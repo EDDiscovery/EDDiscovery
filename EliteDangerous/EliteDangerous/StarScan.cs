@@ -39,7 +39,7 @@ namespace EliteDangerousCore
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
             public bool EDSMAdded = false;
-            public SortedList<int, ScanNode> NodesByID;
+            public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
 
@@ -733,7 +733,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            if (ancestors != null && ancestorbodies != null && ancestorbodies[0] == null && toplevelnode.BodyID == null)
+            if (ancestors != null && ancestorbodies != null && ancestorbodies.Count > 0 && ancestorbodies[0] == null && toplevelnode.BodyID == null)
             {
                 for (int lvl = 1; lvl < ancestors.Count; lvl++)
                 {

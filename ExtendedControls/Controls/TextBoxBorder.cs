@@ -43,6 +43,7 @@ namespace ExtendedControls
         public bool WordWrap { get { return textbox.WordWrap; } set { textbox.WordWrap = value; } }
         public bool Multiline { get { return textbox.Multiline; } set { textbox.Multiline = value; Reposition(); } }
         public bool ReadOnly { get { return textbox.ReadOnly; } set { textbox.ReadOnly = value; } }
+        public bool ClearOnFirstChar { get; set; } = false;
         public System.Windows.Forms.ScrollBars ScrollBars { get { return textbox.ScrollBars; } set { textbox.ScrollBars = value; } }
 
         public override string Text { get { return textbox.Text; } set { textbox.Text = value; } }
@@ -66,6 +67,9 @@ namespace ExtendedControls
         private Color backnormalcolor;        // normal back colour..
         private Color backerrorcolor;        // error back colour..
         private bool inerrorcondition;          // if in error condition
+
+        private char lastkey;               // records key presses
+        private int keyspressed = 0;
 
         public TextBoxBorder() : base()
         {
@@ -338,6 +342,9 @@ namespace ExtendedControls
 
         private void Textbox_KeyPress(object sender, KeyPressEventArgs e)
         {
+            lastkey = e.KeyChar;
+            keyspressed++;
+
             OnKeyPress(e);
         }
 
@@ -351,9 +358,22 @@ namespace ExtendedControls
             OnKeyUp(e);
         }
 
+        bool nonreentrantchange = true;
         protected virtual void Textbox_TextChanged(object sender, EventArgs e)
         {
-            OnTextChanged(e);
+            //System.Diagnostics.Debug.WriteLine("Text changed " + nonreentrantchange);
+            if (nonreentrantchange == true)
+            {
+                if (ClearOnFirstChar && keyspressed == 1)
+                {
+                    nonreentrantchange = false;
+                    textbox.Text = "" + lastkey;
+                    textbox.Select(1, 1);
+                    nonreentrantchange = true;
+                }
+
+                OnTextChanged(e);
+            }
         }
 
         #endregion

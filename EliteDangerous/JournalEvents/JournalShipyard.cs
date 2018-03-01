@@ -44,12 +44,13 @@ namespace EliteDangerousCore.JournalEvents
             Horizons = evt["Horizons"].BoolNull();
             AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
-            ShipyardItems = evt["PriceList"]?.ToObject<ShipyardItem[]>();
+            ShipyardItems = evt["PriceList"]?.ToObjectProtected<ShipyardItem[]>();
 
             if (ShipyardItems != null)
             {
                 foreach (ShipyardItem i in ShipyardItems)
                 {
+                    i.FDShipType = i.ShipType;
                     i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
                 }
             }
@@ -100,6 +101,7 @@ namespace EliteDangerousCore.JournalEvents
         public class ShipyardItem
         {
             public long id;
+            public string FDShipType;
             public string ShipType;
             public string ShipType_Localised;
             public long ShipPrice;

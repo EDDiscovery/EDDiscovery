@@ -73,7 +73,7 @@
     <Compile Include="Misc\Processes.cs" />
     <Compile Include="Misc\AppTicks.cs" />
     <Compile Include="Misc\SHA.cs" />
-    <Compile Include="Numbers\ColorObjectExtensions.cs" />
+    <Compile Include="WinForms\ColorObjectExtensions.cs" />
     <Compile Include="Numbers\DistanceParser.cs" />
     <Compile Include="Numbers\LineStore.cs" />
     <Compile Include="Numbers\NumberObjectExtensions.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Strings\FieldBuilder.cs" />
     <Compile Include="Files\FileHelpers.cs" />
     <Compile Include="Files\LogToFile.cs" />
-    <Compile Include="Misc\JSONObjectExtensions.cs" />
+    <Compile Include="JSON\JSONObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Misc\PropertyNames.cs" />
     <Compile Include="Strings\StringObjectExtensions.cs" />

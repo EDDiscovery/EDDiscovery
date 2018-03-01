@@ -81,9 +81,11 @@ namespace EliteDangerousCore
                 return 0;
             }
 
-            foreach (var s in new[] { "bobble", "cargobaydoor", "cockpit", "decal", "enginecustomisation", "nameplate", "paintjob", "shipkit", "weaponcustomisation" })
+            foreach (var s in new[] { "bobble", "cargobaydoor", "cockpit", "decal", "enginecustomisation", "nameplate", "paintjob", "shipkit", "weaponcustomisation", "voicepack" })
+            {
                 if (ifd.Contains(s))
                     return -1;       // no IDs
+            }
 
             int firstunderscore = ifd.IndexOf('_');
 
@@ -240,6 +242,21 @@ namespace EliteDangerousCore
             { "int_detailedsurfacescanner_tiny",128666634},
         };
 
+        static Dictionary<string, int> ax_missile_rack = new Dictionary<string, int>
+        {
+            { "2-F>D",128788699},
+            { "2-T>D",128788704},
+            { "3-F>D",128788700},
+            { "3-T>D",128788705},
+        };
+        static Dictionary<string, int> ax_multi_cannon = new Dictionary<string, int>
+        {
+            { "2-F",128788701},
+            { "2-T",128793059},
+            { "3-F",128788702},
+            { "3-T",128793060},
+        };
+
         static Dictionary<string, int> beam_laser = new Dictionary<string, int>
         {
             { "1-F",128049428},
@@ -348,6 +365,7 @@ namespace EliteDangerousCore
             { "1-F",128049525},
             { "1-F-A",128671347},   // Mining lance, called Mininglaser_fixed_small_advanced in fd folders
             { "2-F",128049526},
+            { "2-T", 128740820 },
         };
         static Dictionary<string, int> dumbfiremissile_rack = new Dictionary<string, int>
         {
@@ -410,6 +428,13 @@ namespace EliteDangerousCore
             { "2-F",128049489},
             { "2-F-B",128671341},     // fixed medium burst in FD folders
         };
+
+        static Dictionary<string, int> remote_release_flak_launcher = new Dictionary<string, int>
+        {
+            { "2-F",128785626},
+            { "2-T",128793058},
+        };
+
         static Dictionary<string, int> shield_booster = new Dictionary<string, int>
         {
             { "0E",128668532},
@@ -422,6 +447,17 @@ namespace EliteDangerousCore
         {
             { "1-F",128049509},           //Verified
             { "2-F",128049510},
+        };
+
+
+        static Dictionary<string, int> shutdown_field_neutraliser = new Dictionary<string, int>
+        {
+            { "0F+Shutdown Field Neutraliser",128771884},
+        };
+
+        static Dictionary<string, int> xeno_scanner = new Dictionary<string, int>
+        {
+            { "0E+Xeno Scanner",128793115},
         };
 
         static Dictionary<string, int> auto_field_maintenance_unit = new Dictionary<string, int>
@@ -488,6 +524,8 @@ namespace EliteDangerousCore
             { "6E",128064343},
             { "7E",128064344},
             { "8E",128064345},
+            { "1E+Corrosion Resistant",128681641},
+            { "1F+Corrosion Resistant",128681992},
         };
 
         static Dictionary<string, int> corrosion_cargo_rack = new Dictionary<string, int>   
@@ -530,13 +568,16 @@ namespace EliteDangerousCore
             { "4E",128727922},
             { "5E",128734693},
             { "6E",128727926},
+
             { "4C",128727924},
             { "5C",128734695},
             { "6C",128727928},
+
             { "3D",128734692},
             { "4D",128727923},
             { "5D",128734694},
             { "6D",128727927},
+
             { "5B",128727925},
             { "6B",128727929},
         };
@@ -1161,6 +1202,8 @@ namespace EliteDangerousCore
             { "pristmaticshieldgenerator",pristmatic_shield_generator},     //V. NOT occuring in ED, specially redirected by code in ID.  Evidence ED folders, have _strong at end
             { "shieldgenerator",shield_generator},  //V
 
+            { "axmissilerack",ax_missile_rack},
+            { "axmulticannon",ax_multi_cannon},
             { "advancedtorppylon",torpedo_pylon},       //V
             { "beamlaser",beam_laser},                  //V
             { "pulselaserburst",burst_laser},           //V
@@ -1175,6 +1218,9 @@ namespace EliteDangerousCore
             { "plasmaaccelerator",plasma_accelerator},      //V
             { "pulselaser",pulse_laser},            //V
             { "railgun",rail_gun},                  //V
+            { "remotereleaseflaklauncher",remote_release_flak_launcher},
+            { "shutdownfieldneutraliser",shutdown_field_neutraliser},
+            { "xenoscanner",xeno_scanner},
 
             { "hyperdrive",frame_shift_drive},  //V
             { "fueltank",fuel_tank},    //V
@@ -1408,6 +1454,14 @@ namespace EliteDangerousCore
             { "mirrored",128049337},
             { "reactive",128049338},
         };
+        static Dictionary<string, int> type_10_defender = new Dictionary<string, int>
+        {
+            { "grade1",128049334},
+            { "grade2",128049335},
+            { "grade3",128049336},
+            { "mirrored",128049337},
+            { "reactive",128049338},
+        };
         static Dictionary<string, int> viper = new Dictionary<string, int>
         {
             { "grade1",128049274},
@@ -1466,6 +1520,7 @@ namespace EliteDangerousCore
             { "Type6",type_6_transporter},
             { "Type7",type_7_transport},
             { "Type9",type_9_heavy},
+            { "Type9_Military",type_10_defender},
             { "Viper",viper},
             { "Viper_MkIV",viper_mk_iv},
             { "Vulture",vulture},

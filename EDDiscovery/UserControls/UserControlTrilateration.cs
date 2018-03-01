@@ -1013,7 +1013,8 @@ namespace EDDiscovery.UserControls
             {
                 // there can be multiple instances tied to the history form so this might already exist...
                 List<WantedSystemClass> dbCheck = WantedSystemClass.GetAllWantedSystems();
-                if (dbCheck.Where(s => s.system == sysName).Any()) return;
+                if (dbCheck != null && dbCheck.Where(s => s.system == sysName).Any()) // if we have wanted systems in the DB... and its there..
+                    return;
             }
 
             WantedSystemClass entry = wanted.Where(x => x.system == sysName).FirstOrDefault();  //duplicate?

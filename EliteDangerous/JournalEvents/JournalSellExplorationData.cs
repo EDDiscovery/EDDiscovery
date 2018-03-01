@@ -29,12 +29,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalSellExplorationData(JObject evt ) : base(evt, JournalTypeEnum.SellExplorationData)
         {
-            if (!evt["Systems"].Empty())
-                Systems = evt.Value<JArray>("Systems").Values<string>().ToArray();
-
-            if (!evt["Discovered"].Empty())
-                Discovered = evt.Value<JArray>("Discovered").Values<string>().ToArray();
-
+            Systems = evt["Systems"]?.ToObjectProtected<string[]>();
+            Discovered = evt["Discovered"]?.ToObjectProtected<string[]>();
             BaseValue = evt["BaseValue"].Long();
             Bonus = evt["Bonus"].Long();
             TotalEarnings = evt["TotalEarnings"].LongNull();        

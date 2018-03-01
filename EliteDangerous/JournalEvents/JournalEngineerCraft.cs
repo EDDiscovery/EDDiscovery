@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (mats.Type == JTokenType.Object)
                 {
-                    Dictionary<string, int> temp = mats?.ToObject<Dictionary<string, int>>();
+                    Dictionary<string, int> temp = mats?.ToObjectProtected<Dictionary<string, int>>();
 
                     if (temp != null)
                     {
@@ -131,10 +131,11 @@ namespace EliteDangerousCore.JournalEvents
                 Level = evt["Level"].Int();
                 Quality = evt["Quality"].Double(0);
                 // EngineerCraft has it as Apply.. Loadout has just ExperimentalEffect.  Check both
-                ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt,new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
+                ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
 
-                Modifiers = evt["Modifiers"]?.ToObject<EngineeringModifiers[]>();
+                Modifiers = evt["Modifiers"]?.ToObjectProtected<EngineeringModifiers[]>();
             }
+
         }
 
         public class EngineeringModifiers

@@ -27,8 +27,8 @@ namespace EliteDangerousCore.JournalEvents
             MarketID = evt["MarketID"].LongNull();
             TraderType = evt["TraderType"].Str();
 
-            Paid = evt["Paid"]?.ToObject<Traded>();
-            Received = evt["Received"]?.ToObject<Traded>();
+            Paid = evt["Paid"]?.ToObjectProtected<Traded>();
+            Received = evt["Received"]?.ToObjectProtected<Traded>();
         }
 
         public string TraderType { get; set; }

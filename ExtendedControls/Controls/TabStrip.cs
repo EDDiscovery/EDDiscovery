@@ -33,6 +33,7 @@ namespace ExtendedControls
         public Image EmptyPanelIcon { get; set; } = Properties.Resources.Stop;
         public Image[] ImageList;     // images
         public string[] TextList;       // text associated - tooltips or text on list selection
+        public object[] TagList;      // tags for them..
         public bool ShowPopOut { get; set; }= true; // Pop out icon show
 
         public int TabFieldSpacing { get; set; } = 8;

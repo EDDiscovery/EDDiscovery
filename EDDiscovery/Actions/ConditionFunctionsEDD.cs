@@ -69,7 +69,7 @@ namespace EDDiscovery.Actions
 
         protected bool Version(out string output)
         {
-            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersion();
+            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
 
             int para;
             if (paras[0].value.InvariantParse(out para) && para >= 0 && para <= edversion.Length)
