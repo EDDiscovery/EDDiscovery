@@ -258,7 +258,7 @@ namespace EDDiscovery.Forms
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
 
-                if (numtoopen > 0)
+                if (paneltype != null && numtoopen > 0) // paranoia on first..
                 {
                     int numopened = usercontrolsforms.CountOf(paneltype);
                     if (numopened < numtoopen)
