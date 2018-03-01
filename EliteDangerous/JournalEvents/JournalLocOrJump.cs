@@ -23,6 +23,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     public abstract class JournalLocOrJump : JournalEntry, ISystemStationEntry
     {
+        private static DateTime ED_No_Training_Timestamp = new DateTime(2017, 10, 4, 0, 0, 0, DateTimeKind.Utc);
+        private static DateTime ED_No_Faction_Timestamp = new DateTime(2017, 9, 26, 0, 0, 0, DateTimeKind.Utc);
+
         public string StarSystem { get; set; }
         public EMK.LightGeometry.Vector3 StarPos { get; set; }
         public long? SystemAddress { get; set; }
@@ -116,7 +119,7 @@ namespace EliteDangerousCore.JournalEvents
             PowerplayPowers = evt["Powers"]?.ToObjectProtected<string[]>();
 
             // Allegiance without Faction only occurs in Training
-            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
+            if (!String.IsNullOrEmpty(Allegiance) && Faction == null && EventTimeUTC <= ED_No_Training_Timestamp && (EventTimeUTC <= ED_No_Faction_Timestamp || EventTypeID != JournalTypeEnum.FSDJump || StarSystem == "Eranin"))
             {
                 IsTrainingEvent = true;
             }
