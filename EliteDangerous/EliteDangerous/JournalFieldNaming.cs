@@ -297,8 +297,14 @@ namespace EliteDangerousCore
             //string x = s;
             if (s.StartsWith("$int_"))
                 s = s.Replace("$int_", "Int_");
+            if (s.StartsWith("int_"))
+                s = s.Replace("int_", "Int_");
             if (s.StartsWith("$hpt_"))
                 s = s.Replace("$hpt_", "Hpt_");
+            if (s.StartsWith("hpt_"))
+                s = s.Replace("hpt_", "Hpt_");
+            if (s.Contains("_armour_"))
+                s = s.Replace("_armour_", "_Armour_");
             if (s.EndsWith("_name;"))
                 s = s.Substring(0, s.Length - 6);
 

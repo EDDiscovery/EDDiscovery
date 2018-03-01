@@ -118,6 +118,8 @@ namespace EDDiscovery
             msg.Invoke("Scanning Memory Banks");
             InitializeDatabases();
 
+            GlobalBookMarkList.LoadBookmarks();
+
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
 
@@ -591,8 +593,7 @@ namespace EDDiscovery
 
             galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
             SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
-            SystemNoteClass.GetAllSystemNotes();                             
-            BookmarkClass.LoadBookmarks();
+            SystemNoteClass.GetAllSystemNotes();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
 

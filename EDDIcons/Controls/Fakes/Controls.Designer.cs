@@ -39,7 +39,7 @@ namespace EDDiscovery.Icons {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls.Fakes_Controls", typeof(Controls).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls", typeof(Controls).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,36 @@ namespace EDDiscovery.Icons {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Bookmarks_Delete {
+            get {
+                object obj = ResourceManager.GetObject("Bookmarks_Delete", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Bookmarks_Edit {
+            get {
+                object obj = ResourceManager.GetObject("Bookmarks_Edit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Bookmarks_New {
+            get {
+                object obj = ResourceManager.GetObject("Bookmarks_New", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -1453,6 +1483,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap StarList_BodyClass {
+            get {
+                object obj = ResourceManager.GetObject("StarList_BodyClass", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap StarList_EDSM {
             get {
                 object obj = ResourceManager.GetObject("StarList_EDSM", resourceCulture);
@@ -1476,6 +1516,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap StarList_History {
             get {
                 object obj = ResourceManager.GetObject("StarList_History", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap StarList_Jumponium {
+            get {
+                object obj = ResourceManager.GetObject("StarList_Jumponium", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

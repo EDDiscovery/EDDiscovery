@@ -59,15 +59,6 @@ namespace EDDiscovery.UserControls
             this.panelPrev = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanelPrev = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewPrevious = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelValue = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
-            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
-            this.panelCurrent = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,6 +68,15 @@ namespace EDDiscovery.UserControls
             this.pColTargetFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
+            this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelValue = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
+            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
+            this.panelCurrent = new System.Windows.Forms.Panel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
             this.dataViewScrollerPanelCurrent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).BeginInit();
             this.panelPrev.SuspendLayout();
@@ -275,6 +275,77 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.TabIndex = 2;
             this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
             // 
+            // PcolName
+            // 
+            this.PcolName.HeaderText = "Name";
+            this.PcolName.MinimumWidth = 50;
+            this.PcolName.Name = "PcolName";
+            this.PcolName.ReadOnly = true;
+            // 
+            // pColStart
+            // 
+            this.pColStart.FillWeight = 75F;
+            this.pColStart.HeaderText = "Start Date";
+            this.pColStart.MinimumWidth = 50;
+            this.pColStart.Name = "pColStart";
+            this.pColStart.ReadOnly = true;
+            // 
+            // pColEnd
+            // 
+            this.pColEnd.FillWeight = 75F;
+            this.pColEnd.HeaderText = "End Date";
+            this.pColEnd.MinimumWidth = 50;
+            this.pColEnd.Name = "pColEnd";
+            this.pColEnd.ReadOnly = true;
+            // 
+            // pColOrigin
+            // 
+            this.pColOrigin.FillWeight = 80F;
+            this.pColOrigin.HeaderText = "Origin";
+            this.pColOrigin.MinimumWidth = 50;
+            this.pColOrigin.Name = "pColOrigin";
+            this.pColOrigin.ReadOnly = true;
+            // 
+            // pColFromFaction
+            // 
+            this.pColFromFaction.FillWeight = 50F;
+            this.pColFromFaction.HeaderText = "Faction";
+            this.pColFromFaction.MinimumWidth = 50;
+            this.pColFromFaction.Name = "pColFromFaction";
+            this.pColFromFaction.ReadOnly = true;
+            // 
+            // pColDestSys
+            // 
+            this.pColDestSys.FillWeight = 80F;
+            this.pColDestSys.HeaderText = "Destination";
+            this.pColDestSys.MinimumWidth = 50;
+            this.pColDestSys.Name = "pColDestSys";
+            this.pColDestSys.ReadOnly = true;
+            // 
+            // pColTargetFaction
+            // 
+            this.pColTargetFaction.FillWeight = 50F;
+            this.pColTargetFaction.HeaderText = "Target Faction";
+            this.pColTargetFaction.MinimumWidth = 50;
+            this.pColTargetFaction.Name = "pColTargetFaction";
+            this.pColTargetFaction.ReadOnly = true;
+            // 
+            // pColResult
+            // 
+            this.pColResult.FillWeight = 50F;
+            this.pColResult.HeaderText = "Result (cr)";
+            this.pColResult.MinimumWidth = 25;
+            this.pColResult.Name = "pColResult";
+            this.pColResult.ReadOnly = true;
+            // 
+            // pColInfo
+            // 
+            this.pColInfo.FillWeight = 150F;
+            this.pColInfo.HeaderText = "Info";
+            this.pColInfo.MinimumWidth = 50;
+            this.pColInfo.Name = "pColInfo";
+            this.pColInfo.ReadOnly = true;
+            // 
             // vScrollBarCustomPrev
             // 
             this.vScrollBarCustomPrev.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -402,77 +473,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerMissions.Size = new System.Drawing.Size(800, 572);
             this.splitContainerMissions.SplitterDistance = 266;
             this.splitContainerMissions.TabIndex = 3;
-            // 
-            // PcolName
-            // 
-            this.PcolName.HeaderText = "Name";
-            this.PcolName.MinimumWidth = 50;
-            this.PcolName.Name = "PcolName";
-            this.PcolName.ReadOnly = true;
-            // 
-            // pColStart
-            // 
-            this.pColStart.FillWeight = 75F;
-            this.pColStart.HeaderText = "Start Date";
-            this.pColStart.MinimumWidth = 50;
-            this.pColStart.Name = "pColStart";
-            this.pColStart.ReadOnly = true;
-            // 
-            // pColEnd
-            // 
-            this.pColEnd.FillWeight = 75F;
-            this.pColEnd.HeaderText = "End Date";
-            this.pColEnd.MinimumWidth = 50;
-            this.pColEnd.Name = "pColEnd";
-            this.pColEnd.ReadOnly = true;
-            // 
-            // pColOrigin
-            // 
-            this.pColOrigin.FillWeight = 80F;
-            this.pColOrigin.HeaderText = "Origin";
-            this.pColOrigin.MinimumWidth = 50;
-            this.pColOrigin.Name = "pColOrigin";
-            this.pColOrigin.ReadOnly = true;
-            // 
-            // pColFromFaction
-            // 
-            this.pColFromFaction.FillWeight = 50F;
-            this.pColFromFaction.HeaderText = "Faction";
-            this.pColFromFaction.MinimumWidth = 50;
-            this.pColFromFaction.Name = "pColFromFaction";
-            this.pColFromFaction.ReadOnly = true;
-            // 
-            // pColDestSys
-            // 
-            this.pColDestSys.FillWeight = 80F;
-            this.pColDestSys.HeaderText = "Destination";
-            this.pColDestSys.MinimumWidth = 50;
-            this.pColDestSys.Name = "pColDestSys";
-            this.pColDestSys.ReadOnly = true;
-            // 
-            // pColTargetFaction
-            // 
-            this.pColTargetFaction.FillWeight = 50F;
-            this.pColTargetFaction.HeaderText = "Target Faction";
-            this.pColTargetFaction.MinimumWidth = 50;
-            this.pColTargetFaction.Name = "pColTargetFaction";
-            this.pColTargetFaction.ReadOnly = true;
-            // 
-            // pColResult
-            // 
-            this.pColResult.FillWeight = 50F;
-            this.pColResult.HeaderText = "Result (cr)";
-            this.pColResult.MinimumWidth = 25;
-            this.pColResult.Name = "pColResult";
-            this.pColResult.ReadOnly = true;
-            // 
-            // pColInfo
-            // 
-            this.pColInfo.FillWeight = 150F;
-            this.pColInfo.HeaderText = "Info";
-            this.pColInfo.MinimumWidth = 50;
-            this.pColInfo.Name = "pColInfo";
-            this.pColInfo.ReadOnly = true;
             // 
             // UserControlMissions
             // 

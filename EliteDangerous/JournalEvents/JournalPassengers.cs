@@ -55,7 +55,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalPassengers(JObject evt) : base(evt, JournalTypeEnum.Passengers)
         {
-            Manifest = evt["Manifest"]?.ToObject<Passengers[]>();
+            Manifest = evt["Manifest"]?.ToObjectProtected<Passengers[]>();
 
             if (Manifest != null )
             {

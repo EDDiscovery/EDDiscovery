@@ -41,13 +41,13 @@ namespace EDDiscovery.UserControls
     }
 
 
-    public partial class UserControlStatsTime : UserControl
+    public partial class StatsTimeForm : UserControl
     {
         public event EventHandler TimeModeChanged;
         public event EventHandler DrawModeChanged;
 
 
-        public UserControlStatsTime()
+        public StatsTimeForm()
         {
             InitializeComponent();
 

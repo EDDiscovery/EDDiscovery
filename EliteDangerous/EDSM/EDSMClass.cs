@@ -67,11 +67,6 @@ namespace EliteDangerousCore.EDSM
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
-        public string SubmitDistances(string from, string to, double dist)
-        {
-            return SubmitDistances(from, new Dictionary<string, double> { { to, dist } });
-        }
-
         public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
             string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
@@ -192,17 +187,6 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public string RequestDistances(string date)
-        {
-            string query;
-            query = "?showId=1&submitted=1&startdatetime=" + HttpUtility.UrlEncode(date);
-
-            var response = RequestGet("api-v1/distances" + query, handleException: true);
-            if (response.Error)
-                return null;
-            return response.Body;
-        }
-
 
         public string GetHiddenSystems()
         {
@@ -226,7 +210,6 @@ namespace EliteDangerousCore.EDSM
         
         }
 
-
         public string GetComments(DateTime starttime)
         {
             if (!ValidCredentials)
@@ -234,25 +217,6 @@ namespace EliteDangerousCore.EDSM
 
             string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-
-        public string GetComment(string systemName, long edsmid = 0)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "get-comment?systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            if (edsmid > 0)
-                query += "&systemId=" + edsmid;
-
             var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
             if (response.Error)
@@ -347,99 +311,6 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
-        public string SetLog(string systemName, DateTime dateVisitedutc)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
-                 "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
-                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string SetLogWithPos(string systemName, DateTime dateVisitedutc, double x, double y, double z)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey +
-                 "&fromSoftware=" + HttpUtility.UrlEncode(fromSoftware) + "&fromSoftwareVersion=" + HttpUtility.UrlEncode(fromSoftwareVersion) +
-                 "&x=" + HttpUtility.UrlEncode(x.ToString(CultureInfo.InvariantCulture)) + "&y=" + HttpUtility.UrlEncode(y.ToString(CultureInfo.InvariantCulture)) + "&z=" + HttpUtility.UrlEncode(z.ToString(CultureInfo.InvariantCulture)) +
-                  "&dateVisited=" + HttpUtility.UrlEncode(dateVisitedutc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-logs-v1/set-log", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public bool SendTravelLog(string name, DateTime timeutc, bool coord, double x, double y, double z, out string error, out int errno, out bool firstdiscover, out int edsmid)
-        {
-            firstdiscover = false;
-            edsmid = 0;
-
-            if (!ValidCredentials)
-            {
-                errno = -1;
-                error = "EDSM API Key not set";
-                return false;
-            }
-
-            error = "";
-            errno = 0;
-
-            string json = null;
-
-            try
-            {
-                if (!coord)
-                    json = SetLog(name, timeutc);
-                else
-                    json = SetLogWithPos(name, timeutc, x, y, z);
-            }
-            catch (Exception ex)
-            {
-                errno = -1;
-                error = "EDSM sync error, connection to server failed";
-                System.Diagnostics.Trace.WriteLine("EDSM Sync error:" + ex.ToString());
-            }
-
-            if (json != null)
-            {
-                JObject msg = (JObject)JObject.Parse(json);
-
-                int msgnum = msg["msgnum"].Value<int>();
-                string msgstr = msg["msg"].Value<string>();
-
-                if (msgnum == 100 || msgnum == 401 || msgnum == 402 || msgnum == 403)
-                {
-                    firstdiscover = msg["systemCreated"].Bool(false);
-                    edsmid = msg["systemId"].Int(0);
-
-                    return true;
-                }
-                else
-                {
-                    error = "EDSM sync error submitting system (" + name + "):" + msgnum.ToString() + ":" + msgstr;
-                    errno = msgnum;
-                    System.Diagnostics.Trace.WriteLine("Error sync:" + msgnum.ToString() + " : " + name);
-                }
-            }
-
-            return false;
-        }
 
         public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<HistoryEntry> log, out DateTime logstarttime, out DateTime logendtime)
         {
@@ -887,7 +758,7 @@ namespace EliteDangerousCore.EDSM
             {
                 Dictionary<string, double?> mats;
                 Dictionary<string, double> mats2;
-                mats = jo["materials"]?.ToObject<Dictionary<string, double?>>();
+                mats = jo["materials"]?.ToObjectProtected<Dictionary<string, double?>>();
                 mats2 = new Dictionary<string, double>();
 
                 foreach (string key in mats.Keys)
@@ -957,238 +828,6 @@ namespace EliteDangerousCore.EDSM
                     startype = startype.Substring(0, index).Trim();
             }
             return startype;
-        }
-
-        public string SetRanks(int combat_rank, int combat_progress, int trade_rank, int trade_progress,
-            int explore_rank, int explore_progress, int cqc_rank, int cqc_progress,
-            int federation_rank, int federation_progress, int empire_rank, int empire_progress)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query = query + "&Combat=" + combat_rank.ToString() + ";" + combat_progress.ToString();
-            query = query + "&Trade=" + trade_rank.ToString() + ";" + trade_progress.ToString();
-            query = query + "&Explore=" + explore_rank.ToString() + ";" + explore_progress.ToString();
-            query = query + "&CQC=" + cqc_rank.ToString() + ";" + cqc_progress.ToString();
-            query = query + "&Federation=" + federation_rank.ToString() + ";" + federation_progress.ToString();
-            query = query + "&Empire=" + empire_rank.ToString() + ";" + empire_progress.ToString();
-
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-ranks", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string SetCredits(long credits, long loan)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query = query + "&balance=" + credits.ToString();
-            query = query + "&loan=" + loan.ToString();
-
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-credits", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string SetInventoryMaterials(Dictionary<string, int> matcounts)
-        {
-            JObject jo = new JObject();
-            foreach (KeyValuePair<string, int> kvp in matcounts)
-            {
-                jo[kvp.Key] = kvp.Value;
-            }
-
-            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query += "&type=materials";
-            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string SetInventoryData(Dictionary<string, int> matcounts)
-        {
-            JObject jo = new JObject();
-            foreach (KeyValuePair<string, int> kvp in matcounts)
-            {
-                jo[kvp.Key] = kvp.Value;
-            }
-
-            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query += "&type=data";
-            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string SetInventoryCargo(Dictionary<string, int> matcounts)
-        {
-            JObject jo = new JObject();
-            foreach (KeyValuePair<string, int> kvp in matcounts)
-            {
-                jo[kvp.Key] = kvp.Value;
-            }
-
-            string query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query += "&type=cargo";
-            query += "&values=" + HttpUtility.UrlEncode(jo.ToString());
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-materials", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string CommanderUpdateShip(int shipId, string type, EliteDangerousCore.ShipInformation shipinfo = null, int cargoqty = -1)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query = query + "&shipId=" + shipId.ToString();
-            query = query + "&type=" + Uri.EscapeDataString(type);
-
-            if (shipinfo != null)
-            {
-                int cargocap = shipinfo.CargoCapacity();
-                if (cargocap != 0)
-                    query += "&cargoCapacity=" + cargocap.ToString();
-                if (cargoqty >= 0)
-                    query += "&cargoQty=" + cargoqty.ToString();
-                double fuelcap = shipinfo.FuelCapacity;
-                if (fuelcap != 0)
-                    query += "&fuelMainCapacity=" + fuelcap.ToString();
-                double fuellevel = shipinfo.FuelLevel;
-                if (fuellevel != 0)
-                    query += "&fuelMainLevel=" + fuellevel.ToString();
-                string ident = shipinfo.ShipUserIdent;
-                if (!string.IsNullOrWhiteSpace(ident))
-                    query += "&shipIdent=" + Uri.EscapeDataString(ident);
-                string name = shipinfo.ShipUserName;
-                if (!string.IsNullOrWhiteSpace(name))
-                    query += "&shipName=" + Uri.EscapeDataString(name);
-                string paintjob = shipinfo.Modules.ContainsKey("Paint Job") ? shipinfo.Modules["Paint Job"].ItemFD : null;
-                if (!string.IsNullOrWhiteSpace(paintjob))
-                    query += "&paintJob=" + Uri.EscapeDataString(paintjob);
-                string errstr;
-                string coriolisurl = shipinfo.GetCoriolisUrl(out errstr);
-                query += "&linkToCoriolis=" + Uri.EscapeDataString(coriolisurl);
-            }
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/update-ship", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public string CommanderSetCurrentShip(int shipId)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey;
-            query = query + "&shipId=" + shipId.ToString();
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-commander-v1/set-ship-id", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        static private ShipInformation LastShipInfo = null;     // send with some caching
-        static private long LastEDSMCredits = -1;
-        static private long LastShipID = -1;
-        static JournalProgress LastProgress = null;
-        static JournalRank LastRank = null;
-        static MaterialCommoditiesList LastMats = null;
-        static Object LockShipInfo = new object();
-
-        // No longer needed as journal events are now sent to EDSM
-        public void SendShipInfo(ShipInformation si, MaterialCommoditiesList matcommod, int cargo, ShipInformation sicurrent, long cash, long loan, 
-                                    JournalProgress progress, JournalRank rank  // both may be null
-                                )
-        {
-            lock (LockShipInfo) // lets not double send in different threads.
-            {
-                if (!si.Equals(LastShipInfo))   // if we are sending new ship info..
-                {
-                    System.Diagnostics.Trace.WriteLine("Update EDSM with ship info " + si.ID + " " + si.ShipType + " " + cargo);
-                    CommanderUpdateShip(si.ID, si.ShipType.Alt("Unknown"), si, cargo);
-                    LastShipInfo = si;
-                }
-
-                if (LastShipID != sicurrent.ID) // if we have a new current ship
-                {
-                    System.Diagnostics.Trace.WriteLine("Update EDSM with current ship " + sicurrent.ID);
-                    CommanderSetCurrentShip(sicurrent.ID);
-                    LastShipID = sicurrent.ID;
-                }
-
-                if (LastEDSMCredits != cash)    // if our cash has changed..
-                {
-                    System.Diagnostics.Trace.WriteLine("Update EDSM with credits " + cash);
-                    SetCredits(cash, loan);
-                    LastEDSMCredits = cash;
-                }
-
-                if ( progress != null && rank != null && (!Object.ReferenceEquals(progress,LastProgress) || !Object.ReferenceEquals(rank,LastRank)) )
-                {
-                    System.Diagnostics.Trace.WriteLine("Update EDSM with ranks");
-                    SetRanks((int)rank.Combat, progress.Combat, (int)rank.Trade, progress.Trade, (int)rank.Explore, progress.Explore, (int)rank.CQC, progress.CQC, (int)rank.Federation, progress.Federation, (int)rank.Empire, progress.Empire);
-                    LastProgress = progress;
-                    LastRank = rank;
-                }
-
-                if (matcommod != null && matcommod != LastMats)
-                {
-                    System.Diagnostics.Trace.WriteLine("Update EDSM with materials and cargo");
-                    List<MaterialCommodities> lmats = matcommod.Sort(false);
-                    List<MaterialCommodities> lcargo = matcommod.Sort(true);
-                    List<MaterialCommodities> ldata = lmats.Where(m => m.category == MaterialCommodities.MaterialEncodedCategory).ToList();
-                    lmats = lmats.Where(m => m.category != MaterialCommodities.MaterialEncodedCategory).ToList();
-                    SetInventoryMaterials(lmats.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
-                    SetInventoryData(ldata.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
-                    SetInventoryCargo(lcargo.Where(m => m.count > 0).ToDictionary(m => m.fdname, m => m.count));
-                    LastMats = matcommod;
-                }
-            }
         }
 
         public List<string> GetJournalEventsToDiscard()

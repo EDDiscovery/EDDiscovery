@@ -62,8 +62,7 @@ namespace EliteDangerousCore.JournalEvents
             DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list
             DestinationStation = evt["DestinationStation"].Str();
 
-            if (!evt["PermitsAwarded"].Empty())
-                PermitsAwarded = evt.Value<JArray>("PermitsAwarded").Values<string>().ToArray();
+            PermitsAwarded = evt["PermitsAwarded"]?.ToObjectProtected<string[]>();
 
             if (!evt["CommodityReward"].Empty())
             {
@@ -107,7 +106,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
 
-            FactionEffects = evt["FactionEffects"]?.ToObject<FactionEffectsEntry[]>();      // NEEDS TEST
+            FactionEffects = evt["FactionEffects"]?.ToObjectProtected<FactionEffectsEntry[]>();      // NEEDS TEST
         }
 
         public string Name { get; set; }

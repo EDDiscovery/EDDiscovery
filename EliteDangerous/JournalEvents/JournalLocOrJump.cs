@@ -23,6 +23,9 @@ namespace EliteDangerousCore.JournalEvents
 {
     public abstract class JournalLocOrJump : JournalEntry, ISystemStationEntry
     {
+        private static DateTime ED_No_Training_Timestamp = new DateTime(2017, 10, 4, 0, 0, 0, DateTimeKind.Utc);
+        private static DateTime ED_No_Faction_Timestamp = new DateTime(2017, 9, 26, 0, 0, 0, DateTimeKind.Utc);
+
         public string StarSystem { get; set; }
         public EMK.LightGeometry.Vector3 StarPos { get; set; }
         public long? SystemAddress { get; set; }
@@ -40,7 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Security_Localised { get; set; }
         public long? Population { get; set; }
         public string PowerplayState { get; set; }
-        public string[] Powers { get; set; }
+        public string[] PowerplayPowers { get; set; }
         public bool? Wanted { get; set; }
 
         public FactionInformation[] Factions { get; set; }
@@ -67,7 +70,7 @@ namespace EliteDangerousCore.JournalEvents
             public int Trend { get; set; }
         }
 
-        protected JournalLocOrJump(JObject evt, JournalTypeEnum jtype ) : base(evt, jtype)
+        protected JournalLocOrJump(JObject evt, JournalTypeEnum jtype) : base(evt, jtype)
         {
             StarSystem = evt["StarSystem"].Str();
             StarPosFromEDSM = evt["StarPosFromEDSM"].Bool(false);
@@ -78,9 +81,9 @@ namespace EliteDangerousCore.JournalEvents
             if (!evt["StarPos"].Empty())            // if its an old VS entry, may not have co-ords
             {
                 JArray coords = evt["StarPos"] as JArray;
-                pos.X = coords[0].Value<float>();
-                pos.Y = coords[1].Value<float>();
-                pos.Z = coords[2].Value<float>();
+                pos.X = coords[0].Float();
+                pos.Y = coords[1].Float();
+                pos.Z = coords[2].Float();
             }
             else
             {
@@ -93,7 +96,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemFaction", "Faction" });
             FactionState = evt["FactionState"].Str();           // PRE 2.3 .. not present in newer files, fixed up in next bit of code
-            Factions = evt["Factions"]?.ToObject<FactionInformation[]>()?.OrderByDescending(x => x.Influence)?.ToArray();  // POST 2.3
+            Factions = evt["Factions"]?.ToObjectProtected<FactionInformation[]>()?.OrderByDescending(x => x.Influence)?.ToArray();  // POST 2.3
 
             if (Factions != null)
             {
@@ -113,11 +116,10 @@ namespace EliteDangerousCore.JournalEvents
             Wanted = evt["Wanted"].BoolNull();
 
             PowerplayState = evt["PowerplayState"].Str();            // NO evidence
-            if (!evt["Powers"].Empty())
-                Powers = evt.Value<JArray>("Powers").Values<string>().ToArray();
+            PowerplayPowers = evt["Powers"]?.ToObjectProtected<string[]>();
 
             // Allegiance without Faction only occurs in Training
-            if (!String.IsNullOrEmpty(Allegiance) && Faction == null)
+            if (!String.IsNullOrEmpty(Allegiance) && Faction == null && EventTimeUTC <= ED_No_Training_Timestamp && (EventTimeUTC <= ED_No_Faction_Timestamp || EventTypeID != JournalTypeEnum.FSDJump || StarSystem == "Eranin"))
             {
                 IsTrainingEvent = true;
             }

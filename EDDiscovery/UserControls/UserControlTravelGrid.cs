@@ -27,6 +27,7 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -450,6 +451,14 @@ namespace EDDiscovery.UserControls
             if (he.StartMarker || he.StopMarker)
                 noicons++;
 
+            BookmarkClass bk = null;
+            if (he.IsLocOrJump)
+            {
+                bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
+                if (bk != null)
+                    noicons++;
+            }
+
             int padding = 4;
             int size = 24;
 
@@ -474,10 +483,19 @@ namespace EDDiscovery.UserControls
             }
 
             if (he.StartMarker)
+            {
                 e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStart, new Rectangle(hstart, top, size, size));
+                hstart += size + padding;
+            }
             else if (he.StopMarker)
+            {
                 e.Graphics.DrawImage(Icons.Controls.TravelGrid_FlagStop, new Rectangle(hstart, top, size, size));
-
+                hstart += size + padding;
+            }
+            if (bk != null)
+            {
+                e.Graphics.DrawImage(Icons.Controls.Map3D_Bookmarks_Star, new Rectangle(hstart, top, size, size));
+            }
         }
 
         #region Clicks
@@ -906,6 +924,38 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                BookmarkForm bookmarkForm = new BookmarkForm();
+                BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
+                DateTime tme;
+                if (existing != null)
+                {
+                    tme = existing.Time;
+                    bookmarkForm.Update(existing);
+                }
+                else
+                {
+                    tme = DateTime.Now;
+                    bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme.ToString());
+                }
+                DialogResult dr = bookmarkForm.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
+                        tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
+                }
+                if (dr == DialogResult.Abort && existing != null)
+                {
+                    GlobalBookMarkList.Instance.Delete(existing);
+                }
+
+                dataGridViewTravel.Refresh();
+            }
+        }
+
         #endregion
 
         #region Event Filter
@@ -1070,7 +1120,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-#endregion
+        #endregion
 
     }
 }

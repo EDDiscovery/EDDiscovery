@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         const int vspacing = 170;
         Size panelsize = new Size(hspacing - 20, vspacing - 20);
 
-        private int HorzNumber { get { return ClientRectangle.Width / hspacing; } }
+        private int HorzNumber { get { return Math.Max(1,ClientRectangle.Width / hspacing); } }
         private int curhorz = 0;
 
         public UserControlPanelSelector()
@@ -96,36 +96,35 @@ namespace EDDiscovery.UserControls
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
             }
 
-            for (int i = 0; i < PanelInformation.GetNumberPanels; i++)
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+
+            for (int i = 0; i < pids.Length; i++)
             {
-                PanelInformation.PanelInfo pi = PanelInformation.PanelList[i];
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByEnum(pids[i]);
 
-                if (pi.IsUserSelectable)
-                {
-                    CompositeButton cb = new CompositeButton();
-                    cb.Size = panelsize;
-                    cb.Tag = i;
-                    cb.Padding = new Padding(10);
-                    cb.QuickInit(EDDiscovery.Icons.Controls.Selector_Background,
-                                pi.WindowTitle,
-                                EDDTheme.Instance.GetFontAtSize(11),
-                                EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
-                                centre,
-                                pi.TabIcon,
-                                new Size(48, 48),
-                                new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab },
-                                new Size(48, 48),
-                                ButtonPress);
-                    toolTip1.SetToolTip(cb.Buttons[0], "Pop out in a new window");
-                    toolTip1.SetToolTip(cb.Buttons[1], "Open as a new menu tab");
-                    toolTip1.SetToolTip(cb.Decals[0], pi.Description);
-                    EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);
-                    cb.Buttons[0].BackColor = centre; // need to reset the colour back!
-                    EDDTheme.Instance.ApplyToControls(cb.Buttons[1], null, true);
-                    cb.Buttons[1].BackColor = centre;
+                CompositeButton cb = new CompositeButton();
+                cb.Size = panelsize;
+                cb.Tag = pi.PopoutID;
+                cb.Padding = new Padding(10);
+                cb.QuickInit(EDDiscovery.Icons.Controls.Selector_Background,
+                            pi.WindowTitle,
+                            EDDTheme.Instance.GetFontAtSize(11),
+                            EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
+                            centre,
+                            pi.TabIcon,
+                            new Size(48, 48),
+                            new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab },
+                            new Size(48, 48),
+                            ButtonPress);
+                toolTip1.SetToolTip(cb.Buttons[0], "Pop out in a new window");
+                toolTip1.SetToolTip(cb.Buttons[1], "Open as a new menu tab");
+                toolTip1.SetToolTip(cb.Decals[0], pi.Description);
+                EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);
+                cb.Buttons[0].BackColor = centre; // need to reset the colour back!
+                EDDTheme.Instance.ApplyToControls(cb.Buttons[1], null, true);
+                cb.Buttons[1].BackColor = centre;
 
-                    panelVScroll.Controls.Add(cb);       // we don't theme it.. its already fully themed to a fixed theme.
-                }
+                panelVScroll.Controls.Add(cb);       // we don't theme it.. its already fully themed to a fixed theme.
             }
 
             Reposition();
@@ -156,18 +155,18 @@ namespace EDDiscovery.UserControls
         private void ButtonPress(Object o, int i)
         {
             int button = (int)o;
-            System.Diagnostics.Debug.WriteLine("Selected " + button + " " + i);
 
             if (button == 999)
                 discoveryform.manageAddOnsToolStripMenuItem_Click(null, null);
             else
             {
-                PanelInformation.PanelInfo pi = PanelInformation.PanelList[button];
+                PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)o;
+                System.Diagnostics.Debug.WriteLine("Selected " + pid + " " + i);
 
                 if (i == 0)
-                    discoveryform.PopOuts.PopOut(pi.PopoutID);
+                    discoveryform.PopOuts.PopOut(pid);
                 else
-                    discoveryform.AddTab(pi.PopoutID, -1);   // add as last tab
+                    discoveryform.AddTab(pid, -1);   // add as last tab
             }
 
         }

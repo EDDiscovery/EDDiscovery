@@ -407,13 +407,13 @@ namespace EliteDangerousCore
 
                 int edid = ModuleEDID.Instance.CalcID(sm.ItemFD,ShipFD);
 
-                if (edid == 0)
+                if (edid == 0)      // 0 is error
                 {
                     errstring += sm.Item + ":" + sm.ItemFD + Environment.NewLine;
                 }
                 else
                 {
-                    if (edid > 0)
+                    if (edid > 0)   // -1 is no EDID
                         module["id"] = edid;
 
                     module["name"] = sm.ItemFD;
@@ -558,11 +558,14 @@ namespace EliteDangerousCore
         {
             string sid = Key(shipfd, id);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            sm.Set(ship, shipfd, name, ident);
-            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.Ship);
+            //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
 
-            ShipInformation newsm = null;
+            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident);     // update ship key, make a fresh one if required.
+            
+            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFullInfo());
+
+            ShipInformation newsm = null;       // if we change anything, we need a new clone..
 
             foreach (JournalLoadout.ShipModule m in modulelist)
             {
@@ -666,7 +669,7 @@ namespace EliteDangerousCore
             string sid = Key(e.ShipFD, e.ShipID);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.Set(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent);
+            Ships[sid] = sm.Set(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent); // will clone if data changed..
             currentid = sid;           // must be in it to do this
         }
 

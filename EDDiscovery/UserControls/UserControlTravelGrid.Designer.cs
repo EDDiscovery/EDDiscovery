@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
@@ -347,9 +348,10 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.setNoteToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
-            this.copyJournalEntryToClipboardToolStripMenuItem});
+            this.copyJournalEntryToClipboardToolStripMenuItem,
+            this.createEditBookmarkToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 356);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -489,6 +491,13 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
+            // createEditBookmarkToolStripMenuItem
+            // 
+            this.createEditBookmarkToolStripMenuItem.Name = "createEditBookmarkToolStripMenuItem";
+            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
+            this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -545,5 +554,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
+        private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
     }
 }

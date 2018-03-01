@@ -58,12 +58,12 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.UserControlStatsTime();
+            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeForm();
             this.tabPageScan = new System.Windows.Forms.TabPage();
             this.dataGridViewScan = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlStatsTimeScan = new EDDiscovery.UserControls.UserControlStatsTime();
+            this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeForm();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -347,11 +347,11 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.TabPage tabPageTravel;
         private System.Windows.Forms.TabPage tabPageScan;
-        private UserControlStatsTime userControlStatsTimeTravel;
+        private StatsTimeForm userControlStatsTimeTravel;
         private System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private UserControlStatsTime userControlStatsTimeScan;
+        private StatsTimeForm userControlStatsTimeScan;
         private System.Windows.Forms.DataGridView dataGridViewScan;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
