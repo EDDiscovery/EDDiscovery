@@ -166,29 +166,42 @@ namespace EliteDangerousCore.EDSM
 
         public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
         {
+            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))     // check if we need a new discard list
+            {
+                EDSMClass edsm = new EDSMClass();
+                discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+                lastDiscardFetch = DateTime.UtcNow;
+            }
+
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
 
             int eventCount = 0;
             bool hasbeta = false;
             DateTime betatime = DateTime.MinValue;
+
             foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
             {
-                if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                if ( !he.EdsmSync )     // if we have not sent it..
                 {
-                    hasbeta = true;
-                    betatime = he.EventTimeUTC;
-                }
-                else if (ShouldSendEvent(he))
-                {
-                    historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log , ManualSync = manual });
-                    eventCount++;
+                    string eventtype = he.EntryType.ToString();
+
+                    if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+                    {
+                        hasbeta = true;
+                        betatime = he.EventTimeUTC;
+                        he.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
+                    }
+                    else if (! ( he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype) ))
+                    {
+                        historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log, ManualSync = manual });
+                        eventCount++;
+                    }
                 }
             }
 
             if (hasbeta && eventCount == 0)
             {
                 log?.Invoke($"Cannot send Beta logs to EDSM - most recent timestamp: {betatime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")}");
-                return false;
             }
 
             if (manual )    // if in manual mode, we want to tell the user the end, so push an end marker
@@ -455,27 +468,6 @@ namespace EliteDangerousCore.EDSM
 
                 return true;
             }
-        }
-
-        private static bool ShouldSendEvent(HistoryEntry he)
-        {
-            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))
-            {
-                EDSMClass edsm = new EDSMClass();
-                discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
-                lastDiscardFetch = DateTime.UtcNow;
-            }
-
-            string eventtype = he.EntryType.ToString();
-            if (he.EdsmSync ||
-                he.MultiPlayer ||
-                discardEvents.Contains(eventtype) ||
-                alwaysDiscard.Contains(eventtype))
-            {
-                return false;
-            }
-
-            return true;
         }
 
     }
