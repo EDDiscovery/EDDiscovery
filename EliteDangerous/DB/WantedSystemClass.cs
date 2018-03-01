@@ -83,7 +83,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public static List<WantedSystemClass> GetAllWantedSystems()
+        public static List<WantedSystemClass> GetAllWantedSystems()     // CAN return null
         {
             try
             {
