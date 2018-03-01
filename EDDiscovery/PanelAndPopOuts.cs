@@ -175,10 +175,16 @@ namespace EDDiscovery.Forms
             return PanelList.Find(x => x.PopoutType == t);
         }
 
-        public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
+        static public Type GetPanelTypeByEnum(PanelIDs p)       // null if panel ID is bad.
         {
             int index = GetPanelIndexByEnum(p);
-            return index>=0 ? (UserControls.UserControlCommonBase)Activator.CreateInstance(PanelList[index].PopoutType, null) : null;
+            return index >= 0 ? PanelList[index].PopoutType : null;
+        }
+
+        public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
+        {
+            Type t = GetPanelTypeByEnum(p);
+            return t != null ? (UserControls.UserControlCommonBase)Activator.CreateInstance(t, null) : null;
         }
 
         static private int GetPanelIndexByEnum(PanelIDs p)
@@ -231,33 +237,34 @@ namespace EDDiscovery.Forms
 
         internal void SaveCurrentPopouts()
         {
-            foreach (int i in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
+            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)i;
-
-                UserControlCommonBase ctrl = PanelInformation.Create(p);
-                int numopened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
-                SQLiteConnectionUser.PutSettingInt("SavedPanelInformation.PopOuts:" + ((PanelInformation.PanelIDs)i).ToString(), numopened);
+                Type paneltype = PanelInformation.GetPanelTypeByEnum(p);
+                if (paneltype != null) // paranoia
+                {
+                    int numopened = usercontrolsforms.CountOf(paneltype);
+                    //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
+                    SQLiteConnectionUser.PutSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
+                }
             }
         }
 
         internal void LoadSavedPopouts()
         {
-            foreach (int ip in Enum.GetValues(typeof(PanelInformation.PanelIDs)))     // in terms of PopOut ENUM
+            foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)ip;
+                int numtoopen = SQLiteConnectionUser.GetSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), 0);
+                Type paneltype = PanelInformation.GetPanelTypeByEnum(p);
 
-                int numToOpen = SQLiteConnectionUser.GetSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), 0);
-                if (numToOpen > 0)
+                //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
+
+                if (numtoopen > 0)
                 {
-                    UserControlCommonBase ctrl = PanelInformation.Create(p);
-                    int numOpened = ctrl == null ? 0 : usercontrolsforms.CountOf(ctrl.GetType());
-                    if (numOpened < numToOpen)
+                    int numopened = usercontrolsforms.CountOf(paneltype);
+                    if (numopened < numtoopen)
                     {
-                        for (int i = numOpened + 1; i <= numToOpen; i++)
-                        {
+                        for (int i = numopened + 1; i <= numtoopen; i++)
                             PopOut(p);
-                        }
                     }
                 }
             }
