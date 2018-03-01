@@ -450,9 +450,14 @@ namespace EDDiscovery.UserControls
             int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
             if (he.StartMarker || he.StopMarker)
                 noicons++;
-            BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
-            if (bk != null)
-                noicons++;
+
+            BookmarkClass bk = null;
+            if (he.IsLocOrJump)
+            {
+                bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
+                if (bk != null)
+                    noicons++;
+            }
 
             int padding = 4;
             int size = 24;
