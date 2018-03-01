@@ -171,7 +171,7 @@ namespace ExtendedControls
         protected ObjectCollection _items;
 
         private ComboBox _cbsystem;
-        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, topBoxTextTotalArea;
+        private Rectangle topBoxTextArea, arrowRectangleArea, topBoxOutline, textBoxBackArea;
         private Point arrowpt1, arrowpt2, arrowpt3;
         private Point arrowpt1c, arrowpt2c, arrowpt3c;
         private bool isActivated = false;
@@ -203,6 +203,7 @@ namespace ExtendedControls
         public override DockStyle Dock { get { return base.Dock; } set { base.Dock = value; _cbsystem.Dock = value; } }
         public override Font Font { get { return base.Font; } set { base.Font = value; _cbsystem.Font = value; } }
         public override string Text { get { return base.Text; } set { base.Text = value; _cbsystem.Text = value; Invalidate();  } }
+        public System.Drawing.ContentAlignment TextAlign { get; set; } = System.Drawing.ContentAlignment.MiddleLeft;      // ONLY for non system combo boxes
 
         // BEWARE SET value/display before DATA SOURCE
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }
@@ -254,9 +255,13 @@ namespace ExtendedControls
             if (this.FlatStyle != FlatStyle.System)
             {
                 int extraborder = 1;
+                int texthorzspacing = 1;
 
-                topBoxTextArea = new Rectangle(ClientRectangle.X + extraborder, ClientRectangle.Y + extraborder,
-                                        ClientRectangle.Width - 2 * extraborder - ScrollBarWidth, ClientRectangle.Height - 2 * extraborder);
+                textBoxBackArea = new Rectangle(ClientRectangle.X + extraborder, ClientRectangle.Y + extraborder,
+                                                            ClientRectangle.Width - 2 * extraborder, ClientRectangle.Height - 2 * extraborder);
+
+                topBoxTextArea = new Rectangle(ClientRectangle.X + extraborder + texthorzspacing, ClientRectangle.Y + extraborder,
+                                        ClientRectangle.Width - 2 * extraborder - 2 * texthorzspacing - ScrollBarWidth, ClientRectangle.Height - 2 * extraborder);
 
                 arrowRectangleArea = new Rectangle(ClientRectangle.Width - ScrollBarWidth - extraborder, ClientRectangle.Y + extraborder,
                                                     ScrollBarWidth, ClientRectangle.Height - 2 * extraborder);
@@ -264,8 +269,6 @@ namespace ExtendedControls
                 topBoxOutline = new Rectangle(ClientRectangle.X, ClientRectangle.Y,
                                                 ClientRectangle.Width - 1, ClientRectangle.Height - 1);
 
-                topBoxTextTotalArea = new Rectangle(ClientRectangle.X + extraborder, ClientRectangle.Y + extraborder,
-                                                            ClientRectangle.Width - 2 * extraborder, ClientRectangle.Height - 2 * extraborder);
 
                 int hoffset = arrowRectangleArea.Width / 3;
                 int voffset = arrowRectangleArea.Height / 3;
@@ -276,9 +279,6 @@ namespace ExtendedControls
                 arrowpt1c = new Point(arrowpt1.X, arrowpt2.Y);
                 arrowpt2c = new Point(arrowpt2.X, arrowpt1.Y);
                 arrowpt3c = new Point(arrowpt3.X, arrowpt2.Y);
-
-                SizeF sz = e.Graphics.MeasureString("Represent THIS", this.Font);
-                topBoxTextArea.Y += (topBoxTextArea.Height - (int)sz.Height) / 2;
 
                 Brush textb;
                 Pen p, p2;
@@ -312,14 +312,16 @@ namespace ExtendedControls
 
                 if (FlatStyle == FlatStyle.Popup)
                 {
-                    bbck = new System.Drawing.Drawing2D.LinearGradientBrush(topBoxTextTotalArea, bck, bck.Multiply(ButtonColorScaling), 90);
+                    bbck = new System.Drawing.Drawing2D.LinearGradientBrush(textBoxBackArea, bck, bck.Multiply(ButtonColorScaling), 90);
                 }
                 else
                 {
                     bbck = new SolidBrush(bck);
                 }
 
-                e.Graphics.FillRectangle(bbck, topBoxTextTotalArea);
+                e.Graphics.FillRectangle(bbck, textBoxBackArea);
+
+                //using (Brush test = new SolidBrush(Color.Red)) e.Graphics.FillRectangle(test, topBoxTextArea); // used to check alignment 
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
@@ -337,8 +339,11 @@ namespace ExtendedControls
                     }
                 }
 
-                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Near, FormatFlags = StringFormatFlags.NoWrap })
-                    e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, f);
+                using (var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(RtlTranslateAlignment(TextAlign)))
+                {
+                    fmt.FormatFlags = StringFormatFlags.NoWrap;
+                    e.Graphics.DrawString(this.Text, this.Font, textb, topBoxTextArea, fmt);
+                }
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
 
