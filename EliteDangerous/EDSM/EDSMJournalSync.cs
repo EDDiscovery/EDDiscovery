@@ -170,11 +170,13 @@ namespace EliteDangerousCore.EDSM
 
             int eventCount = 0;
             bool hasbeta = false;
+            DateTime betatime = DateTime.MinValue;
             foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
             {
                 if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
                 {
                     hasbeta = true;
+                    betatime = he.EventTimeUTC;
                 }
                 else if (ShouldSendEvent(he))
                 {
@@ -185,7 +187,7 @@ namespace EliteDangerousCore.EDSM
 
             if (hasbeta && eventCount == 0)
             {
-                log?.Invoke("Cannot send Beta logs to EDSM");
+                log?.Invoke($"Cannot send Beta logs to EDSM - most recent timestamp: {betatime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")}");
                 return false;
             }
 
