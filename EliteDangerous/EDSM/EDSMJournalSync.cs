@@ -169,19 +169,26 @@ namespace EliteDangerousCore.EDSM
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
 
             int eventCount = 0;
+            bool hasbeta = false;
+            DateTime betatime = DateTime.MinValue;
             foreach (HistoryEntry he in helist)     // push list of events to historylist queue..
             {
                 if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
                 {
-                    log?.Invoke("Cannot send Beta logs to EDSM");
-                    return false;
+                    hasbeta = true;
+                    betatime = he.EventTimeUTC;
                 }
-
-                if (ShouldSendEvent(he))
+                else if (ShouldSendEvent(he))
                 {
                     historylist.Enqueue(new HistoryQueueEntry { HistoryEntry = he, Logger = log , ManualSync = manual });
                     eventCount++;
                 }
+            }
+
+            if (hasbeta && eventCount == 0)
+            {
+                log?.Invoke($"Cannot send Beta logs to EDSM - most recent timestamp: {betatime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")}");
+                return false;
             }
 
             if (manual )    // if in manual mode, we want to tell the user the end, so push an end marker
