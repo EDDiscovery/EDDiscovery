@@ -78,11 +78,11 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
             this.resetToolStripReset = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelOuter = new System.Windows.Forms.Panel();
+            this.background = new System.Windows.Forms.PictureBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartBubble)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            this.panelOuter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxView.DropDownWidth = 75;
             this.comboBoxView.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxView.ItemHeight = 13;
-            this.comboBoxView.Location = new System.Drawing.Point(157, 3);
+            this.comboBoxView.Location = new System.Drawing.Point(153, 3);
             this.comboBoxView.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxView.Name = "comboBoxView";
             this.comboBoxView.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -196,7 +196,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxView.SelectedIndex = -1;
             this.comboBoxView.SelectedItem = null;
             this.comboBoxView.SelectedValue = null;
-            this.comboBoxView.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxView.Size = new System.Drawing.Size(60, 21);
             this.comboBoxView.TabIndex = 9;
             this.comboBoxView.Text = "comboBoxCustom1";
             this.comboBoxView.ValueMember = "";
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
             this.chartBubble.ChartAreas.Add(chartArea1);
             this.chartBubble.ChartAreas.Add(chartArea2);
             this.chartBubble.ChartAreas.Add(chartArea3);
-            this.chartBubble.Location = new System.Drawing.Point(0, 26);
+            this.chartBubble.Location = new System.Drawing.Point(19, 41);
             this.chartBubble.Margin = new System.Windows.Forms.Padding(0);
             this.chartBubble.Name = "chartBubble";
             series1.ChartArea = "ChartXYZ-Top";
@@ -366,7 +366,7 @@ namespace EDDiscovery.UserControls
             this.chartBubble.Series.Add(series7);
             this.chartBubble.Series.Add(series8);
             this.chartBubble.Series.Add(series9);
-            this.chartBubble.Size = new System.Drawing.Size(335, 317);
+            this.chartBubble.Size = new System.Drawing.Size(301, 283);
             this.chartBubble.SuppressExceptions = true;
             this.chartBubble.TabIndex = 28;
             this.chartBubble.Text = "Nearest Systems Plot";
@@ -469,30 +469,32 @@ namespace EDDiscovery.UserControls
             this.resetToolStripReset.Text = "Reset";
             this.resetToolStripReset.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
-            // panelOuter
+            // background
             // 
-            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.chartBubble);
-            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 26);
-            this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(335, 317);
-            this.panelOuter.TabIndex = 29;
+            this.background.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.background.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.background.Location = new System.Drawing.Point(0, 0);
+            this.background.Name = "background";
+            this.background.Size = new System.Drawing.Size(335, 343);
+            this.background.TabIndex = 29;
+            this.background.TabStop = false;
+            this.background.MouseDown += new System.Windows.Forms.MouseEventHandler(this.background_MouseDown);
             // 
             // UserControlPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.chartBubble);
+            this.Controls.Add(this.background);
             this.Name = "UserControlPlot";
             this.Size = new System.Drawing.Size(335, 343);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chartBubble)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            this.panelOuter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -517,6 +519,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem4;
         private ToolStripMenuItem resetToolStripReset;
         private ExtendedControls.ComboBoxCustom comboBoxView;
-        private Panel panelOuter;
+        private PictureBox background;
     }
 }
