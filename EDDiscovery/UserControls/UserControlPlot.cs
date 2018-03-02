@@ -43,7 +43,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             this.chartBubble.MouseWheel += Zoom_MouseWheel;
-            SetMarkerSize(); // define default bubbles size
+                        
+            SetMarkerSize();
         }
 
         const double defaultmaximumradarradius = 50;
@@ -96,6 +97,7 @@ namespace EDDiscovery.UserControls
             KickComputation(he);
 
             refreshRadar();
+            SetChartSize(chartBubble, 1);
         }
 
         private void KickComputation(HistoryEntry he)
@@ -209,7 +211,7 @@ namespace EDDiscovery.UserControls
         
         // zoom with the mouse scroll wheel
         private double[] zoomFactor = { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0 };
-        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 };
+        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 }; // markes reduce in size when zoom in, for a clearer view
         private int zoomIndex = 0; // default zoom at 1:1
 
         private int[] seriesIsCurrent = { 0, 3, 6 };
@@ -251,8 +253,16 @@ namespace EDDiscovery.UserControls
             ctrlToZoom.Width = ctrlToZoom.Parent.Width;
 
             // multiply the chart's size to the zoom factor 
-            ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
-            ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio);
+            if (zoomratio == 1.0) 
+            { // reduce a bit the size of the chart for a better overall visualization
+                ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
+                ctrlToZoom.Height = (Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio) / 100) * 90;
+            }
+            else
+            {
+                ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
+                ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio);
+            }
 
             ctrlToZoom.Left = ctrlToZoom.Parent.Left;
             ctrlToZoom.Top = ctrlToZoom.Parent.Top;
@@ -294,7 +304,7 @@ namespace EDDiscovery.UserControls
             }
             if (zoomIndex == 0)
             {
-                SetChartSize(chartBubble, 1);
+                SetChartSize(chartBubble, 1.0);
                 SetMarkerSize();
             }
         }
@@ -479,6 +489,12 @@ namespace EDDiscovery.UserControls
                 int cursorY = Cursor.Position.Y;
                 contextMenuStrip.Show(cursorX, cursorY);
             }
+        }
+
+        private void UserControlPlot_Resize(object sender, EventArgs e)
+        {
+            SetChartSize(chartBubble, 1);
+            SetMarkerSize();           
         }
     }    
 }
