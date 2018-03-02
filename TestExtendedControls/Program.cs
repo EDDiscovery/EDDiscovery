@@ -78,6 +78,10 @@ namespace DialogTest
                 case "testcompositebutton":
                     sel = new TestCompositeButton();
                     break;
+
+                case "testcompasscontrol":
+                    sel = new TestCompassControl();
+                    break;
             }
 
 

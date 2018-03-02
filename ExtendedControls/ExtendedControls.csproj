@@ -56,6 +56,9 @@
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CompassControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\CompositeButton.cs">
       <SubType>Component</SubType>
     </Compile>
