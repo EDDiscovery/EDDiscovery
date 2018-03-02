@@ -67,43 +67,54 @@ namespace NetLogEntry
                     break;
             }
 
-            if (args.Left < 2)
+            string arg1 = args.Next;
+
+            if (arg1 == null )
             {
                 Help();
                 return;
             }
 
-            string arg1 = args.Next;
-            string arg2 = args.Next;        // must have 2 at least.
+            if (arg1.Equals("StatusJSON", StringComparison.InvariantCultureIgnoreCase))
+            {
+                StatusJSON();
+                return;
+            }
+
+            if ( args.Left < 1)
+            {
+                Help();
+                return;
+            }
 
             if (arg1.Equals("EDDBSTARS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Star\"", "\"spectral_class\"", "Star class ");
+                EDDBLog(args.Next, "\"Star\"", "\"spectral_class\"", "Star class ");
             }
             else if (arg1.Equals("EDDBPLANETS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Planet\"", "\"type_name\"", "Planet class");
+                EDDBLog(args.Next, "\"Planet\"", "\"type_name\"", "Planet class");
             }
             else if (arg1.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Star\"", "\"name\"", "Star Name");
+                EDDBLog(args.Next, "\"Star\"", "\"name\"", "Star Name");
             }
             else if (arg1.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
             {
-                Bindings(arg2);
+                Bindings(args.Next);
             }
             else if (arg1.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
             {
-                DeviceMappings(arg2);
+                DeviceMappings(args.Next);
             }
-            else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase) )
+            else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase))
             {
-                if ( args.Left >= 1 )
-                    Phoneme(arg2, args.Next);
+                if (args.Left >= 1)
+                    Phoneme(args.Next, args.Next);
             }
             else
             {
-                JournalEntry(arg1, arg2, args, repeatdelay);
+                JournalEntry(arg1, args.Next, args, repeatdelay);
             }
         }
 
@@ -306,7 +317,8 @@ namespace NetLogEntry
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
-                              "DeviceMappings <filename>\n"
+                              "DeviceMappings <filename>\n"+
+                              "StatusJSON \n"
                               );
 
         }
@@ -707,6 +719,32 @@ namespace NetLogEntry
 
         }
 
+        public static void StatusJSON()
+        {
+            int heading = 0;
+            long flags = 0;
+
+            while(true)
+            {
+                heading = (heading + 2) %360;
+
+                //{ "timestamp":"2018-03-01T21:51:36Z", "event":"Status", "Flags":18874376, 
+                //"Pips":[4,8,0], "FireGroup":1, "GuiFocus":0, "Latitude":-18.978821, "Longitude":-123.642052, "Heading":308, "Altitude":20016 }
+
+                string j = "{ " + TimeStamp() + F("event", "Status") + F("Flags", flags) + F("Pips",new int[] { 4,8,0}) + 
+                            F("FireGroup",1) + F("GuiFocus",0) + F("Latitude",-10) + F("Longitude",20) + F("Heading",heading) + FF("Altitude",20) 
+                            + "}";
+
+                File.WriteAllText("Status.json", j);
+                System.Threading.Thread.Sleep(250);
+
+                if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+            }
+        }
+
         #region Helpers for journal writing
 
         public static string TimeStamp()
@@ -718,6 +756,20 @@ namespace NetLogEntry
         public static string F(string name, string v)
         {
             return "\"" + name + "\":\"" + v + "\", ";
+        }
+
+        public static string F(string name, int[] array, bool end = false)
+        {
+            string s = "";
+            foreach( int a in array )
+            {
+                if (s.Length > 0)
+                    s += ", ";
+
+                s += a.ToString();
+            }
+
+            return "\"" + name + "\":[" + s + "]" + (end? "" : ", ");
         }
 
         public static string FF(string name, string v)      // no final comma
