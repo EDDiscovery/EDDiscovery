@@ -29,6 +29,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using ExtendedControls;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -64,7 +65,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedIndex = 0;
             comboBoxView.Enabled = true;
-
+                        
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
@@ -74,7 +75,7 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            refreshRadar();
+            //refreshRadar();
         }
 
         public override void Closing()
@@ -94,7 +95,6 @@ namespace EDDiscovery.UserControls
         {
             KickComputation(he);
 
-            // this is our current system, centered on the map
             refreshRadar();
         }
 
@@ -144,6 +144,9 @@ namespace EDDiscovery.UserControls
                         var curY = centerSystem.Y;
                         var curZ = centerSystem.Z;
 
+                        double totalMass = 0;
+                        double knownMagnitude = 0;
+                        
                         // reset charts axis
                         chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
                         chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
@@ -159,7 +162,7 @@ namespace EDDiscovery.UserControls
                             int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys + "; " + "Known masses: " + totalMass + "; " + "Known absolute magnitude: " + knownMagnitude);
 
                             double dx = curX - sysX;
                             double dy = curY - sysY;
@@ -171,20 +174,22 @@ namespace EDDiscovery.UserControls
 
                             // visited systems go to series #1, #4 and #7; unvisited to series #2, #5 and #8. 
                             // Serie #0, #3 and #6 is for the current system...
-                                                        
+
                             if (visits > 0)
                             {
+
                                 chartBubble.Series[1].Points.AddXY(px, py, pz);
                                 chartBubble.Series[1].ToolTip = label.ToString();
 
                                 chartBubble.Series[4].Points.AddXY(px, pz, py);
                                 chartBubble.Series[4].ToolTip = label.ToString();
-                                
+
                                 chartBubble.Series[7].Points.AddXY(py, pz, px);
-                                chartBubble.Series[7].ToolTip = label.ToString();
+                                chartBubble.Series[7].ToolTip = label.ToString();                                
                             }
                             else
                             {
+
                                 chartBubble.Series[2].Points.AddXY(px, py, pz);
                                 chartBubble.Series[2].ToolTip = label.ToString();
 
@@ -335,11 +340,11 @@ namespace EDDiscovery.UserControls
             chartBubble.Update();            
         }
         
-        private int panSwitch = 0;
+        private bool panSwitch = false;
 
         private void chartBubble_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle && panSwitch == 1)
+            if (e.Button == MouseButtons.Middle && panSwitch == true)
             {                
                 mousePosPan = e.Location;
             }
@@ -434,12 +439,12 @@ namespace EDDiscovery.UserControls
 
         private void chartBubble_MouseEnter(object sender, EventArgs e)
         {
-            panSwitch = 1;
+            panSwitch = true;
         }
 
         private void chartBubble_MouseLeave(object sender, EventArgs e)
         {
-            panSwitch = 0;
+            panSwitch = false;
         }
 
         private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
@@ -462,6 +467,18 @@ namespace EDDiscovery.UserControls
                 chartBubble.ChartAreas[1].Visible = false;
                 chartBubble.ChartAreas[2].Visible = true;
             }
-        }        
+        }
+
+        private void background_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+
+                //Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
+                int cursorX = Cursor.Position.X;
+                int cursorY = Cursor.Position.Y;
+                contextMenuStrip.Show(cursorX, cursorY);
+            }
+        }
     }    
 }

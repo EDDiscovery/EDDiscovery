@@ -76,8 +76,8 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            RefreshMap();
-            ControlReset(chartMap);
+            //RefreshMap();
+            //ControlReset(chartMap);
         }
 
         public override void Closing()
@@ -309,12 +309,12 @@ namespace EDDiscovery.UserControls
             if (zoomFactor[zoomIndex] != 0)
             {
                 // get the current position of the chart
-                var chartZoomIn = PointToScreen(new Point(chartMap.Left, chartMap.Top));
+                var ctrlPrevCoords = PointToScreen(new Point(ctrlToZoom.Left, ctrlToZoom.Top));
 
                 // get the mouse position
-                var Mouse = PointToScreen(new Point(e.X, e.Y));
+                var mouseCoords = PointToScreen(new Point(e.X, e.Y));
 
-                // multiply the chart's size to the zoom factor 
+                // multiply the control's size to the zoom factor 
                 ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomFactor[zoomIndex]);
                 ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomFactor[zoomIndex]);
 
@@ -322,10 +322,10 @@ namespace EDDiscovery.UserControls
                 var Center = new Point(Convert.ToInt32(ctrlToZoom.Parent.Width / 2), Convert.ToInt32(ctrlToZoom.Parent.Height / 2));
 
                 // calculate the offset
-                var Offset = new Point(Convert.ToInt32(Mouse.X - Center.X), Convert.ToInt32((Mouse.Y - Center.Y)));
+                var Offset = new Point(Convert.ToInt32(mouseCoords.X - Center.X), Convert.ToInt32((mouseCoords.Y - Center.Y)));
 
-                // calculate the new position of the chart, offsetting it's center to the mouse coordinates
-                var NewPosition = new Point(chartZoomIn.X - Offset.X, chartZoomIn.Y - Offset.Y);
+                // calculate the new position of the control, offsetting it's center to the mouse coordinates
+                var NewPosition = new Point(ctrlPrevCoords.X - Offset.X, ctrlPrevCoords.Y - Offset.Y);
 
                 ctrlToZoom.Left = NewPosition.X;
                 ctrlToZoom.Top = NewPosition.Y;
@@ -335,13 +335,13 @@ namespace EDDiscovery.UserControls
             if (zoomFactor[zoomIndex] == 0)
             {
                 // resize to the minimum width and height
-                chartMap.Width = chartMap.Parent.Width;
-                chartMap.Height = chartMap.Parent.Height;
+                ctrlToZoom.Width = ctrlToZoom.Parent.Width;
+                ctrlToZoom.Height = ctrlToZoom.Parent.Height;
 
-                // position the chart in the center of the panel
-                var chartNoZoom = new Point(chartMap.Parent.Left, chartMap.Parent.Top);
-                chartMap.Left = chartNoZoom.X;
-                chartMap.Top = chartNoZoom.Y;
+                // position the control in the center of the panel
+                var chartNoZoom = new Point(ctrlToZoom.Parent.Left, ctrlToZoom.Parent.Top);
+                ctrlToZoom.Left = chartNoZoom.X;
+                ctrlToZoom.Top = chartNoZoom.Y;
             }
         }
 
@@ -413,7 +413,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private int panSwitch = 1;
+        private bool panSwitch = false;
 
         private void ChartMap_MouseMove(object sender, MouseEventArgs e)
         {
@@ -433,7 +433,7 @@ namespace EDDiscovery.UserControls
             }
 
             // pan the chart with the middle mouse buttom
-            if (e.Button == MouseButtons.Middle & panSwitch == 0)
+            if (e.Button == MouseButtons.Middle & panSwitch == true)
             {
                 PanControl(chartMap, e);
             }
@@ -646,12 +646,20 @@ namespace EDDiscovery.UserControls
 
         private void chartMap_MouseEnter(object sender, EventArgs e)
         {
-            panSwitch = 0;
+            panSwitch = true;
         }
 
         private void chartMap_MouseLeave(object sender, EventArgs e)
         {
-            panSwitch = 1;
+            panSwitch = false;
+        }
+
+        private void background_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
+            }
         }
     }
 }
