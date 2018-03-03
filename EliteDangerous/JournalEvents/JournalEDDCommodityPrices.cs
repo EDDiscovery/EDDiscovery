@@ -71,9 +71,9 @@ namespace EliteDangerousCore.JournalEvents
                 if (c.buyPrice > 0)
                 {
                     if (c.sellPrice > 0)
-                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ", c.name, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
+                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ", c.fdname, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
                     else
-                        detailed += string.Format("{0}: {1}  ", c.name, c.buyPrice);
+                        detailed += string.Format("{0}: {1}  ", c.fdname, c.buyPrice);
 
                     if (++col == maxcol)
                     {
@@ -92,7 +92,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (c.buyPrice <= 0)
                 {
-                    detailed += string.Format("{0}: {1}  ", c.name, c.sellPrice);
+                    detailed += string.Format("{0}: {1}  ", c.fdname, c.sellPrice);
                     if (++col == maxcol)
                     {
                         detailed += System.Environment.NewLine;

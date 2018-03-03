@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
 
             int firstdisplayed = dataGridViewMarketData.FirstDisplayedScrollingRowIndex;
             string commodity = (dataGridViewMarketData.CurrentRow != null) ? (string)dataGridViewMarketData.CurrentRow.Cells[1].Value : null;
-            int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? dataGridViewMarketData.CurrentRow.Index - firstdisplayed : 0;
+            int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
             
             dataGridViewMarketData.Rows.Clear();
             labelLocation.Text = "No Data";
@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodities> notfound = new List<MaterialCommodities>();
                 foreach (MaterialCommodities m in mclist)
                 {
-                    int index = list.FindIndex(x => x.name.EqualsAlphaNumOnlyNoCase(m.name));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.name));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
                         list[index].CargoCarried = m.count; // found it, set cargo count..
                     else
@@ -175,8 +175,8 @@ namespace EDDiscovery.UserControls
                 {
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
-                        object[] rowobj = { c.loctype.Alt(c.type) ,
-                                            c.locName.Alt(c.name.SplitCapsWordFull()) ,
+                        object[] rowobj = { c.loccategory.Alt(c.category) ,
+                                            c.locName.Alt(c.fdname.SplitCapsWordFull()) ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
@@ -268,6 +268,8 @@ namespace EDDiscovery.UserControls
             {
                 comboboxentries.Add(h);
                 string v = h.System.Name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
+                if (h.journalEntry is JournalEDDCommodityPrices)
+                    v += " (CAPI)";
                 comboBoxCustomFrom.Items.Add(v);
                 comboBoxCustomTo.Items.Add(v);
             }
