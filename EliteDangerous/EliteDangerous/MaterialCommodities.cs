@@ -169,36 +169,37 @@ namespace EliteDangerousCore
 
         public static void SetUpInitialTable()
         {
-            AddRaw("Antimony", MaterialFreqVeryRare, "Sb");
-            AddRaw("Polonium", MaterialFreqVeryRare, "Po");
-            AddRaw("Ruthenium", MaterialFreqVeryRare, "Ru");
-            AddRaw("Technetium", MaterialFreqVeryRare, "Tc");
-            AddRaw("Tellurium", MaterialFreqVeryRare, "Te");
-
-            AddRaw( "Yttrium", MaterialFreqRare, "Y");
-            AddRaw( "Cadmium", MaterialFreqRare, "Cd");
-            AddRaw( "Mercury", MaterialFreqRare, "Hg");
-            AddRaw( "Molybdenum", MaterialFreqRare, "Mo");
-            AddRaw( "Tin", MaterialFreqRare, "Sn");
-
+            
             AddRaw("Carbon", MaterialFreqVeryCommon, "C");
             AddRaw("Iron", MaterialFreqVeryCommon, "Fe");
             AddRaw("Nickel", MaterialFreqVeryCommon, "Ni");
             AddRaw("Phosphorus", MaterialFreqVeryCommon, "P");
             AddRaw("Sulphur", MaterialFreqVeryCommon, "S");
 
-            AddRaw( "Chromium", MaterialFreqCommon, "Cr");
-            AddRaw( "Germanium", MaterialFreqCommon, "Ge");
-            AddRaw( "Manganese", MaterialFreqCommon, "Mn");
-            AddRaw( "Vanadium", MaterialFreqCommon, "V");
-            AddRaw( "Zinc", MaterialFreqCommon, "Zn");
-                               
+            AddRaw("Chromium", MaterialFreqCommon, "Cr");
+            AddRaw("Germanium", MaterialFreqCommon, "Ge");
+            AddRaw("Manganese", MaterialFreqCommon, "Mn");
+            AddRaw("Vanadium", MaterialFreqCommon, "V");
+            AddRaw("Zinc", MaterialFreqCommon, "Zn");
+            AddRaw("Zirconium", MaterialFreqCommon, "Zr");
+            AddRaw("Tin", MaterialFreqCommon, "Sn");
+            AddRaw("Arsenic", MaterialFreqCommon, "As");
+
             AddRaw("Niobium", MaterialFreqStandard, "Nb");        // realign to Anthors standard
             AddRaw("Tungsten", MaterialFreqStandard, "W");
-            AddRaw("Arsenic", MaterialFreqStandard, "As");
-            AddRaw("Selenium", MaterialFreqStandard, "Se");
-            AddRaw("Zirconium", MaterialFreqStandard, "Zr");
-                                     
+            AddRaw("Molybdenum", MaterialFreqStandard, "Mo");
+            AddRaw("Mercury", MaterialFreqStandard, "Hg");
+
+            AddRaw("Selenium", MaterialFreqRare, "Se");
+            AddRaw("Yttrium", MaterialFreqRare, "Y");
+            AddRaw("Cadmium", MaterialFreqRare, "Cd");
+            AddRaw("Technetium", MaterialFreqRare, "Tc");
+            AddRaw("Tellurium", MaterialFreqRare, "Te");
+            AddRaw("Ruthenium", MaterialFreqRare, "Ru");
+            AddRaw("Polonium", MaterialFreqRare, "Po");
+
+            AddRaw("Antimony", MaterialFreqVeryRare, "Sb");
+
             AddCommodity("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
             AddCommodity("Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
@@ -464,7 +465,6 @@ namespace EliteDangerousCore
             AddManu("Hybrid Capacitors", MaterialFreqCommon, "HC");
             AddManu("Mechanical Equipment", MaterialFreqCommon, "ME");
             AddManu("Shield Emitters", MaterialFreqCommon, "SE");
-
             // standard manufactured
             AddManu( "Chemical Distillery", MaterialFreqStandard, "CD");
             AddManu( "Conductive Ceramics", MaterialFreqStandard, "CCe");
