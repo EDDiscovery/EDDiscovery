@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             long profit = TotalSale - (AvgPricePaid * Count);
-            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; cr;N0", SellPrice, "Total:", TotalSale, "Profit:", profit);
+            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; cr;N0", SellPrice, "Total:; cr;N0", TotalSale, "Profit:; cr;N0", profit);
             detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
         }
     }

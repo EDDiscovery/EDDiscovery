@@ -254,9 +254,9 @@ namespace BaseUtils
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                     WriteLog("GET " + request.RequestUri, "");
-                    
+
                     // Get the response.
-                    //request.Timeout = 740 * 1000;
+                    request.Timeout = 5000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     var data = getResponseData(response);

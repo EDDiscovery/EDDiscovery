@@ -352,15 +352,14 @@ namespace EliteDangerousCore.EDDN
 
             foreach (var commodity in commodities)
             {
-                if (commodity.type.Equals("NonMarketable"))
+                if (commodity.category.IndexOf("NonMarketable", StringComparison.InvariantCultureIgnoreCase)>=0)
                 {
                     continue;
                 }
 
-
                 JObject jo = new JObject();
 
-                jo["name"] = commodity.name;
+                jo["name"] = commodity.fdname;
                 jo["meanPrice"] = commodity.meanPrice;
                 jo["buyPrice"] = commodity.buyPrice;
                 jo["stock"] = commodity.stock;
