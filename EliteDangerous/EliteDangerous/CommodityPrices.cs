@@ -6,8 +6,12 @@ namespace EliteDangerousCore
     public class CCommodities
     {
         public int id { get; private set; }
-        public string name { get; private set; }            // NAME as given by the CAPI, which is normal text, not fdname, but is not perfect (some conjoining)
+
+        public string fdname { get; private set; }            // EDDN use : name is lower cased in CAPI but thats all to match Marketing use of it
         public string locName { get; private set; }
+        public string category { get; private set; }                // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
+        public string loccategory { get; private set; }       // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
+
         public int buyPrice { get; private set; }
         public int sellPrice { get; private set; }
         public int meanPrice { get; private set; }
@@ -15,8 +19,7 @@ namespace EliteDangerousCore
         public int stockBracket { get; private set; }
         public int stock { get; private set; }
         public int demand { get; private set; }
-        public string type { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
-        public string loctype { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
+
         public List<string> StatusFlags { get; private set; }
 
         public string ComparisionLR { get; private set; }       // NOT in Frontier data, used for market data UC during merge
@@ -36,7 +39,12 @@ namespace EliteDangerousCore
         public CCommodities(CCommodities other)             // main fields copied, not the extra data ones
         {
             id = other.id;
-            name = other.name;
+
+            fdname = other.fdname;
+            locName = other.locName;
+            category = other.category;
+            loccategory = other.loccategory;
+
             buyPrice = other.buyPrice;
             sellPrice = other.sellPrice;
             meanPrice = other.meanPrice;
@@ -44,9 +52,9 @@ namespace EliteDangerousCore
             stockBracket = other.stockBracket;
             stock = other.stock;
             demand = other.demand;
-            type = other.type;
-            loctype = other.loctype;
+
             StatusFlags = new List<string>(other.StatusFlags);
+
             ComparisionLR = ComparisionRL = "";
         }
 
@@ -55,9 +63,12 @@ namespace EliteDangerousCore
             try
             {
                 id = jo["id"].Int();
-                name = jo["name"].Str();
+                fdname = jo["name"].Str().ToLower();
                 locName = jo["locName"].Str();
-                locName = locName.Alt(name);
+                loccategory = category = jo["categoryname"].Str();
+                category = "$MARKET_category_" + category.ToLower().Replace(" ","_").Replace("narcotics","drugs");
+               // System.Diagnostics.Debug.WriteLine("CAPI field fd:'{0}' loc:'{1}' of type '{2}' '{3}'", fdname, locName, category , loccategory);
+                locName = locName.Alt(fdname.SplitCapsWord());      // use locname, if not there, make best loc name possible
 
                 buyPrice = jo["buyPrice"].Int();
                 sellPrice = jo["sellPrice"].Int();
@@ -66,9 +77,7 @@ namespace EliteDangerousCore
                 stockBracket = jo["stockBracket"].Int();
                 stock = jo["stock"].Int();
                 demand = jo["demand"].Int();
-                loctype = type = jo["categoryname"].Str();
 
-                System.Diagnostics.Debug.WriteLine("CAPI field {0} {1} of type {2}", name, locName, type);
 
                 List<string> StatusFlags = new List<string>();
                 foreach (dynamic statusFlag in jo["statusFlags"])
@@ -91,10 +100,10 @@ namespace EliteDangerousCore
             try
             {
                 id = jo["id"].Int();
-                name = JournalFieldNaming.FixCommodityName(jo["Name"].Str());
-                locName = jo["Name_Localised"].Str().Alt(name);
-                loctype = jo["Category_Localised"].Str();
-                type = jo["Category"].Str();
+                fdname = JournalFieldNaming.FixCommodityName(jo["Name"].Str());
+                locName = jo["Name_Localised"].Str().Alt(fdname);
+                loccategory = jo["Category_Localised"].Str();
+                category = jo["Category"].Str();
 
                 buyPrice = jo["BuyPrice"].Int();
                 sellPrice = jo["SellPrice"].Int();
@@ -116,6 +125,7 @@ namespace EliteDangerousCore
                     StatusFlags.Add("Rare");
 
                 this.StatusFlags = StatusFlags;
+                //System.Diagnostics.Debug.WriteLine("Market field fd:'{0}' loc:'{1}' of type '{2}' '{3}'", fdname, locName, category, loccategory);
 
                 ComparisionLR = ComparisionRL = "";
                 return true;
@@ -129,16 +139,16 @@ namespace EliteDangerousCore
         public override string ToString()
         {
             return string.Format("{0} : {1} Buy {2} Sell {3} Mean {4}" + System.Environment.NewLine +
-                                 "Stock {5} Demand {6}", loctype, locName, buyPrice, sellPrice, meanPrice, stock, demand);
+                                 "Stock {5} Demand {6}", loccategory, locName, buyPrice, sellPrice, meanPrice, stock, demand);
         }
 
         public static void Sort(List<CCommodities> list)
         {
             list.Sort(delegate (CCommodities left, CCommodities right)
             {
-                int cat = left.type.CompareTo(right.type);
+                int cat = left.category.CompareTo(right.category);
                 if (cat == 0)
-                    cat = left.name.CompareTo(right.name);
+                    cat = left.fdname.CompareTo(right.fdname);
                 return cat;
             });
         }
@@ -150,7 +160,7 @@ namespace EliteDangerousCore
             foreach (CCommodities l in left)
             {
                 CCommodities m = new CCommodities(l);
-                CCommodities r = right.Find(x => x.name == l.name);
+                CCommodities r = right.Find(x => x.fdname == l.fdname);
                 if (r != null)
                 {
                     if (l.buyPrice > 0)     // if we can buy it..
@@ -176,11 +186,11 @@ namespace EliteDangerousCore
 
             foreach (CCommodities r in right)
             {
-                CCommodities m = merged.Find(x => x.name == r.name);        // see if any in right we have not merged
+                CCommodities m = merged.Find(x => x.fdname == r.fdname);        // see if any in right we have not merged
                 if (m == null)
                 {
                     m = new CCommodities(r);
-                    m.name = m.name + " at " + otherstation;
+                    m.fdname = m.fdname + " at " + otherstation;
                     m.ComparisionRightOnly = true;
 
                     if (r.buyPrice > 0)                             // if we can buy it here, note you can't price it in left
