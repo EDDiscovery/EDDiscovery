@@ -7,6 +7,7 @@ namespace EliteDangerousCore
     {
         public int id { get; private set; }
         public string name { get; private set; }            // NAME as given by the CAPI, which is normal text, not fdname, but is not perfect (some conjoining)
+        public string locName { get; private set; }
         public int buyPrice { get; private set; }
         public int sellPrice { get; private set; }
         public int meanPrice { get; private set; }
@@ -17,10 +18,6 @@ namespace EliteDangerousCore
         public string type { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
         public string loctype { get; private set; }            // in this context, it means, its type (Metals).. as per MaterialCommoditiesDB
         public List<string> StatusFlags { get; private set; }
-
-        public string categoryname { get; private set; }
-        public string locName { get; private set; }
-
 
         public string ComparisionLR { get; private set; }       // NOT in Frontier data, used for market data UC during merge
         public string ComparisionRL { get; private set; }       // NOT in Frontier data, used for market data UC during merge
@@ -38,9 +35,17 @@ namespace EliteDangerousCore
 
         public CCommodities(CCommodities other)             // main fields copied, not the extra data ones
         {
-            id = other.id; name = other.name; buyPrice = other.buyPrice; sellPrice = other.sellPrice; meanPrice = other.meanPrice;
-            demandBracket = other.demandBracket; stockBracket = other.stockBracket; stock = other.stock; demand = other.demand;
+            id = other.id;
+            name = other.name;
+            buyPrice = other.buyPrice;
+            sellPrice = other.sellPrice;
+            meanPrice = other.meanPrice;
+            demandBracket = other.demandBracket;
+            stockBracket = other.stockBracket;
+            stock = other.stock;
+            demand = other.demand;
             type = other.type;
+            loctype = other.loctype;
             StatusFlags = new List<string>(other.StatusFlags);
             ComparisionLR = ComparisionRL = "";
         }
@@ -62,6 +67,8 @@ namespace EliteDangerousCore
                 stock = jo["stock"].Int();
                 demand = jo["demand"].Int();
                 loctype = type = jo["categoryname"].Str();
+
+                System.Diagnostics.Debug.WriteLine("CAPI field {0} {1} of type {2}", name, locName, type);
 
                 List<string> StatusFlags = new List<string>();
                 foreach (dynamic statusFlag in jo["statusFlags"])
