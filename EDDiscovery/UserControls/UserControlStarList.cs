@@ -357,7 +357,7 @@ namespace EDDiscovery.UserControls
                             hasmaterials = 1;
 
                             string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Carbon (C), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
 
                             int jump1 = 0;
                             int jump2 = 0;
@@ -371,6 +371,12 @@ namespace EDDiscovery.UserControls
                             if (MaterialsBrief.Contains("Cadmium"))
                             {
                                 jump2 += 1;
+                            }
+                            if (MaterialsBrief.Contains("Carbon"))
+                            {
+                                jump1 += 1;
+                                jump2 += 1;
+                                jump3 += 1;
                             }
                             if (MaterialsBrief.Contains("Germanium"))
                             {
