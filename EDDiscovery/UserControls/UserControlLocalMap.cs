@@ -33,7 +33,7 @@ using System.Diagnostics;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlMap : UserControlCommonBase
+    public partial class UserControlLocalMap : UserControlCommonBase
     {
         #region init
 
@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
 
         private StarDistanceComputer computer;
 
-        public UserControlMap()
+        public UserControlLocalMap()
         {
             InitializeComponent();
             this.chartMap.MouseWheel += Zoom_MouseWheel;            
