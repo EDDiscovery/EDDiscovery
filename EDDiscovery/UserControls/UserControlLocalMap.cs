@@ -288,19 +288,25 @@ namespace EDDiscovery.UserControls
             if (e.Delta > 0)
             {
                 if (zoomIndex < 12)
+                {
                     zoomIndex++;
-
-                ZoomControl(chartMap, zoomIndex, e);
+                    ZoomControl(chartMap, zoomIndex, e);
+                }
             }
 
             // Zoom Out
             else if (e.Delta < 0)
             {
                 if (zoomIndex > 0)
+                {
                     zoomIndex--;
-
-                ZoomControl(chartMap, zoomIndex, e);
-            }
+                    ZoomControl(chartMap, zoomIndex, e);
+                }
+                else if (zoomIndex == 0) // necessary to avoid zoom try to reduce the map when 1:1
+                {
+                    zoomIndex = 0; // do nothing...
+                }
+            }            
         }
 
         private void ZoomControl(Control ctrlToZoom, int zoomIndex, MouseEventArgs e)
