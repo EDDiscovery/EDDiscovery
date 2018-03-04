@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
                             double dy = curY - sysY;
                             double dz = curZ - sysZ;
 
-                            int px = Convert.ToInt32(dx);
+                            int px = Convert.ToInt32(dx) * -1;
                             int py = Convert.ToInt32(dy) * -1;
                             int pz = Convert.ToInt32(dz);
 
