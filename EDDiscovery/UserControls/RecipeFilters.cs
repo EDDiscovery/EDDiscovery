@@ -78,7 +78,43 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.SynthesisRecipe( "Heat Sinks", "Standard", "2BaC,2HCW,2HE"),
             new MaterialCommoditiesList.SynthesisRecipe( "Heat Sinks", "Basic", "1BaC,1HCW"),
 
-            new MaterialCommoditiesList.SynthesisRecipe( "Life Support", "Basic", "2Fe,1Ni")
+            new MaterialCommoditiesList.SynthesisRecipe( "Life Support", "Basic", "2Fe,1Ni"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("AX Small Calibre Munitions", "Basic", "2Fe,1Ni,2S,2WP"),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Small Calibre Munitions", "Standard", "2Fe,2P,2Zr,3UES,4WP" ),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Small Calibre Munitions", "Premium", "3Fe,2P,2Zr,4UES,2UKCP,6WP" ),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Plasma Charger Munitions", "Basic", "3Cr,2HDP,3GPC,4GSWC"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Plasma Charger Munitions", "Standard", "4Cr,2HE,2PA,2GPCe,2GTC"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Plasma Charger Munitions", "Premium", "6Cr,2Zr,4HE,6PA,4GPCe,3GSWP"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Gauss Cannon Munitions", "Basic", "3Mn,2FoC,2GPC,4GSWC"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Gauss Cannon Munitions", "Standard", "5Mn,3HRC,5FoC,4GPC,3GSWP"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Gauss Cannon Munitions", "Premium", "8Mn,4HRC,6FiC,10FoC"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Enzyme Missile Launcher Munitions", "Basic", "3Fe,3S,4BMC,3PE,3WP,2Pb"),
+            new MaterialCommoditiesList.SynthesisRecipe("Enzyme Missile Launcher Munitions", "Standard", "6S,4W,5BMC,6PE,4WP,4Pb"),
+            new MaterialCommoditiesList.SynthesisRecipe("Enzyme Missile Launcher Munitions", "Premium", "5P,4W,6BMC,5PE,4WP,6Pb"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("AX Remote Flak Munitions", "Basic", "4Ni,3C,2S"),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Remote Flak Munitions", "Standard", "2Sn,3Zn,1As,3UKTC,2WC"),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Remote Flak Munitions", "Premium", "8Zn,2W,1As,3UES,4UKTC,1WP"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Flechette Launcher Munitions", "Basic", "1W,3EA,2MC,2B"),
+            new MaterialCommoditiesList.SynthesisRecipe("Flechette Launcher Munitions", "Standard", "4W,6EA,4MC,4B"),
+            new MaterialCommoditiesList.SynthesisRecipe("Flechette Launcher Munitions", "Premium", "6W,5EA,9MC,6B"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Basic", "3C,2V,3CS,3GPCe,5GSWC"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Standard", "4CS,2GPCe,2GSWP"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Premium", "8C,3Se,4V,8CS"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Basic", "3GR,2HDP,2FoC,2PA,2Pb"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Standard", "5GR,3HDP,4FoC,5PA,3Pb"),
+            new MaterialCommoditiesList.SynthesisRecipe("Guardian Shard Cannon Munitions", "Premium", "7GR,4HDP,6FoC,8PA,5Pb"),
+
+            new MaterialCommoditiesList.SynthesisRecipe("AX Explosive Munitions", "Basic", "3Fe,3Ni,4C,3PE"),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Explosive Munitions", "Standard", "6S,6P,2Hg,4UKOC,4PE"),
+            new MaterialCommoditiesList.SynthesisRecipe("AX Explosive Munitions", "Premium", "5W,4Hg,2Po,5BMC,5PE,6SFD"),
         };
 
         public static List<MaterialCommoditiesList.EngineeringRecipe> EngineeringRecipes = new List<MaterialCommoditiesList.EngineeringRecipe>()
