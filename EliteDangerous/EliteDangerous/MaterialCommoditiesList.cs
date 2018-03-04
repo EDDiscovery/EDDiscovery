@@ -240,7 +240,7 @@ namespace EliteDangerousCore
                 count = new int[ilist.Length];
                 for (int i = 0; i < ilist.Length; i++)
                 {
-                    //Thanks to 10Fe and 10 Ni to synthesis a limpet we can no longer assume the first character is a number and the rest is the material
+                    //Thanks to 10Fe and 10 Ni to synthesise a limpet we can no longer assume the first character is a number and the rest is the material
                     //Maybe worth changing the class to pass ingredients and numbers as separate lists but not today...
                     string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
                     ingredients[i] = ilist[i].Substring(s.Length);
@@ -277,6 +277,13 @@ namespace EliteDangerousCore
                 engineersstring = engnrs;
                 engineers = engnrs.Split(',');
             }
+        }
+
+        public class TechBrokerUnlockRecipe : Recipe
+        {
+            public TechBrokerUnlockRecipe(string n, string indg)
+                : base(n, indg)
+            { }
         }
 
         static public void ResetUsed(List<MaterialCommodities> mcl)

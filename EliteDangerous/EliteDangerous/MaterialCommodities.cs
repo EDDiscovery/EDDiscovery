@@ -141,6 +141,11 @@ namespace EliteDangerousCore
             return AddList(CommodityCategory, Color.Green, aliasnamelist, typeofit, "", fdname);
         }
 
+        private static bool AddCommoditySN(string aliasname, string typeofit, string shortname, string fdname = "")
+        {
+            return Add(CommodityCategory, Color.Green, aliasname, typeofit, shortname, fdname);
+        }
+
         // fdname only useful if aliasname is not a list.
         private static bool AddList(string category, Color colour, string aliasnamelist, string typeofit, string shortname = "" , string fdname = "")
         {
@@ -176,6 +181,7 @@ namespace EliteDangerousCore
             AddRaw("Phosphorus", MaterialFreqVeryCommon, "P");
             AddRaw("Sulphur", MaterialFreqVeryCommon, "S");
             AddRaw("Lead", MaterialFreqVeryCommon, "Pb");
+            AddRaw("Rhenium", MaterialFreqVeryCommon, "Re");
 
             AddRaw("Chromium", MaterialFreqCommon, "Cr");
             AddRaw("Germanium", MaterialFreqCommon, "Ge");
@@ -209,20 +215,29 @@ namespace EliteDangerousCore
             AddCommodity("Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
 
             string im = "Industrial Materials";
-            AddCommodity("Ceramic Composites;CMM Composite;Insulating Membrane;Neofabric Insulation;Polymers;Semiconductors;Superconductors", im);
-            AddCommodity("Meta-Alloys", im, "metaalloys");
-            AddCommodity("Micro-Weave Cooling Hoses", im, "coolinghoses");
+            AddCommodity("Ceramic Composites;Insulating Membrane;Polymers;Semiconductors;Superconductors", im);
+            AddCommoditySN("Meta-Alloys", im, "MA", "metaalloys");
+            AddCommoditySN("Micro-Weave Cooling Hoses", im, "MWCH", "coolinghoses");
+            AddCommoditySN("Neofabric Insulation", im, "NFI");
+            AddCommoditySN("CMM Composite", im, "CMMC");
 
             string ld = "Legal Drugs";
             AddCommodity("Beer;Bootleg Liquor;Liquor;Tobacco;Wine;Lavian Brandy", ld);
             AddCommodity("Narcotics", ld, "basicnarcotics");
 
             string m = "Machinery";
-            AddCommodity("Articulation Motors;Atmospheric Processors;Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
-            AddCommodity("Heatsink Interlink;HN Shock Mount;Ion Distributor;Magnetic Emitter Coil;Marine Equipment", m);
-            AddCommodity("Microbial Furnaces;Mineral Extractors;Modular Terminals;Power Converter;Power Generators;Power Transfer Bus", m);
-            AddCommodity("Radiation Baffle;Reinforced Mounting Plate;Skimmer Components;Thermal Cooling Units;Water Purifiers", m);
-            AddCommodity("Energy Grid Assembly", m, "powergridassembly");
+            AddCommodity("Atmospheric Processors;Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
+            AddCommodity("Heatsink Interlink;HN Shock Mount;Marine Equipment", m);
+            AddCommodity("Microbial Furnaces;Mineral Extractors;Modular Terminals;Power Generators", m);
+            AddCommodity("Skimmer Components;Thermal Cooling Units;Water Purifiers", m);
+            AddCommoditySN("Energy Grid Assembly", m, "EGA", "powergridassembly");
+            AddCommoditySN("Radiation Baffle", m, "RB");
+            AddCommoditySN("Magnetic Emitter Coil", m, "MEC");
+            AddCommoditySN("Articulation Motors", m, "AM");
+            AddCommoditySN("Reinforced Mounting Plate", m, "RMP");
+            AddCommoditySN("Power Transfer Bus", m, "PTB");
+            AddCommoditySN("Power Converter", m, "PC");
+            AddCommoditySN("Ion Distributor", m, "ID");
 
             string md = "Medicines";
             AddCommodity("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
@@ -440,6 +455,8 @@ namespace EliteDangerousCore
             AddEnc( "Eccentric Hyperspace Trajectories", MaterialFreqRare, "EHT", "hyperspacetrajectories");
             AddEnc( "Security Firmware Patch", MaterialFreqRare, "SFP", "securityfirmware");
             AddEnc( "Pattern Delta Obelisk Data", MaterialFreqRare, "PDOD", "ancientlanguagedata");
+            AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS");  // from INARA - FDName needs checking
+            AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS");  // from INARA - FDName needs checking
             // very rare data
             AddEnc( "Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
             AddEnc( "Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
@@ -483,7 +500,7 @@ namespace EliteDangerousCore
             AddManu("Shielding Sensors", MaterialFreqStandard, "SS");
             AddManu("Weapon Parts", MaterialFreqStandard, "WP");    // from INARA - FDName needs checking
             AddManu("Guardian Technology Component", MaterialFreqStandard, "GTC");      // from INARA - FDName needs checking
-            AddManu("Guardinan Sentinel Weapon Parts", MaterialFreqStandard, "GSWP");     // from INARA - FDName needs checking
+            AddManu("Guardian Sentinel Weapon Parts", MaterialFreqStandard, "GSWP");     // from INARA - FDName needs checking
             AddManu("Bio-Mechanical Conduits", MaterialFreqStandard, "BMC");    // from INARA - FDName needs checking
             AddManu("Propulsion Elements", MaterialFreqStandard, "PE"); // from INARA - FDName needs checking
             AddManu("Wreckage Components", MaterialFreqStandard, "WC"); // from INARA - FDName needs checking
