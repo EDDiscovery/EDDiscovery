@@ -202,7 +202,10 @@ namespace EliteDangerousCore.EDSM
                     }
                 }
 
-                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+                if (rdr.TokenType != JsonToken.EndObject)
+                {
+                    throw new JsonException($"Expected EndObject, got {rdr.TokenType}");
+                }
 
                 return c;
             }
@@ -231,7 +234,10 @@ namespace EliteDangerousCore.EDSM
                     }
                 }
 
-                Debug.Assert(rdr.TokenType == JsonToken.EndObject);
+                if (rdr.TokenType != JsonToken.EndObject)
+                {
+                    throw new JsonException($"Expected EndObject, got {rdr.TokenType}");
+                }
 
                 return s;
             }
@@ -245,32 +251,32 @@ namespace EliteDangerousCore.EDSM
 
         #region Parse and store in DB
 
-        public static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool throwOnTruncation = true)
         {
             using (StringReader sr = new StringReader(json))
-                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, throwOnTruncation);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        public static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool throwOnTruncation = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
-                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
+                return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, throwOnTruncation);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        public static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false, bool throwOnTruncation = true)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
-                return ParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
+                return ParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems, throwOnTruncation);
         }
 
-        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallow, ref DateTime date,  bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallow, ref DateTime date,  bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false, bool throwOnTruncation = true)
         {
-            return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  cancelRequested, reportProgress, useCache, useTempSystems);
+            return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  cancelRequested, reportProgress, useCache, useTempSystems, throwOnTruncation);
         }
 
         // returns no of updates + inserts, not no of items processed.  
 
-        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref DateTime maxdate, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref DateTime maxdate, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false, bool throwOnTruncation = true)
         {
             Dictionary<long, SystemClassBase> systemsByEdsmId = useCache ? GetEdsmSystemsLite() : new Dictionary<long, SystemClassBase>();
             int count = 0;
@@ -289,20 +295,32 @@ namespace EliteDangerousCore.EDSM
 
                 while (!cancelRequested())
                 {
-                    if (jr.Read())
+                    try
                     {
-                        if (jr.TokenType == JsonToken.StartObject)
+                        if (jr.Read())
                         {
-                            objs.Add(EDSMDumpSystem.Deserialize(jr));
-
-                            if (objs.Count >= BlockSize)
+                            if (jr.TokenType == JsonToken.StartObject)
                             {
-                                break;
+                                objs.Add(EDSMDumpSystem.Deserialize(jr));
+
+                                if (objs.Count >= BlockSize)
+                                {
+                                    break;
+                                }
                             }
                         }
+                        else
+                        {
+                            jr_eof = true;
+                            break;
+                        }
                     }
-                    else
+                    catch (JsonException ex)
                     {
+                        if (throwOnTruncation)
+                            throw;
+
+                        System.Diagnostics.Trace.WriteLine($"JSON error processing systems: {ex.Message}");
                         jr_eof = true;
                         break;
                     }
@@ -695,7 +713,7 @@ namespace EliteDangerousCore.EDSM
                 string json = null;
                 try
                 {
-                    json = edsm.RequestSystems(lastrecordtime, enddate);
+                    json = edsm.RequestSystems(lastrecordtime, enddate, true);
                 }
                 catch (WebException ex)
                 {
@@ -731,7 +749,7 @@ namespace EliteDangerousCore.EDSM
                 DateTime prevrectime = lastrecordtime;
                 System.Diagnostics.Debug.WriteLine("Last record time {0} JSON size {1}", lastrecordtime.ToUniversalTime() , json.Length);
 
-                long updated = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
+                long updated = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false, throwOnTruncation: false);
                 System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
 
                 System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());

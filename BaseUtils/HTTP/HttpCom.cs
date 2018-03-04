@@ -228,7 +228,7 @@ namespace BaseUtils
 
 
 
-        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false)
+        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false, bool returnPartial = false)
         {
             if ( httpserveraddress == null || httpserveraddress.Length == 0 )           // for debugging, set _serveraddress empty
             {
@@ -259,7 +259,7 @@ namespace BaseUtils
                     //request.Timeout = 740 * 1000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
-                    var data = getResponseData(response);
+                    var data = getResponseData(response, returnPartial: returnPartial);
                     response.Close();
 
                     WriteLog(data.Body, "");
@@ -435,14 +435,38 @@ namespace BaseUtils
             }
         }
 
-        private ResponseData getResponseData(HttpWebResponse response, bool? error = null)
+        private string GetPartialResponse(StreamReader rdr)
+        {
+            StringBuilder sb = new StringBuilder();
+            char[] block = new char[1024];
+            bool ateof = false;
+
+            while (!ateof)
+            {
+                try
+                {
+                    int len = rdr.ReadBlock(block, 0, block.Length);
+                    sb.Append(block, 0, len);
+                    ateof = rdr.EndOfStream;
+                }
+                catch (IOException ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Read interrupted: {ex.Message}");
+                    break;
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        private ResponseData getResponseData(HttpWebResponse response, bool? error = null, bool returnPartial = false)
         {
             if (response == null)
                 return new ResponseData(HttpStatusCode.NotFound);
 
             var dataStream = response.GetResponseStream();
             StreamReader reader = new StreamReader(dataStream);
-            var data = new ResponseData(response.StatusCode, reader.ReadToEnd(), response.Headers);
+            var data = new ResponseData(response.StatusCode, returnPartial ? GetPartialResponse(reader) : reader.ReadToEnd(), response.Headers);
             reader.Close();
             dataStream.Close();
             return data;
