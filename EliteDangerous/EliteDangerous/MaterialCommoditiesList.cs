@@ -262,16 +262,18 @@ namespace EliteDangerousCore
 
         public class EngineeringRecipe : Recipe
         {
-            public int level;
-            public string module;
+            public string level;
+            public string modulesstring;
+            public string[] modules;
             public string engineersstring;
             public string[] engineers;
 
-            public EngineeringRecipe(string n, string indg, string mod, int lvl, string engnrs)
+            public EngineeringRecipe(string n, string indg, string mod, string lvl, string engnrs)
                 : base(n, indg)
             {
                 level = lvl;
-                module = mod;
+                modulesstring = mod;
+                modules = mod.Split(',');
                 engineersstring = engnrs;
                 engineers = engnrs.Split(',');
             }
