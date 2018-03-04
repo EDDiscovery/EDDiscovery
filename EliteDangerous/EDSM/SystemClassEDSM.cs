@@ -671,6 +671,11 @@ namespace EliteDangerousCore.EDSM
                 System.Diagnostics.Debug.WriteLine("Reject partial sync, last record less than 1 hour old");
                 return updates;
             }
+            else if (DateTime.UtcNow.Subtract(lastrecordtime).TotalDays >= 30)
+            {
+                System.Diagnostics.Trace.WriteLine("Reject partial sync, last record too old");
+                return updates;
+            }
 
             // Go For SYNC
 
@@ -684,7 +689,7 @@ namespace EliteDangerousCore.EDSM
                 if (PendingClose())     
                     return updates;
 
-                DateTime enddate = lastrecordtime + TimeSpan.FromHours(12);
+                DateTime enddate = lastrecordtime + TimeSpan.FromHours(3);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
