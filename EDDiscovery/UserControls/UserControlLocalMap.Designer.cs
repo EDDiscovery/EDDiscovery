@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlMap
+    partial class UserControlLocalMap
     {
         /// <summary> 
         /// Required designer variable.
