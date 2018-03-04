@@ -1109,6 +1109,22 @@ namespace EDDiscovery.UserControls
             new MaterialCommoditiesList.EngineeringRecipe("Thermo Block", "5ABSD,3CCe,3HV", "Shield Booster", "Experimental", "Didi Vatermann,Felicity Farseer,Lei Cheung"),
             #endregion
         };
+
+        public static List<MaterialCommoditiesList.TechBrokerUnlockRecipe> TechBrokerUnlocks = new List<MaterialCommoditiesList.TechBrokerUnlockRecipe>()
+        {
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Corrosion Resistant Cargo Rack", "30Fe,18CM,30RB,12NFI,28MA"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Enzyme Missile Rack (Fixed)", "30UKEC,36UKOC,34Mo,35W,6RB"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Guardian Gauss Cannon (Fixed)", "4GWBS,36GPCe,42GTC,30Mn,10MEC"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Guardian Plasma Charger (Fixed)", "8GWBS,38GPC,34GSWP,28Cr,12MWCH"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Guardian Plasma Charger (Turreted)", "10GWBS,42GPC,39GSWP,33Cr,10AM"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Guardian Power Plant", "4GMBS,36GPC,42PEOD,30HRC,10EGA"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Meta Allow Hull Reinforcement", "30FoC,26ASPA,20CCom,12RMP,28MA"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Remote Release Flechette Launcher (Turreted)", "36Fe,32Mo,28Re,34Ge,10AM"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Remote Release Flechette Launcher (Fixed)", "40Fe,36Mo,28Re,32Ge,8CMMC"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Shock Cannon (Turreted)", "30V,32W,3Re,28Tc,8PTB"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Shock Cannon (Gimballed)", "36V,32W,30Re,28Tc,10PC"),
+            new MaterialCommoditiesList.TechBrokerUnlockRecipe("Shock Cannon (Fixed)", "30V,30W,36Re,30Tc,6ID"),
+        };
     }
     public class RecipeFilterSelector
     {
