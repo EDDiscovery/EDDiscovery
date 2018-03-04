@@ -170,8 +170,8 @@ namespace EDDiscovery.UserControls
                             double dy = curY - sysY;
                             double dz = curZ - sysZ;
 
-                            int px = Convert.ToInt32(dx);
-                            int py = Convert.ToInt32(dy);
+                            int px = Convert.ToInt32(dx) * -1;
+                            int py = Convert.ToInt32(dy) * -1;
                             int pz = Convert.ToInt32(dz);
 
                             // visited systems go to series #1, #4 and #7; unvisited to series #2, #5 and #8. 

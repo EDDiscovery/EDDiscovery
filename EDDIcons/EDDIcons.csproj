@@ -659,5 +659,8 @@
     <EmbeddedResource Include="Controls\Bookmarks\New.png" />
     <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\LocalMap.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
