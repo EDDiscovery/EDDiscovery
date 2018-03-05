@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
     {
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
         private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
+        private List<MaterialCommoditiesList.Recipe> TechBrokerWanted = new List<MaterialCommoditiesList.Recipe>();
+        private RecipeFilterSelector tbs;
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool showListAvailability;
@@ -44,6 +46,7 @@ namespace EDDiscovery.UserControls
         private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DBTechBrokerFilterSave { get { return "ShoppingListTechBrokerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         const int VeryCommonCap = 300;
         const int CommonCap = 250;
         const int StandardCap = 200;
@@ -78,6 +81,10 @@ namespace EDDiscovery.UserControls
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
+
+            List<string> techBrokerList = TechBrokerUnlocks.Select(r => r.name).ToList();
+            tbs = new RecipeFilterSelector(techBrokerList);
+            tbs.Changed += TechBrokerSelectionChanged;
         }
 
         public override void Closing()
@@ -129,11 +136,6 @@ namespace EDDiscovery.UserControls
             SynthesisWanted = wanted;
             Display();
         }
-
-        private void Display(HistoryEntry he, HistoryList hl)
-        {
-            Display();
-        }
         
         private void Display()
         {
@@ -146,6 +148,16 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<MaterialCommoditiesList.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+                string techBrokers = SQLiteDBClass.GetSettingString(DBTechBrokerFilterSave, "None");
+                if (techBrokers != "None")
+                {
+                    List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
+                    foreach (MaterialCommoditiesList.Recipe r in TechBrokerUnlocks)
+                    {
+                        if (techBrokers == "All" || techBrokerList.Contains(r.name))
+                            totalWanted.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(r, 1));
+                    }
+                }
 
                 List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
                 JournalScan sd = null;
@@ -262,6 +274,7 @@ namespace EDDiscovery.UserControls
 
                 userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
                 userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
+                buttonTechBroker.Visible = buttonTechBroker.Enabled = !IsTransparent;
 
                 splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
 
@@ -306,7 +319,7 @@ namespace EDDiscovery.UserControls
             userControlEngineering.SetHistoric(useHistoric);
             Display();
         }
-
+                
         private void showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem_Click(object sender, EventArgs e)
         {
             showSystemAvailability = ((ToolStripMenuItem)sender).Checked;
@@ -317,6 +330,18 @@ namespace EDDiscovery.UserControls
         {
             useEDSMForSystemAvailability = ((ToolStripMenuItem)sender).Checked;
             Display();
+        }
+
+        private void TechBrokerSelectionChanged(object sender, EventArgs e)
+        {
+            Display();
+        }
+
+        private void buttonTechBroker_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            tbs.FilterButton(DBTechBrokerFilterSave, b,
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
     }
 }
