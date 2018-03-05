@@ -77,7 +77,7 @@ namespace NetLogEntry
 
             if (arg1.Equals("StatusJSON", StringComparison.InvariantCultureIgnoreCase))
             {
-                StatusJSON();
+                StatusJSON(args);
                 return;
             }
 
@@ -368,7 +368,7 @@ namespace NetLogEntry
         {
             if (args.Left < 4)
             {
-                Console.WriteLine("** More parameters");
+                Console.WriteLine("** More parameters: file cmdrname fsd x y z");
                 return null;
             }
 
@@ -719,29 +719,48 @@ namespace NetLogEntry
 
         }
 
-        public static void StatusJSON()
+        public static void StatusJSON(Args args)
         {
-            int heading = 0;
             long flags = 0;
 
-            while(true)
-            {
-                heading = (heading + 2) %360;
+            double latitude = 0;
+            double longitude = 0;
+            double latstep = 0;
+            double longstep = 0;
+            double heading = 0;
+            double headstep = 1;
+            int steptime = 100;
 
+            if (!double.TryParse(args.Next, out latitude) || !double.TryParse(args.Next, out longitude) ||
+                !double.TryParse(args.Next, out latstep) || !double.TryParse(args.Next, out longstep) ||
+                !double.TryParse(args.Next, out heading) || !double.TryParse(args.Next, out headstep) ||
+                !int.TryParse(args.Next, out steptime))
+            {
+                Console.WriteLine("** More/Wrong parameters: statusjson lat long latstep lonstep heading headstep steptimems");
+                return;
+            }
+
+            while (true)
+            {
                 //{ "timestamp":"2018-03-01T21:51:36Z", "event":"Status", "Flags":18874376, 
                 //"Pips":[4,8,0], "FireGroup":1, "GuiFocus":0, "Latitude":-18.978821, "Longitude":-123.642052, "Heading":308, "Altitude":20016 }
 
                 string j = "{ " + TimeStamp() + F("event", "Status") + F("Flags", flags) + F("Pips",new int[] { 4,8,0}) + 
-                            F("FireGroup",1) + F("GuiFocus",0) + F("Latitude",-10) + F("Longitude",20) + F("Heading",heading) + FF("Altitude",20) 
+                            F("FireGroup",1) + F("GuiFocus",0) + F("Latitude",latitude) + F("Longitude",longitude) + F("Heading",heading) + FF("Altitude",20) 
                             + "}";
 
                 File.WriteAllText("Status.json", j);
-                System.Threading.Thread.Sleep(250);
+                System.Threading.Thread.Sleep(steptime);
 
                 if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Escape)
                 {
                     break;
                 }
+
+                latitude += latstep;
+                longitude = longitude + longstep;
+                heading = (heading + headstep) % 360;
+
             }
         }
 
@@ -753,9 +772,19 @@ namespace NetLogEntry
             return "\"timestamp\":\"" + dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\", ";
         }
 
-        public static string F(string name, string v)
+        public static string F(string name, long v , bool term = false)
         {
-            return "\"" + name + "\":\"" + v + "\", ";
+            return "\"" + name + "\":" + v + (term ? " " : ", ");
+        }
+
+        public static string F(string name, double v, bool term = false)
+        {
+            return "\"" + name + "\":\"" + v.ToString("0.######") + (term ? "\" " : "\", ");
+        }
+
+        public static string F(string name, string v , bool term = false)
+        {
+            return "\"" + name + "\":\"" + v + (term ? "\" " : "\", ");
         }
 
         public static string F(string name, int[] array, bool end = false)
@@ -774,19 +803,13 @@ namespace NetLogEntry
 
         public static string FF(string name, string v)      // no final comma
         {
-            return "\"" + name + "\":\"" + v + "\"";
-        }
-
-        public static string F(string name, long v)
-        {
-            return "\"" + name + "\":" + v + ", ";
+            return F(name, v, true);
         }
 
         public static string FF(string name, long v)      // no final comma
         {
-            return "\"" + name + "\":" + v;
+            return F(name, v, true);
         }
-
 
         public static void Write(string filename, string line)
         {
