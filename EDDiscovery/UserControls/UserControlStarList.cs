@@ -365,92 +365,92 @@ namespace EDDiscovery.UserControls
                             // "Standard", "1C,1V,1Ge,1Cd,1Nb"),
                             // "Basic", "1C,1V,1Ge"),
 
-                            int jump1 = 0;
-                            int jump2 = 0;
-                            int jump3 = 0;
-                            int njump = 0;
+                            int basic = 0;
+                            int standard = 0;
+                            int premium = 0;
+                            int totalMterials = 0;
 
                             if (MaterialsBrief.Contains("Arsenic"))
                             {
-                                jump3 += 1;
+                                premium += 1;
                             }
                             if (MaterialsBrief.Contains("Cadmium"))
                             {
-                                jump2 += 1;
+                                standard += 1;
                             }
                             if (MaterialsBrief.Contains("Carbon"))
                             {
-                                jump1 += 1;
-                                jump2 += 1;
-                                jump3 += 1;
+                                basic += 1;
+                                standard += 1;
+                                premium += 1;
                             }
                             if (MaterialsBrief.Contains("Germanium"))
                             {
-                                jump1 += 1;
-                                jump2 += 1;
-                                jump3 += 1;
+                                basic += 1;
+                                standard += 1;
+                                premium += 1;
                             }
                             if (MaterialsBrief.Contains("Niobium"))
                             {
-                                jump2 += 1;
-                                jump3 += 1;
+                                standard += 1;
+                                premium += 1;
                             }
                             if (MaterialsBrief.Contains("Polonium"))
                             {
-                                jump3 += 1;
+                                premium += 1;
                             }
                             if (MaterialsBrief.Contains("Vanadium"))
                             {
-                                jump1 += 1;
+                                basic += 1;
                             }
                             if (MaterialsBrief.Contains("Yttrium"))
                             {
-                                jump3 += 1;
+                                premium += 1;
                             }
 
-                            if (jump1 > 0 || jump2 > 0 || jump3 > 0)
+                            if (basic > 0 || standard > 0 || premium > 0)
                             {
-                                njump = jump1 + jump2 + jump3;
+                                totalMterials = basic + standard + premium;
 
                                 StringBuilder jumpLevel = new StringBuilder();
 
                                 // level I
-                                if (jump1 != 0 && jump2 == 0 && jump3 == 0)
+                                if (basic != 0 && standard == 0 && premium == 0)
                                 {
-                                    jumpLevel.Append(jump1 + " level I");
+                                    jumpLevel.Append(basic + " Basic");
                                 }
                                 // level I and II
-                                if (jump1 != 0 && jump2 != 0 && jump3 == 0)
+                                if (basic != 0 && standard != 0 && premium == 0)
                                 {
-                                    jumpLevel.Append(jump1 + " level I and " + jump2 + " level II");
+                                    jumpLevel.Append(basic + " Basic " + standard + " Standard");
                                 }
                                 // level I
-                                if (jump1 == 0 && jump2 != 0 && jump3 == 0)
+                                if (basic == 0 && standard != 0 && premium == 0)
                                 {
-                                    jumpLevel.Append(jump2 + " level II");
+                                    jumpLevel.Append(standard + " Standard");
                                 }
                                 // level II and III
-                                if (jump1 == 0 && jump2 != 0 && jump3 != 0)
+                                if (basic == 0 && standard != 0 && premium != 0)
                                 {
-                                    jumpLevel.Append(jump2 + " level II and " + jump3 + " level III");
+                                    jumpLevel.Append(standard + " Standard and " + premium + " Premium");
                                 }
                                 // level III
-                                if (jump1 == 0 && jump2 == 0 && jump3 != 0)
+                                if (basic == 0 && standard == 0 && premium != 0)
                                 {
-                                    jumpLevel.Append(jump3 + " level III");
+                                    jumpLevel.Append(premium + " Premium");
                                 }
                                 // level I and III
-                                if (jump1 != 0 && jump2 == 0 && jump3 != 0)
+                                if (basic != 0 && standard == 0 && premium != 0)
                                 {
-                                    jumpLevel.Append(jump1 + " level I and " + jump3 + " level III");
+                                    jumpLevel.Append(basic + " Basic and " + premium + " Premium");
                                 }
                                 // all levels
-                                if (jump1 != 0 && jump2 != 0 && jump3 != 0)
+                                if (basic != 0 && standard != 0 && premium != 0)
                                 {
-                                    jumpLevel.Append(jump1 + " level I, " + jump2 + " level II and " + jump3 + " level III");
+                                    jumpLevel.Append(basic + " Basic, " + standard + " Standard and " + premium + " Premium");
                                 }
 
-                                jumponium = jumponium.AppendPrePad("\n" + sn.ScanData.BodyName + " has " + jumpLevel);
+                                jumponium = jumponium.AppendPrePad("\n" + sn.ScanData.BodyName + " has " + jumpLevel + " level elements.");
                             }
                         }
                     }
@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
                     }
                     if (hasMaterials == true && checkBoxJumponium.Checked == true)
                     {
-                        infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
+                        infostr = infostr.AppendPrePad("\n\nThis system has materials for FSD boost: ");
                         infostr = infostr.AppendPrePad(jumponium);
                     }
                 }
