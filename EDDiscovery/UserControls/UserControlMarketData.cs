@@ -108,8 +108,7 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            Stopwatch swp = new Stopwatch();
-            swp.Start();
+            //Stopwatch swp = new Stopwatch(); swp.Start();
 
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
@@ -127,19 +126,19 @@ namespace EDDiscovery.UserControls
 
             if (left != null )       // we know it has a journal entry of EDD commodity..
             {
-                System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
+                //System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
 
                 JournalCommodityPricesBase ecp = left.journalEntry as JournalCommodityPricesBase;
                 List<CCommodities> list = ecp.Commodities;
 
-                System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
+                //System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
                 if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same data..
                 {
                     if ( checkBoxAutoSwap.Checked &&
                         left.System.Name.Equals(eddmd_right.System.Name) &&     // if left system being displayed is same as right system
                         left.WhereAmI.Equals(eddmd_right.WhereAmI) )            // that means we can autoswap comparisions around
                     {
-                        System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
+                        //System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
 
                         int index = comboboxentries.FindIndex(x => x.System.Name.Equals(current_displayed.System.Name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
                         if ( index >= 0 )       // if found it, swap to last instance of system
@@ -148,12 +147,12 @@ namespace EDDiscovery.UserControls
                             comboBoxCustomTo.SelectedIndex = index+1;
                             comboBoxCustomTo.Enabled = true;
                             eddmd_right = comboboxentries[index];
-                            System.Diagnostics.Debug.WriteLine("Right is now " + eddmd_right.WhereAmI);
+                            //System.Diagnostics.Debug.WriteLine("Right is now " + eddmd_right.WhereAmI);
                         }
 
                     }
 
-                    System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
+                    //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
                     list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities , eddmd_right.WhereAmI);
                 }
 
@@ -246,7 +245,7 @@ namespace EDDiscovery.UserControls
 
             }
 
-            System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
+            //System.Diagnostics.Debug.WriteLine("Stop watch" + swp.ElapsedMilliseconds);
         }
 
         private void FillComboBoxes(HistoryList hl)
