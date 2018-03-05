@@ -23,6 +23,7 @@ namespace ExtendedControls
         // Stencil tick rate
         public int StencilMajorTicksAt { get { return stencilmajortickat; } set { stencilmajortickat = value; Restart(); } }    // degrees
         public int StencilMinorTicksAt { get { return stencilminortickat; } set { stencilminortickat = value; Restart(); } } // degrees
+        public bool AutoSetStencilTicks { get { return autosetstencilticks; } set { autosetstencilticks = value; Restart(); } } 
 
         // sizes - Percentages of the control, or percentages of the compass
         public int CompassHeightPercentage { get { return compassheightpercentage; } set { compassheightpercentage = value; Restart(); } }
@@ -40,13 +41,38 @@ namespace ExtendedControls
 
         // optional distance
         public double Distance { get { return distance; } set { distancemessage = string.Empty; distance = value; Invalidate(); } }     // NaN to disable, default
-        public string DistanceFormat { get { return distanceformat; } set { distanceformat = value; Invalidate(); } } // as "text {0:0.##} text"
+        public string DistanceFormat { get { return distanceformat; } set { distanceformat = value; ; } } // as "text {0:0.##} text". DOES NOT INVALIDATE.
         public void DistanceDisable(string msg) { distance = double.NaN; distancemessage = msg; Invalidate(); }
 
         // optional message during Disable
         public string DisableMessage { get { return disablemessage; } set { disablemessage = value; Invalidate(); } } // below bar
 
-        // privates
+        // optimised setters - do more at once
+        public void Set(double bearing, double bug, double distance, bool slewto = false )
+        {
+            if (double.IsNaN(bearing))
+                Enabled = false;
+            else
+            {
+                if (!Enabled)
+                    Enabled = true;
+
+                if (this.distance != distance)
+                {
+                    this.distance = distance;
+                    Invalidate();
+                }
+
+                if (this.bug != bug )
+                {
+                    MoveBugToBearing(bug);
+                }
+
+                MoveToBearing(bearing, slewto);
+            }
+        }
+
+        #region Vars and Init
 
         private Bitmap compass = null;      // holds bitmap of compass
         private double bearing = 0;       // always 0-360 internally
@@ -61,6 +87,7 @@ namespace ExtendedControls
         private Color stencilcolor = Color.Red;
         private int stencilmajortickat = 20;
         private int stencilminortickat = 5;
+        private bool autosetstencilticks = false;
         private Color centretickcolor = Color.Green;
         private Color bugcolor = Color.White;
         private int bugsize = 10;
@@ -105,10 +132,10 @@ namespace ExtendedControls
             {
                 v = v % 360;
 
-                double dist = Math.Abs(bearing - v);
-                double pixelstomove = dist * pixelsperdegree;
+                double delta = Math.Abs(bearing - v);
+                double pixelstomove = delta * pixelsperdegree;
 
-                System.Diagnostics.Debug.WriteLine("B {0} to {1} Dist {2} pixels {3} slew {4}", bearing, v, dist, pixelstomove, slew);
+                //System.Diagnostics.Debug.WriteLine("B {0} to {1} Dist {2} pixels {3} slew {4}", bearing, v, delta, pixelstomove, slew);
 
                 slewstopwatch.Reset();
 
@@ -138,42 +165,59 @@ namespace ExtendedControls
                 throw new ArgumentOutOfRangeException();
         }
 
+        private void MoveBugToBearing(double v)
+        {
+            if (double.IsNaN(v))
+            {
+                if (!double.IsNaN(bug))
+                {
+                    bug = v;
+                    Invalidate();
+                }
+            }
+            else if (v >= 0 && v <= 360)
+            {
+                v = v % 360;
+
+                double delta = Math.Abs(bug - v);       // how far..
+                double pixelstomove = delta * pixelsperdegree;
+
+                bug = v;
+
+                if (pixelstomove >= 1)
+                    Invalidate();
+            }
+            else
+                throw new ArgumentOutOfRangeException();
+
+            Invalidate();
+        }
+
         private void Slewtimer_Tick(object sender, EventArgs e)
         {
             double degmovenow = (double)slewrate * (double)slewstopwatch.ElapsedMilliseconds / 1000.0;     // at this point we should have moved this number of degrees
             double step = degmovenow - accumulateddegrees;      // so we need to step this
             accumulateddegrees = degmovenow;
 
-            double delta = (slewtobearing-bearing + 360) % 360;     // modulo
+            double delta = (slewtobearing - bearing + 360) % 360;     // modulo
 
-            System.Diagnostics.Debug.WriteLine("B {0} to {1} Delta {2} step {3} degofmovement {4}", bearing, slewtobearing, delta, step , degmovenow);
+            //System.Diagnostics.Debug.WriteLine("B {0} to {1} Delta {2} step {3} degofmovement {4}", bearing, slewtobearing, delta, step, degmovenow);
 
-            if (delta >= step && delta <= 360.0-step)  // if difference is bigger than step, either way around..
+            if (delta >= step && delta <= 360.0 - step)  // if difference is bigger than step, either way around..
             {
                 bearing += (delta < 180) ? step : -step;
-                bearing = (bearing+360)%360;
+                bearing = (bearing + 360) % 360;
             }
             else
             {
                 slewtimer.Stop();
                 slewstopwatch.Reset();
                 bearing = slewtobearing;
-                System.Diagnostics.Debug.WriteLine("..stop at {0}" , bearing);
+                //System.Diagnostics.Debug.WriteLine("..stop at {0}", bearing);
             }
             Invalidate();
         }
 
-        private void MoveBugToBearing(double v)
-        {
-            if (double.IsNaN(v))
-                bug = v;
-            else if (v >= 0 && v <= 360)
-                bug = v % 360;
-            else
-                throw new ArgumentOutOfRangeException();
-
-            Invalidate();
-        }
 
         protected override void OnResize(EventArgs e)
         {
@@ -201,6 +245,10 @@ namespace ExtendedControls
             return (int)((degree - pixelstart) * pixelsperdegree);
         }
 
+        #endregion
+
+        #region Paint
+
         private void PaintCompass()
         {
             pixelsperdegree = (double)this.Width / (double)WidthDegrees;
@@ -208,7 +256,7 @@ namespace ExtendedControls
             int bitmapwidth = (int)(360 * pixelsperdegree);        // size of bitmap
             int bitmapheight = Height * CompassHeightPercentage / 100;
 
-            System.Diagnostics.Debug.WriteLine("Compass width " + this.Width + " deg width " + WidthDegrees + " pix/deg " + pixelsperdegree);
+            //System.Diagnostics.Debug.WriteLine("Compass width " + this.Width + " deg width " + WidthDegrees + " pix/deg " + pixelsperdegree);
 
             if (!DesignMode)        // for some reason, FromImage craps it out
             {
@@ -235,6 +283,32 @@ namespace ExtendedControls
                     int bigtickdepth = bitmapheight * TickHeightPercentage / 100;
                     int smalltickdepth = bigtickdepth / 2;
 
+                    int stmajor = stencilmajortickat;
+                    int stminor = stencilminortickat;
+
+
+                    if ( autosetstencilticks )
+                    {
+                        double minmajorticks = sz.Width / pixelsperdegree;        
+                       // System.Diagnostics.Debug.WriteLine("Major min ticks at {0} = {1}", sz.Width, minmajorticks);
+                        if (minmajorticks >= 40)
+                        {
+                            stmajor = 80; stminor = 20;
+                        }
+                        else if (minmajorticks >= 20)
+                        {
+                            stmajor = 40; stminor = 10;
+                        }
+                        else if (minmajorticks >= 10)
+                        {
+                            stmajor = 20; stminor = 5;
+                        }
+                        else 
+                        {
+                            stmajor = 10; stminor = 2;
+                        }
+                    }
+
                     Pen p1 = new Pen(StencilColor, 1);
                     Pen p2 = new Pen(StencilColor, 2);
                     Brush textb = new SolidBrush(this.ForeColor);
@@ -244,8 +318,8 @@ namespace ExtendedControls
                     {
                         int x = (int)((d - pixelstart) * pixelsperdegree);
 
-                        bool majortick = d % stencilmajortickat == 0;
-                        bool minortick = (d % stencilminortickat == 0) && !majortick;
+                        bool majortick = d % stmajor == 0;
+                        bool minortick = (d % stminor == 0) && !majortick;
 
                         if (majortick)
                         {
@@ -253,6 +327,8 @@ namespace ExtendedControls
                             g.DrawLine(p2, new Point(x, yline), new Point(x, yline + bigtickdepth));
                             g.SmoothingMode = textsmoothingmode;
                             g.DrawString(ToVisual(d).ToStringInvariant(), this.Font, textb, new Rectangle(x - 30, fontline, 60, compass.Height - fontline), fmt);
+
+                            //DEBUG g.DrawLine(p1, x - sz.Width / 2, fontline, x + sz.Width / 2, fontline);
                         }
 
                         if ( minortick )
@@ -421,5 +497,7 @@ namespace ExtendedControls
                 }
             }
         }
+
+        #endregion
     }
 }

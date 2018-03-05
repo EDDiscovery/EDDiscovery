@@ -184,6 +184,7 @@ namespace ExtendedControls
         public Color DropDownBackgroundColor { get; set; } = Color.Gray;
         public Color ScrollBarColor { get; set; } = Color.LightGray;
         public Color ScrollBarButtonColor { get; set; } = Color.LightGray;
+        public bool DisableBackgroundDisabledShadingGradient { get; set; } = false;     // set, non system only, stop scaling for disabled state (useful for transparency)
 
         public int ArrowWidth { get; set; } = 1;
         public float ButtonColorScaling { get; set; } = 0.5F;           // Popup style only
@@ -306,11 +307,11 @@ namespace ExtendedControls
                 if (todraw)
                     bck = (mouseover) ? MouseOverBackgroundColor : BackColor;
                 else
-                    bck = BackColor.Multiply(0.5F);
+                    bck = DisableBackgroundDisabledShadingGradient ? BackColor : BackColor.Multiply(0.5F);
 
                 Brush bbck;
 
-                if (FlatStyle == FlatStyle.Popup)
+                if (FlatStyle == FlatStyle.Popup && !DisableBackgroundDisabledShadingGradient)
                 {
                     bbck = new System.Drawing.Drawing2D.LinearGradientBrush(textBoxBackArea, bck, bck.Multiply(ButtonColorScaling), 90);
                 }
