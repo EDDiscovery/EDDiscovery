@@ -48,11 +48,14 @@
             this.button16 = new System.Windows.Forms.Button();
             this.button17 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
-            this.compassControl1 = new ExtendedControls.CompassControl();
             this.button19 = new System.Windows.Forms.Button();
             this.button20 = new System.Windows.Forms.Button();
             this.button21 = new System.Windows.Forms.Button();
             this.button22 = new System.Windows.Forms.Button();
+            this.button23 = new System.Windows.Forms.Button();
+            this.compassControl1 = new ExtendedControls.CompassControl();
+            this.button24 = new System.Windows.Forms.Button();
+            this.button25 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -251,33 +254,6 @@
             this.button18.UseVisualStyleBackColor = true;
             this.button18.Click += new System.EventHandler(this.buttonresizesmall_Click);
             // 
-            // compassControl1
-            // 
-            this.compassControl1.BackColor = System.Drawing.Color.LightBlue;
-            this.compassControl1.Bearing = 355D;
-            this.compassControl1.Bug = 90D;
-            this.compassControl1.BugColor = System.Drawing.Color.White;
-            this.compassControl1.BugSizePixels = 10;
-            this.compassControl1.CentreTickColor = System.Drawing.Color.Green;
-            this.compassControl1.CentreTickHeightPercentage = 60;
-            this.compassControl1.CompassHeightPercentage = 50;
-            this.compassControl1.Distance = double.NaN;
-            this.compassControl1.DistanceFormat = "{0:0.##}";
-            this.compassControl1.Location = new System.Drawing.Point(119, 104);
-            this.compassControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.compassControl1.Name = "compassControl1";
-            this.compassControl1.ShowNegativeDegrees = false;
-            this.compassControl1.Size = new System.Drawing.Size(481, 64);
-            this.compassControl1.SlewRateDegreesSec = 0;
-            this.compassControl1.SlewToBearing = 355D;
-            this.compassControl1.StencilColor = System.Drawing.Color.Red;
-            this.compassControl1.StencilMajorTicksAt = 20;
-            this.compassControl1.StencilMinorTicksAt = 5;
-            this.compassControl1.TabIndex = 1;
-            this.compassControl1.Text = "compassControl1";
-            this.compassControl1.TickHeightPercentage = 60;
-            this.compassControl1.WidthDegrees = 360;
-            // 
             // button19
             // 
             this.button19.Location = new System.Drawing.Point(119, 619);
@@ -318,6 +294,63 @@
             this.button22.UseVisualStyleBackColor = true;
             this.button22.Click += new System.EventHandler(this.button360view_Click);
             // 
+            // button23
+            // 
+            this.button23.Location = new System.Drawing.Point(331, 529);
+            this.button23.Name = "button23";
+            this.button23.Size = new System.Drawing.Size(100, 23);
+            this.button23.TabIndex = 3;
+            this.button23.Text = "Dis Distance";
+            this.button23.UseVisualStyleBackColor = true;
+            this.button23.Click += new System.EventHandler(this.buttondistdisb_Click);
+            // 
+            // compassControl1
+            // 
+            this.compassControl1.BackColor = System.Drawing.Color.LightBlue;
+            this.compassControl1.Bearing = 355D;
+            this.compassControl1.Bug = 90D;
+            this.compassControl1.BugColor = System.Drawing.Color.White;
+            this.compassControl1.BugSizePixels = 10;
+            this.compassControl1.CentreTickColor = System.Drawing.Color.Green;
+            this.compassControl1.CentreTickHeightPercentage = 60;
+            this.compassControl1.CompassHeightPercentage = 50;
+            this.compassControl1.Distance = double.NaN;
+            this.compassControl1.DistanceFormat = "{0:0.##}";
+            this.compassControl1.Location = new System.Drawing.Point(119, 104);
+            this.compassControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.compassControl1.Name = "compassControl1";
+            this.compassControl1.ShowNegativeDegrees = false;
+            this.compassControl1.Size = new System.Drawing.Size(481, 64);
+            this.compassControl1.SlewRateDegreesSec = 0;
+            this.compassControl1.SlewToBearing = 355D;
+            this.compassControl1.StencilColor = System.Drawing.Color.Red;
+            this.compassControl1.StencilMajorTicksAt = 20;
+            this.compassControl1.StencilMinorTicksAt = 5;
+            this.compassControl1.TabIndex = 1;
+            this.compassControl1.Text = "compassControl1";
+            this.compassControl1.TickHeightPercentage = 60;
+            this.compassControl1.WidthDegrees = 360;
+            // 
+            // button24
+            // 
+            this.button24.Location = new System.Drawing.Point(118, 658);
+            this.button24.Name = "button24";
+            this.button24.Size = new System.Drawing.Size(100, 23);
+            this.button24.TabIndex = 3;
+            this.button24.Text = "Enable";
+            this.button24.UseVisualStyleBackColor = true;
+            this.button24.Click += new System.EventHandler(this.buttonenable_Click);
+            // 
+            // button25
+            // 
+            this.button25.Location = new System.Drawing.Point(225, 658);
+            this.button25.Name = "button25";
+            this.button25.Size = new System.Drawing.Size(100, 23);
+            this.button25.TabIndex = 3;
+            this.button25.Text = "Disable";
+            this.button25.UseVisualStyleBackColor = true;
+            this.button25.Click += new System.EventHandler(this.buttondisable_Click);
+            // 
             // TestCompassControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -331,10 +364,13 @@
             this.Controls.Add(this.button14);
             this.Controls.Add(this.button16);
             this.Controls.Add(this.button13);
+            this.Controls.Add(this.button23);
             this.Controls.Add(this.button18);
             this.Controls.Add(this.button22);
             this.Controls.Add(this.button21);
             this.Controls.Add(this.button20);
+            this.Controls.Add(this.button25);
+            this.Controls.Add(this.button24);
             this.Controls.Add(this.button19);
             this.Controls.Add(this.button17);
             this.Controls.Add(this.button15);
@@ -382,5 +418,8 @@
         private System.Windows.Forms.Button button20;
         private System.Windows.Forms.Button button21;
         private System.Windows.Forms.Button button22;
+        private System.Windows.Forms.Button button23;
+        private System.Windows.Forms.Button button24;
+        private System.Windows.Forms.Button button25;
     }
 }

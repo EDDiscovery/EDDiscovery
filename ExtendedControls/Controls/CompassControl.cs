@@ -39,8 +39,12 @@ namespace ExtendedControls
         public int SlewRateDegreesSec { get { return slewrate;} set { slewrate = value; } }
 
         // optional distance
-        public double Distance { get { return distance; } set { distance = value; Invalidate(); } }     // NaN to disable, default
+        public double Distance { get { return distance; } set { distancemessage = string.Empty; distance = value; Invalidate(); } }     // NaN to disable, default
         public string DistanceFormat { get { return distanceformat; } set { distanceformat = value; Invalidate(); } } // as "text {0:0.##} text"
+        public void DistanceDisable(string msg) { distance = double.NaN; distancemessage = msg; Invalidate(); }
+
+        // optional message during Disable
+        public string DisableMessage { get { return disablemessage; } set { disablemessage = value; Invalidate(); } } // below bar
 
         // privates
 
@@ -52,6 +56,8 @@ namespace ExtendedControls
         private int degreeoffset = 0;
         private double distance = double.NaN;
         private string distanceformat = "{0:0.##}";
+        private string distancemessage = string.Empty;
+        private string disablemessage = string.Empty;
         private Color stencilcolor = Color.Red;
         private int stencilmajortickat = 20;
         private int stencilminortickat = 5;
@@ -290,109 +296,126 @@ namespace ExtendedControls
 
                 //System.Diagnostics.Debug.WriteLine("Bearing {0} bug {1}", bearing, bug);
 
-                double startdegree = bearing - WidthDegrees / 2;       // where do we start
-
-                int p1start = Bitmappixel((360 + startdegree) % 360);       // this whole bit was a bit mind warping!
-                int p1width = Math.Min(compass.Width - p1start,this.Width);     // paint all you can up to compass end, limited by control width
-                int left = this.Width - p1width;                        // and this is what we need from the start of the image..
-
-                //System.Diagnostics.Debug.WriteLine("start {0} First paint {1} w {2} then {3}", startdegree, p1start, p1width, left);
-
-                pe.Graphics.DrawImage(compass, new Rectangle(0, 0, p1width, compass.Height), new Rectangle(p1start, 0, p1width, compass.Height), GraphicsUnit.Pixel);
-                if (left > 0)
-                    pe.Graphics.DrawImage(compass, new Rectangle(p1width, 0, left, compass.Height), new Rectangle(0, 0, left, compass.Height), GraphicsUnit.Pixel);
-
-                pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
-
-                if (!CentreTickColor.IsFullyTransparent())
-                {
-                    using (Pen p2 = new Pen(CentreTickColor, 4))
-                        pe.Graphics.DrawLine(p2, new Point(this.Width / 2, 0), new Point(this.Width / 2, (compass.Height * centreticklengthpercentage / 100) - 1));
-                }
 
                 using (Brush textb = new SolidBrush(this.ForeColor))
                 {
-                    if (!double.IsNaN(bug))
+                    double startdegree = bearing - WidthDegrees / 2;       // where do we start
+
+                    int p1start = Bitmappixel((360 + startdegree) % 360);       // this whole bit was a bit mind warping!
+                    int p1width = Math.Min(compass.Width - p1start, this.Width);     // paint all you can up to compass end, limited by control width
+                    int left = this.Width - p1width;                        // and this is what we need from the start of the image..
+
+                    //System.Diagnostics.Debug.WriteLine("start {0} First paint {1} w {2} then {3}", startdegree, p1start, p1width, left);
+
+                    System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+                    if ( !Enabled )
+                        ia.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix() { Matrix00 = 1.0F, Matrix11 = 1.0F, Matrix22 = 1.0F , Matrix33 = 0.20F });
+
+                    pe.Graphics.DrawImage(compass, new Rectangle(0, 0, p1width, compass.Height), p1start, 0, p1width, compass.Height, GraphicsUnit.Pixel, ia);
+                    if (left > 0)
+                        pe.Graphics.DrawImage(compass, new Rectangle(p1width, 0, left, compass.Height), 0, 0, left, compass.Height, GraphicsUnit.Pixel, ia);
+
+                    if (!Enabled)
                     {
-                        using (Brush bbrush = new SolidBrush(BugColor))
+                        if (disablemessage.Length > 0)
                         {
-                            int bugpixel = Bitmappixel(bug);                 // which pixel in the image is this?
-                            int bugx = (bugpixel >= p1start) ? (bugpixel - p1start) : (bugpixel + p1width); // adjust to account for image wrap
-                            double delta = (bug - bearing + 360) % 360;
-
-                            //System.Diagnostics.Debug.WriteLine("bug {0} {1} => {2} Delta {3}", p1start, bugpixel, bugx, delta);
-
-                            int bugy = compass.Height;
-
-                            if (bugx < BugSizePixels || bugx >= this.Width - BugSizePixels)
-                            {
-                                Rectangle r;
-                                StringFormat fmt;
-                                string text;
-
-                                bool itsleft = bugx < BugSizePixels || (delta > 180 && delta <= 270);
-                                int xmargin = 2;
-
-                                if (itsleft)
-                                {
-                                    pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(0, bugy + BugSizePixels), new Point(BugSizePixels * 2, bugy), new Point(BugSizePixels * 2, bugy + BugSizePixels * 2) });
-                                    xmargin += BugSizePixels * 2;
-                                    r = new Rectangle(xmargin, bugy, this.Width - xmargin, BugSizePixels * 2);
-                                    fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleLeft);
-                                    text = ToVisual(bug) + "° " + (double.IsNaN(distance) ? "" : string.Format(distanceformat, distance));
-                                }
-                                else
-                                {
-                                    pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(this.Width - 1, bugy + BugSizePixels), new Point(this.Width - 1 - BugSizePixels * 2, bugy), new Point(this.Width - 1 - BugSizePixels * 2, bugy + BugSizePixels * 2) });
-                                    r = new Rectangle(0, bugy, this.Width - BugSizePixels * 2 - xmargin, BugSizePixels * 2);
-                                    fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleRight);
-                                    text = (double.IsNaN(distance) ? "" : string.Format(distanceformat, distance)) + " " + ToVisual(bug) + "°";
-                                }
-
-                                pe.Graphics.SmoothingMode = textsmoothingmode;
-                                pe.Graphics.DrawString(text, this.Font, textb, r, fmt);
-
-                                fmt.Dispose();
-                            }
-                            else
-                            {
-                                pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(bugx, bugy), new Point(bugx - BugSizePixels, bugy + BugSizePixels * 2), new Point(bugx + BugSizePixels, bugy + BugSizePixels * 2) });
-
-                                if (!double.IsNaN(distance))
-                                {
-                                    string text = string.Format(distanceformat, distance);
-                                    SizeF sz = pe.Graphics.MeasureString(text, Font);
-
-                                    Rectangle r;
-                                    StringFormat fmt;
-
-                                    if (bugx > this.Width / 2)    // left or right, depe
-                                    {
-                                        fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleRight);
-                                        r = new Rectangle(0, bugy, bugx - BugSizePixels * 1, BugSizePixels * 2);
-                                    }
-                                    else
-                                    {
-                                        int xs = bugx + BugSizePixels * 1;
-                                        r = new Rectangle(xs, bugy, this.Width - xs, BugSizePixels * 2);
-                                        fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleLeft);
-                                    }
-
-                                    pe.Graphics.SmoothingMode = textsmoothingmode;
-                                    pe.Graphics.DrawString(text, this.Font, textb, r, fmt);
-                                    fmt.Dispose();
-                                }
-                            }
+                            var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleCenter);
+                            pe.Graphics.SmoothingMode = textsmoothingmode;
+                            pe.Graphics.DrawString(disablemessage, this.Font, textb, new Rectangle(0, compass.Height, this.Width, 24), fmt);
+                            fmt.Dispose();
                         }
                     }
                     else
                     {
-                        if (!double.IsNaN(distance))
+                        if (!CentreTickColor.IsFullyTransparent())
                         {
-                            var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleCenter);
-                            pe.Graphics.SmoothingMode = textsmoothingmode;
-                            pe.Graphics.DrawString(string.Format(distanceformat,distance), this.Font, textb, new Rectangle(0,compass.Height,this.Width,24), fmt);
-                            fmt.Dispose();
+                            using (Pen p2 = new Pen(CentreTickColor, 4))
+                                pe.Graphics.DrawLine(p2, new Point(this.Width / 2, 0), new Point(this.Width / 2, (compass.Height * centreticklengthpercentage / 100) - 1));
+                        }
+
+                        string distancetext = (double.IsNaN(distance) ? "" : string.Format(distanceformat, distance)) + distancemessage;
+
+                        if (!double.IsNaN(bug))
+                        {
+                            using (Brush bbrush = new SolidBrush(BugColor))
+                            {
+                                int bugpixel = Bitmappixel(bug);                 // which pixel in the image is this?
+                                int bugx = (bugpixel >= p1start) ? (bugpixel - p1start) : (bugpixel + p1width); // adjust to account for image wrap
+                                double delta = (bug - bearing + 360) % 360;
+
+                                //System.Diagnostics.Debug.WriteLine("bug {0} {1} => {2} Delta {3}", p1start, bugpixel, bugx, delta);
+
+                                int bugy = compass.Height;
+
+                                if (bugx < BugSizePixels || bugx >= this.Width - BugSizePixels)
+                                {
+                                    Rectangle r;
+                                    StringFormat fmt;
+                                    string text;
+
+                                    bool itsleft = bugx < BugSizePixels || (delta > 180 && delta <= 270);
+                                    int xmargin = 2;
+
+                                    if (itsleft)
+                                    {
+                                        pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(0, bugy + BugSizePixels), new Point(BugSizePixels * 2, bugy), new Point(BugSizePixels * 2, bugy + BugSizePixels * 2) });
+                                        xmargin += BugSizePixels * 2;
+                                        r = new Rectangle(xmargin, bugy, this.Width - xmargin, BugSizePixels * 2);
+                                        fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleLeft);
+                                        text = ToVisual(bug) + "° " + distancetext;
+                                    }
+                                    else
+                                    {
+                                        pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(this.Width - 1, bugy + BugSizePixels), new Point(this.Width - 1 - BugSizePixels * 2, bugy), new Point(this.Width - 1 - BugSizePixels * 2, bugy + BugSizePixels * 2) });
+                                        r = new Rectangle(0, bugy, this.Width - BugSizePixels * 2 - xmargin, BugSizePixels * 2);
+                                        fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleRight);
+                                        text = distancetext + " " + ToVisual(bug) + "°";
+                                    }
+
+                                    pe.Graphics.SmoothingMode = textsmoothingmode;
+                                    pe.Graphics.DrawString(text, this.Font, textb, r, fmt);
+
+                                    fmt.Dispose();
+                                }
+                                else
+                                {
+                                    pe.Graphics.FillPolygon(bbrush, new Point[3] { new Point(bugx, bugy), new Point(bugx - BugSizePixels, bugy + BugSizePixels * 2), new Point(bugx + BugSizePixels, bugy + BugSizePixels * 2) });
+
+                                    if (distancetext.Length > 0)  // if anything to paint
+                                    {
+                                        SizeF sz = pe.Graphics.MeasureString(distancetext, Font);
+
+                                        Rectangle r;
+                                        StringFormat fmt;
+
+                                        if (bugx > this.Width / 2)    // left or right, dependent
+                                        {
+                                            fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleRight);
+                                            r = new Rectangle(0, bugy, bugx - BugSizePixels * 1, BugSizePixels * 2);
+                                        }
+                                        else
+                                        {
+                                            int xs = bugx + BugSizePixels * 1;
+                                            r = new Rectangle(xs, bugy, this.Width - xs, BugSizePixels * 2);
+                                            fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleLeft);
+                                        }
+
+                                        pe.Graphics.SmoothingMode = textsmoothingmode;
+                                        pe.Graphics.DrawString(distancetext, this.Font, textb, r, fmt);
+                                        fmt.Dispose();
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (distancetext.Length > 0)
+                            {
+                                var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleCenter);
+                                pe.Graphics.SmoothingMode = textsmoothingmode;
+                                pe.Graphics.DrawString(distancetext, this.Font, textb, new Rectangle(0, compass.Height, this.Width, 24), fmt);
+                                fmt.Dispose();
+                            }
                         }
                     }
                 }
