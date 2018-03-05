@@ -28,6 +28,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.JournalEvents;
+using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -49,7 +50,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Init
-
         private class StarHistoryColumns
         {
             public const int LastVisit = 0;
@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
-                
+        
         public UserControlStarList()
         {
             InitializeComponent();
@@ -101,9 +101,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
 
             discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;            
+            discoveryform.OnNewEntry += AddNewEntry;                        
         }
-               
+        
+                
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
@@ -237,13 +238,15 @@ namespace EDDiscovery.UserControls
         {
             string infostr = "";
             string jumponium = "";
-            int hasmaterials = 0;
+            bool hasMaterials = false;
 
             if (syslist.Count > 1)
                 infostr = "First visit " + syslist.Last().EventTimeLocal.ToShortDateString();
 
             HistoryEntry he = syslist[0];
             StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
+
+            #region information
 
             if (node != null)
             {
@@ -354,10 +357,13 @@ namespace EDDiscovery.UserControls
                         // Landable bodies with valuable materials
                         if (sn.ScanData != null && sn.ScanData.IsLandable == true && sn.ScanData.HasMaterials && checkBoxJumponium.Checked == true)
                         {
-                            hasmaterials = 1;
+                            hasMaterials = true;
 
                             string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
                             // jumponium materials: Arsenic (As), Cadmium (Cd), Carbon (C), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            // "Premium","1C,1Ge,1Nb,1As,1Po,1Y" ),
+                            // "Standard", "1C,1V,1Ge,1Cd,1Nb"),
+                            // "Basic", "1C,1V,1Ge"),
 
                             int jump1 = 0;
                             int jump2 = 0;
@@ -381,6 +387,8 @@ namespace EDDiscovery.UserControls
                             if (MaterialsBrief.Contains("Germanium"))
                             {
                                 jump1 += 1;
+                                jump2 += 1;
+                                jump3 += 1;
                             }
                             if (MaterialsBrief.Contains("Niobium"))
                             {
@@ -457,7 +465,7 @@ namespace EDDiscovery.UserControls
                     {   // we need this to allow the panel to scan also through systems which has only stars
                         infostr = infostr.AppendPrePad(extrainfo, prefix);
                     }
-                    if (hasmaterials != 0 && checkBoxJumponium.Checked == true)
+                    if (hasMaterials == true && checkBoxJumponium.Checked == true)
                     {
                         infostr = infostr.AppendPrePad("\nThis system has jumponium materials: ");
                         infostr = infostr.AppendPrePad(jumponium);
@@ -467,6 +475,8 @@ namespace EDDiscovery.UserControls
 
             return infostr;
         }
+
+        #endregion
 
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
         {
