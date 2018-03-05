@@ -14,13 +14,9 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ExtendedControls
+namespace BaseUtils
 {
     public class BitMapHelpers
     {
@@ -33,6 +29,35 @@ namespace ExtendedControls
 
             using (Graphics gr = Graphics.FromImage(newmap))
                 gr.DrawImage(source, new Rectangle(0, 0, source.Width, source.Height), 0, 0, source.Width, source.Height, GraphicsUnit.Pixel, ia);
+
+            return newmap;
+        }
+
+        public static Bitmap ScaleColourInBitmap(Bitmap source, System.Drawing.Imaging.ColorMatrix cm)
+        {
+            Bitmap newmap = new Bitmap(source.Width, source.Height);
+
+            System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+            ia.SetColorMatrix(cm);
+
+            using (Graphics gr = Graphics.FromImage(newmap))
+                gr.DrawImage(source, new Rectangle(0, 0, source.Width, source.Height), 0, 0, source.Width, source.Height, GraphicsUnit.Pixel, ia);
+
+            return newmap;
+        }
+
+        public static Bitmap ScaleColourInBitmapSideBySide(Bitmap source, Bitmap source2, System.Drawing.Imaging.ColorMatrix cm)
+        {
+            Bitmap newmap = new Bitmap(source.Width + source2.Width, Math.Max(source.Height,source2.Height));
+
+            System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
+            ia.SetColorMatrix(cm);
+
+            using (Graphics gr = Graphics.FromImage(newmap))
+            {
+                gr.DrawImage(source, new Rectangle(0, 0, source.Width, source.Height), 0, 0, source.Width, source.Height, GraphicsUnit.Pixel, ia);
+                gr.DrawImage(source2, new Rectangle(source.Width, 0, source2.Width, source2.Height), 0, 0, source2.Width, source2.Height, GraphicsUnit.Pixel, ia);
+            }
 
             return newmap;
         }

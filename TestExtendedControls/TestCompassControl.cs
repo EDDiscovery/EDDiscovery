@@ -182,5 +182,21 @@ namespace DialogTest
             compassControl1.WidthDegrees = 360;
 
         }
+
+        private void buttondistdisb_Click(object sender, EventArgs e)
+        {
+            compassControl1.DistanceDisable("No Distance data");
+        }
+
+        private void buttonenable_Click(object sender, EventArgs e)
+        {
+            compassControl1.Enabled = true;
+        }
+
+        private void buttondisable_Click(object sender, EventArgs e)
+        {
+            compassControl1.DisableMessage = "Compass is disabled";
+            compassControl1.Enabled = false;
+        }
     }
 }
