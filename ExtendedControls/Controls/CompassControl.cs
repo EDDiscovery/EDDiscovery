@@ -106,6 +106,8 @@ namespace ExtendedControls
         private System.Diagnostics.Stopwatch slewstopwatch;
         private double accumulateddegrees;
 
+        private bool lastdrawnenablestate = true;
+
         public CompassControl()
         {
             SetStyle(
@@ -251,6 +253,9 @@ namespace ExtendedControls
 
         private void PaintCompass()
         {
+            compass?.Dispose();     // ensure we are clean
+            compass = null;
+
             pixelsperdegree = (double)this.Width / (double)WidthDegrees;
 
             int bitmapwidth = (int)(360 * pixelsperdegree);        // size of bitmap
@@ -286,7 +291,6 @@ namespace ExtendedControls
                     int stmajor = stencilmajortickat;
                     int stminor = stencilminortickat;
 
-
                     if ( autosetstencilticks )
                     {
                         double minmajorticks = sz.Width / pixelsperdegree;        
@@ -309,9 +313,10 @@ namespace ExtendedControls
                         }
                     }
 
-                    Pen p1 = new Pen(StencilColor, 1);
-                    Pen p2 = new Pen(StencilColor, 2);
-                    Brush textb = new SolidBrush(this.ForeColor);
+                    Color sc = Enabled ? StencilColor : StencilColor.Multiply(0.5F);
+                    Pen p1 = new Pen(sc, 1);
+                    Pen p2 = new Pen(sc, 2);
+                    Brush textb = new SolidBrush(Enabled ? this.ForeColor : this.ForeColor.Multiply(0.5F));
                     var fmt = ControlHelpersStaticFunc.StringFormatFromContentAlignment(ContentAlignment.MiddleCenter);
 
                     for (int d = pixelstart; d < 360 + pixelstart; d++)
@@ -361,9 +366,10 @@ namespace ExtendedControls
         {
             base.OnPaint(pe);
 
-            if (compass == null)
+            if (compass == null || Enabled != lastdrawnenablestate)     // if enabled change (which we don't trap directly due to it being a lower control) redraw as well
             {
                 PaintCompass();
+                lastdrawnenablestate = Enabled;
             }
 
             if (compass != null)        // designer problems
@@ -383,13 +389,9 @@ namespace ExtendedControls
 
                     //System.Diagnostics.Debug.WriteLine("start {0} First paint {1} w {2} then {3}", startdegree, p1start, p1width, left);
 
-                    System.Drawing.Imaging.ImageAttributes ia = new System.Drawing.Imaging.ImageAttributes();
-                    if ( !Enabled )
-                        ia.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix() { Matrix00 = 1.0F, Matrix11 = 1.0F, Matrix22 = 1.0F , Matrix33 = 0.20F });
-
-                    pe.Graphics.DrawImage(compass, new Rectangle(0, 0, p1width, compass.Height), p1start, 0, p1width, compass.Height, GraphicsUnit.Pixel, ia);
+                    pe.Graphics.DrawImage(compass, new Rectangle(0, 0, p1width, compass.Height), p1start, 0, p1width, compass.Height, GraphicsUnit.Pixel);
                     if (left > 0)
-                        pe.Graphics.DrawImage(compass, new Rectangle(p1width, 0, left, compass.Height), 0, 0, left, compass.Height, GraphicsUnit.Pixel, ia);
+                        pe.Graphics.DrawImage(compass, new Rectangle(p1width, 0, left, compass.Height), 0, 0, left, compass.Height, GraphicsUnit.Pixel);
 
                     if (!Enabled)
                     {
