@@ -39,8 +39,6 @@ namespace EDDiscovery.UserControls
         double? longitude = null;
         double? heading = null;
         double? bodyRadius = null;
-        double? targetBearing = null;
-        double? targetDistance = null;
         bool autoHideTargetCoords = false;
         HistoryEntry last_he;
         BookmarkClass bookMark;
@@ -57,7 +55,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnNewEntry += Display;
+            discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
             numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
             numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
@@ -65,6 +63,8 @@ namespace EDDiscovery.UserControls
             checkBoxHideTransparent.Checked = autoHideTargetCoords;
             comboBoxBookmarks.Text = "";
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
+            compassControl.SlewRateDegreesSec = 40;
+            compassControl.AutoSetStencilTicks = true;
         }
 
         public override void Closing()
@@ -72,35 +72,49 @@ namespace EDDiscovery.UserControls
             PutSettingDouble(DbLatSave, numberBoxTargetLatitude.Value);
             PutSettingDouble(DbLongSave, numberBoxTargetLongitude.Value);
             PutSettingBool(DbHideSave, autoHideTargetCoords);
-            discoveryform.OnNewEntry -= Display;
+            discoveryform.OnNewEntry -= OnNewEntry;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
 
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curbackcol)
         {
-            labelExtTargetLong.BackColor = labelTargetLat.BackColor = curcol;
-            numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curcol;
-            labelBookmark.BackColor = comboBoxBookmarks.BackColor = curcol;
-            buttonNewBookmark.BackColor = curcol;
-            BackColor = curcol;
-            if (on && autoHideTargetCoords && numberBoxTargetLatitude.Visible)
+            labelExtTargetLong.BackColor = labelTargetLat.BackColor = curbackcol;
+            numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
+            labelBookmark.BackColor = curbackcol;
+            checkBoxHideTransparent.BackColor = curbackcol;
+            comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = on;
+            comboBoxBookmarks.BackColor = curbackcol;
+            buttonNewBookmark.BackColor = curbackcol;
+            BackColor = curbackcol;
+
+            Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            compassControl.ForeColor = fore;
+            compassControl.StencilColor = fore;
+            compassControl.CentreTickColor = fore.Multiply(1.2F);
+            compassControl.BugColor = fore.Multiply(0.8F);
+            compassControl.BackColor = on ? Color.Transparent : BackColor;
+            compassControl.Font = discoveryform.theme.GetFontAtSize(10);
+
+            if (autoHideTargetCoords)
             {
-                labelExtTargetLong.Visible = labelTargetLat.Visible = false;
-                numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
-                buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = false;
-                pictureBoxCompass.Top = numberBoxTargetLongitude.Top;
+                if (on)
+                {
+                    labelExtTargetLong.Visible = labelTargetLat.Visible = false;
+                    numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
+                    buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = false;
+                    compassControl.Top = 0;
+                }
+                else
+                {
+                    labelExtTargetLong.Visible = labelTargetLat.Visible = true;
+                    numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
+                    buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = true;
+                    compassControl.Top = comboBoxBookmarks.Bottom + 8;
+                }
             }
-            if (!on && autoHideTargetCoords && !numberBoxTargetLatitude.Visible)
-            {
-                labelExtTargetLong.Visible = labelTargetLat.Visible = true;
-                numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
-                buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = true;
-                pictureBoxCompass.Top = comboBoxBookmarks.Top + comboBoxBookmarks.Height + 3;
-            }
-            Display();
         }
 
         #endregion
@@ -110,14 +124,16 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()       // on start up, this will have an empty history
         {
             last_he = discoveryform.history.GetLast;
-            Display(last_he, discoveryform.history);
+            OnNewEntry(last_he, discoveryform.history);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl)
+        private void OnNewEntry(HistoryEntry he, HistoryList hl)
         {
             last_he = he;
             if (last_he != null)
             {
+                // hmm. not checking EDSM for scan data.. do we want to ? prob not.
+
                 JournalScan sd = discoveryform.history.GetScans(he.System.Name).Where(sc => sc.BodyName == he.WhereAmI).FirstOrDefault();
                 bodyRadius = sd?.nRadius;
 
@@ -156,7 +172,9 @@ namespace EDDiscovery.UserControls
                     default:
                         return;
                 }
-                Display();
+
+                PopulateBookmarkCombo();
+                DisplayCompass();
             }
         }
 
@@ -176,205 +194,41 @@ namespace EDDiscovery.UserControls
                     latitude = longitude = heading = null;
             }
 
-            Display();
+            DisplayCompass();
         }
         
-        private void Display()
+        private void DisplayCompass()
         {
             double? targetlat = numberBoxTargetLatitude.Value;
             double? targetlong = numberBoxTargetLongitude.Value;
 
-            PopulateBookmarkCombo();
-            targetBearing = CalculateBearing(targetlat, targetlong);
-            targetDistance = CalculateDistance(targetlat, targetlong);
-            DrawCompassImage();
-            pictureBoxCompass.Render(true);
-        }
+            double? targetDistance = CalculateDistance(targetlat, targetlong);
 
-        private string TargetDistanceFormatted()
-        {
-            if (!targetDistance.HasValue) return "distance unknown";
-            if (targetDistance.Value < 1000) return $"{targetDistance.Value.ToString("N0")} m";
-            if (targetDistance.Value < 1000000) return $"{(targetDistance.Value / 1000).ToString("N0")} km";
-            return $"{(targetDistance.Value / 1000000).ToString("N0")} Mm";
-        }
-
-        private void PopulateBookmarkCombo()
-        {
-            if (last_he == null)
+            if ( targetDistance.HasValue)
             {
-                buttonNewBookmark.Enabled = false;
-                return;
-            }
-            buttonNewBookmark.Enabled = true;
-            if (bookMark != null && bookMark.StarName == last_he.System.Name)
-            {
-                return;
-            }
-            string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
-            comboBoxBookmarks.Items.Clear();
-            bookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
-            if (bookMark != null)
-            {
-                if (heading.HasValue)
+                if (targetDistance.Value < 1000)
+                    compassControl.DistanceFormat = "{0:0.#}m";
+                else if (targetDistance.Value < 1000000)
                 {
-                    // orbital flight or landed, just do this body
-                    labelBookmark.Text = "Planet Bookmarks";
-                    PlanetMarks.Planet pl = bookMark.PlanetaryMarks.Planets.Where(p => p.Name == last_he.WhereAmI).FirstOrDefault();
-                    if(pl != null && pl.Locations != null && pl.Locations.Any())
-                    {
-                        foreach(PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                        {
-                            comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
-                        }                        
-                    }
+                    targetDistance = targetDistance.Value / 1000;
+                    compassControl.DistanceFormat = "{0:0.#}km";
                 }
                 else
                 {
-                    // add whole system
-                    labelBookmark.Text = "System Bookmarks";
-                    if (bookMark.PlanetaryMarks?.Planets != null)
-                    {
-                        foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
-                        {
-                            if (pl.Locations != null && pl.Locations.Any())
-                            {
-                                foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                                {
-                                    comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
-                                }
-                            }
-                        }
-                    }
+                    targetDistance = targetDistance.Value / 1000000;
+                    compassControl.DistanceFormat = "{0:0.#}Mm";
                 }
             }
-            if (externallyForcedBookmark && !comboBoxBookmarks.Items.Contains(externalLocationName))
+
+            double? targetBearing = CalculateBearing(targetlat, targetlong);
+
+            try
             {
-                comboBoxBookmarks.Items.Add(externalLocationName);
+                compassControl.Set(heading.HasValue ? heading.Value : double.NaN,
+                                targetBearing.HasValue ? targetBearing.Value : double.NaN,
+                                targetDistance.HasValue ? targetDistance.Value : double.NaN, true);
             }
-            if (!String.IsNullOrEmpty(selection) && comboBoxBookmarks.Items.Contains(selection))
-            {
-                comboBoxBookmarks.Text = selection;
-            }
-            else
-            {
-                comboBoxBookmarks.Text = "";
-            }
-        }
-
-        private void DrawCompassImage()
-        {
-            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-            Color backcolour = IsTransparent ? Color.Transparent : BackColor;
-            Font displayFont = discoveryform.theme.GetFontAtSize(10);
-            PictureBoxHotspot.ImageElement compass;
-            const int margin = 3;
-
-            pictureBoxCompass.ClearImageList();
-            if (heading.HasValue)
-            {
-                SizeF labelSize;
-                using (Graphics tempGraph = Graphics.FromHwnd(Handle))
-                {
-                    labelSize = tempGraph.MeasureString("000", displayFont);
-                }
-                int bigTickSize = (int)labelSize.Height;
-                int littleTickSize = (int)(labelSize.Height / 2);
-                int scaleWidth = (int)labelSize.Width * 17;   // 9 labels + 8 gaps
-
-                Size s = new Size(scaleWidth, bigTickSize + (int)labelSize.Width * 3 + margin * 3);
-                Bitmap scale = new Bitmap(s.Width, s.Height);
-
-                int iconTop = bigTickSize + (int)labelSize.Height + margin * 2;
-                int labelTop = bigTickSize + (int)labelSize.Height + margin * 2 + (int)labelSize.Width;
-
-                int left = (int)heading.Value - 90; // start at -90 to heading
-
-                bool steerLeft = false;
-                bool steerRight = false;
-
-                if (targetBearing.HasValue)
-                {
-                    int right = (int)heading.Value + 90;
-                    int leftCorrected = left < 0 ? 360 + left : left;
-                    int rightCorrected = right % 360;
-                    int target = (int)targetBearing.Value;
-                    if (rightCorrected >= 180)
-                    {
-                        steerRight = (target > rightCorrected && target <= 360) || (target < leftCorrected - 90);
-                        steerLeft = target < leftCorrected && target >= leftCorrected - 90;
-                    }
-                    else
-                    {
-                        steerRight = target > rightCorrected && target <= rightCorrected + 90;
-                        steerLeft = target > rightCorrected + 90 && target < leftCorrected;
-                    }
-                }
-
-                using (Graphics gr = Graphics.FromImage(scale))
-                {
-                    string targetLabel = targetBearing.HasValue ? $"{targetBearing.Value.ToString("N0")}° ({TargetDistanceFormatted()})" : "";
-                    SizeF targetLabelSize = gr.MeasureString(targetLabel, displayFont);
-                    gr.FillRectangle(new SolidBrush(backcolour), new Rectangle(0, 0, scale.Width, scale.Height));
-                    Pen bigTick = new Pen(textcolour, 2);
-                    Pen littleTick = new Pen(textcolour, 1);
-
-                    double tickGap = (double)scaleWidth / 179.0;
-
-                    for (int i = left; i <= (int)heading.Value + 90; i++)
-                    {
-                        int x = margin + (int)((i - left) * tickGap);
-
-                        if (i % 5 == 0)
-                        {
-                            //System.Diagnostics.Debug.WriteLine("Tick at " + x);
-                            if (i % 20 == 0)
-                            {
-                                string label = i < 0 ? (i + 360).ToString() : (i % 360).ToString();
-                                gr.DrawLine(bigTick, new Point(x, margin), new Point(x, bigTickSize));
-                                gr.DrawString(label, displayFont, new SolidBrush(textcolour), x - margin, bigTickSize + margin * 2, StringFormat.GenericDefault);
-                            }
-                            else gr.DrawLine(littleTick, new Point(x, margin), new Point(x, littleTickSize));
-                        }
-                        if (i == (int)heading.Value)
-                        {
-                            using (Pen ahead = new Pen(textcolour, 4))
-                            {
-                                gr.DrawLine(ahead, new Point(x, 0), new Point(x, (int)labelSize.Width));
-                            }
-                        }
-                        if (targetBearing.HasValue && (i + 360) % 360 == (int)targetBearing.Value)
-                        {
-                            gr.DrawImage(Map3D_Navigation_CenterOnSystem, new Rectangle(x - (int)labelSize.Width / 2, iconTop, (int)labelSize.Width, (int)labelSize.Width));
-                            gr.DrawString(targetLabel, displayFont, new SolidBrush(textcolour), Max(x - (int)targetLabelSize.Width / 2, margin), labelTop, StringFormat.GenericDefault);
-                        }
-                    }
-
-                    if (steerLeft)
-                    {
-                        gr.DrawImage(TabStrip_ArrowLeft, new Rectangle(margin, iconTop, (int)labelSize.Width, (int)labelSize.Width));
-                        gr.DrawString(targetLabel, displayFont, new SolidBrush(textcolour), margin, labelTop, StringFormat.GenericDefault);
-                    }
-
-                    if (steerRight)
-                    {
-                        gr.DrawImage(TabStrip_ArrowRight, new Rectangle(scaleWidth - margin * 4 - (int)labelSize.Width, iconTop, (int)labelSize.Width, (int)labelSize.Width));
-                        gr.DrawString(targetLabel, displayFont, new SolidBrush(textcolour), scaleWidth - margin * 4 - (int)targetLabelSize.Width, labelTop, StringFormat.GenericDefault);
-                    }
-                    bigTick.Dispose();
-                    littleTick.Dispose();
-                }
-
-                compass = pictureBoxCompass.AddImage(new Rectangle(new Point(margin, margin), s), scale);
-            }
-            else
-            {
-                Size s = new Size(1920, 1080);
-                compass = pictureBoxCompass.AddTextAutoSize(new Point(0, 2), s, "Surface coordinates unavailable", displayFont, textcolour, backcolour, 1.0F);
-            }
-            //RevertToNormalSize();
-            //RequestTemporaryResize(new Size(Max(compass.img.Width + pictureBoxCompass.Left, numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Right + 3 : 0), 
-            //    compass.img.Height + (numberBoxTargetLatitude.Visible ? comboBoxBookmarks.Top + comboBoxBookmarks.Height + 6 : 0)));
+            catch { }       // unlikely but Status.JSON could send duff values, trap out the exception on bad values
         }
 
         private double? CalculateBearing(double? targetLat, double? targetLong)
@@ -413,13 +267,74 @@ namespace EDDiscovery.UserControls
 
             return bodyRadius.Value * c;
         }
+
+        private void PopulateBookmarkCombo()
+        {
+            if (last_he == null)
+            {
+                buttonNewBookmark.Enabled = false;
+                return;
+            }
+            buttonNewBookmark.Enabled = true;
+            if (bookMark != null && bookMark.StarName == last_he.System.Name)
+            {
+                return;
+            }
+            string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
+            comboBoxBookmarks.Items.Clear();
+            bookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
+            if (bookMark != null)
+            {
+                if (heading.HasValue)
+                {
+                    // orbital flight or landed, just do this body
+                    labelBookmark.Text = "Planet Bookmarks";
+                    PlanetMarks.Planet pl = bookMark.PlanetaryMarks.Planets.Where(p => p.Name == last_he.WhereAmI).FirstOrDefault();
+                    if (pl != null && pl.Locations != null && pl.Locations.Any())
+                    {
+                        foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
+                        {
+                            comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
+                        }
+                    }
+                }
+                else
+                {
+                    // add whole system
+                    labelBookmark.Text = "System Bookmarks";
+                    if (bookMark.PlanetaryMarks?.Planets != null)
+                    {
+                        foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
+                        {
+                            if (pl.Locations != null && pl.Locations.Any())
+                            {
+                                foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
+                                {
+                                    comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (externallyForcedBookmark && !comboBoxBookmarks.Items.Contains(externalLocationName))
+            {
+                comboBoxBookmarks.Items.Add(externalLocationName);
+            }
+            if (!String.IsNullOrEmpty(selection) && comboBoxBookmarks.Items.Contains(selection))
+            {
+                comboBoxBookmarks.Text = selection;
+            }
+            else
+            {
+                comboBoxBookmarks.Text = "";
+            }
+        }
+
+
         #endregion
 
-        private void textBox_Validated(object sender, EventArgs e)
-        {
-            Display();
-        }
-        
+
         private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
         {
             autoHideTargetCoords = ((CheckBoxCustom)sender).Checked;
@@ -446,7 +361,8 @@ namespace EDDiscovery.UserControls
                                 externalLocationName = "";
                                 externalLocation = null;
                             }
-                            Display();
+
+                            DisplayCompass();
                             return;
                         }
                     }
@@ -492,14 +408,18 @@ namespace EDDiscovery.UserControls
                 GlobalBookMarkList.Instance.Delete(bookMark);
                 bookMark = null;
             }
-            Display();
+
+            PopulateBookmarkCombo();
+            DisplayCompass();
         }
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
             if (bookMark != null && bookMark.id == bk.id)
                 bookMark = null;
-            Display();
+
+            PopulateBookmarkCombo();
+            DisplayCompass();
         }
 
 
@@ -513,8 +433,19 @@ namespace EDDiscovery.UserControls
                 numberBoxTargetLatitude.Value = externalLocation.Latitude;
                 numberBoxTargetLongitude.Value = externalLocation.Longitude;
             }
-            Display();
+
+            PopulateBookmarkCombo();
+            DisplayCompass();
         }
 
+        private void numberBoxTargetLatitude_ValueChanged(object sender, EventArgs e)
+        {
+            DisplayCompass();
+        }
+
+        private void numberBoxTargetLongitude_ValueChanged(object sender, EventArgs e)
+        {
+            DisplayCompass();
+        }
     }
 }
