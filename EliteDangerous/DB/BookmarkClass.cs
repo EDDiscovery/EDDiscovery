@@ -191,7 +191,7 @@ namespace EliteDangerousCore.DB
             Note = (string)dr["Note"];
             if (System.DBNull.Value != dr["PlanetMarks"])
             {
-                System.Diagnostics.Debug.WriteLine("Planet mark {0} {1}", StarName, (string)dr["PlanetMarks"]);
+                //System.Diagnostics.Debug.WriteLine("Planet mark {0} {1}", StarName, (string)dr["PlanetMarks"]);
                 PlanetaryMarks = new PlanetMarks((string)dr["PlanetMarks"]);
             }
         }
