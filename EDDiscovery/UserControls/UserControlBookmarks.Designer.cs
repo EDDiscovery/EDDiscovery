@@ -45,6 +45,8 @@
             this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
@@ -54,6 +56,7 @@
             this.splitContainer1.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).BeginInit();
+            this.contextMenuStripBookmarks.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelButtons
@@ -110,6 +113,7 @@
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(50, 6);
@@ -207,6 +211,7 @@
             this.X,
             this.Y,
             this.Z});
+            this.dataGridViewBookMarks.ContextMenuStrip = this.contextMenuStripBookmarks;
             this.dataGridViewBookMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
@@ -216,6 +221,7 @@
             this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
             this.dataGridViewBookMarks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewBookMarks_SortCompare);
+            this.dataGridViewBookMarks.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewBookMarks_MouseDown);
             // 
             // Type
             // 
@@ -254,6 +260,20 @@
             this.Z.Name = "Z";
             this.Z.ReadOnly = true;
             // 
+            // contextMenuStripBookmarks
+            // 
+            this.contextMenuStripBookmarks.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemGotoStar3dmap});
+            this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
+            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(158, 26);
+            // 
+            // toolStripMenuItemGotoStar3dmap
+            // 
+            this.toolStripMenuItemGotoStar3dmap.Name = "toolStripMenuItemGotoStar3dmap";
+            this.toolStripMenuItemGotoStar3dmap.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItemGotoStar3dmap.Text = "Goto in 3D Map";
+            this.toolStripMenuItemGotoStar3dmap.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
+            // 
             // userControlSurfaceBookmarks
             // 
             this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -278,6 +298,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).EndInit();
+            this.contextMenuStripBookmarks.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -302,5 +323,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Y;
         private System.Windows.Forms.DataGridViewTextBoxColumn Z;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripBookmarks;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
     }
 }
