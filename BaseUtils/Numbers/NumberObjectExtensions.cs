@@ -126,6 +126,15 @@ public static class ObjectExtensionsNumbersBool
             return null;
     }
 
+    static public double? ParseDoubleNull(this string s)
+    {
+        double i;
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.CurrentCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     #endregion
 
     #region Float

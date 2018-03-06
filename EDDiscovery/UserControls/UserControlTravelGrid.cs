@@ -939,7 +939,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     tme = DateTime.Now;
-                    bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme.ToString());
+                    bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme);
                 }
                 DialogResult dr = bookmarkForm.ShowDialog();
                 if (dr == DialogResult.OK)

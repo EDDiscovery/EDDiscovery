@@ -378,11 +378,11 @@ namespace EDDiscovery.UserControls
             {
                 if (latitude.HasValue)
                 {
-                    frm.NewSystemBookmark(last_he.System, "", tme.ToString(), last_he.WhereAmI, latitude.Value, longitude.Value);
+                    frm.NewSystemBookmark(last_he.System, "", tme, last_he.WhereAmI, latitude.Value, longitude.Value);
                 }
                 else
                 {
-                    frm.NewSystemBookmark(last_he.System, "", tme.ToString());
+                    frm.NewSystemBookmark(last_he.System, "", tme);
                 }
             }
             else

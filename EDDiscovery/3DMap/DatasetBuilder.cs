@@ -102,7 +102,7 @@ namespace EDDiscovery._3DMap
 
             foreach (BookmarkClass bc in GlobalBookMarkList.Instance.Bookmarks)
             {
-                Bitmap touse = (bc.id == bookmarktarget) ? maptarget : (bc.isRegion ? mapregion : (bc.hasSurfaceMarks ? mapsurface : mapstar));
+                Bitmap touse = (bc.id == bookmarktarget) ? maptarget : (bc.isRegion ? mapregion : (bc.hasPlanetaryMarks ? mapsurface : mapstar));
                 TexturedQuadData newtexture = TexturedQuadData.FromBitmap(touse, new PointData(bc.x, bc.y, bc.z), rotation, widthly, heightly,  0, heightly / 2);
                 newtexture.Tag = bc;
                 newtexture.Tag2 = 0;        // bookmark
