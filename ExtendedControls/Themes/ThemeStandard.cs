@@ -153,6 +153,8 @@ namespace ExtendedControls
         public Color ButtonBorderColor { get { return currentsettings.colors[Settings.CI.button_border]; } set { SetCustom(); currentsettings.colors[Settings.CI.button_border] = value; } }
         public Color ButtonTextColor { get { return currentsettings.colors[Settings.CI.button_text]; } set { SetCustom(); currentsettings.colors[Settings.CI.button_text] = value; } }
 
+        public Color GridCellBack { get { return currentsettings.colors[Settings.CI.grid_cellbackground]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_cellbackground] = value; } }
+        public Color GridBorderBack { get { return currentsettings.colors[Settings.CI.grid_borderback]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderback] = value; } }
         public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
         public Color GridBorderLines { get { return currentsettings.colors[Settings.CI.grid_borderlines]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderlines] = value; } }
         

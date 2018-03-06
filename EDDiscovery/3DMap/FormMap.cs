@@ -1047,6 +1047,12 @@ namespace EDDiscovery
                 labelSystemCoords.Text = "No centre system";
         }
 
+        public bool MoveTo(float x, float y, float z)
+        {
+            posdir.StartCameraSlew(new Vector3(x,y,z), -1F);
+            return true;
+        }
+
         public bool SetCenterSystemTo(string name)
         {
             if (Is3DMapsRunning)                         // if null, we are not up and running
@@ -1345,7 +1351,7 @@ namespace EDDiscovery
             BookmarkForm frm = new BookmarkForm();
             frm.InitialisePos(posdir.Position.X, posdir.Position.Y, posdir.Position.Z);
             DateTime tme = DateTime.Now;
-            frm.RegionBookmark(tme.ToString());
+            frm.NewRegionBookmark(tme);
             DialogResult res = frm.ShowDialog(this);
 
             if (res == DialogResult.OK)

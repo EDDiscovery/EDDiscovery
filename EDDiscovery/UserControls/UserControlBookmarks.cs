@@ -40,7 +40,10 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             Display();
+            userControlSurfaceBookmarks.Changed += ChangeLocations;
+            userControlSurfaceBookmarks.CompassSeleted += CompassSelected;
         }
+
         
         private void Display()
         {
@@ -90,18 +93,21 @@ namespace EDDiscovery.UserControls
                 currentedit = dataGridViewBookMarks.Rows[dataGridViewBookMarks.CurrentCell.RowIndex];
                 BookmarkClass bk = (BookmarkClass)(currentedit.Tag);
                 //System.Diagnostics.Debug.WriteLine("Move to row " + currentedit.Index + " Notes " + bk.Name);
-                userControlSurfaceBookmarks.DisplayPlanetMarks(bk);
+                if (bk.isRegion)
+                    userControlSurfaceBookmarks.Disable();
+                else
+                    userControlSurfaceBookmarks.Init(bk.StarName,bk.PlanetaryMarks);
             }
             else
             {
                 currentedit = null;
-                userControlSurfaceBookmarks.DisplayPlanetMarks(null);
+                userControlSurfaceBookmarks.Disable();
             }
         }
 
         private void SaveBackAnyChanges()
         {
-            if (currentedit != null )
+            if (currentedit != null)
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
                 string newNote = currentedit.Cells[2].Value.ToString();
@@ -111,15 +117,18 @@ namespace EDDiscovery.UserControls
                 {
                     updating = true;
                     //System.Diagnostics.Debug.WriteLine("Save back " + bk.Name + " " + newNote);
-                    PlanetMarks latestMarks = userControlSurfaceBookmarks.PlanetMarks;
-                    currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion, bk.isRegion ? bk.Heading : bk.StarName, bk.x, bk.y, bk.z, bk.Time, newNote, latestMarks);
+                    currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion,
+                                    bk.isRegion ? bk.Heading : bk.StarName,
+                                    bk.x, bk.y, bk.z, bk.Time,
+                                    newNote,
+                                    userControlSurfaceBookmarks.PlanetMarks);
                     updating = false;
+                    userControlSurfaceBookmarks.Edited = false;
                 }
 
                 currentedit = null;
             }
         }
-
 
         private void dataGridViewBookMarks_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
@@ -152,17 +161,10 @@ namespace EDDiscovery.UserControls
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            BookmarkForm frm = new BookmarkForm();
-            DateTime tme = DateTime.Now;
-            frm.NewSystemBookmark(tme.ToString());
-            if (frm.ShowDialog(this) == DialogResult.OK)
-            {
-                updating = true;
-                GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                     tme, frm.Notes, frm.SurfaceLocations);
-                updating = false;
-                Display();
-            }
+            updating = true;
+            UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, null, null, false);
+            updating = false;
+            Display();
         }
 
         private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -177,25 +179,10 @@ namespace EDDiscovery.UserControls
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
                 SaveBackAnyChanges();
-
-                BookmarkForm frm = new BookmarkForm();
-                frm.Update(bk);
-                DialogResult dr = frm.ShowDialog(this);
+                EliteDangerousCore.ISystem sys = bk.isStar ? EliteDangerousCore.SystemCache.FindSystem(bk.Name) : null;
 
                 updating = true;
-
-                if (dr == DialogResult.OK)
-                {
-                    //System.Diagnostics.Debug.WriteLine("Updating bookmark " + bk.Name);
-                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                     bk.Time, frm.Notes, frm.SurfaceLocations);
-
-                }
-                else if (dr == DialogResult.Abort)
-                {
-                    GlobalBookMarkList.Instance.Delete(bk);
-                }
-
+                UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
                 updating = false;
                 Display();
             }
@@ -251,6 +238,23 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.Default;
         }
 
+
+        private void ChangeLocations(PlanetMarks p)     // planetary bits edited.. call back from planetaryform
+        {
+            SaveBackAnyChanges();
+        }
+
+        private void CompassSelected(string planet, string locname)
+        {
+            if (currentedit != null)      // if we have a current cell.. 
+            {
+                BookmarkClass bk = (BookmarkClass)currentedit.Tag;
+
+                UserControlCompass comp = (UserControlCompass)EDDApplicationContext.EDDMainForm.PopOuts.PopOut(PanelInformation.PanelIDs.Compass);
+                comp.SetSurfaceBookmark(bk, planet, locname);
+            }
+        }
+
         #endregion
 
         #region Reaction to bookmarks doing stuff from outside sources
@@ -268,5 +272,52 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Right clicks
+
+        BookmarkClass rightclickbookmark = null;
+
+        private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclickbookmark = null;
+            }
+
+            if (dataGridViewBookMarks.SelectedCells.Count < 2 || dataGridViewBookMarks.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewBookMarks.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewBookMarks.ClearSelection();                // select row under cursor.
+                    dataGridViewBookMarks.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+                    {
+                        rightclickbookmark = (BookmarkClass)dataGridViewBookMarks.Rows[hti.RowIndex].Tag;
+                    }
+                }
+            }
+        }
+
+        private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
+        {
+            if (rightclickbookmark != null )
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                    discoveryform.Open3DMap(null);
+
+                this.Cursor = Cursors.Default;
+
+                if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
+                {
+                    if (discoveryform.Map.MoveTo((float)rightclickbookmark.x, (float)rightclickbookmark.y, (float)rightclickbookmark.z))
+                        discoveryform.Map.Show();
+                }
+            }
+        }
+
+        #endregion
     }
 }
