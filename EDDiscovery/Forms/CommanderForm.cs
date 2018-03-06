@@ -47,6 +47,9 @@ namespace EDDiscovery.Forms
             textBoxEGOName.Text = cmdr.EGOName;
             textBoxEGOAPI.Text = cmdr.EGOAPIKey;
 
+            textBoxInaraAPI.Text = cmdr.InaraAPIKey;
+            checkBoxInaraSync.Checked = cmdr.SyncToInara;
+
             UpdateCAPIState();
         }
 
@@ -62,6 +65,11 @@ namespace EDDiscovery.Forms
             cmdr.SyncToEGO = checkBoxEGOSync.Checked;
             cmdr.EGOName = textBoxEGOName.Text;
             cmdr.EGOAPIKey = textBoxEGOAPI.Text;
+
+            cmdr.InaraAPIKey = textBoxInaraAPI.Text;
+            cmdr.SyncToInara = checkBoxInaraSync.Checked;
+
+
         }
 
         public bool Valid { get { return textBoxBorderCmdr.Text != ""; } }
@@ -227,5 +235,9 @@ namespace EDDiscovery.Forms
 
         }
 
+        private void CommanderForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -73,12 +73,17 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.groupBoxCustom6 = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxInaraSync = new ExtendedControls.CheckBoxCustom();
+            this.textBoxInaraAPI = new ExtendedControls.TextBoxBorder();
+            this.label11 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustom4.SuspendLayout();
             this.groupBoxCustom3.SuspendLayout();
             this.groupBoxCustom2.SuspendLayout();
             this.groupBoxCustom1.SuspendLayout();
             this.groupBoxCustom5.SuspendLayout();
+            this.groupBoxCustom6.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -166,9 +171,6 @@
             // 
             // buttonExtCAPI
             // 
-            this.buttonExtCAPI.BorderColorScaling = 1.25F;
-            this.buttonExtCAPI.ButtonColorScaling = 0.5F;
-            this.buttonExtCAPI.ButtonDisabledScaling = 0.5F;
             this.buttonExtCAPI.Location = new System.Drawing.Point(418, 27);
             this.buttonExtCAPI.Name = "buttonExtCAPI";
             this.buttonExtCAPI.Size = new System.Drawing.Size(102, 23);
@@ -236,9 +238,6 @@
             // 
             // buttonExtBrowse
             // 
-            this.buttonExtBrowse.BorderColorScaling = 1.25F;
-            this.buttonExtBrowse.ButtonColorScaling = 0.5F;
-            this.buttonExtBrowse.ButtonDisabledScaling = 0.5F;
             this.buttonExtBrowse.Location = new System.Drawing.Point(494, 60);
             this.buttonExtBrowse.Name = "buttonExtBrowse";
             this.buttonExtBrowse.Size = new System.Drawing.Size(75, 23);
@@ -270,10 +269,13 @@
             // 
             this.textBoxEGOName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxEGOName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxEGOName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxEGOName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxEGOName.BorderColorScaling = 0.5F;
             this.textBoxEGOName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxEGOName.ClearOnFirstChar = false;
             this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOName.InErrorCondition = false;
             this.textBoxEGOName.Location = new System.Drawing.Point(160, 30);
             this.textBoxEGOName.Multiline = false;
             this.textBoxEGOName.Name = "textBoxEGOName";
@@ -291,10 +293,13 @@
             // 
             this.textBoxEGOAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxEGOAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxEGOAPI.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxEGOAPI.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxEGOAPI.BorderColorScaling = 0.5F;
             this.textBoxEGOAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxEGOAPI.ClearOnFirstChar = false;
             this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEGOAPI.InErrorCondition = false;
             this.textBoxEGOAPI.Location = new System.Drawing.Point(160, 60);
             this.textBoxEGOAPI.Multiline = false;
             this.textBoxEGOAPI.Name = "textBoxEGOAPI";
@@ -312,10 +317,13 @@
             // 
             this.textBoxBorderCompanionPassword.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderCompanionPassword.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCompanionPassword.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderCompanionPassword.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCompanionPassword.BorderColorScaling = 0.5F;
             this.textBoxBorderCompanionPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCompanionPassword.ClearOnFirstChar = false;
             this.textBoxBorderCompanionPassword.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionPassword.InErrorCondition = false;
             this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(160, 88);
             this.textBoxBorderCompanionPassword.Multiline = false;
             this.textBoxBorderCompanionPassword.Name = "textBoxBorderCompanionPassword";
@@ -334,10 +342,13 @@
             // 
             this.textBoxBorderCompanionLogin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderCompanionLogin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCompanionLogin.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
             this.textBoxBorderCompanionLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCompanionLogin.ClearOnFirstChar = false;
             this.textBoxBorderCompanionLogin.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionLogin.InErrorCondition = false;
             this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(160, 58);
             this.textBoxBorderCompanionLogin.Multiline = false;
             this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
@@ -356,10 +367,13 @@
             // 
             this.textBoxBorderEDSMName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderEDSMName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderEDSMName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderEDSMName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderEDSMName.BorderColorScaling = 0.5F;
             this.textBoxBorderEDSMName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderEDSMName.ClearOnFirstChar = false;
             this.textBoxBorderEDSMName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderEDSMName.InErrorCondition = false;
             this.textBoxBorderEDSMName.Location = new System.Drawing.Point(160, 30);
             this.textBoxBorderEDSMName.Multiline = false;
             this.textBoxBorderEDSMName.Name = "textBoxBorderEDSMName";
@@ -377,10 +391,13 @@
             // 
             this.textBoxBorderEDSMAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderEDSMAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderEDSMAPI.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderEDSMAPI.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderEDSMAPI.BorderColorScaling = 0.5F;
             this.textBoxBorderEDSMAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderEDSMAPI.ClearOnFirstChar = false;
             this.textBoxBorderEDSMAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderEDSMAPI.InErrorCondition = false;
             this.textBoxBorderEDSMAPI.Location = new System.Drawing.Point(160, 60);
             this.textBoxBorderEDSMAPI.Multiline = false;
             this.textBoxBorderEDSMAPI.Name = "textBoxBorderEDSMAPI";
@@ -398,10 +415,13 @@
             // 
             this.textBoxBorderJournal.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderJournal.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderJournal.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderJournal.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderJournal.BorderColorScaling = 0.5F;
             this.textBoxBorderJournal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderJournal.ClearOnFirstChar = false;
             this.textBoxBorderJournal.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderJournal.InErrorCondition = false;
             this.textBoxBorderJournal.Location = new System.Drawing.Point(160, 60);
             this.textBoxBorderJournal.Multiline = false;
             this.textBoxBorderJournal.Name = "textBoxBorderJournal";
@@ -420,10 +440,13 @@
             // 
             this.textBoxBorderCmdr.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBorderCmdr.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCmdr.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBorderCmdr.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBorderCmdr.BorderColorScaling = 0.5F;
             this.textBoxBorderCmdr.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCmdr.ClearOnFirstChar = false;
             this.textBoxBorderCmdr.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCmdr.InErrorCondition = false;
             this.textBoxBorderCmdr.Location = new System.Drawing.Point(160, 30);
             this.textBoxBorderCmdr.Multiline = false;
             this.textBoxBorderCmdr.Name = "textBoxBorderCmdr";
@@ -630,10 +653,7 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(418, 672);
+            this.buttonCancel.Location = new System.Drawing.Point(418, 721);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 1;
@@ -644,10 +664,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.BorderColorScaling = 1.25F;
-            this.buttonOK.ButtonColorScaling = 0.5F;
-            this.buttonOK.ButtonDisabledScaling = 0.5F;
-            this.buttonOK.Location = new System.Drawing.Point(519, 672);
+            this.buttonOK.Location = new System.Drawing.Point(519, 721);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 0;
@@ -680,7 +697,7 @@
             this.groupBoxCustom5.Location = new System.Drawing.Point(0, 526);
             this.groupBoxCustom5.Margin = new System.Windows.Forms.Padding(10);
             this.groupBoxCustom5.Name = "groupBoxCustom5";
-            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 133);
+            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 123);
             this.groupBoxCustom5.TabIndex = 33;
             this.groupBoxCustom5.TabStop = false;
             this.groupBoxCustom5.Text = "Elite Galaxy Online Information (optional)";
@@ -714,11 +731,84 @@
             this.label9.TabIndex = 1;
             this.label9.Text = "Get an EGO API key from https://www.elitegalaxyonline.com in the account menu";
             // 
+            // groupBoxCustom6
+            // 
+            this.groupBoxCustom6.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustom6.BackColorScaling = 0.5F;
+            this.groupBoxCustom6.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustom6.BorderColorScaling = 0.5F;
+            this.groupBoxCustom6.Controls.Add(this.checkBoxInaraSync);
+            this.groupBoxCustom6.Controls.Add(this.textBoxInaraAPI);
+            this.groupBoxCustom6.Controls.Add(this.label11);
+            this.groupBoxCustom6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustom6.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustom6.Location = new System.Drawing.Point(0, 649);
+            this.groupBoxCustom6.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustom6.Name = "groupBoxCustom6";
+            this.groupBoxCustom6.Size = new System.Drawing.Size(606, 68);
+            this.groupBoxCustom6.TabIndex = 34;
+            this.groupBoxCustom6.TabStop = false;
+            this.groupBoxCustom6.Text = "Inara";
+            this.groupBoxCustom6.TextPadding = 0;
+            this.groupBoxCustom6.TextStartPosition = -1;
+            // 
+            // checkBoxInaraSync
+            // 
+            this.checkBoxInaraSync.AutoSize = true;
+            this.checkBoxInaraSync.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxInaraSync.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxInaraSync.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxInaraSync.FontNerfReduction = 0.5F;
+            this.checkBoxInaraSync.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxInaraSync.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxInaraSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxInaraSync.Name = "checkBoxInaraSync";
+            this.checkBoxInaraSync.Size = new System.Drawing.Size(89, 17);
+            this.checkBoxInaraSync.TabIndex = 4;
+            this.checkBoxInaraSync.Text = "Sync to Inara";
+            this.checkBoxInaraSync.TickBoxReductionSize = 10;
+            this.toolTip1.SetToolTip(this.checkBoxInaraSync, "Send your scan data to EGO");
+            this.checkBoxInaraSync.UseVisualStyleBackColor = true;
+            // 
+            // textBoxInaraAPI
+            // 
+            this.textBoxInaraAPI.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxInaraAPI.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxInaraAPI.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxInaraAPI.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxInaraAPI.BorderColorScaling = 0.5F;
+            this.textBoxInaraAPI.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxInaraAPI.ClearOnFirstChar = false;
+            this.textBoxInaraAPI.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxInaraAPI.InErrorCondition = false;
+            this.textBoxInaraAPI.Location = new System.Drawing.Point(160, 29);
+            this.textBoxInaraAPI.Multiline = false;
+            this.textBoxInaraAPI.Name = "textBoxInaraAPI";
+            this.textBoxInaraAPI.ReadOnly = false;
+            this.textBoxInaraAPI.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxInaraAPI.SelectionLength = 0;
+            this.textBoxInaraAPI.SelectionStart = 0;
+            this.textBoxInaraAPI.Size = new System.Drawing.Size(231, 20);
+            this.textBoxInaraAPI.TabIndex = 3;
+            this.textBoxInaraAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip1.SetToolTip(this.textBoxInaraAPI, "Enter the API key from the EGO Website");
+            this.textBoxInaraAPI.WordWrap = true;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(6, 29);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(75, 13);
+            this.label11.TabIndex = 2;
+            this.label11.Text = "Inara API Key:";
+            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 711);
+            this.ClientSize = new System.Drawing.Size(606, 760);
+            this.Controls.Add(this.groupBoxCustom6);
             this.Controls.Add(this.groupBoxCustom5);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.groupBoxCustom4);
@@ -737,6 +827,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "CommanderForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CommanderForm_FormClosed);
+            this.Load += new System.EventHandler(this.CommanderForm_Load);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.groupBoxCustom4.ResumeLayout(false);
@@ -749,6 +840,8 @@
             this.groupBoxCustom1.PerformLayout();
             this.groupBoxCustom5.ResumeLayout(false);
             this.groupBoxCustom5.PerformLayout();
+            this.groupBoxCustom6.ResumeLayout(false);
+            this.groupBoxCustom6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -799,5 +892,9 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private ExtendedControls.CheckBoxCustom checkBoxCAPIEnable;
+        private ExtendedControls.GroupBoxCustom groupBoxCustom6;
+        private ExtendedControls.CheckBoxCustom checkBoxInaraSync;
+        private ExtendedControls.TextBoxBorder textBoxInaraAPI;
+        private System.Windows.Forms.Label label11;
     }
 }
