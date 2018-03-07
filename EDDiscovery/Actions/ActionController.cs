@@ -189,6 +189,11 @@ namespace EDDiscovery.Actions
             List<string> jevents = JournalEntry.GetListOfEventsWithOptMethod(towords: false);
             jevents.Sort();
             List<ActionEvent> eventlist = ActionEventEDList.EventsFromNames(jevents, "Journal");
+
+            List<string> uievents = Enum.GetNames(typeof(UITypeEnum)).ToList();
+            uievents.Sort();
+            eventlist.AddRange(ActionEventEDList.EventsFromNames(uievents, "UIEvents"));
+
             eventlist.AddRange(ActionEventEDList.events); // our ED events
             eventlist.AddRange(ActionEvent.events);     // core events
 

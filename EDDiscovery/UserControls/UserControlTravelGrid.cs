@@ -113,6 +113,7 @@ namespace EDDiscovery.UserControls
 
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
+            writeJournalToLogtoolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -907,8 +908,21 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
             cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
-            if (rightclicksystem.ShipInformation != null)
-                discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
+            //if (rightclicksystem.ShipInformation != null)
+            //    discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
+        }
+
+        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            {
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                if (json != null)
+                {
+                    discoveryform.LogLine(json);
+                }
+            }
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
