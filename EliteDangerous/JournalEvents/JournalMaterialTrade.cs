@@ -28,7 +28,18 @@ namespace EliteDangerousCore.JournalEvents
             TraderType = evt["TraderType"].Str();
 
             Paid = evt["Paid"]?.ToObjectProtected<Traded>();
+            if (Paid != null)
+            {
+                Paid.Material = JournalFieldNaming.FDNameTranslation(Paid.Material);
+                Paid.FriendlyMaterial = JournalFieldNaming.RMat(Paid.Material);
+            }
+
             Received = evt["Received"]?.ToObjectProtected<Traded>();
+            if (Received != null)
+            {
+                Received.Material = JournalFieldNaming.FDNameTranslation(Received.Material);
+                Received.FriendlyMaterial = JournalFieldNaming.RMat(Received.Material);
+            }
         }
 
         public string TraderType { get; set; }
@@ -38,8 +49,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public class Traded
         {
-            public string Material;
-            public string Material_Localised;
+            public string Material;     //fdname
+            public string FriendlyMaterial; // our name
+            public string Material_Localised;   // their localised name if present
+            public string Category;
+            public string Category_Localised;
             public int Quantity;
         }
 
@@ -47,9 +61,8 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Paid != null && Received != null)
             {
-// TBD experimental
-                mc.Change(TraderType, JournalFieldNaming.FDNameTranslation(Paid.Material), -Paid.Quantity, 0, conn);
-                mc.Change(TraderType, JournalFieldNaming.FDNameTranslation(Received.Material), Received.Quantity, 0, conn );
+                mc.Change(Paid.Category.Alt(TraderType), Paid.Material, -Paid.Quantity, 0, conn);
+                mc.Change(Received.Category.Alt(TraderType), Received.Material, Received.Quantity, 0, conn );
             }
         }
 
@@ -60,8 +73,8 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Paid != null && Received != null)
             {
-                info = BaseUtils.FieldBuilder.Build("Sold: ", Paid.Quantity, "< ", Paid.Material_Localised.Alt(Paid.Material),
-                                                    "Received: ", Received.Quantity, "< ", Received.Material_Localised.Alt(Received.Material));
+                info = BaseUtils.FieldBuilder.Build("Sold: ", Paid.Quantity, "< ", Paid.Material_Localised.Alt(Paid.FriendlyMaterial),
+                                                    "Received: ", Received.Quantity, "< ", Received.Material_Localised.Alt(Received.FriendlyMaterial));
             }
         }
     }
