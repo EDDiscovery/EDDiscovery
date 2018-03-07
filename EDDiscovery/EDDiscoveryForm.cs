@@ -665,7 +665,8 @@ namespace EDDiscovery
             cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             cv["UIEvent"] = uievent.EventTypeStr;
             cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , cv);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv); 
         }
 
         private void SendPricestoEDDN(HistoryEntry he, CMarket market)

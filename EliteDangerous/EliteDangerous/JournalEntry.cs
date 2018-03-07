@@ -43,6 +43,7 @@ namespace EliteDangerousCore
         BuyTradeData = 50,
         CapShipBond = 60,
         Cargo = 63,
+        CargoDepot = 64,
         ChangeCrewRole = 65,
         ClearSavedGame = 70,
         CockpitBreached = 80,

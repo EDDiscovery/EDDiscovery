@@ -83,6 +83,8 @@ namespace EliteDangerousCore.JournalEvents
 
             Reward = evt["Reward"].IntNull();   // not in DOC V13, but present in latest journal entries
 
+            Wing = evt["Wing"].BoolNull();      // new 3.02
+
         }
 
         public string Faction { get; set; }                 // in MissionAccepted order
@@ -114,6 +116,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public int? Reward { get; set; }
 
+        public bool? Wing { get; set; }     // 3.02
+
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
@@ -129,7 +133,9 @@ namespace EliteDangerousCore.JournalEvents
                                       "Expiry:", exp,
                                       "Influence:", Influence,
                                       "Reputation:", Reputation,
-                                      "Reward:", Reward);
+                                      "Reward:; cr;N0", Reward,
+                                      "; (Wing)", Wing);
+                        
 
             detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
                                            "Target:", TargetLocalised.Alt(TargetFriendly), 
