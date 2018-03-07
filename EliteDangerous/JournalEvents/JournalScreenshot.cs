@@ -74,7 +74,7 @@ namespace EliteDangerousCore.JournalEvents
             jo["EDDOutputFile"] = output_filename;
             jo["EDDOutputWidth"] = width;
             jo["EDDOutputHeight"] = height;
-            UpdateJson(jo);
+            UpdateJsonEntry(jo);
         }
 
         public void GetConvertedFilename(out string input_filename, out string output_filename, out int width, out int height)
