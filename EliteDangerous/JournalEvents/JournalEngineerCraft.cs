@@ -141,9 +141,11 @@ namespace EliteDangerousCore.JournalEvents
         public class EngineeringModifiers
         {
             public string Label { get; set; }
-            public double Value { get; set; }
+            public string ValueStr { get; set; }            // 3.02 if set, means ones further on do not apply. check first
+            public double Value { get; set; }               // may be 0
             public double OriginalValue { get; set; }
             public bool LessIsGood { get; set; }
+
         }
     }
 }

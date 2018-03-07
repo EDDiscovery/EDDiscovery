@@ -230,7 +230,7 @@ namespace NetLogEntry
                 else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
                 else if (writetype.Equals("Market", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = Market(Path.GetDirectoryName(filename) , args.Next);
+                    lineout = Market(Path.GetDirectoryName(filename), args.Next);
                 else if (writetype.Equals("ModuleInfo", StringComparison.InvariantCultureIgnoreCase))
                     lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next);
                 else if (writetype.Equals("Outfitting", StringComparison.InvariantCultureIgnoreCase))
@@ -241,6 +241,8 @@ namespace NetLogEntry
                     lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank", 10) + F("Merits", 10) + F("Votes", 2) + FF("TimePledged", 433024) + " }";
                 else if (writetype.Equals("UnderAttack", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "UnderAttack") + FF("Target", "Fighter") + " }";
+                else if (writetype.Equals("CargoDepot", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = CargoDepot(args);
                 else
                 {
                     Help();
@@ -299,26 +301,27 @@ namespace NetLogEntry
         {
             Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
                               "JournalPath CMDRname Options..\n" +
-                              "     Options: FSD name x y z (x y z is position as double)\n" +
-                              "     Options: FSDTravel name x y z destx desty destz percentint \n" +
-                              "     Options: Loc name x y z\n" +
-                              "     Options: Interdiction name success isplayer combatrank faction power\n" +
-                              "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
-                              "     Options: ScanPlanet name\n" +
-                              "     Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
-                              "     Options: RepairDrone CommunityGoal\n" +
-                              "     Options: MusicNormal MusicGalMap MusicSysMap\n" +
-                              "     Options: Friends Name\n" +
-                              "     Options: FuelScoop amount total\n" +
-                              "     Options: JetConeBoost\n" +
-                              "     Options: PowerPlay UnderAttack\n" +
-                              "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
-                              "     Options: Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
+                              "     FSD name x y z (x y z is position as double)\n" +
+                              "     FSDTravel name x y z destx desty destz percentint \n" +
+                              "     Loc name x y z\n" +
+                              "     Interdiction name success isplayer combatrank faction power\n" +
+                              "     Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
+                              "     ScanPlanet name\n" +
+                              "     ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
+                              "     RepairDrone CommunityGoal\n" +
+                              "     MusicNormal MusicGalMap MusicSysMap\n" +
+                              "     Friends Name\n" +
+                              "     FuelScoop amount total\n" +
+                              "     JetConeBoost\n" +
+                              "     PowerPlay UnderAttack\n" +
+                              "     CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
+                              "     FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
+                              "     Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
                               "DeviceMappings <filename>\n"+
-                              "StatusJSON \n"
+                              "StatusJSON <various paras see entry>\n"
                               );
 
         }
@@ -448,6 +451,30 @@ namespace NetLogEntry
                 File.WriteAllText(Path.Combine(mpath, "Outfitting.json"), fline);
 
             return jline + " }";
+        }
+
+        static string CargoDepot(Args args)
+        {
+            try
+            {
+                int missid = int.Parse(args.Next);
+                string type = args.Next;
+                int countcol = int.Parse(args.Next);
+                int countdel = int.Parse(args.Next);
+                int total = int.Parse(args.Next);
+
+                return "{ " + TimeStamp() + F("event", "CargoDepot") + F("MissionID", missid) + F("UpdateType", type) +
+                                F("StartMarketID", 12) + F("EndMarketID", 13) +
+                                F("ItemsCollected", countcol) +
+                                F("ItemsDelivered", countdel) +
+                                F("TotalItemsToDeliver", total) +
+                                F("Progress", (double)countcol / (double)total, true) + " }";
+            }
+            catch
+            {
+                Console.WriteLine("missionid type col del total");
+                return null;
+            }
         }
 
         static string Shipyard(string mpath, string opt)
@@ -779,7 +806,7 @@ namespace NetLogEntry
 
         public static string F(string name, double v, bool term = false)
         {
-            return "\"" + name + "\":\"" + v.ToString("0.######") + (term ? "\" " : "\", ");
+            return "\"" + name + "\":" + v.ToString("0.######") + (term ? " " : "\", ");
         }
 
         public static string F(string name, string v , bool term = false)

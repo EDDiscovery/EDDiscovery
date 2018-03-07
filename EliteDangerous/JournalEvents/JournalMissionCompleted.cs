@@ -64,45 +64,27 @@ namespace EliteDangerousCore.JournalEvents
 
             PermitsAwarded = evt["PermitsAwarded"]?.ToObjectProtected<string[]>();
 
-            if (!evt["CommodityReward"].Empty())
+            // 7/3/2018 journal 16 3.02
+
+            CommodityReward = evt["CommodityReward"]?.ToObjectProtected<CommodityRewards[]>();
+
+            if ( CommodityReward != null )
             {
-                JArray rewards = (JArray)evt["CommodityReward"];        // does not have the $_name problem, straight FDNAME
-
-                if (rewards.Count > 0)
+                foreach( CommodityRewards c in CommodityReward )
                 {
-                    System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
-                    int i = 0;
-                    foreach (JToken jc in rewards.Children())
-                    {
-                        if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
-                            cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Value<string>()), jc["Count"].Value<int>());
-
-                        //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
-                    }
-                    CommodityReward = new System.Tuple<string, int>[i];
-                    System.Array.Copy(cr, CommodityReward, i);
+                    c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
+                    c.FriendlyName = JournalFieldNaming.RMat(c.Name);
                 }
             }
 
-            // 16/2/2018 NO EVIDENCE in manual of format, turn on when have answer
+            MaterialsReward = evt["MaterialsReward"]?.ToObjectProtected<MaterialRewards[]>();
 
-            if (!evt["MaterialsReward"].Empty())
+            if ( MaterialsReward != null)
             {
-                JArray rewards = (JArray)evt["MaterialsReward"];        // does not have the $_name problem, straight FDNAME
-
-                if (rewards.Count > 0)
+                foreach( MaterialRewards m in MaterialsReward )
                 {
-                    System.Tuple<string, int>[] cr = new System.Tuple<string, int>[rewards.Count];
-                    int i = 0;
-                    foreach (JToken jc in rewards.Children())
-                    {
-                        if (!jc["Name"].Empty() && !jc["Count"].Empty())        // evidence of empty values
-                            cr[i++] = new System.Tuple<string, int>(JournalFieldNaming.FDNameTranslation(jc["Name"].Str()), jc["Count"].Int());
-
-                        //System.Diagnostics.Trace.WriteLine(string.Format(" >> Child {0} {1}", jc.Path, jc.Type.ToString()));
-                    }
-                    MaterialsReward = new System.Tuple<string, int>[i];
-                    System.Array.Copy(cr, MaterialsReward, i);
+                    m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
+                    m.FriendlyName = JournalFieldNaming.RMat(m.Name);
                 }
             }
 
@@ -133,8 +115,8 @@ namespace EliteDangerousCore.JournalEvents
         public string[] PermitsAwarded { get; set; }
         public int MissionId { get; set; }
 
-        public System.Tuple<string, int>[] CommodityReward { get; set; }            // Verified in fdname, not in $_name. Must be in fdname format
-        public System.Tuple<string, int>[] MaterialsReward { get; set; }
+        public CommodityRewards[] CommodityReward { get; set; }            
+        public MaterialRewards[] MaterialsReward { get; set; }
 
         public FactionEffectsEntry[] FactionEffects;
 
@@ -142,15 +124,17 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (CommodityReward != null)
             {
-                // Forum indicates its commodities, and we get normal materialcollected events if its a material.
-                for (int i = 0; i < CommodityReward.Length; i++)
-                    mc.Change(MaterialCommodities.CommodityCategory, CommodityReward[i].Item1, CommodityReward[i].Item2, 0, conn);
+                foreach (CommodityRewards c in CommodityReward)
+                    mc.Change(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
             }
 
             if (MaterialsReward != null)
             {
-                for (int i = 0; i < MaterialsReward.Length; i++)        // NOTE as of 3.0 journal 15, we are not getting a CAT, so set true don't use CAT to match
-                    mc.Change(MaterialCommodities.MaterialRawCategory, MaterialsReward[i].Item1, MaterialsReward[i].Item2, 0, conn, true);
+                foreach( MaterialRewards m in MaterialsReward )                 // 7/3/2018 not yet fully proven.. changed in 3.02
+                {
+                    string c = m.Category.Alt(MaterialCommodities.MaterialRawCategory);     // older ones did not have this tag..
+                    mc.Change(c, m.Name, m.Count, 0, conn);
+                }
             }
         }
 
@@ -212,7 +196,10 @@ namespace EliteDangerousCore.JournalEvents
                 if (pretty)
                     detailed += "Rewards:";
                 for (int i = 0; i < CommodityReward.Length; i++)
-                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(CommodityReward[i].Item1) + " " + CommodityReward[i].Item2.ToStringInvariant();
+                {
+                    CommodityRewards c = CommodityReward[i];
+                    detailed += ((i > 0) ? "," : "") + c.Name_Localised.Alt(c.FriendlyName) + " " + CommodityReward[i].Count.ToStringInvariant();
+                }
 
                 if (pretty)
                     detailed += System.Environment.NewLine;
@@ -228,7 +215,10 @@ namespace EliteDangerousCore.JournalEvents
                 if (pretty)
                     detailed += "Rewards:";
                 for (int i = 0; i < MaterialsReward.Length; i++)
-                    detailed += ((i > 0) ? "," : "") + JournalFieldNaming.RMat(MaterialsReward[i].Item1) + " " + MaterialsReward[i].Item2.ToStringInvariant();
+                {
+                    MaterialRewards m = MaterialsReward[i];
+                    detailed += ((i > 0) ? "," : "") + m.Name_Localised.Alt(m.FriendlyName) + " " + MaterialsReward[i].Count.ToStringInvariant();
+                }
 
                 if (pretty)
                     detailed += System.Environment.NewLine;
@@ -242,6 +232,24 @@ namespace EliteDangerousCore.JournalEvents
         public string MissionInformation()          // other stuff for the mission panel which it does not already cover or accepted has
         {
             return PermitsList() + CommoditiesList() + MaterialList();
+        }
+
+        public class MaterialRewards
+        {
+            public string Name; // fdname
+            public string FriendlyName; // our conversion
+            public string Name_Localised;       // may be null
+            public string Category; // may be null
+            public string Category_Localised; // may be null
+            public int Count;
+        }
+
+        public class CommodityRewards
+        {
+            public string Name; // fdname
+            public string FriendlyName; // our conversion
+            public string Name_Localised;   // may be null
+            public int Count;
         }
 
         public class EffectTrend
