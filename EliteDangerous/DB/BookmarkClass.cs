@@ -39,7 +39,9 @@ namespace EliteDangerousCore.DB
             public List<Location> Locations;
         }
 
-        public List<Planet> Planets;
+        public List<Planet> Planets;            // may be null
+
+        public bool hasMarks { get { return Planets != null && Planets.Count > 0 && Planets.Where(pl => pl.Locations.Count > 0).Any(); } }
 
         public PlanetMarks(string json)
         {
@@ -165,14 +167,11 @@ namespace EliteDangerousCore.DB
         public PlanetMarks PlanetaryMarks;   // may be null
         
         public bool isRegion { get { return Heading != null; } }
-        public bool hasSurfaceMarks
-        { get {
-                return PlanetaryMarks != null &&
-                    PlanetaryMarks.Planets.Count > 0 &&
-                    PlanetaryMarks.Planets.Where(pl => pl.Locations.Count > 0).Any();
-            } }
         public bool isStar { get { return Heading == null; } }
         public string Name { get { return Heading == null ? StarName : Heading; } }
+
+        public bool hasPlanetaryMarks
+        { get { return PlanetaryMarks != null && PlanetaryMarks.hasMarks; } }
 
         public BookmarkClass()
         {
@@ -192,6 +191,7 @@ namespace EliteDangerousCore.DB
             Note = (string)dr["Note"];
             if (System.DBNull.Value != dr["PlanetMarks"])
             {
+                //System.Diagnostics.Debug.WriteLine("Planet mark {0} {1}", StarName, (string)dr["PlanetMarks"]);
                 PlanetaryMarks = new PlanetMarks((string)dr["PlanetMarks"]);
             }
         }

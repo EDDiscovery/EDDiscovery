@@ -192,7 +192,7 @@ namespace EliteDangerousCore.EDSM
 
                                 if (he.IsEDSMFirstDiscover && !lhe.IsEDSMFirstDiscover)
                                 {
-                                    lhe.SetFirstDiscover();
+                                    lhe.SetFirstDiscover(true);
                                 }
 
                                 previdx = index;

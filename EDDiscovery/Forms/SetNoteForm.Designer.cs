@@ -46,7 +46,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 14);
+            this.label1.Location = new System.Drawing.Point(3, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 1;
@@ -55,7 +55,7 @@
             // labelForSystem
             // 
             this.labelForSystem.AutoSize = true;
-            this.labelForSystem.Location = new System.Drawing.Point(17, 34);
+            this.labelForSystem.Location = new System.Drawing.Point(3, 34);
             this.labelForSystem.Name = "labelForSystem";
             this.labelForSystem.Size = new System.Drawing.Size(44, 13);
             this.labelForSystem.TabIndex = 2;
@@ -64,7 +64,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(17, 54);
+            this.label2.Location = new System.Drawing.Point(3, 58);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 6;
@@ -73,7 +73,7 @@
             // labelTimestamp
             // 
             this.labelTimestamp.AutoSize = true;
-            this.labelTimestamp.Location = new System.Drawing.Point(105, 14);
+            this.labelTimestamp.Location = new System.Drawing.Point(100, 10);
             this.labelTimestamp.Name = "labelTimestamp";
             this.labelTimestamp.Size = new System.Drawing.Size(58, 13);
             this.labelTimestamp.TabIndex = 7;
@@ -82,7 +82,7 @@
             // labelSystem
             // 
             this.labelSystem.AutoSize = true;
-            this.labelSystem.Location = new System.Drawing.Point(105, 34);
+            this.labelSystem.Location = new System.Drawing.Point(100, 34);
             this.labelSystem.Name = "labelSystem";
             this.labelSystem.Size = new System.Drawing.Size(52, 13);
             this.labelSystem.TabIndex = 8;
@@ -90,16 +90,17 @@
             // 
             // labelSummary
             // 
-            this.labelSummary.Location = new System.Drawing.Point(105, 54);
+            this.labelSummary.AutoSize = true;
+            this.labelSummary.Location = new System.Drawing.Point(100, 58);
             this.labelSummary.Name = "labelSummary";
-            this.labelSummary.Size = new System.Drawing.Size(292, 13);
+            this.labelSummary.Size = new System.Drawing.Size(50, 13);
             this.labelSummary.TabIndex = 9;
             this.labelSummary.Text = "Summary";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(17, 74);
+            this.label3.Location = new System.Drawing.Point(3, 82);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(42, 13);
             this.label3.TabIndex = 10;
@@ -107,9 +108,9 @@
             // 
             // labelDetails
             // 
-            this.labelDetails.Location = new System.Drawing.Point(105, 74);
+            this.labelDetails.Location = new System.Drawing.Point(100, 82);
             this.labelDetails.Name = "labelDetails";
-            this.labelDetails.Size = new System.Drawing.Size(271, 76);
+            this.labelDetails.Size = new System.Drawing.Size(276, 91);
             this.labelDetails.TabIndex = 11;
             this.labelDetails.Text = "Details\r\n1\r\n2\r\n3";
             // 
@@ -130,15 +131,12 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(396, 327);
+            this.panel1.Size = new System.Drawing.Size(388, 348);
             this.panel1.TabIndex = 13;
             // 
             // buttonCancel
             // 
-            this.buttonCancel.BorderColorScaling = 1.25F;
-            this.buttonCancel.ButtonColorScaling = 0.5F;
-            this.buttonCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonCancel.Location = new System.Drawing.Point(203, 289);
+            this.buttonCancel.Location = new System.Drawing.Point(203, 308);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 3;
@@ -148,10 +146,7 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.BorderColorScaling = 1.25F;
-            this.buttonSave.ButtonColorScaling = 0.5F;
-            this.buttonSave.ButtonDisabledScaling = 0.5F;
-            this.buttonSave.Location = new System.Drawing.Point(301, 289);
+            this.buttonSave.Location = new System.Drawing.Point(301, 308);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(75, 23);
             this.buttonSave.TabIndex = 4;
@@ -164,18 +159,32 @@
             this.textBoxNote.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxNote.BorderColorScaling = 0.5F;
             this.textBoxNote.HideScrollBar = true;
-            this.textBoxNote.Location = new System.Drawing.Point(20, 157);
+            this.textBoxNote.Location = new System.Drawing.Point(6, 176);
             this.textBoxNote.Name = "textBoxNote";
+            this.textBoxNote.ReadOnly = false;
+            this.textBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.textBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.textBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.textBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.textBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.textBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.textBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNote.ScrollBarWidth = 20;
             this.textBoxNote.ShowLineCount = false;
-            this.textBoxNote.Size = new System.Drawing.Size(356, 110);
+            this.textBoxNote.Size = new System.Drawing.Size(370, 110);
             this.textBoxNote.TabIndex = 12;
+            this.textBoxNote.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxNote.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // SetNoteForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(396, 327);
+            this.ClientSize = new System.Drawing.Size(388, 348);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "SetNoteForm";

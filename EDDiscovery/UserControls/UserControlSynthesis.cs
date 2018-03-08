@@ -86,8 +86,10 @@ namespace EDDiscovery.UserControls
 
             List<string> matShortNames = SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
+
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
+
             mfs = new RecipeFilterSelector(matLongNames);
             mfs.Changed += FilterChanged;
 
@@ -186,8 +188,11 @@ namespace EDDiscovery.UserControls
                 string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
                 List<string> matList;
-                if (materials == "All" || materials == "None") { matList = new List<string>(); }
-                else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
+
+                if (materials == "All" || materials == "None")
+                    matList = new List<string>();
+                else
+                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
 
                 for (int i = 0; i < SynthesisRecipes.Count; i++)
                 {

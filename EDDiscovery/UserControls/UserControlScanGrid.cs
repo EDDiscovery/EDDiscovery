@@ -213,11 +213,11 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.HasMaterials)
                         {
                             string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                            // jumponium materials: Arsenic (As), Cadmium (Cd), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
+                            // jumponium materials: Arsenic (As), Cadmium (Cd), Carbon (C), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
                             
-                            if (MaterialsBrief.Contains("Arsenic") || MaterialsBrief.Contains("Cadmium") || MaterialsBrief.Contains("Germanium")
-                                || MaterialsBrief.Contains("Niobium") || MaterialsBrief.Contains("Polonium") || MaterialsBrief.Contains("Vanadium")
-                                || MaterialsBrief.Contains("Yttrium"))
+                            if (MaterialsBrief.Contains("Arsenic") || MaterialsBrief.Contains("Cadmium") || MaterialsBrief.Contains("Carbon")
+                                || MaterialsBrief.Contains("Germanium") || MaterialsBrief.Contains("Niobium") || MaterialsBrief.Contains("Polonium")
+                                || MaterialsBrief.Contains("Vanadium") || MaterialsBrief.Contains("Yttrium"))
                             {
                                 bdDetails.Append("\n" + "This body contains: ");
                             }
