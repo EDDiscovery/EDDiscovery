@@ -56,6 +56,9 @@
     <Compile Include="Controls\ButtonExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\CompassControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\CompositeButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,7 +90,6 @@
     <Compile Include="Forms\SmartSysMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helpers\BitMapHelpers.cs" />
     <Compile Include="Forms\DraggableForm.cs">
       <SubType>Form</SubType>
     </Compile>

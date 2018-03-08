@@ -43,6 +43,7 @@ namespace EliteDangerousCore
         BuyTradeData = 50,
         CapShipBond = 60,
         Cargo = 63,
+        CargoDepot = 64,
         ChangeCrewRole = 65,
         ClearSavedGame = 70,
         CockpitBreached = 80,
@@ -458,23 +459,31 @@ namespace EliteDangerousCore
             }
         }
 
-        protected bool UpdateJson(JObject jo)
+        public void UpdateJsonEntry(JObject jo, SQLiteConnectionUser cn = null, DbTransaction tn = null)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            bool ownconn = false;
+
+            try
             {
-                return UpdateJson(jo, cn);
+                if (cn == null)
+                {
+                    ownconn = true;
+                    cn = new SQLiteConnectionUser(utc: true);
+                }
+
+                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
+                {
+                    cmd.AddParameterWithValue("@ID", Id);
+                    cmd.AddParameterWithValue("@EventData", jo.ToString());
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                }
             }
-        }
-
-        protected bool UpdateJson(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set EventData=@EventData where ID=@id", tn))
+            finally
             {
-                cmd.AddParameterWithValue("@ID", Id);
-                cmd.AddParameterWithValue("@EventData", jo.ToString());
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
-
-                return true;
+                if (ownconn)
+                {
+                    cn.Dispose();
+                }
             }
         }
 

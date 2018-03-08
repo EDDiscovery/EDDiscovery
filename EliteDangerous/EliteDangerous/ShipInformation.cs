@@ -107,6 +107,21 @@ namespace EliteDangerousCore
             }
         }
 
+        public string ShipNameIdentType
+        {
+            get                  // unique ID
+            {
+                string res = string.IsNullOrEmpty(ShipUserName) ? "" : ShipUserName;
+                res = res.AppendPrePad(string.IsNullOrEmpty(ShipUserIdent) ? "" : ShipUserIdent, ",");
+                bool empty = string.IsNullOrEmpty(res);
+                res = res.AppendPrePad(ShipType, ",");
+                if ( empty )
+                    res += "(" + ID.ToString() + ")";
+
+                return res;
+            }
+        }
+
         public int GetFuelCapacity()
         {
             int cap = 0;
@@ -534,6 +549,13 @@ namespace EliteDangerousCore
         {
             List<ShipInformation> lst = Ships.Values.ToList();
             int index = lst.FindIndex(x => x.ShipShortName.Equals(sn));
+            return (index >= 0) ? lst[index] : null;
+        }
+
+        public ShipInformation GetShipByNameIdentType(string sn)
+        {
+            List<ShipInformation> lst = Ships.Values.ToList();
+            int index = lst.FindIndex(x => x.ShipNameIdentType.Equals(sn));
             return (index >= 0) ? lst[index] : null;
         }
 

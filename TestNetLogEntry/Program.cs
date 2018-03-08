@@ -67,43 +67,54 @@ namespace NetLogEntry
                     break;
             }
 
-            if (args.Left < 2)
+            string arg1 = args.Next;
+
+            if (arg1 == null )
             {
                 Help();
                 return;
             }
 
-            string arg1 = args.Next;
-            string arg2 = args.Next;        // must have 2 at least.
+            if (arg1.Equals("StatusJSON", StringComparison.InvariantCultureIgnoreCase))
+            {
+                StatusJSON(args);
+                return;
+            }
+
+            if ( args.Left < 1)
+            {
+                Help();
+                return;
+            }
 
             if (arg1.Equals("EDDBSTARS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Star\"", "\"spectral_class\"", "Star class ");
+                EDDBLog(args.Next, "\"Star\"", "\"spectral_class\"", "Star class ");
             }
             else if (arg1.Equals("EDDBPLANETS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Planet\"", "\"type_name\"", "Planet class");
+                EDDBLog(args.Next, "\"Planet\"", "\"type_name\"", "Planet class");
             }
             else if (arg1.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDBLog(arg2, "\"Star\"", "\"name\"", "Star Name");
+                EDDBLog(args.Next, "\"Star\"", "\"name\"", "Star Name");
             }
             else if (arg1.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
             {
-                Bindings(arg2);
+                Bindings(args.Next);
             }
             else if (arg1.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
             {
-                DeviceMappings(arg2);
+                DeviceMappings(args.Next);
             }
-            else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase) )
+            else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase))
             {
-                if ( args.Left >= 1 )
-                    Phoneme(arg2, args.Next);
+                if (args.Left >= 1)
+                    Phoneme(args.Next, args.Next);
             }
             else
             {
-                JournalEntry(arg1, arg2, args, repeatdelay);
+                JournalEntry(arg1, args.Next, args, repeatdelay);
             }
         }
 
@@ -219,7 +230,7 @@ namespace NetLogEntry
                 else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
                 else if (writetype.Equals("Market", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = Market(Path.GetDirectoryName(filename) , args.Next);
+                    lineout = Market(Path.GetDirectoryName(filename), args.Next);
                 else if (writetype.Equals("ModuleInfo", StringComparison.InvariantCultureIgnoreCase))
                     lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next);
                 else if (writetype.Equals("Outfitting", StringComparison.InvariantCultureIgnoreCase))
@@ -230,6 +241,8 @@ namespace NetLogEntry
                     lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank", 10) + F("Merits", 10) + F("Votes", 2) + FF("TimePledged", 433024) + " }";
                 else if (writetype.Equals("UnderAttack", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "UnderAttack") + FF("Target", "Fighter") + " }";
+                else if (writetype.Equals("CargoDepot", StringComparison.InvariantCultureIgnoreCase))
+                    lineout = CargoDepot(args);
                 else
                 {
                     Help();
@@ -288,25 +301,27 @@ namespace NetLogEntry
         {
             Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
                               "JournalPath CMDRname Options..\n" +
-                              "     Options: FSD name x y z (x y z is position as double)\n" +
-                              "     Options: FSDTravel name x y z destx desty destz percentint \n" +
-                              "     Options: Loc name x y z\n" +
-                              "     Options: Interdiction name success isplayer combatrank faction power\n" +
-                              "     Options: Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
-                              "     Options: ScanPlanet name\n" +
-                              "     Options: ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
-                              "     Options: RepairDrone CommunityGoal\n" +
-                              "     Options: MusicNormal MusicGalMap MusicSysMap\n" +
-                              "     Options: Friends Name\n" +
-                              "     Options: FuelScoop amount total\n" +
-                              "     Options: JetConeBoost\n" +
-                              "     Options: PowerPlay UnderAttack\n" +
-                              "     Options: FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
-                              "     Options: Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
+                              "     FSD name x y z (x y z is position as double)\n" +
+                              "     FSDTravel name x y z destx desty destz percentint \n" +
+                              "     Loc name x y z\n" +
+                              "     Interdiction name success isplayer combatrank faction power\n" +
+                              "     Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
+                              "     ScanPlanet name\n" +
+                              "     ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
+                              "     RepairDrone CommunityGoal\n" +
+                              "     MusicNormal MusicGalMap MusicSysMap\n" +
+                              "     Friends Name\n" +
+                              "     FuelScoop amount total\n" +
+                              "     JetConeBoost\n" +
+                              "     PowerPlay UnderAttack\n" +
+                              "     CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
+                              "     FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
+                              "     Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
-                              "DeviceMappings <filename>\n"
+                              "DeviceMappings <filename>\n"+
+                              "StatusJSON <various paras see entry>\n"
                               );
 
         }
@@ -356,7 +371,7 @@ namespace NetLogEntry
         {
             if (args.Left < 4)
             {
-                Console.WriteLine("** More parameters");
+                Console.WriteLine("** More parameters: file cmdrname fsd x y z");
                 return null;
             }
 
@@ -436,6 +451,30 @@ namespace NetLogEntry
                 File.WriteAllText(Path.Combine(mpath, "Outfitting.json"), fline);
 
             return jline + " }";
+        }
+
+        static string CargoDepot(Args args)
+        {
+            try
+            {
+                int missid = int.Parse(args.Next);
+                string type = args.Next;
+                int countcol = int.Parse(args.Next);
+                int countdel = int.Parse(args.Next);
+                int total = int.Parse(args.Next);
+
+                return "{ " + TimeStamp() + F("event", "CargoDepot") + F("MissionID", missid) + F("UpdateType", type) +
+                                F("StartMarketID", 12) + F("EndMarketID", 13) +
+                                F("ItemsCollected", countcol) +
+                                F("ItemsDelivered", countdel) +
+                                F("TotalItemsToDeliver", total) +
+                                F("Progress", (double)countcol / (double)total, true) + " }";
+            }
+            catch
+            {
+                Console.WriteLine("missionid type col del total");
+                return null;
+            }
         }
 
         static string Shipyard(string mpath, string opt)
@@ -707,6 +746,51 @@ namespace NetLogEntry
 
         }
 
+        public static void StatusJSON(Args args)
+        {
+            long flags = 0;
+
+            double latitude = 0;
+            double longitude = 0;
+            double latstep = 0;
+            double longstep = 0;
+            double heading = 0;
+            double headstep = 1;
+            int steptime = 100;
+
+            if (!double.TryParse(args.Next, out latitude) || !double.TryParse(args.Next, out longitude) ||
+                !double.TryParse(args.Next, out latstep) || !double.TryParse(args.Next, out longstep) ||
+                !double.TryParse(args.Next, out heading) || !double.TryParse(args.Next, out headstep) ||
+                !int.TryParse(args.Next, out steptime))
+            {
+                Console.WriteLine("** More/Wrong parameters: statusjson lat long latstep lonstep heading headstep steptimems");
+                return;
+            }
+
+            while (true)
+            {
+                //{ "timestamp":"2018-03-01T21:51:36Z", "event":"Status", "Flags":18874376, 
+                //"Pips":[4,8,0], "FireGroup":1, "GuiFocus":0, "Latitude":-18.978821, "Longitude":-123.642052, "Heading":308, "Altitude":20016 }
+
+                string j = "{ " + TimeStamp() + F("event", "Status") + F("Flags", flags) + F("Pips",new int[] { 4,8,0}) + 
+                            F("FireGroup",1) + F("GuiFocus",0) + F("Latitude",latitude) + F("Longitude",longitude) + F("Heading",heading) + FF("Altitude",20) 
+                            + "}";
+
+                File.WriteAllText("Status.json", j);
+                System.Threading.Thread.Sleep(steptime);
+
+                if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Escape)
+                {
+                    break;
+                }
+
+                latitude += latstep;
+                longitude = longitude + longstep;
+                heading = (heading + headstep) % 360;
+
+            }
+        }
+
         #region Helpers for journal writing
 
         public static string TimeStamp()
@@ -715,26 +799,44 @@ namespace NetLogEntry
             return "\"timestamp\":\"" + dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'") + "\", ";
         }
 
-        public static string F(string name, string v)
+        public static string F(string name, long v , bool term = false)
         {
-            return "\"" + name + "\":\"" + v + "\", ";
+            return "\"" + name + "\":" + v + (term ? " " : ", ");
+        }
+
+        public static string F(string name, double v, bool term = false)
+        {
+            return "\"" + name + "\":" + v.ToString("0.######") + (term ? " " : "\", ");
+        }
+
+        public static string F(string name, string v , bool term = false)
+        {
+            return "\"" + name + "\":\"" + v + (term ? "\" " : "\", ");
+        }
+
+        public static string F(string name, int[] array, bool end = false)
+        {
+            string s = "";
+            foreach( int a in array )
+            {
+                if (s.Length > 0)
+                    s += ", ";
+
+                s += a.ToString();
+            }
+
+            return "\"" + name + "\":[" + s + "]" + (end? "" : ", ");
         }
 
         public static string FF(string name, string v)      // no final comma
         {
-            return "\"" + name + "\":\"" + v + "\"";
-        }
-
-        public static string F(string name, long v)
-        {
-            return "\"" + name + "\":" + v + ", ";
+            return F(name, v, true);
         }
 
         public static string FF(string name, long v)      // no final comma
         {
-            return "\"" + name + "\":" + v;
+            return F(name, v, true);
         }
-
 
         public static void Write(string filename, string line)
         {

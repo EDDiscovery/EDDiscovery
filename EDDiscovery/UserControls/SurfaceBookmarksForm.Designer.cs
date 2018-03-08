@@ -31,46 +31,25 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataGridViewMarks = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sendToCompassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelSurface = new ExtendedControls.LabelExt();
-            this.buttonSave = new ExtendedControls.ButtonExt();
+            this.labelSurface = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewMarks = new System.Windows.Forms.DataGridView();
             this.BodyName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.SurfaceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SurfaceDesc = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Latitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Longitude = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Valid = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).BeginInit();
+            this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextMenuStrip1.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataGridViewMarks
-            // 
-            this.dataGridViewMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.BodyName,
-            this.SurfaceName,
-            this.SurfaceDesc,
-            this.Latitude,
-            this.Longitude,
-            this.Valid});
-            this.dataGridViewMarks.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataGridViewMarks.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewMarks.Name = "dataGridViewMarks";
-            this.dataGridViewMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewMarks.Size = new System.Drawing.Size(637, 168);
-            this.dataGridViewMarks.TabIndex = 3;
-            this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
-            this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
-            this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
             // 
             // contextMenuStrip1
             // 
@@ -94,22 +73,10 @@ namespace EDDiscovery.UserControls
             this.labelSurface.Size = new System.Drawing.Size(149, 13);
             this.labelSurface.TabIndex = 2;
             this.labelSurface.Text = "Surface Bookmarks In System";
-            this.labelSurface.TextBackColor = System.Drawing.Color.Transparent;
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Location = new System.Drawing.Point(173, 3);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(64, 24);
-            this.buttonSave.TabIndex = 4;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // panelTop
             // 
             this.panelTop.Controls.Add(this.labelSurface);
-            this.panelTop.Controls.Add(this.buttonSave);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
@@ -121,7 +88,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewMarks);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
@@ -140,13 +107,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(637, 34);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(637, 21);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 134);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 147);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
@@ -157,6 +124,27 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
+            // 
+            // dataGridViewMarks
+            // 
+            this.dataGridViewMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.BodyName,
+            this.SurfaceName,
+            this.SurfaceDesc,
+            this.Latitude,
+            this.Longitude,
+            this.Valid});
+            this.dataGridViewMarks.ContextMenuStrip = this.contextMenuStrip1;
+            this.dataGridViewMarks.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewMarks.Name = "dataGridViewMarks";
+            this.dataGridViewMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewMarks.Size = new System.Drawing.Size(637, 168);
+            this.dataGridViewMarks.TabIndex = 3;
+            this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
+            this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
+            this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
             // 
             // BodyName
             // 
@@ -194,19 +182,24 @@ namespace EDDiscovery.UserControls
             this.Valid.Name = "Valid";
             this.Valid.ReadOnly = true;
             // 
-            // UserControlSurfaceBookmarks
+            // contextMenuStrip2
+            // 
+            this.contextMenuStrip2.Name = "contextMenuStrip2";
+            this.contextMenuStrip2.Size = new System.Drawing.Size(153, 26);
+            // 
+            // SurfaceBookmarksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
             this.Controls.Add(this.panelTop);
-            this.Name = "UserControlSurfaceBookmarks";
+            this.Name = "SurfaceBookmarksForm";
             this.Size = new System.Drawing.Size(657, 200);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.dataViewScrollerPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarks)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -214,8 +207,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridViewMarks;
-        private ExtendedControls.LabelExt labelSurface;
-        private ExtendedControls.ButtonExt buttonSave;
+        private System.Windows.Forms.Label labelSurface;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem sendToCompassToolStripMenuItem;
         private System.Windows.Forms.DataGridViewComboBoxColumn BodyName;
@@ -227,5 +219,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip2;
     }
 }

@@ -262,34 +262,40 @@ namespace EDDiscovery.UserControls
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-            EDSMClass edsm = new EDSMClass();
-            long? id_edsm = rightclicksystem.EDSMID;
-
-            if (id_edsm == 0)
+            if (rightclicksystem != null)
             {
-                id_edsm = null;
+                this.Cursor = Cursors.WaitCursor;
+                EDSMClass edsm = new EDSMClass();
+                long? id_edsm = rightclicksystem.EDSMID;
+
+                if (id_edsm == 0)
+                {
+                    id_edsm = null;
+                }
+
+                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+
+                this.Cursor = Cursors.Default;
             }
-
-            if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
-
-            this.Cursor = Cursors.Default;
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
-
-            if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
-                discoveryform.Open3DMap(null);
-
-            this.Cursor = Cursors.Default;
-
-            if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
+            if (rightclicksystem != null)
             {
-                if (discoveryform.Map.MoveToSystem(rightclicksystem))
-                    discoveryform.Map.Show();
+                this.Cursor = Cursors.WaitCursor;
+
+                if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                    discoveryform.Open3DMap(null);
+
+                this.Cursor = Cursors.Default;
+
+                if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
+                {
+                    if (discoveryform.Map.MoveToSystem(rightclicksystem))
+                        discoveryform.Map.Show();
+                }
             }
         }
 

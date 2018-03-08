@@ -539,7 +539,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetFirstDiscover(bool firstdiscover = true)
+        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
         {
             IsEDSMFirstDiscover = firstdiscover;
             if (journalEntry != null)
@@ -547,7 +547,10 @@ namespace EliteDangerousCore
                 JournalLocOrJump jl = journalEntry as JournalLocOrJump;
                 if (jl != null)
                 {
-                    jl.UpdateEDSMFirstDiscover(firstdiscover);
+                    Newtonsoft.Json.Linq.JObject jo = jl.GetJson();
+                    jo["EDD_EDSMFirstDiscover"] = firstdiscover;
+                    jl.UpdateJsonEntry(jo, cn, txnl);
+                    jl.EDSMFirstDiscover = firstdiscover;
                 }
             }
         }
