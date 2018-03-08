@@ -566,7 +566,6 @@
     <EmbeddedResource Include="Panels\Compass.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\Map.png" />
     <EmbeddedResource Include="Panels\Plot.png" />
   </ItemGroup>
   <ItemGroup>
@@ -660,6 +659,7 @@
     <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\LocalMap.png" />
     <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

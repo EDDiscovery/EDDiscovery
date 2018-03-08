@@ -443,11 +443,11 @@
     <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlMap.cs">
+    <Compile Include="UserControls\UserControlLocalMap.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlMap.Designer.cs">
-      <DependentUpon>UserControlMap.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlLocalMap.Designer.cs">
+      <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\SurfaceBookmarksForm.cs">
       <SubType>UserControl</SubType>
@@ -665,8 +665,8 @@
     <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
       <DependentUpon>UserControlShoppingList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlMap.resx">
-      <DependentUpon>UserControlMap.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlLocalMap.resx">
+      <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SurfaceBookmarksForm.resx">
       <DependentUpon>SurfaceBookmarksForm.cs</DependentUpon>
