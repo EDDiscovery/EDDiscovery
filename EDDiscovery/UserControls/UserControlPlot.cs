@@ -145,9 +145,6 @@ namespace EDDiscovery.UserControls
                         var curX = centerSystem.X;
                         var curY = centerSystem.Y;
                         var curZ = centerSystem.Z;
-
-                        double totalMass = 0;
-                        double knownMagnitude = 0;
                         
                         // reset charts axis
                         chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
@@ -164,7 +161,7 @@ namespace EDDiscovery.UserControls
                             int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys + "; " + "Known masses: " + totalMass + "; " + "Known absolute magnitude: " + knownMagnitude);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
 
                             double dx = curX - sysX;
                             double dy = curY - sysY;
@@ -222,7 +219,9 @@ namespace EDDiscovery.UserControls
         {
             int maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
             int defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
-            int minMarker = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
+                        
+            int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
+            int minMarker = minMarkAbsolute < 1 ? minMarker = 1: minMarker = 2; // avoid zero values or less than 1 pixel marker when zooming
 
             // Min and Max size for Current system
             foreach (int serie in seriesIsCurrent)
