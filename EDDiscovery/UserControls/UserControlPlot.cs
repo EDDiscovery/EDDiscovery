@@ -459,19 +459,20 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxView.SelectedItem == "Top")
+            string s = comboBoxView.SelectedItem.ToString();
+            if ( s == "Top")
             {
                 chartBubble.ChartAreas[0].Visible = true;
                 chartBubble.ChartAreas[1].Visible = false;
                 chartBubble.ChartAreas[2].Visible = false;
             }
-            if (comboBoxView.SelectedItem == "Front")
+            if (s == "Front")
             {
                 chartBubble.ChartAreas[0].Visible = false;
                 chartBubble.ChartAreas[1].Visible = true;
                 chartBubble.ChartAreas[2].Visible = false;
             }
-            if (comboBoxView.SelectedItem == "Side")
+            if (s == "Side")
             {
                 chartBubble.ChartAreas[0].Visible = false;
                 chartBubble.ChartAreas[1].Visible = false;
