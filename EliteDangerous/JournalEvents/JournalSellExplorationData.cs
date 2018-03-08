@@ -33,7 +33,9 @@ namespace EliteDangerousCore.JournalEvents
             Discovered = evt["Discovered"]?.ToObjectProtected<string[]>();
             BaseValue = evt["BaseValue"].Long();
             Bonus = evt["Bonus"].Long();
-            TotalEarnings = evt["TotalEarnings"].LongNull();        
+            TotalEarnings = evt["TotalEarnings"].LongNull();        // may not be present, also 3.02 has a bug with incorrect value - actually fed from the FD web server so may not be version tied
+            if (TotalEarnings == null || TotalEarnings.Value < BaseValue+Bonus)
+                TotalEarnings = BaseValue + Bonus;
         }
 
         public string[] Systems { get; set; }
@@ -51,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus , "Full Total:; cr;N0", TotalEarnings);
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus , "Total:; cr (inc any PVP bonus);N0", TotalEarnings);
             detailed = "";
             if (Systems != null)
             {
