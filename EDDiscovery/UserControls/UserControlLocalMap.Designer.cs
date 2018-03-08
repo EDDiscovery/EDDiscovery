@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlMap
+    partial class UserControlLocalMap
     {
         /// <summary> 
         /// Required designer variable.
@@ -176,12 +176,12 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelOuter = new System.Windows.Forms.Panel();
+            this.background = new System.Windows.Forms.PictureBox();
             this.panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            this.panelOuter.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             this.SuspendLayout();
             // 
             // labelExt1
@@ -201,6 +201,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMinRadius.ClearOnFirstChar = false;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.Format = "0.#######";
@@ -224,7 +225,7 @@ namespace EDDiscovery.UserControls
             // labelExt3
             // 
             this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(78, 6);
+            this.labelExt3.Location = new System.Drawing.Point(75, 6);
             this.labelExt3.Name = "labelExt3";
             this.labelExt3.Size = new System.Drawing.Size(27, 13);
             this.labelExt3.TabIndex = 3;
@@ -238,11 +239,12 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
             this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMaxRadius.ClearOnFirstChar = false;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(106, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(103, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -275,13 +277,12 @@ namespace EDDiscovery.UserControls
             // 
             // slideMaxItems
             // 
-            this.slideMaxItems.Dock = System.Windows.Forms.DockStyle.Right;
             this.slideMaxItems.LargeChange = 50;
-            this.slideMaxItems.Location = new System.Drawing.Point(290, 0);
+            this.slideMaxItems.Location = new System.Drawing.Point(152, 1);
             this.slideMaxItems.Maximum = 500;
             this.slideMaxItems.Minimum = 50;
             this.slideMaxItems.Name = "slideMaxItems";
-            this.slideMaxItems.Size = new System.Drawing.Size(90, 26);
+            this.slideMaxItems.Size = new System.Drawing.Size(90, 45);
             this.slideMaxItems.SmallChange = 10;
             this.slideMaxItems.TabIndex = 4;
             this.slideMaxItems.TickFrequency = 50;
@@ -338,7 +339,7 @@ namespace EDDiscovery.UserControls
             chartArea1.BackSecondaryColor = System.Drawing.Color.Black;
             chartArea1.Name = "ChartArea";
             this.chartMap.ChartAreas.Add(chartArea1);
-            this.chartMap.Location = new System.Drawing.Point(15, 15);
+            this.chartMap.Location = new System.Drawing.Point(16, 40);
             this.chartMap.Margin = new System.Windows.Forms.Padding(0);
             this.chartMap.MinimumSize = new System.Drawing.Size(50, 50);
             this.chartMap.Name = "chartMap";
@@ -1207,23 +1208,25 @@ namespace EDDiscovery.UserControls
             this.aboutToolStripAbout.Text = "About";
             this.aboutToolStripAbout.Click += new System.EventHandler(this.aboutToolStripAbout_Click);
             // 
-            // panelOuter
+            // background
             // 
-            this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelOuter.Controls.Add(this.chartMap);
-            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 26);
-            this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(380, 380);
-            this.panelOuter.TabIndex = 30;
+            this.background.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.background.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.background.Location = new System.Drawing.Point(0, 0);
+            this.background.Name = "background";
+            this.background.Size = new System.Drawing.Size(380, 406);
+            this.background.TabIndex = 30;
+            this.background.TabStop = false;
+            this.background.MouseDown += new System.Windows.Forms.MouseEventHandler(this.background_MouseDown);
             // 
             // UserControlMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.chartMap);
+            this.Controls.Add(this.background);
             this.Name = "UserControlMap";
             this.Size = new System.Drawing.Size(380, 406);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
@@ -1234,7 +1237,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            this.panelOuter.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1267,6 +1270,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuReset;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem aboutToolStripAbout;
-        private Panel panelOuter;
+        private PictureBox background;
     }
 }
