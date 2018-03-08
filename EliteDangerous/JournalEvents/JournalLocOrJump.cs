@@ -125,14 +125,6 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateEDSMFirstDiscover(bool firstdiscover)
-        {
-            JObject jo = GetJson();
-            jo["EDD_EDSMFirstDiscover"] = firstdiscover;
-            UpdateJson(jo);
-            EDSMFirstDiscover = firstdiscover;
-        }
-
         public EDGovernment EDGovernment
         {
             get

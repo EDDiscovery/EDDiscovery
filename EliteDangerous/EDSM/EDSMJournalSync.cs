@@ -444,7 +444,7 @@ namespace EliteDangerousCore.EDSM
 
                                     if (systemCreated)
                                     {
-                                        he.SetFirstDiscover(true);
+                                        he.SetFirstDiscover(true,cn,txn);
                                     }
                                 }
 
