@@ -65,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else if (UpdateEnum == UpdateTypeEnum.WingUpdate)
             {
-                info = BaseUtils.FieldBuilder.Build(":", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress Left:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Wing Update:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress Left:;%;N1", ProgressPercent);
             }
             else
             {

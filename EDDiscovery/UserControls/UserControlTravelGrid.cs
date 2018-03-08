@@ -445,8 +445,11 @@ namespace EDDiscovery.UserControls
 
             // right alignment might actually make more sense for numbers
             using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-            using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                    e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+            }
 
             int noicons = (he.IsFSDJump && showfsdmapcolour) ? 2 : 1;
             if (he.StartMarker || he.StopMarker)
@@ -469,6 +472,8 @@ namespace EDDiscovery.UserControls
             int hstart = (hpos + colwidth / 2) - size / 2 * noicons - padding / 2 * (noicons - 1);
 
             int top = (e.RowBounds.Top + e.RowBounds.Bottom) / 2 - size / 2;
+
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
             e.Graphics.DrawImage(he.GetIcon, new Rectangle(hstart, top, size, size));
             hstart += size + padding;
