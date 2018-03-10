@@ -171,6 +171,7 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
+            message.Remove("Wanted");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
