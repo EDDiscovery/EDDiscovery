@@ -424,8 +424,8 @@ namespace EliteDangerousCore.DB
                                     }
                                     else if (storedentry.EndDate != newentry.EndDate || storedentry.StartDate != newentry.StartDate)    // times change, just update
                                     {
-                                        storedentry.StartDate = newentry.StartDate.Value;      // update time and date but keep the expedition ID
-                                        storedentry.EndDate = newentry.EndDate.Value;
+                                        storedentry.StartDate = newentry.StartDate;             // update time and date but keep the expedition ID
+                                        storedentry.EndDate = newentry.EndDate;
                                         storedentry.EDSM = true;
                                         storedentry.Update();
                                         changed = true;
