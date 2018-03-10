@@ -318,6 +318,14 @@ namespace EliteDangerousCore.EDDN
             if (systemAddress != null)
                 message["SystemAddress"] = systemAddress;
 
+            if (message["Materials"] != null && message["Materials"] is JArray)
+            {
+                foreach (JObject mmat in message["Materials"])
+                {
+                    mmat.Remove("Name_Localised");
+                }
+            }
+
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
             if (!bodydesig.StartsWith(starSystem, StringComparison.InvariantCultureIgnoreCase))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
