@@ -363,6 +363,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UserControlCombatPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlCombatPanel.Designer.cs">
+      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlPanelSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -631,6 +637,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlCombatPanel.resx">
+      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlPanelSelector.resx">
       <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
