@@ -94,7 +94,7 @@ namespace EliteDangerousCore.JournalEvents
                 BaseUtils.FieldBuilder.NewPrefix nl = new BaseUtils.FieldBuilder.NewPrefix(Environment.NewLine+"  ");
 
                 DateTime exp = Expiry;
-                if (exp != null)
+                if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                     exp = exp.ToLocalTime();
 
                 return BaseUtils.FieldBuilder.Build(

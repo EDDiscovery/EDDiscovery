@@ -12,6 +12,7 @@ namespace ExtendedControls
 {
     public class CustomDateTimePicker : Control
     {
+        // its up to you how to use this, what tz info it has.  tries to keep the kind
         public DateTime Value { get { return datetimevalue; } set { datetimevalue = value; Invalidate(); } }
 
         // Fore = colour of text
@@ -75,6 +76,7 @@ namespace ExtendedControls
             updown.Selected += OnUpDown;
             calendaricon.MouseClick += Calendaricon_MouseClick;
             calendar.DateSelected += Calendar_DateSelected;
+            calendar.Visible = false;
             checkbox.CheckedChanged += Checkbox_CheckedChanged;
         }
 
@@ -215,6 +217,7 @@ namespace ExtendedControls
                 calendaricon.Image = ExtendedControls.Properties.Resources.Calendar;
                 //calendaricon.Image = DialogTest.Properties.Resources.Calendar;
                 calendaricon.Location = new Point(ClientRectangle.Width - offset - calendaricon.Image.Width - 4, ClientRectangle.Height / 2 - calendaricon.Image.Height / 2);
+
                 calendaricon.Size = calendaricon.Image.Size;
                 calendaricon.Visible = !ShowUpDown;
                 calendaricon.SizeMode = PictureBoxSizeMode.CenterImage;
@@ -363,17 +366,17 @@ namespace ExtendedControls
             try
             {
                 if (p.ptype == PartsTypes.Day)
-                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, newvalue, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second);
+                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, newvalue, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second, datetimevalue.Kind);
                 else if (p.ptype == PartsTypes.Month)
-                    nv = new DateTime(datetimevalue.Year, newvalue, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second);
+                    nv = new DateTime(datetimevalue.Year, newvalue, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second, datetimevalue.Kind);
                 else if (p.ptype == PartsTypes.Year)
-                    nv = new DateTime(newvalue, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second);
+                    nv = new DateTime(newvalue, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second, datetimevalue.Kind);
                 else if (p.ptype == PartsTypes.Hours)
-                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, newvalue, datetimevalue.Minute, datetimevalue.Second);
+                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, newvalue, datetimevalue.Minute, datetimevalue.Second, datetimevalue.Kind);
                 else if (p.ptype == PartsTypes.Mins)
-                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, newvalue, datetimevalue.Second);
+                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, newvalue, datetimevalue.Second, datetimevalue.Kind);
                 else if (p.ptype == PartsTypes.Seconds)
-                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, newvalue);
+                    nv = new DateTime(datetimevalue.Year, datetimevalue.Month, datetimevalue.Day, datetimevalue.Hour, datetimevalue.Minute, newvalue, datetimevalue.Kind);
 
                 datetimevalue = nv;
 
@@ -429,25 +432,29 @@ namespace ExtendedControls
 
         private void Calendaricon_MouseClick(object sender, MouseEventArgs e)
         {
-            Point screencoord = PointToScreen(new Point(0, Height));     // screen co-ord of our control at the bottom left
-            Form f = FindForm();
-            Point formpoint = f.PointToClient(screencoord);             // now in form client terms
-            calendar.Location = formpoint;
-            //calendar.Size = new Size(ClientRectangle.Width, ClientRectangle.Width );
-            calendar.MaxSelectionCount = 1;
-            calendar.Focus();
-            calendar.SetDate(datetimevalue);
-            calendar.Show();
-            f.Controls.Add(calendar);
-            this.FindForm().Controls.SetChildIndex(calendar, 0);
-            selectedpart = -1;
-            Invalidate();
+            if (calendar.Visible == false)
+            {
+                Point screencoord = PointToScreen(new Point(0, Height));     // screen co-ord of our control at the bottom left
+                Form f = FindForm();
+                Point formpoint = f.PointToClient(screencoord);             // now in form client terms
+                calendar.Location = formpoint.PositionWithinRectangle(calendar.Size, f.ClientRectangle);
+                //calendar.Size = new Size(ClientRectangle.Width, ClientRectangle.Width );
+                calendar.MaxSelectionCount = 1;
+                calendar.Focus();
+                calendar.SetDate(datetimevalue);
+                calendar.Show();
+                f.Controls.Add(calendar);
+                this.FindForm().Controls.SetChildIndex(calendar, 0);
+                selectedpart = -1;
+                Invalidate();
+            }
         }
 
         private void Calendar_DateSelected(object sender, DateRangeEventArgs e)
         {
-            datetimevalue = new DateTime(e.Start.Year, e.Start.Month, e.Start.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second);
+            datetimevalue = new DateTime(e.Start.Year, e.Start.Month, e.Start.Day, datetimevalue.Hour, datetimevalue.Minute, datetimevalue.Second, datetimevalue.Kind);
             //System.Diagnostics.Debug.WriteLine("Set to " + Value.ToLongTimeString() + " " + Value.ToLongDateString());
+            calendar.Visible = false;
             calendar.Hide();
             this.FindForm().Controls.Remove(calendar);
             Invalidate();

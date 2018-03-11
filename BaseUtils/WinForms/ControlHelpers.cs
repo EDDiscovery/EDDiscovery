@@ -188,7 +188,7 @@ public static class ControlHelpersStaticFunc
         }
     }
 
-    static public Point PositionWithinScreen(this Control p, int x, int y)
+    static public Point PositionWithinScreen(this Control p, int x, int y)      // clamp to withing screen of control
     {
         Screen scr = Screen.FromControl(p);
         Rectangle scrb = scr.Bounds;
@@ -196,6 +196,12 @@ public static class ControlHelpersStaticFunc
         x = Math.Min(Math.Max(x, scrb.Left), scrb.Right - p.Width);
         y = Math.Min(Math.Max(y, scrb.Top), scrb.Bottom - p.Height);
         return new Point(x, y);
+    }
+
+    static public Point PositionWithinRectangle(this Point p, Size ps, Rectangle other)      // clamp to within client rectangle of another
+    {
+        return new Point(Math.Min(p.X, other.Width - ps.Width),                   // respecting size, ensure we are within the rectangle of another
+                                Math.Min(p.Y, other.Height - ps.Height));
     }
 
     static public void SplitterDistance(this SplitContainer sp, double value)           // set the splitter distance from a double value.. safe from exceptions.

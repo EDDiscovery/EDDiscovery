@@ -17,6 +17,7 @@
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EliteDangerousCore
 {
@@ -109,13 +110,6 @@ namespace EliteDangerousCore
             Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
         }
 
-        public void Redirected(JournalMissionRedirected m, ISystem sys, string body)
-        {
-            // Update State with new info...     TODO
-            //Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
-        }
-
-
         public void Completed(JournalMissionCompleted m)
         {
             Missions[Key(m)] = new MissionState(Missions[Key(m)], m); // copy previous mission state, add completed
@@ -137,6 +131,7 @@ namespace EliteDangerousCore
             //Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
         }
 
+        public List<MissionState> GetAllCombatMissions() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 select x).ToList(); }
 
         // can't think of a better way, don't want to put it in the actual entries since it should all be here.. can't be bothered to refactor so they have a common ancestor.
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }

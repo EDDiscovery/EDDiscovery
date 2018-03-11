@@ -123,7 +123,7 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
 
             DateTime exp = Expiry;
-            if (exp != null)
+            if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
             info = BaseUtils.FieldBuilder.Build("", Name, 

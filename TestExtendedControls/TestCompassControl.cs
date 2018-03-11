@@ -33,7 +33,20 @@ namespace DialogTest
             compassControl1.Distance = 100.2;
             compassControl1.DistanceFormat = "{0:0.##} km";
             compassControl1.SlewRateDegreesSec = 40;
+
+            dateTimePicker1.Value = DateTime.Now;
+            dateTimePicker1.ValueChanged += DateTimePicker1_ValueChanged;
            
+        }
+
+        private void DateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            DateTime p = dateTimePicker1.Value;
+            DateTime pp = new DateTime(p.Year, p.Month, p.Day, p.Hour, p.Minute, p.Second, DateTimeKind.Local);
+            DateTime utc = p.ToUniversalTime();
+            DateTime local = p.ToLocalTime();
+            System.Diagnostics.Debug.WriteLine("Time is " + dateTimePicker1.Value);
+
         }
 
         private void T_Tick(object sender, EventArgs e)
