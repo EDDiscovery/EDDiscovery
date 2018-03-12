@@ -707,6 +707,9 @@ namespace EliteDangerousCore.EDSM
             if (jo["axialTilt"] != null) jout["AxialTilt"] = jo["axialTilt"].Double() * Math.PI / 180.0; // degrees -> radians
             if (jo["rotationalPeriod"].Double() != 0) jout["RotationalPeriod"] = jo["rotationalPeriod"].Double() * JournalScan.oneDay_s; // days -> seconds
             if (jo["surfaceTemperature"] != null) jout["SurfaceTemperature"] = jo["surfaceTemperature"];
+            if (jo["distanceToArrival"] != null) jout["DistanceFromArrivalLS"] = jo["distanceToArrival"];
+            if (jo["parents"] != null) jout["Parents"] = jo["parents"];
+            if (jo["id64"] != null) jout["BodyID"] = jo["id64"].Long() >> 55;
 
             if (!jo["type"].Empty())
             {
