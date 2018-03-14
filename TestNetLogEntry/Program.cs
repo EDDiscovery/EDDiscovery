@@ -27,6 +27,7 @@ namespace NetLogEntry
         }
 
         public string Next { get { return (pos < args.Length) ? args[pos++] : null; } }
+        public int Int { get { return (pos < args.Length) ? args[pos++].InvariantParseInt(0) : 0; } }
         public string this[int v] { get { int left = args.Length - pos; return (v < left) ? args[pos + v] : null; } }
         public int Left { get { return args.Length - pos; } }
         public void Remove() { if (pos < args.Length) pos++; }
@@ -158,13 +159,75 @@ namespace NetLogEntry
                 else if (writetype.Equals("Touchdown", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Touchdown\", " + "\"Latitude\":7.141173, \"Longitude\":95.256424 }";
                 else if (writetype.Equals("CommitCrime", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + "\"event\":\"CommitCrime\", \"CrimeType\":\"collidedAtSpeedInNoFireZone\", \"Faction\":\"Revolutionary Party of Ciguri\", \"Fine\":100 }";
+                {
+                    string f = args.Next;
+                    int id = args.Int;
+                    lineout = "{ " + TimeStamp() + F("event", "CommitCrime") + F("CrimeType", "collidedAtSpeedInNoFireZone") + F("Faction", f) + FF("Fine", id) + " }";
+                }
+                else if (writetype.Equals("MissionAccepted", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string f = args.Next;
+                    string vf = args.Next;
+                    int id = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "MissionAccepted") + F("Faction", f) +
+                            F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf)
+                            + F("DestinationSystem", "Quapa") + F("DestinationStation", "Grabe Dock") + F("Target", "mamsey") + F("Expiry", DateTime.UtcNow.AddDays(1)) +
+                            F("Influence", "Med") + F("Reputation", "Med") + FF("MissionID", id) + "}";
+                }
                 else if (writetype.Equals("MissionCompleted", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + F("event", "MissionCompleted") + F("Faction", "whooo") + F("Name", "Mission_massacre") +
-                                F("MissingID", "29292") + F("Reward", "82272") + " \"CommodityReward\":[ { \"Name\": \"CoolingHoses\", \"Count\": 4 } ] }";
-                else if (writetype.Equals("MissionCompleted2", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + F("event", "MissionCompleted") + F("Faction", "whooo") + F("Name", "Mission_massacre") +
-                                F("MissingID", "29292") + F("Reward", "82272") + " \"CommodityReward\":[ { \"Name\": \"CoolingHoses\", \"Count\": 4 } , { \"Name\": \"Fish\", \"Count\": 10 } ] }";
+                {
+                    string f = args.Next;
+                    string vf = args.Next;
+                    int id = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "MissionCompleted") + F("Faction", f) +
+                        F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf) +
+                         F("MissionID", id) + F("Reward", "82272") + " \"CommodityReward\":[ { \"Name\": \"CoolingHoses\", \"Count\": 4 } ] }";
+                }
+                else if (writetype.Equals("MissionRedirected", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string sysn = args.Next;
+                    string stationn = args.Next;
+                    int id = args.Int;
+                    lineout = "{ " + TimeStamp() + F("event", "MissionRedirected") + F("MissionID", id) + F("MissionName", "Mission_Assassinate_Legal_Corporate") +
+                        F("NewDestinationStation", stationn) + F("OldDestinationStation", "Cuffey Orbital") +
+                        F("NewDestinationSystem", sysn) + FF("OldDestinationSystem", "Vequess") + " }";
+                }
+                else if (writetype.Equals("Bounty", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string f = args.Next;
+                    int rw = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "Bounty") + F("VictimFaction", f) + F("VictimFaction_Localised", f + "_Loc") +
+                        F("TotalReward", rw, true) + "}";
+                }
+                else if (writetype.Equals("FactionKillBond", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string f = args.Next;
+                    string vf = args.Next;
+                    int rw = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "FactionKillBond") + F("VictimFaction", vf) + F("VictimFaction_Localised", vf + "_Loc") +
+                        F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
+                        F("Reward", rw, true) + "}";
+                }
+                else if (writetype.Equals("CapShipBond", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string f = args.Next;
+                    string vf = args.Next;
+                    int rw = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "CapShipBond") + F("VictimFaction", vf) + F("VictimFaction_Localised", vf + "_Loc") +
+                        F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
+                        F("Reward", rw, true) + "}";
+                }
+                else if (writetype.Equals("Resurrect", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int ct = args.Int;
+
+                    lineout = "{ " + TimeStamp() + F("event", "Resurrect") + F("Option", "Help me") + F("Cost", ct) + FF("Bankrupt", false) + "}";
+                }
                 else if (writetype.Equals("MiningRefined", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "MiningRefined") + FF("Type", "Gold") + " }";
                 else if (writetype.Equals("EngineerCraft", StringComparison.InvariantCultureIgnoreCase))
@@ -194,8 +257,6 @@ namespace NetLogEntry
                 else if (writetype.Equals("SearchAndRescue", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "SearchAndRescue") + "\"Name\":\"Fred\", \"Count\":50, \"Reward\":4110183 }";
 
-                else if (writetype.Equals("MissionRedirected", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + F("event", "MissionRedirected") + "\"MissionID\": 65367315, \"NewDestinationStation\": \"Metcalf Orbital\", \"OldDestinationStation\": \"Cuffey Orbital\", \"NewDestinationSystem\": \"Cemiess\", \"OldDestinationSystem\": \"Vequess\" }";
 
                 else if (writetype.Equals("RepairDrone", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "RepairDrone") + "\"HullRepaired\": 0.23, \"CockpitRepaired\": 0.1,  \"CorrosionRepaired\": 0.5 }";
@@ -301,22 +362,32 @@ namespace NetLogEntry
         {
             Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
                               "JournalPath CMDRname Options..\n" +
-                              "     FSD name x y z (x y z is position as double)\n" +
-                              "     FSDTravel name x y z destx desty destz percentint \n" +
-                              "     Loc name x y z\n" +
-                              "     Interdiction name success isplayer combatrank faction power\n" +
-                              "     Docked, Undocked, Touchdown, Liftoff, CommitCrime MissionCompleted MissionCompleted2 MiningRefined\n" +
-                              "     ScanPlanet name\n" +
-                              "     ScanStar NavBeaconScan ScanEarth SellShipOnRebuy SearchANdRescue MissionRedirected\n" +
-                              "     RepairDrone CommunityGoal\n" +
-                              "     MusicNormal MusicGalMap MusicSysMap\n" +
-                              "     Friends Name\n" +
-                              "     FuelScoop amount total\n" +
-                              "     JetConeBoost\n" +
-                              "     PowerPlay UnderAttack\n" +
-                              "     CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
-                              "     FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
-                              "     Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
+                              "Travel   FSD name x y z (x y z is position as double)\n" +
+                              "         FSDTravel name x y z destx desty destz percentint \n" +
+                              "         Loc name x y z\n" +
+                              "         Docked, Undocked, Touchdown, Liftoff\n" +
+                              "         FuelScoop amount total\n" +
+                              "         JetConeBoost\n" +
+                              "Missions MissionAccepted/MissionCompleted faction victimfaction id\n" +
+                              "         MissionRedirected newsystem newstation id\n" +
+                              "         Bounty faction reward\n" +
+                              "         CommitCrime faction amount\n" +
+                              "         Interdiction name success isplayer combatrank faction power\n" +
+                              "         FactionKillBond faction victimfaction reward\n" +
+                              "         CapShipBond faction victimfaction reward\n" +
+                              "         Resurrect cost\n" +
+                              "Scans    ScanPlanet name\n" +
+                              "         ScanStar ScanEarth\n" +
+                              "         NavBeaconScan\n"+
+                              "Ships    SellShipOnRebuy\n" +
+                              "Others   SearchANdRescue MiningRefined\n" +
+                              "         RepairDrone CommunityGoal\n" +
+                              "         MusicNormal MusicGalMap MusicSysMap\n" +
+                              "         Friends Name\n" +
+                              "         PowerPlay UnderAttack\n" +
+                              "         CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
+                              "         FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
+                              "         Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
@@ -809,9 +880,19 @@ namespace NetLogEntry
             return "\"" + name + "\":" + v.ToString("0.######") + (term ? " " : "\", ");
         }
 
-        public static string F(string name, string v , bool term = false)
+        public static string F(string name, bool v, bool term = false)
+        {
+            return "\"" + name + "\":" + (v?"true":"false") + (term ? " " : "\", ");
+        }
+
+        public static string F(string name, string v, bool term = false)
         {
             return "\"" + name + "\":\"" + v + (term ? "\" " : "\", ");
+        }
+
+        public static string F(string name, DateTime v, bool term = false)
+        {
+            return "\"" + name + "\":\"" + v.ToString("yyyy-MM-ddTHH:mm:ssZ") + (term ? "\" " : "\", ");
         }
 
         public static string F(string name, int[] array, bool end = false)
@@ -829,6 +910,11 @@ namespace NetLogEntry
         }
 
         public static string FF(string name, string v)      // no final comma
+        {
+            return F(name, v, true);
+        }
+
+        public static string FF(string name, bool v)      // no final comma
         {
             return F(name, v, true);
         }

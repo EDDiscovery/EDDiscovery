@@ -99,7 +99,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Target { get; set; }
         public string TargetFriendly { get; set; }
         public string TargetLocalised { get; set; }     // not all.. only for radars etc.
-        public DateTime Expiry { get; set; }
+        public DateTime Expiry { get; set; }            // MARKED as 2000 if not there..
+        public bool ExpiryValid { get { return Expiry.Year >= 2014; } }
         public string Influence { get; set; }
         public string Reputation { get; set; }
         public int MissionId { get; set; }

@@ -681,6 +681,9 @@ namespace ExtendedControls
             {
                 myControl.ForeColor = currentsettings.colors[Settings.CI.label];
                 myControl.Font = fnt;
+
+                if ( myControl is LabelExt )
+                    (myControl as LabelExt).TextBackColor = currentsettings.colors[Settings.CI.form];
             }
             else if (myControl is GroupBoxCustom)
             {
