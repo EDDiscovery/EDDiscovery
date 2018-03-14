@@ -259,8 +259,16 @@ namespace EDDiscovery.UserControls
                     wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
-                        wantedList.AppendFormat("   {0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
-                                                                        mat.Value.ToString("N1"));
+                        int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;
+                        MaterialCommodityDB md =  MaterialCommodityDB.GetCachedMaterial(mat.Key);
+                        int max;
+                        if (md.type == MaterialCommodityDB.MaterialFreqVeryCommon)  max = VeryCommonCap;
+                        else if (md.type == MaterialCommodityDB.MaterialFreqCommon)  max = CommonCap;
+                        else if (md.type == MaterialCommodityDB.MaterialFreqStandard)  max = StandardCap;
+                        else if (md.type == MaterialCommodityDB.MaterialFreqRare)  max = RareCap;
+                        else max = VeryRareCap;
+                        wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
+                                                                        mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
                     }
                 }
 
