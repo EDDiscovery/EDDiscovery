@@ -127,6 +127,11 @@ namespace EliteDangerousCore
             }
         }
 
+        public List<HistoryEntry> FilterByDateRangeLatestFirst(DateTime startutc, DateTime endutc) // UTC! in time ascending order
+        {
+            return historylist.Where(s=>s.EventTimeUTC >= startutc && s.EventTimeUTC<=endutc).OrderByDescending(s => s.EventTimeUTC).ToList();
+        }
+
         public List<HistoryEntry> FilterByNotEDSMSyncedAndFSD
         {
             get

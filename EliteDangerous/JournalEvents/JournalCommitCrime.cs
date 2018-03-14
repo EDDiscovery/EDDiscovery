@@ -44,6 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         public string VictimLocalised { get; set; }
         public long? Fine { get; set; }
         public long? Bounty { get; set; }
+        public long Cost { get { return (Fine.HasValue ? Fine.Value : 0) + (Bounty.HasValue ? Bounty.Value : 0); } }
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
