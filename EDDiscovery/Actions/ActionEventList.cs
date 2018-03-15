@@ -9,7 +9,7 @@ namespace EDDiscovery.Actions
 {
     public class ActionEventEDList : ActionLanguage.ActionEvent
     {
-        protected ActionEventEDList(string a, string b, string c) :base(a,b,c)
+        protected ActionEventEDList(string name, string trigtype, string cls) :base(name, trigtype, cls)
         {
         }
 
@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
             new ActionEventEDList("onPopDown", "UserUIEvent", "UI"), //12
             new ActionEventEDList("onPanelChange", "UserUIEvent", "UI"),
             new ActionEventEDList("onHistorySelection", "UserUIEvent", "UI"),  //14
-            new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "EliteUI"),  //15
+            new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "UIEvents"),  //15
             new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program"),  //16
             new ActionEventEDList("onEGOSync", "ProgramEvent", "Program"),  //17
             new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program"),  //18
@@ -65,6 +65,7 @@ namespace EDDiscovery.Actions
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }
         public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", ""); }
         public static ActionEvent EventCmd(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "ActionProgram", ""); }
+        public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI"+ ui.EventTypeStr, "EliteUIEvent", ""); }
         public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", ""); }
 
         public static List<ActionEvent> EventsFromNames(List<string> alist, string uiclname)

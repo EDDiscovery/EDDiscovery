@@ -126,6 +126,15 @@ public static class ObjectExtensionsNumbersBool
             return null;
     }
 
+    static public double? ParseDoubleNull(this string s)
+    {
+        double i;
+        if (s != null && double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.CurrentCulture, out i))
+            return i;
+        else
+            return null;
+    }
+
     #endregion
 
     #region Float
@@ -210,11 +219,16 @@ public static class ObjectExtensionsNumbersBool
         return 0;
     }
 
-    static public int[] GetVersion(this System.Reflection.Assembly aw)
+    static public int[] GetVersionInts(this System.Reflection.Assembly aw)
     {
-        string v = aw.FullName.Split(',')[1].Split('=')[1];
-        string[] list = v.Split('.');
-        return VersionFromStringArray(list);
+        System.Reflection.AssemblyName an = new System.Reflection.AssemblyName(aw.FullName);            // offical way to split it
+        return new int[4] { an.Version.Major, an.Version.Minor, an.Version.Build, an.Version.Revision };
+    }
+
+    static public string GetVersionString(this System.Reflection.Assembly aw)
+    {
+        System.Reflection.AssemblyName an = new System.Reflection.AssemblyName(aw.FullName);
+        return an.Version.Major.ToStringInvariant() + "." + an.Version.Minor.ToStringInvariant() + "." + an.Version.Build.ToStringInvariant() + "." + an.Version.Revision.ToStringInvariant();
     }
 
     #endregion

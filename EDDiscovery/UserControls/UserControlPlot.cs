@@ -13,11 +13,11 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.DataVisualization.Charting;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -28,13 +28,14 @@ using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
-
+using ExtendedControls;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlPlot : UserControlCommonBase
     {
-        private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return "PlotPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private StarDistanceComputer computer;
 
@@ -42,7 +43,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             this.chartBubble.MouseWheel += Zoom_MouseWheel;
-            SetMarkerSize(); // define default bubbles size
+                        
+            SetMarkerSize();
         }
 
         const double defaultmaximumradarradius = 50;
@@ -57,6 +59,14 @@ namespace EDDiscovery.UserControls
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
+            comboBoxView.Enabled = false;
+            comboBoxView.Items.Add("Top");
+            comboBoxView.Items.Add("Front");
+            comboBoxView.Items.Add("Side");
+            comboBoxView.Items.DefaultIfEmpty("Top");
+            comboBoxView.SelectedIndex = 0;
+            comboBoxView.Enabled = true;
+                        
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
@@ -66,7 +76,7 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
 
-            refreshRadar();
+            //refreshRadar();
         }
 
         public override void Closing()
@@ -80,15 +90,14 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             KickComputation(uctg.GetCurrentHistoryEntry);            
-
-        }
+        }              
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
 
-            // this is our current system, centered on the map
             refreshRadar();
+            SetChartSize(chartBubble, 1);
         }
 
         private void KickComputation(HistoryEntry he)
@@ -136,7 +145,7 @@ namespace EDDiscovery.UserControls
                         var curX = centerSystem.X;
                         var curY = centerSystem.Y;
                         var curZ = centerSystem.Z;
-
+                        
                         // reset charts axis
                         chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
                         chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
@@ -158,26 +167,28 @@ namespace EDDiscovery.UserControls
                             double dy = curY - sysY;
                             double dz = curZ - sysZ;
 
-                            int px = Convert.ToInt32(dx);
+                            int px = Convert.ToInt32(dx) * -1;
                             int py = Convert.ToInt32(dy);
                             int pz = Convert.ToInt32(dz);
 
                             // visited systems go to series #1, #4 and #7; unvisited to series #2, #5 and #8. 
                             // Serie #0, #3 and #6 is for the current system...
-                                                        
+
                             if (visits > 0)
                             {
+
                                 chartBubble.Series[1].Points.AddXY(px, py, pz);
                                 chartBubble.Series[1].ToolTip = label.ToString();
 
                                 chartBubble.Series[4].Points.AddXY(px, pz, py);
                                 chartBubble.Series[4].ToolTip = label.ToString();
-                                
+
                                 chartBubble.Series[7].Points.AddXY(py, pz, px);
-                                chartBubble.Series[7].ToolTip = label.ToString();
+                                chartBubble.Series[7].ToolTip = label.ToString();                                
                             }
                             else
                             {
+
                                 chartBubble.Series[2].Points.AddXY(px, py, pz);
                                 chartBubble.Series[2].ToolTip = label.ToString();
 
@@ -197,7 +208,7 @@ namespace EDDiscovery.UserControls
         
         // zoom with the mouse scroll wheel
         private double[] zoomFactor = { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0 };
-        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 };
+        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 }; // markes reduce in size when zoom in, for a clearer view
         private int zoomIndex = 0; // default zoom at 1:1
 
         private int[] seriesIsCurrent = { 0, 3, 6 };
@@ -206,9 +217,11 @@ namespace EDDiscovery.UserControls
 
         private void SetMarkerSize()
         {
-            int maxMarker = Convert.ToInt32(5 * (markerReduction[zoomIndex]));
-            int defMarker = Convert.ToInt32(3 * (markerReduction[zoomIndex]));
-            int minMarker = Convert.ToInt32(1 * (markerReduction[zoomIndex]));
+            int maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
+            int defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
+                        
+            int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
+            int minMarker = minMarkAbsolute < 1 ? minMarker = 1: minMarker = 2; // avoid zero values or less than 1 pixel marker when zooming
 
             // Min and Max size for Current system
             foreach (int serie in seriesIsCurrent)
@@ -239,8 +252,16 @@ namespace EDDiscovery.UserControls
             ctrlToZoom.Width = ctrlToZoom.Parent.Width;
 
             // multiply the chart's size to the zoom factor 
-            ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
-            ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio);
+            if (zoomratio == 1.0) 
+            { // reduce a bit the size of the chart for a better overall visualization
+                ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
+                ctrlToZoom.Height = (Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio) / 100) * 90;
+            }
+            else
+            {
+                ctrlToZoom.Width = Convert.ToInt32(ctrlToZoom.Parent.Width * zoomratio);
+                ctrlToZoom.Height = Convert.ToInt32(ctrlToZoom.Parent.Height * zoomratio);
+            }
 
             ctrlToZoom.Left = ctrlToZoom.Parent.Left;
             ctrlToZoom.Top = ctrlToZoom.Parent.Top;
@@ -282,7 +303,7 @@ namespace EDDiscovery.UserControls
             }
             if (zoomIndex == 0)
             {
-                SetChartSize(chartBubble, 1);
+                SetChartSize(chartBubble, 1.0);
                 SetMarkerSize();
             }
         }
@@ -327,41 +348,23 @@ namespace EDDiscovery.UserControls
             }            
             chartBubble.Update();            
         }
-
-        private void buttonExt2dtop_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = false;
-            chartBubble.ChartAreas[1].Visible = true;
-            chartBubble.ChartAreas[2].Visible = false;
-        }
-
-        private void buttonExt2dfront_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = true;
-            chartBubble.ChartAreas[1].Visible = false;
-            chartBubble.ChartAreas[2].Visible = false;
-        }
-
-        private void buttonExt2dside_MouseDown(object sender, MouseEventArgs e)
-        {
-            chartBubble.ChartAreas[0].Visible = false;
-            chartBubble.ChartAreas[1].Visible = false;
-            chartBubble.ChartAreas[2].Visible = true;
-        }
-
-        private int panSwitch = 1;
+        
+        private bool panSwitch = false;
 
         private void chartBubble_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle)
+            if (e.Button == MouseButtons.Middle && panSwitch == true)
             {                
                 mousePosPan = e.Location;
             }
 
-            if (e.Button == MouseButtons.Right && panSwitch == 0)
+            if (e.Button == MouseButtons.Right)
             {
-                Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
-                contextMenuStrip.Show(cursor.X, cursor.Y);
+
+                //Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
+                int cursorX = Cursor.Position.X;
+                int cursorY = Cursor.Position.Y;
+                contextMenuStrip.Show(cursorX, cursorY);
             }
         }
 
@@ -445,12 +448,53 @@ namespace EDDiscovery.UserControls
 
         private void chartBubble_MouseEnter(object sender, EventArgs e)
         {
-            panSwitch = 1;
+            panSwitch = true;
         }
 
         private void chartBubble_MouseLeave(object sender, EventArgs e)
         {
-            panSwitch = 0;
+            panSwitch = false;
+        }
+
+        private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string s = comboBoxView.SelectedItem.ToString();
+            if ( s == "Top")
+            {
+                chartBubble.ChartAreas[0].Visible = true;
+                chartBubble.ChartAreas[1].Visible = false;
+                chartBubble.ChartAreas[2].Visible = false;
+            }
+            if (s == "Front")
+            {
+                chartBubble.ChartAreas[0].Visible = false;
+                chartBubble.ChartAreas[1].Visible = true;
+                chartBubble.ChartAreas[2].Visible = false;
+            }
+            if (s == "Side")
+            {
+                chartBubble.ChartAreas[0].Visible = false;
+                chartBubble.ChartAreas[1].Visible = false;
+                chartBubble.ChartAreas[2].Visible = true;
+            }
+        }
+
+        private void background_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+
+                //Point cursor = PointToScreen(new Point(e.Location.X, e.Location.Y));
+                int cursorX = Cursor.Position.X;
+                int cursorY = Cursor.Position.Y;
+                contextMenuStrip.Show(cursorX, cursorY);
+            }
+        }
+
+        private void UserControlPlot_Resize(object sender, EventArgs e)
+        {
+            SetChartSize(chartBubble, 1);
+            SetMarkerSize();           
         }
     }    
 }

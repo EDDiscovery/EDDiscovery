@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
             foreach ( string id in shm.Ships.Keys)
             {
                 ShipInformation sm = shm.Ships[id];
-                comboBoxShips.Items.Add(sm.ShipShortName);
+                comboBoxShips.Items.Add(sm.ShipNameIdentType);
             }
 
             if (cursel == "")
@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ShipInformation si = discoveryform.history.shipinformationlist.GetShipByShortName(comboBoxShips.Text);
+                ShipInformation si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
                     Display(si);
             }
@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
                     si = last_he.ShipInformation;
             }
             else 
-                si = discoveryform.history.shipinformationlist.GetShipByShortName(comboBoxShips.Text);
+                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
                      
             if (si != null)
             {

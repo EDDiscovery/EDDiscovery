@@ -145,6 +145,12 @@ public static class ObjectExtensionsDates
     {
         return dt.ToString("yyyy-MM-dd HH:mm:ss");
     }
+
+    public static string ToStringZulu(this DateTime dt)     // zulu warrior format web style
+    {
+        //return dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
+        return dt.ToString("O");
+    }
 }
 
 

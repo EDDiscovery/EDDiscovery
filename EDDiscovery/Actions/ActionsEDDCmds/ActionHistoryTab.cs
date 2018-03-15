@@ -71,11 +71,13 @@ namespace EDDiscovery.Actions
                         else
                         {
                             Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
-                            int poi = Forms.PanelInformation.GetPanelIndexByWindowsRefName(nextcmd);
+                            Forms.PanelInformation.PanelIDs? id = Forms.PanelInformation.GetPanelIDByWindowsRefName(nextcmd);
 
-                            if (poi>=0)
+                            if (id != null)
                             {
-                                if (!ts.ChangeTo(poi))
+                                Forms.PanelInformation.PanelIDs[] list = ts.TagList.Cast<Forms.PanelInformation.PanelIDs>().ToArray();
+                                int index = Array.IndexOf(list, id.Value);
+                                if (!ts.ChangeTo(index))
                                     ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
                             }
                             else

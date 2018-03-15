@@ -17,7 +17,7 @@ using ExtendedControls;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStatsTime
+    public partial class StatsTimeForm
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStatsTime));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatsTimeForm));
             this.panelControls = new System.Windows.Forms.Panel();
             this.CustomDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
             this.CustomDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();

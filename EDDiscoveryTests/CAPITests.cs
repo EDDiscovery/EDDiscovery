@@ -34,7 +34,7 @@ namespace EDDiscoveryTests
             Assert.AreEqual(79, market.commodities.Count, "nr Commodities");
 
 
-            Assert.AreEqual("HydrogenFuel", market.commodities[0].name, "Name");
+            Assert.AreEqual("hydrogenfuel", market.commodities[0].fdname, "Name");
             Assert.AreEqual(113, market.commodities[0].buyPrice, "buyPrice");
             Assert.AreEqual(108, market.commodities[0].sellPrice, "sellPrice");
             Assert.AreEqual(110, market.commodities[0].meanPrice, "meanPrice");
@@ -42,7 +42,7 @@ namespace EDDiscoveryTests
             Assert.AreEqual(1, market.commodities[0].stockBracket, "stockBracket");
             Assert.AreEqual(150631, market.commodities[0].stock, "stock");
             Assert.AreEqual(1, market.commodities[0].demand, "demand");
-            Assert.AreEqual("Chemicals", market.commodities[0].type, "categoryname");
+            Assert.AreEqual("$MARKET_category_chemicals", market.commodities[0].category, "categoryname");
             Assert.AreEqual("Hydrogen Fuel", market.commodities[0].locName, "locName");
 
 

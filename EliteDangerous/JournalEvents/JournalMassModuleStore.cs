@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
             ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
-            ModuleItems = evt["Items"]?.ToObject<ModuleItem[]>();
+            ModuleItems = evt["Items"]?.ToObjectProtected<ModuleItem[]>();
 
             if ( ModuleItems != null )
             {

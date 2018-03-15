@@ -68,6 +68,11 @@ namespace EDDiscovery._3DMap
             return _formMap?.SetCenterSystemTo(system) ?? true;
         }
 
+        public bool MoveTo(float x, float y, float z)
+        {
+            return _formMap?.MoveTo(x, y, z) ?? true;
+        }
+
         public void Show()
         {
             // TODO: set Opacity to match EDDiscoveryForm

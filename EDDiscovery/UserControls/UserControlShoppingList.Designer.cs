@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonTechBroker = new ExtendedControls.ButtonExt();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -107,6 +108,7 @@ namespace EDDiscovery.UserControls
             // 
             // splitContainerRightHorz.Panel1
             // 
+            this.splitContainerRightHorz.Panel1.Controls.Add(this.buttonTechBroker);
             this.splitContainerRightHorz.Panel1.Controls.Add(this.userControlSynthesis);
             // 
             // splitContainerRightHorz.Panel2
@@ -121,9 +123,9 @@ namespace EDDiscovery.UserControls
             this.userControlSynthesis.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.userControlSynthesis.Location = new System.Drawing.Point(0, 0);
+            this.userControlSynthesis.Location = new System.Drawing.Point(0, 32);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(844, 211);
+            this.userControlSynthesis.Size = new System.Drawing.Size(844, 179);
             this.userControlSynthesis.TabIndex = 0;
             // 
             // userControlEngineering
@@ -198,6 +200,16 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
+            // buttonTechBroker
+            // 
+            this.buttonTechBroker.Location = new System.Drawing.Point(3, 3);
+            this.buttonTechBroker.Name = "buttonTechBroker";
+            this.buttonTechBroker.Size = new System.Drawing.Size(121, 23);
+            this.buttonTechBroker.TabIndex = 1;
+            this.buttonTechBroker.Text = "Tech Broker Unlocks";
+            this.buttonTechBroker.UseVisualStyleBackColor = true;
+            this.buttonTechBroker.Click += new System.EventHandler(this.buttonTechBroker_Click);
+            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -233,5 +245,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonTechBroker;
     }
 }

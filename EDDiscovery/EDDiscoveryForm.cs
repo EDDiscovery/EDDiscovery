@@ -151,6 +151,7 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
+            PanelInformation.InitIcons();
 
             // Some components require the controller to be initialized
             // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
@@ -178,10 +179,13 @@ namespace EDDiscovery
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this);
 
-            for (int i = 0; i < PanelInformation.GetNumberPanels; i++)      // and fill up menu control
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
+
+            foreach(PanelInformation.PanelIDs pid in pids)
             {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(i, (s, e) => 
-                            tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid, 
+                    (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
+
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
             }
@@ -313,13 +317,11 @@ namespace EDDiscovery
 
                 if (rel != null)
                 {
-                    //string newInstaller = jo["Filename"].Value<string>();
+                    var currentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionString();
+                    var releaseVersion = rel.ReleaseVersion;
 
-                    var currentVersion = Application.ProductVersion;
-
-                    Version v1, v2;
-                    v1 = new Version(rel.ReleaseVersion);
-                    v2 = new Version(currentVersion);
+                    Version v1 = new Version(releaseVersion);
+                    Version v2 = new Version(currentVersion);
 
                     if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
@@ -663,7 +665,8 @@ namespace EDDiscovery
             cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             cv["UIEvent"] = uievent.EventTypeStr;
             cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent , cv);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv); 
         }
 
         private void SendPricestoEDDN(HistoryEntry he, CMarket market)
@@ -679,7 +682,7 @@ namespace EDDiscovery
                 if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
                     eddn.isBeta = true;
 
-                JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, DateTime.UtcNow);
+                JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, market.id, DateTime.UtcNow);
 
                 if (msg != null)
                 {
@@ -1431,6 +1434,7 @@ namespace EDDiscovery
             popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>
             {
@@ -1440,7 +1444,7 @@ namespace EDDiscovery
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
-                PopOuts.PopOut(popoutdropdown.SelectedIndex);
+                PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
             popoutdropdown.Size = new Size(500,600);

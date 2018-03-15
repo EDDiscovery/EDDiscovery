@@ -36,9 +36,12 @@ namespace BaseUtils
         public string ReleaseVersion {
             get
             {
-                string str = jo["name"].Str();
-
-                return new string(str.Where(p => char.IsDigit(p) || p=='.').ToArray());
+                string str = jo["tag_name"].Str();
+                int indexof = str.IndexOfAny("0123456789".ToCharArray());
+                if (indexof >= 0)
+                    return str.Substring(indexof);
+                else
+                    return "";
             }
         }
 

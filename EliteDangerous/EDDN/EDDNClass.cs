@@ -171,6 +171,7 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
+            message.Remove("Wanted");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
@@ -219,12 +220,12 @@ namespace EliteDangerousCore.EDDN
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
                 ["systemName"] = journal.StarSystem,
                 ["stationName"] = journal.StationName,
-                ["marketID"] = journal.MarketID,
-                ["modules"] = new JArray(journal.ModuleItems.Select(m => m.Name))
+                ["marketId"] = journal.MarketID,
+                ["modules"] = new JArray(journal.ModuleItems.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
             };
 
-            if (systemAddress != null)
-                message["systemAddress"] = systemAddress;
+            //if (systemAddress != null)
+            //    message["systemAddress"] = systemAddress;
 
             msg["message"] = message;
             return msg;
@@ -268,12 +269,12 @@ namespace EliteDangerousCore.EDDN
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
                 ["systemName"] = journal.StarSystem,
                 ["stationName"] = journal.StationName,
-                ["marketID"] = journal.MarketID,
-                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.ShipType))
+                ["marketId"] = journal.MarketID,
+                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.FDShipType))
             };
 
-            if (systemAddress != null)
-                message["SystemAddress"] = systemAddress;
+            //if (systemAddress != null)
+            //    message["SystemAddress"] = systemAddress;
 
             msg["message"] = message;
             return msg;
@@ -317,6 +318,14 @@ namespace EliteDangerousCore.EDDN
             if (systemAddress != null)
                 message["SystemAddress"] = systemAddress;
 
+            if (message["Materials"] != null && message["Materials"] is JArray)
+            {
+                foreach (JObject mmat in message["Materials"])
+                {
+                    mmat.Remove("Name_Localised");
+                }
+            }
+
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
             if (!bodydesig.StartsWith(starSystem, StringComparison.InvariantCultureIgnoreCase))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
@@ -331,7 +340,7 @@ namespace EliteDangerousCore.EDDN
         }
 
 
-        public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, DateTime time)
+        public JObject CreateEDDNCommodityMessage(List<CCommodities> commodities, string systemName, string stationName, long? marketID, DateTime time)
         {
             if (commodities == null || commodities.Count == 0)
                 return null;
@@ -345,28 +354,28 @@ namespace EliteDangerousCore.EDDN
 
             message["systemName"] = systemName;
             message["stationName"] = stationName;
+            message["marketId"] = marketID;
             message["timestamp"] = time.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture);
 
             JArray JAcommodities = new JArray();
 
             foreach (var commodity in commodities)
             {
-                if (commodity.type.Equals("NonMarketable"))
+                if (commodity.category.IndexOf("NonMarketable", StringComparison.InvariantCultureIgnoreCase)>=0)
                 {
                     continue;
                 }
 
-
                 JObject jo = new JObject();
 
-                jo["demandBracket"] = commodity.demandBracket;
-                jo["name"] = commodity.name;
-                jo["buyPrice"] = commodity.buyPrice;
+                jo["name"] = commodity.fdname;
                 jo["meanPrice"] = commodity.meanPrice;
-                jo["stockBracket"] = commodity.stockBracket;
-                jo["demand"] = commodity.demand;
-                jo["sellPrice"] = commodity.sellPrice;
+                jo["buyPrice"] = commodity.buyPrice;
                 jo["stock"] = commodity.stock;
+                jo["stockBracket"] = commodity.stockBracket;
+                jo["sellPrice"] = commodity.sellPrice;
+                jo["demand"] = commodity.demand;
+                jo["demandBracket"] = commodity.demandBracket;
 
                 if (commodity.StatusFlags!=null && commodity.StatusFlags.Count > 0)
                 {
@@ -395,7 +404,16 @@ namespace EliteDangerousCore.EDDN
             catch (System.Net.WebException ex)
             {
                 System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
-                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nEDDN Message: {msg.ToString()}");
+                string responsetext = null;
+                using (var responsestream = response.GetResponseStream())
+                {
+                    using (var reader = new System.IO.StreamReader(responsestream))
+                    {
+                        responsetext = reader.ReadToEnd();
+                    }
+                }
+
+                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nResponse: {responsetext}\nEDDN Message: {msg.ToString()}");
                 return false;
             }
         }

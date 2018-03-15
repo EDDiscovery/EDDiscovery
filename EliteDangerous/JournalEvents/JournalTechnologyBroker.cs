@@ -25,7 +25,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalTechnologyBroker(JObject evt) : base(evt, JournalTypeEnum.TechnologyBroker)
         {
             ItemUnlocked = JournalFieldNaming.GetBetterItemNameEvents(evt["ItemUnlocked"].Str());
-            IngredientsList = evt["Ingredients"]?.ToObject<Ingredients[]>();
+            IngredientsList = evt["Ingredients"]?.ToObjectProtected<Ingredients[]>();
         }
 
         public string ItemUnlocked { get; set; }

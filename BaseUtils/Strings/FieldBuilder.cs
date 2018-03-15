@@ -67,7 +67,7 @@ namespace BaseUtils
                 }
                 else if ( first is string )     // normal, string
                 {
-                    System.Diagnostics.Debug.Assert(i + 2 <= values.Length);
+                    System.Diagnostics.Debug.Assert(i + 2 <= values.Length,"Field Builder missing parameter");
 
                     string[] fieldnames = ((string)first).Split(';');
                     object value = values[i + 1];

@@ -21,5 +21,6 @@ namespace EliteDangerousCore
         int DefaultMapColour { get; }
         bool ClearCommodities { get; }
         bool ClearMaterials { get; }
+        bool DisplayUTC { get; }
     }
 }

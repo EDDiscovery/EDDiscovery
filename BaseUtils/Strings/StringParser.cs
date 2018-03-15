@@ -305,5 +305,20 @@ namespace BaseUtils
             else
                 return def;
         }
+
+        public static List<string> ParseOptionallyQuotedStringList(string s, bool lowercase = false, bool replaceescape = false)
+        {
+            List<string> list = new List<string>();
+            StringParser sp = new StringParser(s);
+
+            string r;
+            while( (r = sp.NextQuotedWordComma(lowercase , replaceescape)) != null )
+            {
+                list.Add(r);
+            }
+
+
+            return list;
+        }
     }
 }

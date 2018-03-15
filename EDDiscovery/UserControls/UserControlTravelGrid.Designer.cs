@@ -79,7 +79,9 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.TopPanel.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -163,6 +165,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(217, 6);
@@ -194,6 +197,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
             this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
             this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
@@ -211,6 +215,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -347,9 +352,11 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.setNoteToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
-            this.copyJournalEntryToClipboardToolStripMenuItem});
+            this.writeJournalToLogtoolStripMenuItem,
+            this.copyJournalEntryToClipboardToolStripMenuItem,
+            this.createEditBookmarkToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 312);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 378);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
@@ -475,12 +482,26 @@ namespace EDDiscovery.UserControls
             this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
             this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
+            // writeJournalToLogtoolStripMenuItem
+            // 
+            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
+            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
+            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
+            // 
             // copyJournalEntryToClipboardToolStripMenuItem
             // 
             this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
             this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
+            // 
+            // createEditBookmarkToolStripMenuItem
+            // 
+            this.createEditBookmarkToolStripMenuItem.Name = "createEditBookmarkToolStripMenuItem";
+            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
+            this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -545,5 +566,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
+        private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem writeJournalToLogtoolStripMenuItem;
     }
 }

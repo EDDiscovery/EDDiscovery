@@ -226,7 +226,7 @@ namespace EliteDangerousCore.JournalEvents
             nPeriapsis = evt["Periapsis"].DoubleNull();
             nAxialTilt = evt["AxialTilt"].DoubleNull();
 
-            Rings = evt["Rings"]?.ToObject<StarPlanetRing[]>(); // may be Null
+            Rings = evt["Rings"]?.ToObjectProtected<StarPlanetRing[]>(); // may be Null
 
             nTidalLock = evt["TidalLock"].Bool();
             TerraformState = evt["TerraformState"].StrNull();
@@ -279,7 +279,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (mats.Type == JTokenType.Object)
                 {
-                    Materials = mats?.ToObject<Dictionary<string, double>>();
+                    Materials = mats?.ToObjectProtected<Dictionary<string, double>>();
                 }
                 else
                 {
@@ -297,7 +297,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (atmos.Type == JTokenType.Object)
                 {
-                    AtmosphereComposition = atmos?.ToObject<Dictionary<string, double>>();
+                    AtmosphereComposition = atmos?.ToObjectProtected<Dictionary<string, double>>();
                 }
                 else
                 {

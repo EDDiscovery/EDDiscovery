@@ -35,7 +35,7 @@ namespace EDDiscovery
         [STAThread]
         static void Main()
         {
-            using (OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false }))
+            using (OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false, Backend = OpenTK.PlatformBackend.PreferNative }))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

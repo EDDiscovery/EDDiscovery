@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
             StarSystem = evt["StarSystem"].Str();
             MarketID = evt["MarketID"].LongNull();
 
-            ModuleItems = evt["Items"]?.ToObject<StoredModuleItem[]>();
+            ModuleItems = evt["Items"]?.ToObjectProtected<StoredModuleItem[]>();
 
             if (ModuleItems != null)
             {

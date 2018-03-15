@@ -254,9 +254,9 @@ namespace BaseUtils
                     request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
                     WriteLog("GET " + request.RequestUri, "");
-                    
+
                     // Get the response.
-                    //request.Timeout = 740 * 1000;
+                    request.Timeout = 5000;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     var data = getResponseData(response);
@@ -407,6 +407,8 @@ namespace BaseUtils
         private static Object LOCK = new Object();
         static public  void WriteLog(string str1, string str2)
         {
+            //System.Diagnostics.Debug.WriteLine("From:" + Environment.StackTrace.StackTrace("WriteLog",10) + Environment.NewLine + "HTTP:" + str1 + ":" + str2);
+
             if (LogPath == null)
                 return;
 

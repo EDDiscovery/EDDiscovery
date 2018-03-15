@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, NpcCrewID + " wages", -Amount);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for " + Name.Alt("Unknown"), -Amount);
         }
     }
 }
