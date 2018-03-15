@@ -171,6 +171,7 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
+            message.Remove("Wanted");
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
 
@@ -316,6 +317,14 @@ namespace EliteDangerousCore.EDDN
 
             if (systemAddress != null)
                 message["SystemAddress"] = systemAddress;
+
+            if (message["Materials"] != null && message["Materials"] is JArray)
+            {
+                foreach (JObject mmat in message["Materials"])
+                {
+                    mmat.Remove("Name_Localised");
+                }
+            }
 
             string bodydesig = journal.BodyDesignation ?? journal.BodyName;
 
