@@ -32,22 +32,29 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCapShipBond(JObject evt) : base(evt, JournalTypeEnum.CapShipBond)
         {
             AwardingFaction = evt["AwardingFaction"].Str();
+            AwardingFaction_Localised = evt["AwardingFaction_Localised"].Str();
             VictimFaction = evt["VictimFaction"].Str();
+            VictimFaction_Localised = evt["VictimFaction_Localised"].Str();
             Reward = evt["Reward"].Long();
         }
+
         public string AwardingFaction { get; set; }
+        public string AwardingFaction_Localised { get; set; }       // may be empty
         public string VictimFaction { get; set; }
+        public string VictimFaction_Localised { get; set; }         // may be empty
+
         public long Reward { get; set; }
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, AwardingFaction +" " + Reward);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, AwardingFaction_Localised.Alt(AwardingFaction) + " " + Reward);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("; cr;N0", Reward, "Awarding faction:" , AwardingFaction,  "Victim faction:", VictimFaction);
+            info = BaseUtils.FieldBuilder.Build("; cr;N0", Reward, "< from ", AwardingFaction_Localised.Alt(AwardingFaction),
+                "< , due to ", VictimFaction_Localised.Alt(VictimFaction));
             detailed = "";
         }
     }

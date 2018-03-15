@@ -159,7 +159,7 @@ namespace EDDiscovery.Actions
                 int ind = 0;
                 foreach (EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
                 {
-                    string mi = prefix + "Ship_Module_" + ind.ToString() + "_";
+                    string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
                     vars[mi + "Slot"] = m.Slot;
                     vars[mi + "Item"] = m.Item;
                     vars[mi + "ItemLocalised"] = m.LocalisedItem.Alt(m.Item);

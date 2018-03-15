@@ -40,12 +40,15 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
         {
-            Inventory = evt["Inventory"]?.ToObject<Cargo[]>().OrderBy(x => x.Name).ToArray();
-            foreach (Cargo c in Inventory)
-                c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
+            Inventory = evt["Inventory"]?.ToObjectProtected<Cargo[]>().OrderBy(x => x.Name)?.ToArray();
+            if (Inventory != null)
+            {
+                foreach (Cargo c in Inventory)
+                    c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
+            }
         }
 
-        public Cargo[] Inventory { get; set; }
+        public Cargo[] Inventory { get; set; }      // may be NULL
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -79,8 +82,11 @@ namespace EliteDangerousCore.JournalEvents
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
             mc.Clear(true);
 
-            foreach (Cargo c in Inventory)
-                mc.Set(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
+            if (Inventory != null)
+            {
+                foreach (Cargo c in Inventory)
+                    mc.Set(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
+            }
         }
     }
 }

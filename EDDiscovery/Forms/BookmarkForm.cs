@@ -14,6 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using EDDiscovery;
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
@@ -23,24 +25,36 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using static EliteDangerousCore.DB.PlanetMarks;
 
 namespace EDDiscovery.Forms
 {
     public partial class BookmarkForm : ExtendedControls.DraggableForm
     {
         public string StarHeading { get { return textBoxName.Text; } }
-        public string Notes { get { return textBoxNotes.Text; } }
+        public string Notes { get { return textBoxBookmarkNotes.Text; } }
         public string x { get { return textBoxX.Text; } }
         public string y { get { return textBoxY.Text; } }
         public string z { get { return textBoxZ.Text; } }
         public bool IsTarget { get { return checkBoxTarget.Checked;  } }
-
+        public PlanetMarks SurfaceLocations { get { return userControlSurfaceBookmarks.PlanetMarks; } }
+        
         private string edsmurl = null;
+        bool validatestarname = false;
 
         public BookmarkForm()
         {
             InitializeComponent();
-            EDDTheme.Instance.ApplyToFormStandardFontSize(this); 
+            EDDTheme.Instance.ApplyToFormStandardFontSize(this);
+        }
+
+        #region External Initialisation
+
+        public void InitialisePos(ISystem system)
+        {
+            textBoxX.Text = system.X.ToString("0.00");
+            textBoxY.Text = system.Y.ToString("0.00");
+            textBoxZ.Text = system.Z.ToString("0.00");
         }
 
         public void InitialisePos(double x, double y, double z)
@@ -50,134 +64,177 @@ namespace EDDiscovery.Forms
             textBoxZ.Text = z.ToString("0.00");
         }
 
-        public void NotedSystem(string name, string note, bool target)
+        public void NotedSystem(string name, string note, bool istarget)          // from target, a system with notes
         {
             this.Text = "System Information";
-            buttonCancel.Hide();
-            buttonDelete.Hide();
-            textBoxNotes.Hide();
-            textBoxTime.Hide();
-            labelTimeMade.Hide();
-            labelBookmarkNotes.Hide();
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
+            checkBoxTarget.Checked = istarget;
 
-            int delta = textBoxTravelNote.Location.Y - checkBoxTarget.Location.Y;       // before we move it
-
-            checkBoxTarget.Location = new Point(checkBoxTarget.Location.X, labelTimeMade.Location.Y);
-            buttonEDSM.Location = new Point(buttonEDSM.Location.X, labelTimeMade.Location.Y);
-
-            ShiftLocationY(buttonOK, delta);
-            ShiftLocationY(labelTravelNote, delta);
-            ShiftLocationY(labelTravelNoteEdit, delta);
-            ShiftLocationY(textBoxTravelNote, delta);
-            this.Height -= delta;
-            checkBoxTarget.Checked = target;
+            HideTime();
+            HideBookmarkNotes();
+            HideSurfaceBookmarks();
 
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(name);
         }
 
 
-        public void RegionBookmark(string tme)
+        public void NewRegionBookmark(DateTime tme)              // from map, a region bookmark at this time
         {
             this.Text = "Create Region Bookmark";
-            textBoxTime.Text = tme;
+            textBoxName.Text = "Enter a region name...";
+            textBoxName.ClearOnFirstChar = true;
+            textBoxTime.Text = tme.ToString();
             textBoxX.ReadOnly = false;
             textBoxY.ReadOnly = false;
             textBoxZ.ReadOnly = false;
-            textBoxName.ReadOnly = false;
-            buttonDelete.Hide();
-            labelTravelNote.Hide();
-            labelTravelNoteEdit.Hide();
-            textBoxTravelNote.Hide();
-            buttonEDSM.Hide();
 
-            int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
-            ShiftLocationY(buttonOK, delta);
-            ShiftLocationY(buttonCancel, delta);
-            this.Height -= delta;
+            HideEDSM();
+            HideTravelNote();
+            HideSurfaceBookmarks();
+            buttonDelete.Hide();
+
             buttonOK.Enabled = ValidateData();
         }
 
-        public void Update(string name, string note, string bookmarknote, string tme, bool regionmark , bool istarget )
+        public void Update(BookmarkClass bk)        // from multiple places, update this bookmark, region or system..
         {
+            string note = "";
+            string name;
+
+            if (!bk.isRegion)
+            {
+                ISystem s = SystemClassDB.GetSystem(bk.StarName);
+                if ( s != null )    // paranoia
+                    InitialisePos(s);
+
+                SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
+                note = (sn != null) ? sn.Note : "";
+
+                name = bk.StarName;
+            }
+            else
+            {       // region, set position, set name
+                InitialisePos(bk.x, bk.y, bk.z);
+                name = bk.Heading;
+            }
+
             this.Text = "Update Bookmark";
             buttonOK.Text = "Update";
             textBoxName.Text = name;
-            textBoxName.ReadOnly = !regionmark;
-            textBoxNotes.Text = bookmarknote;
-            textBoxNotes.CursorToEnd();
-            textBoxNotes.ScrollToCaret();
+            textBoxName.ReadOnly = !bk.isRegion;
+            textBoxBookmarkNotes.Text = bk.Note;
+            textBoxBookmarkNotes.CursorToEnd();
+            textBoxBookmarkNotes.ScrollToCaret();
             textBoxTravelNote.Text = note;
-            textBoxTime.Text = tme;
-            checkBoxTarget.Checked = istarget;
+            textBoxTime.Text = bk.Time.ToString();
+            checkBoxTarget.Checked = bk.id == TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
 
-            if ( regionmark )
+            if (bk.isRegion)
             {
-                buttonEDSM.Hide();
-                labelTravelNote.Hide();
-                labelTravelNoteEdit.Hide();
-                textBoxTravelNote.Hide();
-                int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
-                ShiftLocationY(buttonOK, delta);
-                ShiftLocationY(buttonCancel, delta);
-                ShiftLocationY(buttonDelete, delta);
-                this.Height -= delta;
+                HideEDSM();
+                HideTravelNote();
+                HideSurfaceBookmarks();
             }
             else
             {
                 var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToEDSMSystem(name);
+                userControlSurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
             }
+
+            buttonOK.Enabled = true;
         }
 
-        public void NewSystemBookmark(string name, string note, string tme)
+        public void Update(BookmarkClass bk, string planet, double latitude, double longitude)  // from compass, bookmark at planet/lat/long
+        {
+            Update(bk);
+            userControlSurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
+        }
+
+        public void NewSystemBookmark(ISystem system, string note, DateTime tme)    // from multipe, create a new system bookmark
         {
             this.Text = "New System Bookmark";
-            textBoxName.Text = name;
+            textBoxName.Text = system.Name;
             textBoxTravelNote.Text = note;
-            textBoxTime.Text = tme;
+            textBoxTime.Text = tme.ToString();
+            InitialisePos(system);
             buttonDelete.Hide();
             var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToEDSMSystem(name);
+            edsmurl = edsm.GetUrlToEDSMSystem(system.Name,system.EDSMID);
+            userControlSurfaceBookmarks.Init(system.Name);
+            buttonOK.Enabled = true;
         }
 
-        public void GMO(string name, string descr , bool istarget , string url )
+                                                                                    // from compass, new system bookmark at position
+        public void NewSystemBookmark(ISystem system, string note, DateTime tme, string planet, double latitude, double longitude)
+        {
+            NewSystemBookmark(system, note, tme);
+            userControlSurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
+        }
+
+        public void NewFreeEntrySystemBookmark(DateTime tme)     // new system bookmark anywhere
+        {
+            this.Text = "New System Bookmark";
+            textBoxName.Text = "Enter a system name...";
+            validatestarname = true;
+            textBoxName.SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
+            textBoxName.ClearOnFirstChar = true;
+            textBoxName.SelectAll();
+            textBoxName.Focus();
+            textBoxTime.Text = tme.ToString();
+            validatestarname = true;
+            buttonDelete.Hide();
+            buttonEDSM.Enabled = false;
+            buttonOK.Enabled = false;
+            userControlSurfaceBookmarks.Init("");
+        }
+
+        public void GMO(string name, string descr , bool istarget , string url )    // from formmap, new GMO bookmark
         {
             this.Text = "Galactic Mapping Object";
             textBoxName.Text = name;
-            textBoxNotes.Text = descr.WordWrap(40);
-            textBoxNotes.CursorToEnd();
-            textBoxNotes.ScrollToCaret();
-            textBoxNotes.ReadOnly = true;
+            textBoxBookmarkNotes.Text = descr.WordWrap(40);
+            textBoxBookmarkNotes.CursorToEnd();
+            textBoxBookmarkNotes.ScrollToCaret();
+            textBoxBookmarkNotes.ReadOnly = true;
             labelBookmarkNotes.Text = "Description";
             buttonDelete.Hide();
-            textBoxTime.Hide();
-            labelTimeMade.Hide();
-            textBoxTravelNote.Hide();
-            labelTravelNote.Hide();
-            labelTravelNoteEdit.Hide();
+            HideTime();
+            HideTravelNote();
+            HideSurfaceBookmarks();
 
             checkBoxTarget.Checked = istarget;
-
-            int delta = buttonOK.Location.Y - labelTravelNote.Location.Y;
-            ShiftLocationY(buttonOK, delta);
-            ShiftLocationY(buttonCancel, delta);
-            this.Height -= delta;
-
-            delta = buttonEDSM.Location.Y - labelTimeMade.Location.Y;
-            ShiftLocationY(buttonEDSM, delta);
-            ShiftLocationY(checkBoxTarget, delta);
-            ShiftLocationY(labelBookmarkNotes, delta);
-            ShiftLocationY(textBoxNotes, delta);
-            ShiftLocationY(buttonOK, delta);
-            ShiftLocationY(buttonCancel, delta);
-            this.Height -= delta;
 
             edsmurl = url;
         }
 
+        private void HideTime() { labelTimeMade.Hide(); textBoxTime.Hide(); ShiftControls(textBoxBookmarkNotes, textBoxTime); }
+        private void HideBookmarkNotes() { labelBookmarkNotes.Hide(); textBoxBookmarkNotes.Hide(); ShiftControls(textBoxTravelNote, textBoxBookmarkNotes); }
+        private void HideTravelNote() { labelTravelNote.Hide(); labelTravelNoteEdit.Hide(); textBoxTravelNote.Hide(); ShiftControls(userControlSurfaceBookmarks, textBoxTravelNote); }
+        private void HideSurfaceBookmarks() { userControlSurfaceBookmarks.Hide(); ShiftControls(buttonOK, userControlSurfaceBookmarks); }
+        private void HideEDSM() { buttonEDSM.Hide(); checkBoxTarget.Left = buttonEDSM.Left; }
+
+        void ShiftControls(Control bot, Control top)
+        {
+            int topline = top.Top;
+            int delta = bot.Top - topline;
+            System.Diagnostics.Debug.WriteLine("Control bot {0} {1} to {2} {3} delta {4}", bot.Name, bot.Top, top.Name, top.Top, delta);
+            foreach (Control c in panelOuter.Controls)
+            {
+                if (c.Top >= topline)  // if below..
+                {
+                    System.Diagnostics.Debug.WriteLine("Control {0} at {1}", c.Name, c.Top);
+                    c.Top -= delta;
+                }
+            }
+            Height -= delta;
+        }
+
+        #endregion
+
+        #region UI
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
@@ -199,7 +256,23 @@ namespace EDDiscovery.Forms
 
         private void textBox_TextChanged(object sender, EventArgs e)
         {
-            buttonOK.Enabled = ValidateData();
+            if ( validatestarname )
+            {
+                ISystem f = SystemCache.FindSystem(textBoxName.Text);
+                if (f != null && f.HasCoordinate)
+                {
+                    InitialisePos(f);
+                    var edsm = new EDSMClass();
+                    edsmurl = edsm.GetUrlToEDSMSystem(f.Name,f.EDSMID);
+                    userControlSurfaceBookmarks.Init(f.Name);
+                }
+                else
+                    textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";
+
+                buttonEDSM.Enabled = buttonOK.Enabled = ValidateData() && f != null;
+            }
+            else
+                buttonOK.Enabled = ValidateData();
         }
 
         private bool ValidateData()
@@ -214,14 +287,12 @@ namespace EDDiscovery.Forms
                 System.Diagnostics.Process.Start(edsmurl);
         }
 
-        void ShiftLocationY(Control c, int d)
-        {
-            c.Location = new Point(c.Location.X, c.Location.Y - d);
-        }
-
         private void panel1_MouseDown(object sender, MouseEventArgs e)
         {
             OnCaptionMouseDown((Control)sender, e);
         }
+
+
+        #endregion
     }
 }

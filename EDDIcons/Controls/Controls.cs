@@ -79,6 +79,7 @@ namespace EDDiscovery.Icons
         public static Image Map3D_Bookmarks_Noted { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Noted"); } }
         public static Image Map3D_Bookmarks_Region { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Region"); } }
         public static Image Map3D_Bookmarks_Star { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Star"); } }
+        public static Image Map3d_Bookmarks_StarWithPlanets { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.StarWithPlanets"); } }
         public static Image Map3D_Bookmarks_Target { get { return IconSet.GetIcon("Controls.Map3D.Bookmarks.Target"); } }
         public static Image Map3D_EliteMovement { get { return IconSet.GetIcon("Controls.Map3D.EliteMovement"); } }
         public static Image Map3D_Filter_Menu { get { return IconSet.GetIcon("Controls.Map3D.Filter.Menu"); } }
@@ -185,6 +186,8 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlStarList
         public static Image StarList_EDSM { get { return IconSet.GetIcon("Controls.StarList.EDSM"); } }
+        public static Image StarList_BodyClass { get { return IconSet.GetIcon("Controls.StarList.BodyClasses"); } }
+        public static Image StarList_Jumponium { get { return IconSet.GetIcon("Controls.StarList.Jumponium"); } }
         public static Image StarList_ExportToExcel { get { return IconSet.GetIcon("Controls.StarList.ExportToExcel"); } }
         public static Image StarList_History { get { return IconSet.GetIcon("Controls.StarList.History"); } }
         #endregion
@@ -221,7 +224,11 @@ namespace EDDiscovery.Icons
         #region Selector
         public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
         public static Image Selector_AddTab { get { return IconSet.GetIcon("Controls.Selector.Addtab"); } }
-
+        #endregion
+        #region Bookmarks
+        public static Image Bookmarks_Edit { get { return IconSet.GetIcon("Controls.Bookmarks.Edit"); } }
+        public static Image Bookmarks_New { get { return IconSet.GetIcon("Controls.Bookmarks.New"); } }
+        public static Image Bookmarks_Delete { get { return IconSet.GetIcon("Controls.Bookmarks.Delete"); } }
         #endregion
     }
 }

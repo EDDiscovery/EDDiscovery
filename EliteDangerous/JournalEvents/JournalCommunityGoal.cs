@@ -77,8 +77,7 @@ namespace EliteDangerousCore.JournalEvents
                 Title = jo["Title"].Str();
                 SystemName = jo["SystemName"].Str();
                 MarketName = jo["MarketName"].Str();
-                if (!jo["Expiry"].Empty())
-                    Expiry = DateTime.Parse(jo.Value<string>("Expiry"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+                Expiry = jo["Expiry"].DateTimeUTC();
                 IsComplete = jo["IsComplete"].Bool();
                 CurrentTotal = jo["CurrentTotal"].Long();
                 PlayerContribution = jo["PlayerContribution"].Long();
@@ -95,7 +94,7 @@ namespace EliteDangerousCore.JournalEvents
                 BaseUtils.FieldBuilder.NewPrefix nl = new BaseUtils.FieldBuilder.NewPrefix(Environment.NewLine+"  ");
 
                 DateTime exp = Expiry;
-                if (exp != null)
+                if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                     exp = exp.ToLocalTime();
 
                 return BaseUtils.FieldBuilder.Build(

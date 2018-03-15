@@ -74,13 +74,7 @@ namespace EliteDangerousCore.JournalEvents
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
 
             Count = evt["Count"].IntNull();
-
-            if (!evt["Expiry"].Empty())
-            {
-                string s = evt.Value<string>("Expiry");
-                //System.Diagnostics.Debug.WriteLine("Time " + s);
-                Expiry = DateTime.Parse(s, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
-            }
+            Expiry = evt["Expiry"].DateTimeUTC();
 
             PassengerCount = evt["PassengerCount"].IntNull();
             PassengerVIPs = evt["PassengerVIPs"].BoolNull();
@@ -88,6 +82,8 @@ namespace EliteDangerousCore.JournalEvents
             PassengerType = evt["PassengerType"].StrNull();
 
             Reward = evt["Reward"].IntNull();   // not in DOC V13, but present in latest journal entries
+
+            Wing = evt["Wing"].BoolNull();      // new 3.02
 
         }
 
@@ -103,7 +99,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Target { get; set; }
         public string TargetFriendly { get; set; }
         public string TargetLocalised { get; set; }     // not all.. only for radars etc.
-        public DateTime Expiry { get; set; }
+        public DateTime Expiry { get; set; }            // MARKED as 2000 if not there..
+        public bool ExpiryValid { get { return Expiry.Year >= 2014; } }
         public string Influence { get; set; }
         public string Reputation { get; set; }
         public int MissionId { get; set; }
@@ -120,12 +117,14 @@ namespace EliteDangerousCore.JournalEvents
 
         public int? Reward { get; set; }
 
+        public bool? Wing { get; set; }     // 3.02
+
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
 
             DateTime exp = Expiry;
-            if (exp != null)
+            if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
             info = BaseUtils.FieldBuilder.Build("", Name, 
@@ -135,7 +134,9 @@ namespace EliteDangerousCore.JournalEvents
                                       "Expiry:", exp,
                                       "Influence:", Influence,
                                       "Reputation:", Reputation,
-                                      "Reward:", Reward);
+                                      "Reward:; cr;N0", Reward,
+                                      "; (Wing)", Wing);
+                        
 
             detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised.Alt(FriendlyCommodity), 
                                            "Target:", TargetLocalised.Alt(TargetFriendly), 

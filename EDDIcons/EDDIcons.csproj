@@ -63,6 +63,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Controls.Designer.cs</LastGenOutput>
       <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="Journal\AfmuRepairs.png" />
     <EmbeddedResource Include="Journal\ApproachSettlement.png" />
@@ -565,7 +566,6 @@
     <EmbeddedResource Include="Panels\Compass.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Panels\Map.png" />
     <EmbeddedResource Include="Panels\Plot.png" />
   </ItemGroup>
   <ItemGroup>
@@ -642,6 +642,25 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\UnderAttack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Map3D\Bookmarks\StarWithPlanets.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\BookmarkManager.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\StarList\BodyClasses.png" />
+    <EmbeddedResource Include="Controls\StarList\Jumponium.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\Bookmarks\Delete.png" />
+    <EmbeddedResource Include="Controls\Bookmarks\New.png" />
+    <EmbeddedResource Include="Controls\Bookmarks\Edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\LocalMap.png" />
+    <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

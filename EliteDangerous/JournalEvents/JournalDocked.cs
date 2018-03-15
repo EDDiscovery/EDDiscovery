@@ -72,8 +72,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Wanted = evt["Wanted"].BoolNull();
 
-            if (!evt["StationServices"].Empty())
-                StationServices = evt.Value<JArray>("StationServices").Values<string>().ToList();
+            StationServices = evt["StationServices"]?.ToObjectProtected<string[]>();
 
             // Government = None only happens in Training
             if (Government == "$government_None;")
@@ -95,7 +94,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Economy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
-        public List<string> StationServices { get; set; }
+        public string[] StationServices { get; set; }
         public bool? Wanted { get; set; }
 
         public bool IsTrainingEvent { get; private set; }

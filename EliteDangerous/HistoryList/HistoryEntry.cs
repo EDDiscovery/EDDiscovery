@@ -72,7 +72,12 @@ namespace EliteDangerousCore
             get
             {
                 DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
-                if ((EntryType == JournalTypeEnum.Scan || EntryType == JournalTypeEnum.Docked || EntryType == JournalTypeEnum.FSDJump) && EventTimeUTC > ed22) return true; else return false;
+                if ((EntryType == JournalTypeEnum.Scan ||
+                     EntryType == JournalTypeEnum.Docked ||
+                     EntryType == JournalTypeEnum.FSDJump ||
+                     EntryType == JournalTypeEnum.Market ||
+                     EntryType == JournalTypeEnum.Shipyard ||
+                     EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true; else return false;
             }
         }
 
@@ -534,7 +539,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetFirstDiscover(bool firstdiscover = true)
+        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
         {
             IsEDSMFirstDiscover = firstdiscover;
             if (journalEntry != null)
@@ -542,7 +547,10 @@ namespace EliteDangerousCore
                 JournalLocOrJump jl = journalEntry as JournalLocOrJump;
                 if (jl != null)
                 {
-                    jl.UpdateEDSMFirstDiscover(firstdiscover);
+                    Newtonsoft.Json.Linq.JObject jo = jl.GetJson();
+                    jo["EDD_EDSMFirstDiscover"] = firstdiscover;
+                    jl.UpdateJsonEntry(jo, cn, txnl);
+                    jl.EDSMFirstDiscover = firstdiscover;
                 }
             }
         }

@@ -21,8 +21,6 @@ namespace EDDiscovery.Forms
         public bool ExportAsJournals {  get { return checkBoxRawJournal.Checked; } }
         public string Path { get; private set; }
 
-        private Font font;
-
         public ExportForm()
         {
             InitializeComponent();
@@ -58,6 +56,7 @@ namespace EDDiscovery.Forms
                 Height -= d;
             }
             checkBoxRawJournal.Visible = checkBoxRawJournal.Enabled = allowRawJournalExport;
+            if (!allowRawJournalExport) checkBoxRawJournal.Checked = false;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -68,15 +67,13 @@ namespace EDDiscovery.Forms
 
         private void ExportForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            font.Dispose();
-            font = null;
         }
 
         private void buttonExport_Click(object sender, EventArgs e)
         {
             EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
             EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
-            EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
+            if (checkBoxRawJournal.Visible) EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
 
             SelectedIndex = comboBoxCustomExportType.SelectedIndex;
 
@@ -120,7 +117,8 @@ namespace EDDiscovery.Forms
 
         private void checkBoxRawJournal_CheckedChanged(object sender, EventArgs e)
         {
-            if (((ExtendedControls.CheckBoxCustom)sender).Checked)
+            ExtendedControls.CheckBoxCustom control = (ExtendedControls.CheckBoxCustom)sender;
+            if (control.Checked && control.Visible)
             {
                 checkBoxIncludeHeader.Checked = false;
                 checkBoxIncludeHeader.Enabled = false;

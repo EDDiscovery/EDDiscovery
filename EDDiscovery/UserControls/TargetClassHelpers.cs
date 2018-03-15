@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    BookmarkClass bk = BookmarkClass.FindBookmarkOnSystem(sn);    // has it been bookmarked?
+                    BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sn);    // has it been bookmarked?
 
                     if (bk != null)
                     {
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
                         if (createbookmark)
                         {
-                            BookmarkClass newbk = BookmarkClass.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
+                            BookmarkClass newbk = GlobalBookMarkList.Instance.AddOrUpdateBookmark(null, true, sn, sc.X, sc.Y, sc.Z, DateTime.Now, "");
                             TargetClass.SetTargetBookmark(sc.Name, newbk.id, newbk.x, newbk.y, newbk.z);
                         }
                     }
@@ -115,13 +115,18 @@ namespace EDDiscovery.UserControls
 
         }
 
+        // cursystem = null, curbookmark = null, new system free entry bookmark
+        // cursystem != null, curbookmark = null, system bookmark found, update
+        // cursystem != null, curbookmark = null, no system bookmark found, new bookmark on system
+        // curbookmark != null, edit current bookmark
+
         public static void showBookmarkForm(Object sender,
             EDDiscoveryForm discoveryForm, ISystem cursystem, BookmarkClass curbookmark, bool notedsystem)
         {
             Form senderForm = ((Control)sender)?.FindForm() ?? discoveryForm;
 
             // try and find the associated bookmark..
-            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : BookmarkClass.FindBookmarkOnSystem(cursystem.Name);
+            BookmarkClass bkmark = (curbookmark != null) ? curbookmark : (cursystem != null ? GlobalBookMarkList.Instance.FindBookmarkOnSystem(cursystem.Name) : null);
 
             SystemNoteClass sn = (cursystem != null) ? SystemNoteClass.GetNoteOnSystem(cursystem.Name, cursystem.EDSMID) : null;
             string note = (sn != null) ? sn.Note : "";
@@ -133,7 +138,7 @@ namespace EDDiscovery.UserControls
                 long targetid = TargetClass.GetTargetNotedSystem();      // who is the target of a noted system (0=none)
                 long noteid = sn.id;
 
-                frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
+                frm.InitialisePos(cursystem);
                 frm.NotedSystem(cursystem.Name, note, noteid == targetid);       // note may be passed in null
                 frm.ShowDialog(senderForm);
 
@@ -150,30 +155,32 @@ namespace EDDiscovery.UserControls
                 bool regionmarker = false;
                 DateTime tme;
 
-                long targetid = TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
-
                 if (bkmark == null)                         // new bookmark
                 {
-                    frm.InitialisePos(cursystem.X, cursystem.Y, cursystem.Z);
                     tme = DateTime.Now;
-                    frm.NewSystemBookmark(cursystem.Name, note, tme.ToString());
+                    if (cursystem == null)
+                        frm.NewFreeEntrySystemBookmark(tme);
+                    else
+                        frm.NewSystemBookmark(cursystem, note, tme);
                 }
                 else                                        // update bookmark
                 {
-                    frm.InitialisePos(bkmark.x, bkmark.y, bkmark.z);
                     regionmarker = bkmark.isRegion;
                     tme = bkmark.Time;
-                    frm.Update(regionmarker ? bkmark.Heading : bkmark.StarName, note, bkmark.Note, tme.ToString(), regionmarker, targetid == bkmark.id);
+                    frm.Update(bkmark);
                 }
 
                 DialogResult res = frm.ShowDialog(senderForm);
 
+                long curtargetid = TargetClass.GetTargetBookmark();      // who is the target of a bookmark (0=none)
+
                 if (res == DialogResult.OK)
                 {
-                    BookmarkClass newcls = BookmarkClass.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
-                                                                     tme, frm.Notes);
+                    BookmarkClass newcls = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bkmark, !regionmarker, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z),
+                                                                     tme, frm.Notes, frm.SurfaceLocations);
 
-                    if ((frm.IsTarget && targetid != newcls.id) || (!frm.IsTarget && targetid == newcls.id)) // changed..
+
+                    if ((frm.IsTarget && curtargetid != newcls.id) || (!frm.IsTarget && curtargetid == newcls.id)) // changed..
                     {
                         if (frm.IsTarget)
                             TargetClass.SetTargetBookmark(regionmarker ? ("RM:" + newcls.Heading) : newcls.StarName, newcls.id, newcls.x, newcls.y, newcls.z);
@@ -183,12 +190,12 @@ namespace EDDiscovery.UserControls
                 }
                 else if (res == DialogResult.Abort && bkmark != null)
                 {
-                    if (targetid == bkmark.id)
+                    if (curtargetid == bkmark.id)
                     {
                         TargetClass.ClearTarget();
                     }
 
-                    bkmark.Delete();
+                    GlobalBookMarkList.Instance.Delete(bkmark);
                 }
             }
 

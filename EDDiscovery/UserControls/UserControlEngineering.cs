@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector lfs;
         RecipeFilterSelector matfs;
 
-        private List<string> levels = new List<string> { "1", "2", "3", "4", "5" };
+        private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
         private List<Tuple<string, string>> matLookUp;
 
         private string DbColumnSave { get { return ("EngineeringGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
             lfs = new RecipeFilterSelector(levels);
             lfs.Changed += FilterChanged;
 
-            List<string> modules = EngineeringRecipes.Select(r => r.module).Distinct().ToList();
+            List<string> modules = EngineeringRecipes.SelectMany(r => r.modules).Distinct().ToList();
             modules.Sort();
             mfs = new RecipeFilterSelector(modules);
             mfs.Changed += FilterChanged;
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
                 row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
-                row.Cells[Module.Index].Value = r.module;
+                row.Cells[Module.Index].Value = r.modulesstring;
                 row.Cells[Level.Index].Value = r.level;
                 row.Cells[Recipe.Index].Value = r.ingredientsstring;
                 row.Cells[Engineers.Index].Value = r.engineersstring;
@@ -191,9 +191,9 @@ namespace EDDiscovery.UserControls
                 string engineers = SQLiteDBClass.GetSettingString(DbEngFilterSave, "All");
                 List<string> engList = engineers.Split(';').ToList<string>();
                 string modules = SQLiteDBClass.GetSettingString(DbModFilterSave, "All");
-                string[] modArray = modules.Split(';');
+                List<string> modList = modules.Split(';').ToList<string>();
                 string levels = SQLiteDBClass.GetSettingString(DbLevelFilterSave, "All");
-                int[] lvlArray = (levels == "All"  || levels == "None") ? new int[0] : levels.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(x => int.Parse(x)).ToArray();
+                string[] lvlArray = (levels == "All" || levels == "None") ? new string[0] : levels.Split(';');
                 string upgrades = SQLiteDBClass.GetSettingString(DbUpgradeFilterSave, "All");
                 string[] upgArray = upgrades.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
@@ -221,7 +221,8 @@ namespace EDDiscovery.UserControls
                         if (modules == "All") { visible = visible && true; }
                         else
                         {
-                            visible = visible && modArray.Contains(EngineeringRecipes[rno].module);
+                            var included = modList.Intersect<string>(EngineeringRecipes[rno].modules.ToList<string>());
+                            visible = visible && included.Count() > 0;
                         }
                         if (levels == "All") { visible = visible && true; }
                         else

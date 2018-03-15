@@ -64,6 +64,12 @@
     <Compile Include="TestJournalRead.Designer.cs">
       <DependentUpon>TestJournalRead.cs</DependentUpon>
     </Compile>
+    <Compile Include="TestCompassControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestCompassControl.Designer.cs">
+      <DependentUpon>TestCompassControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestTabControlCustom.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +156,9 @@
     </Compile>
     <EmbeddedResource Include="TestRollUpPanel.resx">
       <DependentUpon>TestRollUpPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TestCompassControl.resx">
+      <DependentUpon>TestCompassControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TestTabControlCustom.resx">
       <DependentUpon>TestTabControlCustom.cs</DependentUpon>
