@@ -431,7 +431,14 @@ namespace ActionLanguage
                 bool res = condres.HasValue && condres.Value;
 
                 if (res)
-                    ap.ReportError(errmsg);
+                {
+                    if (ap.functions.ExpandString(errmsg, out string exprerr) != ConditionFunctions.ExpandResult.Failed)
+                    {
+                        ap.ReportError(exprerr);
+                    }
+                    else
+                        ap.ReportError(exprerr);
+                }
             }
             else
                 ap.ReportError(errlist);

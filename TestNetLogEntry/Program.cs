@@ -48,9 +48,15 @@ namespace NetLogEntry
                 return;
             }
 
-            if (arg1.Equals("StatusJSON", StringComparison.InvariantCultureIgnoreCase))
+            if (arg1.Equals("StatusMove", StringComparison.InvariantCultureIgnoreCase))
             {
-                Journal.StatusJSON(args);
+                Status.StatusMove(args);
+                return;
+            }
+
+            if (arg1.Equals("Status", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Status.StatusSet(args);
                 return;
             }
 
@@ -140,7 +146,8 @@ namespace NetLogEntry
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
                               "DeviceMappings <filename>\n"+
-                              "StatusJSON <various paras see entry>\n" +
+                              "StatusMove <various paras see entry>\n" +
+                              "Status <Status flags>...  multiple ones are: supercruise, landed, fight (see code)\n" +
                               "CorolisModules rootfolder - process corolis-data\\modules\\<folder>\n" +
                               "CorolisShips rootfolder - process corolis-data\\ships\n"
                               );

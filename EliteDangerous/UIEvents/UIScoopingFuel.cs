@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIScoopingFuel : UIEvent
     {
-        public UIScoopingFuel(bool state, DateTime time) : base(UITypeEnum.ScoopingFuel, time)
+        public UIScoopingFuel(bool state, DateTime time, bool refresh): base(UITypeEnum.ScoopingFuel, time, refresh)
         {
             Scooping = state;
         }

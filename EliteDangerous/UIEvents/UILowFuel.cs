@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UILowFuel: UIEvent
     {
-        public UILowFuel(bool state, DateTime time) : base(UITypeEnum.LowFuel, time)
+        public UILowFuel(bool state, DateTime time, bool refresh): base(UITypeEnum.LowFuel, time, refresh)
         {
             LowFuel = state;
         }

@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UILandingGear : UIEvent
     {
-        public UILandingGear(bool state, DateTime time) : base(UITypeEnum.LandingGear, time)
+        public UILandingGear(bool state, DateTime time, bool refresh): base(UITypeEnum.LandingGear, time, refresh)
         {
             Gear = state;
         }

@@ -326,6 +326,8 @@ namespace Conditions
         }
 
         public int ParaCount { get { return paras.Count; } }
+        static public Random GetRandom() { return rnd; }
+        protected static Random rnd = new Random();
         protected List<Parameter> paras;
         protected ConditionFunctions caller;
         protected ConditionVariables vars;
@@ -334,7 +336,6 @@ namespace Conditions
         protected FuncEntry fe;
         protected delegate bool func(out string output);
         protected static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
-        protected static Random rnd = new Random();
         protected virtual FuncEntry FindFunction(string name) { return null; }
 
         #endregion

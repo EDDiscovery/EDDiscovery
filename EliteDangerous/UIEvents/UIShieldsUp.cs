@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIShieldsUp : UIEvent
     {
-        public UIShieldsUp(bool state, DateTime time) : base(UITypeEnum.ShieldsUp, time)
+        public UIShieldsUp(bool state, DateTime time, bool refresh): base(UITypeEnum.ShieldsUp, time, refresh)
         {
             ShieldState = state;
         }

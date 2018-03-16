@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIHasLatLong : UIEvent
     {
-        public UIHasLatLong(bool state, DateTime time) : base(UITypeEnum.HasLatLong, time)
+        public UIHasLatLong(bool state, DateTime time, bool refresh): base(UITypeEnum.HasLatLong, time, refresh)
         {
             HasLatLong = state;
         }

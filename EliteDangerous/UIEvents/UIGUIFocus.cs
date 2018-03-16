@@ -35,7 +35,7 @@ namespace EliteDangerousCore.UIEvents
             SystemMap = 7
         }
 
-        public UIGUIFocus(int focus, DateTime time) : base(UITypeEnum.GUIFocus,time)
+        public UIGUIFocus(int focus, DateTime time, bool refresh): base(UITypeEnum.GUIFocus, time, refresh)
         {
             GUIFocus = (Focus)focus;
         }

@@ -186,17 +186,6 @@ namespace EDDiscovery.Actions
 
         public bool EditPack(string name)            // edit pack name
         {
-            List<string> jevents = JournalEntry.GetListOfEventsWithOptMethod(towords: false);
-            jevents.Sort();
-            List<ActionEvent> eventlist = ActionEventEDList.EventsFromNames(jevents, "Journal");
-
-            List<string> uievents = Enum.GetNames(typeof(UITypeEnum)).ToList();
-            uievents.Sort();
-            eventlist.AddRange(ActionEventEDList.EventsFromNames(uievents, "UIEvents"));
-
-            eventlist.AddRange(ActionEventEDList.events); // our ED events
-            eventlist.AddRange(ActionEvent.events);     // core events
-
             ActionPackEditorForm frm = new ActionPackEditorForm();
 
             frm.AdditionalNames += Frm_onAdditionalNames;
@@ -207,7 +196,7 @@ namespace EDDiscovery.Actions
             {
                 string collapsestate = SQLiteConnectionUser.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
-                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, eventlist, collapsestate);
+                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, ActionEventEDList.EventList(), collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
@@ -237,10 +226,10 @@ namespace EDDiscovery.Actions
 
                 // make sure the voice condition is right.. if not, reset.
 
-                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.triggername || 
+                if (cd.eventname != Actions.ActionEventEDList.onVoiceInput.TriggerName || 
                         ( !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList) && !cd.Is("VoiceInput", ConditionEntry.MatchType.MatchSemicolon)))
                 {
-                    cd.eventname = Actions.ActionEventEDList.onVoiceInput.triggername;
+                    cd.eventname = Actions.ActionEventEDList.onVoiceInput.TriggerName;
                     cd.Set(new ConditionEntry("VoiceInput", ConditionEntry.MatchType.MatchSemicolonList, "?"));     // Voiceinput being the variable set to the expression
                 }
 
@@ -513,16 +502,18 @@ namespace EDDiscovery.Actions
         public int ActionRun(ActionEvent ev, HistoryEntry he = null, ConditionVariables additionalvars = null,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
-            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.triggername, flagstart);      // look thru all actions, find matching ones
+            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, flagstart);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)
             {
                 ConditionVariables eventvars = new ConditionVariables();
-                Actions.ActionVars.TriggerVars(eventvars, ev.triggername, ev.triggertype);
+                Actions.ActionVars.TriggerVars(eventvars, ev.TriggerName, ev.TriggerType);
                 Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
                 Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
                 Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
                 eventvars.Add(additionalvars);   // adding null is allowed
+
+                //System.Diagnostics.Debug.WriteLine("Dispatch Program with" + Environment.NewLine + eventvars.ToString(prefix:".. ", separ: Environment.NewLine));
 
                 ConditionVariables testvars = new ConditionVariables(Globals);
                 testvars.Add(eventvars);

@@ -13,7 +13,7 @@ namespace EDDiscovery.Actions
         {
         }
 
-        public new static List<ActionEvent> events = new List<ActionEvent>()
+        protected new static List<ActionEvent> events = new List<ActionEvent>()
         {
             new ActionEventEDList("onInstall", "ProgramEvent", "Program"),
             new ActionEventEDList("onRefreshStart", "ProgramEvent", "Program"),
@@ -62,18 +62,60 @@ namespace EDDiscovery.Actions
         public static ActionEvent onVoiceInput { get { return events[19]; } }
         public static ActionEvent onVoiceInputFailed { get { return events[20]; } }
 
+        // for events marked with run at refresh, get an HE per entry
         public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }
+
+        // onNewEntry, journal event
         public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", ""); }
+
+        // Event cmd Action - reissue He
         public static ActionEvent EventCmd(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "ActionProgram", ""); }
+
+        // UI Event
         public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI"+ ui.EventTypeStr, "EliteUIEvent", ""); }
+
+        // Journal or Travel grid, run actions on this event
         public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", ""); }
 
-        public static List<ActionEvent> EventsFromNames(List<string> alist, string uiclname)
+        public static List<ActionEvent> EventsFromNames(List<string> alist, string prefix , string triggertype, string uiclname)
         {
             List<ActionEvent> ae = new List<ActionEvent>();
             foreach (string s in alist)
-                ae.Add(new ActionEventEDList(s, "", uiclname));
+                ae.Add(new ActionEventEDList(prefix + s, triggertype, uiclname));
             return ae;
+        }
+
+        public static List<ActionEvent> StaticDefinedEvents()       
+        {
+            List<ActionEvent> be = new List<ActionEvent>(ActionEvent.events);
+            be.AddRange(ActionEventEDList.events);
+            return be;
+        }
+
+        public static List<ActionEvent> EventList(bool excludestatics = false, bool excludejournal = false, bool excludeui = false)
+        {
+            List<ActionEvent> eventlist = new List<ActionEvent>();
+
+            if (!excludejournal)
+            {
+                List<string> jevents = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(towords: false);
+                jevents.Sort();
+                eventlist.AddRange(ActionEventEDList.EventsFromNames(jevents, "", "NewEntry", "Journal"));      // presume NewEntry as its the most prevalent.  Trigger type is not used in this circumstance except in Perform
+            }
+
+            if ( !excludeui )
+            {
+                List<string> uievents = Enum.GetNames(typeof(EliteDangerousCore.UITypeEnum)).ToList();
+                uievents.Sort();
+                eventlist.AddRange(ActionEventEDList.EventsFromNames(uievents, "UI" , "EliteUIEvent", "UIEvents"));
+            }
+
+            if (!excludestatics)
+            {
+                eventlist.AddRange(ActionEventEDList.StaticDefinedEvents());
+            }
+
+            return eventlist;
         }
     }
 }
