@@ -61,6 +61,7 @@ namespace Conditions
                 functions.Add("ifle", new FuncEntry(Ifnumlessequal, 3, FuncEntry.PT.FmeSEBlk, FuncEntry.PT.FmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
 
                 functions.Add("random", new FuncEntry(Random, FuncEntry.PT.ImeSE));
+                functions.Add("seedrandom", new FuncEntry(SeedRandom, FuncEntry.PT.ImeSE));
                 functions.Add("round", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE));
                 functions.Add("roundnz", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE));
                 functions.Add("roundscale", new FuncEntry(RoundCommon, FuncEntry.PT.FmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LmeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.FmeSE));
@@ -645,6 +646,13 @@ namespace Conditions
         protected bool Random(out string output)
         {
             output = rnd.Next(paras[0].Int).ToString(ct);
+            return true;
+        }
+
+        protected bool SeedRandom(out string output)
+        {
+            rnd = new System.Random(paras[0].Int);
+            output = "1";
             return true;
         }
 

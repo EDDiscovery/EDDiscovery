@@ -176,7 +176,7 @@ namespace EDDiscovery.Actions
                     string directory = sp.NextQuotedWord();
                     string optclean = sp.NextWord();
 
-                    if ( gitfolder != null && filewildcard != null && directory != null )
+                    if (gitfolder != null && filewildcard != null && directory != null)
                     {
                         if (System.IO.Directory.Exists(directory))
                         {
@@ -190,6 +190,53 @@ namespace EDDiscovery.Actions
                     else
                         ap.ReportError("Missing parameters in Perform Datadownload");
 
+                }
+                else if (cmdname.Equals("generateevent" ))
+                {
+                    string eventname = sp.NextQuotedWordComma();      // get the journal entry as JSON
+
+                    ActionEvent f = ActionEventEDList.EventList(excludejournal: true).Find(x => x.TriggerName.Equals(eventname));
+
+                    if (f != null)
+                    {
+                        Conditions.ConditionVariables c = new Conditions.ConditionVariables();
+                        if (c.FromString(sp, Conditions.ConditionVariables.FromMode.MultiEntryComma))
+                        {
+                            if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
+                            {
+                                c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
+                                c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
+                                c["EventClass_UIDisplayed"] = EDDConfig.Instance.ShowUIEvents ? "1" : "0";
+                                (ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
+                            }
+
+                            (ap.actioncontroller as ActionController).ActionRun(f, c, now: true);
+                        }
+                        else
+                            ap.ReportError("Variables not in correct form");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            EliteDangerousCore.JournalEntry je = EliteDangerousCore.JournalEntry.CreateJournalEntry(eventname);
+
+                            if (je is EliteDangerousCore.JournalEvents.JournalUnknown)
+                            {
+                                ap.ReportError("Unknown journal event");
+                            }
+                            else
+                            {
+                                EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, out bool journalupdate);
+                                // may want to fill he in a bit
+                                (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
+                            }
+                        }
+                        catch
+                        {
+                            ap.ReportError("Journal event not in correct JSON form");
+                        }
+                    }
                 }
                 else
                     ap.ReportError("Unknown command " + cmdname + " in Performaction");

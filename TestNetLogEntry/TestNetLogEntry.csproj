@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Bindings.cs" />
     <Compile Include="Speech.cs" />
+    <Compile Include="Status.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

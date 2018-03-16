@@ -213,7 +213,7 @@ namespace Conditions
                             return ExpandResult.Failed;
                         }
 
-                        System.Diagnostics.Debug.WriteLine("Output is '" + expand + "'");
+                        //System.Diagnostics.Debug.WriteLine("Output is '" + expand + "'");
 
                         noexpansion++;
                         line = line.Substring(0, pos - 1) + expand + line.Substring(apos);

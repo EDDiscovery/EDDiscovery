@@ -451,7 +451,7 @@ namespace EDDiscovery
                 if (je is EliteDangerousCore.JournalEvents.JournalMusic)
                 {
                     //System.Diagnostics.Debug.WriteLine("Dispatch from controller Journal UI event ");
-                    OnNewUIEvent?.Invoke(new EliteDangerousCore.UIEvents.UIJournalMusic((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents, DateTime.UtcNow));
+                    OnNewUIEvent?.Invoke(new EliteDangerousCore.UIEvents.UIJournalMusic((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents, DateTime.UtcNow, false));
                 }
             }
 

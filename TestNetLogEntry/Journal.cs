@@ -47,7 +47,9 @@ namespace NetLogEntry
                 else if (writetype.Equals("Liftoff", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Liftoff\", " + "\"Latitude\":7.141173, \"Longitude\":95.256424 }";
                 else if (writetype.Equals("Touchdown", StringComparison.InvariantCultureIgnoreCase))
-                    lineout = "{ " + TimeStamp() + "\"event\":\"Touchdown\", " + "\"Latitude\":7.141173, \"Longitude\":95.256424 }";
+                {
+                    lineout = "{ " + TimeStamp() + F("event", "Touchdown") + F("Latitude", 7.141173) + F("Longitude", 95.256424) + FF("PlayerControlled", true) + " }";
+                }
                 else if (writetype.Equals("CommitCrime", StringComparison.InvariantCultureIgnoreCase))
                 {
                     string f = args.Next;
@@ -500,51 +502,6 @@ namespace NetLogEntry
 
         #endregion
 
-
-        public static void StatusJSON(CommandArgs args)
-        {
-            long flags = 0;
-
-            double latitude = 0;
-            double longitude = 0;
-            double latstep = 0;
-            double longstep = 0;
-            double heading = 0;
-            double headstep = 1;
-            int steptime = 100;
-
-            if (!double.TryParse(args.Next, out latitude) || !double.TryParse(args.Next, out longitude) ||
-                !double.TryParse(args.Next, out latstep) || !double.TryParse(args.Next, out longstep) ||
-                !double.TryParse(args.Next, out heading) || !double.TryParse(args.Next, out headstep) ||
-                !int.TryParse(args.Next, out steptime))
-            {
-                Console.WriteLine("** More/Wrong parameters: statusjson lat long latstep lonstep heading headstep steptimems");
-                return;
-            }
-
-            while (true)
-            {
-                //{ "timestamp":"2018-03-01T21:51:36Z", "event":"Status", "Flags":18874376, 
-                //"Pips":[4,8,0], "FireGroup":1, "GuiFocus":0, "Latitude":-18.978821, "Longitude":-123.642052, "Heading":308, "Altitude":20016 }
-
-                string j = "{ " + Journal.TimeStamp() + F("event", "Status") + F("Flags", flags) + F("Pips", new int[] { 4, 8, 0 }) +
-                            F("FireGroup", 1) + F("GuiFocus", 0) + F("Latitude", latitude) + F("Longitude", longitude) + F("Heading", heading) + FF("Altitude", 20)
-                            + "}";
-
-                File.WriteAllText("Status.json", j);
-                System.Threading.Thread.Sleep(steptime);
-
-                if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Escape)
-                {
-                    break;
-                }
-
-                latitude += latstep;
-                longitude = longitude + longstep;
-                heading = (heading + headstep) % 360;
-
-            }
-        }
 
     }
 
