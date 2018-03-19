@@ -67,6 +67,8 @@ namespace EliteDangerousCore.JournalEvents
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
             Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
             Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            EconomyList = evt["StationEconomies"]?.ToObjectProtected<Economies[]>();
+
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
 
@@ -92,12 +94,20 @@ namespace EliteDangerousCore.JournalEvents
         public string Allegiance { get; set; }
         public string Economy { get; set; }
         public string Economy_Localised { get; set; }
+        public Economies[] EconomyList { get; set; }        // may be null
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public string[] StationServices { get; set; }
         public bool? Wanted { get; set; }
 
         public bool IsTrainingEvent { get; private set; }
+
+        public class Economies
+        {
+            public string Name;
+            public string Name_Localised;
+            public double Proportion;
+        }
 
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
@@ -107,9 +117,18 @@ namespace EliteDangerousCore.JournalEvents
 
             if (StationServices != null)
             {
-                detailed += System.Environment.NewLine + "Station services:";
+                string l = "";
                 foreach (string s in StationServices)
-                    detailed = detailed.AppendPrePad(s, " ");
+                    l = l.AppendPrePad(s, ", ");
+                detailed += System.Environment.NewLine + "Station services:" + l;
+            }
+
+            if ( EconomyList != null )
+            {
+                string l = "";
+                foreach (Economies e in EconomyList)
+                    l = l.AppendPrePad(e.Name_Localised.Alt(e.Name) + " " + (e.Proportion * 100).ToString("0.#") + "%", ", ");
+                detailed += System.Environment.NewLine + "Economies:" + l;
             }
         }
 
