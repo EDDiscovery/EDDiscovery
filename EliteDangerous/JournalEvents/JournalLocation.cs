@@ -51,6 +51,8 @@ namespace EliteDangerousCore.JournalEvents
 
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
+
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public bool Docked { get; set; }
@@ -63,6 +65,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
+
+        public long? MarketID { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

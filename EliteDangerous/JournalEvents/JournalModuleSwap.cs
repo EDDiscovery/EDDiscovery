@@ -50,7 +50,9 @@ namespace EliteDangerousCore.JournalEvents
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string FromSlot { get; set; }
         public string FromSlotFD { get; set; }
         public string ToSlot { get; set; }
@@ -64,6 +66,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {

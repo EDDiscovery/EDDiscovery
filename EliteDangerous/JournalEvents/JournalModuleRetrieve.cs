@@ -53,6 +53,8 @@ namespace EliteDangerousCore.JournalEvents
             Hot = evt["Hot"].BoolNull();
             Level = evt["Level"].IntNull();
             Quality = evt["Quality"].DoubleNull();
+
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string Slot { get; set; }
@@ -71,7 +73,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? Quality { get; set; }
         public int? Level { get; set; }
         public bool? Hot { get; set; }
-
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
