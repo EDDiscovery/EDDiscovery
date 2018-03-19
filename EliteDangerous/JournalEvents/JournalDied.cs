@@ -63,7 +63,10 @@ namespace EliteDangerousCore.JournalEvents
             if (Killers != null)
             {
                 foreach (Killer k in Killers)
+                {
                     k.Ship = JournalFieldNaming.GetBetterShipName(k.Ship);
+                    k.Name_Localised = k.Name_Localised.Alt(k.Name);
+                }
             }
         }
 
@@ -83,7 +86,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += k.Name_Localised.Alt(k.Name) + " in ship type " + k.Ship + " rank " + k.Rank;
+                    info += k.Name_Localised + " in ship type " + k.Ship + " rank " + k.Rank;
                 }
             }
 

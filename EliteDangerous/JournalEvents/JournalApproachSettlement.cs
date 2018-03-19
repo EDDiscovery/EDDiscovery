@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)
         {
             Name = evt["Name"].Str();
-            Name_Localised = evt["Name_Localised"].Str();
+            Name_Localised = evt["Name_Localised"].Str().Alt(Name);
             MarketID = evt["MarketID"].LongNull();
         }
 
@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = Name_Localised.Alt(Name);
+            info = Name_Localised;
             detailed = "";
         }
 

@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalAfmuRepairs(JObject evt) : base(evt, JournalTypeEnum.AfmuRepairs)
         {
             Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
-            ModuleLocalised = evt["Module_Localised"].Str();
+            ModuleLocalised = evt["Module_Localised"].Str().Alt(Module);
             FullyRepaired = evt["FullyRepaired"].Bool();
             Health = evt["Health"].Float()*100.0F;
         }
@@ -49,7 +49,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised.Alt(Module), "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
+            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised, "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
             detailed = "";
         }
     }

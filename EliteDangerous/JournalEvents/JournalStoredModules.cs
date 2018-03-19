@@ -18,21 +18,7 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening outfitting
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //•	Items: Array of records
-    //o   StorageSlot
-    //o   Name
-    //o   Name_Localised
-    //o   StarSystem
-    //o   MarketID
-    //o   TransferCost
-    //o   TransferTime
-    //o   EngineerModifications(only present if modified)
-
+   
     [JournalEntryType(JournalTypeEnum.StoredModules)]
     public class JournalStoredModules : JournalEntry
     {
@@ -47,11 +33,7 @@ namespace EliteDangerousCore.JournalEvents
             if (ModuleItems != null)
             {
                 foreach (StoredModuleItem i in ModuleItems)
-                {
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
-                    i.TransferTimeSpan = new System.TimeSpan((int)(i.TransferTime / 60 / 60), (int)((i.TransferTime / 60) % 60), (int)(i.TransferTime % 60));
-                    i.TransferTimeString = i.TransferTimeSpan.ToString();
-                }
+                    i.Normalise();
             }
         }
 
@@ -94,6 +76,14 @@ namespace EliteDangerousCore.JournalEvents
 
             public System.TimeSpan TransferTimeSpan;        // computed
             public string TransferTimeString; // computed
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.GetBetterItemNameEvents(Name);
+                Name_Localised = Name_Localised.Alt(Name);
+                TransferTimeSpan = new System.TimeSpan((int)(TransferTime / 60 / 60), (int)((TransferTime / 60) % 60), (int)(TransferTime % 60));
+                TransferTimeString = TransferTimeSpan.ToString();
+            }
         }
     }
 }

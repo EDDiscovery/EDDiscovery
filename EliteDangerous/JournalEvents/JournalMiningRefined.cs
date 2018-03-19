@@ -30,10 +30,12 @@ namespace EliteDangerousCore.JournalEvents
             Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name, translate to FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
+            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);
         }
 
         public string Type { get; set; }                                        // FIXED fdname always.. vital it stays this way
         public string FriendlyType { get; set; }
+        public string Type_Localised { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -48,7 +50,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = FriendlyType;
+            info = Type_Localised;
             detailed = "";
         }
     }

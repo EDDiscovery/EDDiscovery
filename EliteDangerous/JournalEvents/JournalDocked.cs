@@ -65,12 +65,13 @@ namespace EliteDangerousCore.JournalEvents
             FactionState = evt["FactionState"].Str().SplitCapsWord();
 
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+
             Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
-            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" }).Alt(Economy);
             EconomyList = evt["StationEconomies"]?.ToObjectProtected<Economies[]>();
 
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
-            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
+            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" }).Alt(Government);
 
             Wanted = evt["Wanted"].BoolNull();
 
@@ -113,7 +114,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = $"At {StationName}";
             info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, ";Wanted" , Wanted, "Faction:", Faction, "< in state ", FactionState);
-            detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
+            detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised);
 
             if (StationServices != null)
             {
