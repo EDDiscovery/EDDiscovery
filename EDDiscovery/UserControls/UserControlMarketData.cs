@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
-            //DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
         }
 
         public override void Closing()

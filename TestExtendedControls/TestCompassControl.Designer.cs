@@ -56,6 +56,7 @@
             this.compassControl1 = new ExtendedControls.CompassControl();
             this.button24 = new System.Windows.Forms.Button();
             this.button25 = new System.Windows.Forms.Button();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // panel1
@@ -306,6 +307,7 @@
             // 
             // compassControl1
             // 
+            this.compassControl1.AutoSetStencilTicks = false;
             this.compassControl1.BackColor = System.Drawing.Color.LightBlue;
             this.compassControl1.Bearing = 355D;
             this.compassControl1.Bug = 90D;
@@ -314,6 +316,7 @@
             this.compassControl1.CentreTickColor = System.Drawing.Color.Green;
             this.compassControl1.CentreTickHeightPercentage = 60;
             this.compassControl1.CompassHeightPercentage = 50;
+            this.compassControl1.DisableMessage = "";
             this.compassControl1.Distance = double.NaN;
             this.compassControl1.DistanceFormat = "{0:0.##}";
             this.compassControl1.Location = new System.Drawing.Point(119, 104);
@@ -351,11 +354,22 @@
             this.button25.UseVisualStyleBackColor = true;
             this.button25.Click += new System.EventHandler(this.buttondisable_Click);
             // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CustomFormat = "yyyy/MM/dd HH:mm:ss";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(753, 161);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker1.TabIndex = 4;
+            // 
             // TestCompassControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1369, 741);
+            this.Controls.Add(this.dateTimePicker1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
@@ -421,5 +435,6 @@
         private System.Windows.Forms.Button button23;
         private System.Windows.Forms.Button button24;
         private System.Windows.Forms.Button button25;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
     }
 }

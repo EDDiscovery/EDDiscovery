@@ -237,7 +237,7 @@ namespace EDDiscovery.Forms
             // buttonExtGlobals
             // 
             this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtGlobals.Location = new System.Drawing.Point(50, 3);
+            this.buttonExtGlobals.Location = new System.Drawing.Point(3, 3);
             this.buttonExtGlobals.Name = "buttonExtGlobals";
             this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
             this.buttonExtGlobals.TabIndex = 7;

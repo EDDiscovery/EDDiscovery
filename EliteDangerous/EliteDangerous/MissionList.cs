@@ -17,22 +17,30 @@
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("Mission {Mission.Name} {InProgress}")]
+    [System.Diagnostics.DebuggerDisplay("Mission {Mission.Name} {State} {DestinationSystemStation()}")]
     public class MissionState
     {
         public JournalMissionAccepted Mission { get; private set; }                  // never null
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
-        public enum StateTypes { InProgress, Completed, Abandoned, Failed, Redirected };
-        public StateTypes State { get; private set; }     
+        public JournalMissionRedirected Redirected { get; private set; }             // null unless redirected
+        public enum StateTypes { InProgress, Completed, Abandoned, Failed };
+        public StateTypes State { get; private set; }
+        public DateTime MissionEndTime;  // on Accepted, Expiry time, then actual finish time on Completed/Abandoned/Failed
 
-        public bool InProgress { get { return (State == StateTypes.InProgress || State == StateTypes.Redirected); } }
+        public bool InProgress { get { return (State == StateTypes.InProgress); } }
         public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
         public string OriginatingSystem { get { return sys.Name; } }
         public string OriginatingStation { get { return body; } }
+
+        public string DestinationSystemStation()        // allowing for redirection
+        {
+            return (Redirected != null) ? ("->" + Redirected.NewDestinationSystem.AppendPrePad(Redirected.NewDestinationStation, ":")) : Mission.DestinationSystem.AppendPrePad(Mission.DestinationStation, ":");
+        }
 
         public ISystem sys;                                         // where it was found
         public string body;                                                         // and body
@@ -64,29 +72,42 @@ namespace EliteDangerousCore
             }
         }
 
-        public MissionState(JournalMissionAccepted m, ISystem s, string b)
+        public MissionState(JournalMissionAccepted m, ISystem s, string b)      // Start!
         {
             Mission = m;
+            State = StateTypes.InProgress;
+            MissionEndTime = m.Expiry;
             sys = s;
             body = b;
-            State = StateTypes.InProgress;
         }
 
-        public MissionState(MissionState other, JournalMissionCompleted m)
+        public MissionState(MissionState other, JournalMissionRedirected m)      // completed mission
         {
             Mission = other.Mission;
+            Redirected = m;
+            State = other.State;
+            MissionEndTime = other.MissionEndTime;
             sys = other.sys;
             body = other.body;
+        }
+
+        public MissionState(MissionState other, JournalMissionCompleted m)      // completed mission
+        {
+            Mission = other.Mission;
             Completed = m;
             State = StateTypes.Completed;
-        }
-
-        public MissionState(MissionState other, StateTypes type )
-        {
-            Mission = other.Mission;
+            MissionEndTime = m.EventTimeUTC;
             sys = other.sys;
             body = other.body;
+        }
+
+        public MissionState(MissionState other, StateTypes type , DateTime? endtime )           // changed to another state..
+        {
+            Mission = other.Mission;
             State = type;
+            MissionEndTime = (endtime != null) ? endtime.Value : other.MissionEndTime;
+            sys = other.sys;
+            body = other.body;
         }
     }
 
@@ -109,34 +130,27 @@ namespace EliteDangerousCore
             Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
         }
 
-        public void Redirected(JournalMissionRedirected m, ISystem sys, string body)
+        public void Completed(JournalMissionCompleted c)
         {
-            // Update State with new info...     TODO
-            //Missions[Key(m)] = new MissionState(m, sys, body); // add a new one..
+            Missions[Key(c)] = new MissionState(Missions[Key(c)], c); // copy previous mission state, add completed
         }
 
-
-        public void Completed(JournalMissionCompleted m)
+        public void Abandoned(JournalMissionAbandoned a)
         {
-            Missions[Key(m)] = new MissionState(Missions[Key(m)], m); // copy previous mission state, add completed
+            Missions[Key(a)] = new MissionState(Missions[Key(a)], MissionState.StateTypes.Abandoned, a.EventTimeUTC); // copy previous mission state, add abandonded
         }
 
-        public void Abandoned(JournalMissionAbandoned m)
+        public void Failed(JournalMissionFailed f)
         {
-            Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Abandoned); // copy previous mission state, add abandonded
+            Missions[Key(f)] = new MissionState(Missions[Key(f)], MissionState.StateTypes.Failed , f.EventTimeUTC); // copy previous mission state, add failed
         }
 
-        public void Failed(JournalMissionFailed m)
+        public void Redirected(JournalMissionRedirected r)
         {
-            Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
-        }
-        public void Redirected(JournalMissionRedirected m)
-        {
-            Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Redirected); // copy previous mission state, add failed
-            // Todo  update destination....
-            //Missions[Key(m)] = new MissionState(Missions[Key(m)], MissionState.StateTypes.Failed); // copy previous mission state, add failed
+            Missions[Key(r)] = new MissionState(Missions[Key(r)], r); // copy previous, add redirected
         }
 
+        public List<MissionState> GetAllCombatMissionsLatestFirst() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 && x.Mission.ExpiryValid orderby x.Mission.EventTimeUTC descending select x).ToList(); }
 
         // can't think of a better way, don't want to put it in the actual entries since it should all be here.. can't be bothered to refactor so they have a common ancestor.
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }

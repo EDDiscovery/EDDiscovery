@@ -76,6 +76,8 @@ namespace EDDiscovery.UserControls
         public virtual Color ColorTransparency { get { return Color.Transparent; } }        // override to say support transparency, and what colour you want.
         public virtual void SetTransparency(bool ison, Color curcol) { }                      // set on/off transparency of components.
 
+        public bool IsFloatingWindow { get { return this.FindForm() is Forms.UserControlForm; } }   // ultimately its a floating window
+
         public void SetControlText(string s)            // used to set heading text in either the form of the tabstrip
         {
             if (this.Parent is ExtendedControls.TabStrip)

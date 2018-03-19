@@ -81,7 +81,7 @@ namespace EDDiscovery.UserControls
 
         public override void SetTransparency(bool on, Color curbackcol)
         {
-            labelExtTargetLong.BackColor = labelTargetLat.BackColor = curbackcol;
+            labelExtTargetLong.TextBackColor = labelTargetLat.TextBackColor = curbackcol;
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
             labelBookmark.BackColor = curbackcol;
             checkBoxHideTransparent.BackColor = curbackcol;
