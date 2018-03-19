@@ -33,12 +33,17 @@ namespace EliteDangerousCore.JournalEvents
             Type = evt["Type"].Str();       // fdname
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
+            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);         // always ensure we have one
+
             Count = evt["Count"].Int();
             Abandoned = evt["Abandoned"].Bool();
             PowerplayOrigin = evt["PowerplayOrigin"].Str();
         }
+
         public string Type { get; set; }                    // FDName
         public string FriendlyType { get; set; }            // translated name
+        public string Type_Localised { get; set; }            // always set
+
         public int Count { get; set; }
         public bool Abandoned { get; set; }
         public string PowerplayOrigin { get; set; }
@@ -56,7 +61,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
             detailed = "";
         }
     }

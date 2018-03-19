@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
             TotalReward = evt["TotalReward"].Long();     // others of them..
 
             VictimFaction = evt["VictimFaction"].Str();
-            VictimFactionLocalised = evt["VictimFaction_Localised"].Str(); // may not be present
+            VictimFactionLocalised = evt["VictimFaction_Localised"].Str().Alt(VictimFaction);
 
             SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObjectProtected<BountyReward[]>();
@@ -64,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised.Alt(VictimFaction));
+            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised);
 
             detailed = "";
             if ( Rewards!=null)

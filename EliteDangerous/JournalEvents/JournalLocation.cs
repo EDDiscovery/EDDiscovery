@@ -51,6 +51,8 @@ namespace EliteDangerousCore.JournalEvents
 
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
+
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public bool Docked { get; set; }
@@ -64,13 +66,15 @@ namespace EliteDangerousCore.JournalEvents
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
 
+        public long? MarketID { get; set; }
+
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             if (Docked)
             {
                 summary = "At " + StationName;
                 info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem);
-                detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
+                detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised, "Security:", Security_Localised);
 
                 if (Factions != null)
                     foreach (FactionInformation f in Factions)

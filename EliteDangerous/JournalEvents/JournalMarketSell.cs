@@ -33,9 +33,11 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMarketSell(JObject evt ) : base(evt, JournalTypeEnum.MarketSell)
         {
+            MarketID = evt["MarketID"].LongNull();
             Type = evt["Type"].Str();                           // FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
+            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);         // always ensure we have one
             Count = evt["Count"].Int();
             SellPrice = evt["SellPrice"].Long();
             TotalSale = evt["TotalSale"].Long();
@@ -47,6 +49,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Type { get; set; }
         public string FriendlyType { get; set; }
+        public string Type_Localised { get; set; }      // always set
+
         public int Count { get; set; }
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
@@ -54,6 +58,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool IllegalGoods { get; set; }
         public bool StolenGoods { get; set; }
         public bool BlackMarket { get; set; }
+        public long? MarketID { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -69,7 +74,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             long profit = TotalSale - (AvgPricePaid * Count);
-            info = BaseUtils.FieldBuilder.Build("", FriendlyType, "", Count, "< at ; cr;N0", SellPrice, "Total:; cr;N0", TotalSale, "Profit:; cr;N0", profit);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< at ; cr;N0", SellPrice, "Total:; cr;N0", TotalSale, "Profit:; cr;N0", profit);
             detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
         }
     }

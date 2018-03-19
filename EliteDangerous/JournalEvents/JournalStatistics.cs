@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -128,9 +129,17 @@ namespace EliteDangerousCore.JournalEvents
             public int PlanetsScannedToLevel2 { get; set; }
             public int PlanetsScannedToLevel3 { get; set; }
             public long HighestPayout { get; set; }
+            public long TotalHyperspaceDistance { get; set; }
             public int TotalHyperspaceJumps { get; set; }
             public double GreatestDistanceFromStart { get; set; }
             public int TimePlayed { get; set; }
+            public string TimePlayedDisplay()
+            {
+                TimeSpan s = TimeSpan.FromSeconds(TimePlayed);
+                int days = s.Days % 7;
+                int weeks = (s.Days - days) / 7;
+                return $"{weeks} weeks {days} days {s.Hours} hours";
+            }
         }
 
         public class PassengerMissionsClass
@@ -161,6 +170,10 @@ namespace EliteDangerousCore.JournalEvents
 
         public class CrewClass
         {
+            public long NpcCrewTotalWages { get; set; }
+            public int NpcCrewHired { get; set; }
+            public int NpcCrewFired { get; set; }
+            public int NpcCrewDied { get; set; }
         }
 
         public class MulticrewClass

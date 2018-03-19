@@ -40,20 +40,23 @@ namespace EliteDangerousCore.JournalEvents
 
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
-            StoredItemLocalised = evt["StoredItem_Localised"].Str();
+            StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
 
             EngineerModifications = evt["EngineerModifications"].StrNull().SplitCapsWordFull();
 
             ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ReplacementItem"].Str());
             ReplacementItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ReplacementItem"].Str());
-            ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str();
+            ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str().Alt(ReplacementItem);
 
             Cost = evt["Cost"].LongNull();
 
             Hot = evt["Hot"].BoolNull();
             Level = evt["Level"].IntNull();
             Quality = evt["Quality"].DoubleNull();
+
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string Slot { get; set; }
         public string SlotFD { get; set; }
         public string Ship { get; set; }
@@ -70,6 +73,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? Quality { get; set; }
         public int? Level { get; set; }
         public bool? Hot { get; set; }
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -85,9 +89,9 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
             if (ReplacementItem.Length > 0)
-                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised.Alt(ReplacementItem));
+                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised);
             detailed = BaseUtils.FieldBuilder.Build("Modifications:", EngineerModifications);
         }
     }

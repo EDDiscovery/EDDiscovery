@@ -38,19 +38,21 @@ namespace EliteDangerousCore.JournalEvents
 
             FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
             FromItemFD = JournalFieldNaming.NormaliseFDItemName(evt["FromItem"].Str());
-            FromItemLocalised = evt["FromItem_Localised"].Str();
+            FromItemLocalised = evt["FromItem_Localised"].Str().Alt(FromItem);
 
             ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
             ToItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ToItem"].Str());
             if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
                 ToItem = ToItemFD = "";
-            ToItemLocalised = evt["ToItem_Localised"].Str();        // if ToItem is null or not there, this won't be
+            ToItemLocalised = evt["ToItem_Localised"].Str().Alt(ToItem);        // if ToItem is null or not there, this won't be
 
             ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
 
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string FromSlot { get; set; }
         public string FromSlotFD { get; set; }
         public string ToSlot { get; set; }
@@ -64,6 +66,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
@@ -73,9 +76,9 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("From ", FromSlot , "< to " , ToSlot , "Item:" , FromItemLocalised.Alt(FromItem));
+            info = BaseUtils.FieldBuilder.Build("From ", FromSlot , "< to " , ToSlot , "Item:" , FromItemLocalised);
             if (ToItem.Length > 0 )                         
-                info += ", Swapped with " + ToItemLocalised.Alt(ToItem);
+                info += ", Swapped with " + ToItemLocalised;
             detailed = "";
         }
     }

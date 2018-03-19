@@ -22,7 +22,7 @@ namespace EliteDangerousCore.JournalEvents
     //{ "timestamp":"2017-06-27T03:02:37Z", "event":"EngineerContribution", "Engineer":"Tiana Fortune", "Type":"Materials", "Material":"decodedemissiondata", "Quantity":50, "TotalQuantity":50 }
 
 [JournalEntryType(JournalTypeEnum.EngineerContribution)]
-    public class JournalEngineerContribution : JournalEntry
+    public class JournalEngineerContribution : JournalEntry , ILedgerJournalEntry , IMaterialCommodityJournalEntry
     {
         public JournalEngineerContribution(JObject evt ) : base(evt, JournalTypeEnum.EngineerContribution)
         {
@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             EngineerID = evt["EngineerID"].LongNull();
             Type = evt["Type"].Str();
 
-            if (Type.Equals("Commodity") || Type.Equals("Materials"))
+            if (Type.Equals("Commodity") || Type.Equals("Materials") || Type.Equals("Credits") || Type.Equals("Bond") || Type.Equals("Bounty"))
                 unknownType = false;
             else
                 unknownType = true;
@@ -38,10 +38,12 @@ namespace EliteDangerousCore.JournalEvents
             Commodity = evt["Commodity"].Str();
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            Commodity_Localised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
 
             Material = evt["Material"].Str();
             Material = JournalFieldNaming.FDNameTranslation(Material);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyMaterial = JournalFieldNaming.RMat(Material);
+            Material_Localised = evt["Material_Localised"].Str().Alt(FriendlyMaterial);
 
             Quantity = evt["Quantity"].Int();
             TotalQuantity = evt["TotalQuantity"].Int();
@@ -51,12 +53,31 @@ namespace EliteDangerousCore.JournalEvents
         public string Engineer { get; set; }
         public long? EngineerID { get; set; }
         public string Type { get; set; }
+
         public string FriendlyCommodity { get; set; }
         public string Commodity { get; set; }
+        public string Commodity_Localised { get; set; }     // always set
+
         public string FriendlyMaterial { get; set; }
         public string Material { get; set; }
+        public string Material_Localised { get; set; }      // always set
+
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Type.Equals("Commodity"))
+                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -Quantity, 0, conn);
+            else if (Type.Equals("Materials"))
+                mc.Change(MaterialCommodities.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+        }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            if ( Type.Equals("Credits"))
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Engineer Contribution Credits", -Quantity);
+        }
 
         protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
 
@@ -66,7 +87,7 @@ namespace EliteDangerousCore.JournalEvents
             if (unknownType==true)
                 info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
              else
-                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", FriendlyCommodity, "Material:", FriendlyMaterial, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
+                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", Commodity_Localised, "Material:", Material_Localised, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
             detailed = "";
         }
     }

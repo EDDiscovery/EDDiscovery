@@ -42,18 +42,20 @@ namespace EliteDangerousCore.JournalEvents
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
-            CommodityLocalised = evt["Commodity_Localised"].Str();
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            CommodityLocalised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);        // remove $, underscores etc
-            TargetTypeLocalised = evt["TargetTypeLocalised"].Str();     // may be empty..
+            TargetTypeLocalised = evt["TargetTypeLocalised"].Str().Alt(TargetTypeFriendly);     // may be empty..
+
             TargetFaction = evt["TargetFaction"].Str();
+
             Target = evt["Target"].Str();
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscores etc
-            TargetLocalised = evt["Target_Localised"].Str();        // copied from Accepted.. no evidence
+            TargetLocalised = evt["Target_Localised"].Str().Alt(TargetFriendly);        // copied from Accepted.. no evidence
 
             Reward = evt["Reward"].LongNull();
             Donation = evt["Donation"].LongNull();
@@ -70,22 +72,16 @@ namespace EliteDangerousCore.JournalEvents
 
             if ( CommodityReward != null )
             {
-                foreach( CommodityRewards c in CommodityReward )
-                {
-                    c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
-                    c.FriendlyName = JournalFieldNaming.RMat(c.Name);
-                }
+                foreach (CommodityRewards c in CommodityReward)
+                    c.Normalise();
             }
 
             MaterialsReward = evt["MaterialsReward"]?.ToObjectProtected<MaterialRewards[]>();
 
             if ( MaterialsReward != null)
             {
-                foreach( MaterialRewards m in MaterialsReward )
-                {
-                    m.Name = JournalFieldNaming.FDNameTranslation(m.Name);
-                    m.FriendlyName = JournalFieldNaming.RMat(m.Name);
-                }
+                foreach (MaterialRewards m in MaterialsReward)
+                    m.Normalise();
             }
 
             FactionEffects = evt["FactionEffects"]?.ToObjectProtected<FactionEffectsEntry[]>();      // NEEDS TEST
@@ -161,9 +157,9 @@ namespace EliteDangerousCore.JournalEvents
                                         "System:", DestinationSystem,
                                         "Station:", DestinationStation);
 
-            detailed = BaseUtils.FieldBuilder.Build("Commodity:", CommodityLocalised.Alt(FriendlyCommodity),
-                                            "Target:", TargetLocalised.Alt(TargetFriendly),
-                                            "Type:", TargetTypeFriendly,
+            detailed = BaseUtils.FieldBuilder.Build("Commodity:", CommodityLocalised,
+                                            "Target:", TargetLocalised,
+                                            "Type:", TargetTypeLocalised,
                                             "Target Faction:", TargetFaction);
 
             detailed += PermitsList();
@@ -198,7 +194,7 @@ namespace EliteDangerousCore.JournalEvents
                 for (int i = 0; i < CommodityReward.Length; i++)
                 {
                     CommodityRewards c = CommodityReward[i];
-                    detailed += ((i > 0) ? "," : "") + c.Name_Localised.Alt(c.FriendlyName) + " " + CommodityReward[i].Count.ToStringInvariant();
+                    detailed += ((i > 0) ? "," : "") + c.Name_Localised + " " + CommodityReward[i].Count.ToStringInvariant();
                 }
 
                 if (pretty)
@@ -217,7 +213,7 @@ namespace EliteDangerousCore.JournalEvents
                 for (int i = 0; i < MaterialsReward.Length; i++)
                 {
                     MaterialRewards m = MaterialsReward[i];
-                    detailed += ((i > 0) ? "," : "") + m.Name_Localised.Alt(m.FriendlyName) + " " + MaterialsReward[i].Count.ToStringInvariant();
+                    detailed += ((i > 0) ? "," : "") + m.Name_Localised + " " + MaterialsReward[i].Count.ToStringInvariant();
                 }
 
                 if (pretty)
@@ -242,6 +238,13 @@ namespace EliteDangerousCore.JournalEvents
             public string Category; // may be null
             public string Category_Localised; // may be null
             public int Count;
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.FDNameTranslation(Name);
+                FriendlyName = JournalFieldNaming.RMat(Name);
+                Name_Localised = Name_Localised.Alt(FriendlyName);
+            }
         }
 
         public class CommodityRewards
@@ -250,6 +253,13 @@ namespace EliteDangerousCore.JournalEvents
             public string FriendlyName; // our conversion
             public string Name_Localised;   // may be null
             public int Count;
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.FDNameTranslation(Name);
+                FriendlyName = JournalFieldNaming.RMat(Name);
+                Name_Localised = Name_Localised.Alt(FriendlyName);
+            }
         }
 
         public class EffectTrend
