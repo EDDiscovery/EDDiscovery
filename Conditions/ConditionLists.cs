@@ -87,7 +87,7 @@ namespace Conditions
                         }
                         else
                         {
-                            errlist += "AlwaysFalse/True does not have left side text of Condition";
+                            errlist += "AlwaysFalse/True does not have on the left side the word 'Condition'";
                             innerres = false;
                             break;
                         }
@@ -129,12 +129,12 @@ namespace Conditions
                         {
                             if (er == ConditionFunctions.ExpandResult.NoExpansion)     // no expansion, must be a variable name
                             {
-                                leftside = values.Qualify(f.itemname);
-                                leftside = values.Exists(leftside) ? values[leftside] : null;   // then lookup
+                                string qualname = values.Qualify(f.itemname);
+                                leftside = values.Exists(qualname) ? values[qualname] : null;   // then lookup.. lookup may also be null if its a pre-def
 
                                 if (leftside == null)
                                 {
-                                    errlist += "Item " + leftside + " is not available" + Environment.NewLine;
+                                    errlist += "Variable '" + qualname + "' does not exist" + Environment.NewLine;
                                     innerres = false;
                                     break;                       // stop the loop, its a false
                                 }
