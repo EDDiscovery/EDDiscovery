@@ -121,14 +121,12 @@ namespace EDDiscovery.UserControls
                 var totalReward = 0;
                 foreach (MissionState ms in mcurrent)
                 {
-
-
                     object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
-                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                         ms.Info()
@@ -174,10 +172,10 @@ namespace EDDiscovery.UserControls
 
                             object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
-                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
+                                        EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.MissionEndTime : ms.MissionEndTime.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
                                         ms.Mission.Faction,
-                                        ms.Mission.DestinationSystem + ((ms.Mission.DestinationStation.Length>0) ? ":" +ms.Mission.DestinationStation :""),
+                                        ms.DestinationSystemStation(),
                                         ms.Mission.TargetFaction,
                                         ms.StateText,
                                         ms.Info()

@@ -26,9 +26,12 @@ namespace ExtendedControls
     // draws label using a bitmap - solves problems with aliasing over transparent backgrounds
     // but it does not antialias properly if the background is not drawn..
 
-    public class LabelExt : Label               
+    public class LabelExt : Label
     {
-        public Color TextBackColor { get; set; } = Color.Transparent;       // area of text box only
+        private new Color BackColor {get;set;}          // DONT - has no meaning for this label
+
+        public Color TextBackColor { get { return textbackcolor; } set { textbackcolor = value; Invalidate(); } }      // area of text box only
+        private Color textbackcolor = Color.Transparent;
 
         public LabelExt()
         {
@@ -39,7 +42,7 @@ namespace ExtendedControls
             SizeF sizef = pe.Graphics.MeasureString(this.Text, this.Font);
             Size sz = new Size((int)(sizef.Width + 1), (int)(sizef.Height + 1));
 
-            //Console.WriteLine("Label size {0}", sz);
+            //Console.WriteLine("Label {0} {1} size {2}", Name, Text, sz);
 
             if (sz.Width > 0 && sz.Height > 0 && this.Text.Length > 0)
             {
@@ -52,6 +55,7 @@ namespace ExtendedControls
                             using (Brush b = new SolidBrush(this.TextBackColor))
                             {
                                 mpg.FillRectangle(b, new Rectangle(0, 0, sz.Width, sz.Height));
+                                //System.Diagnostics.Debug.WriteLine("Draw {0} with back {1}", Text, this.TextBackColor);
                             }
                         }
 

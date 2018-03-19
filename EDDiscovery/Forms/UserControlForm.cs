@@ -197,7 +197,8 @@ namespace EDDiscovery.Forms
             panel_taskbaricon.BackColor = panel_transparent.BackColor = panel_close.BackColor =
                     panel_minimize.BackColor = panel_ontop.BackColor = panel_showtitle.BackColor = panelTop.BackColor = togo;
 
-            label_index.ForeColor = labelControlText.ForeColor = IsTransparent ? labeltransparentcolour : labelnormalcolour;
+            label_index.ForeColor = labelControlText.ForeColor = showtransparent ? labeltransparentcolour : labelnormalcolour;
+            label_index.TextBackColor = labelControlText.TextBackColor = togo;
 
             UserControl.SetTransparency(showtransparent, togo);
             PerformLayout();

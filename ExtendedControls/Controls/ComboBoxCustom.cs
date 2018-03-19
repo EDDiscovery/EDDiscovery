@@ -194,9 +194,9 @@ namespace ExtendedControls
         //Set width to 1 to scale it to the same width as the Button..
         public int DropDownWidth { get { return _cbsystem.DropDownWidth; } set { _cbsystem.DropDownWidth = value; } }
         public int DropDownHeight { get { return _cbsystem.DropDownHeight; } set { _cbsystem.DropDownHeight = value; } }
-        public int ItemHeight { get { return _cbsystem.ItemHeight; } set { _cbsystem.ItemHeight = value; } }
+        public int ItemHeight { get { return _cbsystem.ItemHeight; } set { _cbsystem.ItemHeight = value;  } }
 
-        public int SelectedIndex { get { return _cbsystem.SelectedIndex; } set { _cbsystem.SelectedIndex = value; } }
+        public int SelectedIndex { get { return _cbsystem.SelectedIndex; } set { _cbsystem.SelectedIndex = value; base.Text = _cbsystem.Text; Invalidate(); } }
 
         public ObjectCollection Items { get { return _items; } set { _items.Clear(); _items.AddRange(value.ToArray()); } }
 
@@ -210,7 +210,7 @@ namespace ExtendedControls
         public object DataSource { get { return _cbsystem.DataSource; } set { _cbsystem.DataSource = value; } }
         public string ValueMember { get { return _cbsystem.ValueMember; } set { _cbsystem.ValueMember = value; } }
         public string DisplayMember { get { return _cbsystem.DisplayMember; } set { _cbsystem.DisplayMember = value; } }
-        public object SelectedItem { get { return _cbsystem.SelectedItem; } set { _cbsystem.SelectedItem = value; } }
+        public object SelectedItem { get { return _cbsystem.SelectedItem; } set { _cbsystem.SelectedItem = value; base.Text = _cbsystem.Text; Invalidate(); } }
         public object SelectedValue { get { return _cbsystem.SelectedValue; } set { _cbsystem.SelectedValue = value; } }
         public new System.Drawing.Size Size { get { return _cbsystem.Size; } set { _cbsystem.Size = value; base.Size = value; } }
 

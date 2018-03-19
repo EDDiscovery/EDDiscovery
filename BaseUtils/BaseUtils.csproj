@@ -60,6 +60,7 @@
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Keys\EnhancedSendKeys.cs" />
+    <Compile Include="Misc\CommandArgs.cs" />
     <Compile Include="Misc\ExceptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
