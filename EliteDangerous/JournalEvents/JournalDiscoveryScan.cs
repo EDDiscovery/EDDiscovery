@@ -18,18 +18,7 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-     When written: when repairing modules using the Auto Field Maintenance Unit (AFMU)
-    Parameters:
-     Module: module name
-     FullyRepaired: (bool)
-     Health; (float 0.0..1.0)
-    If the AFMU runs out of ammo, the module may not be fully repaired.
-    Example:
-    { "timestamp":"2017-08-14T15:41:50Z", "event":"AfmuRepairs",
-    "Module":"$modularcargobaydoor_name;", "Module_Localised":"Cargo Hatch",
-    "FullyRepaired":true, "Health":1.000000 } 
-     */
+   
     [JournalEntryType(JournalTypeEnum.DiscoveryScan)]
     public class JournalDiscoveryScan : JournalEntry
     {

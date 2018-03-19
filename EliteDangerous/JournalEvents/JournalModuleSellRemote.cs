@@ -32,13 +32,14 @@ namespace EliteDangerousCore.JournalEvents
 
             SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
-            SellItemLocalised = evt["SellItem_Localised"].Str();
+            SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
 
             SellPrice = evt["SellPrice"].Long();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
             ServerId = evt["ServerId"].Int();
         }
+
         public string Slot { get; set; }
         public string SellItem { get; set; }
         public string SellItemFD { get; set; }
@@ -63,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Item:", SellItemLocalised.Alt(SellItem), "Price:; cr;N0", SellPrice);
+            info = BaseUtils.FieldBuilder.Build("Item:", SellItemLocalised, "Price:; cr;N0", SellPrice);
             detailed = BaseUtils.FieldBuilder.Build("Ship:", Ship);
         }
     }

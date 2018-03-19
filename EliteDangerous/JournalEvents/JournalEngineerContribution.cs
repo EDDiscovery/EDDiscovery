@@ -38,10 +38,12 @@ namespace EliteDangerousCore.JournalEvents
             Commodity = evt["Commodity"].Str();
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            Commodity_Localised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
 
             Material = evt["Material"].Str();
             Material = JournalFieldNaming.FDNameTranslation(Material);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyMaterial = JournalFieldNaming.RMat(Material);
+            Material_Localised = evt["Material_Localised"].Str().Alt(FriendlyMaterial);
 
             Quantity = evt["Quantity"].Int();
             TotalQuantity = evt["TotalQuantity"].Int();
@@ -51,10 +53,15 @@ namespace EliteDangerousCore.JournalEvents
         public string Engineer { get; set; }
         public long? EngineerID { get; set; }
         public string Type { get; set; }
+
         public string FriendlyCommodity { get; set; }
         public string Commodity { get; set; }
+        public string Commodity_Localised { get; set; }     // always set
+
         public string FriendlyMaterial { get; set; }
         public string Material { get; set; }
+        public string Material_Localised { get; set; }      // always set
+
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
@@ -80,7 +87,7 @@ namespace EliteDangerousCore.JournalEvents
             if (unknownType==true)
                 info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
              else
-                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", FriendlyCommodity, "Material:", FriendlyMaterial, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
+                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", Commodity_Localised, "Material:", Material_Localised, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
             detailed = "";
         }
     }
