@@ -22,7 +22,7 @@ namespace EliteDangerousCore.JournalEvents
     //{ "timestamp":"2017-06-27T03:02:37Z", "event":"EngineerContribution", "Engineer":"Tiana Fortune", "Type":"Materials", "Material":"decodedemissiondata", "Quantity":50, "TotalQuantity":50 }
 
 [JournalEntryType(JournalTypeEnum.EngineerContribution)]
-    public class JournalEngineerContribution : JournalEntry
+    public class JournalEngineerContribution : JournalEntry , ILedgerJournalEntry , IMaterialCommodityJournalEntry
     {
         public JournalEngineerContribution(JObject evt ) : base(evt, JournalTypeEnum.EngineerContribution)
         {
@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             EngineerID = evt["EngineerID"].LongNull();
             Type = evt["Type"].Str();
 
-            if (Type.Equals("Commodity") || Type.Equals("Materials"))
+            if (Type.Equals("Commodity") || Type.Equals("Materials") || Type.Equals("Credits") || Type.Equals("Bond") || Type.Equals("Bounty"))
                 unknownType = false;
             else
                 unknownType = true;
@@ -57,6 +57,20 @@ namespace EliteDangerousCore.JournalEvents
         public string Material { get; set; }
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Type.Equals("Commodity"))
+                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -Quantity, 0, conn);
+            else if (Type.Equals("Materials"))
+                mc.Change(MaterialCommodities.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+        }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            if ( Type.Equals("Credits"))
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Engineer Contribution Credits", -Quantity);
+        }
 
         protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
 
