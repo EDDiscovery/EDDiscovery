@@ -28,10 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalRepair(JObject evt ) : base(evt, JournalTypeEnum.Repair)
         {
             Item = JournalFieldNaming.GetBetterItemNameEvents(evt["Item"].Str());
-            ItemLocalised = evt["Item_Localised"].Str();
-            if (ItemLocalised.Length == 0)                          // bug frontier in earlier 2.0 journals, no localised
-                ItemLocalised = Item;
-
+            ItemLocalised = evt["Item_Localised"].Str().Alt(Item);
             Cost = evt["Cost"].Long();
         }
 
@@ -47,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("",ItemLocalised.Alt(Item), "Cost:; cr;N0" , Cost );
+            info = BaseUtils.FieldBuilder.Build("",ItemLocalised, "Cost:; cr;N0" , Cost );
             detailed = "";
         }
     }

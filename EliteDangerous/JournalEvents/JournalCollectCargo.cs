@@ -30,11 +30,13 @@ namespace EliteDangerousCore.JournalEvents
             Type = evt["Type"].Str();                               //FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
+            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);         // always ensure we have one
             Stolen = evt["Stolen"].Bool();
         }
 
-        public string Type { get; set; }            // FDNAME..
+        public string Type { get; set; }                    // FDNAME..
         public string FriendlyType { get; set; }            // translated name
+        public string Type_Localised { get; set; }            // always set
         public bool Stolen { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
@@ -50,7 +52,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", FriendlyType, ";Stolen", Stolen);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen", Stolen);
             detailed = "";
         }
     }

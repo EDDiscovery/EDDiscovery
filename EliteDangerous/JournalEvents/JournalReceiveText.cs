@@ -29,9 +29,9 @@ namespace EliteDangerousCore.JournalEvents
         public JournalReceiveText(JObject evt) : base(evt, JournalTypeEnum.ReceiveText)
         {
             From = evt["From"].Str();
-            FromLocalised = evt["From_Localised"].Str();
+            FromLocalised = evt["From_Localised"].Str().Alt(From);
             Message = evt["Message"].Str();
-            MessageLocalised = evt["Message_Localised"].Str();
+            MessageLocalised = evt["Message_Localised"].Str().Alt(Message);
             Channel = evt["Channel"].Str();
 
         }
@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("From:", FromLocalised.Alt(From), "Msg:", MessageLocalised.Alt(Message), "Channel:", Channel);
+            info = BaseUtils.FieldBuilder.Build("From:", FromLocalised, "Msg:", MessageLocalised, "Channel:", Channel);
             detailed = "";
         }
     }

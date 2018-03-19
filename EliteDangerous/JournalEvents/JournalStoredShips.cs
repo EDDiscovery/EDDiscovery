@@ -85,11 +85,7 @@ namespace EliteDangerousCore.JournalEvents
             if (s != null)
             {
                 foreach (StoredShipInformation i in s)
-                {
-                    i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
-                    i.TransferTimeSpan = new System.TimeSpan((int)(i.TransferTime / 60 / 60), (int)((i.TransferTime / 60) % 60), (int)(i.TransferTime % 60));
-                    i.TransferTimeString = i.TransferTimeSpan.ToString();
-                }
+                    i.Normalise();
             }
         }
 
@@ -107,6 +103,14 @@ namespace EliteDangerousCore.JournalEvents
 
             public System.TimeSpan TransferTimeSpan;        // computed
             public string TransferTimeString; // computed
+
+            public void Normalise()
+            {
+                ShipType = JournalFieldNaming.GetBetterShipName(ShipType);
+                ShipType_Localised = ShipType_Localised.Alt(ShipType);
+                TransferTimeSpan = new System.TimeSpan((int)(TransferTime / 60 / 60), (int)((TransferTime / 60) % 60), (int)(TransferTime % 60));
+                TransferTimeString = TransferTimeSpan.ToString();
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDatalinkScan(JObject evt ) : base(evt, JournalTypeEnum.DatalinkScan)
         {
             Message = evt["Message"].Str();
-            MessageLocalised = evt["Message_Localised"].Str();
+            MessageLocalised = evt["Message_Localised"].Str().Alt(Message);
 
         }
         public string Message { get; set; }
@@ -36,7 +36,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = MessageLocalised.Length>0 ? MessageLocalised : Message;
+            info = MessageLocalised;
             detailed = "";
         }
     }

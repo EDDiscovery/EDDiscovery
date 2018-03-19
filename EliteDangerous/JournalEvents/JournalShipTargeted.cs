@@ -35,10 +35,10 @@ namespace EliteDangerousCore.JournalEvents
         {
             TargetLocked = evt["TargetLocked"].Bool();
             Ship = evt["Ship"].StrNull();
-            Ship_Localised = evt["Ship_Localised"].StrNull();
+            Ship_Localised = evt["Ship_Localised"].Str().Alt(Ship);
             ScanStage = evt["ScanStage"].IntNull();
             PilotName = evt["PilotName"].StrNull();
-            PilotName_Localised = evt["PilotName_Localised"].StrNull();
+            PilotName_Localised = evt["PilotName_Localised"].Str().Alt(PilotName);
             PilotRank = evt["PilotRank"].StrNull();
             ShieldHealth = evt["ShieldHealth"].DoubleNull();
             HullHealth = evt["HullHealth"].DoubleNull();
@@ -71,7 +71,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             if (TargetLocked)
-                info = BaseUtils.FieldBuilder.Build("", Ship_Localised.Alt(Ship), "", PilotName_Localised.Alt(PilotName),
+                info = BaseUtils.FieldBuilder.Build("", Ship_Localised, "", PilotName_Localised,
                             " Rank ", PilotRank, "Shield ;;0.0", ShieldHealth, "Hull ;;0.0", HullHealth, "Faction ", Faction,
                             "", LegalStatus, "Bounty ", Bounty, "", SubSystem, "< at ;;0.0", SubSystemHealth);
             else

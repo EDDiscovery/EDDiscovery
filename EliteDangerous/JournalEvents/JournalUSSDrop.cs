@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)
         {
             USSType = evt["USSType"].Str();
-            USSTypeLocalised = evt["USSType_Localised"].Str();
+            USSTypeLocalised = evt["USSType_Localised"].Str().Alt(USSType);
             USSThreat = evt["USSThreat"].Int();
         }
         public string USSType { get; set; }
@@ -38,7 +38,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Type:",USSTypeLocalised.Alt(USSType), "Threat:" , USSThreat);
+            info = BaseUtils.FieldBuilder.Build("Type:",USSTypeLocalised, "Threat:" , USSThreat);
             detailed = "";
         }
     }
