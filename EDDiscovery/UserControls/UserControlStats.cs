@@ -25,11 +25,15 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlStats : UserControlCommonBase
     {
+        private string DbSelectedTabSave { get { return "StatsSelectedTab" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbStatsTreeStateSave { get { return "StatsTreeExpanded" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        
         public UserControlStats()
         {
             InitializeComponent();
@@ -38,6 +42,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            tabControlCustomStats.SelectedIndex = SQLiteDBClass.GetSettingInt(DbSelectedTabSave, 0);
             userControlStatsTimeScan.ScanMode = true;
             discoveryform.OnNewEntry += AddNewEntry;
             uctg.OnTravelSelectionChanged += SelectionChanged;
@@ -52,6 +57,8 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            SQLiteDBClass.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
+            SQLiteDBClass.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             discoveryform.OnNewEntry -= AddNewEntry;
             uctg.OnTravelSelectionChanged -= SelectionChanged;
         }
@@ -98,6 +105,10 @@ namespace EDDiscovery.UserControls
             if (tabControlCustomStats.SelectedIndex == 2)
             {
                 StatsScan(he, hl);
+            }
+            if (tabControlCustomStats.SelectedIndex == 3)
+            {
+                StatsGame(he, hl);
             }
         }
 
@@ -631,6 +642,136 @@ namespace EDDiscovery.UserControls
 
         }
 
+        void StatsGame(HistoryEntry he, HistoryList hl)
+        {
+            string collapseExpand = GameStatTreeState();
+            if (string.IsNullOrEmpty(collapseExpand)) collapseExpand = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
+            if (collapseExpand.Length < 13) collapseExpand += new string('Y', 13);
+            JournalStatistics stats = (JournalStatistics)hl.Where(j => j.EntryType == JournalTypeEnum.Statistics).OrderByDescending(j => j.EventTimeUTC).FirstOrDefault().journalEntry;
+            if (stats != null)
+            {
+                treeViewStats.Nodes.Clear();
+                TreeNode bank = treeViewStats.Nodes.Add("Bank Account");
+                AddChildNode(bank, "Current Assets", stats.BankAccount?.CurrentWealth.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Spent on Ships", stats.BankAccount?.SpentOnShips.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Spent on Outfitting", stats.BankAccount?.SpentOnOutfitting.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Spent on Repairs", stats.BankAccount?.SpentOnRepairs.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Spent on Fuel", stats.BankAccount?.SpentOnFuel.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Spent on Munitions", stats.BankAccount?.SpentOnAmmoConsumables.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Insurance Claims", stats.BankAccount?.InsuranceClaims.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(bank, "Total Claim Costs", stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand.Substring(0,1) == "Y") bank.Expand();
+                TreeNode combat = treeViewStats.Nodes.Add("Combat");
+                AddChildNode(combat, "Bounties Claimed", stats.Combat?.BountiesClaimed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "");
+                AddChildNode(combat, "Profit from Bounty Hunting", stats.Combat?.BountyHuntingProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(combat, "Combat Bonds", stats.Combat?.CombatBonds.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(combat, "Profit from Combat Bonds", stats.Combat?.CombatBondProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(combat, "Assassinations", stats.Combat?.Assassinations.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(combat, "Profit from Assassination", stats.Combat?.AssassinationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(combat, "Highest Single Reward", stats.Combat?.HighestSingleReward.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(combat, "Skimmers Killed", stats.Combat?.SkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(1,1) == "Y") combat.Expand();
+                TreeNode crime = treeViewStats.Nodes.Add("Crime");
+                AddChildNode(crime, "Notoriety", stats.Crime?.Notoriety.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crime, "Number of Fines", stats.Crime?.Fines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crime, "Lifetime Fines Value", stats.Crime?.TotalFines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(crime, "Bounties Received", stats.Crime?.BountiesReceived.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crime, "Lifetime Bounty Value", stats.Crime?.TotalBounties.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(crime, "Highest Bounty Issued", stats.Crime?.HighestBounty.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand.Substring(2,1) == "Y") crime.Expand();
+                TreeNode smuggling = treeViewStats.Nodes.Add("Smuggling");
+                AddChildNode(smuggling, "Black Market Network", stats.Smuggling?.BlackMarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(smuggling, "Black Market Profits", stats.Smuggling?.BlackMarketsProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(smuggling, "Commodities Smuggled", stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(smuggling, "Average Profit", stats.Smuggling?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(smuggling, "Highest Single Transaction", stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand.Substring(3,1) == "Y") smuggling.Expand();
+                TreeNode trading = treeViewStats.Nodes.Add("Trading");
+                AddChildNode(trading, "Market Network", stats.Trading?.MarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(trading, "Market Profits", stats.Trading?.MarketProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(trading, "Commodities Traded", stats.Trading?.ResourcesTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(trading, "Average Profit", stats.Trading?.AverageProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(trading, "Highest Single Transaction", stats.Trading?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand.Substring(4,1) == "Y") trading.Expand();
+                TreeNode mining = treeViewStats.Nodes.Add("Mining");
+                AddChildNode(mining, "Mining Profits", stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(mining, "Materials Refined", stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(mining, "Materials Collected", stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(5,1) == "Y") mining.Expand();
+                TreeNode exploration = treeViewStats.Nodes.Add("Exploration");
+                AddChildNode(exploration, "Systems Visited", stats.Exploration?.SystemsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(exploration, "Exploration Profits", stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(exploration, "Level 2 Scans", stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(exploration, "Level 3 Scans", stats.Exploration?.PlanetsScannedToLevel3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(exploration, "Highest Payout", stats.Exploration?.HighestPayout.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(exploration, "Total Hyperspace Distance", stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
+                AddChildNode(exploration, "Total Hyperspace Jumps", stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(exploration, "Farthest From Start", stats.Exploration?.GreatestDistanceFromStart.ToString("N2", System.Globalization.CultureInfo.CurrentCulture), "ly");
+                AddChildNode(exploration, "Time Played", stats.Exploration?.TimePlayedDisplay());
+                if (collapseExpand.Substring(6,1) == "Y") exploration.Expand();
+                TreeNode passengers = treeViewStats.Nodes.Add("Passengers");
+                AddChildNode(passengers, "Total Bulk Passengers Delivered", stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(passengers, "Total VIPs Delivered", stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(passengers, "Delivered", stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(passengers, "Ejected", stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(7,1) == "Y") passengers.Expand();
+                TreeNode search = treeViewStats.Nodes.Add("Search and Rescue");
+                AddChildNode(search, "Total Items Rescued", stats.SearchAndRescue?.Traded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(search, "Total Profit", stats.SearchAndRescue?.Profit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(search, "Total Rescue Transactions", stats.SearchAndRescue?.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(8,1) == "Y") search.Expand();
+                TreeNode craft = treeViewStats.Nodes.Add("Crafting");
+                AddChildNode(craft, "Engineers Used", stats.Crafting?.CountOfUsedEngineers.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Total Recipes Generated", stats.Crafting?.RecipesGenerated.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Grade 1 Recipes Generated", stats.Crafting?.RecipesGeneratedRank1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Grade 2 Recipes Generated", stats.Crafting?.RecipesGeneratedRank2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Grade 3 Recipes Generated", stats.Crafting?.RecipesGeneratedRank3.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Grade 4 Recipes Generated", stats.Crafting?.RecipesGeneratedRank4.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(craft, "Grade 5 Recipes Generated", stats.Crafting?.RecipesGeneratedRank5.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(9,1) == "Y") craft.Expand();
+                TreeNode crew = treeViewStats.Nodes.Add("Crew"); 
+                AddChildNode(crew, "Total Wages", stats.Crew?.NpcCrewTotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(crew, "Total Hired", stats.Crew?.NpcCrewHired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Total Fired", stats.Crew?.NpcCrewHired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Died in Line of Duty", stats.Crew?.NpcCrewDied.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(10,1) == "Y") crew.Expand();
+                TreeNode multicrew = treeViewStats.Nodes.Add("Multi-crew");
+                AddChildNode(multicrew, "Total Time", SecondsToDHMString(stats.Multicrew?.TimeTotal));
+                AddChildNode(multicrew, "Fighter Time", SecondsToDHMString(stats.Multicrew?.FighterTimeTotal));
+                AddChildNode(multicrew, "Gunner Time", SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
+                AddChildNode(multicrew, "Credits Made", stats.Multicrew?.CreditsTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(multicrew, "Fines Accrued", stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                if (collapseExpand.Substring(11,1) == "Y") multicrew.Expand();
+                TreeNode mattrader = treeViewStats.Nodes.Add("Materials Trader");
+                AddChildNode(mattrader, "Trades Completed", stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(mattrader, "Materials Traded", stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                if (collapseExpand.Substring(12,1) == "Y") mattrader.Expand();
+            }
+        }
+
+        string SecondsToDHMString(int? seconds)
+        {
+            if (!seconds.HasValue) return "";
+
+            TimeSpan time = TimeSpan.FromSeconds(seconds.Value);
+            return $"{time.Days} days {time.Hours} hours {time.Minutes} minutes";
+        }
+
+        void AddChildNode(TreeNode parent, string name, string value, string units = "")
+        {
+            parent.Nodes.Add($"{name}:  {(String.IsNullOrEmpty(value) ? "0" : value)} {units}");
+        }
+
+        string GameStatTreeState()
+        {
+            string result = "";
+            if (treeViewStats.Nodes.Count > 0)
+            {
+                foreach(TreeNode tn in treeViewStats.Nodes) result += tn.IsExpanded ? "Y" : "N";
+            }
+            return result;
+        }
+
         private static void ColumnValueAlignment(DataGridViewTextBoxColumn Col2)
         {
             Col2.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -743,9 +884,9 @@ namespace EDDiscovery.UserControls
             DataGridViewSorter2.DataGridSort2(dataGridViewScan, e.ColumnIndex);
         }
 
-        private void userControlStatsTimeTravel_Load(object sender, EventArgs e)
+        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            Stats(null, null);
         }
     }
 }

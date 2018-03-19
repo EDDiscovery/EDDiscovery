@@ -87,6 +87,12 @@
     <Compile Include="Controls\PanelNoTheme.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Controls\TreeViewCustom.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TreeViewCustom.Designer.cs">
+      <DependentUpon>TreeViewCustom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SmartSysMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
