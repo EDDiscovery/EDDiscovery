@@ -456,7 +456,7 @@ namespace EliteDangerousCore
             AddEnc( "Security Firmware Patch", MaterialFreqRare, "SFP", "securityfirmware");
             AddEnc( "Pattern Delta Obelisk Data", MaterialFreqRare, "PDOD", "ancientlanguagedata");
             AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS");  // from INARA - FDName needs checking
-            AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS");  // from INARA - FDName needs checking
+            AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS", "guardian_moduleblueprint");
             // very rare data
             AddEnc( "Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
             AddEnc( "Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
@@ -473,8 +473,8 @@ namespace EliteDangerousCore
             AddManu("Salvaged Alloys", MaterialFreqVeryCommon, "SAll");
             AddManu("Worn Shield Emitters", MaterialFreqVeryCommon, "WSE");
             AddManu("Thermic Alloys", MaterialFreqVeryCommon, "ThA");
-            AddManu("Guardian Sentinel Wreckage Components", MaterialFreqVeryCommon, "GSWC");       // from INARA - FDName needs checking
-            AddManu("Guardian Power Cell", MaterialFreqVeryCommon, "GPCe");     // from INARA - FDName needs checking
+            AddManu("Guardian Sentinel Wreckage Components", MaterialFreqVeryCommon, "GSWC", "guardian_sentinel_wreckagecomponents");
+            AddManu("Guardian Power Cell", MaterialFreqVeryCommon, "GPCe", "guardian_powercell");
             // common manufactured
             AddManu("Chemical Processors", MaterialFreqCommon, "CP");
             AddManu("Conductive Components", MaterialFreqCommon, "CCo");
@@ -486,7 +486,7 @@ namespace EliteDangerousCore
             AddManu("Hybrid Capacitors", MaterialFreqCommon, "HC");
             AddManu("Mechanical Equipment", MaterialFreqCommon, "ME");
             AddManu("Shield Emitters", MaterialFreqCommon, "SE");
-            AddManu("Guardian Power Conduit", MaterialFreqCommon, "GPC");       // from INARA - FDName needs checking
+            AddManu("Guardian Power Conduit", MaterialFreqCommon, "GPC", "guardian_powerconduit");
             // standard manufactured
             AddManu("Chemical Distillery", MaterialFreqStandard, "CD");
             AddManu("Conductive Ceramics", MaterialFreqStandard, "CCe");
@@ -499,8 +499,8 @@ namespace EliteDangerousCore
             AddManu("Precipitated Alloys", MaterialFreqStandard, "PAll");
             AddManu("Shielding Sensors", MaterialFreqStandard, "SS");
             AddManu("Weapon Parts", MaterialFreqStandard, "WP");    // from INARA - FDName needs checking
-            AddManu("Guardian Technology Component", MaterialFreqStandard, "GTC");      // from INARA - FDName needs checking
-            AddManu("Guardian Sentinel Weapon Parts", MaterialFreqStandard, "GSWP");     // from INARA - FDName needs checking
+            AddManu("Guardian Technology Component", MaterialFreqStandard, "GTC", "guardian_techcomponent");
+            AddManu("Guardian Sentinel Weapon Parts", MaterialFreqStandard, "GSWP", "guardian_sentinel_weaponparts");
             AddManu("Bio-Mechanical Conduits", MaterialFreqStandard, "BMC");    // from INARA - FDName needs checking
             AddManu("Propulsion Elements", MaterialFreqStandard, "PE"); // from INARA - FDName needs checking
             AddManu("Wreckage Components", MaterialFreqStandard, "WC"); // from INARA - FDName needs checking
