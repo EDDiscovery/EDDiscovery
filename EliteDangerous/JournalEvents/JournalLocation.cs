@@ -74,7 +74,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 summary = "At " + StationName;
                 info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem);
-                detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government), "Security:", Security_Localised.Alt(Security));
+                detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised, "Security:", Security_Localised);
 
                 if (Factions != null)
                     foreach (FactionInformation f in Factions)

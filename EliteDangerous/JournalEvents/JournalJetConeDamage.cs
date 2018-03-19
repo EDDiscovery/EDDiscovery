@@ -30,6 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             ModuleLocalised = evt["Module_Localised"].Str();       
             if ( ModuleLocalised.Length == 0 )
                 ModuleLocalised = evt["_Localised"].Str();       //Frontier bug - jet cone boost entries are bugged in journal at the moment up to 2.2.
+            ModuleLocalised = ModuleLocalised.Alt(Module);
         }
 
         public string Module { get; set; }
@@ -38,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = ModuleLocalised.Alt(Module);
+            info = ModuleLocalised;
             detailed = "";
         }
     }

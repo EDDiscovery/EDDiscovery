@@ -40,13 +40,13 @@ namespace EliteDangerousCore.JournalEvents
 
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
-            StoredItemLocalised = evt["StoredItem_Localised"].Str();
+            StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
 
             EngineerModifications = evt["EngineerModifications"].StrNull().SplitCapsWordFull();
 
             ReplacementItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ReplacementItem"].Str());
             ReplacementItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ReplacementItem"].Str());
-            ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str();
+            ReplacementItemLocalised = evt["ReplacementItem_Localised"].Str().Alt(ReplacementItem);
 
             Cost = evt["Cost"].LongNull();
 
@@ -89,9 +89,9 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised.Alt(StoredItem), "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
             if (ReplacementItem.Length > 0)
-                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised.Alt(ReplacementItem));
+                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised);
             detailed = BaseUtils.FieldBuilder.Build("Modifications:", EngineerModifications);
         }
     }

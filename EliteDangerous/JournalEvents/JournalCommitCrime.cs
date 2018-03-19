@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
             CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
             Faction = evt["Faction"].Str();
             Victim = evt["Victim"].Str();
-            VictimLocalised = evt["Victim_Localised"].Str();
+            VictimLocalised = evt["Victim_Localised"].Str().Alt(Victim);
             Fine = evt["Fine"].LongNull();
             Bounty = evt["Bounty"].LongNull();
         }
@@ -64,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised.Alt(Victim), "Cost ; cr;N0", Fine, "Bounty ; cr;N0", Bounty);
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised, "Cost ; cr;N0", Fine, "Bounty ; cr;N0", Bounty);
             detailed = "";
         }
     }

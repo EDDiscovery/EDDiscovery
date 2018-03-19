@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalSendText(JObject evt) : base(evt, JournalTypeEnum.SendText)
         {
             To = evt["To"].Str();
-            To_Localised = evt["To_Localised"].Str();
+            To_Localised = evt["To_Localised"].Str().Alt(To);
             Message = evt["Message"].Str();
         }
         public string To { get; set; }
@@ -38,7 +38,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("To:", To_Localised.Alt(To), "Msg:", Message);
+            info = BaseUtils.FieldBuilder.Build("To:", To_Localised, "Msg:", Message);
             detailed = "";
         }
     }

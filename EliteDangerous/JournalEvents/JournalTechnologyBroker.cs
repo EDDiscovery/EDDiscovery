@@ -31,6 +31,10 @@ namespace EliteDangerousCore.JournalEvents
             CommodityList = evt["Commodities"]?.ToObjectProtected<Commodities[]>();
             MaterialList = evt["Materials"]?.ToObjectProtected<Materials[]>();
 
+            if (ItemsUnlocked != null)
+                foreach (Unlocked u in ItemsUnlocked)
+                    u.Name_Localised = u.Name_Localised.Alt(u.Name);
+
             if (CommodityList != null)
                 foreach (Commodities c in CommodityList)
                     c.FriendlyName = JournalFieldNaming.RMat(c.Name);
@@ -79,7 +83,7 @@ namespace EliteDangerousCore.JournalEvents
             if (ItemsUnlocked != null)
             {
                 foreach (Unlocked u in ItemsUnlocked)
-                    info = info.AppendPrePad(u.Name_Localised.Alt(u.Name), ", ");
+                    info = info.AppendPrePad(u.Name_Localised, ", ");
             }
 
             detailed = "";
