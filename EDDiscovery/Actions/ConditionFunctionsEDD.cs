@@ -44,6 +44,7 @@ namespace EDDiscovery.Actions
 
         protected override FuncEntry FindFunction(string name)
         {
+            name = name.ToLowerInvariant();      // case insensitive.
             return functions.ContainsKey(name) ? functions[name] : base.FindFunction(name);
         }
 

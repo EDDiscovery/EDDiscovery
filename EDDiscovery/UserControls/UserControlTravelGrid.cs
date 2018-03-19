@@ -935,7 +935,7 @@ namespace EDDiscovery.UserControls
             if (rightclicksystem != null && rightclicksystem.journalEntry != null)
             {
                 Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
+                string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
                 if (json != null)
                 {
                     Clipboard.SetText(json);

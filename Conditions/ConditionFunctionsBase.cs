@@ -30,12 +30,12 @@ namespace Conditions
 
                 #region Variables
                 functions.Add("exist", new FuncEntry(Exist, 1, 20, FuncEntry.PT.M)); // no macros, all literal, can be strings
-                functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.M, FuncEntry.PT.MESE ));   // first is a macro but can not exist, second is a string or macro which must exist
+                functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.M, FuncEntry.PT.MESE));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.ME)); // check var, can be string (if so expanded)
 
                 functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS));
-                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS ));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
-                functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.MESE ));   
+                functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
+                functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.ME));   // check var
                 functions.Add("i", new FuncEntry(IndirectI, FuncEntry.PT.ME, FuncEntry.PT.LS));   // first is a macro name, second is literal or string
                 functions.Add("ispresent", new FuncEntry(Ispresent, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // 1 may not be there, 2 either a macro or can be string. 3 is optional and a var or literal
@@ -78,6 +78,7 @@ namespace Conditions
                 functions.Add("ifnotequal", new FuncEntry(Ifnotequal, 3, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE, FuncEntry.PT.ms, FuncEntry.PT.ms, FuncEntry.PT.ms));
 
                 functions.Add("indexof", new FuncEntry(IndexOf, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("icao", new FuncEntry(Icao, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
                 functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MESE));
                 functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MESE, FuncEntry.PT.M));
                 functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MESE));
@@ -86,7 +87,7 @@ namespace Conditions
 
                 functions.Add("regex", new FuncEntry(Regex, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("replace", new FuncEntry(Replace, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
-                functions.Add("replacevar", new FuncEntry(ReplaceVar,  FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("replacevar", new FuncEntry(ReplaceVar, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
                 functions.Add("rv", new FuncEntry(ReplaceVar, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // var/string, literal/var/string
                 functions.Add("rs", new FuncEntry(ReplaceVarSC, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE)); // var/string, literal/var/string
                 functions.Add("replaceescapechar", new FuncEntry(ReplaceEscapeChar, FuncEntry.PT.MESE));
@@ -103,7 +104,7 @@ namespace Conditions
 
                 #region Files
                 functions.Add("closefile", new FuncEntry(CloseFile, FuncEntry.PT.ME));
-                functions.Add("direxists", new FuncEntry(DirExists, 1,20, FuncEntry.PT.MESE));
+                functions.Add("direxists", new FuncEntry(DirExists, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("fileexists", new FuncEntry(FileExists, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("deletefile", new FuncEntry(DeleteFile, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("filelist", new FuncEntry(FileList, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
@@ -148,6 +149,7 @@ namespace Conditions
 
         protected override FuncEntry FindFunction(string name)
         {
+            name = name.ToLowerInvariant();      // case insensitive.
             return functions.ContainsKey(name) ? functions[name] : null;
         }
 
@@ -533,6 +535,62 @@ namespace Conditions
 
             output = "0";
             return false;
+        }
+
+        static string[] IcaoAlphabet =      // nicked from our EDCD friends
+        {
+                "<phoneme alphabet=\"ipa\" ph=\"ˈzɪərəʊ\">zero</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈwʌn\">one</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈtuː\">two</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈtriː\">tree</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈfoʊ.ər\">fawer</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈfaɪf\">fife</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈsɪks\">six</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈsɛvɛn\">seven</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈeɪt\">eight</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈnaɪnər\">niner</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈælfə\">alpha</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈbrɑːˈvo\">bravo</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈtʃɑːli\">charlie</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈdɛltə\">delta</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈeko\">echo</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈfɒkstrɒt\">foxtrot</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ɡɒlf\">golf</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"hoːˈtel\">hotel</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈindiˑɑ\">india</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈdʒuːliˑˈet\">juliet</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈkiːlo\">kilo</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈliːmɑ\">lima</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"maɪk\">mike</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"noˈvembə\">november</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈɒskə\">oscar</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"pəˈpɑ\">papa</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"keˈbek\">quebec</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈroːmiˑo\">romeo</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"siˈerə\">sierra</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈtænɡo\">tango</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈjuːnifɔːm\">uniform</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈvɪktə\">victor</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈwiski\">whiskey</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈeksˈrei\">x-ray</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈjænki\">yankee</phoneme>",
+                "<phoneme alphabet=\"ipa\" ph=\"ˈzuːluː\">zulu</phoneme>",
+        };
+
+        protected bool Icao(out string output)
+        {
+            string str = paras[0].Value.ToLower();
+            output = "";
+            foreach( char c in str )
+            {
+                if (char.IsDigit(c))
+                    output += IcaoAlphabet[c - '0'];
+                else if (c >= 'a' && c <= 'z')
+                    output += IcaoAlphabet[c - 'a' + 10];
+                else if (c == '-' && paras[1].Value.IndexOf("Dash", StringComparison.InvariantCultureIgnoreCase) >=0)
+                    output += " dash ";
+            }
+            return true;
         }
 
         #endregion

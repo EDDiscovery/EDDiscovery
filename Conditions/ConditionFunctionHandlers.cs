@@ -41,7 +41,7 @@ namespace Conditions
                     func fptr = (func)Delegate.CreateDelegate(typeof(func), this, mi);      // need a delegate which is attached to this instance..
                     bool res = fptr(out output);
                     if (!res)
-                        output = "Function " + funcname + ": " + output;
+                        output = "Function '" + funcname + "': " + output;
                     return res;
                 }
             }
@@ -248,20 +248,23 @@ namespace Conditions
             {
                 string value = paras[parano].Value;
 
-                if (paras[parano].IsString)
+                if (paras[parano].IsString)     // if its a string..
                 {
                     ConditionFunctions.ExpandResult sexpresult = caller.ExpandStringFull(value, out output, recdepth + 1);
 
                     if (sexpresult == ConditionFunctions.ExpandResult.Failed)
                         return false;
                 }
-                else if (vars.Exists(value))
+                else if (vars.Exists(value))        // if macro exists.. expand it
                 {
-                    output = vars[value];
+                    ConditionFunctions.ExpandResult sexpresult = caller.ExpandStringFull(vars[value], out output, recdepth + 1);
+
+                    if (sexpresult == ConditionFunctions.ExpandResult.Failed)
+                        return false;
                 }
                 else
                 {
-                    output = "Variable " + value + " does not exist";
+                    output = "Variable '" + value + "' does not exist";
                     return false;
                 }
             }
