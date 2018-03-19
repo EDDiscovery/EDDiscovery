@@ -29,6 +29,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMarketBuy(JObject evt ) : base(evt, JournalTypeEnum.MarketBuy)
         {
+            MarketID = evt["MarketID"].LongNull();
             Type = evt["Type"].Str();        // must be FD name
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
@@ -42,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Count { get; set; }
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
+        public long? MarketID { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {

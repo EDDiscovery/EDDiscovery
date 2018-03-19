@@ -52,6 +52,8 @@ namespace EliteDangerousCore.JournalEvents
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
             StoredItemLocalised = evt["StoredItem_Localised"].Str();
+
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string Slot { get; set; }
@@ -74,6 +76,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StoredItem { get; set; }                  // if stored previous one
         public string StoredItemFD { get; set; }                  // if stored previous one
         public string StoredItemLocalised { get; set; }         // if stored previous one
+
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

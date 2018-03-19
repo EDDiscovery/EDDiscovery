@@ -37,6 +37,8 @@ namespace EliteDangerousCore.JournalEvents
         public string Allegiance { get; set; }
         public string Economy { get; set; }
         public string Economy_Localised { get; set; }
+        public string SecondEconomy { get; set; }
+        public string SecondEconomy_Localised { get; set; }
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public string Security { get; set; }
@@ -108,6 +110,8 @@ namespace EliteDangerousCore.JournalEvents
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
             Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy", "Economy" });
             Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemEconomy_Localised", "Economy_Localised" });
+            SecondEconomy = evt["SystemSecondEconomy"].Str();
+            SecondEconomy_Localised = evt["SystemSecondEconomy_Localised"].Str();
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment", "Government" });
             Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemGovernment_Localised", "Government_Localised" });
             Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
