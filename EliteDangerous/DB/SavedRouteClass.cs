@@ -394,7 +394,6 @@ namespace EliteDangerousCore.DB
 
                         foreach (SavedRouteClass newentry in array)
                         {
-                            newentry.EDSM = true;
                             if (newentry.StartDate.HasValue)
                                 newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
                             if (newentry.EndDate.HasValue)
@@ -412,6 +411,8 @@ namespace EliteDangerousCore.DB
                             }
                             else
                             {
+                                newentry.EDSM = true;       // if we need to use newentry, then it must be marked as an EDSM one..
+
                                 if (storedentry != null)  // if stored already..
                                 {
                                     if (!storedentry.Systems.SequenceEqual(newentry.Systems)) // systems changed, we need to reset..
