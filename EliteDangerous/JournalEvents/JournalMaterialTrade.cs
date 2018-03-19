@@ -29,17 +29,11 @@ namespace EliteDangerousCore.JournalEvents
 
             Paid = evt["Paid"]?.ToObjectProtected<Traded>();
             if (Paid != null)
-            {
-                Paid.Material = JournalFieldNaming.FDNameTranslation(Paid.Material);
-                Paid.FriendlyMaterial = JournalFieldNaming.RMat(Paid.Material);
-            }
+                Paid.Normalise();
 
             Received = evt["Received"]?.ToObjectProtected<Traded>();
             if (Received != null)
-            {
-                Received.Material = JournalFieldNaming.FDNameTranslation(Received.Material);
-                Received.FriendlyMaterial = JournalFieldNaming.RMat(Received.Material);
-            }
+                Received.Normalise();
         }
 
         public string TraderType { get; set; }
@@ -55,6 +49,14 @@ namespace EliteDangerousCore.JournalEvents
             public string Category;
             public string Category_Localised;
             public int Quantity;
+
+            public void Normalise()
+            {
+                Material = JournalFieldNaming.FDNameTranslation(Material);
+                FriendlyMaterial = JournalFieldNaming.RMat(Material);
+                Material_Localised = Material_Localised.Alt(FriendlyMaterial);       // ensure.
+                Category_Localised = Category_Localised.Alt(Category);
+            }
         }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
@@ -73,8 +75,8 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Paid != null && Received != null)
             {
-                info = BaseUtils.FieldBuilder.Build("Sold: ", Paid.Quantity, "< ", Paid.Material_Localised.Alt(Paid.FriendlyMaterial),
-                                                    "Received: ", Received.Quantity, "< ", Received.Material_Localised.Alt(Received.FriendlyMaterial));
+                info = BaseUtils.FieldBuilder.Build("Sold: ", Paid.Quantity, "< ", Paid.Material_Localised,
+                                                    "Received: ", Received.Quantity, "< ", Received.Material_Localised);
             }
         }
     }

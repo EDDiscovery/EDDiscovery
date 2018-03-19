@@ -65,10 +65,13 @@ namespace EliteDangerousCore.JournalEvents
             FactionState = evt["FactionState"].Str().SplitCapsWord();
 
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
+
             Economy = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy", "Economy" });
-            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" });
+            Economy_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationEconomy_Localised", "Economy_Localised" }).Alt(Economy);
+            EconomyList = evt["StationEconomies"]?.ToObjectProtected<Economies[]>();
+
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
-            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" });
+            Government_Localised = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" }).Alt(Government);
 
             Wanted = evt["Wanted"].BoolNull();
 
@@ -92,6 +95,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Allegiance { get; set; }
         public string Economy { get; set; }
         public string Economy_Localised { get; set; }
+        public Economies[] EconomyList { get; set; }        // may be null
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public string[] StationServices { get; set; }
@@ -99,17 +103,33 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool IsTrainingEvent { get; private set; }
 
+        public class Economies
+        {
+            public string Name;
+            public string Name_Localised;
+            public double Proportion;
+        }
+
         public override void FillInformation(out string summary, out string info, out string detailed)      //V
         {
             summary = $"At {StationName}";
             info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, ";Wanted" , Wanted, "Faction:", Faction, "< in state ", FactionState);
-            detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised.Alt(Economy), "Government:", Government_Localised.Alt(Government));
+            detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised);
 
             if (StationServices != null)
             {
-                detailed += System.Environment.NewLine + "Station services:";
+                string l = "";
                 foreach (string s in StationServices)
-                    detailed = detailed.AppendPrePad(s, " ");
+                    l = l.AppendPrePad(s, ", ");
+                detailed += System.Environment.NewLine + "Station services:" + l;
+            }
+
+            if ( EconomyList != null )
+            {
+                string l = "";
+                foreach (Economies e in EconomyList)
+                    l = l.AppendPrePad(e.Name_Localised.Alt(e.Name) + " " + (e.Proportion * 100).ToString("0.#") + "%", ", ");
+                detailed += System.Environment.NewLine + "Economies:" + l;
             }
         }
 

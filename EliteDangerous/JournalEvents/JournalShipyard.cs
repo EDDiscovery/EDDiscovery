@@ -49,10 +49,7 @@ namespace EliteDangerousCore.JournalEvents
             if (ShipyardItems != null)
             {
                 foreach (ShipyardItem i in ShipyardItems)
-                {
-                    i.FDShipType = i.ShipType;
-                    i.ShipType = JournalFieldNaming.GetBetterShipName(i.ShipType);
-                }
+                    i.Normalise();
             }
         }
 
@@ -105,7 +102,13 @@ namespace EliteDangerousCore.JournalEvents
             public string ShipType;
             public string ShipType_Localised;
             public long ShipPrice;
+
+            public void Normalise()
+            {
+                FDShipType = ShipType;
+                ShipType = JournalFieldNaming.GetBetterShipName(ShipType);
+                ShipType_Localised = ShipType_Localised.Alt(ShipType);
+            }
         }
     }
-
 }

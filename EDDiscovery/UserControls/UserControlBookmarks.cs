@@ -1,5 +1,6 @@
 ﻿using EDDiscovery.Forms;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -190,7 +191,32 @@ namespace EDDiscovery.UserControls
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            if (currentedit != null)      // if we have a current cell.. 
+            int[] rows = null;
+
+            if (dataGridViewBookMarks.SelectedCells.Count > 0)      // being paranoid
+            {
+                rows = (from DataGridViewCell x in dataGridViewBookMarks.SelectedCells select x.RowIndex).Distinct().ToArray();
+            }
+
+            //System.Diagnostics.Debug.WriteLine("cells {0} rows {1} selrows {2}", dataGridViewBookMarks.SelectedCells.Count, dataGridViewBookMarks.SelectedRows.Count , rows.Length);
+
+            if ( rows != null && rows.Length > 1 )
+            {
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you really want to delete " + rows.Length + " bookmarks?" + Environment.NewLine + "Confirm or Cancel", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                {
+                    updating = true;
+                    foreach (int r in rows)
+                    {
+                        BookmarkClass bk = (BookmarkClass)dataGridViewBookMarks.Rows[r].Tag;
+                        //System.Diagnostics.Debug.WriteLine("Delete " + bk.Name);
+                        GlobalBookMarkList.Instance.Delete(bk);
+                    }
+                    updating = false;
+                    Display();
+                }
+
+            }
+            else if (currentedit != null)      // if we have a current cell.. 
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
@@ -299,25 +325,36 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            toolStripMenuItemGotoStar3dmap.Enabled = rightclickbookmark != null;
+            openInEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.isStar;
+        }
+
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            if (rightclickbookmark != null )
+            if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                discoveryform.Open3DMap(null);
+
+            if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                this.Cursor = Cursors.WaitCursor;
-
-                if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
-                    discoveryform.Open3DMap(null);
-
-                this.Cursor = Cursors.Default;
-
-                if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
-                {
-                    if (discoveryform.Map.MoveTo((float)rightclickbookmark.x, (float)rightclickbookmark.y, (float)rightclickbookmark.z))
-                        discoveryform.Map.Show();
-                }
+                if (discoveryform.Map.MoveTo((float)rightclickbookmark.x, (float)rightclickbookmark.y, (float)rightclickbookmark.z))
+                    discoveryform.Map.Show();
             }
         }
 
+        private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
+            
+            if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName, null))
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+
+            this.Cursor = Cursors.Default;
+        }
+
         #endregion
+
     }
 }

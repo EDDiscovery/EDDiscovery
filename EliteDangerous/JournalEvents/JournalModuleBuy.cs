@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
 
             BuyItem = JournalFieldNaming.GetBetterItemNameEvents(evt["BuyItem"].Str());
             BuyItemFD = JournalFieldNaming.NormaliseFDItemName(evt["BuyItem"].Str());
-            BuyItemLocalised = evt["BuyItem_Localised"].Str();
+            BuyItemLocalised = evt["BuyItem_Localised"].Str().Alt(BuyItem);
             BuyPrice = evt["BuyPrice"].Long();
 
             ShipFD = evt["Ship"].Str();
@@ -46,12 +46,14 @@ namespace EliteDangerousCore.JournalEvents
 
             SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
-            SellItemLocalised = evt["SellItem_Localised"].Str();
+            SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
             SellPrice = evt["SellPrice"].LongNull();
 
             StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
-            StoredItemLocalised = evt["StoredItem_Localised"].Str();
+            StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
+
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public string Slot { get; set; }
@@ -75,6 +77,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StoredItemFD { get; set; }                  // if stored previous one
         public string StoredItemLocalised { get; set; }         // if stored previous one
 
+        public long? MarketID { get; set; }
+
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string s = (BuyItemLocalised.Length > 0) ? BuyItemLocalised : BuyItem;
@@ -90,11 +94,11 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised.Alt(BuyItem), "< into ", Slot, "Cost:; cr;N0", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised, "< into ", Slot, "Cost:; cr;N0", BuyPrice);
             if (SellItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised.Alt(SellItem), "Price:; cr;N0", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised, "Price:; cr;N0", SellPrice);
             if (StoredItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoredItemLocalised.Alt(StoredItem));
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoredItemLocalised);
 
             detailed = "";
         }

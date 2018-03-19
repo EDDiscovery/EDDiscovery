@@ -13,7 +13,6 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.UserControls;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
@@ -325,11 +324,18 @@ namespace EDDiscovery.UserControls
             {
                 if (currentroute.Id >= 0)
                 {
-                    currentroute.Deleted = true;
-                    currentroute.Update();
+                    if (currentroute.EDSM)
+                    {
+                        currentroute.Deleted = true;
+                        currentroute.Update();
+                        UpdateUndeleteMenu();
+                    }
+                    else
+                    {
+                        currentroute.Delete();
+                    }
 
                     savedroute.Remove(currentroute);
-                    UpdateUndeleteMenu();
                     UpdateComboBox();
                 }
 
