@@ -27,12 +27,16 @@ namespace EliteDangerousCore.JournalEvents
             UpdateType = evt["UpdateType"].Str();        // must be FD name
             System.Enum.TryParse<UpdateTypeEnum>(UpdateType, out UpdateTypeEnum u);
             UpdateEnum = u;
+            CargoType = evt["CargoType"].Str();     // item counts
+            FriendlyCargoType = JournalFieldNaming.RMat(CargoType);
+            Count = evt["Count"].Int(0);
             StartMarketID = evt["StartMarketID"].Long();
             EndMarketID = evt["EndMarketID"].Long();
             ItemsCollected = evt["ItemsCollected"].Int();
             ItemsDelivered = evt["ItemsCollected"].Int();
             TotalItemsToDeliver = evt["TotalItemsToDeliver"].Int();
             ProgressPercent = evt["Progress"].Double()*100;
+            MarketID = evt["MarketID"].LongNull();
         }
 
         public enum UpdateTypeEnum { Unknown, Collect, Deliver, WingUpdate}
@@ -40,16 +44,25 @@ namespace EliteDangerousCore.JournalEvents
         public int MissionId { get; set; }
         public string UpdateType { get; set; }
         public UpdateTypeEnum UpdateEnum { get; set; }
+
+        public string CargoType { get; set; } // 3.03       deliver/collect only    - what you have done now.  Blank if not known (<3.03)
+        public string FriendlyCargoType { get; set; }
+        public int Count { get; set; }  // 3.03         deliver/collect only.  0 if not known.
+
         public long StartMarketID { get; set; }
         public long EndMarketID { get; set; }
-        public int ItemsCollected { get; set; }
+
+        public int ItemsCollected { get; set; }             // current total stats
         public int ItemsDelivered { get; set; }
         public int TotalItemsToDeliver { get; set; }
         public double ProgressPercent { get; set; }
 
+        public long? MarketID { get; set; }
+
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            // as presented, we can't track the hold.. because collected/delivered is cumulative. So we are bust! FD are fixing
+            if ( CargoType.Length>0 && Count>0)
+                mc.Change(MaterialCommodities.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
@@ -57,15 +70,15 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
-                info = BaseUtils.FieldBuilder.Build("Collected:", ItemsCollected, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Collected:", Count, "< of " , FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.Deliver)
             {
-                info = BaseUtils.FieldBuilder.Build("Delivered:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Delivered:", Count, "< of ", FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.WingUpdate)
             {
-                info = BaseUtils.FieldBuilder.Build("Wing Update:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress Left:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Update, Collected:", ItemsCollected, "Delivered:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress Left:;%;N1", ProgressPercent);
             }
             else
             {

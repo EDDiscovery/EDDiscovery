@@ -64,6 +64,8 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeForm();
+            this.tabPageGameStats = new System.Windows.Forms.TabPage();
+            this.treeViewStats = new ExtendedControls.Controls.TreeViewCustom();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -73,6 +75,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.tabPageScan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).BeginInit();
+            this.tabPageGameStats.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridViewStats
@@ -149,7 +152,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 10;
             this.vScrollBarCustom.Location = new System.Drawing.Point(764, 0);
-            this.vScrollBarCustom.Maximum = -202;
+            this.vScrollBarCustom.Maximum = -710;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -163,14 +166,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -202;
-            this.vScrollBarCustom.ValueLimited = -202;
+            this.vScrollBarCustom.Value = -710;
+            this.vScrollBarCustom.ValueLimited = -710;
             // 
             // tabControlCustomStats
             // 
+            this.tabControlCustomStats.AllowDragReorder = false;
             this.tabControlCustomStats.Controls.Add(this.tabPageGeneral);
             this.tabControlCustomStats.Controls.Add(this.tabPageTravel);
             this.tabControlCustomStats.Controls.Add(this.tabPageScan);
+            this.tabControlCustomStats.Controls.Add(this.tabPageGameStats);
             this.tabControlCustomStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlCustomStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlCustomStats.Location = new System.Drawing.Point(0, 0);
@@ -190,6 +195,7 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.TabStyle = tabStyleSquare1;
             this.tabControlCustomStats.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlCustomStats.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControlCustomStats.SelectedIndexChanged += new System.EventHandler(this.tabControlCustomStats_SelectedIndexChanged);
             // 
             // tabPageGeneral
             // 
@@ -251,13 +257,13 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
+            this.userControlStatsTimeTravel.ScanMode = false;
             this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
             this.userControlStatsTimeTravel.Stars = false;
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
             this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
-            this.userControlStatsTimeTravel.Load += new System.EventHandler(this.userControlStatsTimeTravel_Load);
             // 
             // tabPageScan
             // 
@@ -309,11 +315,48 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(3, 3);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
+            this.userControlStatsTimeScan.ScanMode = false;
             this.userControlStatsTimeScan.Size = new System.Drawing.Size(784, 27);
             this.userControlStatsTimeScan.Stars = false;
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
+            // 
+            // tabPageGameStats
+            // 
+            this.tabPageGameStats.Controls.Add(this.treeViewStats);
+            this.tabPageGameStats.Location = new System.Drawing.Point(4, 22);
+            this.tabPageGameStats.Name = "tabPageGameStats";
+            this.tabPageGameStats.Size = new System.Drawing.Size(790, 726);
+            this.tabPageGameStats.TabIndex = 5;
+            this.tabPageGameStats.Text = "In Game";
+            this.tabPageGameStats.UseVisualStyleBackColor = true;
+            // 
+            // treeViewStats
+            // 
+            this.treeViewStats.BorderColor = System.Drawing.Color.Transparent;
+            this.treeViewStats.BorderColorScaling = 0.5F;
+            this.treeViewStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewStats.HideScrollBar = true;
+            this.treeViewStats.Location = new System.Drawing.Point(0, 0);
+            this.treeViewStats.Name = "treeViewStats";
+            this.treeViewStats.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.treeViewStats.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.treeViewStats.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.treeViewStats.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.treeViewStats.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.treeViewStats.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.treeViewStats.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.treeViewStats.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.treeViewStats.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.treeViewStats.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.treeViewStats.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.treeViewStats.ScrollBarWidth = 20;
+            this.treeViewStats.ShowLineCount = false;
+            this.treeViewStats.Size = new System.Drawing.Size(790, 726);
+            this.treeViewStats.TabIndex = 0;
+            this.treeViewStats.TreeViewBackColor = System.Drawing.SystemColors.Control;
+            this.treeViewStats.TreeViewForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // UserControlStats
             // 
@@ -331,6 +374,7 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
             this.tabPageScan.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).EndInit();
+            this.tabPageGameStats.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -355,5 +399,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewScan;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.TabPage tabPageGameStats;
+        private ExtendedControls.Controls.TreeViewCustom treeViewStats;
     }
 }

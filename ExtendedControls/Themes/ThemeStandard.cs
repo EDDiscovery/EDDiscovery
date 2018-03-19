@@ -924,6 +924,12 @@ namespace ExtendedControls
             {
                 return;     // no themeing of it or sub controls
             }
+            else if (myControl is TreeView)
+            {
+                TreeView ctrl = myControl as TreeView;
+                ctrl.ForeColor = currentsettings.colors[Settings.CI.textbox_fore];
+                ctrl.BackColor = currentsettings.colors[Settings.CI.textbox_back];
+            }
             else
             {
                 if (!parentcontroltype.Namespace.Equals("ExtendedControls"))

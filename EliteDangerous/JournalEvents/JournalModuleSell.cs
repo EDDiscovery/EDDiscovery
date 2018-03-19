@@ -41,7 +41,10 @@ namespace EliteDangerousCore.JournalEvents
             ShipFD = evt["Ship"].Str();
             Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipId = evt["ShipID"].Int();
+
+            MarketID = evt["MarketID"].LongNull();
         }
+
         public string Slot { get; set; }
         public string SlotFD { get; set; }
         public string SellItem { get; set; }
@@ -51,6 +54,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Ship { get; set; }
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
+        public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {

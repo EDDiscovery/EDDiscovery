@@ -394,31 +394,39 @@ namespace EliteDangerousCore.DB
 
                         foreach (SavedRouteClass newentry in array)
                         {
-                            newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
-                            newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
+                            if (newentry.StartDate.HasValue)
+                                newentry.StartDate = newentry.StartDate.Value.ToLocalTime();      // supplied, and respected by JSON, as zulu time. the stupid database holds local times. Convert.
+                            if (newentry.EndDate.HasValue)
+                                newentry.EndDate = newentry.EndDate.Value.ToLocalTime();
 
                             SavedRouteClass storedentry = stored.Find(x => x.Name.Equals(newentry.Name));
 
                             if (newentry.Systems.Count == 0)              // no systems, means delete the database entry.. use with caution
                             {
-                                if ( storedentry != null )                  // if we have it in the DB, delete it
+                                if (storedentry != null)                // if we have it in the DB, delete it
+                                {
                                     storedentry.Delete();
+                                    changed = true;
+                                }
                             }
                             else
                             {
+                                newentry.EDSM = true;       // if we need to use newentry, then it must be marked as an EDSM one..
+
                                 if (storedentry != null)  // if stored already..
                                 {
                                     if (!storedentry.Systems.SequenceEqual(newentry.Systems)) // systems changed, we need to reset..
                                     {
+                                        bool wasDel = storedentry.Deleted;
                                         storedentry.Delete();   // delete the old one.. systems may be in a different order, and there is no ordering except by ID in the DB
-                                        newentry.EDSM = true;
+                                        newentry.Deleted = wasDel;
                                         newentry.Add();        // add to db..
-                                        changed = true;
+                                        changed = changed || !wasDel;   // If it was marked deleted, don't report it as being changed.
                                     }
-                                    else if (storedentry.EndDate == null || storedentry.StartDate == null || storedentry.EndDate.Value != newentry.EndDate.Value || storedentry.StartDate.Value != newentry.StartDate.Value)    // times change, just update
+                                    else if (storedentry.EndDate != newentry.EndDate || storedentry.StartDate != newentry.StartDate)    // times change, just update
                                     {
-                                        storedentry.StartDate = newentry.StartDate.Value;      // update time and date but keep the expedition ID
-                                        storedentry.EndDate = newentry.EndDate.Value;
+                                        storedentry.StartDate = newentry.StartDate;             // update time and date but keep the expedition ID
+                                        storedentry.EndDate = newentry.EndDate;
                                         storedentry.EDSM = true;
                                         storedentry.Update();
                                         changed = true;
@@ -432,7 +440,6 @@ namespace EliteDangerousCore.DB
                                 }
                                 else
                                 {                   // not there, add it..
-                                    newentry.EDSM = true;
                                     newentry.Add();        // add to db..
                                     changed = true;
                                 }
