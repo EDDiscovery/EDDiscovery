@@ -29,7 +29,7 @@ namespace Conditions
 
         public bool IsFunction { get { return fe != null; } }
 
-        public bool Run(out string output, string funcname)
+        public bool Run(out string output)
         {
             if (IsFunction)
             {
@@ -40,8 +40,6 @@ namespace Conditions
                     System.Reflection.MethodInfo mi = GetType().GetMethod(fe.fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                     func fptr = (func)Delegate.CreateDelegate(typeof(func), this, mi);      // need a delegate which is attached to this instance..
                     bool res = fptr(out output);
-                    if (!res)
-                        output = "Function '" + funcname + "': " + output;
                     return res;
                 }
             }
@@ -125,12 +123,15 @@ namespace Conditions
                 {
                     t = vars.Qualify(t);
                 }
-                else if (ptype == FuncEntry.PT.ME)     // macro name always, or string with macro name, expanded, must exist
+                else if (ptype == FuncEntry.PT.ME)     // macro name always, or string with macro name (which has been expanded by above) naming a macro
                 {
                     t = vars.Qualify(t);
 
                     if (vars.Exists(t))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Expand ME {0} -> {1}", t, vars[t]);
                         t = vars[t];
+                    }
                     else
                         return "Variable '" + t + "' does not exist";
                 }
@@ -161,7 +162,7 @@ namespace Conditions
                 }
                 else if (ptype == FuncEntry.PT.ImeSE)   // as per meSE but must be integer.
                 {
-                    string errstr = "string parameter is not an integer";
+                    string errstr = "String parameter '" + t + "' is not an integer";
 
                     if (!isstr)
                     {
@@ -170,10 +171,10 @@ namespace Conditions
                         if (vars.Exists(mname))         // if its a variable.. expand and check it converts
                         {
                             t = vars[mname];
-                            errstr = "variable value is not an integer";
+                            errstr = "Variable '" + mname + "' value '" + t + "' is not an integer";
                         }
                         else
-                            errstr = "parameter is not an integer or a variable name";
+                            errstr = "Parameter '" + t + "' is not an integer or a variable name";
                     }
 
                     long? l = t.InvariantParseLongNull();
@@ -187,7 +188,7 @@ namespace Conditions
                 }
                 else if (ptype == FuncEntry.PT.FmeSE || ptype == FuncEntry.PT.FmeSEBlk )    
                 {
-                    string errstr = "string parameter is not a number";
+                    string errstr = "String parameter '" + t + "' is not a number";
 
                     if (!isstr)
                     {
@@ -196,16 +197,16 @@ namespace Conditions
                         if (vars.Exists(mname))
                         {
                             t = vars[mname];
-                            errstr = "variable value is not a number";
+                            errstr = "Variable '" + mname + "' value '" + t + "' is not a number";
                         }
                         else
-                            errstr = "parameter is not a number or a variable name";
+                            errstr = "Parameter '" + t + "' is not an number or a variable name";
                     }
 
                     if (t.Length == 0)      // empty string, may pass due to Blk.
                     {
                         if (ptype != FuncEntry.PT.FmeSEBlk) // error if not blank version
-                            return "value is empty";        // else fall thru with t = blank
+                            return "Value is empty";        // else fall thru with t = blank
                     }
                     else
                     {
@@ -292,7 +293,7 @@ namespace Conditions
             public bool Expandstring(int pno) { return expandedstrings.Contains(paratype[pno]); }
 
             public PT[] paratype;
-            public string fname;
+            public string fname;        // actual in code function name for reflection
             public int numberparasmin;
 
             public int numberparasmax { get { return paratype.Length; } }
@@ -330,6 +331,7 @@ namespace Conditions
 
         public int ParaCount { get { return paras.Count; } }
         static public Random GetRandom() { return rnd; }
+        static public void SetRandom(Random r) { rnd = r; }
         protected static Random rnd = new Random();
         protected List<Parameter> paras;
         protected ConditionFunctions caller;

@@ -34,6 +34,8 @@ namespace ActionLanguage
         public Dictionary<string, ExtendedControls.ConfigurableForm> dialogs;
         private bool closehandlesatend;
 
+        public bool ClosingHandlesAtEnd { get { return closehandlesatend; } }
+
         private ConditionVariables inputvars;        // input vars to this program, never changed
 
         private ActionRun actionrun;                         // who is running it..
@@ -129,7 +131,12 @@ namespace ActionLanguage
                 return null;
         }
 
-        public string Location { get { return actionfile.name + "::" + Name + " Step " + nextstepnumber; } }
+        public string Location { get
+            {
+                int lineno = GetLastStep() != null ? GetLastStep().LineNumber : 0;
+
+                return "Step " + nextstepnumber.ToStringInvariant() + " in " + actionfile.name + "::" + Name + ":" + lineno.ToStringInvariant();
+            } }
 
         public int ExecLevel { get { return execlevel; } }
 

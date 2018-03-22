@@ -80,6 +80,7 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -353,37 +354,38 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.writeJournalToLogtoolStripMenuItem,
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem,
             this.createEditBookmarkToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 378);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 400);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
             // 
             this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
-            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
             this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
             // 
             // starMapColourToolStripMenuItem
             // 
             this.starMapColourToolStripMenuItem.Name = "starMapColourToolStripMenuItem";
-            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.starMapColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.starMapColourToolStripMenuItem.Text = "Star Map Colour...";
             this.starMapColourToolStripMenuItem.Click += new System.EventHandler(this.starMapColourToolStripMenuItem_Click);
             // 
             // hideSystemToolStripMenuItem
             // 
             this.hideSystemToolStripMenuItem.Name = "hideSystemToolStripMenuItem";
-            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.hideSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.hideSystemToolStripMenuItem.Text = "Hide Entries";
             this.hideSystemToolStripMenuItem.Click += new System.EventHandler(this.hideSystemToolStripMenuItem_Click);
             // 
             // moveToAnotherCommanderToolStripMenuItem
             // 
             this.moveToAnotherCommanderToolStripMenuItem.Name = "moveToAnotherCommanderToolStripMenuItem";
-            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.moveToAnotherCommanderToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.moveToAnotherCommanderToolStripMenuItem.Text = "Move Entries to another Commander";
             this.moveToAnotherCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveToAnotherCommanderToolStripMenuItem_Click);
             // 
@@ -395,7 +397,7 @@ namespace EDDiscovery.UserControls
             this.bothToolStripMenuItem,
             this.routeToolStripMenuItem});
             this.addToTrilaterationToolStripMenuItem.Name = "addToTrilaterationToolStripMenuItem";
-            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.addToTrilaterationToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.addToTrilaterationToolStripMenuItem.Text = "Add to ...";
             // 
             // trilaterationToolStripMenuItem
@@ -429,77 +431,84 @@ namespace EDDiscovery.UserControls
             // viewOnEDSMToolStripMenuItem
             // 
             this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
             // selectCorrectSystemToolStripMenuItem
             // 
             this.selectCorrectSystemToolStripMenuItem.Name = "selectCorrectSystemToolStripMenuItem";
-            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.selectCorrectSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.selectCorrectSystemToolStripMenuItem.Text = "Assign new system";
             this.selectCorrectSystemToolStripMenuItem.Click += new System.EventHandler(this.selectCorrectSystemToolStripMenuItem_Click);
             // 
             // toolStripMenuItemStartStop
             // 
             this.toolStripMenuItemStartStop.Name = "toolStripMenuItemStartStop";
-            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(293, 22);
+            this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(387, 22);
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
             // 
             // removeJournalEntryToolStripMenuItem
             // 
             this.removeJournalEntryToolStripMenuItem.Name = "removeJournalEntryToolStripMenuItem";
-            this.removeJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.removeJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.removeJournalEntryToolStripMenuItem.Text = "Remove Journal Entry";
             this.removeJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.removeJournalEntryToolStripMenuItem_Click);
             // 
             // sendUnsyncedScanToEDDNToolStripMenuItem
             // 
             this.sendUnsyncedScanToEDDNToolStripMenuItem.Name = "sendUnsyncedScanToEDDNToolStripMenuItem";
-            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.sendUnsyncedScanToEDDNToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.sendUnsyncedScanToEDDNToolStripMenuItem.Text = "Send unsynced scan to EDDN";
             this.sendUnsyncedScanToEDDNToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedScanToEDDNToolStripMenuItem_Click);
             // 
             // runActionsOnThisEntryToolStripMenuItem
             // 
             this.runActionsOnThisEntryToolStripMenuItem.Name = "runActionsOnThisEntryToolStripMenuItem";
-            this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.runActionsOnThisEntryToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.runActionsOnThisEntryToolStripMenuItem.Text = "Run Actions on this entry";
             this.runActionsOnThisEntryToolStripMenuItem.Click += new System.EventHandler(this.runActionsOnThisEntryToolStripMenuItem_Click);
             // 
             // setNoteToolStripMenuItem
             // 
             this.setNoteToolStripMenuItem.Name = "setNoteToolStripMenuItem";
-            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.setNoteToolStripMenuItem.Text = "Set Note";
             this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
             // 
             // writeEventInfoToLogDebugToolStripMenuItem
             // 
             this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
             this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
             // writeJournalToLogtoolStripMenuItem
             // 
             this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
-            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
             this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
+            // 
+            // runActionsAcrossSelectionToolSpeechStripMenuItem
+            // 
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Name = "runActionsAcrossSelectionToolSpeechStripMenuItem";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Text = "Run actions across selection for speech debugging (Debug)";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Click += new System.EventHandler(this.runActionsAcrossSelectionToolStripMenuItem_Click);
             // 
             // copyJournalEntryToClipboardToolStripMenuItem
             // 
             this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
-            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
             // createEditBookmarkToolStripMenuItem
             // 
             this.createEditBookmarkToolStripMenuItem.Name = "createEditBookmarkToolStripMenuItem";
-            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
             this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
             // 
@@ -568,5 +577,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem writeJournalToLogtoolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runActionsAcrossSelectionToolSpeechStripMenuItem;
     }
 }

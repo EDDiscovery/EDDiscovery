@@ -218,6 +218,10 @@ namespace ActionLanguage
                             ap.actioncontroller.LogLine("Say: " + expsay);
                             expsay = "";
                         }
+                        if (ctrl.Contains("Mute"))
+                        {
+                            expsay = "";
+                        }
 
                         if (dontspeak)
                             expsay = "";    

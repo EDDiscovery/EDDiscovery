@@ -51,6 +51,8 @@ namespace ActionLanguage
 
         public System.Drawing.Icon Icon { get; private set;}
 
+        public bool AsyncMode { get { return actionrunasync.AsyncMode; } set { actionrunasync.AsyncMode = value; } }
+
         public ActionCoreController(System.Windows.Forms.Form frm, System.Drawing.Icon ic )
         {
             Icon = ic;
