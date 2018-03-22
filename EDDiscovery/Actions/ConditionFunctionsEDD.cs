@@ -37,6 +37,7 @@ namespace EDDiscovery.Actions
                 functions.Add("version", new FuncEntry(Version, FuncEntry.PT.ImeSE));
                 functions.Add("star", new FuncEntry(Star, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
                 functions.Add("ship", new FuncEntry(Ship, FuncEntry.PT.MESE));
+                functions.Add("events", new FuncEntry(Events, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
             }
         }
 
@@ -100,7 +101,7 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        protected bool Star(out string output )
+        protected bool Star(out string output)
         {
             // Find IX-T123b and replace with I X - T 123 b
             paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
@@ -110,6 +111,19 @@ namespace EDDiscovery.Actions
             });
 
             return ReplaceVarCommon(out output, true);
+        }
+
+        protected bool Events(out string output)
+        {
+            output = "";
+            foreach (EliteDangerousCore.JournalTypeEnum v in Enum.GetValues(typeof(EliteDangerousCore.JournalTypeEnum)) )
+            {
+                if ((int)v>0&&(int)v<(int)EliteDangerousCore.JournalTypeEnum.EDDItemSet)
+                {
+                    output += paras[0].Value + v.ToString() + paras[1].Value;
+                }
+            }
+            return true;
         }
 
         protected override bool VerifyFileAccess(string file, FileMode fm)

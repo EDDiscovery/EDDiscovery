@@ -69,6 +69,12 @@ namespace Conditions
 
         public ExpandResult ExpandStringFull(string line, out string result, int recdepth)
         {
+            if (recdepth > 9)
+            {
+                result = "Recursion detected - aborting expansion";
+                return ExpandResult.Failed;
+            }
+
             int noexpansion = 0;
             int pos = 0;
             do
@@ -93,20 +99,22 @@ namespace Conditions
 
                         ConditionFunctionHandlers cfh = GetCFH(this, vars, persistentdata, recdepth);
 
-                        if ( funcname.Length>0 && !cfh.SetFunction(funcname))
+                        string errprefix = "";
+                        if (funcname.Length > 0)
                         {
-                            result = "Function '" + funcname + "' does not exist";
-                            return ExpandResult.Failed;
-                        }
-
-                        while (true)
-                        {
-                            if (!cfh.IsNextParameterAllowed)
+                            if (!cfh.SetFunction(funcname))
                             {
-                                result = "Too many parameters";
+                                result = "Function '" + funcname + "' does not exist";
                                 return ExpandResult.Failed;
                             }
 
+                            errprefix = "Function " + funcname + ": ";
+                            //System.Diagnostics.Debug.WriteLine("Function " + funcname);
+                        }
+
+
+                        while (true)
+                        {
                             while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
                                 apos++;
 
@@ -116,6 +124,11 @@ namespace Conditions
                                 break;
                             }
 
+                            if (!cfh.IsNextParameterAllowed)
+                            {
+                                result = errprefix + "Too many parameters";
+                                return ExpandResult.Failed;
+                            }
                             int start = apos;
 
                             bool isstring = false;       // meaning, we can't consider it for macro names, its now a literal
@@ -125,7 +138,7 @@ namespace Conditions
                             {
                                 if (!cfh.IsNextStringAllowed)
                                 {
-                                    result = "String not allowed in parameter " + (cfh.ParaCount + 1);
+                                    result = errprefix + "String not allowed in parameter " + (cfh.ParaCount + 1);
                                     return ExpandResult.Failed;
                                 }
 
@@ -145,7 +158,7 @@ namespace Conditions
 
                                 if (apos >= line.Length)
                                 {
-                                    result = "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = errprefix + "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
 
@@ -175,7 +188,7 @@ namespace Conditions
 
                                 if (apos == start)
                                 {
-                                    result = "Missing text/varname at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = errprefix + "Missing text/varname at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
 
@@ -186,7 +199,7 @@ namespace Conditions
 
                             if (err != null)
                             {
-                                result = "Parameter " + (cfh.ParaCount + 1) + ":" + err;
+                                result = errprefix + "Parameter " + (cfh.ParaCount + 1) + ": " + err;
                                 return ExpandResult.Failed;
                             }
 
@@ -207,9 +220,9 @@ namespace Conditions
 
                         string expand = null;
 
-                        if ( !cfh.Run(out expand , funcname ))
+                        if ( !cfh.Run(out expand ))
                         {
-                            result = expand;
+                            result = errprefix + expand;
                             return ExpandResult.Failed;
                         }
 

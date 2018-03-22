@@ -198,42 +198,11 @@ namespace Conditions
 
         protected bool Expand(out string output)
         {
-            return ExpandCore(out output, false);
-        }
-        protected bool Indirect(out string output)
-        {
-            return ExpandCore(out output, true);
-        }
-
-        protected bool ExpandCore(out string output, bool indirect)
-        {
-            if (recdepth > 9)
-            {
-                output = "Recursion detected - aborting expansion";
-                return false;
-            }
-
             output = "";
 
-            foreach (Parameter p in paras)
+            foreach (Parameter p in paras)          // output been expanded by ME to get macro contents, now expand them out
             {
-                string value = p.Value;
-
-                if (indirect)
-                {
-                    if (vars.Exists(value))
-                        value = vars[value];
-                    else
-                    {
-                        output = "Indrect Variable " + value + " not found";
-                        return false;
-                    }
-                }
-
-                string res;
-                ConditionFunctions.ExpandResult result = caller.ExpandStringFull(value, out res, recdepth + 1);
-
-                if (result == ConditionFunctions.ExpandResult.Failed)
+                if (caller.ExpandStringFull(p.Value, out string res, recdepth + 1) == ConditionFunctions.ExpandResult.Failed)
                 {
                     output = res;
                     return false;
@@ -241,19 +210,43 @@ namespace Conditions
 
                 output += res;
             }
+        
+            return true;
+        }
+
+        protected bool Indirect(out string output)
+        {
+            output = "";
+
+            foreach (Parameter p in paras)          // output been expanded by ME.. 
+            {
+                if (vars.Exists(p.Value))         // if macro name, expand..
+                {
+                    if (caller.ExpandStringFull(vars[p.Value], out string res, recdepth + 1) == ConditionFunctions.ExpandResult.Failed)
+                    {
+                        output = res;
+                        return false;
+                    }
+
+                    output += res;
+                }
+                else if (p.IsString)         // in previous versions, i was incorrectly usign indirect instead of expand.. so if its string quoted, allow it thru
+                {
+                    output += p.Value;         // its already expanded once, no need again..
+                }
+                else
+                {
+                    output = "Indirect Variable '" + p.Value + "' not found";
+                    return false;
+                }
+            }
 
             return true;
         }
 
         protected bool IndirectI(out string output)
         {
-            if (recdepth > 9)
-            {
-                output = "Recursion detected - aborting expansion";
-                return false;
-            }
-
-            string mname = paras[0].Value + paras[1].Value;        // expand first part, already checked.  Plus the second literal part
+            string mname = paras[0].Value + paras[1].Value;        // first part macro name, expanded. Plus the second literal part
 
             if (vars.Exists(mname))
             {
@@ -709,7 +702,7 @@ namespace Conditions
 
         protected bool SeedRandom(out string output)
         {
-            rnd = new System.Random(paras[0].Int);
+            SetRandom(new System.Random(paras[0].Int));
             output = "1";
             return true;
         }

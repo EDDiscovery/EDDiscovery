@@ -114,6 +114,7 @@ namespace EDDiscovery.UserControls
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
             writeJournalToLogtoolStripMenuItem.Visible = false;
+            runActionsAcrossSelectionToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -939,6 +940,48 @@ namespace EDDiscovery.UserControls
                 if (json != null)
                 {
                     Clipboard.SetText(json);
+                }
+            }
+        }
+
+        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string laststring = "";
+            string lasttype = "";
+            int lasttypecount = 0;
+
+            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
+
+            if (dataGridViewTravel.SelectedRows.Count > 0)
+            {
+                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
+                foreach (DataGridViewRow rw in rows)
+                {
+                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
+
+
+                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
+                    if (!same || lasttypecount < 10)
+                    {
+                        lasttype = he.journalEntry.EventTypeStr;
+                        lasttypecount = (same) ? ++lasttypecount : 0;
+
+                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
+                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
+                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+
+                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
+                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+
+                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
+
+                        if (s.Length > 0 && !s.Equals(laststring))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            laststring = s;
+                        }
+                    }
                 }
             }
         }
