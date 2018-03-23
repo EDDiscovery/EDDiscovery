@@ -1906,6 +1906,30 @@ namespace EliteDangerousCore
             { "Eol Procul Centauri", new Dictionary<string, string> {
                 { "Hutton Moon", "Eol Procul Centauri 1" }
             } },
+            { "61 Virginis", new Dictionary<string, string> {
+                { "Rubin's Discovery", "61 Virginis 1" }
+            } },
+            { "Bragurom Du", new Dictionary<string, string> {
+                { "Remlok's Claim", "Bragurom Du 4 a" }
+            } },
+            { "LHS 2610", new Dictionary<string, string> {
+                { "Evangeline's Grace", "LHS 2610 4 a" }
+            } },
+            { "Eowrairsts JA-P c19-0", new Dictionary<string, string> {
+                { "Farwalker Point", "Eowrairsts JA-P c19-0 7 a" }
+            } },
+            { "George Pantazis", new Dictionary<string, string> {
+                { "Anew", "George Pantazis A 12" }
+            } },
+            { "LHS 2038", new Dictionary<string, string> {
+                { "Frauke", "LHS 2038 C 1" }
+            } },
+            { "California Sector HW-W c1-5", new Dictionary<string, string> {
+                { "Emma's Hope", "California Sector HW-W c1-5 C 1" }
+            } },
+            { "CD-43 11917", new Dictionary<string, string> {
+                { "Ares", "CD-43 11917 1" }
+            } },
         };
     }
 }
