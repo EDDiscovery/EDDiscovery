@@ -509,7 +509,7 @@ namespace EliteDangerousCore
                         elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
-                    else if (elements.Count == 5 && elements[0].Length == 1 &&
+                    else if (elements.Count == 5 && elements[0].Length >= 1 &&
                             elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
                             elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
@@ -563,7 +563,7 @@ namespace EliteDangerousCore
                         elements = new List<string> { "Main Star", elements[0] + " " + elements[1], elements[2] + " " + elements[3] };
                         isbeltcluster = true;
                     }
-                    else if (elements.Count == 5 && elements[0].Length == 1 &&
+                    else if (elements.Count == 5 && elements[0].Length >= 1 &&
                             elements[1].Length == 1 && char.IsLetter(elements[1][0]) &&
                             elements[2].Equals("belt", StringComparison.InvariantCultureIgnoreCase) &&
                             elements[3].Equals("cluster", StringComparison.InvariantCultureIgnoreCase))
