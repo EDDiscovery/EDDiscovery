@@ -769,6 +769,8 @@ namespace EDDiscovery.UserControls
             {
                 foreach(TreeNode tn in treeViewStats.Nodes) result += tn.IsExpanded ? "Y" : "N";
             }
+            else
+                result = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
             return result;
         }
 
