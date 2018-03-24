@@ -165,21 +165,21 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Docked)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNMessage(je as JournalDocked, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Scan)
             {
-                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System.Name, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
+                msg = eddn.CreateEDDNMessage(je as JournalScan, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
                 //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
-                msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System.SystemAddress);
+                msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Shipyard)
             {
                 //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
-                msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System.SystemAddress);
+                msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
