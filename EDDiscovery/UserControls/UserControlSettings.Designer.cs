@@ -428,7 +428,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxHomeSystem, "Pick a home system");
             this.textBoxHomeSystem.WordWrap = true;
-            this.textBoxHomeSystem.Validated += new System.EventHandler(this.textBoxHomeSystem_Validated);
+            this.textBoxHomeSystem.Leave += new System.EventHandler(this.textBoxHomeSystem_Leave);
             // 
             // buttonReloadSaved
             // 
