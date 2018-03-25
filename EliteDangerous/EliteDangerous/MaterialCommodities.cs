@@ -197,10 +197,10 @@ namespace EliteDangerousCore
             AddRaw("Molybdenum", MaterialFreqStandard, "Mo");
             AddRaw("Mercury", MaterialFreqStandard, "Hg");
             AddRaw("Boron", MaterialFreqStandard, "B");
+            AddRaw("Cadmium", MaterialFreqStandard, "Cd");
 
             AddRaw("Selenium", MaterialFreqRare, "Se");
             AddRaw("Yttrium", MaterialFreqRare, "Y");
-            AddRaw("Cadmium", MaterialFreqRare, "Cd");
             AddRaw("Technetium", MaterialFreqRare, "Tc");
             AddRaw("Tellurium", MaterialFreqRare, "Te");
             AddRaw("Ruthenium", MaterialFreqRare, "Ru");
@@ -256,8 +256,6 @@ namespace EliteDangerousCore
             AddCommodity("Galactic Travel Guide;Geological Samples;Hostage;Military Intelligence;Military Plans;Mysterious Idol;Occupied CryoPod;Occupied Escape Pod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials;Prototype Tech", sv);
             AddCommodity("Rare Artwork;Rebel Transmissions;Salvageable Wreckage;Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Technical Blueprints;Trade Data;Unknown Probe;Unstable Data Core", sv);
             AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
-            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
-            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
             AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
 
             AddCommodityO(sv, "AncientRelic", "Ancient Relic");
