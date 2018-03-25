@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
                         string present = "";
                         if (showListAvailability)
                         {
-                            if (sd != null)
+                            if (sd != null && sd.HasMaterials)
                             {
                                 if (sd.Materials.TryGetValue(c.fdname, out available))
                                 {
