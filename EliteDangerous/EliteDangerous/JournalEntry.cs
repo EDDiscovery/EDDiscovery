@@ -971,7 +971,7 @@ namespace EliteDangerousCore
                         while (reader.Read())
                         {
                             JournalEntry jent = CreateJournalEntry(reader);
-                            if (!AreSameEntry(ent, jent, entjo))
+                            if (AreSameEntry(ent, jent, entjo))
                             {
                                 entries.Add(jent);
                             }
