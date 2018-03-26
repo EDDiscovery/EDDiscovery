@@ -108,19 +108,19 @@ namespace NetLogEntry
             string v;
             while ((v = args.Next) != null)
             {
-                if (Enum.TryParse<StatusFlagsShip>(v, out StatusFlagsShip s))
+                if (Enum.TryParse<StatusFlagsShip>(v, true, out StatusFlagsShip s))
                 {
                     flags |= 1L << (int)s;
                 }
-                else if (Enum.TryParse<StatusFlagsSRV>(v, out StatusFlagsSRV sv))
+                else if (Enum.TryParse<StatusFlagsSRV>(v, true, out StatusFlagsSRV sv))
                 {
                     flags |= 1L << (int)sv;
                 }
-                else if (Enum.TryParse<StatusFlagsAll>(v, out StatusFlagsAll a))
+                else if (Enum.TryParse<StatusFlagsAll>(v, true, out StatusFlagsAll a))
                 {
                     flags |= 1L << (int)a;
                 }
-                else if (Enum.TryParse<StatusFlagsShipType>(v, out StatusFlagsShipType st))
+                else if (Enum.TryParse<StatusFlagsShipType>(v, true, out StatusFlagsShipType st))
                 {
                     flags |= 1L << (int)st;
                 }

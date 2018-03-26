@@ -33,7 +33,7 @@ namespace Conditions
                 functions.Add("existsdefault", new FuncEntry(ExistsDefault, FuncEntry.PT.M, FuncEntry.PT.MESE));   // first is a macro but can not exist, second is a string or macro which must exist
                 functions.Add("expand", new FuncEntry(Expand, 1, 20, FuncEntry.PT.ME)); // check var, can be string (if so expanded)
 
-                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS));
+                functions.Add("expandarray", new FuncEntry(ExpandArray, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS, FuncEntry.PT.MESE));
                 functions.Add("expandvars", new FuncEntry(ExpandVars, 4, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE, FuncEntry.PT.LS));   // var 1 is text root/string, not var, not string, var 2 can be var or string, var 3/4 is integers or variables, checked in function
                 functions.Add("findarray", new FuncEntry(FindArray, 2, FuncEntry.PT.M, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
                 functions.Add("indirect", new FuncEntry(Indirect, 1, 20, FuncEntry.PT.ME));   // check var
@@ -757,18 +757,37 @@ namespace Conditions
 
         protected bool ExpandArray(out string output)
         {
-            return ExpandArrayCommon(out output, false);
+            output = "";
+
+            string postname = paras.Count == 6 ? paras[5].Value : "";
+            bool splitcaps = paras.Count == 5 && paras[4].Value.IndexOf("splitcaps", StringComparison.InvariantCultureIgnoreCase) >= 0;
+            int start = paras[2].Int;
+            int length = paras[3].Int;
+
+            for (int i = start; i < start + length; i++)
+            {
+                string aname = paras[0].Value + "[" + i.ToString(ct) + "]" + postname;
+
+                if (vars.Exists(aname))
+                {
+                    if (i != start)
+                        output += paras[1].Value;
+
+                    if (splitcaps)
+                        output += vars[aname].SplitCapsWordFull();
+                    else
+                        output += vars[aname];
+                }
+                else
+                    break;
+            }
+
+            return true;
         }
 
         protected bool ExpandVars(out string output)
         {
-            return ExpandArrayCommon(out output, true);
-        }
-
-        protected bool ExpandArrayCommon(out string output, bool join)
-        {
             string arrayroot = paras[0].Value;
-            string separ = paras[1].Value;
             int start = paras[2].Int;
             int length = paras[3].Int;
 
@@ -776,49 +795,26 @@ namespace Conditions
 
             output = "";
 
-            if (join)
+            bool nameonly = paras.Count == 5 && paras[4].Value.IndexOf("nameonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
+            bool valueonly = paras.Count == 5 && paras[4].Value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
+
+            int index = 0;
+            foreach (string key in vars.NameEnumuerable)
             {
-                bool nameonly = paras.Count == 5 && paras[4].Value.IndexOf("nameonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
-                bool valueonly = paras.Count == 5 && paras[4].Value.IndexOf("valueonly", StringComparison.InvariantCultureIgnoreCase) >= 0;
-
-                int index = 0;
-                foreach (string key in vars.NameEnumuerable)
+                if (key.StartsWith(arrayroot))
                 {
-                    if (key.StartsWith(arrayroot))
+                    index++;
+                    if (index >= start && index < start + length)
                     {
-                        index++;
-                        if (index >= start && index < start + length)
-                        {
-                            string value = vars[key];
+                        string value = vars[key];
 
-                            string entry = (valueonly) ? vars[key] : (key.Substring(arrayroot.Length) + (nameonly ? "" : (" = " + vars[key])));
+                        string entry = (valueonly) ? vars[key] : (key.Substring(arrayroot.Length) + (nameonly ? "" : (" = " + vars[key])));
 
-                            if (output.Length > 0)
-                                output += separ;
+                        if (output.Length > 0)
+                            output += paras[1].Value;
 
-                            output += (splitcaps) ? entry.SplitCapsWordFull() : entry;
-                        }
+                        output += (splitcaps) ? entry.SplitCapsWordFull() : entry;
                     }
-                }
-            }
-            else
-            {
-                for (int i = start; i < start + length; i++)
-                {
-                    string aname = arrayroot + "[" + i.ToString(ct) + "]";
-
-                    if (vars.Exists(aname))
-                    {
-                        if (i != start)
-                            output += separ;
-
-                        if (splitcaps)
-                            output += vars[aname].SplitCapsWordFull();
-                        else
-                            output += vars[aname];
-                    }
-                    else
-                        break;
                 }
             }
 

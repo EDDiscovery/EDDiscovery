@@ -218,24 +218,44 @@ namespace EDDiscovery.Actions
 
                             if (f != null)
                             {
-                                StringParser sp = new StringParser(UserData);       // go back to the string parser.. cludge
-                                sp.NextQuotedWord();
-                                sp.NextQuotedWord();
                                 Conditions.ConditionVariables c = new Conditions.ConditionVariables();
-                                if (c.FromString(sp, Conditions.ConditionVariables.FromMode.MultiEntryComma))
-                                {
-                                    if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
-                                    {
-                                        c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
-                                        c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
-                                        c["EventClass_UIDisplayed"] = EDDConfig.Instance.ShowUIEvents ? "1" : "0";
-                                        (ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
-                                    }
 
-                                    (ap.actioncontroller as ActionController).ActionRun(f, c, now: true);
+                                for ( int w = 2; w < exp.Count; w++ )
+                                {
+                                    string vname = exp[w];
+                                    int asterisk = vname.IndexOf('*');
+
+                                    if ( asterisk >=0 )     // pass in name* no complaining if not there
+                                    {
+                                        string prefix = vname.Substring(0, asterisk);
+
+                                        foreach (string jkey in ap.variables.NameEnumuerable)
+                                        {
+                                            if (jkey.StartsWith(prefix))
+                                                c[jkey] = ap.variables[jkey];
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (ap.variables.Exists(vname))     // pass in explicit name
+                                            c[vname] = ap.variables[vname];
+                                        else
+                                        {
+                                            ap.ReportError("No such variable '"  + vname  +"'");
+                                            return true;
+                                        }
+                                    }
                                 }
-                                else
-                                    ap.ReportError("Variables not in correct form");
+                                
+                                if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
+                                {
+                                    c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
+                                    c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
+                                    c["EventClass_UIDisplayed"] = EDDConfig.Instance.ShowUIEvents ? "1" : "0";
+                                    (ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
+                                }
+
+                                (ap.actioncontroller as ActionController).ActionRun(f, c, now: true);
                             }
                             else
                             {

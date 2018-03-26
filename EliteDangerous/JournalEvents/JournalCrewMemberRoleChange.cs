@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCrewMemberRoleChange(JObject evt) : base(evt, JournalTypeEnum.CrewMemberRoleChange)
         {
             Crew = evt["Crew"].Str();
-            Role = evt["Role"].Str();
+            Role = evt["Role"].Str().SplitCapsWord();
         }
         public string Crew { get; set; }
         public string Role { get; set; }
@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             summary = EventTypeStr.SplitCapsWord();
             //info = Crew;
-            info = BaseUtils.FieldBuilder.Build("Crew", Crew, "Role", Role);
+            info = BaseUtils.FieldBuilder.Build("Crew:", Crew, "Role:", Role);
             detailed = "";
         }
     }
