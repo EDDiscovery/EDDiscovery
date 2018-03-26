@@ -173,7 +173,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
         {
-            shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules);
+//            if (HullValue != null)                System.Diagnostics.Debug.WriteLine("!)");
+            shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

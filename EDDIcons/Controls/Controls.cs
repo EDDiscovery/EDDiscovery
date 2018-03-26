@@ -155,6 +155,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlModules
         public static Image Modules_ShowOnCoriolis { get { return IconSet.GetIcon("Controls.Modules.ShowOnCoriolis"); } }
+        public static Image Modules_EDShipYard { get { return IconSet.GetIcon("Controls.Modules.EDShipYard"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlRoute
         public static Image Route_ExportToExcel { get { return IconSet.GetIcon("Controls.Route.ExportToExcel"); } }
