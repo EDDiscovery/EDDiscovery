@@ -261,6 +261,10 @@ namespace EliteDangerousCore
                 { "Gliese 649.1 B", "V1090 Herculis B" },
                 { "Gliese 649.1 C", "V1090 Herculis C" },
             } },
+            { "9 Aurigae", new Dictionary<string, string> {
+                { "9 Aurigae B", "9 Aurigae A" },
+                { "9 Aurigae", "9 Aurigae B" },
+            } }
         };
 
         public static Dictionary<string, Dictionary<string, string>> Planets = new Dictionary<string, Dictionary<string, string>>
@@ -1905,6 +1909,64 @@ namespace EliteDangerousCore
             } },
             { "Eol Procul Centauri", new Dictionary<string, string> {
                 { "Hutton Moon", "Eol Procul Centauri 1" }
+            } },
+            { "61 Virginis", new Dictionary<string, string> {
+                { "Rubin's Discovery", "61 Virginis 1" }
+            } },
+            { "Bragurom Du", new Dictionary<string, string> {
+                { "Remlok's Claim", "Bragurom Du 4 a" }
+            } },
+            { "LHS 2610", new Dictionary<string, string> {
+                { "Evangeline's Grace", "LHS 2610 4 a" }
+            } },
+            { "Eowrairsts JA-P c19-0", new Dictionary<string, string> {
+                { "Farwalker Point", "Eowrairsts JA-P c19-0 7 a" }
+            } },
+            { "George Pantazis", new Dictionary<string, string> {
+                { "Anew", "George Pantazis A 12" }
+            } },
+            { "LHS 2038", new Dictionary<string, string> {
+                { "Frauke", "LHS 2038 C 1" }
+            } },
+            { "California Sector HW-W c1-5", new Dictionary<string, string> {
+                { "Emma's Hope", "California Sector HW-W c1-5 C 1" }
+            } },
+            { "CD-43 11917", new Dictionary<string, string> {
+                { "Ares", "CD-43 11917 1" }
+            } },
+        };
+
+        public struct DesigMap
+        {
+            public string Name { get; set; }
+            public string Designation { get; set; }
+            public bool CaseSensitive { get; set; }
+
+            public DesigMap(string name, string desig, bool caseSensitive = false)
+            {
+                Name = name;
+                Designation = desig;
+                CaseSensitive = caseSensitive;
+            }
+
+            public bool NameEquals(string name)
+            {
+                return Name.Equals(name, CaseSensitive ? StringComparison.InvariantCulture : StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
+        public static Dictionary<string, Dictionary<int, DesigMap>> ByBodyId = new Dictionary<string, Dictionary<int, DesigMap>>
+        {
+            { "9 Aurigae", new Dictionary<int, DesigMap> {
+                { 4, new DesigMap("9 Aurigae B", "9 Aurigae A") },
+                { 5, new DesigMap("9 Aurigae", "9 Aurigae B") },
+                { 6, new DesigMap("9 Aurigae C", "9 Aurigae C") },
+                { 7, new DesigMap("9 Aurigae C", "9 Aurigae D") },
+                { 8, new DesigMap("9 Aurigae E", "9 Aurigae E") }
+            } },
+            { "m Centauri", new Dictionary<int, DesigMap> {
+                { 1, new DesigMap("m Centauri", "m Centauri A", true) },
+                { 2, new DesigMap("M Centauri", "m Centauri B", true) }
             } },
         };
     }
