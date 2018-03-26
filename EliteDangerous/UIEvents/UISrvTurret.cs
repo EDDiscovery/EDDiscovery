@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UISrvTurret : UIEvent
     {
-        public UISrvTurret(bool state, DateTime time) : base(UITypeEnum.SrvTurret, time)
+        public UISrvTurret(bool state, DateTime time, bool refresh): base(UITypeEnum.SrvTurret, time, refresh)
         {
             Turret = state;
         }

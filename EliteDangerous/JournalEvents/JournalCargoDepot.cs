@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
             ItemsCollected = evt["ItemsCollected"].Int();
             ItemsDelivered = evt["ItemsCollected"].Int();
             TotalItemsToDeliver = evt["TotalItemsToDeliver"].Int();
+            ItemsToGo = TotalItemsToDeliver - ItemsDelivered;
             ProgressPercent = evt["Progress"].Double()*100;
             MarketID = evt["MarketID"].LongNull();
         }
@@ -54,6 +55,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public int ItemsCollected { get; set; }             // current total stats
         public int ItemsDelivered { get; set; }
+        public int ItemsToGo { get; set; }
         public int TotalItemsToDeliver { get; set; }
         public double ProgressPercent { get; set; }
 
@@ -70,15 +72,15 @@ namespace EliteDangerousCore.JournalEvents
             summary = EventTypeStr.SplitCapsWord();
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
-                info = BaseUtils.FieldBuilder.Build("Collected:", Count, "< of " , FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Collected:", Count, "< of " , FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", ItemsToGo, "Progress:;%;N1", ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.Deliver)
             {
-                info = BaseUtils.FieldBuilder.Build("Delivered:", Count, "< of ", FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Delivered:", Count, "< of ", FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", ItemsToGo , "Progress:;%;N1", ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.WingUpdate)
             {
-                info = BaseUtils.FieldBuilder.Build("Update, Collected:", ItemsCollected, "Delivered:", ItemsDelivered, "To Go:", TotalItemsToDeliver - ItemsDelivered, "Progress Left:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Update, Collected:", ItemsCollected, "Delivered:", ItemsDelivered, "To Go:", ItemsToGo , "Progress Left:;%;N1", ProgressPercent);
             }
             else
             {

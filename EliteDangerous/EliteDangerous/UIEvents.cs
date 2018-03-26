@@ -61,27 +61,29 @@ namespace EliteDangerousCore
 
     public abstract class UIEvent
     {
-        public UIEvent(UITypeEnum t, DateTime time)
+        public UIEvent(UITypeEnum t, DateTime time, bool refresh)
         {
             EventTypeID = t;
             EventTimeUTC = time;
+            EventRefresh = refresh;
         }
 
         public DateTime EventTimeUTC { get; set; }
         public UITypeEnum EventTypeID { get; set; }             // name of event. 
         public string EventTypeStr { get { return EventTypeID.ToString(); } }
+        public bool EventRefresh { get; set; }                  // either at the start or a forced refresh
 
         static string JournalRootClassname = typeof(UIEvents.UIDocked).Namespace;        // pick one at random to find out root classname
 
         // Flag Factory (others are created individually)
 
-        static public UIEvent CreateFlagEvent(string name, bool value, DateTime time)
+        static public UIEvent CreateFlagEvent(string name, bool value, DateTime time, bool refresh)
         {
             string evname = "UI" + name;
             Type t = Type.GetType(JournalRootClassname + "." + evname, false, true);
             if (t != null)
             {
-                UIEvent e = (UIEvent)Activator.CreateInstance(t, new Object[] { value, time });
+                UIEvent e = (UIEvent)Activator.CreateInstance(t, new Object[] { value, time , refresh });
                 return e;
             }
             else

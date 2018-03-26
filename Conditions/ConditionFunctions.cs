@@ -69,6 +69,12 @@ namespace Conditions
 
         public ExpandResult ExpandStringFull(string line, out string result, int recdepth)
         {
+            if (recdepth > 9)
+            {
+                result = "Recursion detected - aborting expansion";
+                return ExpandResult.Failed;
+            }
+
             int noexpansion = 0;
             int pos = 0;
             do
@@ -93,24 +99,52 @@ namespace Conditions
 
                         ConditionFunctionHandlers cfh = GetCFH(this, vars, persistentdata, recdepth);
 
+                        string errprefix = "";
+                        if (funcname.Length > 0)
+                        {
+                            if (!cfh.SetFunction(funcname))
+                            {
+                                result = "Function '" + funcname + "' does not exist";
+                                return ExpandResult.Failed;
+                            }
+
+                            errprefix = "Function " + funcname + ": ";
+                            //System.Diagnostics.Debug.WriteLine("Function " + funcname);
+                        }
+
+
                         while (true)
                         {
                             while (apos < line.Length && char.IsWhiteSpace(line[apos])) // remove white space
                                 apos++;
 
-                            if (apos < line.Length && line[apos] == ')' && cfh.paras.Count == 0)        // ) here must be on first only, and is valid
+                            if (apos < line.Length && line[apos] == ')' && cfh.ParaCount == 0)        // ) here must be on first only, and is valid
                             {
                                 apos++; // skip by
                                 break;
                             }
 
+                            if (!cfh.IsNextParameterAllowed)
+                            {
+                                result = errprefix + "Too many parameters";
+                                return ExpandResult.Failed;
+                            }
                             int start = apos;
+
+                            bool isstring = false;       // meaning, we can't consider it for macro names, its now a literal
+                            string res = null;
 
                             if (apos < line.Length && (line[apos] == '"' || line[apos] == '\''))
                             {
+                                if (!cfh.IsNextStringAllowed)
+                                {
+                                    result = errprefix + "String not allowed in parameter " + (cfh.ParaCount + 1);
+                                    return ExpandResult.Failed;
+                                }
+
                                 char quote = line[apos++];
 
-                                string res = "";
+                                res = string.Empty;
 
                                 while (apos < line.Length && line[apos] != quote)
                                 {
@@ -124,26 +158,16 @@ namespace Conditions
 
                                 if (apos >= line.Length)
                                 {
-                                    result = "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = errprefix + "Terminal quote missing at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
 
                                 apos++;     // remove quote
-
-                                string resexp;          // expand out any strings.. recursion
-                                ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
-
-                                if (sexpresult == ExpandResult.Failed)
-                                {
-                                    result = resexp;
-                                    return sexpresult;
-                                }
-
-                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = resexp, isstring = true });
+                                isstring = true;     
                             }
                             else
                             {
-                                if (funcname.Length > 0)        // functions can have () embedded .. in literals
+                                if (cfh.IsFunction)        // functions can have () embedded .. in literals
                                 {
                                     int blevel = 0;
                                     while (apos < line.Length && (blevel > 0 || "), ".IndexOf(line[apos]) == -1))
@@ -164,32 +188,19 @@ namespace Conditions
 
                                 if (apos == start)
                                 {
-                                    result = "Missing variable name at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                                    result = errprefix + "Missing text/varname at '" + line.Substring(startexpression, apos - startexpression) + "'";
                                     return ExpandResult.Failed;
                                 }
 
-                                string res = line.Substring(start, apos - start);
+                                res = line.Substring(start, apos - start);
+                            }
 
-                                if (funcname.Length > 0 && line.Contains("%"))        // function paramters can be expanded if they have a %
-                                {
-                                    string resexp;          // expand out any strings.. recursion
-                                    ExpandResult sexpresult = ExpandStringFull(res, out resexp, recdepth + 1);
+                            string err = cfh.ProcessParameter(res, isstring , recdepth);
 
-                                    if (sexpresult == ExpandResult.Failed)
-                                    {
-                                        result = resexp;
-                                        return sexpresult;
-                                    }
-
-                                    res = resexp;
-                                }
-                                else
-                                {                   // not an expansion.. see if it needs mangling
-                                    res = vars.Qualify(res);
-                                }
-
-                                cfh.paras.Add(new ConditionFunctionHandlers.Parameter() { value = res, isstring = false });
-                               
+                            if (err != null)
+                            {
+                                result = errprefix + "Parameter " + (cfh.ParaCount + 1) + ": " + err;
+                                return ExpandResult.Failed;
                             }
 
                             while (apos < line.Length && char.IsWhiteSpace(line[apos]))
@@ -209,34 +220,13 @@ namespace Conditions
 
                         string expand = null;
 
-                        if (funcname.Length > 0)        // functions!
+                        if ( !cfh.Run(out expand ))
                         {
-                            if (!cfh.RunFunction(funcname, out expand))
-                            {
-                                result = "Function " + funcname + ": " + expand;
-                                return ExpandResult.Failed;
-                            }
-                        }
-                        else if (cfh.paras.Count != 1)   // only 1
-                        {
-                            result = "Variable name missing between () at '" + line.Substring(startexpression, apos - startexpression) + "'";
+                            result = errprefix + expand;
                             return ExpandResult.Failed;
                         }
-                        else
-                        {                               // variables
-                            if (cfh.paras[0].isstring)
-                            {
-                                result = "Must be a variable not a string for non function expansions";
-                                return ExpandResult.Failed;
-                            }
-                            else if (vars.Exists(cfh.paras[0].value))
-                                expand = vars[cfh.paras[0].value];
-                            else
-                            {
-                                result = "Variable '" + cfh.paras[0].value + "' does not exist";
-                                return ExpandResult.Failed;
-                            }
-                        }
+
+                        //System.Diagnostics.Debug.WriteLine("Output is '" + expand + "'");
 
                         noexpansion++;
                         line = line.Substring(0, pos - 1) + expand + line.Substring(apos);
@@ -261,108 +251,4 @@ namespace Conditions
         #endregion
     }
 
-    // Class holding parameters and can call functions.  inherit from this, and override find function to add on functions
-    // done this way for historical reasons instead of having a set of ptrs to classes handling functions.
-
-    public class ConditionFunctionHandlers
-    {
-        public class Parameter
-        {
-            public string value;
-            public bool isstring;
-        };
-
-        public List<Parameter> paras;
-
-        protected ConditionFunctions caller;
-        protected ConditionVariables vars;
-        protected ConditionPersistentData persistentdata;
-        protected int recdepth;
-
-        protected delegate bool func(out string output);
-
-        protected class FuncEntry
-        {
-            public string fname;
-            public int numberparasmin;
-            public int numberparasmax;
-            public int checkvarmap;             // if not a string, check macro and fail if does not exist. b0 = para1, etc.
-            public int allowstringmap;          // allow a string map. b0 = para1, etc.
-
-            public FuncEntry(func f, int min, int max, int checkmacromapx, int allowstringmapx )
-            {
-                fname = f.Method.Name;
-                numberparasmin = min; numberparasmax = max;
-                checkvarmap = checkmacromapx; allowstringmap = allowstringmapx;
-            }
-        }
-
-        protected const int NoMacros = 0;           // ID for checkvarmap above
-        protected const int FirstMacro = 1;
-        protected const int SecondMacro = 2;
-        protected const int FirstSecondMacro = 3;
-        protected const int FirstSecondThirdMacro = 7;
-        protected const int SecondOnMacro = 0xffffffe;
-        protected const int AllMacros = 0xfffffff;
-
-        protected const int NoStrings = 0;          // ID for allowstringmap above
-        protected const int FirstString = 1;
-        protected const int SecondString = 2;
-        protected const int SecondOnStrings = 0xffffffe;
-        protected const int AllStrings = 0xfffffff;
-
-        protected static System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
-        protected static Random rnd = new Random();
-
-        protected virtual FuncEntry FindFunction(string name) { return null; }
-
-        public ConditionFunctionHandlers(ConditionFunctions c, ConditionVariables v, ConditionPersistentData h, int recd)
-        {
-            caller = c;
-            vars = v;
-            persistentdata = h;
-            recdepth = recd;
-            paras = new List<Parameter>();
-        }
-
-        public bool RunFunction(string fname, out string output)
-        {
-            FuncEntry fe = FindFunction(fname.ToLower());       // function names are case insensitive
-
-            if (fe != null)
-            {
-                if (paras.Count < fe.numberparasmin)
-                    output = "Too few parameters";
-                else if (paras.Count > fe.numberparasmax)
-                    output = "Too many parameters";
-                else
-                {
-                    for (int i = 0; i < paras.Count; i++)
-                    {
-                        if (paras[i].isstring)
-                        {
-                            if (((fe.allowstringmap >> i) & 1) == 0)
-                            {
-                                output = "Strings are not allowed in parameter " + (i + 1).ToString(ct);
-                                return false;
-                            }
-                        }
-                        else if (((fe.checkvarmap >> i) & 1) == 1 && !vars.Exists(paras[i].value))
-                        {
-                            output = "Variable '" + paras[i].value + "' does not exist in parameter " + (i + 1).ToString(ct);
-                            return false;
-                        }
-                    }
-
-                    System.Reflection.MethodInfo mi = GetType().GetMethod(fe.fname, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                    func fptr = (func)Delegate.CreateDelegate(typeof(func), this, mi);      // need a delegate which is attached to this instance..
-                    return fptr(out output);
-                }
-            }
-            else
-                output = "Function '" + fname + "' does not exist";
-
-            return false;
-        }
-    }
 }

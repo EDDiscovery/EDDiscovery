@@ -24,7 +24,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UISrvUnderShip : UIEvent
     {
-        public UISrvUnderShip(bool state, DateTime time) : base(UITypeEnum.SrvUnderShip, time)
+        public UISrvUnderShip(bool state, DateTime time, bool refresh): base(UITypeEnum.SrvUnderShip, time, refresh)
         {
             UnderShip = state;
         }

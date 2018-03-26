@@ -54,6 +54,7 @@
     <Compile Include="ConditionFilterForm.Designer.cs">
       <DependentUpon>ConditionFilterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConditionFunctionHandlers.cs" />
     <Compile Include="ConditionFunctions.cs" />
     <Compile Include="ConditionFunctionsBase.cs" />
     <Compile Include="ConditionLists.cs" />

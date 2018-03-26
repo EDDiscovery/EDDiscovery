@@ -25,7 +25,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalNpcCrewPaidWage(JObject evt ) : base(evt, JournalTypeEnum.NpcCrewPaidWage)
         {
             NpcCrewID = evt["NpcCrewId"].Long();
-            Name = evt["NpcCrewName"].Str();
+            Name = evt["NpcCrewName"].Str().Alt("Unknown");
             Amount = evt["Amount"].Long();
         }
 
@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for " + Name.Alt("Unknown"), -Amount);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for " + Name, -Amount);
         }
     }
 }

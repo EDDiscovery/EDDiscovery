@@ -141,8 +141,6 @@ namespace ActionLanguage
             public string eventname;
         }
 
-        Random rnd = new Random();
-
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string say;
@@ -200,17 +198,36 @@ namespace ActionLanguage
                     string expsay;
                     if (ap.functions.ExpandString(say, out expsay) != ConditionFunctions.ExpandResult.Failed)
                     {
-                        if ( !literal ) 
+                        Random rnd = ConditionFunctionHandlers.GetRandom();
+
+                        if ( !literal )
+                        {
                             expsay = expsay.PickOneOfGroups(rnd);       // expand grouping if not literal
+                        }
 
                         ap["SaySaid"] = expsay;
 
-                        if ((ap.VarExist("SpeechDebug") && ap["SpeechDebug"].Contains("Print")))
+                        string ctrl = ap.VarExist("SpeechDebug") ? ap["SpeechDebug"] : "";
+
+                        if (ctrl.Contains("Global"))
                         {
-                            ap.actioncontroller.LogLine("Say: " + expsay);
-                            expsay = "";
+                            ap.actioncontroller.SetPeristentGlobal("GlobalSaySaid", expsay);
                         }
 
+                        if (ctrl.Contains("Print"))
+                        {
+                            ap.actioncontroller.LogLine("Say: " + expsay);
+                        }
+
+                        if (ctrl.Contains("Mute"))
+                        {
+                            return true;
+                        }
+
+                        if (ctrl.Contains("DontSpeak"))
+                        {
+                            expsay = "";
+                        }
 
                         if (dontspeak)
                             expsay = "";    

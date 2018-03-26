@@ -800,15 +800,23 @@ public static class ObjectExtensionsStrings
             return StartWithResult.None;
     }
 
-    public static string FirstWord( ref string s, char[] stopchars)
+    public static string FirstWord(ref string s, char[] stopchars)
     {
         int i = 0;
-        while (i < s.Length && Array.IndexOf(stopchars,s[i]) == -1 )
+        while (i < s.Length && Array.IndexOf(stopchars, s[i]) == -1)
             i++;
 
         string ret = s.Substring(0, i);
         s = s.Substring(i).TrimStart();
         return ret;
+    }
+
+    public static string Word(this string s, char[] stopchars)
+    {
+        int i = 0;
+        while (i < s.Length && Array.IndexOf(stopchars, s[i]) == -1)
+            i++;
+        return s.Substring(0, i);
     }
 
     public static bool IsPrefix(ref string s, string t, StringComparison c = StringComparison.InvariantCulture)

@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIBeingInterdicted : UIEvent
     {
-        public UIBeingInterdicted(bool state, DateTime time) : base(UITypeEnum.BeingInterdicted,time)
+        public UIBeingInterdicted(bool state, DateTime time, bool refresh): base(UITypeEnum.BeingInterdicted, time, refresh)
         {
             Interdicted = state;
         }

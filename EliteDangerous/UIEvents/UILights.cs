@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UILights : UIEvent
     {
-        public UILights(bool state, DateTime time) : base(UITypeEnum.Lights, time)
+        public UILights(bool state, DateTime time, bool refresh): base(UITypeEnum.Lights, time, refresh)
         {
             Lights = state;
         }
