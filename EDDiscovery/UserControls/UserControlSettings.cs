@@ -118,6 +118,7 @@ namespace EDDiscovery.UserControls
         {
             EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;   // ok to do here..
             EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+            if (textBoxHomeSystem.Text != EDDiscoveryForm.EDDConfig.HomeSystem.Name) ValidateAndSaveHomeSystem();     // make sure any change is persisted
             discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
             themeeditor?.Dispose();
@@ -138,22 +139,7 @@ namespace EDDiscovery.UserControls
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged += ParentForm_TopMostChanged;
         }
-
-
-        private void textBoxHomeSystem_Validated(object sender, EventArgs e)
-        {
-            string t = textBoxHomeSystem.Text.Trim();
-            ISystem s = SystemClassDB.GetSystem(t);
-
-            if (s != null)
-            {
-                textBoxHomeSystem.Text = s.Name;
-                EDDConfig.Instance.HomeSystem = s;
-            }
-            else
-                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
-        }
-
+                       
         private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
@@ -451,6 +437,25 @@ namespace EDDiscovery.UserControls
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+        }
+
+        private void textBoxHomeSystem_Leave(object sender, EventArgs e)
+        {
+            ValidateAndSaveHomeSystem();
+        }
+
+        private void ValidateAndSaveHomeSystem()
+        {
+            string t = textBoxHomeSystem.Text.Trim();
+            ISystem s = SystemClassDB.GetSystem(t);
+
+            if (s != null)
+            {
+                textBoxHomeSystem.Text = s.Name;
+                EDDConfig.Instance.HomeSystem = s;
+            }
+            else
+                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
         }
 
         #region EDSM Galaxy
