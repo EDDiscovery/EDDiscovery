@@ -154,7 +154,7 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
-        public string RequestSystems(DateTime startdate, DateTime enddate)
+        public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)
         {
             DateTime gammadate = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc);
             if (startdate < gammadate)
@@ -166,7 +166,7 @@ namespace EliteDangerousCore.EDSM
                 "?startdatetime=" + HttpUtility.UrlEncode(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
-            var response = RequestGet(query, handleException: true);
+            var response = RequestGet(query, handleException: true, timeout: timeout);
             if (response.Error)
                 return null;
 
