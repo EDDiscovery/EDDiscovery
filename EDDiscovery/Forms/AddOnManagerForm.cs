@@ -243,6 +243,8 @@ namespace EDDiscovery.Forms
                     string text;
                     if (di.state == VersioningManager.ItemState.EDOutOfDate)
                         text = "Newer EDD required";
+                    else if (di.state == VersioningManager.ItemState.EDTooOld)
+                        text = "Too old for EDD";
                     else if (di.state == VersioningManager.ItemState.UpToDate)
                         text = (di.localmodified) ? "Locally modified" : "Up to Date";
                     else if (di.state == VersioningManager.ItemState.LocalOnly)
