@@ -213,12 +213,18 @@ namespace ActionLanguage
                         {
                             ap.actioncontroller.SetPeristentGlobal("GlobalSaySaid", expsay);
                         }
+
                         if (ctrl.Contains("Print"))
                         {
                             ap.actioncontroller.LogLine("Say: " + expsay);
-                            expsay = "";
                         }
+
                         if (ctrl.Contains("Mute"))
+                        {
+                            return true;
+                        }
+
+                        if (ctrl.Contains("DontSpeak"))
                         {
                             expsay = "";
                         }

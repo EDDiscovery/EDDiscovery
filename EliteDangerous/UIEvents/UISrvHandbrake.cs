@@ -25,9 +25,9 @@ namespace EliteDangerousCore.UIEvents
     {
         public UISrvHandbrake(bool state, DateTime time, bool refresh): base(UITypeEnum.SrvHandbrake, time, refresh)
         {
-            Handbreak = state;
+            Handbrake = state;
         }
 
-        public bool Handbreak { get; private set; }
+        public bool Handbrake { get; private set; }
     }
 }

@@ -29,6 +29,9 @@ namespace ActionLanguage
     {
         public bool AsyncMode { get; set; } = true;         // set this for non async mode -debug only
 
+        private BaseUtils.LogToFile logger = null;
+        private bool logtologline = false;
+        
         private List<ActionProgramRun> progqueue = new List<ActionProgramRun>();
         private ActionProgramRun progcurrent = null;
 
@@ -82,6 +85,20 @@ namespace ActionLanguage
                 DoExecute();
             }
         }
+
+        public void DebugTrace(bool ll, string file = null)
+        {
+            logtologline = ll;
+            if (logger != null)
+            {
+                logger.Dispose();
+                logger = null;
+            }
+
+            if (file != null)
+                logger = new BaseUtils.LogToFile(file);
+        }
+
 
         private void DoExecute()    // MAIN thread only..     
         {
@@ -147,7 +164,17 @@ namespace ActionLanguage
                     continue;
                 }
 
-                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Exec  Lv" + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + ": " + progcurrent.StepNumber + " " + ac.Name + " " + ac.DisplayedUserData);
+                if ( logtologline || logger != null )
+                {
+                    string t = (Environment.TickCount % 10000).ToString("00000") + " ";
+                    string index = string.Concat(Enumerable.Repeat(". ", progcurrent.ExecLevel));
+                    string s =  progcurrent.GetLastStep().LineNumber.ToString() + (progcurrent.IsExecuteOn ? "+" : "-") + ":" + index + ac.Name + " " + ac.DisplayedUserData;
+                    System.Diagnostics.Debug.WriteLine(t+s);
+                    if ( logtologline )
+                        actioncontroller.LogLine(t + s);
+                    if ( logger!= null )
+                        logger.Write(s);
+                }
 
                 if (progcurrent.DoExecute(ac))       // execute is on.. 
                 {

@@ -23,14 +23,41 @@ using System.Threading.Tasks;
 
 namespace BaseUtils
 {
-    public static class LogToFile
+    public class LogToFile
     {
-        public static string rootpath = "c:\\";
+        public LogToFile()
+        {
+            rootpath = "c:\\";
+        }
 
-        static StreamWriter debugout = null;
-        static Stopwatch debugtimer = null;
+        public LogToFile(string s)
+        {
+            rootpath = s;
+        }
 
-        static public void Write(string s)
+        public void Dispose()
+        {
+            SetFile(rootpath);
+        }
+
+        string rootpath;
+        StreamWriter debugout = null;
+        Stopwatch debugtimer = null;
+
+        public void SetFile(string p)
+        {
+            if (debugout != null)
+            {
+                debugout.Close();
+                debugout.Dispose();
+                debugtimer = null;
+                debugout = null;
+            }
+
+            rootpath = p;
+        }
+
+        public void Write(string s)
         {
             if (debugout == null)
             {
