@@ -349,6 +349,12 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             detailed = DisplayString(0, false);
+
+            if (info.IsEmpty())
+            {
+                info = detailed;
+                detailed = "";
+            }
         }
 
 

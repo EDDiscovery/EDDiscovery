@@ -104,10 +104,10 @@ namespace ActionLanguage
             actionfile = file;
             events = evlist;
 
-            grouptypenames = (from e in events select e.uiclass).ToList().Distinct().ToList();      // here we extract from events relevant data
+            grouptypenames = (from e in events select e.UIClass).ToList().Distinct().ToList();      // here we extract from events relevant data
             groupeventlist = new Dictionary<string, List<string>>();
             foreach (string s in grouptypenames)
-                groupeventlist.Add(s, (from e in events where e.uiclass == s select e.triggername).ToList());
+                groupeventlist.Add(s, (from e in events where e.UIClass == s select e.TriggerName).ToList());
 
             bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
@@ -303,8 +303,8 @@ namespace ActionLanguage
 
         private string GetGroupName(string a)
         {
-            ActionEvent p = events.Find(x => x.triggername == a);
-            return (p == null) ? "Misc" : p.uiclass;
+            ActionEvent p = events.Find(x => x.TriggerName == a);
+            return (p == null) ? "Misc" : p.UIClass;
         }
 
         #endregion

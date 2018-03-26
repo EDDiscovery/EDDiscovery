@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIHardpointsDeployed : UIEvent
     {
-        public UIHardpointsDeployed(bool state, DateTime time) : base(UITypeEnum.HardpointsDeployed, time)
+        public UIHardpointsDeployed(bool state, DateTime time, bool refresh): base(UITypeEnum.HardpointsDeployed, time, refresh)
         {
             Deployed = state;
         }

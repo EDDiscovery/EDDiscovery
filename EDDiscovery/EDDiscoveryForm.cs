@@ -52,6 +52,8 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
+        public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
+
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
@@ -662,9 +664,10 @@ namespace EDDiscovery
         private void Controller_NewUIEvent(UIEvent uievent)      
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(uievent, "UI", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            cv["UIEvent"] = uievent.EventTypeStr;
-            cv["UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
+
+            string prefix = "EventClass_";
+            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            cv[prefix+"UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv); 
         }

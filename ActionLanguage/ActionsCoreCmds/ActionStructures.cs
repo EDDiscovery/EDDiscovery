@@ -362,12 +362,12 @@ namespace ActionLanguage
         string errmsg;
 
 
-        public bool FromString(string s, out ConditionLists cond, out string errmsg)
+        public bool FromString(string s, out ConditionLists cond, out string errmsg)    // errmsg has real control chars
         {
             cond = new ConditionLists();
 
             StringParser p = new StringParser(s);
-            errmsg = p.NextQuotedWord(" ,");
+            errmsg = p.NextQuotedWord(" ,", replaceescape:true);
 
             if (errmsg != null && p.IsCharMoveOn(','))
             {
@@ -383,7 +383,7 @@ namespace ActionLanguage
 
         public string ToString(ConditionLists cond, string errmsg)
         {
-            return errmsg.QuoteString(comma: true) + ", " + cond.ToString();
+            return errmsg.EscapeControlChars().QuoteString(comma: true) + ", " + cond.ToString();       // this will return with escaped chars
         }
 
         public override string VerifyActionCorrect()
@@ -431,7 +431,14 @@ namespace ActionLanguage
                 bool res = condres.HasValue && condres.Value;
 
                 if (res)
-                    ap.ReportError(errmsg);
+                {
+                    if (ap.functions.ExpandString(errmsg, out string exprerr) != ConditionFunctions.ExpandResult.Failed)
+                    {
+                        ap.ReportError(exprerr);
+                    }
+                    else
+                        ap.ReportError(exprerr);
+                }
             }
             else
                 ap.ReportError(errlist);

@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIJournalMusic : UIEvent
     {
-        public UIJournalMusic(string track, bool shown, DateTime time) : base(UITypeEnum.JournalMusic,time)
+        public UIJournalMusic(string track, bool shown, DateTime time, bool refresh): base(UITypeEnum.JournalMusic, time, refresh)
         {
             Track = track;
             Shown = shown;

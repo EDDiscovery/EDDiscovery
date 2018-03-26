@@ -20,18 +20,19 @@ using System.Text;
 
 namespace ActionLanguage
 {
+    [System.Diagnostics.DebuggerDisplay("Event {TriggerName} {TriggerType} {UIClass}")]
     public class ActionEvent
     {
-        public string triggername { get; protected set; }             // define an event, a name, a trigger type.  associate for editing with a uiclass
-        public string triggertype { get; protected set; }
-        public string uiclass { get; protected set; }
+        public string TriggerName { get; protected set; }             // define an event, a name, a trigger type.  associate for editing with a uiclass
+        public string TriggerType { get; protected set; }
+        public string UIClass { get; protected set; }
 
         protected ActionEvent(string n, string c, string u)
         {
-            triggername = n; triggertype = c; uiclass = u;
+            TriggerName = n; TriggerType = c; UIClass = u;
         }
 
-        public static List<ActionEvent> events = new List<ActionEvent>()
+        protected static List<ActionEvent> events = new List<ActionEvent>()
         {
             new ActionEvent("onStartup", "ProgramEvent", "Program"),
             new ActionEvent("onPostStartup","ProgramEvent",  "Program"),
@@ -51,12 +52,4 @@ namespace ActionLanguage
         public static ActionEvent onSayFinished { get { return events[6]; } }
     }
 
-    class bbb : ActionEvent
-    {
-        bbb() : base("", "", "")
-        {
-
-        }
-
-    }
 }

@@ -97,7 +97,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("In ", Slot , "" , Module, "by ", Engineering.Engineer, "Blueprint ", Engineering.FriendlyBlueprintName, "Level ", Engineering.Level);
+            info = BaseUtils.FieldBuilder.Build("In ", Slot , "" , Module, "By ", Engineering.Engineer, "Blueprint ", Engineering.FriendlyBlueprintName, "Level ", Engineering.Level);
 
             detailed = "";
             if (Ingredients != null)

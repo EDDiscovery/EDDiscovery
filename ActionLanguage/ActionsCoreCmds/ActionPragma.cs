@@ -105,6 +105,23 @@ namespace ActionLanguage
                     {
                         ap.SetContinueOnErrors(false);
                     }
+                    else if (cmd.Equals("disableasync"))
+                    {
+                        ap.actioncontroller.AsyncMode = false;
+                    }
+                    else if (cmd.Equals("enableasync"))
+                    {
+                        ap.actioncontroller.AsyncMode = false;
+                    }
+                    else if (cmd.Equals("enabletrace"))
+                    {
+                        string file = p.NextQuotedWord();
+                        ap.actioncontroller.DebugTrace(file == null, file);
+                    }
+                    else if (cmd.Equals("disabletrace"))
+                    {
+                        ap.actioncontroller.DebugTrace(false);
+                    }
                     else if ( !ap.actioncontroller.Pragma(cmd) )
                     {
                         ap.ReportError("Unknown pragma");

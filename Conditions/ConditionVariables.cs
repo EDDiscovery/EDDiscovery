@@ -37,7 +37,7 @@ namespace Conditions
 
         public ConditionVariables(ConditionVariables other, ConditionVariables other2)      // other can be null, other2 must not be
         {
-            if ( other == null )
+            if (other == null)
                 values = new Dictionary<string, string>(other2.values);
             else
             {
@@ -58,7 +58,7 @@ namespace Conditions
             FromString(s, fm);
         }
 
-        public ConditionVariables(string s, string value)     
+        public ConditionVariables(string s, string value)
         {
             values[s] = value;
         }
@@ -66,8 +66,8 @@ namespace Conditions
         public ConditionVariables(string[] s) // name,value,name,value..
         {
             System.Diagnostics.Debug.Assert(s.Length % 2 == 0);
-            for (int i = 0; i < s.Length; i+=2)
-                values[s[i]] = s[i+1];
+            for (int i = 0; i < s.Length; i += 2)
+                values[s[i]] = s[i + 1];
         }
 
         public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
@@ -100,14 +100,14 @@ namespace Conditions
         {
             if (values.ContainsKey(name))
             {
-                if ( !checklen || values[name].Length>0 )
+                if (!checklen || values[name].Length > 0)
                     return values[name];
             }
 
             return def;
         }
 
-        public void SetOrRemove(bool add, string name,  string value)     // Set it, or remove it
+        public void SetOrRemove(bool add, string name, string value)     // Set it, or remove it
         {
             if (add)
                 values[name] = value;
@@ -117,7 +117,7 @@ namespace Conditions
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
-        public string ToString(Dictionary<string, string> altops = null, string pad = "", string separ = ",", string prefix = "" , bool bracket = false, bool comma = true , bool space = true )
+        public string ToString(Dictionary<string, string> altops = null, string pad = "", string separ = ",", string prefix = "", bool bracket = false, bool comma = true, bool space = true)
         {
             string s = "";
             foreach (KeyValuePair<string, string> v in values)
@@ -127,7 +127,7 @@ namespace Conditions
 
                 string vs = v.Value.QuoteString(comma: comma, bracket: bracket, space: space);
 
-                if ( altops == null )
+                if (altops == null)
                     s += prefix + v.Key + pad + "=" + pad + vs;
                 else
                 {
@@ -148,11 +148,25 @@ namespace Conditions
         }
 
         // FromMode controls where its stopped. 
-        // namelimit limits allowable names
-        // fixnamecase means make sure its in Titlecase
         // altops enables operators other than = to be used (set/let only) 
 
-        public bool FromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string,string> altops = null )
+        public bool FromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
+        {
+            Dictionary<string, string> newvars = ReadFromString(p, fm, altops);
+            if (newvars != null)
+                values = newvars;
+            return (newvars != null);
+        }
+
+        public bool AddFromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
+        {
+            Dictionary<string, string> newvars = ReadFromString(p, fm, altops);
+            if (newvars != null)
+                Add(newvars);
+            return (newvars != null);
+        }
+
+        private Dictionary<string, string> ReadFromString(BaseUtils.StringParser p, FromMode fm, Dictionary<string, string> altops = null)
         {
             Dictionary<string, string> newvars = new Dictionary<string, string>();
 
@@ -161,7 +175,7 @@ namespace Conditions
                 string varname = p.NextQuotedWord( "= ");
 
                 if (varname == null)
-                    return false;
+                    return null;
 
                 if (altops!=null)            // with extended ops, the ops are returned in the altops function, one per variable found
                 {                           // used only with let and set..
@@ -197,28 +211,24 @@ namespace Conditions
                 }
 
                 if (!p.IsCharMoveOn('='))
-                    return false;
+                    return null;
 
                 string value = (fm == FromMode.OnePerLine) ? p.NextQuotedWordOrLine() : p.NextQuotedWord((fm == FromMode.MultiEntryComma) ? ", " : ",) "); 
 
                 if (value == null)
-                    return false;
+                    return null;
 
                 newvars[varname] = value;
 
                 if (fm == FromMode.MultiEntryCommaBracketEnds && p.PeekChar() == ')')        // bracket, stop don't remove.. outer bit wants to check its there..
-                {
-                    values = newvars;
-                    return true;
-                }
+                    return newvars;
                 else if (fm == FromMode.OnePerLine && !p.IsEOL)        // single entry, must be eol now
-                    return false;
+                    return null;
                 else if (!p.IsEOL && !p.IsCharMoveOn(','))   // if not EOL, but not comma, incorrectly formed list
-                    return false;
+                    return null;
             }
 
-            values = newvars;
-            return true;
+            return newvars;
         }
 
         public JArray ToJSONObject()
@@ -282,20 +292,20 @@ namespace Conditions
         public void Add(List<ConditionVariables> varlist)
         {
             foreach (ConditionVariables d in varlist)
-            {
-                if (d != null)
-                {
-                    foreach (KeyValuePair<string, string> v in d.values)   // plus event vars
-                        values[v.Key] = v.Value;
-                }
-            }
+                Add(d);
         }
 
         public void Add(ConditionVariables d)
         {
             if (d != null)
+                Add(d.values);
+        }
+
+        public void Add(Dictionary<string,string> list)
+        {
+            if (list != null)
             {
-                foreach (KeyValuePair<string, string> v in d.values)   // plus event vars
+                foreach (KeyValuePair<string, string> v in list)   // plus event vars
                     values[v.Key] = v.Value;
             }
         }

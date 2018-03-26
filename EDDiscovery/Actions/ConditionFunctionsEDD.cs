@@ -33,10 +33,11 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
-                functions.Add("systempath", new FuncEntry(SystemPath, 1, 1, NoMacros, NoStrings));   // literal
-                functions.Add("version", new FuncEntry(Version, 1, 1, NoMacros, NoStrings));     // don't check first para
-                functions.Add("star", new FuncEntry(Star, 2, 2, FirstMacro, AllStrings));     // var/string, literal/var/string
-                functions.Add("ship", new FuncEntry(Ship, 1, 1, AllMacros, AllStrings));   //ship translator
+                functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.LmeSE));   // literal
+                functions.Add("version", new FuncEntry(Version, FuncEntry.PT.ImeSE));
+                functions.Add("star", new FuncEntry(Star, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
+                functions.Add("ship", new FuncEntry(Ship, FuncEntry.PT.MESE));
+                functions.Add("events", new FuncEntry(Events, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
             }
         }
 
@@ -44,6 +45,7 @@ namespace EDDiscovery.Actions
 
         protected override FuncEntry FindFunction(string name)
         {
+            name = name.ToLowerInvariant();      // case insensitive.
             return functions.ContainsKey(name) ? functions[name] : base.FindFunction(name);
         }
 
@@ -51,7 +53,7 @@ namespace EDDiscovery.Actions
 
         protected new bool SystemPath(out string output)
         {
-            string id = paras[0].value;
+            string id = paras[0].Value;
 
             if (id.Equals("EDDAPPFOLDER", StringComparison.InvariantCultureIgnoreCase))
                 output = EDDOptions.Instance.AppDataDirectory;
@@ -71,8 +73,8 @@ namespace EDDiscovery.Actions
         {
             int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetVersionInts();
 
-            int para;
-            if (paras[0].value.InvariantParse(out para) && para >= 0 && para <= edversion.Length)
+            int para = paras[0].Int;
+            if (para >= 0 && para <= edversion.Length)
             {
                 if (para == 0)
                     output = edversion[0] + "." + edversion[1] + "." + edversion[2] + "." + edversion[3];
@@ -82,7 +84,7 @@ namespace EDDiscovery.Actions
             }
             else
             {
-                output = "Parameter number must be between 1 and 4";
+                output = "Parameter number must be 0 (all), 1 to 4";
                 return false;
             }
         }
@@ -94,56 +96,68 @@ namespace EDDiscovery.Actions
 
         protected bool Ship(out string output)
         {
-            string value = (paras[0].isstring) ? paras[0].value : vars[paras[0].value];
-            output = PhoneticShipName(value);
+            output = PhoneticShipName(paras[0].Value);
             output = output.SplitCapsWordFull();
             return true;
         }
 
-        protected bool Star(out string output )
+        protected bool Star(out string output)
         {
-            string s = paras[0].isstring ? paras[0].value : vars[paras[0].value];
-
             // Find IX-T123b and replace with I X - T 123 b
-            paras[0].value = System.Text.RegularExpressions.Regex.Replace(s, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
+            paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
             {
                 string r = System.Text.RegularExpressions.Regex.Replace(match.Value, @"([A-Za-z\-])", " $1 ");  // space out alphas and dash
                 return r.Replace("  ", " ");   // remove double spaces.. quickest way for now
             });
 
-            paras[0].isstring = true;       // now a string, pass to root function to do the say_ss bit
-
             return ReplaceVarCommon(out output, true);
         }
 
+        protected bool Events(out string output)
+        {
+            output = "";
+            foreach (EliteDangerousCore.JournalTypeEnum v in Enum.GetValues(typeof(EliteDangerousCore.JournalTypeEnum)) )
+            {
+                if ((int)v>0&&(int)v<(int)EliteDangerousCore.JournalTypeEnum.EDDItemSet)
+                {
+                    output += paras[0].Value + v.ToString() + paras[1].Value;
+                }
+            }
+            return true;
+        }
 
         protected override bool VerifyFileAccess(string file, FileMode fm)
         {
             if (fm != FileMode.Open)
             {
-                string folder = Path.GetDirectoryName(file);
-                string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+                return VerifyFileAction("write", file);
+            }
+            else
+                return true;
+        }
 
-                if (!actionfolderperms.Contains(folder + ";"))
+        protected override bool VerifyFileAction(string action, string file)
+        {
+            string folder = Path.GetDirectoryName(file);
+            string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+
+            if (!actionfolderperms.Contains(folder + ";"))
+            {
+                bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to "+ action + " folder" + Environment.NewLine + Environment.NewLine +
+                                                     folder + Environment.NewLine + Environment.NewLine +
+                                                     "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
+                                                       "!!! Verify you are happy for the program to perform this action and access ANY files in that folder!!!",
+                                                       "WARNING - ACCESS REQUESTED",
+                                                    System.Windows.Forms.MessageBoxButtons.YesNo,
+                                                    System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
+
+                if (ok)
                 {
-                    bool ok = ExtendedControls.MessageBoxTheme.Show("Warning - This program is attempting to write to folder" + Environment.NewLine + Environment.NewLine +
-                                                         folder + Environment.NewLine + Environment.NewLine +
-                                                         "with file " + Path.GetFileName(file) + Environment.NewLine + Environment.NewLine +
-                                                           "!!! Verify you are happy for the program to write to ANY files in that folder!!!",
-                                                           "WARNING - WRITE FILE ACCESS REQUESTED",
-                                                        System.Windows.Forms.MessageBoxButtons.YesNo,
-                                                        System.Windows.Forms.MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.Yes;
-
-                    if (ok)
-                    {
-                        SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
-                        return true;
-                    }
-                    else
-                        return false;
+                    SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                    return true;
                 }
                 else
-                    return true;
+                    return false;
             }
             else
                 return true;
@@ -175,5 +189,6 @@ namespace EDDiscovery.Actions
         }
 
         #endregion
+
     }
 }

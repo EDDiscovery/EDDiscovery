@@ -26,7 +26,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             NpcCrewID = evt["NpcCrewId"].Long();
             RankCombat = (CombatRank)evt["RankCombat"].Int();
-            Name = evt["NpcCrewName"].Str();
+            Name = evt["NpcCrewName"].Str().Alt("Unknown");
         }
 
         public long NpcCrewID { get; set; }

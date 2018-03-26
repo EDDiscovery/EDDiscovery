@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UILanded : UIEvent
     {
-        public UILanded(bool state, DateTime time) : base(UITypeEnum.Landed, time)
+        public UILanded(bool state, DateTime time, bool refresh): base(UITypeEnum.Landed, time, refresh)
         {
             Landed = state;
         }

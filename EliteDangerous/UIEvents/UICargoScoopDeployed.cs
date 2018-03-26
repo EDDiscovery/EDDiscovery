@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UICargoScoopDeployed: UIEvent
     {
-        public UICargoScoopDeployed(bool state, DateTime time) : base(UITypeEnum.CargoScoopDeployed, time)
+        public UICargoScoopDeployed(bool state, DateTime time, bool refresh): base(UITypeEnum.CargoScoopDeployed, time, refresh)
         {
             Scoop = state;
         }

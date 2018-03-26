@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIIsInDanger : UIEvent
     {
-        public UIIsInDanger(bool state, DateTime time) : base(UITypeEnum.IsInDanger, time)
+        public UIIsInDanger(bool state, DateTime time, bool refresh): base(UITypeEnum.IsInDanger, time, refresh)
         {
             Danger = state;
         }

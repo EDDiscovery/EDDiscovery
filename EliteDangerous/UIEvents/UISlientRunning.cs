@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UISilentRunning : UIEvent
     {
-        public UISilentRunning(bool state, DateTime time) : base(UITypeEnum.SilentRunning, time)
+        public UISilentRunning(bool state, DateTime time, bool refresh): base(UITypeEnum.SilentRunning, time, refresh)
         {
             SilentRunning = state;
         }

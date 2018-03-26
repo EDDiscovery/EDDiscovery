@@ -27,15 +27,19 @@ namespace ActionLanguage
 
     public class ActionRun
     {
+        public bool AsyncMode { get; set; } = true;         // set this for non async mode -debug only
+
+        private BaseUtils.LogToFile logger = null;
+        private bool logtologline = false;
+        
         private List<ActionProgramRun> progqueue = new List<ActionProgramRun>();
         private ActionProgramRun progcurrent = null;
 
         private ActionCoreController actioncontroller = null;
         private ActionFileList actionfilelist = null;
 
-        bool async = false;             // if this Action is an asynchoronous object
-        bool executing = false;         // Records is executing
-        Timer restarttick = new Timer();
+        private bool executing = false;         // Records is executing
+        private Timer restarttick = new Timer();
 
         public ActionRun(ActionCoreController ed, ActionFileList afl)
         {
@@ -61,7 +65,9 @@ namespace ActionLanguage
                                                 fh == null ? new ConditionPersistentData() : fh, d == null ? new Dictionary<string, ExtendedControls.ConfigurableForm>() : d, closeatend);        // if no filehandles, make them and close at end
             }
             else
+            {
                 progqueue.Add(new ActionProgramRun(fileset, r, inputparas, this, actioncontroller));
+            }
         }
 
         public void Execute()  
@@ -80,6 +86,20 @@ namespace ActionLanguage
             }
         }
 
+        public void DebugTrace(bool ll, string file = null)
+        {
+            logtologline = ll;
+            if (logger != null)
+            {
+                logger.Dispose();
+                logger = null;
+            }
+
+            if (file != null)
+                logger = new BaseUtils.LogToFile(file);
+        }
+
+
         private void DoExecute()    // MAIN thread only..     
         {
             executing = true;
@@ -93,8 +113,8 @@ namespace ActionLanguage
                 {
                     if (progcurrent.GetErrorList != null)       // any errors pending, handle
                     {
-                        actioncontroller.LogLine("Error at " + progcurrent.Location + ": Line " + progcurrent.GetLastStep().LineNumber + ":" + Environment.NewLine + progcurrent.GetLastStep().Name + " " + progcurrent.GetErrorList);
-                        TerminateCurrent();
+                        actioncontroller.LogLine("Error: " + progcurrent.GetErrorList + Environment.NewLine + StackTrace() );
+                        TerminateToCloseAtEnd();        // terminate up to a close at end entry, which would have started this stack
                     }
                     else if (progcurrent.IsProgramFinished)        // if current program ran out, cancel it
                     {
@@ -144,7 +164,17 @@ namespace ActionLanguage
                     continue;
                 }
 
-                //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " Exec  Lv" + progcurrent.ExecLevel + " e " + (progcurrent.IsExecuteOn ? "1" : "0") + " up " + ac.LevelUp + ": " + progcurrent.StepNumber + " " + ac.Name + " " + ac.DisplayedUserData);
+                if ( logtologline || logger != null )
+                {
+                    string t = (Environment.TickCount % 10000).ToString("00000") + " ";
+                    string index = string.Concat(Enumerable.Repeat(". ", progcurrent.ExecLevel));
+                    string s =  progcurrent.GetLastStep().LineNumber.ToString() + (progcurrent.IsExecuteOn ? "+" : "-") + ":" + index + ac.Name + " " + ac.DisplayedUserData;
+                    System.Diagnostics.Debug.WriteLine(t+s);
+                    if ( logtologline )
+                        actioncontroller.LogLine(t + s);
+                    if ( logger!= null )
+                        logger.Write(s);
+                }
 
                 if (progcurrent.DoExecute(ac))       // execute is on.. 
                 {
@@ -187,7 +217,7 @@ namespace ActionLanguage
                     }
                 }
 
-                if (async && timetaken.ElapsedMilliseconds > 100)  // no more than 100ms per go to stop the main thread being blocked
+                if (AsyncMode && timetaken.ElapsedMilliseconds > 100)  // no more than 100ms per go to stop the main thread being blocked
                 {
                     //System.Diagnostics.Debug.WriteLine((Environment.TickCount % 10000).ToString("00000") + " *** SUSPEND");
                     restarttick.Start();
@@ -213,6 +243,52 @@ namespace ActionLanguage
 
             progcurrent = null;
             progqueue.Clear();
+            executing = false;
+        }
+
+        public string StackTrace()
+        {
+            string s = "";
+
+            if (progcurrent != null)        // if we are running..
+            {
+                s += "At " + progcurrent.Location + ": " + progcurrent.GetLastStep().Name;
+
+                if (!progcurrent.ClosingHandlesAtEnd)       // if we are not a base functions, trace back up
+                {
+                    foreach (ActionProgramRun p in progqueue)       // ensure all have a chance to clean up
+                    {
+                        s += Environment.NewLine;
+                        s += "At " + p.Location + ": " + p.GetLastStep().Name;
+                        if (p.ClosingHandlesAtEnd)
+                            break;
+                    }
+                }
+            }
+
+            return s;
+        }
+
+        public void TerminateToCloseAtEnd()     // halt up to close at end function
+        {
+            if ( progcurrent != null && !progcurrent.ClosingHandlesAtEnd )     // if its not a top end function
+            {
+                List<ActionProgramRun> toremove = new List<ActionProgramRun>();
+                foreach (ActionProgramRun p in progqueue)       // ensure all have a chance to clean up
+                {
+                    toremove.Add(p);
+                    if (p.ClosingHandlesAtEnd)
+                        break;
+                }
+
+                foreach (ActionProgramRun apr in toremove)
+                {
+                    apr.Terminated();
+                    progqueue.Remove(apr);
+                }
+            }
+
+            progcurrent = null;
             executing = false;
         }
 

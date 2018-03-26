@@ -23,7 +23,7 @@ namespace EliteDangerousCore.UIEvents
 {
     public class UIShipType : UIEvent
     {
-        public UIShipType(Shiptype type, DateTime time) : base(UITypeEnum.ShipType, time)
+        public UIShipType(Shiptype type, DateTime time, bool refresh): base(UITypeEnum.ShipType, time, refresh)
         {
             ShipType = type;
         }

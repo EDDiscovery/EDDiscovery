@@ -203,9 +203,9 @@ namespace BaseUtils
                 return null;
         }
 
-        // Read a quoted word list off.
+        // Read a quoted word list off 
 
-        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false )        // empty list on error
+        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , bool commaopt =  false)        // empty list on error
         {
             List<string> ret = new List<string>();
 
@@ -217,7 +217,11 @@ namespace BaseUtils
 
                 ret.Add(v);
 
-                if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its not a comma matey
+                if (commaopt)
+                {
+                    IsCharMoveOn(',');   // remove it if its there
+                }
+                else if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its not a comma matey
                     return null;
 
             } while (!IsEOL);
