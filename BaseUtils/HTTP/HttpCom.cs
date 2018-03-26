@@ -228,7 +228,7 @@ namespace BaseUtils
 
 
 
-        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false)
+        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false, int timeout = 5000)
         {
             if ( httpserveraddress == null || httpserveraddress.Length == 0 )           // for debugging, set _serveraddress empty
             {
@@ -256,7 +256,7 @@ namespace BaseUtils
                     WriteLog("GET " + request.RequestUri, "");
 
                     // Get the response.
-                    request.Timeout = 5000;
+                    request.Timeout = timeout;
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
                     var data = getResponseData(response);
