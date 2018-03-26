@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewModules.RowTemplate.Height = 26;
 
-            buttonExtCoriolis.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = false;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
 
             LabelVehicleText.Visible = false;
             labelVehicle.Visible = false;
-            buttonExtCoriolis.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = false;
 
             if (comboBoxShips.Text.Contains("Stored"))
             {
@@ -180,17 +180,32 @@ namespace EDDiscovery.UserControls
                 if (sm.Engineering != null)
                     eng = sm.Engineering.FriendlyBlueprintName;
 
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString() , ammo, eng , value, sm.PE() };
+                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString(), ammo, eng, value, sm.PE() };
                 // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
                 dataGridViewModules.Rows.Add(rowobj);
 
             }
 
+            if (si.HullValue > 0)
+                AddValueLine("Hull Value", si.HullValue);
+            if (si.ModulesValue > 0)
+                AddValueLine("Modules Value", si.ModulesValue);
+            if (si.HullValue > 0 && si.ModulesValue > 0)
+                AddValueLine("Total Cost", si.HullValue + si.ModulesValue);
+            if (si.Rebuy > 0)
+                AddValueLine("Rebuy Cost", si.Rebuy);
+
             LabelVehicleText.Visible = labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo();
-            buttonExtCoriolis.Visible = si.CheckMinimumJSONModules();
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
         }
 
+        void AddValueLine(string s, long v )
+        {
+            object[] rowobj = { s, "", "", "", "", v.ToString("N0"), "" };
+            dataGridViewModules.Rows.Add(rowobj);
+        }
+        
         #endregion
 
         #region Layout
@@ -228,59 +243,56 @@ namespace EDDiscovery.UserControls
                 if (last_he != null && last_he.ShipInformation != null)
                     si = last_he.ShipInformation;
             }
-            else 
+            else
                 si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
-                     
+
             if (si != null)
             {
                 string errstr;
-                string s = si.ToJSON(out errstr);
+                string s = si.ToJSONCoriolis(out errstr);
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
-                string uri = null;
+                string uri = Properties.Resources.URLCoriolis + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
 
-                var bytes = Encoding.UTF8.GetBytes(s);
-                using (MemoryStream indata = new MemoryStream(bytes))
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
-                    using (MemoryStream outdata = new MemoryStream())
-                    {
-                        using (System.IO.Compression.GZipStream gzipStream = new System.IO.Compression.GZipStream(outdata, System.IO.Compression.CompressionLevel.Optimal, true))
-                            indata.CopyTo(gzipStream);      // important to clean up gzip otherwise all the data is not written.. using
-
-                        uri += Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(Convert.ToBase64String(outdata.ToArray()));
-                        uri += "&bn=" + Uri.EscapeDataString(si.Name);
-
-                        string browser = BaseUtils.BrowserInfo.GetDefault();
-
-                        if ( browser != null )
-                        {
-                            string path = BaseUtils.BrowserInfo.GetPath(browser);
-
-                            if (path != null)
-                            {
-                                try
-                                {
-                                    System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo(path, uri);
-                                    p.UseShellExecute = false;
-                                    System.Diagnostics.Process.Start(p);
-                                    return;
-                                }
-                                catch (Exception ex)
-                                {
-                                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unable to launch browser" + ex.Message, "Browser Launch Error");
-                                }
-                            }
-                        }
-                         
-                    }
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                    s, new int[] { 0, 100 });
+                    info.ShowDialog(FindForm());
                 }
+            }
+        }
 
-                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location), 
-                                s, new int[] { 0, 100 });
-                info.ShowDialog(FindForm());
+        private void buttonExtEDShipyard_Click(object sender, EventArgs e)
+        {
+            ShipInformation si = null;
+
+            if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            {
+                if (last_he != null && last_he.ShipInformation != null)
+                    si = last_he.ShipInformation;
+            }
+            else
+                si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
+
+            if (si != null)
+            {
+                string s = si.ToJSONLoadout();
+
+                string uri = Properties.Resources.URLEDShipyard + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s);
+
+                //File.WriteAllText(@"c:\code\out.txt", uri);
+
+                if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
+                {
+                    ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                                    s, new int[] { 0, 100 });
+                    info.ShowDialog(FindForm());
+                }
             }
         }
 
@@ -308,5 +320,6 @@ namespace EDDiscovery.UserControls
                 e.Handled = true;
             }
         }
+
     }
 }
