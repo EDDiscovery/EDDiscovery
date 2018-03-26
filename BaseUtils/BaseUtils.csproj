@@ -58,6 +58,7 @@
     <Compile Include="HTTP\GitHubFile.cs" />
     <Compile Include="HTTP\GitHubRelease.cs" />
     <Compile Include="HTTP\HttpCom.cs" />
+    <Compile Include="HTTP\HttpUriEncode.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Keys\EnhancedSendKeys.cs" />
     <Compile Include="Misc\CommandArgs.cs" />

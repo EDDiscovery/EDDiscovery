@@ -72,5 +72,32 @@ namespace BaseUtils
         }
 
         public static string UserAgent { get; } = Assembly.GetEntryAssembly().GetName().Name + " v" + Assembly.GetEntryAssembly().FullName.Split(',')[1].Split('=')[1];
+
+        public static bool LaunchBrowser(string uri)
+        {
+            string browser = GetDefault();
+
+            if (browser != null)
+            {
+                string path = BaseUtils.BrowserInfo.GetPath(browser);
+
+                if (path != null)
+                {
+                    try
+                    {
+                        System.Diagnostics.ProcessStartInfo p = new System.Diagnostics.ProcessStartInfo(path, uri);
+                        p.UseShellExecute = false;
+                        System.Diagnostics.Process.Start(p);
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
