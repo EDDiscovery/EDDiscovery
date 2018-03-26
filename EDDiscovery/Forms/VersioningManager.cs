@@ -34,6 +34,7 @@ namespace EDDiscovery.Versions
             NotPresent,
             UpToDate,
             OutOfDate,
+            EDTooOld,
         }
 
         public class DownloadItem
@@ -185,8 +186,16 @@ namespace EDDiscovery.Versions
 
                             int[] minedversion = cv["MinEDVersion"].VersionFromString();
 
-                            if (minedversion.CompareVersion(edversion) > 0)
+                            if (minedversion.CompareVersion(edversion) > 0)     // if midedversion > edversion can't install
                                 it.state = ItemState.EDOutOfDate;
+
+                            if ( cv.Exists("MaxEDInstallVersion"))      
+                            {
+                                int[] maxedinstallversion = cv["MaxEDInstallVersion"].VersionFromString();
+
+                                if (maxedinstallversion.CompareVersion(edversion) <= 0) // if maxedinstallversion 
+                                    it.state = ItemState.EDTooOld;
+                            }
 
                         }
                     }
