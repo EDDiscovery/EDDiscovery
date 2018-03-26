@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
             writeJournalToLogtoolStripMenuItem.Visible = false;
-            runActionsAcrossSelectionToolStripMenuItem.Visible = false;
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
