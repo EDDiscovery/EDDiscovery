@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonExtEDShipyard = new ExtendedControls.ButtonExt();
             this.buttonExtCoriolis = new ExtendedControls.ButtonExt();
             this.labelVehicle = new System.Windows.Forms.Label();
             this.LabelVehicleText = new System.Windows.Forms.Label();
@@ -185,6 +186,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonExtEDShipyard);
             this.panelButtons.Controls.Add(this.buttonExtCoriolis);
             this.panelButtons.Controls.Add(this.labelVehicle);
             this.panelButtons.Controls.Add(this.LabelVehicleText);
@@ -196,12 +198,20 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             // 
+            // buttonExtEDShipyard
+            // 
+            this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
+            this.buttonExtEDShipyard.Location = new System.Drawing.Point(285, 3);
+            this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
+            this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtEDShipyard.TabIndex = 29;
+            this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
+            this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
+            // 
             // buttonExtCoriolis
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExtCoriolis.BorderColorScaling = 1.25F;
-            this.buttonExtCoriolis.ButtonColorScaling = 0.5F;
-            this.buttonExtCoriolis.ButtonDisabledScaling = 0.5F;
             this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
             this.buttonExtCoriolis.Location = new System.Drawing.Point(255, 3);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
@@ -214,7 +224,7 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(340, 9);
+            this.labelVehicle.Location = new System.Drawing.Point(366, 9);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
             this.labelVehicle.TabIndex = 28;
@@ -223,7 +233,7 @@ namespace EDDiscovery.UserControls
             // LabelVehicleText
             // 
             this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(293, 9);
+            this.LabelVehicleText.Location = new System.Drawing.Point(319, 9);
             this.LabelVehicleText.Name = "LabelVehicleText";
             this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
             this.LabelVehicleText.TabIndex = 27;
@@ -244,6 +254,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.BorderColor = System.Drawing.Color.Red;
             this.comboBoxShips.ButtonColorScaling = 0.5F;
             this.comboBoxShips.DataSource = null;
+            this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxShips.DisplayMember = "";
             this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxShips.DropDownHeight = 200;
@@ -261,6 +272,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.SelectedValue = null;
             this.comboBoxShips.Size = new System.Drawing.Size(188, 21);
             this.comboBoxShips.TabIndex = 0;
+            this.comboBoxShips.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -300,5 +312,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private ExtendedControls.ButtonExt buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.ButtonExt buttonExtEDShipyard;
     }
 }

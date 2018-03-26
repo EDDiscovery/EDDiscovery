@@ -33,8 +33,11 @@ namespace EliteDangerousCore
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
-        public double FuelLevel { get; private set; }       // fuel level
-        public double FuelCapacity { get; private set; }       // fuel capacity
+        public double FuelLevel { get; private set; }       // fuel level may be 0 not known
+        public double FuelCapacity { get; private set; }    // fuel capacity may be 0 not known
+        public long HullValue;                              // may be 0, not known
+        public long ModulesValue;                           // may be 0, not known
+        public long Rebuy;                                  // may be 0, not known
 
         public enum SubVehicleType
         {
@@ -48,7 +51,7 @@ namespace EliteDangerousCore
         public string ShipFullInfo(bool cargo = true, bool fuel = true)
         {
             StringBuilder sb = new StringBuilder(64);
-            if ( ShipUserIdent!=null)
+            if (ShipUserIdent != null)
                 sb.Append(ShipUserIdent);
             sb.AppendPrePad(ShipUserName);
             sb.AppendPrePad(ShipType);
@@ -115,7 +118,7 @@ namespace EliteDangerousCore
                 res = res.AppendPrePad(string.IsNullOrEmpty(ShipUserIdent) ? "" : ShipUserIdent, ",");
                 bool empty = string.IsNullOrEmpty(res);
                 res = res.AppendPrePad(ShipType, ",");
-                if ( empty )
+                if (empty)
                     res += "(" + ID.ToString() + ")";
 
                 return res;
@@ -125,10 +128,10 @@ namespace EliteDangerousCore
         public int GetFuelCapacity()
         {
             int cap = 0;
-            foreach(JournalLoadout.ShipModule sm in Modules.Values )
+            foreach (JournalLoadout.ShipModule sm in Modules.Values)
             {
                 int classpos;
-                if ( sm.Item.Contains("Fuel Tank") && (classpos = sm.Item.IndexOf("Class "))!=-1)
+                if (sm.Item.Contains("Fuel Tank") && (classpos = sm.Item.IndexOf("Class ")) != -1)
                 {
                     char digit = sm.Item[classpos + 6];
                     cap += (1 << (digit - '0'));        // 1<<1 = 2.. 1<<2 = 4, etc.
@@ -171,6 +174,9 @@ namespace EliteDangerousCore
             sm.FuelLevel = this.FuelLevel;
             sm.FuelCapacity = this.FuelCapacity;
             sm.SubVehicle = this.SubVehicle;
+            sm.HullValue = this.HullValue;
+            sm.ModulesValue = this.ModulesValue;
+            sm.Rebuy = this.Rebuy;
             sm.Modules = new Dictionary<string, JournalLoadout.ShipModule>(this.Modules);
             return sm;
         }
@@ -206,13 +212,16 @@ namespace EliteDangerousCore
                    si.ShipUserIdent == this.ShipUserIdent &&
                    si.FuelLevel == this.FuelLevel &&
                    si.FuelCapacity == this.FuelCapacity &&
+                   si.HullValue == this.HullValue &&
+                   si.ModulesValue == this.ModulesValue &&
+                   si.Rebuy == this.Rebuy &&
                    si.SubVehicle == this.SubVehicle &&
                    si.Modules.SequenceEqual(this.Modules);
         }
 
         public void Set(JournalLoadout.ShipModule sm)
         {
-            if ( Modules.ContainsKey(sm.Slot) )
+            if (Modules.ContainsKey(sm.Slot))
             {
                 JournalLoadout.ShipModule oldsm = Modules[sm.Slot];
 
@@ -230,12 +239,17 @@ namespace EliteDangerousCore
             }
         }
 
-        public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null, double fuellevel = 0, double fueltotal = 0)
+        public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null, 
+                                    double fuellevel = 0, double fueltotal = 0,
+                                    long hullvalue = 0, long modulesvalue = 0, long rebuy = 0)
         {
-            if (ship != ShipType || (name != null && name != ShipUserName) || 
+            if (ship != ShipType || (name != null && name != ShipUserName) ||
                                 (ident != null && ident != ShipUserIdent) ||
                                 (fuellevel != 0 && fuellevel != FuelLevel) ||
-                                (fueltotal != 0 && fueltotal != FuelCapacity) )
+                                (fueltotal != 0 && fueltotal != FuelCapacity) ||
+                                (hullvalue != 0 && hullvalue != HullValue) ||
+                                (modulesvalue != 0 && modulesvalue != ModulesValue) ||
+                                (rebuy != 0 && rebuy != Rebuy ) )
             {
                 ShipInformation sm = this.ShallowClone();
 
@@ -251,6 +265,12 @@ namespace EliteDangerousCore
                     sm.FuelCapacity = fuellevel;
                 if (fueltotal != 0)
                     sm.FuelCapacity = fueltotal;
+                if (hullvalue != 0)
+                    sm.HullValue = hullvalue;
+                if (modulesvalue != 0)
+                    sm.ModulesValue = modulesvalue;
+                if (rebuy != 0)
+                    sm.Rebuy = rebuy;
 
                 //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
                 return sm;
@@ -350,11 +370,11 @@ namespace EliteDangerousCore
             return sm ?? this;
         }
 
-        public ShipInformation SwapModule(string fromslot, string fromslotfd, string fromitem , string fromitemfd, string fromiteml, 
-                                          string toslot , string toslotfd, string toitem, string toitemfd, string toiteml ) 
+        public ShipInformation SwapModule(string fromslot, string fromslotfd, string fromitem, string fromitemfd, string fromiteml,
+                                          string toslot, string toslotfd, string toitem, string toitemfd, string toiteml)
         {
             ShipInformation sm = this.ShallowClone();
-            if ( Modules.ContainsKey(fromslot))
+            if (Modules.ContainsKey(fromslot))
             {
                 if (Modules.ContainsKey(toslot))
                 {
@@ -366,7 +386,7 @@ namespace EliteDangerousCore
                 sm.Modules[toslot] = new JournalLoadout.ShipModule(toslot, toslotfd, fromitem, fromitemfd, fromiteml);
 
                 if (fromitem != toitem && ((fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1) ||
-                                           (fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1))) 
+                                           (fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1)))
                 {
                     sm.FuelCapacity = sm.GetFuelCapacity();
                     if (sm.FuelLevel > sm.FuelCapacity)
@@ -406,7 +426,7 @@ namespace EliteDangerousCore
             return (reqmodules == (1 << requiredmodules.Length) - 1);
         }
 
-        public string ToJSON(out string errstring)          
+        public string ToJSONCoriolis(out string errstring)
         {
             JObject jo = new JObject();
 
@@ -420,7 +440,7 @@ namespace EliteDangerousCore
             {
                 JObject module = new JObject();
 
-                int edid = ModuleEDID.Instance.CalcID(sm.ItemFD,ShipFD);
+                int edid = ModuleEDID.Instance.CalcID(sm.ItemFD, ShipFD);
 
                 if (edid == 0)      // 0 is error
                 {
@@ -447,34 +467,48 @@ namespace EliteDangerousCore
             return jo.ToString(Newtonsoft.Json.Formatting.Indented);
         }
 
-        public string ToCompressedJSON(out string errstring)
+        public string ToJSONLoadout()
         {
-            string s = ToJSON(out errstring);
+            JObject jo = new JObject();
 
-            var bytes = Encoding.UTF8.GetBytes(s);
+            jo["timestamp"] = DateTime.UtcNow.ToStringZulu();
+            jo["event"] = "Loadout";
+            jo["Ship"] = ShipFD;
+            if (!string.IsNullOrEmpty(ShipUserName))
+                jo["ShipName"] = ShipUserName;
+            if (!string.IsNullOrEmpty(ShipUserIdent))
+                jo["ShipIdent"] = ShipUserIdent;
+            if (Rebuy > 0)
+                jo["Rebuy"] = Rebuy;
+            if (HullValue > 0)
+                jo["HullValue"] = HullValue;
+            if (ModulesValue > 0)
+                jo["ModulesValue"] = ModulesValue;
 
-            using (MemoryStream indata = new MemoryStream(bytes))
+            JArray mlist = new JArray();
+
+            foreach (JournalLoadout.ShipModule sm in Modules.Values)
             {
-                using (MemoryStream outdata = new MemoryStream())
-                {
-                    using (System.IO.Compression.GZipStream gzipStream = new System.IO.Compression.GZipStream(outdata, System.IO.Compression.CompressionLevel.Optimal, true))
-                    {
-                        indata.CopyTo(gzipStream);      // important to clean up gzip otherwise all the data is not written.. using
-                    }
+                JObject module = new JObject();
 
-                    return Convert.ToBase64String(outdata.ToArray());
-                }
+                module["Slot"] = sm.SlotFD;
+                module["Item"] = sm.ItemFD;
+                module["On"] = sm.Enabled.HasValue ? sm.Enabled : true;
+                module["Priority"] = sm.Priority.HasValue ? sm.Priority : 0;
+                if (sm.Value.HasValue)
+                    module["Value"] = sm.Value;
+
+                mlist.Add(module);
             }
-        }
 
-        public string GetCoriolisUrl(out string errstring)
-        {
-            string data = ToCompressedJSON(out errstring);
+            jo["Modules"] = mlist;
 
-            return EliteDangerous.Properties.Resources.URLCoriolis + "data=" + Uri.EscapeDataString(data) + "&bn=" + Uri.EscapeDataString(Name);
+            return jo.ToString(Newtonsoft.Json.Formatting.Indented);
         }
     }
 
+
+    //{ "timestamp":"2018-03-07T18:11:06Z", "event":"Loadout", "Ship":"Anaconda", "ShipID":14, "ShipName":"The MATTHEW", "ShipIdent":"RXP-3", "HullValue":119844513, "ModulesValue":88008018, "Rebuy":7794470, "Modules":[ { "Slot":"HugeHardpoint1", "Item":"Hpt_PulseLaserBurst_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":800400 }, { "Slot":"LargeHardpoint1", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"LargeHardpoint2", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"LargeHardpoint3", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"MediumHardpoint1", "Item":"Hpt_MultiCannon_Turret_Medium", "On":true, "Priority":0, "AmmoInClip":90, "AmmoInHopper":2100, "Health":1.000000, "Value":1098880 }, { "Slot":"MediumHardpoint2", "Item":"Hpt_MultiCannon_Turret_Medium", "On":true, "Priority":0, "AmmoInClip":90, "AmmoInHopper":2100, "Health":1.000000, "Value":1098880 }, { "Slot":"TinyHardpoint1", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint2", "Item":"Hpt_ChaffLauncher_Tiny", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":10, "Health":1.000000, "Value":8500 }, { "Slot":"TinyHardpoint3", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint4", "Item":"Hpt_ChaffLauncher_Tiny", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":10, "Health":1.000000, "Value":8500 }, { "Slot":"TinyHardpoint5", "Item":"Hpt_CloudScanner_Size0_Class3", "On":true, "Priority":0, "Health":1.000000, "Value":103615 }, { "Slot":"TinyHardpoint6", "Item":"Hpt_ShieldBooster_Size0_Class5", "On":true, "Priority":0, "Health":1.000000, "Value":238850 }, { "Slot":"TinyHardpoint7", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint8", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"Armour", "Item":"Anaconda_Armour_Grade1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PaintJob", "Item":"PaintJob_Anaconda_Militaire_Earth_Yellow", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PowerPlant", "Item":"Int_Powerplant_Size8_Class2", "On":true, "Priority":1, "Health":1.000000, "Value":6021722 }, { "Slot":"MainEngines", "Item":"Int_Engine_Size7_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":1899597 }, { "Slot":"FrameShiftDrive", "Item":"Int_Hyperdrive_Size6_Class5", "On":true, "Priority":0, "Health":1.000000, "Value":13752601 }, { "Slot":"LifeSupport", "Item":"Int_LifeSupport_Size5_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":67524 }, { "Slot":"PowerDistributor", "Item":"Int_PowerDistributor_Size8_Class3", "On":true, "Priority":0, "Health":1.000000, "Value":4359903 }, { "Slot":"Radar", "Item":"Int_Sensors_Size8_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":1482366 }, { "Slot":"FuelTank", "Item":"Int_FuelTank_Size5_Class3", "On":true, "Priority":1, "Health":1.000000, "Value":97754 }, { "Slot":"Decal1", "Item":"Decal_DistantWorlds", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Decal2", "Item":"Decal_Explorer_Pathfinder", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Decal3", "Item":"Decal_Combat_Dangerous", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipName0", "Item":"Nameplate_Explorer01_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipName1", "Item":"Nameplate_Explorer01_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipID0", "Item":"Nameplate_ShipID_DoubleLine_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipID1", "Item":"Nameplate_ShipID_DoubleLine_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Slot01_Size7", "Item":"Int_CargoRack_Size7_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":1178420 }, { "Slot":"Slot02_Size6", "Item":"Int_ShieldGenerator_Size6_Class4", "On":true, "Priority":0, "Health":1.000000, "Value":4584201 }, { "Slot":"Slot03_Size6", "Item":"Int_CargoRack_Size6_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":362591 }, { "Slot":"Slot04_Size6", "Item":"Int_CargoRack_Size6_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":362591 }, { "Slot":"Slot05_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot06_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot07_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot08_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot09_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot10_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot13_Size2", "Item":"Int_CargoRack_Size2_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":3250 }, { "Slot":"Military01", "Item":"Int_ShieldCellBank_Size5_Class4", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":4, "Health":1.000000, "Value":496527 }, { "Slot":"PlanetaryApproachSuite", "Item":"Int_PlanetApproachSuite", "On":true, "Priority":1, "Health":1.000000, "Value":500 }, { "Slot":"WeaponColour", "Item":"WeaponCustomisation_Red", "On":false, "Priority":1, "Health":1.000000 }, { "Slot":"VesselVoice", "Item":"VoicePack_Verity", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipCockpit", "Item":"Anaconda_Cockpit", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"CargoHatch", "Item":"ModularCargoBayDoor", "On":true, "Priority":2, "Health":1.000000 } ] }
     public class ModulesInStore
     {
         public List<JournalLoadout.ShipModule> StoredModules { get; private set; }       // by STORE id
@@ -576,14 +610,15 @@ namespace EliteDangerousCore
             currentid = null;
         }
 
-        public void Loadout(int id, string ship, string shipfd, string name, string ident, List<JournalLoadout.ShipModule> modulelist)
+        public void Loadout(int id, string ship, string shipfd, string name, string ident, List<JournalLoadout.ShipModule> modulelist,
+                        long HullValue, long ModulesValue, long Rebuy)
         {
             string sid = Key(shipfd, id);
 
             //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident);     // update ship key, make a fresh one if required.
+            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident, 0,0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
             
             //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFullInfo());
 
