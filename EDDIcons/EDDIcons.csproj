@@ -663,7 +663,7 @@
     <EmbeddedResource Include="Journal\CargoDepot.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Modules\edshipyard.png" />
+    <EmbeddedResource Include="Controls\Modules\EDShipYard.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
