@@ -665,5 +665,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\Modules\EDShipYard.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\Plot\Dots.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
