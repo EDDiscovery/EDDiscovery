@@ -64,9 +64,11 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Front");
             comboBoxView.Items.Add("Side");
             comboBoxView.Items.DefaultIfEmpty("Top");
-            comboBoxView.SelectedIndex = 0;
+            comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
-                        
+            
+            checkBoxDotSize.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotDepth", true);
+
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
@@ -85,6 +87,8 @@ namespace EDDiscovery.UserControls
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
+            SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
+            SQLiteConnectionUser.PutSettingBool(DbSave + "PlotDepth", checkBoxDotSize.Checked);
         }
 
         public override void InitialDisplay()
@@ -217,11 +221,18 @@ namespace EDDiscovery.UserControls
 
         private void SetMarkerSize()
         {
-            int maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
-            int defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
-                        
-            int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
-            int minMarker = minMarkAbsolute < 1 ? minMarker = 1: minMarker = 2; // avoid zero values or less than 1 pixel marker when zooming
+            int maxMarker = 2;
+            int defMarker = 2;
+            int minMarker = 2;
+
+            if (checkBoxDotSize.Checked == true)
+            {
+                maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
+                defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
+
+                int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
+                minMarker = minMarkAbsolute < 1 ? minMarker = 1 : minMarker = 2; // avoid zero values or less than 1 pixel marker when zooming
+            }
 
             // Min and Max size for Current system
             foreach (int serie in seriesIsCurrent)
@@ -243,7 +254,7 @@ namespace EDDiscovery.UserControls
                 chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
                 chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
                 chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
-            }
+            }                           
         }
 
         private void SetChartSize(Control ctrlToZoom, double zoomratio)
@@ -495,6 +506,11 @@ namespace EDDiscovery.UserControls
         {
             SetChartSize(chartBubble, 1);
             SetMarkerSize();           
+        }
+
+        private void checkBoxDotSize_CheckedChanged(object sender, EventArgs e)
+        {
+            SetMarkerSize();
         }
     }    
 }
