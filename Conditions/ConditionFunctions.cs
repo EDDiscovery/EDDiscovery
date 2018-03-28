@@ -62,6 +62,25 @@ namespace Conditions
             return ExpandResult.Expansion;
         }
 
+        public ConditionVariables ExpandVars(ConditionVariables vars, out string errlist)       // expand all variables to new list
+        {
+            errlist = null;
+
+            ConditionVariables exp = new ConditionVariables();
+
+            foreach (string k in vars.NameEnumuerable)
+            {
+                if (ExpandString(vars[k], out errlist) == ConditionFunctions.ExpandResult.Failed)
+                    return null;
+
+                exp[k] = errlist;
+            }
+
+            errlist = null;
+            return exp;
+        }
+
+
         public ExpandResult ExpandString(string line, out string result)
         {
             return ExpandStringFull(line, out result, 1);

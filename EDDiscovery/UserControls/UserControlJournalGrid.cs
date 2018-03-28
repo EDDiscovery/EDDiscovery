@@ -286,11 +286,13 @@ namespace EDDiscovery.UserControls
         private void buttonField_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            List<string> namelist = new List<string>() { "Note" };
+            namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
-                            discoveryform.Globals.NameList, fieldfilter);
+                            namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
                 fieldfilter = frm.result;

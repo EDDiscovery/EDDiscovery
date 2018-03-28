@@ -30,6 +30,8 @@ namespace Conditions
         public string action;                           // action associated with a pass
         public string actiondata;                       // any data 
 
+        #region Init
+
         public Condition()
         {
             eventname = action = actiondata = "";
@@ -76,6 +78,9 @@ namespace Conditions
             return false;
         }
 
+        #endregion
+
+        #region Manip
 
         public bool IsAlwaysTrue()
         {
@@ -123,6 +128,8 @@ namespace Conditions
             fields.Add(f);
         }
 
+        // list into CV the variables needed for the condition entry list
+
         public void IndicateValuesNeeded(ref ConditionVariables vr)
         {
             foreach (ConditionEntry fd in fields)
@@ -131,6 +138,10 @@ namespace Conditions
                     vr[fd.itemname] = null;
             }
         }
+
+        #endregion
+
+        #region Input/Output
 
         public string ToString(bool includeaction = false, bool multi = false)          // multi means quoting needed for ) as well as comma space
         {
@@ -235,5 +246,6 @@ namespace Conditions
             }
         }
 
+        #endregion
     }
 }
