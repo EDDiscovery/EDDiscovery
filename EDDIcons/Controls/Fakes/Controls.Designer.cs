@@ -39,7 +39,7 @@ namespace EDDiscovery.Icons {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls.Fakes.Controls", typeof(Controls).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls", typeof(Controls).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
