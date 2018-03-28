@@ -50,6 +50,12 @@ namespace EDDiscovery.UserControls
         const double defaultmaximumradarradius = 50;
         const int maxitems = 500;
 
+        public string currentSystemName = "";
+        public string previousSystemName = "";
+        public double prevX = 0.0;
+        public double prevY = 0.0;
+        public double prevZ = 0.0;
+
         public override void Init()
         {
             computer = new StarDistanceComputer();
@@ -93,15 +99,28 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);            
+            KickComputation(uctg.GetCurrentHistoryEntry);           
         }              
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
 
+            // Previous system
+            currentSystemName = he.System.Name;            
+            GetPreviousSystemInHistory(hl);
+
             refreshRadar();
             SetChartSize(chartBubble, 1);
+        }
+
+        private void GetPreviousSystemInHistory(HistoryList hl)
+        {
+            HistoryEntry prev_he = hl.GetLastHistoryEntry(he => he.System.Name != currentSystemName);
+            previousSystemName = prev_he.System.Name;
+            prevX = prev_he.System.X;
+            prevY = prev_he.System.Y;
+            prevZ = prev_he.System.Z;
         }
 
         private void KickComputation(HistoryEntry he)
@@ -136,10 +155,10 @@ namespace EDDiscovery.UserControls
                 chartBubble.Series[3].ToolTip = centerSystem.Name;
                 chartBubble.Series[6].Points.AddXY(0, 0, 4);
                 chartBubble.Series[6].ToolTip = centerSystem.Name;
-
+                
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
-                    if (tvp.Value.Name != centerSystem.Name)
+                    if (tvp.Value.Name != centerSystem.Name && tvp.Value.Name != previousSystemName)
                     { 
                         var theISystemInQuestion = tvp.Value;
                         var sysX = theISystemInQuestion.X;
@@ -198,12 +217,32 @@ namespace EDDiscovery.UserControls
 
                                 chartBubble.Series[5].Points.AddXY(px, pz, py);
                                 chartBubble.Series[5].ToolTip = label.ToString();
-
+                                 
                                 chartBubble.Series[8].Points.AddXY(py, pz, px);
-                                chartBubble.Series[8].ToolTip = label.ToString();
+                                chartBubble.Series[8].ToolTip = label.ToString();                                                                
                             }
                         }
                     }
+                    if (tvp.Value.Name != centerSystem.Name && tvp.Value.Name == previousSystemName)
+                    {
+                        // Previous system coordinates, distances and label
+                        int prevx = Convert.ToInt32(centerSystem.X - prevX) * -1;
+                        int prevy = Convert.ToInt32(centerSystem.Y - prevY);
+                        int prevz = Convert.ToInt32(centerSystem.Z - prevZ);
+
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
+
+                        StringBuilder label = new StringBuilder();
+                        label.Append(previousSystemName + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+
+                        chartBubble.Series[9].Points.AddXY(prevx, prevy, prevz);
+                        chartBubble.Series[9].ToolTip = label.ToString();
+                        chartBubble.Series[10].Points.AddXY(prevx, prevz, prevy);
+                        chartBubble.Series[10].ToolTip = label.ToString();
+                        chartBubble.Series[11].Points.AddXY(prevy, prevz, prevx);
+                        chartBubble.Series[11].ToolTip = label.ToString();
+                    }                    
                 }
             }
         }
@@ -218,6 +257,7 @@ namespace EDDiscovery.UserControls
         private int[] seriesIsCurrent = { 0, 3, 6 };
         private int[] seriesIsVisited = { 1, 4, 7 };
         private int[] seriesUnVisited = { 2, 5, 8 };
+        private int[] seriesIsPrevious = { 9, 10, 11 };
 
         private void SetMarkerSize()
         {
@@ -254,7 +294,14 @@ namespace EDDiscovery.UserControls
                 chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
                 chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
                 chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
-            }                           
+            }
+            // Min and Max size for Previous systems
+            foreach (int serie in seriesIsPrevious)
+            {
+                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+            }
         }
 
         private void SetChartSize(Control ctrlToZoom, double zoomratio)
@@ -353,7 +400,7 @@ namespace EDDiscovery.UserControls
                 
         private void refreshRadar()
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i <= 11; i++)
             {
                 chartBubble.Series[i].Points.Clear();
             }            
