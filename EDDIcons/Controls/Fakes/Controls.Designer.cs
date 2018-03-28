@@ -39,7 +39,7 @@ namespace EDDiscovery.Icons {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls", typeof(Controls).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("EDDiscovery.Icons.Controls.Fakes.Controls", typeof(Controls).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -96,16 +96,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap DateTimePicker_Calendar {
             get {
                 object obj = ResourceManager.GetObject("DateTimePicker_Calendar", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Dots {
-            get {
-                object obj = ResourceManager.GetObject("Dots", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1256,6 +1246,16 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap Modules_ShowOnCoriolis {
             get {
                 object obj = ResourceManager.GetObject("Modules_ShowOnCoriolis", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Plot_Dots {
+            get {
+                object obj = ResourceManager.GetObject("Plot_Dots", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
