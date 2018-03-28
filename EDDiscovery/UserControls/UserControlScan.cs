@@ -175,6 +175,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (StarScan.ScanNode starnode in last_sn.starnodes.Values)        // always has scan nodes
                 {
+                    //System.Diagnostics.Debug.WriteLine("Draw " + starnode.type);
                     int offset = 0;
                     Point maxstarpos = DrawNode(starcontrols, starnode,
                                 (starnode.type == StarScan.ScanNodeType.barycentre) ? Icons.Controls.Scan_Bodies_Barycentre : JournalScan.GetStarImageNotScanned(),
@@ -201,8 +202,10 @@ namespace EDDiscovery.UserControls
 
                         StarScan.ScanNode lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
 
-                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type != StarScan.ScanNodeType.belt && s.type != StarScan.ScanNodeType.barycentre))
+                        foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.body || s.type == StarScan.ScanNodeType.star))
                         {
+                           // System.Diagnostics.Debug.WriteLine("Draw " + planetnode.type);
+
                             while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
                                 if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
