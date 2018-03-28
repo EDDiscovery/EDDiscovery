@@ -166,59 +166,61 @@ namespace EDDiscovery.Actions
                 {
                     if (jidindex == -1)
                         ap.ReportError("Valid JID must be given for command " + cmdname + " in Event");
-                    else if (cmdname.Equals("action"))
-                    {
-                        int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(hl.EntryOrder[jidindex], Actions.ActionEventEDList.EventCmd(hl.EntryOrder[jidindex]), now:true);
-                        ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
-                    }
-                    else if (cmdname.Equals("edsm"))
-                    {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
-                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
-                        long? id_edsm = he.System.EDSMID;
-                        if (id_edsm <= 0)
-                        {
-                            id_edsm = null;
-                        }
-
-                        EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
-                        string url = edsm.GetUrlToEDSMSystem(he.System.Name, id_edsm);
-
-                        ap[prefix + "URL"] = url;
-
-                        if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                            System.Diagnostics.Process.Start(url);
-                    }
-                    else if (cmdname.Equals("ross"))
-                    {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
-                        (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
-
-                        string url = "";
-
-                        if (he.System.EDDBID > 0)
-                        {
-                            url = "http://ross.eddb.io/system/update/" + he.System.EDDBID.ToString();
-                            System.Diagnostics.Process.Start(url);
-                        }
-
-                        ap[prefix + "URL"] = url;
-                    }
-                    else if (cmdname.Equals("info"))
-                    {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
-                        ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
-                        ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
-                        ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
-                    }
-                    else if (cmdname.Equals("missions"))
-                    {
-                        HistoryEntry he = hl.EntryOrder[jidindex];
-                        ActionVars.MissionInformation(ap, he.MissionList, prefix);
-                    }
                     else
-                        ap.ReportError("Unknown command " + cmdname + " in Event");
+                    {
+                        HistoryEntry he = hl.EntryOrder[jidindex];
+                        ap[prefix + "JID"] = jidindex.ToStringInvariant();
+
+                        if (cmdname.Equals("action"))
+                        {
+                            int count = (ap.actioncontroller as ActionController).ActionRunOnEntry(he, Actions.ActionEventEDList.EventCmd(he), now: true);
+                            ap[prefix + "Count"] = count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        else if (cmdname.Equals("edsm"))
+                        {
+                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
+
+                            long? id_edsm = he.System.EDSMID;
+                            if (id_edsm <= 0)
+                            {
+                                id_edsm = null;
+                            }
+
+                            EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
+                            string url = edsm.GetUrlToEDSMSystem(he.System.Name, id_edsm);
+
+                            ap[prefix + "URL"] = url;
+
+                            if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+                                System.Diagnostics.Process.Start(url);
+                        }
+                        else if (cmdname.Equals("ross"))
+                        {
+                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
+
+                            string url = "";
+
+                            if (he.System.EDDBID > 0)
+                            {
+                                url = "http://ross.eddb.io/system/update/" + he.System.EDDBID.ToString();
+                                System.Diagnostics.Process.Start(url);
+                            }
+
+                            ap[prefix + "URL"] = url;
+                        }
+                        else if (cmdname.Equals("info"))
+                        {
+                            ActionVars.HistoryEventFurtherInfo(ap, hl, he, prefix);
+                            ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);
+                            ActionVars.ShipModuleInformation(ap, he.ShipInformation, prefix);
+                        }
+                        else if (cmdname.Equals("missions"))
+                        {
+                            ActionVars.MissionInformation(ap, he.MissionList, prefix);
+                        }
+                        else
+                            ap.ReportError("Unknown command " + cmdname + " in Event");
+                    }
                 }
             }
             else
@@ -241,6 +243,7 @@ namespace EDDiscovery.Actions
                 }
                 catch { }
 
+                ap[prefix + "JID"] = hl[pos].Journalid.ToStringInvariant();
                 ap[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches
             }
             else
