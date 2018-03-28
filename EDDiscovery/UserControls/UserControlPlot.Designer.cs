@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxDotSize.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBoxDotSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxDotSize.FontNerfReduction = 0.5F;
-            this.checkBoxDotSize.Image = global::EDDiscovery.Icons.Controls.Map3D_YellowDot;
+            this.checkBoxDotSize.Image = global::EDDiscovery.Icons.Controls.Plot_Dots;
             this.checkBoxDotSize.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxDotSize.Location = new System.Drawing.Point(194, 1);
             this.checkBoxDotSize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
