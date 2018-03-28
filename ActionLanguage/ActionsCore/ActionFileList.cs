@@ -259,6 +259,8 @@ namespace ActionLanguage
 
         #region special helpers
 
+        // give back all conditions which match itemname and have a compatible matchtype across all files.. used for key presses/voice input to compile a list of condition data to check for
+
         public List<Tuple<string, ConditionEntry.MatchType>> ReturnValuesOfSpecificConditions(string conditions, List<ConditionEntry.MatchType> matchtypes)
         {
             List<Tuple<string, ConditionEntry.MatchType>> ret = new List<Tuple<string, ConditionEntry.MatchType>>();

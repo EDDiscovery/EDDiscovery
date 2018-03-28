@@ -131,7 +131,7 @@ namespace ActionLanguage
             if (FromString(userdata, out keys, out statementvars))
             {
                 string errlist = null;
-                ConditionVariables vars = statementvars.ExpandAll(ap.functions, statementvars, out errlist);
+                ConditionVariables vars = ap.functions.ExpandVars(statementvars, out errlist);
 
                 if (errlist == null)
                 {
