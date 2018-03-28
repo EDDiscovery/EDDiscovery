@@ -194,7 +194,9 @@ namespace EDDiscovery.Actions
             if ( subname != null )
             {
                 int totalchildren = (scannode.Value.children != null) ? scannode.Value.children.Count : 0;
-                ap[prefix + subname] = totalchildren.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                int totalbodies = (scannode.Value.children != null) ? (from x in scannode.Value.children where x.Value.type == StarScan.ScanNodeType.body select x).Count() : 0;
+                ap[prefix + subname] = totalchildren.ToStringInvariant();
+                ap[prefix + subname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
             }
         }
     }
