@@ -586,8 +586,7 @@ namespace Conditions
 
         #region Helpers
 
-        // Event name.. give me conditions which match that name or ALL
-        // flagstart, if not null ,compare with start of action data and include only if matches
+        // is condition flag in actiondata set
 
         public bool IsConditionFlagSet(string flagstart)
         {
@@ -599,6 +598,9 @@ namespace Conditions
 
             return false;
         }
+
+        // Event name.. give me conditions which match that name or ALL
+        // flagstart, if not null ,compare with start of action data and include only if matches
 
         public List<Condition> GetConditionListByEventName(string eventname, string flagstart = null)
         {
@@ -619,6 +621,8 @@ namespace Conditions
 
             return (fel.Count == 0) ? null : fel;
         }
+
+        // give back all conditions which match itemname and have a compatible matchtype.. used for key presses/voice input to compile a list of condition data to check for
 
         public List<Tuple<string, ConditionEntry.MatchType>> ReturnValuesOfSpecificConditions(string itemname, List<ConditionEntry.MatchType> matchtypes)      // given itemname, give me a list of values it is matched against
         {
@@ -643,7 +647,7 @@ namespace Conditions
         // take conditions and JSON, decode it, execute..
         public bool? CheckCondition(   List<Condition> fel, 
                                         Object cls , // object with data in it
-                                        ConditionVariables othervars,   // any other variables to present to the condition, in addition to the JSON variables
+                                        ConditionVariables[] othervars,   // any other variables to present to the condition, in addition to the class variables
                                         out string errlist,     // null if okay..
                                         List<Condition> passed)            // null or conditions passed
         {
@@ -656,20 +660,20 @@ namespace Conditions
 
             try
             {
-                valuesneeded.GetValuesIndicated(cls);
+                valuesneeded.GetValuesIndicated(cls);       // given the class data, and the list of values needed, add it
                 valuesneeded.Add(othervars);
                 return CheckConditions(fel, valuesneeded, out errlist, passed);    // and check, passing in the values collected against the conditions to test.
             }
             catch (Exception)
             {
-                errlist = "JSON failed to parse!";
+                errlist = "CL:669 class failed to parse";
                 return null;
             }
         }
 
         // TRUE if filter is True and has value
 
-        public bool CheckFilterTrue(Object cls, ConditionVariables othervars, out string errlist, List<Condition> passed)      // if none, true, if false, true.. 
+        public bool CheckFilterTrue(Object cls, ConditionVariables[] othervars, out string errlist, List<Condition> passed)      // if none, true, if false, true.. 
         {                                                                                         // only if the filter passes do we get a false..
             bool? v = CheckCondition(conditionlist, cls, othervars, out errlist, passed);
             return (v.HasValue && v.Value);     // true IF we have a positive result
@@ -677,9 +681,10 @@ namespace Conditions
 
         // Filter OUT if condition matches..
 
-        public bool CheckFilterFalse(Object cls, string eventname, ConditionVariables othervars,  out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
+        public bool CheckFilterFalse(Object cls, string eventname, ConditionVariables[] othervars, out string errlist , List<Condition> passed)      // if none, true, if false, true.. 
         {
-            List<Condition> fel = GetConditionListByEventName(eventname);
+            List<Condition> fel = GetConditionListByEventName(eventname);       // first find conditions applicable, filtered by eventname
+
             if (fel != null)        // if we have matching filters..
             {
                 bool? v = CheckCondition(fel, cls, othervars, out errlist, passed);  // true means filter matched
