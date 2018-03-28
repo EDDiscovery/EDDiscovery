@@ -868,6 +868,10 @@
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Charts\Charts.csproj">
+      <Project>{6e3bddd2-540e-4b95-96cb-a9bf119e1241}</Project>
+      <Name>Charts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Conditions\Conditions.csproj">
       <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
       <Name>Conditions</Name>
