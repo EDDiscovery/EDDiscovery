@@ -17,14 +17,14 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Conditions
 {
     public class ConditionVariables
     {
         private Dictionary<string, string> values = new Dictionary<string, string>();
+
+        #region Init
 
         public ConditionVariables()
         {
@@ -70,9 +70,19 @@ namespace Conditions
                 values[s[i]] = s[i + 1];
         }
 
-        public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
+        public ConditionVariables(ConditionVariables other, string name, string value)
+        {
+            values = new Dictionary<string, string>(other.values);
+            values[name] = value;
+        }
+
+        #endregion
+
+        #region Read/Set
 
         public int Count { get { return values.Count; } }
+
+        public string this[string s] { get { return values[s]; } set { values[s] = value; } }       // can be set NULL
 
         public IEnumerable<string> NameEnumuerable { get { return values.Keys; } }
         public List<string> NameList { get { return values.Keys.ToList(); } }
@@ -85,6 +95,35 @@ namespace Conditions
         {
             if (values.ContainsKey(name))
                 values.Remove(name);
+        }
+
+        public void Add(List<ConditionVariables> varlist)
+        {
+            if (varlist != null)
+                foreach (ConditionVariables d in varlist)
+                    Add(d);
+        }
+
+        public void Add(ConditionVariables[] varlist)
+        {
+            if (varlist != null)
+                foreach (ConditionVariables d in varlist)
+                    Add(d);
+        }
+
+        public void Add(ConditionVariables d)
+        {
+            if (d != null)
+                Add(d.values);
+        }
+
+        public void Add(Dictionary<string, string> list)
+        {
+            if (list != null)
+            {
+                foreach (KeyValuePair<string, string> v in list)
+                    values[v.Key] = v.Value;
+            }
         }
 
         public int GetInt(string name, int def = 0)     // get or default
@@ -114,6 +153,43 @@ namespace Conditions
             else
                 values.Remove(name);
         }
+
+        public string AddToVar(string name, int add, int initial)       // DOES NOT set anything.. looks up a value and returns +add to it if its numeric.
+        {
+            if (values.ContainsKey(name))
+            {
+                int i;
+                if (values[name].InvariantParse(out i))
+                {
+                    return (i + add).ToString(System.Globalization.CultureInfo.InvariantCulture);
+                }
+            }
+
+            return initial.ToString();
+        }
+
+        // return a list just with the names matching filter, or filter*
+
+        public ConditionVariables FilterVars(string filter)
+        {
+            int wildcard = filter.IndexOf('*');
+            if (wildcard >= 0)
+                filter = filter.Substring(0, wildcard);
+
+            ConditionVariables ret = new ConditionVariables();
+
+            foreach (KeyValuePair<string, string> k in values)
+            {
+                if ((wildcard >= 0 && k.Key.StartsWith(filter)) || k.Key.Equals(filter))
+                    ret[k.Key] = k.Value;
+            }
+
+            return ret;
+        }
+
+        #endregion
+
+        #region Input/Output
 
         // Print vars, if altops is passed in, you can output using alternate operators
 
@@ -254,6 +330,10 @@ namespace Conditions
             }
         }
 
+        #endregion
+
+        #region Pack support
+
         static public string flagRunAtRefresh = "RunAtRefresh;";            // ACTION DATA Flags, stored with action program name in events to configure it
 
         public string ToActionDataString(string flag)           // helpers to encode action data..
@@ -289,80 +369,11 @@ namespace Conditions
             }
         }
 
-        public void Add(List<ConditionVariables> varlist)
-        {
-            foreach (ConditionVariables d in varlist)
-                Add(d);
-        }
-
-        public void Add(ConditionVariables d)
-        {
-            if (d != null)
-                Add(d.values);
-        }
-
-        public void Add(Dictionary<string,string> list)
-        {
-            if (list != null)
-            {
-                foreach (KeyValuePair<string, string> v in list)   // plus event vars
-                    values[v.Key] = v.Value;
-            }
-        }
-
-        public ConditionVariables FilterVars(string filter)
-        {
-            int wildcard = filter.IndexOf('*');
-            if (wildcard >= 0)
-                filter = filter.Substring(0, wildcard);
-
-            ConditionVariables ret = new ConditionVariables();
-
-            foreach (KeyValuePair<string, string> k in values)
-            {
-                if ((wildcard >= 0 && k.Key.StartsWith(filter)) || k.Key.Equals(filter))
-                    ret[k.Key] = k.Value;
-            }
-
-            return ret;
-        }
-
-        // all variables, expand out thru macro expander.  does not alter these ones
-        public ConditionVariables ExpandAll(ConditionFunctions e, ConditionVariables vars, out string errlist)
-        {
-            errlist = null;
-
-            ConditionVariables exp = new ConditionVariables();
-
-            foreach( KeyValuePair<string,string> k in values)
-            {
-                if (e.ExpandString(values[k.Key], out errlist) == ConditionFunctions.ExpandResult.Failed)
-                    return null;
-
-                exp[k.Key] = errlist;
-            }
-
-            errlist = null;
-            return exp;
-        }
-
-        public string AddToVar(string name, int add, int initial)       // DOES NOT set anything..
-        {
-            if (values.ContainsKey(name))
-            {
-                int i;
-                if (values[name].InvariantParse(out i))
-                {
-                    return (i + add).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                }
-            }
-
-            return initial.ToString();
-        }
+        #endregion
 
         #region Object values to this class
 
-        public bool GetValuesIndicated(Object o)                                            // get the ones set up in the class
+        public bool GetValuesIndicated(Object o)                                            // For all in the Values list, fill in data given from fields in O
         {
             Type jtype = o.GetType();
 
@@ -386,7 +397,6 @@ namespace Conditions
 
             return true;
         }
-
 
         public void AddPropertiesFieldsOfClass( Object o, string prefix , Type[] propexcluded , int maxdepth )      // get all data in the class
         {
