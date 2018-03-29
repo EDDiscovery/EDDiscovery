@@ -189,7 +189,6 @@ namespace EliteDangerousCore
             AddRaw("Vanadium", MaterialFreqCommon, "V");
             AddRaw("Zinc", MaterialFreqCommon, "Zn");
             AddRaw("Zirconium", MaterialFreqCommon, "Zr");
-            AddRaw("Tin", MaterialFreqCommon, "Sn");
             AddRaw("Arsenic", MaterialFreqCommon, "As");
 
             AddRaw("Niobium", MaterialFreqStandard, "Nb");        // realign to Anthors standard
@@ -198,6 +197,7 @@ namespace EliteDangerousCore
             AddRaw("Mercury", MaterialFreqStandard, "Hg");
             AddRaw("Boron", MaterialFreqStandard, "B");
             AddRaw("Cadmium", MaterialFreqStandard, "Cd");
+            AddRaw("Tin", MaterialFreqStandard, "Sn");
 
             AddRaw("Selenium", MaterialFreqRare, "Se");
             AddRaw("Yttrium", MaterialFreqRare, "Y");
