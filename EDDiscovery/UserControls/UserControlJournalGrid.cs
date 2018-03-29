@@ -118,6 +118,8 @@ namespace EDDiscovery.UserControls
             Display(discoveryform.history);
         }
 
+        int fdropdown, ftotalevents, ftotalfilters;     // filter totals
+
         private void Display(HistoryList hl)
         {
             if (hl == null)     // just for safety
@@ -130,13 +132,10 @@ namespace EDDiscovery.UserControls
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl);
+            fdropdown = hl.Count() - result.Count();
 
-            int ftotal;
-            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-            toolTip.SetToolTip(buttonFilter, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries based on event type");
-
-            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotal);
-            toolTip.SetToolTip(buttonField, (ftotal > 0) ? ("Total filtered out " + ftotal) : "Filter out entries matching the field selection");
+            result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
+            result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
@@ -147,6 +146,8 @@ namespace EDDiscovery.UserControls
             }
 
             StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
+
+            UpdateToolTipsForFilter();
 
             int rowno = FindGridPosByJID(pos.Item1,true);
 
@@ -159,6 +160,7 @@ namespace EDDiscovery.UserControls
 
             FireChangeSelection();
         }
+
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
@@ -188,7 +190,22 @@ namespace EDDiscovery.UserControls
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
-            if (he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All")) && FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
+
+            if (!add)
+            {
+                ftotalevents++;
+                UpdateToolTipsForFilter();
+            }
+
+            if (add && !FilterHelpers.FilterHistory(he, fieldfilter, discoveryform.Globals))
+            {
+                add = false;
+                ftotalfilters++;
+                UpdateToolTipsForFilter();
+            }
+
+            if ( add )
             {
                 AddNewJournalRow(true, he);
 
@@ -228,6 +245,14 @@ namespace EDDiscovery.UserControls
                     FireChangeSelection();
                 }
             }
+        }
+
+        private void UpdateToolTipsForFilter()
+        {
+            string ms = " showing " + dataGridViewJournal.Rows.Count + " original " + (current_historylist?.Count() ?? 0);
+            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? ("Filtered " + fdropdown + ms) : "Select the entries by age, " + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? ("Filtered " + ftotalevents + ms) : "Filter out entries based on event type, " + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
         }
 
 	    #endregion
