@@ -147,14 +147,27 @@ namespace EDDiscovery.UserControls
         }
 
         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
-
         public void HistoryChanged(HistoryList hl)           // on History change
+        {
+            HistoryChanged(hl, false);
+        }
+
+        public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
         {
             if (hl == null)     // just for safety
                 return;
 
             current_historylist = hl;
+
             Tuple<long, int> pos = CurrentGridPosByJID();
+
+            SortOrder sortorder = dataGridViewTravel.SortOrder;
+            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? -1;
+            if (sortcol >= 0 && disablesorting)
+            {
+                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                sortcol = -1;
+            }
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -164,6 +177,7 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
+            
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
@@ -191,6 +205,12 @@ namespace EDDiscovery.UserControls
                 rowno = -1;
 
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            if (sortcol >= 0)
+            {
+                dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
 
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }
@@ -303,6 +323,14 @@ namespace EDDiscovery.UserControls
             toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
         }
 
+        private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if ( e.Column.Index == 0 )
+            {
+                e.SortDataGridViewColumnDate();
+            }
+        }
+
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
         {
             long jid = (dataGridViewTravel.CurrentCell != null) ? ((HistoryEntry)(dataGridViewTravel.Rows[dataGridViewTravel.CurrentCell.RowIndex].Cells[TravelHistoryColumns.HistoryTag].Tag)).Journalid : -1;
@@ -336,15 +364,6 @@ namespace EDDiscovery.UserControls
             if (current_historylist != null)
             {
                 HistoryChanged(current_historylist);        // fires lots of events
-            }
-        }
-
-        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.ColumnIndex != TravelHistoryColumns.Icon)
-            {
-                DataGridViewSorter.DataGridSort(dataGridViewTravel, e.ColumnIndex);
-                FireChangeSelection();
             }
         }
 
@@ -619,6 +638,12 @@ namespace EDDiscovery.UserControls
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
+        }
+
+        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HistoryChanged(current_historylist, true);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -1049,7 +1074,7 @@ namespace EDDiscovery.UserControls
 
         private void EventFilterChanged(object sender, EventArgs e)
         {
-            HistoryChanged(current_historylist);
+            HistoryChanged(current_historylist,true);
         }
 
         private void buttonField_Click(object sender, EventArgs e)

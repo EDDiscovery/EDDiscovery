@@ -342,7 +342,6 @@
     <Compile Include="3DMap\FormMap.Designer.cs">
       <DependentUpon>FormMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\DataGridViewSorter.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -566,11 +565,11 @@
     <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\StatsTimeForm.cs">
+    <Compile Include="UserControls\StatsTimeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\StatsTimeForm.Designer.cs">
-      <DependentUpon>StatsTimeForm.cs</DependentUpon>
+    <Compile Include="UserControls\StatsTimeUserControl.Designer.cs">
+      <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlStarList.cs">
       <SubType>UserControl</SubType>
@@ -728,8 +727,8 @@
     <EmbeddedResource Include="UserControls\UserControlStats.resx">
       <DependentUpon>UserControlStats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\StatsTimeForm.resx">
-      <DependentUpon>StatsTimeForm.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\StatsTimeUserControl.resx">
+      <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarList.resx">
       <DependentUpon>UserControlStarList.cs</DependentUpon>
