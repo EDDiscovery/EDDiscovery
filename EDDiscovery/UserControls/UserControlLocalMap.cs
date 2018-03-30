@@ -17,7 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
+//using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -29,6 +29,17 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using System.Diagnostics;
+using nzy3D.Chart;
+using nzy3D.Chart.Controllers.Thread.Camera;
+using nzy3D.Colors;
+using nzy3D.Colors.ColorMaps;
+using nzy3D.Maths;
+using nzy3D.Plot3D.Builder;
+using nzy3D.Plot3D.Builder.Concrete;
+using nzy3D.Plot3D.Primitives;
+using nzy3D.Plot3D.Primitives.Axes.Layout;
+using nzy3D.Plot3D.Rendering.Canvas;
+using nzy3D.Plot3D.Rendering.View;
 
 
 namespace EDDiscovery.UserControls
@@ -39,12 +50,14 @@ namespace EDDiscovery.UserControls
 
         private string DbSave { get { return "MapPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
+        private CameraThreadController t;
+        private IAxeLayout axeLayout;
+
         private StarDistanceComputer computer;
 
         public UserControlLocalMap()
         {
-            InitializeComponent();
-            this.chartMap.MouseWheel += Zoom_MouseWheel;            
+            InitializeComponent();                      
         }
 
         private HistoryEntry last_he = null;
@@ -67,8 +80,65 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             slidetimer = new System.Windows.Forms.Timer();
             slidetimer.Interval = 500;
-            slidetimer.Tick += Slidetimer_Tick;
+
+            // render
+            // Create a range for the graph generation
+            Range range = new Range(-150, 150);
+            int steps = 50;
+
+            // Build a nice surface to display with cool alpha colors 
+            // (alpha 0.8 for surface color and 0.5 for wireframe)
+            Shape surface = Builder.buildOrthonomal(new OrthonormalGrid(range, steps, range, steps), new MyMapper());
+            surface.ColorMapper = new ColorMapper(new ColorMapRainbow(), surface.Bounds.zmin, surface.Bounds.zmax, new Color(1, 1, 1, 0.8));
+            surface.FaceDisplayed = true;
+            surface.WireframeDisplayed = true;
+            surface.WireframeColor = Color.CYAN;
+            surface.WireframeColor.mul(new Color(1, 1, 1, 0.5));
+
+            // Create the chart and embed the surface within
+            Chart chart = new Chart(rendererMap, Quality.Nicest);
+            chart.Scene.Graph.Add(surface);
+            axeLayout = chart.AxeLayout;
+
+            // All activated by default
+            DisplayXTicks = true;
+            DisplayXAxisLabel = true;
+            DisplayYTicks = true;
+            DisplayYAxisLabel = true;
+            DisplayZTicks = true;
+            DisplayZAxisLabel = true;
+            DisplayTickLines = true;
+
+            // Create a mouse control
+            nzy3D.Chart.Controllers.Mouse.Camera.CameraMouseController mouse = new nzy3D.Chart.Controllers.Mouse.Camera.CameraMouseController();
+            mouse.addControllerEventListener(rendererMap);
+            chart.addController(mouse);
+
+            // This is just to ensure code is reentrant (used when code is not called in Form_Load but another reentrant event)
+            DisposeBackgroundThread();
+
+            // Create a thread to control the camera based on mouse movements
+            t = new nzy3D.Chart.Controllers.Thread.Camera.CameraThreadController();
+            t.addControllerEventListener(rendererMap);
+            mouse.addSlaveThreadController(t);
+            chart.addController(t);
+            t.Start();
+
+            // Associate the chart with current control
+            rendererMap.setView(chart.View);
+
+            this.Refresh();
+
         }
+
+        private void DisposeBackgroundThread()
+        {
+            if ((t != null))
+            {
+                t.Dispose();
+            }
+        }
+
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {            
@@ -87,6 +157,9 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
+
+            //
+            DisposeBackgroundThread();
         }
 
         public override void InitialDisplay()
@@ -94,16 +167,168 @@ namespace EDDiscovery.UserControls
             KickComputation(uctg.GetCurrentHistoryEntry);            
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        private bool _DisplayTickLines;
+        public bool DisplayTickLines
         {
-            KickComputation(he);
-            RefreshMap();
-            ControlReset(chartMap);
+            get
+            {
+                return _DisplayTickLines;
+            }
+            set
+            {
+                _DisplayTickLines = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.TickLineDisplayed = value;
+                }
+            }
         }
+
+        private bool _DisplayXTicks;
+        public bool DisplayXTicks
+        {
+            get
+            {
+                return _DisplayXTicks;
+            }
+            set
+            {
+                _DisplayXTicks = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.XTickLabelDisplayed = value;
+                }
+            }
+        }
+
+        private bool _DisplayYTicks;
+        public bool DisplayYTicks
+        {
+            get
+            {
+                return _DisplayYTicks;
+            }
+            set
+            {
+                _DisplayYTicks = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.YTickLabelDisplayed = value;
+                }
+            }
+        }
+
+        private bool _DisplayZTicks;
+        public bool DisplayZTicks
+        {
+            get
+            {
+                return _DisplayZTicks;
+            }
+            set
+            {
+                _DisplayZTicks = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.ZTickLabelDisplayed = value;
+                }
+            }
+        }
+
+        private bool _DisplayXAxisLabel;
+        public bool DisplayXAxisLabel
+        {
+            get
+            {
+                return _DisplayXAxisLabel;
+            }
+            set
+            {
+                _DisplayXAxisLabel = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.XAxeLabelDisplayed = value;
+                }
+            }
+        }
+
+        private bool _DisplayYAxisLabel;
+        public bool DisplayYAxisLabel
+        {
+            get
+            {
+                return _DisplayYAxisLabel;
+            }
+            set
+            {
+                _DisplayYAxisLabel = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.YAxeLabelDisplayed = value;
+                }
+            }
+        }
+
+        private bool _DisplayZAxisLabel;
+        public bool DisplayZAxisLabel
+        {
+            get
+            {
+                return _DisplayZAxisLabel;
+            }
+            set
+            {
+                _DisplayZAxisLabel = value;
+                if (axeLayout != null)
+                {
+                    axeLayout.ZAxeLabelDisplayed = value;
+                }
+            }
+        }
+
+        /*
+        private void checkBoxes_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDisplayXTicks.Checked != DisplayXTicks)
+            {
+                DisplayXTicks = chkDisplayXTicks.Checked;
+            }
+            if (chkDisplayYTicks.Checked != DisplayYTicks)
+            {
+                DisplayYTicks = chkDisplayYTicks.Checked;
+            }
+            if (chkDisplayZTick.Checked != DisplayZTicks)
+            {
+                DisplayZTicks = chkDisplayZTick.Checked;
+            }
+            if (chkDisplayXAxisLabel.Checked != DisplayXAxisLabel)
+            {
+                DisplayXAxisLabel = chkDisplayXAxisLabel.Checked;
+            }
+            if (chkDisplayYAxisLabel.Checked != DisplayYAxisLabel)
+            {
+                DisplayYAxisLabel = chkDisplayYAxisLabel.Checked;
+            }
+            if (chkDisplayZAxisLabel.Checked != DisplayZAxisLabel)
+            {
+                DisplayZAxisLabel = chkDisplayZAxisLabel.Checked;
+            }
+            if (chkDisplayTickLines.Checked != DisplayTickLines)
+            {
+                DisplayTickLines = chkDisplayTickLines.Checked;
+            }
+        }
+        */
+
 
         #endregion
 
         #region computer
+
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            KickComputation(he);
+        }
 
         private void KickComputation(HistoryEntry he)
         {            
@@ -127,8 +352,8 @@ namespace EDDiscovery.UserControls
             SetControlText("3D Map of closest systems from " + centerSystem.Name);
 
             // Add the current system
-            chartMap.Series[50].Points.AddXY(0, 0); 
-            chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
+            //chartMap.Series[50].Points.AddXY(0, 0); 
+            //chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
 
             System.Diagnostics.Debug.WriteLine("Max " + textMaxRadius.Value + " Min " + textMinRadius.Value + " Count " + csl.Count()); ;
             if (csl.Count() > 0)
@@ -147,12 +372,12 @@ namespace EDDiscovery.UserControls
                     var curZ = centerSystem.Z;
 
                         // reset charts axis
-                        chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
-                        chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;                        
-                        chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
-                        chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
-                        chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
-                        chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
+                        //chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
+                        //chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;                        
+                        //chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
+                        //chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
+                        //chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
+                        //chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
 
                         // depth of the series layers need to be adjusted, so to follow the X and Y axis
                         int sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
@@ -163,7 +388,7 @@ namespace EDDiscovery.UserControls
                             sdepth = 1000;
                         }
 
-                        chartMap.ChartAreas[0].Area3DStyle.PointDepth = sdepth;
+                        //chartMap.ChartAreas[0].Area3DStyle.PointDepth = sdepth;
 
                         if (distFromCurrentSys > textMinRadius.Value) // we want to be able to define a shell 
                         {
@@ -206,23 +431,33 @@ namespace EDDiscovery.UserControls
                             StringBuilder label = new StringBuilder();
                             label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
 
-                            chartMap.Series[ispy].Points.AddXY(px, pz);
-                            chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips
+                            //chartMap.Series[ispy].Points.AddXY(px, pz);
+                            //chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips
                         }
                     }
                 }
             }
             else
             {
-                for( int i =0; i < chartMap.Series.Count; i++ )
-                    chartMap.Series[i].Points.Clear();
+                //for( int i =0; i < chartMap.Series.Count; i++ )
+                    //chartMap.Series[i].Points.Clear();
 
             }
         }
 
         #endregion
 
-        #region refresh
+        class MyMapper : nzy3D.Plot3D.Builder.Mapper
+        {
+
+            public override double f(double x, double y)
+            {
+                return 10 * Math.Sin(x / 10) * Math.Cos(y / 20) * x;
+            }
+
+        }
+
+        #region refresh computation
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
@@ -232,22 +467,11 @@ namespace EDDiscovery.UserControls
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
             KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
-        }
-
-        private void RefreshMap()
-        {
-            // clean up all the series
-            foreach (int s in Enumerable.Range(0, 100))
-            {
-                chartMap.Series[s].Points.Clear();
-            }
-
-            // update the chart
-            chartMap.Update();            
-        }
+        }        
 
         #endregion
 
+        /*
         #region slide
 
         private void SlideMaxItems_Scroll(object sender, EventArgs e)
@@ -667,6 +891,7 @@ namespace EDDiscovery.UserControls
                 contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
             }
         }
+        */
     }
 }
 

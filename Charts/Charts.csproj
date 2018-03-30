@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6E3BDDD2-540E-4B95-96CB-A9BF119E1241}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>nzy3d_api</RootNamespace>
+    <AssemblyName>nzy3d-api</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\OpenTK.Compatibility.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Chart\Chart.cs" />
+    <Compile Include="Chart\ChartScene.cs" />
+    <Compile Include="Chart\ChartView.cs" />
+    <Compile Include="Chart\Controllers\AbstractController.cs" />
+    <Compile Include="Chart\Controllers\Camera\AbstractCameraController.cs" />
+    <Compile Include="Chart\Controllers\ControllerType.cs" />
+    <Compile Include="Chart\Controllers\Mouse\Camera\CameraMouseController.cs" />
+    <Compile Include="Chart\Controllers\Thread\Camera\CameraThreadController.cs" />
+    <Compile Include="Colors\Color.cs" />
+    <Compile Include="Colors\ColorMapper.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapGrayscale.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapHotCold.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapRainbow.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapRBG.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapRedAndGreen.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapWhiteBlue.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapWhiteGreen.cs" />
+    <Compile Include="Colors\ColorsMaps\ColorMapWhiteRed.cs" />
+    <Compile Include="Colors\ColorsMaps\IColorMap.cs" />
+    <Compile Include="Colors\IColorMappable.cs" />
+    <Compile Include="Colors\IMultiColorable.cs" />
+    <Compile Include="Colors\ISingleColorable.cs" />
+    <Compile Include="Events\ControllerEventArgs.cs" />
+    <Compile Include="Events\DrawableChangedEventArgs.cs" />
+    <Compile Include="Events\IControllerEventListener.cs" />
+    <Compile Include="Events\IDrawableListener.cs" />
+    <Compile Include="Events\Keyboard\IKeyListener.cs" />
+    <Compile Include="Events\Mouse\IMouseListener.cs" />
+    <Compile Include="Events\IScaleChangedListener.cs" />
+    <Compile Include="Events\IViewIsVerticalEventListener.cs" />
+    <Compile Include="Events\IViewModeChangedListener.cs" />
+    <Compile Include="Events\IViewPointChangedListener.cs" />
+    <Compile Include="Events\Mouse\IMouseMotionListener.cs" />
+    <Compile Include="Events\Mouse\IMouseWheelListener.cs" />
+    <None Include="Events\Mouse\MouseButton.cs" />
+    <None Include="Events\Mouse\MouseEventArgs.cs" />
+    <None Include="Events\Mouse\MouseWheelEventArgs.cs" />
+    <Compile Include="Events\ObjectEventArgs.cs" />
+    <Compile Include="Events\ScaleChangedEventArgs.cs" />
+    <Compile Include="Events\ViewIsVerticalEventArgs.cs" />
+    <Compile Include="Events\ViewModeChangedEventArgs.cs" />
+    <Compile Include="Events\ViewPointChangedEventArgs.cs" />
+    <Compile Include="Factories\AxeFactory.cs" />
+    <Compile Include="Factories\CameraFactory.cs" />
+    <Compile Include="Factories\NzyFactories.cs" />
+    <Compile Include="Factories\OrderingStrategyFactory.cs" />
+    <None Include="Factories\Renderer3dFactory.cs" />
+    <Compile Include="Factories\SceneFactory.cs" />
+    <Compile Include="Factories\ViewFactory.cs" />
+    <Compile Include="Glut\BitmapCharRec.cs" />
+    <Compile Include="Glut\BitmapFontRec.cs" />
+    <Compile Include="Glut\CoordRec.cs" />
+    <Compile Include="Glut\GLUTBitmapHelvetica10.cs" />
+    <Compile Include="Glut\Glut.cs" />
+    <Compile Include="Glut\GLUTBitmap8x13.cs" />
+    <Compile Include="Glut\GLUTBitmap9x15.cs" />
+    <Compile Include="Glut\GLUTBitmapHelvetica12.cs" />
+    <Compile Include="Glut\GLUTBitmapHelvetica18.cs" />
+    <Compile Include="Glut\GLUTBitmapTimesRoman10.cs" />
+    <Compile Include="Glut\GLUTBitmapTimesRoman24.cs" />
+    <Compile Include="Glut\GLUTStrokeMonoRoman.cs" />
+    <Compile Include="Glut\GLUTStrokeRoman.cs" />
+    <Compile Include="Glut\StrokeCharRec.cs" />
+    <Compile Include="Glut\StrokeFontRec.cs" />
+    <Compile Include="Glut\StrokeRec.cs" />
+    <Compile Include="Maths\Algorithms\Interpolation\Bernstein\BernsteinInterpolator.cs" />
+    <Compile Include="Maths\Algorithms\Interpolation\Bernstein\BernsteinPolynomial.cs" />
+    <Compile Include="Maths\Algorithms\Interpolation\Bernstein\Spline3D.cs" />
+    <Compile Include="Maths\Algorithms\Interpolation\IInterpolator.cs" />
+    <Compile Include="Maths\Algorithms\OutlierRemover.cs" />
+    <Compile Include="Maths\Algorithms\ScaleFinder.cs" />
+    <Compile Include="Maths\Angle2d.cs" />
+    <Compile Include="Maths\Angle3d.cs" />
+    <Compile Include="Maths\Array.cs" />
+    <Compile Include="Maths\BoundingBox2d.cs" />
+    <Compile Include="Maths\BoundingBox3d.cs" />
+    <Compile Include="Maths\Coord2d.cs" />
+    <Compile Include="Maths\Coord3d.cs" />
+    <Compile Include="Maths\Coordinates.cs" />
+    <Compile Include="Maths\Graphs\DefaultGraph.cs" />
+    <Compile Include="Maths\Graphs\IGraph.cs" />
+    <Compile Include="Maths\Graphs\StringGraphGenerator.cs" />
+    <Compile Include="Maths\Grid.cs" />
+    <Compile Include="Maths\IntegerCoord2d.cs" />
+    <Compile Include="Maths\Mapper.cs" />
+    <Compile Include="Maths\Normal.cs" />
+    <Compile Include="Maths\Pair.cs" />
+    <Compile Include="Maths\PlaneAxis.cs" />
+    <Compile Include="Maths\PolygonArray.cs" />
+    <Compile Include="Maths\Range.cs" />
+    <Compile Include="Maths\Scale.cs" />
+    <Compile Include="Maths\Statistics.cs" />
+    <Compile Include="Maths\TicToc.cs" />
+    <Compile Include="Maths\Utils.cs" />
+    <Compile Include="Maths\Vector2d.cs" />
+    <Compile Include="Maths\Vector3d.cs" />
+    <Compile Include="Plot2D\Primitives\ColorbarImageGenerator.cs" />
+    <Compile Include="Plot3D\Builder\Builder.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\BufferedImageMapper.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\CustomGrid.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\OrthonormalGrid.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\OrthonormalTessellator.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\RingExtrapolator.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\RingGrid.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\RingTessellator.cs" />
+    <Compile Include="Plot3D\Builder\Concrete\SphereScatterGenerator.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\DelaunayCoordinateValidator.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\DelaunayTessellator.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\DelaunayTriangulationManager.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\ICoordinateValidator.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\ITriangulation.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\BoundingBox.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\Circle_dt.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\Delaunay_Triangulation.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\GridIndex.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\Point_dt.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\Jdt\Triangle_dt.cs" />
+    <Compile Include="Plot3D\Builder\Delaunay\OrthonormalCoordinateValidator.cs" />
+    <Compile Include="Plot3D\Builder\Grid.cs" />
+    <Compile Include="Plot3D\Builder\IObjectTopology.cs" />
+    <Compile Include="Plot3D\Builder\Mapper.cs" />
+    <Compile Include="Plot3D\Builder\Tessellator.cs" />
+    <Compile Include="Plot3D\Primitives\AbstractComposite.cs" />
+    <Compile Include="Plot3D\Primitives\AbstractDrawable.cs" />
+    <Compile Include="Plot3D\Primitives\AbstractWireframeable.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\AxeBase.cs" />
+    <Compile Include="Plot3D\Primitives\CompileableComposite.cs" />
+    <Compile Include="Plot3D\Primitives\ISortableDraw.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\AxeBox.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\IAxe.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\AxeBoxLayout.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\IAxeLayout.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Providers\AbstractTickProvider.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Providers\ITickProvider.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Providers\RegularTickProvider.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Providers\SmartTickProvider.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Providers\StaticTickProvider.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\DateTickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\DefaultDecimalTickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\FixedDecimalTickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\IntegerTickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\ITickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\ScientificNotationTickRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Axes\Layout\Renderers\TickLabelMap.cs" />
+    <None Include="Plot3D\Primitives\Graphs\Layout\DefaultGraphLayout2d.cs" />
+    <None Include="Plot3D\Primitives\Graphs\Layout\IGraphLayout2d.cs" />
+    <Compile Include="Plot3D\Primitives\IGLBindedResource.cs" />
+    <Compile Include="Plot3D\Primitives\IGLRenderer.cs" />
+    <Compile Include="Plot3D\Primitives\Parallelepiped.cs" />
+    <Compile Include="Plot3D\Primitives\Point.cs" />
+    <Compile Include="Plot3D\Primitives\Polygon.cs" />
+    <Compile Include="Plot3D\Primitives\Scatter.cs" />
+    <Compile Include="Plot3D\Primitives\ScatterMultiColor.cs" />
+    <Compile Include="Plot3D\Primitives\Selectable\ISelectable.cs" />
+    <Compile Include="Plot3D\Primitives\Shape.cs" />
+    <Compile Include="Plot3D\Rendering\Canvas\ICanvas.cs" />
+    <Compile Include="Plot3D\Rendering\Canvas\Quality.cs" />
+    <Compile Include="Plot3D\Rendering\Legends\Colorbars\ColorbarLegend.cs" />
+    <Compile Include="Plot3D\Rendering\Legends\Legend.cs" />
+    <Compile Include="Plot3D\Rendering\Lights\Light.cs" />
+    <Compile Include="Plot3D\Rendering\Lights\LightSet.cs" />
+    <Compile Include="Plot3D\Rendering\Lights\LightSwitch.cs" />
+    <Compile Include="Plot3D\Rendering\Ordering\AbstractOrderingStrategy.cs" />
+    <Compile Include="Plot3D\Rendering\Ordering\BarycentreOrderingStrategy.cs" />
+    <Compile Include="Plot3D\Rendering\Ordering\DefaultOrderingStrategy.cs" />
+    <Compile Include="Plot3D\Rendering\Ordering\PointOrderingStrategy.cs" />
+    <Compile Include="Plot3D\Rendering\Scene\Decomposition.cs" />
+    <Compile Include="Plot3D\Rendering\Scene\Graph.cs" />
+    <Compile Include="Plot3D\Rendering\View\AbstractViewport.cs" />
+    <Compile Include="Plot3D\Rendering\View\Camera.cs" />
+    <Compile Include="Plot3D\Rendering\View\ImageRenderer.cs" />
+    <Compile Include="Plot3D\Rendering\View\ImageViewport.cs" />
+    <Compile Include="Plot3D\Rendering\View\IRenderer2D.cs" />
+    <Compile Include="Plot3D\Rendering\View\Modes\CameraMode.cs" />
+    <Compile Include="Plot3D\Rendering\View\Modes\ViewBoundMode.cs" />
+    <Compile Include="Plot3D\Rendering\View\Modes\ViewPositionMode.cs" />
+    <Compile Include="Plot3D\Rendering\View\Renderer3D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Plot3D\Rendering\View\View.cs" />
+    <Compile Include="Plot3D\Rendering\Scene\Scene.cs" />
+    <Compile Include="Plot3D\Rendering\View\ViewPort.cs" />
+    <Compile Include="Plot3D\Text\AbstractTextRenderer.cs" />
+    <Compile Include="Plot3D\Text\Align\Halign.cs" />
+    <Compile Include="Plot3D\Text\Align\Valign.cs" />
+    <Compile Include="Plot3D\Text\ITextRenderer.cs" />
+    <Compile Include="Plot3D\Text\Renderer\TextBillboardRenderer.cs" />
+    <Compile Include="Plot3D\Text\Renderer\TextBitmapRenderer.cs" />
+    <Compile Include="Plot3D\Transform\ITransformer.cs" />
+    <Compile Include="Plot3D\Transform\Scale.cs" />
+    <Compile Include="Plot3D\Transform\Transform.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
