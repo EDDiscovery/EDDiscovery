@@ -500,14 +500,16 @@ namespace EDDiscovery.UserControls
 
                     grd.GetLine += delegate (int r)
                     {
-                        HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                        DataGridViewRow rw = dataGridViewJournal.Rows[r];
                         if (frm.ExportAsJournals)
                         {
-                            return new Object[] { he.journalEntry.GetJson()?.ToString() };
+                            HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                            return new Object[] { he.journalEntry.GetJson()?.ToString().Replace("\n", "").Replace("\r", "") };
                         }
                         else
+                        {
+                            DataGridViewRow rw = dataGridViewJournal.Rows[r];
                             return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                        }
                     };
 
                     grd.GetHeader += delegate (int c)
@@ -515,7 +517,7 @@ namespace EDDiscovery.UserControls
                         return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
                     };
 
-                    if (grd.WriteCSV(frm.Path))
+                    if (grd.WriteCSV(frm.Path, frm.ExportAsJournals))
                     {
                         if (frm.AutoOpen)
                             System.Diagnostics.Process.Start(frm.Path);
