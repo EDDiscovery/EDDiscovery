@@ -208,6 +208,20 @@ namespace EDDiscovery.UserControls
             SizeControls();
         }
 
+        bool IsTravelling(HistoryList hl, out DateTime startTime)
+        {
+            bool inTrip = false;
+            startTime = DateTime.Now;
+            HistoryEntry lastStartMark = hl.GetLastHistoryEntry(x => x.StartMarker);
+            if (lastStartMark != null)
+            {
+                HistoryEntry lastStopMark = hl.GetLastHistoryEntry(x => x.StopMarker);
+                inTrip = lastStopMark == null || lastStopMark.EventTimeLocal < lastStartMark.EventTimeLocal;
+                if (inTrip) startTime = lastStartMark.EventTimeLocal;
+            }
+            return inTrip;
+        }
+
         void StatsTravel(HistoryEntry he, HistoryList hl)
         {
             int[] intar = null;
@@ -215,19 +229,20 @@ namespace EDDiscovery.UserControls
             int intervals=0;
             DateTime[] timearr;
             DateTime endTime;
-
-
+            
             if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary || userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Custom)
             {
                 dataGridViewTravel.Rows.Clear();
                 dataGridViewTravel.Columns.Clear();
                 dataGridViewTravel.Dock = DockStyle.Fill;
                 dataGridViewTravel.Visible = true;
-
-
+                
                 if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
                 {
-                    intervals = 5;
+                    DateTime tripStart;
+                    bool inTrip = IsTravelling(hl, out tripStart);
+                    
+                    intervals = inTrip ? 6 : 5;
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "Last";
 
@@ -248,32 +263,50 @@ namespace EDDiscovery.UserControls
                     ColumnValueAlignment(Col5);
 
                     var Col6 = new DataGridViewTextBoxColumn();
-                    Col6.HeaderText = "all";
-                    ColumnValueAlignment(Col6);
+                    var Col7 = new DataGridViewTextBoxColumn();
 
-                    dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    if (inTrip)
+                    {
+                        Col6.HeaderText = "Trip";
+                        ColumnValueAlignment(Col6);
 
+                        Col7.HeaderText = "all";
+                        ColumnValueAlignment(Col7);
+                        dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
 
+                    }
+                    else
+                    { 
+                        Col6.HeaderText = "all";
+                        ColumnValueAlignment(Col6);
+                        dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    }
+                    
                     intar = new int[intervals];
                     strarr = new string[intervals];
-
-
+                    
                     timearr = new DateTime[intervals];
-
 
                     HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
                     DateTime lastdockTime = DateTime.Now;
 
                     if (lastdocked != null)
                         lastdockTime = lastdocked.EventTimeLocal;
-
-
+                    
                     timearr[0] = DateTime.Now.AddDays(-1);
                     timearr[1] = DateTime.Now.AddDays(-7);
                     timearr[2] = DateTime.Now.AddMonths(-1);
-                    timearr[3] = lastdockTime;
-                    timearr[4] = new DateTime(2012, 1, 1);
-
+                    if (inTrip)
+                    {
+                        timearr[3] = lastdockTime;
+                        timearr[4] = tripStart;
+                        timearr[5] = new DateTime(2012, 1, 1);
+                    }
+                    else
+                    {
+                        timearr[3] = lastdockTime;
+                        timearr[4] = new DateTime(2012, 1, 1);
+                    }
                     endTime = DateTime.Now;
                 }
                 else  // Custom
@@ -291,17 +324,13 @@ namespace EDDiscovery.UserControls
 
                     intar = new int[intervals];
                     strarr = new string[intervals];
-
-
+                    
                     timearr = new DateTime[intervals];
-
-
+                    
                     timearr[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value;
                     endTime = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1);
 
                 }
-
-
 
                 for (int ii = 0; ii<intervals; ii++)
                     strarr[ii] = hl.GetFSDJumps(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -312,8 +341,16 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Premium Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Standard Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Basic Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetJetConeBoost(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -322,8 +359,7 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetPlayerControlledTouchDown(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
-
-
+                
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetHeatWarning(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
@@ -348,15 +384,13 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
 
-
             }
             else
             {
                 intervals = 10;
                 DateTime[] timeintervals = new DateTime[intervals + 1];
                 DateTime currentday = DateTime.Today;
-
-
+                
                 if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Day)
                 {
                     timeintervals[0] = currentday.AddDays(1);
@@ -387,7 +421,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Dock = DockStyle.Fill;
                 dataGridViewTravel.Visible = true;
 
-
                 var Col1 = new DataGridViewTextBoxColumn();
                 Col1.HeaderText = "";
 
@@ -400,22 +433,26 @@ namespace EDDiscovery.UserControls
                     ColumnValueAlignment(Col2);
                     dataGridViewTravel.Columns.Add(Col2);
                 }
-
-
+                
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetFSDJumps(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Jumps", strarr);
-
-
+                
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii], 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Premium Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii], 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Standard Boost", strarr);
 
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii+ 1], timeintervals[ii], 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Basic Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -428,8 +465,7 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetPlayerControlledTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
-
-
+                
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetHeatWarning(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
@@ -450,14 +486,10 @@ namespace EDDiscovery.UserControls
                     strarr[ii] = hl.GetNrScans(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scans", strarr);
 
-
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
-
-
-
-
+                
             }
         }
 
@@ -477,6 +509,9 @@ namespace EDDiscovery.UserControls
 
                 if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary)
                 {
+                    DateTime tripStart;
+                    bool inTrip = IsTravelling(hl, out tripStart);
+
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "Body Type";
 
@@ -491,19 +526,30 @@ namespace EDDiscovery.UserControls
                     var Col4 = new DataGridViewTextBoxColumn();
                     Col4.HeaderText = "month";
                     ColumnValueAlignment(Col4);
-
-
+                    
                     var Col5 = new DataGridViewTextBoxColumn();
                     Col5.HeaderText = "Last dock";
                     ColumnValueAlignment(Col5);
 
                     var Col6 = new DataGridViewTextBoxColumn();
-                    Col6.HeaderText = "all";
-                    ColumnValueAlignment(Col6);
+                    var Col7 = new DataGridViewTextBoxColumn();
 
-                    dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
-
-                    intervals = 5;
+                    if (inTrip)
+                    {
+                        Col6.HeaderText = "Trip";
+                        ColumnValueAlignment(Col6);
+                        Col7.HeaderText = "all";
+                        ColumnValueAlignment(Col7);
+                        dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
+                    }
+                    else
+                    {
+                        Col6.HeaderText = "all";
+                        ColumnValueAlignment(Col6);
+                        dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    }
+                    
+                    intervals = inTrip ? 6 : 5;
                     intar = new int[intervals];
                     strarr = new string[intervals];
 
@@ -520,7 +566,15 @@ namespace EDDiscovery.UserControls
                     scanlists[1] = hl.GetScanList(DateTime.Now.AddDays(-7), DateTime.Now);
                     scanlists[2] = hl.GetScanList(DateTime.Now.AddMonths(-1), DateTime.Now);
                     scanlists[3] = hl.GetScanList(lastdockTime, DateTime.Now);
-                    scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    if (inTrip)
+                    {
+                        scanlists[4] = hl.GetScanList(tripStart, DateTime.Now);
+                        scanlists[5] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    }
+                    else
+                    {
+                        scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    }
                 }
                 else
                 {
