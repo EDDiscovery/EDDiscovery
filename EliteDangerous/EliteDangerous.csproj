@@ -140,6 +140,7 @@
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="JournalEvents\JournalCargoDepot.cs" />
     <Compile Include="JournalEvents\JournalMaterialTrade.cs" />
+    <Compile Include="JournalEvents\JournalPayBounties.cs" />
     <Compile Include="JournalEvents\JournalPowerplay.cs" />
     <Compile Include="JournalEvents\JournalTechnologyBroker.cs" />
     <Compile Include="JournalEvents\JournalEngineerLegacyConvert.cs" />
