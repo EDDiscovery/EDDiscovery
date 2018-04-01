@@ -302,16 +302,8 @@ namespace EDDiscovery.UserControls
         private void dataGridViewEDSM_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 1 || e.Column.Index == 3)
-            {
-                double v1, v2;
-                string vs1 = e.CellValue1?.ToString();
-                string vs2 = e.CellValue2?.ToString();
-                if (vs1 != null && vs2 != null && Double.TryParse(vs1, out v1) && Double.TryParse(vs2, out v2))
-                {
-                    e.SortResult = v1.CompareTo(v2);
-                    e.Handled = true;
-                }
-            }
+                e.SortDataGridViewColumnDate();
+           
         }
     }
 }

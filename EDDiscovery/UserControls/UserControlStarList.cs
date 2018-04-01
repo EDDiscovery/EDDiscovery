@@ -127,12 +127,26 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl)           // on History change
         {
+            HistoryChanged(hl, false);
+        }
+
+        public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
+        {
             if (hl == null)     // just for safety
                 return;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
             current_historylist = hl;
+
+            SortOrder sortorder = dataGridViewStarList.SortOrder;
+            int sortcol = dataGridViewStarList.SortedColumn?.Index ?? -1;
+            if (sortcol >= 0 && disablesorting)
+            {
+                dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                sortcol = -1;
+            }
+
             rowsbyjournalid.Clear();
             systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
@@ -173,6 +187,12 @@ namespace EDDiscovery.UserControls
                 rowno = -1;
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            if (sortcol >= 0)
+            {
+                dataGridViewStarList.Sort(dataGridViewStarList.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
 
             //System.Diagnostics.Debug.WriteLine("Fire HC");
 
@@ -528,15 +548,6 @@ namespace EDDiscovery.UserControls
                 HistoryChanged(current_historylist);        // fires lots of events
         }
 
-        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.ColumnIndex != 2)
-            {
-                DataGridViewSorter.DataGridSort(dataGridViewStarList, e.ColumnIndex);
-                FireChangeSelection();
-            }
-        }
-
         public void FireChangeSelection() // uccursor requirement
         {
             if (dataGridViewStarList.CurrentCell != null)
@@ -659,6 +670,13 @@ namespace EDDiscovery.UserControls
 
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewStarList.SortedColumn != null;
+
+        }
+
+        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            HistoryChanged(current_historylist, true);
         }
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
@@ -730,18 +748,12 @@ namespace EDDiscovery.UserControls
         // Override of visits column sorting, to properly ordering as integers and not as strings - do not work as expected, yet...
         private void dataGridViewStarList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (ColumnVisits.Equals(e.Column))
-            {
-                int v1, v2;
-                string s1 = e.CellValue1?.ToString();
-                string s2 = e.CellValue2?.ToString();
-                if (!string.IsNullOrEmpty(s1) && !string.IsNullOrEmpty(s2) && int.TryParse(s1, out v1) && int.TryParse(s2, out v2))
-                {
-                    e.SortResult = v1.CompareTo(v2);
-                    e.Handled = true;
-                }
-            }
+            if ( e.Column.Index == 0 )
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 2)
+                e.SortDataGridViewColumnNumeric();
         }
+
         #endregion
 
         #region Excel
