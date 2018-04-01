@@ -230,4 +230,64 @@ public static class ControlHelpersStaticFunc
         //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.SplitterDistance} Get SplitterDistance {a} -> {v:N2}");
         return v;
     }
+
+    static public void SortDataGridViewColumnNumeric(this DataGridViewSortCompareEventArgs e, string removetext= null)
+    {
+        string s1 = e.CellValue1?.ToString();
+        string s2 = e.CellValue2?.ToString();
+
+        if (removetext != null)
+        {
+            if ( s1 != null )
+                s1 = s1.Replace(removetext, "");
+            if ( s2 != null )
+                s2 = s2.Replace(removetext, "");
+        }
+
+        double v1=0, v2=0;
+
+        bool v1hasval = s1 != null && Double.TryParse(s1, out v1);
+        bool v2hasval = s2 != null && Double.TryParse(s2, out v2);
+
+        if (!v1hasval)
+        {
+            e.SortResult = 1;
+        }
+        else if (!v2hasval)
+        {
+            e.SortResult = -1;
+        }
+        else
+        {
+            e.SortResult = v1.CompareTo(v2);
+        }
+
+        e.Handled = true;
+    }
+
+    static public void SortDataGridViewColumnDate(this DataGridViewSortCompareEventArgs e)
+    {
+        string s1 = e.CellValue1?.ToString();
+        string s2 = e.CellValue2?.ToString();
+
+        DateTime v1 = DateTime.MinValue, v2 = DateTime.MinValue;
+
+        bool v1hasval = s1!=null && DateTime.TryParse(e.CellValue1?.ToString(), out v1);
+        bool v2hasval = s2!=null && DateTime.TryParse(e.CellValue2?.ToString(), out v2);
+
+        if (!v1hasval)
+        {
+            e.SortResult = 1;
+        }
+        else if (!v2hasval)
+        {
+            e.SortResult = -1;
+        }
+        else
+        {
+            e.SortResult = v1.CompareTo(v2);
+        }
+
+        e.Handled = true;
+    }
 }
