@@ -102,10 +102,10 @@ namespace EDDiscovery.UserControls
 
             Display(currentHE.System);
 
-          //  t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent)); percent += 0.2; }; t.Start();  // debug to make it play thru.. leave
+            //t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent)); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
         }
 
-        // double percent = 0; Timer t = new Timer();// play thru harness
+       //  double percent = 39; Timer t = new Timer();// play thru harness
 
         private void Display(ISystem cursys)
         {
@@ -121,58 +121,46 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            string topline = "";
+            string topline = "", bottomline = "";
 
-            ISystem finalSystem = SystemClassDB.GetSystem(currentRoute.Systems[currentRoute.Systems.Count - 1]);
-
-            if (finalSystem != null && cursys.HasCoordinate)
+            if (!cursys.HasCoordinate)
             {
-                string mesg = "remain";
-                double distX = cursys.Distance(finalSystem);
-                //Small hack to pull the jump range from TripPanel1
-                var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);       //TBD Not a good idea.
-                if (jumpRange > 0)
-                {
-                    int jumps = (int)Math.Ceiling(distX / jumpRange);
-                    if (jumps > 0)
-                        mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
-                }
-                topline = String.Format("{0} {1} WPs, {2:N2}ly {3}", currentRoute.Name, currentRoute.Systems.Count, distX, mesg);
+                topline = String.Format("Unknown location");
+                bottomline = "";
             }
             else
             {
-                topline = String.Format("{0} {1} WPs remain", currentRoute.Name, currentRoute.Systems.Count);
-            }
+                SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(cursys);
 
-            string bottomline = "";
-
-            Tuple<ISystem, int> closest = cursys.HasCoordinate ? currentRoute.ClosestTo(cursys) : null;
-
-            if (closest != null)
-            {
-                if (closest.Item2 >= currentRoute.Systems.Count) // if past end..
+                if (closest == null)  // if null, no systems found.. uh oh
                 {
-                    bottomline = String.Format("Past Last WP{0} {1}", closest.Item2, currentRoute.LastSystem);
+                    topline = String.Format("No systems in route have known co-ords");
+                    bottomline = "";
+                }
+                else if (closest.system == null)  // this is returned if past last system
+                {
+                    topline = String.Format("Past Last WP{0} {1}", currentRoute.Systems.Count(), currentRoute.LastSystem);
+                    bottomline = "";
                 }
                 else
                 {
-                    string name = null;
+                    double distleft = closest.waypointdistleft + closest.disttowaypoint;
 
-                    if (closest.Item1 != null )         // if have a closest system
+                    string mesg = "";
+                    var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);       //TBD Not a good idea.
+                    if (jumpRange > 0)
                     {
-                        double distance = cursys.Distance(closest.Item1);
-
-                        bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", distance, closest.Item2 + 1, closest.Item1.Name,
-                            closest.Item1.X.ToString("0.#"), closest.Item1.Y.ToString("0.#"), closest.Item1.Z.ToString("0.#"));
-
-                        name = closest.Item1.Name;
+                        int jumps = (int)Math.Ceiling(distleft / jumpRange);
+                        if (jumps > 0)
+                            mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                     }
-                    else
-                    {           // just know waypoint..
-                        bottomline = String.Format("To WP{0} {1}", closest.Item2 + 1, currentRoute.Systems[closest.Item2]);
 
-                        name = currentRoute.Systems[closest.Item2];
-                    }
+                    topline = String.Format("{0} {1} WPs, {2:N1}ly, left {3:N1}ly {4}", currentRoute.Name, currentRoute.Systems.Count, currentRoute.CumulativeDistance(), distleft, mesg);
+                    bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", closest.disttowaypoint, closest.waypoint + 1, closest.system.Name,
+                        closest.system.X.ToString("0.#"), closest.system.Y.ToString("0.#"), closest.system.Z.ToString("0.#"));
+
+                    //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);
+                    string name = closest.system.Name;
 
                     if (lastsystem == null || name.CompareTo(lastsystem) != 0)
                     {
@@ -192,8 +180,6 @@ namespace EDDiscovery.UserControls
                     }
                 }
             }
-            else
-                bottomline = "No current position/no systems found in database";
 
             DisplayText(topline, bottomline);
         }
@@ -237,6 +223,9 @@ namespace EDDiscovery.UserControls
             {
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.
+
+                // currentRoute.TestHarness(); // enable for debug
+
                 if (currentRoute != null)
                     SQLiteDBClass.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
 
