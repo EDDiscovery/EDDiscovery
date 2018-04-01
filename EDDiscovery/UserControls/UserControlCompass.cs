@@ -285,33 +285,29 @@ namespace EDDiscovery.UserControls
             bookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
             if (bookMark != null)
             {
+                List<PlanetMarks.Planet> planetMarks = bookMark.PlanetaryMarks?.Planets;
+
                 if (heading.HasValue)
                 {
                     // orbital flight or landed, just do this body
                     labelBookmark.Text = "Planet Bookmarks";
-                    PlanetMarks.Planet pl = bookMark.PlanetaryMarks.Planets.Where(p => p.Name == last_he.WhereAmI).FirstOrDefault();
-                    if (pl != null && pl.Locations != null && pl.Locations.Any())
-                    {
-                        foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                        {
-                            comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
-                        }
-                    }
+                    planetMarks = planetMarks?.Where(p => p.Name == last_he.WhereAmI)?.ToList();
                 }
                 else
                 {
                     // add whole system
                     labelBookmark.Text = "System Bookmarks";
-                    if (bookMark.PlanetaryMarks?.Planets != null)
+                }
+
+                if (planetMarks != null)
+                {
+                    foreach (PlanetMarks.Planet pl in planetMarks)
                     {
-                        foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
+                        if (pl.Locations != null && pl.Locations.Any())
                         {
-                            if (pl.Locations != null && pl.Locations.Any())
+                            foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
                             {
-                                foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
-                                {
-                                    comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
-                                }
+                                comboBoxBookmarks.Items.Add($"{loc.Name} ({pl.Name})");
                             }
                         }
                     }

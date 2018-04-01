@@ -261,18 +261,30 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public double CumulativeDistance()
+        public double CumulativeDistance(string start = null)   // optional first system to measure from
         {
             ISystem last = null;
             double distance = 0;
 
-            for (int i = 0; i < Systems.Count; i++)
+            int i = 0;
+
+            if ( start != null)
             {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                i = Systems.FindIndex(x => x.Equals(start, StringComparison.InvariantCultureIgnoreCase));
+                if (i == -1)
+                    return -1;
+            }
+
+            for (; i < Systems.Count; i++)
+            {
+                ISystem s = SystemCache.FindSystem(Systems[i]);
                 if (s != null)
                 {
                     if (last != null)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Cum dist " + s.Name + " " + last.Name + " " + distance + " " + s.Distance(last));
                         distance += s.Distance(last);
+                    }
 
                     last = s;
                 }
@@ -283,13 +295,15 @@ namespace EliteDangerousCore.DB
 
         public ISystem PosAlongRoute(double percentage)             // go along route and give me a co-ord along it..
         {
-            double dist = CumulativeDistance() * percentage / 100.0;
+            double dist = CumulativeDistance();
+            //System.Diagnostics.Debug.WriteLine("Total trip distance " + dist);
+            dist *= percentage / 100.0;
 
             ISystem last = null;
 
             for (int i = 0; i < Systems.Count; i++)
             {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                ISystem s = SystemCache.FindSystem(Systems[i]);
                 if (s != null)
                 {
                     if (last != null)
@@ -299,7 +313,7 @@ namespace EliteDangerousCore.DB
                         if (dist < d)
                         {
                             d = dist / d;
-
+                            //System.Diagnostics.Debug.WriteLine(percentage + " " + d + " last:" + last.X + " " + last.Y + " " + last.Z + " s:" + s.X + " " + s.Y + " " + s.Z);
                             return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.X + (s.X - last.X) * d, last.Y + (s.Y - last.Y) * d, last.Z + (s.Z - last.Z) * d);
                         }
 
@@ -313,9 +327,18 @@ namespace EliteDangerousCore.DB
             return last;
         }
 
-        // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based)
+        // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based) and the distance on the path left..
 
-        public Tuple<ISystem, int> ClosestTo(ISystem sys)
+        public class ClosestInfo
+        {
+            public ISystem system;
+            public int waypoint;
+            public double waypointdistleft;
+            public double disttowaypoint;
+            public ClosestInfo( ISystem s, int w, double wdl, double dtwp) { system = s; waypoint = w; waypointdistleft = wdl; disttowaypoint = dtwp; }
+        }
+
+        public ClosestInfo ClosestTo(ISystem currentsystem)
         {
             double dist = Double.MaxValue;
             ISystem found = null;
@@ -325,11 +348,11 @@ namespace EliteDangerousCore.DB
 
             for (int i = 0; i < Systems.Count; i++)
             {
-                ISystem s = SystemClassDB.GetSystem(Systems[i]);
+                ISystem s = SystemCache.FindSystem(Systems[i]);
 
-                if (s != null)
+                if (s != null && s.HasCoordinate)
                 {
-                    double sd = s.Distance(sys);
+                    double sd = s.Distance(currentsystem);
                     if (sd < dist)
                     {
                         dist = sd;
@@ -343,9 +366,9 @@ namespace EliteDangerousCore.DB
 
             if (found != null)
             {
-                //System.Diagnostics.Debug.WriteLine("Found at " + closest + " System " + found.name + " " + found.x + " " + found.y + " " + found.z + " dist " + dist);
+                //System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Found at " + closest + " System " + found.Name + " " + found.X + " " + found.Y + " " + found.Z + " dist " + dist + " cur " + currentsystem.X + "," + currentsystem.Y + "," + currentsystem.Z);
 
-                if (closest > 0)
+                if (closest > 0)    // if not starting point
                 {
                     int lastentry = closest - 1;
                     while (lastentry >= 0 && list[lastentry] == null)       // go and find the last one which had a position..
@@ -354,18 +377,30 @@ namespace EliteDangerousCore.DB
                     if (lastentry >= 0 && list[lastentry] != null)      // found it, so work out using distance if we are closest to last or past it
                     {
                         double distlasttoclosest = list[closest].Distance(list[lastentry]);     // last->closest vs
-                        double distlasttocur = sys.Distance(list[lastentry]);                   // last->cur position
+                        double distlasttocurrent = currentsystem.Distance(list[lastentry]);         // last->cur position
 
-                        if (distlasttocur > distlasttoclosest - 0.1)   // past current because the distance last->cur > last->closest waypoint
+                        //System.Diagnostics.Debug.WriteLine("Dist to last " + list[lastentry].Name + "=" + distlasttocurrent + " >? Dist last to closest" + distlasttoclosest);
+
+                        if (distlasttocurrent > distlasttoclosest - 0.1)   // past closest because the distance last->cur > last->closest waypoint
                         {
-                            return new Tuple<ISystem, int>(closest < Systems.Count - 1 ? list[closest + 1] : null, closest + 1); // en-route to this. may be null
+                            closest++;      // must move to next target
+                            //System.Diagnostics.Debug.WriteLine("Moved to " + closest);
+                        }
+
+                        if (closest < Systems.Count )       // is this still a valid system..
+                        {
+                            ISystem nextsys = list[closest];
+                            double distanceleft = CumulativeDistance(nextsys.Name);     // -1 if can't find..
+                            //System.Diagnostics.Debug.WriteLine("Cum dist " + distanceleft + " to  current system " + currentsystem.Distance(nextsys));
+
+                            return new ClosestInfo(nextsys, closest, distanceleft, currentsystem.Distance(nextsys)); // en-route to this. may be null
                         }
                         else
-                            return new Tuple<ISystem, int>(found, closest); // en-route to this
+                            return new ClosestInfo(null, closest, -1,-1); // pass last.. end of trip
                     }
                 }
 
-                return new Tuple<ISystem, int>(found, closest);
+                return new ClosestInfo(found, closest, CumulativeDistance(), currentsystem.Distance(found));
             }
             else
                 return null;
@@ -456,16 +491,16 @@ namespace EliteDangerousCore.DB
 
         public void TestHarness()       // fly the route and debug the closestto.. keep this for testing
         {
-            for (double percent = 0; percent < 110; percent += 1)
+            for (double percent = 0; percent < 110; percent += 0.1)
             {
                 ISystem cursys = PosAlongRoute(percent);
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.X, cursys.Y, cursys.Z, cursys.Name);
 
-                Tuple<ISystem, int> closest = ClosestTo(cursys);
+                ClosestInfo closest = ClosestTo(cursys);
 
                 if (closest != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4}", closest.Item1?.X, closest.Item1?.Y, closest.Item1?.Z, closest.Item1?.Name, closest.Item2);
+                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} wpdistleft {5} towp {6}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.disttowaypoint, closest.waypointdistleft);
                 }
             }
         }

@@ -75,6 +75,7 @@ namespace EliteDangerousCore
                 if ((EntryType == JournalTypeEnum.Scan ||
                      EntryType == JournalTypeEnum.Docked ||
                      EntryType == JournalTypeEnum.FSDJump ||
+                     EntryType == JournalTypeEnum.Location ||
                      EntryType == JournalTypeEnum.Market ||
                      EntryType == JournalTypeEnum.Shipyard ||
                      EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true; else return false;

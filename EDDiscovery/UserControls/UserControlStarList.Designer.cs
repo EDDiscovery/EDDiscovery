@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStarList));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -71,6 +70,7 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
-            // buttonJumponium
+            // checkBoxJumponium
             // 
             this.checkBoxJumponium.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxJumponium.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -140,14 +140,14 @@ namespace EDDiscovery.UserControls
             this.checkBoxJumponium.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxJumponium.Location = new System.Drawing.Point(444, 0);
             this.checkBoxJumponium.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxJumponium.Name = "buttonJumponium";
+            this.checkBoxJumponium.Name = "checkBoxJumponium";
             this.checkBoxJumponium.Size = new System.Drawing.Size(32, 32);
             this.checkBoxJumponium.TabIndex = 36;
             this.checkBoxJumponium.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxJumponium, "Show/Hide presence of Jumponium Materials");
             this.checkBoxJumponium.UseVisualStyleBackColor = true;
             // 
-            // buttonBodyClasses
+            // checkBoxBodyClasses
             // 
             this.checkBoxBodyClasses.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxBodyClasses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxBodyClasses.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxBodyClasses.Location = new System.Drawing.Point(409, 0);
             this.checkBoxBodyClasses.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxBodyClasses.Name = "buttonBodyClasses";
+            this.checkBoxBodyClasses.Name = "checkBoxBodyClasses";
             this.checkBoxBodyClasses.Size = new System.Drawing.Size(32, 32);
             this.checkBoxBodyClasses.TabIndex = 37;
             this.checkBoxBodyClasses.TickBoxReductionSize = 10;
@@ -176,6 +176,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(203, 6);
@@ -235,6 +236,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
             this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
             this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
@@ -253,6 +255,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -270,31 +273,32 @@ namespace EDDiscovery.UserControls
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.removeSortingOfColumnsToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.setNoteToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(187, 70);
+            this.historyContextMenu.Size = new System.Drawing.Size(221, 114);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // mapGotoStartoolStripMenuItem
             // 
             this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
-            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
             this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem
             // 
             this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             // 
             // setNoteToolStripMenuItem
             // 
             this.setNoteToolStripMenuItem.Name = "setNoteToolStripMenuItem";
-            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.setNoteToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
             this.setNoteToolStripMenuItem.Text = "Set Note";
             this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
             // 
@@ -392,7 +396,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.Size = new System.Drawing.Size(847, 578);
             this.dataGridViewStarList.TabIndex = 3;
             this.dataGridViewStarList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
-            this.dataGridViewStarList.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
             this.dataGridViewStarList.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewStarList_SortCompare);
             this.dataGridViewStarList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
             this.dataGridViewStarList.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
@@ -432,6 +435,13 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation.MinimumWidth = 50;
             this.ColumnInformation.Name = "ColumnInformation";
             this.ColumnInformation.ReadOnly = true;
+            // 
+            // removeSortingOfColumnsToolStripMenuItem
+            // 
+            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
+            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
+            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // UserControlStarList
             // 
@@ -474,5 +484,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnVisits;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
+        private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
     }
 }
