@@ -34,7 +34,7 @@ namespace BaseUtils
         {
         }
 
-        public bool WriteCSV(string filename, bool suppressFormatting = false)
+        public bool WriteCSV(string filename)
         {
             try
             {
@@ -64,10 +64,7 @@ namespace BaseUtils
                                 {
                                     for (int i = 0; i < objs.Length; i++)
                                     {
-                                        if (suppressFormatting)
-                                            writer.Write(objs[i] + (i != objs.Length - 1 ? delimiter : string.Empty));
-                                        else
-                                            writer.Write(Format(objs[i], (i != objs.Length - 1)));
+                                        writer.Write(Format(objs[i], (i != objs.Length - 1)));
                                     }
                                     writer.WriteLine();
                                 }
