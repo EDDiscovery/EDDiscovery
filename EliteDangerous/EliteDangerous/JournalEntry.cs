@@ -139,6 +139,7 @@ namespace EliteDangerousCore
         Outfitting = 543,
         Passengers = 545,
         PayFines = 550,
+        PayBounties = 551,
         PayLegacyFines = 560,
         Powerplay = 565,
         PowerplayCollect = 570,

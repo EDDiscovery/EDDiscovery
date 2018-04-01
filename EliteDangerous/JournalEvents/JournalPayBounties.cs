@@ -18,14 +18,10 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When Written: when paying fines
-//    Parameters:
-//•	Amount: (total amount paid , including any broker fee)
-//•	BrokerPercentage(present if paid via a Broker)
-    [JournalEntryType(JournalTypeEnum.PayFines)]
-    public class JournalPayFines : JournalEntry, ILedgerJournalEntry
+    [JournalEntryType(JournalTypeEnum.PayBounties)]
+    public class JournalPayBounties : JournalEntry, ILedgerJournalEntry
     {
-        public JournalPayFines(JObject evt) : base(evt, JournalTypeEnum.PayFines)
+        public JournalPayBounties(JObject evt) : base(evt, JournalTypeEnum.PayBounties)
         {
             Amount = evt["Amount"].Long();
             BrokerPercentage = evt["BrokerPercentage"].Double();
@@ -38,8 +34,8 @@ namespace EliteDangerousCore.JournalEvents
         public long Amount { get; set; }
         public double BrokerPercentage { get; set; }
         public bool AllFines { get; set; }
-        public string Faction { get; set; } // may be blank
-        public string Faction_Localised { get; set; }       // may be blank
+        public string Faction { get; set; }      // may be blank
+        public string Faction_Localised { get; set; }    // may be blank
         public int ShipId { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
