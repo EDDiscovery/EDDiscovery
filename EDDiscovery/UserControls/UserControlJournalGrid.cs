@@ -122,12 +122,25 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryList hl)
         {
+            Display(hl, false);
+        }
+
+        private void Display(HistoryList hl, bool disablesorting )
+        {
             if (hl == null)     // just for safety
                 return;
 
             current_historylist = hl;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
+
+            SortOrder sortorder = dataGridViewJournal.SortOrder;
+            int sortcol = dataGridViewJournal.SortedColumn?.Index ?? -1;
+            if (sortcol >= 0 && disablesorting)
+            {
+                dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                sortcol = -1;
+            }
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -136,6 +149,7 @@ namespace EDDiscovery.UserControls
 
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
+
 
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
@@ -157,6 +171,12 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            if (sortcol >= 0)
+            {
+                dataGridViewJournal.Sort(dataGridViewJournal.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
 
             FireChangeSelection();
         }
@@ -299,15 +319,6 @@ namespace EDDiscovery.UserControls
             Display(current_historylist);
         }
 
-        private void dataGridViewJournal_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (e.ColumnIndex != JournalHistoryColumns.Event)
-            {
-                DataGridViewSorter.DataGridSort(dataGridViewJournal, e.ColumnIndex);
-                FireChangeSelection();
-            }
-        }
-
         private void buttonField_Click(object sender, EventArgs e)
         {
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
@@ -343,6 +354,7 @@ namespace EDDiscovery.UserControls
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
         }
 
         HistoryEntry rightclicksystem = null;
@@ -443,6 +455,11 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display(current_historylist, true);
+        }
+
         #endregion
 
 
@@ -529,6 +546,14 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 0)
+            {
+                e.SortDataGridViewColumnDate();
+            }
+        }
 
         private void dataGridViewJournal_CellClick(object sender, DataGridViewCellEventArgs e)
         {

@@ -58,14 +58,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeForm();
+            this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageScan = new System.Windows.Forms.TabPage();
             this.dataGridViewScan = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeForm();
+            this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
             this.treeViewStats = new ExtendedControls.Controls.TreeViewCustom();
+            this.ScanNotUsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -93,7 +92,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStats.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStats.Size = new System.Drawing.Size(156, 336);
             this.dataGridViewStats.TabIndex = 2;
-            this.dataGridViewStats.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewStats_ColumnHeaderMouseClick);
             // 
             // ItemName
             // 
@@ -137,7 +135,6 @@ namespace EDDiscovery.UserControls
             this.panelData.Size = new System.Drawing.Size(784, 720);
             this.panelData.TabIndex = 4;
             this.panelData.VerticalScrollBarDockRight = true;
-            this.panelData.Paint += new System.Windows.Forms.PaintEventHandler(this.panelData_Paint);
             // 
             // vScrollBarCustom
             // 
@@ -152,7 +149,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 10;
             this.vScrollBarCustom.Location = new System.Drawing.Point(764, 0);
-            this.vScrollBarCustom.Maximum = -710;
+            this.vScrollBarCustom.Maximum = -202;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -166,8 +163,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -710;
-            this.vScrollBarCustom.ValueLimited = -710;
+            this.vScrollBarCustom.Value = -202;
+            this.vScrollBarCustom.ValueLimited = -202;
             // 
             // tabControlCustomStats
             // 
@@ -228,13 +225,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
-            this.dataGridViewTravel.Location = new System.Drawing.Point(19, 46);
+            this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 28);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersVisible = false;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(156, 336);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(790, 698);
             this.dataGridViewTravel.TabIndex = 3;
-            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
+            this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
             // 
             // dataGridViewTextBoxColumn1
             // 
@@ -254,16 +252,12 @@ namespace EDDiscovery.UserControls
             // userControlStatsTimeTravel
             // 
             this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.userControlStatsTimeTravel.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
-            this.userControlStatsTimeTravel.ScanMode = false;
-            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 27);
-            this.userControlStatsTimeTravel.Stars = false;
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 28);
             this.userControlStatsTimeTravel.TabIndex = 0;
-            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
+            this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
-            this.userControlStatsTimeTravel.DrawModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_DrawModeChanged);
             // 
             // tabPageScan
             // 
@@ -271,7 +265,6 @@ namespace EDDiscovery.UserControls
             this.tabPageScan.Controls.Add(this.userControlStatsTimeScan);
             this.tabPageScan.Location = new System.Drawing.Point(4, 22);
             this.tabPageScan.Name = "tabPageScan";
-            this.tabPageScan.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageScan.Size = new System.Drawing.Size(790, 726);
             this.tabPageScan.TabIndex = 1;
             this.tabPageScan.Text = "Scan";
@@ -284,42 +277,24 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewScan.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewScan.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn3,
-            this.dataGridViewTextBoxColumn4});
-            this.dataGridViewScan.Location = new System.Drawing.Point(6, 50);
+            this.ScanNotUsed});
+            this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewScan.Location = new System.Drawing.Point(0, 28);
             this.dataGridViewScan.Name = "dataGridViewScan";
             this.dataGridViewScan.RowHeadersVisible = false;
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridViewScan.Size = new System.Drawing.Size(551, 367);
+            this.dataGridViewScan.Size = new System.Drawing.Size(790, 698);
             this.dataGridViewScan.TabIndex = 4;
-            this.dataGridViewScan.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewScan_ColumnHeaderMouseClick);
-            // 
-            // dataGridViewTextBoxColumn3
-            // 
-            this.dataGridViewTextBoxColumn3.HeaderText = "Item";
-            this.dataGridViewTextBoxColumn3.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
-            this.dataGridViewTextBoxColumn3.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumn4
-            // 
-            this.dataGridViewTextBoxColumn4.FillWeight = 400F;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Information";
-            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
-            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
             // 
             // userControlStatsTimeScan
             // 
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
-            this.userControlStatsTimeScan.DrawMode = EDDiscovery.UserControls.UserControlStatsDrawModeEnum.Graph;
-            this.userControlStatsTimeScan.Location = new System.Drawing.Point(3, 3);
+            this.userControlStatsTimeScan.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
-            this.userControlStatsTimeScan.ScanMode = false;
-            this.userControlStatsTimeScan.Size = new System.Drawing.Size(784, 27);
-            this.userControlStatsTimeScan.Stars = false;
+            this.userControlStatsTimeScan.Size = new System.Drawing.Size(790, 28);
             this.userControlStatsTimeScan.TabIndex = 1;
-            this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.UserControlStatsTimeModeEnum.Summary;
+            this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
             // 
             // tabPageGameStats
@@ -353,10 +328,18 @@ namespace EDDiscovery.UserControls
             this.treeViewStats.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.treeViewStats.ScrollBarWidth = 20;
             this.treeViewStats.ShowLineCount = false;
+            this.treeViewStats.ShowLines = true;
+            this.treeViewStats.ShowPlusMinus = true;
+            this.treeViewStats.ShowRootLines = true;
             this.treeViewStats.Size = new System.Drawing.Size(790, 726);
             this.treeViewStats.TabIndex = 0;
             this.treeViewStats.TreeViewBackColor = System.Drawing.SystemColors.Control;
             this.treeViewStats.TreeViewForeColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // ScanNotUsed
+            // 
+            this.ScanNotUsed.HeaderText = "Column1";
+            this.ScanNotUsed.Name = "ScanNotUsed";
             // 
             // UserControlStats
             // 
@@ -391,15 +374,14 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.TabPage tabPageTravel;
         private System.Windows.Forms.TabPage tabPageScan;
-        private StatsTimeForm userControlStatsTimeTravel;
+        private StatsTimeUserControl userControlStatsTimeTravel;
         private System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private StatsTimeForm userControlStatsTimeScan;
+        private StatsTimeUserControl userControlStatsTimeScan;
         private System.Windows.Forms.DataGridView dataGridViewScan;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.TabPage tabPageGameStats;
         private ExtendedControls.Controls.TreeViewCustom treeViewStats;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ScanNotUsed;
     }
 }

@@ -311,28 +311,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewMarketData_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index >= 2)        // 2 on are numbers
-            {
-                double v1;
-                double v2;
-                bool v1hasval = Double.TryParse(e.CellValue1?.ToString().Replace("cr/t", ""), out v1);
-                bool v2hasval = Double.TryParse(e.CellValue2?.ToString().Replace("cr/t", ""), out v2);
-
-                if (v1hasval)
-                {
-                    if (v2hasval)
-                        e.SortResult = v1.CompareTo(v2);
-                    else
-                        e.SortResult = 1;
-                }
-                else if (v2hasval)
-                    e.SortResult = -1;
-                else
-                    return;
-
-                e.Handled = true;
-
-            }
-
+                e.SortDataGridViewColumnDate();
         }
 
         private void comboBoxCustomFrom_SelectedIndexChanged(object sender, EventArgs e)

@@ -17,7 +17,7 @@ using ExtendedControls;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class StatsTimeForm
+    public partial class StatsTimeUserControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -45,7 +45,6 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StatsTimeForm));
             this.panelControls = new System.Windows.Forms.Panel();
             this.CustomDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
             this.CustomDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();
@@ -71,27 +70,27 @@ namespace EDDiscovery.UserControls
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(800, 27);
+            this.panelControls.Size = new System.Drawing.Size(800, 32);
             this.panelControls.TabIndex = 6;
-            this.panelControls.Paint += new System.Windows.Forms.PaintEventHandler(this.panelControls_Paint);
             // 
             // CustomDateTimePickerTo
             // 
             this.CustomDateTimePickerTo.BorderColor = System.Drawing.Color.Transparent;
             this.CustomDateTimePickerTo.BorderColorScaling = 0.5F;
             this.CustomDateTimePickerTo.Checked = false;
-            this.CustomDateTimePickerTo.CustomFormat = "yyyy-MM-dd";
+            this.CustomDateTimePickerTo.CustomFormat = "dd MMMM yyyy";
             this.CustomDateTimePickerTo.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.CustomDateTimePickerTo.Location = new System.Drawing.Point(304, 1);
+            this.CustomDateTimePickerTo.Location = new System.Drawing.Point(284, 2);
             this.CustomDateTimePickerTo.Name = "CustomDateTimePickerTo";
             this.CustomDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
             this.CustomDateTimePickerTo.ShowCheckBox = false;
             this.CustomDateTimePickerTo.ShowUpDown = false;
-            this.CustomDateTimePickerTo.Size = new System.Drawing.Size(75, 23);
+            this.CustomDateTimePickerTo.Size = new System.Drawing.Size(120, 24);
             this.CustomDateTimePickerTo.TabIndex = 8;
             this.CustomDateTimePickerTo.Text = "customDateTimePicker2";
             this.CustomDateTimePickerTo.TextBackColor = System.Drawing.Color.DarkBlue;
             this.CustomDateTimePickerTo.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
+            this.CustomDateTimePickerTo.Visible = false;
             this.CustomDateTimePickerTo.ValueChanged += new System.EventHandler(this.customDateTimePickerTo_ValueChanged);
             // 
             // CustomDateTimePickerFrom
@@ -99,18 +98,19 @@ namespace EDDiscovery.UserControls
             this.CustomDateTimePickerFrom.BorderColor = System.Drawing.Color.Transparent;
             this.CustomDateTimePickerFrom.BorderColorScaling = 0.5F;
             this.CustomDateTimePickerFrom.Checked = false;
-            this.CustomDateTimePickerFrom.CustomFormat = "yyyy-MM-dd";
+            this.CustomDateTimePickerFrom.CustomFormat = "dd MMMM yyyy";
             this.CustomDateTimePickerFrom.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.CustomDateTimePickerFrom.Location = new System.Drawing.Point(223, 1);
+            this.CustomDateTimePickerFrom.Location = new System.Drawing.Point(159, 2);
             this.CustomDateTimePickerFrom.Name = "CustomDateTimePickerFrom";
             this.CustomDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
             this.CustomDateTimePickerFrom.ShowCheckBox = false;
             this.CustomDateTimePickerFrom.ShowUpDown = false;
-            this.CustomDateTimePickerFrom.Size = new System.Drawing.Size(75, 23);
+            this.CustomDateTimePickerFrom.Size = new System.Drawing.Size(120, 24);
             this.CustomDateTimePickerFrom.TabIndex = 7;
             this.CustomDateTimePickerFrom.Text = "customDateTimePicker1";
             this.CustomDateTimePickerFrom.TextBackColor = System.Drawing.Color.DarkBlue;
             this.CustomDateTimePickerFrom.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
+            this.CustomDateTimePickerFrom.Visible = false;
             this.CustomDateTimePickerFrom.ValueChanged += new System.EventHandler(this.customDateTimePickerFrom_ValueChanged);
             // 
             // checkBoxCustomStars
@@ -119,9 +119,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomStars.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomStars.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomStars.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomStars.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCustomStars.FontNerfReduction = 0.5F;
             this.checkBoxCustomStars.Image = global::EDDiscovery.Icons.Controls.StatsTime_Stars;
-            this.checkBoxCustomStars.Location = new System.Drawing.Point(191, 0);
+            this.checkBoxCustomStars.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomStars.Location = new System.Drawing.Point(442, 1);
             this.checkBoxCustomStars.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomStars.Name = "checkBoxCustomStars";
             this.checkBoxCustomStars.Size = new System.Drawing.Size(26, 26);
@@ -138,9 +140,13 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomPlanets.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomPlanets.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomPlanets.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomPlanets.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.checkBoxCustomPlanets.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Red;
+            this.checkBoxCustomPlanets.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCustomPlanets.FontNerfReduction = 0.5F;
             this.checkBoxCustomPlanets.Image = global::EDDiscovery.Icons.Controls.StatsTime_Planets;
-            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(159, 0);
+            this.checkBoxCustomPlanets.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomPlanets.Location = new System.Drawing.Point(410, 1);
             this.checkBoxCustomPlanets.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomPlanets.Name = "checkBoxCustomPlanets";
             this.checkBoxCustomPlanets.Size = new System.Drawing.Size(26, 26);
@@ -153,13 +159,13 @@ namespace EDDiscovery.UserControls
             // checkBoxCustomGraph
             // 
             this.checkBoxCustomGraph.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomGraph.AutoSize = true;
             this.checkBoxCustomGraph.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomGraph.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGraph.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomGraph.FontNerfReduction = 0.5F;
             this.checkBoxCustomGraph.Image = global::EDDiscovery.Icons.Controls.StatsTime_Graph;
-            this.checkBoxCustomGraph.Location = new System.Drawing.Point(761, 0);
+            this.checkBoxCustomGraph.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomGraph.Location = new System.Drawing.Point(510, 1);
             this.checkBoxCustomGraph.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGraph.Name = "checkBoxCustomGraph";
             this.checkBoxCustomGraph.Size = new System.Drawing.Size(26, 26);
@@ -172,13 +178,13 @@ namespace EDDiscovery.UserControls
             // checkBoxCustomText
             // 
             this.checkBoxCustomText.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomText.AutoSize = true;
             this.checkBoxCustomText.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomText.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomText.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomText.FontNerfReduction = 0.5F;
             this.checkBoxCustomText.Image = global::EDDiscovery.Icons.Controls.StatsTime_Text;
-            this.checkBoxCustomText.Location = new System.Drawing.Point(729, 0);
+            this.checkBoxCustomText.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomText.Location = new System.Drawing.Point(478, 1);
             this.checkBoxCustomText.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomText.Name = "checkBoxCustomText";
             this.checkBoxCustomText.Size = new System.Drawing.Size(26, 26);
@@ -194,13 +200,14 @@ namespace EDDiscovery.UserControls
             this.comboBoxTimeMode.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTimeMode.ButtonColorScaling = 0.5F;
             this.comboBoxTimeMode.DataSource = null;
+            this.comboBoxTimeMode.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTimeMode.DisplayMember = "";
             this.comboBoxTimeMode.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTimeMode.DropDownHeight = 200;
             this.comboBoxTimeMode.DropDownWidth = 1;
             this.comboBoxTimeMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTimeMode.ItemHeight = 13;
-            this.comboBoxTimeMode.Location = new System.Drawing.Point(53, 3);
+            this.comboBoxTimeMode.Location = new System.Drawing.Point(53, 4);
             this.comboBoxTimeMode.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTimeMode.Name = "comboBoxTimeMode";
             this.comboBoxTimeMode.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -209,8 +216,9 @@ namespace EDDiscovery.UserControls
             this.comboBoxTimeMode.SelectedIndex = -1;
             this.comboBoxTimeMode.SelectedItem = null;
             this.comboBoxTimeMode.SelectedValue = null;
-            this.comboBoxTimeMode.Size = new System.Drawing.Size(100, 22);
+            this.comboBoxTimeMode.Size = new System.Drawing.Size(100, 21);
             this.comboBoxTimeMode.TabIndex = 1;
+            this.comboBoxTimeMode.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxTimeMode.ValueMember = "";
             this.comboBoxTimeMode.SelectedIndexChanged += new System.EventHandler(this.comboBoxTimeMode_SelectedIndexChanged);
             // 
@@ -223,13 +231,13 @@ namespace EDDiscovery.UserControls
             this.labelTime.TabIndex = 2;
             this.labelTime.Text = "Time";
             // 
-            // UserControlStatsTime
+            // StatsTimeUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelControls);
-            this.Name = "UserControlStatsTime";
-            this.Size = new System.Drawing.Size(800, 27);
+            this.Name = "StatsTimeUserControl";
+            this.Size = new System.Drawing.Size(800, 32);
             this.Load += new System.EventHandler(this.UserControlStatsTime_Load);
             this.panelControls.ResumeLayout(false);
             this.panelControls.PerformLayout();
@@ -242,11 +250,11 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelControls;
         internal ExtendedControls.ComboBoxCustom comboBoxTimeMode;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomGraph;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomText;
         private ExtendedControls.CheckBoxCustom checkBoxCustomStars;
         private ExtendedControls.CheckBoxCustom checkBoxCustomPlanets;
         internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerTo;
         internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerFrom;
+        private CheckBoxCustom checkBoxCustomGraph;
+        private CheckBoxCustom checkBoxCustomText;
     }
 }
