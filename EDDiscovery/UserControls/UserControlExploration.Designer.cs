@@ -66,6 +66,8 @@ namespace EDDiscovery.UserControls
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.ColumnSystemName = new ExtendedControls.AutoCompleteDGVColumn();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,8 +78,6 @@ namespace EDDiscovery.UserControls
             this.ColumnPrimaryStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -193,6 +193,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFileName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFileName.BorderColorScaling = 0.5F;
             this.textBoxFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFileName.ClearOnFirstChar = false;
             this.textBoxFileName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFileName.InErrorCondition = false;
             this.textBoxFileName.Location = new System.Drawing.Point(90, 3);
@@ -224,6 +225,7 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxRouteName.BorderColorScaling = 0.5F;
             this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxRouteName.InErrorCondition = false;
             this.textBoxRouteName.Location = new System.Drawing.Point(90, 28);
@@ -324,84 +326,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewExplore.Size = new System.Drawing.Size(797, 494);
             this.dataGridViewExplore.TabIndex = 2;
             this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
-            this.dataGridViewExplore.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewExplore_ColumnHeaderMouseClick);
-            // 
-            // ColumnSystemName
-            // 
-            this.ColumnSystemName.FillWeight = 150F;
-            this.ColumnSystemName.HeaderText = "System Name";
-            this.ColumnSystemName.MinimumWidth = 50;
-            this.ColumnSystemName.Name = "ColumnSystemName";
-            // 
-            // ColumnDist
-            // 
-            this.ColumnDist.FillWeight = 75F;
-            this.ColumnDist.HeaderText = "Dist";
-            this.ColumnDist.MinimumWidth = 25;
-            this.ColumnDist.Name = "ColumnDist";
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.FillWeight = 50F;
-            this.ColumnX.HeaderText = "X";
-            this.ColumnX.MinimumWidth = 25;
-            this.ColumnX.Name = "ColumnX";
-            this.ColumnX.ReadOnly = true;
-            // 
-            // ColumnY
-            // 
-            this.ColumnY.FillWeight = 50F;
-            this.ColumnY.HeaderText = "Y";
-            this.ColumnY.MinimumWidth = 25;
-            this.ColumnY.Name = "ColumnY";
-            this.ColumnY.ReadOnly = true;
-            // 
-            // ColumnZ
-            // 
-            this.ColumnZ.FillWeight = 50F;
-            this.ColumnZ.HeaderText = "Z";
-            this.ColumnZ.MinimumWidth = 25;
-            this.ColumnZ.Name = "ColumnZ";
-            this.ColumnZ.ReadOnly = true;
-            // 
-            // ColumnVisits
-            // 
-            this.ColumnVisits.FillWeight = 50F;
-            this.ColumnVisits.HeaderText = "Visists";
-            this.ColumnVisits.MinimumWidth = 25;
-            this.ColumnVisits.Name = "ColumnVisits";
-            this.ColumnVisits.ReadOnly = true;
-            this.ColumnVisits.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Programmatic;
-            // 
-            // ColumnScans
-            // 
-            this.ColumnScans.FillWeight = 50F;
-            this.ColumnScans.HeaderText = "Scans";
-            this.ColumnScans.MinimumWidth = 25;
-            this.ColumnScans.Name = "ColumnScans";
-            this.ColumnScans.ReadOnly = true;
-            // 
-            // ColumnPrimaryStar
-            // 
-            this.ColumnPrimaryStar.FillWeight = 75F;
-            this.ColumnPrimaryStar.HeaderText = "Pri star";
-            this.ColumnPrimaryStar.MinimumWidth = 50;
-            this.ColumnPrimaryStar.Name = "ColumnPrimaryStar";
-            this.ColumnPrimaryStar.ReadOnly = true;
-            // 
-            // ColumnInfo
-            // 
-            this.ColumnInfo.HeaderText = "Info";
-            this.ColumnInfo.MinimumWidth = 50;
-            this.ColumnInfo.Name = "ColumnInfo";
-            this.ColumnInfo.ReadOnly = true;
-            // 
-            // ColumnNote
-            // 
-            this.ColumnNote.HeaderText = "Note";
-            this.ColumnNote.MinimumWidth = 50;
-            this.ColumnNote.Name = "ColumnNote";
-            this.ColumnNote.ReadOnly = true;
+            this.dataGridViewExplore.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewExplore_SortCompare);
             // 
             // dataViewScrollerPanel1
             // 
@@ -444,6 +369,83 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
+            // 
+            // ColumnSystemName
+            // 
+            this.ColumnSystemName.FillWeight = 150F;
+            this.ColumnSystemName.HeaderText = "System Name";
+            this.ColumnSystemName.MinimumWidth = 50;
+            this.ColumnSystemName.Name = "ColumnSystemName";
+            this.ColumnSystemName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            // 
+            // ColumnDist
+            // 
+            this.ColumnDist.FillWeight = 75F;
+            this.ColumnDist.HeaderText = "Dist";
+            this.ColumnDist.MinimumWidth = 25;
+            this.ColumnDist.Name = "ColumnDist";
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.FillWeight = 50F;
+            this.ColumnX.HeaderText = "X";
+            this.ColumnX.MinimumWidth = 25;
+            this.ColumnX.Name = "ColumnX";
+            this.ColumnX.ReadOnly = true;
+            // 
+            // ColumnY
+            // 
+            this.ColumnY.FillWeight = 50F;
+            this.ColumnY.HeaderText = "Y";
+            this.ColumnY.MinimumWidth = 25;
+            this.ColumnY.Name = "ColumnY";
+            this.ColumnY.ReadOnly = true;
+            // 
+            // ColumnZ
+            // 
+            this.ColumnZ.FillWeight = 50F;
+            this.ColumnZ.HeaderText = "Z";
+            this.ColumnZ.MinimumWidth = 25;
+            this.ColumnZ.Name = "ColumnZ";
+            this.ColumnZ.ReadOnly = true;
+            // 
+            // ColumnVisits
+            // 
+            this.ColumnVisits.FillWeight = 50F;
+            this.ColumnVisits.HeaderText = "Visits";
+            this.ColumnVisits.MinimumWidth = 25;
+            this.ColumnVisits.Name = "ColumnVisits";
+            this.ColumnVisits.ReadOnly = true;
+            // 
+            // ColumnScans
+            // 
+            this.ColumnScans.FillWeight = 50F;
+            this.ColumnScans.HeaderText = "Scans";
+            this.ColumnScans.MinimumWidth = 25;
+            this.ColumnScans.Name = "ColumnScans";
+            this.ColumnScans.ReadOnly = true;
+            // 
+            // ColumnPrimaryStar
+            // 
+            this.ColumnPrimaryStar.FillWeight = 75F;
+            this.ColumnPrimaryStar.HeaderText = "Pri star";
+            this.ColumnPrimaryStar.MinimumWidth = 50;
+            this.ColumnPrimaryStar.Name = "ColumnPrimaryStar";
+            this.ColumnPrimaryStar.ReadOnly = true;
+            // 
+            // ColumnInfo
+            // 
+            this.ColumnInfo.HeaderText = "Info";
+            this.ColumnInfo.MinimumWidth = 50;
+            this.ColumnInfo.Name = "ColumnInfo";
+            this.ColumnInfo.ReadOnly = true;
+            // 
+            // ColumnNote
+            // 
+            this.ColumnNote.HeaderText = "Note";
+            this.ColumnNote.MinimumWidth = 50;
+            this.ColumnNote.Name = "ColumnNote";
+            this.ColumnNote.ReadOnly = true;
             // 
             // UserControlExploration
             // 
