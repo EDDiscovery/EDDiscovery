@@ -289,7 +289,7 @@ namespace EDDiscovery.UserControls
             DateTime[] timearr;
             DateTime endTime;
 
-            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 0;
+            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewTravel.SortOrder;
 
             dataGridViewTravel.Rows.Clear();
@@ -325,15 +325,12 @@ namespace EDDiscovery.UserControls
                     if (inTrip)
                     {
                         Col6.HeaderText = "Trip";
-                        ColumnValueAlignment(Col6);
                         Col7.HeaderText = "all";
-                        ColumnValueAlignment(Col7);
                         dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
                     }
                     else
                     { 
                         Col6.HeaderText = "all";
-                        ColumnValueAlignment(Col6);
                         dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
                     }
                     
@@ -603,15 +600,12 @@ namespace EDDiscovery.UserControls
                     if (inTrip)
                     {
                         Col6.HeaderText = "Trip";
-                        ColumnValueAlignment(Col6);
                         Col7.HeaderText = "all";
-                        ColumnValueAlignment(Col7);
                         dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
                     }
                     else
                     {
                         Col6.HeaderText = "all";
-                        ColumnValueAlignment(Col6);
                         dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
                     }
                     
