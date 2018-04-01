@@ -773,10 +773,6 @@ namespace EDDiscovery.UserControls
                 TargetHelpers.showBookmarkForm(this,discoveryform, sc, null, false);
         }
 
-        private void dataGridViewExplore_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            DataGridViewSorter2.DataGridSort2(dataGridViewExplore, e.ColumnIndex);
-        }
 
         private void tsbImportSphere_Click(object sender, EventArgs e)
         {
@@ -833,12 +829,18 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-
             foreach (var sysname in systems)
             {
                 dataGridViewExplore.Rows.Add(sysname, "", "");
             }
             UpdateSystemRows();
+        }
+
+        private void dataGridViewExplore_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index >= 1 && e.Column.Index <= 6)
+                e.SortDataGridViewColumnDate();
+
         }
     }
 

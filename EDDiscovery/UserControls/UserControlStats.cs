@@ -33,7 +33,9 @@ namespace EDDiscovery.UserControls
     {
         private string DbSelectedTabSave { get { return "StatsSelectedTab" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbStatsTreeStateSave { get { return "StatsTreeExpanded" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        
+
+        #region Init
+
         public UserControlStats()
         {
             InitializeComponent();
@@ -43,16 +45,16 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             tabControlCustomStats.SelectedIndex = SQLiteDBClass.GetSettingInt(DbSelectedTabSave, 0);
-            userControlStatsTimeScan.ScanMode = true;
+            userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
             discoveryform.OnNewEntry += AddNewEntry;
-            uctg.OnTravelSelectionChanged += SelectionChanged;
+            uctg.OnTravelSelectionChanged += TravelGridChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= SelectionChanged;
+            uctg.OnTravelSelectionChanged -= TravelGridChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += SelectionChanged;
+            uctg.OnTravelSelectionChanged += TravelGridChanged;
         }
 
         public override void Closing()
@@ -60,7 +62,7 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingInt(DbSelectedTabSave, tabControlCustomStats.SelectedIndex);
             SQLiteDBClass.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             discoveryform.OnNewEntry -= AddNewEntry;
-            uctg.OnTravelSelectionChanged -= SelectionChanged;
+            uctg.OnTravelSelectionChanged -= TravelGridChanged;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)
@@ -70,17 +72,29 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            SelectionChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
+            TravelGridChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
         }
 
-        public void SelectionChanged(HistoryEntry he, HistoryList hl)
+        protected override void OnLayout(LayoutEventArgs e)
+        {
+            base.OnLayout(e);
+            SizeControls();         // need to size controls here as well.. goes tabstrip.. create user control.. calls updatestats with incorrect size.. added to UC panel.. relayout
+        }
+
+        public void TravelGridChanged(HistoryEntry he, HistoryList hl)
         {
             Stats(he, hl);
         }
 
-        private HistoryEntry last_he=null;
-        private HistoryList last_hl=null;
-        private void Stats(HistoryEntry he, HistoryList hl)
+        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Stats(null, null);
+        }
+
+        private HistoryEntry last_he = null;
+        private HistoryList last_hl = null;
+
+        private void Stats(HistoryEntry he, HistoryList hl)     // paint new stats..
         {
             // Cache old History entry and list to use for events inside control.
             if (he == null)
@@ -111,6 +125,11 @@ namespace EDDiscovery.UserControls
                 StatsGame(he, hl);
             }
         }
+
+        #endregion
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        #region Stats General
 
         private void StatsGeneral(HistoryEntry he, HistoryList hl)
         {
@@ -156,7 +175,6 @@ namespace EDDiscovery.UserControls
                 StatToDGV("Most West", west.System.Name + " @ " + west.System.X.ToString("0.0") + "; " + west.System.Y.ToString("0.0") + "; " + west.System.Z.ToString("0.0"));
                 StatToDGV("Most Highest", up.System.Name + " @ " + up.System.X.ToString("0.0") + "; " + up.System.Y.ToString("0.0") + "; " + up.System.Z.ToString("0.0"));
                 StatToDGV("Most Lowest", down.System.Name + " @ " + down.System.X.ToString("0.0") + "; " + down.System.Y.ToString("0.0") + "; " + down.System.Z.ToString("0.0"));
-
 
                 var groupeddata = from data in hl.OrderByDate
                                   where data.IsFSDJump
@@ -222,6 +240,47 @@ namespace EDDiscovery.UserControls
             return inTrip;
         }
 
+        void SizeControls()
+        {
+            try
+            {
+                int height = 0;
+                foreach (DataGridViewRow row in dataGridViewStats.Rows)
+                {
+                    height += row.Height + 1;
+                }
+                height += dataGridViewStats.ColumnHeadersHeight + 2;
+                dataGridViewStats.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), height);             // all controls should be placed each time.
+                                                                                                                                                  //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
+                mostVisited.Location = new Point(0, height);
+                mostVisited.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), mostVisited.Height);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"UserControlStats::SizeControls Exception: {ex.Message}");
+                return;
+            }
+
+        }
+
+        void StatToDGV(string title, string data)
+        {
+            object[] rowobj = { title, data };
+            dataGridViewStats.Rows.Add(rowobj);
+        }
+
+        void StatToDGV(string title, int data)
+        {
+            object[] rowobj = { title, data.ToString() };
+            dataGridViewStats.Rows.Add(rowobj);
+        }
+
+        #endregion
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region Travel Panel
+
         void StatsTravel(HistoryEntry he, HistoryList hl)
         {
             int[] intar = null;
@@ -229,38 +288,36 @@ namespace EDDiscovery.UserControls
             int intervals=0;
             DateTime[] timearr;
             DateTime endTime;
-            
-            if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary || userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Custom)
+
+            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 0;
+            SortOrder sortorder = dataGridViewTravel.SortOrder;
+
+            dataGridViewTravel.Rows.Clear();
+            dataGridViewTravel.Columns.Clear();
+
+            if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Summary || userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Custom)
             {
-                dataGridViewTravel.Rows.Clear();
-                dataGridViewTravel.Columns.Clear();
-                dataGridViewTravel.Dock = DockStyle.Fill;
-                dataGridViewTravel.Visible = true;
-                
-                if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Summary)
+                if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Summary)
                 {
                     DateTime tripStart;
                     bool inTrip = IsTravelling(hl, out tripStart);
                     
                     intervals = inTrip ? 6 : 5;
                     var Col1 = new DataGridViewTextBoxColumn();
-                    Col1.HeaderText = "Last";
+                    Col1.HeaderText = "Type";
+                    Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
-                    ColumnValueAlignment(Col2);
                     Col2.HeaderText = "24 hours";
 
                     var Col3 = new DataGridViewTextBoxColumn();
-                    ColumnValueAlignment(Col3);
                     Col3.HeaderText = "week";
 
                     var Col4 = new DataGridViewTextBoxColumn();
-                    ColumnValueAlignment(Col4);
                     Col4.HeaderText = "month";
 
                     var Col5 = new DataGridViewTextBoxColumn();
                     Col5.HeaderText = "Last dock";
-                    ColumnValueAlignment(Col5);
 
                     var Col6 = new DataGridViewTextBoxColumn();
                     var Col7 = new DataGridViewTextBoxColumn();
@@ -269,11 +326,9 @@ namespace EDDiscovery.UserControls
                     {
                         Col6.HeaderText = "Trip";
                         ColumnValueAlignment(Col6);
-
                         Col7.HeaderText = "all";
                         ColumnValueAlignment(Col7);
                         dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
-
                     }
                     else
                     { 
@@ -283,8 +338,7 @@ namespace EDDiscovery.UserControls
                     }
                     
                     intar = new int[intervals];
-                    strarr = new string[intervals];
-                    
+                    strarr = new string[intervals];                    
                     timearr = new DateTime[intervals];
 
                     HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
@@ -292,7 +346,7 @@ namespace EDDiscovery.UserControls
 
                     if (lastdocked != null)
                         lastdockTime = lastdocked.EventTimeLocal;
-                    
+
                     timearr[0] = DateTime.Now.AddDays(-1);
                     timearr[1] = DateTime.Now.AddDays(-7);
                     timearr[2] = DateTime.Now.AddMonths(-1);
@@ -313,20 +367,17 @@ namespace EDDiscovery.UserControls
                 {
                     intervals = 1;
                     var Col1 = new DataGridViewTextBoxColumn();
-                    Col1.HeaderText = "";
+                    Col1.HeaderText = "Type";
+                    Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
-                    ColumnValueAlignment(Col2);
                     Col2.HeaderText = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value.ToShortDateString() + " - " + userControlStatsTimeTravel.CustomDateTimePickerTo.Value.ToShortDateString();
 
                     dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2});
 
-
                     intar = new int[intervals];
                     strarr = new string[intervals];
-                    
                     timearr = new DateTime[intervals];
-                    
                     timearr[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value;
                     endTime = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1);
 
@@ -359,7 +410,7 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetPlayerControlledTouchDown(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
-                
+
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetHeatWarning(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
@@ -383,22 +434,20 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
-
             }
             else
             {
                 intervals = 10;
                 DateTime[] timeintervals = new DateTime[intervals + 1];
                 DateTime currentday = DateTime.Today;
-                
-                if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Day)
+                if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Day)
                 {
                     timeintervals[0] = currentday.AddDays(1);
                     for (int ii = 0; ii < intervals; ii++)
                         timeintervals[ii + 1] = timeintervals[ii].AddDays(-1);
 
                 }
-                else if (userControlStatsTimeTravel.TimeMode == UserControlStatsTimeModeEnum.Week)
+                else if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Week)
                 {
                     DateTime startOfWeek = currentday.AddDays(-1 * (int)(DateTime.Today.DayOfWeek -1));
                     timeintervals[0] = startOfWeek.AddDays(7);
@@ -416,28 +465,22 @@ namespace EDDiscovery.UserControls
 
                 strarr = new string[intervals];
 
-                dataGridViewTravel.Rows.Clear();
-                dataGridViewTravel.Columns.Clear();
-                dataGridViewTravel.Dock = DockStyle.Fill;
-                dataGridViewTravel.Visible = true;
-
                 var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "";
-
+                Col1.HeaderText = "Type";
+                Col1.Tag = "AlphaSort";
                 dataGridViewTravel.Columns.Add(Col1);
 
                 for (int ii = 0; ii < intervals; ii++)
                 {
                     var Col2 = new DataGridViewTextBoxColumn();
                     Col2.HeaderText = timeintervals[ii+1].ToShortDateString();
-                    ColumnValueAlignment(Col2);
                     dataGridViewTravel.Columns.Add(Col2);
                 }
-                
+
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetFSDJumps(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Jumps", strarr);
-                
+
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetTraveledLy(timeintervals[ii + 1], timeintervals[ii]).ToString("N2", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
@@ -465,7 +508,7 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetPlayerControlledTouchDown(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Landed", strarr);
-                
+
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetHeatWarning(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Heat Warning", strarr);
@@ -489,9 +532,33 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value", strarr);
-                
+            }
+
+            for (int i = 1; i < dataGridViewTravel.Columns.Count; i++)
+                ColumnValueAlignment(dataGridViewTravel.Columns[i] as DataGridViewTextBoxColumn);
+
+            if (sortcol < dataGridViewTravel.Columns.Count)
+            {
+                dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
         }
+
+        private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Tag == null)     // tag null means numeric sort.
+                e.SortDataGridViewColumnDate();
+        }
+
+        private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
+        {
+            Stats(null, null);
+        }
+
+        #endregion
+
+        /////////////////////////////////////////////////////////////        
+        #region SCAN 
 
         void StatsScan(HistoryEntry he, HistoryList hl)
         {
@@ -500,36 +567,35 @@ namespace EDDiscovery.UserControls
             int intervals;
             List<JournalScan>[] scanlists = null;
 
-            if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary || userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Custom)
-            {
-                dataGridViewScan.Rows.Clear();
-                dataGridViewScan.Columns.Clear();
-                dataGridViewScan.Dock = DockStyle.Fill;
-                dataGridViewScan.Visible = true;
+            int sortcol = dataGridViewScan.SortedColumn?.Index ?? 0;
+            SortOrder sortorder = dataGridViewScan.SortOrder;
 
-                if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Summary)
+            dataGridViewScan.Rows.Clear();
+            dataGridViewScan.Columns.Clear();
+            dataGridViewScan.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
+            if (userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Summary || userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Custom)
+            {
+                if (userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Summary)
                 {
                     DateTime tripStart;
                     bool inTrip = IsTravelling(hl, out tripStart);
 
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "Body Type";
+                    Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
                     Col2.HeaderText = "24 hours";
-                    ColumnValueAlignment(Col2);
 
                     var Col3 = new DataGridViewTextBoxColumn();
                     Col3.HeaderText = "week";
-                    ColumnValueAlignment(Col3);
 
                     var Col4 = new DataGridViewTextBoxColumn();
                     Col4.HeaderText = "month";
-                    ColumnValueAlignment(Col4);
-                    
+
                     var Col5 = new DataGridViewTextBoxColumn();
                     Col5.HeaderText = "Last dock";
-                    ColumnValueAlignment(Col5);
 
                     var Col6 = new DataGridViewTextBoxColumn();
                     var Col7 = new DataGridViewTextBoxColumn();
@@ -552,7 +618,6 @@ namespace EDDiscovery.UserControls
                     intervals = inTrip ? 6 : 5;
                     intar = new int[intervals];
                     strarr = new string[intervals];
-
 
                     scanlists = new List<JournalScan>[intervals];
 
@@ -580,9 +645,9 @@ namespace EDDiscovery.UserControls
                 {
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "";
+                    Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
-                    ColumnValueAlignment(Col2);
                     Col2.HeaderText = userControlStatsTimeScan.CustomDateTimePickerFrom.Value.ToShortDateString() + " - " + userControlStatsTimeScan.CustomDateTimePickerTo.Value.ToShortDateString();
 
                     dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2 });
@@ -594,8 +659,6 @@ namespace EDDiscovery.UserControls
                     scanlists = new List<JournalScan>[intervals];
                     scanlists[0] = hl.GetScanList(userControlStatsTimeScan.CustomDateTimePickerFrom.Value, userControlStatsTimeScan.CustomDateTimePickerTo.Value.AddDays(1));
                 }
-
-
             }
             else
             {
@@ -603,15 +666,13 @@ namespace EDDiscovery.UserControls
                 DateTime[] timeintervals = new DateTime[intervals + 1];
                 DateTime currentday = DateTime.Today;
 
-
-                if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Day)
+                if (userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Day)
                 {
                     timeintervals[0] = currentday.AddDays(1);
                     for (int ii = 0; ii < intervals; ii++)
                         timeintervals[ii + 1] = timeintervals[ii].AddDays(-1);
-
                 }
-                else if (userControlStatsTimeScan.TimeMode == UserControlStatsTimeModeEnum.Week)
+                else if (userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Week)
                 {
                     DateTime startOfWeek = currentday.AddDays(-1 * (int)(DateTime.Today.DayOfWeek - 1));
                     timeintervals[0] = startOfWeek.AddDays(7);
@@ -629,14 +690,9 @@ namespace EDDiscovery.UserControls
 
                 strarr = new string[intervals];
 
-                dataGridViewScan.Rows.Clear();
-                dataGridViewScan.Columns.Clear();
-                dataGridViewScan.Dock = DockStyle.Fill;
-                dataGridViewScan.Visible = true;
-
-
                 var Col1 = new DataGridViewTextBoxColumn();
                 Col1.HeaderText = "Body type";
+                Col1.Tag = "AlphaSort";
 
                 dataGridViewScan.Columns.Add(Col1);
 
@@ -644,18 +700,18 @@ namespace EDDiscovery.UserControls
                 {
                     var Col2 = new DataGridViewTextBoxColumn();
                     Col2.HeaderText = timeintervals[ii + 1].ToShortDateString();
-                    ColumnValueAlignment(Col2);
                     dataGridViewScan.Columns.Add(Col2);
                 }
-
 
                 scanlists = new List<JournalScan>[intervals];
                 for (int ii = 0; ii < intervals; ii++)
                     scanlists[ii] = hl.GetScanList(timeintervals[ii + 1], timeintervals[ii]);
             }
 
+            for (int i = 1; i < dataGridViewScan.Columns.Count; i++)
+                ColumnValueAlignment(dataGridViewScan.Columns[i] as DataGridViewTextBoxColumn);
 
-            if (userControlStatsTimeScan.Stars)
+            if (userControlStatsTimeScan.StarPlanetMode)
             {
                 foreach (EDStar obj in Enum.GetValues(typeof(EDStar)))
                 {
@@ -690,11 +746,34 @@ namespace EDDiscovery.UserControls
                         strarr[ii] = nr.ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
 
                     }
+
                     StatToDGV(dataGridViewScan, obj.ToString().Replace("_", " "), strarr, false);
                 }
             }
 
+            if (sortcol < dataGridViewScan.Columns.Count)
+            {
+                dataGridViewScan.Sort(dataGridViewScan.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewScan.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
         }
+
+        private void dataGridViewScan_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Tag == null)     // tag null means numeric sort.
+                e.SortDataGridViewColumnDate();
+        }
+
+        private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
+        {
+            Stats(null, null);
+        }
+
+        #endregion
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        #region STATS IN GAME
 
         void StatsGame(HistoryEntry he, HistoryList hl)
         {
@@ -821,61 +900,25 @@ namespace EDDiscovery.UserControls
             string result = "";
             if (treeViewStats.Nodes.Count > 0)
             {
-                foreach(TreeNode tn in treeViewStats.Nodes) result += tn.IsExpanded ? "Y" : "N";
+                foreach (TreeNode tn in treeViewStats.Nodes) result += tn.IsExpanded ? "Y" : "N";
             }
             else
                 result = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
             return result;
         }
 
+        #endregion
+
+        #region Helpers
+
         private static void ColumnValueAlignment(DataGridViewTextBoxColumn Col2)
         {
             Col2.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
             Col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            Col2.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Col2.SortMode = DataGridViewColumnSortMode.Automatic;
         }
 
-        void SizeControls()
-        {
-            try
-            {
-                int height = 0;
-                foreach (DataGridViewRow row in dataGridViewStats.Rows)
-                {
-                    height += row.Height + 1;
-                }
-                height += dataGridViewStats.ColumnHeadersHeight + 2;
-                dataGridViewStats.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), height);             // all controls should be placed each time.
-                                                                                                                                    //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
-                mostVisited.Location = new Point(0, height);
-                mostVisited.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), mostVisited.Height);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine($"UserControlStats::SizeControls Exception: {ex.Message}");
-                return;
-            }
-
-        }
-
-        protected override void OnLayout(LayoutEventArgs e)
-        {
-            base.OnLayout(e);       
-            SizeControls();         // need to size controls here as well.. goes tabstrip.. create user control.. calls updatestats with incorrect size.. added to UC panel.. relayout
-        }
-
-        void StatToDGV(string title, string data)
-        {
-            object[] rowobj = { title, data };
-            dataGridViewStats.Rows.Add(rowobj);
-        }
-
-        void StatToDGV(string title, int data)
-        {
-            object[] rowobj = { title, data.ToString() };
-            dataGridViewStats.Rows.Add(rowobj);
-        }
-
+       
         void StatToDGV(DataGridView datagrid,  string title, string[] data, bool showEmptyLines = true)
         {
             object[] rowobj = new object[data.Length + 1];
@@ -893,56 +936,6 @@ namespace EDDiscovery.UserControls
                 datagrid.Rows.Add(rowobj);
         }
 
-        void StatToDGV(DataGridView datagrid, string title, int[] data)
-        {
-            object[] rowobj = new object[data.Length + 1];
-
-            rowobj[0] = title;
-            for (int ii = 0; ii < data.Length; ii++)
-                rowobj[ii + 1] = data[ii].ToString();
-
-            datagrid.Rows.Add(rowobj);
-        }
-
-
-        private void panelData_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void userControlStatsTimeTravel_TimeModeChanged(object sender, EventArgs e)
-        {
-            Stats(null, null);
-        }
-
-        private void userControlStatsTimeTravel_DrawModeChanged(object sender, EventArgs e)
-        {
-            Stats(null, null);
-        }
-
-        private void userControlStatsTimeScan_TimeModeChanged(object sender, EventArgs e)
-        {
-            Stats(null, null);
-        }
-
-        private void dataGridViewStats_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            
-        }
-
-        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            DataGridViewSorter2.DataGridSort2(dataGridViewTravel, e.ColumnIndex);
-        }
-
-        private void dataGridViewScan_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            DataGridViewSorter2.DataGridSort2(dataGridViewScan, e.ColumnIndex);
-        }
-
-        private void tabControlCustomStats_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Stats(null, null);
-        }
+        #endregion
     }
 }
