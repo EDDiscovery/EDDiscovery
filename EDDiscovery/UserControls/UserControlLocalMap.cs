@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         #region init
 
         private string DbSave { get { return "MapPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-
+        
         private StarDistanceComputer computer;
 
         public UserControlLocalMap()
@@ -68,6 +68,10 @@ namespace EDDiscovery.UserControls
             slidetimer = new System.Windows.Forms.Timer();
             slidetimer.Interval = 500;
             slidetimer.Tick += Slidetimer_Tick;
+
+            var style = chartMap.ChartAreas[0].Area3DStyle;
+            style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationX", xr)))));
+            style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationY", yr)))));
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -87,6 +91,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMin", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapMax", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationX", prevxr);
+            SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationY", prevyr);
         }
 
         public override void InitialDisplay()
@@ -362,10 +368,10 @@ namespace EDDiscovery.UserControls
         }
 
         // coordinates for rotation mouse reposition computation
-        private Int32 xr = 0;
-        private Int32 yr = 0;
-        private Int32 prevxr;
-        private Int32 prevyr;
+        private double xr = 0;
+        private double yr = 0;
+        private double prevxr;
+        private double prevyr;      
 
         private void ChartMap_MouseDown(object sender, MouseEventArgs e)
         {
@@ -373,12 +379,15 @@ namespace EDDiscovery.UserControls
             {
                 // Smooth out the rotation of the chart
                 Cursor.Hide(); // hide the cursor
-                xr = Cursor.Position.X; // record the initial mouse position
+                xr = Cursor.Position.X; // record the current mouse position
                 yr = Cursor.Position.Y; // 
 
                 if (prevxr.ToString() != null || prevyr.ToString() != null)
                 {
-                    Cursor.Position = new Point(prevxr, prevyr);
+                    prevxr = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationX", xr);
+                    prevyr = SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationY", yr);
+
+                    Cursor.Position = new Point(Convert.ToInt32(prevxr), Convert.ToInt32(prevyr));
                 }
             }
 
@@ -395,20 +404,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void UserControlMap_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
-            }
-        }
-
         private void ChartMap_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 prevxr = Cursor.Position.X; // record the last mouse position
-                prevyr = Cursor.Position.Y; //                
+                prevyr = Cursor.Position.Y; //       
+
+                SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationX", prevxr);
+                SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+
                 CenterMouseOverControl(chartMap);
                 Cursor.Show(); // show the cursor                
             }
@@ -419,6 +424,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void UserControlMap_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
+            }
+        }
+        
         private bool panSwitch = false;
 
         private void ChartMap_MouseMove(object sender, MouseEventArgs e)
