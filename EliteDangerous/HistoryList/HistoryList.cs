@@ -324,11 +324,20 @@ namespace EliteDangerousCore
             return (from s in historylist where s.EntryType == JournalTypeEnum.JetConeBoost && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
-        public int GetFSDBoostUsed(DateTime start, DateTime to)
+        public int GetFSDBoostUsed(DateTime start, DateTime to, int boostValue = -1)
         {
-            return (from s in historylist
-                    where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
-                    select s).Count();
+            if (boostValue >= 1 && boostValue <= 3)
+            {
+                return (from s in historylist
+                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostValue == boostValue)
+                        select s).Count();
+            }
+            else
+            { 
+                return (from s in historylist
+                        where (s.EntryType == JournalTypeEnum.FSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to && ((JournalFSDJump)s.journalEntry).BoostUsed == true)
+                        select s).Count();
+            }
         }
 
 

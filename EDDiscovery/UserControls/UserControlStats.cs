@@ -226,6 +226,20 @@ namespace EDDiscovery.UserControls
             SizeControls();
         }
 
+        bool IsTravelling(HistoryList hl, out DateTime startTime)
+        {
+            bool inTrip = false;
+            startTime = DateTime.Now;
+            HistoryEntry lastStartMark = hl.GetLastHistoryEntry(x => x.StartMarker);
+            if (lastStartMark != null)
+            {
+                HistoryEntry lastStopMark = hl.GetLastHistoryEntry(x => x.StopMarker);
+                inTrip = lastStopMark == null || lastStopMark.EventTimeLocal < lastStartMark.EventTimeLocal;
+                if (inTrip) startTime = lastStartMark.EventTimeLocal;
+            }
+            return inTrip;
+        }
+
         void SizeControls()
         {
             try
@@ -275,7 +289,7 @@ namespace EDDiscovery.UserControls
             DateTime[] timearr;
             DateTime endTime;
 
-            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 0;
+            int sortcol = dataGridViewTravel.SortedColumn?.Index ?? 99;
             SortOrder sortorder = dataGridViewTravel.SortOrder;
 
             dataGridViewTravel.Rows.Clear();
@@ -285,7 +299,10 @@ namespace EDDiscovery.UserControls
             {
                 if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Summary)
                 {
-                    intervals = 5;
+                    DateTime tripStart;
+                    bool inTrip = IsTravelling(hl, out tripStart);
+                    
+                    intervals = inTrip ? 6 : 5;
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "Type";
                     Col1.Tag = "AlphaSort";
@@ -303,13 +320,22 @@ namespace EDDiscovery.UserControls
                     Col5.HeaderText = "Last dock";
 
                     var Col6 = new DataGridViewTextBoxColumn();
-                    Col6.HeaderText = "all";
+                    var Col7 = new DataGridViewTextBoxColumn();
 
-                    dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
-
+                    if (inTrip)
+                    {
+                        Col6.HeaderText = "Trip";
+                        Col7.HeaderText = "all";
+                        dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
+                    }
+                    else
+                    { 
+                        Col6.HeaderText = "all";
+                        dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    }
+                    
                     intar = new int[intervals];
-                    strarr = new string[intervals];
-
+                    strarr = new string[intervals];                    
                     timearr = new DateTime[intervals];
 
                     HistoryEntry lastdocked = hl.GetLastHistoryEntry(x => x.IsDocked);
@@ -321,9 +347,17 @@ namespace EDDiscovery.UserControls
                     timearr[0] = DateTime.Now.AddDays(-1);
                     timearr[1] = DateTime.Now.AddDays(-7);
                     timearr[2] = DateTime.Now.AddMonths(-1);
-                    timearr[3] = lastdockTime;
-                    timearr[4] = new DateTime(2012, 1, 1);
-
+                    if (inTrip)
+                    {
+                        timearr[3] = lastdockTime;
+                        timearr[4] = tripStart;
+                        timearr[5] = new DateTime(2012, 1, 1);
+                    }
+                    else
+                    {
+                        timearr[3] = lastdockTime;
+                        timearr[4] = new DateTime(2012, 1, 1);
+                    }
                     endTime = DateTime.Now;
                 }
                 else  // Custom
@@ -340,9 +374,7 @@ namespace EDDiscovery.UserControls
 
                     intar = new int[intervals];
                     strarr = new string[intervals];
-
                     timearr = new DateTime[intervals];
-
                     timearr[0] = userControlStatsTimeTravel.CustomDateTimePickerFrom.Value;
                     endTime = userControlStatsTimeTravel.CustomDateTimePickerTo.Value.AddDays(1);
 
@@ -357,8 +389,16 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Premium Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Standard Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timearr[ii], endTime, 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Basic Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetJetConeBoost(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -397,7 +437,6 @@ namespace EDDiscovery.UserControls
                 intervals = 10;
                 DateTime[] timeintervals = new DateTime[intervals + 1];
                 DateTime currentday = DateTime.Today;
-
                 if (userControlStatsTimeTravel.TimeMode == StatsTimeUserControl.TimeModeType.Day)
                 {
                     timeintervals[0] = currentday.AddDays(1);
@@ -444,8 +483,16 @@ namespace EDDiscovery.UserControls
                 StatToDGV(dataGridViewTravel, "Traveled Ly", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
-                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
-                StatToDGV(dataGridViewTravel, "Boost used", strarr);
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii], 3).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Premium Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii + 1], timeintervals[ii], 2).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Standard Boost", strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetFSDBoostUsed(timeintervals[ii+ 1], timeintervals[ii], 1).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Basic Boost", strarr);
 
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetJetConeBoost(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
@@ -528,6 +575,9 @@ namespace EDDiscovery.UserControls
             {
                 if (userControlStatsTimeScan.TimeMode == StatsTimeUserControl.TimeModeType.Summary)
                 {
+                    DateTime tripStart;
+                    bool inTrip = IsTravelling(hl, out tripStart);
+
                     var Col1 = new DataGridViewTextBoxColumn();
                     Col1.HeaderText = "Body Type";
                     Col1.Tag = "AlphaSort";
@@ -545,11 +595,21 @@ namespace EDDiscovery.UserControls
                     Col5.HeaderText = "Last dock";
 
                     var Col6 = new DataGridViewTextBoxColumn();
-                    Col6.HeaderText = "all";
+                    var Col7 = new DataGridViewTextBoxColumn();
 
-                    dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
-
-                    intervals = 5;
+                    if (inTrip)
+                    {
+                        Col6.HeaderText = "Trip";
+                        Col7.HeaderText = "all";
+                        dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
+                    }
+                    else
+                    {
+                        Col6.HeaderText = "all";
+                        dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
+                    }
+                    
+                    intervals = inTrip ? 6 : 5;
                     intar = new int[intervals];
                     strarr = new string[intervals];
 
@@ -565,7 +625,15 @@ namespace EDDiscovery.UserControls
                     scanlists[1] = hl.GetScanList(DateTime.Now.AddDays(-7), DateTime.Now);
                     scanlists[2] = hl.GetScanList(DateTime.Now.AddMonths(-1), DateTime.Now);
                     scanlists[3] = hl.GetScanList(lastdockTime, DateTime.Now);
-                    scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    if (inTrip)
+                    {
+                        scanlists[4] = hl.GetScanList(tripStart, DateTime.Now);
+                        scanlists[5] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    }
+                    else
+                    {
+                        scanlists[4] = hl.GetScanList(new DateTime(2012, 1, 1), DateTime.Now);
+                    }
                 }
                 else
                 {
