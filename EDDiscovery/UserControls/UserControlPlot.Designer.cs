@@ -58,6 +58,7 @@ namespace EDDiscovery.UserControls
             this.labelExt3 = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.buttonExportToImage = new ExtendedControls.ButtonExt();
             this.checkBoxLegend = new ExtendedControls.CheckBoxCustom();
             this.checkBoxDotSize = new ExtendedControls.CheckBoxCustom();
             this.comboBoxView = new ExtendedControls.ComboBoxCustom();
@@ -168,6 +169,7 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
+            this.panelTop.Controls.Add(this.buttonExportToImage);
             this.panelTop.Controls.Add(this.checkBoxLegend);
             this.panelTop.Controls.Add(this.checkBoxDotSize);
             this.panelTop.Controls.Add(this.comboBoxView);
@@ -180,6 +182,19 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(335, 26);
             this.panelTop.TabIndex = 25;
+            // 
+            // buttonExportToImage
+            // 
+            this.buttonExportToImage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExportToImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExportToImage.Image = global::EDDiscovery.Icons.Controls.Map3D_Recorder_Save;
+            this.buttonExportToImage.Location = new System.Drawing.Point(248, 1);
+            this.buttonExportToImage.Name = "buttonExportToImage";
+            this.buttonExportToImage.Size = new System.Drawing.Size(24, 24);
+            this.buttonExportToImage.TabIndex = 29;
+            this.toolTip1.SetToolTip(this.buttonExportToImage, "Export to Excel");
+            this.buttonExportToImage.UseVisualStyleBackColor = true;
+            this.buttonExportToImage.Click += new System.EventHandler(this.buttonExportToImage_Click);
             // 
             // checkBoxLegend
             // 
@@ -195,14 +210,13 @@ namespace EDDiscovery.UserControls
             this.checkBoxLegend.FontNerfReduction = 0.5F;
             this.checkBoxLegend.Image = global::EDDiscovery.Icons.Controls.Map3D_Stars_Menu;
             this.checkBoxLegend.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxLegend.Location = new System.Drawing.Point(226, 1);
+            this.checkBoxLegend.Location = new System.Drawing.Point(221, 1);
             this.checkBoxLegend.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxLegend.Name = "checkBoxLegend";
             this.checkBoxLegend.Size = new System.Drawing.Size(24, 24);
             this.checkBoxLegend.TabIndex = 11;
             this.checkBoxLegend.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxLegend, "Use the third axis value to mimics depth (nearest systems larger, farther systems" +
-        " smaller)");
+            this.toolTip1.SetToolTip(this.checkBoxLegend, "Toggle the Legend");
             this.checkBoxLegend.UseVisualStyleBackColor = false;
             this.checkBoxLegend.CheckedChanged += new System.EventHandler(this.checkBoxLegend_CheckedChanged);
             // 
@@ -312,21 +326,21 @@ namespace EDDiscovery.UserControls
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series2.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series2.Legend = "Legend";
-            series2.MarkerBorderColor = System.Drawing.Color.RoyalBlue;
-            series2.MarkerColor = System.Drawing.Color.Purple;
+            series2.MarkerBorderColor = System.Drawing.Color.Blue;
+            series2.MarkerColor = System.Drawing.Color.RoyalBlue;
             series2.MarkerSize = 4;
             series2.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series2.Name = "Previous";
+            series2.Name = "Visited";
             series2.YValuesPerPoint = 2;
             series3.ChartArea = "Plot";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
             series3.CustomProperties = "BubbleMinSize=2, BubbleMaxSize=8";
             series3.Legend = "Legend";
-            series3.MarkerBorderColor = System.Drawing.Color.Blue;
-            series3.MarkerColor = System.Drawing.Color.RoyalBlue;
+            series3.MarkerBorderColor = System.Drawing.Color.RoyalBlue;
+            series3.MarkerColor = System.Drawing.Color.Purple;
             series3.MarkerSize = 4;
             series3.MarkerStyle = System.Windows.Forms.DataVisualization.Charting.MarkerStyle.Circle;
-            series3.Name = "Visited";
+            series3.Name = "Previous";
             series3.YValuesPerPoint = 2;
             series4.ChartArea = "Plot";
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bubble;
@@ -566,5 +580,6 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn sysZ;
         private DataGridViewTextBoxColumn sysVisits;
         private ExtendedControls.CheckBoxCustom checkBoxLegend;
+        private ExtendedControls.ButtonExt buttonExportToImage;
     }
 }

@@ -25,6 +25,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.IO;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
@@ -620,6 +621,20 @@ namespace EDDiscovery.UserControls
             {
                 chartBubblePlot.Legends[0].Enabled = false;
             }
+        }
+        
+        private void buttonExportToImage_Click(object sender, EventArgs e)
+        {
+            string FileName = "Plot around " + currentSystemName + " in range " + textMinRadius.Value.ToString() + "Ly to " + textMaxRadius.Value.ToString() + "Ly.png";
+            string AddPAth = currentSystemName;
+            string screenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Plots");
+
+            string OutputPath = Path.Combine(screenshotsDirdefault, AddPAth);
+            System.IO.Directory.CreateDirectory(OutputPath);
+
+            string FilePath = Path.Combine(OutputPath, FileName);            
+
+            chartBubblePlot.SaveImage(FilePath, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
         }
     }    
 }
