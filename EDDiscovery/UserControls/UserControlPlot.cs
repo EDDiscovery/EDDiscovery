@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
         public UserControlPlot()
         {
             InitializeComponent();
-            this.chartBubble.MouseWheel += Zoom_MouseWheel;
+            this.chartBubblePlot.MouseWheel += Zoom_MouseWheel;
                         
             SetMarkerSize();
         }
@@ -69,11 +69,22 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Top");
             comboBoxView.Items.Add("Front");
             comboBoxView.Items.Add("Side");
+            comboBoxView.Items.Add("List");
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
             
             checkBoxDotSize.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotDepth", true);
+            checkBoxLegend.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotLegend", true);
+
+            if (checkBoxLegend.Checked == true)
+            {
+                dataGridList.Visible = true;
+            }
+            else
+            {
+                dataGridList.Visible = false;
+            }
 
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
@@ -95,6 +106,7 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
             SQLiteConnectionUser.PutSettingBool(DbSave + "PlotDepth", checkBoxDotSize.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbSave + "PlotLegend", checkBoxLegend.Checked);
         }
 
         public override void InitialDisplay()
@@ -110,8 +122,8 @@ namespace EDDiscovery.UserControls
             currentSystemName = he.System.Name;            
             GetPreviousSystemInHistory(hl);
 
-            refreshRadar();
-            SetChartSize(chartBubble, 1);
+            refreshPlot();
+            SetChartSize(chartBubblePlot, 1);
         }
 
         private void GetPreviousSystemInHistory(HistoryList hl)
@@ -125,7 +137,7 @@ namespace EDDiscovery.UserControls
 
         private void KickComputation(HistoryEntry he)
         {
-            var x = this.Handle; // workaround to avoid throw an exception if open the panel as popup
+            var x = this.Handle; // workaround to avoid throw an exception if open the panel as pop up
 
             if (he?.System != null && he.System.HasCoordinate)
             {
@@ -140,145 +152,145 @@ namespace EDDiscovery.UserControls
             discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillPlot(list, sys);
         }
-        
+                
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
-            SetControlText("");
+            SetControlText("2D Plot of systems in range from " + currentSystem.Name);
 
+            // reset charts axis
+            chartBubblePlot.ChartAreas[0].AxisY.IsStartedFromZero = false;
+            chartBubblePlot.ChartAreas[0].AxisX.IsStartedFromZero = false;
+
+            // position the current system in the center of the references coordinates
+            chartBubblePlot.Series[0].Points.AddXY(0, 0, 4);
+            chartBubblePlot.Series[0].ToolTip = currentSystem.Name;
+
+            // get the coordinates of the current system, to properly calculate the distances
+            var curX = currentSystem.X;
+            var curY = currentSystem.Y;
+            var curZ = currentSystem.Z;
+            
             if (csl.Count() > 0)
             {
-                SetControlText("2D Plot of systems in range from " + currentSystem.Name);                
-
-                // position the current system in the center of the references coordinates
-                chartBubble.Series[0].Points.AddXY(0, 0, 4);
-                chartBubble.Series[0].ToolTip = currentSystem.Name;
-                chartBubble.Series[3].Points.AddXY(0, 0, 4);
-                chartBubble.Series[3].ToolTip = currentSystem.Name;
-                chartBubble.Series[6].Points.AddXY(0, 0, 4);
-                chartBubble.Series[6].ToolTip = currentSystem.Name;
-                
                 // create a point for each system in range
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     var inRangeSystem = tvp.Value;
 
-                    if (tvp.Value.Name != currentSystem.Name && tvp.Value.Name != previousSystemName)
-                    { 
+                    // used later, to assign a separate series for visited, non visited and last system
+                    int p = 0;
+
+                    // for each system that is not the current center system, do:
+                    if (inRangeSystem.Name != currentSystem.Name)
+                    {
                         // get the coordinates of each system in range
                         var sysX = inRangeSystem.X;
                         var sysY = inRangeSystem.Y;
                         var sysZ = inRangeSystem.Z;
-                        
-                        // get the coordinates of the current system, to properly calculate the distance
-                        var curX = currentSystem.X;
-                        var curY = currentSystem.Y;
-                        var curZ = currentSystem.Z;
 
+                        // Count the total visits for each system
+                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
+                                                
                         // calculate the distance
                         var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-
-                        // reset charts axis
-                        chartBubble.ChartAreas[0].AxisY.IsStartedFromZero = false;
-                        chartBubble.ChartAreas[1].AxisY.IsStartedFromZero = false;
-                        chartBubble.ChartAreas[2].AxisY.IsStartedFromZero = false;
-                        chartBubble.ChartAreas[0].AxisX.IsStartedFromZero = false;
-                        chartBubble.ChartAreas[1].AxisX.IsStartedFromZero = false;
-                        chartBubble.ChartAreas[2].AxisX.IsStartedFromZero = false;
-
-                        // for a spherical distribution, do not count distances bigger than the selected radius
-                        if (distFromCurrentSys > textMinRadius.Value)
-                        {
-                            // count the total visits for each system
-                            int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
-
-                            // create the label for the tooltip
-                            StringBuilder label = new StringBuilder();
-                            label.Append(inRangeSystem.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
-
-                            // calculate the reference for each coordinate
-                            double dx = curX - sysX;
-                            double dy = curY - sysY;
-                            double dz = curZ - sysZ;
-
+                                                
+                        // calculate the distance of each coordinate
+                        double dx = curX - sysX;
+                        double dy = curY - sysY;
+                        double dz = curZ - sysZ;
+                                                
+                        // Populate the List with the systems in range
+                        if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value)
+                        {                            
+                            // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
+                            object[] rowobj = { inRangeSystem.Name, $"{dx:0.00}", $"{dy:0.00}", $"{dz:0.00}", $"{visits:n0}" };
+                            int rowindex = dataGridList.Rows.Add(rowobj);
+                            dataGridList.Rows[rowindex].Tag = inRangeSystem;
+                                                        
+                            // Plot
                             // prepare the value to be displayed by the plot and fix the orientation
-                            int px = Convert.ToInt32(dx) * -1;
-                            int py = Convert.ToInt32(dy) * -1;
-                            int pz = Convert.ToInt32(dz) * -1;
 
-                            // visited systems go to series #1, #4 and #7; unvisited to series #2, #5 and #8. 
-                            // series #0, #3 and #6 is for the current system...
-
-                            if (visits > 0)
+                            if (tvp.Value.Name == previousSystemName)
+                            // Last visited system
                             {
-                                // Top view
-                                chartBubble.Series[1].Points.AddXY(px, py, pz);
-                                chartBubble.Series[1].ToolTip = label.ToString();
-
-                                // Front view
-                                chartBubble.Series[4].Points.AddXY(px, pz, py);
-                                chartBubble.Series[4].ToolTip = label.ToString();
-
-                                // Side view
-                                chartBubble.Series[7].Points.AddXY(py, pz, px);
-                                chartBubble.Series[7].ToolTip = label.ToString();                                
+                                // Previous system coordinates, distances and label
+                                dx = Convert.ToInt32(currentSystem.X - prevX) * -1;
+                                dy = Convert.ToInt32(currentSystem.Y - prevY) * -1;
+                                dz = Convert.ToInt32(currentSystem.Z - prevZ) * -1;
                             }
                             else
                             {
-                                // Top view
-                                chartBubble.Series[2].Points.AddXY(px, py, pz);
-                                chartBubble.Series[2].ToolTip = label.ToString();
+                                dx = Convert.ToInt32(dx) * -1;
+                                dy = Convert.ToInt32(dy) * -1;
+                                dz = Convert.ToInt32(dz) * -1;
+                            }
+                                                        
+                            // assign the correct series for each state: visited; last visited; non visited.
+                            if (visits > 0)
+                            {
+                                // is visited
+                                if (tvp.Value.Name != previousSystemName)
+                                {
+                                    p = 1;
+                                }
+                                // is visited, and is the last visited system
+                                else if (tvp.Value.Name == previousSystemName)
+                                {
+                                    p = 2;
+                                }
+                            }
+                            else
+                            // is not visited yet
+                            {
+                                p = 3;
+                            }
 
-                                // Front view
-                                chartBubble.Series[5].Points.AddXY(px, pz, py);
-                                chartBubble.Series[5].ToolTip = label.ToString();
-                                 
-                                // Side view
-                                chartBubble.Series[8].Points.AddXY(py, pz, px);
-                                chartBubble.Series[8].ToolTip = label.ToString();                                                                
+                            string s = comboBoxView.SelectedItem.ToString();
+                            if (s == "Top")
+                            {
+                                chartBubblePlot.ChartAreas[0].AxisX.Title = "X";
+                                chartBubblePlot.ChartAreas[0].AxisY.Title = "Y";
+                                chartBubblePlot.ChartAreas[0].AxisY2.Title = "Z";
+
+                                chartBubblePlot.Series[p].Points.AddXY(dx, dy, dz);
+                                chartBubblePlot.Series[p].ToolTip = inRangeSystem.Name;
+                            }
+                            else if (s == "Front")
+                            {
+                                chartBubblePlot.ChartAreas[0].AxisX.Title = "X";
+                                chartBubblePlot.ChartAreas[0].AxisY.Title = "Z";
+                                chartBubblePlot.ChartAreas[0].AxisY2.Title = "Y";
+
+                                chartBubblePlot.Series[p].Points.AddXY(dx, dy, dz);
+                                chartBubblePlot.Series[p].ToolTip = inRangeSystem.Name;
+                            }
+                            else if (s == "Side")
+                            {
+                                chartBubblePlot.ChartAreas[0].AxisX.Title = "Y";
+                                chartBubblePlot.ChartAreas[0].AxisY.Title = "Z";
+                                chartBubblePlot.ChartAreas[0].AxisY2.Title = "X";
+
+                                chartBubblePlot.Series[p].Points.AddXY(dx, dy, dz);
+                                chartBubblePlot.Series[p].ToolTip = inRangeSystem.Name;
                             }
                         }
                     }
-
-                    if (tvp.Value.Name != currentSystem.Name && tvp.Value.Name == previousSystemName)
-                    {
-                        // Previous system coordinates, distances and label
-                        int prevx = Convert.ToInt32(currentSystem.X - prevX) * -1;
-                        int prevy = Convert.ToInt32(currentSystem.Y - prevY) * -1;
-                        int prevz = Convert.ToInt32(currentSystem.Z - prevZ) * -1;
-
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
-                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-
-                        StringBuilder label = new StringBuilder();
-                        label.Append(previousSystemName + " / " + visits + " visits" + "\n" + distFromCurrentSys);
-
-                        // Top view
-                        chartBubble.Series[9].Points.AddXY(prevx, prevy, prevz);
-                        chartBubble.Series[9].ToolTip = label.ToString();
-
-                        // Front view
-                        chartBubble.Series[10].Points.AddXY(prevx, prevz, prevy);
-                        chartBubble.Series[10].ToolTip = label.ToString();
-
-                        // Side view
-                        chartBubble.Series[11].Points.AddXY(prevy, prevz, prevx);
-                        chartBubble.Series[11].ToolTip = label.ToString();
-                    }                    
                 }
             }
         }
 
         // Zoom
-        
+
         // zoom with the mouse scroll wheel
         private double[] zoomFactor = { 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0 };
-        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 }; // markes reduce in size when zoom in, for a clearer view
+        private double[] markerReduction = { 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2 }; // markers reduce in size when zoom in, for a clearer view
         private int zoomIndex = 0; // default zoom at 1:1
 
-        private int[] seriesIsCurrent = { 0, 3, 6 };
-        private int[] seriesIsVisited = { 1, 4, 7 };
-        private int[] seriesUnVisited = { 2, 5, 8 };
-        private int[] seriesIsPrevious = { 9, 10, 11 };
+        private int[] seriesIsCurrent = { 0 };
+        private int[] seriesIsVisited = { 1 };
+        private int[] seriesIsLastVisited = { 2 };
+        private int[] seriesNotVisited = { 3 };
+        
 
         private void SetMarkerSize()
         {
@@ -289,47 +301,45 @@ namespace EDDiscovery.UserControls
             if (checkBoxDotSize.Checked == true)
             {
                 maxMarker = Convert.ToInt32(6 * (markerReduction[zoomIndex]));
-                defMarker = Convert.ToInt32(4 * (markerReduction[zoomIndex]));
+                defMarker = Convert.ToInt32(3 * (markerReduction[zoomIndex]));
 
                 int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
                 minMarker = minMarkAbsolute < 1 ? minMarker = 1 : minMarker = 2; // avoid zero values or less than 1 pixel marker when zooming
             }
             else
             {
-                maxMarker = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
-                defMarker = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
-
-                int minMarkAbsolute = Convert.ToInt32(2 * (markerReduction[zoomIndex]));
-                minMarker = minMarkAbsolute < 2 ? minMarker = 2 : minMarker = 2; // try to maintain all markers at the same size
+                maxMarker = 1;
+                defMarker = 1;                                
+                minMarker = 1;
             }
 
             // Min and Max size for Current system
             foreach (int serie in seriesIsCurrent)
             {
-                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
-                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
-                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubblePlot.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMinSize"] = minMarker.ToString();
             }
             // Min and Max size for Visited systems
             foreach (int serie in seriesIsVisited)
             {
-                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
-                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
-                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubblePlot.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMinSize"] = minMarker.ToString();
             }
             // Min and Max size for Unvisited systems
-            foreach (int serie in seriesUnVisited)
+            foreach (int serie in seriesNotVisited)
             {
-                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
-                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
-                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubblePlot.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMinSize"] = minMarker.ToString();
             }
             // Min and Max size for Previous systems
-            foreach (int serie in seriesIsPrevious)
+            foreach (int serie in seriesIsLastVisited)
             {
-                chartBubble.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
-                chartBubble.Series[serie]["MarkerSize"] = defMarker.ToString();
-                chartBubble.Series[serie]["BubbleMinSize"] = minMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMaxSize"] = maxMarker.ToString();
+                chartBubblePlot.Series[serie]["MarkerSize"] = defMarker.ToString();
+                chartBubblePlot.Series[serie]["BubbleMinSize"] = minMarker.ToString();
             }
         }
 
@@ -386,11 +396,11 @@ namespace EDDiscovery.UserControls
             if (zoomIndex > 0)
             {
                 SetMarkerSize();
-                SetChartSize(chartBubble, zoomFactor[zoomIndex]);
+                SetChartSize(chartBubblePlot, zoomFactor[zoomIndex]);
             }
             if (zoomIndex == 0)
             {
-                SetChartSize(chartBubble, 1.0);
+                SetChartSize(chartBubblePlot, 1.0);
                 SetMarkerSize();
             }
         }
@@ -418,24 +428,25 @@ namespace EDDiscovery.UserControls
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
            KickComputation(uctg.GetCurrentHistoryEntry);
-            refreshRadar();
+            refreshPlot();
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
             KickComputation(uctg.GetCurrentHistoryEntry);
-            refreshRadar();
+            refreshPlot();
         }
                 
-        private void refreshRadar()
+        private void refreshPlot()
         {
-            for (int i = 0; i <= 11; i++)
+            for (int i = 0; i <= 3; i++)
             {
-                chartBubble.Series[i].Points.Clear();
+                chartBubblePlot.Series[i].Points.Clear();
             }            
-            chartBubble.Update();            
+            chartBubblePlot.Update(); 
+            dataGridList.Rows.Clear();
         }
-        
+
         private bool panSwitch = false;
 
         private void chartBubble_MouseDown(object sender, MouseEventArgs e)
@@ -457,79 +468,79 @@ namespace EDDiscovery.UserControls
 
         private void chartBubble_MouseMove(object sender, MouseEventArgs e)
         {
-            // pan the chart with the middle mouse buttom
+            // pan the chart with the middle mouse button
             if (e.Button == MouseButtons.Middle)
             {
-                PanControl(chartBubble, e);
+                PanControl(chartBubblePlot, e);
             }
         }
 
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetChartSize(chartBubble, 1);
+            SetChartSize(chartBubblePlot, 1);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             zoomIndex = 0;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem125_Click(object sender, EventArgs e)
         {
             zoomIndex = 1;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }                
 
         private void toolStripMenuItem15_Click(object sender, EventArgs e)
         {
             zoomIndex = 2;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem175_Click(object sender, EventArgs e)
         {
             zoomIndex = 3;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem2_Click(object sender, EventArgs e)
         {
             zoomIndex = 4;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem25_Click(object sender, EventArgs e)
         {
             zoomIndex = 5;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem3_Click(object sender, EventArgs e)
         {
             zoomIndex = 6;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem35_Click(object sender, EventArgs e)
         {
             zoomIndex = 7;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
         private void toolStripMenuItem4_Click(object sender, EventArgs e)
         {
             zoomIndex = 8;
-            SetChartSize(chartBubble, zoomIndex);
+            SetChartSize(chartBubblePlot, zoomIndex);
             SetMarkerSize();
         }
 
@@ -547,22 +558,26 @@ namespace EDDiscovery.UserControls
         {
             string s = comboBoxView.SelectedItem.ToString();
             if ( s == "Top")
-            {
-                chartBubble.ChartAreas[0].Visible = true;
-                chartBubble.ChartAreas[1].Visible = false;
-                chartBubble.ChartAreas[2].Visible = false;
+            {                
+                dataGridList.Visible = false;
+                KickComputation(uctg.GetCurrentHistoryEntry);
+                refreshPlot();
             }
             if (s == "Front")
             {
-                chartBubble.ChartAreas[0].Visible = false;
-                chartBubble.ChartAreas[1].Visible = true;
-                chartBubble.ChartAreas[2].Visible = false;
+                dataGridList.Visible = false;
+                KickComputation(uctg.GetCurrentHistoryEntry);
+                refreshPlot();
             }
             if (s == "Side")
             {
-                chartBubble.ChartAreas[0].Visible = false;
-                chartBubble.ChartAreas[1].Visible = false;
-                chartBubble.ChartAreas[2].Visible = true;
+                dataGridList.Visible = false;
+                KickComputation(uctg.GetCurrentHistoryEntry);
+                refreshPlot();
+            }
+            if (s == "List")
+            {
+                dataGridList.Visible = true;                
             }
         }
 
@@ -580,13 +595,31 @@ namespace EDDiscovery.UserControls
 
         private void UserControlPlot_Resize(object sender, EventArgs e)
         {
-            SetChartSize(chartBubble, 1);
+            SetChartSize(chartBubblePlot, 1);
             SetMarkerSize();           
         }
 
         private void checkBoxDotSize_CheckedChanged(object sender, EventArgs e)
         {
             SetMarkerSize();
+        }
+
+        private void dataGridList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (sysName.Equals(e.Column) && sysX.Equals(e.Column) && sysY.Equals(e.Column) && sysZ.Equals(e.Column))
+                e.SortDataGridViewColumnDate();
+        }
+
+        private void checkBoxLegend_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chartBubblePlot.Legends[0].Enabled == false)
+            {
+                chartBubblePlot.Legends[0].Enabled = true;
+            }
+            else
+            {
+                chartBubblePlot.Legends[0].Enabled = false;
+            }
         }
     }    
 }
