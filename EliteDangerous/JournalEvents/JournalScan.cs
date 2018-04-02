@@ -746,6 +746,10 @@ namespace EliteDangerousCore.JournalEvents
                         kValue = 54309;
                         break;
 
+                    case EDStar.SuperMassiveBlackHole:
+                        kValue = 80.5654;
+                        break;
+
                     default:
                         kValue = 2880;
                         break;
