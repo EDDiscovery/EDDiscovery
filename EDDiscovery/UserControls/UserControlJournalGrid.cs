@@ -498,47 +498,70 @@ namespace EDDiscovery.UserControls
 
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                if (frm.SelectedIndex == 0)
+                if (frm.ExportAsJournals)
                 {
-                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
-                    grd.SetCSVDelimiter(frm.Comma);
-                    grd.GetLineStatus += delegate (int r)
-                    {
-                        if (r < dataGridViewJournal.Rows.Count)
+                    try
+                    { 
+                        using (StreamWriter writer = new StreamWriter(frm.Path))
                         {
-                            HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                            return (dataGridViewJournal.Rows[r].Visible &&
-                                he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
-                                he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                            foreach(DataGridViewRow dgvr in dataGridViewJournal.Rows)
+                            {
+                                HistoryEntry he = dgvr.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                                if (dgvr.Visible && he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 && he.EventTimeLocal.CompareTo(frm.EndTime) <= 0)
+                                {
+                                    string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
+                                    forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
+                                    writer.Write(forExport);
+                                    writer.WriteLine();
+                                }
+                            }
                         }
-                        else
-                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
-                    };
-
-                    grd.GetLine += delegate (int r)
-                    {
-                        HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                        DataGridViewRow rw = dataGridViewJournal.Rows[r];
-                        if (frm.ExportAsJournals)
-                        {
-                            return new Object[] { he.journalEntry.GetJson()?.ToString() };
-                        }
-                        else
-                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
-                    };
-
-                    grd.GetHeader += delegate (int c)
-                    {
-                        return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
-                    };
-
-                    if (grd.WriteCSV(frm.Path))
-                    {
                         if (frm.AutoOpen)
                             System.Diagnostics.Process.Start(frm.Path);
                     }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);   
+                    catch
+                    {
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+                else
+                {
+                    if (frm.SelectedIndex == 0)
+                    {
+                        BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                        grd.SetCSVDelimiter(frm.Comma);
+                        grd.GetLineStatus += delegate (int r)
+                        {
+                            if (r < dataGridViewJournal.Rows.Count)
+                            {
+                                HistoryEntry he = dataGridViewJournal.Rows[r].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                                return (dataGridViewJournal.Rows[r].Visible &&
+                                    he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 &&
+                                    he.EventTimeLocal.CompareTo(frm.EndTime) <= 0) ? BaseUtils.CSVWriteGrid.LineStatus.OK : BaseUtils.CSVWriteGrid.LineStatus.Skip;
+                            }
+                            else
+                                return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                        };
+
+                        grd.GetLine += delegate (int r)
+                        {
+                            DataGridViewRow rw = dataGridViewJournal.Rows[r];
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[2].Value, rw.Cells[3].Value };
+                        };
+
+                        grd.GetHeader += delegate (int c)
+                        {
+                            return (c < 3 && frm.IncludeHeader) ? dataGridViewJournal.Columns[c + ((c > 0) ? 1 : 0)].HeaderText : null;
+                        };
+
+                        if (grd.WriteCSV(frm.Path))
+                        {
+                            if (frm.AutoOpen)
+                                System.Diagnostics.Process.Start(frm.Path);
+                        }
+                        else
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);  
+                    }
                 }
             }
         }
