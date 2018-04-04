@@ -50,6 +50,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.buttonExportReport = new ExtendedControls.ButtonExt();
             this.buttonExportToImage = new ExtendedControls.ButtonExt();
             this.checkBoxLegend = new ExtendedControls.CheckBoxCustom();
             this.checkBoxDotSize = new ExtendedControls.CheckBoxCustom();
@@ -75,7 +76,6 @@ namespace EDDiscovery.UserControls
             this.sysVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.plotView = new OxyPlot.WindowsForms.PlotView();
             this.reportView = new ExtendedControls.RichTextBoxScroll();
-            this.buttonExportReport = new ExtendedControls.ButtonExt();
             this.panelTop.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
@@ -156,6 +156,19 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(333, 26);
             this.panelTop.TabIndex = 25;
+            // 
+            // buttonExportReport
+            // 
+            this.buttonExportReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExportReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExportReport.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
+            this.buttonExportReport.Location = new System.Drawing.Point(242, 0);
+            this.buttonExportReport.Name = "buttonExportReport";
+            this.buttonExportReport.Size = new System.Drawing.Size(24, 24);
+            this.buttonExportReport.TabIndex = 30;
+            this.toolTip1.SetToolTip(this.buttonExportReport, "Export to Excel");
+            this.buttonExportReport.UseVisualStyleBackColor = true;
+            this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
             // 
             // buttonExportToImage
             // 
@@ -412,19 +425,7 @@ namespace EDDiscovery.UserControls
             this.reportView.TabIndex = 32;
             this.reportView.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.reportView.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            // 
-            // buttonExportReport
-            // 
-            this.buttonExportReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExportReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportReport.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
-            this.buttonExportReport.Location = new System.Drawing.Point(242, 0);
-            this.buttonExportReport.Name = "buttonExportReport";
-            this.buttonExportReport.Size = new System.Drawing.Size(24, 24);
-            this.buttonExportReport.TabIndex = 30;
-            this.toolTip1.SetToolTip(this.buttonExportReport, "Export to Excel");
-            this.buttonExportReport.UseVisualStyleBackColor = true;
-            this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
+            this.reportView.WordWrap = false;
             // 
             // UserControlPlot
             // 

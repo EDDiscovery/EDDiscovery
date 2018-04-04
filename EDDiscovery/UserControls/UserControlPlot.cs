@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             dataGridList.Visible = false;
-            reportView.Visible = false;
+            reportView.Visible = false;                        
         }
 
         const double defaultmaximumradarradius = 50;
@@ -60,6 +60,7 @@ namespace EDDiscovery.UserControls
         public double prevX = 0.0;
         public double prevY = 0.0;
         public double prevZ = 0.0;
+        private string dataOutputDir;
 
         public override void Init()
         {
@@ -81,8 +82,8 @@ namespace EDDiscovery.UserControls
             checkBoxDotSize.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotDepth", true);
             checkBoxLegend.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotLegend", true);
 
+            dataOutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
             
-
             computer = new StarDistanceComputer();
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
@@ -186,7 +187,7 @@ namespace EDDiscovery.UserControls
             var curZ = currentSystem.Z;
 
             // Title of the report           
-            reportView.AppendText("\nSystems around " + currentSystemName + ", between " + textMinRadius.Value.ToString()  + " and " + textMaxRadius.Value.ToString() + ": " + csl.Count.ToString() + "\n");
+            reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
             
             if (csl.Count() > 0)
             {       
@@ -373,23 +374,7 @@ namespace EDDiscovery.UserControls
         {
             if (sysName.Equals(e.Column) && sysX.Equals(e.Column) && sysY.Equals(e.Column) && sysZ.Equals(e.Column))
                 e.SortDataGridViewColumnDate();
-        }
-
-        
-        private void buttonExportToImage_Click(object sender, EventArgs e)
-        {            
-            string FileName = "Plot around " + currentSystemName + " " + " view - in range " + textMinRadius.Value.ToString() + "Ly to " + textMaxRadius.Value.ToString() + "Ly.png";
-            string AddPAth = currentSystemName;
-            string screenshotsDirdefault = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Plots");
-
-            string OutputPath = Path.Combine(screenshotsDirdefault, AddPAth);
-            System.IO.Directory.CreateDirectory(OutputPath);
-
-            string FilePath = Path.Combine(OutputPath, FileName);            
-
-            //chartBubblePlot.SaveImage(FilePath, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
-           
-        }
+        }                       
 
         private void comboBoxView_EnabledChanged(object sender, EventArgs e)
         {
@@ -430,10 +415,48 @@ namespace EDDiscovery.UserControls
                 reportView.Visible = true;
             }
         }
+                
+        private void buttonExportToImage_Click(object sender, EventArgs e)
+        {
+            //Plots
+            string plotsDir = Path.Combine(dataOutputDir, "Plots");
+            string AddPAth = currentSystemName;
+
+            string FileName = "Plot around " + currentSystemName + " " + " view - in range " + textMinRadius.Value.ToString() + "Ly to " + textMaxRadius.Value.ToString() + "Ly.png";
+            string OutputPath = Path.Combine(plotsDir, AddPAth);
+            System.IO.Directory.CreateDirectory(OutputPath);
+
+            string FilePath = Path.Combine(OutputPath, FileName);
+            
+            //plotView.SaveImage(FilePath, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+            
+        }
 
         private void buttonExportReport_Click(object sender, EventArgs e)
         {
-            
+            if (reportView.Text.ToString() != null)
+            {
+                try
+                {
+
+                    string reportsDir = Path.Combine(dataOutputDir, "Reports");
+                    string systemPath = currentSystemName;
+                    string FileName = "Report";
+                    string FilePath = Path.Combine(reportsDir, systemPath, FileName.AddSuffixToFilename(".txt"));
+                    File.Create(FilePath);
+                                        
+                    // Create a string array with the lines of text
+                    string[] lines = { "First line", "Second line", "Third line" };
+                                        
+                    // Write the string array to the output file
+                    using (StreamWriter outputFile = new StreamWriter(FilePath))
+                    {
+                        foreach (string line in lines)
+                            outputFile.WriteLine(line);
+                    }                    
+                }
+                catch { }                
+            }            
         }
     }    
 }
