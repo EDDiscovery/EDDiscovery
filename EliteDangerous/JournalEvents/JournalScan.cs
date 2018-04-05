@@ -765,6 +765,7 @@ namespace EliteDangerousCore.JournalEvents
                     
                     case EDPlanet.Metal_rich_body:
                         kValue = 52292;
+                        if (Terraformable) { kBonus = 254229; }
                         break;
                     case EDPlanet.High_metal_content_body:
                     case EDPlanet.Sudarsky_class_II_gas_giant:
