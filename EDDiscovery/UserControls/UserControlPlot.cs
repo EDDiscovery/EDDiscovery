@@ -49,9 +49,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             dataGridList.Visible = false;
-            reportView.Visible = false;                        
+            reportView.Visible = false;
         }
-
+        
         const double defaultmaximumradarradius = 50;
         int maxitems = 500;
 
@@ -109,8 +109,8 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             KickComputation(uctg.GetCurrentHistoryEntry);           
-        }              
-
+        }
+        
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
         {
             KickComputation(he);
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillPlot(list, sys);
         }
-                
+        
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
             // debug
@@ -158,154 +158,87 @@ namespace EDDiscovery.UserControls
 
             SetControlText("2D Plot of systems in range from " + currentSystem.Name);
 
+            var pointSize = 3;
+            var pointColor = 80;
+
             // initializing the plot
             var model = new PlotModel { Title = "Plot around " + currentSystem.Name };
             this.plotView.Model = model;
 
-            // series
-            var currentSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Red, TrackerFormatString = currentSystemName.ToString() };
-            var lastoneSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Purple };
-            var visitedSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.RoyalBlue };
-            var inrangeSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerFill = OxyColors.Yellow };
+            // Define defaults properties of the series
+            var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize };
 
-            // adding the series to the plot
-            model.Series.Add(inrangeSeries);
-            model.Series.Add(visitedSeries);
-            model.Series.Add(currentSeries);
-            model.Series.Add(lastoneSeries);
+            // Add the series
+            model.Series.Add(scatterSeries);
 
-            // axes
-            model.Axes.Add(new LinearAxis { Position = AxisPosition.Left });
-            model.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom });
-                        
-            // position the current system in the center of the references coordinates
-            currentSeries.Points.Add(new ScatterPoint(0, 0, 5));
-
-            // get the coordinates of the current system, to properly calculate the distances
-            var curX = currentSystem.X;
-            var curY = currentSystem.Y;
-            var curZ = currentSystem.Z;
-
+            // Axes
+            // Create a range of colors, to properly visualize distinct properties, such as visited state, etc..
+            //model.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.HueDistinct(10)});
+            
+            // Draw the current system
+            scatterSeries.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, 1000));
+            
             // Title of the report           
             reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
-            
+
+            // Fill with some information for the report                    
+            //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
+            reportView.AppendText("\nCreated on:" + currentSystem.CreateDate);
+            reportView.AppendText("\nNotes:" + currentSystem.SystemNote+ "\n");
+
+            // If the are any system inside the defined range...
             if (csl.Count() > 0)
-            {       
-                // debug
-                //debugView.AppendText("\n\nStart to iterate though the list.");
-                
-                // iterate through each system in the list
+            {   
+                // ...then iterate through each system in the list:
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
-                {
-                    // Created on date
-                    //debugView.AppendText("\nDate: \nCreated on " + tvp.Value.CreateDate.ToString());
-                    // Updated on date
-                    //debugView.AppendText("\nUpdated on " + tvp.Value.UpdateDate.ToString());
+                {   
+                    // get the coordinates of each system in range;
+                    var sysX = tvp.Value.X;
+                    var sysY = tvp.Value.Y;
+                    var sysZ = tvp.Value.Z;
 
-                    // name it
-                    var sysName = tvp.Value.Name;
+                    // count the total visits for each system;
+                    int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
 
-                    // for each system that is not the current center system, do:
-                    if (tvp.Value.Name != currentSystem.Name)
-                    {                        
-                        // get the coordinates of each system in range
-                        var sysX = tvp.Value.X;
-                        var sysY = tvp.Value.Y;
-                        var sysZ = tvp.Value.Z;
+                    // calculate the average distance;
+                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
+                    
+                    // print information on each member of the list;
+                    reportView.AppendText("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
+                    reportView.AppendText("\nCoordinates: " + sysX + ", " + sysY + ", " + sysZ);
+                                        
+                    // Then, populate the Grid with the systems in range
+                    if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value)
+                    {
+                        // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
+                        object[] plotobj = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
+                        int rowindex = dataGridList.Rows.Add(plotobj);
+                        dataGridList.Rows[rowindex].Tag = tvp.Value;
 
-                        // Information on each member of the list
-                        reportView.AppendText("\n" + tvp.Value.Name.ToString());
-                        reportView.AppendText("\nCoordinates: " + sysX + ", " + sysY + ", " + sysZ);
-
-                        // Count the total visits for each system
-                        int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
-                                                
-                        // calculate the distance
-                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                                                
-                        // calculate the distance of each coordinate
-                        double dx = curX - sysX;
-                        double dy = curY - sysY;
-                        double dz = curZ - sysZ;                        
-
-                        // Populate the List with the systems in range
-                        if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value)
-                        {                            
-                            // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
-                            object[] rowobj = { tvp.Value.Name, $"{dx:0.00}", $"{dy:0.00}", $"{dz:0.00}", $"{visits:n0}" };
-                            int rowindex = dataGridList.Rows.Add(rowobj);
-                            dataGridList.Rows[rowindex].Tag = tvp.Value;
-
-                            // Iterate through the list, and plot each system
-                            foreach (object element in rowobj)
+                        // Assign each system to the correct color, depending of its state: 
+                        // visited; lastone; inrange (not visited).
+                        if (visits > 0)
+                        {
+                            // is visited
+                            if (tvp.Value.Name != previousSystemName)
                             {
-                                if (element != null)
-                                {   
-                                    if (tvp.Value.Name == previousSystemName)
-
-                                    // Last visited system
-                                    {
-                                        // Previous system coordinates, distances and label
-                                        dx = Convert.ToInt32(currentSystem.X - prevX) * -1;
-                                        dy = Convert.ToInt32(currentSystem.Y - prevY) * -1;
-                                        dz = Convert.ToInt32(currentSystem.Z - prevZ) * -1;
-                                    }
-                                    else
-                                    {
-                                        dx = Convert.ToInt32(dx) * -1;
-                                        dy = Convert.ToInt32(dy) * -1;
-                                        dz = Convert.ToInt32(dz) * -1;
-                                    }
-
-                                    var coord1 = 0.0;
-                                    var coord2 = 0.0;
-                                    var coord3 = 0.0;
-
-                                    string s = comboBoxView.SelectedItem.ToString();
-                                    if (s == "Top")
-                                    {
-                                        coord1 = dx;
-                                        coord2 = dy;
-                                        coord3 = dz;
-                                    }
-                                    else if (s == "Front")
-                                    {
-                                        coord1 = dx;
-                                        coord2 = dz;
-                                        coord3 = dy;
-                                    }
-                                    else if (s == "Side")
-                                    {
-                                        coord1 = dz;
-                                        coord2 = dy;
-                                        coord3 = dx;
-                                    }
-
-                                    // assign the correct series for each state: visited; last visited; non visited.
-                                    if (visits > 0)
-                                    {
-                                        // is visited
-                                        if (tvp.Value.Name != previousSystemName)
-                                        {
-                                            visitedSeries.Points.Add(new ScatterPoint(coord1, coord2));
-                                            visitedSeries.TrackerFormatString = sysName;
-                                        }
-                                        // is visited, and is the last visited system
-                                        else if (tvp.Value.Name == previousSystemName)
-                                        {
-                                            lastoneSeries.Points.Add(new ScatterPoint(coord1, coord2));
-                                            lastoneSeries.TrackerFormatString = sysName;
-                                        }
-                                    }
-                                    else
-                                    // is not visited yet
-                                    {
-                                        inrangeSeries.Points.Add(new ScatterPoint(coord1, coord2));
-                                        inrangeSeries.TrackerFormatString = sysName;
-                                    }                                    
-                                }                                
-                            }                                                        
+                                pointColor = 600;
+                            }
+                            // is visited, and is the last visited system
+                            else if (tvp.Value.Name == previousSystemName)
+                            {
+                                pointColor = 100;
+                            }
                         }
+                        else
+                        // is not visited yet
+                        {
+                            pointColor = 800;
+                        }
+
+                        // Draw each point in the Plot                        
+                        scatterSeries.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, pointColor, plotobj[0].ToString()));
+                        scatterSeries.TrackerFormatString = "NAME \n{1}: {2:0.###}, {3}: {4:0.###}, Zcoord";                         
                     }
 
                     // debug
@@ -313,7 +246,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // debug
-                //debugView.AppendText("\n\nPlot completed.");
+                reportView.AppendText("\n\nReport created on " + DateTime.Now.ToString());
             }
         }
              
@@ -415,20 +348,26 @@ namespace EDDiscovery.UserControls
                 reportView.Visible = true;
             }
         }
-                
+
         private void buttonExportToImage_Click(object sender, EventArgs e)
         {
-            //Plots
-            string plotsDir = Path.Combine(dataOutputDir, "Plots");
-            string AddPAth = currentSystemName;
+            try
+            {
+                //Plots
+                string plotsDir = Path.Combine(dataOutputDir, "Plots");
+                string systemPath = currentSystemName;
+                string FilePath = Path.Combine(plotsDir, systemPath);
+                File.Create(FilePath);
 
-            string FileName = "Plot around " + currentSystemName + " " + " view - in range " + textMinRadius.Value.ToString() + "Ly to " + textMaxRadius.Value.ToString() + "Ly.png";
-            string OutputPath = Path.Combine(plotsDir, AddPAth);
-            System.IO.Directory.CreateDirectory(OutputPath);
+                string FileName = Path.Combine(FilePath, "Plot".AddSuffixToFilename(".png"));
 
-            string FilePath = Path.Combine(OutputPath, FileName);
-            
-            //plotView.SaveImage(FilePath, System.Windows.Forms.DataVisualization.Charting.ChartImageFormat.Png);
+                var pngExporter = new PngExporter { Width = 600, Height = 600, Background = OxyColors.White };
+                pngExporter.ExportToFile(plotView.Model, FileName);
+            }
+            catch
+            {
+            	
+            }
             
         }
 

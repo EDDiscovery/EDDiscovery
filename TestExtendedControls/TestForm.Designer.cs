@@ -107,6 +107,7 @@
             this.textBoxDouble2 = new ExtendedControls.NumberBoxDouble();
             this.numberBoxLong0 = new ExtendedControls.NumberBoxLong();
             this.numberBoxLong1 = new ExtendedControls.NumberBoxLong();
+            this.buttonPlot = new System.Windows.Forms.Button();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -513,7 +514,7 @@
             this.customDateTimePicker3.BorderColor = System.Drawing.Color.Maroon;
             this.customDateTimePicker3.BorderColorScaling = 0.5F;
             this.customDateTimePicker3.Checked = false;
-            this.customDateTimePicker3.CustomFormat = "HH:mm:ss";
+            this.customDateTimePicker3.CustomFormat = "h:mm:ss tt";
             this.customDateTimePicker3.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.customDateTimePicker3.Location = new System.Drawing.Point(392, 770);
             this.customDateTimePicker3.Name = "customDateTimePicker3";
@@ -531,7 +532,7 @@
             this.customDateTimePicker1.BorderColor = System.Drawing.Color.Maroon;
             this.customDateTimePicker1.BorderColorScaling = 0.5F;
             this.customDateTimePicker1.Checked = false;
-            this.customDateTimePicker1.CustomFormat = "HH:mm:ss";
+            this.customDateTimePicker1.CustomFormat = "h:mm:ss tt";
             this.customDateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.customDateTimePicker1.Location = new System.Drawing.Point(392, 687);
             this.customDateTimePicker1.Name = "customDateTimePicker1";
@@ -549,7 +550,7 @@
             this.customDateTimePicker2.BorderColor = System.Drawing.Color.Transparent;
             this.customDateTimePicker2.BorderColorScaling = 0.5F;
             this.customDateTimePicker2.Checked = false;
-            this.customDateTimePicker2.CustomFormat = "dd MMMM yyyy";
+            this.customDateTimePicker2.CustomFormat = "dddd, MMMM d, yyyy";
             this.customDateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.customDateTimePicker2.Location = new System.Drawing.Point(392, 744);
             this.customDateTimePicker2.Name = "customDateTimePicker2";
@@ -567,7 +568,7 @@
             this.dateTimePicker1.BorderColor = System.Drawing.Color.Transparent;
             this.dateTimePicker1.BorderColorScaling = 0.5F;
             this.dateTimePicker1.Checked = true;
-            this.dateTimePicker1.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePicker1.CustomFormat = "dddd, MMMM d, yyyy";
             this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Long;
             this.dateTimePicker1.Location = new System.Drawing.Point(392, 718);
             this.dateTimePicker1.Name = "dateTimePicker1";
@@ -611,6 +612,7 @@
             this.autoCompleteTextBox2.BorderColor = System.Drawing.Color.Gold;
             this.autoCompleteTextBox2.BorderColorScaling = 0.5F;
             this.autoCompleteTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.autoCompleteTextBox2.ClearOnFirstChar = false;
             this.autoCompleteTextBox2.ControlBackground = System.Drawing.SystemColors.Control;
             this.autoCompleteTextBox2.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.autoCompleteTextBox2.DropDownBorderColor = System.Drawing.Color.Green;
@@ -642,6 +644,7 @@
             this.autoCompleteTextBox1.BorderColor = System.Drawing.Color.Gold;
             this.autoCompleteTextBox1.BorderColorScaling = 0.5F;
             this.autoCompleteTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.autoCompleteTextBox1.ClearOnFirstChar = false;
             this.autoCompleteTextBox1.ControlBackground = System.Drawing.SystemColors.Control;
             this.autoCompleteTextBox1.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.autoCompleteTextBox1.DropDownBorderColor = System.Drawing.Color.Green;
@@ -864,6 +867,7 @@
             this.richTextBoxScroll1.TabIndex = 30;
             this.richTextBoxScroll1.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScroll1.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxScroll1.WordWrap = false;
             // 
             // vScrollBarCustom2
             // 
@@ -950,6 +954,7 @@
             this.comboBoxCustom2.BorderColor = System.Drawing.Color.Red;
             this.comboBoxCustom2.ButtonColorScaling = 0.5F;
             this.comboBoxCustom2.DataSource = null;
+            this.comboBoxCustom2.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustom2.DisplayMember = "";
             this.comboBoxCustom2.DropDownBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.comboBoxCustom2.DropDownHeight = 100;
@@ -968,6 +973,7 @@
             this.comboBoxCustom2.Size = new System.Drawing.Size(229, 21);
             this.comboBoxCustom2.TabIndex = 15;
             this.comboBoxCustom2.Text = "EDCommander demo";
+            this.comboBoxCustom2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustom2.ValueMember = "";
             // 
             // comboBoxCustom1
@@ -977,6 +983,7 @@
             this.comboBoxCustom1.BorderColor = System.Drawing.Color.Red;
             this.comboBoxCustom1.ButtonColorScaling = 0.5F;
             this.comboBoxCustom1.DataSource = null;
+            this.comboBoxCustom1.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustom1.DisplayMember = "";
             this.comboBoxCustom1.DropDownBackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.comboBoxCustom1.DropDownHeight = 100;
@@ -995,6 +1002,7 @@
             this.comboBoxCustom1.Size = new System.Drawing.Size(229, 21);
             this.comboBoxCustom1.TabIndex = 15;
             this.comboBoxCustom1.Text = "EDCommander demo";
+            this.comboBoxCustom1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustom1.ValueMember = "";
             // 
             // tabControl1
@@ -1081,6 +1089,7 @@
             this.textBoxBorder1.BorderColor = System.Drawing.Color.Gold;
             this.textBoxBorder1.BorderColorScaling = 0.5F;
             this.textBoxBorder1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorder1.ClearOnFirstChar = false;
             this.textBoxBorder1.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorder1.InErrorCondition = false;
             this.textBoxBorder1.Location = new System.Drawing.Point(18, 305);
@@ -1124,10 +1133,10 @@
             this.textBoxDouble1.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDouble1.BorderColorScaling = 0.5F;
             this.textBoxDouble1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDouble1.ClearOnFirstChar = false;
             this.textBoxDouble1.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDouble1.DelayBeforeNotification = 1000;
             this.textBoxDouble1.Format = "0.###";
-            this.textBoxDouble1.FormatCulture = new System.Globalization.CultureInfo("en-GB");
             this.textBoxDouble1.InErrorCondition = false;
             this.textBoxDouble1.Location = new System.Drawing.Point(977, 70);
             this.textBoxDouble1.Maximum = 1.7976931348623157E+308D;
@@ -1152,10 +1161,10 @@
             this.textBoxDouble2.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDouble2.BorderColorScaling = 0.5F;
             this.textBoxDouble2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDouble2.ClearOnFirstChar = false;
             this.textBoxDouble2.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDouble2.DelayBeforeNotification = 1000;
             this.textBoxDouble2.Format = "0.###";
-            this.textBoxDouble2.FormatCulture = new System.Globalization.CultureInfo("en-GB");
             this.textBoxDouble2.InErrorCondition = false;
             this.textBoxDouble2.Location = new System.Drawing.Point(977, 96);
             this.textBoxDouble2.Maximum = 1.7976931348623157E+308D;
@@ -1180,10 +1189,10 @@
             this.numberBoxLong0.BorderColor = System.Drawing.Color.Transparent;
             this.numberBoxLong0.BorderColorScaling = 0.5F;
             this.numberBoxLong0.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxLong0.ClearOnFirstChar = false;
             this.numberBoxLong0.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxLong0.DelayBeforeNotification = 0;
             this.numberBoxLong0.Format = "D";
-            this.numberBoxLong0.FormatCulture = new System.Globalization.CultureInfo("en-GB");
             this.numberBoxLong0.InErrorCondition = false;
             this.numberBoxLong0.Location = new System.Drawing.Point(977, 23);
             this.numberBoxLong0.Maximum = ((long)(9223372036854775807));
@@ -1209,10 +1218,10 @@
             this.numberBoxLong1.BorderColor = System.Drawing.Color.Transparent;
             this.numberBoxLong1.BorderColorScaling = 0.5F;
             this.numberBoxLong1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.numberBoxLong1.ClearOnFirstChar = false;
             this.numberBoxLong1.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxLong1.DelayBeforeNotification = 0;
             this.numberBoxLong1.Format = "D";
-            this.numberBoxLong1.FormatCulture = new System.Globalization.CultureInfo("en-GB");
             this.numberBoxLong1.InErrorCondition = false;
             this.numberBoxLong1.Location = new System.Drawing.Point(977, 44);
             this.numberBoxLong1.Maximum = ((long)(9223372036854775807));
@@ -1230,12 +1239,23 @@
             this.numberBoxLong1.WordWrap = true;
             this.numberBoxLong1.ValueChanged += new System.EventHandler(this.textBoxLong1_ValueChanged);
             // 
+            // buttonPlot
+            // 
+            this.buttonPlot.Location = new System.Drawing.Point(22, 770);
+            this.buttonPlot.Name = "buttonPlot";
+            this.buttonPlot.Size = new System.Drawing.Size(75, 23);
+            this.buttonPlot.TabIndex = 67;
+            this.buttonPlot.Text = "Plot";
+            this.buttonPlot.UseVisualStyleBackColor = true;
+            this.buttonPlot.Click += new System.EventHandler(this.buttonPlot_Click);
+            // 
             // TestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(1430, 986);
+            this.Controls.Add(this.buttonPlot);
             this.Controls.Add(this.numberBoxLong1);
             this.Controls.Add(this.numberBoxLong0);
             this.Controls.Add(this.textBoxDouble2);
@@ -1391,6 +1411,7 @@
         private ExtendedControls.NumberBoxDouble textBoxDouble2;
         private ExtendedControls.NumberBoxLong numberBoxLong0;
         private ExtendedControls.NumberBoxLong numberBoxLong1;
+        private System.Windows.Forms.Button buttonPlot;
     }
 }
 
