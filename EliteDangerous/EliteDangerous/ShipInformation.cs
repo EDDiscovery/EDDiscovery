@@ -21,6 +21,7 @@ using System.Text;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore
 {
@@ -35,9 +36,9 @@ namespace EliteDangerousCore
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
         public double FuelLevel { get; private set; }       // fuel level may be 0 not known
         public double FuelCapacity { get; private set; }    // fuel capacity may be 0 not known
-        public long HullValue;                              // may be 0, not known
-        public long ModulesValue;                           // may be 0, not known
-        public long Rebuy;                                  // may be 0, not known
+        public long HullValue { get; private set; }         // may be 0, not known
+        public long ModulesValue { get; private set; }      // may be 0, not known
+        public long Rebuy { get; private set; }             // may be 0, not known
 
         public enum SubVehicleType
         {
@@ -249,7 +250,8 @@ namespace EliteDangerousCore
                                 (fueltotal != 0 && fueltotal != FuelCapacity) ||
                                 (hullvalue != 0 && hullvalue != HullValue) ||
                                 (modulesvalue != 0 && modulesvalue != ModulesValue) ||
-                                (rebuy != 0 && rebuy != Rebuy ) )
+                                (rebuy != 0 && rebuy != Rebuy)
+                                )
             {
                 ShipInformation sm = this.ShallowClone();
 
@@ -410,6 +412,93 @@ namespace EliteDangerousCore
             return sb.ToString();
         }
 
+        public EliteDangerousCalculations.FSDSpec GetFSDSpec()          // may be null due to not having the info
+        {
+            foreach( var sm in Modules)
+            {
+                EliteDangerousCalculations.FSDSpec fsd = sm.Value.GetFSDSpec();
+                if (fsd != null)
+                    return fsd;
+            }
+
+            return null;
+        }
+
+        public double ModuleMass()
+        {
+            double mass = 0;
+            foreach (var sm in Modules)
+            {
+                ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetModuleProperties(sm.Value.ItemFD);
+                if (smd != null)
+                {
+                    mass += smd.mass;
+                    System.Diagnostics.Debug.WriteLine("{0} = {1}", sm.Value.ItemFD, smd.mass);
+                }
+                    
+            }
+            return mass;
+        }
+
+        public double HullMass()
+        {
+            ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "HullMass");
+            return md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+        }
+
+        public double FuelWarningPercent
+        {
+            get { return SQLiteDBClass.GetSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", 0); }
+            set { SQLiteDBClass.PutSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", value); }
+        }
+
+        public string Manufacturer
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Manu");
+                return md != null ? (md as ShipModuleData.ShipInfoString).str : "Unknown";
+            }
+        }
+
+        public int Boost
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Boost");
+                return md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+            }
+        }
+
+        public int Speed
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Speed");
+                return md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+            }
+        }
+
+        public string PadSize
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Speed");
+                if (md != null)
+                    return "Unknown";
+                else
+                {
+                    int i = (md as ShipModuleData.ShipInfoInt).value;
+                    if (i == 1)
+                        return "Small";
+                    else if (i == 2)
+                        return "Medium";
+                    else 
+                        return "Large";
+                }
+            }
+        }
+
         public bool CheckMinimumJSONModules()
         {
             // these are required slots..
@@ -440,7 +529,7 @@ namespace EliteDangerousCore
             {
                 JObject module = new JObject();
 
-                int edid = ModuleEDID.Instance.CalcID(sm.ItemFD, ShipFD);
+                int edid = ShipModuleData.Instance.CalcID(sm.ItemFD, ShipFD);
 
                 if (edid == 0)      // 0 is error
                 {
