@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewModules.RowTemplate.Height = 26;
 
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -107,6 +107,8 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry last_he = null;
+        ShipInformation last_si = null;
+
         private void Display(HistoryEntry he, HistoryList hl)
         {
             if ( comboBoxShips.Items.Count == 0 )
@@ -125,7 +127,9 @@ namespace EDDiscovery.UserControls
 
             LabelVehicleText.Visible = false;
             labelVehicle.Visible = false;
-            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = false;
+            buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
+
+            last_si = null;     // no ship info
 
             if (comboBoxShips.Text.Contains("Stored"))
             {
@@ -160,8 +164,13 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
-        private void Display(ShipInformation si)
+        private void Display(ShipInformation si)     //cargo -1 if not travel history entry
         {
+            last_si = si;
+
+            double hullmass = si.HullMass();
+            double modulemass = si.ModuleMass();
+
             foreach (string key in si.Modules.Keys)
             {
                 EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
@@ -174,7 +183,7 @@ namespace EDDiscovery.UserControls
                         ammo += "/" + sm.AmmoClip.ToString();
                 }
 
-                string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) : "";
+                string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToStringInvariant("N0") : "";
 
                 string eng = "";
                 if (sm.Engineering != null)
@@ -184,6 +193,16 @@ namespace EDDiscovery.UserControls
                 // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
                 dataGridViewModules.Rows.Add(rowobj);
 
+                DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
+
+                EliteDangerousCalculations.FSDSpec fsdspec = sm.GetFSDSpec();
+                if (fsdspec != null)
+                {
+                    rw.Cells[1].ToolTipText = rw.Cells[0].ToolTipText = fsdspec.ToString();
+                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity/2);
+                    AddInfoLine("FSD Max Jump", ji.avgsinglejumpnocargo.ToStringInvariant("N1") + "ly", "Half tank, no cargo");
+                    AddInfoLine("FSD Max Range", ji.maxjumprange.ToStringInvariant("N1") + "ly", "Full Tank, no cargo");
+                }
             }
 
             if (si.HullValue > 0)
@@ -195,17 +214,45 @@ namespace EDDiscovery.UserControls
             if (si.Rebuy > 0)
                 AddValueLine("Rebuy Cost", si.Rebuy);
 
+            AddInfoLine("Mass Hull", hullmass.ToStringInvariant("N1") + "t");
+            AddInfoLine("Mass Unladen", (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            AddInfoLine("Mass Modules", modulemass.ToStringInvariant("N1") + "t", "Unengineered");
+
+            if ( si.FuelCapacity > 0 )
+                AddInfoLine("Fuel Capacity", si.FuelCapacity.ToStringInvariant("N1") + "t");
+            if ( si.FuelLevel > 0 )
+                AddInfoLine("Fuel Level", si.FuelLevel.ToStringInvariant("N1") + "t");
+
+            double fuelwarn = si.FuelWarningPercent;
+            AddInfoLine("Fuel Warning %", fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off");
+
+            AddInfoLine("Pad Size", si.PadSize);
+            AddInfoLine("Main Thruster Speed", si.Speed.ToStringInvariant(), "Unengineered");
+            AddInfoLine("Main Thruster Boost", si.Boost.ToStringInvariant(), "Unengineered");
+
+            int cc = si.CargoCapacity();
+            if ( cc > 0 )
+                AddInfoLine("Cargo Capacity", cc.ToStringInvariant("N0") + "t");
+
+
             LabelVehicleText.Visible = labelVehicle.Visible = true;
-            labelVehicle.Text = si.ShipFullInfo();
+            labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
+            buttonExtConfigure.Visible = true;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
         }
 
-        void AddValueLine(string s, long v )
+        void AddValueLine(string s, long v, string opt = "")
         {
-            object[] rowobj = { s, "", "", "", "", v.ToString("N0"), "" };
+            object[] rowobj = { s, opt, "", "", "", v.ToString("N0"), "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
-        
+
+        void AddInfoLine(string s, string v, string opt = "")
+        {
+            object[] rowobj = { s, opt, "", v , "", "", "" };
+            dataGridViewModules.Rows.Add(rowobj);
+        }
+
         #endregion
 
         #region Layout
@@ -293,6 +340,50 @@ namespace EDDiscovery.UserControls
                                     s, new int[] { 0, 100 });
                     info.ShowDialog(FindForm());
                 }
+            }
+        }
+
+        private void buttonExtConfigure_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.Assert(last_si != null);           // must be set for this configure button to be visible
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+            int ctrlleft = 150;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:", new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)") { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK", new Point(width - 100, 70), new Size(80, 24), "Press to Accept"));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(width - 200, 70), new Size(80, 24), "Press to Cancel"));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if ( controlname == "OK" )
+                {
+                    double? v3 = f.GetDouble("FuelWarning");
+                    if ( v3.HasValue)
+                    {
+                        f.DialogResult = DialogResult.OK;
+                        f.Close();
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid", "Warning - Value", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else if ( controlname == "Cancel")
+                {
+                    f.DialogResult = DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 110), new Point(-999, -999), "Ship Configure");
+
+            if (res == DialogResult.OK)
+            {
+                last_si.FuelWarningPercent = f.GetDouble("FuelWarning").Value;
+                Display();
             }
         }
 

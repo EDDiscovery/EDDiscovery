@@ -285,12 +285,6 @@
     <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
     <Compile Include="PanelAndPopOuts.cs" />
-    <Compile Include="Forms\ShipDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ShipDetails.Designer.cs">
-      <DependentUpon>ShipDetails.cs</DependentUpon>
-    </Compile>
     <Compile Include="IDiscoveryController.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
@@ -618,9 +612,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SetNoteForm.resx">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ShipDetails.resx">
-      <DependentUpon>ShipDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserControlForm.resx">
       <DependentUpon>UserControlForm.cs</DependentUpon>

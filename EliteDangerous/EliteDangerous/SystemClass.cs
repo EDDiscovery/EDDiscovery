@@ -122,5 +122,10 @@ namespace EliteDangerousCore
                        State != EDState.Unknown || Security != EDSecurity.Unknown || PrimaryEconomy != EDEconomy.Unknown || (Faction != null && Faction.Length>0); 
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0} @ {1:N1},{2:N1},{3:N1}", Name, X, Y, Z);
+        }
     }
 }

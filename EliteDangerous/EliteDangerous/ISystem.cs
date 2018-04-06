@@ -160,5 +160,6 @@ namespace EliteDangerousCore
         string CommanderUpdate { get; set; }
         SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
         string SystemNote { get; set; }
+
     }
 }

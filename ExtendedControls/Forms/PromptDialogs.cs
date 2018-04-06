@@ -152,6 +152,11 @@ namespace ExtendedControls
             public string comboboxitems;        // fill in for combobox
             public Size? comboboxdropdownsize;  // may be null, fill in for combobox
             public string customdateformat;     // fill in for datetimepicker
+            public double numberboxdoubleminimum;   // for double box
+            public double numberboxdoublemaximum;
+            public long numberboxlongminimum;   // for long box
+            public long numberboxlongmaximum;
+            public string numberboxformat;      // for both number boxes
 
             public Control control; // used by Show  no need to set.
         }
@@ -213,7 +218,17 @@ namespace ExtendedControls
                 else if (c is ExtendedControls.CheckBoxCustom)
                     return (c as ExtendedControls.CheckBoxCustom).Checked ? "1" : "0";
                 else if (c is ExtendedControls.CustomDateTimePicker)
-                    return (c as ExtendedControls.CustomDateTimePicker).Value.ToString("yyyy/dd/MM HH:mm:ss",System.Globalization.CultureInfo.InvariantCulture);
+                    return (c as ExtendedControls.CustomDateTimePicker).Value.ToString("yyyy/dd/MM HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture);
+                else if (c is ExtendedControls.NumberBoxDouble)
+                {
+                    var cn = c as ExtendedControls.NumberBoxDouble;
+                    return cn.IsValid ? cn.Value.ToStringInvariant() : "INVALID";
+                }
+                else if (c is ExtendedControls.NumberBoxLong)
+                {
+                    var cn = c as ExtendedControls.NumberBoxLong;
+                    return cn.IsValid ? cn.Value.ToStringInvariant() : "INVALID";
+                }
                 else if (c is ExtendedControls.ComboBoxCustom)
                 {
                     ExtendedControls.ComboBoxCustom cb = c as ExtendedControls.ComboBoxCustom;
@@ -224,9 +239,33 @@ namespace ExtendedControls
             return null;
         }
 
+        public double? GetDouble(string controlname)     // Null if not valid
+        {
+            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase));
+            if (t != null)
+            {
+                var cn = t.control as ExtendedControls.NumberBoxDouble;
+                if (cn.IsValid)
+                    return cn.Value;
+            }
+            return null;
+        }
+
+        public long? GetLong(string controlname)     // Null if not valid
+        {
+            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase));
+            if (t != null)
+            {
+                var cn = t.control as ExtendedControls.NumberBoxLong;
+                if (cn.IsValid)
+                    return cn.Value;
+            }
+            return null;
+        }
+
         public DateTime? GetDateTime(string controlname)
         {
-            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase) );
+            Entry t = entries.Find(x => x.controlname.Equals(controlname, StringComparison.InvariantCultureIgnoreCase));
             if (t != null)
             {
                 CustomDateTimePicker c = t.control as CustomDateTimePicker;
@@ -261,6 +300,26 @@ namespace ExtendedControls
                         cb.Enabled = false;
                         cb.SelectedItem = value;
                         cb.Enabled = true;
+                        return true;
+                    }
+                }
+                else if (c is ExtendedControls.NumberBoxDouble)
+                {
+                    var cn = c as ExtendedControls.NumberBoxDouble;
+                    double? v = value.InvariantParseDoubleNull();
+                    if (v.HasValue)
+                    {
+                        cn.Value = v.Value;
+                        return true;
+                    }
+                }
+                else if (c is ExtendedControls.NumberBoxLong)
+                {
+                    var cn = c as ExtendedControls.NumberBoxLong;
+                    long? v = value.InvariantParseLongNull();
+                    if (v.HasValue)
+                    {
+                        cn.Value = v.Value;
                         return true;
                     }
                 }
@@ -302,6 +361,10 @@ namespace ExtendedControls
                 ctype = typeof(ExtendedControls.ComboBoxCustom);
             else if (type.Equals("datetime"))
                 ctype = typeof(ExtendedControls.CustomDateTimePicker);
+            else if (type.Equals("numberboxlong"))
+                ctype = typeof(ExtendedControls.NumberBoxLong);
+            else if (type.Equals("numberboxdouble"))
+                ctype = typeof(ExtendedControls.NumberBoxDouble);
             else
                 return "Unknown control type " + type;
 
@@ -343,6 +406,29 @@ namespace ExtendedControls
                 entry.comboboxitems = sp.LineLeft.Trim();
                 if (tip == null || entry.comboboxitems.Length == 0)
                     return "Missing paramters for combobox";
+            }
+
+            if (type.Contains("datetime"))
+            {
+                entry.customdateformat = sp.NextWord();
+            }
+
+            if (type.Contains("numberboxdouble"))
+            {
+                double? min = sp.NextWordComma().InvariantParseDoubleNull();
+                double? max = sp.NextWordComma().InvariantParseDoubleNull();
+                entry.numberboxdoubleminimum = min.HasValue ? min.Value : double.MinValue;
+                entry.numberboxdoublemaximum = max.HasValue ? max.Value : double.MaxValue;
+                entry.numberboxformat = sp.NextWordComma();
+            }
+
+            if (type.Contains("numberboxlong"))
+            {
+                long? min = sp.NextWordComma().InvariantParseLongNull();
+                long? max = sp.NextWordComma().InvariantParseLongNull();
+                entry.numberboxlongminimum = min.HasValue ? min.Value : long.MinValue;
+                entry.numberboxlongmaximum = max.HasValue ? max.Value : long.MaxValue;
+                entry.numberboxformat = sp.NextWordComma();
             }
 
             if (type.Contains("datetime"))
@@ -402,7 +488,7 @@ namespace ExtendedControls
                 ent.control = c;
                 c.Size = ent.size;
                 c.Location = ent.pos;
-                if (!(c is ExtendedControls.ComboBoxCustom || c is ExtendedControls.CustomDateTimePicker) )        // everything but get text
+                if (!(c is ExtendedControls.ComboBoxCustom || c is ExtendedControls.CustomDateTimePicker || c is ExtendedControls.NumberBoxDouble || c is ExtendedControls.NumberBoxLong) )        // everything but get text
                     c.Text = ent.text;
                 c.Tag = ent;     // point control tag at ent structure
                 outer.Controls.Add(c);
@@ -435,6 +521,28 @@ namespace ExtendedControls
                         Entry en = (Entry)(((Control)sender).Tag);
                         Trigger?.Invoke(logicalname, en.controlname, this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
+                }
+
+                if (c is ExtendedControls.NumberBoxDouble)
+                {
+                    ExtendedControls.NumberBoxDouble cb = c as ExtendedControls.NumberBoxDouble;
+                    cb.Minimum = ent.numberboxdoubleminimum;
+                    cb.Maximum = ent.numberboxdoublemaximum;
+                    double? v = ent.text.InvariantParseDoubleNull();
+                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
+                    if (ent.numberboxformat != null)
+                        cb.Format = ent.numberboxformat;
+                }
+
+                if (c is ExtendedControls.NumberBoxLong)
+                {
+                    ExtendedControls.NumberBoxLong cb = c as ExtendedControls.NumberBoxLong;
+                    cb.Minimum = ent.numberboxlongminimum;
+                    cb.Maximum = ent.numberboxlongmaximum;
+                    long? v = ent.text.InvariantParseLongNull();
+                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
+                    if (ent.numberboxformat != null)
+                        cb.Format = ent.numberboxformat;
                 }
 
                 if (c is ExtendedControls.CustomDateTimePicker)
