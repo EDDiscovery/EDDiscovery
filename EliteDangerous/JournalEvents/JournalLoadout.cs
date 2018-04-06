@@ -65,10 +65,10 @@ namespace EliteDangerousCore.JournalEvents
             public ShipModule()
             { }
 
-            public ShipModule(string s, string sfd, string i, string ifd, 
-                            bool? e, int? prior, int? ac, int? ah, double? health, long? value, 
+            public ShipModule(string s, string sfd, string i, string ifd,
+                            bool? e, int? prior, int? ac, int? ah, double? health, long? value,
                             double? power,
-                            JournalEngineerCraftBase.EngineeringData engineering )
+                            JournalEngineerCraftBase.EngineeringData engineering)
             {
                 Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; Enabled = e; Priority = prior; AmmoClip = ac; AmmoHopper = ah;
                 if (health.HasValue)
@@ -78,7 +78,7 @@ namespace EliteDangerousCore.JournalEvents
                 Engineering = engineering;
             }
 
-            public ShipModule(string s, string sfd, string i, string ifd, string l )
+            public ShipModule(string s, string sfd, string i, string ifd, string l)
             {
                 Slot = s; SlotFD = sfd; Item = i; ItemFD = ifd; LocalisedItem = l;
             }
@@ -91,7 +91,7 @@ namespace EliteDangerousCore.JournalEvents
                 return basics;  // Engineering is not needed, we have checked slots/items
             }
 
-            public bool Same(string item )
+            public bool Same(string item)
             {
                 return Item == item;
             }
@@ -107,11 +107,45 @@ namespace EliteDangerousCore.JournalEvents
             {
                 string pe = "";
                 if (Priority.HasValue)
-                    pe = "P" + (Priority.Value+1).ToString();
+                    pe = "P" + (Priority.Value + 1).ToString();
                 if (Enabled.HasValue)
                     pe += Enabled.Value ? "E" : "D";
 
                 return pe;
+            }
+
+            public EliteDangerousCalculations.FSDSpec GetFSDSpec()      // may be null - not found
+            {
+                if (IsFSDSlot)
+                    return EliteDangerousCalculations.FindFSD(ClassOf,RatingOf);     // may still be null
+
+                return null;
+            }
+
+            public bool IsFSDSlot { get { return SlotFD.Contains("FrameShiftDrive"); } }
+
+            public string RatingOf              // null if not rated
+            {
+                get
+                {
+                    int p = Item.IndexOf("Rating");
+                    if (p >= 0 && Item.Length > p + 7)
+                        return Item[p + 7] + "";
+                    else
+                        return null;
+                }
+            }
+
+            public int ClassOf                  // null if not classed
+            {
+                get
+                {
+                    int p = Item.IndexOf("Class");
+                    if (p >= 0 && Item.Length > p + 6)
+                        return Item[p + 6] - '0';
+                    else
+                        return 0;
+                }
             }
         }
 
@@ -191,8 +225,6 @@ namespace EliteDangerousCore.JournalEvents
                 detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item , "" , m.PE() );
             }
         }
-
-
-
     }
 }
+

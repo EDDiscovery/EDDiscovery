@@ -106,6 +106,13 @@ namespace NetLogEntry
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
+            else if (arg1.Equals("Corolismodule", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+
+                string ret = CorolisData.ProcessModules(allFiles);
+                Console.WriteLine(ret);
+            }
             else
             {
                 Journal.JournalEntry(arg1, args.Next, args, repeatdelay);
@@ -149,6 +156,7 @@ namespace NetLogEntry
                               "StatusMove <various paras see entry>\n" +
                               "Status <Status flags>...  multiple ones are: supercruise, landed, fight (see code)\n" +
                               "CorolisModules rootfolder - process corolis-data\\modules\\<folder>\n" +
+                              "CorolisModule name - process corolis-data\\modules\\<folder>\n" +
                               "CorolisShips rootfolder - process corolis-data\\ships\n"
                               );
 

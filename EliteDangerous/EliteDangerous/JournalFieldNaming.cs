@@ -90,6 +90,7 @@ namespace EliteDangerousCore
                 { "cutter",                     "Imperial Cutter" },
                 { "diamondback",                "Diamondback Scout" },
                 { "diamondbackxl",              "Diamondback Explorer" },
+                { "dolphin",                    "Dolphin" },
                 { "eagle",                      "Eagle" },
                 { "empire_courier",             "Imperial Courier" },
                 { "empire_eagle",               "Imperial Eagle" },
@@ -289,6 +290,7 @@ namespace EliteDangerousCore
                 s = s.Replace("Rating E", "Rating H").Replace("Rating D", "Rating G");
 
             //System.Diagnostics.Debug.WriteLine("PP Item " + x + " >> " + s);
+
             return s;
         }
 
@@ -304,7 +306,7 @@ namespace EliteDangerousCore
             if (s.StartsWith("hpt_"))
                 s = s.Replace("hpt_", "Hpt_");
             if (s.Contains("_armour_"))
-                s = s.Replace("_armour_", "_Armour_");
+                s = s.Replace("_Armour_", "_armour_");      // normalise Armour to now lower case.. as done in journals
             if (s.EndsWith("_name;"))
                 s = s.Substring(0, s.Length - 6);
 
@@ -318,7 +320,7 @@ namespace EliteDangerousCore
 
         static public string NormaliseFDShipName(string s)            // FD ship names.. tend to change case.. Fix
         {
-            s = ModuleEDID.Instance.NormaliseShipName(s);
+            s = ShipModuleData.Instance.NormaliseShipName(s);
             return s;
         }
 

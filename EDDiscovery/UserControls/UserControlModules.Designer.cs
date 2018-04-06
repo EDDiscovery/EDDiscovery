@@ -49,12 +49,13 @@ namespace EDDiscovery.UserControls
             this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ammo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonExtConfigure = new ExtendedControls.ButtonExt();
             this.buttonExtEDShipyard = new ExtendedControls.ButtonExt();
             this.buttonExtCoriolis = new ExtendedControls.ButtonExt();
             this.labelVehicle = new System.Windows.Forms.Label();
@@ -90,7 +91,7 @@ namespace EDDiscovery.UserControls
             this.SlotCol,
             this.ItemCol,
             this.ItemLocalised,
-            this.Ammo,
+            this.ItemInfo,
             this.BluePrint,
             this.Value,
             this.PriorityEnable});
@@ -124,13 +125,13 @@ namespace EDDiscovery.UserControls
             this.ItemLocalised.Name = "ItemLocalised";
             this.ItemLocalised.ReadOnly = true;
             // 
-            // Ammo
+            // ItemInfo
             // 
-            this.Ammo.FillWeight = 50F;
-            this.Ammo.HeaderText = "Ammo";
-            this.Ammo.MinimumWidth = 20;
-            this.Ammo.Name = "Ammo";
-            this.Ammo.ReadOnly = true;
+            this.ItemInfo.FillWeight = 50F;
+            this.ItemInfo.HeaderText = "Info";
+            this.ItemInfo.MinimumWidth = 20;
+            this.ItemInfo.Name = "ItemInfo";
+            this.ItemInfo.ReadOnly = true;
             // 
             // BluePrint
             // 
@@ -186,6 +187,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonExtConfigure);
             this.panelButtons.Controls.Add(this.buttonExtEDShipyard);
             this.panelButtons.Controls.Add(this.buttonExtCoriolis);
             this.panelButtons.Controls.Add(this.labelVehicle);
@@ -198,11 +200,23 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
             // 
+            // buttonExtConfigure
+            // 
+            this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Modules_Configure;
+            this.buttonExtConfigure.Location = new System.Drawing.Point(246, 3);
+            this.buttonExtConfigure.Name = "buttonExtConfigure";
+            this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtConfigure.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
+            this.buttonExtConfigure.UseVisualStyleBackColor = false;
+            this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
+            // 
             // buttonExtEDShipyard
             // 
             this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.Modules_EDShipYard;
-            this.buttonExtEDShipyard.Location = new System.Drawing.Point(285, 3);
+            this.buttonExtEDShipyard.Location = new System.Drawing.Point(306, 3);
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDShipyard.TabIndex = 29;
@@ -213,7 +227,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Modules_ShowOnCoriolis;
-            this.buttonExtCoriolis.Location = new System.Drawing.Point(255, 3);
+            this.buttonExtCoriolis.Location = new System.Drawing.Point(276, 3);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
             this.buttonExtCoriolis.TabIndex = 29;
@@ -224,7 +238,7 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(366, 9);
+            this.labelVehicle.Location = new System.Drawing.Point(402, 9);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
             this.labelVehicle.TabIndex = 28;
@@ -233,7 +247,7 @@ namespace EDDiscovery.UserControls
             // LabelVehicleText
             // 
             this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(319, 9);
+            this.LabelVehicleText.Location = new System.Drawing.Point(355, 9);
             this.LabelVehicleText.Name = "LabelVehicleText";
             this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
             this.LabelVehicleText.TabIndex = 27;
@@ -303,15 +317,16 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelShip;
         private System.Windows.Forms.Label labelVehicle;
         private System.Windows.Forms.Label LabelVehicleText;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ammo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private ExtendedControls.ButtonExt buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ButtonExt buttonExtEDShipyard;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
+        private ExtendedControls.ButtonExt buttonExtConfigure;
     }
 }
