@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillPlot(list, sys);
         }
-        
+                
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
             // debug
@@ -158,25 +158,27 @@ namespace EDDiscovery.UserControls
 
             SetControlText("2D Plot of systems in range from " + currentSystem.Name);
 
-            var pointSize = 3;
-            var pointColor = 80;
+            var pointSize = 3;            
 
             // initializing the plot
             var model = new PlotModel { Title = "Plot around " + currentSystem.Name };
             this.plotView.Model = model;
 
             // Define defaults properties of the series
-            var scatterSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize };
+            var currentSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
+            var lastoneSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
+            var inrangeSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Yellow };
+            var visitedSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Cyan };
 
             // Add the series
-            model.Series.Add(scatterSeries);
-
-            // Axes
-            // Create a range of colors, to properly visualize distinct properties, such as visited state, etc..
-            //model.Axes.Add(new LinearColorAxis { Position = AxisPosition.Right, Palette = OxyPalettes.HueDistinct(10)});
-            
+            model.Series.Add(currentSeries);
+            model.Series.Add(lastoneSeries);
+            model.Series.Add(visitedSeries);
+            model.Series.Add(inrangeSeries);
+                        
             // Draw the current system
-            scatterSeries.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, 1000));
+            currentSeries.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
+            currentSeries.TrackerFormatString = "{Tag}";
             
             // Title of the report           
             reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
@@ -191,29 +193,31 @@ namespace EDDiscovery.UserControls
             {   
                 // ...then iterate through each system in the list:
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
-                {   
-                    // get the coordinates of each system in range;
-                    var sysX = tvp.Value.X;
-                    var sysY = tvp.Value.Y;
-                    var sysZ = tvp.Value.Z;
+                {
+                    // calculate the average distance;
+                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
 
                     // count the total visits for each system;
                     int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
-
-                    // calculate the average distance;
-                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
                     
-                    // print information on each member of the list;
-                    reportView.AppendText("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
-                    reportView.AppendText("\nCoordinates: " + sysX + ", " + sysY + ", " + sysZ);
-                                        
                     // Then, populate the Grid with the systems in range
-                    if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value)
+                    if (distFromCurrentSys >= textMinRadius.Value && distFromCurrentSys <= textMaxRadius.Value && tvp.Value.Name != currentSystemName)
                     {
+                        // get the coordinates of each system in range;
+                        var sysX = tvp.Value.X;
+                        var sysY = tvp.Value.Y;
+                        var sysZ = tvp.Value.Z;
+                        
+                        // print information on each member of the list;
+                        reportView.AppendText("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
+                        reportView.AppendText("\nCoordinates: " + sysX + ", " + sysY + ", " + sysZ);
+
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
                         object[] plotobj = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
                         int rowindex = dataGridList.Rows.Add(plotobj);
                         dataGridList.Rows[rowindex].Tag = tvp.Value;
+
+                        var series = inrangeSeries;
 
                         // Assign each system to the correct color, depending of its state: 
                         // visited; lastone; inrange (not visited).
@@ -222,23 +226,27 @@ namespace EDDiscovery.UserControls
                             // is visited
                             if (tvp.Value.Name != previousSystemName)
                             {
-                                pointColor = 600;
+                                series = visitedSeries;
                             }
                             // is visited, and is the last visited system
                             else if (tvp.Value.Name == previousSystemName)
                             {
-                                pointColor = 100;
+                                series = lastoneSeries;
                             }
                         }
                         else
                         // is not visited yet
                         {
-                            pointColor = 800;
+                            series = inrangeSeries;
                         }
-
+                        
                         // Draw each point in the Plot                        
-                        scatterSeries.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, pointColor, plotobj[0].ToString()));
-                        scatterSeries.TrackerFormatString = "NAME \n{1}: {2:0.###}, {3}: {4:0.###}, Zcoord";                         
+                        series.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[3]), plotobj[0]));
+
+                        // Create a tracker which shows the name of the system and its coordinates
+                        series.TrackerFormatString =
+                            "{Tag}\n" +
+                            "Z: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}\n";                            
                     }
 
                     // debug
