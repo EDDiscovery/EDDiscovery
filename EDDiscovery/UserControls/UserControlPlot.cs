@@ -78,10 +78,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
-
-            checkBoxDotSize.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotDepth", true);
-            checkBoxLegend.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "PlotLegend", true);
-
+                        
             dataOutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
             
             computer = new StarDistanceComputer();
@@ -101,9 +98,7 @@ namespace EDDiscovery.UserControls
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
-            SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
-            SQLiteConnectionUser.PutSettingBool(DbSave + "PlotDepth", checkBoxDotSize.Checked);
-            SQLiteConnectionUser.PutSettingBool(DbSave + "PlotLegend", checkBoxLegend.Checked);
+            SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());            
         }
 
         public override void InitialDisplay()
@@ -130,7 +125,10 @@ namespace EDDiscovery.UserControls
         }
 
         private void KickComputation(HistoryEntry he)
-        {
+        {            
+            plotViewTop.Refresh();
+            plotViewFront.Refresh();
+            plotViewSide.Refresh();
             dataGridList.Rows.Clear();
             reportView.Clear();
 
@@ -157,28 +155,63 @@ namespace EDDiscovery.UserControls
             //debugView.AppendText("Plot started.");
 
             SetControlText("2D Plot of systems in range from " + currentSystem.Name);
-
+            
             var pointSize = 3;            
 
             // initializing the plot
-            var model = new PlotModel { Title = "Plot around " + currentSystem.Name };
-            this.plotView.Model = model;
+            var modelTop = new PlotModel { Title = "Plot around " + currentSystem.Name };
+            var modelFront = new PlotModel { Title = "Plot around " + currentSystem.Name };
+            var modelSide = new PlotModel { Title = "Plot around " + currentSystem.Name };
+            this.plotViewTop.Model = modelTop;
+            this.plotViewFront.Model = modelFront;
+            this.plotViewSide.Model = modelSide;
 
-            // Define defaults properties of the series
-            var currentSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
-            var lastoneSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
-            var inrangeSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Yellow };
-            var visitedSeries = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Cyan };
+            // Define defaults properties of the series for the Top view
+            var currentSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
+            var lastoneSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
+            var inrangeSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Yellow };
+            var visitedSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Cyan };
+
+            // Define defaults properties of the series for the Front view
+            var currentSeriesFront = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
+            var lastoneSeriesFront = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
+            var inrangeSeriesFront = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Yellow };
+            var visitedSeriesFront = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Cyan };
+
+            // Define defaults properties of the series for the Side view
+            var currentSeriesSide = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
+            var lastoneSeriesSide = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
+            var inrangeSeriesSide = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Yellow };
+            var visitedSeriesSide = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Cyan };
+            
+            // Add the series
+            modelTop.Series.Add(currentSeriesTop);
+            modelTop.Series.Add(lastoneSeriesTop);
+            modelTop.Series.Add(visitedSeriesTop);
+            modelTop.Series.Add(inrangeSeriesTop);
 
             // Add the series
-            model.Series.Add(currentSeries);
-            model.Series.Add(lastoneSeries);
-            model.Series.Add(visitedSeries);
-            model.Series.Add(inrangeSeries);
-                        
+            modelFront.Series.Add(currentSeriesFront);
+            modelFront.Series.Add(lastoneSeriesFront);
+            modelFront.Series.Add(visitedSeriesFront);
+            modelFront.Series.Add(inrangeSeriesFront);
+
+            // Add the series
+            modelSide.Series.Add(currentSeriesSide);
+            modelSide.Series.Add(lastoneSeriesSide);
+            modelSide.Series.Add(visitedSeriesSide);
+            modelSide.Series.Add(inrangeSeriesSide);
+
+            // title
+            modelTop.Title = "Plot around " + currentSystemName + ", viewed from the Top";
+
             // Draw the current system
-            currentSeries.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
-            currentSeries.TrackerFormatString = "{Tag}";
+            currentSeriesTop.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
+            currentSeriesTop.TrackerFormatString = "{Tag}";
+            currentSeriesFront.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
+            currentSeriesFront.TrackerFormatString = "{Tag}";
+            currentSeriesSide.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
+            currentSeriesSide.TrackerFormatString = "{Tag}";
             
             // Title of the report           
             reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
@@ -217,36 +250,51 @@ namespace EDDiscovery.UserControls
                         int rowindex = dataGridList.Rows.Add(plotobj);
                         dataGridList.Rows[rowindex].Tag = tvp.Value;
 
-                        var series = inrangeSeries;
+                        var seriesTop = inrangeSeriesTop;
+                        var seriesFront = inrangeSeriesFront;
+                        var seriesSide = inrangeSeriesSide;
 
-                        // Assign each system to the correct color, depending of its state: 
+                        // Assign each system to the correct color and series, depending of its state: 
                         // visited; lastone; inrange (not visited).
                         if (visits > 0)
                         {
                             // is visited
                             if (tvp.Value.Name != previousSystemName)
                             {
-                                series = visitedSeries;
+                                seriesTop = visitedSeriesTop;
+                                seriesFront = visitedSeriesFront;
+                                seriesSide = visitedSeriesSide;
                             }
                             // is visited, and is the last visited system
                             else if (tvp.Value.Name == previousSystemName)
                             {
-                                series = lastoneSeries;
+                                seriesTop = lastoneSeriesTop;
+                                seriesFront = visitedSeriesFront;
+                                seriesSide = visitedSeriesSide;
                             }
                         }
                         else
                         // is not visited yet
                         {
-                            series = inrangeSeries;
+                            seriesTop = inrangeSeriesTop;
+                            seriesFront = visitedSeriesFront;
+                            seriesSide = visitedSeriesSide;
                         }
-                        
+                        //
+
                         // Draw each point in the Plot                        
-                        series.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[3]), plotobj[0]));
+                        seriesTop.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[3]), plotobj[0]));
+                        seriesFront.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[3]), pointSize, Convert.ToDouble(plotobj[2]), plotobj[0]));
+                        seriesSide.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[3]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[1]), plotobj[0]));
 
                         // Create a tracker which shows the name of the system and its coordinates
-                        series.TrackerFormatString =
-                            "{Tag}\n" +
-                            "Z: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}\n";                            
+                        
+                        string Tracker = "{Tag}\n" +
+                            "Z: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+
+                        seriesTop.TrackerFormatString = Tracker;
+                        seriesFront.TrackerFormatString = Tracker;
+                        seriesSide.TrackerFormatString = Tracker;
                     }
 
                     // debug
@@ -272,36 +320,50 @@ namespace EDDiscovery.UserControls
         {
             string s = comboBoxView.SelectedItem.ToString();
             if ( s == "Top")
-            {                
+            {
+                plotViewTop.Visible = true;
+                plotViewFront.Visible = false;
+                plotViewSide.Visible = false;
+
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                KickComputation(uctg.GetCurrentHistoryEntry);                
             }
             if (s == "Front")
             {
+                plotViewTop.Visible = false;
+                plotViewFront.Visible = true;
+                plotViewSide.Visible = false;
+
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                KickComputation(uctg.GetCurrentHistoryEntry);                
             }
             if (s == "Side")
             {
+                plotViewTop.Visible = false;
+                plotViewFront.Visible = false;
+                plotViewSide.Visible = true;
+
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                KickComputation(uctg.GetCurrentHistoryEntry);                
             }
             if (s == "Grid")
             {
                 dataGridList.Visible = true;
                 buttonExportToImage.Enabled = false;
+                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
             }
             if (s == "Report")
             {
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = false;
+                buttonExportReport.Enabled = true;
                 reportView.Visible = true;
             }
         }
@@ -329,13 +391,13 @@ namespace EDDiscovery.UserControls
             {
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
-                reportView.Visible = false;
+                reportView.Visible = false;                
             }
             if (s == "Front")
             {
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
-                reportView.Visible = false;
+                reportView.Visible = false;                
             }
             if (s == "Side")
             {
@@ -347,13 +409,13 @@ namespace EDDiscovery.UserControls
             {
                 dataGridList.Visible = true;
                 buttonExportToImage.Enabled = false;
-                reportView.Visible = false;
+                reportView.Visible = false;                
             }
             if (s == "Report")
             {
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = false;
-                reportView.Visible = true;
+                reportView.Visible = true;                
             }
         }
 
@@ -365,12 +427,12 @@ namespace EDDiscovery.UserControls
                 string plotsDir = Path.Combine(dataOutputDir, "Plots");
                 string systemPath = currentSystemName;
                 string FilePath = Path.Combine(plotsDir, systemPath);
-                File.Create(FilePath);
+                Directory.CreateDirectory(FilePath);                
 
-                string FileName = Path.Combine(FilePath, "Plot".AddSuffixToFilename(".png"));
+                string FileName = Path.Combine(FilePath, "Plot" + DateTime.Now.ToString().AddSuffixToFilename(".png"));
 
                 var pngExporter = new PngExporter { Width = 600, Height = 600, Background = OxyColors.White };
-                pngExporter.ExportToFile(plotView.Model, FileName);
+                pngExporter.ExportToFile(plotViewTop.Model, FileName);
             }
             catch
             {
@@ -388,19 +450,13 @@ namespace EDDiscovery.UserControls
 
                     string reportsDir = Path.Combine(dataOutputDir, "Reports");
                     string systemPath = currentSystemName;
-                    string FileName = "Report";
+                    string FileName = "Report " + DateTime.Now.ToString();
                     string FilePath = Path.Combine(reportsDir, systemPath, FileName.AddSuffixToFilename(".txt"));
                     File.Create(FilePath);
                                         
-                    // Create a string array with the lines of text
-                    string[] lines = { "First line", "Second line", "Third line" };
-                                        
-                    // Write the string array to the output file
+                    // Write the content of the report to the output file
                     using (StreamWriter outputFile = new StreamWriter(FilePath))
-                    {
-                        foreach (string line in lines)
-                            outputFile.WriteLine(line);
-                    }                    
+                    outputFile.WriteLine(reportView.Text.ToString());
                 }
                 catch { }                
             }            

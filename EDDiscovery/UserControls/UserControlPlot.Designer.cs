@@ -52,8 +52,6 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonExportReport = new ExtendedControls.ButtonExt();
             this.buttonExportToImage = new ExtendedControls.ButtonExt();
-            this.checkBoxLegend = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxDotSize = new ExtendedControls.CheckBoxCustom();
             this.comboBoxView = new ExtendedControls.ComboBoxCustom();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.zoomToolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
@@ -74,8 +72,10 @@ namespace EDDiscovery.UserControls
             this.sysY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.plotView = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewTop = new OxyPlot.WindowsForms.PlotView();
             this.reportView = new ExtendedControls.RichTextBoxScroll();
+            this.plotViewSide = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewFront = new OxyPlot.WindowsForms.PlotView();
             this.panelTop.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
@@ -146,8 +146,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
             this.panelTop.Controls.Add(this.buttonExportReport);
             this.panelTop.Controls.Add(this.buttonExportToImage);
-            this.panelTop.Controls.Add(this.checkBoxLegend);
-            this.panelTop.Controls.Add(this.checkBoxDotSize);
             this.panelTop.Controls.Add(this.comboBoxView);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.textMaxRadius);
@@ -162,11 +160,11 @@ namespace EDDiscovery.UserControls
             this.buttonExportReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExportReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExportReport.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
-            this.buttonExportReport.Location = new System.Drawing.Point(242, 0);
+            this.buttonExportReport.Location = new System.Drawing.Point(183, 1);
             this.buttonExportReport.Name = "buttonExportReport";
             this.buttonExportReport.Size = new System.Drawing.Size(24, 24);
             this.buttonExportReport.TabIndex = 30;
-            this.toolTip1.SetToolTip(this.buttonExportReport, "Export to Excel");
+            this.toolTip1.SetToolTip(this.buttonExportReport, "Create a Report");
             this.buttonExportReport.UseVisualStyleBackColor = true;
             this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
             // 
@@ -175,61 +173,13 @@ namespace EDDiscovery.UserControls
             this.buttonExportToImage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExportToImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExportToImage.Image = global::EDDiscovery.Icons.Controls.Map3D_Recorder_Save;
-            this.buttonExportToImage.Location = new System.Drawing.Point(212, 0);
+            this.buttonExportToImage.Location = new System.Drawing.Point(153, 1);
             this.buttonExportToImage.Name = "buttonExportToImage";
             this.buttonExportToImage.Size = new System.Drawing.Size(24, 24);
             this.buttonExportToImage.TabIndex = 29;
-            this.toolTip1.SetToolTip(this.buttonExportToImage, "Export to Excel");
+            this.toolTip1.SetToolTip(this.buttonExportToImage, "Export to PNG");
             this.buttonExportToImage.UseVisualStyleBackColor = true;
             this.buttonExportToImage.Click += new System.EventHandler(this.buttonExportToImage_Click);
-            // 
-            // checkBoxLegend
-            // 
-            this.checkBoxLegend.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxLegend.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxLegend.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxLegend.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxLegend.CheckBoxInnerColor = System.Drawing.Color.Transparent;
-            this.checkBoxLegend.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxLegend.Checked = true;
-            this.checkBoxLegend.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxLegend.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxLegend.FontNerfReduction = 0.5F;
-            this.checkBoxLegend.Image = global::EDDiscovery.Icons.Controls.Map3D_Stars_Menu;
-            this.checkBoxLegend.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxLegend.Location = new System.Drawing.Point(182, 1);
-            this.checkBoxLegend.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxLegend.Name = "checkBoxLegend";
-            this.checkBoxLegend.Size = new System.Drawing.Size(24, 24);
-            this.checkBoxLegend.TabIndex = 11;
-            this.checkBoxLegend.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxLegend, "Toggle the Title and Legend visibility");
-            this.checkBoxLegend.UseVisualStyleBackColor = false;
-            // 
-            // checkBoxDotSize
-            // 
-            this.checkBoxDotSize.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxDotSize.BackColor = System.Drawing.SystemColors.Control;
-            this.checkBoxDotSize.CheckAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.checkBoxDotSize.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxDotSize.CheckBoxInnerColor = System.Drawing.Color.Transparent;
-            this.checkBoxDotSize.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxDotSize.Checked = true;
-            this.checkBoxDotSize.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxDotSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxDotSize.FontNerfReduction = 0.5F;
-            this.checkBoxDotSize.Image = global::EDDiscovery.Icons.Controls.Plot_Dots;
-            this.checkBoxDotSize.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxDotSize.Location = new System.Drawing.Point(152, 1);
-            this.checkBoxDotSize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxDotSize.Name = "checkBoxDotSize";
-            this.checkBoxDotSize.Size = new System.Drawing.Size(24, 24);
-            this.checkBoxDotSize.TabIndex = 10;
-            this.checkBoxDotSize.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxDotSize, "Use the third axis value to mimics depth (nearest systems larger, farther systems" +
-        " smaller)");
-            this.checkBoxDotSize.UseVisualStyleBackColor = false;
-            this.checkBoxDotSize.CheckedChanged += new System.EventHandler(this.checkBoxDotSize_CheckedChanged);
             // 
             // comboBoxView
             // 
@@ -383,20 +333,20 @@ namespace EDDiscovery.UserControls
             this.sysVisits.Name = "sysVisits";
             this.sysVisits.ReadOnly = true;
             // 
-            // plotView
+            // plotViewTop
             // 
-            this.plotView.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.plotView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotView.ForeColor = System.Drawing.Color.Black;
-            this.plotView.Location = new System.Drawing.Point(0, 26);
-            this.plotView.Name = "plotView";
-            this.plotView.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotView.Size = new System.Drawing.Size(333, 315);
-            this.plotView.TabIndex = 31;
-            this.plotView.Text = "plotView1";
-            this.plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.plotViewTop.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.plotViewTop.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewTop.ForeColor = System.Drawing.Color.Black;
+            this.plotViewTop.Location = new System.Drawing.Point(0, 26);
+            this.plotViewTop.Name = "plotViewTop";
+            this.plotViewTop.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
+            this.plotViewTop.Size = new System.Drawing.Size(333, 315);
+            this.plotViewTop.TabIndex = 31;
+            this.plotViewTop.Text = "plotView1";
+            this.plotViewTop.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewTop.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewTop.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // reportView
             // 
@@ -427,6 +377,36 @@ namespace EDDiscovery.UserControls
             this.reportView.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             this.reportView.WordWrap = false;
             // 
+            // plotViewSide
+            // 
+            this.plotViewSide.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.plotViewSide.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewSide.ForeColor = System.Drawing.Color.Black;
+            this.plotViewSide.Location = new System.Drawing.Point(0, 26);
+            this.plotViewSide.Name = "plotViewSide";
+            this.plotViewSide.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
+            this.plotViewSide.Size = new System.Drawing.Size(333, 315);
+            this.plotViewSide.TabIndex = 33;
+            this.plotViewSide.Text = "plotView1";
+            this.plotViewSide.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewSide.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewSide.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewFront
+            // 
+            this.plotViewFront.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.plotViewFront.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewFront.ForeColor = System.Drawing.Color.Black;
+            this.plotViewFront.Location = new System.Drawing.Point(0, 26);
+            this.plotViewFront.Name = "plotViewFront";
+            this.plotViewFront.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
+            this.plotViewFront.Size = new System.Drawing.Size(333, 315);
+            this.plotViewFront.TabIndex = 34;
+            this.plotViewFront.Text = "plotView1";
+            this.plotViewFront.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewFront.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewFront.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
             // UserControlPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,7 +415,9 @@ namespace EDDiscovery.UserControls
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.reportView);
             this.Controls.Add(this.dataGridList);
-            this.Controls.Add(this.plotView);
+            this.Controls.Add(this.plotViewTop);
+            this.Controls.Add(this.plotViewFront);
+            this.Controls.Add(this.plotViewSide);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlPlot";
             this.Size = new System.Drawing.Size(333, 341);
@@ -463,7 +445,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem4;
         private ToolStripMenuItem resetToolStripReset;
         private ExtendedControls.ComboBoxCustom comboBoxView;
-        private ExtendedControls.CheckBoxCustom checkBoxDotSize;
         private ToolTip toolTip1;
         private DataGridView dataGridList;
         private DataGridViewTextBoxColumn sysName;
@@ -471,10 +452,11 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn sysY;
         private DataGridViewTextBoxColumn sysZ;
         private DataGridViewTextBoxColumn sysVisits;
-        private ExtendedControls.CheckBoxCustom checkBoxLegend;
         private ExtendedControls.ButtonExt buttonExportToImage;
-        private OxyPlot.WindowsForms.PlotView plotView;
+        private OxyPlot.WindowsForms.PlotView plotViewTop;
         private ExtendedControls.RichTextBoxScroll reportView;
         private ExtendedControls.ButtonExt buttonExportReport;
+        private OxyPlot.WindowsForms.PlotView plotViewSide;
+        private OxyPlot.WindowsForms.PlotView plotViewFront;
     }
 }
