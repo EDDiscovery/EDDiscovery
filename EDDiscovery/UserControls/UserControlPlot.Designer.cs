@@ -157,6 +157,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExportReport
             // 
+            this.buttonExportReport.Enabled = false;
             this.buttonExportReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExportReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExportReport.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
@@ -166,6 +167,7 @@ namespace EDDiscovery.UserControls
             this.buttonExportReport.TabIndex = 30;
             this.toolTip1.SetToolTip(this.buttonExportReport, "Create a Report");
             this.buttonExportReport.UseVisualStyleBackColor = true;
+            this.buttonExportReport.Visible = false;
             this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
             // 
             // buttonExportToImage
@@ -353,6 +355,7 @@ namespace EDDiscovery.UserControls
             this.reportView.BorderColor = System.Drawing.Color.Transparent;
             this.reportView.BorderColorScaling = 0.5F;
             this.reportView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportView.Enabled = false;
             this.reportView.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.reportView.HideScrollBar = true;
             this.reportView.Location = new System.Drawing.Point(0, 26);
@@ -375,6 +378,7 @@ namespace EDDiscovery.UserControls
             this.reportView.TabIndex = 32;
             this.reportView.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.reportView.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.reportView.Visible = false;
             this.reportView.WordWrap = false;
             // 
             // plotViewSide

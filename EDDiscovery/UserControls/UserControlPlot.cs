@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Front");
             comboBoxView.Items.Add("Side");
             comboBoxView.Items.Add("Grid");
-            comboBoxView.Items.Add("Report");
+            //comboBoxView.Items.Add("Report");
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
@@ -202,17 +202,11 @@ namespace EDDiscovery.UserControls
             modelSide.Series.Add(visitedSeriesSide);
             modelSide.Series.Add(inrangeSeriesSide);
 
-            // title
-            modelTop.Title = "Plot around " + currentSystemName + ", viewed from the Top";
+            // titles
+            modelTop.Title = "Plot around " + currentSystemName + ", viewed from the top";
+            modelFront.Title = "Plot around " + currentSystemName + ", viewed from the front";
+            modelSide.Title = "Plot around " + currentSystemName + ", viewed from the side";
 
-            // Draw the current system
-            currentSeriesTop.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
-            currentSeriesTop.TrackerFormatString = "{Tag}";
-            currentSeriesFront.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
-            currentSeriesFront.TrackerFormatString = "{Tag}";
-            currentSeriesSide.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
-            currentSeriesSide.TrackerFormatString = "{Tag}";
-            
             // Title of the report           
             reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
 
@@ -269,23 +263,23 @@ namespace EDDiscovery.UserControls
                             else if (tvp.Value.Name == previousSystemName)
                             {
                                 seriesTop = lastoneSeriesTop;
-                                seriesFront = visitedSeriesFront;
-                                seriesSide = visitedSeriesSide;
+                                seriesFront = lastoneSeriesFront;
+                                seriesSide = lastoneSeriesSide;
                             }
                         }
                         else
                         // is not visited yet
                         {
                             seriesTop = inrangeSeriesTop;
-                            seriesFront = visitedSeriesFront;
-                            seriesSide = visitedSeriesSide;
+                            seriesFront = inrangeSeriesFront;
+                            seriesSide = inrangeSeriesSide;
                         }
                         //
 
                         // Draw each point in the Plot                        
                         seriesTop.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[3]), plotobj[0]));
                         seriesFront.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[3]), pointSize, Convert.ToDouble(plotobj[2]), plotobj[0]));
-                        seriesSide.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[3]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[1]), plotobj[0]));
+                        seriesSide.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[2]), Convert.ToDouble(plotobj[3]), pointSize, Convert.ToDouble(plotobj[1]), plotobj[0]));
 
                         // Create a tracker which shows the name of the system and its coordinates
                         
@@ -296,6 +290,16 @@ namespace EDDiscovery.UserControls
                         seriesFront.TrackerFormatString = Tracker;
                         seriesSide.TrackerFormatString = Tracker;
                     }
+
+                    currentSeriesTop.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
+                    currentSeriesFront.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Z, pointSize, currentSystem.Y, currentSystemName));
+                    currentSeriesSide.Points.Add(new ScatterPoint(currentSystem.Y, currentSystem.Z, pointSize, currentSystem.X, currentSystemName));
+
+                    string currentTracker = "{Tag}";
+
+                    currentSeriesTop.TrackerFormatString = currentTracker;
+                    currentSeriesFront.TrackerFormatString = currentTracker;
+                    currentSeriesSide.TrackerFormatString = currentTracker;
 
                     // debug
                     reportView.AppendText("\n");
@@ -327,8 +331,10 @@ namespace EDDiscovery.UserControls
 
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                /*
                 buttonExportReport.Enabled = false;
                 reportView.Visible = false;
+                */
             }
             if (s == "Front")
             {
@@ -338,8 +344,10 @@ namespace EDDiscovery.UserControls
 
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                /*
                 buttonExportReport.Enabled = false;
                 reportView.Visible = false;
+                */
             }
             if (s == "Side")
             {
@@ -349,8 +357,10 @@ namespace EDDiscovery.UserControls
 
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = true;
+                /*
                 buttonExportReport.Enabled = false;
                 reportView.Visible = false;
+                */
             }
             if (s == "Grid")
             {
@@ -363,8 +373,10 @@ namespace EDDiscovery.UserControls
             {
                 dataGridList.Visible = false;
                 buttonExportToImage.Enabled = false;
+                /*
                 buttonExportReport.Enabled = true;
                 reportView.Visible = true;
+                */
             }
         }
         
@@ -429,10 +441,14 @@ namespace EDDiscovery.UserControls
                 string FilePath = Path.Combine(plotsDir, systemPath);
                 Directory.CreateDirectory(FilePath);                
 
-                string FileName = Path.Combine(FilePath, "Plot" + DateTime.Now.ToString().AddSuffixToFilename(".png"));
+                string FileNameTop = Path.Combine(FilePath, "Top view Plot".AddSuffixToFilename(".png"));
+                string FileNameFront = Path.Combine(FilePath, "Front view Plot".AddSuffixToFilename(".png"));
+                string FileNameSide = Path.Combine(FilePath, "Side view Plot".AddSuffixToFilename(".png"));
 
                 var pngExporter = new PngExporter { Width = 600, Height = 600, Background = OxyColors.White };
-                pngExporter.ExportToFile(plotViewTop.Model, FileName);
+                pngExporter.ExportToFile(plotViewTop.Model, FileNameTop);
+                pngExporter.ExportToFile(plotViewFront.Model, FileNameFront);
+                pngExporter.ExportToFile(plotViewSide.Model, FileNameSide);
             }
             catch
             {
@@ -450,13 +466,13 @@ namespace EDDiscovery.UserControls
 
                     string reportsDir = Path.Combine(dataOutputDir, "Reports");
                     string systemPath = currentSystemName;
-                    string FileName = "Report " + DateTime.Now.ToString();
+                    string FileName = "Report of systems in range from " + textMinRadius.Value.ToString() + " to " + textMaxRadius.Value.ToString() + "Ly";
                     string FilePath = Path.Combine(reportsDir, systemPath, FileName.AddSuffixToFilename(".txt"));
                     File.Create(FilePath);
                                         
                     // Write the content of the report to the output file
                     using (StreamWriter outputFile = new StreamWriter(FilePath))
-                    outputFile.WriteLine(reportView.Text.ToString());
+                    outputFile.WriteLine(reportView.Text);
                 }
                 catch { }                
             }            
