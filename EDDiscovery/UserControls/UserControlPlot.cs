@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             this.plotViewTop.Model = modelTop;
             this.plotViewFront.Model = modelFront;
             this.plotViewSide.Model = modelSide;
-
+                        
             // Define defaults properties of the series for the Top view
             var currentSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Red };
             var lastoneSeriesTop = new ScatterSeries { MarkerType = MarkerType.Circle, MarkerSize = pointSize, MarkerFill = OxyColors.Purple };
