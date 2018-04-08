@@ -33,8 +33,6 @@ using ExtendedControls;
 using EliteDangerousCore.JournalEvents;
 using OxyPlot;
 using OxyPlot.Series;
-using OxyPlot.Axes;
-using OxyPlot.Annotations;
 using OxyPlot.WindowsForms;
 
 namespace EDDiscovery.UserControls
@@ -78,7 +76,8 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.DefaultIfEmpty("Top");
             comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
             comboBoxView.Enabled = true;
-                        
+            
+            // retrieve the path for export plots and reports
             dataOutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
             
             computer = new StarDistanceComputer();
@@ -445,7 +444,7 @@ namespace EDDiscovery.UserControls
                 string FileNameFront = Path.Combine(FilePath, "Front view Plot".AddSuffixToFilename(".png"));
                 string FileNameSide = Path.Combine(FilePath, "Side view Plot".AddSuffixToFilename(".png"));
 
-                var pngExporter = new PngExporter { Width = 600, Height = 600, Background = OxyColors.White };
+                var pngExporter = new PngExporter { Width = 900, Height = 900, Background = OxyColors.White };
                 pngExporter.ExportToFile(plotViewTop.Model, FileNameTop);
                 pngExporter.ExportToFile(plotViewFront.Model, FileNameFront);
                 pngExporter.ExportToFile(plotViewSide.Model, FileNameSide);

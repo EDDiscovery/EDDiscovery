@@ -30,9 +30,9 @@ using System.Threading.Tasks;
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
-    {
+    {        
         public string dataOutputDir { get { return textBoxOutputDir.Text; } }
-
+        
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public UserControlSettings()
@@ -57,7 +57,16 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
 
-            textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);            
+            if (SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir) == "")
+            {
+                textBoxOutputDir.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+            }
+            else
+            {
+                textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
+            }
+
+            
         }
 
         void SetEntryThemeComboBox()
