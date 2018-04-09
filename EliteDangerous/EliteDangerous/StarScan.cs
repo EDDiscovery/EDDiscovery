@@ -844,6 +844,8 @@ namespace EliteDangerousCore
 
                         node.children.Add(beltname, belt);
                     }
+
+                    belt.BeltData = ring;
                 }
             }
         }
