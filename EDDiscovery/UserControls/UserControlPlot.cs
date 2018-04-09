@@ -283,7 +283,7 @@ namespace EDDiscovery.UserControls
                         // Create a tracker which shows the name of the system and its coordinates
                         
                         string Tracker = "{Tag}\n" +
-                            "Z: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+                            "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
 
                         seriesTop.TrackerFormatString = Tracker;
                         seriesFront.TrackerFormatString = Tracker;
