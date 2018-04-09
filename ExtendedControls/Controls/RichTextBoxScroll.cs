@@ -62,10 +62,15 @@ namespace ExtendedControls
         public Color ScrollBarForeColor { get { return ScrollBar.ForeColor; } set { ScrollBar.ForeColor = value; } }
 
         public override string Text { get { return TextBox.Text; } set { TextBox.Text = value; UpdateScrollBar(); } }                // return only textbox text
+        
         public int LineCount { get { return TextBox.GetLineFromCharIndex(TextBox.Text.Length) + 1; } }
+
+        public bool WordWrap { get; set; } = false; // wrap words
 
         public delegate void OnTextBoxChanged(object sender, EventArgs e);
         public event OnTextBoxChanged TextBoxChanged;
+                
+        
 
         #region Public Functions
 
@@ -227,7 +232,7 @@ namespace ExtendedControls
                 h++;
             return h;
         }
-
+                
         public int EstimateLinesInBox(int height)
         {
             int lines = (int)(height/ GetRealFontHeight());

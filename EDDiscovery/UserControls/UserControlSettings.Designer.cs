@@ -95,6 +95,9 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
             this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxCustomPath = new ExtendedControls.GroupBoxCustom();
+            this.buttonChangeOutputFolder = new ExtendedControls.ButtonExt();
+            this.textBoxOutputDir = new ExtendedControls.TextBoxBorder();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxPopOuts.SuspendLayout();
             this.groupBoxTheme.SuspendLayout();
@@ -104,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1.SuspendLayout();
             this.groupBoxCustomScreenShots.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
+            this.groupBoxCustomPath.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -136,6 +140,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTheme.BorderColor = System.Drawing.Color.Red;
             this.comboBoxTheme.ButtonColorScaling = 0.5F;
             this.comboBoxTheme.DataSource = null;
+            this.comboBoxTheme.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTheme.DisplayMember = "";
             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTheme.DropDownHeight = 150;
@@ -153,6 +158,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTheme.SelectedValue = null;
             this.comboBoxTheme.Size = new System.Drawing.Size(209, 21);
             this.comboBoxTheme.TabIndex = 0;
+            this.comboBoxTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxTheme, "Select the theme to use");
             this.comboBoxTheme.ValueMember = "";
             // 
@@ -373,13 +379,15 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxDefaultZoom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxDefaultZoom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxDefaultZoom.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxDefaultZoom.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxDefaultZoom.BorderColorScaling = 0.5F;
             this.textBoxDefaultZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDefaultZoom.ClearOnFirstChar = false;
             this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDefaultZoom.DelayBeforeNotification = 0;
             this.textBoxDefaultZoom.Format = "0.#######";
-            this.textBoxDefaultZoom.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxDefaultZoom.InErrorCondition = true;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(114, 70);
             this.textBoxDefaultZoom.Maximum = 300D;
             this.textBoxDefaultZoom.Minimum = 0.01D;
@@ -391,11 +399,9 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.SelectionStart = 0;
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
-            this.textBoxDefaultZoom.Text = "0";
             this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
             this.textBoxDefaultZoom.Value = 0D;
-            this.textBoxDefaultZoom.ValueNoChange = 0D;
             this.textBoxDefaultZoom.WordWrap = true;
             this.textBoxDefaultZoom.ValueChanged += new System.EventHandler(this.textBoxDefaultZoom_ValueChanged);
             // 
@@ -403,9 +409,11 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxHomeSystem.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxHomeSystem.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxHomeSystem.BorderColorScaling = 0.5F;
             this.textBoxHomeSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxHomeSystem.ClearOnFirstChar = false;
             this.textBoxHomeSystem.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
@@ -416,6 +424,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownWidth = 0;
             this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxHomeSystem.InErrorCondition = false;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(114, 19);
             this.textBoxHomeSystem.Multiline = false;
             this.textBoxHomeSystem.Name = "textBoxHomeSystem";
@@ -562,6 +571,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.BorderColor = System.Drawing.Color.White;
             this.comboBoxClickThruKey.ButtonColorScaling = 0.5F;
             this.comboBoxClickThruKey.DataSource = null;
+            this.comboBoxClickThruKey.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxClickThruKey.DisplayMember = "";
             this.comboBoxClickThruKey.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxClickThruKey.DropDownHeight = 200;
@@ -579,6 +589,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.SelectedValue = null;
             this.comboBoxClickThruKey.Size = new System.Drawing.Size(126, 21);
             this.comboBoxClickThruKey.TabIndex = 6;
+            this.comboBoxClickThruKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxClickThruKey, resources.GetString("comboBoxClickThruKey.ToolTip"));
             this.comboBoxClickThruKey.ValueMember = "";
             // 
@@ -710,7 +721,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
             this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 289);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
-            this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 109);
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(353, 109);
             this.groupBoxPopOuts.TabIndex = 19;
             this.groupBoxPopOuts.TabStop = false;
             this.groupBoxPopOuts.Text = "Pop Out Window Options";
@@ -764,7 +775,7 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.FillClientAreaWithAlternateColor = false;
             this.groupBox3dmap.Location = new System.Drawing.Point(440, 182);
             this.groupBox3dmap.Name = "groupBox3dmap";
-            this.groupBox3dmap.Size = new System.Drawing.Size(379, 100);
+            this.groupBox3dmap.Size = new System.Drawing.Size(353, 100);
             this.groupBox3dmap.TabIndex = 17;
             this.groupBox3dmap.TabStop = false;
             this.groupBox3dmap.Text = "3D Map Settings";
@@ -842,7 +853,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.FillClientAreaWithAlternateColor = false;
             this.groupBoxCommanders.Location = new System.Drawing.Point(0, 4);
             this.groupBoxCommanders.Name = "groupBoxCommanders";
-            this.groupBoxCommanders.Size = new System.Drawing.Size(819, 176);
+            this.groupBoxCommanders.Size = new System.Drawing.Size(793, 176);
             this.groupBoxCommanders.TabIndex = 15;
             this.groupBoxCommanders.TabStop = false;
             this.groupBoxCommanders.Text = "Commanders";
@@ -904,7 +915,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(4, 404);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
-            this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(425, 100);
+            this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(425, 118);
             this.groupBoxCustomScreenShots.TabIndex = 20;
             this.groupBoxCustomScreenShots.TabStop = false;
             this.groupBoxCustomScreenShots.Text = "Screenshots";
@@ -922,17 +933,70 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 404);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
-            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(379, 100);
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(353, 54);
             this.groupBoxCustomEDSM.TabIndex = 21;
             this.groupBoxCustomEDSM.TabStop = false;
             this.groupBoxCustomEDSM.Text = "EDSM/EDDB Control";
             this.groupBoxCustomEDSM.TextPadding = 0;
             this.groupBoxCustomEDSM.TextStartPosition = -1;
             // 
+            // groupBoxCustomPath
+            // 
+            this.groupBoxCustomPath.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomPath.BackColorScaling = 0.5F;
+            this.groupBoxCustomPath.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomPath.BorderColorScaling = 0.5F;
+            this.groupBoxCustomPath.Controls.Add(this.textBoxOutputDir);
+            this.groupBoxCustomPath.Controls.Add(this.buttonChangeOutputFolder);
+            this.groupBoxCustomPath.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomPath.Location = new System.Drawing.Point(440, 464);
+            this.groupBoxCustomPath.Name = "groupBoxCustomPath";
+            this.groupBoxCustomPath.Size = new System.Drawing.Size(353, 58);
+            this.groupBoxCustomPath.TabIndex = 22;
+            this.groupBoxCustomPath.TabStop = false;
+            this.groupBoxCustomPath.Text = "Output Path for Reports, Plots and Exploration Data";
+            this.groupBoxCustomPath.TextPadding = 0;
+            this.groupBoxCustomPath.TextStartPosition = -1;
+            // 
+            // buttonChangeOutputFolder
+            // 
+            this.buttonChangeOutputFolder.Location = new System.Drawing.Point(287, 23);
+            this.buttonChangeOutputFolder.Name = "buttonChangeOutputFolder";
+            this.buttonChangeOutputFolder.Size = new System.Drawing.Size(57, 23);
+            this.buttonChangeOutputFolder.TabIndex = 17;
+            this.buttonChangeOutputFolder.Text = "Browse";
+            this.buttonChangeOutputFolder.UseVisualStyleBackColor = true;
+            this.buttonChangeOutputFolder.Click += new System.EventHandler(this.buttonChangeScreenshotsFolder_Click);
+            // 
+            // textBoxOutputDir
+            // 
+            this.textBoxOutputDir.AccessibleRole = System.Windows.Forms.AccessibleRole.ScrollBar;
+            this.textBoxOutputDir.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxOutputDir.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxOutputDir.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxOutputDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxOutputDir.BorderColorScaling = 0.5F;
+            this.textBoxOutputDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxOutputDir.ClearOnFirstChar = false;
+            this.textBoxOutputDir.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxOutputDir.InErrorCondition = false;
+            this.textBoxOutputDir.Location = new System.Drawing.Point(9, 25);
+            this.textBoxOutputDir.Multiline = false;
+            this.textBoxOutputDir.Name = "textBoxOutputDir";
+            this.textBoxOutputDir.ReadOnly = false;
+            this.textBoxOutputDir.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxOutputDir.SelectionLength = 0;
+            this.textBoxOutputDir.SelectionStart = 0;
+            this.textBoxOutputDir.Size = new System.Drawing.Size(269, 20);
+            this.textBoxOutputDir.TabIndex = 18;
+            this.textBoxOutputDir.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxOutputDir.WordWrap = true;
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.groupBoxCustomPath);
             this.Controls.Add(this.groupBoxCustomEDSM);
             this.Controls.Add(this.groupBoxCustomScreenShots);
             this.Controls.Add(this.groupBoxPopOuts);
@@ -941,7 +1005,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.groupBoxCommanders);
             this.Name = "UserControlSettings";
-            this.Size = new System.Drawing.Size(937, 725);
+            this.Size = new System.Drawing.Size(797, 525);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
@@ -957,6 +1021,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.PerformLayout();
             this.groupBoxCustomEDSM.ResumeLayout(false);
             this.groupBoxCustomEDSM.PerformLayout();
+            this.groupBoxCustomPath.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1012,5 +1077,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.GroupBoxCustom groupBoxCustomEDSM;
         private ExtendedControls.ButtonExt buttonExtEDSMConfigureArea;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMEDDBDownload;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomPath;
+        private ExtendedControls.ButtonExt buttonChangeOutputFolder;
+        private ExtendedControls.TextBoxBorder textBoxOutputDir;
     }
 }
