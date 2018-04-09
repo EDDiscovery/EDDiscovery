@@ -168,9 +168,16 @@ namespace EliteDangerousCore.EDSM
         {
             if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))     // check if we need a new discard list
             {
-                EDSMClass edsm = new EDSMClass();
-                discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
-                lastDiscardFetch = DateTime.UtcNow;
+                try
+                {
+                    EDSMClass edsm = new EDSMClass();
+                    discardEvents = new HashSet<string>(edsm.GetJournalEventsToDiscard());
+                    lastDiscardFetch = DateTime.UtcNow;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Unable to retrieve events to be discarded: {ex.ToString()}");
+                }
             }
 
             System.Diagnostics.Debug.WriteLine("Send " + helist.Count());
