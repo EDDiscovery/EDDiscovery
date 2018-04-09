@@ -481,5 +481,12 @@ namespace DialogTest
         {
             System.Diagnostics.Debug.WriteLine("Long is " + numberBoxLong0.Value);
         }
+
+        private void buttonPlot_Click(object sender, EventArgs e)
+        {
+            TestPlot f2 = new TestPlot(); //this is the change, code for redirect
+
+            f2.ShowDialog();
+        }
     }
 }
