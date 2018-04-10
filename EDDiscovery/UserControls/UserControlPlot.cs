@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
 
             SetControlText("2D Plot of systems in range from " + currentSystem.Name);
 
-            var pointSize = 3;
+            var pointSize = 4;
 
             // initializing the plot
             var modelTop = new PlotModel { Title = "Plot around " + currentSystem.Name };
