@@ -161,7 +161,25 @@ namespace EDDiscovery.UserControls
                         chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
 
                         // depth of the series layers need to be adjusted, so to follow the X and Y axis
-                        int sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
+
+                        int sdepth;
+
+                        if (textMaxRadius.Value < 25)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 3));
+                        }
+                        else if (textMaxRadius.Value == 26 || textMaxRadius.Value <= 50)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2.66));
+                        }
+                        else if (textMaxRadius.Value == 51 || textMaxRadius.Value <= 100)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2.33));
+                        }
+                        else
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
+                        }
 
                         // maximum allowed depth in chart is 1000%
                         if (sdepth > 1000)
@@ -182,7 +200,7 @@ namespace EDDiscovery.UserControls
 
                             int px = Convert.ToInt32(dx) * -1;
                             int py = Convert.ToInt32(dy) * -1;
-                            int pz = Convert.ToInt32(dz);
+                            int pz = Convert.ToInt32(dz) * -1;
 
                             int nseries = 101; // # of series in the 3d plot (0 to 49, before the current system; 50, our current system; 51 to 101, after the current system)
                             double ratio = ((textMaxRadius.Value * 2) / nseries);
@@ -190,11 +208,7 @@ namespace EDDiscovery.UserControls
 
                             int ispy = Convert.ToInt32(spy);
 
-                            // we don't want a very close system to be showed as current one, so if it share the same serie of the current system we put in right before or after.
-                            if (ispy > 50 && ispy < 51)
-                            {
-                                ispy = 51;
-                            }
+                            // we don't want a very close system to be showed as current one, so if it share the same serie of the current system we put in right before or after.                            
                             if (ispy == 50)
                             {
                                 ispy = 49;
@@ -210,7 +224,8 @@ namespace EDDiscovery.UserControls
 
                             // strings to add in tooltip
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys + "\n" + 
+                                          "X: " + sysX + ", Y: " + sysY + ", Z:" + sysZ);
 
                             chartMap.Series[ispy].Points.AddXY(px, pz);
                             chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips

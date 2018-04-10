@@ -129,7 +129,7 @@ namespace EDDiscovery.UserControls
             plotViewFront.Refresh();
             plotViewSide.Refresh();
             dataGridList.Rows.Clear();
-            reportView.Clear();
+            reportView.Refresh();
 
             var x = this.Handle; // workaround to avoid throw an exception if open the panel as pop up
 
@@ -207,12 +207,12 @@ namespace EDDiscovery.UserControls
             modelSide.Title = "Plot around " + currentSystemName + ", viewed from the side";
 
             // Title of the report           
-            reportView.AppendText("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
+            reportView.Text += ("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString()  + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
 
             // Fill with some information for the report                    
             //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
-            reportView.AppendText("\nCreated on:" + currentSystem.CreateDate);
-            reportView.AppendText("\nNotes:" + currentSystem.SystemNote+ "\n");
+            reportView.Text += ("\nVisits: " + discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
+            reportView.Text += ("\nNotes: " + currentSystem.SystemNote+ "\n");
 
             // If the are any system inside the defined range...
             if (csl.Count() > 0)
@@ -233,10 +233,11 @@ namespace EDDiscovery.UserControls
                         var sysX = tvp.Value.X;
                         var sysY = tvp.Value.Y;
                         var sysZ = tvp.Value.Z;
-                        
+
                         // print information on each member of the list;
-                        reportView.AppendText("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
-                        reportView.AppendText("\nCoordinates: " + sysX + ", " + sysY + ", " + sysZ);
+                        reportView.Text += ("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
+                        reportView.Text += ("\n" + "Visits " + visits.ToString());
+                        reportView.Text += ("\nCoordinates: " + "X:" + sysX + ", Y:" + sysY + ", Z:" + sysZ);
 
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
                         object[] plotobj = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
@@ -282,12 +283,13 @@ namespace EDDiscovery.UserControls
 
                         // Create a tracker which shows the name of the system and its coordinates
                         
-                        string Tracker = "{Tag}\n" +
-                            "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+                        string TrackerTop = "{Tag}\n" + "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+                        string TrackerFront = "{Tag}\n" + "X: {2:0.###}; Z: {4:0.###}; Y: {6:0.###}";
+                        string TrackerSide = "{Tag}\n" + "Y: {2:0.###}; Z: {4:0.###}; X: {6:0.###}";
 
-                        seriesTop.TrackerFormatString = Tracker;
-                        seriesFront.TrackerFormatString = Tracker;
-                        seriesSide.TrackerFormatString = Tracker;
+                        seriesTop.TrackerFormatString = TrackerTop;
+                        seriesFront.TrackerFormatString = TrackerFront;
+                        seriesSide.TrackerFormatString = TrackerSide;
                     }
 
                     currentSeriesTop.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
@@ -300,12 +302,12 @@ namespace EDDiscovery.UserControls
                     currentSeriesFront.TrackerFormatString = currentTracker;
                     currentSeriesSide.TrackerFormatString = currentTracker;
 
-                    // debug
-                    reportView.AppendText("\n");
+                    // End of the systems list
+                    reportView.Text += ("\n");
                 }
 
-                // debug
-                reportView.AppendText("\n\nReport created on " + DateTime.Now.ToString());
+                // End of the Report
+                reportView.Text += ("\n\nReport created on " + DateTime.Now.ToString());
             }
         }
              
@@ -327,55 +329,34 @@ namespace EDDiscovery.UserControls
                 plotViewTop.Visible = true;
                 plotViewFront.Visible = false;
                 plotViewSide.Visible = false;
-
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
-                /*
-                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                */
             }
             if (s == "Front")
             {
                 plotViewTop.Visible = false;
                 plotViewFront.Visible = true;
                 plotViewSide.Visible = false;
-
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
-                /*
-                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                */
             }
             if (s == "Side")
             {
                 plotViewTop.Visible = false;
                 plotViewFront.Visible = false;
                 plotViewSide.Visible = true;
-
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
-                /*
-                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
-                */
             }
             if (s == "Grid")
             {
                 dataGridList.Visible = true;
-                buttonExportToImage.Enabled = false;
-                buttonExportReport.Enabled = false;
                 reportView.Visible = false;
             }
             if (s == "Report")
             {
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = false;
-                /*
-                buttonExportReport.Enabled = true;
                 reportView.Visible = true;
-                */
             }
         }
         
@@ -401,80 +382,80 @@ namespace EDDiscovery.UserControls
             if (s == "Top")
             {
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
+                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;                
             }
             if (s == "Front")
             {
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
+                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;                
             }
             if (s == "Side")
             {
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = true;
+                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;
             }
             if (s == "Grid")
             {
                 dataGridList.Visible = true;
-                buttonExportToImage.Enabled = false;
+                buttonExportPNG.Enabled = true;
                 reportView.Visible = false;                
             }
             if (s == "Report")
             {
                 dataGridList.Visible = false;
-                buttonExportToImage.Enabled = false;
+                buttonExportPNG.Enabled = true;
                 reportView.Visible = true;                
             }
         }
-
+        
         private void buttonExportToImage_Click(object sender, EventArgs e)
+        {            
+            {
+                try
+                {   // Export Plots view as PNG
+                    
+                    string plotsDir = Path.Combine(dataOutputDir, "Plots");
+                    string systemPath = currentSystemName;
+                    string FilePath = Path.Combine(plotsDir, systemPath);
+                    Directory.CreateDirectory(FilePath);
+
+                    string FileNameTop = Path.Combine(FilePath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + " - Top view".AddSuffixToFilename(".png"));
+                    string FileNameFront = Path.Combine(FilePath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + " - Front view".AddSuffixToFilename(".png"));
+                    string FileNameSide = Path.Combine(FilePath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + " - Side view".AddSuffixToFilename(".png"));
+
+                    var pngExporter = new PngExporter { Width = 900, Height = 900, Background = OxyColors.White };
+                    pngExporter.ExportToFile(plotViewTop.Model, FileNameTop);
+                    pngExporter.ExportToFile(plotViewFront.Model, FileNameFront);
+                    pngExporter.ExportToFile(plotViewSide.Model, FileNameSide);
+                }
+                catch
+                {
+
+                }
+            }           
+        }
+
+        private void buttonExtReport_Click(object sender, EventArgs e)
         {
             try
-            {
-                //Plots
-                string plotsDir = Path.Combine(dataOutputDir, "Plots");
+            {   // Save a Report
+
+                string reportsDir = Path.Combine(dataOutputDir, "Reports");
                 string systemPath = currentSystemName;
-                string FilePath = Path.Combine(plotsDir, systemPath);
-                Directory.CreateDirectory(FilePath);                
+                string FilePath = Path.Combine(reportsDir, systemPath);
+                Directory.CreateDirectory(FilePath);
 
-                string FileNameTop = Path.Combine(FilePath, "Top view Plot".AddSuffixToFilename(".png"));
-                string FileNameFront = Path.Combine(FilePath, "Front view Plot".AddSuffixToFilename(".png"));
-                string FileNameSide = Path.Combine(FilePath, "Side view Plot".AddSuffixToFilename(".png"));
+                string FileNameReport = Path.Combine(FilePath, DateTime.Now.ToString("yyyyMMddHHmmssfff") + " - Report".AddSuffixToFilename(".txt"));
 
-                var pngExporter = new PngExporter { Width = 900, Height = 900, Background = OxyColors.White };
-                pngExporter.ExportToFile(plotViewTop.Model, FileNameTop);
-                pngExporter.ExportToFile(plotViewFront.Model, FileNameFront);
-                pngExporter.ExportToFile(plotViewSide.Model, FileNameSide);
+                File.WriteAllText(FileNameReport, reportView.Text);
             }
             catch
             {
-            	
+
             }
-            
-        }
-
-        private void buttonExportReport_Click(object sender, EventArgs e)
-        {
-            if (reportView.Text.ToString() != null)
-            {
-                try
-                {
-
-                    string reportsDir = Path.Combine(dataOutputDir, "Reports");
-                    string systemPath = currentSystemName;
-                    string FileName = "Report of systems in range from " + textMinRadius.Value.ToString() + " to " + textMaxRadius.Value.ToString() + "Ly";
-                    string FilePath = Path.Combine(reportsDir, systemPath, FileName.AddSuffixToFilename(".txt"));
-                    File.Create(FilePath);
-                                        
-                    // Write the content of the report to the output file
-                    using (StreamWriter outputFile = new StreamWriter(FilePath))
-                    outputFile.WriteLine(reportView.Text);
-                }
-                catch { }                
-            }            
         }
     }    
 }
