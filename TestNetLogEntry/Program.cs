@@ -136,7 +136,6 @@ namespace NetLogEntry
                               "         Interdiction name success isplayer combatrank faction power\n" +
                               "         FactionKillBond faction victimfaction reward\n" +
                               "         CapShipBond faction victimfaction reward\n" +
-                              "         Resurrect cost\n" +
                               "Scans    ScanPlanet name\n" +
                               "         ScanStar ScanEarth\n" +
                               "         NavBeaconScan\n"+
@@ -145,6 +144,8 @@ namespace NetLogEntry
                               "         RepairDrone CommunityGoal\n" +
                               "         MusicNormal MusicGalMap MusicSysMap\n" +
                               "         Friends Name\n" +
+                              "         Died\n" +
+                              "         Resurrect cost\n" +
                               "         PowerPlay UnderAttack\n" +
                               "         CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
                               "         FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
