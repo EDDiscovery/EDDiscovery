@@ -132,6 +132,12 @@ namespace EDDiscovery.UserControls
         {
             SetControlText("3D Map of closest systems from " + centerSystem.Name);
 
+            for (int s = 0; s <= 100; s++)
+            {
+               chartMap.Series[s].MarkerSize = 6;
+            }
+            chartMap.Series[50].MarkerSize = 8;
+
             // Add the current system
             chartMap.Series[50].Points.AddXY(0, 0);
             chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
