@@ -21,7 +21,7 @@ using System.Collections.Generic;
 
 namespace EliteDangerousCore
 {
-    class ShipModuleData
+    public class ShipModuleData
     {
         static ShipModuleData instance = null;
 
@@ -69,11 +69,30 @@ namespace EliteDangerousCore
             return modules.ContainsKey(fdname) ? modules[fdname] as ShipModule : null;
         }
 
-        // fdname is the name given in the journals, which match the ones in the folder elite.../win64/items/shipmodule
-        // in normal form of prefix_itemname_extensions
-        // As of 31/3/2017, Robby has gone thru as many modules as he can ;-)
-        // Powerplay modules are hard.. don't have any, so guessed from that folder naming scheme which matches the events normally.
-        // shipname is in frontier speak.
+        static public bool IsVanity(string ifd)
+        {
+            ifd = ifd.ToLower();
+            foreach (var s in new[] { "bobble", "decal", "enginecustomisation", "nameplate", "paintjob",
+                                    "shipkit", "weaponcustomisation", "voicepack" , "string_lights_coloured" })
+            {
+                if (ifd.Contains(s))
+                    return true;       // no IDs
+            }
+
+            return false;
+        }
+
+        static public bool IsNotForExport(string ifd)
+        {
+            ifd = ifd.ToLower();
+            foreach (var s in new[] { "cargobaydoor", "cockpit" })
+            {
+                if (ifd.Contains(s))
+                    return true;       // no IDs
+            }
+
+            return false;
+        }
 
         public int CalcID(string ifd , string fdshipname )            // -1 dont have one, 0 unknown, else code
         {
@@ -96,12 +115,8 @@ namespace EliteDangerousCore
                 return 0;
             }
 
-            foreach (var s in new[] { "bobble", "cargobaydoor", "cockpit", "decal", "enginecustomisation", "nameplate", "paintjob",
-                                    "shipkit", "weaponcustomisation", "voicepack" , "string_lights_coloured" })
-            {
-                if (ifd.Contains(s))
-                    return -1;       // no IDs
-            }
+            if (IsVanity(ifd) || IsNotForExport(ifd))
+                return -1;
 
             if (modules.ContainsKey(ifd))
             {

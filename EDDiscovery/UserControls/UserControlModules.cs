@@ -131,78 +131,65 @@ namespace EDDiscovery.UserControls
 
             last_si = null;     // no ship info
 
+            dataGridViewModules.Columns[2].HeaderText = "Slot";
+            dataGridViewModules.Columns[3].HeaderText = "Info";
+            dataGridViewModules.Columns[6].HeaderText = "Value";
+
             if (comboBoxShips.Text.Contains("Stored"))
             {
                 if (last_he != null && last_he.StoredModules != null)
                 {
                     ModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
-                    int i = 1;
-                    foreach(EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm in mi.StoredModules )
-                    {
-                        object[] rowobj = { i.ToString(), sm.Item, sm.LocalisedItem.ToNullSafeString() };
-                        dataGridViewModules.Rows.Add(rowobj);
-                        i++;
-                    }
+
+                    foreach (ModulesInStore.StoredModule sm in mi.StoredModules)
+                        AddStoredModule(sm);
+
+                    dataGridViewModules.Columns[2].HeaderText = "System";
+                    dataGridViewModules.Columns[3].HeaderText = "Tx Time";
+                    dataGridViewModules.Columns[6].HeaderText = "Cost";
                 }
             }
             else if (comboBoxShips.Text.Contains("Travel") || comboBoxShips.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 if (last_he != null && last_he.ShipInformation != null)
                 {
-                    Display(last_he.ShipInformation);
+                    DisplayShip(last_he.ShipInformation);
                 }
             }
             else
             {
                 ShipInformation si = discoveryform.history.shipinformationlist.GetShipByNameIdentType(comboBoxShips.Text);
                 if (si != null)
-                    Display(si);
+                    DisplayShip(si);
             }
 
             dataGridViewModules.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewModules.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
-        private void Display(ShipInformation si)     //cargo -1 if not travel history entry
+        private void DisplayShip(ShipInformation si)    
         {
+            //System.Diagnostics.Debug.WriteLine("HE " + last_he.Indexno);
             last_si = si;
+
+            foreach (string key in si.Modules.Keys)
+            {
+                EliteDangerousCore.ShipModule sm = si.Modules[key];
+                AddModuleLine(sm);
+            }
 
             double hullmass = si.HullMass();
             double modulemass = si.ModuleMass();
 
-            foreach (string key in si.Modules.Keys)
+            EliteDangerousCalculations.FSDSpec fsdspec = si.GetFSDSpec();
+            if (fsdspec != null)
             {
-                EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule sm = si.Modules[key];
-
-                string ammo = "";
-                if (sm.AmmoHopper.HasValue)
-                {
-                    ammo = sm.AmmoHopper.Value.ToString();
-                    if (sm.AmmoClip.HasValue)
-                        ammo += "/" + sm.AmmoClip.ToString();
-                }
-
-                string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToStringInvariant("N0") : "";
-
-                string eng = "";
-                if (sm.Engineering != null)
-                    eng = sm.Engineering.FriendlyBlueprintName;
-
-                object[] rowobj = { sm.Slot, sm.Item, sm.LocalisedItem.ToNullSafeString(), ammo, eng, value, sm.PE() };
-                // debug object[] rowobj = { sm.Slot+":" + sm.SlotFD, sm.Item + ":" + sm.ItemFD, sm.LocalisedItem.ToNullSafeString() , ammo, blueprint , value, sm.PE() };
-                dataGridViewModules.Rows.Add(rowobj);
-
+                EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
+                AddInfoLine("FSD Avg Jump", ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo", fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
-
-                EliteDangerousCalculations.FSDSpec fsdspec = sm.GetFSDSpec();
-                if (fsdspec != null)
-                {
-                    rw.Cells[1].ToolTipText = rw.Cells[0].ToolTipText = fsdspec.ToString();
-                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity/2);
-                    AddInfoLine("FSD Max Jump", ji.avgsinglejumpnocargo.ToStringInvariant("N1") + "ly", "Half tank, no cargo");
-                    AddInfoLine("FSD Max Range", ji.maxjumprange.ToStringInvariant("N1") + "ly", "Full Tank, no cargo");
-                }
+                AddInfoLine("FSD Max Range", ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo", fsdspec.ToString());
+                AddInfoLine("FSD Maximum Fuel per jump", fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
             }
 
             if (si.HullValue > 0)
@@ -214,9 +201,11 @@ namespace EDDiscovery.UserControls
             if (si.Rebuy > 0)
                 AddValueLine("Rebuy Cost", si.Rebuy);
 
-            AddInfoLine("Mass Hull", hullmass.ToStringInvariant("N1") + "t");
-            AddInfoLine("Mass Unladen", (hullmass + modulemass).ToStringInvariant("N1") + "t");
-            AddInfoLine("Mass Modules", modulemass.ToStringInvariant("N1") + "t", "Unengineered");
+            AddMassLine("Mass Hull", hullmass.ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Unladen", (hullmass + modulemass).ToStringInvariant("N1") + "t");
+            AddMassLine("Mass Modules", modulemass.ToStringInvariant("N1") + "t");
+
+            AddInfoLine("Manufacturer", si.Manufacturer);
 
             if ( si.FuelCapacity > 0 )
                 AddInfoLine("Fuel Capacity", si.FuelCapacity.ToStringInvariant("N1") + "t");
@@ -227,13 +216,12 @@ namespace EDDiscovery.UserControls
             AddInfoLine("Fuel Warning %", fuelwarn > 0 ? fuelwarn.ToStringInvariant("N1") + "%" : "Off");
 
             AddInfoLine("Pad Size", si.PadSize);
-            AddInfoLine("Main Thruster Speed", si.Speed.ToStringInvariant(), "Unengineered");
-            AddInfoLine("Main Thruster Boost", si.Boost.ToStringInvariant(), "Unengineered");
+            AddInfoLine("Main Thruster Speed", si.Speed.ToStringInvariant("0.#"));
+            AddInfoLine("Main Thruster Boost", si.Boost.ToStringInvariant("0.#"));
 
             int cc = si.CargoCapacity();
             if ( cc > 0 )
                 AddInfoLine("Cargo Capacity", cc.ToStringInvariant("N0") + "t");
-
 
             LabelVehicleText.Visible = labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
@@ -241,15 +229,69 @@ namespace EDDiscovery.UserControls
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();
         }
 
-        void AddValueLine(string s, long v, string opt = "")
+        void AddModuleLine(ShipModule sm)
         {
-            object[] rowobj = { s, opt, "", "", "", v.ToString("N0"), "" };
+            string ammo = "";
+            if (sm.AmmoHopper.HasValue)
+            {
+                ammo = sm.AmmoHopper.Value.ToString();
+                if (sm.AmmoClip.HasValue)
+                    ammo += "/" + sm.AmmoClip.ToString();
+            }
+
+            string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToStringInvariant("N0") : "";
+
+            string typename = sm.LocalisedItem;
+            if (typename.IsEmpty())
+                typename = EliteDangerousCore.ShipModuleData.IsVanity(sm.Item) ? "Vanity" : "Module";
+
+            object[] rowobj = { typename,
+                                sm.Item, sm.Slot, ammo,
+                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.Engineering?.FriendlyBlueprintName ?? "",
+                                value, sm.PE() };
+
+            dataGridViewModules.Rows.Add(rowobj);
+
+            if ( sm.Engineering != null )
+            {
+                string text = sm.Engineering.ToString();
+                EliteDangerousCalculations.FSDSpec spec = sm.GetFSDSpec();
+                if (spec != null)
+                    text += spec.ToString();
+
+                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[5].ToolTipText = text;
+            }
+        }
+
+        void AddStoredModule(ModulesInStore.StoredModule sm)
+        {
+            object[] rowobj = { sm.Name_Localised.Alt(sm.Name), sm.Name,
+                                sm.StarSystem.Alt("In Transit"), sm.TransferTimeString ,
+                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.EngineerModifications.Alt(""),
+                                sm.TransferCost>0 ? sm.TransferCost.ToStringInvariant("N0") : "",
+                                "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
 
-        void AddInfoLine(string s, string v, string opt = "")
+        void AddValueLine(string s, long v, string opt = "")
         {
-            object[] rowobj = { s, opt, "", v , "", "", "" };
+            object[] rowobj = { s, opt, "", "", "", "", v.ToString("N0"), "" };
+            dataGridViewModules.Rows.Add(rowobj);
+        }
+
+        void AddInfoLine(string s, string v, string opt = "", string tooltip = "")
+        {
+            object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "","", "" };
+            dataGridViewModules.Rows.Add(rowobj);
+            if (!string.IsNullOrEmpty(tooltip))
+                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
+        }
+
+        void AddMassLine(string m, string v, string opt = "")
+        {
+            object[] rowobj = { m, opt, "", "", v, "","", "" };
             dataGridViewModules.Rows.Add(rowobj);
         }
 
@@ -389,9 +431,25 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 5)
-                e.SortDataGridViewColumnDate();
+            if (e.Column.Index == 4 || e.Column.Index == 6)
+                e.SortDataGridViewColumnNumeric("t");
         }
 
+        private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                string tt = dataGridViewModules.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText;
+                if (!string.IsNullOrEmpty(tt))
+                {
+                    Form mainform = FindForm();
+                    ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
+                    frm.Info("Module Information", mainform.Icon, tt, themeit: true);
+                    frm.Size = new Size(600, 400);
+                    frm.StartPosition = FormStartPosition.CenterParent;
+                    frm.Show(mainform);
+                }
+            }
+        }
     }
 }

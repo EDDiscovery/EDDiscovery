@@ -23,8 +23,8 @@ namespace EliteDangerousCore
             public string Rating { get { return rating; } }
             public double PowerConstant { get { return pc; } }
             public double LinearConstant { get { return lc; } }
-            public double OptimalMass { get { return mOpt; } }
-            public double MaxFuelPerJump { get { return mfpj; } }
+            public double OptimalMass { get { return mOpt; } set { mOpt = value; } }
+            public double MaxFuelPerJump { get { return mfpj; } set { mfpj = value; } }
 
             public FSDSpec(int fsdClass,
                 string rating,

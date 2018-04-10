@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            line += String.Format(" [{0:N1}ly @ {1:N1}ly / {2:N0}]", ji.avgsinglejump, ji.maxjumprange, ji.maxjumps);
+                            line += String.Format(" [{0:N1}ly, {1:N1}ly / {2:N0}]", ji.avgsinglejump, ji.maxjumprange, ji.maxjumps);
                         }
                     }
 
