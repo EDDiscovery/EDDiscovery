@@ -126,7 +126,9 @@
     <Compile Include="EliteDangerous\MaterialCommodities.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
     <Compile Include="EliteDangerous\MissionList.cs" />
-    <Compile Include="EliteDangerous\ModuleEDID.cs" />
+    <Compile Include="EliteDangerous\ShipInformationList.cs" />
+    <Compile Include="EliteDangerous\ShipModule.cs" />
+    <Compile Include="EliteDangerous\ShipModuleData.cs" />
     <Compile Include="EliteDangerous\NetLogClass.cs" />
     <Compile Include="EliteDangerous\NetLogReader.cs" />
     <Compile Include="EliteDangerous\Ranks.cs" />

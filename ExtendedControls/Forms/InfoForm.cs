@@ -33,11 +33,11 @@ namespace ExtendedControls
             InitializeComponent();
         }
 
-        public void Info(string title, Icon ic, string info , int[] array , bool themeit = false)    
+        public void Info(string title, Icon ic, string info , int[] array = null , bool themeit = false)    
         {
             Icon = ic;
             Text = title;
-            textBoxInfo.SetTabs(array);
+            textBoxInfo.SetTabs(array ?? new int[] { 0, 100, 200, 300, 400, 500, 600 });
             textBoxInfo.ReadOnly = true;
             textBoxInfo.Text = info;
             textBoxInfo.Select(0, 0);

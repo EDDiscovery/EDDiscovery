@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
+using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -53,6 +54,7 @@ namespace EDDiscovery.UserControls
         {
             displayfont = discoveryform.theme.GetFont;
 
+            showJumpsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showjumps", true);
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
             autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
             string ids = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
@@ -68,6 +70,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            SQLiteDBClass.PutSettingBool(DbSave + "showjumps", showJumpsToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
@@ -102,10 +105,10 @@ namespace EDDiscovery.UserControls
 
             Display(currentHE.System);
 
-            //t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent)); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
+            //t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent,100)); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
         }
 
-       //  double percent = 39; Timer t = new Timer();// play thru harness
+         //double percent = -10; Timer t = new Timer();// play thru harness
 
         private void Display(ISystem cursys)
         {
@@ -137,27 +140,44 @@ namespace EDDiscovery.UserControls
                     topline = String.Format("No systems in route have known co-ords");
                     bottomline = "";
                 }
-                else if (closest.system == null)  // this is returned if past last system
-                {
-                    topline = String.Format("Past Last WP{0} {1}", currentRoute.Systems.Count(), currentRoute.LastSystem);
-                    bottomline = "";
-                }
                 else
                 {
-                    double distleft = closest.waypointdistleft + closest.disttowaypoint;
+                    topline = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name,
+                                    currentRoute.Systems.Count, currentRoute.CumulativeDistance());
 
-                    string mesg = "";
-                    var jumpRange = SQLiteDBClass.GetSettingDouble("TripPanel1" + "JumpRange", -1.0);       //TBD Not a good idea.
-                    if (jumpRange > 0)
+                    double distleft = closest.disttowaypoint + (closest.deviation<0 ? 0: closest.cumulativewpdist );
+
+                    string jumpmsg = "";
+
+                    if (showJumpsToolStripMenuItem.Checked)
                     {
-                        int jumps = (int)Math.Ceiling(distleft / jumpRange);
-                        if (jumps > 0)
-                            mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
+                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = currentHE.GetJumpInfo();
+
+                        if ( ji != null )
+                        {
+                            int jumps = (int)Math.Ceiling(distleft / ji.avgsinglejump);
+
+                            if (jumps > 0)
+                                jumpmsg = " @ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
+                        }
+                        else
+                            jumpmsg = " No Ship Information or Unladen Mass not set (see Loadout screen to set)";
                     }
 
-                    topline = String.Format("{0} {1} WPs, {2:N1}ly, left {3:N1}ly {4}", currentRoute.Name, currentRoute.Systems.Count, currentRoute.CumulativeDistance(), distleft, mesg);
-                    bottomline = String.Format("{0:N2}ly to WP{1} {2} @ {3},{4},{5}", closest.disttowaypoint, closest.waypoint + 1, closest.system.Name,
-                        closest.system.X.ToString("0.#"), closest.system.Y.ToString("0.#"), closest.system.Z.ToString("0.#"));
+                    string wpposmsg = String.Format("{0} @ {1:N1},{2:N1},{3:N1} {4:N1}ly", closest.system.Name, closest.system.X, closest.system.Y, closest.system.Z, closest.disttowaypoint);
+
+                    if (closest.deviation < 0)        // if not on path
+                    {
+                        bottomline += closest.cumulativewpdist == 0 ? "From Last WP " : "To First WP ";
+                        bottomline += wpposmsg + jumpmsg;
+                    }
+                    else
+                    {
+                        topline += String.Format(", Left {0:N1}ly", distleft);
+                        bottomline += String.Format("To WP {0} ", closest.waypoint + 1);
+                        bottomline += wpposmsg + jumpmsg;
+                        bottomline += String.Format(", Dev {0:N1}ly", closest.deviation);
+                    }
 
                     //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);
                     string name = closest.system.Name;
@@ -203,6 +223,11 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void showJumpsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display();
+        }
+
         private void setRouteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
@@ -224,7 +249,7 @@ namespace EDDiscovery.UserControls
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.
 
-                // currentRoute.TestHarness(); // enable for debug
+                currentRoute.TestHarness(); // enable for debug
 
                 if (currentRoute != null)
                     SQLiteDBClass.PutSettingString(DbSave + "SelectedRoute", currentRoute.Id.ToStringInvariant());        // write ID back
@@ -234,7 +259,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
 
     }
 }

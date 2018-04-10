@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
 
     // Base class used for craft and legacy
 
-    public class JournalEngineerCraftBase : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalEngineerCraftBase : JournalEntry, IMaterialCommodityJournalEntry, IShipInformation
     {
         public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
         {
@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
             Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
             ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
 
-            Engineering = new EngineeringData(evt);
+            Engineering = new ShipModule.EngineeringData(evt);
             
             IsPreview = evt["IsPreview"].BoolNull();
             JToken mats = (JToken)evt["Ingredients"];
@@ -77,13 +77,11 @@ namespace EliteDangerousCore.JournalEvents
         public string Module { get; set; }
         public string ModuleFD { get; set; }
 
-        public EngineeringData Engineering { get; set; }
+        public ShipModule.EngineeringData Engineering { get; set; }
 
         public bool? IsPreview { get; set; }            // Only for legacy convert
 
         public Dictionary<string, int> Ingredients { get; set; }        // not for legacy convert
-
-        public EngineeringModifiers[] Modifiers;
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -91,6 +89,14 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
                     mc.Craft(k.Key, k.Value);
+            }
+        }
+
+        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        {
+            if ( (IsPreview==null || IsPreview.Value == false) && Engineering != null )
+            {
+                shp.EngineerCraft(this);
             }
         }
 
@@ -109,43 +115,5 @@ namespace EliteDangerousCore.JournalEvents
 
         // Engineering data - used here and for Loadout.
 
-        public class EngineeringData
-        {
-            public string Engineer { get; set; }
-            public string BlueprintName { get; set; }
-            public string FriendlyBlueprintName { get; set; }
-            public long EngineerID { get; set; }
-            public long BlueprintID { get; set; }
-            public int Level { get; set; }
-            public double Quality { get; set; }
-            public string ExperimentalEffect { get; set; }
-            public EngineeringModifiers[] Modifiers { get; set; }       // may be null
-
-            public EngineeringData(JObject evt)
-            {
-                Engineer = evt["Engineer"].Str();
-                EngineerID = evt["EngineerID"].Long();
-                BlueprintName = evt["BlueprintName"].Str();
-                FriendlyBlueprintName = BlueprintName.SplitCapsWordFull();
-                BlueprintID = evt["BlueprintID"].Long();
-                Level = evt["Level"].Int();
-                Quality = evt["Quality"].Double(0);
-                // EngineerCraft has it as Apply.. Loadout has just ExperimentalEffect.  Check both
-                ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
-
-                Modifiers = evt["Modifiers"]?.ToObjectProtected<EngineeringModifiers[]>();
-            }
-
-        }
-
-        public class EngineeringModifiers
-        {
-            public string Label { get; set; }
-            public string ValueStr { get; set; }            // 3.02 if set, means ones further on do not apply. check first
-            public double Value { get; set; }               // may be 0
-            public double OriginalValue { get; set; }
-            public bool LessIsGood { get; set; }
-
-        }
     }
 }

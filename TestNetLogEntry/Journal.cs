@@ -120,6 +120,10 @@ namespace NetLogEntry
 
                     lineout = "{ " + TimeStamp() + F("event", "Resurrect") + F("Option", "Help me") + F("Cost", ct) + FF("Bankrupt", false) + "}";
                 }
+                else if (writetype.Equals("Died", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    lineout = "{ " + TimeStamp() + F("event", "Died") + F("KillerName", "Evil Jim McDuff") + F("KillerName_Localised", "Evil Jim McDuff The great") + F("KillerShip", "X-Wing") + FF("KillerRank", "Invincible") + "}";
+                }
                 else if (writetype.Equals("MiningRefined", StringComparison.InvariantCultureIgnoreCase))
                     lineout = "{ " + TimeStamp() + F("event", "MiningRefined") + FF("Type", "Gold") + " }";
                 else if (writetype.Equals("EngineerCraft", StringComparison.InvariantCultureIgnoreCase))
