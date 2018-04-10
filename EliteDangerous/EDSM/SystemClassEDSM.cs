@@ -409,7 +409,7 @@ namespace EliteDangerousCore.EDSM
 
                                         if (coords != null)
                                         {
-                                            DateTime updatedate = jo.date;
+                                            DateTime updatedate = DateTime.SpecifyKind(jo.date, DateTimeKind.Utc);
 
                                             if (updatedate > maxdate)                                   // even if we reject it due to grid id, keep last date up to date
                                                 maxdate = updatedate;

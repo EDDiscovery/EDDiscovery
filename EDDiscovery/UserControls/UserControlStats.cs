@@ -151,6 +151,9 @@ namespace EDDiscovery.UserControls
                                       ", One Year: " + hl.GetFSDJumps(new TimeSpan(365, 0, 0, 0))
                                       );
 
+                int discovered = hl.Where(x => x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData).Sum(x => ((JournalSellExplorationData)x.journalEntry).Discovered.Count());
+                StatToDGV("First Discoveries", discovered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+
                 HistoryEntry north = hl.GetConditionally(Double.MinValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Z > l; if (v) l = s.System.Z; return v; });
 
@@ -168,7 +171,7 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry down = hl.GetConditionally(Double.MaxValue, (HistoryEntry s, ref double l) =>
                 { bool v = s.IsFSDJump && s.System.HasCoordinate && s.System.Y < l; if (v) l = s.System.Y; return v; });
-
+                
                 StatToDGV("Most North", north.System.Name + " @ " + north.System.X.ToString("0.0") + "; " + north.System.Y.ToString("0.0") + "; " + north.System.Z.ToString("0.0"));
                 StatToDGV("Most South", south.System.Name + " @ " + south.System.X.ToString("0.0") + "; " + south.System.Y.ToString("0.0") + "; " + south.System.Z.ToString("0.0"));
                 StatToDGV("Most East", east.System.Name + " @ " + east.System.X.ToString("0.0") + "; " + east.System.Y.ToString("0.0") + "; " + east.System.Z.ToString("0.0"));
