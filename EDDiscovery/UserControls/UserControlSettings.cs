@@ -30,7 +30,9 @@ using System.Threading.Tasks;
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
-    {
+    {        
+        public string dataOutputDir { get { return textBoxOutputDir.Text; } }
+        
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public UserControlSettings()
@@ -54,6 +56,17 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
             discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
+
+            if (SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir) == "")
+            {
+                textBoxOutputDir.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "Frontier Developments", "Elite Dangerous");
+            }
+            else
+            {
+                textBoxOutputDir.Text = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
+            }
+
+            
         }
 
         void SetEntryThemeComboBox()
@@ -125,6 +138,8 @@ namespace EDDiscovery.UserControls
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged -= ParentForm_TopMostChanged;
+
+            SQLiteDBClass.PutSettingString("ImageHandlerOutputDir", dataOutputDir);
         }
 
         private void DiscoveryForm_OnRefreshCommanders()
@@ -529,6 +544,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void buttonChangeScreenshotsFolder_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+
+            dlg.Description = "Select converted screenshot folder";
+            dlg.SelectedPath = textBoxOutputDir.Text;
+
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                textBoxOutputDir.Text = dlg.SelectedPath;
+            }
+        }
     }
 }
 
