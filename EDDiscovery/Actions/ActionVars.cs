@@ -157,7 +157,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Ship_Module_Count"] = si.Modules.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
                 int ind = 0;
-                foreach (EliteDangerousCore.JournalEvents.JournalLoadout.ShipModule m in si.Modules.Values)
+                foreach (ShipModule m in si.Modules.Values)
                 {
                     string mi = prefix + "Ship_Module[" + ind.ToString() + "]_";
                     vars[mi + "Slot"] = m.Slot;
@@ -169,6 +169,7 @@ namespace EDDiscovery.Actions
                     vars[mi + "Blueprint"] = (m.Engineering != null) ? m.Engineering.FriendlyBlueprintName : "";
                     vars[mi + "Health"] = m.Health.ToStringInvariant();
                     vars[mi + "Value"] = m.Value.ToStringInvariant();
+                    vars[mi + "Mass"] = m.Mass.ToStringInvariant();
                     ind++;
                 }
             }

@@ -46,10 +46,11 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
-            this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SlotCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -88,10 +89,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewModules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewModules.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SlotCol,
-            this.ItemCol,
             this.ItemLocalised,
+            this.ItemCol,
+            this.SlotCol,
             this.ItemInfo,
+            this.Mass,
             this.BluePrint,
             this.Value,
             this.PriorityEnable});
@@ -101,14 +103,15 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewModules.TabIndex = 1;
+            this.dataGridViewModules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellClick);
             this.dataGridViewModules.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
             // 
-            // SlotCol
+            // ItemLocalised
             // 
-            this.SlotCol.HeaderText = "Slot";
-            this.SlotCol.MinimumWidth = 50;
-            this.SlotCol.Name = "SlotCol";
-            this.SlotCol.ReadOnly = true;
+            this.ItemLocalised.HeaderText = "Type";
+            this.ItemLocalised.MinimumWidth = 100;
+            this.ItemLocalised.Name = "ItemLocalised";
+            this.ItemLocalised.ReadOnly = true;
             // 
             // ItemCol
             // 
@@ -118,12 +121,12 @@ namespace EDDiscovery.UserControls
             this.ItemCol.Name = "ItemCol";
             this.ItemCol.ReadOnly = true;
             // 
-            // ItemLocalised
+            // SlotCol
             // 
-            this.ItemLocalised.HeaderText = "Name";
-            this.ItemLocalised.MinimumWidth = 100;
-            this.ItemLocalised.Name = "ItemLocalised";
-            this.ItemLocalised.ReadOnly = true;
+            this.SlotCol.HeaderText = "Slot";
+            this.SlotCol.MinimumWidth = 50;
+            this.SlotCol.Name = "SlotCol";
+            this.SlotCol.ReadOnly = true;
             // 
             // ItemInfo
             // 
@@ -132,6 +135,14 @@ namespace EDDiscovery.UserControls
             this.ItemInfo.MinimumWidth = 20;
             this.ItemInfo.Name = "ItemInfo";
             this.ItemInfo.ReadOnly = true;
+            // 
+            // Mass
+            // 
+            this.Mass.FillWeight = 50F;
+            this.Mass.HeaderText = "Mass";
+            this.Mass.MinimumWidth = 20;
+            this.Mass.Name = "Mass";
+            this.Mass.ReadOnly = true;
             // 
             // BluePrint
             // 
@@ -155,6 +166,7 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable.HeaderText = "P/E";
             this.PriorityEnable.MinimumWidth = 20;
             this.PriorityEnable.Name = "PriorityEnable";
+            this.PriorityEnable.ReadOnly = true;
             // 
             // vScrollBarCustomMC
             // 
@@ -320,13 +332,14 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ButtonExt buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ButtonExt buttonExtEDShipyard;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
+        private ExtendedControls.ButtonExt buttonExtConfigure;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mass;
         private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
         private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
-        private ExtendedControls.ButtonExt buttonExtConfigure;
     }
 }
