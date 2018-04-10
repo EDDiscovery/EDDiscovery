@@ -129,6 +129,7 @@ namespace EDDiscovery.UserControls
             plotViewFront.Refresh();
             plotViewSide.Refresh();
             dataGridList.Rows.Clear();
+            reportView.Text = string.Empty;
             reportView.Refresh();
 
             var x = this.Handle; // workaround to avoid throw an exception if open the panel as pop up
@@ -236,7 +237,7 @@ namespace EDDiscovery.UserControls
 
                         // print information on each member of the list;
                         reportView.Text += ("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
-                        reportView.Text += ("\n" + "Visits " + visits.ToString());
+                        reportView.Text += ("\n" + "Visits: " + visits.ToString());
                         reportView.Text += ("\nCoordinates: " + "X:" + sysX + ", Y:" + sysY + ", Z:" + sysZ);
 
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
