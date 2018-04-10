@@ -13,6 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -261,149 +262,174 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public double CumulativeDistance(string start = null)   // optional first system to measure from
+        public List<ISystem> KnownSystemList()          // list of known system only.  ID holds original index of entry from Systems
         {
-            ISystem last = null;
-            double distance = 0;
-
-            int i = 0;
-
-            if ( start != null)
-            {
-                i = Systems.FindIndex(x => x.Equals(start, StringComparison.InvariantCultureIgnoreCase));
-                if (i == -1)
-                    return -1;
-            }
-
-            for (; i < Systems.Count; i++)
-            {
-                ISystem s = SystemCache.FindSystem(Systems[i]);
-                if (s != null)
-                {
-                    if (last != null)
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Cum dist " + s.Name + " " + last.Name + " " + distance + " " + s.Distance(last));
-                        distance += s.Distance(last);
-                    }
-
-                    last = s;
-                }
-            }
-
-            return distance;
-        }
-
-        public ISystem PosAlongRoute(double percentage)             // go along route and give me a co-ord along it..
-        {
-            double dist = CumulativeDistance();
-            //System.Diagnostics.Debug.WriteLine("Total trip distance " + dist);
-            dist *= percentage / 100.0;
-
-            ISystem last = null;
-
+            List<ISystem> list = new List<ISystem>();
             for (int i = 0; i < Systems.Count; i++)
             {
                 ISystem s = SystemCache.FindSystem(Systems[i]);
                 if (s != null)
                 {
-                    if (last != null)
-                    {
-                        double d = s.Distance(last);
-
-                        if (dist < d)
-                        {
-                            d = dist / d;
-                            //System.Diagnostics.Debug.WriteLine(percentage + " " + d + " last:" + last.X + " " + last.Y + " " + last.Z + " s:" + s.X + " " + s.Y + " " + s.Z);
-                            return new SystemClass("WP" + (i).ToString() + "-" + "WP" + (i + 1).ToString() + "-" + d.ToString("#.00"), last.X + (s.X - last.X) * d, last.Y + (s.Y - last.Y) * d, last.Z + (s.Z - last.Z) * d);
-                        }
-
-                        dist -= d;
-                    }
-
-                    last = s;
+                    s.ID = i;
+                    list.Add(s);
                 }
             }
 
-            return last;
+            return list;
         }
+
+
+        public double CumulativeDistance(ISystem start = null, List<ISystem> knownsystems = null)   // optional first system to measure from
+        {
+            if ( knownsystems == null )
+                knownsystems = KnownSystemList();
+
+            double distance = 0;
+            int i = 0;
+
+            if ( start != null)
+            {
+                i = knownsystems.FindIndex(x => x.Name.Equals(start.Name, StringComparison.InvariantCultureIgnoreCase));
+                if (i == -1)
+                    return -1;
+            }
+
+            for (i++; i < knownsystems.Count; i++)                          // from 1, or 1 past found, to end, accumulate distance
+                distance += knownsystems[i].Distance(knownsystems[i-1]);
+
+            return distance;
+        }
+
+
+        public ISystem PosAlongRoute(double percentage, int error = 0)             // go along route and give me a co-ord along it..
+        {
+            List<ISystem> knownsystems = KnownSystemList();
+
+            double totaldist = CumulativeDistance(null,knownsystems);
+            double distleft = totaldist * percentage / 100.0;
+
+            if (knownsystems.Count < 2)     // need a path
+                return null;
+
+            Point3D syspos = null;
+            string name = "";
+
+            if (percentage < 0 || percentage > 100)                         // not on route, interpolate to/from
+            {
+                int i = (percentage < 0) ? 0 : knownsystems.Count - 2;      // take first two, or last two.
+
+                Point3D pos1 = P3D(knownsystems[i]);
+                Point3D pos2 = P3D(knownsystems[i + 1]);
+                double p12dist = pos1.Distance(pos2);
+                double pospath = (percentage > 100) ? (1.0 + (percentage - 100) * totaldist / p12dist / 100.0) : (percentage * totaldist / p12dist / 100.0);
+                syspos = pos1.PointAlongPath(pos2, pospath );       // amplify percentage by totaldist/this path dist
+                name = "System at " + percentage.ToString("N1");
+            }
+            else
+            {
+                for (int i = 1; i < knownsystems.Count; i++)
+                {
+                    double d = knownsystems[i].Distance(knownsystems[i - 1]);
+
+                    if (distleft<d || (i==knownsystems.Count-1))        // if left, OR last system (allows for some rounding errors on floats)
+                    {
+                        d = distleft / d;
+                        //System.Diagnostics.Debug.WriteLine(percentage + " " + d + " last:" + last.X + " " + last.Y + " " + last.Z + " s:" + s.X + " " + s.Y + " " + s.Z);
+                        name = "WP" + knownsystems[i - 1].ID.ToString() + "-" + "WP" + knownsystems[i].ID.ToString() + "-" + d.ToString("#.00");
+                        syspos = new Point3D(knownsystems[i - 1].X + (knownsystems[i].X - knownsystems[i - 1].X) * d, knownsystems[i - 1].Y + (knownsystems[i].Y - knownsystems[i - 1].Y) * d, knownsystems[i - 1].Z + (knownsystems[i].Z - knownsystems[i - 1].Z) * d);
+                        break;
+                    }
+
+                    distleft -= d;
+                }
+            }
+
+            if (error > 0)
+                return new SystemClass(name, syspos.X + rnd.Next(error), syspos.Y + rnd.Next(error), syspos.Z + rnd.Next(error));
+            else
+                return new SystemClass(name, syspos.X, syspos.Y, syspos.Z);
+        }
+
+        Random rnd = new Random();
 
         // given the system list, which is the next waypoint to go to.  return the system (or null if not available or past end) and the waypoint.. (0 based) and the distance on the path left..
 
         public class ClosestInfo
         {
             public ISystem system;
-            public int waypoint;
-            public double waypointdistleft;
-            public double disttowaypoint;
-            public ClosestInfo( ISystem s, int w, double wdl, double dtwp) { system = s; waypoint = w; waypointdistleft = wdl; disttowaypoint = dtwp; }
+            public int waypoint;                    // index of Systems
+            public double deviation;                // -1 if not on path
+            public double cumulativewpdist;         // distance after the WP, 0 means no more WPs after this
+            public double disttowaypoint;           // distance to WP
+            public ClosestInfo( ISystem s, int w, double dv, double wdl, double dtwp) { system = s; waypoint = w; deviation = dv; cumulativewpdist = wdl; disttowaypoint = dtwp; }
+        }
+
+        static Point3D P3D(ISystem s)
+        {
+            return new Point3D(s.X, s.Y, s.Z);
         }
 
         public ClosestInfo ClosestTo(ISystem currentsystem)
         {
-            double dist = Double.MaxValue;
-            ISystem found = null;
-            int closest = -1;
+            Point3D currentsystemp3d = P3D(currentsystem);
 
-            List<ISystem> list = new List<ISystem>();
+            List<ISystem> knownsystems = KnownSystemList();
 
-            for (int i = 0; i < Systems.Count; i++)
+            if (knownsystems.Count < 1)     // need at least one
+                return null;
+
+            double mininterceptdist = Double.MaxValue;
+            int interceptendpoint = -1;
+
+            double closesttodist = Double.MaxValue;
+            int closestto = -1;
+
+            for (int i = 0; i < knownsystems.Count; i++)
             {
-                ISystem s = SystemCache.FindSystem(Systems[i]);
-
-                if (s != null && s.HasCoordinate)
+                if (i > 0)
                 {
-                    double sd = s.Distance(currentsystem);
-                    if (sd < dist)
+                    Point3D lastp3d = P3D(knownsystems[i - 1]);
+                    Point3D top3d = P3D(knownsystems[i]);
+
+                    double distbetween = lastp3d.Distance(top3d);
+
+                    double interceptpercent = lastp3d.InterceptPercentageDistance(top3d, currentsystemp3d, out double dist);       //dist to intercept point on line note.
+                    //System.Diagnostics.Debug.WriteLine("From " + knownsystems[i - 1].ToString() + " to " + knownsystems[i].ToString() + " Percent " + interceptpercent + " Distance " + dist);
+
+                    // allow a little margin in the intercept point for randomness, must be min dist, and not stupidly far.
+                    if (interceptpercent >= -0.01 && interceptpercent < 1.01 && dist < mininterceptdist && dist < distbetween)
                     {
-                        dist = sd;
-                        closest = i;
-                        found = s;
+                        interceptendpoint = i;
+                        mininterceptdist = dist;
                     }
                 }
-                list.Add(s);
+
+                double disttofirstpoint = currentsystemp3d.Distance(P3D(knownsystems[i]));
+
+                if (disttofirstpoint < closesttodist)
+                {
+                    closesttodist = disttofirstpoint;
+                    closestto = i;
+                }
             }
 
+            int topos = interceptendpoint;     // default value
 
-            if (found != null)
+            if (topos == -1)        // if not on path
             {
-                //System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Found at " + closest + " System " + found.Name + " " + found.X + " " + found.Y + " " + found.Z + " dist " + dist + " cur " + currentsystem.X + "," + currentsystem.Y + "," + currentsystem.Z);
-
-                if (closest > 0)    // if not starting point
-                {
-                    int lastentry = closest - 1;
-                    while (lastentry >= 0 && list[lastentry] == null)       // go and find the last one which had a position..
-                        lastentry--;
-
-                    if (lastentry >= 0 && list[lastentry] != null)      // found it, so work out using distance if we are closest to last or past it
-                    {
-                        double distlasttoclosest = list[closest].Distance(list[lastentry]);     // last->closest vs
-                        double distlasttocurrent = currentsystem.Distance(list[lastentry]);         // last->cur position
-
-                        //System.Diagnostics.Debug.WriteLine("Dist to last " + list[lastentry].Name + "=" + distlasttocurrent + " >? Dist last to closest" + distlasttoclosest);
-
-                        if (distlasttocurrent > distlasttoclosest - 0.1)   // past closest because the distance last->cur > last->closest waypoint
-                        {
-                            closest++;      // must move to next target
-                            //System.Diagnostics.Debug.WriteLine("Moved to " + closest);
-                        }
-
-                        if (closest < Systems.Count )       // is this still a valid system..
-                        {
-                            ISystem nextsys = list[closest];
-                            double distanceleft = CumulativeDistance(nextsys.Name);     // -1 if can't find..
-                            //System.Diagnostics.Debug.WriteLine("Cum dist " + distanceleft + " to  current system " + currentsystem.Distance(nextsys));
-
-                            return new ClosestInfo(nextsys, closest, distanceleft, currentsystem.Distance(nextsys)); // en-route to this. may be null
-                        }
-                        else
-                            return new ClosestInfo(null, closest, -1,-1); // pass last.. end of trip
-                    }
-                }
-
-                return new ClosestInfo(found, closest, CumulativeDistance(), currentsystem.Distance(found));
+                topos = closestto;
+                mininterceptdist = -1;
+                //System.Diagnostics.Debug.WriteLine("Not on path, closest to" + knownsystems[closestto].ToString());
             }
             else
-                return null;
+            { 
+                //System.Diagnostics.Debug.WriteLine("Lies on line to WP" + interceptendpoint + " " + knownsystems[interceptendpoint].ToString());
+            }
+
+            double distto = currentsystemp3d.Distance(P3D(knownsystems[topos]));
+            double cumldist = CumulativeDistance(knownsystems[topos], knownsystems);
+
+            return new ClosestInfo(knownsystems[topos], (int)knownsystems[topos].ID, mininterceptdist, cumldist, distto);
         }
 
         // Given a set of expedition files, update the DB.  Add any new ones, and make sure the EDSM marker is on.
@@ -491,16 +517,16 @@ namespace EliteDangerousCore.DB
 
         public void TestHarness()       // fly the route and debug the closestto.. keep this for testing
         {
-            for (double percent = 0; percent < 110; percent += 0.1)
+            for (double percent = -10; percent < 110; percent += 0.1)
             {
-                ISystem cursys = PosAlongRoute(percent);
+                ISystem cursys = PosAlongRoute(percent,100);
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.X, cursys.Y, cursys.Z, cursys.Name);
 
                 ClosestInfo closest = ClosestTo(cursys);
 
                 if (closest != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} wpdistleft {5} towp {6}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.disttowaypoint, closest.waypointdistleft);
+                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} dev {5} dist to wp {6} cumul left {7}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.deviation , closest.disttowaypoint, closest.cumulativewpdist);
                 }
             }
         }

@@ -14,15 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.ObjectModel;
 using EDDiscovery.Forms;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
@@ -36,7 +31,7 @@ namespace EDDiscovery.UserControls
 
         private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
-        HistoryEntry lastHE;
+        private HistoryEntry lastHE;
 
         private Font displayfont;
 
@@ -49,33 +44,10 @@ namespace EDDiscovery.UserControls
         {
             displayfont = discoveryform.theme.GetFont;
 
-            jumpRange = SQLiteDBClass.GetSettingDouble(DbSave + "JumpRange", -1.0);
-            tankSize = SQLiteDBClass.GetSettingDouble(DbSave + "TankSize", -1);
-            currentCargo = SQLiteDBClass.GetSettingDouble(DbSave + "currentCargo", 0);
-            unladenMass = SQLiteDBClass.GetSettingDouble(DbSave + "unladenMass", -1);
-
-            linearConstant = SQLiteDBClass.GetSettingDouble(DbSave + "linearConstant", -1);
-            powerConstant = SQLiteDBClass.GetSettingDouble(DbSave + "powerConstant", -1);
-            optimalMass = SQLiteDBClass.GetSettingDouble(DbSave + "optimalMass", -1);
-            maxFuelPerJump = SQLiteDBClass.GetSettingDouble(DbSave + "maxFuelPerJump", -1);
-            fsdDrive = SQLiteDBClass.GetSettingString(DbSave + "fsdDrive", null);
-            tankWarning = SQLiteDBClass.GetSettingDouble(DbSave + "TankWarning", -1);
-
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;
         }
-
-        private double jumpRange = -1;
-        private double tankSize = -1;
-        private double currentCargo = -1;
-        private double linearConstant = -1;
-        private double unladenMass = -1;
-        private double optimalMass = -1;
-        private double powerConstant = -1;
-        private double maxFuelPerJump = -1;
-        private string fsdDrive = null;
-        private double tankWarning = -1;
 
         public override void Closing()
         {
@@ -141,118 +113,69 @@ namespace EDDiscovery.UserControls
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                string name;
-                Point3D tpos;
-                bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
+                EliteDangerousCalculations.FSDSpec.JumpInfo ji = he.GetJumpInfo();          // may be null
 
-                String topline = "  Route Not Set";
+                String line = "  Target Not Set";
 
-                if (targetpresent)
+                if (TargetClass.GetTargetPosition(out string name, out Point3D tpos))
                 {
                     double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
 
                     string mesg = "Left";
-                    if (jumpRange > 0)
+
+                    if (ji!=null)
                     {
-                        int jumps = (int)Math.Ceiling(dist / jumpRange);
+                        int jumps = (int)Math.Ceiling(dist / ji.avgsinglejump);
                         if (jumps > 0)
                             mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                     }
-                    topline = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
+
+                    line = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
                 }
 
-                topline = String.Format("{0} [{2}] | {1}", he.System.Name, topline, discoveryform.history.GetVisitsCount(he.System.Name));
+                line = String.Format("{0} [{1}] | {2}", he.System.Name, discoveryform.history.GetVisitsCount(he.System.Name) , line);
 
-                pictureBox.AddTextAutoSize(new Point(100, 5), new Size(1000, 40), topline, displayfont, textcolour, backcolour, 1.0F);
+                pictureBox.AddTextAutoSize(new Point(100, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
-                string botline = "";
-
-                botline += String.Format("{0:n}{1} @ {2} | {3} | ", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly (*)" : "ly"),
+                line = String.Format("{0:n}{1} @ {2} | {3} | ", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly (*)" : "ly"),
                                         he.Travelledjumps,
                                         he.TravelledSeconds);
 
-                ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(new Point(100, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
+                ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(new Point(100, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
-
-                double fuel = 0.0;
-                HistoryEntry fuelhe;
-
-
-                switch (he.journalEntry.EventTypeID)
+                ShipInformation si = he.ShipInformation;
+                if (si!=null)
                 {
-                    case JournalTypeEnum.FuelScoop:
-                        fuel = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
-                        break;
-                    case JournalTypeEnum.FSDJump:
-                        fuel = (he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
-                        break;
-                    case JournalTypeEnum.RefuelAll:
-                        fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
-                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
-                        if (fuelhe.journalEntry.EventTypeID == EliteDangerousCore.JournalTypeEnum.FSDJump)
-                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
-                        else
-                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
-                        fuel += (he.journalEntry as EliteDangerousCore.JournalEvents.JournalRefuelAll).Amount;
-                        break;
-                    case JournalTypeEnum.RefuelPartial:
-                        fuelhe = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.FSDJump
-                    || x.journalEntry.EventTypeID == JournalTypeEnum.FuelScoop);
-                        if (fuelhe.journalEntry.EventTypeID == EliteDangerousCore.JournalTypeEnum.FSDJump)
-                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).FuelLevel;
-                        else
-                            fuel = (fuelhe.journalEntry as EliteDangerousCore.JournalEvents.JournalFuelScoop).Total;
-                        fuel += (he.journalEntry as EliteDangerousCore.JournalEvents.JournalRefuelPartial).Amount;
-                        break;
-                    //fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelAll).Amount;
-                    //case EliteDangerous.JournalTypeEnum.RefuelPartial:
-                    ////fuel += (he.journalEntry as EliteDangerous.JournalEvents.JournalRefuelPartial).Amount;
-                    default:
-                        break;
-                }
-                fuel = Math.Floor(fuel * 100.0) / 100.0;
-                if (tankSize == -1 || tankWarning == -1)
-                {
-                    botline = "Please set ships details";
-                }
-                else
-                {
-                    if (fuel > tankSize)
-                        fuel = tankSize;
-                    botline = String.Format("{0}t / {1}t", fuel.ToString("N1"), tankSize.ToString("N1"));
+                    double fuel = si.FuelLevel;
+                    double tanksize = si.FuelCapacity;
+                    double warninglevelpercent = si.FuelWarningPercent;
 
-                    if ((fuel / tankSize) < (tankWarning / 100.0))
+                    line = String.Format("{0}/{1}t", fuel.ToString("N1"), tanksize.ToString("N1"));
+
+                    if ( warninglevelpercent > 0 && fuel < tanksize * warninglevelpercent / 100.0 )
                     {
                         textcolour = discoveryform.theme.TextBlockHighlightColor;
-                        botline += String.Format(" < {0}%", tankWarning.ToString("N1"));
+                        line += String.Format(" < {0}%", warninglevelpercent.ToString("N1"));
                     }
+
+                    if ( ji != null )
+                    { 
+                        HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
+                        if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
+                        {
+                            double jumpdistance = ji.avgsinglejump * (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
+                            line += String.Format(" [{0:N1}ly @ BOOST]", jumpdistance);
+                        }
+                        else
+                        {
+                            line += String.Format(" [{0:N1}ly, {1:N1}ly / {2:N0}]", ji.avgsinglejump, ji.maxjumprange, ji.maxjumps);
+                        }
+                    }
+
+                    pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
                 }
 
-                if (currentCargo >= 0 && linearConstant > 0 && unladenMass > 0 && optimalMass > 0
-                    && powerConstant > 0 && maxFuelPerJump > 0)
-                {
-                    double maxJumps = 0;
-                    double maxJumpDistance = EliteDangerousCore.EliteDangerousCalculations.CalculateMaxJumpDistance(fuel,
-                        currentCargo, linearConstant, unladenMass,
-                        optimalMass, powerConstant,
-                        maxFuelPerJump, out maxJumps);
-                    double JumpRange = Math.Pow(maxFuelPerJump / (linearConstant * 0.001), 1 / powerConstant) * optimalMass / (currentCargo + unladenMass + fuel);
 
-                    HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
-                    if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
-                    {
-                        JumpRange *= (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
-                        botline += String.Format(" [{0:N2}ly @ BOOST]", Math.Floor(JumpRange * 100) / 100);
-                    }
-                    else
-                    {
-                        botline += String.Format(" [{0:N2}ly @ {1:N2}ly / {2:N0}]",
-                         Math.Floor(JumpRange * 100) / 100,
-                         Math.Floor(maxJumpDistance * 100) / 100,
-                         Math.Floor(maxJumps * 100) / 100);
-                    }
-                }
-                pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), botline, displayfont, textcolour, backcolour, 1.0F);
                 pictureBox.Render();
             }
         }
@@ -302,52 +225,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private void setShipDetailsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ShipDetails form =    new ShipDetails();
-            form.JumpRange = jumpRange;
-            form.TankSize = tankSize;
-            form.CurrentCargo = currentCargo;
-            form.UnladenMass = unladenMass;
-            form.LinearConstant = linearConstant;
-            form.PowerConstant = powerConstant;
-            form.OptimalMass = optimalMass;
-            form.maxFuelPerJump = maxFuelPerJump;
-            form.FSDDrive = "5A";
-            form.tankWarning = tankWarning;
-
-            if (form.ShowDialog(this.FindForm() )== DialogResult.OK){
-
-                jumpRange = form.JumpRange;
-                tankSize = form.TankSize;
-                currentCargo = form.CurrentCargo;
-                unladenMass = form.UnladenMass;
-                powerConstant = form.PowerConstant;
-                optimalMass = form.OptimalMass;
-                maxFuelPerJump = form.maxFuelPerJump;
-                fsdDrive = form.FSDDrive;
-                linearConstant = form.LinearConstant;
-                tankWarning = form.tankWarning;
-
-                SQLiteDBClass.PutSettingDouble(DbSave + "JumpRange", jumpRange);
-                SQLiteDBClass.PutSettingDouble(DbSave + "TankSize", tankSize);
-                SQLiteDBClass.PutSettingDouble(DbSave + "currentCargo", currentCargo);
-                SQLiteDBClass.PutSettingDouble(DbSave + "unladenMass", unladenMass);
-                SQLiteDBClass.PutSettingDouble(DbSave + "linearConstant", linearConstant);
-                SQLiteDBClass.PutSettingDouble(DbSave + "powerConstant", powerConstant);
-                SQLiteDBClass.PutSettingDouble(DbSave + "optimalMass", optimalMass);
-                SQLiteDBClass.PutSettingDouble(DbSave + "maxFuelPerJump", maxFuelPerJump);
-                SQLiteDBClass.PutSettingDouble(DbSave + "TankWarning", tankWarning);
-                SQLiteDBClass.PutSettingString(DbSave + "fsdDrive", fsdDrive);
-
-                displayLastFSDOrScoop(lastHE);
-            }
-        }
-
-        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            displayLastFSDOrScoop(lastHE);
-        }
     }
 }
 

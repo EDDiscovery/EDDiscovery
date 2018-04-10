@@ -77,6 +77,11 @@ namespace EMK.LightGeometry
         /// <param name="P1">First point.</param>
         /// <param name="P2">Second point.</param>
         /// <returns>Distance value.</returns>
+        public double Distance(Point3D P2)
+        {
+            return Math.Sqrt((this.X - P2.X) * (this.X - P2.X) + (this.Y - P2.Y) * (this.Y - P2.Y) + (this.Z - P2.Z) * (this.Z - P2.Z));
+        }
+
         public static double DistanceBetween(Point3D P1, Point3D P2)
         {
             return Math.Sqrt((P1.X - P2.X) * (P1.X - P2.X) + (P1.Y - P2.Y) * (P1.Y - P2.Y) + (P1.Z - P2.Z) * (P1.Z - P2.Z));
@@ -104,9 +109,17 @@ namespace EMK.LightGeometry
             return new Point3D(this.X + (x1.X - this.X) * i, this.Y + (x1.Y - this.Y) * i, this.Z + (x1.Z - this.Z) * i);
         }
 
-        public Point3D InterceptPoint( Point3D x2, Point3D x0 )     // from this(x1) to X2, given a point x0, where do the perpendiclar intercept?
+        public Point3D InterceptPoint(Point3D x2, Point3D x0)     // from this(x1) to X2, given a point x0, where do the perpendiclar intercept?
         {
             return PointAlongPath(x2, InterceptPercent(x2, x0));
+        }
+
+        public double InterceptPercentageDistance(Point3D x2, Point3D x0, out double dist )     // from this(x1) to X2, given a point x0, where do the perpendiclar intercept?
+        {
+            double ip = InterceptPercent(x2, x0);
+            Point3D point = PointAlongPath(x2, ip);
+            dist = DistanceBetween(x0,point);
+            return ip;
         }
 
         public Point3D Subtract(Point3D other )

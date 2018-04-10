@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showJumpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -66,10 +67,11 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setRouteToolStripMenuItem,
+            this.showJumpsToolStripMenuItem,
             this.autoCopyWPToolStripMenuItem,
             this.autoSetTargetToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 114);
             // 
             // setRouteToolStripMenuItem
             // 
@@ -78,9 +80,21 @@ namespace EDDiscovery.UserControls
             this.setRouteToolStripMenuItem.Text = "Set route";
             this.setRouteToolStripMenuItem.Click += new System.EventHandler(this.setRouteToolStripMenuItem_Click);
             // 
+            // showJumpsToolStripMenuItem
+            // 
+            this.showJumpsToolStripMenuItem.Checked = true;
+            this.showJumpsToolStripMenuItem.CheckOnClick = true;
+            this.showJumpsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showJumpsToolStripMenuItem.Name = "showJumpsToolStripMenuItem";
+            this.showJumpsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.showJumpsToolStripMenuItem.Text = "Show Jumps To Go";
+            this.showJumpsToolStripMenuItem.Click += new System.EventHandler(this.showJumpsToolStripMenuItem_Click);
+            // 
             // autoCopyWPToolStripMenuItem
             // 
+            this.autoCopyWPToolStripMenuItem.Checked = true;
             this.autoCopyWPToolStripMenuItem.CheckOnClick = true;
+            this.autoCopyWPToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoCopyWPToolStripMenuItem.Name = "autoCopyWPToolStripMenuItem";
             this.autoCopyWPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.autoCopyWPToolStripMenuItem.Text = "Auto copy waypoint";
@@ -88,7 +102,9 @@ namespace EDDiscovery.UserControls
             // 
             // autoSetTargetToolStripMenuItem
             // 
+            this.autoSetTargetToolStripMenuItem.Checked = true;
             this.autoSetTargetToolStripMenuItem.CheckOnClick = true;
+            this.autoSetTargetToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoSetTargetToolStripMenuItem.Name = "autoSetTargetToolStripMenuItem";
             this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
@@ -112,5 +128,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem setRouteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoSetTargetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showJumpsToolStripMenuItem;
     }
 }

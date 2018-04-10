@@ -21,7 +21,7 @@ namespace ExtendedControls
 {
     public abstract class NumberBox<T> : TextBoxBorder
     {
-        public string Format { get { return format; } set { format = value; } }
+        public string Format { get { return format; } set { format = value; base.Text = ConvertToString(Value); } }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public System.Globalization.CultureInfo FormatCulture { get { return culture; } set { culture = value; } }

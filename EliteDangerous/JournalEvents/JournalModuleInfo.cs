@@ -41,14 +41,14 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Rescan(JObject evt)
         { 
-            ShipModules = new List<JournalLoadout.ShipModule>();
+            ShipModules = new List<ShipModule>();
 
             JArray jmodules = (JArray)evt["Modules"];
             if (jmodules != null)
             {
                 foreach (JObject jo in jmodules)
                 {
-                    JournalLoadout.ShipModule module = new JournalLoadout.ShipModule( 
+                    ShipModule module = new ShipModule( 
                                                         JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
                                                         JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
@@ -80,7 +80,7 @@ namespace EliteDangerousCore.JournalEvents
             return jnew != null;
         }
 
-        public List<JournalLoadout.ShipModule> ShipModules;
+        public List<ShipModule> ShipModules;
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -88,7 +88,7 @@ namespace EliteDangerousCore.JournalEvents
             info = BaseUtils.FieldBuilder.Build("Modules:", ShipModules.Count);
             detailed = "";
 
-            foreach (JournalLoadout.ShipModule m in ShipModules)
+            foreach (ShipModule m in ShipModules)
             {
                 double? power = (m.Power.HasValue && m.Power.Value > 0) ? m.Power : null;
 

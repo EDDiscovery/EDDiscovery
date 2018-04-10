@@ -27,7 +27,7 @@ namespace EliteDangerousCore.JournalEvents
     //Parameters:
     //•	Killers: a JSON array of objects containing player name, ship, and rank
     [JournalEntryType(JournalTypeEnum.Died)]
-    public class JournalDied : JournalEntry
+    public class JournalDied : JournalEntry, IMissions, IMaterialCommodityJournalEntry
     {
         public class Killer
         {
@@ -71,6 +71,17 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public Killer[] Killers { get; set; }
+
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        {
+            mlist.Died(this.EventTimeUTC);
+        }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Died();
+        }
+
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {

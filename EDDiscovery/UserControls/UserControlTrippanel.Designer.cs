@@ -43,46 +43,18 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.setJumpRangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
-            this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(728, 570);
             this.pictureBox.TabIndex = 0;
             this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setJumpRangeToolStripMenuItem,
-            this.refreshToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
-            // 
-            // setJumpRangeToolStripMenuItem
-            // 
-            this.setJumpRangeToolStripMenuItem.Name = "setJumpRangeToolStripMenuItem";
-            this.setJumpRangeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.setJumpRangeToolStripMenuItem.Text = "Set ship details";
-            this.setJumpRangeToolStripMenuItem.Click += new System.EventHandler(this.setShipDetailsToolStripMenuItem_Click);
-            // 
-            // refreshToolStripMenuItem
-            // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // UserControlTrippanel
             // 
@@ -92,7 +64,6 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlTrippanel";
             this.Size = new System.Drawing.Size(728, 570);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -100,8 +71,5 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem setJumpRangeToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
     }
 }

@@ -21,12 +21,15 @@ using System.Text;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore
 {
     [System.Diagnostics.DebuggerDisplay("{ID} {ShipType} {Modules.Count}")]
     public class ShipInformation
     {
+        #region Information interface
+
         public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
         public bool Sold { get; set; }                      // if sold.
         public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc. can be null
@@ -35,9 +38,9 @@ namespace EliteDangerousCore
         public string ShipUserIdent { get; private set; }   // ship ident, may be empty or null
         public double FuelLevel { get; private set; }       // fuel level may be 0 not known
         public double FuelCapacity { get; private set; }    // fuel capacity may be 0 not known
-        public long HullValue;                              // may be 0, not known
-        public long ModulesValue;                           // may be 0, not known
-        public long Rebuy;                                  // may be 0, not known
+        public long HullValue { get; private set; }         // may be 0, not known
+        public long ModulesValue { get; private set; }      // may be 0, not known
+        public long Rebuy { get; private set; }             // may be 0, not known
 
         public enum SubVehicleType
         {
@@ -46,7 +49,10 @@ namespace EliteDangerousCore
 
         public SubVehicleType SubVehicle { get; private set; } = SubVehicleType.None;    // if in a sub vehicle or mothership
 
-        public Dictionary<string, JournalLoadout.ShipModule> Modules { get; private set; }
+        public Dictionary<string, ShipModule> Modules { get; private set; }
+
+        public ShipModule GetModule(string name) { return Modules.ContainsKey(name) ? Modules[name] : null; }      // Name is the nice Slot name.
+        public ShipModule.EngineeringData GetEngineering(string name) { return Modules.ContainsKey(name) ? Modules[name].Engineering : null; }
 
         public string ShipFullInfo(bool cargo = true, bool fuel = true)
         {
@@ -128,7 +134,7 @@ namespace EliteDangerousCore
         public int GetFuelCapacity()
         {
             int cap = 0;
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            foreach (ShipModule sm in Modules.Values)
             {
                 int classpos;
                 if (sm.Item.Contains("Fuel Tank") && (classpos = sm.Item.IndexOf("Class ")) != -1)
@@ -144,7 +150,7 @@ namespace EliteDangerousCore
         public int CargoCapacity()
         {
             int cap = 0;
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            foreach (ShipModule sm in Modules.Values)
             {
                 int classpos;
                 if (sm.Item.Contains("Cargo Rack") && (classpos = sm.Item.IndexOf("Class ")) != -1)
@@ -157,10 +163,104 @@ namespace EliteDangerousCore
             return cap;
         }
 
+        public EliteDangerousCalculations.FSDSpec GetFSDSpec()          // may be null due to not having the info
+        {
+            ShipModule fsd = GetModule("FrameShiftDrive");
+            return fsd?.GetFSDSpec() ?? null;
+        }
+
+        public double ModuleMass()
+        {
+            return (from var in Modules select var.Value.Mass).Sum();
+        }
+
+        public double HullMass()
+        {
+            ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "HullMass");
+            return md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+        }
+
+        public double FuelWarningPercent
+        {
+            get { return SQLiteDBClass.GetSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", 0); }
+            set { SQLiteDBClass.PutSettingDouble("ShipInformation:" + ShipFD + ID + "Warninglevel", value); }
+        }
+
+        public string Manufacturer
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Manu");
+                return md != null ? (md as ShipModuleData.ShipInfoString).str : "Unknown";
+            }
+        }
+
+        public double Boost
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Boost");
+                double v = md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+                ShipModule.EngineeringData ed = GetEngineering("Main Thrusters"); // aka "MainEngines" in fd speak, but we use a slot naming conversion
+                ed?.EngineerThrusters(ref v);
+                return v;
+            }
+        }
+
+        public double Speed
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Speed");
+                double v = md != null ? (md as ShipModuleData.ShipInfoInt).value : 0;
+                ShipModule.EngineeringData ed = GetEngineering("Main Thrusters");
+                ed?.EngineerThrusters(ref v);
+                return v;
+            }
+        }
+
+        public string PadSize
+        {
+            get
+            {
+                ShipModuleData.ShipInfo md = ShipModuleData.Instance.GetShipProperty(ShipFD, "Class");
+                if (md == null)
+                    return "Unknown";
+                else
+                {
+                    int i = (md as ShipModuleData.ShipInfoInt).value;
+                    if (i == 1)
+                        return "Small";
+                    else if (i == 2)
+                        return "Medium";
+                    else
+                        return "Large";
+                }
+            }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder(256);
+            sb.AppendFormat("Ship {0}", ShipFullInfo());
+            sb.Append(Environment.NewLine);
+            foreach (ShipModule sm in Modules.Values)
+            {
+                sb.AppendFormat(sm.ToString());
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
+
+        #endregion
+
+        #region Creating and changing
+
         public ShipInformation(int id)
         {
             ID = id;
-            Modules = new Dictionary<string, JournalLoadout.ShipModule>();
+            Modules = new Dictionary<string, ShipModule>();
         }
 
         public ShipInformation ShallowClone()          // shallow clone.. does not clone the ship modules, just the dictionary
@@ -177,7 +277,7 @@ namespace EliteDangerousCore
             sm.HullValue = this.HullValue;
             sm.ModulesValue = this.ModulesValue;
             sm.Rebuy = this.Rebuy;
-            sm.Modules = new Dictionary<string, JournalLoadout.ShipModule>(this.Modules);
+            sm.Modules = new Dictionary<string, ShipModule>(this.Modules);
             return sm;
         }
 
@@ -186,49 +286,27 @@ namespace EliteDangerousCore
             return Modules.ContainsKey(slot);
         }
 
-        public bool Same(JournalLoadout.ShipModule sm)
+        public bool Same(ShipModule sm)
         {
             if (Modules.ContainsKey(sm.Slot))
             {
-                bool v = Modules[sm.Slot].Same(sm);
-                if (v)
-                    return true;
-                else
-                    return false;
+                return Modules[sm.Slot].Same(sm);
             }
             else
                 return false;
         }
 
-        public bool Equals(ShipInformation si)
-        {
-            if (si == null)
-                return false;
-
-            return si.Sold == this.Sold &&
-                   si.ShipType == this.ShipType &&
-                   si.ShipFD == this.ShipFD &&
-                   si.ShipUserName == this.ShipUserName &&
-                   si.ShipUserIdent == this.ShipUserIdent &&
-                   si.FuelLevel == this.FuelLevel &&
-                   si.FuelCapacity == this.FuelCapacity &&
-                   si.HullValue == this.HullValue &&
-                   si.ModulesValue == this.ModulesValue &&
-                   si.Rebuy == this.Rebuy &&
-                   si.SubVehicle == this.SubVehicle &&
-                   si.Modules.SequenceEqual(this.Modules);
-        }
-
-        public void Set(JournalLoadout.ShipModule sm)
+        public void SetModule(ShipModule sm)                // changed the module array, so you should have cloned that first..
         {
             if (Modules.ContainsKey(sm.Slot))
             {
-                JournalLoadout.ShipModule oldsm = Modules[sm.Slot];
+                ShipModule oldsm = Modules[sm.Slot];
 
                 if (sm.Item.Equals(oldsm.Item) && sm.LocalisedItem == null && oldsm.LocalisedItem != null)  // if item the same, old one has a localised name..
                     sm.LocalisedItem = oldsm.LocalisedItem;
 
             }
+
             Modules[sm.Slot] = sm;
 
             if (sm.Item.Contains("Fuel Tank") && sm.Item.IndexOf("Class ") != -1)
@@ -239,7 +317,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public ShipInformation Set(string ship, string shipfd, string name = null, string ident = null, 
+        public ShipInformation SetShipDetails(string ship, string shipfd, string name = null, string ident = null, 
                                     double fuellevel = 0, double fueltotal = 0,
                                     long hullvalue = 0, long modulesvalue = 0, long rebuy = 0)
         {
@@ -249,7 +327,8 @@ namespace EliteDangerousCore
                                 (fueltotal != 0 && fueltotal != FuelCapacity) ||
                                 (hullvalue != 0 && hullvalue != HullValue) ||
                                 (modulesvalue != 0 && modulesvalue != ModulesValue) ||
-                                (rebuy != 0 && rebuy != Rebuy ) )
+                                (rebuy != 0 && rebuy != Rebuy)
+                                )
             {
                 ShipInformation sm = this.ShallowClone();
 
@@ -310,10 +389,10 @@ namespace EliteDangerousCore
 
         public ShipInformation AddModule(string slot, string slotfd, string item, string itemfd, string itemlocalised)
         {
-            if (!Modules.ContainsKey(slot) || !Modules[slot].Same(item))       // if does not have it, or item is not the same..
+            if (!Modules.ContainsKey(slot) || Modules[slot].Item.Equals(item) == false)       // if does not have it, or item is not the same..
             {
                 ShipInformation sm = this.ShallowClone();
-                sm.Modules[slot] = new JournalLoadout.ShipModule(slot, slotfd, item, itemfd, itemlocalised);
+                sm.Modules[slot] = new ShipModule(slot, slotfd, item, itemfd, itemlocalised);
 
                 if (item.Contains("Fuel Tank") && item.IndexOf("Class ") != -1)
                 {
@@ -378,12 +457,12 @@ namespace EliteDangerousCore
             {
                 if (Modules.ContainsKey(toslot))
                 {
-                    sm.Modules[fromslot] = new JournalLoadout.ShipModule(fromslot, fromslotfd, toitem, toitemfd, toiteml);
+                    sm.Modules[fromslot] = new ShipModule(fromslot, fromslotfd, toitem, toitemfd, toiteml);
                 }
                 else
                     sm.Modules.Remove(fromslot);
 
-                sm.Modules[toslot] = new JournalLoadout.ShipModule(toslot, toslotfd, fromitem, fromitemfd, fromiteml);
+                sm.Modules[toslot] = new ShipModule(toslot, toslotfd, fromitem, fromitemfd, fromiteml);
 
                 if (fromitem != toitem && ((fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1) ||
                                            (fromitem.Contains("Fuel Tank") && fromitem.IndexOf("Class ") != -1)))
@@ -396,19 +475,22 @@ namespace EliteDangerousCore
             return sm;
         }
 
-        public override string ToString()
+        public ShipInformation Craft(string slot, string item, ShipModule.EngineeringData eng)
         {
-            StringBuilder sb = new StringBuilder(256);
-            sb.AppendFormat("Ship {0}", ShipFullInfo());
-            sb.Append(Environment.NewLine);
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            if (Modules.ContainsKey(slot) && Modules[slot].Item.Equals(item))       // craft, module must be there, otherwise just ignore
             {
-                sb.AppendFormat(sm.ToString());
-                sb.Append(Environment.NewLine);
+                ShipInformation sm = this.ShallowClone();
+                sm.Modules[slot] = new ShipModule(sm.Modules[slot]);        // clone
+                sm.Modules[slot].SetEngineering(eng);                       // and update engineering
+                return sm;
             }
 
-            return sb.ToString();
+            return this;
         }
+
+        #endregion
+
+        #region Export
 
         public bool CheckMinimumJSONModules()
         {
@@ -416,7 +498,7 @@ namespace EliteDangerousCore
             string[] requiredmodules = { "PowerPlant", "MainEngines", "FrameShiftDrive", "LifeSupport", "PowerDistributor", "Radar", "FuelTank", "Armour" };
             int reqmodules = 0;
 
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            foreach (ShipModule sm in Modules.Values)
             {
                 int index = Array.FindIndex(requiredmodules, x => x.Equals(sm.SlotFD));
                 if (index >= 0)
@@ -436,11 +518,11 @@ namespace EliteDangerousCore
 
             errstring = "";
 
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            foreach (ShipModule sm in Modules.Values)
             {
                 JObject module = new JObject();
 
-                int edid = ModuleEDID.Instance.CalcID(sm.ItemFD, ShipFD);
+                int edid = ShipModuleData.Instance.CalcID(sm.ItemFD, ShipFD);
 
                 if (edid == 0)      // 0 is error
                 {
@@ -487,7 +569,7 @@ namespace EliteDangerousCore
 
             JArray mlist = new JArray();
 
-            foreach (JournalLoadout.ShipModule sm in Modules.Values)
+            foreach (ShipModule sm in Modules.Values)
             {
                 JObject module = new JObject();
 
@@ -504,393 +586,6 @@ namespace EliteDangerousCore
             jo["Modules"] = mlist;
 
             return jo.ToString(Newtonsoft.Json.Formatting.Indented);
-        }
-    }
-
-
-    //{ "timestamp":"2018-03-07T18:11:06Z", "event":"Loadout", "Ship":"Anaconda", "ShipID":14, "ShipName":"The MATTHEW", "ShipIdent":"RXP-3", "HullValue":119844513, "ModulesValue":88008018, "Rebuy":7794470, "Modules":[ { "Slot":"HugeHardpoint1", "Item":"Hpt_PulseLaserBurst_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":800400 }, { "Slot":"LargeHardpoint1", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"LargeHardpoint2", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"LargeHardpoint3", "Item":"Hpt_BeamLaser_Turret_Large", "On":true, "Priority":0, "Health":1.000000, "Value":16489660 }, { "Slot":"MediumHardpoint1", "Item":"Hpt_MultiCannon_Turret_Medium", "On":true, "Priority":0, "AmmoInClip":90, "AmmoInHopper":2100, "Health":1.000000, "Value":1098880 }, { "Slot":"MediumHardpoint2", "Item":"Hpt_MultiCannon_Turret_Medium", "On":true, "Priority":0, "AmmoInClip":90, "AmmoInHopper":2100, "Health":1.000000, "Value":1098880 }, { "Slot":"TinyHardpoint1", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint2", "Item":"Hpt_ChaffLauncher_Tiny", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":10, "Health":1.000000, "Value":8500 }, { "Slot":"TinyHardpoint3", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint4", "Item":"Hpt_ChaffLauncher_Tiny", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":10, "Health":1.000000, "Value":8500 }, { "Slot":"TinyHardpoint5", "Item":"Hpt_CloudScanner_Size0_Class3", "On":true, "Priority":0, "Health":1.000000, "Value":103615 }, { "Slot":"TinyHardpoint6", "Item":"Hpt_ShieldBooster_Size0_Class5", "On":true, "Priority":0, "Health":1.000000, "Value":238850 }, { "Slot":"TinyHardpoint7", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"TinyHardpoint8", "Item":"Hpt_PlasmaPointDefence_Turret_Tiny", "On":true, "Priority":0, "AmmoInClip":12, "AmmoInHopper":10000, "Health":1.000000, "Value":18546 }, { "Slot":"Armour", "Item":"Anaconda_Armour_Grade1", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PaintJob", "Item":"PaintJob_Anaconda_Militaire_Earth_Yellow", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"PowerPlant", "Item":"Int_Powerplant_Size8_Class2", "On":true, "Priority":1, "Health":1.000000, "Value":6021722 }, { "Slot":"MainEngines", "Item":"Int_Engine_Size7_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":1899597 }, { "Slot":"FrameShiftDrive", "Item":"Int_Hyperdrive_Size6_Class5", "On":true, "Priority":0, "Health":1.000000, "Value":13752601 }, { "Slot":"LifeSupport", "Item":"Int_LifeSupport_Size5_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":67524 }, { "Slot":"PowerDistributor", "Item":"Int_PowerDistributor_Size8_Class3", "On":true, "Priority":0, "Health":1.000000, "Value":4359903 }, { "Slot":"Radar", "Item":"Int_Sensors_Size8_Class2", "On":true, "Priority":0, "Health":1.000000, "Value":1482366 }, { "Slot":"FuelTank", "Item":"Int_FuelTank_Size5_Class3", "On":true, "Priority":1, "Health":1.000000, "Value":97754 }, { "Slot":"Decal1", "Item":"Decal_DistantWorlds", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Decal2", "Item":"Decal_Explorer_Pathfinder", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Decal3", "Item":"Decal_Combat_Dangerous", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipName0", "Item":"Nameplate_Explorer01_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipName1", "Item":"Nameplate_Explorer01_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipID0", "Item":"Nameplate_ShipID_DoubleLine_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipID1", "Item":"Nameplate_ShipID_DoubleLine_White", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"Slot01_Size7", "Item":"Int_CargoRack_Size7_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":1178420 }, { "Slot":"Slot02_Size6", "Item":"Int_ShieldGenerator_Size6_Class4", "On":true, "Priority":0, "Health":1.000000, "Value":4584201 }, { "Slot":"Slot03_Size6", "Item":"Int_CargoRack_Size6_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":362591 }, { "Slot":"Slot04_Size6", "Item":"Int_CargoRack_Size6_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":362591 }, { "Slot":"Slot05_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot06_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot07_Size5", "Item":"Int_CargoRack_Size5_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":111566 }, { "Slot":"Slot08_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot09_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot10_Size4", "Item":"Int_CargoRack_Size4_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":34328 }, { "Slot":"Slot13_Size2", "Item":"Int_CargoRack_Size2_Class1", "On":true, "Priority":1, "Health":1.000000, "Value":3250 }, { "Slot":"Military01", "Item":"Int_ShieldCellBank_Size5_Class4", "On":true, "Priority":0, "AmmoInClip":1, "AmmoInHopper":4, "Health":1.000000, "Value":496527 }, { "Slot":"PlanetaryApproachSuite", "Item":"Int_PlanetApproachSuite", "On":true, "Priority":1, "Health":1.000000, "Value":500 }, { "Slot":"WeaponColour", "Item":"WeaponCustomisation_Red", "On":false, "Priority":1, "Health":1.000000 }, { "Slot":"VesselVoice", "Item":"VoicePack_Verity", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"ShipCockpit", "Item":"Anaconda_Cockpit", "On":true, "Priority":1, "Health":1.000000 }, { "Slot":"CargoHatch", "Item":"ModularCargoBayDoor", "On":true, "Priority":2, "Health":1.000000 } ] }
-    public class ModulesInStore
-    {
-        public List<JournalLoadout.ShipModule> StoredModules { get; private set; }       // by STORE id
-
-        public ModulesInStore()
-        {
-            StoredModules = new List<JournalLoadout.ShipModule>();
-        }
-
-        public ModulesInStore( List<JournalLoadout.ShipModule> list )
-        {
-            StoredModules = new List<JournalLoadout.ShipModule>(list);
-        }
-
-        public ModulesInStore StoreModule(string item, string itemlocalised)
-        {
-            ModulesInStore mis = this.ShallowClone();
-            mis.StoredModules.Add(new JournalLoadout.ShipModule("", "", item, "", itemlocalised));
-            return mis;
-        }
-
-        public ModulesInStore StoreModule(JournalMassModuleStore.ModuleItem[] items, Dictionary<string, string> itemlocalisation)
-        {
-            ModulesInStore mis = this.ShallowClone();
-            foreach (var it in items)
-            {
-                string local = itemlocalisation.ContainsKey(it.Name) ? itemlocalisation[it.Name] : "";
-                mis.StoredModules.Add(new JournalLoadout.ShipModule("", "", it.Name, "", local));
-            }
-            return mis;
-        }
-
-        public ModulesInStore RemoveModule(string item)
-        {
-            int index = StoredModules.FindIndex(x => x.Item.Equals(item, StringComparison.InvariantCultureIgnoreCase));  // if we have an item of this name
-            if (index != -1)
-            {
-                ModulesInStore mis = this.ShallowClone();
-                mis.StoredModules.RemoveAt(index);
-                return mis;
-            }
-            else
-                return this;
-        }
-
-        public ModulesInStore ShallowClone()          // shallow clone.. does not clone the ship modules, just the dictionary
-        {
-            ModulesInStore mis = new ModulesInStore(this.StoredModules);
-            return mis;
-        }
-    }
-
-
-
-    [System.Diagnostics.DebuggerDisplay("{currentid} ships {Ships.Count}")]
-    public class ShipInformationList
-    {
-        public Dictionary<string, ShipInformation> Ships { get; private set; }         // by shipid
-
-        public ModulesInStore StoredModules { get; private set; }                   // stored modules
-
-        private Dictionary<string, string> itemlocalisation;
-
-        private string currentid;
-        public bool HaveCurrentShip { get { return currentid!=null; } }
-        public ShipInformation CurrentShip { get { return (HaveCurrentShip) ? Ships[currentid] : null; } }
-
-        // IDs have been repeated, need more than just that
-        private string Key(string fdname, int i) { return fdname.ToLower() + ":" + i.ToStringInvariant(); }
-
-        public ShipInformation GetShipByShortName(string sn)
-        {
-            List<ShipInformation> lst = Ships.Values.ToList();
-            int index = lst.FindIndex(x => x.ShipShortName.Equals(sn));
-            return (index >= 0) ? lst[index] : null;
-        }
-
-        public ShipInformation GetShipByNameIdentType(string sn)
-        {
-            List<ShipInformation> lst = Ships.Values.ToList();
-            int index = lst.FindIndex(x => x.ShipNameIdentType.Equals(sn));
-            return (index >= 0) ? lst[index] : null;
-        }
-
-        public ShipInformation GetShipByFullInfoMatch(string sn)
-        {
-            List<ShipInformation> lst = Ships.Values.ToList();
-            int index = lst.FindIndex(x => x.ShipFullInfo().IndexOf(sn, StringComparison.InvariantCultureIgnoreCase)!=-1);
-            return (index >= 0) ? lst[index] : null;
-        }
-
-        private int newsoldid = 30000;
-
-        public ShipInformationList()
-        {
-            Ships = new Dictionary<string, ShipInformation>();
-            StoredModules = new ModulesInStore();
-            itemlocalisation = new Dictionary<string, string>();
-            currentid = null;
-        }
-
-        public void Loadout(int id, string ship, string shipfd, string name, string ident, List<JournalLoadout.ShipModule> modulelist,
-                        long HullValue, long ModulesValue, long Rebuy)
-        {
-            string sid = Key(shipfd, id);
-
-            //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident, 0,0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
-            
-            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFullInfo());
-
-            ShipInformation newsm = null;       // if we change anything, we need a new clone..
-
-            foreach (JournalLoadout.ShipModule m in modulelist)
-            {
-                if (!sm.Contains(m.Slot) || !sm.Same(m))  // no slot, or not the same data.. (ignore localised item)
-                {
-                    if (m.LocalisedItem == null && itemlocalisation.ContainsKey(m.Item))        // if we have a cached localisation, use it
-                        m.LocalisedItem = itemlocalisation[m.Item];
-
-                    if (newsm == null)              // if not cloned
-                    {
-                        newsm = sm.ShallowClone();  // we need a clone, pointing to the same modules, but with a new dictionary
-                        Ships[sid] = newsm;              // update our record of last module list for this ship
-                    }
-
-                    newsm.Set(m);                   // update entry only.. rest will still point to same entries
-                }
-            }
-        }
-
-        public void LoadGame(int id, string ship, string shipfd, string name, string ident, double fuellevel, double fueltotal)        // LoadGame..
-        {
-            string sid = Key(shipfd, id);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-
-            Ships[sid] = sm = sm.Set(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
-
-            //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
-
-            if (!JournalFieldNaming.IsSRVOrFighter(ship))
-                currentid = sid;
-        }
-
-        public void LaunchSRV()
-        {
-            //System.Diagnostics.Debug.WriteLine("Launch SRV");
-            if (HaveCurrentShip)
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.SRV);
-        }
-
-        public void DockSRV()
-        {
-            //System.Diagnostics.Debug.WriteLine("Dock SRV");
-            if (HaveCurrentShip)
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
-        }
-
-        public void LaunchFighter(bool pc)
-        {
-            //System.Diagnostics.Debug.WriteLine("Launch Fighter");
-            if (HaveCurrentShip && pc==true)
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.Fighter);
-        }
-
-        public void DockFighter()
-        {
-            //System.Diagnostics.Debug.WriteLine("Dock Fighter");
-            if (HaveCurrentShip)
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
-        }
-
-        public void Resurrect()       
-        {
-            if (HaveCurrentShip)           // resurrect always in ship
-            {
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
-            }
-        }
-
-        public void VehicleSwitch(string to)
-        {
-            if (HaveCurrentShip)
-            {
-                if (to == "Fighter")
-                    Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.Fighter);
-                else
-                    Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
-            }
-        }
-
-        public void ShipyardSwap(JournalShipyardSwap e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.Set(e.ShipType, e.ShipFD); // shallow copy if changed
-            currentid = sid;
-        }
-
-        public void ShipyardNew(JournalShipyardNew e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.Set(e.ShipType,e.ShipFD); // shallow copy if changed
-            currentid = sid;
-        }
-
-        public void SetUserShipName(JournalSetUserShipName e)
-        {
-            string sid = Key(e.ShipFD, e.ShipID);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.Set(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent); // will clone if data changed..
-            currentid = sid;           // must be in it to do this
-        }
-
-        public void ModuleBuy(JournalModuleBuy e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
-
-            if ( e.StoredItem.Length>0)                             // if we stored something
-                StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
-
-                                                                    // if we sold it, who cares?
-            Ships[sid] = sm.AddModule(e.Slot,e.SlotFD, e.BuyItem,e.BuyItemFD, e.BuyItemLocalised);      // replace the slot with this
-
-            itemlocalisation[e.BuyItem] = e.BuyItemLocalised;       // record any localisations
-            if (e.SellItem.Length>0)
-                itemlocalisation[e.SellItem] = e.SellItemLocalised;
-            if (e.StoredItem.Length>0)
-                itemlocalisation[e.StoredItem] = e.StoredItemLocalised;
-
-            currentid = sid;           // must be in it to do this
-        }
-
-        public void ModuleSell(JournalModuleSell e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.RemoveModule(e.Slot, e.SellItem);
-
-            if (e.SellItem.Length>0)
-                itemlocalisation[e.SellItem] = e.SellItemLocalised;
-
-            currentid = sid;           // must be in it to do this
-        }
-
-        public void ModuleSwap(JournalModuleSwap e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.SwapModule(e.FromSlot, e.FromSlotFD, e.FromItem, e.FromItemFD, e.FromItemLocalised, 
-                                            e.ToSlot , e.ToSlotFD, e.ToItem , e.ToItemFD, e.ToItemLocalised);
-            currentid = sid;           // must be in it to do this
-        }
-
-        public void ModuleStore(JournalModuleStore e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-
-            if (e.ReplacementItem.Length > 0)
-                Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
-            else
-                Ships[sid] = sm.RemoveModule(e.Slot, e.StoredItem);
-
-            StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
-            currentid = sid;           // must be in it to do this
-        }
-
-        public void ModuleRetrieve(JournalModuleRetrieve e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-
-            if ( e.SwapOutItem.Length>0 )
-                StoredModules = StoredModules.StoreModule(e.SwapOutItem, e.SwapOutItemLocalised);
-
-            Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.RetrievedItem, e.RetrievedItemFD, e.RetrievedItemLocalised);
-
-            StoredModules = StoredModules.RemoveModule(e.RetrievedItem);
-        }
-
-        public void ModuleSellRemote(JournalModuleSellRemote e)
-        {
-            StoredModules = StoredModules.RemoveModule(e.SellItem);
-        }
-
-        public void MassModuleStore(JournalMassModuleStore e)
-        {
-            string sid = Key(e.ShipFD, e.ShipId);
-
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.RemoveModules(e.ModuleItems);
-            StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
-        }
-
-        public void FSDJump(JournalFSDJump e)
-        {
-            if (HaveCurrentShip)
-            {
-                Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelLevel);
-            }
-        }
-
-        public void FuelScoop(JournalFuelScoop e)
-        {
-            if (HaveCurrentShip)
-            {
-                Ships[currentid] = CurrentShip.SetFuelLevel(e.Total);
-            }
-        }
-
-        public void RefuelAll(JournalRefuelAll e)
-        {
-            if (HaveCurrentShip)
-            {
-                Ships[currentid] = CurrentShip.SetFuelLevel(CurrentShip.FuelCapacity);
-            }
-        }
-
-        public void RefuelPartial(JournalRefuelPartial e)
-        {
-            if (HaveCurrentShip)
-            {
-                // Amount includes reserve
-                double level = CurrentShip.FuelLevel + e.Amount - 0.1;
-
-                // If amount refuelled is less than 10%, then the tank is full
-                if (e.Amount < CurrentShip.FuelCapacity / 10 || level > CurrentShip.FuelCapacity)
-                    level = CurrentShip.FuelCapacity;
-
-                Ships[currentid] = CurrentShip.SetFuelLevel(level);
-            }
-        }
-
-        #region Helpers
-
-        private ShipInformation EnsureShip(string id)      // ensure we have an ID of this type..
-        {
-            if (Ships.ContainsKey(id))
-            {
-                ShipInformation sm = Ships[id];
-                if (!sm.Sold)               // if not sold, ok
-                    return sm;             
-                else
-                {
-                    Ships[Key(sm.ShipFD,newsoldid++)] = sm;                      // okay, we place this information on 30000+  all Ids of this will now refer to new entry
-                }
-            }
-
-            int i;
-            id.Substring(id.IndexOf(":") + 1).InvariantParse(out i);
-            ShipInformation smn = new ShipInformation(i);
-            Ships[id] = smn;
-            return smn;
-        }
-
-        #endregion
-
-        #region process
-
-        public Tuple<ShipInformation,ModulesInStore> Process(JournalEntry je, DB.SQLiteConnectionUser conn)
-        {
-            if (je is IShipInformation)
-            {
-                IShipInformation e = je as IShipInformation;
-                e.ShipInformation(this, conn);                             // not cloned.. up to callers to see if they need to
-            }
-
-            return new Tuple<ShipInformation,ModulesInStore>(CurrentShip,StoredModules);
         }
 
         #endregion

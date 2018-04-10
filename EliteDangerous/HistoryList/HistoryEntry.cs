@@ -24,7 +24,7 @@ using System.Data.Common;
 
 namespace EliteDangerousCore
 {
-    [DebuggerDisplay("Event {EntryType} {System.Name} ({System.X,nq},{System.Y,nq},{System.Z,nq}) {EventTimeUTC} JID:{Journalid}")]
+    [DebuggerDisplay("Event {EntryType} {System.Name} ({System.X,nq},{System.Y,nq},{System.Z,nq}) {EventTimeUTC} Inx:{Indexno} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {
         #region Variables
@@ -78,7 +78,8 @@ namespace EliteDangerousCore
                      EntryType == JournalTypeEnum.Location ||
                      EntryType == JournalTypeEnum.Market ||
                      EntryType == JournalTypeEnum.Shipyard ||
-                     EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true; else return false;
+                     EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true;
+                else return false;
             }
         }
 
@@ -205,18 +206,18 @@ namespace EliteDangerousCore
                     };
 
                     // If it was a new system, pass the coords back to the StartJump
-                    if (prev != null && prev.journalEntry is JournalStartJump )
+                    if (prev != null && prev.journalEntry is JournalStartJump)
                     {
                         prev.System = newsys;       // give the previous startjump our system..
                     }
                 }
                 else
-                {   
+                {
                     // NOTE Rob: 09-JAN-2018 I've removed the Jumpstart looking up a system by name since they were using up lots of lookup time during history reading.  
                     // This is used for pre 2.2 systems without co-ords, which now should be limited.
                     // JumpStart still gets the system when the FSD loc is processed, see above.
                     // Jumpstart was also screwing about with the EDSM ID fill in which was broken.  This is now working again.
-                    
+
                     // Default one
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.EDSMID = je.EdsmID;
@@ -247,7 +248,7 @@ namespace EliteDangerousCore
 
                 JournalFSDJump jfsd = je as JournalFSDJump;
 
-                if (jfsd != null )
+                if (jfsd != null)
                 {
                     if (jfsd.JumpDist <= 0 && isys.HasCoordinate && newsys.HasCoordinate) // if no JDist, its a really old entry, and if previous has a co-ord
                     {
@@ -566,7 +567,20 @@ namespace EliteDangerousCore
             return eventstr == "All" || IsJournalEventInEventFilter(eventstr.Split(';'));
         }
 
+        public EliteDangerousCalculations.FSDSpec.JumpInfo GetJumpInfo()      // can we calc jump range? null if we don't have the info
+        {
+            EliteDangerousCalculations.FSDSpec fsdspec = ShipInformation?.GetFSDSpec();
+
+            if (fsdspec != null)
+            {
+                double mass = ShipInformation.HullMass() + ShipInformation.ModuleMass();
+
+                if (mass > 0)
+                    return fsdspec.GetJumpInfo(MaterialCommodity.CargoCount, mass, ShipInformation.FuelLevel, ShipInformation.FuelCapacity/2);
+            }
+
+            return null;
+        }
+
     }
-
-
 }
