@@ -27,23 +27,23 @@ namespace EliteDangerousCore
         public JournalMissionAccepted Mission { get; private set; }                  // never null
         public JournalMissionCompleted Completed { get; private set; }               // null until complete
         public JournalMissionRedirected Redirected { get; private set; }             // null unless redirected
-        public enum StateTypes { InProgress, Completed, Abandoned, Failed };
+        public enum StateTypes { InProgress, Completed, Abandoned, Failed , Died };
         public StateTypes State { get; private set; }
-        public DateTime MissionEndTime;  // on Accepted, Expiry time, then actual finish time on Completed/Abandoned/Failed
+        public DateTime MissionEndTime { get; private set; }  // on Accepted, Expiry time, then actual finish time on Completed/Abandoned/Failed
 
         public bool InProgress { get { return (State == StateTypes.InProgress); } }
         public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
         public string OriginatingSystem { get { return sys.Name; } }
         public string OriginatingStation { get { return body; } }
+        private ISystem sys;                                      // where it was found
+        private string body;                                        // and body
 
         public string DestinationSystemStation()        // allowing for redirection
         {
             return (Redirected != null) ? ("->" + Redirected.NewDestinationSystem.AppendPrePad(Redirected.NewDestinationStation, ":")) : Mission.DestinationSystem.AppendPrePad(Mission.DestinationStation, ":");
         }
 
-        public ISystem sys;                                         // where it was found
-        public string body;                                                         // and body
 
         public string Info()            // looking at state
         {
@@ -94,6 +94,7 @@ namespace EliteDangerousCore
         public MissionState(MissionState other, JournalMissionCompleted m)      // completed mission
         {
             Mission = other.Mission;
+            Redirected = other.Redirected;
             Completed = m;
             State = StateTypes.Completed;
             MissionEndTime = m.EventTimeUTC;
@@ -101,9 +102,10 @@ namespace EliteDangerousCore
             body = other.body;
         }
 
-        public MissionState(MissionState other, StateTypes type , DateTime? endtime )           // changed to another state..
+        public MissionState(MissionState other, StateTypes type, DateTime? endtime)           // changed to another state..
         {
             Mission = other.Mission;
+            Redirected = other.Redirected;
             State = type;
             MissionEndTime = (endtime != null) ? endtime.Value : other.MissionEndTime;
             sys = other.sys;
@@ -142,12 +144,25 @@ namespace EliteDangerousCore
 
         public void Failed(JournalMissionFailed f)
         {
-            Missions[Key(f)] = new MissionState(Missions[Key(f)], MissionState.StateTypes.Failed , f.EventTimeUTC); // copy previous mission state, add failed
+            Missions[Key(f)] = new MissionState(Missions[Key(f)], MissionState.StateTypes.Failed, f.EventTimeUTC); // copy previous mission state, add failed
         }
 
         public void Redirected(JournalMissionRedirected r)
         {
             Missions[Key(r)] = new MissionState(Missions[Key(r)], r); // copy previous, add redirected
+        }
+
+        public void Died(DateTime diedtimeutc)
+        {
+            List<MissionState> affected = new List<MissionState>();
+            foreach (var m in Missions)
+            {
+                if (m.Value.InProgressDateTime(diedtimeutc))
+                    affected.Add(m.Value);
+            }
+
+            foreach( var m in affected)
+                Missions[Key(m.Mission)] = new MissionState(Missions[Key(m.Mission)], MissionState.StateTypes.Died, diedtimeutc); // copy previous mission info, set died, now!
         }
 
         public List<MissionState> GetAllCombatMissionsLatestFirst() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 && x.Mission.ExpiryValid orderby x.Mission.EventTimeUTC descending select x).ToList(); }
@@ -163,19 +178,19 @@ namespace EliteDangerousCore
     [System.Diagnostics.DebuggerDisplay("Total {current.Missions.Count}")]
     public class MissionListAccumulator
     {
-        private MissionList current;
+        private MissionList missionlist;
 
         public MissionListAccumulator()
         {
-            current = new MissionList();
+            missionlist = new MissionList();
         }
 
         public void Accepted(JournalMissionAccepted m, ISystem sys, string body)
         {
-            if (!current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            if (!missionlist.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
-                current = new MissionList(current);     // shallow copy
-                current.Add(m, sys, body);
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Add(m, sys, body);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Duplicate " + MissionList.Key(m));
@@ -183,10 +198,10 @@ namespace EliteDangerousCore
 
         public void Completed(JournalMissionCompleted m)
         {
-            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            if (missionlist.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
-                current = new MissionList(current);     // shallow copy
-                current.Completed(m);
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Completed(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -194,10 +209,10 @@ namespace EliteDangerousCore
 
         public void Abandoned(JournalMissionAbandoned m)
         {
-            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            if (missionlist.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
-                current = new MissionList(current);     // shallow copy
-                current.Abandoned(m);
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Abandoned(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -205,10 +220,10 @@ namespace EliteDangerousCore
 
         public void Failed(JournalMissionFailed m)
         {
-            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            if (missionlist.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
-                current = new MissionList(current);     // shallow copy
-                current.Failed(m);
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Failed(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
@@ -216,13 +231,19 @@ namespace EliteDangerousCore
 
         public void Redirected(JournalMissionRedirected m)
         {
-            if (current.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
+            if (missionlist.Missions.ContainsKey(MissionList.Key(m)))        // make sure not repeating, ignore if so
             {
-                current = new MissionList(current);     // shallow copy
-                current.Redirected(m);
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Redirected(m);
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
+        }
+
+        public void Died(DateTime diedtime)
+        {
+            missionlist = new MissionList(missionlist);     // shallow copy
+            missionlist.Died(diedtime);
         }
 
         #region process
@@ -235,7 +256,7 @@ namespace EliteDangerousCore
                 e.UpdateMissions(this, sys , body, conn);                                   // not cloned.. up to callers to see if they need to
             }
 
-            return current;
+            return missionlist;
         }
 
         #endregion

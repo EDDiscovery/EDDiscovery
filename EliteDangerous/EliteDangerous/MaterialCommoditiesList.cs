@@ -180,6 +180,11 @@ namespace EliteDangerousCore
             }
         }
 
+        public void Died()
+        {
+            list.RemoveAll(x => x.category.Equals(MaterialCommodities.CommodityCategory));      // empty the list of all commodities
+        }
+
         public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
