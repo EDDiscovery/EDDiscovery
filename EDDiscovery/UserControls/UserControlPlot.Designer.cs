@@ -50,8 +50,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.buttonExportReport = new ExtendedControls.ButtonExt();
-            this.buttonExportToImage = new ExtendedControls.ButtonExt();
+            this.buttonExportPNG = new ExtendedControls.ButtonExt();
             this.comboBoxView = new ExtendedControls.ComboBoxCustom();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.zoomToolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,9 +72,10 @@ namespace EDDiscovery.UserControls
             this.sysZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.plotViewTop = new OxyPlot.WindowsForms.PlotView();
-            this.reportView = new ExtendedControls.RichTextBoxScroll();
             this.plotViewSide = new OxyPlot.WindowsForms.PlotView();
             this.plotViewFront = new OxyPlot.WindowsForms.PlotView();
+            this.reportView = new ExtendedControls.TextBoxBorder();
+            this.buttonExtReport = new ExtendedControls.ButtonExt();
             this.panelTop.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
@@ -144,8 +144,8 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
-            this.panelTop.Controls.Add(this.buttonExportReport);
-            this.panelTop.Controls.Add(this.buttonExportToImage);
+            this.panelTop.Controls.Add(this.buttonExtReport);
+            this.panelTop.Controls.Add(this.buttonExportPNG);
             this.panelTop.Controls.Add(this.comboBoxView);
             this.panelTop.Controls.Add(this.textMinRadius);
             this.panelTop.Controls.Add(this.textMaxRadius);
@@ -155,33 +155,18 @@ namespace EDDiscovery.UserControls
             this.panelTop.Size = new System.Drawing.Size(333, 26);
             this.panelTop.TabIndex = 25;
             // 
-            // buttonExportReport
+            // buttonExportPNG
             // 
-            this.buttonExportReport.Enabled = false;
-            this.buttonExportReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExportReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportReport.Image = global::EDDiscovery.Icons.Controls.Map2D_Save;
-            this.buttonExportReport.Location = new System.Drawing.Point(183, 1);
-            this.buttonExportReport.Name = "buttonExportReport";
-            this.buttonExportReport.Size = new System.Drawing.Size(24, 24);
-            this.buttonExportReport.TabIndex = 30;
-            this.toolTip1.SetToolTip(this.buttonExportReport, "Create a Report");
-            this.buttonExportReport.UseVisualStyleBackColor = true;
-            this.buttonExportReport.Visible = false;
-            this.buttonExportReport.Click += new System.EventHandler(this.buttonExportReport_Click);
-            // 
-            // buttonExportToImage
-            // 
-            this.buttonExportToImage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.buttonExportToImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExportToImage.Image = global::EDDiscovery.Icons.Controls.Map3D_Recorder_Save;
-            this.buttonExportToImage.Location = new System.Drawing.Point(153, 1);
-            this.buttonExportToImage.Name = "buttonExportToImage";
-            this.buttonExportToImage.Size = new System.Drawing.Size(24, 24);
-            this.buttonExportToImage.TabIndex = 29;
-            this.toolTip1.SetToolTip(this.buttonExportToImage, "Export to PNG");
-            this.buttonExportToImage.UseVisualStyleBackColor = true;
-            this.buttonExportToImage.Click += new System.EventHandler(this.buttonExportToImage_Click);
+            this.buttonExportPNG.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExportPNG.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExportPNG.Image = global::EDDiscovery.Icons.Controls.Map3D_Recorder_Save;
+            this.buttonExportPNG.Location = new System.Drawing.Point(153, 1);
+            this.buttonExportPNG.Name = "buttonExportPNG";
+            this.buttonExportPNG.Size = new System.Drawing.Size(24, 24);
+            this.buttonExportPNG.TabIndex = 29;
+            this.toolTip1.SetToolTip(this.buttonExportPNG, "Export to PNG");
+            this.buttonExportPNG.UseVisualStyleBackColor = true;
+            this.buttonExportPNG.Click += new System.EventHandler(this.buttonExportToImage_Click);
             // 
             // comboBoxView
             // 
@@ -350,37 +335,6 @@ namespace EDDiscovery.UserControls
             this.plotViewTop.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewTop.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
-            // reportView
-            // 
-            this.reportView.BorderColor = System.Drawing.Color.Transparent;
-            this.reportView.BorderColorScaling = 0.5F;
-            this.reportView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.reportView.Enabled = false;
-            this.reportView.Font = new System.Drawing.Font("Lucida Console", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.reportView.HideScrollBar = true;
-            this.reportView.Location = new System.Drawing.Point(0, 26);
-            this.reportView.Name = "reportView";
-            this.reportView.ReadOnly = false;
-            this.reportView.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.reportView.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.reportView.ScrollBarBackColor = System.Drawing.Color.Black;
-            this.reportView.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.reportView.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.reportView.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.reportView.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.reportView.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.reportView.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.reportView.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.reportView.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.reportView.ScrollBarWidth = 20;
-            this.reportView.ShowLineCount = false;
-            this.reportView.Size = new System.Drawing.Size(333, 315);
-            this.reportView.TabIndex = 32;
-            this.reportView.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.reportView.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            this.reportView.Visible = false;
-            this.reportView.WordWrap = false;
-            // 
             // plotViewSide
             // 
             this.plotViewSide.Cursor = System.Windows.Forms.Cursors.Cross;
@@ -411,17 +365,55 @@ namespace EDDiscovery.UserControls
             this.plotViewFront.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewFront.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
+            // reportView
+            // 
+            this.reportView.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.reportView.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.reportView.BackErrorColor = System.Drawing.Color.Red;
+            this.reportView.BorderColor = System.Drawing.Color.Transparent;
+            this.reportView.BorderColorScaling = 0.5F;
+            this.reportView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.reportView.ClearOnFirstChar = false;
+            this.reportView.ControlBackground = System.Drawing.SystemColors.Control;
+            this.reportView.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.reportView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportView.InErrorCondition = false;
+            this.reportView.Location = new System.Drawing.Point(0, 26);
+            this.reportView.Multiline = true;
+            this.reportView.Name = "reportView";
+            this.reportView.ReadOnly = false;
+            this.reportView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.reportView.SelectionLength = 0;
+            this.reportView.SelectionStart = 0;
+            this.reportView.Size = new System.Drawing.Size(333, 315);
+            this.reportView.TabIndex = 2;
+            this.reportView.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.reportView.WordWrap = true;
+            // 
+            // buttonExtReport
+            // 
+            this.buttonExtReport.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.buttonExtReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtReport.Image = global::EDDiscovery.Icons.Controls.StatsTime_Text;
+            this.buttonExtReport.Location = new System.Drawing.Point(183, 1);
+            this.buttonExtReport.Name = "buttonExtReport";
+            this.buttonExtReport.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtReport.TabIndex = 30;
+            this.toolTip1.SetToolTip(this.buttonExtReport, "Create a TXT report.");
+            this.buttonExtReport.UseVisualStyleBackColor = true;
+            this.buttonExtReport.Click += new System.EventHandler(this.buttonExtReport_Click);
+            // 
             // UserControlPlot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.reportView);
             this.Controls.Add(this.dataGridList);
             this.Controls.Add(this.plotViewTop);
             this.Controls.Add(this.plotViewFront);
             this.Controls.Add(this.plotViewSide);
+            this.Controls.Add(this.reportView);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlPlot";
             this.Size = new System.Drawing.Size(333, 341);
@@ -456,11 +448,11 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn sysY;
         private DataGridViewTextBoxColumn sysZ;
         private DataGridViewTextBoxColumn sysVisits;
-        private ExtendedControls.ButtonExt buttonExportToImage;
+        private ExtendedControls.ButtonExt buttonExportPNG;
         private OxyPlot.WindowsForms.PlotView plotViewTop;
-        private ExtendedControls.RichTextBoxScroll reportView;
-        private ExtendedControls.ButtonExt buttonExportReport;
         private OxyPlot.WindowsForms.PlotView plotViewSide;
         private OxyPlot.WindowsForms.PlotView plotViewFront;
+        private ExtendedControls.TextBoxBorder reportView;
+        private ExtendedControls.ButtonExt buttonExtReport;
     }
 }
