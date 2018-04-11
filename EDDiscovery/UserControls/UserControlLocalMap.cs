@@ -38,13 +38,13 @@ namespace EDDiscovery.UserControls
         #region init
 
         private string DbSave { get { return "MapPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        
+
         private StarDistanceComputer computer;
 
         public UserControlLocalMap()
         {
             InitializeComponent();
-            this.chartMap.MouseWheel += Zoom_MouseWheel;            
+            this.chartMap.MouseWheel += Zoom_MouseWheel;
         }
 
         private HistoryEntry last_he = null;
@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
         private const double defaultMapMinRadius = 0;
         private int maxitems = 500;
         private System.Windows.Forms.Timer slidetimer;
-        
+
         public override void Init()
         {
             computer = new StarDistanceComputer();
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
-        {            
+        {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);            
+            KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
@@ -112,9 +112,9 @@ namespace EDDiscovery.UserControls
         #region computer
 
         private void KickComputation(HistoryEntry he)
-        {            
+        {
             if (he?.System != null && he.System.HasCoordinate)
-            {                
+            {
                 computer.CalculateClosestSystems(he.System,
                     (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }),
                     maxitems, textMinRadius.Value, textMaxRadius.Value, true);
@@ -124,16 +124,22 @@ namespace EDDiscovery.UserControls
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);       // check!
-            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value , true);
+            discoveryform.history.CalculateSqDistances(list, sys.X, sys.Y, sys.Z, maxitems, textMinRadius.Value, textMaxRadius.Value, true);
             FillMap(list, sys);
-        }             
+        }
 
         private void FillMap(SortedList<double, ISystem> csl, ISystem centerSystem)
-        {   
+        {
             SetControlText("3D Map of closest systems from " + centerSystem.Name);
 
+            for (int s = 0; s <= 100; s++)
+            {
+               chartMap.Series[s].MarkerSize = 6;
+            }
+            chartMap.Series[50].MarkerSize = 8;
+
             // Add the current system
-            chartMap.Series[50].Points.AddXY(0, 0); 
+            chartMap.Series[50].Points.AddXY(0, 0);
             chartMap.Series[50].ToolTip = centerSystem.Name; // tooltip
 
             System.Diagnostics.Debug.WriteLine("Max " + textMaxRadius.Value + " Min " + textMinRadius.Value + " Count " + csl.Count()); ;
@@ -142,26 +148,44 @@ namespace EDDiscovery.UserControls
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     if (tvp.Value != centerSystem)
-                    { 
-                    var theISystemInQuestion = tvp.Value;
-                    var sysX = theISystemInQuestion.X;
-                    var sysY = theISystemInQuestion.Y;
-                    var sysZ = theISystemInQuestion.Z;
-                    var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
-                    var curX = centerSystem.X;
-                    var curY = centerSystem.Y;
-                    var curZ = centerSystem.Z;
+                    {
+                        var theISystemInQuestion = tvp.Value;
+                        var sysX = theISystemInQuestion.X;
+                        var sysY = theISystemInQuestion.Y;
+                        var sysZ = theISystemInQuestion.Z;
+                        var distFromCurrentSys = Math.Round(Math.Sqrt(tvp.Key), 2, MidpointRounding.AwayFromZero);
+                        var curX = centerSystem.X;
+                        var curY = centerSystem.Y;
+                        var curZ = centerSystem.Z;
 
                         // reset charts axis
                         chartMap.ChartAreas[0].AxisY.IsStartedFromZero = false;
-                        chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;                        
+                        chartMap.ChartAreas[0].AxisX.IsStartedFromZero = false;
                         chartMap.ChartAreas[0].AxisX.Maximum = textMaxRadius.Value;
                         chartMap.ChartAreas[0].AxisX.Minimum = textMaxRadius.Value * -1;
                         chartMap.ChartAreas[0].AxisY.Maximum = textMaxRadius.Value;
                         chartMap.ChartAreas[0].AxisY.Minimum = textMaxRadius.Value * -1;
 
                         // depth of the series layers need to be adjusted, so to follow the X and Y axis
-                        int sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
+
+                        int sdepth;
+
+                        if (textMaxRadius.Value < 25)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 3));
+                        }
+                        else if (textMaxRadius.Value == 26 || textMaxRadius.Value <= 50)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2.66));
+                        }
+                        else if (textMaxRadius.Value == 51 || textMaxRadius.Value <= 100)
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2.33));
+                        }
+                        else
+                        {
+                            sdepth = (Convert.ToInt32((textMaxRadius.Value) * 2));
+                        }
 
                         // maximum allowed depth in chart is 1000%
                         if (sdepth > 1000)
@@ -174,15 +198,15 @@ namespace EDDiscovery.UserControls
                         if (distFromCurrentSys > textMinRadius.Value) // we want to be able to define a shell 
                         {
                             int visits = discoveryform.history.GetVisitsCount(tvp.Value.Name, tvp.Value.EDSMID);
-                                                        
+
                             // calculate distance for each axis; this provide a cubical distribution
                             double dx = curX - sysX;
                             double dy = curY - sysY;
                             double dz = curZ - sysZ;
 
                             int px = Convert.ToInt32(dx) * -1;
-                            int py = Convert.ToInt32(dy) * -1;
-                            int pz = Convert.ToInt32(dz);
+                            int py = Convert.ToInt32(dy);
+                            int pz = Convert.ToInt32(dz) * -1;
 
                             int nseries = 101; // # of series in the 3d plot (0 to 49, before the current system; 50, our current system; 51 to 101, after the current system)
                             double ratio = ((textMaxRadius.Value * 2) / nseries);
@@ -190,11 +214,7 @@ namespace EDDiscovery.UserControls
 
                             int ispy = Convert.ToInt32(spy);
 
-                            // we don't want a very close system to be showed as current one, so if it share the same serie of the current system we put in right before or after.
-                            if (ispy > 50 && ispy < 51)
-                            {
-                                ispy = 51;
-                            }
+                            // we don't want a very close system to be showed as current one, so if it share the same serie of the current system we put in right before or after.                            
                             if (ispy == 50)
                             {
                                 ispy = 49;
@@ -210,7 +230,8 @@ namespace EDDiscovery.UserControls
 
                             // strings to add in tooltip
                             StringBuilder label = new StringBuilder();
-                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys);
+                            label.Append(theISystemInQuestion.Name + " / " + visits + " visits" + "\n" + distFromCurrentSys + "\n" +
+                                          "X: " + sysX + ", Y: " + sysY + ", Z:" + sysZ);
 
                             chartMap.Series[ispy].Points.AddXY(px, pz);
                             chartMap.Series[ispy].ToolTip = label.ToString(); // tooltips
@@ -220,7 +241,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                for( int i =0; i < chartMap.Series.Count; i++ )
+                for (int i = 0; i < chartMap.Series.Count; i++)
                     chartMap.Series[i].Points.Clear();
 
             }
@@ -249,7 +270,7 @@ namespace EDDiscovery.UserControls
             }
 
             // update the chart
-            chartMap.Update();            
+            chartMap.Update();
         }
 
         #endregion
@@ -312,7 +333,7 @@ namespace EDDiscovery.UserControls
                 {
                     zoomIndex = 0; // do nothing...
                 }
-            }            
+            }
         }
 
         private void ZoomControl(Control ctrlToZoom, int zoomIndex, MouseEventArgs e)
@@ -371,7 +392,7 @@ namespace EDDiscovery.UserControls
         private double xr = 0;
         private double yr = 0;
         private double prevxr;
-        private double prevyr;      
+        private double prevyr;
 
         private void ChartMap_MouseDown(object sender, MouseEventArgs e)
         {
@@ -431,7 +452,7 @@ namespace EDDiscovery.UserControls
                 contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
             }
         }
-        
+
         private bool panSwitch = false;
 
         private void ChartMap_MouseMove(object sender, MouseEventArgs e)
@@ -439,11 +460,11 @@ namespace EDDiscovery.UserControls
             // rotate the map with the firt mouse button
 
             if (e.Button == MouseButtons.Left)
-            {                
+            {
                 // rotate the chart            
                 if (!mousePosRotate.IsEmpty)
                 {
-                var style = chartMap.ChartAreas[0].Area3DStyle;
+                    var style = chartMap.ChartAreas[0].Area3DStyle;
                     style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (e.Location.X - mousePosRotate.X)));
                     style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (e.Location.Y - mousePosRotate.Y)));
                 }
@@ -456,7 +477,7 @@ namespace EDDiscovery.UserControls
             {
                 PanControl(chartMap, e);
             }
-        }        
+        }
 
         // pan the map
         private void PanControl(Control ctrlToPan, MouseEventArgs e)
@@ -475,7 +496,7 @@ namespace EDDiscovery.UserControls
                 ctrlToPan.Location = new Point(newX, newY);
             }
         }
-        
+
         // reset the size of the map to the default
         private void ControlReset(Control ctrlToReset)
         {
@@ -588,7 +609,7 @@ namespace EDDiscovery.UserControls
             ZoomToFactor(chartMap, 2);
             CenterControlToParent(chartMap);
         }
-                
+
         // 2.5:1
         private void toolStripMenuZoom25_Click(object sender, EventArgs e)
         {
