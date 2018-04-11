@@ -1934,6 +1934,19 @@ namespace EliteDangerousCore
             { "CD-43 11917", new Dictionary<string, string> {
                 { "Ares", "CD-43 11917 1" }
             } },
+            { "Hypuae Aim ZP-R b48-0", new Dictionary<string, string>
+            {
+                { "Travis Green", "Hypuae Aim ZP-R b48-0 1" }
+            } },
+            { "HR 7291", new Dictionary<string, string>
+            {
+                { "Rick's Retreat", "HR 7291 7 d" },
+                { "Annette's Paradise", "HR 7291 7 e" }
+            } },
+            { "Pepper", new Dictionary<string, string>
+            {
+                { "Pepper", "Pepper A 1" }
+            } },
         };
 
         public struct DesigMap
