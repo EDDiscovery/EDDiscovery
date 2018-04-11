@@ -43,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
             ShipId = evt["ShipID"].Int();
             ServerId = evt["ServerId"].Int();
             nTransferTime = evt["TransferTime"].IntNull();
+            FriendlyTransferTime = nTransferTime.HasValue ? nTransferTime.Value.SecondsToString() : "";
         }
 
         public string StorageSlot { get; set; }
@@ -54,6 +55,7 @@ namespace EliteDangerousCore.JournalEvents
         public int ShipId { get; set; }
         public int ServerId { get; set; }
         public int? nTransferTime { get; set; }
+        public string FriendlyTransferTime { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -63,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "Cost:", TransferCost, "into ship:", Ship, "Transfer Time:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "Cost:", TransferCost, "into ship:", Ship, "Transfer Time:", FriendlyTransferTime);
             detailed = "";
         }
     }

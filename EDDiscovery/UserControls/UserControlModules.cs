@@ -84,11 +84,13 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add("Travel History Entry");
             comboBoxShips.Items.Add("Stored Modules");
-            foreach ( string id in shm.Ships.Keys)
-            {
-                ShipInformation sm = shm.Ships[id];
-                comboBoxShips.Items.Add(sm.ShipNameIdentType);
-            }
+
+            var now = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem == null select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(now);
+            var stored = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem != null select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(stored);
+            var sold = (from x1 in shm.Ships where x1.Value.Sold == true select x1.Value.ShipNameIdentType).ToList();
+            comboBoxShips.Items.AddRange(sold);
 
             if (cursel == "")
                 cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
@@ -125,7 +127,6 @@ namespace EDDiscovery.UserControls
 
             dataGridViewModules.Rows.Clear();
 
-            LabelVehicleText.Visible = false;
             labelVehicle.Visible = false;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
@@ -219,11 +220,16 @@ namespace EDDiscovery.UserControls
             AddInfoLine("Main Thruster Speed", si.Speed.ToStringInvariant("0.#"));
             AddInfoLine("Main Thruster Boost", si.Boost.ToStringInvariant("0.#"));
 
+            if (si.InTransit)
+                AddInfoLine("In Transit to ", (si.StoredAtSystem??"Unknown") + ":" + (si.StoredAtStation ?? "Unknown"));
+            else if ( si.StoredAtSystem != null )
+                AddInfoLine("Stored at", si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown"));
+
             int cc = si.CargoCapacity();
             if ( cc > 0 )
                 AddInfoLine("Cargo Capacity", cc.ToStringInvariant("N0") + "t");
 
-            LabelVehicleText.Visible = labelVehicle.Visible = true;
+            labelVehicle.Visible = true;
             labelVehicle.Text = si.ShipFullInfo(cargo: false, fuel: false);
             buttonExtConfigure.Visible = true;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumJSONModules();

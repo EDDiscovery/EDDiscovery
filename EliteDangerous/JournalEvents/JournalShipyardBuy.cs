@@ -33,32 +33,54 @@ namespace EliteDangerousCore.JournalEvents
     //
     //Note: the new ship’s ShipID will be logged in a separate event after the purchase
     [JournalEntryType(JournalTypeEnum.ShipyardBuy)]
-    public class JournalShipyardBuy : JournalEntry, ILedgerJournalEntry
+    public class JournalShipyardBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalShipyardBuy(JObject evt ) : base(evt, JournalTypeEnum.ShipyardBuy)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
+            ShipType = JournalFieldNaming.GetBetterShipName(ShipTypeFD);
             ShipPrice = evt["ShipPrice"].Long();
-            StoreOldShip = JournalFieldNaming.GetBetterShipName(evt["StoreOldShip"].Str());
+
+            StoreOldShipFD = JournalFieldNaming.NormaliseFDShipName(evt["StoreOldShip"].Str());
+            StoreOldShip = JournalFieldNaming.GetBetterShipName(StoreOldShipFD);
             StoreShipId = evt["StoreShipID"].IntNull();
-            SellOldShip = JournalFieldNaming.GetBetterShipName(evt["SellOldShip"].Str());
+
+            SellOldShipFD = JournalFieldNaming.NormaliseFDShipName(evt["SellOldShip"].Str());
+            SellOldShip = JournalFieldNaming.GetBetterShipName(SellOldShipFD);
             SellShipId = evt["SellShipID"].IntNull();
             SellPrice = evt["SellPrice"].LongNull();
+
             MarketID = evt["MarketID"].LongNull();
         }
 
+        public string ShipTypeFD { get; set; }
         public string ShipType { get; set; }
         public long ShipPrice { get; set; }
+
+        public string StoreOldShipFD { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
+
+        public string SellOldShipFD { get; set; }
         public string SellOldShip { get; set; }
         public int? SellShipId { get; set; }
+
         public long? SellPrice { get; set; }
         public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -ShipPrice + (SellPrice ?? 0));
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {                                   // new will come along and provide the new ship info
+
+            //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Buy");
+            if (StoreShipId != null)
+                shp.Store(StoreOldShipFD, StoreShipId.Value, whereami, system.Name);     
+            if (SellShipId != null)
+                shp.Sell(SellOldShipFD, SellShipId.Value);     
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

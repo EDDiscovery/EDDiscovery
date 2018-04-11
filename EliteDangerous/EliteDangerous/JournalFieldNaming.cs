@@ -332,16 +332,5 @@ namespace EliteDangerousCore
             return s.SplitCapsWordFull();
         }
 
-        static public string GetBetterTimeinSeconds(int? s)
-        {
-            if (!s.HasValue)
-                return null;
-
-            TimeSpan ts = new TimeSpan(0,0,s.Value);
-
-            return ts.ToString();
-        }
-
-
     }
 }

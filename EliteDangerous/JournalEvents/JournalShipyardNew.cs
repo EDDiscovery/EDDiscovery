@@ -30,8 +30,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalShipyardNew(JObject evt ) : base(evt, JournalTypeEnum.ShipyardNew)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
+            ShipType = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["NewShipID"].Int();
         }
 
@@ -39,9 +39,10 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.ShipyardNew(this);
+            //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " NEW");
+            shp.ShipyardNew(ShipType, ShipFD, ShipId);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

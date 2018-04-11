@@ -35,7 +35,7 @@ namespace EliteDangerousCore
 
     public interface IShipInformation
     {
-        void ShipInformation(ShipInformationList shp, SQLiteConnectionUser conn);
+        void ShipInformation(ShipInformationList shp, string whereami, ISystem system, SQLiteConnectionUser conn);
     }
 
     public interface IBodyNameAndID
