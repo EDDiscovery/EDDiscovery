@@ -821,9 +821,14 @@ namespace EliteDangerousCore
                     ScanNode belt;
                     string beltname = ring.Name;
                     string stardesig = sc.BodyDesignation ?? sc.BodyName;
+
                     if (beltname.StartsWith(stardesig, StringComparison.InvariantCultureIgnoreCase))
                     {
                         beltname = beltname.Substring(stardesig.Length).Trim();
+                    }
+                    else if (stardesig.ToLowerInvariant() == "lave" && beltname.ToLowerInvariant() == "castellan belt")
+                    {
+                        beltname = "A Belt";
                     }
 
                     if (node.children == null || !node.children.TryGetValue(beltname, out belt))
@@ -835,6 +840,7 @@ namespace EliteDangerousCore
                         {
                             ownname = beltname,
                             fullname = node.fullname + " " + beltname,
+                            customname = ring.Name,
                             ScanData = null,
                             BeltData = ring,
                             children = null,
@@ -1007,6 +1013,11 @@ namespace EliteDangerousCore
                 {
                     return "m Centauri B";
                 }
+            }
+            // Special case for Castellan Belt
+            else if (system.ToLowerInvariant() == "lave" && bodyname.StartsWith("Castellan Belt ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "Lave A Belt " + bodyname.Substring("Castellan Belt ".Length);
             }
 
             if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(bodyname))

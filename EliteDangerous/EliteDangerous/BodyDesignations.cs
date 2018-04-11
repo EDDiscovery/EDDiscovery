@@ -1943,6 +1943,10 @@ namespace EliteDangerousCore
                 { "Rick's Retreat", "HR 7291 7 d" },
                 { "Annette's Paradise", "HR 7291 7 e" }
             } },
+            { "Pepper", new Dictionary<string, string>
+            {
+                { "Pepper", "Pepper A 1" }
+            } },
         };
 
         public struct DesigMap
