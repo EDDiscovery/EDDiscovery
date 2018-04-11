@@ -151,6 +151,12 @@ public static class ObjectExtensionsDates
         //return dt.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'");
         return dt.ToString("O");
     }
+
+    public static string SecondsToString(this int s)
+    {
+        TimeSpan ts = new TimeSpan(0, 0, s);
+        return ts.ToString();
+    }
 }
 
 

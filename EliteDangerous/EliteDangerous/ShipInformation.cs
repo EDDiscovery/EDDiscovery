@@ -41,6 +41,10 @@ namespace EliteDangerousCore
         public long HullValue { get; private set; }         // may be 0, not known
         public long ModulesValue { get; private set; }      // may be 0, not known
         public long Rebuy { get; private set; }             // may be 0, not known
+        public string StoredAtSystem { get; private set; }  // null if not stored, else where stored
+        public string StoredAtStation { get; private set; } // null if not stored or unknown
+        public DateTime TransferArrivalTimeUTC { get; private set; }     // if current UTC < this, its in transit
+        public bool Hot { get; private set; }               // if known to be hot.
 
         public enum SubVehicleType
         {
@@ -48,8 +52,9 @@ namespace EliteDangerousCore
         }
 
         public SubVehicleType SubVehicle { get; private set; } = SubVehicleType.None;    // if in a sub vehicle or mothership
-
         public Dictionary<string, ShipModule> Modules { get; private set; }
+
+        public bool InTransit { get { return TransferArrivalTimeUTC.CompareTo(DateTime.UtcNow)>0; } }
 
         public ShipModule GetModule(string name) { return Modules.ContainsKey(name) ? Modules[name] : null; }      // Name is the nice Slot name.
         public ShipModule.EngineeringData GetEngineering(string name) { return Modules.ContainsKey(name) ? Modules[name].Engineering : null; }
@@ -69,6 +74,14 @@ namespace EliteDangerousCore
                 sb.AppendPrePad(" in Fighter");
             else
             {
+                if (Sold)
+                    sb.Append(" (Sold)");
+
+                if (InTransit)
+                    sb.Append(" (Tx to " + StoredAtSystem + ")");
+                else if (StoredAtSystem != null)
+                    sb.Append(" (@" + StoredAtSystem + ")");
+
                 if (fuel)
                 {
                     double cap = FuelCapacity;
@@ -125,7 +138,15 @@ namespace EliteDangerousCore
                 bool empty = string.IsNullOrEmpty(res);
                 res = res.AppendPrePad(ShipType, ",");
                 if (empty)
-                    res += "(" + ID.ToString() + ")";
+                    res += " (" + ID.ToString() + ")";
+
+                if (Sold)
+                    res += " (Sold)";
+
+                if (InTransit)
+                    res += " (Tx to " + StoredAtSystem + ")";
+                else if (StoredAtSystem != null)
+                    res += " (@" + StoredAtSystem + ")";
 
                 return res;
             }
@@ -277,6 +298,10 @@ namespace EliteDangerousCore
             sm.HullValue = this.HullValue;
             sm.ModulesValue = this.ModulesValue;
             sm.Rebuy = this.Rebuy;
+            sm.StoredAtStation = this.StoredAtStation;
+            sm.StoredAtSystem = this.StoredAtSystem;
+            sm.TransferArrivalTimeUTC = this.TransferArrivalTimeUTC;
+            sm.Hot = this.Hot;
             sm.Modules = new Dictionary<string, ShipModule>(this.Modules);
             return sm;
         }
@@ -486,6 +511,46 @@ namespace EliteDangerousCore
             }
 
             return this;
+        }
+
+        public ShipInformation SellShip()
+        {
+            ShipInformation sm = this.ShallowClone();
+            sm.Sold = true;
+            sm.ClearStorage();
+            return sm;
+        }
+
+        public ShipInformation Store(string station, string system)
+        {
+            ShipInformation sm = this.ShallowClone();
+            //if (sm.StoredAtSystem != null) { if (sm.StoredAtSystem.Equals(system)) System.Diagnostics.Debug.WriteLine("..Previous known stored at" + sm.StoredAtSystem + ":" + sm.StoredAtStation); else System.Diagnostics.Debug.WriteLine("************************ DISGREEE..Previous known stored at" + sm.StoredAtSystem + ":" + sm.StoredAtStation); }
+            sm.StoredAtSystem = system;
+            sm.StoredAtStation = station ?? sm.StoredAtStation;     // we may get one with just the system, so use the previous station if we have one
+            //System.Diagnostics.Debug.WriteLine(".." + ShipFD + " Stored at " + sm.StoredAtSystem + ":" + sm.StoredAtStation);
+            return sm;                                              // don't change transfer time as it may be in progress..
+        }
+
+        public ShipInformation SwapTo()
+        {
+            ShipInformation sm = this.ShallowClone();
+            sm.ClearStorage();    // just in case
+            return sm;
+        }
+
+        public ShipInformation Transfer(string tosystem , string tostation, DateTime arrivaltimeutc)
+        {
+            ShipInformation sm = this.ShallowClone();
+            sm.StoredAtStation = tostation;
+            sm.StoredAtSystem = tosystem;
+            sm.TransferArrivalTimeUTC = arrivaltimeutc;
+            return sm;
+        }
+
+        private void ClearStorage()
+        {
+            StoredAtStation = StoredAtSystem = null;
+            TransferArrivalTimeUTC = DateTime.MinValue;
         }
 
         #endregion

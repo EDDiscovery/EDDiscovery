@@ -64,7 +64,7 @@ namespace EliteDangerousCore
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
 
-            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFullInfo());
+            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFD);
 
             ShipInformation newsm = null;       // if we change anything, we need a new clone..
 
@@ -150,22 +150,98 @@ namespace EliteDangerousCore
             }
         }
 
-        public void ShipyardSwap(JournalShipyardSwap e)
+        public void ShipyardSwap(JournalShipyardSwap e, string station, string system)
         {
-            string sid = Key(e.ShipFD, e.ShipId);
+            if ( e.StoreShipId.HasValue)    // if we have an old ship ID (old records do not)
+            { 
+                string oldship = Key(e.StoreOldShipFD, e.StoreShipId.Value);
+
+                if (Ships.ContainsKey(oldship))
+                {
+                    //System.Diagnostics.Debug.WriteLine(e.StoreOldShipFD + " Swap Store at " + system + ":" + station);
+                    Ships[oldship] = Ships[oldship].Store(station, system);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine(e.StoreOldShipFD + " Cant find to swap");
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(e.StoreOldShipFD + " Cant find to swap");
+            }
+
+            //System.Diagnostics.Debug.WriteLine(e.ShipFD + " Swap to at " + system );
+            string sid = Key(e.ShipFD, e.ShipId);           //swap to new ship
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.SetShipDetails(e.ShipType, e.ShipFD); // shallow copy if changed
+            sm = sm.SetShipDetails(e.ShipType, e.ShipFD);   // shallow copy if changed
+            sm = sm.SwapTo();                               // swap into
+            Ships[sid] = sm;
             currentid = sid;
         }
 
-        public void ShipyardNew(JournalShipyardNew e)
+        public void ShipyardNew(string ship, string shipFD, int id)
         {
-            string sid = Key(e.ShipFD, e.ShipId);
+            string sid = Key(shipFD, id);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm.SetShipDetails(e.ShipType, e.ShipFD); // shallow copy if changed
+            Ships[sid] = sm.SetShipDetails(ship, shipFD); // shallow copy if changed
             currentid = sid;
+        }
+
+        public void Sell(string ShipFD, int id)
+        {
+            string sid = Key(ShipFD, id);
+            if (Ships.ContainsKey(sid))       // if we don't have it, don't worry
+            {
+                //System.Diagnostics.Debug.WriteLine(ShipFD + " Sell ");
+                Ships[sid] = Ships[sid].SellShip();
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(ShipFD + " can't find to Sell");
+            }
+        }
+
+        public void Transfer(string ship, string shipFD, int id, string fromsystem, string tosystem, string tostation, DateTime arrivaltime)
+        {
+            string sid = Key(shipFD, id);
+            ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+            sm = sm.SetShipDetails(ship, shipFD);               // set up minimum stuff we know about it
+            sm = sm.Transfer(tosystem, tostation, arrivaltime);    // transfer set up
+            Ships[sid] = sm;
+            //System.Diagnostics.Debug.WriteLine(shipFD + " Transfer from " + fromsystem + " to " + tosystem + ":" + tostation + " arrives " + arrivaltime.ToString());
+        }
+
+        public void Store(string ShipFD, int id, string station, string system)
+        {
+            string sid = Key(ShipFD, id);
+            if (Ships.ContainsKey(sid))       // if we don't have it, don't worry
+            {
+                //System.Diagnostics.Debug.WriteLine(ShipFD + " store on buy at " + system);
+                Ships[sid] = Ships[sid].Store(station, system);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(ShipFD + " cannot find ship to store on buy");
+            }
+        }
+
+        public void StoredShips(JournalStoredShips.StoredShipInformation[] ships)
+        {
+            foreach (var i in ships)
+            {
+                //System.Diagnostics.Debug.WriteLine(i.ShipTypeFD + " Stored info " + i.StarSystem + ":" + i.StationName + " transit" + i.InTransit);
+                string sid = Key(i.ShipTypeFD, i.ShipID);
+                ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+                sm = sm.SetShipDetails(i.ShipType, i.ShipTypeFD,i.Name);  // set up minimum stuff we know about it
+
+                if ( !i.InTransit )                                 // if in transit, we don't know where it is, ignore
+                    sm = sm.Store(i.StationName, i.StarSystem);         // ship is not with us, its stored, so store it.
+
+                Ships[sid] = sm;
+            }
         }
 
         public void SetUserShipName(JournalSetUserShipName e)
@@ -331,6 +407,8 @@ namespace EliteDangerousCore
                 }
             }
 
+            //System.Diagnostics.Debug.WriteLine("Made new ship " + id);
+
             int i;
             id.Substring(id.IndexOf(":") + 1).InvariantParse(out i);
             ShipInformation smn = new ShipInformation(i);
@@ -342,12 +420,12 @@ namespace EliteDangerousCore
 
         #region process
 
-        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, DB.SQLiteConnectionUser conn)
+        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, DB.SQLiteConnectionUser conn, string whereami, ISystem system)
         {
             if (je is IShipInformation)
             {
                 IShipInformation e = je as IShipInformation;
-                e.ShipInformation(this, conn);                             // not cloned.. up to callers to see if they need to
+                e.ShipInformation(this, whereami, system, conn);                             // not cloned.. up to callers to see if they need to
             }
 
             return new Tuple<ShipInformation, ModulesInStore>(CurrentShip, StoredModules);
@@ -399,7 +477,7 @@ namespace EliteDangerousCore
             {
                 Name = item;
                 Name_Localised = item_localised.Alt(Name);
-                System.Diagnostics.Debug.WriteLine("Store module '" + item + "' '" + item_localised + "'");
+                //System.Diagnostics.Debug.WriteLine("Store module '" + item + "' '" + item_localised + "'");
             }
 
             public StoredModule()
@@ -442,7 +520,7 @@ namespace EliteDangerousCore
             int index = StoredModules.FindIndex(x => x.Name.Equals(item, StringComparison.InvariantCultureIgnoreCase));  // if we have an item of this name
             if (index != -1)
             {
-                System.Diagnostics.Debug.WriteLine("Remove module '" + item + "'  '" + StoredModules[index].Name_Localised + "'");
+                //System.Diagnostics.Debug.WriteLine("Remove module '" + item + "'  '" + StoredModules[index].Name_Localised + "'");
                 ModulesInStore mis = this.ShallowClone();
                 mis.StoredModules.RemoveAt(index);
                 return mis;
