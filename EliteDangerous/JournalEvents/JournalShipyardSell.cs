@@ -16,6 +16,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -23,7 +24,7 @@ namespace EliteDangerousCore.JournalEvents
 {
 
     [JournalEntryType(JournalTypeEnum.ShipyardSell)]
-    public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry
+    public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         //When Written: when selling a ship stored in the shipyard
         //Parameters:
@@ -34,20 +35,29 @@ namespace EliteDangerousCore.JournalEvents
         public JournalShipyardSell(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSell)
         {
             MarketID = evt["MarketID"].LongNull();
-            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
+            ShipType = JournalFieldNaming.GetBetterShipName(ShipTypeFD);
             SellShipId = evt["SellShipID"].Int();
             ShipPrice = evt["ShipPrice"].Long();
             System = evt["System"].Str();
         }
+
+        public string ShipTypeFD { get; set; }
         public string ShipType { get; set; }
         public int SellShipId { get; set; }
         public long ShipPrice { get; set; }
-        public string System { get; set; }
+        public string System { get; set; }      // may be empty
         public long? MarketID { get; set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, ShipPrice);
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {
+            //Debug.WriteLine(EventTimeUTC + " SELL");
+            shp.Sell(ShipType, SellShipId);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

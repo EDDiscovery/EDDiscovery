@@ -47,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipName { get; set; }
         public string ShipIdent { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.SetUserShipName(this);
         }

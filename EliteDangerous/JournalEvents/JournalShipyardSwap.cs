@@ -34,24 +34,31 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalShipyardSwap(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSwap)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
+            ShipType = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
-            StoreOldShip = JournalFieldNaming.GetBetterShipName(evt["StoreOldShip"].Str());
+
+            StoreOldShipFD = JournalFieldNaming.NormaliseFDShipName(evt["StoreOldShip"].Str());
+            StoreOldShip = JournalFieldNaming.GetBetterShipName(StoreOldShipFD);
             StoreShipId = evt["StoreShipID"].IntNull();
+
             MarketID = evt["MarketID"].LongNull();
         }
 
-        public string ShipType { get; set; }
         public string ShipFD { get; set; }
+        public string ShipType { get; set; }
         public int ShipId { get; set; }
+
+        public string StoreOldShipFD { get; set; }
         public string StoreOldShip { get; set; }
         public int? StoreShipId { get; set; }
+
         public long? MarketID { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.ShipyardSwap(this);
+            //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " SWAP");
+            shp.ShipyardSwap(this, whereami, system.Name);
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V

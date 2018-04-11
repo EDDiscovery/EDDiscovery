@@ -55,7 +55,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public ModuleItem[] ModuleItems { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.MassModuleStore(this);
         }

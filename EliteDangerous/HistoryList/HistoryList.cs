@@ -797,7 +797,7 @@ namespace EliteDangerousCore
                 cashledger.Process(je, conn);
                 he.Credits = cashledger.CashTotal;
 
-                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);
+                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
                 he.ShipInformation = ret.Item1;
                 he.StoredModules = ret.Item2;
 
@@ -951,7 +951,7 @@ namespace EliteDangerousCore
                     cashledger.Process(je, conn);            // update the ledger     
                     he.Credits = cashledger.CashTotal;
 
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn);  // the ships
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI, he.System);  // the ships
                     he.ShipInformation = ret.Item1;
                     he.StoredModules = ret.Item2;
 

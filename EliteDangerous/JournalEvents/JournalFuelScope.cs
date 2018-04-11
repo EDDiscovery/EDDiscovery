@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.FuelScoop(this);
         }

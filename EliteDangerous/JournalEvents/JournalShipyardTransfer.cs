@@ -35,13 +35,15 @@ namespace EliteDangerousCore.JournalEvents
     "ShipID":7, "System":"Eranin", "Distance":85.639145, "TransferPrice":580 }
      * */
     [JournalEntryType(JournalTypeEnum.ShipyardTransfer)]
-    public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry
+    public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
         public JournalShipyardTransfer(JObject evt ) : base(evt, JournalTypeEnum.ShipyardTransfer)
         {
-            ShipType = JournalFieldNaming.GetBetterShipName(evt["ShipType"].Str());
+            ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(evt["ShipType"].Str());
+            ShipType = JournalFieldNaming.GetBetterShipName(ShipTypeFD);
             ShipId = evt["ShipID"].Int();
-            System = evt["System"].Str();
+
+            FromSystem = evt["System"].Str();
             Distance = evt["Distance"].Double();
             TransferPrice = evt["TransferPrice"].Long();
 
@@ -49,16 +51,20 @@ namespace EliteDangerousCore.JournalEvents
                 Distance = Distance / 299792458.0 / 365 / 24 / 60 / 60;
 
             nTransferTime = evt["TransferTime"].IntNull();
+            FriendlyTransferTime = nTransferTime.HasValue ? nTransferTime.Value.SecondsToString() : "";
+
             MarketID = evt["MarketID"].LongNull();
             ShipMarketID = evt["ShipMarketID"].LongNull();
         }
 
+        public string ShipTypeFD { get; set; }
         public string ShipType { get; set; }
         public int ShipId { get; set; }
-        public string System { get; set; }
+        public string FromSystem { get; set; }
         public double Distance { get; set; }
         public long TransferPrice { get; set; }
         public int? nTransferTime { get; set; }
+        public string FriendlyTransferTime { get; set; }
         public long? MarketID { get; set; }
         public long? ShipMarketID { get; set; }
 
@@ -67,10 +73,17 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -TransferPrice);
         }
 
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {
+            DateTime arrival = EventTimeUTC.AddSeconds(nTransferTime ?? 0);
+            //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Transfer");
+            shp.Transfer(ShipType, ShipTypeFD, ShipId, FromSystem, system.Name, whereami, arrival);
+        }
+
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
-            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , System , "Distance:; ly;0.0" , Distance , "Price:; cr;N0", TransferPrice, "TransferTime:", JournalFieldNaming.GetBetterTimeinSeconds(nTransferTime));
+            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , FromSystem , "Distance:; ly;0.0" , Distance , "Price:; cr;N0", TransferPrice, "TransferTime:", FriendlyTransferTime);
             detailed = "";
         }
     }

@@ -68,7 +68,7 @@ namespace EliteDangerousCore.JournalEvents
         public int ShipId { get; set; }
         public long? MarketID { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.ModuleSwap(this);
         }
