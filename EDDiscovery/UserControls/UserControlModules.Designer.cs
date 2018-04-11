@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtEDShipyard = new ExtendedControls.ButtonExt();
             this.buttonExtCoriolis = new ExtendedControls.ButtonExt();
             this.labelVehicle = new System.Windows.Forms.Label();
-            this.LabelVehicleText = new System.Windows.Forms.Label();
             this.labelShip = new System.Windows.Forms.Label();
             this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -203,7 +202,6 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Controls.Add(this.buttonExtEDShipyard);
             this.panelButtons.Controls.Add(this.buttonExtCoriolis);
             this.panelButtons.Controls.Add(this.labelVehicle);
-            this.panelButtons.Controls.Add(this.LabelVehicleText);
             this.panelButtons.Controls.Add(this.labelShip);
             this.panelButtons.Controls.Add(this.comboBoxShips);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
@@ -250,20 +248,11 @@ namespace EDDiscovery.UserControls
             // labelVehicle
             // 
             this.labelVehicle.AutoSize = true;
-            this.labelVehicle.Location = new System.Drawing.Point(402, 9);
+            this.labelVehicle.Location = new System.Drawing.Point(333, 9);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
             this.labelVehicle.TabIndex = 28;
             this.labelVehicle.Text = "Unknown";
-            // 
-            // LabelVehicleText
-            // 
-            this.LabelVehicleText.AutoSize = true;
-            this.LabelVehicleText.Location = new System.Drawing.Point(355, 9);
-            this.LabelVehicleText.Name = "LabelVehicleText";
-            this.LabelVehicleText.Size = new System.Drawing.Size(42, 13);
-            this.LabelVehicleText.TabIndex = 27;
-            this.LabelVehicleText.Text = "Vehicle";
             // 
             // labelShip
             // 
@@ -283,8 +272,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxShips.DisplayMember = "";
             this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxShips.DropDownHeight = 200;
-            this.comboBoxShips.DropDownWidth = 1;
+            this.comboBoxShips.DropDownHeight = 300;
+            this.comboBoxShips.DropDownWidth = 400;
             this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxShips.ItemHeight = 13;
             this.comboBoxShips.Location = new System.Drawing.Point(52, 4);
@@ -328,7 +317,6 @@ namespace EDDiscovery.UserControls
         internal ExtendedControls.ComboBoxCustom comboBoxShips;
         private System.Windows.Forms.Label labelShip;
         private System.Windows.Forms.Label labelVehicle;
-        private System.Windows.Forms.Label LabelVehicleText;
         private ExtendedControls.ButtonExt buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ButtonExt buttonExtEDShipyard;

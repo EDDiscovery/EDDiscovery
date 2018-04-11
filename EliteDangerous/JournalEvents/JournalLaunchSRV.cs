@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             shp.LaunchSRV();
         }
