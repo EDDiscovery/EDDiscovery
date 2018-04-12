@@ -936,6 +936,12 @@ namespace EliteDangerousCore
                 }
             }
 
+            // Special case for Castellan Belt
+            if (system.ToLowerInvariant() == "lave" && je.BodyName.StartsWith("Castellan Belt ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "Lave A Belt " + je.BodyName.Substring("Castellan Belt ".Length);
+            }
+
             // Special case for 9 Aurigae
             if (je.IsStar && system.ToLowerInvariant() == "9 Aurigae")
             {
