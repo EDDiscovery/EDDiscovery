@@ -959,6 +959,9 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format("SurfacePressure"));
                                     writer.Write(csv.Format("Landable"));
                                     writer.Write(csv.Format("EarthMasses"));
+                                    writer.Write(csv.Format("IcePercent"));
+                                    writer.Write(csv.Format("RockPercent"));
+                                    writer.Write(csv.Format("MetalPercent"));
                                 }
                                 // Common orbital param
                                 writer.Write(csv.Format("SemiMajorAxis"));
@@ -1055,6 +1058,9 @@ namespace EDDiscovery.UserControls
                                     writer.Write(csv.Format(scan.nSurfacePressure.HasValue ? scan.nSurfacePressure.Value : 0));
                                     writer.Write(csv.Format(scan.nLandable.HasValue ? scan.nLandable.Value : false));
                                     writer.Write(csv.Format((scan.nMassEM.HasValue) ? scan.nMassEM.Value : 0));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Ice")));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Rock")));
+                                    writer.Write(csv.Format(scan.GetCompositionPercent("Metal")));
                                 }
                                 // Common orbital param
                                 writer.Write(csv.Format(scan.nSemiMajorAxis.HasValue ? scan.nSemiMajorAxis.Value : 0));
