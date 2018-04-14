@@ -51,6 +51,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	RotationPeriod (seconds)
     //•	Rings [ array of info ] - if rings present
     //•	ReserveLevel: (Pristine/Major/Common/Low/Depleted) – if rings present
+    //•	Composition
     //
     // Rings properties
     //•	Name
@@ -108,6 +109,8 @@ namespace EliteDangerousCore.JournalEvents
         public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
         public bool HasAtmosphericComposition { get { return AtmosphereComposition != null && AtmosphereComposition.Any(); } }
         public Dictionary<string, double> AtmosphereComposition { get; set; }
+        public Dictionary<string, double> PlanetComposition { get; set; }
+        public bool HasPlanetaryComposition { get { return PlanetComposition != null && PlanetComposition.Any(); }}
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
         public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }
@@ -309,6 +312,17 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
 
+            JToken composition = evt["Composition"];
+
+            if (composition != null)
+            {
+                PlanetComposition = new Dictionary<string, double>();
+                foreach (JProperty jp in composition)
+                {
+                    PlanetComposition[jp.Name] = (double)jp.Value;
+                }
+            }
+
             IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
 
             EstimatedValue = CalculateEstimatedValue();
@@ -390,16 +404,20 @@ namespace EliteDangerousCore.JournalEvents
                     }
                 }
 
-                if (HasAtmosphericComposition)
-                {
-                    scanText.Append("\n" + DisplayAtmosphere(2) + "\n");
-                }
-
                 if (IsLandable)
                     scanText.AppendFormat(", Landable");
 
                 scanText.AppendFormat("\n");
 
+                if (HasAtmosphericComposition)
+                    scanText.Append("\n" + DisplayAtmosphere(2));
+                    
+                if (HasPlanetaryComposition)
+                    scanText.Append("\n" + DisplayComposition(2));
+
+                if (HasPlanetaryComposition || HasAtmosphericComposition)
+                    scanText.Append("\n\n");
+                                
                 if (nAge.HasValue)
                     scanText.AppendFormat("Age: {0} million years\n", nAge.Value.ToString("N0"));
 
@@ -585,6 +603,23 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString();
         }
 
+        public string DisplayComposition(int indent = 0)
+        {
+            StringBuilder scanText = new StringBuilder();
+            string indents = new string(' ', indent);
+
+            scanText.Append(indents + "Planetary Composition:\n");
+            foreach (KeyValuePair<string, double> comp in PlanetComposition)
+            {
+                scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
+            }
+
+            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                scanText.Remove(scanText.Length - 1, 1);
+
+            return scanText.ToNullSafeString();
+        }
+
         public string RingInformationMoons(int ringno)
         {
             return RingInformation(ringno, 1 / oneMoon_MT, " Moons");
@@ -670,6 +705,17 @@ namespace EliteDangerousCore.JournalEvents
 
             return AtmosphereComposition[c];
 
+        }
+
+        public double? GetCompositionPercent(string c)
+        {
+            if (!HasPlanetaryComposition)
+                return null;
+
+            if (!PlanetComposition.ContainsKey(c))
+                return 0.0;
+
+            return PlanetComposition[c] * 100;
         }
 
         public bool IsStarNameRelated(string starname, string designation = null)
