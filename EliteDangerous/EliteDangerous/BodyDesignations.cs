@@ -1914,7 +1914,7 @@ namespace EliteDangerousCore
                 { "Rubin's Discovery", "61 Virginis 1" }
             } },
             { "Bragurom Du", new Dictionary<string, string> {
-                { "Remlok's Claim", "Bragurom Du 4 a" }
+                { "Remlok's Claim", "Bragurom Du 2 a" }
             } },
             { "LHS 2610", new Dictionary<string, string> {
                 { "Evangeline's Grace", "LHS 2610 4 a" }
