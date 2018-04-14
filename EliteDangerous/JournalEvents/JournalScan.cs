@@ -611,7 +611,8 @@ namespace EliteDangerousCore.JournalEvents
             scanText.Append(indents + "Planetary Composition:\n");
             foreach (KeyValuePair<string, double> comp in PlanetComposition)
             {
-                scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
+                if (comp.Value > 0)
+                    scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
