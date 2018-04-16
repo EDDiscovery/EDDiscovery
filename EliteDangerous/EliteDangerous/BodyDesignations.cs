@@ -1947,6 +1947,9 @@ namespace EliteDangerousCore
             {
                 { "Pepper", "Pepper A 1" }
             } },
+            { "Praea Euq WD-T c3-36", new Dictionary<string, string> {
+                { "Miola", "Praea Euq WD-T c3-36 B 9 a" }
+            } },
         };
 
         public struct DesigMap
