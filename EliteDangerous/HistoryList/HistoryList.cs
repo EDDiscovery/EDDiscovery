@@ -33,6 +33,7 @@ namespace EliteDangerousCore
         public Ledger cashledger { get; private set; } = new Ledger();       // and the ledger..
         public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
         private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
+        public ShipYardList shipyards = new ShipYardList(); // yards in space (not meters)
         public StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
@@ -55,6 +56,7 @@ namespace EliteDangerousCore
             shipinformationlist = other.shipinformationlist;
             CommanderId = other.CommanderId;
             missionlistaccumulator = other.missionlistaccumulator;
+            shipyards = other.shipyards;
         }
 
         public int Count { get { return historylist.Count; } }
@@ -231,6 +233,13 @@ namespace EliteDangerousCore
         public bool IsCurrentlyLanded { get { HistoryEntry he = GetLast; return (he != null) ? he.IsLanded : false; } }     //safe methods
         public bool IsCurrentlyDocked { get { HistoryEntry he = GetLast; return (he != null) ? he.IsDocked : false; } }
         public ISystem CurrentSystem { get { HistoryEntry he = GetLast; return (he != null) ? he.System : null; } }  // current system
+
+        public double DistanceCurrentTo(string system)          // from current, if we have one, to system, if its found.
+        {
+            ISystem cursys = CurrentSystem;
+            ISystem other = SystemCache.FindSystem(system);
+            return cursys != null ? cursys.Distance(other) : -1;  // current can be null, shipsystem can be null, cursys can not have co-ord, -1 if failed.
+        }
 
         public HistoryEntry GetLastFSD
         {
@@ -797,11 +806,15 @@ namespace EliteDangerousCore
                 cashledger.Process(je, conn);
                 he.Credits = cashledger.CashTotal;
 
+                shipyards.Process(je, conn);
+
                 Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
                 he.ShipInformation = ret.Item1;
                 he.StoredModules = ret.Item2;
 
                 he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
+
+                
             }
 
             historylist.Add(he);
@@ -950,6 +963,8 @@ namespace EliteDangerousCore
 
                     cashledger.Process(je, conn);            // update the ledger     
                     he.Credits = cashledger.CashTotal;
+
+                    shipyards.Process(je, conn);
 
                     Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI, he.System);  // the ships
                     he.ShipInformation = ret.Item1;

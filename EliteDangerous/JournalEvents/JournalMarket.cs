@@ -65,6 +65,11 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
+        public bool Equals(JournalMarket other)
+        {
+            return string.Compare(Station, other.Station) == 0 && string.Compare(StarSystem, other.StarSystem) == 0 && CollectionStaticHelpers.Equals(Commodities, other.Commodities);
+        }
+
         public bool ReadAdditionalFiles(string directory, ref JObject jo)
         {
             JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"));

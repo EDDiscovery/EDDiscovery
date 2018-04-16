@@ -65,8 +65,9 @@ namespace EDDiscovery.Forms
             LocalMap,               // 32
             Plot,                   // 33
             PanelSelector,          // 34
-            BookmarkManager,
-            CombatPanel,
+            BookmarkManager,        // 35
+            CombatPanel,            // 36
+            ShipYardPanel,          // 37
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -94,6 +95,7 @@ namespace EDDiscovery.Forms
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated scan values of bodies in system", transparent: false) },
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
+            { new PanelInfo( PanelIDs.ShipYardPanel, typeof(UserControlShipYards), "Ship Yards", "ShipYards", "Information on ship yards you have visited") },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Local Map", "LocalMap", "3D Map of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", "Exploration Information") },

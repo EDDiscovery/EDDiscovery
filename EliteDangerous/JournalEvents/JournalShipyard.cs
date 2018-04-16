@@ -38,19 +38,10 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Rescan(JObject evt)
         {
-            StationName = evt["StationName"].Str();
-            StarSystem = evt["StarSystem"].Str();
+            Yard = new ShipYard(evt["StationName"].Str(), evt["StarSystem"].Str(), EventTimeUTC, evt["PriceList"]?.ToObjectProtected<ShipYard.ShipyardItem[]>());
             MarketID = evt["MarketID"].LongNull();
             Horizons = evt["Horizons"].BoolNull();
             AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
-
-            ShipyardItems = evt["PriceList"]?.ToObjectProtected<ShipyardItem[]>();
-
-            if (ShipyardItems != null)
-            {
-                foreach (ShipyardItem i in ShipyardItems)
-                    i.Normalise();
-            }
         }
 
         public bool ReadAdditionalFiles(string directory, ref JObject jo)
@@ -64,13 +55,10 @@ namespace EliteDangerousCore.JournalEvents
             return jnew != null;
         }
 
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
+        public ShipYard Yard { get; set; }
         public long? MarketID { get; set; }
         public bool? Horizons { get; set; }
         public bool? AllowCobraMkIV { get; set; }
-
-        public ShipyardItem[] ShipyardItems { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -78,37 +66,22 @@ namespace EliteDangerousCore.JournalEvents
             info = "";
             detailed = "";
 
-            if (ShipyardItems != null)
+            if (Yard.Ships != null)
             {
-                if (ShipyardItems.Length < 5)
+                if (Yard.Ships.Length < 5)
                 {
-                    foreach (ShipyardItem m in ShipyardItems)
+                    foreach (ShipYard.ShipyardItem m in Yard.Ships)
                         info = info.AppendPrePad(m.ShipType_Localised.Alt(m.ShipType), ", ");
                 }
                 else
-                    info = ShipyardItems.Length.ToString() + " ships";
+                    info = Yard.Ships.Length.ToString() + " ships";
 
-                foreach (ShipyardItem m in ShipyardItems)
+                foreach (ShipYard.ShipyardItem m in Yard.Ships)
                 {
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("",m.ShipType_Localised.Alt(m.ShipType), "; cr;N0", m.ShipPrice), System.Environment.NewLine);
                 }
             }
         }
 
-        public class ShipyardItem
-        {
-            public long id;
-            public string FDShipType;
-            public string ShipType;
-            public string ShipType_Localised;
-            public long ShipPrice;
-
-            public void Normalise()
-            {
-                FDShipType = ShipType;
-                ShipType = JournalFieldNaming.GetBetterShipName(ShipType);
-                ShipType_Localised = ShipType_Localised.Alt(ShipType);
-            }
-        }
     }
 }
