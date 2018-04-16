@@ -13,6 +13,8 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+using EliteDangerousCore;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -45,11 +47,11 @@ namespace EliteDangerousCore.JournalEvents
             Horizons = evt["Horizons"].BoolNull();
             AllowCobraMkIV = evt["AllowCobraMkIV"].BoolNull();
 
-            ModuleItems = evt["Items"]?.ToObjectProtected<OutfittingModuleItem[]>();
+            ModuleItems = evt["Items"]?.ToObjectProtected<ShipModule.OutfittingEntry[]>();
 
             if ( ModuleItems != null )
             {
-                foreach (OutfittingModuleItem i in ModuleItems)
+                foreach (ShipModule.OutfittingEntry i in ModuleItems)
                 {
                     i.FDName = i.Name;
                     i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
@@ -74,7 +76,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool? Horizons { get; set; }
         public bool? AllowCobraMkIV { get; set; }
 
-        public OutfittingModuleItem[] ModuleItems { get; set; }
+        public ShipModule.OutfittingEntry[] ModuleItems { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
@@ -86,21 +88,13 @@ namespace EliteDangerousCore.JournalEvents
             {
                 info = ModuleItems.Length.ToString() + " items available";
                 int itemno = 0;
-                foreach (OutfittingModuleItem m in ModuleItems)
+                foreach (ShipModule.OutfittingEntry m in ModuleItems)
                 {
                     detailed = detailed.AppendPrePad(m.Name + ":" + m.BuyPrice.ToString("N0"), (itemno % 3 < 2) ? ", " : System.Environment.NewLine);
                     itemno++;
                 }
             }
                 
-        }
-
-        public class OutfittingModuleItem
-        {
-            public long id;
-            public string Name;
-            public string FDName;
-            public long BuyPrice;
         }
     }
 }

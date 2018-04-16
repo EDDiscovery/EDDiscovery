@@ -306,7 +306,7 @@ namespace EliteDangerousCore
             if (s.StartsWith("hpt_"))
                 s = s.Replace("hpt_", "Hpt_");
             if (s.Contains("_armour_"))
-                s = s.Replace("_Armour_", "_armour_");      // normalise Armour to now lower case.. as done in journals
+                s = s.Replace("_armour_", "_Armour_");      // normalise to Armour upper cas.. its a bit over the place with case..
             if (s.EndsWith("_name;"))
                 s = s.Substring(0, s.Length - 6);
 
