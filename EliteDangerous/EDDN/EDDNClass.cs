@@ -239,7 +239,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalShipyard journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.ShipyardItems == null)
+            if (journal.Yard.Ships == null)
                 return null;
 
             JObject msg = new JObject();
@@ -262,7 +262,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNShipyardMessage(JournalShipyard journal, ISystem system = null)
         {
-            if (journal.ShipyardItems == null)
+            if (journal.Yard.Ships == null)
                 return null;
 
             JObject msg = new JObject();
@@ -273,10 +273,10 @@ namespace EliteDangerousCore.EDDN
             JObject message = new JObject
             {
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
-                ["systemName"] = journal.StarSystem,
-                ["stationName"] = journal.StationName,
+                ["systemName"] = journal.Yard.StarSystem,
+                ["stationName"] = journal.Yard.StationName,
                 ["marketId"] = journal.MarketID,
-                ["ships"] = new JArray(journal.ShipyardItems.Select(m => m.FDShipType))
+                ["ships"] = new JArray(journal.Yard.Ships.Select(m => m.FDShipType))
             };
 
             //if (systemAddress != null)

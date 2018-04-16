@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EliteDangerousCore
 {
-    public class CCommodities
+    public class CCommodities : System.IEquatable<CCommodities>
     {
         public int id { get; private set; }
 
@@ -56,6 +56,14 @@ namespace EliteDangerousCore
             StatusFlags = new List<string>(other.StatusFlags);
 
             ComparisionLR = ComparisionRL = "";
+        }
+
+        public bool Equals(CCommodities other)
+        {
+            return (id == other.id && string.Compare(fdname, other.fdname) == 0 && string.Compare(locName, other.locName) == 0 &&
+                     string.Compare(category, other.category) == 0 && string.Compare(loccategory, other.loccategory) == 0 &&
+                     buyPrice == other.buyPrice && sellPrice == other.sellPrice && meanPrice == other.meanPrice &&
+                     demandBracket == other.demandBracket && stockBracket == other.stockBracket && stock == other.stock && demand == other.demand);
         }
 
         public bool FromJsonCAPI(JObject jo)

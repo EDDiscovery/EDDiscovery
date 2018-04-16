@@ -123,34 +123,5 @@ namespace EliteDangerousCore.JournalEvents
                 shp.StoredShips(ShipsRemote);
         }
 
-        public class StoredShipInformation
-        {
-            public int ShipID;      // both
-            public string ShipType; // both
-            public string ShipType_Localised; // both
-            public string Name;     // Both
-            public long Value;      // both
-            public bool Hot;        // both
-
-            public string StarSystem;   // remote only and when not in transit, but filled in for local
-            public long ShipMarketID;   //remote
-            public long TransferPrice;  //remote
-            public long TransferTime;   //remote
-            public bool InTransit;      //remote, and that means StarSystem is not there.
-
-            public string StationName;  // local only, null otherwise
-            public string ShipTypeFD; // both, computed
-            public System.TimeSpan TransferTimeSpan;        // computed
-            public string TransferTimeString; // computed
-
-            public void Normalise()
-            {
-                ShipTypeFD = JournalFieldNaming.NormaliseFDShipName(ShipType);
-                ShipType = JournalFieldNaming.GetBetterShipName(ShipTypeFD);
-                ShipType_Localised = ShipType_Localised.Alt(ShipType);
-                TransferTimeSpan = new System.TimeSpan((int)(TransferTime / 60 / 60), (int)((TransferTime / 60) % 60), (int)(TransferTime % 60));
-                TransferTimeString = TransferTimeSpan.ToString();
-            }
-        }
     }
 }
