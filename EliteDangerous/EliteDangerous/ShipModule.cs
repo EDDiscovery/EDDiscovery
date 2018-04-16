@@ -313,5 +313,25 @@ namespace EliteDangerousCore
         }
 
         #endregion
+
+        #region Outfitting Module
+
+        public class OutfittingEntry : IEquatable<OutfittingEntry>
+        {
+            public long id;
+            public string Name;
+            public string FDName;
+            public long BuyPrice;
+
+            public bool Equals(OutfittingEntry other)
+            {
+                return (id == other.id && string.Compare(Name, other.Name) == 0 && string.Compare(FDName, other.FDName) == 0 &&
+                         BuyPrice == other.BuyPrice);
+            }
+
+        }
+
+        #endregion
+
     }
 }

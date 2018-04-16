@@ -182,11 +182,11 @@ namespace EliteDangerousCore
 
                 netlogpos = nfi.TravelLogUnit.Size;
 
-                List<JournalReaderEntry> ents = nfi.ReadJournalLog().ToList();
+                bool readanything = nfi.ReadJournal(out List<JournalReaderEntry> ents);
 
                 //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " size " + netlogpos);
 
-                if (ents.Count > 0)
+                if (readanything)           // if we read, we must update the travel log pos
                 {
                     using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                     {
@@ -201,6 +201,7 @@ namespace EliteDangerousCore
                                 ticksNoActivity = 0;
                             }
 
+                            System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
                             nfi.TravelLogUnit.Update(cn);
 
                             txn.Commit();
@@ -273,7 +274,8 @@ namespace EliteDangerousCore
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    List<JournalReaderEntry> entries = reader.ReadJournalLog(true).ToList();      // this may create new commanders, and may write to the TLU db
+                    reader.ReadJournal(out List<JournalReaderEntry> entries, true);      // this may create new commanders, and may write to the TLU db
+
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
                     using (DbTransaction tn = cn.BeginTransaction())
