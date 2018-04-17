@@ -238,8 +238,10 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewLedger_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index >= 3)
+            if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
+            else if (e.Column.Index >= 3)
+                e.SortDataGridViewColumnNumeric();
         }
     }
 }

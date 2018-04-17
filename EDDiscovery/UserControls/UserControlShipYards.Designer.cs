@@ -226,7 +226,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelYardSel;
         private System.Windows.Forms.Label labelYard;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn LocationOf;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;

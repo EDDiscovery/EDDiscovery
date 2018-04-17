@@ -37,31 +37,23 @@ namespace EDDiscovery.UserControls
     {
         private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
-        public static bool DeleteIsPermanent = true;
-
-        private List<ExplorationSetClass> _savedExplorationSets;
-        private ExplorationSetClass _currentExplorationSet;
-        private EDSMClass edsm;
-        private Rectangle _dragBox;
-        private int _dragRowIndex;
-        HistoryList hl = null;
-        //HistoryEntry last_he = null;
+        private ExplorationSetClass currentexplorationset;
 
         public int JounalScan { get; private set; }
+
+        #region Initialisation
 
         public UserControlExploration()
         {
             InitializeComponent();
             var corner = dataGridViewExplore.TopLeftHeaderCell; // work around #1487
             ColumnSystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
-            _currentExplorationSet = new ExplorationSetClass();
+            currentexplorationset = new ExplorationSetClass();
         }
 
         public override void Init()
         {
-            edsm = new EDSMClass();
-            _currentExplorationSet = new ExplorationSetClass();
-            _savedExplorationSets = new List<ExplorationSetClass>();
+            currentexplorationset = new ExplorationSetClass();
             discoveryform.OnNewEntry += NewEntry;
             uctg.OnTravelSelectionChanged += Display;
         }
@@ -72,7 +64,6 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
         }
-
 
         public override void LoadLayout()
         {
@@ -102,40 +93,17 @@ namespace EDDiscovery.UserControls
             UpdateSystemRows();
         }
 
-        public void InsertRows(int insertIndex, params string[] sysnames)
+        #endregion
+
+        #region Updating info due to new record coming in
+
+        private void UpdateSystemRows()
         {
-            foreach (var row in sysnames)
+            for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
             {
-                dataGridViewExplore.Rows.Insert(insertIndex, row, "", "", "", "", "", "", "", "");
-                insertIndex++;
+                UpdateSystemRow(i);
+                dataGridViewExplore.Rows[i].HeaderCell.Value = (i + 1).ToStringInvariant();
             }
-            UpdateSystemRows();
-        }
-
-        public void AppendRows(params string[] sysnames)
-        {
-            foreach (var row in sysnames)
-            {
-                dataGridViewExplore.Rows.Add(row, "", "", "", "", "", "", "", "");
-            }
-            UpdateSystemRows();
-        }
-
-   
-
-        private ISystem GetSystem(string sysname)
-        {
-            ISystem sys = SystemClassDB.GetSystem(sysname);
-
-            if (sys == null)
-            {
-                //if (edsm.IsKnownSystem(sysname))
-                //{
-                //    sys = new SystemClass(sysname);
-                //}
-            }
-
-            return sys;
         }
 
         private void UpdateSystemRow(int rowindex)
@@ -146,15 +114,7 @@ namespace EDDiscovery.UserControls
             const int idxInfo = 8;
             const int idxNote = 9;
 
-            if (hl == null)
-                hl = discoveryform.history;
-
-            HistoryEntry last = hl.GetLast;
-
-            if ( last == null )
-                return;
-
-            ISystem currentSystem = last.System;
+            ISystem currentSystem = discoveryform.history.CurrentSystem; // may be null
 
             if (rowindex < dataGridViewExplore.Rows.Count && dataGridViewExplore[0, rowindex].Value != null)
             {
@@ -162,10 +122,7 @@ namespace EDDiscovery.UserControls
                 ISystem sys = (ISystem)dataGridViewExplore[0, rowindex].Tag;
 
                 if (sys == null)
-                {
-                    
-                    sys = GetSystem(sysname);
-                }
+                    sys = SystemCache.FindSystem(sysname);
 
                 if (sys != null && currentSystem != null)
                 {
@@ -177,7 +134,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewExplore[0, rowindex].Tag = sys;
                 dataGridViewExplore.Rows[rowindex].DefaultCellStyle.ForeColor = (sys != null && sys.HasCoordinate) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
-
                 if (sys != null)
                 {
                     if (sys.HasCoordinate)
@@ -187,17 +143,16 @@ namespace EDDiscovery.UserControls
                         dataGridViewExplore[4, rowindex].Value = sys.Z.ToString("0.00");
                     }
 
+                    dataGridViewExplore[idxVisits, rowindex].Value = discoveryform.history.GetVisitsCount(sysname).ToString();
 
-                    dataGridViewExplore[idxVisits, rowindex].Value = hl.GetVisitsCount(sysname).ToString();
-
-                    List<JournalScan> scans = hl.GetScans(sysname);
+                    List<JournalScan> scans = discoveryform.history.GetScans(sysname);
                     dataGridViewExplore[idxScans, rowindex].Value = scans.Count.ToString();
 
                     string pristar = "";
                     // Search for primary star
                     foreach (var scan in scans)
                     {
-                        if (scan.IsStar && scan.DistanceFromArrivalLS==0.0)
+                        if (scan.IsStar && scan.DistanceFromArrivalLS == 0.0)
                         {
                             pristar = scan.StarType;
                             break;
@@ -263,116 +218,241 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        #endregion
 
-        private void UpdateSystemRows()
-        {
-            for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
-            {
-                UpdateSystemRow(i);
-            }
-        }
+        #region  Tool strip
 
-        private void UpdateExplorationInfo(ExplorationSetClass route)
-        {
-            route.Name = textBoxRouteName.Text.Trim();
-            route.Systems.Clear();
-            route.Systems.AddRange(dataGridViewExplore.Rows.OfType<DataGridViewRow>().Where(r => r.Cells[0].Value != null).Select(r => r.Cells[0].Value.ToString()));
-
-        }
-
-        private void toolStripButtonSave_Click(object sender, EventArgs e)
-        {
-            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
-            if (!Directory.Exists(explorepath))
-                Directory.CreateDirectory(explorepath);
-
-            UpdateExplorationInfo(_currentExplorationSet);
-
-            if (String.IsNullOrEmpty(textBoxFileName.Text))
-            {
-                SaveFileDialog dlg = new SaveFileDialog();
-
-                dlg.InitialDirectory = explorepath;
-                dlg.OverwritePrompt = true;
-                dlg.DefaultExt = "json";
-                dlg.AddExtension = true;
-                dlg.Filter = "Explore file| *.json";
-
-                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
-                {
-                    textBoxFileName.Text = dlg.FileName;
-                }
-                else
-                    return;
-
-     
-            }
-            UpdateExplorationInfo(_currentExplorationSet);
-            _currentExplorationSet.Save(textBoxFileName.Text);
-        }
-
-        private void toolStripButtonLoad_Click(object sender, EventArgs e)
-        {
-            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
-            if (!Directory.Exists(explorepath))
-                Directory.CreateDirectory(explorepath);
-
-
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.InitialDirectory = explorepath;
-            dlg.DefaultExt = "json";
-            dlg.AddExtension = true;
-            dlg.Filter = "Explore file| *.json";
-
-            if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                textBoxFileName.Text = dlg.FileName;
-                _currentExplorationSet.Clear();
-                _currentExplorationSet.Load(dlg.FileName);
-
-                textBoxRouteName.Text = _currentExplorationSet.Name;
-                dataGridViewExplore.Rows.Clear();
-                foreach (var sysname in _currentExplorationSet.Systems)
-                {
-                    dataGridViewExplore.Rows.Add(sysname, "", "");
-                }
-                UpdateSystemRows();
-
-            }
-        }
 
         private void toolStripButtonNew_Click(object sender, EventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            string explorepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
-            if (!Directory.Exists(explorepath))
-                Directory.CreateDirectory(explorepath);
+            string file = currentexplorationset.DialogNew(FindForm());
 
-            dlg.InitialDirectory = explorepath;
-            dlg.OverwritePrompt = true;
-            dlg.DefaultExt = "json";
-            dlg.AddExtension = true;
-            dlg.Filter = "Explore file| *.json";
-
-
-            if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
+            if ( file != null )
             {
-                textBoxFileName.Text = dlg.FileName;
-                UpdateExplorationInfo(_currentExplorationSet);
+                textBoxFileName.Text = file;
+                UpdateExplorationInfo(currentexplorationset);
                 ClearExplorationSet();
             }
         }
 
-        private void ClearExplorationSet()
+        private void toolStripButtonLoad_Click(object sender, EventArgs e)
         {
-            _currentExplorationSet = new ExplorationSetClass { Name = "" };
-            dataGridViewExplore.Rows.Clear();
-        
-            textBoxRouteName.Text = "";
-        
+            string file = currentexplorationset.DialogLoad(this.FindForm());
+
+            if ( file != null )
+            {
+                textBoxFileName.Text = file;
+                textBoxRouteName.Text = currentexplorationset.Name;
+
+                dataGridViewExplore.Rows.Clear();
+                foreach (var sysname in currentexplorationset.Systems)
+                    dataGridViewExplore.Rows.Add(sysname, "", "");
+
+                UpdateSystemRows();
+            }
         }
 
-     
+
+        private void toolStripButtonSave_Click(object sender, EventArgs e)
+        {
+            UpdateExplorationInfo(currentexplorationset);
+
+            if (String.IsNullOrEmpty(textBoxFileName.Text))
+            {
+                string file = currentexplorationset.DialogSave(FindForm());
+
+                if (file != null)
+                    textBoxFileName.Text = file;
+            }
+            else
+            {
+                currentexplorationset.Save(textBoxFileName.Text);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Saved to " + textBoxFileName.Text, "Exploration Set");
+            }
+        }
+
+
+        private void toolStripButtonImportFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "Text Files|*.txt";
+            ofd.Title = "Select a exploration set file";
+
+            if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            string[] sysnames;
+
+            try
+            {
+                sysnames = System.IO.File.ReadAllLines(ofd.FileName);
+            }
+            catch (IOException)
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"There was a problem opening file {ofd.FileName}", "Import file",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            List<String> systems = new List<String>();
+            int countunknown = 0;
+            foreach (String name in sysnames)
+            {
+                String sysname = name;
+                if (sysname.Contains(","))
+                {
+                    String[] values = sysname.Split(',');
+                    sysname = values[0];
+                }
+                if (String.IsNullOrWhiteSpace(sysname))
+                    continue;
+                ISystem sc = SystemCache.FindSystem(sysname.Trim());
+                if (sc == null)
+                {
+                    sc = new SystemClass(sysname.Trim());
+                    countunknown++;
+                }
+                systems.Add(sc.Name);
+
+            }
+
+            if (systems.Count == 0)
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                    "The imported file contains no known system names",
+                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            ClearExplorationSet();
+
+            foreach (var sysname in systems)
+            {
+                dataGridViewExplore.Rows.Add(sysname, "", "");
+            }
+
+            UpdateSystemRows();
+        }
+
+
+        private void toolStripButtonExport_Click(object sender, EventArgs e)
+        {
+            string filename = "";
+            try
+            {
+                if (dataGridViewExplore.Rows.Count == 0
+                    || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
+                {
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(),
+                    "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    return;
+                }
+
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.Filter = "Route export| *.txt";
+                dlg.Title = "Export route";
+                if (currentexplorationset != null && !String.IsNullOrWhiteSpace(currentexplorationset.Name))
+                    dlg.FileName = currentexplorationset.Name + ".txt";
+                else
+                    dlg.FileName = "route.txt";
+
+                dlg.FileName = dlg.FileName.SafeFileString();
+
+                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
+                    return;
+
+                filename = dlg.FileName;
+                using (StreamWriter writer = new StreamWriter(filename, false))
+                {
+                    for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
+                    {
+                        String sysname = (String)dataGridViewExplore[0, i].Value;
+                        if (!String.IsNullOrWhiteSpace(sysname))
+                            writer.WriteLine(sysname);
+                    }
+                }
+
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Export complete to {filename}", "Export route");
+            }
+            catch (IOException)
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Error exporting route. Is file {filename} open?", "Export route",
+                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+        }
+
+
+        private void toolStripButtonClear_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to clear the route list?", "Delete Entries", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                ClearExplorationSet();
+            }
+        }
+
+
+        private void tsbAddSystems_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            FindSystemsUserControl usc = new FindSystemsUserControl();
+            usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
+            {
+                List<String> systems = new List<String>();
+                int countunknown = 0;
+                foreach (Tuple<ISystem, double> ret in syslist)
+                {
+                    string name = ret.Item1.Name;
+
+                    ISystem sc = SystemCache.FindSystem(name.Trim());
+                    if (sc == null)
+                    {
+                        sc = new SystemClass(name.Trim());
+                        countunknown++;
+                    }
+                    systems.Add(sc.Name);
+                }
+
+                if (systems.Count == 0)
+                {
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names",
+                        "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+                else
+                {
+                    foreach (var sysname in systems)
+                        dataGridViewExplore.Rows.Add(sysname, "", "");
+
+                    UpdateSystemRows();
+                }
+
+                f.DialogResult = DialogResult.OK;
+                f.Close();
+            };
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), new Size(740, 150), null) { control = usc });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(650, 190), new Size(80, 24), "Press to Cancel"));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "Cancel")
+                {
+                    f.DialogResult = DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(750, 240), new Point(-999, -999), "Add Systems", 
+                                callback: () => { usc.Font = EDDTheme.Instance.GetFontStandardFontSize(); usc.Init(0, false, discoveryform); });
+            usc.Closing();
+        }
+
+
+        #endregion
+
+        #region Cell data
+
         private void dataGridViewRouteSystems_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             if (e.ColumnIndex == 0)
@@ -382,6 +462,8 @@ namespace EDDiscovery.UserControls
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
                 ISystem sys = SystemClassDB.GetSystem(sysname);
+
+                EDSMClass edsm = new EDSMClass();
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
@@ -399,95 +481,13 @@ namespace EDDiscovery.UserControls
             if (e.ColumnIndex == 0)
             {
                 UpdateSystemRow(e.RowIndex);
+                dataGridViewExplore.Rows[e.RowIndex].HeaderCell.Value = (e.RowIndex + 1).ToStringInvariant();
             }
         }
 
-        private void dataGridViewRouteSystems_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            var textbox = (ExtendedControls.TextBoxBorder)e.Control;
-            if (dataGridViewExplore.CurrentCell.ColumnIndex != 0)
-            {
-                textbox.AutoCompleteMode = AutoCompleteMode.None;
-                return;
-            }
+        #endregion
 
-            //TBD this used to have an autocomplete, but now we don't have systemnames we are lacking it
-        }
-
-        private void dataGridViewRouteSystems_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button.HasFlag(MouseButtons.Left))
-            {
-                var hit = dataGridViewExplore.HitTest(e.X, e.Y);
-                if (hit.Type == DataGridViewHitTestType.RowHeader && hit.RowIndex != -1)
-                {
-                    _dragRowIndex = hit.RowIndex;
-                    Size dragsize = SystemInformation.DragSize;
-                    _dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
-                }
-                else
-                {
-                    _dragBox = Rectangle.Empty;
-                }
-            }
-        }
-
-        private void dataGridViewRouteSystems_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button.HasFlag(MouseButtons.Left))
-            {
-                if (_dragBox != Rectangle.Empty && !_dragBox.Contains(e.Location))
-                {
-                    dataGridViewExplore.DoDragDrop(dataGridViewExplore.Rows[_dragRowIndex], DragDropEffects.Move);
-                }
-            }
-        }
-
-        private void dataGridViewRouteSystems_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
-            {
-                var data = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                if (data.DataGridView == dataGridViewExplore)
-                {
-                    e.Effect = DragDropEffects.Move;
-                }
-            }
-            else if (e.Data.GetDataPresent(typeof(string)))
-            {
-                e.Effect = DragDropEffects.Copy;
-            }
-        }
-
-        private void dataGridViewRouteSystems_DragDrop(object sender, DragEventArgs e)
-        {
-            Point p = dataGridViewExplore.PointToClient(new Point(e.X, e.Y));
-            var insertIndex = dataGridViewExplore.HitTest(p.X, p.Y).RowIndex;
-            if (insertIndex >= dataGridViewExplore.Rows.Count)
-            {
-                insertIndex = dataGridViewExplore.Rows.Count - 1;
-            }
-
-            if (e.Data.GetDataPresent(typeof(DataGridViewRow)))
-            {
-                if (e.Effect == DragDropEffects.Move)
-                {
-                    var row = e.Data.GetData(typeof(DataGridViewRow)) as DataGridViewRow;
-                    if (row.DataGridView == dataGridViewExplore)
-                    {
-                        dataGridViewExplore.Rows.Remove(row);
-                        dataGridViewExplore.Rows.Insert(insertIndex, row);
-                        UpdateSystemRows();
-                    }
-                }
-            }
-            else if (e.Data.GetDataPresent(typeof(string)) && e.Effect == DragDropEffects.Copy)
-            {
-                var data = e.Data.GetData(typeof(string)) as string;
-                var rows = data.Replace("\r", "").Split('\n').Where(r => r != "").ToArray();
-                InsertRows(insertIndex, rows);
-            }
-        }
+        #region right clicks
 
         private void contextMenuCopyPaste_Opening(object sender, CancelEventArgs e)
         {
@@ -576,22 +576,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridViewRouteSystems_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
-        {           // autopaint the row number..
-            var grid = sender as DataGridView;
-            var rowIdx = (e.RowIndex + 1).ToString();
-
-            if (!e.IsLastVisibleRow)
-            {
-                var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
-
-                // right alignment might actually make more sense for numbers
-                using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
-                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                    e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
-            }
-        }
-
         private void deleteRowsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int[] selectedRows = dataGridViewExplore.SelectedCells.OfType<DataGridViewCell>().Where(c => c.RowIndex != dataGridViewExplore.NewRowIndex).Select(c => c.RowIndex).OrderBy(v => v).Distinct().ToArray();
@@ -600,145 +584,6 @@ namespace EDDiscovery.UserControls
                 dataGridViewExplore.Rows.RemoveAt(index);
             }
             UpdateSystemRows();
-        }
-
-
-        private void toolStripButtonDelete_Click(object sender, EventArgs e)
-        {
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?", "Delete Route", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                if (DeleteIsPermanent)
-                {
-                    _currentExplorationSet.Delete();
-                }
-                else
-                {
-                    _currentExplorationSet.Name = "\x7F" + _currentExplorationSet.Name;
-
-                }
-
-                _savedExplorationSets.Remove(_currentExplorationSet);
-
-                ClearExplorationSet();
-            }
-        }
-        
-        private void toolStripButtonImportFile_Click(object sender, EventArgs e)
-        {
-
-
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Filter = "Text Files|*.txt";
-            ofd.Title = "Select a exploration set file";
-
-            if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
-                return;
-
-            ClearExplorationSet();
-
-            string[] sysnames;
-
-
-
-            try
-            {
-                sysnames = System.IO.File.ReadAllLines(ofd.FileName);
-            }
-            catch (IOException)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"There was a problem opening file {ofd.FileName}", "Import file",
-                      MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            List<String> systems = new List<String>();
-            int countunknown = 0;
-            foreach (String name in sysnames)
-            {
-                String sysname = name;
-                if (sysname.Contains(","))
-                {
-                    String[] values = sysname.Split(',');
-                    sysname = values[0];
-                }
-                if (String.IsNullOrWhiteSpace(sysname))
-                    continue;
-                ISystem sc = GetSystem(sysname.Trim());
-                if (sc == null)
-                {
-                    sc = new SystemClass(sysname.Trim());
-                    countunknown++;
-                }
-                systems.Add(sc.Name);
-
-            }
-            if (systems.Count == 0)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "The imported file contains no known system names",
-                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-      
-            foreach (var sysname in systems)
-            {
-                dataGridViewExplore.Rows.Add(sysname, "", "");
-            }
-            UpdateSystemRows();
-        }
-
- 
-
-        private void toolStripButtonExport_Click(object sender, EventArgs e)
-        {
-            string filename = "";
-            try
-            {
-
-                if (dataGridViewExplore.Rows.Count == 0
-                    || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
-                {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    return;
-                }
-
-                SaveFileDialog dlg = new SaveFileDialog();
-                dlg.Filter = "Route export| *.txt";
-                dlg.Title = "Export route";
-                if (_currentExplorationSet != null && !String.IsNullOrWhiteSpace(_currentExplorationSet.Name))
-                    dlg.FileName = _currentExplorationSet.Name + ".txt";
-                else
-                    dlg.FileName = "route.txt";
-
-                string fileName = dlg.FileName;
-                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
-                {
-                    fileName = fileName.Replace(c, '_');
-                }
-                dlg.FileName = fileName;
-
-                if (dlg.ShowDialog(FindForm()) != DialogResult.OK)
-                    return;
-                filename = dlg.FileName;
-                using (StreamWriter writer = new StreamWriter(filename, false))
-                {
-                    for (int i = 0; i < dataGridViewExplore.Rows.Count; i++)
-                    {
-                        String sysname = (String)dataGridViewExplore[0, i].Value;
-                        if (!String.IsNullOrWhiteSpace(sysname))
-                            writer.WriteLine(sysname);
-                    }
-                }
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Export complete to {filename}", "Export route");
-            }
-            catch (IOException)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Error exporting route. Is file {filename} open?", "Export route",
-                      MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
         }
 
         private void setTargetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -751,7 +596,7 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            TargetHelpers.setTargetSystem(this,discoveryform, (string)obj);
+            TargetHelpers.setTargetSystem(this, discoveryform, (string)obj);
         }
 
         private void editBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
@@ -764,84 +609,52 @@ namespace EDDiscovery.UserControls
 
             if (obj == null)
                 return;
-            ISystem sc = SystemClassDB.GetSystem((string)obj);
+            ISystem sc = SystemCache.FindSystem((string)obj);
             if (sc == null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
             }
             else
-                TargetHelpers.showBookmarkForm(this,discoveryform, sc, null, false);
+                TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);
         }
 
+        #endregion
 
-        private void tsbImportSphere_Click(object sender, EventArgs e)
-        {
-            string systemName;
-            double radius;
-
-            if (!ImportSphere.showDialog(discoveryform, out systemName, out radius, FindForm()))
-                return;
-
-            if (String.IsNullOrWhiteSpace(systemName))
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System name not set");
-                return;
-            }
-
-            if (radius < 0 || radius > 1000.0) { 
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Radius should be a number 0.0 and 1000.0");
-                return;
-            }
-
-            ClearExplorationSet();
-            EDSMClass edsm = new EDSMClass();
-            Cursor.Current = Cursors.WaitCursor;
-            Task<List<Tuple<ISystem, double>>> taskEDSM = Task<List<Tuple<ISystem, double>>>.Factory.StartNew(() =>
-            {
-                return edsm.GetSphereSystems(systemName, radius);
-            });
-            Task.WaitAll();
-            LoadSphereData(taskEDSM);
-            Cursor.Current = Cursors.Default;
-
-        }
-
-        private void LoadSphereData(Task<List<Tuple<ISystem, double>>> task)
-        {
-            List<String> systems = new List<String>();
-            int countunknown = 0;
-            foreach (Tuple<ISystem,double> ret in task.Result)
-            {
-                string name = ret.Item1.Name;
-
-                ISystem sc = GetSystem(name.Trim());
-                if (sc == null)
-                {
-                    sc = new SystemClass(name.Trim());
-                    countunknown++;
-                }
-                systems.Add(sc.Name);
-            }
-            if (systems.Count == 0)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names",
-                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            foreach (var sysname in systems)
-            {
-                dataGridViewExplore.Rows.Add(sysname, "", "");
-            }
-            UpdateSystemRows();
-        }
+        #region Helpers
 
         private void dataGridViewExplore_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index >= 1 && e.Column.Index <= 6)
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
 
         }
+
+
+        public void InsertRows(int insertIndex, params string[] sysnames)
+        {
+            foreach (var row in sysnames)
+            {
+                dataGridViewExplore.Rows.Insert(insertIndex, row, "", "", "", "", "", "", "", "");
+                insertIndex++;
+            }
+            UpdateSystemRows();
+        }
+
+        private void UpdateExplorationInfo(ExplorationSetClass route)
+        {
+            route.Name = textBoxRouteName.Text.Trim();
+            route.Systems.Clear();
+            route.Systems.AddRange(dataGridViewExplore.Rows.OfType<DataGridViewRow>().Where(r => !string.IsNullOrEmpty((string)r.Cells[0].Value)).Select(r => r.Cells[0].Value.ToString()));
+        }
+
+        private void ClearExplorationSet()
+        {
+            currentexplorationset = new ExplorationSetClass { Name = "" };
+            dataGridViewExplore.Rows.Clear();
+            textBoxRouteName.Text = "";
+        }
+
+        #endregion
     }
 
     public class ExplorationSetClass
@@ -854,10 +667,6 @@ namespace EDDiscovery.UserControls
             this.Systems = new List<string>();
         }
 
-        public void Delete()
-        { }
-
-
         public void Save(string fileName)
         {
             JObject jo = new JObject();
@@ -866,37 +675,98 @@ namespace EDDiscovery.UserControls
                 return;
 
             jo["Name"] = Name;
-
             jo["Systems"] = new JArray(Systems);
 
             File.WriteAllText(fileName, jo.ToString());
         }
 
 
-        public void Load(string fileName)
+        public bool Load(string fileName)
         {
-            JObject jo = JObject.Parse(File.ReadAllText(fileName));
-
-
-            Name = jo["Name"].ToString();
-
-            Systems.Clear();
-
-            JArray ja = (JArray)jo["Systems"];
-
-            foreach (var jsys in ja)
+            try
             {
-                string sysname = jsys.Value<String>();
-                if (!Systems.Contains(sysname))
-                    Systems.Add(sysname);
-            }
+                JObject jo = JObject.Parse(File.ReadAllText(fileName));
 
+                Name = jo["Name"].ToString();
+
+                Systems.Clear();
+
+                JArray ja = (JArray)jo["Systems"];
+
+                foreach (var jsys in ja)
+                {
+                    string sysname = jsys.Value<String>();
+                    if (!Systems.Contains(sysname))
+                        Systems.Add(sysname);
+                }
+
+                return true;
+            }
+            catch { }
+
+            return false;
         }
 
-        internal void Clear()
+        public void Clear()
         {
             Name = "";
             Systems.Clear();
+        }
+
+        public string DialogLoad(Form parent)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.InitialDirectory = EDDOptions.Instance.ExploreAppDirectory();
+            dlg.DefaultExt = "json";
+            dlg.AddExtension = true;
+            dlg.Filter = "Explore file| *.json";
+
+            if (dlg.ShowDialog(parent) == DialogResult.OK)
+            {
+                Clear();
+                if (Load(dlg.FileName))
+                    return dlg.FileName;
+            }
+
+            return null;
+        }
+
+        public string DialogNew(Form parent)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.InitialDirectory = EDDOptions.Instance.ExploreAppDirectory();
+            dlg.OverwritePrompt = true;
+            dlg.DefaultExt = "json";
+            dlg.AddExtension = true;
+            dlg.Filter = "Explore file| *.json";
+
+            if (dlg.ShowDialog(parent) == DialogResult.OK)
+            {
+                Clear();
+                return dlg.FileName;
+            }
+
+            return null;
+        }
+
+        public string DialogSave(Form parent)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.InitialDirectory = EDDOptions.Instance.ExploreAppDirectory();
+            dlg.OverwritePrompt = true;
+            dlg.DefaultExt = "json";
+            dlg.AddExtension = true;
+            dlg.Filter = "Explore file| *.json";
+
+            if (dlg.ShowDialog(parent) == DialogResult.OK)
+            {
+                Save(dlg.FileName);
+                return dlg.FileName;
+            }
+
+            return null;
         }
     }
 }

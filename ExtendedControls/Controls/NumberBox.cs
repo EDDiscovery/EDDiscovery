@@ -39,13 +39,28 @@ namespace ExtendedControls
             InErrorCondition = !IsValid;
         }
 
-        public event EventHandler ValueChanged
+        public void SetBlank()          // Blanks it, but does not declare an error
+        {
+            ignorechange = true;
+            base.Text = "";
+            InErrorCondition = false;
+            ignorechange = false;
+        }
+
+        public void SetNonBlank()       // restores it to its last value
+        {
+            base.Text = ConvertToString(Value);
+        }
+
+        public event EventHandler ValueChanged              // fired (first) when value is changed to a new valid value. Can be delayed by DelayBeforeNotification
         {
             add { Events.AddHandler(EVENT_VALUECHANGED, value); }
             remove { Events.RemoveHandler(EVENT_VALUECHANGED, value); }
         }
 
-        public Action<bool> ValidityChanged;                    // fires if valid
+        public Action<bool> ValidityChanged;                    // fires (second) if validity changes
+
+        // Finally, Use TextChanged to see all changes, then you can check for IsValid.  Fires after ValueChanged/ValidityChanged
 
         public T Value                                          // will fire a ValueChanged event
         {
@@ -72,7 +87,7 @@ namespace ExtendedControls
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override string Text { get { return base.Text; } set { } }       // can't set Text, only read..
+        public override string Text { get { return base.Text; } set { System.Diagnostics.Debug.Assert(false, "Can't set Number box"); } }       // can't set Text, only read..
 
         #region Implementation
 
@@ -99,10 +114,6 @@ namespace ExtendedControls
         {
             timer.Dispose();
             base.Dispose();
-        }
-
-        private void SetValidColor()      // set the validity colour
-        {
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -138,6 +149,8 @@ namespace ExtendedControls
                     InErrorCondition = true;
                 }
             }
+
+            base.OnTextChanged(e);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
