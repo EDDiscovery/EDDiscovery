@@ -804,7 +804,7 @@ namespace EDDiscovery.UserControls
             Forms.ExportForm frm = new Forms.ExportForm();
             frm.Init(new string[] { "All", "Stars only",
                                     "Planets only", //2
-                                    "Exploration List stars", //3
+                                    "Exploration List Stars", //3
                                     "Exploration List Planets", //4
                                     "Sold Exploration Data", // 5
                                         });
@@ -875,26 +875,15 @@ namespace EDDiscovery.UserControls
                             }
                             else
                             {
-                                string explorepath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Exploration");
-                                if (!System.IO.Directory.Exists(explorepath))
-                                    System.IO.Directory.CreateDirectory(explorepath);
+                                ExplorationSetClass currentExplorationSet = new ExplorationSetClass();
 
-                                OpenFileDialog dlg = new OpenFileDialog();
-                                dlg.InitialDirectory = explorepath;
-                                dlg.DefaultExt = "json";
-                                dlg.AddExtension = true;
-                                dlg.Filter = "Explore file| *.json";
+                                string file = currentExplorationSet.DialogLoad(FindForm());
 
-                                scans = new List<JournalScan>();
-
-                                if (dlg.ShowDialog(FindForm()) == DialogResult.OK)
+                                if (file != null)
                                 {
+                                    scans = new List<JournalScan>();
 
-                                    ExplorationSetClass _currentExplorationSet = new ExplorationSetClass();
-                                    _currentExplorationSet.Clear();
-                                    _currentExplorationSet.Load(dlg.FileName);
-
-                                    foreach (string system in _currentExplorationSet.Systems)
+                                    foreach (string system in currentExplorationSet.Systems)
                                     {
                                         List<long> edsmidlist = SystemClassDB.GetEdsmIdsFromName(system);
 

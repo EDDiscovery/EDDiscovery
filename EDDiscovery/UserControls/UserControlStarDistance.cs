@@ -213,8 +213,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewNearest_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (colDistance.Equals(e.Column) || colVisited.Equals(e.Column))
-                e.SortDataGridViewColumnDate();
+            if (e.Column.Index >= 1)
+                e.SortDataGridViewColumnNumeric();
         }
 
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)

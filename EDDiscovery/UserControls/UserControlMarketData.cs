@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewMarketData_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index >= 2)        // 2 on are numbers
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
         }
 
         private void comboBoxCustomFrom_SelectedIndexChanged(object sender, EventArgs e)

@@ -243,8 +243,19 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewPrevious_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Index == 7)
+            if (e.Column.Index == 1 || e.Column.Index == 2)
                 e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 7)
+                e.SortDataGridViewColumnNumeric();
+        }
+
+        private void dataGridViewCurrent_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Index == 1 || e.Column.Index == 2)
+                e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 7)
+                e.SortDataGridViewColumnNumeric();
+
         }
     }
 }

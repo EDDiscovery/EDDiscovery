@@ -44,6 +44,16 @@ namespace EDDiscovery
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
 
+        public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
+        {
+            string path = Path.Combine(EDDOptions.Instance.AppDataDirectory, subfolder);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            return path;
+        }
+
+        public string ExploreAppDirectory() { return SubAppDirectory("Exploration"); }
+
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
 
