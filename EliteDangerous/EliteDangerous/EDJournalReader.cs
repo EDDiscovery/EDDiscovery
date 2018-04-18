@@ -183,7 +183,7 @@ namespace EliteDangerousCore
                 toosoon = lastmarket != null && lastmarket.Equals(je as JournalEvents.JournalMarket);
                 lastmarket = je as JournalEvents.JournalMarket;
             }
-            else if (je is JournalEvents.JournalUndocked)             // undocked, repeats are cleared
+            else if (je is JournalEvents.JournalUndocked || je is JournalEvents.JournalLoadGame)             // undocked, Load Game, repeats are cleared
             {
                 lastshipyard = null;
                 laststoredmodules = null;

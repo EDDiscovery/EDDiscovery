@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
         {
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.InitialDirectory = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Theme");
+            dlg.InitialDirectory = EDDOptions.Instance.ThemeAppDirectory();
             dlg.DefaultExt = "eddtheme";
             dlg.AddExtension = true;
 

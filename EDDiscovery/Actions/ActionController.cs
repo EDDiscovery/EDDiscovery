@@ -133,14 +133,12 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
         }
 
-        static public string AppFolder { get { return System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"); } }
-
         public void ReLoad(bool completereload = true)        // COMPLETE reload..
         {
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            ErrorList = actionfiles.LoadAllActionFiles(AppFolder);
+            ErrorList = actionfiles.LoadAllActionFiles(EDDOptions.Instance.ActionsAppDirectory());
 
             AdditionalChecks(ref ErrorList);
 
@@ -196,7 +194,7 @@ namespace EDDiscovery.Actions
             {
                 string collapsestate = SQLiteConnectionUser.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
-                frm.Init("Edit pack " + name, this.Icon, this, AppFolder, f, ActionEventEDList.EventList(), collapsestate);
+                frm.Init("Edit pack " + name, this.Icon, this, EDDOptions.Instance.ActionsAppDirectory(), f, ActionEventEDList.EventList(), collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
@@ -325,7 +323,7 @@ namespace EDDiscovery.Actions
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r, AppFolder);
+                    actionfiles.CreateSet(r, EDDOptions.Instance.ActionsAppDirectory());
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(discoveryform, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);

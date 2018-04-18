@@ -120,26 +120,7 @@ namespace EDDiscovery
         {
             base.LoadBaseThemes();
 
-            string themepath = "";
-
-            try
-            {
-                themepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Theme");
-                if (!Directory.Exists(themepath))
-                {
-                    Directory.CreateDirectory(themepath);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Unable to create the folder '{themepath}'");
-                Trace.WriteLine($"Exception: {ex.Message}");
-
-                return;
-            }
-
-            // Search for theme files
+            string themepath = EDDOptions.Instance.ThemeAppDirectory();
             DirectoryInfo dirInfo = new DirectoryInfo(themepath);
             FileInfo[] allFiles = null;
 
@@ -209,25 +190,8 @@ namespace EDDiscovery
 
         public bool SaveFile(string filename)
         {
-            string themepath = "";
+            string themepath = EDDOptions.Instance.ThemeAppDirectory();
             JObject jo = Settings2Json();
-
-            try
-            {
-                themepath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Theme") ;
-                if (!Directory.Exists(themepath))
-                {
-                    Directory.CreateDirectory(themepath);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Unable to create the folder '{themepath}'");
-                Trace.WriteLine($"Exception: {ex.Message}");
-
-                return false;
-            }
 
             if (filename == null)
             {
