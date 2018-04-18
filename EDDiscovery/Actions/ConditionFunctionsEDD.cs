@@ -58,11 +58,11 @@ namespace EDDiscovery.Actions
             if (id.Equals("EDDAPPFOLDER", StringComparison.InvariantCultureIgnoreCase))
                 output = EDDOptions.Instance.AppDataDirectory;
             else if (id.Equals("EDDACTIONSFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions");
+                output = EDDOptions.Instance.ActionsAppDirectory();
             else if (id.Equals("EDDVIDEOFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Videos");
+                output = EDDOptions.Instance.VideosAppDirectory();
             else if (id.Equals("EDDSOUNDFOLDER", StringComparison.InvariantCultureIgnoreCase))
-                output = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Sounds");
+                output = EDDOptions.Instance.SoundsAppDirectory();
             else
                 return base.SystemPath(out output);
 

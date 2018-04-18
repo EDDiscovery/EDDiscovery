@@ -53,6 +53,15 @@ namespace EDDiscovery
         }
 
         public string ExploreAppDirectory() { return SubAppDirectory("Exploration"); }
+        public string ExpeditionsAppDirectory() { return SubAppDirectory("Expeditions"); }
+        public string ActionsAppDirectory() { return SubAppDirectory("Actions"); }
+        public string VideosAppDirectory() { return SubAppDirectory("Videos"); }
+        public string SoundsAppDirectory() { return SubAppDirectory("Sounds"); }
+        public string IconsAppDirectory() { return SubAppDirectory("Icons"); }
+        public string MapsAppDirectory() { return SubAppDirectory("Maps"); }
+        public string LogAppDirectory() { return SubAppDirectory("Log"); }
+        public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
+        public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable

@@ -126,7 +126,7 @@ namespace EDDiscovery
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
 
-            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.AppDataDirectory + "\\Icons\\*.zip");
+            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.IconsAppDirectory() + "\\*.zip");
 
             Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, AppDomain.CurrentDomain.BaseDirectory);
         }
@@ -365,12 +365,7 @@ namespace EDDiscovery
             string logpath = "";
             try
             {
-                logpath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Log");
-                if (!Directory.Exists(logpath))
-                {
-                    Directory.CreateDirectory(logpath);
-                }
-
+                logpath = EDDOptions.Instance.LogAppDirectory();
                 TraceLog.logroot = EDDOptions.Instance.AppDataDirectory;
                 TraceLog.urlfeedback = Properties.Resources.URLProjectFeedback;
 
@@ -880,9 +875,7 @@ namespace EDDiscovery
                 var files = github.ReadDirectory("Maps/V1");
                 if (files != null)
                 {
-                    string mapsdir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-                    if (!Directory.Exists(mapsdir))
-                        Directory.CreateDirectory(mapsdir);
+                    string mapsdir = EDDOptions.Instance.MapsAppDirectory();
 
                     if ( github.DownloadFiles(files, mapsdir) )
                     {
@@ -904,9 +897,7 @@ namespace EDDiscovery
                 var files = github.ReadDirectory("Expeditions");
                 if (files != null)        // may be empty, unlikely, but
                 {
-                    string expeditiondir = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Expeditions");
-                    if (!Directory.Exists(expeditiondir))
-                        Directory.CreateDirectory(expeditiondir);
+                    string expeditiondir = EDDOptions.Instance.ExpeditionsAppDirectory();
 
                     if (github.DownloadFiles(files, expeditiondir))
                     {
