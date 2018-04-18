@@ -47,9 +47,9 @@
             this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -267,7 +267,7 @@
             this.toolStripMenuItemGotoStar3dmap,
             this.openInEDSMToolStripMenuItem});
             this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
-            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(158, 70);
+            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(158, 48);
             this.contextMenuStripBookmarks.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripBookmarks_Opening);
             // 
             // toolStripMenuItemGotoStar3dmap
@@ -277,6 +277,13 @@
             this.toolStripMenuItemGotoStar3dmap.Text = "Goto in 3D Map";
             this.toolStripMenuItemGotoStar3dmap.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
             // 
+            // openInEDSMToolStripMenuItem
+            // 
+            this.openInEDSMToolStripMenuItem.Name = "openInEDSMToolStripMenuItem";
+            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
+            this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
+            // 
             // userControlSurfaceBookmarks
             // 
             this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -284,13 +291,6 @@
             this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 203);
             this.userControlSurfaceBookmarks.TabIndex = 5;
-            // 
-            // openInEDSMToolStripMenuItem
-            // 
-            this.openInEDSMToolStripMenuItem.Name = "openInEDSMToolStripMenuItem";
-            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
-            this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
-            this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
             // 
             // UserControlBookmarks
             // 

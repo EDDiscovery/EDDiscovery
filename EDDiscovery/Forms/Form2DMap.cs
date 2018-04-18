@@ -117,14 +117,9 @@ namespace EDDiscovery
         private bool AddImages()
         {
             fgeimages = new List<Map2d>();
-            string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-            if (Directory.Exists(datapath))
-            {
-                fgeimages = Map2d.LoadImages(datapath);
-                return fgeimages.Count > 0;
-            }
-            else
-                return false;
+            string datapath = EDDOptions.Instance.MapsAppDirectory();
+            fgeimages = Map2d.LoadImages(datapath);
+            return fgeimages.Count > 0;
         }
 
         private void DrawTravelHistory()

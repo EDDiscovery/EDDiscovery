@@ -461,40 +461,48 @@ namespace EliteDangerousCore.EDSM
             return systems;
         }
 
-        public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double radius)
+        public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double maxradius, double minradius)      // may return null
         {
-            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), radius);
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&minRadius={2}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), maxradius , minradius);
 
             var response = RequestGet(query, handleException: true);
             if (response.Error)
                 return null;
 
             var json = response.Body;
-            if (json == null)
-                return null;
-
-            JArray msg = JArray.Parse(json);
-
-            List<Tuple<ISystem,double>> systems = new List<Tuple<ISystem,double>>();
-
-            if (msg != null)
+            if (json != null)
             {
-                foreach (JObject sysname in msg)
+                try
                 {
-                    ISystem sys = new SystemClass();
-                    sys.Name = sysname["name"].Str("Unknown");
-                    sys.EDSMID = sysname["id"].Long(0);
-                    JObject co = (JObject)sysname["coords"];
-                    if ( co != null )
+                    List<Tuple<ISystem, double>> systems = new List<Tuple<ISystem, double>>();
+
+                    JArray msg = JArray.Parse(json);        // allow for crap from EDSM or empty list
+
+                    if (msg != null)
                     {
-                        sys.X = co["x"].Double();
-                        sys.Y = co["y"].Double();
-                        sys.Z = co["z"].Double();
+                        foreach (JObject sysname in msg)
+                        {
+                            ISystem sys = new SystemClass();
+                            sys.Name = sysname["name"].Str("Unknown");
+                            sys.EDSMID = sysname["id"].Long(0);
+                            JObject co = (JObject)sysname["coords"];
+                            if (co != null)
+                            {
+                                sys.X = co["x"].Double();
+                                sys.Y = co["y"].Double();
+                                sys.Z = co["z"].Double();
+                            }
+                            systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
+                        }
+
+                        return systems;
                     }
-                    systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
                 }
+                catch       // json may be garbage
+                { }
             }
-            return systems;
+
+            return null;
         }
 
 

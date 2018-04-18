@@ -199,8 +199,11 @@ namespace ExtendedControls
             }
         }
 
+        private const int StandardFontSize = 10;
+
         public Font GetFontMaxSized(float size) { return new Font(currentsettings.fontname, Math.Min(currentsettings.fontsize, size)); }
         public Font GetFontAtSize(float size) { return new Font(currentsettings.fontname, size); }
+        public Font GetFontStandardFontSize() { return new Font(currentsettings.fontname, StandardFontSize); }
 
         public Settings currentsettings;           // if name = custom, then its not a standard theme..
         protected List<Settings> themelist;
@@ -370,9 +373,11 @@ namespace ExtendedControls
                                                false, 95, "Microsoft Sans Serif", 8.25F));
         }
 
+        // Note user controls need the Font applied to them, generally done outside of this class, to size their controls properly.  See popout control
+
         public bool ApplyToFormStandardFontSize(Form form)
         {
-            return ApplyToForm(form, GetFontAtSize(10));
+            return ApplyToForm(form, GetFontAtSize(StandardFontSize));
         }
 
         public bool ApplyToForm(Form form, float fontsize)
@@ -412,7 +417,7 @@ namespace ExtendedControls
         {
 #if DEBUG
             //string pad = "                             ".Substring(0, level);
-            //System.Diagnostics.Debug.WriteLine(pad + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString());
+            //System.Diagnostics.Debug.WriteLine(pad + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + fnt.ToString());
 #endif
             float mouseoverscaling = 1.3F;
             float mouseselectedscaling = 1.5F;

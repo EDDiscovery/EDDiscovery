@@ -2274,12 +2274,7 @@ namespace EDDiscovery
 
         private void LoadMapImages()
         {
-            string datapath = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
-            if (System.IO.Directory.Exists(datapath))
-            {
-                fgeimages = BaseUtils.Map2d.LoadImages(datapath);
-            }
-
+            fgeimages = BaseUtils.Map2d.LoadImages(EDDOptions.Instance.MapsAppDirectory());
             dropdownMapNames.DropDownItems.Clear();
 
             foreach (var img in fgeimages)

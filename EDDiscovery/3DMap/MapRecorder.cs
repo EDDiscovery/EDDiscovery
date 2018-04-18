@@ -288,14 +288,7 @@ namespace EDDiscovery._3DMap
             if ( Entries )      // note you can save partially thru a recording
             {
                 SaveFileDialog dlg = new SaveFileDialog();
-
-                dlg.InitialDirectory = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
-
-                if (!Directory.Exists(dlg.InitialDirectory))
-                {
-                    Directory.CreateDirectory(dlg.InitialDirectory);
-                }
-
+                dlg.InitialDirectory = EDDOptions.Instance.FlightsAppDirectory();
                 dlg.DefaultExt = "flight";
                 dlg.AddExtension = true;
                 dlg.Filter = "Flight files (*.flight)|*.flight|All files (*.*)|*.*";
@@ -313,14 +306,7 @@ namespace EDDiscovery._3DMap
         public void LoadDialog()
         {
             OpenFileDialog dlg = new OpenFileDialog();
-
-            dlg.InitialDirectory = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
-
-            if (!Directory.Exists(dlg.InitialDirectory))
-            {
-                Directory.CreateDirectory(dlg.InitialDirectory);
-            }
-
+            dlg.InitialDirectory = EDDOptions.Instance.FlightsAppDirectory();
             dlg.DefaultExt = "flight";
             dlg.AddExtension = true;
 
@@ -351,7 +337,7 @@ namespace EDDiscovery._3DMap
                 tsmi.Dispose();
             }
 
-            string flightdir =  Path.Combine(EDDOptions.Instance.AppDataDirectory, "Flights");
+            string flightdir = EDDOptions.Instance.FlightsAppDirectory();
             DirectoryInfo dirInfo = new DirectoryInfo(flightdir);
 
             if (dirInfo.Exists)

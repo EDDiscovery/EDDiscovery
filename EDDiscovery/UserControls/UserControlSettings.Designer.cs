@@ -391,7 +391,6 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.SelectionStart = 0;
             this.textBoxDefaultZoom.Size = new System.Drawing.Size(51, 20);
             this.textBoxDefaultZoom.TabIndex = 6;
-            this.textBoxDefaultZoom.Text = "0";
             this.textBoxDefaultZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
             this.textBoxDefaultZoom.Value = 0D;

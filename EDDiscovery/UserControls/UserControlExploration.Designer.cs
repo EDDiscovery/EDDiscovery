@@ -46,12 +46,12 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
-            this.tsbImportSphere = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoad = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.tsbAddSystems = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
             this.textBoxFileName = new ExtendedControls.TextBoxBorder();
@@ -66,8 +66,6 @@ namespace EDDiscovery.UserControls
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.ColumnSystemName = new ExtendedControls.AutoCompleteDGVColumn();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -78,6 +76,8 @@ namespace EDDiscovery.UserControls
             this.ColumnPrimaryStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.toolStrip1.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -90,12 +90,12 @@ namespace EDDiscovery.UserControls
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
-            this.toolStripButtonImportFile,
-            this.tsbImportSphere,
             this.toolStripButtonLoad,
             this.toolStripButtonSave,
+            this.tsbAddSystems,
+            this.toolStripButtonImportFile,
             this.toolStripButtonExport,
-            this.toolStripButtonDelete,
+            this.toolStripButtonClear,
             this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -111,24 +111,6 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew.Size = new System.Drawing.Size(51, 22);
             this.toolStripButtonNew.Text = "New";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
-            // 
-            // toolStripButtonImportFile
-            // 
-            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
-            this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
-            this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
-            this.toolStripButtonImportFile.Text = "Import file";
-            this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
-            // 
-            // tsbImportSphere
-            // 
-            this.tsbImportSphere.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
-            this.tsbImportSphere.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbImportSphere.Name = "tsbImportSphere";
-            this.tsbImportSphere.Size = new System.Drawing.Size(102, 22);
-            this.tsbImportSphere.Text = "Import Sphere";
-            this.tsbImportSphere.Click += new System.EventHandler(this.tsbImportSphere_Click);
             // 
             // toolStripButtonLoad
             // 
@@ -148,25 +130,42 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonSave.Text = "Save";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
+            // tsbAddSystems
+            // 
+            this.tsbAddSystems.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportSphere;
+            this.tsbAddSystems.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbAddSystems.Name = "tsbAddSystems";
+            this.tsbAddSystems.Size = new System.Drawing.Size(95, 22);
+            this.tsbAddSystems.Text = "Add Systems";
+            this.tsbAddSystems.Click += new System.EventHandler(this.tsbAddSystems_Click);
+            // 
+            // toolStripButtonImportFile
+            // 
+            this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Exploration_ImportFile;
+            this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
+            this.toolStripButtonImportFile.Size = new System.Drawing.Size(108, 22);
+            this.toolStripButtonImportFile.Text = "Import Text File";
+            this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
+            // 
             // toolStripButtonExport
             // 
             this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Exploration_Export;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
-            this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
-            this.toolStripButtonExport.Text = "Export";
+            this.toolStripButtonExport.Size = new System.Drawing.Size(105, 22);
+            this.toolStripButtonExport.Text = "Export Text File";
             this.toolStripButtonExport.ToolTipText = "Export to file";
             this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
             // 
-            // toolStripButtonDelete
+            // toolStripButtonClear
             // 
-            this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Controls.Exploration_Delete;
-            this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(60, 22);
-            this.toolStripButtonDelete.Text = "Delete";
-            this.toolStripButtonDelete.Visible = false;
-            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            this.toolStripButtonClear.Image = global::EDDiscovery.Icons.Controls.Exploration_Delete;
+            this.toolStripButtonClear.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonClear.Name = "toolStripButtonClear";
+            this.toolStripButtonClear.Size = new System.Drawing.Size(75, 22);
+            this.toolStripButtonClear.Text = "Clear List";
+            this.toolStripButtonClear.Click += new System.EventHandler(this.toolStripButtonClear_Click);
             // 
             // toolStripSeparator1
             // 
@@ -328,48 +327,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
             this.dataGridViewExplore.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewExplore_SortCompare);
             // 
-            // dataViewScrollerPanel1
-            // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewExplore);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 79);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(817, 494);
-            this.dataViewScrollerPanel1.TabIndex = 3;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom1
-            // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(797, 21);
-            this.vScrollBarCustom1.Maximum = 0;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 473);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 3;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = 0;
-            this.vScrollBarCustom1.ValueLimited = 0;
-            // 
             // ColumnSystemName
             // 
             this.ColumnSystemName.FillWeight = 150F;
@@ -447,6 +404,48 @@ namespace EDDiscovery.UserControls
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewExplore);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 79);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(817, 494);
+            this.dataViewScrollerPanel1.TabIndex = 3;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = false;
+            this.vScrollBarCustom1.LargeChange = 1;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(797, 21);
+            this.vScrollBarCustom1.Maximum = 0;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 473);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 3;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = 0;
+            this.vScrollBarCustom1.ValueLimited = 0;
+            // 
             // UserControlExploration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -482,7 +481,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertCopiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteRowsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
+        private System.Windows.Forms.ToolStripButton toolStripButtonClear;
         private System.Windows.Forms.ToolStripButton toolStripButtonImportFile;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;
@@ -491,7 +490,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
         private ExtendedControls.TextBoxBorder textBoxFileName;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ToolStripButton tsbImportSphere;
+        private System.Windows.Forms.ToolStripButton tsbAddSystems;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private ExtendedControls.AutoCompleteDGVColumn ColumnSystemName;
