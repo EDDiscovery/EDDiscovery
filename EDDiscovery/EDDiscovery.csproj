@@ -241,6 +241,12 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\FindSystemsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\FindSystemsUserControl.Designer.cs">
+      <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\IHistoryCursor.cs" />
     <Compile Include="UserControls\StarDistanceComputer.cs" />
     <Compile Include="UserControls\UserControlBookmarks.cs">
@@ -275,12 +281,6 @@
     </Compile>
     <Compile Include="Forms\AddOnManagerForm.Designer.cs">
       <DependentUpon>AddOnManagerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ImportSphere.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ImportSphere.Designer.cs">
-      <DependentUpon>ImportSphere.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\SetNoteForm.cs">
       <SubType>Form</SubType>
@@ -616,9 +616,6 @@
     <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ImportSphere.resx">
-      <DependentUpon>ImportSphere.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SafeModeForm.resx">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -630,6 +627,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\FindSystemsUserControl.resx">
+      <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>

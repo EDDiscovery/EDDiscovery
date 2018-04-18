@@ -75,7 +75,7 @@ namespace EDDiscovery.Forms
 
         public bool Init(string cellset)
         {
-            string datapath = Path.Combine(EDDOptions.Instance.AppDataDirectory, "Maps");
+            string datapath = EDDOptions.Instance.MapsAppDirectory();
             if (Directory.Exists(datapath))
             {
                 galaxy = Map2d.LoadImage(Path.Combine(datapath, "Galaxy_L_Grid.json"));

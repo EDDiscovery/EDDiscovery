@@ -180,9 +180,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMC_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if ((materials && e.Column.Index == 4) || (!materials && (e.Column.Index == 2 || e.Column.Index == 3)))
+            if ((materials && e.Column.Index == 4) || (!materials && e.Column.Index == 3))
             {
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
             }
         }
     }

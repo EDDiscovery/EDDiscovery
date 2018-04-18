@@ -128,6 +128,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCurrent.Size = new System.Drawing.Size(780, 266);
             this.dataGridViewCurrent.TabIndex = 1;
+            this.dataGridViewCurrent.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCurrent_SortCompare);
             // 
             // cColName
             // 

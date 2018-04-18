@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewBookMarks_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index >= 3)
-                e.SortDataGridViewColumnDate();
+                e.SortDataGridViewColumnNumeric();
         }
 
         #endregion
