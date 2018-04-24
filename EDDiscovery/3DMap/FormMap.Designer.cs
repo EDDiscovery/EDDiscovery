@@ -147,7 +147,7 @@ namespace EDDiscovery
             this.textboxFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textboxFrom.DropDownBorderColor = System.Drawing.Color.Green;
             this.textboxFrom.DropDownHeight = 200;
-            this.textboxFrom.DropDownItemHeight = 20;
+            this.textboxFrom.DropDownItemHeight = 13;
             this.textboxFrom.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textboxFrom.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textboxFrom.DropDownScrollBarColor = System.Drawing.Color.LightGray;

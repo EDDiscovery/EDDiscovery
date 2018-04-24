@@ -45,9 +45,10 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip1.SuspendLayout();
+            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBox_History
@@ -58,24 +59,46 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
+            this.richTextBox_History.ReadOnly = false;
+            this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
             this.richTextBox_History.Size = new System.Drawing.Size(496, 224);
             this.richTextBox_History.TabIndex = 1;
+            this.richTextBox_History.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBox_History.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemCopy,
             this.clearLogToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(125, 26);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
             // 
             // clearLogToolStripMenuItem
             // 
             this.clearLogToolStripMenuItem.Name = "clearLogToolStripMenuItem";
-            this.clearLogToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.clearLogToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.clearLogToolStripMenuItem.Text = "Clear Log";
             this.clearLogToolStripMenuItem.Click += new System.EventHandler(this.clearLogToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItemCopy
+            // 
+            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
+            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemCopy.Text = "Copy";
+            this.toolStripMenuItemCopy.Click += new System.EventHandler(this.toolStripMenuItemCopy_Click);
             // 
             // UserControlLog
             // 
@@ -84,7 +107,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.richTextBox_History);
             this.Name = "UserControlLog";
             this.Size = new System.Drawing.Size(496, 224);
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -92,7 +115,8 @@ namespace EDDiscovery.UserControls
         #endregion
 
         internal ExtendedControls.RichTextBoxScroll richTextBox_History;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;
     }
 }

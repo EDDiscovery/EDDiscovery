@@ -33,14 +33,16 @@ namespace EliteDangerousCore.JournalEvents
         {
             StorageSlot = evt["StorageSlot"].Str();          // Slot number, not a slot on our ship
 
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
+            StoredItem = JournalFieldNaming.GetBetterItemName(StoredItemFD);
             StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
 
             TransferCost = evt["TransferCost"].Long();
 
-            Ship = JournalFieldNaming.GetBetterShipName( evt["Ship"].Str() );
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
+
             ServerId = evt["ServerId"].Int();
             nTransferTime = evt["TransferTime"].IntNull();
             FriendlyTransferTime = nTransferTime.HasValue ? nTransferTime.Value.SecondsToString() : "";
@@ -51,6 +53,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StoredItemFD { get; set; }
         public string StoredItemLocalised { get; set; }
         public long TransferCost { get; set; }
+        public string ShipFD { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public int ServerId { get; set; }

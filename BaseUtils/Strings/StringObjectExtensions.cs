@@ -57,7 +57,21 @@ public static class ObjectExtensionsStrings
             return string.Empty;
     }
 
-    public static string Mid(this string obj, int start, int length)      // obj = null, return "".  Mid, start/length can be out of limits
+    public static string Left(this string obj, string match, StringComparison cmp = StringComparison.CurrentCulture, bool allifnotthere = false)
+    {
+        if (obj != null && obj.Length > 0)
+        {
+            int indexof = obj.IndexOf(match, cmp);
+            if (indexof == -1)
+                return allifnotthere ? obj : "";
+            else
+                return obj.Substring(0,indexof);
+        }
+        else
+            return string.Empty;
+    }
+
+    public static string Mid(this string obj, int start, int length = 999999)      // obj = null, return "".  Mid, start/length can be out of limits
     {
         if (obj != null)
         {
@@ -69,6 +83,20 @@ public static class ObjectExtensionsStrings
         }
 
         return string.Empty;
+    }
+
+    public static string Mid(this string obj, string match, StringComparison cmp = StringComparison.CurrentCulture, bool allifnotthere = false)
+    {
+        if (obj != null && obj.Length > 0)
+        {
+            int indexof = obj.IndexOf(match, cmp);
+            if (indexof == -1)
+                return allifnotthere ? obj : "";
+            else
+                return obj.Substring(indexof);
+        }
+        else
+            return string.Empty;
     }
 
     public static string Alt(this string obj, string alt)
@@ -878,7 +906,34 @@ public static class ObjectExtensionsStrings
         return text;
     }
 
+    static public int Lines(this string s)    
+    {
+        int count = 1;         // supposedly the fastest https://www.codeproject.com/Tips/312312/Counting-Lines-in-a-String
+        int position = 0;
+        while ((position = s.IndexOf(Environment.NewLine, position)) != -1)
+        {
+            count++;
+            position++;         // Skip this occurrence!
+        }
+        return count;
+    }
 
+    static public string LineLimit(this string s, int limit, string cutindicator)   // love extension methods
+    {
+        int count = 1;         
+        int position = 0;
+        while ((position = s.IndexOf(Environment.NewLine, position)) != -1)
+        {
+            if (count == limit)
+            {
+                return s.Substring(0, position) + cutindicator;
+            }
 
+            count++;
+            position++;         // Skip this occurrence!
+        }
+
+        return s;
+    }
 }
 

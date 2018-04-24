@@ -30,13 +30,16 @@ namespace EliteDangerousCore.JournalEvents
         {
             Slot = evt["StorageSlot"].Str();         // this is NOT a ship slot name, just a index
 
-            SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
+            SellItem = JournalFieldNaming.GetBetterItemName(SellItemFD);
             SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
 
             SellPrice = evt["SellPrice"].Long();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
+
             ServerId = evt["ServerId"].Int();
         }
 
@@ -45,6 +48,7 @@ namespace EliteDangerousCore.JournalEvents
         public string SellItemFD { get; set; }
         public string SellItemLocalised { get; set; }
         public long SellPrice { get; set; }
+        public string ShipFD { get; set; }
         public string Ship { get; set; }
         public int ShipId { get; set; }
         public int ServerId { get; set; }

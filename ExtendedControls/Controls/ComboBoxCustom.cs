@@ -177,6 +177,7 @@ namespace ExtendedControls
         private bool isActivated = false;
         private bool mouseover = false;
         private DropDownCustom _customdropdown;
+        private int itemheight = 13;
 
         // ForeColor = text, BackColor = control background
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
@@ -194,7 +195,7 @@ namespace ExtendedControls
         //Set width to 1 to scale it to the same width as the Button..
         public int DropDownWidth { get { return _cbsystem.DropDownWidth; } set { _cbsystem.DropDownWidth = value; } }
         public int DropDownHeight { get { return _cbsystem.DropDownHeight; } set { _cbsystem.DropDownHeight = value; } }
-        public int ItemHeight { get { return _cbsystem.ItemHeight; } set { _cbsystem.ItemHeight = value;  } }
+        public int ItemHeight { get { return itemheight; } set { itemheight = _cbsystem.ItemHeight = value;  } }
 
         public int SelectedIndex { get { return _cbsystem.SelectedIndex; } set { _cbsystem.SelectedIndex = value; base.Text = _cbsystem.Text; Invalidate(); } }
 

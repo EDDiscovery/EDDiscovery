@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalAfmuRepairs(JObject evt) : base(evt, JournalTypeEnum.AfmuRepairs)
         {
-            Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
+            Module = JournalFieldNaming.GetBetterItemName(evt["Module"].Str());
             ModuleLocalised = evt["Module_Localised"].Str().Alt(Module);
             FullyRepaired = evt["FullyRepaired"].Bool();
             Health = evt["Health"].Float()*100.0F;

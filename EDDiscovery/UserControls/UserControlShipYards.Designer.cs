@@ -44,103 +44,22 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.dataGridViewShips = new System.Windows.Forms.DataGridView();
-            this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelYard = new System.Windows.Forms.Label();
             this.labelYardSel = new System.Windows.Forms.Label();
             this.comboBoxYards = new ExtendedControls.ComboBoxCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShips)).BeginInit();
+            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.dataGridViewShips = new System.Windows.Forms.DataGridView();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.panelButtons.SuspendLayout();
+            this.dataViewScrollerPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShips)).BeginInit();
             this.SuspendLayout();
-            // 
-            // dataViewScrollerPanel
-            // 
-            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewShips);
-            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
-            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 540);
-            this.dataViewScrollerPanel.TabIndex = 0;
-            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
-            // 
-            // dataGridViewShips
-            // 
-            this.dataGridViewShips.AllowUserToAddRows = false;
-            this.dataGridViewShips.AllowUserToDeleteRows = false;
-            this.dataGridViewShips.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewShips.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewShips.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ItemLocalised,
-            this.ItemCol,
-            this.Distance});
-            this.dataGridViewShips.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewShips.Name = "dataGridViewShips";
-            this.dataGridViewShips.RowHeadersVisible = false;
-            this.dataGridViewShips.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewShips.Size = new System.Drawing.Size(780, 540);
-            this.dataGridViewShips.TabIndex = 1;
-            this.dataGridViewShips.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewModules_SortCompare);
-            // 
-            // ItemLocalised
-            // 
-            this.ItemLocalised.HeaderText = "Type";
-            this.ItemLocalised.MinimumWidth = 50;
-            this.ItemLocalised.Name = "ItemLocalised";
-            this.ItemLocalised.ReadOnly = true;
-            // 
-            // ItemCol
-            // 
-            this.ItemCol.FillWeight = 50F;
-            this.ItemCol.HeaderText = "Price";
-            this.ItemCol.MinimumWidth = 50;
-            this.ItemCol.Name = "ItemCol";
-            this.ItemCol.ReadOnly = true;
-            // 
-            // Distance
-            // 
-            this.Distance.HeaderText = "Distance";
-            this.Distance.MinimumWidth = 50;
-            this.Distance.Name = "Distance";
-            this.Distance.ReadOnly = true;
-            // 
-            // vScrollBarCustomMC
-            // 
-            this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustomMC.HideScrollBar = false;
-            this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
-            this.vScrollBarCustomMC.Maximum = -1;
-            this.vScrollBarCustomMC.Minimum = 0;
-            this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
-            this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustomMC.SmallChange = 1;
-            this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
-            this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
-            this.vScrollBarCustomMC.Value = -1;
-            this.vScrollBarCustomMC.ValueLimited = -1;
             // 
             // panelButtons
             // 
@@ -167,9 +86,9 @@ namespace EDDiscovery.UserControls
             this.labelYardSel.AutoSize = true;
             this.labelYardSel.Location = new System.Drawing.Point(6, 7);
             this.labelYardSel.Name = "labelYardSel";
-            this.labelYardSel.Size = new System.Drawing.Size(29, 13);
+            this.labelYardSel.Size = new System.Drawing.Size(22, 13);
             this.labelYardSel.TabIndex = 26;
-            this.labelYardSel.Text = "Yard";
+            this.labelYardSel.Text = "Sel";
             // 
             // comboBoxYards
             // 
@@ -200,34 +119,121 @@ namespace EDDiscovery.UserControls
             this.comboBoxYards.ValueMember = "";
             this.comboBoxYards.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewShips);
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(800, 540);
+            this.dataViewScrollerPanel1.TabIndex = 3;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // dataGridViewShips
+            // 
+            this.dataGridViewShips.AllowUserToAddRows = false;
+            this.dataGridViewShips.AllowUserToDeleteRows = false;
+            this.dataGridViewShips.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewShips.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewShips.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Col1,
+            this.Col2,
+            this.Col3,
+            this.ColPrice});
+            this.dataGridViewShips.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewShips.Name = "dataGridViewShips";
+            this.dataGridViewShips.RowHeadersVisible = false;
+            this.dataGridViewShips.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewShips.Size = new System.Drawing.Size(780, 540);
+            this.dataGridViewShips.TabIndex = 1;
+            // 
+            // Col1
+            // 
+            this.Col1.HeaderText = "";
+            this.Col1.MinimumWidth = 50;
+            this.Col1.Name = "Col1";
+            this.Col1.ReadOnly = true;
+            // 
+            // Col2
+            // 
+            this.Col2.FillWeight = 200F;
+            this.Col2.HeaderText = "";
+            this.Col2.Name = "Col2";
+            this.Col2.ReadOnly = true;
+            // 
+            // Col3
+            // 
+            this.Col3.HeaderText = "";
+            this.Col3.Name = "Col3";
+            this.Col3.ReadOnly = true;
+            // 
+            // ColPrice
+            // 
+            this.ColPrice.HeaderText = "";
+            this.ColPrice.MinimumWidth = 50;
+            this.ColPrice.Name = "ColPrice";
+            this.ColPrice.ReadOnly = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = false;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(780, 15);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 525);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 0;
+            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
             // UserControlShipYards
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel);
+            this.Controls.Add(this.dataViewScrollerPanel1);
             this.Controls.Add(this.panelButtons);
             this.Name = "UserControlShipYards";
             this.Size = new System.Drawing.Size(800, 572);
-            this.dataViewScrollerPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShips)).EndInit();
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
+            this.dataViewScrollerPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShips)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private System.Windows.Forms.DataGridView dataGridViewShips;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         internal ExtendedControls.ComboBoxCustom comboBoxYards;
         private System.Windows.Forms.Label labelYardSel;
         private System.Windows.Forms.Label labelYard;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private System.Windows.Forms.DataGridView dataGridViewShips;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Col3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPrice;
     }
 }

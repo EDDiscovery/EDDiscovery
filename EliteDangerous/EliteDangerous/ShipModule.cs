@@ -100,10 +100,10 @@ namespace EliteDangerousCore
         {
             get
             {
-                ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetModuleProperties(ItemFD);
+                ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetItemProperties(ItemFD);
                 if (smd != null)
                 {
-                    double mass = smd.mass;
+                    double mass = smd.Mass;
                     Engineering?.EngineerMass(ref mass);
                     return mass;
                 }
@@ -313,25 +313,5 @@ namespace EliteDangerousCore
         }
 
         #endregion
-
-        #region Outfitting Module
-
-        public class OutfittingEntry : IEquatable<OutfittingEntry>
-        {
-            public long id;
-            public string Name;
-            public string FDName;
-            public long BuyPrice;
-
-            public bool Equals(OutfittingEntry other)
-            {
-                return (id == other.id && string.Compare(Name, other.Name) == 0 && string.Compare(FDName, other.FDName) == 0 &&
-                         BuyPrice == other.BuyPrice);
-            }
-
-        }
-
-        #endregion
-
     }
 }

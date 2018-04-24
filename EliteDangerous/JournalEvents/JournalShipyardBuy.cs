@@ -41,13 +41,24 @@ namespace EliteDangerousCore.JournalEvents
             ShipType = JournalFieldNaming.GetBetterShipName(ShipTypeFD);
             ShipPrice = evt["ShipPrice"].Long();
 
-            StoreOldShipFD = JournalFieldNaming.NormaliseFDShipName(evt["StoreOldShip"].Str());
-            StoreOldShip = JournalFieldNaming.GetBetterShipName(StoreOldShipFD);
-            StoreShipId = evt["StoreShipID"].IntNull();
+            StoreOldShipFD = evt["StoreOldShip"].StrNull();
+            if (StoreOldShipFD != null)
+            {
+                StoreOldShipFD = JournalFieldNaming.NormaliseFDShipName(StoreOldShipFD);
+                StoreOldShip = JournalFieldNaming.GetBetterShipName(StoreOldShipFD);
+            }
 
-            SellOldShipFD = JournalFieldNaming.NormaliseFDShipName(evt["SellOldShip"].Str());
-            SellOldShip = JournalFieldNaming.GetBetterShipName(SellOldShipFD);
-            SellShipId = evt["SellShipID"].IntNull();
+            StoreOldShipId = evt["StoreShipID"].IntNull();
+
+            SellOldShipFD = evt["SellOldShip"].StrNull();
+            if (SellOldShipFD != null)
+            {
+                SellOldShipFD = JournalFieldNaming.NormaliseFDShipName(SellOldShipFD);
+                SellOldShip = JournalFieldNaming.GetBetterShipName(SellOldShipFD);
+            }
+
+            SellOldShipId = evt["SellShipID"].IntNull();
+
             SellPrice = evt["SellPrice"].LongNull();
 
             MarketID = evt["MarketID"].LongNull();
@@ -57,13 +68,13 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipType { get; set; }
         public long ShipPrice { get; set; }
 
-        public string StoreOldShipFD { get; set; }
-        public string StoreOldShip { get; set; }
-        public int? StoreShipId { get; set; }
+        public string StoreOldShipFD { get; set; }      // may be null
+        public string StoreOldShip { get; set; }        // may be null
+        public int? StoreOldShipId { get; set; }           // may be null
 
-        public string SellOldShipFD { get; set; }
-        public string SellOldShip { get; set; }
-        public int? SellShipId { get; set; }
+        public string SellOldShipFD { get; set; }       // may be null         
+        public string SellOldShip { get; set; }         // may be null
+        public int? SellOldShipId { get; set; }            // may be null
 
         public long? SellPrice { get; set; }
         public long? MarketID { get; set; }
@@ -77,19 +88,20 @@ namespace EliteDangerousCore.JournalEvents
         {                                   // new will come along and provide the new ship info
 
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Buy");
-            if (StoreShipId != null)
-                shp.Store(StoreOldShipFD, StoreShipId.Value, whereami, system.Name);     
-            if (SellShipId != null)
-                shp.Sell(SellOldShipFD, SellShipId.Value);     
+            if (StoreOldShipId != null && StoreOldShipFD!=null)
+                shp.Store(StoreOldShipFD, StoreOldShipId.Value, whereami, system.Name);
+
+            if (SellOldShipId != null && SellOldShipFD!=null)
+                shp.Sell(SellOldShipFD, SellOldShipId.Value);     
         }
 
         public override void FillInformation(out string summary, out string info, out string detailed) //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0", ShipPrice);
-            if (StoreOldShip.Length > 0)
+            if (StoreOldShip != null)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoreOldShip);
-            if (SellOldShip.Length > 0)
+            if (SellOldShip != null)
                 info += ", " + BaseUtils.FieldBuilder.Build("Sold:", StoreOldShip, "Amount:; cr;N0", SellPrice);
             detailed = "";
         }

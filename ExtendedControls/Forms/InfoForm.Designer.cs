@@ -43,6 +43,7 @@ namespace ExtendedControls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.textBoxInfo = new ExtendedControls.RichTextBoxScroll();
             this.labelCaption = new System.Windows.Forms.Label();
@@ -50,8 +51,12 @@ namespace ExtendedControls
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelBottom = new System.Windows.Forms.Panel();
+            this.statusStripBottom = new ExtendedControls.StatusStripCustom();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -69,9 +74,10 @@ namespace ExtendedControls
             // 
             this.textBoxInfo.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxInfo.BorderColorScaling = 0.5F;
-            this.textBoxInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxInfo.ContextMenuStrip = this.contextMenuStrip;
             this.textBoxInfo.HideScrollBar = true;
-            this.textBoxInfo.Location = new System.Drawing.Point(0, 30);
+            this.textBoxInfo.Location = new System.Drawing.Point(304, 115);
+            this.textBoxInfo.Margin = new System.Windows.Forms.Padding(10);
             this.textBoxInfo.Name = "textBoxInfo";
             this.textBoxInfo.ReadOnly = false;
             this.textBoxInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -87,7 +93,7 @@ namespace ExtendedControls
             this.textBoxInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxInfo.ScrollBarWidth = 20;
             this.textBoxInfo.ShowLineCount = false;
-            this.textBoxInfo.Size = new System.Drawing.Size(824, 530);
+            this.textBoxInfo.Size = new System.Drawing.Size(273, 228);
             this.textBoxInfo.TabIndex = 2;
             this.textBoxInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -145,10 +151,32 @@ namespace ExtendedControls
             // 
             this.panelBottom.Controls.Add(this.buttonOK);
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelBottom.Location = new System.Drawing.Point(0, 560);
+            this.panelBottom.Location = new System.Drawing.Point(0, 538);
             this.panelBottom.Name = "panelBottom";
             this.panelBottom.Size = new System.Drawing.Size(824, 34);
             this.panelBottom.TabIndex = 31;
+            // 
+            // statusStripBottom
+            // 
+            this.statusStripBottom.Location = new System.Drawing.Point(0, 572);
+            this.statusStripBottom.Name = "statusStripBottom";
+            this.statusStripBottom.Size = new System.Drawing.Size(824, 22);
+            this.statusStripBottom.TabIndex = 27;
+            this.statusStripBottom.Text = "statusStripCustom1";
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemCopy});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(103, 26);
+            // 
+            // toolStripMenuItemCopy
+            // 
+            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
+            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(102, 22);
+            this.toolStripMenuItemCopy.Text = "Copy";
+            this.toolStripMenuItemCopy.Click += new System.EventHandler(this.toolStripMenuItemCopy_Click);
             // 
             // InfoForm
             // 
@@ -158,14 +186,18 @@ namespace ExtendedControls
             this.Controls.Add(this.textBoxInfo);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelBottom);
+            this.Controls.Add(this.statusStripBottom);
             this.Name = "InfoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "InfoForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InfoForm_FormClosing);
+            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.InfoForm_Layout);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -177,5 +209,8 @@ namespace ExtendedControls
         private DrawnPanel panel_minimize;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Panel panelBottom;
+        private StatusStripCustom statusStripBottom;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;
     }
 }
