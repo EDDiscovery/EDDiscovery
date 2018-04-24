@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             richTextBox_History.ReadOnly = true;
-            richTextBox_History.SetContextMenuStrip(contextMenuStrip1);
+            richTextBox_History.ContextMenuStrip = contextMenuStrip;
         }
 
         public override void Init()
@@ -54,14 +54,18 @@ namespace EDDiscovery.UserControls
             richTextBox_History.AppendText(s, c);
         }
 
-        public void CopyTextFrom( UserControlLog other )
-        {
-            richTextBox_History.CopyFrom(other.richTextBox_History);
-        }
-
         private void clearLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             richTextBox_History.Clear();
+        }
+
+        private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
+        {
+            string s = richTextBox_History.SelectedText;
+            if (s.Length == 0)
+                s = richTextBox_History.Text;
+            //System.Diagnostics.Debug.WriteLine("Sel " + s);
+            Clipboard.SetText(s);
         }
     }
 }

@@ -404,7 +404,7 @@ namespace EDDiscovery.Forms
             this.textBoxName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxName.DropDownHeight = 200;
-            this.textBoxName.DropDownItemHeight = 20;
+            this.textBoxName.DropDownItemHeight = 13;
             this.textBoxName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxName.DropDownScrollBarColor = System.Drawing.Color.LightGray;

@@ -36,11 +36,11 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
         {
-            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
+            Slot = JournalFieldNaming.GetBetterSlotName(SlotFD);
 
-            Module = JournalFieldNaming.GetBetterItemNameEvents(evt["Module"].Str());
             ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
+            Module = JournalFieldNaming.GetBetterItemName(ModuleFD);
 
             Engineering = new ShipModule.EngineeringData(evt);
             

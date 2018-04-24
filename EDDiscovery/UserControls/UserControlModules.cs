@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
 
             string typename = sm.LocalisedItem;
             if (typename.IsEmpty())
-                typename = EliteDangerousCore.ShipModuleData.IsVanity(sm.Item) ? "Vanity" : "Module";
+                typename = ShipModuleData.Instance.GetItemProperties(sm.ItemFD).ModType;
 
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, ammo,
@@ -354,8 +354,7 @@ namespace EDDiscovery.UserControls
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                                    s, new int[] { 0, 100 });
+                    info.Info("Cannot launch browser, use this JSON for manual Coriolis import", FindForm().Icon, s);
                     info.ShowDialog(FindForm());
                 }
             }
@@ -384,8 +383,7 @@ namespace EDDiscovery.UserControls
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                                    s, new int[] { 0, 100 });
+                    info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", FindForm().Icon, s);
                     info.ShowDialog(FindForm());
                 }
             }
@@ -450,7 +448,7 @@ namespace EDDiscovery.UserControls
                 {
                     Form mainform = FindForm();
                     ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-                    frm.Info("Module Information", mainform.Icon, tt, themeit: true);
+                    frm.Info("Module Information", mainform.Icon, tt);
                     frm.Size = new Size(600, 400);
                     frm.StartPosition = FormStartPosition.CenterParent;
                     frm.Show(mainform);

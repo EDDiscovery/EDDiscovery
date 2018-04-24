@@ -27,25 +27,25 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
         {
-            Modules = evt["Modules"]?.ToObjectProtected<string[]>();
+            Slots = evt["Modules"]?.ToObjectProtected<string[]>();
 
-            if (Modules != null )
+            if (Slots != null )
             {
-                FriendlyModules = new string[Modules.Length];
-                for (int i = 0; i < Modules.Length; i++)
-                    FriendlyModules[i] = JournalFieldNaming.GetBetterItemNameEvents(Modules[i]);
+                FriendlySlots = new string[Slots.Length];
+                for (int i = 0; i < Slots.Length; i++)
+                    FriendlySlots[i] = JournalFieldNaming.GetBetterSlotName(Slots[i]);
             }
         }
 
-        public string[] Modules { get; set; }
-        public string[] FriendlyModules { get; set; }
+        public string[] Slots { get; set; }
+        public string[] FriendlySlots { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {
             summary = EventTypeStr.SplitCapsWord();
             info = "";
-            if (FriendlyModules != null)
-                info = string.Join(",", FriendlyModules);
+            if (FriendlySlots != null)
+                info = string.Join(",", FriendlySlots);
             detailed = "";
         }
     }

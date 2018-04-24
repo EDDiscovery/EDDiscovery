@@ -34,6 +34,7 @@ namespace EliteDangerousCore
         public ShipInformationList shipinformationlist { get; private set; } = new ShipInformationList();     // ship info
         private MissionListAccumulator missionlistaccumulator = new MissionListAccumulator(); // and mission list..
         public ShipYardList shipyards = new ShipYardList(); // yards in space (not meters)
+        public OutfittingList outfitting = new OutfittingList();
         public StarScan starscan { get; private set; } = new StarScan();                                           // and the results of scanning
         public int CommanderId { get; private set; }
 
@@ -57,6 +58,7 @@ namespace EliteDangerousCore
             CommanderId = other.CommanderId;
             missionlistaccumulator = other.missionlistaccumulator;
             shipyards = other.shipyards;
+            outfitting = other.outfitting;
         }
 
         public int Count { get { return historylist.Count; } }
@@ -807,6 +809,7 @@ namespace EliteDangerousCore
                 he.Credits = cashledger.CashTotal;
 
                 shipyards.Process(je, conn);
+                outfitting.Process(je, conn);
 
                 Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
                 he.ShipInformation = ret.Item1;
@@ -965,6 +968,7 @@ namespace EliteDangerousCore
                     he.Credits = cashledger.CashTotal;
 
                     shipyards.Process(je, conn);
+                    outfitting.Process(je, conn);
 
                     Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI, he.System);  // the ships
                     he.ShipInformation = ret.Item1;

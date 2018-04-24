@@ -608,6 +608,7 @@ namespace EDDiscovery
             this.panelToolBar.RolledUpHeight = 5;
             this.panelToolBar.RollUpAnimationTime = 500;
             this.panelToolBar.RollUpDelay = 1000;
+            this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
             this.panelToolBar.Size = new System.Drawing.Size(984, 32);
             this.panelToolBar.TabIndex = 1;
@@ -620,6 +621,7 @@ namespace EDDiscovery
             this.comboBoxCommander.BorderColor = System.Drawing.Color.White;
             this.comboBoxCommander.ButtonColorScaling = 0.5F;
             this.comboBoxCommander.DataSource = null;
+            this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommander.DropDownHeight = 400;
@@ -631,13 +633,14 @@ namespace EDDiscovery
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarWidth = 16;
+            this.comboBoxCommander.ScrollBarWidth = 13;
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
             this.comboBoxCommander.SelectedValue = null;
             this.comboBoxCommander.Size = new System.Drawing.Size(149, 21);
             this.comboBoxCommander.TabIndex = 3;
             this.comboBoxCommander.Text = "Cmdr";
+            this.comboBoxCommander.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCommander, "Select the commander to view");
             this.comboBoxCommander.ValueMember = "";
             this.comboBoxCommander.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommander_SelectedIndexChanged);

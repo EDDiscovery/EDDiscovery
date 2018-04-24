@@ -34,8 +34,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalSetUserShipName(JObject evt) : base(evt, JournalTypeEnum.SetUserShipName)
         {
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipID = evt["ShipID"].Int();
             ShipName = evt["UserShipName"].Str();// name to match LoadGame
             ShipIdent = evt["UserShipId"].Str();     // name to match LoadGame

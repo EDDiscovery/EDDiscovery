@@ -368,6 +368,12 @@
     <Compile Include="UserControls\UserControlCombatPanel.Designer.cs">
       <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlOutfitting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlOutfitting.Designer.cs">
+      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlShipYards.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -642,6 +648,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlCombatPanel.resx">
       <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlOutfitting.resx">
+      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlShipYards.resx">
       <DependentUpon>UserControlShipYards.cs</DependentUpon>

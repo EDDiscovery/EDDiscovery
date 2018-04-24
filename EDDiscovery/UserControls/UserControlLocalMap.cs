@@ -677,7 +677,7 @@ namespace EDDiscovery.UserControls
         private void aboutToolStripAbout_Click(object sender, EventArgs e)
         {
             ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-            frm.Info("Map Help", FindForm().Icon, EDDiscovery.Properties.Resources.mapuc, new int[1] { 300 }, true);
+            frm.Info("Map Help", FindForm().Icon, EDDiscovery.Properties.Resources.mapuc, new int[1] { 300 });
             frm.StartPosition = FormStartPosition.CenterParent;
             frm.Show(FindForm());
         }

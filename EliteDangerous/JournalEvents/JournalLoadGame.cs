@@ -28,8 +28,8 @@ namespace EliteDangerousCore.JournalEvents
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
             LoadGameCommander = evt["Commander"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
             StartLanded = evt["StartLanded"].Bool();
             StartDead = evt["StartDead"].Bool();

@@ -190,7 +190,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNJournalMessage(JournalOutfitting journal, double x, double y, double z, long? systemAddress)
         {
-            if (journal.ModuleItems == null)
+            if (journal.ItemList.Items == null)
                 return null;
 
             JObject msg = new JObject();
@@ -213,7 +213,7 @@ namespace EliteDangerousCore.EDDN
 
         public JObject CreateEDDNOutfittingMessage(JournalOutfitting journal, ISystem system = null)
         {
-            if (journal.ModuleItems == null)
+            if (journal.ItemList.Items == null)
                 return null;
 
             JObject msg = new JObject();
@@ -224,10 +224,10 @@ namespace EliteDangerousCore.EDDN
             JObject message = new JObject
             {
                 ["timestamp"] = journal.EventTimeUTC.ToString("yyyy-MM-ddTHH:mm:ss'Z'"),
-                ["systemName"] = journal.StarSystem,
-                ["stationName"] = journal.StationName,
+                ["systemName"] = journal.ItemList.StarSystem,
+                ["stationName"] = journal.ItemList.StationName,
                 ["marketId"] = journal.MarketID,
-                ["modules"] = new JArray(journal.ModuleItems.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
+                ["modules"] = new JArray(journal.ItemList.Items.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
             };
 
             //if (systemAddress != null)

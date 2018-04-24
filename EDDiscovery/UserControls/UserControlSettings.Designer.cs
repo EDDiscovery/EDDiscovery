@@ -409,7 +409,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxHomeSystem.DropDownHeight = 200;
-            this.textBoxHomeSystem.DropDownItemHeight = 20;
+            this.textBoxHomeSystem.DropDownItemHeight = 13;
             this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
