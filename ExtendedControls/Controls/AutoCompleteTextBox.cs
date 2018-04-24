@@ -30,7 +30,7 @@ namespace ExtendedControls
 
         public int DropDownWidth { get; set; } = 0;     // means auto size
         public int DropDownHeight { get; set; } = 200;
-        public int DropDownItemHeight { get; set; } = 20;
+        public int DropDownItemHeight { get; set; } = 13;
         public Color DropDownBackgroundColor { get; set; } = Color.Gray;
         public Color DropDownBorderColor { get; set; } = Color.Green;
         public Color DropDownScrollBarColor { get; set; } = Color.LightGray;

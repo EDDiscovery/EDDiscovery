@@ -179,6 +179,7 @@ namespace ExtendedControls
         public double Opacity { get { return currentsettings.formopacity; } set { SetCustom(); currentsettings.formopacity = value; } }
         public string FontName { get { return currentsettings.fontname; } set { SetCustom(); currentsettings.fontname = value; } }
         public float FontSize { get { return currentsettings.fontsize; } set { SetCustom(); currentsettings.fontsize = value; } }
+        public int ItemHeightForFont() { return (int)(6+currentsettings.fontsize); }
 
         public void SetCustom()
         { currentsettings.name = "Custom"; }                                // set so custom..
@@ -502,6 +503,7 @@ namespace ExtendedControls
                     actb.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     actb.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                     actb.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                    actb.DropDownItemHeight = ItemHeightForFont();
 
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
                         actb.FlatStyle = FlatStyle.System;
@@ -602,6 +604,9 @@ namespace ExtendedControls
                     ctrl.ScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                     ctrl.ScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
 
+                    if (ctrl.ImageItems == null)        // ones with images are not auto set..
+                        ctrl.ItemHeight = ItemHeightForFont();
+
                     if (currentsettings.buttonstyle.Equals(ButtonStyles[1])) // flat
                         ctrl.FlatStyle = FlatStyle.Flat;
                     else
@@ -616,7 +621,7 @@ namespace ExtendedControls
                 PanelSelectionList ctrl = (PanelSelectionList)myControl;
                 ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
                 ctrl.SelectionMarkColor = ctrl.ForeColor;
-
+                ctrl.ItemHeight = ItemHeightForFont();
                 ctrl.BackColor = ctrl.SelectionBackColor = currentsettings.colors[Settings.CI.button_back];
                 ctrl.BorderColor = currentsettings.colors[Settings.CI.button_border];
                 ctrl.MouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
@@ -647,6 +652,8 @@ namespace ExtendedControls
                         ctrl.FlatStyle = FlatStyle.Flat;
                     else
                         ctrl.FlatStyle = FlatStyle.Popup;
+
+                    ctrl.ItemHeight = ItemHeightForFont();
                 }
 
                 myControl.Font = fnt;

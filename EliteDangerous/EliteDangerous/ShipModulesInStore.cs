@@ -29,6 +29,7 @@ namespace EliteDangerousCore
         public class StoredModule: IEquatable<StoredModule> // storage used by journal event..
         {
             public int StorageSlot;
+            public string NameFD;
             public string Name;
             public string Name_Localised;
             public string StarSystem;       // not while in transit
@@ -49,14 +50,15 @@ namespace EliteDangerousCore
             {
                 get
                 {
-                    ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetModuleProperties(Name);
-                    return smd?.mass ?? 0;
+                    ShipModuleData.ShipModule smd = ShipModuleData.Instance.GetItemProperties(Name);
+                    return smd?.Mass ?? 0;
                 }
             }
 
             public void Normalise()
             {
-                Name = JournalFieldNaming.GetBetterItemNameEvents(Name);
+                NameFD = JournalFieldNaming.NormaliseFDItemName(Name);          // Name comes in with strange characters, normalise out
+                Name = JournalFieldNaming.GetBetterItemName(NameFD);      // and look up a better name
                 Name_Localised = Name_Localised.Alt(Name);
                 TransferTimeSpan = new System.TimeSpan((int)(TransferTime / 60 / 60), (int)((TransferTime / 60) % 60), (int)(TransferTime % 60));
                 TransferTimeString = TransferTime > 0 ? TransferTimeSpan.ToString() : "";

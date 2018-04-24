@@ -175,7 +175,7 @@
             this.textBoxSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxSystemName.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxSystemName.DropDownHeight = 200;
-            this.textBoxSystemName.DropDownItemHeight = 20;
+            this.textBoxSystemName.DropDownItemHeight = 13;
             this.textBoxSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;

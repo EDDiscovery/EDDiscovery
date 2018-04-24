@@ -43,8 +43,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.toolTipEddb = new System.Windows.Forms.ToolTip(this.components);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlHistory));
             this.splitContainerLeftRight = new System.Windows.Forms.SplitContainer();
             this.splitContainerLeft = new System.Windows.Forms.SplitContainer();
             this.userControlTravelGrid = new EDDiscovery.UserControls.UserControlTravelGrid();
@@ -71,10 +70,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightInner.Panel2.SuspendLayout();
             this.splitContainerRightInner.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // toolTipEddb
-            // 
-            this.toolTipEddb.ShowAlways = true;
             // 
             // splitContainerLeftRight
             // 
@@ -129,12 +124,14 @@ namespace EDDiscovery.UserControls
             this.tabStripBottom.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripBottom.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStripBottom.DropDownWidth = 500;
+            this.tabStripBottom.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStripBottom.EmptyPanelIcon")));
             this.tabStripBottom.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottom.Name = "tabStripBottom";
             this.tabStripBottom.SelectedIndex = -1;
             this.tabStripBottom.ShowPopOut = true;
             this.tabStripBottom.Size = new System.Drawing.Size(550, 296);
             this.tabStripBottom.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+            this.tabStripBottom.TabFieldSpacing = 8;
             this.tabStripBottom.TabIndex = 0;
             // 
             // splitContainerRightOuter
@@ -165,12 +162,14 @@ namespace EDDiscovery.UserControls
             this.tabStripTopRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripTopRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStripTopRight.DropDownWidth = 500;
+            this.tabStripTopRight.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStripTopRight.EmptyPanelIcon")));
             this.tabStripTopRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripTopRight.Name = "tabStripTopRight";
             this.tabStripTopRight.SelectedIndex = -1;
             this.tabStripTopRight.ShowPopOut = true;
             this.tabStripTopRight.Size = new System.Drawing.Size(337, 325);
             this.tabStripTopRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+            this.tabStripTopRight.TabFieldSpacing = 8;
             this.tabStripTopRight.TabIndex = 2;
             // 
             // splitContainerRightInner
@@ -201,12 +200,14 @@ namespace EDDiscovery.UserControls
             this.tabStripMiddleRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripMiddleRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStripMiddleRight.DropDownWidth = 500;
+            this.tabStripMiddleRight.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStripMiddleRight.EmptyPanelIcon")));
             this.tabStripMiddleRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripMiddleRight.Name = "tabStripMiddleRight";
             this.tabStripMiddleRight.SelectedIndex = -1;
             this.tabStripMiddleRight.ShowPopOut = true;
             this.tabStripMiddleRight.Size = new System.Drawing.Size(337, 160);
             this.tabStripMiddleRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+            this.tabStripMiddleRight.TabFieldSpacing = 8;
             this.tabStripMiddleRight.TabIndex = 1;
             // 
             // tabStripBottomRight
@@ -219,12 +220,14 @@ namespace EDDiscovery.UserControls
             this.tabStripBottomRight.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStripBottomRight.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStripBottomRight.DropDownWidth = 500;
+            this.tabStripBottomRight.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStripBottomRight.EmptyPanelIcon")));
             this.tabStripBottomRight.Location = new System.Drawing.Point(0, 0);
             this.tabStripBottomRight.Name = "tabStripBottomRight";
             this.tabStripBottomRight.SelectedIndex = -1;
             this.tabStripBottomRight.ShowPopOut = true;
             this.tabStripBottomRight.Size = new System.Drawing.Size(337, 157);
             this.tabStripBottomRight.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
+            this.tabStripBottomRight.TabFieldSpacing = 8;
             this.tabStripBottomRight.TabIndex = 0;
             // 
             // UserControlHistory
@@ -255,7 +258,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTipEddb;
         private System.Windows.Forms.SplitContainer splitContainerLeft;
         private System.Windows.Forms.SplitContainer splitContainerLeftRight;
         private System.Windows.Forms.SplitContainer splitContainerRightInner;

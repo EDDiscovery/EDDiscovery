@@ -32,8 +32,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMassModuleStore(JObject evt) : base(evt, JournalTypeEnum.MassModuleStore)
         {
-            ShipFD = evt["Ship"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
             ModuleItems = evt["Items"]?.ToObjectProtected<ModuleItem[]>();
             MarketID = evt["MarketID"].LongNull();
@@ -42,8 +42,10 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (ModuleItem i in ModuleItems)
                 {
-                    i.Slot = JournalFieldNaming.GetBetterSlotName(i.Slot);
-                    i.Name = JournalFieldNaming.GetBetterItemNameEvents(i.Name);
+                    i.SlotFD = JournalFieldNaming.NormaliseFDSlotName(i.Slot);
+                    i.Slot = JournalFieldNaming.GetBetterSlotName(i.SlotFD);
+                    i.NameFD = JournalFieldNaming.NormaliseFDItemName(i.Name);
+                    i.Name = JournalFieldNaming.GetBetterItemName(i.NameFD);
                 }
             }
         }
@@ -76,7 +78,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public class ModuleItem
         {
+            public string SlotFD;
             public string Slot;
+            public string NameFD;
             public string Name;
             public string EngineerModifications;
             public double? Quality { get; set; }

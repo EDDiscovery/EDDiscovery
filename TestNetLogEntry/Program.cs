@@ -99,6 +99,14 @@ namespace NetLogEntry
                 string ret = CorolisData.ProcessShips(allFiles);
                 Console.WriteLine(ret);
             }
+            else if (arg1.Equals("Corolisship", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+
+
+                string ret = CorolisData.ProcessShips(allFiles);
+                Console.WriteLine(ret);
+            }
             else if (arg1.Equals("Corolismodules", StringComparison.InvariantCultureIgnoreCase))
             {
                 FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
@@ -158,7 +166,8 @@ namespace NetLogEntry
                               "Status <Status flags>...  multiple ones are: supercruise, landed, fight (see code)\n" +
                               "CorolisModules rootfolder - process corolis-data\\modules\\<folder>\n" +
                               "CorolisModule name - process corolis-data\\modules\\<folder>\n" +
-                              "CorolisShips rootfolder - process corolis-data\\ships\n"
+                              "CorolisShips rootfolder - process corolis-data\\ships\n" +
+                              "CorolisShip name - process corolis-data\\ships\n"
                               );
 
         }

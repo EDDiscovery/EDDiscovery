@@ -47,7 +47,12 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewJournal = new System.Windows.Forms.DataGridView();
+            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,11 +69,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -136,9 +136,42 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.Size = new System.Drawing.Size(784, 684);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);
+            this.dataGridViewJournal.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellDoubleClick);
             this.dataGridViewJournal.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewJournal_RowPostPaint);
             this.dataGridViewJournal.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewJournal_SortCompare);
             this.dataGridViewJournal.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewJournal_MouseDown);
+            // 
+            // ColumnTime
+            // 
+            this.ColumnTime.HeaderText = "Time";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            // 
+            // Event
+            // 
+            this.Event.FillWeight = 50F;
+            this.Event.HeaderText = "Event";
+            this.Event.MinimumWidth = 50;
+            this.Event.Name = "Event";
+            this.Event.ReadOnly = true;
+            this.Event.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ColumnType
+            // 
+            this.ColumnType.FillWeight = 125F;
+            this.ColumnType.HeaderText = "Description";
+            this.ColumnType.MinimumWidth = 50;
+            this.ColumnType.Name = "ColumnType";
+            this.ColumnType.ReadOnly = true;
+            // 
+            // ColumnText
+            // 
+            this.ColumnText.FillWeight = 300F;
+            this.ColumnText.HeaderText = "Information";
+            this.ColumnText.MinimumWidth = 50;
+            this.ColumnText.Name = "ColumnText";
+            this.ColumnText.ReadOnly = true;
             // 
             // historyContextMenu
             // 
@@ -151,8 +184,15 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 180);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 158);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            // 
+            // removeSortingOfColumnsToolStripMenuItem
+            // 
+            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
+            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
+            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -341,45 +381,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.HeaderText = "Time";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            // 
-            // Event
-            // 
-            this.Event.FillWeight = 50F;
-            this.Event.HeaderText = "Event";
-            this.Event.MinimumWidth = 50;
-            this.Event.Name = "Event";
-            this.Event.ReadOnly = true;
-            this.Event.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // ColumnType
-            // 
-            this.ColumnType.FillWeight = 125F;
-            this.ColumnType.HeaderText = "Description";
-            this.ColumnType.MinimumWidth = 50;
-            this.ColumnType.Name = "ColumnType";
-            this.ColumnType.ReadOnly = true;
-            // 
-            // ColumnText
-            // 
-            this.ColumnText.FillWeight = 300F;
-            this.ColumnText.HeaderText = "Information";
-            this.ColumnText.MinimumWidth = 50;
-            this.ColumnText.Name = "ColumnText";
-            this.ColumnText.ReadOnly = true;
-            // 
-            // removeSortingOfColumnsToolStripMenuItem
-            // 
-            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
-            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
-            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // UserControlJournalGrid
             // 

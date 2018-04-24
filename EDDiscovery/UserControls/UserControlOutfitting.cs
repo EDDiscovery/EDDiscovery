@@ -29,24 +29,24 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlShipYards : UserControlCommonBase
+    public partial class UserControlOutfitting : UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("ShipYardGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbYardSave { get { return "ShipYardGridSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return ("OutfittingGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbYardSave { get { return "OutfittingSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         #region Init
 
-        public UserControlShipYards()
+        public UserControlOutfitting()
         {
             InitializeComponent();
-            var corner = dataGridViewShips.TopLeftHeaderCell; // work around #1487
+            var corner = dataGridViewOutfitting.TopLeftHeaderCell; // work around #1487
         }
 
         public override void Init()
         {
-            dataGridViewShips.MakeDoubleBuffered();
-            dataGridViewShips.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewShips.RowTemplate.Height = 26;
+            dataGridViewOutfitting.MakeDoubleBuffered();
+            dataGridViewOutfitting.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridViewOutfitting.RowTemplate.Height = 26;
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -76,15 +76,15 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox(HistoryList hl)
         {
-            ShipYardList shm = hl.shipyards;
+            OutfittingList ofl = hl.outfitting;
             string cursel = comboBoxYards.Text;
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add("Travel History Entry");
 
-            comboBoxYards.Items.AddRange(shm.ShipList());
+            comboBoxYards.Items.AddRange(ShipModuleData.Instance.GetAllModTypes());
 
-            var list = (from ShipYard x in shm.GetFilteredList() select x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC)).ToList();        // yard list repeats allowed within timescale
+            var list = (from x in ofl.GetFilteredList() select x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC)).ToList();
             comboBoxYards.Items.AddRange(list);
 
             if (cursel == "")
@@ -116,24 +116,24 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            DataGridViewColumn sortcol = dataGridViewShips.SortedColumn != null ? dataGridViewShips.SortedColumn : dataGridViewShips.Columns[0];
-            SortOrder sortorder = dataGridViewShips.SortOrder;
+            DataGridViewColumn sortcol = dataGridViewOutfitting.SortedColumn != null ? dataGridViewOutfitting.SortedColumn : dataGridViewOutfitting.Columns[0];
+            SortOrder sortorder = dataGridViewOutfitting.SortOrder;
 
-            dataGridViewShips.Rows.Clear();
+            dataGridViewOutfitting.Rows.Clear();
 
             labelYard.Visible = false;
 
-            ShipYard yard = null;
+            Outfitting yard = null;
 
             if (comboBoxYards.Text.Contains("Travel") || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
-                HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Shipyard, last_he);
+                HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
-                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalShipyard).Yard;
+                    yard = (lastshipyard.journalEntry as EliteDangerousCore.JournalEvents.JournalOutfitting).ItemList;
             }
             else
             {
-                yard = discoveryform.history.shipyards.GetFilteredList().Find(x => x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC).Equals(comboBoxYards.Text));
+                yard = discoveryform.history.outfitting.GetFilteredList().Find(x => x.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC).Equals(comboBoxYards.Text));
             }
 
             if (yard != null)
@@ -142,76 +142,81 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist = discoveryform.history.shipyards.GetShipLocations(comboBoxYards.Text,nolocrepeats:true);
-                if ( shiplist.Count > 0 )
-                    DisplayShips(shiplist, comboBoxYards.Text);
+                List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist = discoveryform.history.outfitting.GetItemTypeLocationsFromYardsWithoutRepeat(comboBoxYards.Text,nolocrepeats:true);
+                if ( itemlist.Count > 0 )
+                    DisplayItems(itemlist, comboBoxYards.Text);
             }
 
-            dataGridViewShips.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-            dataGridViewShips.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            dataGridViewOutfitting.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+            dataGridViewOutfitting.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }
 
-        private void DisplayShips(List<Tuple<ShipYard, ShipYard.ShipyardItem>> shiplist,string ship)
+        private void DisplayItems(List<Tuple<Outfitting, List<Outfitting.OutfittingItem>>> itemlist, string moduletype)
         {
             ISystem cursys = discoveryform.history.CurrentSystem;
 
-            foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
+            foreach (var yard in itemlist)
             {
-                double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
-                string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? i.Item1.Datetime.ToString() : i.Item1.Datetime.ToLocalTime().ToString();
-                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown", i.Item2.ShipPrice.ToString("N1") + "cr" };
-                dataGridViewShips.Rows.Add(rowobj);
+                double distance = discoveryform.history.DistanceCurrentTo(yard.Item1.StarSystem);
+                string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? yard.Item1.Datetime.ToString() : yard.Item1.Datetime.ToLocalTime().ToString();
+                string yardname = yard.Item1.Location;
+
+                foreach (var item in yard.Item2)
+                {
+                    string itemname = item.Name.StartsWith(item.ModType) ? item.Name.Mid(item.ModType.Length+1) : item.Name;
+                    ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(item.FDName);
+                    itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
+
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown", item.BuyPrice.ToString("N1") + "cr" };
+                    dataGridViewOutfitting.Rows.Add(rowobj);
+                }
             }
 
-            labelYard.Text = ship + " locations";
+            labelYard.Text = moduletype + " locations";
             labelYard.Visible = true;
             Col1.HeaderText = "Date";
             Col2.HeaderText = "Yard";
-            Col3.HeaderText = "Distance";
+            Col3.HeaderText = "Item";
+            Col4.HeaderText = "Distance";
             ColPrice.HeaderText = "Price";
         }
 
-        private void DisplayYard(ShipYard yard)    
+        private void DisplayYard(Outfitting yard)
         {
-            foreach (ShipYard.ShipyardItem i in yard.Ships)
+            foreach (var i in yard.Items)
             {
-                string col2 = "Unknown", col3 = "";
-                Dictionary<ShipModuleData.ShipPropID, ShipModuleData.ShipInfo> shipprops = ShipModuleData.Instance.GetShipProperties(i.FDShipType);
-                if ( shipprops != null)
-                {
-                    col2 = (shipprops[ShipModuleData.ShipPropID.Manu] as ShipModuleData.ShipInfoString).Value;
-                    col3 = (shipprops[ShipModuleData.ShipPropID.HullMass] as ShipModuleData.ShipInfoDouble).Value.ToString("0.#t") +
-                        ", " + (shipprops[ShipModuleData.ShipPropID.Speed] as ShipModuleData.ShipInfoInt).Value.ToString() +
-                        "/" + (shipprops[ShipModuleData.ShipPropID.Boost] as ShipModuleData.ShipInfoInt).Value.ToString();
-                }
+                ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(i.FDName);
+                //string namepart = i.Name.Left("Class", StringComparison.InvariantCultureIgnoreCase, true), classpart = i.Name.Mid("Class", StringComparison.InvariantCultureIgnoreCase, false);
 
-                object[] rowobj = { i.ShipType_Localised, col2, col3,i.ShipPrice.ToString("N1") + "cr" };
+                string info = sm.InfoMassPower(false);
 
-                dataGridViewShips.Rows.Add(rowobj);
+                object[] rowobj = { i.ModType, i.Name, info, sm.Mass.ToString("0.#t"),i.BuyPrice.ToString("N1") + "cr" };
+                dataGridViewOutfitting.Rows.Add(rowobj);
             }
 
             double distance = discoveryform.history.DistanceCurrentTo(yard.StarSystem);
 
-            labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
+            labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
-            Col1.HeaderText = "Ship";
-            Col2.HeaderText = "Manufacturer";
-            Col3.HeaderText = "Mass/Speed";
-            ColPrice.HeaderText = "Price";
-        }
 
+            Col1.HeaderText = "Type";
+            Col2.HeaderText = "Item";
+            Col3.HeaderText = "Info";
+            Col4.HeaderText = "Mass";
+        }
+ 
         #endregion
 
         #region Layout
 
         public override void LoadLayout()
         {
-            DGVLoadColumnLayout(dataGridViewShips, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewOutfitting, DbColumnSave);
         }
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewShips, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewOutfitting, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -237,6 +242,8 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric("ly");
             else if (name == "Price")
                 e.SortDataGridViewColumnNumeric("cr");
+            else if (name == "Mass")
+                e.SortDataGridViewColumnNumeric("t");
         }
 
     }

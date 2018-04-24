@@ -48,11 +48,14 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (JObject jo in jmodules)
                 {
+                    string slotfdname = JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str());
+                    string itemfdname = JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str());
+
                     ShipModule module = new ShipModule( 
-                                                        JournalFieldNaming.GetBetterSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.NormaliseFDSlotName(jo["Slot"].Str()),
-                                                        JournalFieldNaming.GetBetterItemNameEvents(jo["Item"].Str()),
-                                                        JournalFieldNaming.NormaliseFDItemName(jo["Item"].Str()),
+                                                        JournalFieldNaming.GetBetterSlotName(slotfdname),
+                                                        slotfdname,
+                                                        JournalFieldNaming.GetBetterItemName(itemfdname),
+                                                        itemfdname,
                                                         null, // unknown
                                                         jo["Priority"].IntNull(),
                                                         null, //aclip

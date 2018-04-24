@@ -72,7 +72,7 @@ namespace ExtendedControls
         private ListBox lbsys;
         private List<string> items;
         private List<Image> imageitems;
-        private int itemheight = 20;
+        private int itemheight = 13;
         private FlatStyle flatstyle = FlatStyle.System;
 
         #region Implementation
@@ -160,7 +160,7 @@ namespace ExtendedControls
             if (this.FlatStyle == FlatStyle.System)
                 return;
 
-            //System.Diagnostics.Debug.WriteLine("Updated list control");
+            //System.Diagnostics.Debug.WriteLine("Updated list control H=" + itemheight);
 
             if (Items != null && itemslayoutestimatedon != Items.Count())  // item count changed, rework it out.
                 CalculateLayout();

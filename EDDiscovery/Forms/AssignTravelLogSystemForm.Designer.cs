@@ -319,7 +319,7 @@ namespace EDDiscovery.Forms
             this.tbManualSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.tbManualSystemName.DropDownBorderColor = System.Drawing.Color.Green;
             this.tbManualSystemName.DropDownHeight = 200;
-            this.tbManualSystemName.DropDownItemHeight = 20;
+            this.tbManualSystemName.DropDownItemHeight = 13;
             this.tbManualSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tbManualSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tbManualSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
