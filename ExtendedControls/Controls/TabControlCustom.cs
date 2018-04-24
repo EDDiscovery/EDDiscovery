@@ -172,12 +172,15 @@ namespace ExtendedControls
 
         #region Mouse
 
+        int lasttabclickedinside = -1;          // LastTabClicked is persistent.. this is wiped by leaving the control
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            LastTabClicked = TabAt(e.Location);
+            LastTabClicked = lasttabclickedinside = TabAt(e.Location);
             base.OnMouseDown(e);
             //System.Diagnostics.Debug.WriteLine("Clicked on "+ mouseclickedtab);
         }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
@@ -188,14 +191,14 @@ namespace ExtendedControls
 
             //System.Diagnostics.Debug.WriteLine("From " + currentmouseover + " to " + mouseover);
 
-            if (e.Button == MouseButtons.Left && LastTabClicked != -1 && AllowDragReorder)
+            if (e.Button == MouseButtons.Left && lasttabclickedinside != -1 && AllowDragReorder)
             {
-                if ( LastTabClicked != mouseover && mouseover != -1)
+                if ( lasttabclickedinside != mouseover && mouseover != -1)
                 {
-                    TabPage r = TabPages[LastTabClicked];
-                    TabPages[LastTabClicked] = TabPages[mouseover];
+                    TabPage r = TabPages[lasttabclickedinside];
+                    TabPages[lasttabclickedinside] = TabPages[mouseover];
                     TabPages[mouseover] = r;
-                    LastTabClicked = mouseover;
+                    lasttabclickedinside = LastTabClicked = mouseover;
                     SelectedIndex = mouseover;
 
                }
@@ -211,7 +214,9 @@ namespace ExtendedControls
         {
             if (mouseover != -1)
             {
+                //System.Diagnostics.Debug.WriteLine("Mouse leave");
                 mouseover = -1;
+                lasttabclickedinside = -1;
 
                 if (flatstyle != FlatStyle.System)
                     Invalidate();

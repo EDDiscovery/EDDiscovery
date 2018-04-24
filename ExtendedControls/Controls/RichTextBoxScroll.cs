@@ -118,12 +118,13 @@ namespace ExtendedControls
 
         public bool ReadOnly { get { return TextBox.ReadOnly; } set { TextBox.ReadOnly = value; } }
 
+        public string SelectedText { get { return TextBox.SelectedText; } }
         public void Select(int s, int e) { TextBox.Select(s, e); }
         public void CursorToEnd() { TextBox.Select(TextBox.TextLength, TextBox.TextLength); }
         public void ScrollToCaret() { TextBox.ScrollToCaret(); }
         public new void Focus() { TextBox.Focus(); }
 
-        public void SetContextMenuStrip(System.Windows.Forms.ContextMenuStrip c) { TextBox.ContextMenuStrip = c; }
+        public override ContextMenuStrip ContextMenuStrip { get { return TextBox.ContextMenuStrip; } set { TextBox.ContextMenuStrip = value; } }
 
         #endregion
 

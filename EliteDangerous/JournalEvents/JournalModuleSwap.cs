@@ -30,24 +30,24 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalModuleSwap(JObject evt ) : base(evt, JournalTypeEnum.ModuleSwap)
         {
-            FromSlot = JournalFieldNaming.GetBetterSlotName(evt["FromSlot"].Str());
             FromSlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["FromSlot"].Str());
+            FromSlot = JournalFieldNaming.GetBetterSlotName(FromSlotFD);
 
-            ToSlot = JournalFieldNaming.GetBetterSlotName(evt["ToSlot"].Str());
             ToSlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["ToSlot"].Str());
+            ToSlot = JournalFieldNaming.GetBetterSlotName(ToSlotFD);
 
-            FromItem = JournalFieldNaming.GetBetterItemNameEvents(evt["FromItem"].Str());
             FromItemFD = JournalFieldNaming.NormaliseFDItemName(evt["FromItem"].Str());
+            FromItem = JournalFieldNaming.GetBetterItemName(FromItemFD);
             FromItemLocalised = evt["FromItem_Localised"].Str().Alt(FromItem);
 
-            ToItem = JournalFieldNaming.GetBetterItemNameEvents(evt["ToItem"].Str());
             ToItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ToItem"].Str());
+            ToItem = JournalFieldNaming.GetBetterItemName(ToItemFD);
             if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
                 ToItem = ToItemFD = "";
             ToItemLocalised = evt["ToItem_Localised"].Str().Alt(ToItem);        // if ToItem is null or not there, this won't be
 
-            ShipFD = evt["Ship"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
 
             MarketID = evt["MarketID"].LongNull();

@@ -310,7 +310,7 @@
             this.textBox_From.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBox_From.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBox_From.DropDownHeight = 200;
-            this.textBox_From.DropDownItemHeight = 20;
+            this.textBox_From.DropDownItemHeight = 13;
             this.textBox_From.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBox_From.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
@@ -365,7 +365,7 @@
             this.textBox_To.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBox_To.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBox_To.DropDownHeight = 200;
-            this.textBox_To.DropDownItemHeight = 20;
+            this.textBox_To.DropDownItemHeight = 13;
             this.textBox_To.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBox_To.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;

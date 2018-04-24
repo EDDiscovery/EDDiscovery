@@ -45,8 +45,7 @@ namespace EDDiscovery.UserControls
             SetEntryThemeComboBox();
 
             textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
-            comboBoxTheme.ItemHeight = 20;
-
+            
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
@@ -484,13 +483,12 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("Remove " );
 
                     info = new ExtendedControls.InfoForm();
-                    info.Info("Remove Sectors", EDDiscovery.Properties.Resources.edlogo_3mo_icon, 
-                                "Removing " + gss.Removed.Count +" Sector(s)." + Environment.NewLine+ Environment.NewLine +
+                    info.Info("Remove Sectors", EDDiscovery.Properties.Resources.edlogo_3mo_icon,
+                                "Removing " + gss.Removed.Count + " Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
-                                "You may continue to use EDD while this operation takes place" + Environment.NewLine+
-                                "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine+
-                                "the process has finished" + Environment.NewLine + Environment.NewLine
-                                , new int[] { 0 }, true);
+                                "You may continue to use EDD while this operation takes place" + Environment.NewLine +
+                                "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
+                                "the process has finished" + Environment.NewLine + Environment.NewLine);
                     info.EnableClose = false;
                     info.Show(discoveryform);
 

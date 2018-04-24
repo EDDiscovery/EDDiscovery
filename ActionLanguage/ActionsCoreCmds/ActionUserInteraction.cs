@@ -133,7 +133,7 @@ namespace ActionLanguage
                     string caption = (exp[1].Length>0) ? exp[1]: "EDDiscovery Program Message";
 
                     ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
-                    ifrm.Info(caption, ap.actioncontroller.Icon, exp[0], new int[] { 0, 100, 200, 300, 400, 500, 600 }, true);
+                    ifrm.Info(caption, ap.actioncontroller.Icon, exp[0]);
                     ifrm.Show(ap.actioncontroller.Form);
                 }
                 else

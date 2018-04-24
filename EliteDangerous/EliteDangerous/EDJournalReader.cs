@@ -175,7 +175,7 @@ namespace EliteDangerousCore
             }
             else if (je is JournalEvents.JournalOutfitting)         // when doing into outfitting
             {
-                toosoon = lastoutfitting != null && CollectionStaticHelpers.Equals(lastoutfitting.ModuleItems, (je as JournalEvents.JournalOutfitting).ModuleItems);
+                toosoon = lastoutfitting != null && lastoutfitting.ItemList.Equals((je as JournalEvents.JournalOutfitting).ItemList);
                 lastoutfitting = je as JournalEvents.JournalOutfitting;
             }
             else if (je is JournalEvents.JournalMarket)

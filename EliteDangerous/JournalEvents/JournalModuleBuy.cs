@@ -33,24 +33,24 @@ namespace EliteDangerousCore.JournalEvents
         public JournalModuleBuy(JObject evt ) : base(evt, JournalTypeEnum.ModuleBuy)
         {
             SlotFD = JournalFieldNaming.NormaliseFDSlotName(evt["Slot"].Str());
-            Slot = JournalFieldNaming.GetBetterSlotName(evt["Slot"].Str());
+            Slot = JournalFieldNaming.GetBetterSlotName(SlotFD);
 
-            BuyItem = JournalFieldNaming.GetBetterItemNameEvents(evt["BuyItem"].Str());
             BuyItemFD = JournalFieldNaming.NormaliseFDItemName(evt["BuyItem"].Str());
+            BuyItem = JournalFieldNaming.GetBetterItemName(BuyItemFD);
             BuyItemLocalised = evt["BuyItem_Localised"].Str().Alt(BuyItem);
             BuyPrice = evt["BuyPrice"].Long();
 
-            ShipFD = evt["Ship"].Str();
-            Ship = JournalFieldNaming.GetBetterShipName(evt["Ship"].Str());
+            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
+            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             ShipId = evt["ShipID"].Int();
 
-            SellItem = JournalFieldNaming.GetBetterItemNameEvents(evt["SellItem"].Str());
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
+            SellItem = JournalFieldNaming.GetBetterItemName(SellItemFD);
             SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
             SellPrice = evt["SellPrice"].LongNull();
 
-            StoredItem = JournalFieldNaming.GetBetterItemNameEvents(evt["StoredItem"].Str());
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
+            StoredItem = JournalFieldNaming.GetBetterItemName(StoredItemFD);
             StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
 
             MarketID = evt["MarketID"].LongNull();

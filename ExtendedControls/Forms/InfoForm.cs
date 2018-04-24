@@ -33,22 +33,22 @@ namespace ExtendedControls
             InitializeComponent();
         }
 
-        public void Info(string title, Icon ic, string info , int[] array = null , bool themeit = false)    
+        public void Info(string title, Icon ic, string info , int[] array = null)    
         {
             Icon = ic;
             Text = title;
-            textBoxInfo.SetTabs(array ?? new int[] { 0, 100, 200, 300, 400, 500, 600 });
+            textBoxInfo.SetTabs(array ?? new int[] { 0, 100, 200, 300, 400, 500, 600, 800,900,1000,1100,1200 });
             textBoxInfo.ReadOnly = true;
             textBoxInfo.Text = info;
             textBoxInfo.Select(0, 0);
 
             labelCaption.Text = title;
 
-            ITheme theme = ThemeableFormsInstance.Instance;
-
             textBoxInfo.Font = SystemFonts.DefaultFont;
 
-            if (themeit && theme != null)
+            ITheme theme = ThemeableFormsInstance.Instance;
+
+            if (theme != null)
             {
                 bool winborder = theme.ApplyToForm(this);
                 if (winborder)
@@ -59,6 +59,7 @@ namespace ExtendedControls
                 panelTop.Visible = false;
             }
         }
+
 
         public void AddText(string text)
         {
@@ -95,6 +96,21 @@ namespace ExtendedControls
         private void InfoForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = !buttonOK.Enabled;
+        }
+
+        private void InfoForm_Layout(object sender, LayoutEventArgs e)
+        {
+            textBoxInfo.Location = new Point(3, panelTop.Bottom + 1);
+            textBoxInfo.Size = new Size(ClientRectangle.Width-6, panelBottom.Top-textBoxInfo.Top);
+        }
+
+        private void toolStripMenuItemCopy_Click(object sender, EventArgs e)
+        {
+            string s = textBoxInfo.SelectedText;
+            if (s.Length == 0)
+                s = textBoxInfo.Text;
+            //System.Diagnostics.Debug.WriteLine("Sel " + s);
+            Clipboard.SetText(s);
         }
     }
 }
