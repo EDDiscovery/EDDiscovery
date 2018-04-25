@@ -32,6 +32,8 @@ namespace EliteDangerousCore.EDDN
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
         private static Action<string> logger;
 
+        static public Action EventListEmpty;       // called in thread when sync thread has finished and is terminating
+
         public static bool SendEDDNEvent(Action<string> logger, HistoryEntry helist)
         {
             return SendEDDNEvents(logger, new[] { helist });
@@ -107,15 +109,18 @@ namespace EliteDangerousCore.EDDN
                         Thread.Sleep(1000);   // Throttling to 1 per second to not kill EDDN network
                     }
 
-                    // Wait up to 60 seconds for another EDDN event to come in
-                    hlscanevent.WaitOne(60000);
+                    if (hlscanunsyncedlist.IsEmpty)     // if nothing there..
+                    {
+                        EventListEmpty?.Invoke();       // tell the system..
+
+                        hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EDDN event to come in
+                    }
+
                     if (Exit)
                     {
                         return;
                     }
                 }
-
-                //mainForm.LogLine("EDDN sync thread exiting");
             }
             catch (Exception ex)
             {
@@ -126,6 +131,7 @@ namespace EliteDangerousCore.EDDN
             {
                 _running = 0;
             }
+
         }
 
         static public bool SendToEDDN(HistoryEntry he)

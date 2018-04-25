@@ -27,7 +27,7 @@ using System.Management;
 using System.Reflection;
 using System.Text;
 
-namespace EDDiscoveryCore.EGO
+namespace EliteDangerousCore.EGO
 {
     public class EGOClass : BaseUtils.HttpCom
     {

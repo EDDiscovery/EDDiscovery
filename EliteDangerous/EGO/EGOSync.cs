@@ -27,7 +27,7 @@ using System.Threading.Tasks;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 
-namespace EDDiscoveryCore.EGO
+namespace EliteDangerousCore.EGO
 {
     public static class EGOSync
     {
@@ -37,6 +37,8 @@ namespace EDDiscoveryCore.EGO
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
         private static Action<string> logger;
+
+        static public Action EventListEmpty;       // called in thread when sync thread has finished and is terminating
 
         public static bool SendEGOEvent(Action<string> log, HistoryEntry helist)
         {
@@ -124,8 +126,13 @@ namespace EDDiscoveryCore.EGO
 
                     }
 
-                    // Wait up to 60 seconds for another EGO event to come in
-                    hlscanevent.WaitOne(60000);
+                    if (hlscanunsyncedlist.IsEmpty)     // nothing queued
+                    {
+                        EventListEmpty?.Invoke();    // tell the system..
+
+                        hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EGO event to come in
+                    }
+
                     if (Exit)
                     {
                         return;

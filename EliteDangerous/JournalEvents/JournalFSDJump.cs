@@ -124,6 +124,8 @@ Examples of trending states:
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
             if (jm.Empty())
                 evt["EDDMapColor"] = EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour;      // new entries get this default map colour if its not already there
+
+            EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
         }
 
         public double JumpDist { get; set; }
@@ -133,6 +135,7 @@ Examples of trending states:
         public int BoostValue { get; set; }
         public int MapColor { get; set; }
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
+        public bool EDSMFirstDiscover { get; set; }
 
         public override void FillInformation(out string summary, out string info, out string detailed)  //V
         {

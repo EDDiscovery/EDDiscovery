@@ -34,6 +34,8 @@ namespace EliteDangerousCore.EDSM
             public HistoryEntry HistoryEntry;
         }
 
+        static public Action EventListEmpty;       // called in thread when sync thread has finished and is terminating
+
         private static Thread ThreadEDSMSync;
         private static int running = 0;
         private static bool Exit = false;
@@ -166,7 +168,7 @@ namespace EliteDangerousCore.EDSM
 
         public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
         {
-            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))     // check if we need a new discard list
+            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
             {
                 try
                 {
@@ -327,7 +329,7 @@ namespace EliteDangerousCore.EDSM
                         int sendretries = 5;
                         int waittime = 30000;
 
-                        while (sendretries > 0 && !EDSMJournalSync.SendToEDSM(hl, first.Commander, out errmsg))
+                        while (sendretries > 0 && !SendToEDSM(hl, first.Commander, out errmsg))
                         {
                             logger?.Invoke($"Error sending EDSM events {errmsg}");
                             System.Diagnostics.Trace.WriteLine($"Error sending EDSM events {errmsg}");
@@ -356,6 +358,7 @@ namespace EliteDangerousCore.EDSM
 
                     // Wait at least 50ms between messages
                     exitevent.WaitOne(50);
+
                     if (Exit)
                     {
                         return;
@@ -363,6 +366,8 @@ namespace EliteDangerousCore.EDSM
 
                     if (historylist.IsEmpty)
                     {
+                        EventListEmpty?.Invoke();       // finished sending everything, tell..
+
                         historyevent.WaitOne(120000);       // wait for another event keeping the thread open.. Note stop also sets this
                     }
 
@@ -437,7 +442,6 @@ namespace EliteDangerousCore.EDSM
                             JObject result = results[i];
                             int msgnr = result["msgnum"].Int();
                             int systemId = result["systemId"].Int();
-                            bool systemCreated = result["systemCreated"].Bool();
 
                             if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
@@ -448,10 +452,15 @@ namespace EliteDangerousCore.EDSM
                                         he.System.EDSMID = systemId;
                                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
                                     }
+                                }
 
+                                if (he.EntryType == JournalTypeEnum.FSDJump )       // only on FSD, confirmed with Anthor.  25/4/2018
+                                {
+                                    bool systemCreated = result["systemCreated"].Bool();
                                     if (systemCreated)
                                     {
-                                        he.SetFirstDiscover(true,cn,txn);
+                                        System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for record");
+                                        he.SetFirstDiscover(true, cn, txn);
                                     }
                                 }
 
