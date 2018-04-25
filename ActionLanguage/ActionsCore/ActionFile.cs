@@ -88,6 +88,11 @@ namespace ActionLanguage
             filevariables.Delete(n);
         }
 
+        public void DeleteFileVariableWildcard(string n)
+        {
+            filevariables.DeleteWildcard(n);
+        }
+
         public string Read(JObject jo , out bool readenable)            // KEEP JSON reader for backwards compatibility.
         {
             string errlist = "";
