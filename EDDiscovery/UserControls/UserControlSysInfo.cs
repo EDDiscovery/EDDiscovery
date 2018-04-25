@@ -97,6 +97,8 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
+            discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -111,6 +113,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
+            discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             SQLiteDBClass.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
             SQLiteDBClass.PutSettingInt(DbSelection, Selection);
         }
@@ -122,6 +125,12 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+        }
+
+        private void Discoveryform_OnEDSMSyncComplete()     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
+        {
+            //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED KICKING SYS INFO");
+            Display(last_he, discoveryform.history);
         }
 
         bool neverdisplayed = true;
@@ -139,7 +148,15 @@ namespace EDDiscovery.UserControls
             if ( last_he != null )
             {
                 SetControlText(he.System.Name);
-                textBoxSystem.Text = he.System.Name;
+                string name = he.System.Name;
+
+                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
+
+                if (lastfsd != null && lastfsd.IsEDSMFirstDiscover)
+                    name = "(FD)*" + name;
+
+                textBoxSystem.Text = name;
+
                 discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
                 textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");

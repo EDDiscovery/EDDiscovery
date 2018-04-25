@@ -30,7 +30,6 @@ namespace EliteDangerousCore.JournalEvents
         public EMK.LightGeometry.Vector3 StarPos { get; set; }
         public long? SystemAddress { get; set; }
         public bool StarPosFromEDSM { get; set; }
-        public bool EDSMFirstDiscover { get; set; }
 
         public string Faction { get; set; }
         public string FactionState { get; set; }
@@ -76,7 +75,6 @@ namespace EliteDangerousCore.JournalEvents
         {
             StarSystem = evt["StarSystem"].Str();
             StarPosFromEDSM = evt["StarPosFromEDSM"].Bool(false);
-            EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
 
             EMK.LightGeometry.Vector3 pos = new EMK.LightGeometry.Vector3();
 

@@ -73,6 +73,9 @@ namespace EDDiscovery
         public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
         public event Action<List<string>, bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
         public event Action OnAddOnsChanged;                            // add on changed
+        public event Action OnEDSMSyncComplete;                         // EDSM Sync has completed
+        public event Action OnEDDNSyncComplete;                         // Sync has completed
+        public event Action OnEGOSyncComplete;                          // Sync has completed
 
         #endregion
 
@@ -213,6 +216,36 @@ namespace EDDiscovery
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
             SetUpLogging();
+
+            EDSMJournalSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEDSMSyncComplete?.Invoke();
+                    ActionRun(Actions.ActionEventEDList.onEDSMSync);
+                });
+            };
+
+            EDDNSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEDDNSyncComplete?.Invoke();
+                    ActionRun(Actions.ActionEventEDList.onEDDNSync);
+                });
+            };
+
+            EliteDangerousCore.EGO.EGOSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            {
+                this.BeginInvoke((MethodInvoker)delegate
+                {
+                    System.Diagnostics.Debug.Assert(Application.MessageLoop);
+                    OnEGOSyncComplete?.Invoke();
+                    ActionRun(Actions.ActionEventEDList.onEGOSync);
+                });
+            };
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
 
@@ -516,23 +549,17 @@ namespace EDDiscovery
 
             if (Capi.LoggedIn)
             {
-                // Remove 17/1/2018 told capi bug was over
-                //if (Controller.history != null && Controller.history.Count > 0 && Controller.history.GetLast.ContainsRares())
-                //{
-                    //LogLine("Not performing Companion API get due to carrying rares");
-                //}
-
-                    try
-                    {
-                        Capi.GetProfile();
-                        OnNewCompanionAPIData?.Invoke(Capi, null);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogLineHighlight("Companion API get failed: " + ex.Message);
-                        if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
-                            LogLineHighlight(ex.StackTrace);
-                    }
+                try
+                {
+                    Capi.GetProfile();
+                    OnNewCompanionAPIData?.Invoke(Capi, null);
+                }
+                catch (Exception ex)
+                {
+                    LogLineHighlight("Companion API get failed: " + ex.Message);
+                    if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
+                        LogLineHighlight(ex.StackTrace);
+                }
             }
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
@@ -549,11 +576,7 @@ namespace EDDiscovery
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    //if (he.ContainsRares())
-                    //{
-                    //    LogLine("Not performing Companion API get due to carrying rares");
-                    //}
-                    //else
+                    // hang over from rares the indenting.
                     {
                         System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
@@ -566,22 +589,18 @@ namespace EDDiscovery
                             if (!Capi.Profile.Cmdr.docked)
                             {
                                 LogLineHighlight("CAPI not docked. Server API lagging!");
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
                             {
                                 LogLineHighlight("CAPI profileSystemRequired is " + dockevt.StarSystem + ", profile station is " + Capi.Profile.CurrentStarSystem.name);
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
                             {
                                 LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
-                                // Todo add a retry later...
                             }
                             else if (!dockevt.StationName.Equals(market.name))
                             {
                                 LogLineHighlight("CAPI stationname  " + dockevt.StationName + ",´market station is " + market.name);
-                                // Todo add a retry later...
                             }
                             else
                             {
@@ -592,7 +611,7 @@ namespace EDDiscovery
                                     OnNewCompanionAPIData?.Invoke(Capi, he);
 
                                     if (EDCommander.Current.SyncToEddn)
-                                        SendPricestoEDDN(he, market);
+                                        SendPricestoEDDN(he, market);           // synchronous, but only done on docking, not worried.
 
                                 }
                             }
@@ -605,50 +624,26 @@ namespace EDDiscovery
                 }
             }
 
-            // Moved from travel history control
-
-            try
-            {   // try is a bit old, probably do not need it.
-                if (he.IsFSDJump)
-                {
-                    int count = history.GetVisitsCount(he.System.Name);
-                    LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
-
-                    System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
-                }
-
-                if (EDCommander.Current.SyncToEdsm)
-                {
-                    EDSMJournalSync.SendEDSMEvents(LogLine, he);
-
-                    if (he.EntryType == JournalTypeEnum.FSDJump)
-                    {
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDSMSync);
-                    }
-                }
-
-                if (he.ISEDDNMessage && he.AgeOfEntry() < TimeSpan.FromDays(1.0))
-                {
-                    if (EDCommander.Current.SyncToEddn == true)
-                    {
-                        EDDNSync.SendEDDNEvents(LogLine, he);
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEDDNSync);
-                    }
-                }
-
-                if (he.EntryType == JournalTypeEnum.Scan)
-                {
-                    if (EDCommander.Current.SyncToEGO)
-                    {
-                        EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
-                        ActionRunOnEntry(he, Actions.ActionEventEDList.onEGOSync);
-                    }
-                }
-            }
-            catch (Exception ex)
+            if (he.IsFSDJump)
             {
-                System.Diagnostics.Trace.WriteLine("Exception NewPosition: " + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Trace: " + ex.StackTrace);
+                int count = history.GetVisitsCount(he.System.Name);
+                LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
+                System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
+            }
+
+            if (EDCommander.Current.SyncToEdsm)
+            {
+                EDSMJournalSync.SendEDSMEvents(LogLine, he);
+            }
+
+            if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
+            {
+                EDDNSync.SendEDDNEvents(LogLine, he);
+            }
+
+            if (he.EntryType == JournalTypeEnum.Scan && EDCommander.Current.SyncToEGO)
+            {
+                EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
             }
         }
 
@@ -775,7 +770,7 @@ namespace EDDiscovery
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEGOSynced;        // first entry is oldest
-            EDDiscoveryCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
+            EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, hlsyncunsyncedlist);
         }
 
         private void frontierForumThreadToolStripMenuItem_Click(object sender, EventArgs e)
