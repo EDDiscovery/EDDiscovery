@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
 
             if ( current != null )
             {
-                System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
+                //System.Diagnostics.Debug.WriteLine("Filter {0} {1}", current.StartTime.ToStringZulu(), current.EndTime.ToStringZulu());
                 List<HistoryEntry> hel;
 
                 if (current.Type == FilterEntry.EntryType.Lastdock)
@@ -505,7 +505,7 @@ namespace EDDiscovery.UserControls
 
         private void SelectInitial()
         {
-            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "");
+            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "Since Last Dock");
 
             if (!sel.IsEmpty())
             {

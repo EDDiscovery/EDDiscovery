@@ -257,9 +257,9 @@ namespace ActionLanguage
                 while ((v = p.NextWord(", ")) != null)
                 {
                     v = ap.variables.Qualify(v);
-                    ap.actioncontroller.DeleteVariable(v);
-                    ap.actionfile.DeleteFileVariable(v);
-                    ap.DeleteVar(v);
+                    ap.actioncontroller.DeleteVariableWildcard(v);
+                    ap.actionfile.DeleteFileVariableWildcard(v);
+                    ap.DeleteVariableWildcard(v);
                     p.IsCharMoveOn(',');
                 }
             }
