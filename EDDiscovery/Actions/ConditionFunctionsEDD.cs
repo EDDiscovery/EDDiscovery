@@ -91,7 +91,7 @@ namespace EDDiscovery.Actions
 
         static public string PhoneticShipName(string inname)
         {
-            return inname.Replace("Mk. IV", "Mark 4").Replace("Mk. III", "Mark 3");
+            return inname.Replace("Mk IV", "Mark 4").Replace("Mk III", "Mark 3").Replace("MkIV", "Mark 4").Replace("MkIII", "Mark 3");
         }
 
         protected bool Ship(out string output)

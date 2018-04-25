@@ -97,6 +97,23 @@ namespace Conditions
                 values.Remove(name);
         }
 
+        public void DeleteWildcard(string name)
+        { 
+            int wildcard = name.IndexOf('*');
+            if (wildcard >= 0)
+                name = name.Substring(0, wildcard);
+
+            List<string> removelist = new List<string>();
+            foreach (KeyValuePair<string, string> k in values)
+            {
+                if ((wildcard >= 0 && k.Key.StartsWith(name)) || k.Key.Equals(name))
+                    removelist.Add(k.Key);
+            }
+
+            foreach (string k in removelist)
+                values.Remove(k);
+        }
+
         public void Add(List<ConditionVariables> varlist)
         {
             if (varlist != null)

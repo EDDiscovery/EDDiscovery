@@ -125,7 +125,7 @@ namespace EliteDangerousCore
                     {
                         yards.Add(yard);
                         last = yard;
-                        System.Diagnostics.Debug.WriteLine("OF return " + yard.Ident(true) + " " + yard.Datetime.ToString());
+                        //System.Diagnostics.Debug.WriteLine("OF return " + yard.Ident(true) + " " + yard.Datetime.ToString());
                     }
                 }
             }

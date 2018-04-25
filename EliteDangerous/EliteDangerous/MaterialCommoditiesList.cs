@@ -79,7 +79,6 @@ namespace EliteDangerousCore
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
 
-            mcl.list = new List<MaterialCommodities>(list.Count);
             list.ForEach(item =>
             {
                 bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
@@ -156,7 +155,7 @@ namespace EliteDangerousCore
         public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
-
+       
             double costprev = mc.count * mc.price;
             double costnew = num * price;
             mc.count = Math.Max(mc.count + num, 0);
