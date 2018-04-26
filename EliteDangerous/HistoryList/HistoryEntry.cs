@@ -31,8 +31,8 @@ namespace EliteDangerousCore
 
         public int Indexno;            // for display purposes.
 
-        public JournalTypeEnum EntryType;
-        public long Journalid;
+        public JournalTypeEnum EntryType { get { return journalEntry?.EventTypeID ?? JournalTypeEnum.Unknown; } }
+        public long Journalid { get { return journalEntry?.Id ??0; } }
         public JournalEntry journalEntry;
         public EDCommander Commander;
 
@@ -47,11 +47,11 @@ namespace EliteDangerousCore
                                        // SO the journal reader can just read data in that table only, does not need to do a system match
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        public DateTime EventTimeUTC;
+        public DateTime EventTimeUTC { get { return journalEntry?.EventTimeUTC.ToLocalTime() ?? DateTime.UtcNow; } }
         public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
-        public string EventSummary;
-        public string EventDescription;
-        public string EventDetailedInfo;
+        public string EventSummary { get { journalEntry.FillInformation(out string s, out string i, out string d); return s; } }
+        public string EventDescription { get { journalEntry.FillInformation(out string s, out string i, out string d); return s; } }
+        public string EventDetailedInfo { get { journalEntry.FillInformation(out string s, out string i, out string d); return s; } }
 
         public int MapColour;
 
@@ -141,20 +141,26 @@ namespace EliteDangerousCore
         // for importing old events in from 2.1 - logs
         public static HistoryEntry MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
         {
-            Debug.Assert(sys != null);
-            return new HistoryEntry
-            {
-                EntryType = JournalTypeEnum.FSDJump,
-                System = sys,
-                EventTimeUTC = eventt,
-                EventSummary = "Jump to " + sys.Name,
-                EventDescription = dist,
-                EventDetailedInfo = info,
-                MapColour = m,
-                Journalid = journalid,
-                IsEDSMFirstDiscover = firstdiscover,
-                EdsmSync = true
-            };
+            return null;
+            //Debug.Assert(sys != null);
+
+            //Newtonsoft.Json.Linq.JObject evt = new Newtonsoft.Json.Linq.JObject();
+            //evt.Add("timestamp",new Newtonsoft.Json.J)
+
+            //return new HistoryEntry
+            //{
+            //    journalEntry = new JournalFSDJump(eventt),
+            //    EntryType = JournalTypeEnum.FSDJump,
+            //    System = sys,
+            //    EventTimeUTC = eventt,
+            //    EventSummary = "Jump to " + sys.Name,
+            //    EventDescription = dist,
+            //    EventDetailedInfo = info,
+            //    MapColour = m,
+            //    Journalid = journalid,
+            //    IsEDSMFirstDiscover = firstdiscover,
+            //    EdsmSync = true
+            //};
         }
 
         public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
@@ -260,20 +266,14 @@ namespace EliteDangerousCore
             HistoryEntry he = new HistoryEntry
             {
                 Indexno = indexno,
-                EntryType = je.EventTypeID,
-                Journalid = je.Id,
                 journalEntry = je,
                 System = isys,
-                EventTimeUTC = je.EventTimeUTC,
                 MapColour = mapcolour,
                 EdsmSync = je.SyncedEDSM,
                 EDDNSync = je.SyncedEDDN,
                 EGOSync = je.SyncedEGO,
                 StartMarker = je.StartMarker,
                 StopMarker = je.StopMarker,
-                EventSummary = summary,
-                EventDescription = info,
-                EventDetailedInfo = detailed,
                 IsStarPosFromEDSM = starposfromedsm,
                 IsEDSMFirstDiscover = firstdiscover,
                 Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
@@ -415,10 +415,11 @@ namespace EliteDangerousCore
                 {
                     //Debug.WriteLine("Travelling stop at " + he.Indexno);
                     he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
+//TBD                    
+                    //he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
+                    //                    + ", " + he.travelled_jumps + " jumps"
+                    //                    + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                    //                    ", time " + he.travelled_seconds;
 
                     he.travelled_distance = 0;
                     he.travelled_seconds = new TimeSpan(0);
@@ -429,11 +430,13 @@ namespace EliteDangerousCore
 
                     if (he.IsFSDJump)
                     {
-                        he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" +
-                                        " distance " + he.travelled_distance.ToString("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
+//TBD
+
+                        //he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" +
+                        //                " distance " + he.travelled_distance.ToString("0.0") + " LY"
+                        //                + ", " + he.travelled_jumps + " jumps"
+                        //                + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
+                        //                ", time " + he.travelled_seconds;
                     }
                 }
             }

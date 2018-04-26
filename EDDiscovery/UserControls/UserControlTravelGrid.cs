@@ -213,6 +213,8 @@ namespace EDDiscovery.UserControls
                 dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
             }
 
+            System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " GRID UP");
+
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }
 

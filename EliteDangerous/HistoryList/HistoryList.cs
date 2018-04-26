@@ -885,7 +885,7 @@ namespace EliteDangerousCore
                 {
                     if (MergeEntries(jprev, je))        // if we merge.. we may have updated info, so reprint.
                     {
-                        jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
+                        //jprev.FillInformation(out prev.EventSummary, out prev.EventDescription, out prev.EventDetailedInfo);    // need to keep this up to date..
                         continue;
                     }
 
