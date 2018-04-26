@@ -32,6 +32,8 @@ namespace EliteDangerousCore.EDDN
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
         private static Action<string> logger;
 
+        static public Action<int> SentEvents;       // called in thread when sync thread has finished and is terminating
+
         public static bool SendEDDNEvent(Action<string> logger, HistoryEntry helist)
         {
             return SendEDDNEvents(logger, new[] { helist });
@@ -84,6 +86,8 @@ namespace EliteDangerousCore.EDDN
                     List<HistoryEntry> hl = new List<HistoryEntry>();
                     HistoryEntry he = null;
 
+                    int eventcount = 0;
+
                     while (hlscanunsyncedlist.TryDequeue(out he))
                     {
                         hlscanevent.Reset();
@@ -97,6 +101,7 @@ namespace EliteDangerousCore.EDDN
                         else if (EDDNSync.SendToEDDN(he))
                         {
                             logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            eventcount++;
                         }
 
                         if (Exit)
@@ -107,15 +112,16 @@ namespace EliteDangerousCore.EDDN
                         Thread.Sleep(1000);   // Throttling to 1 per second to not kill EDDN network
                     }
 
-                    // Wait up to 60 seconds for another EDDN event to come in
-                    hlscanevent.WaitOne(60000);
+                    SentEvents?.Invoke(eventcount);     // tell the system..
+
+                    if (hlscanunsyncedlist.IsEmpty)     // if nothing there..
+                        hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EDDN event to come in
+
                     if (Exit)
                     {
                         return;
                     }
                 }
-
-                //mainForm.LogLine("EDDN sync thread exiting");
             }
             catch (Exception ex)
             {
@@ -126,6 +132,7 @@ namespace EliteDangerousCore.EDDN
             {
                 _running = 0;
             }
+
         }
 
         static public bool SendToEDDN(HistoryEntry he)

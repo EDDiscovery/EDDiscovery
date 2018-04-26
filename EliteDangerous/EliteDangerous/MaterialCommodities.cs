@@ -29,7 +29,6 @@ namespace EliteDangerousCore
         public string type { get; set; }                    // and its type, for materials its rarity, for commodities its group ("Metals" etc).
         public string shortname { get; set; }               // short abv. name
         public Color colour { get; set; }                   // colour if its associated with one
-        public int flags { get; set; }                      // now out of date.. keep for now to limit code changes
 
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
@@ -44,10 +43,12 @@ namespace EliteDangerousCore
         public static string MaterialFreqCommon = "Common";
         public static string MaterialFreqVeryCommon = "Very Common";
 
+        // name key is lower case normalised
         private static Dictionary<string, MaterialCommodityDB> cachelist = new Dictionary<string, MaterialCommodityDB>();
 
         public static MaterialCommodityDB GetCachedMaterial(string fdname)
         {
+            fdname = fdname.ToLower();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
@@ -62,7 +63,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public MaterialCommodityDB(string cs, string n, string fd, string t, string shortn, Color cl, int fl)
+        public MaterialCommodityDB(string cs, string n, string fd, string t, string shortn, Color cl)
         {
             category = cs;
             name = n;
@@ -70,7 +71,6 @@ namespace EliteDangerousCore
             type = t;
             shortname = shortn;
             colour = cl;
-            flags = fl;
         }
 
         public void SetCache()
@@ -82,7 +82,7 @@ namespace EliteDangerousCore
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {
-                MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, 0);
+                MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname );
             }
@@ -167,7 +167,7 @@ namespace EliteDangerousCore
         private static bool Add(string catname, Color colour, string aliasname, string typeofit, string shortname = "", string fdName = "")
         {
             string fdn = (fdName.Length > 0) ? fdName : aliasname.FDName();
-            MaterialCommodityDB mc = new MaterialCommodityDB(catname, aliasname, fdn, typeofit, shortname, colour, 0);
+            MaterialCommodityDB mc = new MaterialCommodityDB(catname, aliasname, fdn, typeofit, shortname, colour);
             mc.SetCache();
             return true;
         }

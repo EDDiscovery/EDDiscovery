@@ -19,6 +19,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BaseUtils
 {
@@ -42,105 +43,37 @@ namespace BaseUtils
             return ret;
         }
 
-        protected ResponseData RequestPost(string json, string action, NameValueCollection headers = null, bool handleException = false )
+        protected ResponseData RequestPost(string postData, string action, NameValueCollection headers = null, bool handleException = false )
         {
-            if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
-            {
-                System.Diagnostics.Trace.WriteLine("POST:" + action);
-                return new ResponseData(HttpStatusCode.Unauthorized);
-            }
-
-            try
-            {
-                try
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
-                    // Set the Method property of the request to POST.
-                    request.Method = "POST";
-                    if (headers != null)
-                    {
-                        request.Headers.Add(headers);
-                    }
-                    // Create POST data and convert it to a byte array.
-                    //WRITE JSON DATA TO VARIABLE D
-                    //string postData = "{\"requests\":[{\"C\":\"Gpf_Auth_Service\", \"M\":\"authenticate\", \"fields\":[[\"name\",\"value\"],[\"Id\",\"\"],[\"username\",\"user@example.com\"],[\"password\",\"ab9ce908\"],[\"rememberMe\",\"Y\"],[\"language\",\"en-US\"],[\"roleType\",\"M\"]]}],\"C\":\"Gpf_Rpc_Server\", \"M\":\"run\"}";
-                    string postData = json;
-
-
-                    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                    // Set the ContentType property of the WebRequest.
-                    request.ContentType = MimeType;
-                    //request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                    // Set the ContentLength property of the WebRequest.
-                    request.ContentLength = byteArray.Length;
-                    // Get the request stream.
-                    Stream dataStream = request.GetRequestStream();
-                    // Write the data to the request stream.
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    // Close the Stream object.
-                    dataStream.Close();
-                    // Get the response.
-                    //request.Timeout = 740 * 1000;
-
-                    WriteLog("POST " + request.RequestUri, postData);
-
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                    var data = getResponseData(response);
-                    response.Close();
-
-                    //TODO: Log Status Code too
-                    WriteLog(data.Body, "");
-
-                    return data;
-                }
-                catch (WebException ex)
-                {
-                    if (!handleException)
-                    {
-                        throw;
-                    }
-
-                    using (WebResponse response = ex.Response)
-                    {
-                        HttpWebResponse httpResponse = (HttpWebResponse)response;
-                        var data = getResponseData(httpResponse);
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
-                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                        if (LogPath != null)
-                        {
-                            WriteLog("WebException" + ex.Message, "");
-                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
-                            WriteLog($"HTTP Error body: {data.Body}", "");
-                        }
-                        return data;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!handleException)
-                {
-                    throw;
-                }
-
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                WriteLog("Exception" + ex.Message, "");
-
-                return new ResponseData(HttpStatusCode.BadRequest);
-            }
+            return Request("POST", postData, action, headers, handleException,0);
         }
 
-        protected ResponseData RequestPatch(string json, string action, NameValueCollection headers = null, bool handleException = false)
+        protected ResponseData RequestPatch(string postData, string action, NameValueCollection headers = null, bool handleException = false)
+        {
+            return Request("PATCH", postData, action, headers, handleException,0);
+        }
+
+        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false, int timeout = 5000)
+        {
+            return Request("GET", "", action, headers, handleException, timeout);
+        }
+
+        // responsecallback is in TASK you must convert back to foreground
+        protected void RequestGetAsync(string action, Action<ResponseData,Object> responsecallback, Object tag = null, NameValueCollection headers = null, bool handleException = false, int timeout = 5000)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                ResponseData resp = Request("GET", "", action, headers, handleException, timeout);
+                responsecallback(resp,tag);
+            });
+        }
+
+        protected ResponseData Request(string method, string postData, string action, NameValueCollection headers, bool handleException,
+                                        int timeout)
         {
             if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
             {
-                System.Diagnostics.Trace.WriteLine("PATCH:" + action);
+                System.Diagnostics.Trace.WriteLine(method + action);
                 return new ResponseData(HttpStatusCode.Unauthorized);
             }
 
@@ -149,30 +82,29 @@ namespace BaseUtils
                 try
                 {
                     HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
-                    request.Method = "PATCH";
-                    if (headers != null)
+                    request.Method = method;
+                    request.ContentType = MimeType;    //request.Headers.Add("Accept-Encoding", "gzip,deflate");
+
+                    if (method == "GET")
                     {
-                        request.Headers.Add(headers);
+                        request.Headers.Add("Accept-Encoding", "gzip,deflate");
+                        request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+                        request.Timeout = timeout;
                     }
-                    string postData = json;
+                    else
+                    {
+                        byte[] byteArray = Encoding.UTF8.GetBytes(postData);  // Set the ContentType property of the WebRequest.
+                        request.ContentLength = byteArray.Length;       // Set the ContentLength property of the WebRequest.
+                        Stream dataStream = request.GetRequestStream();     // Get the request stream.
+                        dataStream.Write(byteArray, 0, byteArray.Length);       // Write the data to the request stream.
+                        dataStream.Close();     // Close the Stream object.
+                    }
 
+                    if (headers != null)
+                        request.Headers.Add(headers);
 
-                    byte[] byteArray = Encoding.UTF8.GetBytes(postData);
-                    // Set the ContentType property of the WebRequest.
-                    request.ContentType = MimeType;
-                    //request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                    // Set the ContentLength property of the WebRequest.
-                    request.ContentLength = byteArray.Length;
-                    // Get the request stream.
-                    Stream dataStream = request.GetRequestStream();
-                    // Write the data to the request stream.
-                    dataStream.Write(byteArray, 0, byteArray.Length);
-                    // Close the Stream object.
-                    dataStream.Close();
-                    // Get the response.
-                    //request.Timeout = 740 * 1000;
-
-                    WriteLog("PATCH " + request.RequestUri, postData);
+                    System.Diagnostics.Debug.WriteLine("HTTP" + method + " TO " + (httpserveraddress + action) + " Thread" + System.Threading.Thread.CurrentThread.Name);
+                    WriteLog(method + " " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
@@ -196,15 +128,22 @@ namespace BaseUtils
                         var data = getResponseData(httpResponse);
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                         System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
-                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
+                        if (httpResponse != null)
+                        {
+                            System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
+                            System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
+                        }
+
                         System.Diagnostics.Trace.WriteLine(ex.StackTrace);
 
                         if (LogPath != null)
                         {
                             WriteLog("WebException" + ex.Message, "");
-                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
-                            WriteLog($"HTTP Error body: {data.Body}", "");
+                            if (httpResponse != null)
+                            {
+                                WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
+                                WriteLog($"HTTP Error body: {data.Body}", "");
+                            }
                         }
                         return data;
                     }
@@ -228,179 +167,8 @@ namespace BaseUtils
 
 
 
-        protected ResponseData RequestGet(string action, NameValueCollection headers = null, bool handleException = false, int timeout = 5000)
+        private static void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
-            if ( httpserveraddress == null || httpserveraddress.Length == 0 )           // for debugging, set _serveraddress empty
-            {
-                System.Diagnostics.Trace.WriteLine("GET:" + action);
-                return new ResponseData(HttpStatusCode.Unauthorized);
-            }
-
-            try
-            {
-                try
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
-                    // Set the Method property of the request to POST.
-                    request.Method = "GET";
-
-                    // Set the ContentType property of the WebRequest.
-                    request.ContentType = MimeType;
-                    request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                    if (headers != null)
-                    {
-                        request.Headers.Add(headers);
-                    }
-                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                    WriteLog("GET " + request.RequestUri, "");
-
-                    // Get the response.
-                    request.Timeout = timeout;
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                    var data = getResponseData(response);
-                    response.Close();
-
-                    WriteLog(data.Body, "");
-
-                    return data;
-                }
-                catch (WebException ex)
-                {
-                    if (!handleException)
-                    {
-                        throw;
-                    }
-
-                    using (WebResponse response = ex.Response)
-                    {
-                        HttpWebResponse httpResponse = (HttpWebResponse)response;
-                        var data = getResponseData(httpResponse);
-
-      
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        if (httpResponse != null)
-                        {
-                            System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
-                            System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
-                        }
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                        if (LogPath != null)
-                        {
-                            WriteLog("WebException" + ex.Message, "");
-                            if (httpResponse != null)
-                            {
-
-                                WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
-                                WriteLog($"HTTP Error body: {data.Body}", "");
-                            }
-                        }
-                        return data;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!handleException)
-                {
-                    throw;
-                }
-
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                WriteLog("Exception" + ex.Message, "");
-
-                return new ResponseData(HttpStatusCode.BadRequest);
-            }
-
-        }
-
-
-        protected ResponseData RequestDelete(string action, NameValueCollection headers = null, bool handleException = false)
-        {
-            if (httpserveraddress == null || httpserveraddress.Length == 0)           // for debugging, set _serveraddress empty
-            {
-                System.Diagnostics.Trace.WriteLine("DELETE:" + action);
-                return new ResponseData(HttpStatusCode.Unauthorized);
-            }
-
-            try
-            {
-                try
-                {
-                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(httpserveraddress + action);
-                    request.Method = "DELETE";
-
-                    // Set the ContentType property of the WebRequest.
-                    request.ContentType = MimeType;
-                    request.Headers.Add("Accept-Encoding", "gzip,deflate");
-                    if (headers != null)
-                    {
-                        request.Headers.Add(headers);
-                    }
-                    request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-                    WriteLog("DELETE " + request.RequestUri, "");
-
-
-                    // Get the response.
-                    //request.Timeout = 740 * 1000;
-                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-                    var data = getResponseData(response);
-                    response.Close();
-
-                    WriteLog(data.Body, "");
-
-                    return data;
-                }
-                catch (WebException ex)
-                {
-                    if (!handleException)
-                    {
-                        throw;
-                    }
-
-                    using (WebResponse response = ex.Response)
-                    {
-                        HttpWebResponse httpResponse = (HttpWebResponse)response;
-                        var data = getResponseData(httpResponse);
-                        data.Error = true;
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                        System.Diagnostics.Trace.WriteLine("WebException : " + ex.Message);
-                        System.Diagnostics.Trace.WriteLine("Response code : " + httpResponse.StatusCode);
-                        System.Diagnostics.Trace.WriteLine("Response body : " + data.Body);
-                        System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                        if (LogPath!=null)
-                        {
-                            WriteLog("WebException" + ex.Message, "");
-                            WriteLog($"HTTP Error code: {httpResponse.StatusCode}", "");
-                            WriteLog($"HTTP Error body: {data.Body}", "");
-                        }
-                        return data;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                if (!handleException)
-                {
-                    throw;
-                }
-
-                System.Diagnostics.Trace.WriteLine("Exception : " + ex.Message);
-                System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-
-                WriteLog("Exception" + ex.Message, "");
-
-                return new ResponseData(HttpStatusCode.BadRequest, error: true);
-            }
-
         }
 
 

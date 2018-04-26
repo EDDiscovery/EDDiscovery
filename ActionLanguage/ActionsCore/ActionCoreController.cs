@@ -120,11 +120,11 @@ namespace ActionLanguage
             programrunglobalvariables[name] = globalvariables[name] = value;
         }
 
-        public void DeleteVariable(string name)
+        public void DeleteVariableWildcard(string name)
         {
-            programrunglobalvariables.Delete(name);
-            persistentglobalvariables.Delete(name);
-            globalvariables.Delete(name);
+            programrunglobalvariables.DeleteWildcard(name);
+            persistentglobalvariables.DeleteWildcard(name);
+            globalvariables.DeleteWildcard(name);
         }
 
         public void TerminateAll()

@@ -173,7 +173,7 @@ namespace ActionLanguage
                     if ( logtologline )
                         actioncontroller.LogLine(t + s);
                     if ( logger!= null )
-                        logger.Write(s);
+                        logger.WriteLine(s);
                 }
 
                 if (progcurrent.DoExecute(ac))       // execute is on.. 

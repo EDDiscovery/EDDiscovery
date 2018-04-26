@@ -83,7 +83,7 @@ namespace ActionLanguage
 
         public ConditionVariables variables { get { return currentvars; } }
         public string this[string s] { get { return currentvars[s]; } set { currentvars[s] = value; } }
-        public void DeleteVar(string v) { currentvars.Delete(v); }
+        public void DeleteVariableWildcard(string v) { currentvars.DeleteWildcard(v); }
         public bool VarExist(string v) { return currentvars.Exists(v); }
         public void Add(ConditionVariables v) { currentvars.Add(v); }
         public void AddDataOfType(Object o, Type t, string n) { currentvars.AddDataOfType(o, t, n, 5); }

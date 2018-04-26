@@ -27,7 +27,7 @@ using System.Management;
 using System.Reflection;
 using System.Text;
 
-namespace EDDiscoveryCore.EGO
+namespace EliteDangerousCore.EGO
 {
     public class EGOClass : BaseUtils.HttpCom
     {
@@ -64,8 +64,10 @@ namespace EDDiscoveryCore.EGO
             return msg;
         }
 
-        public bool PostMessage(JObject msg, ref bool recordSet)
+        public bool PostMessage(JObject msg, out bool recordSet)
         {
+            recordSet = false;
+
             try
             {
                 BaseUtils.ResponseData resp = RequestPost(msg.ToString(), "");

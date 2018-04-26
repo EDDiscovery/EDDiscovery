@@ -98,8 +98,8 @@ namespace Conditions
                 functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MESE));
                 functions.Add("upper", new FuncEntry(Upper, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.MESE));
-                functions.Add("wordlistcount", new FuncEntry(WordListCount, FuncEntry.PT.MESE));
-                functions.Add("wordlistentry", new FuncEntry(WordListEntry, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE));
+                functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
+                functions.Add("wordlistentry", new FuncEntry(WordListEntry, 2, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.MESE));
                 #endregion
 
                 #region Files
@@ -376,8 +376,9 @@ namespace Conditions
         protected bool WordListCount(out string output)
         {
             BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].Value);
-            List<string> ll = l.NextQuotedWordList();
-            output = ll.Count.ToStringInvariant();
+            string splitchars = (paras.Count >= 2) ? paras[1].Value : ",";
+            List<string> ll = l.NextQuotedWordList(nonquoteterminators: splitchars);
+            output = ll != null ? ll.Count.ToStringInvariant() : "0";
             return true;
         }
 
@@ -386,13 +387,13 @@ namespace Conditions
         {
             BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].Value);
             int count = paras[1].Int;
+            string splitchars = (paras.Count >= 3) ? paras[2].Value : ",";
+
             output = "";
 
-            List<string> ll = l.NextQuotedWordList();
-            if (count >= 0 && count < ll.Count)
-            {
+            List<string> ll = l.NextQuotedWordList(nonquoteterminators: splitchars);
+            if (ll != null && count >= 0 && count < ll.Count)
                 output = ll[count];
-            }
             return true;
         }
 
