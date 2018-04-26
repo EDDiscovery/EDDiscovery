@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
 
                 foreach ( HistoryEntry he in hel )
                 {
-                    System.Diagnostics.Debug.WriteLine("{0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
+                    //System.Diagnostics.Debug.WriteLine("Combat Add {0} {1} {2}", he.EventTimeUTC.ToStringZulu(), he.EventSummary, he.EventDescription);
                     AddToGrid(he);
                 }
             }

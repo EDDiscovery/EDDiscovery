@@ -32,13 +32,13 @@ namespace EliteDangerousCore.EGO
     public static class EGOSync
     {
         private static Thread ThreadEGOSync;
-        private static int _running = 0;
+        private static int running = 0;
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
         private static Action<string> logger;
 
-        static public Action EventListEmpty;       // called in thread when sync thread has finished and is terminating
+        static public Action<int,string> SentEvents;       // called in thread when sync thread has finished and is terminating
 
         public static bool SendEGOEvent(Action<string> log, HistoryEntry helist)
         {
@@ -62,7 +62,7 @@ namespace EliteDangerousCore.EGO
             hlscanevent.Set();
 
             // Start the sync thread if it's not already running
-            if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref running, 1, 0) == 0)
             {
                 Exit = false;
                 ThreadEGOSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
@@ -82,10 +82,9 @@ namespace EliteDangerousCore.EGO
 
         private static void SyncThread()
         {
-            bool newRecord = false;
             try
             {
-                _running = 1;
+                running = 1;
                 //mainForm.LogLine("Starting EGO sync thread");
 
                 while (hlscanunsyncedlist.Count != 0)
@@ -93,15 +92,23 @@ namespace EliteDangerousCore.EGO
                     List<HistoryEntry> hl = new List<HistoryEntry>();
                     HistoryEntry he = null;
 
+                    string recordlist = "";
+                    int eventcount = 0;
+
                     while (hlscanunsyncedlist.TryDequeue(out he))
                     {
                         hlscanevent.Reset();
-                        newRecord = false;
 
-                        if (EGOSync.SendToEGO(he, ref newRecord))
+                        if (EGOSync.SendToEGO(he, out bool recordflag))
                         {
                             logger?.Invoke($"Sent {he.EntryType.ToString()} event to EGO ({he.EventSummary})");
-                            if (newRecord) { logger?.Invoke("New EGO record set"); }
+                            if (recordflag)
+                            {
+                                logger?.Invoke("New EGO record set");
+                                recordlist = recordlist.AppendPrePad(he.System.Name, ";");
+                            }
+
+                            eventcount++;
                         }
                         else
                         {
@@ -119,19 +126,13 @@ namespace EliteDangerousCore.EGO
                             return;
                         }
 
-                        if (DateTime.UtcNow < new DateTime(2017,8,18))  // Temporary slow down EGO sync more...
-                            Thread.Sleep(5000);   // Throttling to 1 per second to not kill EGO network
-                        else
-                            Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
-
+                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill EGO network
                     }
+
+                    SentEvents?.Invoke(eventcount, recordlist);    // tell the system..
 
                     if (hlscanunsyncedlist.IsEmpty)     // nothing queued
-                    {
-                        EventListEmpty?.Invoke();    // tell the system..
-
                         hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EGO event to come in
-                    }
 
                     if (Exit)
                     {
@@ -148,14 +149,15 @@ namespace EliteDangerousCore.EGO
             }
             finally
             {
-                _running = 0;
+                running = 0;
             }
         }
 
-        static public bool SendToEGO(HistoryEntry he, ref bool newRecord)
+        static public bool SendToEGO(HistoryEntry he, out bool newRecord)
         {
+            newRecord = false;
+
             EGOClass ego = new EGOClass();
-            
 
             if (he.Commander != null)
             {
@@ -180,7 +182,7 @@ namespace EliteDangerousCore.EGO
 
             if (msg != null)
             {
-                if (ego.PostMessage(msg, ref newRecord))
+                if (ego.PostMessage(msg, out newRecord))
                 {
                     he.SetEGOSync();
                     return true;

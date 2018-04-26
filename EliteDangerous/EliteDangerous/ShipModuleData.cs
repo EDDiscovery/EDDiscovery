@@ -60,35 +60,50 @@ namespace EliteDangerousCore
         {
             string lowername = fdid.ToLower();
 
+            ShipModule m = null;
+
             if (modules.ContainsKey(lowername))
             {
                 //System.Diagnostics.Debug.WriteLine("Module item " + fdid + " >> " + (modules[lowername] as ShipModule).modname + " " + (modules[lowername] as ShipModule).moduleid);
-                return modules[lowername] as ShipModule;
+                m = modules[lowername];
             }
             else if (noncorolismodules.ContainsKey(lowername))
             {
-                //System.Diagnostics.Debug.WriteLine("Module item " + fdid + " >> " + (modules[lowername] as ShipModule).modname + " " + (modules[lowername] as ShipModule).moduleid);
-                return noncorolismodules[lowername] as ShipModule;
+                m = noncorolismodules[lowername];
+            }
+            else if (synthesisedmodules.ContainsKey(lowername))
+            {
+                m = synthesisedmodules[lowername];
+            }
+            else
+            {                                                           // synthesise one
+                string candidatename = fdid;
+                candidatename = candidatename.Replace("weaponcustomisation", "WeaponCustomisation").Replace("testbuggy", "SRV").
+                                        Replace("enginecustomisation", "EngineCustomisation");
+
+                candidatename = candidatename.SplitCapsWordFull();
+
+                m = new ShipModule(-1, 0, candidatename, IsVanity(lowername) ? VanityType : UnknownType);
+
+                System.Diagnostics.Debug.WriteLine("**** Not known item.. synthesise response " + fdid + " >> " + m.ModName + "," + m.ModType);
+                synthesisedmodules.Add(lowername, m);                   // lets cache them for completeness..
+                //            string line = "{ \"" + lowername + "\", new ShipModule( -1, 0 , \"" + m.modname + "\",\"" + m.modtype + "\") },";
+                //            if (!synthresponses.Contains(line))  synthresponses.Add(line);
             }
 
-            // synthesise one - its probably a vanity item.. all the regular items should be in the list..
-
-            ShipModule m = new ShipModule(-1, 0, fdid.SplitCapsWordFull(), IsVanity(lowername) ? VanityType : UnknownType);
-            System.Diagnostics.Debug.WriteLine("**** Not known item.. synthesise response " + fdid + " >> " + m.ModName + "," + m.ModType);
-
-//            string line = "{ \"" + lowername + "\", new ShipModule( -1, 0 , \"" + m.modname + "\",\"" + m.modtype + "\") },";
-//            if (!synthresponses.Contains(line))  synthresponses.Add(line);
-
+            // System.Diagnostics.Debug.WriteLine("Module item " + fdid + " >> " + m.ModName + " " + m.ModType + " " + m.ModuleID);
             return m;
         }
 
-        List<string> synthresponses = new List<string>();               // for debugging and collecting new items, comment out above
-        public void DumpItems()
-        {
-            synthresponses.Sort();
-            foreach (var s in synthresponses)
-                System.Diagnostics.Debug.WriteLine(s);
-        }
+        //List<string> synthresponses = new List<string>();               // KEEP ..  for debugging and collecting new items, comment out above
+        //public void DumpItems()
+        //{
+        //    synthresponses.Sort();
+        //    foreach (var s in synthresponses)
+        //        System.Diagnostics.Debug.WriteLine(s);
+        //}
+
+        private Dictionary<string, ShipModule> synthesisedmodules = new Dictionary<string, ShipModule>();
 
         private const string VanityType =  "Vanity Item";
         private const string UnknownType = "Unknown Module";
@@ -304,7 +319,7 @@ namespace EliteDangerousCore
             { "modularcargobaydoor", new ShipModule( -1, 0 , "Modular Cargo Bay Door", CargoBayDoorType ) },
             { "modularcargobaydoorfdl", new ShipModule( -1, 0 , "FDL Cargo Bay Door", CargoBayDoorType ) },
 
-            // Vanities found in logs
+            // Vanities found in logs (not exaustive)
 
             { "asp_shipkit1_bumper1", new ShipModule( -1, 0 , "Asp Shipkit 1 Bumper 1", VanityType) },
             { "asp_shipkit1_bumper2", new ShipModule( -1, 0 , "Asp Shipkit 1 Bumper 2", VanityType) },
@@ -440,7 +455,7 @@ namespace EliteDangerousCore
 
 ///////////////////////////////////// FROM MODULE SCAN
 
-                        { "hpt_atdumbfiremissile_fixed_medium", new ShipModule(128788699, 4, 1.2F, "Ammo:64/8, Damage:64, Speed:750m/s, Reload:5s, ThermL:2.4","AX Dumbfire Missile Fixed Medium", "Missile Rack")},
+            { "hpt_atdumbfiremissile_fixed_medium", new ShipModule(128788699, 4, 1.2F, "Ammo:64/8, Damage:64, Speed:750m/s, Reload:5s, ThermL:2.4","AX Dumbfire Missile Fixed Medium", "Missile Rack")},
             { "hpt_atdumbfiremissile_turret_medium", new ShipModule(128788704, 4, 1.2F, "Ammo:64/8, Damage:50, Speed:750m/s, Reload:5s, ThermL:1.5","AX Dumbfire Missile Turret Medium", "Missile Rack")},
             { "hpt_atdumbfiremissile_fixed_large", new ShipModule(128788700, 8, 1.62F, "Ammo:128/12, Damage:64, Speed:750m/s, Reload:5s, ThermL:3.6","AX Dumbfire Missile Fixed Large", "Missile Rack")},
             { "hpt_atdumbfiremissile_turret_large", new ShipModule(128788705, 8, 1.75F, "Ammo:128/12, Damage:64, Speed:750m/s, Reload:5s, ThermL:1.9","AX Dumbfire Missile Turret Large", "Missile Rack")},
@@ -1061,41 +1076,6 @@ namespace EliteDangerousCore
             { "int_powerdistributor_size1_class3", new ShipModule(128064180, 1.3F, 0.4F, "Sys:0.5MW, Eng:0.5MW, Wep:1.5MW","Power Distributor Class 1 Rating C", "Power Distributor")},
             { "int_powerdistributor_size1_class4", new ShipModule(128064181, 2, 0.44F, "Sys:0.6MW, Eng:0.6MW, Wep:1.7MW","Power Distributor Class 1 Rating B", "Power Distributor")},
             { "int_powerdistributor_size1_class5", new ShipModule(128064182, 1.3F, 0.48F, "Sys:0.6MW, Eng:0.6MW, Wep:1.8MW","Power Distributor Class 1 Rating A", "Power Distributor")},
-            { "int_powerplant_size8_class1", new ShipModule(128064063, 160, 0, "Power:24MW","Powerplant Class 8 Rating E", "Powerplant")},
-            { "int_powerplant_size8_class2", new ShipModule(128064064, 64, 0, "Power:27MW","Powerplant Class 8 Rating D", "Powerplant")},
-            { "int_powerplant_size8_class3", new ShipModule(128064065, 80, 0, "Power:30MW","Powerplant Class 8 Rating C", "Powerplant")},
-            { "int_powerplant_size8_class4", new ShipModule(128064066, 128, 0, "Power:33MW","Powerplant Class 8 Rating B", "Powerplant")},
-            { "int_powerplant_size8_class5", new ShipModule(128064067, 80, 0, "Power:36MW","Powerplant Class 8 Rating A", "Powerplant")},
-            { "int_powerplant_size7_class1", new ShipModule(128064058, 80, 0, "Power:20MW","Powerplant Class 7 Rating E", "Powerplant")},
-            { "int_powerplant_size7_class2", new ShipModule(128064059, 32, 0, "Power:22.5MW","Powerplant Class 7 Rating D", "Powerplant")},
-            { "int_powerplant_size7_class3", new ShipModule(128064060, 40, 0, "Power:25MW","Powerplant Class 7 Rating C", "Powerplant")},
-            { "int_powerplant_size7_class4", new ShipModule(128064061, 64, 0, "Power:27.5MW","Powerplant Class 7 Rating B", "Powerplant")},
-            { "int_powerplant_size7_class5", new ShipModule(128064062, 40, 0, "Power:30MW","Powerplant Class 7 Rating A", "Powerplant")},
-            { "int_powerplant_size6_class1", new ShipModule(128064053, 40, 0, "Power:16.8MW","Powerplant Class 6 Rating E", "Powerplant")},
-            { "int_powerplant_size6_class2", new ShipModule(128064054, 16, 0, "Power:18.9MW","Powerplant Class 6 Rating D", "Powerplant")},
-            { "int_powerplant_size6_class3", new ShipModule(128064055, 20, 0, "Power:21MW","Powerplant Class 6 Rating C", "Powerplant")},
-            { "int_powerplant_size6_class4", new ShipModule(128064056, 32, 0, "Power:23.1MW","Powerplant Class 6 Rating B", "Powerplant")},
-            { "int_powerplant_size6_class5", new ShipModule(128064057, 20, 0, "Power:25.2MW","Powerplant Class 6 Rating A", "Powerplant")},
-            { "int_powerplant_size5_class1", new ShipModule(128064048, 20, 0, "Power:13.6MW","Powerplant Class 5 Rating E", "Powerplant")},
-            { "int_powerplant_size5_class2", new ShipModule(128064049, 8, 0, "Power:15.3MW","Powerplant Class 5 Rating D", "Powerplant")},
-            { "int_powerplant_size5_class3", new ShipModule(128064050, 10, 0, "Power:17MW","Powerplant Class 5 Rating C", "Powerplant")},
-            { "int_powerplant_size5_class4", new ShipModule(128064051, 16, 0, "Power:18.7MW","Powerplant Class 5 Rating B", "Powerplant")},
-            { "int_powerplant_size5_class5", new ShipModule(128064052, 10, 0, "Power:20.4MW","Powerplant Class 5 Rating A", "Powerplant")},
-            { "int_powerplant_size4_class1", new ShipModule(128064043, 10, 0, "Power:10.4MW","Powerplant Class 4 Rating E", "Powerplant")},
-            { "int_powerplant_size4_class2", new ShipModule(128064044, 4, 0, "Power:11.7MW","Powerplant Class 4 Rating D", "Powerplant")},
-            { "int_powerplant_size4_class3", new ShipModule(128064045, 5, 0, "Power:13MW","Powerplant Class 4 Rating C", "Powerplant")},
-            { "int_powerplant_size4_class4", new ShipModule(128064046, 8, 0, "Power:14.3MW","Powerplant Class 4 Rating B", "Powerplant")},
-            { "int_powerplant_size4_class5", new ShipModule(128064047, 5, 0, "Power:15.6MW","Powerplant Class 4 Rating A", "Powerplant")},
-            { "int_powerplant_size3_class1", new ShipModule(128064038, 5, 0, "Power:8MW","Powerplant Class 3 Rating E", "Powerplant")},
-            { "int_powerplant_size3_class2", new ShipModule(128064039, 2, 0, "Power:9MW","Powerplant Class 3 Rating D", "Powerplant")},
-            { "int_powerplant_size3_class3", new ShipModule(128064040, 2.5F, 0, "Power:10MW","Powerplant Class 3 Rating C", "Powerplant")},
-            { "int_powerplant_size3_class4", new ShipModule(128064041, 4, 0, "Power:11MW","Powerplant Class 3 Rating B", "Powerplant")},
-            { "int_powerplant_size3_class5", new ShipModule(128064042, 2.5F, 0, "Power:12MW","Powerplant Class 3 Rating A", "Powerplant")},
-            { "int_powerplant_size2_class1", new ShipModule(128064033, 2.5F, 0, "Power:6.4MW","Powerplant Class 2 Rating E", "Powerplant")},
-            { "int_powerplant_size2_class2", new ShipModule(128064034, 1, 0, "Power:7.2MW","Powerplant Class 2 Rating D", "Powerplant")},
-            { "int_powerplant_size2_class3", new ShipModule(128064035, 1.3F, 0, "Power:8MW","Powerplant Class 2 Rating C", "Powerplant")},
-            { "int_powerplant_size2_class4", new ShipModule(128064036, 2, 0, "Power:8.8MW","Powerplant Class 2 Rating B", "Powerplant")},
-            { "int_powerplant_size2_class5", new ShipModule(128064037, 1.3F, 0, "Power:9.6MW","Powerplant Class 2 Rating A", "Powerplant")},
             { "int_sensors_size8_class1", new ShipModule(128064253, 160, 0.55F, "Range:5.1km","Sensors Class 8 Rating E", "Sensors")},
             { "int_sensors_size8_class2", new ShipModule(128064254, 64, 0.62F, "Range:5.8km","Sensors Class 8 Rating D", "Sensors")},
             { "int_sensors_size8_class3", new ShipModule(128064255, 160, 0.69F, "Range:6.4km","Sensors Class 8 Rating C", "Sensors")},
@@ -1173,8 +1153,52 @@ namespace EliteDangerousCore
             { "int_engine_size2_class5", new ShipModule(128064072, 2.5F, 3, "OptMass:72t, MaxMass:108t, MinMass:36t","Thrusters Class 2 Rating A", "Thrusters")},
             { "int_engine_size3_class5_fast", new ShipModule(128682013, 5, 5, "OptMass:90t, MaxMass:200t, MinMass:70t","Thrusters Class 3 Rating A Fast", "Thrusters")},
             { "int_engine_size2_class5_fast", new ShipModule(128682014, 2.5F, 4, "OptMass:60t, MaxMass:120t, MinMass:50t","Thrusters Class 2 Rating A Fast", "Thrusters")},
+            { "hpt_guardian_gausscannon_fixed_medium", new ShipModule(128833687, 4, 2.61F, "Ammo:80/1, Damage:70, Range:3000m, Reload:1s, ThermL:25","Guardian Gauss Cannon Fixed Medium", "Guardian")},
+            { "hpt_guardian_plasmalauncher_fixed_medium", new ShipModule(128049466, 4, 2.13F, "Ammo:200/15, Damage:5, Range:3500m, Speed:1200m/s, Reload:3s, ThermL:5.2","Guardian Plasma Launcher Fixed Medium", "Guardian")},
+            { "hpt_guardian_plasmalauncher_turret_medium", new ShipModule(128049466, 4, 2.01F, "Ammo:200/15, Damage:4, Range:3500m, Speed:1200m/s, Reload:3s, ThermL:5.8","Guardian Plasma Launcher Turret Medium", "Guardian")},
+            { "int_powerplant_size8_class1", new ShipModule(128064063, 160, 0, "Power:24MW","Powerplant Class 8 Rating E", "Powerplant")},
+            { "int_powerplant_size8_class2", new ShipModule(128064064, 64, 0, "Power:27MW","Powerplant Class 8 Rating D", "Powerplant")},
+            { "int_powerplant_size8_class3", new ShipModule(128064065, 80, 0, "Power:30MW","Powerplant Class 8 Rating C", "Powerplant")},
+            { "int_powerplant_size8_class4", new ShipModule(128064066, 128, 0, "Power:33MW","Powerplant Class 8 Rating B", "Powerplant")},
+            { "int_powerplant_size8_class5", new ShipModule(128064067, 80, 0, "Power:36MW","Powerplant Class 8 Rating A", "Powerplant")},
+            { "int_powerplant_size7_class1", new ShipModule(128064058, 80, 0, "Power:20MW","Powerplant Class 7 Rating E", "Powerplant")},
+            { "int_powerplant_size7_class2", new ShipModule(128064059, 32, 0, "Power:22.5MW","Powerplant Class 7 Rating D", "Powerplant")},
+            { "int_powerplant_size7_class3", new ShipModule(128064060, 40, 0, "Power:25MW","Powerplant Class 7 Rating C", "Powerplant")},
+            { "int_powerplant_size7_class4", new ShipModule(128064061, 64, 0, "Power:27.5MW","Powerplant Class 7 Rating B", "Powerplant")},
+            { "int_powerplant_size7_class5", new ShipModule(128064062, 40, 0, "Power:30MW","Powerplant Class 7 Rating A", "Powerplant")},
+            { "int_powerplant_size6_class1", new ShipModule(128064053, 40, 0, "Power:16.8MW","Powerplant Class 6 Rating E", "Powerplant")},
+            { "int_powerplant_size6_class2", new ShipModule(128064054, 16, 0, "Power:18.9MW","Powerplant Class 6 Rating D", "Powerplant")},
+            { "int_powerplant_size6_class3", new ShipModule(128064055, 20, 0, "Power:21MW","Powerplant Class 6 Rating C", "Powerplant")},
+            { "int_powerplant_size6_class4", new ShipModule(128064056, 32, 0, "Power:23.1MW","Powerplant Class 6 Rating B", "Powerplant")},
+            { "int_powerplant_size6_class5", new ShipModule(128064057, 20, 0, "Power:25.2MW","Powerplant Class 6 Rating A", "Powerplant")},
+            { "int_powerplant_size5_class1", new ShipModule(128064048, 20, 0, "Power:13.6MW","Powerplant Class 5 Rating E", "Powerplant")},
+            { "int_powerplant_size5_class2", new ShipModule(128064049, 8, 0, "Power:15.3MW","Powerplant Class 5 Rating D", "Powerplant")},
+            { "int_powerplant_size5_class3", new ShipModule(128064050, 10, 0, "Power:17MW","Powerplant Class 5 Rating C", "Powerplant")},
+            { "int_powerplant_size5_class4", new ShipModule(128064051, 16, 0, "Power:18.7MW","Powerplant Class 5 Rating B", "Powerplant")},
+            { "int_powerplant_size5_class5", new ShipModule(128064052, 10, 0, "Power:20.4MW","Powerplant Class 5 Rating A", "Powerplant")},
+            { "int_powerplant_size4_class1", new ShipModule(128064043, 10, 0, "Power:10.4MW","Powerplant Class 4 Rating E", "Powerplant")},
+            { "int_powerplant_size4_class2", new ShipModule(128064044, 4, 0, "Power:11.7MW","Powerplant Class 4 Rating D", "Powerplant")},
+            { "int_powerplant_size4_class3", new ShipModule(128064045, 5, 0, "Power:13MW","Powerplant Class 4 Rating C", "Powerplant")},
+            { "int_powerplant_size4_class4", new ShipModule(128064046, 8, 0, "Power:14.3MW","Powerplant Class 4 Rating B", "Powerplant")},
+            { "int_powerplant_size4_class5", new ShipModule(128064047, 5, 0, "Power:15.6MW","Powerplant Class 4 Rating A", "Powerplant")},
+            { "int_powerplant_size3_class1", new ShipModule(128064038, 5, 0, "Power:8MW","Powerplant Class 3 Rating E", "Powerplant")},
+            { "int_powerplant_size3_class2", new ShipModule(128064039, 2, 0, "Power:9MW","Powerplant Class 3 Rating D", "Powerplant")},
+            { "int_powerplant_size3_class3", new ShipModule(128064040, 2.5F, 0, "Power:10MW","Powerplant Class 3 Rating C", "Powerplant")},
+            { "int_powerplant_size3_class4", new ShipModule(128064041, 4, 0, "Power:11MW","Powerplant Class 3 Rating B", "Powerplant")},
+            { "int_powerplant_size3_class5", new ShipModule(128064042, 2.5F, 0, "Power:12MW","Powerplant Class 3 Rating A", "Powerplant")},
+            { "int_powerplant_size2_class1", new ShipModule(128064033, 2.5F, 0, "Power:6.4MW","Powerplant Class 2 Rating E", "Powerplant")},
+            { "int_powerplant_size2_class2", new ShipModule(128064034, 1, 0, "Power:7.2MW","Powerplant Class 2 Rating D", "Powerplant")},
+            { "int_powerplant_size2_class3", new ShipModule(128064035, 1.3F, 0, "Power:8MW","Powerplant Class 2 Rating C", "Powerplant")},
+            { "int_powerplant_size2_class4", new ShipModule(128064036, 2, 0, "Power:8.8MW","Powerplant Class 2 Rating B", "Powerplant")},
+            { "int_powerplant_size2_class5", new ShipModule(128064037, 1.3F, 0, "Power:9.6MW","Powerplant Class 2 Rating A", "Powerplant")},
+            { "int_guardianpowerplant_size2", new ShipModule(128064037, 1.5F, 0, "Power:12.7MW","Guardian Powerplant Class 2", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size3", new ShipModule(128064037, 2.9F, 0, "Power:15.8MW","Guardian Powerplant Class 3", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size4", new ShipModule(128064037, 5.9F, 0, "Power:20.6MW","Guardian Powerplant Class 4", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size5", new ShipModule(128064037, 11.7F, 0, "Power:26.9MW","Guardian Powerplant Class 5", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size6", new ShipModule(128064037, 23.4F, 0, "Power:33.3MW","Guardian Powerplant Class 6", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size7", new ShipModule(128064037, 46.8F, 0, "Power:39.6MW","Guardian Powerplant Class 7", "Guardian Powerplant")},
+            { "int_guardianpowerplant_size8", new ShipModule(128064037, 93.6F, 0, "Power:47.5MW","Guardian Powerplant Class 8", "Guardian Powerplant")},
 
-            
             ///////////////////////////////////// FROM SHIP DATA SCAN - Corolis has some module info in the ships folder
 
             { "adder_armour_grade1", new ShipModule(128049268,0,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Adder Lightweight Armour","Armour")},

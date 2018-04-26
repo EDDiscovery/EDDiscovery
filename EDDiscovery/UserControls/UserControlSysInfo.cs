@@ -127,14 +127,15 @@ namespace EDDiscovery.UserControls
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
-        private void Discoveryform_OnEDSMSyncComplete()     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
+        private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
         {
-            //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED KICKING SYS INFO");
+            System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
             Display(last_he, discoveryform.history);
         }
 
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
+
         private void Display(HistoryEntry he, HistoryList hl)
         {
             if (neverdisplayed)

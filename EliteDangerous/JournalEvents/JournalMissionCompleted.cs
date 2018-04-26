@@ -234,7 +234,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string Name; // fdname
             public string FriendlyName; // our conversion
-            public string Name_Localised;       // may be null
+            public string Name_Localised;       // may be null on reading
             public string Category; // may be null
             public string Category_Localised; // may be null
             public int Count;
@@ -244,6 +244,12 @@ namespace EliteDangerousCore.JournalEvents
                 Name = JournalFieldNaming.FDNameTranslation(Name);
                 FriendlyName = JournalFieldNaming.RMat(Name);
                 Name_Localised = Name_Localised.Alt(FriendlyName);
+
+                if (Category != null)
+                {
+                    Category = JournalFieldNaming.NormaliseMaterialCategory(Category);
+                    Category_Localised = Category_Localised.Alt(Category);
+                }
             }
         }
 
