@@ -56,7 +56,7 @@ namespace EliteDangerousCore
         public int MapColour;
 
         public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
-        public bool IsEDSMFirstDiscover;// flag populated from journal entry when HE is made. Were we the first to report the system to EDSM?
+        public bool IsEDSMFirstDiscover;// Only on FSD JUMP
         public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
         public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
@@ -67,21 +67,6 @@ namespace EliteDangerousCore
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
         public bool IsBetaMessage { get { return journalEntry?.Beta ?? false; } }
-        public bool ISEDDNMessage
-        {
-            get
-            {
-                DateTime ed22 = new DateTime(2016, 10, 25, 12, 0, 0);
-                if ((EntryType == JournalTypeEnum.Scan ||
-                     EntryType == JournalTypeEnum.Docked ||
-                     EntryType == JournalTypeEnum.FSDJump ||
-                     EntryType == JournalTypeEnum.Location ||
-                     EntryType == JournalTypeEnum.Market ||
-                     EntryType == JournalTypeEnum.Shipyard ||
-                     EntryType == JournalTypeEnum.Outfitting) && EventTimeUTC > ed22) return true;
-                else return false;
-            }
-        }
 
         public double TravelledDistance { get { return travelled_distance; } }
         public TimeSpan TravelledSeconds { get { return travelled_seconds; } }
@@ -262,11 +247,11 @@ namespace EliteDangerousCore
                     }
 
                     mapcolour = jfsd.MapColor;
+                    firstdiscover = jfsd.EDSMFirstDiscover;
                 }
 
                 isys = newsys;
                 starposfromedsm = (jl != null && jl.HasCoordinate) ? jl.StarPosFromEDSM : newsys.HasCoordinate;
-                firstdiscover = jl == null ? false : jl.EDSMFirstDiscover;
             }
 
             string summary, info, detailed;
@@ -541,12 +526,12 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
+        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null) // only on FSD entries
         {
             IsEDSMFirstDiscover = firstdiscover;
             if (journalEntry != null)
             {
-                JournalLocOrJump jl = journalEntry as JournalLocOrJump;
+                JournalFSDJump jl = journalEntry as JournalFSDJump;
                 if (jl != null)
                 {
                     Newtonsoft.Json.Linq.JObject jo = jl.GetJson();

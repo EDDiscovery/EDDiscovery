@@ -32,7 +32,7 @@ namespace EDDiscovery.Actions
         List<string> FromString(string input)       // returns in raw esacped mode
         {
             StringParser sp = new StringParser(input);
-            List<string> s = sp.NextQuotedWordList(commaopt:true);
+            List<string> s = sp.NextQuotedWordList(termopt:true);
             return (s != null && s.Count >= 1 ) ? s : null;
         }
 

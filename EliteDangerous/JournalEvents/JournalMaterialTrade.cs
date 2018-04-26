@@ -46,7 +46,7 @@ namespace EliteDangerousCore.JournalEvents
             public string Material;     //fdname
             public string FriendlyMaterial; // our name
             public string Material_Localised;   // their localised name if present
-            public string Category;
+            public string Category;     // journal says always there.  If not, use tradertype
             public string Category_Localised;
             public int Quantity;
 
@@ -55,7 +55,12 @@ namespace EliteDangerousCore.JournalEvents
                 Material = JournalFieldNaming.FDNameTranslation(Material);
                 FriendlyMaterial = JournalFieldNaming.RMat(Material);
                 Material_Localised = Material_Localised.Alt(FriendlyMaterial);       // ensure.
-                Category_Localised = Category_Localised.Alt(Category);
+
+                if (Category != null)       // some entries do not have this
+                {
+                    Category = JournalFieldNaming.NormaliseMaterialCategory(Category);  // fix up any strangeness
+                    Category_Localised = Category_Localised.Alt(Category);
+                }
             }
         }
 

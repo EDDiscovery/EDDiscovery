@@ -43,31 +43,68 @@ namespace BaseUtils
         string rootpath;
         StreamWriter debugout = null;
         Stopwatch debugtimer = null;
+        Object lockit = new object();
 
         public void SetFile(string p)
         {
-            if (debugout != null)
+            lock (lockit)
             {
-                debugout.Close();
-                debugout.Dispose();
-                debugtimer = null;
-                debugout = null;
-            }
+                if (debugout != null)
+                {
+                    debugout.Close();
+                    debugout.Dispose();
+                    debugtimer = null;
+                    debugout = null;
+                }
 
-            rootpath = p;
+                rootpath = p;
+            }
         }
 
-        public void Write(string s)
+        public void WriteLine(string s)
         {
-            if (debugout == null)
+            lock (lockit)
             {
-                debugout = new StreamWriter(Path.Combine(rootpath, "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
-                debugtimer = new Stopwatch();
-                debugtimer.Start();
-            }
+                if (debugout == null)
+                {
+                    debugout = new StreamWriter(Path.Combine(rootpath, "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
+                    debugtimer = new Stopwatch();
+                    debugtimer.Start();
+                }
 
-            debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
-            debugout.Flush();
+                debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
+                debugout.Flush();
+            }
+        }
+
+        bool atstart = true;
+
+        public void Write(string s,bool lf=false)
+        {
+            lock (lockit)
+            {
+                if (debugout == null)
+                {
+                    debugout = new StreamWriter(Path.Combine(rootpath, "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
+                    debugtimer = new Stopwatch();
+                    debugtimer.Start();
+                }
+
+                if (atstart)
+                {
+                    debugout.Write((debugtimer.ElapsedMilliseconds % 100000) + ":");
+                    atstart = false;
+                }
+
+                if (lf)
+                {
+                    debugout.WriteLine(s);
+                    atstart = false;
+                    debugout.Flush();
+                }
+                else
+                    debugout.Write(s);
+            }
         }
     }
 }

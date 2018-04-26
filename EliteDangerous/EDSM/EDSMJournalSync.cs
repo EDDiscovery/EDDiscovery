@@ -34,6 +34,8 @@ namespace EliteDangerousCore.EDSM
             public HistoryEntry HistoryEntry;
         }
 
+        static public Action<int,string> SentEvents;       // called in thread when sync thread has finished and is terminating. first discovery list
+
         private static Thread ThreadEDSMSync;
         private static int running = 0;
         private static bool Exit = false;
@@ -166,7 +168,7 @@ namespace EliteDangerousCore.EDSM
 
         public static bool SendEDSMEvents(Action<string> log, IEnumerable<HistoryEntry> helist, bool manual = false)
         {
-            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-30))     // check if we need a new discard list
+            if (lastDiscardFetch < DateTime.UtcNow.AddMinutes(-120))     // check if we need a new discard list
             {
                 try
                 {
@@ -249,7 +251,6 @@ namespace EliteDangerousCore.EDSM
 
                 while (historylist.Count != 0)      // while stuff to send
                 {
-                    List<HistoryEntry> hl = new List<HistoryEntry>();
                     HistoryQueueEntry hqe = null;
 
                     if (historylist.TryDequeue(out hqe))        // next history event...
@@ -274,7 +275,7 @@ namespace EliteDangerousCore.EDSM
                         historyevent.Reset();
                         Action<string> logger = hqe.Logger;
 
-                        hl.Add(first);
+                        List<HistoryEntry> hl = new List<HistoryEntry>() { first };
 
                         string logline = $"Adding {first.EntryType.ToString()} event to EDSM journal sync ({first.EventSummary})";
                         System.Diagnostics.Trace.WriteLine(logline);
@@ -323,11 +324,11 @@ namespace EliteDangerousCore.EDSM
                             }
                         }
 
-                        string errmsg;
                         int sendretries = 5;
                         int waittime = 30000;
+                        string firstdiscovery = "";
 
-                        while (sendretries > 0 && !EDSMJournalSync.SendToEDSM(hl, first.Commander, out errmsg))
+                        while (sendretries > 0 && !SendToEDSM(hl, first.Commander, out string errmsg, out firstdiscovery))
                         {
                             logger?.Invoke($"Error sending EDSM events {errmsg}");
                             System.Diagnostics.Trace.WriteLine($"Error sending EDSM events {errmsg}");
@@ -351,25 +352,22 @@ namespace EliteDangerousCore.EDSM
                             {
                                 logger?.Invoke($"Sent {manualcount} events to EDSM so far for commander {first.Commander.Name}");
                             }
+
+                            SentEvents?.Invoke(hl.Count,firstdiscovery);       // finished sending everything, tell..
                         }
                     }
 
-                    // Wait at least 50ms between messages
-                    exitevent.WaitOne(50);
+                    // Wait at least N between messages
+                    exitevent.WaitOne(100);
+
                     if (Exit)
-                    {
                         return;
-                    }
 
                     if (historylist.IsEmpty)
-                    {
                         historyevent.WaitOne(120000);       // wait for another event keeping the thread open.. Note stop also sets this
-                    }
 
                     if (Exit)
-                    {
                         return;
-                    }
                 }
             }
             catch (Exception ex)
@@ -382,10 +380,11 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
-        static private bool SendToEDSM(List<HistoryEntry> hl, EDCommander cmdr, out string errmsg)
+        static private bool SendToEDSM(List<HistoryEntry> hl, EDCommander cmdr, out string errmsg , out string firstdiscovers )
         {
             EDSMClass edsm = new EDSMClass(cmdr);       // Ensure we use the commanders EDSM credentials.
             errmsg = null;
+            firstdiscovers = "";
 
             List<JObject> entries = new List<JObject>();
 
@@ -437,7 +436,6 @@ namespace EliteDangerousCore.EDSM
                             JObject result = results[i];
                             int msgnr = result["msgnum"].Int();
                             int systemId = result["systemId"].Int();
-                            bool systemCreated = result["systemCreated"].Bool();
 
                             if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                             {
@@ -448,10 +446,17 @@ namespace EliteDangerousCore.EDSM
                                         he.System.EDSMID = systemId;
                                         JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
                                     }
+                                }
+
+                                if (he.EntryType == JournalTypeEnum.FSDJump )       // only on FSD, confirmed with Anthor.  25/4/2018
+                                {
+                                    bool systemCreated = result["systemCreated"].Bool();
 
                                     if (systemCreated)
                                     {
-                                        he.SetFirstDiscover(true,cn,txn);
+                                        System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for " + he.System.Name);
+                                        he.SetFirstDiscover(true, cn, txn);
+                                        firstdiscovers = firstdiscovers.AppendPrePad(he.System.Name, ";");
                                     }
                                 }
 

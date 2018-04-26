@@ -65,6 +65,8 @@ namespace EliteDangerousCore
     {
         private List<MaterialCommodities> list;
 
+        // static BaseUtils.LogToFile log = new BaseUtils.LogToFile("c:\\code"); // debug
+
         public MaterialCommoditiesList()
         {
             list = new List<MaterialCommodities>();
@@ -79,7 +81,6 @@ namespace EliteDangerousCore
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
 
-            mcl.list = new List<MaterialCommodities>(list.Count);
             list.ForEach(item =>
             {
                 bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
@@ -148,6 +149,9 @@ namespace EliteDangerousCore
                 MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname, conn);    // get a MCDB of this
                 MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
+
+                //log.WriteLine("MC Made:" + cat + " " + fdname + " >> " + mc.fdname + mc.name );
+
                 return mc;
             }
         }
@@ -156,7 +160,7 @@ namespace EliteDangerousCore
         public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
-
+       
             double costprev = mc.count * mc.price;
             double costnew = num * price;
             mc.count = Math.Max(mc.count + num, 0);
@@ -164,7 +168,7 @@ namespace EliteDangerousCore
             if (mc.count > 0 && num > 0)      // if bought (defensive with mc.count)
                 mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
 
-            //System.Diagnostics.Debug.WriteLine("Mat:" + cat + " " + fdname + " " + num + " " + mc.count);
+            //log.WriteLine("MC Change:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Craft(string fdname, int num)
@@ -176,7 +180,8 @@ namespace EliteDangerousCore
                 MaterialCommodities mc = new MaterialCommodities(list[index]);      // new clone of
                 list[index] = mc;       // replace ours with new one
                 mc.count = Math.Max(mc.count - num, 0);
-                //System.Diagnostics.Debug.WriteLine("craft:" + fdname + " " + num + " " + mc.count);
+
+                //log.WriteLine("MC Craft:" + fdname + " " + num + " " + mc.count);
             }
         }
 
@@ -185,19 +190,20 @@ namespace EliteDangerousCore
             list.RemoveAll(x => x.category.Equals(MaterialCommodities.CommodityCategory));      // empty the list of all commodities
         }
 
-        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn)
         {
-            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn);
 
             mc.count = num;
             if (price > 0)
                 mc.price = price;
 
-            //System.Diagnostics.Debug.WriteLine("Set:" + cat + " " + fdname + " " + num + " " + mc.count);
+            //log.WriteLine("MC Set:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Clear(bool commodity)
         {
+            //log.Write("MC Clear");
             for (int i = 0; i < list.Count; i++)
             {
                 MaterialCommodities mc = list[i];
@@ -205,9 +211,10 @@ namespace EliteDangerousCore
                 {
                     list[i] = new MaterialCommodities(list[i]);     // new clone of it we can change..
                     list[i].count = 0;  // and clear it
-                    //System.Diagnostics.Debug.WriteLine("Clear:" + mc.fdname);
+                    //log.Write(mc.fdname + ",");
                 }
             }
+            //log.Write("", true);
         }
 
         static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn,

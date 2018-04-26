@@ -83,6 +83,18 @@ namespace BaseUtils
                 return false;
         }
 
+        public bool IsAnyCharMoveOn(string t)
+        {
+            if (pos < line.Length && t.Contains(line[pos]))
+            {
+                pos++;
+                SkipSpace();
+                return true;
+            }
+            else
+                return false;
+        }
+
         // WORD defined by terminators. options to lowercase it and de-escape it
 
         public string NextWord(string terminators = " " , bool lowercase = false, bool replacescape = false)
@@ -203,25 +215,26 @@ namespace BaseUtils
                 return null;
         }
 
-        // Read a quoted word list off 
-
-        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , bool commaopt =  false)        // empty list on error
+        // Read a quoted word list off, delimiters definable, and with an optional move on char, and the lowercard/replaceescape options
+        // null list on error
+        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , 
+                                        string nonquoteterminators = ",", string itemterm = " ", bool termopt = false)
         {
             List<string> ret = new List<string>();
 
             do
             {
-                string v = NextQuotedWord(", ",lowercase,replaceescape);
+                string v = NextQuotedWord(nonquoteterminators + itemterm,lowercase,replaceescape);
                 if (v == null)
                     return null;
 
                 ret.Add(v);
 
-                if (commaopt)
+                if (termopt)
                 {
-                    IsCharMoveOn(',');   // remove it if its there
+                    IsAnyCharMoveOn(nonquoteterminators);   // remove it if its there
                 }
-                else if (!IsEOL && !IsCharMoveOn(','))   // either EOL, or its not a comma matey
+                else if (!IsEOL && !IsAnyCharMoveOn(nonquoteterminators))   // either EOL, or its not a terminator
                     return null;
 
             } while (!IsEOL);

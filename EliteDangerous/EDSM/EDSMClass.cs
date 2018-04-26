@@ -67,6 +67,8 @@ namespace EliteDangerousCore.EDSM
         public static string ServerAddress { get { return edsm_server_address; } set { edsm_server_address = value; } }
         public static bool IsServerAddressValid { get { return edsm_server_address.Length > 0; } }
 
+        #region For Trilateration
+
         public string SubmitDistances(string from, Dictionary<string, double> distances)
         {
             string query = "{\"ver\":2," + " \"commander\":\"" + commanderName + "\", \"fromSoftware\":\"" + fromSoftware + "\",  \"fromSoftwareVersion\":\"" + fromSoftwareVersion + "\", \"p0\": { \"name\": \"" + from + "\" },   \"refs\": [";
@@ -154,6 +156,85 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+
+        public bool IsKnownSystem(string sysName)
+        {
+            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName);
+            string json = null;
+            var response = RequestGet("api-v1/" + query, handleException: true);
+            if (response.Error)
+                return false;
+            json = response.Body;
+
+            if (json == null)
+                return false;
+
+            return json.ToString().Contains("\"name\":");
+        }
+
+        public List<string> CheckForNewCoordinates(List<string> sysNames)
+        {
+            List<string> nowKnown = new List<string>();
+            string query = "api-v1/systems?onlyKnownCoordinates=1&";
+            bool first = true;
+            foreach (string s in sysNames)
+            {
+                if (first) first = false;
+                else query = query + "&";
+                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
+            }
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return nowKnown;
+
+            var json = response.Body;
+            if (json == null)
+                return nowKnown;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    nowKnown.Add(sysname["name"].ToString());
+                }
+            }
+
+            return nowKnown;
+        }
+
+        public List<String> GetPushedSystems()
+        {
+            List<String> systems = new List<string>();
+            string query = "api-v1/systems?pushed=1";
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return systems;
+
+            var json = response.Body;
+            if (json == null)
+                return systems;
+
+            JArray msg = JArray.Parse(json);
+
+            if (msg != null)
+            {
+                foreach (JObject sysname in msg)
+                {
+                    systems.Add(sysname["name"].ToString());
+                }
+            }
+
+            return systems;
+        }
+
+        #endregion
+
+        #region For System DB update
+
         public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)
         {
             DateTime gammadate = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc);
@@ -172,21 +253,6 @@ namespace EliteDangerousCore.EDSM
 
             return response.Body;
         }
-
-        public string RequestSystems(string date)
-        {
-            DateTime dtDate = DateTime.ParseExact(date, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-            if (dtDate.Subtract(new DateTime(2015, 5, 10)).TotalDays < 0)
-                date = "2015-05-10 00:00:00";
-
-            string query = "api-v1/systems" + "?startdatetime=" + HttpUtility.UrlEncode(date) + "&coords=1&submitted=1&known=1&showId=1";
-            var response = RequestGet(query, handleException: true);
-            if (response.Error)
-                return null;
-            return response.Body;
-        }
-
 
         public string GetHiddenSystems()
         {
@@ -210,7 +276,11 @@ namespace EliteDangerousCore.EDSM
         
         }
 
-        public string GetComments(DateTime starttime)
+        #endregion
+
+        #region Comment sync
+
+        private string GetComments(DateTime starttime)
         {
             if (!ValidCredentials)
                 return null;
@@ -223,43 +293,6 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             return response.Body;
-        }
-
-        public string SetComment(string systemName, string note, long edsmid = 0)
-        {
-            if (!ValidCredentials)
-                return null;
-
-            string query;
-            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
-
-            if (edsmid > 0)
-            {
-                // For future use when EDSM adds the ability to link a comment to a system by EDSM ID
-                query += "&systemId=" + edsmid;
-            }
-
-            MimeType = "application/x-www-form-urlencoded";
-            var response = RequestPost(query, "api-logs-v1/set-comment", handleException: true);
-
-            if (response.Error)
-                return null;
-
-            return response.Body;
-        }
-
-        public static void SendComments(string star, string note, long edsmid = 0, EDCommander cmdr = null) // (verified with EDSM 29/9/2016)
-        {
-            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
-            EDSMClass edsm = new EDSMClass(cmdr);
-
-            if (!edsm.ValidCredentials)
-                return;
-
-            System.Threading.Tasks.Task taskEDSM = System.Threading.Tasks.Task.Factory.StartNew(() =>
-            {
-                edsm.SetComment(star, note, edsmid);
-            });
         }
 
         public void GetComments(Action<string> logout = null)
@@ -311,6 +344,46 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+        private string SetComment(string systemName, string note, long edsmid = 0)
+        {
+            if (!ValidCredentials)
+                return null;
+
+            string query;
+            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
+
+            if (edsmid > 0)
+            {
+                // For future use when EDSM adds the ability to link a comment to a system by EDSM ID
+                query += "&systemId=" + edsmid;
+            }
+
+            MimeType = "application/x-www-form-urlencoded";
+            var response = RequestPost(query, "api-logs-v1/set-comment", handleException: true);
+
+            if (response.Error)
+                return null;
+
+            return response.Body;
+        }
+
+        public static void SendComments(string star, string note, long edsmid = 0, EDCommander cmdr = null) // (verified with EDSM 29/9/2016)
+        {
+            System.Diagnostics.Debug.WriteLine("Send note to EDSM " + star + " " + edsmid + " " + note);
+            EDSMClass edsm = new EDSMClass(cmdr);
+
+            if (!edsm.ValidCredentials)
+                return;
+
+            System.Threading.Tasks.Task taskEDSM = System.Threading.Tasks.Task.Factory.StartNew(() =>
+            {
+                edsm.SetComment(star, note, edsmid);
+            });
+        }
+
+        #endregion
+
+        #region Log Sync for log fetcher
 
         public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<HistoryEntry> log, out DateTime logstarttime, out DateTime logendtime)
         {
@@ -387,126 +460,7 @@ namespace EliteDangerousCore.EDSM
             return msgnr;
         }
 
-        public bool IsKnownSystem(string sysName)
-        {
-            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName);
-            string json = null;
-            var response = RequestGet("api-v1/" + query, handleException: true);
-            if (response.Error)
-                return false;
-            json = response.Body;
-
-            if (json == null)
-                return false;
-
-            return json.ToString().Contains("\"name\":");
-        }
-
-        public List<string> CheckForNewCoordinates(List<string> sysNames)
-        {
-            List<string> nowKnown = new List<string>();
-            string query = "api-v1/systems?onlyKnownCoordinates=1&";
-            bool first = true;
-            foreach (string s in sysNames)
-            {
-                if (first) first = false;
-                else query = query + "&";
-                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
-            }
-
-            var response = RequestGet(query, handleException: true);
-            if (response.Error)
-                return nowKnown;
-
-            var json = response.Body;
-            if (json == null)
-                return nowKnown;
-
-            JArray msg = JArray.Parse(json);
-
-            if (msg != null)
-            {
-                foreach (JObject sysname in msg)
-                {
-                    nowKnown.Add(sysname["name"].ToString());
-                }
-            }
-
-            return nowKnown;
-        }
-
-        public List<String> GetPushedSystems()
-        {
-            List<String> systems = new List<string>();
-            string query = "api-v1/systems?pushed=1";
-
-            var response = RequestGet(query, handleException: true);
-            if (response.Error)
-                return systems;
-
-            var json = response.Body;
-            if (json == null)
-                return systems;
-
-            JArray msg = JArray.Parse(json);
-
-            if (msg != null)
-            {
-                foreach (JObject sysname in msg)
-                {
-                    systems.Add(sysname["name"].ToString());
-                }
-            }
-
-            return systems;
-        }
-
-        public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double maxradius, double minradius)      // may return null
-        {
-            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&minRadius={2}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), maxradius , minradius);
-
-            var response = RequestGet(query, handleException: true);
-            if (response.Error)
-                return null;
-
-            var json = response.Body;
-            if (json != null)
-            {
-                try
-                {
-                    List<Tuple<ISystem, double>> systems = new List<Tuple<ISystem, double>>();
-
-                    JArray msg = JArray.Parse(json);        // allow for crap from EDSM or empty list
-
-                    if (msg != null)
-                    {
-                        foreach (JObject sysname in msg)
-                        {
-                            ISystem sys = new SystemClass();
-                            sys.Name = sysname["name"].Str("Unknown");
-                            sys.EDSMID = sysname["id"].Long(0);
-                            JObject co = (JObject)sysname["coords"];
-                            if (co != null)
-                            {
-                                sys.X = co["x"].Double();
-                                sys.Y = co["y"].Double();
-                                sys.Z = co["z"].Double();
-                            }
-                            systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
-                        }
-
-                        return systems;
-                    }
-                }
-                catch       // json may be garbage
-                { }
-            }
-
-            return null;
-        }
-
-
-        public List<ISystem> GetSystemsByName(string systemName, bool uselike = false)
+        private List<ISystem> GetSystemsByName(string systemName, bool uselike = false)
         {
             string query = String.Format("api-v1/systems?systemName={0}&showCoordinates=1&showId=1&showInformation=1&showPermit=1", Uri.EscapeDataString(systemName));
 
@@ -568,6 +522,54 @@ namespace EliteDangerousCore.EDSM
             return systems;
         }
 
+        #endregion
+
+        #region System Information
+
+        public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double maxradius, double minradius)      // may return null
+        {
+            string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&minRadius={2}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), maxradius , minradius);
+
+            var response = RequestGet(query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json != null)
+            {
+                try
+                {
+                    List<Tuple<ISystem, double>> systems = new List<Tuple<ISystem, double>>();
+
+                    JArray msg = JArray.Parse(json);        // allow for crap from EDSM or empty list
+
+                    if (msg != null)
+                    {
+                        foreach (JObject sysname in msg)
+                        {
+                            ISystem sys = new SystemClass();
+                            sys.Name = sysname["name"].Str("Unknown");
+                            sys.EDSMID = sysname["id"].Long(0);
+                            JObject co = (JObject)sysname["coords"];
+                            if (co != null)
+                            {
+                                sys.X = co["x"].Double();
+                                sys.Y = co["y"].Double();
+                                sys.Z = co["z"].Double();
+                            }
+                            systems.Add(new Tuple<ISystem, double>(sys, sysname["distance"].Double()));
+                        }
+
+                        return systems;
+                    }
+                }
+                catch       // json may be garbage
+                { }
+            }
+
+            return null;
+        }
+
         public bool ShowSystemInEDSM(string sysName, long? id_edsm = null)
         {
             string url = GetUrlToEDSMSystem(sysName, id_edsm);
@@ -613,8 +615,11 @@ namespace EliteDangerousCore.EDSM
         // https://www.edsm.net/api-system-v1/bodies?systemName=Colonia
         // https://www.edsm.net/api-system-v1/bodies?systemId=27
 
+        #endregion
 
-        public JObject GetBodies(string sysName)
+        #region Body info
+
+        private JObject GetBodies(string sysName)
         {
             string encodedSys = HttpUtility.UrlEncode(sysName);
 
@@ -631,7 +636,7 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
-        public JObject GetBodies(long edsmID)
+        private JObject GetBodies(long edsmID)
         {
             string query = "bodies?systemId=" + edsmID.ToString();
             var response = RequestGet("api-system-v1/" + query, handleException: true);
@@ -646,7 +651,30 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
-        public  static List<JournalScan> GetBodiesList(long edsmid)
+        // Example ASYNC call
+
+        public void GetBodiesAsync(long edsmID, Action<JObject> ret)        // ret is called in thread, must deal with that
+        {
+            string query = "bodies?systemId=" + edsmID.ToString();
+            RequestGetAsync("api-system-v1/" + query,
+                (response, tag) =>
+                {
+                    JObject msg = null;
+                    if (!response.Error)
+                    {
+                        var json = response.Body;
+                        if (json != null && json.ToString() != "[]")
+                        {
+                            msg = JObject.Parse(json);
+                        }
+                    }
+
+                    (tag as Action<JObject>).Invoke(msg);
+                }
+                , ret, handleException: true);
+        }
+
+        public static List<JournalScan> GetBodiesList(long edsmid)
         {
             try
             {
@@ -694,7 +722,6 @@ namespace EliteDangerousCore.EDSM
             }
             return null;
         }
-
 
         private static JObject ConvertFromEDSMBodies(JObject jo)
         {
@@ -841,6 +868,10 @@ namespace EliteDangerousCore.EDSM
             return startype;
         }
 
+        #endregion
+
+        #region Journal Events
+
         public List<string> GetJournalEventsToDiscard()
         {
             string action = "api-journal-v1/discard";
@@ -879,5 +910,7 @@ namespace EliteDangerousCore.EDSM
 
             return resp["events"].Select(e => (JObject)e).ToList();
         }
+
+        #endregion
     }
 }

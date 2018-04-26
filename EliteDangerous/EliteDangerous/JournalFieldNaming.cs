@@ -35,6 +35,18 @@ namespace EliteDangerousCore
             return MaterialCommodityDB.FDNameTranslation(old);
         }
 
+        static public string NormaliseMaterialCategory(string cat)
+        {
+            if (cat.Contains("$"))
+            {
+                int i = cat.LastIndexOf('_');
+                if (i != -1 && i < cat.Length - 1)
+                    cat = cat.Substring(i + 1).Replace(";", "");
+            }
+
+            return cat;
+        }
+
         public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
             MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(fdname);

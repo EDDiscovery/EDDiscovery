@@ -27,14 +27,14 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMaterialCollected(JObject evt ) : base(evt, JournalTypeEnum.MaterialCollected)
         {
-            Category = evt["Category"].Str();
-            Name = evt["Name"].Str();            // MUST BE FD NAME
-            Name = JournalFieldNaming.FDNameTranslation(Name);     // pre-mangle to latest names, in case we are reading old journal records
+            Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
+            Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int(1);
         }
         public string Category { get; set; }
         public string FriendlyName { get; set; }
+        public string FDName { get; set; }
         public string Name { get; set; }
         public int Count { get; set; }
 

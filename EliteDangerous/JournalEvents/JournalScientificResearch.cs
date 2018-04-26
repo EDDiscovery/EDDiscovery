@@ -23,9 +23,9 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalScientificResearch(JObject evt) : base(evt, JournalTypeEnum.ScientificResearch)
         {
-            Name = evt["Name"].Str();
+            Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());
             Count = evt["Count"].Int();
-            Category = evt["Category"].Str();
+            Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
             MarketID = evt["MarketID"].LongNull();
         }
 
