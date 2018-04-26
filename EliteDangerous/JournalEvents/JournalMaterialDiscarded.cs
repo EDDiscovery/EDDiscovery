@@ -23,9 +23,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMaterialDiscarded(JObject evt ) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
-            Category = evt["Category"].Str();
-            Name = evt["Name"].Str();           // FDNAME
-            Name = JournalFieldNaming.FDNameTranslation(Name);     // pre-mangle to latest names, in case we are reading old journal records
+            Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
+            Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyName = JournalFieldNaming.RMat(Name);
             Count = evt["Count"].Int();
         }

@@ -34,8 +34,15 @@ namespace EliteDangerousCore.JournalEvents
         public class Cargo
         {
             public string Name { get; set; }            // FDNAME
+            public string FriendlyName { get; set; }            // FDNAME
             public int Count { get; set; }
             public int Stolen { get; set; }
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.FDNameTranslation(Name);
+                FriendlyName = JournalFieldNaming.RMat(Name);
+            }
         }
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
@@ -44,7 +51,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Inventory != null)
             {
                 foreach (Cargo c in Inventory)
-                    c.Name = JournalFieldNaming.FDNameTranslation(c.Name);
+                    c.Normalise();
             }
         }
 
@@ -72,7 +79,7 @@ namespace EliteDangerousCore.JournalEvents
                     int? stolen = null;
                     if (c.Stolen > 0)
                         stolen = c.Stolen;
-                    detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(c.Name), "; items", c.Count , "(;)" , stolen);
+                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items", c.Count , "(;)" , stolen);
                 }
             }
         }

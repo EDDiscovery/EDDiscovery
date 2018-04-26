@@ -68,14 +68,14 @@ namespace EDDiscovery
         #region Callbacks from us
 
         public event Action<Object> OnNewTarget;
-        public event Action<Object, HistoryEntry, bool> OnNoteChanged;                    // UI.Note has been updated attached to this note
+        public event Action<Object, HistoryEntry, bool> OnNoteChanged;  // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
         public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
-        public event Action<List<string>, bool> OnNewStarsForTrilat;      // add stars to trilat (false distance, true wanted)
+        public event Action<List<string>, bool> OnNewStarsForTrilat;    // add stars to trilat (false distance, true wanted)
         public event Action OnAddOnsChanged;                            // add on changed
-        public event Action OnEDSMSyncComplete;                         // EDSM Sync has completed
-        public event Action OnEDDNSyncComplete;                         // Sync has completed
-        public event Action OnEGOSyncComplete;                          // Sync has completed
+        public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
+        public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
+        public event Action<int,string> OnEGOSyncComplete;              // EGO Sync has completed with records on this list of stars
 
         #endregion
 
@@ -217,33 +217,33 @@ namespace EDDiscovery
 
             SetUpLogging();
 
-            EDSMJournalSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
-                    OnEDSMSyncComplete?.Invoke();
-                    ActionRun(Actions.ActionEventEDList.onEDSMSync);
+                    OnEDSMSyncComplete?.Invoke(count,list);
+                    ActionRun(Actions.ActionEventEDList.onEDSMSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
                 });
             };
 
-            EDDNSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EDDNSync.SentEvents = (count) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
-                    OnEDDNSyncComplete?.Invoke();
-                    ActionRun(Actions.ActionEventEDList.onEDDNSync);
+                    OnEDDNSyncComplete?.Invoke(count);
+                    ActionRun(Actions.ActionEventEDList.onEDDNSync, null, new Conditions.ConditionVariables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 
-            EliteDangerousCore.EGO.EGOSync.EventListEmpty = () =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
+            EliteDangerousCore.EGO.EGOSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
-                    OnEGOSyncComplete?.Invoke();
-                    ActionRun(Actions.ActionEventEDList.onEGOSync);
+                    OnEGOSyncComplete?.Invoke(count,list);
+                    ActionRun(Actions.ActionEventEDList.onEGOSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -576,7 +576,7 @@ namespace EDDiscovery
             {
                 if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
                 {
-                    // hang over from rares the indenting.
+                    // hang over from rares indenting.
                     {
                         System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
