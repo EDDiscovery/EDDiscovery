@@ -61,38 +61,38 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        static public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)       // Used for debugging it..
-        {
-            count = 0;
+        //static public List<HistoryEntry> MarkHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)       // Used for debugging it..
+        //{
+        //    count = 0;
 
-            if (cond.Count == 0)       // no filters, all in
-                return he;
-            else
-            {
-                List<HistoryEntry> ret = new List<HistoryEntry>();
+        //    if (cond.Count == 0)       // no filters, all in
+        //        return he;
+        //    else
+        //    {
+        //        List<HistoryEntry> ret = new List<HistoryEntry>();
 
-                foreach (HistoryEntry s in he)
-                {
-                    List<Conditions.Condition> list = new List<Conditions.Condition>();    // don't want it
+        //        foreach (HistoryEntry s in he)
+        //        {
+        //            List<Conditions.Condition> list = new List<Conditions.Condition>();    // don't want it
 
-                    int mrk = s.EventDescription.IndexOf(":::");
-                    if (mrk >= 0)
-                        s.EventDescription = s.EventDescription.Substring(mrk + 3);
+        //            int mrk = s.EventDescription.IndexOf(":::");
+        //            if (mrk >= 0)
+        //                s.EventDescription = s.EventDescription.Substring(mrk + 3);
 
-                    string er;
+        //            string er;
 
-                    if (!cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, new Conditions.ConditionVariables[] { othervars, new Conditions.ConditionVariables("Note", s.snc?.Note ?? "") }, out er, list))
-                    {
-                        //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
-                        s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
-                        count++;
-                    }
+        //            if (!cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr, new Conditions.ConditionVariables[] { othervars, new Conditions.ConditionVariables("Note", s.snc?.Note ?? "") }, out er, list))
+        //            {
+        //                //System.Diagnostics.Debug.WriteLine("Filter out " + s.Journalid + " " + s.EntryType + " " + s.EventDescription);
+        //                s.EventDescription = "!" + list[0].eventname + ":::" + s.EventDescription;
+        //                count++;
+        //            }
 
-                    ret.Add(s);
-                }
+        //            ret.Add(s);
+        //        }
 
-                return ret;
-            }
-        }
+        //        return ret;
+        //    }
+        //}
     }
 }
