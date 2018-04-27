@@ -848,11 +848,9 @@ namespace EliteDangerousCore
                                     bool Keepuievents = true)
         {
             HistoryList hist = new HistoryList();
-            EDCommander cmdr = null;
 
             if (CurrentCommander >= 0)
             {
-                cmdr = EDCommander.GetCommander(CurrentCommander);
                 journalmonitor.ParseJournalFiles(() => cancelRequested(), (p, s) => reportProgress(p, s), forceReload: ForceJournalReload);   // Parse files stop monitor..
 
                 if (NetLogPath != null)
@@ -888,7 +886,7 @@ namespace EliteDangerousCore
                     }
 
                     bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn, cmdr);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn);
 
                     prev = he;
                     jprev = je;
