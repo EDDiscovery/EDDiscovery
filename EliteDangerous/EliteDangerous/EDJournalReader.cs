@@ -120,23 +120,23 @@ namespace EliteDangerousCore
                     newname = "[BETA] " + newname;
                 }
 
-                EDCommander _commander = EDCommander.GetCommander(newname);
+                EDCommander commander = EDCommander.GetCommander(newname);
 
-                if (_commander == null )
+                if (commander == null )
                 {
-                    _commander = EDCommander.GetAll().FirstOrDefault();
-                    if (EDCommander.NumberOfCommanders == 1 && _commander != null && _commander.Name == "Jameson (Default)")
+                    commander = EDCommander.GetListCommanders().FirstOrDefault();
+                    if (EDCommander.NumberOfCommanders == 1 && commander != null && commander.Name == "Jameson (Default)")
                     {
-                        _commander.Name = newname;
-                        _commander.EdsmName = newname;
-                        EDCommander.Update(new List<EDCommander> { _commander }, false);
+                        commander.Name = newname;
+                        commander.EdsmName = newname;
+                        EDCommander.Update(new List<EDCommander> { commander }, false);
                     }
                     else
-                        _commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
+                        commander = EDCommander.Create(newname, null, EDJournalClass.GetDefaultJournalDir().Equals(TravelLogUnit.Path) ? "" : TravelLogUnit.Path);
 
                 }
 
-                cmdrid = _commander.Nr;
+                cmdrid = commander.Nr;
 
                 if (!TravelLogUnit.CommanderId.HasValue)
                 {
