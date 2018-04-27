@@ -83,7 +83,7 @@ namespace EliteDangerousCore
 
         #region Methods
 
-        public static EDCommander GetCommander(int nr)      // should always return incl hidden commander
+        public static EDCommander GetCommander(int nr)      // null if not valid - cope with it. Hidden gets returned.
         {
             if (commanders.ContainsKey(nr))
             {
@@ -91,7 +91,6 @@ namespace EliteDangerousCore
             }
             else
             {
-                System.Diagnostics.Debug.Assert(false, "Must return commander");
                 return null;
             }
         }

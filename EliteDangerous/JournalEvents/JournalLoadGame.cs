@@ -28,9 +28,18 @@ namespace EliteDangerousCore.JournalEvents
         public JournalLoadGame(JObject evt ) : base(evt, JournalTypeEnum.LoadGame)
         {
             LoadGameCommander = evt["Commander"].Str();
-            ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
-            Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
-            ShipId = evt["ShipID"].Int();
+            ShipFD = evt["Ship"].Str();
+            if (ShipFD.Length > 0)      // Vega logs show no ship on certain logs.. handle it to prevent warnings.
+            {
+                ShipFD = JournalFieldNaming.NormaliseFDShipName(ShipFD);
+                Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
+                ShipId = evt["ShipID"].Int();
+            }
+            else
+            {       // leave ShipFD as blank.
+                Ship = "Unknown";
+            }
+
             StartLanded = evt["StartLanded"].Bool();
             StartDead = evt["StartDead"].Bool();
             GameMode = evt["GameMode"].Str();
