@@ -285,8 +285,16 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
+
+            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
+            string travelinfo = item.TravelInfo();
+            if (travelinfo != null)
+                EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+
             rw.CreateCells(dataGridViewTravel, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", 
-                                item.EventSummary, item.EventDescription, (item.snc != null) ? item.snc.Note : "");
+                                item.EventSummary, EventDescription, (item.snc != null) ? item.snc.Note : "");
+
             rw.Cells[TravelHistoryColumns.HistoryTag].Tag = item;
 
             int rownr = 0;
@@ -303,7 +311,7 @@ namespace EDDiscovery.UserControls
 
             dataGridViewTravel.Rows[rownr].DefaultCellStyle.ForeColor = (item.System.HasCoordinate || item.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
-            string tip = item.EventSummary + Environment.NewLine + item.EventDescription + Environment.NewLine + item.EventDetailedInfo;
+            string tip = item.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
             dataGridViewTravel.Rows[rownr].Cells[0].ToolTipText = tip;
             dataGridViewTravel.Rows[rownr].Cells[1].ToolTipText = tip;
@@ -520,7 +528,9 @@ namespace EDDiscovery.UserControls
 
             if (he.IsFSDJump && showfsdmapcolour)
             {
-                using (Brush b = new SolidBrush(Color.FromArgb(he.MapColour)))
+                Color c = Color.FromArgb((he.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+
+                using (Brush b = new SolidBrush(c))
                 {
                     e.Graphics.FillEllipse(b, new Rectangle(hstart + 2, top + 2, size - 6, size - 6));
                 }
@@ -590,7 +600,13 @@ namespace EDDiscovery.UserControls
         {
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
-                string infodetailed = leftclicksystem.EventDescription.AppendPrePad(leftclicksystem.EventDetailedInfo,Environment.NewLine);
+                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
+                string travelinfo = leftclicksystem.TravelInfo();
+                if (travelinfo != null)
+                    EventDetailedInfo = travelinfo + Environment.NewLine + EventDetailedInfo;
+
+                string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo,Environment.NewLine);
 
                 if (infodetailed.Lines() >= 15) // too long for inline expansion
                 {
@@ -605,7 +621,7 @@ namespace EDDiscovery.UserControls
                     int ch = dataGridViewTravel.Rows[leftclickrow].Height;
                     bool toexpand = (ch <= DefaultRowHeight);
 
-                    string infotext = (toexpand) ? infodetailed : leftclicksystem.EventDescription;
+                    string infotext = (toexpand) ? infodetailed : EventDescription;
 
                     int h = DefaultRowHeight;
 
@@ -682,7 +698,7 @@ namespace EDDiscovery.UserControls
             mapColorDialog.AllowFullOpen = true;
             mapColorDialog.FullOpen = true;
             HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Cells[TravelHistoryColumns.HistoryTag].Tag;
-            mapColorDialog.Color = Color.FromArgb(sp2.MapColour);
+            mapColorDialog.Color = Color.Red;
 
             if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -1181,15 +1197,16 @@ namespace EDDiscovery.UserControls
                     grd.GetLine += delegate (int r)
                     {
                         HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Cells[TravelHistoryColumns.HistoryTag].Tag;
+                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
                             dataGridViewTravel.Rows[r].Cells[0].Value,
-                            he.journalEntry.EventTypeStr,
+                            he.journalEntry.EventSummaryName,
                             (he.System != null) ? he.System.Name : "Unknown",    // paranoia
                             he.WhereAmI,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
                             he.EventSummary,
-                            he.EventDescription,
-                            he.EventDetailedInfo,
+                            EventDescription,
+                            EventDetailedInfo,
                             dataGridViewTravel.Rows[r].Cells[4].Value,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",

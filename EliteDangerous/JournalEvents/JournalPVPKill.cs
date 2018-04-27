@@ -35,9 +35,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Victim { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("",Victim, "Rank:" , CombatRank.ToString().SplitCapsWord());
             detailed = "";
         }

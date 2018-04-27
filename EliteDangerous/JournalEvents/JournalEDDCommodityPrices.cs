@@ -58,9 +58,9 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public List<CCommodities> Commodities { get; protected set; }   // never null
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Prices on ; items", Commodities.Count, "< at " , Station , "< in " , StarSystem);
 
             int col = 0;

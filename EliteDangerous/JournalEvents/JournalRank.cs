@@ -55,9 +55,9 @@ namespace EliteDangerousCore.JournalEvents
         public FederationRank Federation { get; set; }
         public CQCRank CQC { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Combat.ToString().SplitCapsWord(),
                                       "", Trade.ToString().SplitCapsWord(),
                                       "", Explore.ToString().SplitCapsWord(),

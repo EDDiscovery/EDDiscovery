@@ -34,9 +34,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public string[] Systems { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = Power;
             if ( Systems!=null)
             {

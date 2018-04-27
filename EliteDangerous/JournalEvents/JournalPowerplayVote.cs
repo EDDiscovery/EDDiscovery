@@ -36,9 +36,9 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public int Votes { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Power, "System:", System, "Votes:", Votes);
             detailed = "";
         }

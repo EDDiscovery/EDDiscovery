@@ -66,9 +66,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public Passengers[] Manifest { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //U
+        public override void FillInformation(out string info, out string detailed) //U
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = "No Passengers";
 
             if (Manifest != null && Manifest.Length > 0)

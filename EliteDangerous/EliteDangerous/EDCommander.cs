@@ -26,101 +26,56 @@ using EliteDangerousCore.DB;
 namespace EliteDangerousCore
 {
 
-    /// <summary>
-    /// The active commander has been changed event.
-    /// </summary>
-    public class CurrentCommanderChangedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The newly active commander.
-        /// </summary>
-        public EDCommander Commander { get; protected set; }
-
-        /// <summary>
-        /// The index of the commander in the list.
-        /// </summary>
-        public int Index { get; protected set; }
-
-        /// <summary>
-        /// Constructs a new CurrentCommanderChangedEventArgs class in preparation to send it off in an event.
-        /// </summary>
-        /// <param name="index">The index of the commander in the list.</param>
-        public CurrentCommanderChangedEventArgs(int index)
-        {
-            Index = index;
-            Commander = EDCommander.GetCommander(index);
-        }
-    }
-
     public class EDCommander
     {
         #region Static interface
 
-        #region Events
-
-        /// <summary>
-        /// The current commander changed event handler.
-        /// </summary>
-        public static event EventHandler<CurrentCommanderChangedEventArgs> CurrentCommanderChanged;
-
-        #endregion
-
         #region Properties
 
-        /// <summary>
-        /// ID of the current commander
-        /// </summary>
         public static int CurrentCmdrID
         {
             get
             {
-                if (_CurrentCommanderID == Int32.MinValue)
+                if (commanderID == Int32.MinValue)
                 {
-                    _CurrentCommanderID = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0);
+                    commanderID = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0);
                 }
 
-                if (_CurrentCommanderID >= 0 && !_Commanders.ContainsKey(_CurrentCommanderID) && _Commanders.Count != 0)
+                if (commanderID >= 0 && !commanders.ContainsKey(commanderID) && commanders.Count != 0)
                 {
-                    _CurrentCommanderID = _Commanders.Values.First().Nr;
+                    commanderID = commanders.Values.First().Nr;
                 }
 
-                return _CurrentCommanderID;
+                return commanderID;
             }
             set
             {
-                if (value != _CurrentCommanderID)
+                if (value != commanderID)
                 {
-                    if (!_Commanders.ContainsKey(value))
+                    if (!commanders.ContainsKey(value))
                     {
                         throw new ArgumentOutOfRangeException();
                     }
 
-                    _CurrentCommanderID = value;
+                    commanderID = value;
                     SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
-                    OnCommanderChangedEvent(value);
                 }
             }
         }
 
-        /// <summary>
-        /// The current commander.
-        /// </summary>
-        public static EDCommander Current
+        public static EDCommander Current           // always returns
         {
             get
             {
-                return _Commanders[CurrentCmdrID];
+                return commanders[CurrentCmdrID];
             }
         }
 
-        /// <summary>
-        /// The number of commanders.
-        /// </summary>
         public static int NumberOfCommanders
         {
             get
             {
-                return _Commanders.Count;
+                return commanders.Count;
             }
         }
 
@@ -128,63 +83,42 @@ namespace EliteDangerousCore
 
         #region Methods
 
-        /// <summary>
-        /// Retrieves the commander with the given ID
-        /// </summary>
-        /// <param name="nr">ID of the commander</param>
-        /// <returns>The requested commander</returns>
-        public static EDCommander GetCommander(int nr)
+        public static EDCommander GetCommander(int nr)      // should always return incl hidden commander
         {
-            if (_Commanders.ContainsKey(nr))
+            if (commanders.ContainsKey(nr))
             {
-                return _Commanders[nr];
+                return commanders[nr];
             }
             else
             {
+                System.Diagnostics.Debug.Assert(false, "Must return commander");
                 return null;
             }
         }
 
-        /// <summary>
-        /// Retrieves the commander with the given ID
-        /// </summary>
-        /// <param name="nr">ID of the commander</param>
-        /// <returns>The requested commander</returns>
         public static EDCommander GetCommander(string name)
         {
-            return _Commanders.Values.FirstOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return commanders.Values.FirstOrDefault(c => c.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static bool IsCommanderPresent(string name)
         {
-            return _Commanders.Values.ToList().FindIndex(x=>x.Name.Equals(name,StringComparison.InvariantCultureIgnoreCase)) != -1;
+            return commanders.Values.ToList().FindIndex(x=>x.Name.Equals(name,StringComparison.InvariantCultureIgnoreCase)) != -1;
         }
 
-        /// <summary>
-        /// Returns all of the commanders
-        /// </summary>
-        /// <returns>All commanders</returns>
-        public static IEnumerable<EDCommander> GetAll()
+        public static List<EDCommander> GetListInclHidden()
         {
-            return _Commanders.Values;
+            return commanders.Values.OrderBy(v => v.Nr).ToList();
         }
 
-        /// <summary>
-        /// Returns list of commanders
-        /// </summary>
-        /// <returns></returns>
-        public static List<EDCommander> GetList()
+        public static List<EDCommander> GetListCommanders()
         {
-            return _Commanders.Values.OrderBy(v => v.Nr).ToList();
+            return commanders.Values.Where(v=>v.Nr>=0).OrderBy(v => v.Nr).ToList();
         }
 
-        /// <summary>
-        /// Delete a commander from backing storage and refresh instantiated list.
-        /// </summary>
-        /// <param name="cmdr">The commander to be deleted.</param>
         public static void Delete(int cmdrid)
         {
-            _Commanders.Remove(cmdrid);
+            commanders.Remove(cmdrid);
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
@@ -196,23 +130,10 @@ namespace EliteDangerousCore
             }
         }
 
-        /// <summary>
-        /// Delete a commander from backing storage and refresh instantiated list.
-        /// </summary>
-        /// <param name="cmdr">The commander to be deleted.</param>
         public static void Delete(EDCommander cmdr)
         {
             Delete(cmdr.Nr);
         }
-
-        /// <summary>
-        /// Generate a new commander with the specified parameters, save it to backing storage, and refresh the instantiated list.
-        /// </summary>
-        /// <param name="name">The in-game name for this commander.</param>
-        /// <param name="edsmName">The name for this commander as shown on EDSM.</param>
-        /// <param name="edsmApiKey">The API key to interface with EDSM.</param>
-        /// <param name="journalpath">Where EDD should monitor for this commander's logs.</param>
-        /// <returns>The newly-generated commander.</returns>
 
         public static EDCommander Create(EDCommander other )
         {
@@ -270,16 +191,11 @@ namespace EliteDangerousCore
                 }
             }
 
-            _Commanders[cmdr.Nr] = cmdr;
+            commanders[cmdr.Nr] = cmdr;
 
             return cmdr;
         }
 
-        /// <summary>
-        /// Write commander information to storage.
-        /// </summary>
-        /// <param name="cmdrlist">The new list of <see cref="EDCommander"/> instances.</param>
-        /// <param name="reload">Whether to refresh the in-memory list after writing.</param>
         public static void Update(List<EDCommander> cmdrlist, bool reload)
         {
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
@@ -317,7 +233,7 @@ namespace EliteDangerousCore
                         cmd.Parameters["@EGOApiKey"].Value = edcmdr.EGOAPIKey != null ? edcmdr.EGOAPIKey : "";
                         cmd.ExecuteNonQuery();
 
-                        _Commanders[edcmdr.Nr] = edcmdr;
+                        commanders[edcmdr.Nr] = edcmdr;
                     }
 
                     if (reload)
@@ -327,7 +243,7 @@ namespace EliteDangerousCore
 
             // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             JObject jo = new JObject();
-            foreach (EDCommander cmdr in _commandersDict.Values)
+            foreach (EDCommander cmdr in commandersDict.Values)
             {
                 JObject j = new JObject();
                 if (cmdr.JournalDir != null)
@@ -359,12 +275,12 @@ namespace EliteDangerousCore
         /// <param name="conn">SQLite connection</param>
         public static void Load(bool write = true, SQLiteConnectionUser conn = null)
         {
-            if (_commandersDict == null)
-                _commandersDict = new Dictionary<int, EDCommander>();
+            if (commandersDict == null)
+                commandersDict = new Dictionary<int, EDCommander>();
 
-            lock (_commandersDict)
+            lock (commandersDict)
             {
-                _commandersDict.Clear();
+                commandersDict.Clear();
 
                 var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
                 int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
@@ -373,11 +289,11 @@ namespace EliteDangerousCore
                 {
                     if (!cmdr.Deleted)
                     {
-                        _commandersDict[cmdr.Nr] = cmdr;
+                        commandersDict[cmdr.Nr] = cmdr;
                     }
                 }
 
-                if (_commandersDict.Count == 0)
+                if (commandersDict.Count == 0)
                 {
                     if (write)
                     {
@@ -385,9 +301,12 @@ namespace EliteDangerousCore
                     }
                     else
                     {
-                        _commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false, false, "", "");
+                        commandersDict[maxnr + 1] = new EDCommander(maxnr + 1, "Jameson (Default)", "", false, false, false, false, "", "");
                     }
                 }
+
+                EDCommander hidden = new EDCommander(-1, "Hidden Log", "", false, false, false, false, "", "", "");     // -1 is the hidden commander, add to list to make it
+                commandersDict[-1] = hidden;        // so we give back a valid entry when its selected
             }
 
             // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
@@ -424,26 +343,21 @@ namespace EliteDangerousCore
 #endregion
 
 #region Private properties and methods
-        private static Dictionary<int, EDCommander> _commandersDict;
-        private static int _CurrentCommanderID = Int32.MinValue;
+        private static Dictionary<int, EDCommander> commandersDict;
+        private static int commanderID = Int32.MinValue;
 
-        private static Dictionary<int, EDCommander> _Commanders
+        private static Dictionary<int, EDCommander> commanders
         {
             get
             {
-                if (_commandersDict == null)
+                if (commandersDict == null)
                 {
                     Load(false);
                 }
-                return _commandersDict;
+                return commandersDict;
             }
         }
 
-        private static void OnCommanderChangedEvent(int commanderIndex)
-        {
-            var e = new CurrentCommanderChangedEventArgs(commanderIndex);
-            CurrentCommanderChanged?.Invoke(null, e);
-        }
 #endregion
 
 #region Instance

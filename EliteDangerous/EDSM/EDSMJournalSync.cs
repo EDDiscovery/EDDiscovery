@@ -455,7 +455,7 @@ namespace EliteDangerousCore.EDSM
                                     if (systemCreated)
                                     {
                                         System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for " + he.System.Name);
-                                        he.SetFirstDiscover(true, cn, txn);
+                                        (he.journalEntry as JournalFSDJump).UpdateFirstDiscover(true, cn, txn);
                                         firstdiscovers = firstdiscovers.AppendPrePad(he.System.Name, ";");
                                     }
                                 }

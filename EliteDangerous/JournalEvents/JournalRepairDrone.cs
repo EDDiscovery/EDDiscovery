@@ -40,9 +40,9 @@ namespace EliteDangerousCore.JournalEvents
         public double CockpitRepaired { get; set; }
         public double CorrosionRepaired { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Hull:", HullRepaired.ToString("0.0"), "Cockpit:", CockpitRepaired.ToString("0.0"), "Corrosion:", CorrosionRepaired.ToString("0.0"));
             detailed = "";
         }

@@ -71,6 +71,13 @@ namespace EliteDangerousCore.JournalEvents
             public int Trend { get; set; }
         }
 
+        protected JournalLocOrJump(DateTime utc, ISystem sys, int synced, JournalTypeEnum jtype) : base(utc, synced, jtype)
+        {
+            StarSystem = sys.Name;
+            StarPos = new EMK.LightGeometry.Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
+            EdsmID = sys.EDSMID;
+        }
+
         protected JournalLocOrJump(JObject evt, JournalTypeEnum jtype) : base(evt, jtype)
         {
             StarSystem = evt["StarSystem"].Str();

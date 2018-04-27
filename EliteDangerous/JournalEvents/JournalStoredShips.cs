@@ -69,9 +69,9 @@ namespace EliteDangerousCore.JournalEvents
         public StoredShipInformation[] ShipsHere { get; set; }
         public StoredShipInformation[] ShipsRemote { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("At starport:",ShipsHere?.Count(),"Other locations:",ShipsRemote?.Count() );
             detailed = "";
             if (ShipsHere != null)

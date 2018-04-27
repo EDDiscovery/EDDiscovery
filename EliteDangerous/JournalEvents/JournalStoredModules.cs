@@ -48,9 +48,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.UpdateStoredModules(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Total:", ModuleItems?.Count());
             detailed = "";
 

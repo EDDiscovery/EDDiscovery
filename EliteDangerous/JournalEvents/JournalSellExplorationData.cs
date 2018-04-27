@@ -50,9 +50,9 @@ namespace EliteDangerousCore.JournalEvents
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus , "Total:; cr (inc any PVP bonus);N0", TotalEarnings);
             detailed = "";
             if (Systems != null)

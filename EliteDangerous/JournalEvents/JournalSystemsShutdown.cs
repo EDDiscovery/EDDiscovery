@@ -33,9 +33,9 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalSystemsShutdown(JObject evt) : base(evt, JournalTypeEnum.SystemsShutdown) { }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)
+        public override void FillInformation(out string info, out string detailed)
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = "";
             detailed = "";
         }

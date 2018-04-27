@@ -42,9 +42,9 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyType { get; set; }
         public string BodyDesignation { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("At ", Body , "< in ", StarSystem, "Type:" , BodyType);
             detailed = "";
         }

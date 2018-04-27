@@ -210,13 +210,12 @@ namespace EDDiscovery.UserControls
                     if (he.StartMarker)
                         return;
 
-                    he.StartMarker = true;
-                    JournalEntry.UpdateSyncFlagBit(he.Journalid, SyncFlags.StartMarker, he.StartMarker);
+                    he.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
+
                     if (list.Count() > 1 && he.isTravelling)
                     {
                         he = list.ToArray()[1];
-                        he.StopMarker = true;
-                        JournalEntry.UpdateSyncFlagBit(he.Journalid, SyncFlags.StopMarker, he.StopMarker);
+                        he.journalEntry.UpdateSyncFlagBit(SyncFlags.StopMarker, true , SyncFlags.StopMarker, false);
                     }
                     discoveryform.RefreshHistoryAsync();
                 }

@@ -39,9 +39,9 @@ namespace EliteDangerousCore.JournalEvents
             mc.Change(Category, Name, -Count, 0, conn);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", FriendlyName, "< ; items", Count);
             detailed = "";
         }

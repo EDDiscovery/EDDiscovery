@@ -39,9 +39,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Progress { get; set; }
         public int? Rank { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Engineer, "Rank:", Rank, "Progress:", Progress);
             detailed = "";
         }

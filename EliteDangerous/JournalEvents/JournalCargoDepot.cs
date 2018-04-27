@@ -67,9 +67,9 @@ namespace EliteDangerousCore.JournalEvents
                 mc.Change(MaterialCommodities.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
                 info = BaseUtils.FieldBuilder.Build("Collected:", Count, "< of " , FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", ItemsToGo, "Progress:;%;N1", ProgressPercent);

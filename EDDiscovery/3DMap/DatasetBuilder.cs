@@ -699,6 +699,8 @@ namespace EDDiscovery._3DMap
 
                     Vector3d? lastpos = null;
 
+                    Color drawcolour = Color.Green;
+
                     foreach (HistoryEntry sp in syslists)
                     {
                         if (sp.EntryType == JournalTypeEnum.Resurrect || sp.EntryType == JournalTypeEnum.Died)
@@ -707,14 +709,17 @@ namespace EDDiscovery._3DMap
                         }
                         else if (sp.IsLocOrJump && sp.System.HasCoordinate)
                         {
+                            if (sp.IsFSDJump)
+                            {
+                                drawcolour = Color.FromArgb((sp.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                                if (drawcolour.GetBrightness() < 0.05)
+                                    drawcolour = Color.Red;
+                            }
+
                             if (lastpos.HasValue)
                             {
-                                Color c = Color.FromArgb(255, Color.FromArgb(sp.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
-                                if (c.GetBrightness() < 0.05)                                        // and ensure it shows
-                                    c = Color.Red;
-
                                 datasetl.Add(new LineData(sp.System.X, sp.System.Y, sp.System.Z,
-                                                    lastpos.Value.X, lastpos.Value.Y , lastpos.Value.Z, c));
+                                                    lastpos.Value.X, lastpos.Value.Y , lastpos.Value.Z, drawcolour));
                             }
 
                             lastpos = new Vector3d(sp.System.X, sp.System.Y, sp.System.Z);
@@ -728,15 +733,20 @@ namespace EDDiscovery._3DMap
                 {
                     var datasetp = Data3DSetClass<PointData>.Create("visitedstarsdots", DotColour, 2.0f);
 
+                    Color drawcolour = Color.Green;
+
                     foreach (HistoryEntry vs in syslists)
                     {
                         if (vs.System.HasCoordinate)
                         {
-                            Color c = Color.FromArgb(255, Color.FromArgb(vs.MapColour));         // convert to colour, ensure alpha is 255 (some time in the past this value could have been screwed up)
-                            if (c.GetBrightness() < 0.05)                                        // and ensure it shows
-                                c = Color.Red;
+                            if (vs.IsFSDJump)
+                            {
+                                drawcolour = Color.FromArgb((vs.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).MapColor);
+                                if (drawcolour.GetBrightness() < 0.05)
+                                    drawcolour = Color.Red;
+                            }
 
-                            datasetp.Add(new PointData(vs.System.X, vs.System.Y, vs.System.Z, c));
+                            datasetp.Add(new PointData(vs.System.X, vs.System.Y, vs.System.Z, drawcolour));
                         }
                     }
 

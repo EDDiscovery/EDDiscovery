@@ -58,8 +58,10 @@ namespace EDDiscovery.Actions
                 vars[prefix + "MultiPlayer"] = he.MultiPlayer ? "1" : "0";
                 vars[prefix + "ContainsRares"] = he.ContainsRares() ? "1" : "0";
                 vars[prefix + "EventSummary"] = he.EventSummary;
-                vars[prefix + "EventDescription"] = he.EventDescription;
-                vars[prefix + "EventDetailedInfo"] = he.EventDetailedInfo;
+
+                he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                vars[prefix + "EventDescription"] = EventDescription;
+                vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
 
                 vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);      //depth seems good enough
 

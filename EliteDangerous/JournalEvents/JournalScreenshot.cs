@@ -60,9 +60,9 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAltitude { get; set; }
         public double? nHeading { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height, "Latitude:", JournalFieldNaming.RLat(nLatitude), "Longitude:", JournalFieldNaming.RLong(nLongitude));
             detailed = "";
         }
@@ -131,7 +131,7 @@ namespace EliteDangerousCore.JournalEvents
                     Body = body
                 });
 
-                ss = JournalEntry.CreateJournalEntry(jo.ToString()) as JournalScreenshot;
+                ss = JournalEntry.CreateJournalEntry(jo) as JournalScreenshot;
                 ss.Add(jo);
             }
 

@@ -45,9 +45,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.ShipyardNew(ShipType, ShipFD, ShipId);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = ShipType;
             detailed = "";
         }

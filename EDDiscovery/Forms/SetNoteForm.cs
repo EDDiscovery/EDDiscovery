@@ -28,8 +28,11 @@ namespace EDDiscovery.Forms
             this.textBoxNote.Text = this.NoteText ?? "";
             this.labelTimestamp.Text = he.EventTimeLocal.ToString();
             this.labelSystem.Text = he.System.Name;
+
+            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
             this.labelSummary.Text = he.EventSummary;
-            this.labelDetails.Text = he.EventDescription;
+            this.labelDetails.Text = EventDescription;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToFormStandardFontSize(this);

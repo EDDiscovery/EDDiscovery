@@ -70,9 +70,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             long profit = TotalSale - (AvgPricePaid * Count);
             info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< at ; cr;N0", SellPrice, "Total:; cr;N0", TotalSale, "Profit:; cr;N0", profit);
             detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
