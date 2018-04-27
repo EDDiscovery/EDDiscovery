@@ -47,9 +47,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Faction { get; set; }
         public string Power { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build(";Submitted", Submitted, "< To ", Interdictor, "< (NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
             detailed = "";
         }

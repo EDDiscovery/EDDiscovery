@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             radioButtonCentreHome.Checked = !selectionCentre;
 
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
-            dataGridViewCommanders.DataSource = EDCommander.GetList();
+            dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
 
             panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
         public void UpdateCommandersListBox()
         {
             dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDCommander.GetList();
+            dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
             dataGridViewCommanders.Update();
         }
 

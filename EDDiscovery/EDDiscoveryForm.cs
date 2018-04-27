@@ -1335,8 +1335,7 @@ namespace EDDiscovery
         {
             comboBoxCommander.Enabled = false;
             comboBoxCommander.Items.Clear();            // comboBox is nicer with items
-            comboBoxCommander.Items.Add("Hidden Log");
-            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetList() select c.Name).ToList());
+            comboBoxCommander.Items.AddRange((from EDCommander c in EDCommander.GetListInclHidden() select c.Name).ToList());
             if (history.CommanderId == -1)
             {
                 comboBoxCommander.SelectedIndex = 0;
@@ -1355,15 +1354,10 @@ namespace EDDiscovery
         {
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
-                if (comboBoxCommander.SelectedIndex == 0)
-                    Controller.RefreshHistoryAsync(currentcmdr: -1);                                   // which will cause DIsplay to be called as some point
-                else
-                {
-                    var itm = (from EDCommander c in EDCommander.GetList() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
+                var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
 
-                    EDCommander.CurrentCmdrID = itm[0].Nr;
-                    Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
-                }
+                EDCommander.CurrentCmdrID = itm[0].Nr;
+                Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
             }
 
         }

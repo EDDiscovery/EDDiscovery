@@ -193,7 +193,7 @@ namespace EliteDangerousCore
 
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            List<EDCommander> listCommanders = EDCommander.GetList();
+            List<EDCommander> listCommanders = EDCommander.GetListCommanders();
 
             // add the default frontier folder in
 

@@ -33,9 +33,8 @@ namespace EliteDangerousCore.JournalEvents
             eventname = evt["event"].Str("No event tag");
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = eventname.SplitCapsWord();
             info = "Unhandled Journal event, Report to EDDiscovery team. " + Environment.NewLine + json;
             detailed = "";
         }

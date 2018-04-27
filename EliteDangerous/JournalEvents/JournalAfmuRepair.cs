@@ -48,9 +48,9 @@ namespace EliteDangerousCore.JournalEvents
         public bool FullyRepaired { get; set; }
         public float Health { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", ModuleLocalised, "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
             detailed = "";
         }

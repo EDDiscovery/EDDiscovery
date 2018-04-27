@@ -62,9 +62,9 @@ namespace EliteDangerousCore.JournalEvents
         public FederationRank? Federation { get; set; }
         public EmpireRank? Empire { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Combat:", Combat.HasValue ? Combat.ToString() : null,
                                       "Trade:", Trade.HasValue ? Trade.ToString() : null,
                                       "Exploration:", Explore.HasValue ? Explore.ToString() : null,

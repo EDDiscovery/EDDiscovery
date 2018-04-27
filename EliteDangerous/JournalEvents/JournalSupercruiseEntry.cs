@@ -33,9 +33,9 @@ namespace EliteDangerousCore.JournalEvents
         public string StarSystem { get; set; }
         public long? SystemAddress { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)//V
+        public override void FillInformation(out string info, out string detailed)//V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = StarSystem;
             detailed = "";
         }

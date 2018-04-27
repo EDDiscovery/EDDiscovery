@@ -31,10 +31,7 @@ namespace EliteDangerousCore
 
         public int Indexno;            // for display purposes.
 
-        public JournalTypeEnum EntryType;
-        public long Journalid;
-        public JournalEntry journalEntry;
-        public EDCommander Commander;
+        public JournalEntry journalEntry;       // MUST be present
 
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
@@ -46,22 +43,20 @@ namespace EliteDangerousCore
                                        //       if edsm_id=-1 a load from SystemTable will occur with the name used
                                        // SO the journal reader can just read data in that table only, does not need to do a system match
 
+        public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
+        public long Journalid { get { return journalEntry.Id; } }
+        public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
-        public DateTime EventTimeUTC;
+        public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
         public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
-        public string EventSummary;
-        public string EventDescription;
-        public string EventDetailedInfo;
 
-        public int MapColour;
+        public string EventSummary { get { return journalEntry.EventSummaryName;} }
 
-        public bool IsStarPosFromEDSM;  // flag populated from journal entry when HE is made. Was the star position taken from EDSM?
-        public bool IsEDSMFirstDiscover;// Only on FSD JUMP
-        public bool EdsmSync;           // flag populated from journal entry when HE is made. Have we synced?
-        public bool EDDNSync;           // flag populated from journal entry when HE is made. Have we synced?
-        public bool EGOSync;            // flag populated from journal entry when HE is made. Have we synced?
-        public bool StartMarker;        // flag populated from journal entry when HE is made. Is this a system distance measurement system
-        public bool StopMarker;         // flag populated from journal entry when HE is made. Is this a system distance measurement stop point
+        public bool EdsmSync { get { return journalEntry.SyncedEDSM; } }           // flag populated from journal entry when HE is made. Have we synced?
+        public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }
+        public bool EGOSync { get { return journalEntry.SyncedEGO; } }
+        public bool StartMarker { get { return journalEntry.StartMarker; } }
+        public bool StopMarker { get { return journalEntry.StopMarker; } }
         public bool IsFSDJump { get { return EntryType == JournalTypeEnum.FSDJump; } }
         public bool IsLocOrJump { get { return EntryType == JournalTypeEnum.FSDJump || EntryType == JournalTypeEnum.Location; } }
         public bool IsFuelScoop { get { return EntryType == JournalTypeEnum.FuelScoop; } }
@@ -136,36 +131,14 @@ namespace EliteDangerousCore
 
         private HistoryEntry()
         {
-
-        }
-        // for importing old events in from 2.1 - logs
-        public static HistoryEntry MakeVSEntry(ISystem sys, DateTime eventt, int m, string dist, string info, int journalid = 0, bool firstdiscover = false)
-        {
-            Debug.Assert(sys != null);
-            return new HistoryEntry
-            {
-                EntryType = JournalTypeEnum.FSDJump,
-                System = sys,
-                EventTimeUTC = eventt,
-                EventSummary = "Jump to " + sys.Name,
-                EventDescription = dist,
-                EventDetailedInfo = info,
-                MapColour = m,
-                Journalid = journalid,
-                IsEDSMFirstDiscover = firstdiscover,
-                EdsmSync = true
-            };
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null, EDCommander cmdr = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
 
-            int mapcolour = 0;
             journalupdate = false;
-            bool starposfromedsm = false;
-            bool firstdiscover = false;
 
             if (je.EventTypeID == JournalTypeEnum.Location || je.EventTypeID == JournalTypeEnum.FSDJump)
             {
@@ -246,37 +219,16 @@ namespace EliteDangerousCore
                         }
                     }
 
-                    mapcolour = jfsd.MapColor;
-                    firstdiscover = jfsd.EDSMFirstDiscover;
                 }
 
                 isys = newsys;
-                starposfromedsm = (jl != null && jl.HasCoordinate) ? jl.StarPosFromEDSM : newsys.HasCoordinate;
             }
-
-            string summary, info, detailed;
-            je.FillInformation(out summary, out info, out detailed);
 
             HistoryEntry he = new HistoryEntry
             {
                 Indexno = indexno,
-                EntryType = je.EventTypeID,
-                Journalid = je.Id,
                 journalEntry = je,
                 System = isys,
-                EventTimeUTC = je.EventTimeUTC,
-                MapColour = mapcolour,
-                EdsmSync = je.SyncedEDSM,
-                EDDNSync = je.SyncedEDDN,
-                EGOSync = je.SyncedEGO,
-                StartMarker = je.StartMarker,
-                StopMarker = je.StopMarker,
-                EventSummary = summary,
-                EventDescription = info,
-                EventDetailedInfo = detailed,
-                IsStarPosFromEDSM = starposfromedsm,
-                IsEDSMFirstDiscover = firstdiscover,
-                Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
 
@@ -385,12 +337,31 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.QuitACrew)
                 he.onCrewWithCaptain = null;
 
-            if (prev != null && prev.travelling)      // if we are travelling..
+            if (prev != null )
             {
-                he.travelled_distance = prev.travelled_distance;
-                he.travelled_missingjump = prev.travelled_missingjump;
-                he.travelled_jumps = prev.travelled_jumps;
+                if (prev.StopMarker)            // if we had a stop marker previously, means the next one needs to clear the counters
+                {
+                    he.travelling = false;               // still travelling if its a start marker
+                    he.travelled_distance = 0;
+                    he.travelled_seconds = new TimeSpan(0);
+                    he.travelled_missingjump = 0;
+                    he.travelled_jumps = 0;
+                }
+                else
+                {
+                    he.travelling = prev.travelling;
+                    he.travelled_distance = prev.travelled_distance;
+                    he.travelled_seconds = prev.travelled_seconds;
+                    he.travelled_missingjump = prev.travelled_missingjump;
+                    he.travelled_jumps = prev.travelled_jumps;
+                }
+            }
 
+            if (he.StartMarker)           // start marker, start travelling
+                he.travelling = true;
+
+            if ( he.travelling )
+            {
                 if (he.IsFSDJump && !he.MultiPlayer)   // if jump, and not multiplayer..
                 {
                     double dist = ((JournalFSDJump)je).JumpDist;
@@ -403,46 +374,17 @@ namespace EliteDangerousCore
                     }
                 }
 
-                he.travelled_seconds = prev.travelled_seconds;
-                TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
-
-                if (he.EntryType != JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
+                if (prev != null)
                 {
-                    he.travelled_seconds += diff;
-                }
+                    TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
 
-                if (he.StopMarker || he.StartMarker)
-                {
-                    //Debug.WriteLine("Travelling stop at " + he.Indexno);
-                    he.travelling = false;
-                    he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelled " + he.travelled_distance.ToStringInvariant("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
-
-                    he.travelled_distance = 0;
-                    he.travelled_seconds = new TimeSpan(0);
-                }
-                else
-                {
-                    he.travelling = true;
-
-                    if (he.IsFSDJump)
+                    if (he.EntryType != JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
                     {
-                        he.EventDetailedInfo += ((he.EventDetailedInfo.Length > 0) ? Environment.NewLine : "") + "Travelling" +
-                                        " distance " + he.travelled_distance.ToString("0.0") + " LY"
-                                        + ", " + he.travelled_jumps + " jumps"
-                                        + ((he.travelled_missingjump > 0) ? ", " + he.travelled_missingjump + " unknown distance jumps" : "") +
-                                        ", time " + he.travelled_seconds;
+                        he.travelled_seconds += diff;
                     }
                 }
             }
 
-            if (he.StartMarker)
-            {
-                //Debug.WriteLine("Travelling start at " + he.Indexno);
-                he.travelling = true;
-            }
 
             return he;
         }
@@ -468,6 +410,26 @@ namespace EliteDangerousCore
 
         #endregion
 
+        public string TravelInfo()          // use to get a summary of travel info.. 
+        {
+            if (StopMarker)
+            {
+                return "Travelled " + travelled_distance.ToStringInvariant("0.0") + " LY"
+                                     + ", " + travelled_jumps + " jumps"
+                                     + ((travelled_missingjump > 0) ? ", " + travelled_missingjump + " unknown distance jumps" : "") +
+                                      ", time " + travelled_seconds;
+            }
+            else if (isTravelling && IsFSDJump)
+            {
+                return "Travelling distance " + travelled_distance.ToString("0.0") + " LY"
+                + ", " + travelled_jumps + " jumps"
+                + ((travelled_missingjump > 0) ? ", " + travelled_missingjump + " unknown distance jumps" : "") +
+                ", time " + travelled_seconds;
+            }
+            else
+                return null;
+        }
+
         public System.Drawing.Image GetIcon
         {
             get
@@ -485,61 +447,27 @@ namespace EliteDangerousCore
         public void UpdateMapColour(int v)
         {
             if (EntryType == JournalTypeEnum.FSDJump)
-            {
-                MapColour = v;
-                if (Journalid != 0)
-                    JournalEntry.UpdateMapColour(Journalid, v);
-            }
+                (journalEntry as JournalFSDJump).UpdateMapColour(v);
         }
 
         public void UpdateCommanderID(int v)
         {
-            if (Journalid != 0)
-            {
-                JournalEntry.UpdateCommanderID(Journalid, v);
-            }
+            journalEntry.UpdateCommanderID(v);
         }
 
         public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            EdsmSync = true;
-            if (Journalid != 0)
-            {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDSM, true, cn, txn);
-            }
+            journalEntry.UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
         }
+
         public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            EDDNSync = true;
-            if (Journalid != 0)
-            {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EDDN, true, cn, txn);
-            }
+            journalEntry.UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn, txn);
         }
 
         public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            EGOSync = true;
-            if (Journalid != 0)
-            {
-                JournalEntry.UpdateSyncFlagBit(Journalid, SyncFlags.EGO, true, cn, txn);
-            }
-        }
-
-        public void SetFirstDiscover(bool firstdiscover, SQLiteConnectionUser cn = null, DbTransaction txnl = null) // only on FSD entries
-        {
-            IsEDSMFirstDiscover = firstdiscover;
-            if (journalEntry != null)
-            {
-                JournalFSDJump jl = journalEntry as JournalFSDJump;
-                if (jl != null)
-                {
-                    Newtonsoft.Json.Linq.JObject jo = jl.GetJson();
-                    jo["EDD_EDSMFirstDiscover"] = firstdiscover;
-                    jl.UpdateJsonEntry(jo, cn, txnl);
-                    jl.EDSMFirstDiscover = firstdiscover;
-                }
-            }
+            journalEntry.UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
         }
 
         public bool IsJournalEventInEventFilter(string[] events)

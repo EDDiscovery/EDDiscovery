@@ -35,9 +35,9 @@ namespace EliteDangerousCore.JournalEvents
         public int USSThreat { get; set; }
         public string USSTypeLocalised { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Type:",USSTypeLocalised, "Threat:" , USSThreat);
             detailed = "";
         }

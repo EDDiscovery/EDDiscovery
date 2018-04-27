@@ -121,9 +121,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool? Wing { get; set; }     // 3.02
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
 
             DateTime exp = Expiry;
             if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)

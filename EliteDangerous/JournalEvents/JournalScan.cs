@@ -338,10 +338,11 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
-        {
-            summary = $"Scan of {BodyName}";
 
+        public override string FillSummary { get { return "Scan of " + BodyName; } }
+
+        public override void FillInformation(out string info, out string detailed)  //V
+        {
             if (IsStar)
             {
                 double? r = nRadius;

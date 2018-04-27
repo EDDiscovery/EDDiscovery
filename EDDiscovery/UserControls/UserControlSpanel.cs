@@ -333,6 +333,8 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showIcon))
                 coldata.Add("`!!ICON!!");                // dummy place holder..
 
+            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
             if (Config(Configuration.showDescription))
             {
                 tooltipattach.Add(coldata.Count);
@@ -342,7 +344,7 @@ namespace EDDiscovery.UserControls
             if (Config(Configuration.showInformation))
             {
                 tooltipattach.Add(coldata.Count);
-                coldata.Add(he.EventDescription.Replace("\r\n", " "));
+                coldata.Add(EventDescription.Replace("\r\n", " "));
             }
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
@@ -381,7 +383,7 @@ namespace EDDiscovery.UserControls
                 edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
 
-            string tooltip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;
+            string tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
             for (int i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
             {
