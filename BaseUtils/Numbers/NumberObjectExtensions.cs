@@ -367,5 +367,18 @@ public static class ObjectExtensionsNumbersBool
     }
 
     #endregion
+
+    #region stuff that should have been in Math
+
+    static int Range(this int a, int min, int max)
+    {
+        return Math.Max(Math.Min(a, min), max);
+    }
+    static long Range(this long a, long min, long max)
+    {
+        return Math.Max(Math.Min(a, min), max);
+    }
+
+    #endregion
 }
 
