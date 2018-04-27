@@ -68,11 +68,20 @@ namespace EliteDangerousCore.JournalEvents
 
         public long? MarketID { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override string FillSummary { get
+            {
+                if (Docked)
+                    return "At " + StationName;
+                else if (Latitude.HasValue && Longitude.HasValue)
+                    return "Landed on " + Body;
+                else
+                    return "At " + StarSystem;
+            } }
+
+        public override void FillInformation(out string info, out string detailed) //V
         {
             if (Docked)
             {
-                summary = "At " + StationName;
                 info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem);
                 detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised, "Security:", Security_Localised);
 
@@ -101,13 +110,11 @@ namespace EliteDangerousCore.JournalEvents
             }
             else if (Latitude.HasValue && Longitude.HasValue)
             {
-                summary = "Landed on " + Body;
                 info = "At " + JournalFieldNaming.RLat(Latitude.Value) + " " + JournalFieldNaming.RLong(Longitude.Value);
                 detailed = "";
             }
             else
             {
-                summary = "At " + StarSystem;
                 info = BaseUtils.FieldBuilder.Build("In space near ", Body, "< of type ", BodyType);
                 detailed = "";
             }

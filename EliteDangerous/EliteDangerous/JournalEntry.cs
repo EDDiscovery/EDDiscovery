@@ -222,6 +222,7 @@ namespace EliteDangerousCore
 
     public enum SyncFlags
     {
+        NoBit = 0,                      // for sync change func only
         EDSM = 0x01,
         EDDN = 0x02,
         EGO = 0x04,
@@ -237,8 +238,9 @@ namespace EliteDangerousCore
         public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
         public int CommanderId;                 // commander Id of entry
 
-        public string EventTypeStr;             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
         public JournalTypeEnum EventTypeID;
+        public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
+        public string EventSummaryName;     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
 
         public DateTime EventTimeUTC;
 
@@ -321,16 +323,25 @@ namespace EliteDangerousCore
             }
         }
 
-        public abstract void FillInformation(out string summary, out string info, out string detailed);
+        public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
+
+        public virtual string FillSummary { get { return EventTypeStr.SplitCapsWord(); } }  // entries may override if required
 
         #endregion
 
         #region Creation
 
+        public JournalEntry(DateTime utc, int synced , JournalTypeEnum jtype)       // manual creation via NEW
+        {
+            EventTypeID = jtype;
+            EventTimeUTC = utc;
+            Synced = synced;
+            TLUId = 0;
+        }
+
         public JournalEntry(JObject jo, JournalTypeEnum jtype)
         {
             EventTypeID = jtype;
-            EventTypeStr = jtype.ToString();
             EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
             TLUId = 0;
         }
@@ -369,33 +380,6 @@ namespace EliteDangerousCore
             jr.EdsmID = (long)dr["EdsmID"];
             jr.Synced = (int)(long)dr["Synced"];
             return jr;
-        }
-
-        public static JObject CreateFSDJournalEntryJson(DateTime utc, string name, double x, double y, double z, int mc)
-        {
-            JObject jo = new JObject();
-            jo["timestamp"] = utc.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
-            jo["event"] = "FSDJump";
-            jo["StarSystem"] = name;
-            jo["StarPos"] = new JArray(x, y, z);
-            jo["EDDMapColor"] = mc;
-            return jo;
-        }
-
-        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, int syncflag, JObject jo, long edsmid = 0)
-        {
-            JournalEntry je = CreateJournalEntry(jo.ToString());
-            je.TLUId = tluid;
-            je.CommanderId = cmdrid;
-            je.Synced = syncflag;
-            je.EdsmID = edsmid;
-            return je;
-        }
-
-        public static JournalEntry CreateFSDJournalEntry(long tluid, int cmdrid, DateTime utc, string name, double x, double y, double z, int mc, int syncflag)
-        {
-            JObject jo = CreateFSDJournalEntryJson(utc, name, x, y, z, mc);
-            return CreateFSDJournalEntry(tluid, cmdrid, syncflag, jo);
         }
 
         #endregion
@@ -562,29 +546,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public static void UpdateMapColour(long journalid, int mapcolour)
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                JObject jo = GetJson(journalid, cn);
-
-                if (jo != null)
-                {
-                    jo["EDDMapColor"] = mapcolour;
-
-                    using (DbCommand cmd2 = cn.CreateCommand("Update JournalEntries set EventData = @EventData where ID = @ID"))
-                    {
-                        cmd2.AddParameterWithValue("@ID", journalid);
-                        cmd2.AddParameterWithValue("@EventData", jo.ToString());
-
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update journal ID {0} with map colour", journalid));
-                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
-                    }
-                }
-            }
-        }
-
-        public static void UpdateSyncFlagBit(long journalid, SyncFlags bit, bool value, SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2 , SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             bool closeConn = false;
 
@@ -596,22 +558,22 @@ namespace EliteDangerousCore
                     cn = new SQLiteConnectionUser(utc: true);
                 }
 
-                JournalEntry je = Get(journalid, cn);
+                if (value1)
+                    Synced |= (int)bit1;
+                else
+                    Synced &= ~(int)bit1;
 
-                if (je != null)
+                if (value2)
+                    Synced |= (int)bit2;
+                else
+                    Synced &= ~(int)bit2;
+
+                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
                 {
-                    if (value)
-                        je.Synced |= (int)bit;
-                    else
-                        je.Synced &= ~(int)bit;
-
-                    using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set Synced = @sync where ID=@journalid", txn))
-                    {
-                        cmd.AddParameterWithValue("@journalid", journalid);
-                        cmd.AddParameterWithValue("@sync", je.Synced);
-                        System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", journalid, je.Synced));
-                        SQLiteDBClass.SQLNonQueryText(cn, cmd);
-                    }
+                    cmd.AddParameterWithValue("@journalid", Id);
+                    cmd.AddParameterWithValue("@sync", Synced);
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", Id , Synced));
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 }
             }
             finally
@@ -623,18 +585,37 @@ namespace EliteDangerousCore
             }
         }
 
-        public static void UpdateCommanderID(long journalid, int cmdrid)
+        public void UpdateCommanderID(int cmdrid)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
                 using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdrid where ID=@journalid"))
                 {
-                    cmd.AddParameterWithValue("@journalid", journalid);
+                    cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
-                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with map colour", journalid));
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with map colour", Id));
+                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    CommanderId = cmdrid;
+                }
+            }
+        }
+
+        static public bool ResetCommanderID(int from, int to)
+        {
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            {
+                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
+                {
+                    if (from == -1)
+                        cmd.CommandText = "Update JournalEntries set CommanderID = @cmdridto";
+
+                    cmd.AddParameterWithValue("@cmdridto", to);
+                    cmd.AddParameterWithValue("@cmdridfrom", from);
+                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
                     SQLiteDBClass.SQLNonQueryText(cn, cmd);
                 }
             }
+            return true;
         }
 
         public static JournalEDDCommodityPrices AddEDDCommodityPrices(int cmdrid, DateTime dt, string station, string faction, JArray jcommodities)     // add item, return journal ID
@@ -1031,6 +1012,10 @@ namespace EliteDangerousCore
             }
         }
 
+        #endregion
+
+        #region Factory creation
+
         static public Type TypeOfJournalEntry(JournalTypeEnum type)
         {
             if (JournalEntryTypes.ContainsKey(type))
@@ -1043,23 +1028,13 @@ namespace EliteDangerousCore
             }
         }
 
-        #endregion
-
-        #region Factory creation
+        static string JournalRootClassname = typeof(JournalEvents.JournalTouchdown).Namespace;        // pick one at random to find out root classname
 
         static public Type TypeOfJournalEntry(string text)
         {
-            //foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum))) // check code only to make sure names match
-            //{
-            //Type p = Type.GetType("EliteDangerous.JournalEvents.Journal" + jte.ToString());
-            //Debug.Assert(p != null);
-            //}
-
             Type t = Type.GetType(JournalRootClassname + ".Journal" + text, false, true); // no exception, ignore case here
             return t;
         }
-
-        static string JournalRootClassname = typeof(JournalEvents.JournalTouchdown).Namespace;        // pick one at random to find out root classname
 
         static public JournalEntry CreateJournalEntry(string text)
         {
@@ -1072,54 +1047,28 @@ namespace EliteDangerousCore
         {
             string Eventstr = jo["event"].StrNull();
 
+            JournalEntry ret = null;
+
             if (Eventstr == null)  // Should normaly not happend unless corrupt string.
-                return new JournalUnknown(jo);      // MUST return something
-
-            JournalTypeEnum jte = JournalTypeEnum.Unknown;
-            Type jtype = Enum.TryParse(Eventstr, out jte) ? TypeOfJournalEntry(jte) : TypeOfJournalEntry(Eventstr);
-
-            if (jtype == null)
-            {
-                System.Diagnostics.Trace.WriteLine("Unknown event: " + Eventstr);
-                return new JournalUnknown(jo);
-            }
+                ret = new JournalUnknown(jo);      // MUST return something
             else
-                return (JournalEntry)Activator.CreateInstance(jtype, jo);
+            {
+                JournalTypeEnum jte = JournalTypeEnum.Unknown;
+                Type jtype = Enum.TryParse(Eventstr, out jte) ? TypeOfJournalEntry(jte) : TypeOfJournalEntry(Eventstr);
+
+                if (jtype == null)
+                    ret = new JournalUnknown(jo);
+                else
+                    ret = (JournalEntry)Activator.CreateInstance(jtype, jo);
+            }
+
+            ret.EventSummaryName = ret.FillSummary;     // after creation, so journal fields are populated.
+            return ret;
         }
 
         #endregion
 
         #region Misc
-
-        static public JournalTypeEnum JournalString2Type(string str)
-        {
-            foreach (JournalTypeEnum mat in Enum.GetValues(typeof(JournalTypeEnum)))
-            {
-                if (str.ToLower().Equals(mat.ToString().ToLower()))
-                    return mat;
-            }
-
-            return JournalTypeEnum.Unknown;
-        }
-
-
-        static public bool ResetCommanderID(int from, int to)
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                using (DbCommand cmd = cn.CreateCommand("Update JournalEntries set CommanderID = @cmdridto where CommanderID=@cmdridfrom"))
-                {
-                    if (from == -1)
-                        cmd.CommandText = "Update JournalEntries set CommanderID = @cmdridto";
-
-                    cmd.AddParameterWithValue("@cmdridto", to);
-                    cmd.AddParameterWithValue("@cmdridfrom", from);
-                    System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
-                }
-            }
-            return true;
-        }
 
         static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
         {

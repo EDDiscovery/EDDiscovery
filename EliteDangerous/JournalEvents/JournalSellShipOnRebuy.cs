@@ -60,9 +60,9 @@ Example:
             shp.Sell(ShipType, SellShipId);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Ship:",ShipType, "System:" , System, "Price:" , ShipPrice);
             detailed = "";
         }

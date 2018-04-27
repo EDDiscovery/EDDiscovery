@@ -88,9 +88,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.ModuleRetrieve(this);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised, "< into ", Slot ,";Hot!", Hot );
             if ( Cost>0)
                 info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost);

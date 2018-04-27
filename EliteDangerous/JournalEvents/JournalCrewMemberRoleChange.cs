@@ -35,9 +35,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Crew { get; set; }
         public string Role { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             //info = Crew;
             info = BaseUtils.FieldBuilder.Build("Crew:", Crew, "Role:", Role);
             detailed = "";

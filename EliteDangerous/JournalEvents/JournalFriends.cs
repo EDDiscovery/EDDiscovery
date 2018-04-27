@@ -58,9 +58,9 @@ namespace EliteDangerousCore.JournalEvents
         public int OnlineCount { get; set; }        // always counts
         public int OfflineCount { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             detailed = "";
 
             if (StatusList != null)

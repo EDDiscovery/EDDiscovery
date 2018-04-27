@@ -87,7 +87,8 @@ namespace EliteDangerousCore
 
                 System.Diagnostics.Debug.WriteLine("**** Not known item.. synthesise response " + fdid + " >> " + m.ModName + "," + m.ModType);
                 synthesisedmodules.Add(lowername, m);                   // lets cache them for completeness..
-                //            string line = "{ \"" + lowername + "\", new ShipModule( -1, 0 , \"" + m.modname + "\",\"" + m.modtype + "\") },";
+                
+                //            string line = "{ \"" + lowername + "\", new ShipModule( -1, 0 , \"" + m.modname + "\",\"" + m.modtype + "\") },";     // DEBUG
                 //            if (!synthresponses.Contains(line))  synthresponses.Add(line);
             }
 

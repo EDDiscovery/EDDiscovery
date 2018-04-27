@@ -40,9 +40,9 @@ namespace EliteDangerousCore.JournalEvents
         public string[] Slots { get; set; }
         public string[] FriendlySlots { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = "";
             if (FriendlySlots != null)
                 info = string.Join(",", FriendlySlots);

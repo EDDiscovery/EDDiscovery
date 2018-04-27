@@ -50,9 +50,9 @@ namespace EliteDangerousCore.JournalEvents
         public int MissionId { get; set; }
         public string Name { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = info = BaseUtils.FieldBuilder.Build("Mission name:", Name,
                                       "From:", OldDestinationSystem,
                                       "", OldDestinationStation,

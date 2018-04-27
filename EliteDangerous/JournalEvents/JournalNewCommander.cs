@@ -34,9 +34,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public string Package { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Cmdr ", Name , "Starting Package:", Package); 
             detailed = "";
         }

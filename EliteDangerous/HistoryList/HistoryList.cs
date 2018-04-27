@@ -748,25 +748,17 @@ namespace EliteDangerousCore
             {
                 if (hs == he)
                 {
-                    if (he.StartMarker)
+                    if (he.StartMarker || he.StopMarker)
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, false);
-                        he.StartMarker = false;
-                    }
-                    else if (he.StopMarker)
-                    {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, false);
-                        he.StopMarker = false;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false);
                     }
                     else if (started == false)
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StartMarker, true);
-                        he.StartMarker = true;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
                     }
                     else
                     {
-                        JournalEntry.UpdateSyncFlagBit(hs.Journalid, SyncFlags.StopMarker, true);
-                        he.StopMarker = true;
+                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true);
                     }
 
                     break;
@@ -970,7 +962,7 @@ namespace EliteDangerousCore
                     shipyards.Process(je, conn);
                     outfitting.Process(je, conn);
 
-                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI, he.System);  // the ships
+                    Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn, he.WhereAmI, he.System);  // the ships
                     he.ShipInformation = ret.Item1;
                     he.StoredModules = ret.Item2;
 

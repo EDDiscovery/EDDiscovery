@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
 
                 HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
 
-                if (lastfsd != null && lastfsd.IsEDSMFirstDiscover)
+                if (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover)
                     name = "(FD)*" + name;
 
                 textBoxSystem.Text = name;

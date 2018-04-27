@@ -74,9 +74,9 @@ namespace EliteDangerousCore.JournalEvents
         public string SubSystem { get; set; }           // 3 null
         public double? SubSystemHealth { get; set; }    // 3 null
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             if (TargetLocked)
             {
                 if (ScanStage == null)

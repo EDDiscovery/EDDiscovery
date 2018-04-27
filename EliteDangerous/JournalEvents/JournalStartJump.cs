@@ -41,9 +41,9 @@ namespace EliteDangerousCore.JournalEvents
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("",JumpType , "< to " , StarSystem, "" , FriendlyStarClass);
             detailed = "";
         }

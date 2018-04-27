@@ -36,9 +36,9 @@ namespace EliteDangerousCore.JournalEvents
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;", PlayerControlled);
             detailed = "";
         }
