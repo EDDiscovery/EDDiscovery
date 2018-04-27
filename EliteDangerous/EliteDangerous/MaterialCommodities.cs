@@ -172,6 +172,14 @@ namespace EliteDangerousCore
             return true;
         }
 
+        public static bool IsJumponium(string name)
+        {
+            name = name.ToLower();
+            return (name.Contains("arsenic") || name.Contains("cadmium") || name.Contains("carbon")
+                || name.Contains("germanium") || name.Contains("niobium") || name.Contains("polonium")
+                || name.Contains("vanadium") || name.Contains("yttrium"));
+        }
+
         public static void SetUpInitialTable()
         {
             

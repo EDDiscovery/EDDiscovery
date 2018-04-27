@@ -731,6 +731,7 @@ namespace EliteDangerousCore.EDSM
                 ["event"] = "Scan",
                 ["EDDFromEDSMBodie"] = true,
                 ["BodyName"] = jo["name"],
+                ["discovery"] = jo["discovery"],
             };
 
             if (jo["orbitalInclination"] != null) jout["OrbitalInclination"] = jo["orbitalInclination"];

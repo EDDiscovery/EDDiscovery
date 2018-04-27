@@ -588,8 +588,6 @@ namespace EDDiscovery.UserControls
                                     string ttext, int labelhoff, bool fromEDSM, bool imgowned = true)
         {
             //System.Diagnostics.Debug.WriteLine("    " + label + " " + postopright + " size " + size + " hoff " + labelhoff + " laby " + (postopright.Y + size.Height + labelhoff));
-            if (fromEDSM)
-                ttext = "From EDSM" + Environment.NewLine + ttext;
 
             PictureBoxHotspot.ImageElement ie = new PictureBoxHotspot.ImageElement(new Rectangle(postopright.X, postopright.Y, size.Width, size.Height), i, ttext, ttext, imgowned);
 

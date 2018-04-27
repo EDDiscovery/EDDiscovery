@@ -103,6 +103,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
             this.dataGridViewScangrid.TabIndex = 23;
+            this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             // 
             // ImageColumn
