@@ -118,13 +118,8 @@ namespace EDDiscovery.UserControls
 
             if (last_sn != null)
             {
-                List<StarScan.ScanNode> all_nodes = new List<StarScan.ScanNode>();
-                foreach (StarScan.ScanNode starnode in last_sn.starnodes.Values)
-                {
-                    all_nodes = Flatten(starnode, all_nodes);
-                }
+                List<StarScan.ScanNode> all_nodes = last_sn.Bodies.ToList();// flatten tree of scan nodes to prepare for listing
 
-                // flatten tree of scan nodes to prepare for listing
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
                     if (sn.ScanData != null && sn.ScanData.BodyName != null)
@@ -212,48 +207,23 @@ namespace EDDiscovery.UserControls
                         // materials                        
                         if (sn.ScanData.HasMaterials)
                         {
-                            string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                            // jumponium materials: Arsenic (As), Cadmium (Cd), Carbon (C), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
-                            
-                            if (MaterialsBrief.Contains("Arsenic") || MaterialsBrief.Contains("Cadmium") || MaterialsBrief.Contains("Carbon")
-                                || MaterialsBrief.Contains("Germanium") || MaterialsBrief.Contains("Niobium") || MaterialsBrief.Contains("Polonium")
-                                || MaterialsBrief.Contains("Vanadium") || MaterialsBrief.Contains("Yttrium"))
+                            string ret = "";
+                            foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
-                                bdDetails.Append("\n" + "This body contains: ");
+                                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
+                                if (mc != null && MaterialCommodityDB.IsJumponium(mc.name))
+                                    ret = ret.AppendPrePad(mc.name, ", ");
                             }
 
-                            if (MaterialsBrief.Contains("Arsenic"))
-                            {
-                                bdDetails.Append("Arsenic. ");
-                            }
-                            if (MaterialsBrief.Contains("Cadmium"))
-                            {
-                                bdDetails.Append("Cadmium. ");
-                            }
-                            if (MaterialsBrief.Contains("Germanium"))
-                            {
-                                bdDetails.Append("Germanium. ");
-                            }
-                            if (MaterialsBrief.Contains("Niobium"))
-                            {
-                                bdDetails.Append("Niobium. ");
-                            }
-                            if (MaterialsBrief.Contains("Polonium"))
-                            {
-                                bdDetails.Append("Polonium. ");
-                            }
-                            if (MaterialsBrief.Contains("Vanadium"))
-                            {
-                                bdDetails.Append("Vanadium. ");
-                            }
-                            if (MaterialsBrief.Contains("Yttrium"))
-                            {
-                                bdDetails.Append("Yttrium. ");
-                            }
+                            if (ret.Length > 0)
+                                bdDetails.Append("\n" + "This body contains: " + ret );
                         }
 
                         int value = sn.ScanData.EstimatedValue;
-                        bdDetails.Append("Value " + value.ToString("N0"));
+                        bdDetails.Append("\nValue " + value.ToString("N0"));
+
+                        //if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
+                        //    bdDetails.Append("\n" + "Discovered by: " + sn.ScanData.EDSMDiscoveryCommander + " on " + sn.ScanData.EDSMDiscoveryUTC.ToStringYearFirst());
 
                         Image img = null;
 
@@ -270,30 +240,15 @@ namespace EDDiscovery.UserControls
 
                         DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
-                        string scan = sn.ScanData.DisplayString(); // display tooltip with full information when hower bodies image
-                        cur.Cells[0].ToolTipText = scan;
                         cur.Tag = img;
-
+                        cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
+                                sn.ScanData.DisplayString();
                     }
                 }
 
                 // display total scan values
                 SetControlText("Scan Summary for " + last_sn.system.Name + ". " + BuildScanValue(last_sn));
             }
-        }
-
-        private List<StarScan.ScanNode> Flatten(StarScan.ScanNode sn, List<StarScan.ScanNode> flattened)
-        {
-            flattened.Add(sn);
-
-            if (sn.children != null)
-            {
-                foreach (StarScan.ScanNode node in sn.children.Values)
-                {
-                    Flatten(node, flattened);
-                }
-            }
-            return flattened;
         }
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -322,6 +277,16 @@ namespace EDDiscovery.UserControls
             }
 
             return $"Approx total scan value: {value:N0}";
+        }
+
+        private void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 4)
+            {
+                object curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
+                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
+                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curdata;
+            }
         }
     }
 }

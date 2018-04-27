@@ -122,7 +122,10 @@ namespace EliteDangerousCore.JournalEvents
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }
+
         public bool IsEDSMBody { get; private set; }
+        public string EDSMDiscoveryCommander { get; private set; }      // may be null if not known
+        public DateTime EDSMDiscoveryUTC { get; private set; }
 
         public EDReserve ReserveLevel { get; set; }
         public string ReserveLevelStr
@@ -323,8 +326,6 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
 
-            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);
-
             EstimatedValue = CalculateEstimatedValue();
 
             if (evt["Parents"] != null)
@@ -336,10 +337,22 @@ namespace EliteDangerousCore.JournalEvents
                     Parents.Add(new BodyParent { Type = prop.Name, BodyID = prop.Value.Int() });
                 }
             }
-        }
+
+            // EDSM bodies fields
+
+            IsEDSMBody = evt["EDDFromEDSMBodie"].Bool(false);           // Bodie? Who is bodie?  Did you mean Body Finwen ;-)
+
+            JToken discovery = evt["discovery"];
+            if (discovery != null)
+            {
+                EDSMDiscoveryCommander = discovery["commander"].StrNull();
+                EDSMDiscoveryUTC = discovery["date"].DateTimeUTC();
+            }
+
+    }
 
 
-        public override string FillSummary { get { return "Scan of " + BodyName; } }
+    public override string FillSummary { get { return "Scan of " + BodyName; } }
 
         public override void FillInformation(out string info, out string detailed)  //V
         {
@@ -389,7 +402,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (includefront)
             {
-                scanText.AppendFormat("{0}\n\n", BodyName);
+                scanText.AppendFormat("{0} {1}\n\n", BodyName, IsEDSMBody ? " (EDSM)" : "");
 
                 if (IsStar)
                 {
@@ -534,6 +547,9 @@ namespace EliteDangerousCore.JournalEvents
             if (EstimatedValue > 0)
                 scanText.AppendFormat("\nEstimated value: {0:N0}", EstimatedValue);
 
+            if (EDSMDiscoveryCommander != null)
+                scanText.AppendFormat("\n\nDiscovered by " + EDSMDiscoveryCommander + " on " + EDSMDiscoveryUTC.ToStringZulu());
+
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
@@ -568,21 +584,25 @@ namespace EliteDangerousCore.JournalEvents
         public string DisplayMaterials(int indent = 0)
         {
             StringBuilder scanText = new StringBuilder();
-            string indents = new string(' ', indent);
 
-            scanText.Append("Materials:\n");
-            foreach (KeyValuePair<string, double> mat in Materials)
+            if (HasMaterials)
             {
-                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                if (mc != null)
-                    scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
-                else
-                    scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
-                                                                mat.Value.ToString("N1"));
-            }
+                string indents = new string(' ', indent);
 
-            if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
-                scanText.Remove(scanText.Length - 1, 1);
+                scanText.Append("Materials:\n");
+                foreach (KeyValuePair<string, double> mat in Materials)
+                {
+                    MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
+                    if (mc != null)
+                        scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
+                    else
+                        scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
+                                                                    mat.Value.ToString("N1"));
+                }
+
+                if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
+                    scanText.Remove(scanText.Length - 1, 1);
+            }
 
             return scanText.ToNullSafeString();
         }
