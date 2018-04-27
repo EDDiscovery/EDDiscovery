@@ -95,9 +95,9 @@ namespace EliteDangerousCore.JournalEvents
                 shp.Sell(SellOldShipFD, SellOldShipId.Value);     
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0", ShipPrice);
             if (StoreOldShip != null)
                 info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoreOldShip);

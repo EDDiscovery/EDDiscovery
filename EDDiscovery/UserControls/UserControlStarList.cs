@@ -244,7 +244,9 @@ namespace EDDiscovery.UserControls
 
             dataGridViewStarList.Rows[rownr].DefaultCellStyle.ForeColor = (he.System.HasCoordinate || he.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
-            string tip = he.EventSummary + Environment.NewLine + he.EventDescription + Environment.NewLine + he.EventDetailedInfo;
+            he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
+            string tip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
             dataGridViewStarList.Rows[rownr].Cells[0].Tag = false;  //[0] records if checked EDSm
 
@@ -799,6 +801,8 @@ namespace EDDiscovery.UserControls
                                 tlist = tlist.AppendPrePad(syslist[i].EventTimeLocal.ToShortDateString() + " " + syslist[i].EventTimeLocal.ToShortTimeString(), ", ");
                         }
 
+                        he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
                         return new Object[] {
                             rw.Cells[0].Value,
                             rw.Cells[1].Value,
@@ -807,8 +811,8 @@ namespace EDDiscovery.UserControls
                             tlist,
                             he.WhereAmI ,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
-                            he.EventDescription,
-                            he.EventDetailedInfo,
+                            EventDescription,
+                            EventDetailedInfo,
                             he.isTravelling ? he.TravelledDistance.ToString("0.0") : "",
                             he.isTravelling ? he.TravelledSeconds.ToString() : "",
                             he.isTravelling ? he.Travelledjumps.ToStringInvariant() : "",

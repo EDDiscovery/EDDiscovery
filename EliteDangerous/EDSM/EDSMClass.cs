@@ -385,9 +385,9 @@ namespace EliteDangerousCore.EDSM
 
         #region Log Sync for log fetcher
 
-        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<HistoryEntry> log, out DateTime logstarttime, out DateTime logendtime)
+        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime)
         {
-            log = new List<HistoryEntry>();
+            log = new List<JournalFSDJump>();
             logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
 
@@ -451,8 +451,8 @@ namespace EliteDangerousCore.EDSM
                             }
                         }
 
-                        HistoryEntry he = HistoryEntry.MakeVSEntry(sc, etutc, EliteConfigInstance.InstanceConfig.DefaultMapColour, "", "", firstdiscover: firstdiscover);       // FSD jump entry
-                        log.Add(he);
+                        JournalFSDJump fsd = new JournalFSDJump(etutc, sc , EliteConfigInstance.InstanceConfig.DefaultMapColour, firstdiscover, (int)SyncFlags.EDSM);
+                        log.Add(fsd);
                     }
                 }
             }

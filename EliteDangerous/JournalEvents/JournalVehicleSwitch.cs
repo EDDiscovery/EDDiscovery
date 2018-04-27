@@ -39,9 +39,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.VehicleSwitch(To);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = To; 
             detailed = "";
         }

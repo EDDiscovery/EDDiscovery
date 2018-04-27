@@ -41,9 +41,9 @@ namespace EliteDangerousCore.JournalEvents
         public string MessageLocalised { get; set; }
         public string Channel { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("From:", FromLocalised, "Msg:", MessageLocalised, "Channel:", Channel);
             detailed = "";
         }

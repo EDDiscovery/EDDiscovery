@@ -40,9 +40,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, System, -Cost);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("System:", System, "Cost:; cr;N0", Cost);
             detailed = "";
         }

@@ -64,9 +64,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool? Horizons { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:;;N0", Credits);
             detailed = BaseUtils.FieldBuilder.Build("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
         }

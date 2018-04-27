@@ -34,9 +34,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Interdictor { get; set; }
         public bool IsPlayer { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("By ", Interdictor, "< (NPC);(Player)", IsPlayer);
             detailed = "";
         }

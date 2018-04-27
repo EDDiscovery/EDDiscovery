@@ -110,9 +110,10 @@ namespace EliteDangerousCore.JournalEvents
             public double Proportion;
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed)      //V
+        public override string FillSummary { get { return $"At {StationName}"; } }
+
+        public override void FillInformation(out string info, out string detailed)      //V
         {
-            summary = $"At {StationName}";
             info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, ";Wanted" , Wanted, "Faction:", Faction, "< in state ", FactionState);
             detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised);
 

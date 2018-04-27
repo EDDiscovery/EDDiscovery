@@ -129,9 +129,9 @@ namespace EliteDangerousCore.JournalEvents
         public List<CommunityGoal> CommunityGoals;
         public string CommunityGoalList;
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = CommunityGoalList;
             detailed = "";
             if ( CommunityGoals!=null )

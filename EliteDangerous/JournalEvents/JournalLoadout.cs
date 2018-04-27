@@ -90,9 +90,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count , "Hull:; cr;N0", HullValue , "Modules:; cr;N0" , ModulesValue , "Rebuy:; cr;N0", Rebuy);
             detailed = "";
 

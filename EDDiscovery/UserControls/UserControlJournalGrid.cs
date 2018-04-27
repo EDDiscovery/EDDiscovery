@@ -184,8 +184,10 @@ namespace EDDiscovery.UserControls
 
         private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
         {
-            string detail = item.EventDescription;
-            detail = detail.AppendPrePad(item.EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
+            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+
+            string detail = EventDescription;
+            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
 
             var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
             rw.CreateCells(dataGridViewJournal, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail);
@@ -399,7 +401,8 @@ namespace EDDiscovery.UserControls
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                string infodetailed = leftclicksystem.EventDescription.AppendPrePad(leftclicksystem.EventDetailedInfo, Environment.NewLine);
+                leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+                string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
                 info.Info("Journal Record: " + (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);

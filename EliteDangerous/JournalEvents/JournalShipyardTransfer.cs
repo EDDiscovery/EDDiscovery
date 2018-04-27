@@ -80,9 +80,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Transfer(ShipType, ShipTypeFD, ShipId, FromSystem, system.Name, whereami, arrival);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , FromSystem , "Distance:; ly;0.0" , Distance , "Price:; cr;N0", TransferPrice, "TransferTime:", FriendlyTransferTime);
             detailed = "";
         }

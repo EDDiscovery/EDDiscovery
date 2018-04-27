@@ -44,9 +44,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " drones", TotalSale);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("",Type, "Count:" , Count , "Each:; cr;N0" , SellPrice, "Amount:; cr;N0" , TotalSale);
             detailed = "";
         }

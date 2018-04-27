@@ -61,9 +61,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.ShipyardSwap(this, whereami, system.Name);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Swap ",StoreOldShip, "< for a " , ShipType);
             detailed = "";
         }

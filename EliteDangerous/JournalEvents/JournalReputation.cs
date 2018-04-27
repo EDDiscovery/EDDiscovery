@@ -37,9 +37,9 @@ namespace EliteDangerousCore.JournalEvents
         public double? Independent { get; set; }
         public double? Alliance { get; set; }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("Federation:;;0.#",Federation , "Empire:;;0.#" , Empire, "Independent:;;0.#", Independent , "Alliance:;;0.#", Alliance);
             detailed = "";
         }

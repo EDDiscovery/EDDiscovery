@@ -58,9 +58,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count);
         }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:", Count, ";Abandoned", Abandoned, "PowerPlay:", PowerplayOrigin);
             detailed = "";
         }

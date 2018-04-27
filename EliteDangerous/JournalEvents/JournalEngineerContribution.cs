@@ -81,9 +81,9 @@ namespace EliteDangerousCore.JournalEvents
 
         protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
 
-        public override void FillInformation(out string summary, out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) //V
         {
-            summary = EventTypeStr.SplitCapsWord();
+            
             if (unknownType==true)
                 info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
              else
