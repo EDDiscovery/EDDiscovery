@@ -31,10 +31,7 @@ namespace EliteDangerousCore
 
         public int Indexno;            // for display purposes.
 
-        public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
-        public long Journalid { get { return journalEntry.Id; } }
         public JournalEntry journalEntry;       // MUST be present
-        public EDCommander Commander;
 
         public ISystem System;         // Must be set! All entries, even if they are not FSD entries.
                                        // The Minimum is name and edsm_id 
@@ -46,6 +43,9 @@ namespace EliteDangerousCore
                                        //       if edsm_id=-1 a load from SystemTable will occur with the name used
                                        // SO the journal reader can just read data in that table only, does not need to do a system match
 
+        public JournalTypeEnum EntryType { get { return journalEntry.EventTypeID; } }
+        public long Journalid { get { return journalEntry.Id; } }
+        public EDCommander Commander { get { return EDCommander.GetCommander(journalEntry.CommanderId); } }
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
         public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
@@ -133,7 +133,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)//, EDCommander cmdr = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SQLiteConnectionSystem conn = null)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -229,7 +229,6 @@ namespace EliteDangerousCore
                 Indexno = indexno,
                 journalEntry = je,
                 System = isys,
-                Commander = cmdr ?? EDCommander.GetCommander(je.CommanderId)
             };
 
 
