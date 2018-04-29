@@ -26,6 +26,7 @@ using System.Text;
 using System.Windows.Forms;
 using EliteDangerousCore.JournalEvents;
 using static EDDiscovery.UserControls.Recipes;
+using static EliteDangerousCore.MaterialCommodityDB;
 
 namespace EDDiscovery.UserControls
 {
@@ -47,12 +48,7 @@ namespace EDDiscovery.UserControls
         private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DBTechBrokerFilterSave { get { return "ShoppingListTechBrokerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        const int VeryCommonCap = 300;
-        const int CommonCap = 250;
-        const int StandardCap = 200;
-        const int RareCap = 150;
-        const int VeryRareCap = 100;
-
+        
         #region Init
 
         public UserControlShoppingList()
@@ -197,11 +193,11 @@ namespace EDDiscovery.UserControls
                         wantedList.Append($"  {c.scratchpad} {c.name}{present}");
                         int? onHand = mcl.Where(m => m.shortname == c.shortname).FirstOrDefault()?.count;
                         int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.type == MaterialCommodityDB.MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqCommon && totalReq > CommonCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqStandard && totalReq > StandardCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqRare && totalReq > RareCap) ||
-                            (c.type == MaterialCommodityDB.MaterialFreqVeryRare && totalReq > VeryRareCap))
+                        if ((c.type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
+                            (c.type == MaterialFreqCommon && totalReq > CommonCap) ||
+                            (c.type == MaterialFreqStandard && totalReq > StandardCap) ||
+                            (c.type == MaterialFreqRare && totalReq > RareCap) ||
+                            (c.type == MaterialFreqVeryRare && totalReq > VeryRareCap))
                         {
                             capExceededMats.Add(c.name);
                         }
@@ -260,13 +256,8 @@ namespace EDDiscovery.UserControls
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;
-                        MaterialCommodityDB md =  MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                        int max;
-                        if (md.type == MaterialCommodityDB.MaterialFreqVeryCommon)  max = VeryCommonCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqCommon)  max = CommonCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqStandard)  max = StandardCap;
-                        else if (md.type == MaterialCommodityDB.MaterialFreqRare)  max = RareCap;
-                        else max = VeryRareCap;
+                        MaterialCommodityDB md =  GetCachedMaterial(mat.Key);
+                        int max = MaterialLimit(md).Value;
                         wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
                                                                         mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
                     }
