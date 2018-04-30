@@ -69,6 +69,7 @@ namespace EDDiscovery.Forms
             CombatPanel,            // 36
             ShipYardPanel,          // 37
             OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
+            SplitterControl,        // 39
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -137,6 +138,7 @@ namespace EDDiscovery.Forms
 
             // Multi panels
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
+            { new PanelInfo( PanelIDs.SplitterControl, typeof(UserControlContainerSplitter), "Splitter", "TheSplitter", "Splitter (allows other panels to be placed in the it)" , transparent:false) },
 
             // Specials changable user panels
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user

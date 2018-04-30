@@ -255,6 +255,12 @@
     <Compile Include="UserControls\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UserControlContainerSplitter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerSplitter.Designer.cs">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -639,6 +645,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlContainerSplitter.resx">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
       <DependentUpon>UserControlContainerGrid.cs</DependentUpon>

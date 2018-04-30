@@ -115,9 +115,10 @@ namespace ExtendedControls
 
         private void Dgv_RowHeightChanged(object sender, DataGridViewRowEventArgs e)
         {
-            int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
-            Debug.Assert(vsc != null, "No Scroll bar attached");
-            vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingColumnIndex, rows - 1, dgv.DisplayedRowCount(false));
+            // TBD Whats up? Try journal..
+        //    int rows = dgv.Rows.GetRowCount(DataGridViewElementStates.Visible);
+        //    Debug.Assert(vsc != null, "No Scroll bar attached");
+        //    vsc.SetValueMaximumLargeChange(dgv.FirstDisplayedScrollingColumnIndex, rows - 1, dgv.DisplayedRowCount(false));
         }
 
 

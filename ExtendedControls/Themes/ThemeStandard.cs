@@ -414,18 +414,18 @@ namespace ExtendedControls
                 UpdateColorControls(parent, c, fnt, 0);
         }
 
-        private void UpdateColorControls(Control parent, Control myControl, Font fnt, int level)
+        private void UpdateColorControls(Control parent, Control myControl, Font fnt, int level)    // parent can be null
         {
 #if DEBUG
-            //string pad = "                             ".Substring(0, level);
-            //System.Diagnostics.Debug.WriteLine(pad + level + ":" + parent.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + fnt.ToString());
+            //System.Diagnostics.Debug.WriteLine("                             ".Substring(0, level) + level + ":" + parent?.Name.ToString() + ":" + myControl.Name.ToString() + " " + myControl.ToString() + " " + fnt.ToString());
 #endif
             float mouseoverscaling = 1.3F;
             float mouseselectedscaling = 1.5F;
 
             Type controltype = myControl.GetType();
-            Type parentcontroltype = parent.GetType();
-            if (!parentcontroltype.Namespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
+            string parentnamespace = parent?.GetType().Namespace ?? "NoParent";
+
+            if (!parentnamespace.Equals("ExtendedControls") && (controltype.Name.Equals("Button") || controltype.Name.Equals("RadioButton") || controltype.Name.Equals("GroupBox") ||
                 controltype.Name.Equals("CheckBox") || controltype.Name.Equals("TextBox") ||
                 controltype.Name.Equals("ComboBox") || (controltype.Name.Equals("RichTextBox")))
                 )
@@ -926,6 +926,7 @@ namespace ExtendedControls
             else if (myControl is TabStrip)
             {
                 TabStrip ts = myControl as TabStrip;
+                //System.Diagnostics.Debug.WriteLine("*************** TAB Strip themeing" + myControl.Name + " " + myControl.Tag);
                 ts.DropDownBackgroundColor = currentsettings.colors[Settings.CI.button_back];
                 ts.DropDownBorderColor = currentsettings.colors[Settings.CI.textbox_border];
                 ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
@@ -944,7 +945,7 @@ namespace ExtendedControls
             }
             else
             {
-                if (!parentcontroltype.Namespace.Equals("ExtendedControls"))
+                if (!parentnamespace.Equals("ExtendedControls"))
                 {
                     //Console.WriteLine("THEME: Unhandled control " + controltype.Name + ":" + myControl.Name + " from " + parent.Name);
                 }
