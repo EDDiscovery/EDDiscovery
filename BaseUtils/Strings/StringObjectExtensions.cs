@@ -935,5 +935,20 @@ public static class ObjectExtensionsStrings
 
         return s;
     }
+
+    // find the next instance of one of the chars in set, in str, and return it in res. Return string after it.  Null if not found 
+    static public string NextOneOf(this string str, char[] set, out char res)
+    {
+        res = char.MinValue;
+        int i = str.IndexOfAny(set);
+        if (i >= 0)
+        { 
+            res = str[i];
+            return str.Substring(i + 1);
+        }
+
+        return null;
+    }
+
 }
 

@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             // 
             this.userControlTravelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlTravelGrid.Location = new System.Drawing.Point(0, 0);
-            this.userControlTravelGrid.Name = "userControlTravelGrid";
+            this.userControlTravelGrid.Name = "PRIMARY userControlTravelGrid";
             this.userControlTravelGrid.Size = new System.Drawing.Size(550, 350);
             this.userControlTravelGrid.TabIndex = 0;
             // 
