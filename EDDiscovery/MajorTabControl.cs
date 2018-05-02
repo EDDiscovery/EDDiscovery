@@ -170,7 +170,7 @@ namespace EDDiscovery
 
         public TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
         {
-            Type t = PanelInformation.GetPanelInfoByEnum(ptype).PopoutType;
+            Type t = PanelInformation.GetPanelInfoByPanelID(ptype).PopoutType;
             return (from TabPage x in TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
         }
 
@@ -234,7 +234,7 @@ namespace EDDiscovery
             else
                 postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs).ToStringInvariant() + ")";
 
-            string title = name != null ? name : (PanelInformation.GetPanelInfoByEnum(ptype).WindowTitle + postfix);
+            string title = name != null ? name : (PanelInformation.GetPanelInfoByPanelID(ptype).WindowTitle + postfix);
             TabPage page = new TabPage(title);
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3);

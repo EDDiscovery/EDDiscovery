@@ -196,9 +196,10 @@ namespace EDDiscovery.Forms
             return PanelList.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
         }
 
-        static public PanelInfo GetPanelInfoByEnum(PanelIDs p)
+        static public PanelInfo GetPanelInfoByPanelID(PanelIDs p)    // null if p is invalid
         {
-            return PanelList[PanelList.FindIndex(x => x.PopoutID == p)];
+            int i = PanelList.FindIndex(x => x.PopoutID == p);
+            return i>=0 ? PanelList[i] : null;
         }
 
         static public PanelInfo GetPanelInfoByType(Type t)  // null if not found
@@ -206,26 +207,15 @@ namespace EDDiscovery.Forms
             return PanelList.Find(x => x.PopoutType == t);
         }
 
-        static public Type GetPanelTypeByEnum(PanelIDs p)       // null if panel ID is bad.
-        {
-            int index = GetPanelIndexByEnum(p);
-            return index >= 0 ? PanelList[index].PopoutType : null;
-        }
-
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
         {
-            Type t = GetPanelTypeByEnum(p);
-            return t != null ? (UserControls.UserControlCommonBase)Activator.CreateInstance(t, null) : null;
-        }
-
-        static private int GetPanelIndexByEnum(PanelIDs p)
-        {
-            return PanelList.FindIndex(x => x.PopoutID == p);
+            PanelInfo pi = GetPanelInfoByPanelID(p);
+            return pi != null ? (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null) : null;
         }
 
         public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(PanelIDs p, System.EventHandler h)
         {
-            PanelInformation.PanelInfo pi = GetPanelInfoByEnum(p);
+            PanelInformation.PanelInfo pi = GetPanelInfoByPanelID(p);
             if (pi.IsUserSelectable)
             {
                 System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();
@@ -270,10 +260,10 @@ namespace EDDiscovery.Forms
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                Type paneltype = PanelInformation.GetPanelTypeByEnum(p);
-                if (paneltype != null) // paranoia
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
+                if (pi != null) // paranoia
                 {
-                    int numopened = usercontrolsforms.CountOf(paneltype);
+                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
                     SQLiteConnectionUser.PutSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
                 }
@@ -285,13 +275,13 @@ namespace EDDiscovery.Forms
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
                 int numtoopen = SQLiteConnectionUser.GetSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), 0);
-                Type paneltype = PanelInformation.GetPanelTypeByEnum(p);
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
 
-                if (paneltype != null && numtoopen > 0) // paranoia on first..
+                if (pi != null && numtoopen > 0) // paranoia on first..
                 {
-                    int numopened = usercontrolsforms.CountOf(paneltype);
+                    int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     if (numopened < numtoopen)
                     {
                         for (int i = numopened + 1; i <= numtoopen; i++)
@@ -308,7 +298,7 @@ namespace EDDiscovery.Forms
 
             UserControlCommonBase ctrl = PanelInformation.Create(selected);
 
-            PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByEnum(selected);
+            PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
 
             if (ctrl != null && poi != null )
             {

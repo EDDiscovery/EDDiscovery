@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
 
             for (int i = 0; i < pids.Length; i++)
             {
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByEnum(pids[i]);
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
                 CompositeButton cb = new CompositeButton();
                 cb.Size = panelsize;
