@@ -69,7 +69,7 @@ namespace ExtendedControls
         {
             InitializeComponent();
             labelControlText.Text = "";
-            labelTitle.Text = "None";
+            labelTitle.Text = "Select";
             autofadeinouttimer.Tick += AutoFadeInOutTick;
             autorepeat.Interval = 200;
             autorepeat.Tick += Autorepeat_Tick;
@@ -107,7 +107,7 @@ namespace ExtendedControls
                 CurrentControl = null;
                 si = -1;
                 labelControlText.Text = "";
-                labelTitle.Text = "None";
+                labelTitle.Text = "Select";
                 panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             }
 

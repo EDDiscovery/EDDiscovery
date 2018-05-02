@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
 
         Control TabCreate(ExtendedControls.TabStrip t, int si)        // called by tab strip when selected index changes.. create a new one.. only create.
         {
-            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByEnum((PanelInformation.PanelIDs)t.TagList[si]);
+            PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)t.TagList[si]);
             Control c = PanelInformation.Create(pi.PopoutID);
             c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
 

@@ -11,7 +11,7 @@ using static System.Windows.Forms.Form;
 
 public static class ControlHelpersStaticFunc
 {
-    #region Misc
+    #region Control
 
     static public void DisposeTree(this Control c, int lvl)     // pass lvl = 0 to dispose of this object itself..
     {
@@ -32,13 +32,13 @@ public static class ControlHelpersStaticFunc
 
         foreach (Control s in todispose)
         {
-            System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + s.GetType().Name + " " + s.Name);
+            //System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + s.GetType().Name + " " + s.Name);
             s.Dispose();
         }
 
         if ( lvl ==0 && !( c is SplitterPanel))
         {
-            System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + c.GetType().Name + " " + c.Name);
+            //System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + c.GetType().Name + " " + c.Name);
             c.Dispose();
         }
 
@@ -46,29 +46,28 @@ public static class ControlHelpersStaticFunc
 
     static public void DumpTree(this Control c, int lvl)
     {
-        System.Diagnostics.Debug.WriteLine("              ".Substring(0,lvl) + "Control " + c.GetType().Name + " " + c.Name);
+        System.Diagnostics.Debug.WriteLine("                       ".Substring(0,lvl) + "Control " + c.GetType().Name + ":" + c.Name);
         foreach (Control s in c.Controls)
         {
-            if (s.Controls.Count > 0)
-                s.DumpTree(lvl + 1);
+            s.DumpTree(lvl + 1);
         }
     }
 
-    static public int RunActionOn(this Control c, Type t, Action<Control> action)       // how many t's under c.  not including c.
+    static public int RunActionOnTree(this Control c, Predicate<Control> cond, Action<Control> action )       // Given a condition, run action on it, count instances
     {
-        int total = 0;
+        //System.Diagnostics.Debug.WriteLine("Raot: " + c.Parent.GetType().Name + "->" + c.GetType().Name + ":" + c.Name);
+        bool istype = cond(c);
 
-        foreach (Control s in c.Controls)
+        if (istype)
         {
-            if (s.Controls.Count > 0)
-                total += RunActionOn(s, t, action);
-
-            bool istype = s.GetType() == t;
-            total += istype ? 1 : 0;
-            //System.Diagnostics.Debug.WriteLine("Action on " + s.GetType().Name + " " + s.Name + " ! " + t.Name);
-            if (istype)
-                action(s);
+            //System.Diagnostics.Debug.WriteLine("Action on " + c.GetType().Name + " " + c.Name + " ==? " + istype);
+            action(c);
         }
+
+        int total = istype ? 1 : 0;
+
+        foreach (Control s in c.Controls)                   // all sub controls get a chance to play!
+            total += RunActionOnTree(s, cond, action);
 
         return total;
     }
@@ -97,6 +96,10 @@ public static class ControlHelpersStaticFunc
             }
         }
     }
+
+    #endregion
+
+    #region Misc
 
     static public StringFormat StringFormatFromContentAlignment(ContentAlignment c)
     {
@@ -374,9 +377,9 @@ public static class ControlHelpersStaticFunc
     {
         SplitContainer tomerge = currentsplitter.Controls[panel].Controls[0] as SplitContainer;  // verified by enable on open
 
-        Control keep = tomerge.Controls[panel].Controls[0];      // we keep this tree..
+        Control keep = tomerge.Controls[0].Controls[0];      // we keep this tree..
 
-        tomerge.Controls[panel].Controls.Clear();    // clear control list - we want to keep these..
+        tomerge.Controls[0].Controls.Clear();    // clear control list - we want to keep these..
         tomerge.DisposeTree(0);               // tree dispose of all other stuff left, and dispose of tomerge.
 
         currentsplitter.Controls[panel].Controls.Add(keep);
