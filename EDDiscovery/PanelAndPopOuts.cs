@@ -308,7 +308,7 @@ namespace EDDiscovery.Forms
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
                             poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);
 
-                ctrl.Init(discoveryform, discoveryform.TravelControl.GetTravelGrid, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
+                ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
                 tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 

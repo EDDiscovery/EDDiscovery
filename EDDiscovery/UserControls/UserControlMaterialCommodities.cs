@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
 
             SetCheckBoxes();
 
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -72,6 +71,19 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
+            DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
+
+            uctg.OnTravelSelectionChanged -= Display;
         }
 
         void SetCheckBoxes()
@@ -149,21 +161,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
-
-            uctg.OnTravelSelectionChanged -= Display;
-        }
-
-        #endregion
 
         private void checkBoxClear_CheckStateChanged(object sender, EventArgs e)
         {

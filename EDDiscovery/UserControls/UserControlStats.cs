@@ -47,13 +47,17 @@ namespace EDDiscovery.UserControls
             tabControlCustomStats.SelectedIndex = SQLiteDBClass.GetSettingInt(DbSelectedTabSave, 0);
             userControlStatsTimeScan.EnableDisplayStarsPlanetSelector();
             discoveryform.OnNewEntry += AddNewEntry;
-            uctg.OnTravelSelectionChanged += TravelGridChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += TravelGridChanged;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += TravelGridChanged;
         }
 

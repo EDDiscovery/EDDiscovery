@@ -80,13 +80,17 @@ namespace EDDiscovery.UserControls
             dataOutputDir = SQLiteDBClass.GetSettingString("ImageHandlerOutputDir", dataOutputDir);
 
             computer = new StarDistanceComputer();
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 

@@ -48,7 +48,7 @@ namespace EDDiscovery
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public UserControls.UserControlHistory TravelControl { get { return travelHistoryControl; } }
+        public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
         
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
@@ -171,6 +171,24 @@ namespace EDDiscovery
             // open all the major tabs except the built in ones
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
             MaterialCommodityDB.SetUpInitialTable();
+
+
+            //backwards compat with pre 10 versions
+            string primarycontrolname = "SplitterControlWindows";
+            string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
+
+            if (splitctrl == "")       // never set, inherit from previous system
+            {
+                int enum_bottom = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan));
+                int enum_bottomright = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log));
+                int enum_middleright = SQLiteDBClass.GetSettingInt("TravelControlMiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
+                int enum_topright = SQLiteDBClass.GetSettingInt("TravelControlTopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
+
+                string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
+                                "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
+                                "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
+                SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
+            }
 
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this);
@@ -372,7 +390,7 @@ namespace EDDiscovery
 
         public void AddTab(PanelInformation.PanelIDs id, int tabindex = 0) // negative means from the end.. -1 is one before end
         {
-            tabControlMain.AddTab(id,tabindex);
+            tabControlMain.AddTab(id, tabindex);
         }
 
         public bool SelectTabPage(string name)
@@ -417,7 +435,7 @@ namespace EDDiscovery
 
         private bool IsNonRemovableTab(int n)
         {
-            bool uch = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlHistory;
+            bool uch = Object.ReferenceEquals(tabControlMain.TabPages[n].Controls[0], tabControlMain.PrimaryTab);
             bool sel = tabControlMain.TabPages[n].Controls[0] is UserControls.UserControlPanelSelector;
             return uch || sel;
         }
@@ -816,7 +834,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
+            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1364,7 +1382,7 @@ namespace EDDiscovery
 
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
-            Open3DMap(travelHistoryControl.GetTravelHistoryCurrent);
+            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
         }
 
         private void buttonExt2dmap_Click(object sender, EventArgs e)

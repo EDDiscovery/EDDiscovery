@@ -29,12 +29,6 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {       
-        public const int DisplayNumberHistoryGrid = 0;              // special codes, reserved for history grid
-        protected const int DisplayNumberHistoryBotLeft = 1000;     // historical numbers.. don't want to change
-        protected const int DisplayNumberHistoryBotRight = 1001;
-        protected const int DisplayNumberHistoryMidRight = 1002;
-        protected const int DisplayNumberHistoryTopRight = 1003;
-
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
         public const int DisplayNumberStartExtraTabs = 100;         // Excepting travelgrid which due to history grid using zero always starts at 100.
         public const int DisplayNumberStartExtraTabsMax = 199;         // Excepting travelgrid which due to history grid using zero always starts at 100.
@@ -54,20 +48,20 @@ namespace EDDiscovery.UserControls
 
         public int displaynumber { get; protected set; }
         public EDDiscoveryForm discoveryform { get; protected set; }
-        public IHistoryCursor uctg { get; protected set; }
+        public IHistoryCursor uctg { get; protected set; }          // valid at loadlayout
 
         // in calling order..
-        public void Init(EDDiscoveryForm ed, IHistoryCursor thc, int dn)
+        public void Init(EDDiscoveryForm ed, int dn)
         {
             System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
             displaynumber = dn;
-            uctg = thc;
             Init();
         }    
 
-        public virtual void Init() { }              // start up, called by above Init
-        public virtual void LoadLayout() { }        // then a chance to load a layout
+        public virtual void Init() { }              // start up, called by above Init.  no cursor available
+        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // optional, cursor is set..
+        public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
         public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
         public virtual void Closing() { }           // close it
 

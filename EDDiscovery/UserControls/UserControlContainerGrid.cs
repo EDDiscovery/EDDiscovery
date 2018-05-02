@@ -40,24 +40,20 @@ namespace EDDiscovery.UserControls
         private string DbPositions { get { return "GridControlPositons" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbZOrder { get { return "GridControlZOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
+        ExtendedControls.DropDownCustom popoutdropdown;
+
         public UserControlContainerGrid()
         {
             InitializeComponent();
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
-        ExtendedControls.DropDownCustom popoutdropdown;
-
-        public override void Init()
-        { 
-            ucursor_history = ucursor_inuse = uctg;
-            //System.Diagnostics.Debug.WriteLine("Init Grid Use THC " + ucursor_inuse.GetHashCode());
-        }
-
         bool checkmulticall = false;    // debug for now
 
-        public override void LoadLayout()
+        public override void LoadLayout()       // unlike splitter, we don't need to be so careful about the cursor.  We can load in load layout
         {
+            ucursor_history = ucursor_inuse = uctg;
+
             System.Diagnostics.Debug.Assert(checkmulticall == false);
             checkmulticall = true;      // examples seen of multi call, lets trap it
 
@@ -191,7 +187,8 @@ namespace EDDiscovery.UserControls
 
             panelPlayfield.Controls.Add(uccr);
 
-            uccb.Init(discoveryform, ucursor_inuse, dnum);
+            uccb.Init(discoveryform, dnum);
+            uccb.SetCursor(ucursor_inuse);
             uccb.LoadLayout();
 
             uccr.Font = discoveryform.theme.GetFont;        // Important. Apply font autoscaling to the user control

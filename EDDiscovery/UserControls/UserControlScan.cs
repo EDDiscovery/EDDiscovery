@@ -69,7 +69,6 @@ namespace EDDiscovery.UserControls
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeCheckBoxes(size);
 
-            uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
 
             imagebox.ClickElement += ClickElement;
@@ -79,6 +78,11 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Display;
         }
 

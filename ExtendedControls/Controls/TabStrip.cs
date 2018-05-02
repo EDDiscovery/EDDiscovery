@@ -94,13 +94,19 @@ namespace ExtendedControls
                 return false;
         }
 
-
         private void ChangePanel(int i)
         {
-            if ( CurrentControl != null )
+            Close();
+            Create(i);
+            PostCreate();
+        }
+
+        public void Close()
+        {
+            if (CurrentControl != null)
             {
-                if (OnRemoving!=null)
-                    OnRemoving(this,CurrentControl);
+                if (OnRemoving != null)
+                    OnRemoving(this, CurrentControl);
 
                 this.Controls.Remove(CurrentControl);
                 CurrentControl.Dispose();
@@ -110,7 +116,10 @@ namespace ExtendedControls
                 labelTitle.Text = "Select";
                 panelSelectedIcon.BackgroundImage = EmptyPanelIcon;
             }
+        }
 
+        public void Create(int i)
+        {
             if (OnCreateTab != null)
             {
                 //System.Diagnostics.Debug.WriteLine("Panel " + i + " make");
@@ -134,10 +143,7 @@ namespace ExtendedControls
 
                     //System.Diagnostics.Debug.WriteLine("Panel " + i + " post create " + CurrentControl.Name);
 
-                    if ( OnPostCreateTab != null )
-                        OnPostCreateTab(this, CurrentControl, i);       // now tab is in control set, give it a chance to configure itself and set its name
-
-                    if ( i < ImageList.Length )
+                    if (i < ImageList.Length)
                         panelSelectedIcon.BackgroundImage = ImageList[i];   // paranoia..
 
                     labelTitle.Text = CurrentControl.Name;
@@ -145,6 +151,14 @@ namespace ExtendedControls
             }
 
             SetIconVisibility();
+        }
+
+        public void PostCreate()
+        {
+            if (CurrentControl != null && OnPostCreateTab != null )
+            {
+                OnPostCreateTab(this, CurrentControl, si);       // now tab is in control set, give it a chance to configure itself and set its name
+            }
         }
 
         public void SetControlText(string t)

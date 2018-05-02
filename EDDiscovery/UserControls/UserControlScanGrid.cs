@@ -53,12 +53,12 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Display;
             discoveryform.OnNewEntry += NewEntry;
         }
 
         public override void LoadLayout()
         {
+            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
         }
 
