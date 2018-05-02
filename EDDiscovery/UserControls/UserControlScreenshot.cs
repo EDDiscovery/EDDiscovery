@@ -43,13 +43,17 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.screenshotconverter.OnScreenShot += ScreenShot;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += Display;
         }
 

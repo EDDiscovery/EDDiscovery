@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    ExtendedControls.TabStrip ts = (ap.actioncontroller as ActionController).DiscoveryForm.TravelControl.GetTabStrip(cmdname);     // case insensitive
+                    ExtendedControls.TabStrip ts = null;//tbd (ap.actioncontroller as ActionController).DiscoveryForm.PrimaryCursor.GetTabStrip(cmdname);     // case insensitive
 
                     if (ts != null)
                     {

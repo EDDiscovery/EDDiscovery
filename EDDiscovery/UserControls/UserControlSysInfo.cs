@@ -94,7 +94,6 @@ namespace EDDiscovery.UserControls
             else
                 Lines = BaseUtils.LineStore.Restore(rs, HorzPositions);
 
-            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
@@ -106,6 +105,12 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
+            System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;    // get this whenever current selection or refreshed..
         }
 
         public override void Closing()
@@ -138,6 +143,8 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl)
         {
+            System.Diagnostics.Debug.WriteLine("system info kicked " + uctg.GetHashCode());
+
             if (neverdisplayed)
             {
                 UpdateViewOnSelection();  // then turn the right ones on

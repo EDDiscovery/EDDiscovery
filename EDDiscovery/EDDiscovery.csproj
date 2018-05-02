@@ -410,12 +410,6 @@
     <Compile Include="UserControls\UserControlSettings.Designer.cs">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlHistory.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlHistory.Designer.cs">
-      <DependentUpon>UserControlHistory.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="UserControls\UserControlContainerResizable.cs">
@@ -818,10 +812,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSettings.resx">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlHistory.resx">
-      <DependentUpon>UserControlHistory.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config">
