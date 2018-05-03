@@ -168,6 +168,7 @@ namespace EDDiscovery.UserControls
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
 
                 tabstrip.Tag = tagid;                               // Tag stores the ID index of this view
+                tabstrip.Name = Name + "." + tagid.ToStringInvariant();
 
                 System.Diagnostics.Debug.WriteLine("Make new tab control " + tagid + " of " + panelid);
 

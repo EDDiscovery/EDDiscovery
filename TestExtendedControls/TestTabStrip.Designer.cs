@@ -37,6 +37,7 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.listControlCustom3 = new ExtendedControls.ListControlCustom();
             this.tabStrip2 = new ExtendedControls.TabStrip();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,12 +60,14 @@
             this.tabStrip1.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStrip1.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStrip1.DropDownWidth = 400;
+            this.tabStrip1.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStrip1.EmptyPanelIcon")));
             this.tabStrip1.Location = new System.Drawing.Point(3, 3);
             this.tabStrip1.Name = "tabStrip1";
             this.tabStrip1.SelectedIndex = -1;
             this.tabStrip1.ShowPopOut = true;
             this.tabStrip1.Size = new System.Drawing.Size(484, 96);
             this.tabStrip1.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop;
+            this.tabStrip1.TabFieldSpacing = 8;
             this.tabStrip1.TabIndex = 0;
             // 
             // listView1
@@ -162,6 +165,7 @@
             this.tabStrip2.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStrip2.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tabStrip2.DropDownWidth = 400;
+            this.tabStrip2.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStrip2.EmptyPanelIcon")));
             this.tabStrip2.Location = new System.Drawing.Point(45, 195);
             this.tabStrip2.Name = "tabStrip2";
             this.tabStrip2.SelectedIndex = -1;
@@ -171,11 +175,22 @@
             this.tabStrip2.TabFieldSpacing = 8;
             this.tabStrip2.TabIndex = 1;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(662, 51);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Clear";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // TestTabStrip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(926, 546);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.tabStrip2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.listControlCustom2);
@@ -200,5 +215,6 @@
         private System.Windows.Forms.ListBox listBox1;
         private ExtendedControls.ListControlCustom listControlCustom3;
         private ExtendedControls.TabStrip tabStrip2;
+        private System.Windows.Forms.Button button1;
     }
 }

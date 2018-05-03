@@ -36,6 +36,10 @@ namespace ExtendedControls
         public object[] TagList;      // tags for them..
         public bool ShowPopOut { get; set; }= true; // Pop out icon show
 
+        // if you set this, when empty, a panel will appear with the color selected
+        public Color EmptyColor { get { return emptypanelcolor; } set { emptypanelcolor = value; Invalidate(); } }
+        public float EmptyColorScaling { get; set; } = 0.5F;
+
         public int TabFieldSpacing { get; set; } = 8;
 
         // only if using ListSelection:
@@ -65,6 +69,8 @@ namespace ExtendedControls
         private Timer autorepeat = new Timer();
         private int autorepeatdir = 0;
 
+        private Color emptypanelcolor = Color.Empty;         // default empty means use base back color.. ambient property
+
         public TabStrip()
         {
             InitializeComponent();
@@ -77,31 +83,29 @@ namespace ExtendedControls
             SetIconVisibility();
         }
 
+
+        #region Public interface
+
         public void Toggle()
         {
             if (si != -1)
                 ChangePanel((si + 1) % ImageList.Length);
         }
 
-        public bool ChangeTo(int i)
+        public bool ChangePanel(int i)     // with bounds checking
         {
             if (i >= 0 && i < ImageList.Length)
             {
-                ChangePanel(i);
+                Close();
+                Create(i);
+                PostCreate();
                 return true;
             }
             else
                 return false;
         }
 
-        private void ChangePanel(int i)
-        {
-            Close();
-            Create(i);
-            PostCreate();
-        }
-
-        public void Close()
+        public void Close()     // close down
         {
             if (CurrentControl != null)
             {
@@ -118,7 +122,7 @@ namespace ExtendedControls
             }
         }
 
-        public void Create(int i)
+        public void Create(int i)       // create.. only if already closed
         {
             if (OnCreateTab != null)
             {
@@ -131,15 +135,7 @@ namespace ExtendedControls
 
                     CurrentControl.Dock = DockStyle.Fill;
 
-                    if (StripMode != StripModeType.StripBottom)
-                    {
-                        Control p = this.Controls[0];
-                        this.Controls.Clear();
-                        this.Controls.Add(CurrentControl);
-                        this.Controls.Add(p);
-                    }
-                    else
-                        this.Controls.Add(CurrentControl);
+                    AddControlToView(CurrentControl);
 
                     //System.Diagnostics.Debug.WriteLine("Panel " + i + " post create " + CurrentControl.Name);
 
@@ -153,7 +149,7 @@ namespace ExtendedControls
             SetIconVisibility();
         }
 
-        public void PostCreate()
+        public void PostCreate()        // ask for post create phase
         {
             if (CurrentControl != null && OnPostCreateTab != null )
             {
@@ -167,7 +163,43 @@ namespace ExtendedControls
             SetIconVisibility();
         }
 
+        #endregion
+
         #region Common 
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            if (emptypanelcolor != Color.Empty && CurrentControl == null)       // this seems the best way to display the non used
+            {
+                Rectangle area = panelStrip.Dock == DockStyle.Top ? new Rectangle(0, panelStrip.Height, ClientRectangle.Width, ClientRectangle.Height - panelStrip.Height) : new Rectangle(0, 0, ClientRectangle.Width, ClientRectangle.Height - panelStrip.Height);
+
+                using (Brush b = new System.Drawing.Drawing2D.LinearGradientBrush(area, emptypanelcolor, emptypanelcolor.Multiply(EmptyColorScaling), 90))
+                {
+                    e.Graphics.FillRectangle(b, area);
+                }
+            }
+        }
+
+        private void AddControlToView(Control c)
+        {
+            SuspendLayout();
+
+            Controls.Clear();
+
+            if (StripMode != StripModeType.StripBottom)
+            {
+                Controls.Add(c);
+                Controls.Add(panelStrip);
+            }
+            else
+            {
+                Controls.Add(panelStrip);
+                Controls.Add(c);
+            }
+
+            ResumeLayout();
+        }
 
         private void TabStrip_Layout(object sender, LayoutEventArgs e)
         {

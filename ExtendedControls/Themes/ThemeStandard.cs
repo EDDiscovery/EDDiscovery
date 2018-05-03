@@ -932,6 +932,7 @@ namespace ExtendedControls
                 ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                 ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                 ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                ts.EmptyColor = currentsettings.colors[Settings.CI.button_back];
             }
             else if ( myControl is CompositeButton )
             {
