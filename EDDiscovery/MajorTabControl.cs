@@ -231,14 +231,17 @@ namespace EDDiscovery
 
             System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
 
-            uccb.Init(eddiscovery, dn);    // start the uccb up
 
             int numoftab = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? 0 : (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1);
             if (uccb is UserControls.UserControlContainerSplitter && numoftab > 0)          // so history is a splitter, so first real splitter will be dn=100, adjust for it
                 numoftab--;
-            
+
             string postfix = numoftab == 0 ? "" : "(" + numoftab.ToStringInvariant() + ")";
             string title = name != null ? name : (PanelInformation.GetPanelInfoByPanelID(ptype).WindowTitle + postfix);
+
+            uccb.Name = title;
+            uccb.Init(eddiscovery, dn);    // start the uccb up
+
             TabPage page = new TabPage(title);
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3);

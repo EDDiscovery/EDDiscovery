@@ -77,7 +77,7 @@ namespace EDDiscovery.Actions
                             {
                                 Forms.PanelInformation.PanelIDs[] list = ts.TagList.Cast<Forms.PanelInformation.PanelIDs>().ToArray();
                                 int index = Array.IndexOf(list, id.Value);
-                                if (!ts.ChangeTo(index))
+                                if (!ts.ChangePanel(index))
                                     ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
                             }
                             else
