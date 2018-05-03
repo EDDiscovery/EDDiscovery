@@ -58,11 +58,11 @@ namespace EDDiscovery.UserControls
             displaynumber = dn;
             Init();
         }    
-
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
-        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // optional, cursor is set..
+
+        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
-        public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
+        public virtual void InitialDisplay() { }    // do the initial display
         public virtual void Closing() { }           // close it
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed

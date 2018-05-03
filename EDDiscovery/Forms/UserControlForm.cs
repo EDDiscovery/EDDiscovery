@@ -275,6 +275,7 @@ namespace EDDiscovery.Forms
             {
                 UserControl.SetCursor(UserControl.discoveryform.PrimaryCursor);
                 UserControl.LoadLayout();
+                UserControl.InitialDisplay();
             }
 
             IsLoaded = true;
