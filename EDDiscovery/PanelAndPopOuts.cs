@@ -320,10 +320,9 @@ namespace EDDiscovery.Forms
 
                 discoveryform.theme.ApplyToForm(tcf);
 
-                ctrl.InitialDisplay();
-
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
+
             return ctrl;
         }
     }

@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
 
         // no cursor..  
         // Since splitter is used as the primary history window, we need to be more careful due to this being used as the primary cursor
-        // so we by design don't have a cursor via Init on any UCCB.  So we must create everything here for the primary, then we have a cursor, and
+        // so we by design don't have a cursor at Init on any UCCB.  So we must create everything here for the primary, then we have a cursor, and
         // then load layout can finish the job
 
         public override void Init()     
