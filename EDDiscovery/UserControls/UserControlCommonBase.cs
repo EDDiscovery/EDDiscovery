@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
         // in calling order..
         public void Init(EDDiscoveryForm ed, int dn)
         {
-            System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            //System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
             displaynumber = dn;
             Init();
