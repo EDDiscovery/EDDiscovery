@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.Assert(checkmulticall == false);
             checkmulticall = true;      // examples seen of multi call, lets trap it
 
-            System.Diagnostics.Debug.WriteLine("Grid Restore from " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DbWindows);
 
             string[] names = SQLiteConnectionUser.GetSettingString(DbWindows, "").Split(',');
             int[] positions;
@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls
             ResumeLayout();
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
-            System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
 
             UpdateButtons();
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
             string s = "", p = "";
             foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
             {
@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
                 s = s.AppendPrePad(uc.GetType().Name,",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
 
-                System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
+                //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
 
                 uc.Closing();
             }
@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
             }
 
             SQLiteConnectionUser.PutSettingString(DbZOrder, z);
-            System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one

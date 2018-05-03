@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels
 
             string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, defaultview);
-            System.Diagnostics.Debug.WriteLine("Split ctrl" + splitctrl);
+
             SuspendLayout();
 
             // try and make the configured splitter tree
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
                     var uccb = c as UserControlCommonBase;
                     int tagid = (int)uccb.Tag;
                     int displaynumber = DisplayNumberOfGridInstance(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                    System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber );
+                    //System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber );
 
                     uccb.Init(discoveryform, displaynumber);
                     uccb.SetCursor(ucursor_inuse);
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
                     }
                 });
 
-            System.Diagnostics.Debug.WriteLine("Split save " + state);
+            //System.Diagnostics.Debug.WriteLine("Split save " + state);
             SQLiteConnectionUser.PutSettingString(DbWindows, state);
 
             panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase, // all UCCB, either direct or in tab strips
@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
                 {
                     var uccb = c as UserControlCommonBase;      // offer the chance for each UCCB to close..
                     uccb.Closing();
-                    System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name);
+                    //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name);
                 } );
         }
 
@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
                 tabstrip.Tag = tagid;                               // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
 
-                System.Diagnostics.Debug.WriteLine("Make new tab control " + tagid + " of " + panelid);
+                //System.Diagnostics.Debug.WriteLine("Make new tab control " + tagid + " of " + panelid);
 
                 tabstrip.OnRemoving += (tab, ctrl) =>
                 {
@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls
 
                     if (uc != null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Make Tab " + tab.Tag + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
+                        //System.Diagnostics.Debug.WriteLine("Make Tab " + tab.Tag + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
                         uc.Init(discoveryform, displaynumber);
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
         {
             bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
-            System.Diagnostics.Debug.WriteLine("Splitter CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("Splitter CTG " + ucursor_history.GetHashCode() + " IU " + ucursor_inuse.GetHashCode() + " New " + thc.GetHashCode());
             ucursor_history = thc;         // underlying one has changed. 
 
             if (changedinuse)   // inform the boys
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
                 {
                     var uccb = c as UserControlCommonBase;
                     uccb.ChangeCursorType(ucursor_inuse);
-                    System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
+                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
                 });
             }
         }
@@ -285,21 +285,21 @@ namespace EDDiscovery.UserControls
                 )
             {
                 ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
-                System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
+                //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
 
                 panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase,
                 (c) =>
                 {
                     var uccb = c as UserControlCommonBase;
                     uccb.ChangeCursorType(ucursor_inuse);
-                    System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
+                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
                 });
 
                 ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Stay on " + ucursor_inuse.GetHashCode());
+                //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Stay on " + ucursor_inuse.GetHashCode());
             }
         }
 
@@ -309,11 +309,6 @@ namespace EDDiscovery.UserControls
 
         private void Sc_MouseClick(object sender, MouseEventArgs e)
         {
-            string state = ControlHelpersStaticFunc.SplitterTreeState(panelPlayfield.Controls[0] as SplitContainer, "",
-                (s) => { return "" + (int)s.Tag; });
-
-            System.Diagnostics.Debug.WriteLine(state);
-
             currentsplitter = sender as SplitContainer;
             bool v = currentsplitter.Orientation == Orientation.Vertical;
             toolStripOrientation.Text = v ? "Change to Horizontal Split" : "Change to Vertical Split";
@@ -373,7 +368,7 @@ namespace EDDiscovery.UserControls
                                                               (c is UserControlCommonBase && c.Parent.GetType() == typeof(SplitterPanel) )),
                                                        (c) => 
                                                        {
-                                                           System.Diagnostics.Debug.WriteLine("Tag lookup on " + c.GetType().Name  +" = " + ((int)c.Tag));
+                                                           //System.Diagnostics.Debug.WriteLine("Tag lookup on " + c.GetType().Name  +" = " + ((int)c.Tag));
                                                            tagsinuse[(int)c.Tag] = 1;
                                                        } );
             int t = Array.FindIndex(tagsinuse, x => x==0);

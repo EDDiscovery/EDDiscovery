@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
-            System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("UCTG changed in sysinfo to " + uctg.GetHashCode());
         }
 
         public override void LoadLayout()
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
         {
-            System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
+            //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
             Display(last_he, discoveryform.history);
         }
 
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            System.Diagnostics.Debug.WriteLine("system info kicked " + uctg.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("system info kicked " + uctg.GetHashCode());
 
             if (neverdisplayed)
             {
