@@ -129,7 +129,7 @@ namespace EDDiscovery.UserControls
 
                     if (materials)
                     {
-                        rowobj = new[] { m.name, m.shortname, m.category, m.type, m.count.ToString() };
+                        rowobj = new[] { m.name, m.shortname, m.category, m.type, $"{m.count.ToString()}/{MaterialCommodityDB.MaterialLimit(m.type)}" };
                     }
                     else
                     {
