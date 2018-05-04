@@ -416,7 +416,6 @@
     <Compile Include="UserControls\UserControlSettings.Designer.cs">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
     <Compile Include="UserControls\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>

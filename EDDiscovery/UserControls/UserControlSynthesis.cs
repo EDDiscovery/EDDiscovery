@@ -25,7 +25,6 @@ using System.Windows.Forms;
 using EDDiscovery.Controls;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
-using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -49,7 +48,7 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector lfs;
         RecipeFilterSelector mfs;
 
-        public Action<List<Tuple<MaterialCommoditiesList.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
 
         public HistoryEntry CurrentHistoryEntry { get {return last_he;} }     //one in use, may be null
 
@@ -67,24 +66,24 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewSynthesis.RowTemplate.Height = 26;
 
-            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, SynthesisRecipes.Count);
+            Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
             if (Order.Distinct().Count() != Order.Length)       // if not distinct..
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
 
-            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, SynthesisRecipes.Count);
+            Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
-            var rcpes = SynthesisRecipes.Select(r => r.name).Distinct().ToList();
+            var rcpes = Recipes.SynthesisRecipes.Select(r => r.name).Distinct().ToList();
             rcpes.Sort();
             rfs = new RecipeFilterSelector(rcpes);
             rfs.Changed += FilterChanged;
 
-            var lvls = SynthesisRecipes.Select(r => r.level).Distinct().ToList();
+            var lvls = Recipes.SynthesisRecipes.Select(r => r.level).Distinct().ToList();
             lvls.Sort();
             lfs = new RecipeFilterSelector(lvls);
             lfs.Changed += FilterChanged;
 
-            List<string> matShortNames = SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
+            List<string> matShortNames = Recipes.SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
             matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
 
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
@@ -93,10 +92,10 @@ namespace EDDiscovery.UserControls
             mfs = new RecipeFilterSelector(matLongNames);
             mfs.Changed += FilterChanged;
 
-            for (int i = 0; i < SynthesisRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
+            for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)         // pre-fill array.. preventing the crash on cell edit when you
             {
                 int rno = Order[i];
-                MaterialCommoditiesList.SynthesisRecipe r = SynthesisRecipes[rno];
+                Recipes.SynthesisRecipe r = Recipes.SynthesisRecipes[rno];
 
                 int rown = dataGridViewSynthesis.Rows.Add();
 
@@ -189,16 +188,16 @@ namespace EDDiscovery.UserControls
         {
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
             // the order of recipies.
-            List<Tuple<MaterialCommoditiesList.Recipe, int>> wantedList = null;
+            List<Tuple<Recipes.Recipe, int>> wantedList = null;
 
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
                 int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
-                MaterialCommoditiesList.ResetUsed(mcl);
+                Recipes.ResetUsed(mcl);
 
-                wantedList = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
+                wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
                 string recep = SQLiteDBClass.GetSettingString(DbRecipeFilterSave, "All");
                 string[] recipeArray = recep.Split(';');
@@ -212,10 +211,10 @@ namespace EDDiscovery.UserControls
                 else
                     matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
 
-                for (int i = 0; i < SynthesisRecipes.Count; i++)
+                for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                 
                     if (recep == "All" && levels == "All" && materials == "All")
@@ -228,17 +227,17 @@ namespace EDDiscovery.UserControls
                         if (recep == "All") { visible = true; }
                         else
                         {
-                            visible = recipeArray.Contains(SynthesisRecipes[rno].name);
+                            visible = recipeArray.Contains(Recipes.SynthesisRecipes[rno].name);
                         }
                         if (levels == "All") { visible = visible && true; }
                         else
                         {
-                            visible = visible && lvlArray.Contains(SynthesisRecipes[rno].level);
+                            visible = visible && lvlArray.Contains(Recipes.SynthesisRecipes[rno].level);
                         }
                         if (materials == "All") { visible = visible && true; }
                         else
                         {
-                            var included = matList.Intersect<string>(SynthesisRecipes[rno].ingredients.ToList<string>());
+                            var included = matList.Intersect<string>(Recipes.SynthesisRecipes[rno].ingredients.ToList<string>());
                             visible = visible && included.Count() > 0;
                         }
                     }
@@ -246,12 +245,12 @@ namespace EDDiscovery.UserControls
                     dataGridViewSynthesis.Rows[i].Visible = visible;
                 }
 
-                for (int i = 0; i < SynthesisRecipes.Count; i++)
+                for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        Tuple<int, int, string> res = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string> res = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -263,16 +262,16 @@ namespace EDDiscovery.UserControls
                     }
                     if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
                     {
-                        wantedList.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(SynthesisRecipes[rno], Wanted[rno]));
+                        wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.SynthesisRecipes[rno], Wanted[rno]));
                     }
                 }
 
-                dataGridViewSynthesis.RowCount = SynthesisRecipes.Count;         // truncate previous shopping list..
+                dataGridViewSynthesis.RowCount = Recipes.SynthesisRecipes.Count;         // truncate previous shopping list..
 
                 if (!isEmbedded)
                 {
-                    MaterialCommoditiesList.ResetUsed(mcl);
-                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(wantedList, mcl);
+                    Recipes.ResetUsed(mcl);
+                    List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(wantedList, mcl);
                     shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
@@ -344,7 +343,7 @@ namespace EDDiscovery.UserControls
         {
             rowFrom = dataGridViewSynthesis.HitTest(e.X, e.Y).RowIndex;
 
-            if (rowFrom >= 0 && rowFrom < SynthesisRecipes.Count)        // only can drag SynthesisRecipes area..
+            if (rowFrom >= 0 && rowFrom < Recipes.SynthesisRecipes.Count)        // only can drag Recipes.SynthesisRecipes area..
             {
                 Size dragSize = SystemInformation.DragSize;
                 moveMoveDragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2),
@@ -366,13 +365,13 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " drop at " + droprow);
 
             // If the drag operation was a move then remove and insert the row.
-            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < SynthesisRecipes.Count )
+            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < Recipes.SynthesisRecipes.Count )
             {
                 DataGridViewRow rowTo = e.Data.GetData( typeof(DataGridViewRow)) as DataGridViewRow;
                 dataGridViewSynthesis.Rows.RemoveAt(rowFrom);
                 dataGridViewSynthesis.Rows.Insert(droprow, rowTo);
 
-                for (int i = 0; i < SynthesisRecipes.Count; i++)
+                for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                     Order[i] = (int)dataGridViewSynthesis.Rows[i].Tag;          // reset the order array
 
                 //for (int i = 0; i < 10; i++)   System.Diagnostics.Debug.WriteLine(i.ToString() + "=" + Order[i]);
@@ -383,7 +382,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < SynthesisRecipes.Count; i++)
+            for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
             {
                 int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                 Wanted[rno] = 0;

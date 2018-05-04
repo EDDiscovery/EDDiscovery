@@ -25,16 +25,15 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EliteDangerousCore.JournalEvents;
-using static EDDiscovery.UserControls.Recipes;
 using static EliteDangerousCore.MaterialCommodityDB;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlShoppingList : UserControlCommonBase
     {
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> EngineeringWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-        private List<Tuple<MaterialCommoditiesList.Recipe, int>> SynthesisWanted = new List<Tuple<MaterialCommoditiesList.Recipe, int>>();
-        private List<MaterialCommoditiesList.Recipe> TechBrokerWanted = new List<MaterialCommoditiesList.Recipe>();
+        private List<Tuple<Recipes.Recipe, int>> EngineeringWanted = new List<Tuple<Recipes.Recipe, int>>();
+        private List<Tuple<Recipes.Recipe, int>> SynthesisWanted = new List<Tuple<Recipes.Recipe, int>>();
+        private List<Recipes.Recipe> TechBrokerWanted = new List<Recipes.Recipe>();
         private RecipeFilterSelector tbs;
         private bool showMaxInjections;
         private bool showPlanetMats;
@@ -78,7 +77,7 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
-            List<string> techBrokerList = TechBrokerUnlocks.Select(r => r.name).ToList();
+            List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.name).ToList();
             tbs = new RecipeFilterSelector(techBrokerList);
             tbs.Changed += TechBrokerSelectionChanged;
         }
@@ -128,13 +127,13 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Engineering_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        private void Engineering_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
         {
             EngineeringWanted = wanted;
             Display();
         }
 
-        private void Synthesis_OnWantedChange(List<Tuple<MaterialCommoditiesList.Recipe, int>> wanted)
+        private void Synthesis_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
         {
             SynthesisWanted = wanted;
             Display();
@@ -147,22 +146,22 @@ namespace EDDiscovery.UserControls
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
-                MaterialCommoditiesList.ResetUsed(mcl);
+                Recipes.ResetUsed(mcl);
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
-                List<Tuple<MaterialCommoditiesList.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+                List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
                 string techBrokers = SQLiteDBClass.GetSettingString(DBTechBrokerFilterSave, "None");
                 if (techBrokers != "None")
                 {
                     List<string> techBrokerList = techBrokers.Split(';').ToList<string>();
-                    foreach (MaterialCommoditiesList.Recipe r in TechBrokerUnlocks)
+                    foreach (Recipes.Recipe r in Recipes.TechBrokerUnlocks)
                     {
                         if (techBrokers == "All" || techBrokerList.Contains(r.name))
-                            totalWanted.Add(new Tuple<MaterialCommoditiesList.Recipe, int>(r, 1));
+                            totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
                     }
                 }
 
-                List<MaterialCommodities> shoppinglist = MaterialCommoditiesList.GetShoppingList(totalWanted, mcl);
+                List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(totalWanted, mcl);
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
@@ -250,10 +249,10 @@ namespace EDDiscovery.UserControls
 
                 if (showMaxInjections)
                 {
-                    MaterialCommoditiesList.ResetUsed(mcl);
-                    Tuple<int, int, string> basic = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string> standard = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string> premium = MaterialCommoditiesList.HowManyLeft(mcl, SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    Recipes.ResetUsed(mcl);
+                    Tuple<int, int, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 
