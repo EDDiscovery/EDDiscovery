@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (string s in landables)
                     {
-                        System.Diagnostics.Debug.WriteLine("Drop " + s);
+                        //System.Diagnostics.Debug.WriteLine("Drop " + s);
                         c.Items.Add(s);
                     }
                 }

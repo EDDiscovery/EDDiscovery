@@ -33,6 +33,7 @@ namespace EDDiscovery
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
+        public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
         public bool No3DMap { get; private set; }
@@ -257,6 +258,7 @@ namespace EDDiscovery
                         ForceBetaOnCommander = true;
                         break;
                     case "notheme": NoTheme = true; break;
+                    case "tabsreset": TabsReset = true; break;
                     case "nosound": NoSound = true; break;
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;

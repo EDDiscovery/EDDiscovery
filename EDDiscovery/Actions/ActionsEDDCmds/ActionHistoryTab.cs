@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    ExtendedControls.TabStrip ts = null;//tbd (ap.actioncontroller as ActionController).DiscoveryForm.PrimaryCursor.GetTabStrip(cmdname);     // case insensitive
+                    ExtendedControls.TabStrip ts = (ap.actioncontroller as ActionController).DiscoveryForm.PrimarySplitter.GetTabStrip(cmdname);     // case insensitive
 
                     if (ts != null)
                     {
@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        ap.ReportError("Unknown panel name " + cmdname + " in Historytab");
+                        ap.ReportError("Unknown panel name or panels re-ordered " + cmdname + " in Historytab");
                     }
                 }
             }

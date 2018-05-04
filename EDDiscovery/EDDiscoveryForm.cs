@@ -49,7 +49,8 @@ namespace EDDiscovery
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
         public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
-        
+        public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
+
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
         public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
@@ -173,11 +174,21 @@ namespace EDDiscovery
             MaterialCommodityDB.SetUpInitialTable();
 
 
-            //backwards compat with pre 10 versions
-            string primarycontrolname = "SplitterControlWindows";
+            // Tab reset Setup
+
+            if (EDDOptions.Instance.TabsReset)
+            {
+                SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+            }
+
+            //Make sure the primary splitter is set up..
+
+            string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
             string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
 
-            if (splitctrl == "")       // never set, inherit from previous system
+            if (splitctrl == "")       // never set, or wiped, reset.. if previous system had the IDs, use them, else use defaults
             {
                 int enum_bottom = SQLiteDBClass.GetSettingInt("TravelControlBottomTab", (int)(PanelInformation.PanelIDs.Scan));
                 int enum_bottomright = SQLiteDBClass.GetSettingInt("TravelControlBottomRightTab", (int)(PanelInformation.PanelIDs.Log));
@@ -187,11 +198,12 @@ namespace EDDiscovery
                 string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
                                 "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
                                 "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
+
                 SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
             }
 
             tabControlMain.MinimumTabWidth = 32;
-            tabControlMain.CreateTabs(this);
+            tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
 

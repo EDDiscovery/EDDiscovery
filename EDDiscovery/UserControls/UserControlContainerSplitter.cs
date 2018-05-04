@@ -44,6 +44,28 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        public ExtendedControls.TabStrip GetTabStrip(string name)       // name is a logical name, map to approx locations
+        {
+            int tagid = -1; // -1 will make it not find
+            if (name.Equals("Bottom", StringComparison.InvariantCultureIgnoreCase))                 // tagids based on default grid IDs on the history window. 
+                tagid = 1;                                                                          // if user changes the deployment -tough
+            else if (name.Equals("Bottom-Right", StringComparison.InvariantCultureIgnoreCase))
+                tagid = 4;
+            else if (name.Equals("Middle-Right", StringComparison.InvariantCultureIgnoreCase))
+                tagid = 3;
+            else if (name.Equals("Top-Right", StringComparison.InvariantCultureIgnoreCase))
+                tagid = 2;
+
+            ExtendedControls.TabStrip found = null;
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            {
+                if ((int)c.Tag == tagid && c is ExtendedControls.TabStrip)      // if its a tab strip, and tag is right
+                    found = c as ExtendedControls.TabStrip;
+            });
+
+            return found;
+        }
+
         public string DbWindows { get { return "SplitterControlWindows" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
@@ -85,21 +107,27 @@ namespace EDDiscovery.UserControls
         {
             ucursor_history = uctg;                 // record base one
             ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
+            string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, "");
 
-            panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase, // all UCCB.
-                (c) =>
+            //System.Diagnostics.Debug.WriteLine("--------------------" + splitctrl);
+            //panelPlayfield.Controls[0].DumpTree(0);
+
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            {
+                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
                 {
-                    var uccb = c as UserControlCommonBase;
-                    int tagid = (int)uccb.Tag;
+                    int tagid = (int)c.Tag;
                     int displaynumber = DisplayNumberOfGridInstance(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                    //System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber );
+                    //System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
 
                     uccb.Init(discoveryform, displaynumber);
                     uccb.SetCursor(ucursor_inuse);
                     uccb.LoadLayout();
                     discoveryform.theme.ApplyToControls(uccb);
                     uccb.InitialDisplay();
-                });
+                }
+            });
 
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
@@ -110,28 +138,33 @@ namespace EDDiscovery.UserControls
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
 
             string state = ControlHelpersStaticFunc.SplitterTreeState(panelPlayfield.Controls[0] as SplitContainer, "",
-                (s) =>          // S is either a TabStrip, or a direct UCCB. See the 
+                (c) =>          // S is either a TabStrip, or a direct UCCB. See the 
                 {
-                    ExtendedControls.TabStrip ts = s as ExtendedControls.TabStrip;
-                    if ( ts != null )       // if tab strip..
-                        return ((int)s.Tag).ToStringInvariant() + "," + (ts.SelectedIndex >= 0 ? (int)pids[ts.SelectedIndex] : NoTabPanelSelected).ToStringInvariant();
+                    ExtendedControls.TabStrip ts = c as ExtendedControls.TabStrip;
+                    int tagid = (int)c.Tag;
+                    if (ts != null)       // if tab strip..
+                    {
+                        return tagid.ToStringInvariant() + "," + (ts.SelectedIndex >= 0 ? (int)pids[ts.SelectedIndex] : NoTabPanelSelected).ToStringInvariant();
+                    }
                     else
                     {
-                        PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(s.GetType());       // must return, as it must be one of the UCCB types
-                        return ((int)s.Tag).ToStringInvariant() + "," + (FixedPanelOffset+((int)pi.PopoutID)).ToStringInvariant();
+                        PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(c.GetType());       // must return, as it must be one of the UCCB types
+                        return tagid.ToStringInvariant() + "," + (FixedPanelOffset + ((int)pi.PopoutID)).ToStringInvariant();
                     }
                 });
 
             //System.Diagnostics.Debug.WriteLine("Split save " + state);
             SQLiteConnectionUser.PutSettingString(DbWindows, state);
 
-            panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase, // all UCCB, either direct or in tab strips
-                (c) =>
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            {
+                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
                 {
-                    var uccb = c as UserControlCommonBase;      // offer the chance for each UCCB to close..
                     uccb.Closing();
-                    //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name);
-                } );
+                    //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name + " " + uccb.Name);
+                }
+            });
         }
 
 
@@ -167,10 +200,10 @@ namespace EDDiscovery.UserControls
                 tabstrip.DropDownHeight = 500;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
 
-                tabstrip.Tag = tagid;                               // Tag stores the ID index of this view
+                tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
 
-                //System.Diagnostics.Debug.WriteLine("Make new tab control " + tagid + " of " + panelid);
+                //System.Diagnostics.Debug.WriteLine("Make new tab control " + tabstrip.Name + " id "  + tagid + " of " + panelid );
 
                 tabstrip.OnRemoving += (tab, ctrl) =>
                 {
@@ -185,20 +218,18 @@ namespace EDDiscovery.UserControls
                     Control c = PanelInformation.Create(pi.PopoutID);
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
 
-                    //TBD discoveryform.ActionRun(Actions.ActionEventEDList.onPanelChange, null,
-                    //    new Conditions.ConditionVariables(new string[] { "PanelTabName", pi.WindowRefName, "PanelTabTitle", pi.WindowTitle, "PanelName", t.Name }));
-
                     return c;
                 };
 
                 tabstrip.OnPostCreateTab += (tab, ctrl, i) =>       // only called during dynamic creation..
                 {
-                    int displaynumber = DisplayNumberOfGridInstance((int)tab.Tag);                         // tab strip - use tag to remember display id which helps us save context.
+                    int tabstripid = (int)tab.Tag;       // tag from tab strip
+                    int displaynumber = DisplayNumberOfGridInstance(tabstripid);                         // tab strip - use tag to remember display id which helps us save context.
                     UserControlCommonBase uc = ctrl as UserControlCommonBase;
 
                     if (uc != null)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Make Tab " + tab.Tag + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
+                        //System.Diagnostics.Debug.WriteLine("Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
                         uc.Init(discoveryform, displaynumber);
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();
@@ -218,10 +249,9 @@ namespace EDDiscovery.UserControls
 
                 panelid = Array.FindIndex(pids, x => x == (PanelInformation.PanelIDs)panelid);      // find ID in array..  -1 if not valid ID, it copes with -1
 
-                if (panelid >= 0)
+                if (panelid >= 0)       // if we have a panel, open it
                 {
                     tabstrip.Create(panelid);       // create but not post create yet...
-                    tabstrip.CurrentControl.Tag = tagid;        // tags stored in here as well so we can get to it..
                 }
 
                 return tabstrip;
@@ -251,12 +281,14 @@ namespace EDDiscovery.UserControls
             {
                 ucursor_inuse = ucursor_history;
 
-                panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase,
-                (c) =>
+                (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
                 {
-                    var uccb = c as UserControlCommonBase;
-                    uccb.ChangeCursorType(ucursor_inuse);
-                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
+                    UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                    if (uccb != null)     // tab strip may not have a control set..
+                    {
+                        uccb.ChangeCursorType(ucursor_inuse);
+                        //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
+                    }
                 });
             }
         }
@@ -287,12 +319,14 @@ namespace EDDiscovery.UserControls
                 ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
 
-                panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase,
-                (c) =>
+                (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
                 {
-                    var uccb = c as UserControlCommonBase;
-                    uccb.ChangeCursorType(ucursor_inuse);
-                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Tag + c.Name);
+                    UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                    if (uccb != null)     // tab strip may not have a control set..
+                    {
+                        uccb.ChangeCursorType(ucursor_inuse);
+                        //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
+                    }
                 });
 
                 ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
@@ -335,42 +369,35 @@ namespace EDDiscovery.UserControls
         {
             SplitContainer sc = MakeSplitContainer(currentsplitter.Orientation == Orientation.Vertical ? Orientation.Horizontal : Orientation.Vertical, (currentsplitter.Name.Substring(3).InvariantParseIntNull() ?? 1000) + 1);
             currentsplitter.Split(0, sc, MakeNode(GetFreeTag().ToStringInvariant()));
-            //panelPlayfield.Controls[0].DumpTree(0);
         }
 
         private void toolStripSplitPanel2_Click(object sender, EventArgs e)
         {
             SplitContainer sc = MakeSplitContainer(currentsplitter.Orientation == Orientation.Vertical ? Orientation.Horizontal : Orientation.Vertical, (currentsplitter.Name.Substring(3).InvariantParseIntNull() ?? 1000) + 1);
             currentsplitter.Split(1, sc, MakeNode(GetFreeTag().ToStringInvariant()));
-            //panelPlayfield.Controls[0].DumpTree(0);
         }
 
         private void toolStripMergePanel1_Click(object sender, EventArgs e)
         {
             currentsplitter.Merge(0);
             AssignTHC();        // because we may have removed the cursor
-            //panelPlayfield.Controls[0].DumpTree(0);
         }
 
         private void toolStripMergePanel2_Click(object sender, EventArgs e)
         {
             currentsplitter.Merge(1);
             AssignTHC();        // because we may have removed the cursor
-            //panelPlayfield.Controls[0].DumpTree(0);
         }
 
         int GetFreeTag()            // find a free tag number in all of the TagStrips around.. Tag holds the number allocated.
         {
             byte[] tagsinuse = new byte[100];      // will be zero
 
-            // need to isolate either tab strips, or UCCB type of directly under a splitter panel, for their tag ids
-            panelPlayfield.Controls[0].RunActionOnTree((c) => (c.GetType() == typeof(ExtendedControls.TabStrip) ||
-                                                              (c is UserControlCommonBase && c.Parent.GetType() == typeof(SplitterPanel) )),
-                                                       (c) => 
-                                                       {
-                                                           //System.Diagnostics.Debug.WriteLine("Tag lookup on " + c.GetType().Name  +" = " + ((int)c.Tag));
-                                                           tagsinuse[(int)c.Tag] = 1;
-                                                       } );
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            {
+                tagsinuse[(int)c.Tag] = 1;        // tags are stored on the object pointed to by the splitter panel
+            });
+
             int t = Array.FindIndex(tagsinuse, x => x==0);
             return t;
         }
@@ -385,11 +412,13 @@ namespace EDDiscovery.UserControls
             this.BackColor = curcol;
             panelPlayfield.BackColor = curcol;
 
-            panelPlayfield.Controls[0].RunActionOnTree((c) => c is UserControlCommonBase,
-            (c) =>
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
-                var uccb = c as UserControlCommonBase;
-                uccb.SetTransparency(on, curcol);
+                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
+                {
+                    uccb.SetTransparency(on, curcol);
+                }
             });
         }
 

@@ -30,16 +30,17 @@ namespace EDDiscovery.UserControls
     public class UserControlCommonBase : UserControl
     {       
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
-        public const int DisplayNumberStartExtraTabs = 100;         // Excepting travelgrid which due to history grid using zero always starts at 100.
-        public const int DisplayNumberStartExtraTabsMax = 199;         // Excepting travelgrid which due to history grid using zero always starts at 100.
+        public const int DisplayNumberStartExtraTabs = 100;         
+        public const int DisplayNumberStartExtraTabsMax = 199;      
 
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
 
-        // When a grid is open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
-        // 1050 + grid displaynumber * 100 + index of type in grid
-        // so, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
+        // When a grid or splitter is open, displaynumber for its children is set by CreatePanel..
+        // 1050 + displaynumber * 100 + index of window
+        // For a grid, index is based on instances of a type, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
         // each grid gets 100 unique numbers, so 100 instances of each type in grid
-        // this works for recursive grids to a enough for 158real world purposes.
+        // this works for recursive grids to a enough for real world purposes.
+        // 1050 is historical.. 1000..1049 was reserved for the previous history window splitters
 
         protected int DisplayNumberOfGridInstance(int numopenedinside)      // grid children are assigned this range..
         { return 1050 + displaynumber * 100 + numopenedinside; }
