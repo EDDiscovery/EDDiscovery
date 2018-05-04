@@ -1929,7 +1929,7 @@ namespace EliteDangerousCore
                 { "Frauke", "LHS 2038 C 1" }
             } },
             { "California Sector HW-W c1-5", new Dictionary<string, string> {
-                { "Emma's Hope", "California Sector HW-W c1-5 C 1" }
+                { "Emma's Hope", "California Sector HW-W c1-5 A 3" }
             } },
             { "CD-43 11917", new Dictionary<string, string> {
                 { "Ares", "CD-43 11917 1" }
@@ -1946,6 +1946,9 @@ namespace EliteDangerousCore
             { "Pepper", new Dictionary<string, string>
             {
                 { "Pepper", "Pepper A 1" }
+            } },
+            { "Praea Euq WD-T c3-36", new Dictionary<string, string> {
+                { "Miola", "Praea Euq WD-T c3-36 B 9 a" }
             } },
         };
 
