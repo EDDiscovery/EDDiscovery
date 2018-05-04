@@ -34,14 +34,13 @@ namespace EDDiscovery.UserControls
         private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
         private IHistoryCursor ucursor_inuse;  // one in use
 
-        public UserControlTravelGrid GetTravelGrid
+        public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(); } }
+
+        public T GetUserControl<T>() where T:class
         {
-            get
-            {                  // special - have we got a travel grid.. find first.
-                UserControlTravelGrid v = null;
-                panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c.GetType() == typeof(UserControlTravelGrid), (c) => { v = c as UserControlTravelGrid; }); // see if we can find a TG
-                return v;
-            }
+            T v = default(T);
+            panelPlayfield?.Controls[0]?.RunActionOnTree((c) => c.GetType() == typeof(T), (c) => { v = c as T; }); // see if we can find a TG
+            return v;
         }
 
         public ExtendedControls.TabStrip GetTabStrip(string name)       // name is a logical name, map to approx locations
@@ -131,6 +130,10 @@ namespace EDDiscovery.UserControls
 
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
+
+            UserControlTravelGrid tg = GetTravelGrid;                   // if travel grid, link up
+            if (tg != null)
+                tg.OnKeyDownInCell += Tg_OnKeyDownInCell;
         }
 
         public override void Closing()
@@ -334,6 +337,26 @@ namespace EDDiscovery.UserControls
             else
             {
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Stay on " + ucursor_inuse.GetHashCode());
+            }
+
+            UserControlTravelGrid tg = GetTravelGrid;       // this is called whenever deployment changes.. so see if TG is there..
+            if (tg != null)
+            {
+                tg.OnKeyDownInCell -= Tg_OnKeyDownInCell;
+                tg.OnKeyDownInCell += Tg_OnKeyDownInCell;
+            }
+
+        }
+
+        private void Tg_OnKeyDownInCell(int asciikeycode, int rowno, int colno, bool note)
+        {
+            if (note)           // links a TG with a system info to allow note taking
+            {
+                UserControlSysInfo s = GetUserControl<UserControlSysInfo>();
+                if (s != null && s.IsNotesShowing)
+                {
+                    s.FocusOnNote(asciikeycode);
+                }
             }
         }
 

@@ -209,6 +209,8 @@ namespace EDDiscovery
             discoveryForm.OnHistoryChange += UpdateSystemListHC;   // refresh, update the system list..
             discoveryForm.OnNewEntry -= UpdateSystemList;   // any new entries, update the system list..
             discoveryForm.OnNewEntry += UpdateSystemList;
+            discoveryForm.PrimaryCursor.OnTravelSelectionChanged -= PrimaryCursor_OnTravelSelectionChanged;
+            discoveryForm.PrimaryCursor.OnTravelSelectionChanged += PrimaryCursor_OnTravelSelectionChanged;
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)
@@ -232,6 +234,11 @@ namespace EDDiscovery
             _plannedRoute = plannedr;
             GenerateDataSetsRouteTri();
             RequestPaint();
+        }
+
+        private void PrimaryCursor_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            UpdateHistorySystem(he.System);
         }
 
         public void UpdateHistorySystem(ISystem historysel)

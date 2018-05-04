@@ -664,7 +664,12 @@ namespace EDDiscovery.UserControls
         {
             DataGridViewCell cell = dataGridViewRoute.CurrentCell;
             if (cell != null)
-                Clipboard.SetText((string)cell.Value);        }
+            {
+                string s = (string)cell.Value;
+                if (s.Length > 0)
+                    Clipboard.SetText(s);
+            }
+        }
 
         int rightclickrow = -1;
 
