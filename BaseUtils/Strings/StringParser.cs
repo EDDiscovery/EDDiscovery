@@ -59,6 +59,11 @@ namespace BaseUtils
             return (pos < line.Length) ? line[pos] : ' ';
         }
 
+        public char GetChar()       // or z\0 if not EOL
+        {
+            return (pos < line.Length) ? line[pos++] : char.MinValue;
+        }
+
         public bool IsStringMoveOn(string s, StringComparison sc = StringComparison.InvariantCulture)
         {
             if (line.Substring(pos).StartsWith(s,sc))
@@ -93,6 +98,14 @@ namespace BaseUtils
             }
             else
                 return false;
+        }
+
+        public bool SkipUntil( char[] chars)
+        {
+            while (pos < line.Length && Array.IndexOf(chars, line[pos]) == -1)
+                pos++;
+
+            return pos < line.Length;
         }
 
         // WORD defined by terminators. options to lowercase it and de-escape it

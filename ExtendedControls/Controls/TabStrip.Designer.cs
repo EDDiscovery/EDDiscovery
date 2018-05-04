@@ -152,11 +152,11 @@ namespace ExtendedControls
             this.panelSelectedIcon.MouseEnter += new System.EventHandler(this.MouseEnterPanelObjects);
             this.panelSelectedIcon.MouseLeave += new System.EventHandler(this.MouseLeavePanelObjects);
             // 
-            // labelCurrent
+            // labelTitle
             // 
             this.labelTitle.AutoSize = true;
             this.labelTitle.Location = new System.Drawing.Point(33, 8);
-            this.labelTitle.Name = "labelCurrent";
+            this.labelTitle.Name = "labelTitle";
             this.labelTitle.Size = new System.Drawing.Size(92, 13);
             this.labelTitle.TabIndex = 0;
             this.labelTitle.Text = "Tab Strip Control..";

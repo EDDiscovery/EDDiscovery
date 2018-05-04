@@ -121,7 +121,6 @@ namespace EDDiscovery.UserControls
             chkHistoric.Visible = !isEmbedded;
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -130,6 +129,25 @@ namespace EDDiscovery.UserControls
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
         }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
+            DGVLoadColumnLayout(dataGridViewEngineering, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewEngineering, DbColumnSave);
+
+            uctg.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+
+            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
+            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
+            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
+        }
+
 
         #endregion
 
@@ -295,26 +313,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewEngineering, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewEngineering, DbColumnSave);
-
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-
-            SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
-            SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
-            SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
-        }
-
-        #endregion
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)
         {

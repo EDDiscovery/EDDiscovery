@@ -11,6 +11,68 @@ using static System.Windows.Forms.Form;
 
 public static class ControlHelpersStaticFunc
 {
+    #region Control
+
+    static public void DisposeTree(this Control c, int lvl)     // pass lvl = 0 to dispose of this object itself..
+    {
+        //System.Diagnostics.Debug.WriteLine(lvl + " at " + c.GetType().Name + " " + c.Name);
+        List<Control> todispose = new List<Control>();
+
+        foreach (Control s in c.Controls)
+        {
+            if (s.Controls.Count > 0)
+            {
+                //System.Diagnostics.Debug.WriteLine(lvl + " Go into " + s.GetType().Name + " " + s.Name);
+                s.DisposeTree(lvl + 1);
+            }
+
+            if (!(s is SplitterPanel))        // owned by their SCs..
+                todispose.Add(s);
+        }
+
+        foreach (Control s in todispose)
+        {
+            //System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + s.GetType().Name + " " + s.Name);
+            s.Dispose();
+        }
+
+        if ( lvl ==0 && !( c is SplitterPanel))
+        {
+            //System.Diagnostics.Debug.WriteLine(lvl + " Dispose " + c.GetType().Name + " " + c.Name);
+            c.Dispose();
+        }
+
+    }
+
+    static public void DumpTree(this Control c, int lvl)
+    {
+        System.Diagnostics.Debug.WriteLine("                                             ".Substring(0,lvl*2) + "Control " + c.GetType().Name + ":" + c.Name);
+
+        foreach (Control s in c.Controls)
+        {
+            s.DumpTree(lvl + 1);
+        }
+    }
+
+    static public int RunActionOnTree(this Control c, Predicate<Control> cond, Action<Control> action )       // Given a condition, run action on it, count instances
+    {
+        //System.Diagnostics.Debug.WriteLine("Raot: " + c.Parent.GetType().Name + "->" + c.GetType().Name + ":" + c.Name);
+        bool istype = cond(c);
+
+        if (istype)
+        {
+            //System.Diagnostics.Debug.WriteLine("Action on " + c.GetType().Name + " " + c.Name + " ==? " + istype);
+            action(c);
+        }
+
+        int total = istype ? 1 : 0;
+
+        foreach (Control s in c.Controls)                   // all sub controls get a chance to play!
+            total += RunActionOnTree(s, cond, action);
+
+        return total;
+    }
+
     // DO a refresh after this. presumes you have sorted the order of controls added in the designer file
     // from C, offset either up/down dependent on on.  Remember in tag of c direction you shifted.  Don't shift if in same direction
     // useful for autolayout forms
@@ -35,6 +97,10 @@ public static class ControlHelpersStaticFunc
             }
         }
     }
+
+    #endregion
+
+    #region Misc
 
     static public StringFormat StringFormatFromContentAlignment(ContentAlignment c)
     {
@@ -204,6 +270,10 @@ public static class ControlHelpersStaticFunc
                                 Math.Min(p.Y, other.Height - ps.Height));
     }
 
+    #endregion
+
+    #region Splitter
+
     static public void SplitterDistance(this SplitContainer sp, double value)           // set the splitter distance from a double value.. safe from exceptions.
     {
         if (!double.IsNaN(value) && !double.IsInfinity(value))
@@ -230,6 +300,126 @@ public static class ControlHelpersStaticFunc
         //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.SplitterDistance} Get SplitterDistance {a} -> {v:N2}");
         return v;
     }
+
+    // Make a tree of splitters, controlled by the string in sp
+
+    static public SplitContainer SplitterTreeMakeFromCtrlString(BaseUtils.StringParser sp, 
+                                                            Func<Orientation, int, SplitContainer> MakeSC, 
+                                                            Func<string, Control> MakeNode , int lvl)
+    {
+        char tomake;
+        if (sp.SkipUntil(new char[] { 'H', 'V', 'U' }) && (tomake = sp.GetChar()) != 'U')
+        {
+            sp.IsCharMoveOn('(');   // ignore (
+
+            SplitContainer sc = MakeSC(tomake == 'H' ? Orientation.Horizontal : Orientation.Vertical, lvl);
+
+            double percent = sp.NextDouble(",") ?? 0.5;
+            sc.SplitterDistance(percent);
+            
+            SplitContainer one = SplitterTreeMakeFromCtrlString(sp, MakeSC, MakeNode, lvl+1);
+
+            if (one == null)
+            {
+                string para = sp.PeekChar() == '\'' ? sp.NextQuotedWord() : "";
+                sc.Panel1.Controls.Add(MakeNode(para));
+            }
+            else
+                sc.Panel1.Controls.Add(one);
+
+            SplitContainer two = SplitterTreeMakeFromCtrlString(sp, MakeSC, MakeNode, lvl+1);
+
+            if (two == null)
+            {
+                string para = sp.PeekChar() == '\'' ? sp.NextQuotedWord() : "";
+                sc.Panel2.Controls.Add(MakeNode(para));
+            }
+            else
+                sc.Panel2.Controls.Add(two);
+
+            return sc;
+        }
+        else
+            return null;
+    }
+
+    // Report control state of a tree of splitters
+
+    static public string SplitterTreeState(this SplitContainer sc, string cur, Func<Control, string> getpara)
+    {
+        string state = sc.Orientation == Orientation.Horizontal ? "H( " : "V( ";
+        state += sc.GetSplitterDistance().ToStringInvariant("0.##") + ", ";
+
+        SplitContainer one = sc.Panel1.Controls[0] as SplitContainer;
+
+        if (one != null)
+        {
+            string substate = SplitterTreeState(one, "", getpara);
+            state = state + substate;
+        }
+        else
+            state += "U'" + getpara(sc.Panel1.Controls[0]) + "'";
+
+        state += ", ";
+        SplitContainer two = sc.Panel2.Controls[0] as SplitContainer;
+
+        if (two != null)
+        {
+            string substate = SplitterTreeState(two, "", getpara);
+            state = state + substate;
+        }
+        else
+            state += "U'" + getpara(sc.Panel2.Controls[0]) + "'";
+
+        state += ") ";
+
+        return state;
+    }
+
+    // Run actions at each Splitter Panel node
+
+    static public void RunActionOnSplitterTree(this SplitContainer sc, Action<SplitterPanel, Control> action)       
+    {
+        SplitContainer one = sc.Panel1.Controls[0] as SplitContainer;
+
+        if (one != null)
+            RunActionOnSplitterTree(one, action);
+        else
+            action(sc.Panel1, sc.Panel1.Controls[0]);
+
+        SplitContainer two = sc.Panel2.Controls[0] as SplitContainer;
+
+        if (two != null)
+            RunActionOnSplitterTree(two, action);
+        else
+            action(sc.Panel2, sc.Panel2.Controls[0]);
+    }
+
+
+    static public void Merge(this SplitContainer currentsplitter , int panel )      // currentsplitter has a splitter underneath it in panel (0/1)
+    {
+        SplitContainer tomerge = currentsplitter.Controls[panel].Controls[0] as SplitContainer;  // verified by enable on open
+
+        Control keep = tomerge.Controls[0].Controls[0];      // we keep this tree..
+
+        tomerge.Controls[0].Controls.Clear();    // clear control list - we want to keep these..
+        tomerge.DisposeTree(0);               // tree dispose of all other stuff left, and dispose of tomerge.
+
+        currentsplitter.Controls[panel].Controls.Add(keep);
+    }
+
+    static public void Split(this SplitContainer currentsplitter, int panel ,  SplitContainer sc, Control ctrl )    // currentsplitter, split panel into a SC with a ctrl
+    {
+        Control cur = currentsplitter.Controls[panel].Controls[0];      // what we current have attached..
+        currentsplitter.Controls[panel].Controls.Clear();   // clear list
+        sc.Panel1.Controls.Add(cur);
+        sc.Panel2.Controls.Add(ctrl);
+        currentsplitter.Controls[panel].Controls.Add(sc);
+    }
+
+    #endregion
+
+    #region Sort
 
     static public void SortDataGridViewColumnNumeric(this DataGridViewSortCompareEventArgs e, string removetext= null)
     {
@@ -290,4 +480,6 @@ public static class ControlHelpersStaticFunc
 
         e.Handled = true;
     }
+
+    #endregion
 }

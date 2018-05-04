@@ -55,7 +55,6 @@ namespace EDDiscovery.UserControls
             checkBoxAutoSwap.Checked = SQLiteDBClass.GetSettingBool(DbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnChanged;
-            uctg.OnTravelSelectionChanged += OnChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -63,6 +62,21 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= OnChanged;
             uctg = thc;
             uctg.OnTravelSelectionChanged += OnChanged;
+        }
+
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
+            uctg.OnTravelSelectionChanged += OnChanged;
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
+            SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
+            SQLiteDBClass.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
+            discoveryform.OnNewEntry -= OnChanged;
+            uctg.OnTravelSelectionChanged -= OnChanged;
         }
 
         public override void InitialDisplay()
@@ -286,24 +300,6 @@ namespace EDDiscovery.UserControls
                 comboBoxCustomTo.SelectedIndex = 0;
 
             comboBoxCustomFrom.Enabled = comboBoxCustomTo.Enabled = true;
-        }
-
-        #endregion
-
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewMarketData, DbColumnSave);
-            SQLiteDBClass.PutSettingBool(DbBuyOnly, checkBoxBuyOnly.Checked);
-            SQLiteDBClass.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
-            discoveryform.OnNewEntry -= OnChanged;
-            uctg.OnTravelSelectionChanged -= OnChanged;
         }
 
         #endregion

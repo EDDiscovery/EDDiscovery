@@ -147,6 +147,8 @@
     <Reference Include="OxyPlot.WindowsForms, Version=1.0.0.0, Culture=neutral, PublicKeyToken=245eacd6b5d2d338, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.WindowsForms.1.0.0\lib\net45\OxyPlot.WindowsForms.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -156,6 +158,7 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions">
       <Private>False</Private>
@@ -166,6 +169,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
@@ -254,6 +260,12 @@
     </Compile>
     <Compile Include="UserControls\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerSplitter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UserControlContainerSplitter.Designer.cs">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlContainerGrid.cs">
       <SubType>UserControl</SubType>
@@ -403,12 +415,6 @@
     </Compile>
     <Compile Include="UserControls\UserControlSettings.Designer.cs">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlHistory.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlHistory.Designer.cs">
-      <DependentUpon>UserControlHistory.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\RecipeFilters.cs" />
     <Compile Include="UserControls\TravelHistoryFilter.cs" />
@@ -640,6 +646,9 @@
     <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UserControlContainerSplitter.resx">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
       <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
     </EmbeddedResource>
@@ -809,10 +818,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSettings.resx">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlHistory.resx">
-      <DependentUpon>UserControlHistory.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config">

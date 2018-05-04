@@ -40,28 +40,24 @@ namespace EDDiscovery.UserControls
         private string DbPositions { get { return "GridControlPositons" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
         private string DbZOrder { get { return "GridControlZOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
+        ExtendedControls.DropDownCustom popoutdropdown;
+
         public UserControlContainerGrid()
         {
             InitializeComponent();
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
-        ExtendedControls.DropDownCustom popoutdropdown;
-
-        public override void Init()
-        { 
-            ucursor_history = ucursor_inuse = uctg;
-            //System.Diagnostics.Debug.WriteLine("Init Grid Use THC " + ucursor_inuse.GetHashCode());
-        }
-
         bool checkmulticall = false;    // debug for now
 
-        public override void LoadLayout()
+        public override void LoadLayout()       // unlike splitter, we don't need to be so careful about the cursor.  We can load in load layout
         {
+            ucursor_history = ucursor_inuse = uctg;
+
             System.Diagnostics.Debug.Assert(checkmulticall == false);
             checkmulticall = true;      // examples seen of multi call, lets trap it
 
-            System.Diagnostics.Debug.WriteLine("Grid Restore from " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DbWindows);
 
             string[] names = SQLiteConnectionUser.GetSettingString(DbWindows, "").Split(',');
             int[] positions;
@@ -98,7 +94,7 @@ namespace EDDiscovery.UserControls
             ResumeLayout();
             Invalidate(true);
             Update();        // need this to FORCE a full refresh in case there are lots of windows
-            System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
 
             UpdateButtons();
 
@@ -122,7 +118,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
             string s = "", p = "";
             foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
             {
@@ -131,7 +127,7 @@ namespace EDDiscovery.UserControls
                 s = s.AppendPrePad(uc.GetType().Name,",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
 
-                System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
+                //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
 
                 uc.Closing();
             }
@@ -150,7 +146,7 @@ namespace EDDiscovery.UserControls
             }
 
             SQLiteConnectionUser.PutSettingString(DbZOrder, z);
-            System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
+            //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
@@ -191,7 +187,8 @@ namespace EDDiscovery.UserControls
 
             panelPlayfield.Controls.Add(uccr);
 
-            uccb.Init(discoveryform, ucursor_inuse, dnum);
+            uccb.Init(discoveryform, dnum);
+            uccb.SetCursor(ucursor_inuse);
             uccb.LoadLayout();
 
             uccr.Font = discoveryform.theme.GetFont;        // Important. Apply font autoscaling to the user control

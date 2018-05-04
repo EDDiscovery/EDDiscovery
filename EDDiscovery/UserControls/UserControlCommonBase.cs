@@ -29,23 +29,18 @@ namespace EDDiscovery.UserControls
 {
     public class UserControlCommonBase : UserControl
     {       
-        public const int DisplayNumberHistoryGrid = 0;              // special codes, reserved for history grid
-        protected const int DisplayNumberHistoryBotLeft = 1000;     // historical numbers.. don't want to change
-        protected const int DisplayNumberHistoryBotRight = 1001;
-        protected const int DisplayNumberHistoryMidRight = 1002;
-        protected const int DisplayNumberHistoryTopRight = 1003;
-
         public const int DisplayNumberPrimaryTab = 0;               // tabs are 0, or 100+.  0 for the first, 100+ for repeats
-        public const int DisplayNumberStartExtraTabs = 100;         // Excepting travelgrid which due to history grid using zero always starts at 100.
-        public const int DisplayNumberStartExtraTabsMax = 199;         // Excepting travelgrid which due to history grid using zero always starts at 100.
+        public const int DisplayNumberStartExtraTabs = 100;         
+        public const int DisplayNumberStartExtraTabsMax = 199;      
 
         public const int DisplayNumberPopOuts = 1;                  // pop outs are 1-99.. of each specific type.
 
-        // When a grid is open, displaynumber for its children is set by CreatePanel in UserControlContainerGrid
-        // 1050 + grid displaynumber * 100 + index of type in grid
-        // so, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
+        // When a grid or splitter is open, displaynumber for its children is set by CreatePanel..
+        // 1050 + displaynumber * 100 + index of window
+        // For a grid, index is based on instances of a type, if a pop out grid of second instance, = 2, would get 1050+2000+index of type in grid
         // each grid gets 100 unique numbers, so 100 instances of each type in grid
-        // this works for recursive grids to a enough for 158real world purposes.
+        // this works for recursive grids to a enough for real world purposes.
+        // 1050 is historical.. 1000..1049 was reserved for the previous history window splitters
 
         protected int DisplayNumberOfGridInstance(int numopenedinside)      // grid children are assigned this range..
         { return 1050 + displaynumber * 100 + numopenedinside; }
@@ -54,21 +49,21 @@ namespace EDDiscovery.UserControls
 
         public int displaynumber { get; protected set; }
         public EDDiscoveryForm discoveryform { get; protected set; }
-        public IHistoryCursor uctg { get; protected set; }
+        public IHistoryCursor uctg { get; protected set; }          // valid at loadlayout
 
         // in calling order..
-        public void Init(EDDiscoveryForm ed, IHistoryCursor thc, int dn)
+        public void Init(EDDiscoveryForm ed, int dn)
         {
-            System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
+            //System.Diagnostics.Debug.WriteLine("Open UCCB " + this.Name + " of " + this.GetType().Name + " with " + dn);
             discoveryform = ed;
             displaynumber = dn;
-            uctg = thc;
             Init();
         }    
+        public virtual void Init() { }              // start up, called by above Init.  no cursor available
 
-        public virtual void Init() { }              // start up, called by above Init
-        public virtual void LoadLayout() { }        // then a chance to load a layout
-        public virtual void InitialDisplay() { }    // then after the themeing, do the initial display
+        public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
+        public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
+        public virtual void InitialDisplay() { }    // do the initial display
         public virtual void Closing() { }           // close it
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed

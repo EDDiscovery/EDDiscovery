@@ -64,11 +64,11 @@ namespace EDDiscovery.UserControls
         {
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
-            userControlEngineering.Init(discoveryform, uctg, displaynumber);
+            userControlEngineering.Init(discoveryform, displaynumber);
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
-            userControlSynthesis.Init(discoveryform, uctg, displaynumber);
+            userControlSynthesis.Init(discoveryform, displaynumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
@@ -85,6 +85,13 @@ namespace EDDiscovery.UserControls
             List<string> techBrokerList = TechBrokerUnlocks.Select(r => r.name).ToList();
             tbs = new RecipeFilterSelector(techBrokerList);
             tbs.Changed += TechBrokerSelectionChanged;
+        }
+
+        public override void SetCursor(IHistoryCursor cur)
+        {
+            base.SetCursor(cur);
+            userControlEngineering.SetCursor(cur);
+            userControlSynthesis.SetCursor(cur);
         }
 
         public override void Closing()

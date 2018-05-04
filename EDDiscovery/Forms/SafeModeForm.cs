@@ -13,9 +13,10 @@ namespace EDDiscovery.Forms
 {
     public partial class SafeModeForm : Form
     {
-        public Action<bool, bool> Run;
+        public Action<bool, bool, bool> Run;
         bool theme = false;
         bool pos = false;
+        bool resettabs = false;
 
         public SafeModeForm()
         {
@@ -24,7 +25,7 @@ namespace EDDiscovery.Forms
 
         private void Run_Click(object sender, EventArgs e)
         {
-            Run(pos,theme);
+            Run(pos,theme,resettabs);
         }
 
         private void buttonResetTheme_Click(object sender, EventArgs e)
@@ -37,6 +38,12 @@ namespace EDDiscovery.Forms
         {
             pos = !pos;
             buttonPositions.Enabled = false;
+        }
+
+        private void buttonResetTabs_Click(object sender, EventArgs e)
+        {
+            resettabs = !resettabs;
+            buttonResetTabs.Enabled = false;
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -123,5 +130,6 @@ namespace EDDiscovery.Forms
                 MessageBox.Show(this, "You need to run EDD first and let it create the dBs before it can delete any!", "Delete/Rebuild System Database", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
         }
+
     }
 }

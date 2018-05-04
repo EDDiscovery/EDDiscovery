@@ -42,8 +42,12 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            uctg.OnTravelSelectionChanged += Display;      
             discoveryform.OnNewEntry += NewEntry;
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

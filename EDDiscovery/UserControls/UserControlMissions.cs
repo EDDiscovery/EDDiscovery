@@ -73,7 +73,6 @@ namespace EDDiscovery.UserControls
             customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -81,6 +80,33 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Display;
+        }
+
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Display;
+
+            DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
+            DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
+
+            splitContainerMissions.SplitterDistance(SQLiteDBClass.GetSettingDouble(DbSplitter, 0.4));
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
+            DGVSaveColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
+
+            uctg.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+
+            SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
+            SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
+            SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
+
+            SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
         }
 
         #endregion
@@ -200,34 +226,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
-            DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
-
-            splitContainerMissions.SplitterDistance(SQLiteDBClass.GetSettingDouble(DbSplitter, 0.4));
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
-            DGVSaveColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);
-
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
-
-            SQLiteDBClass.PutSettingString(DbStartDate, customDateTimePickerStart.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            SQLiteDBClass.PutSettingString(DbEndDate, customDateTimePickerEnd.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-
-            SQLiteDBClass.PutSettingBool(DbStartDateChecked, customDateTimePickerStart.Checked);
-            SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
-
-            SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
-        }
-
-        #endregion
 
         private void customDateTimePickerStart_ValueChanged(object sender, EventArgs e)
         {
