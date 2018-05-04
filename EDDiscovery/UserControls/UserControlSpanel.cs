@@ -218,7 +218,6 @@ namespace EDDiscovery.UserControls
             pictureBox.ClearImageList();
 
             current_historylist = hl;
-            System.Diagnostics.Debug.WriteLine("Display event " );
 
             if (hl != null && hl.Count > 0)     // just for safety
             {

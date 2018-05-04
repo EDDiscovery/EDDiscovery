@@ -73,7 +73,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = (ap.actioncontroller as ActionController).DiscoveryForm.TravelControl.GetTravelHistoryCurrent;
+                        HistoryEntry he = (ap.actioncontroller as ActionController).DiscoveryForm.PrimaryCursor.GetCurrentHistoryEntry;
 
                         if ( he == null )
                         {

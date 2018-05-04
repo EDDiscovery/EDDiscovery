@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
                 }
                 else
                 {
-                    ExtendedControls.TabStrip ts = (ap.actioncontroller as ActionController).DiscoveryForm.TravelControl.GetTabStrip(cmdname);     // case insensitive
+                    ExtendedControls.TabStrip ts = (ap.actioncontroller as ActionController).DiscoveryForm.PrimarySplitter.GetTabStrip(cmdname);     // case insensitive
 
                     if (ts != null)
                     {
@@ -77,7 +77,7 @@ namespace EDDiscovery.Actions
                             {
                                 Forms.PanelInformation.PanelIDs[] list = ts.TagList.Cast<Forms.PanelInformation.PanelIDs>().ToArray();
                                 int index = Array.IndexOf(list, id.Value);
-                                if (!ts.ChangeTo(index))
+                                if (!ts.ChangePanel(index))
                                     ap.ReportError("Panel " + nextcmd + " cannot be used in Historytab");
                             }
                             else
@@ -86,7 +86,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        ap.ReportError("Unknown panel name " + cmdname + " in Historytab");
+                        ap.ReportError("Unknown panel name or panels re-ordered " + cmdname + " in Historytab");
                     }
                 }
             }

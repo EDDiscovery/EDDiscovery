@@ -60,6 +60,10 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+        }
+
+        public override void LoadLayout()
+        {
             uctg.OnTravelSelectionChanged += DisplaySelected;
         }
 

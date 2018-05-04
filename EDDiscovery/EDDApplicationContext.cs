@@ -38,7 +38,7 @@ namespace EDDiscovery
         {
             if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
             {
-                ((SafeModeForm)MainForm).Run += ((p, t) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, t)); });
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs)); });
             }
             else
             {
@@ -138,6 +138,7 @@ namespace EDDiscovery
 
                 EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
                 EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
+                EDDOptions.Instance.TabsReset |= launchArg.TabsReset;
 
                 EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
 
@@ -155,22 +156,23 @@ namespace EDDiscovery
         // Pass startup opts from GoForAutoSequenceStart to MainEngineStart without permanent heap impact.
         private class EDDFormLaunchArgs : EventArgs
         {   // Should probably be public and passed directly on to EDDiscoveryForm ctor() or Init() or something.
+
             public bool PositionReset { get; private set; }
-
             public bool ThemeReset { get; private set; }
-            
+            public bool TabsReset { get; private set; }
 
-            public EDDFormLaunchArgs() : this(false, false) { }
+            public EDDFormLaunchArgs() : this(false, false, false) { }
 
-            public EDDFormLaunchArgs(bool positionReset, bool themeReset)
+            public EDDFormLaunchArgs(bool positionReset, bool themeReset, bool tabsreset)
             {
                 PositionReset = positionReset;
                 ThemeReset = themeReset;
+                TabsReset = tabsreset;
             }
 
             public EDDFormLaunchArgs Clone()
             {
-                return new EDDFormLaunchArgs(PositionReset, ThemeReset);
+                return new EDDFormLaunchArgs(PositionReset, ThemeReset, TabsReset);
             }
         }
 

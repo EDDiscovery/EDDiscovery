@@ -98,6 +98,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
+
             cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
@@ -122,13 +124,11 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
-            System.Diagnostics.Debug.WriteLine("1.Item H" + comboBoxHistoryWindow.ItemHeight);
         }
 
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewTravel, DbColumnSave);
-            System.Diagnostics.Debug.WriteLine("Item H" + comboBoxHistoryWindow.ItemHeight);
         }
 
         public override void Closing()
@@ -145,7 +145,6 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             HistoryChanged(discoveryform.history);
-            System.Diagnostics.Debug.WriteLine("Item H" + comboBoxHistoryWindow.ItemHeight);
         }
 
         int fdropdown, ftotalevents, ftotalfilters;     // filter totals

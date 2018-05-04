@@ -55,7 +55,6 @@ namespace EDDiscovery.UserControls
         {
             currentexplorationset = new ExplorationSetClass();
             discoveryform.OnNewEntry += NewEntry;
-            uctg.OnTravelSelectionChanged += Display;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -67,6 +66,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewExplore, DbColumnSave);
         }
 

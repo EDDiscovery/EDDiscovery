@@ -263,9 +263,40 @@ namespace EliteDangerousCore.DB
             }
         }
 
+        protected static bool RegisterDelete(string key , Func<TConn, bool> action, TConn conn)
+        {
+            if (conn != null)
+            {
+                return action(conn);
+            }
+
+            if (!_initialized && EarlyRegister != null)
+            {
+                EarlyRegister.Remove(key);
+                return true;
+            }
+            else
+            {
+                if (!_initialized && !_schemaLock.IsWriteLockHeld)
+                {
+                    System.Diagnostics.Trace.WriteLine("Delete register before Initialize()");
+                }
+
+                using (TConn cn = new TConn())
+                {
+                    return action(cn);
+                }
+            }
+        }
+
         static public bool keyExists(string sKey, TConn conn = null)
         {
             return RegisterGet(sKey, false, r => true, cn => cn.keyExistsCN(sKey), conn);
+        }
+
+        static public bool DeleteKey(string key, TConn conn = null)
+        {
+            return RegisterDelete(key, cn => cn.DeleteKeyCN(key), conn);
         }
 
         static public int GetSettingInt(string key, int defaultvalue, TConn conn = null)
@@ -568,6 +599,15 @@ namespace EliteDangerousCore.DB
         public bool keyExistsCN(string sKey)
         {
             using (DbCommand cmd = CreateCommand("select ID from Register WHERE ID=@key"))
+            {
+                cmd.AddParameterWithValue("@key", sKey);
+                return cmd.ExecuteScalar() != null;
+            }
+        }
+
+        public bool DeleteKeyCN(string sKey)        // SQL wildcards
+        {
+            using (DbCommand cmd = CreateCommand("Delete from Register WHERE ID like @key"))
             {
                 cmd.AddParameterWithValue("@key", sKey);
                 return cmd.ExecuteScalar() != null;

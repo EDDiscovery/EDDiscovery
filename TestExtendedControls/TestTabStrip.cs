@@ -57,6 +57,7 @@ namespace DialogTest
             bool mode = false;
             ExtendedControls.TabStrip.StripModeType mt = mode ? ExtendedControls.TabStrip.StripModeType.StripTop : ExtendedControls.TabStrip.StripModeType.ListSelection;
 
+            tabStrip1.EmptyColor = Color.Red;
             tabStrip1.StripMode = mt; //.ListSelection;
             tabStrip2.StripMode = mt;
 
@@ -171,6 +172,11 @@ namespace DialogTest
                 e.Font, myBrush, textarea, StringFormat.GenericDefault);
             // If the ListBox has focus, draw a focus rectangle around the selected item.
             e.DrawFocusRectangle();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            tabStrip1.Close();
         }
     }
 }

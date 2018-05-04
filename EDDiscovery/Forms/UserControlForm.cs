@@ -272,7 +272,11 @@ namespace EDDiscovery.Forms
             //System.Diagnostics.Debug.WriteLine("Position Top is {0} {1}", dbrefname, top);
 
             if (UserControl != null)
+            {
+                UserControl.SetCursor(UserControl.discoveryform.PrimaryCursor);
                 UserControl.LoadLayout();
+                UserControl.InitialDisplay();
+            }
 
             IsLoaded = true;
         }

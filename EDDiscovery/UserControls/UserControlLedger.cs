@@ -59,6 +59,18 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
         }
 
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
+            discoveryform.OnHistoryChange -= Redisplay;
+            discoveryform.OnNewEntry -= NewEntry;
+        }
+
         #endregion
 
         #region Display
@@ -139,22 +151,6 @@ namespace EDDiscovery.UserControls
                 string[] events = eventstring.Split(';');
                 return (from tx in txlist where tx.IsJournalEventInEventFilter(events) select tx).ToList();
             }
-        }
-
-        #endregion
-
-        #region Layout
-
-        public override void LoadLayout()
-        {
-            DGVLoadColumnLayout(dataGridViewLedger, DbColumnSave);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
-            discoveryform.OnHistoryChange -= Redisplay;
-            discoveryform.OnNewEntry -= NewEntry;
         }
 
         #endregion

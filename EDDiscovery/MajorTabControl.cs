@@ -25,77 +25,81 @@ namespace EDDiscovery
 {
     public class MajorTabControl : ExtendedControls.TabControlCustom
     {
-        UserControls.UserControlTravelGrid travelgrid;
         EDDiscoveryForm eddiscovery;
 
+        public UserControls.UserControlContainerSplitter PrimaryTab { get 
+            { 
+                foreach (TabPage p in TabPages)      // all main tabs, load/display
+                {
+                    if (p.Tag != null)
+                        return p.Controls[0] as UserControls.UserControlContainerSplitter;
+                }
+                return null;
+            }
+        }
+
         //EDDiscovery Init calls this
-        public void CreateTabs(EDDiscoveryForm edf)
-        { 
+        public void CreateTabs(EDDiscoveryForm edf, bool resettabs, string resetsettings)
+        {
             eddiscovery = edf;
 
+            int[] panelids;
+            int[] displaynumbers;
+            int restoretab = 0;
+
             string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
-            string[] majortabnames = null;
-            int[] tabctrl;
+            string[] majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
 
-            if (!majortabs.RestoreArrayFromString(out tabctrl) || tabctrl.Length == 0 || (tabctrl.Length % 2) != 1) // need it odd as we have an index tab as first
+            while (true)
             {
-                tabctrl = new int[] { 0,        -1, 0 ,         // reset..
-                                                (int)PanelInformation.PanelIDs.Route, 0,
-                                                (int)PanelInformation.PanelIDs.Expedition, 0,
-                                                (int)PanelInformation.PanelIDs.Settings,0,
-                                                (int)PanelInformation.PanelIDs.PanelSelector,0
-                };
-            }
-            else
-                majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Replace("!error!","+").Split(';');       // if its okay, load the name list
+                int[] rawtabctrl;
+                majortabs.RestoreArrayFromString(out rawtabctrl);
 
-            TabPage history = TabPages[0];       // remember history page, remove
-            TabPages.Clear();
+                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();
+                displaynumbers = rawtabctrl.Where((value, index) => index > 0 && index % 2 == 0).ToArray();
 
-            UserControls.UserControlHistory uch = history.Controls[0] as UserControls.UserControlHistory;
-            travelgrid = uch.GetTravelGrid;     // remember travel grid globally for later
-
-            bool donehistory = false;
-            for (int i = 1; i < tabctrl.Length; i += 2)
-            {
-                int nameindex = (i - 1) / 2;
-                string name = majortabnames != null && nameindex < majortabnames.Length && majortabnames[nameindex].Length > 0 ? majortabnames[nameindex] : null;
-
-                if (tabctrl[i] != -1)       // this means UserControlHistory, which is a special one
+                if (resettabs || panelids.Length == 0 || panelids.Length != displaynumbers.Length || !panelids.Contains(-1) || !panelids.Contains((int)PanelInformation.PanelIDs.PanelSelector))
                 {
-                    try
+                    majortabs = resetsettings;
+                    majortabnames = null;
+                    resettabs = false;
+                }
+                else
+                {
+                    if (rawtabctrl[0] > 0 && rawtabctrl[0] < panelids.Length)
+                        restoretab = rawtabctrl[0];
+                    break;
+                }
+            }
+
+            for (int i = 0; i < panelids.Length; i++)
+            {
+                string name = majortabnames != null && i < majortabnames.Length && majortabnames[i].Length > 0 ? majortabnames[i] : null;
+
+                try
+                {
+                    if (panelids[i] == -1)
                     {
-                        PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)tabctrl[i];
-                        CreateTab(p, name, tabctrl[i + 1], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
-                                                                                        // may fail if p is crap, then just ignore
+                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                        p.Tag = true;       // this marks it as the primary tab..
                     }
-                    catch { }   // paranoia in case tabctrl number is crappy.
+                    else
+                    {
+                        PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)panelids[i];
+                        CreateTab(p, name, displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                    }
                 }
-                else if (!donehistory)      // just double check for repeats
-                {
-                    if (name != null)       // set name. if set.
-                        history.Text = name;
-                    TabPages.Add(history); // add back in right place
-                    donehistory = true;
-                }
+                catch { }   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
             }
 
-            if (!donehistory)      // just in case its missing.. be something up if it is.
-                TabPages.Add(history); // add back in right place
-
-            uch.Dock = System.Windows.Forms.DockStyle.Fill;    // Crucial ! uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
-            uch.Location = new System.Drawing.Point(3, 3);
-            uch.Init(eddiscovery, null, UserControls.UserControlCommonBase.DisplayNumberHistoryGrid); // and init at this point with 0 as dn
-
-            EnsureMajorTabIsPresent(PanelInformation.PanelIDs.PanelSelector, true);     // just in case it disappears due to weirdness or debugging
-
-            if (tabctrl.Length > 0 && tabctrl[0] >= 0 && tabctrl[0] < TabPages.Count)   // make sure external data does not crash us
-                SelectedIndex = tabctrl[0];  
+            SelectedIndex = restoretab;
         }
 
         public void LoadTabs()     // called on Loading..
         {
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
+
+            UserControls.UserControlContainerSplitter primary = PrimaryTab;
 
             foreach (TabPage p in TabPages)      // all main tabs, load/display
             {
@@ -104,10 +108,11 @@ namespace EDDiscovery
                 // so force size. tried perform layout to no avail
                 p.Size = TabPages[SelectedIndex].Size;
                 UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
+                uccb.SetCursor(primary.GetTravelGrid);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
-
+                
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
         }
 
@@ -119,12 +124,14 @@ namespace EDDiscovery
 
             string tabnames = "";
 
+            UserControls.UserControlContainerSplitter primary = PrimaryTab;
+
             foreach (TabPage p in TabPages)      // all main tabs, load/display
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.Closing();
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
-                idlist.Add(pi != null ? (int)pi.PopoutID : -1);
+                idlist.Add( Object.ReferenceEquals(uccb,primary) ? -1 : (int)pi.PopoutID);      // primary is marked -1
                 idlist.Add(uccb.displaynumber);
                 tabnames += p.Text + ";";
             }
@@ -139,9 +146,11 @@ namespace EDDiscovery
                 tabindex = Math.Max(0,TabCount + tabindex);
 
             TabPage page = CreateTab(id, null, -1, tabindex, true);
+
             if (page != null)
             {
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
                 SelectedIndex = tabindex;   // and select the inserted one
@@ -170,7 +179,7 @@ namespace EDDiscovery
 
         public TabPage GetMajorTab(PanelInformation.PanelIDs ptype)
         {
-            Type t = PanelInformation.GetPanelInfoByEnum(ptype).PopoutType;
+            Type t = PanelInformation.GetPanelInfoByPanelID(ptype).PopoutType;
             return (from TabPage x in TabPages where x.Controls[0].GetType() == t select x).FirstOrDefault();
         }
 
@@ -181,6 +190,7 @@ namespace EDDiscovery
             {
                 page = CreateTab(ptype, null, -1, TabCount, true);
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
+                uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
@@ -204,12 +214,11 @@ namespace EDDiscovery
             uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
             uccb.Location = new System.Drawing.Point(3, 3);
 
-            List<int> idlist = (from TabPage p in TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
-
             if (dn == -1) // if work out display number
             {
-                // not travel grid (due to clash with History control) and not in list, use primary number (0)
-                if (ptype != PanelInformation.PanelIDs.TravelGrid && !idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
+                List<int> idlist = (from TabPage p in TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
+                
+                if (!idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
                     dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;
                 else
                 {   // search for empty id.
@@ -224,17 +233,18 @@ namespace EDDiscovery
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
+            //System.Diagnostics.Debug.WriteLine("Create tab {0} dn {1} at {2}", ptype, dn, posindex);
 
-            uccb.Init(eddiscovery, travelgrid, dn);    // start the uccb up
+            int numoftab = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? 0 : (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1);
+            if (uccb is UserControls.UserControlContainerSplitter && numoftab > 0)          // so history is a splitter, so first real splitter will be dn=100, adjust for it
+                numoftab--;
 
-            string postfix;
-            if (ptype != PanelInformation.PanelIDs.TravelGrid)      // given the dn, work out the name
-                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberPrimaryTab) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs + 1).ToStringInvariant() + ")";
-            else
-                postfix = (dn == UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs) ? "" : "(" + (dn - UserControls.UserControlCommonBase.DisplayNumberStartExtraTabs).ToStringInvariant() + ")";
+            string postfix = numoftab == 0 ? "" : "(" + numoftab.ToStringInvariant() + ")";
+            string title = name != null ? name : (PanelInformation.GetPanelInfoByPanelID(ptype).WindowTitle + postfix);
 
-            string title = name != null ? name : (PanelInformation.GetPanelInfoByEnum(ptype).WindowTitle + postfix);
+            uccb.Name = title;              // for debugging use
+            uccb.Init(eddiscovery, dn);    // start the uccb up
+
             TabPage page = new TabPage(title);
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
             page.Padding = new System.Windows.Forms.Padding(3);

@@ -64,7 +64,6 @@ namespace EDDiscovery.UserControls
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
-            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
             slidetimer = new System.Windows.Forms.Timer();
             slidetimer.Interval = 500;
             slidetimer.Tick += Slidetimer_Tick;
@@ -79,9 +78,11 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
 
-            //RefreshMap();
-            //ControlReset(chartMap);
+        public override void LoadLayout()
+        {
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
