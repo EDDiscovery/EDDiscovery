@@ -53,8 +53,8 @@ namespace EDDiscovery.Actions
         public static ActionEvent onEliteInputOff { get { return events[10]; } }
         public static ActionEvent onPopUp { get { return events[11]; } }
         public static ActionEvent onPopDown { get { return events[12]; } }
-        public static ActionEvent onPanelChange { get { return events[13]; } }
-        public static ActionEvent onHistorySelection { get { return events[14]; } }
+        public static ActionEvent onPanelChange { get { return events[13]; } }          // withdrawn in 10
+        public static ActionEvent onHistorySelection { get { return events[14]; } }     // withdrawn in 10
         public static ActionEvent onUIEvent { get { return events[15]; } }
         public static ActionEvent onEDDNSync { get { return events[16]; } }
         public static ActionEvent onEGOSync { get { return events[17]; } }
