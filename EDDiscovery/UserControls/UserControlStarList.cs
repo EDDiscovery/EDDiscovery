@@ -28,7 +28,6 @@ using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.JournalEvents;
-using static EDDiscovery.UserControls.Recipes;
 
 namespace EDDiscovery.UserControls
 {
@@ -381,96 +380,36 @@ namespace EDDiscovery.UserControls
                         {
                             hasMaterials = true;
 
-                            string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
-                            // jumponium materials: Arsenic (As), Cadmium (Cd), Carbon (C), Germanium (Ge), Niobium (Nb), Polonium (Po), Vanadium (V), Yttrium (Y)
-                            // "Premium","1C,1Ge,1Nb,1As,1Po,1Y" ),
-                            // "Standard", "1C,1V,1Ge,1Cd,1Nb"),
-                            // "Basic", "1C,1V,1Ge"),
-
                             int basic = 0;
                             int standard = 0;
                             int premium = 0;
-                            int totalMterials = 0;
 
-                            if (MaterialsBrief.Contains("Arsenic"))
+                            foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
-                                premium += 1;
+                                string usedin = Recipes.UsedInSynthesis(mat.Key);
+                                if (usedin.Contains("FSD-Basic"))
+                                    basic++;
+                                if (usedin.Contains("FSD-Standard"))
+                                    standard++;
+                                if (usedin.Contains("FSD-Premium"))
+                                    premium++;
                             }
-                            if (MaterialsBrief.Contains("Cadmium"))
-                            {
-                                standard += 1;
-                            }
-                            if (MaterialsBrief.Contains("Carbon"))
-                            {
-                                basic += 1;
-                                standard += 1;
-                                premium += 1;
-                            }
-                            if (MaterialsBrief.Contains("Germanium"))
-                            {
-                                basic += 1;
-                                standard += 1;
-                                premium += 1;
-                            }
-                            if (MaterialsBrief.Contains("Niobium"))
-                            {
-                                standard += 1;
-                                premium += 1;
-                            }
-                            if (MaterialsBrief.Contains("Polonium"))
-                            {
-                                premium += 1;
-                            }
-                            if (MaterialsBrief.Contains("Vanadium"))
-                            {
-                                basic += 1;
-                            }
-                            if (MaterialsBrief.Contains("Yttrium"))
-                            {
-                                premium += 1;
-                            }
+
+                            // string MaterialsBrief = sn.ScanData.DisplayMaterials(4).ToString();
+                            //System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3} {4}", sn.fullname , basic, standard, premium, MaterialsBrief);
 
                             if (basic > 0 || standard > 0 || premium > 0)
                             {
-                                totalMterials = basic + standard + premium;
+                                int mats = basic + standard + premium;
 
                                 StringBuilder jumpLevel = new StringBuilder();
 
-                                // level I
-                                if (basic != 0 && standard == 0 && premium == 0)
-                                {
-                                    jumpLevel.Append(basic + " Basic");
-                                }
-                                // level I and II
-                                if (basic != 0 && standard != 0 && premium == 0)
-                                {
-                                    jumpLevel.Append(basic + " Basic " + standard + " Standard");
-                                }
-                                // level I
-                                if (basic == 0 && standard != 0 && premium == 0)
-                                {
-                                    jumpLevel.Append(standard + " Standard");
-                                }
-                                // level II and III
-                                if (basic == 0 && standard != 0 && premium != 0)
-                                {
-                                    jumpLevel.Append(standard + " Standard and " + premium + " Premium");
-                                }
-                                // level III
-                                if (basic == 0 && standard == 0 && premium != 0)
-                                {
-                                    jumpLevel.Append(premium + " Premium");
-                                }
-                                // level I and III
-                                if (basic != 0 && standard == 0 && premium != 0)
-                                {
-                                    jumpLevel.Append(basic + " Basic and " + premium + " Premium");
-                                }
-                                // all levels
-                                if (basic != 0 && standard != 0 && premium != 0)
-                                {
-                                    jumpLevel.Append(basic + " Basic, " + standard + " Standard and " + premium + " Premium");
-                                }
+                                if (basic != 0)
+                                    jumpLevel.AppendPrePad(basic + "/" + Recipes.FindSynthesis("FSD", "Basic").Count + " Basic", ", ");
+                                if (standard != 0)
+                                    jumpLevel.AppendPrePad(standard + "/" + Recipes.FindSynthesis("FSD", "Standard").Count + " Standard", ", ");
+                                if (premium != 0)
+                                    jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium", ", ");
 
                                 jumponium = jumponium.AppendPrePad("\n" + sn.ScanData.BodyName + " has " + jumpLevel + " level elements.");
                             }
