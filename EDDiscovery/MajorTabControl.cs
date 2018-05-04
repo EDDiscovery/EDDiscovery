@@ -39,33 +39,37 @@ namespace EDDiscovery
         }
 
         //EDDiscovery Init calls this
-        public void CreateTabs(EDDiscoveryForm edf)
-        { 
+        public void CreateTabs(EDDiscoveryForm edf, bool resettabs, string resetsettings)
+        {
             eddiscovery = edf;
 
-            string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
-            int[] rawtabctrl;
-            majortabs.RestoreArrayFromString(out rawtabctrl);
-            string[] majortabnames = null;
-
-            int[] panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();
-            int[] displaynumbers = rawtabctrl.Where((value, index) => index > 0 && index % 2 == 0).ToArray();
-
+            int[] panelids;
+            int[] displaynumbers;
             int restoretab = 0;
 
-            // must have some, must be the same length, must have a history primary tab, must have a selector
-            if (panelids.Length == 0 || panelids.Length != displaynumbers.Length || !panelids.Contains(-1) || !panelids.Contains((int)PanelInformation.PanelIDs.PanelSelector) )     
-            {
-                panelids = new int[] {-1,(int)PanelInformation.PanelIDs.Route, (int)PanelInformation.PanelIDs.Expedition,
-                                            (int)PanelInformation.PanelIDs.Settings,(int)PanelInformation.PanelIDs.PanelSelector };
-                displaynumbers = new int[] { 0, 0, 0, 0, 0 };
-            }
-            else
-            {
-                if ( rawtabctrl[0]>0&& rawtabctrl[0]<panelids.Length)
-                    restoretab = rawtabctrl[0];
+            string majortabs = SQLiteConnectionUser.GetSettingString("MajorTabControlList", "");
+            string[] majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
 
-                majortabnames = SQLiteConnectionUser.GetSettingString("MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
+            while (true)
+            {
+                int[] rawtabctrl;
+                majortabs.RestoreArrayFromString(out rawtabctrl);
+
+                panelids = rawtabctrl.Where((value, index) => index % 2 != 0).ToArray();
+                displaynumbers = rawtabctrl.Where((value, index) => index > 0 && index % 2 == 0).ToArray();
+
+                if (resettabs || panelids.Length == 0 || panelids.Length != displaynumbers.Length || !panelids.Contains(-1) || !panelids.Contains((int)PanelInformation.PanelIDs.PanelSelector))
+                {
+                    majortabs = resetsettings;
+                    majortabnames = null;
+                    resettabs = false;
+                }
+                else
+                {
+                    if (rawtabctrl[0] > 0 && rawtabctrl[0] < panelids.Length)
+                        restoretab = rawtabctrl[0];
+                    break;
+                }
             }
 
             for (int i = 0; i < panelids.Length; i++)

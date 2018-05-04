@@ -34,11 +34,12 @@
             this.buttonResetTheme = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonDeleteSystemDB = new System.Windows.Forms.Button();
+            this.buttonResetTabs = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Location = new System.Drawing.Point(89, 120);
+            this.buttonDbs.Location = new System.Drawing.Point(89, 123);
             this.buttonDbs.Name = "buttonDbs";
             this.buttonDbs.Size = new System.Drawing.Size(193, 23);
             this.buttonDbs.TabIndex = 0;
@@ -59,7 +60,7 @@
             // 
             // buttonPositions
             // 
-            this.buttonPositions.Location = new System.Drawing.Point(89, 80);
+            this.buttonPositions.Location = new System.Drawing.Point(89, 42);
             this.buttonPositions.Name = "buttonPositions";
             this.buttonPositions.Size = new System.Drawing.Size(193, 23);
             this.buttonPositions.TabIndex = 0;
@@ -69,7 +70,7 @@
             // 
             // buttonResetTheme
             // 
-            this.buttonResetTheme.Location = new System.Drawing.Point(89, 40);
+            this.buttonResetTheme.Location = new System.Drawing.Point(89, 10);
             this.buttonResetTheme.Name = "buttonResetTheme";
             this.buttonResetTheme.Size = new System.Drawing.Size(193, 23);
             this.buttonResetTheme.TabIndex = 0;
@@ -90,13 +91,23 @@
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 160);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 152);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
             this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
             this.buttonDeleteSystemDB.Text = "Delete/Rebuild System DB";
             this.buttonDeleteSystemDB.UseVisualStyleBackColor = true;
             this.buttonDeleteSystemDB.Click += new System.EventHandler(this.buttonDeleteSystemDB_Click);
+            // 
+            // buttonResetTabs
+            // 
+            this.buttonResetTabs.Location = new System.Drawing.Point(89, 74);
+            this.buttonResetTabs.Name = "buttonResetTabs";
+            this.buttonResetTabs.Size = new System.Drawing.Size(193, 23);
+            this.buttonResetTabs.TabIndex = 0;
+            this.buttonResetTabs.Text = "Reset Tabs, Remove PopOuts";
+            this.buttonResetTabs.UseVisualStyleBackColor = true;
+            this.buttonResetTabs.Click += new System.EventHandler(this.buttonResetTabs_Click);
             // 
             // SafeModeForm
             // 
@@ -107,6 +118,7 @@
             this.Controls.Add(this.buttonNormal);
             this.Controls.Add(this.buttonDeleteSystemDB);
             this.Controls.Add(this.buttonDbs);
+            this.Controls.Add(this.buttonResetTabs);
             this.Controls.Add(this.buttonPositions);
             this.Controls.Add(this.buttonResetTheme);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
@@ -124,5 +136,6 @@
         private System.Windows.Forms.Button buttonResetTheme;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonDeleteSystemDB;
+        private System.Windows.Forms.Button buttonResetTabs;
     }
 }

@@ -46,7 +46,8 @@ public static class ControlHelpersStaticFunc
 
     static public void DumpTree(this Control c, int lvl)
     {
-        System.Diagnostics.Debug.WriteLine("                       ".Substring(0,lvl) + "Control " + c.GetType().Name + ":" + c.Name);
+        System.Diagnostics.Debug.WriteLine("                                             ".Substring(0,lvl*2) + "Control " + c.GetType().Name + ":" + c.Name);
+
         foreach (Control s in c.Controls)
         {
             s.DumpTree(lvl + 1);
@@ -302,7 +303,9 @@ public static class ControlHelpersStaticFunc
 
     // Make a tree of splitters, controlled by the string in sp
 
-    static public SplitContainer SplitterTreeMakeFromCtrlString(BaseUtils.StringParser sp, Func<Orientation, int, SplitContainer> MakeSC, Func<string, Control> MakeNode , int lvl)
+    static public SplitContainer SplitterTreeMakeFromCtrlString(BaseUtils.StringParser sp, 
+                                                            Func<Orientation, int, SplitContainer> MakeSC, 
+                                                            Func<string, Control> MakeNode , int lvl)
     {
         char tomake;
         if (sp.SkipUntil(new char[] { 'H', 'V', 'U' }) && (tomake = sp.GetChar()) != 'U')
@@ -342,7 +345,7 @@ public static class ControlHelpersStaticFunc
 
     // Report control state of a tree of splitters
 
-    static public string SplitterTreeState(SplitContainer sc, string cur, Func<Control, string> getpara)
+    static public string SplitterTreeState(this SplitContainer sc, string cur, Func<Control, string> getpara)
     {
         string state = sc.Orientation == Orientation.Horizontal ? "H( " : "V( ";
         state += sc.GetSplitterDistance().ToStringInvariant("0.##") + ", ";
@@ -372,6 +375,26 @@ public static class ControlHelpersStaticFunc
 
         return state;
     }
+
+    // Run actions at each Splitter Panel node
+
+    static public void RunActionOnSplitterTree(this SplitContainer sc, Action<SplitterPanel, Control> action)       
+    {
+        SplitContainer one = sc.Panel1.Controls[0] as SplitContainer;
+
+        if (one != null)
+            RunActionOnSplitterTree(one, action);
+        else
+            action(sc.Panel1, sc.Panel1.Controls[0]);
+
+        SplitContainer two = sc.Panel2.Controls[0] as SplitContainer;
+
+        if (two != null)
+            RunActionOnSplitterTree(two, action);
+        else
+            action(sc.Panel2, sc.Panel2.Controls[0]);
+    }
+
 
     static public void Merge(this SplitContainer currentsplitter , int panel )      // currentsplitter has a splitter underneath it in panel (0/1)
     {
