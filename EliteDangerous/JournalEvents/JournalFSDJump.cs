@@ -212,7 +212,7 @@ Examples of trending states:
 
         public void UpdateFirstDiscover(bool value, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
         {
-            JObject jo = GetJson(Id,cn,txnl);
+            JObject jo = cn == null ? GetJson(Id) : GetJson(Id,cn,txnl);
 
             if (jo != null)
             {
