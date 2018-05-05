@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             isHistoric = newVal;
             if (isHistoric)
             {
-                last_he = uctg.GetCurrentHistoryEntry;
+                last_he = uctg?.GetCurrentHistoryEntry;
             }
             else
             {
