@@ -116,9 +116,7 @@ namespace EDDiscovery.UserControls
             }
 
             isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
-            chkHistoric.Checked = isHistoric;
-            chkHistoric.Visible = !isEmbedded;
-
+            
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
         }
 
@@ -133,6 +131,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewEngineering, DbColumnSave);
+            chkHistoric.Checked = isHistoric;
+            chkHistoric.Visible = !isEmbedded;
         }
 
         public override void Closing()

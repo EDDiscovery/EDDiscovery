@@ -118,6 +118,12 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        public override void LoadLayout()
+        {
+            userControlEngineering.LoadLayout();
+            userControlSynthesis.LoadLayout();
+        }
+
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
