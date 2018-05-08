@@ -26,12 +26,14 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionAbandoned(JObject evt ) : base(evt, JournalTypeEnum.MissionAbandoned)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            FDName = evt["Name"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
             MissionId = evt["MissionID"].Int();
             Fine = evt["Fine"].LongNull();
         }
 
         public string Name { get; set; }
+        public string FDName { get; set; }
         public int MissionId { get; set; }
         public long? Fine { get; set; }
 

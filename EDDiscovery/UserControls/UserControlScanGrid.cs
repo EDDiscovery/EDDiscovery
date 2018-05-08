@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
 
                         cur.Tag = img;
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                sn.ScanData.DisplayString();
+                                sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                     }
                 }
 

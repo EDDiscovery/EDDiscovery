@@ -51,7 +51,8 @@ namespace EliteDangerousCore.JournalEvents
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {       
             Faction = evt["Faction"].Str();
-            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            FDName = evt["Name"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);    // remove $, underscore it
@@ -91,6 +92,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Faction { get; set; }                 // in MissionAccepted order
         public string Name { get; set; }
+        public string FDName { get; set; }
 
         public string TargetType { get; set; }
         public string TargetTypeFriendly { get; set; }
