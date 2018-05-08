@@ -392,7 +392,7 @@ namespace EliteDangerousCore.JournalEvents
             throw new NotImplementedException();
         }
 
-        public string DisplayString(int indent = 0, bool includefront = true)
+        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             string inds = new string(' ', indent);
 
@@ -534,7 +534,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (HasMaterials)
             {
-                scanText.Append("\n" + DisplayMaterials(2) + "\n");
+                scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
             }
 
             string habzonestring = HabZoneString();
@@ -581,7 +581,8 @@ namespace EliteDangerousCore.JournalEvents
                 return null;
         }
 
-        public string DisplayMaterials(int indent = 0)
+        // optionally, show material counts at the historic point and current.
+        public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             StringBuilder scanText = new StringBuilder();
 
@@ -592,17 +593,40 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("Materials:\n");
                 foreach (KeyValuePair<string, double> mat in Materials)
                 {
-                    MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                    if (mc != null)
-                        scanText.AppendFormat(indents + "{0} ({1}) {2} {3}%\n", mc.name, mc.shortname, mc.type, mat.Value.ToString("N1"));
-                    else
-                        scanText.AppendFormat(indents + "{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower()),
-                                                                    mat.Value.ToString("N1"));
+                    scanText.Append(indents + DisplayMaterial(mat.Key, mat.Value, historicmatlist, currentmatlist));
                 }
 
                 if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                     scanText.Remove(scanText.Length - 1, 1);
             }
+
+            return scanText.ToNullSafeString();
+        }
+
+        public string DisplayMaterial(string name, double percent, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
+        {
+            StringBuilder scanText = new StringBuilder();
+
+            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
+
+            if (mc != null)
+            {
+                MaterialCommodities historic = historicmatlist?.Find(mc.name);
+                MaterialCommodities current = Object.ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
+                int? limit = MaterialCommodityDB.MaterialLimit(mc);
+
+                string matinfo = historic?.count.ToString() ?? "0";
+                if (limit != null)
+                    matinfo += "/" + limit.Value.ToString();
+
+                if (current != null && (historic == null || historic.count != current.count) )
+                    matinfo += " Cur " + current.count.ToString();
+
+                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.name, mc.shortname, mc.type, percent.ToString("N1"), matinfo);
+            }
+            else
+                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()),
+                                                            percent.ToString("N1"));
 
             return scanText.ToNullSafeString();
         }

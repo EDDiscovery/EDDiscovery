@@ -37,7 +37,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionCompleted(JObject evt) : base(evt, JournalTypeEnum.MissionCompleted)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(evt["Name"].Str());
+            FDName = evt["Name"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
             Faction = evt["Faction"].Str();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
@@ -88,6 +89,7 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public string Name { get; set; }
+        public string FDName { get; set; }
         public string Faction { get; set; }
 
         public string Commodity { get; set; }               // FDNAME, leave, evidence of the $_name problem

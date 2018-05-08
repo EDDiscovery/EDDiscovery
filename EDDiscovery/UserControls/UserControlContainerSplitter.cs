@@ -270,6 +270,7 @@ namespace EDDiscovery.UserControls
             sc.Name = "SC-" + lv;
             sc.Controls[0].Name = lv + "-P1";       // names used for debugging this complicated beast!
             sc.Controls[1].Name = lv + "-P2";
+            toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels");
             return sc;
         }
 
@@ -366,19 +367,22 @@ namespace EDDiscovery.UserControls
 
         private void Sc_MouseClick(object sender, MouseEventArgs e)
         {
-            currentsplitter = sender as SplitContainer;
-            bool v = currentsplitter.Orientation == Orientation.Vertical;
-            toolStripOrientation.Text = v ? "Change to Horizontal Split" : "Change to Vertical Split";
-            toolStripSplitPanel1.Text = v ? "Split Left Panel" : "Split Top Panel";
-            toolStripSplitPanel2.Text = v ? "Split Right Panel" : "Split Bottom Panel";
-            toolStripMergePanel1.Text = v ? "Merge Left Panel" : "Merge Top Panel";
-            toolStripMergePanel2.Text = v ? "Merge Right Panel" : "Merge Bottom Panel";
+            if (e.Button == MouseButtons.Right)
+            {
+                currentsplitter = sender as SplitContainer;
+                bool v = currentsplitter.Orientation == Orientation.Vertical;
+                toolStripOrientation.Text = v ? "Change to Horizontal Split" : "Change to Vertical Split";
+                toolStripSplitPanel1.Text = v ? "Split Left Panel" : "Split Top Panel";
+                toolStripSplitPanel2.Text = v ? "Split Right Panel" : "Split Bottom Panel";
+                toolStripMergePanel1.Text = v ? "Merge Left Panel" : "Merge Top Panel";
+                toolStripMergePanel2.Text = v ? "Merge Right Panel" : "Merge Bottom Panel";
 
-            toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
-            toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);
-            toolStripMergePanel1.Enabled = currentsplitter.Panel1.Controls[0] is SplitContainer;
-            toolStripMergePanel2.Enabled = currentsplitter.Panel2.Controls[0] is SplitContainer;
-            contextMenuStripSplitter.Show(currentsplitter.PointToScreen(e.Location));
+                toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
+                toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);
+                toolStripMergePanel1.Enabled = currentsplitter.Panel1.Controls[0] is SplitContainer;
+                toolStripMergePanel2.Enabled = currentsplitter.Panel2.Controls[0] is SplitContainer;
+                contextMenuStripSplitter.Show(currentsplitter.PointToScreen(e.Location));
+            }
         }
 
         private void toolStripOrientation_Click(object sender, EventArgs e)

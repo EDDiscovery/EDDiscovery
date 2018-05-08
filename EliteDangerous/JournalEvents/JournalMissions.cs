@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -32,12 +33,12 @@ namespace EliteDangerousCore.JournalEvents
         public JournalMissions(JObject evt) : base(evt, JournalTypeEnum.Missions)
         {
             ActiveMissions = evt["Active"]?.ToObjectProtected<MissionItem[]>();
+            Normalise(ActiveMissions);
             FailedMissions = evt["Failed"]?.ToObjectProtected<MissionItem[]>();
-            CompletedMissions = evt["Completed"]?.ToObjectProtected<MissionItem[]>();
+            Normalise(FailedMissions);
+            CompletedMissions = evt["Complete"]?.ToObjectProtected<MissionItem[]>();
+            Normalise(CompletedMissions);
         }
-
-        public string StationName { get; set; }
-        public string StarSystem { get; set; }
 
         public MissionItem[] ActiveMissions { get; set; }
         public MissionItem[] FailedMissions { get; set; }
@@ -45,9 +46,34 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
-            info = "";
+            info = BaseUtils.FieldBuilder.Build("Active ", ActiveMissions?.Length, "Failed ", FailedMissions?.Length, "Completed ", CompletedMissions?.Length);
             detailed = "";
+            if (ActiveMissions != null && ActiveMissions.Length>0)
+            {
+                detailed = detailed.AppendPrePad("Active:" , Environment.NewLine);
+                foreach (var x in ActiveMissions)
+                    detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
+            }
+            if (FailedMissions != null && FailedMissions.Length>0)
+            {
+                detailed = detailed.AppendPrePad("Failed:" , Environment.NewLine);
+                foreach (var x in FailedMissions)
+                    detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
+            }
+            if (CompletedMissions != null && CompletedMissions.Length > 0)
+            {
+                detailed = detailed.AppendPrePad("Completed:" , Environment.NewLine);
+                foreach (var x in CompletedMissions)
+                    detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
+            }
+
+        }
+
+        public void Normalise(MissionItem[] array)
+        {
+            if (array != null)
+                foreach (var x in array)
+                    x.Normalise(EventTimeUTC);
         }
 
         public class MissionItem
@@ -56,6 +82,20 @@ namespace EliteDangerousCore.JournalEvents
             public string Name;
             public bool PassengerMission;
             public int Expires;
+
+            string FriendlyName;
+            DateTime ExpiryTimeUTC;
+
+            public void Normalise(DateTime utcnow)
+            {
+                ExpiryTimeUTC = utcnow.AddSeconds(Expires);
+                FriendlyName = JournalFieldNaming.GetBetterMissionName(Name);
+            }
+
+            public string Format()
+            {
+                return BaseUtils.FieldBuilder.Build("", FriendlyName, "<;(Passenger)", PassengerMission, " Expires ", ExpiryTimeUTC.ToLocalTime());
+            }
         }
     }
 }
