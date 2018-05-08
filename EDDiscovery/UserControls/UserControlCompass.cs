@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewEntry += OnNewEntry;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             numberBoxTargetLatitude.ValueNoChange = GetSettingDouble(DbLatSave, 0);
             numberBoxTargetLongitude.ValueNoChange = GetSettingDouble(DbLongSave, 0);
             autoHideTargetCoords = GetSettingBool(DbHideSave, false);
@@ -120,6 +121,20 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Display
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
+        {
+            HistoryEntry curhe = discoveryform.history.GetLast;
+            bool differentsystem = last_he != null && curhe != null && last_he.System.Name != curhe.System.Name;
+            last_he = curhe;
+            if (differentsystem)
+            {
+                bookMark = null;
+                PopulateBookmarkCombo();
+            }
+
+            OnNewEntry(last_he, discoveryform.history);
+        }
 
         public override void InitialDisplay()       // on start up, this will have an empty history
         {

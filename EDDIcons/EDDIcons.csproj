@@ -494,6 +494,7 @@
     <EmbeddedResource Include="Controls\Scan\ExportToExcel.png" />
     <EmbeddedResource Include="Controls\Scan\FetchEDSMBodies.png" />
     <EmbeddedResource Include="Controls\Scan\ShowAllMaterials.png" />
+    <EmbeddedResource Include="Controls\Scan\HideFullMaterials.png" />
     <EmbeddedResource Include="Controls\Scan\ShowMoons.png" />
     <EmbeddedResource Include="Controls\Scan\ShowOverlays.png" />
     <EmbeddedResource Include="Controls\Scan\ShowRareMaterials.png" />
@@ -668,6 +669,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\Plot\Dots.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\OutfittingPanel.png" />
+    <EmbeddedResource Include="Panels\ShipYardPanel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\CombatPanel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Panels\SplitterControl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

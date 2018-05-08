@@ -841,7 +841,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(exploration, "Total Hyperspace Distance", stats.Exploration?.TotalHyperspaceDistance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "ly");
                 AddChildNode(exploration, "Total Hyperspace Jumps", stats.Exploration?.TotalHyperspaceJumps.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(exploration, "Farthest From Start", stats.Exploration?.GreatestDistanceFromStart.ToString("N2", System.Globalization.CultureInfo.CurrentCulture), "ly");
-                AddChildNode(exploration, "Time Played", stats.Exploration?.TimePlayedDisplay());
+                AddChildNode(exploration, "Time Played", stats.Exploration?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
                 if (collapseExpand.Substring(6,1) == "Y") exploration.Expand();
                 TreeNode passengers = treeViewStats.Nodes.Add("Passengers");
                 AddChildNode(passengers, "Total Bulk Passengers Delivered", stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));

@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             checkBoxMaterialsRare.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsRare", false);
             checkBoxMoons.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Moons", true);
             checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
+            checkBoxCustomHideFullMats.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsFull", false);
             chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
             progchange = false;
 
@@ -388,7 +389,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString();
+                tip = sc.DisplayString(historicmatlist:last_he.MaterialCommodity , currentmatlist:discoveryform.history.GetLast?.MaterialCommodity);
 
                 if (sc.IsStar && toplevel)
                 {
@@ -537,20 +538,32 @@ namespace EDDiscovery.UserControls
 
             bool noncommon = checkBoxMaterialsRare.Checked;
 
-            string matclicktext = sn.DisplayMaterials(2);
+            string matclicktext = sn.DisplayMaterials(2, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
 
             foreach (KeyValuePair<string, double> sd in sn.Materials)
             {
-                string abv = sd.Key.Substring(0, 1);
-                string tooltip = sd.Key;
+                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
+
                 Color fillc = Color.Yellow;
+                string abv = sd.Key.Substring(0, 1);
 
                 MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(sd.Key);
+
                 if (mc != null)
                 {
                     abv = mc.shortname;
                     fillc = mc.colour;
-                    tooltip = mc.name + " (" + mc.shortname + ") " + mc.type + " " + sd.Value.ToString("0.0") + "%";
+
+                    if (checkBoxCustomHideFullMats.Checked)                 // check full
+                    {
+                        int? limit = MaterialCommodityDB.MaterialLimit(mc);
+                        MaterialCommodities matnow = last_he.MaterialCommodity.Find(mc.name);
+
+                        // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
+                            
+                        if (matnow != null && matnow.count >= limit)        // and limit
+                            continue;
+                    }
 
                     if (noncommon && mc.type.IndexOf("common", StringComparison.InvariantCultureIgnoreCase) >= 0)
                         continue;
@@ -683,6 +696,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void checkBoxCustomHideFullMats_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!progchange)
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "MaterialsFull", checkBoxCustomHideFullMats.Checked);
+                DrawSystem();
+            }
+
+        }
+
         private void checkBoxMoons_CheckedChanged(object sender, EventArgs e)
         {
             if (!progchange)
@@ -769,8 +792,6 @@ namespace EDDiscovery.UserControls
             PositionInfo();
         }
 
-
-
         void HideInfo()
         {
             rtbNodeInfo.Visible = false;
@@ -787,7 +808,7 @@ namespace EDDiscovery.UserControls
 
                 int h = Math.Min(rtbNodeInfo.EstimateVerticalSizeFromText(), panelStars.Height - 20);
 
-                rtbNodeInfo.Size = new Size(panelStars.Width * 6 / 16, h);
+                rtbNodeInfo.Size = new Size(panelStars.Width * 7 / 16, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
         }
