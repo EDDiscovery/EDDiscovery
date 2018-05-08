@@ -420,7 +420,7 @@ namespace ExtendedControls
             base.OnKeyDown(e);
             //System.Diagnostics.Debug.WriteLine("Key press " + e.KeyCode + " Focus " + Focused );
 
-            if (this.FlatStyle != FlatStyle.System)
+            if (this.FlatStyle != FlatStyle.System && this.Items.Count>0)
             {
                 if (SelectedIndex < 0)
                     SelectedIndex = 0;

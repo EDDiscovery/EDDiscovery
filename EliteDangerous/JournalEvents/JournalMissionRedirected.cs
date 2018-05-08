@@ -34,7 +34,8 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalMissionRedirected(JObject evt ) : base(evt, JournalTypeEnum.MissionRedirected)
         {
-            Name = JournalFieldNaming.GetBetterMissionName(evt["MissionName"].Str());
+            FDName = evt["MissionName"].Str();
+            Name = JournalFieldNaming.GetBetterMissionName(FDName);
             MissionId = evt["MissionID"].Int();
             NewDestinationStation = evt["NewDestinationStation"].Str();
             OldDestinationStation = evt["OldDestinationStation"].Str();
@@ -49,6 +50,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public int MissionId { get; set; }
         public string Name { get; set; }
+        public string FDName { get; set; }
 
         public override void FillInformation(out string info, out string detailed) //V
         {

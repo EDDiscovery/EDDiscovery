@@ -160,6 +160,15 @@ public static class ObjectExtensionsDates
         TimeSpan ts = new TimeSpan(0, 0, s);
         return ts.ToString();
     }
+
+    public static string SecondsToWeeksDaysHoursMinutesSeconds(this int seconds)
+    {
+        TimeSpan s = TimeSpan.FromSeconds(seconds);
+        int days = s.Days % 7;
+        int weeks = (s.Days - days) / 7;
+        return (weeks>0 ? $"{weeks} weeks " : "" ) + (days>0 ? $"{days} days " : "") + 
+                          $"{s.Hours} hours" + (weeks==0 ? $" {s.Minutes} minutes {s.Seconds} seconds" : "");
+    }
 }
 
 
