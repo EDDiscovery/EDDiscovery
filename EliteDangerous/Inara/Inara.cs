@@ -174,10 +174,10 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderCredits", dt, eventData);
         }
 
-        static public JToken setCommanderGameStatistics(JToken jsonfromstats, DateTime dt)
+        static public JToken setCommanderGameStatistics(JObject jsonfromstats, DateTime dt)
         {
-            jsonfromstats["event"].Remove();
-            jsonfromstats["timestamp"].Remove();
+            jsonfromstats.Remove("event");
+            jsonfromstats.Remove("timestamp");
             return Event("setCommanderGameStatistics", dt, jsonfromstats);
         }
 
@@ -190,17 +190,17 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderRankEngineer", dt, eventData);
         }
 
-        static public JToken setCommanderRankPilot(string name, int value, int progress, DateTime dt)
+        static public JToken setCommanderRankPilot(string name, int value, int progress, DateTime dt)   // progress is in journal units (0-100)
         {
             JObject eventData = new JObject();
             eventData["rankName"] = name;
             eventData["rankValue"] = value;
             if (progress != -1)
-                eventData["rankProgress"] = progress;
+                eventData["rankProgress"] = progress / 100.0;
             return Event("setCommanderRankPilot", dt, eventData);
         }
 
-        static public JToken setCommanderRankPower(string name, int value, DateTime dt)
+        static public JToken setCommanderRankPower(string name, int value, DateTime dt)  
         {
             JObject eventData = new JObject();
             eventData["powerName"] = name;
@@ -208,12 +208,56 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderRankPower", dt, eventData);
         }
 
-        static public JToken setCommanderReputationMajorFaction(string name, double value, DateTime dt)
+        static public JToken setCommanderReputationMajorFaction(string name, double value, DateTime dt)     // value is in journal units (0-100)
         {
             JObject eventData = new JObject();
             eventData["majorfactionName"] = name;
-            eventData["majorfactionReputation"] = value;
+            eventData["majorfactionReputation"] = value / 100.0;
             return Event("setCommanderReputationMajorFaction", dt, eventData);
+        }
+
+        static public JToken setCommanderInventoryCargo(IEnumerable<Tuple<string,int>> list, DateTime dt)
+        {
+            JArray items = new JArray();
+            foreach (var x in list)
+            {
+                JObject data = new JObject();
+                data["itemName"] = x.Item1;
+                data["itemCount"] = x.Item2;
+                items.Add(data);
+            }
+            return Event("setCommanderInventoryCargo", dt, items);
+        }
+
+        static public JToken setCommanderInventoryCargoItem(string fdname, int count, bool? isstolen, DateTime dt)
+        {
+            JObject eventData = new JObject();
+            eventData["itemName"] = fdname;
+            eventData["itemCount"] = count;
+            if (isstolen.HasValue)
+                eventData["isStolen"] = isstolen.Value;
+            return Event("setCommanderInventoryCargoItem", dt, eventData);
+        }
+
+        static public JToken setCommanderInventoryMaterials(IEnumerable<Tuple<string, int>> list,  DateTime dt)
+        {
+            JArray items = new JArray();
+            foreach (var x in list)
+            {
+                JObject data = new JObject();
+                data["itemName"] = x.Item1;
+                data["itemCount"] = x.Item2;
+                items.Add(data);
+            }
+            return Event("setCommanderInventoryMaterials", dt, items);
+        }
+
+        static public JToken setCommanderInventoryMaterialItem(string fdname, int count, DateTime dt)
+        {
+            JObject eventData = new JObject();
+            eventData["itemName"] = fdname;
+            eventData["itemCount"] = count;
+            return Event("setCommanderInventoryMaterialsItem", dt, eventData);
         }
 
         #endregion

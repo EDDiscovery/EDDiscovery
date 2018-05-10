@@ -57,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public MulticrewClass Multicrew { get; set; }
         public MaterialTraderStatsClass MaterialTraderStats { get; set; }
         public CQCClass CQC { get; set; }
-        public JToken Json { get; set; }
+        public JObject Json { get; set; }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
