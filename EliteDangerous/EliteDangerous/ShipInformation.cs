@@ -186,7 +186,7 @@ namespace EliteDangerousCore
 
         public EliteDangerousCalculations.FSDSpec GetFSDSpec()          // may be null due to not having the info
         {
-            ShipModule fsd = GetModule("FrameShiftDrive");
+            ShipModule fsd = GetModule("Frame Shift Drive");
             return fsd?.GetFSDSpec() ?? null;
         }
 

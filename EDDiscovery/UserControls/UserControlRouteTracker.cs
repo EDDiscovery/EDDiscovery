@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
                                 jumpmsg = " @ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                         }
                         else
-                            jumpmsg = " No Ship Information or Unladen Mass not set (see Loadout screen to set)";
+                            jumpmsg = " No Ship FSD Information";
                     }
 
                     string wpposmsg = String.Format("{0} @ {1:N1},{2:N1},{3:N1} {4:N1}ly", closest.system.Name, closest.system.X, closest.system.Y, closest.system.Z, closest.disttowaypoint);
