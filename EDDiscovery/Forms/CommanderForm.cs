@@ -39,13 +39,16 @@ namespace EDDiscovery.Forms
             textBoxBorderCmdr.Enabled = enablecmdredit;
             textBoxBorderJournal.Text = cmdr.JournalDir;
             textBoxBorderEDSMName.Text = cmdr.EdsmName;
-            textBoxBorderEDSMAPI.Text = cmdr.APIKey;
+            textBoxBorderEDSMAPI.Text = cmdr.EDSMAPIKey;
             checkBoxCustomEDSMFrom.Checked = cmdr.SyncFromEdsm;
             checkBoxCustomEDSMTo.Checked = cmdr.SyncToEdsm;
             checkBoxCustomEDDNTo.Checked = cmdr.SyncToEddn;
             checkBoxEGOSync.Checked = cmdr.SyncToEGO;
             textBoxEGOName.Text = cmdr.EGOName;
             textBoxEGOAPI.Text = cmdr.EGOAPIKey;
+            textBoxBorderInaraAPIKey.Text = cmdr.InaraAPIKey;
+            textBoxBorderInaraName.Text = cmdr.InaraName;
+            checkBoxCustomInara.Checked = cmdr.SyncToInara;
 
             UpdateCAPIState();
         }
@@ -55,13 +58,16 @@ namespace EDDiscovery.Forms
             cmdr.Name = textBoxBorderCmdr.Text;
             cmdr.JournalDir = textBoxBorderJournal.Text;
             cmdr.EdsmName = textBoxBorderEDSMName.Text;
-            cmdr.APIKey = textBoxBorderEDSMAPI.Text;
+            cmdr.EDSMAPIKey = textBoxBorderEDSMAPI.Text;
             cmdr.SyncFromEdsm = checkBoxCustomEDSMFrom.Checked;
             cmdr.SyncToEdsm = checkBoxCustomEDSMTo.Checked;
             cmdr.SyncToEddn = checkBoxCustomEDDNTo.Checked;
             cmdr.SyncToEGO = checkBoxEGOSync.Checked;
             cmdr.EGOName = textBoxEGOName.Text;
             cmdr.EGOAPIKey = textBoxEGOAPI.Text;
+            cmdr.InaraAPIKey = textBoxBorderInaraAPIKey.Text;
+            cmdr.InaraName = textBoxBorderInaraName.Text;
+            cmdr.SyncToInara = checkBoxCustomInara.Checked;
         }
 
         public bool Valid { get { return textBoxBorderCmdr.Text != ""; } }
@@ -73,7 +79,7 @@ namespace EDDiscovery.Forms
             labelCAPIState.Text = "No Credentials";
             labelCAPILogin.Text = "Login ID:";
             textBoxBorderCompanionLogin.Visible = textBoxBorderCompanionPassword.Visible = labelCAPILogin.Visible = labelCAPIPassword.Visible = true;
-            toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter you Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs");
+            toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs");
             buttonExtCAPI.Enabled = false;
             checkBoxCAPIEnable.Visible = false;
 
