@@ -410,7 +410,7 @@ namespace EliteDangerousCore.EDSM
                     json["_systemAddress"] = he.System.SystemAddress;
                 if (he.IsDocked)
                 {
-                    json["_stationName"] = he.StationName;
+                    json["_stationName"] = he.WhereAmI;
                     if (he.MarketID != null)
                         json["_stationMarketId"] = he.MarketID;
                 }

@@ -70,8 +70,17 @@ namespace EliteDangerousCore.Inara
                 var listm = mat.Select(x => new Tuple<string, int>(x.fdname, x.count));
                 eventstosend.Add(InaraClass.setCommanderInventoryMaterials(listm, last.EventTimeUTC));
 
+                eventstosend.Add(InaraClass.setCommanderStorageModules(last.StoredModules.StoredModules, last.EventTimeUTC));
+
                 eventstosend.Add(InaraClass.setCommanderCredits(last.Credits, last.EventTimeUTC));
 
+                var si = last.ShipInformation;
+                eventstosend.Add(InaraClass.setCommanderShip(si.ShipFD, si.ID, last.EventTimeUTC,  
+                                                            si.ShipUserName, si.ShipUserIdent, true, si.Hot,
+                                                            si.HullValue , si.ModulesValue, si.Rebuy, last.System.Name, 
+                                                            last.IsDocked ? last.WhereAmI : null , last.IsDocked ? last.MarketID : null));
+
+                eventstosend.Add(InaraClass.setCommanderShipLoadout(si.ShipFD, si.ID, si.Modules.Values, last.EventTimeUTC));
                 InaraClass inara = new InaraClass();
                 inara.Send(eventstosend);
             }
@@ -86,22 +95,199 @@ namespace EliteDangerousCore.Inara
 
             switch( he.journalEntry.EventTypeID)
             {
+                case JournalTypeEnum.ShipyardBuy:
+                    {
+                        var je = he.journalEntry as JournalShipyardBuy;
+
+                        if (je.StoreOldShipFD != null)
+                            eventstosend.Add(InaraClass.setCommanderShip(je.StoreOldShipFD, je.StoreOldShipId.Value, he.EventTimeUTC, curship: false, starsystemName: he.System.Name, stationName: he.WhereAmI));
+                        if (je.SellOldShipFD != null)
+                            eventstosend.Add(InaraClass.delCommanderShip(je.SellOldShipFD, je.SellOldShipId.Value, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.ShipyardNew:       // into a new ship
+                    {
+                        var je = he.journalEntry as JournalShipyardNew;
+                        eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipId, he.EventTimeUTC, curship: true, starsystemName: he.System.Name, stationName: he.WhereAmI));
+                        break;
+                    }
+
+                case JournalTypeEnum.ShipyardSell:
+                    {
+                        var je = he.journalEntry as JournalShipyardSell;
+                        eventstosend.Add(InaraClass.delCommanderShip(je.ShipTypeFD, je.SellShipId, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.ShipyardSwap:
+                    {
+                        var je = he.journalEntry as JournalShipyardSwap;
+                        eventstosend.Add(InaraClass.setCommanderShip(je.StoreOldShipFD, je.StoreShipId.Value, he.EventTimeUTC, curship: false, starsystemName: he.System.Name, stationName: he.WhereAmI));
+                        eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipId, he.EventTimeUTC, curship: true, starsystemName: he.System.Name, stationName: he.WhereAmI));
+                        break;
+                    }
+
+                case JournalTypeEnum.ShipyardTransfer:
+                    {
+                        var je = he.journalEntry as JournalShipyardTransfer;
+                        eventstosend.Add(InaraClass.setCommanderShipTransfer(je.ShipTypeFD,je.ShipId, he.System.Name, he.WhereAmI, he.MarketID, je.nTransferTime??0, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.Loadout:
+                    {
+                        var si = he.ShipInformation;
+                        eventstosend.Add(InaraClass.setCommanderShipLoadout(si.ShipFD, si.ID, si.Modules.Values, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.SetUserShipName:
+                    {
+                        var je = he.journalEntry as JournalSetUserShipName;
+                        eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipID, he.EventTimeUTC, curship: true, username: je.ShipName, userid: je.ShipIdent, starsystemName: he.System.Name, stationName: he.WhereAmI));
+                        break;
+                    }
+
+
+                case JournalTypeEnum.Docked:
+                    {
+                        var je = he.journalEntry as JournalDocked;
+                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, he.System.Name, he.WhereAmI, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.FSDJump:
+                    {
+                        var je = he.journalEntry as JournalFSDJump;
+                        eventstosend.Add(InaraClass.addCommanderTravelFSDJump(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.JumpDist, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.Location:
+                    {
+                        var je = he.journalEntry as JournalLocation;
+                        eventstosend.Add(InaraClass.addCommanderTravelLocation(je.StarSystem, je.Docked ? je.StationName : null, je.Docked ? je.MarketID : null, he.EventTimeUTC));
+                        break;
+                    }
+
                 case JournalTypeEnum.MissionCompleted:
                     {
-                        JournalMissionCompleted je = he.journalEntry as JournalMissionCompleted;
+                        var je = he.journalEntry as JournalMissionCompleted;
                         if (je.PermitsAwarded != null)
                         {
                             foreach (string s in je.PermitsAwarded)
-                                eventstosend.Add(InaraClass.addCommanderPermit(s, je.EventTimeUTC));
+                                eventstosend.Add(InaraClass.addCommanderPermit(s, he.EventTimeUTC));
+                        }
+
+                        // more stuff later.
+
+                        if ( je.CommodityReward != null )
+                        {
+                            foreach (var x in je.CommodityReward)
+                            {
+                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, x.Name, he.EventTimeUTC);
+                                if (entry != null)
+                                    eventstosend.Add(entry);
+                            }
+                        }
+
+                        if ( je.MaterialsReward != null )
+                        {
+                            foreach (var x in je.MaterialsReward)
+                            {
+                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, x.Name, he.EventTimeUTC);
+                                if (entry != null)
+                                    eventstosend.Add(entry);
+                            }
                         }
                         break;
                     }
+
                 case JournalTypeEnum.EngineerProgress:
                     {
-                        JournalEngineerProgress je = he.journalEntry as JournalEngineerProgress;
-                        eventstosend.Add(InaraClass.setCommanderRankEngineer(je.Engineer, je.Progress, je.Rank.HasValue ? je.Rank.Value : 1, je.EventTimeUTC));
+                        var je = he.journalEntry as JournalEngineerProgress;
+                        eventstosend.Add(InaraClass.setCommanderRankEngineer(je.Engineer, je.Progress, je.Rank.HasValue ? je.Rank.Value : 1, he.EventTimeUTC));
                         break;
                     }
+
+                case JournalTypeEnum.MaterialTrade: // one out, one in..
+                    {
+                        var je = he.journalEntry as JournalMaterialTrade;
+                        if (je.Paid != null)
+                        {
+                            JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Paid.Material, he.EventTimeUTC);
+                            if (entry != null)
+                                eventstosend.Add(entry);
+                        }
+
+                        if (je.Received != null)
+                        {
+                            JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Received.Material, he.EventTimeUTC);
+                            if (entry != null)
+                                eventstosend.Add(entry);
+                        }
+
+                        break;
+                    }
+
+                case JournalTypeEnum.EngineerCraft:
+                    {
+                        var je = he.journalEntry as JournalEngineerCraft;
+
+                        if (je.Ingredients != null)
+                        {
+                            foreach (KeyValuePair<string, int> k in je.Ingredients)
+                            {
+                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC);
+                                if (entry != null)
+                                    eventstosend.Add(entry);
+                            }
+                        }
+                        break;
+                    }
+                case JournalTypeEnum.Synthesis:
+                    {
+                        var je = he.journalEntry as JournalSynthesis;
+
+                        if (je.Materials != null)
+                        {
+                            foreach (KeyValuePair<string, int> k in je.Materials)
+                            {
+                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC);
+                                if (entry != null)
+                                    eventstosend.Add(entry);
+                            }
+                        }
+                        break;
+                    }
+                case JournalTypeEnum.Died:
+                    {
+                        eventstosend.Add(InaraClass.setCommanderInventoryCargo(null, he.EventTimeUTC));
+                        break;
+                    }
+                case JournalTypeEnum.CargoDepot:
+                case JournalTypeEnum.CollectCargo:
+                case JournalTypeEnum.EjectCargo:
+                case JournalTypeEnum.EngineerContribution:
+                case JournalTypeEnum.MarketBuy:
+                case JournalTypeEnum.MarketSell:
+                case JournalTypeEnum.MaterialCollected:
+                case JournalTypeEnum.MaterialDiscarded:
+                case JournalTypeEnum.MiningRefined:
+                    {
+                        var x = he.MaterialCommodity.LastChange;
+                        if ( x != null)
+                        {
+                            if (x.category.Equals(MaterialCommodities.CommodityCategory))
+                                eventstosend.Add(InaraClass.setCommanderInventoryCargoItem(x.fdname, x.count, null, he.EventTimeUTC));
+                            else
+                                eventstosend.Add(InaraClass.setCommanderInventoryMaterialsItem(x.fdname, x.count, he.EventTimeUTC));
+                        }
+                        break;
+                    }
+
+                // EDDItemSet/cargo/Materials - not doing, handled by initial sync
             }
 
             return true;
