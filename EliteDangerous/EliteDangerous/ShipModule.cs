@@ -240,23 +240,26 @@ namespace EliteDangerousCore
                 {
                     return false;
                 }
-                else if ((Modifiers == null && other.Modifiers != null) || (Modifiers != null && other.Modifiers == null) || (Modifiers.Length != other.Modifiers.Length))
+                else if (Modifiers != null || other.Modifiers != null)
                 {
-                    return false;
-                }
-                else
-                {
-                    for (int i = 0; i < Modifiers.LongLength; i++)
+                    if (Modifiers == null || other.Modifiers == null || Modifiers.Length != other.Modifiers.Length)
                     {
-                        if (Modifiers[i].Label != other.Modifiers[i].Label || Modifiers[i].ValueStr != other.Modifiers[i].ValueStr ||
-                            Modifiers[i].Value != other.Modifiers[i].Value || Modifiers[i].OriginalValue != other.Modifiers[i].OriginalValue || Modifiers[i].LessIsGood != other.Modifiers[i].LessIsGood)
+                        return false;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < Modifiers.LongLength; i++)
                         {
-                            return false;
+                            if (Modifiers[i].Label != other.Modifiers[i].Label || Modifiers[i].ValueStr != other.Modifiers[i].ValueStr ||
+                                Modifiers[i].Value != other.Modifiers[i].Value || Modifiers[i].OriginalValue != other.Modifiers[i].OriginalValue || Modifiers[i].LessIsGood != other.Modifiers[i].LessIsGood)
+                            {
+                                return false;
+                            }
                         }
                     }
-
-                    return true;
                 }
+
+                return true;
             }
 
 
