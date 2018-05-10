@@ -137,6 +137,9 @@ namespace EliteDangerousCore.DB
                 if (dbver < 118)
                     UpgradeUserDB118(conn);
 
+                if (dbver < 119)
+                    UpgradeUserDB119(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -409,6 +412,13 @@ namespace EliteDangerousCore.DB
             string query1 = "ALTER TABLE Commanders ADD COLUMN SyncToInara INT NOT NULL DEFAULT 0";
             string query3 = "ALTER TABLE Commanders ADD COLUMN InaraAPIKey TEXT";
             PerformUpgrade(conn, 118, true, false, new[] { query1, query3 });
+        }
+
+
+        private static void UpgradeUserDB119(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN InaraName TEXT";
+            PerformUpgrade(conn, 119, true, false, new[] { query1 });
         }
 
 

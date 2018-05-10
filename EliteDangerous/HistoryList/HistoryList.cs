@@ -256,6 +256,11 @@ namespace EliteDangerousCore
             return historylist.FindLast(where);
         }
 
+        public T GetLastJournalEntry<T>(Predicate<HistoryEntry> where) where T:class             // may be Null
+        {
+            return historylist.FindLast(where)?.journalEntry as T;
+        }
+
         public HistoryEntry GetLastHistoryEntry(Predicate<HistoryEntry> where, HistoryEntry frominclusive)
         {
             int hepos = historylist.FindIndex(x => x.Journalid == frominclusive.Journalid);

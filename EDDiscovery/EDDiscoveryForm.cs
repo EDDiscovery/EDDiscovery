@@ -547,8 +547,6 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-
-
             if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
             {
                 Capi.Logout();
@@ -592,6 +590,11 @@ namespace EDDiscovery
                     if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                         LogLineHighlight(ex.StackTrace);
                 }
+            }
+
+            if (EDCommander.Current.SyncToEdsm)
+            {
+                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history);
             }
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
@@ -666,6 +669,11 @@ namespace EDDiscovery
             if (EDCommander.Current.SyncToEdsm)
             {
                 EDSMJournalSync.SendEDSMEvents(LogLine, he);
+            }
+
+            if (EDCommander.Current.SyncToEdsm)
+            {
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
             }
 
             if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
@@ -794,9 +802,12 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            actioncontroller.ReLoad();
-            actioncontroller.CheckWarn();
-            actioncontroller.onStartup();
+            //actioncontroller.ReLoad();
+            //actioncontroller.CheckWarn();
+            //actioncontroller.onStartup();
+
+            EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass();
+            inara.getCommanderProfile("Robby");
          }
 
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)

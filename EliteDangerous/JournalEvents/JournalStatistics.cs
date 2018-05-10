@@ -39,6 +39,8 @@ namespace EliteDangerousCore.JournalEvents
             Multicrew = evt["Multicrew"].RemoveKeyUnderscores().RemoveKeyPrefix("Multicrew")?.ToObjectProtected<MulticrewClass>() ?? new MulticrewClass();
             MaterialTraderStats = evt["Material_Trader_Stats"].RemoveKeyUnderscores()?.ToObjectProtected<MaterialTraderStatsClass>() ?? new MaterialTraderStatsClass();
             CQC = evt["CQC"].RemoveKeyUnderscores().RemoveKeyPrefix("CQC")?.ToObjectProtected<CQCClass>() ?? new CQCClass();
+
+            Json = evt;     // keep for inara purposes..
         }
 
         public BankAccountClass BankAccount { get; set; }
@@ -55,6 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public MulticrewClass Multicrew { get; set; }
         public MaterialTraderStatsClass MaterialTraderStats { get; set; }
         public CQCClass CQC { get; set; }
+        public JToken Json { get; set; }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
