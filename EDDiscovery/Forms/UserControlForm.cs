@@ -294,6 +294,14 @@ namespace EDDiscovery.Forms
                 UserControl.Closing();
         }
 
+        public void FireHistoryCursorChanged(IHistoryCursor cursor)
+        {
+            if (UserControl != null)
+            {
+                UserControl.ChangeCursorType(cursor);
+            }
+        }
+
 #endregion
 
 #region Clicks
@@ -459,6 +467,7 @@ namespace EDDiscovery.Forms
         {
             tabforms = new List<UserControlForm>();
             discoveryform = ed;
+            discoveryform.OnHistoryCursorChanged += FireHistoryCursorChanged;
         }
 
         public UserControlForm this[int i] { get { return tabforms[i]; } }
@@ -493,6 +502,14 @@ namespace EDDiscovery.Forms
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
             discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, null, new Conditions.ConditionVariables(new string[] { "PopOutName", tcf.dbrefname.Substring(9), "PopOutTitle", tcf.wintitle }));
+        }
+
+        private void FireHistoryCursorChanged(IHistoryCursor cursor)
+        {
+            foreach (var form in tabforms)
+            {
+                form.FireHistoryCursorChanged(cursor);
+            }
         }
 
         public List<UserControlCommonBase> GetListOfControls(Type c)
