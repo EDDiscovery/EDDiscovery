@@ -745,7 +745,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString();
+                scantext = scan.DisplayString(historicmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                 Display(current_historylist);
                 SetSurfaceScanBehaviour(null);  // set up timers etc.
             }
