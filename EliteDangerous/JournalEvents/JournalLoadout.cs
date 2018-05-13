@@ -79,9 +79,9 @@ namespace EliteDangerousCore.JournalEvents
         public int ShipId { get; set; }
         public string ShipName { get; set; } // : user-defined ship name
         public string ShipIdent { get; set; } //   user-defined ship ID string
-        long? HullValue { get; set; }   //3.0
-        long? ModulesValue { get; set; }   //3.0
-        long? Rebuy { get; set; }   //3.0
+        public long? HullValue { get; set; }   //3.0
+        public long? ModulesValue { get; set; }   //3.0
+        public long? Rebuy { get; set; }   //3.0
 
         public List<ShipModule> ShipModules;
 

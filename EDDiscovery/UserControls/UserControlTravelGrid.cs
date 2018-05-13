@@ -116,6 +116,7 @@ namespace EDDiscovery.UserControls
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
             writeJournalToLogtoolStripMenuItem.Visible = false;
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -159,6 +160,7 @@ namespace EDDiscovery.UserControls
                 return;
 
             current_historylist = hl;
+            this.Cursor = Cursors.WaitCursor;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -213,6 +215,8 @@ namespace EDDiscovery.UserControls
             }
 
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+
+            this.Cursor = Cursors.Default;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
@@ -982,28 +986,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
-        {
-            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
-            //if (rightclicksystem.ShipInformation != null)
-            //    discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
-        }
-
-        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
-            {
-                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
-                if (json != null)
-                {
-                    discoveryform.LogLine(json);
-                }
-            }
-        }
-
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightclicksystem != null && rightclicksystem.journalEntry != null)
@@ -1013,48 +995,6 @@ namespace EDDiscovery.UserControls
                 if (json != null)
                 {
                     Clipboard.SetText(json);
-                }
-            }
-        }
-
-        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string laststring = "";
-            string lasttype = "";
-            int lasttypecount = 0;
-
-            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
-
-            if (dataGridViewTravel.SelectedRows.Count > 0)
-            {
-                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
-                foreach (DataGridViewRow rw in rows)
-                {
-                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
-
-
-                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
-                    if (!same || lasttypecount < 10)
-                    {
-                        lasttype = he.journalEntry.EventTypeStr;
-                        lasttypecount = (same) ? ++lasttypecount : 0;
-
-                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
-                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
-
-                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
-                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
-
-                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
-
-                        if (s.Length > 0 && !s.Equals(laststring))
-                        {
-                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
-                            laststring = s;
-                        }
-                    }
                 }
             }
         }
@@ -1122,6 +1062,89 @@ namespace EDDiscovery.UserControls
                 fieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
+            }
+        }
+
+        #endregion
+
+        #region DEBUG clicks - only for special people who build the debug version!
+
+        private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null )
+            {
+                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclicksystem);
+
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                discoveryform.LogLine(json);
+
+                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass();
+                string str = inara.ToJSONString(list);
+                discoveryform.LogLine(str);
+                System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
+            }
+        }
+
+        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
+        {
+            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
+        }
+
+        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            {
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                if (json != null)
+                {
+                    discoveryform.LogLine(json);
+                }
+            }
+        }
+
+        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string laststring = "";
+            string lasttype = "";
+            int lasttypecount = 0;
+
+            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
+
+            if (dataGridViewTravel.SelectedRows.Count > 0)
+            {
+                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
+                foreach (DataGridViewRow rw in rows)
+                {
+                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
+
+
+                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
+                    if (!same || lasttypecount < 10)
+                    {
+                        lasttype = he.journalEntry.EventTypeStr;
+                        lasttypecount = (same) ? ++lasttypecount : 0;
+
+                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
+                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
+                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+
+                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
+                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+
+                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
+
+                        if (s.Length > 0 && !s.Equals(laststring))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            laststring = s;
+                        }
+                    }
+                }
             }
         }
 

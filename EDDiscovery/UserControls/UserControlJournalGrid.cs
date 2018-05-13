@@ -130,6 +130,8 @@ namespace EDDiscovery.UserControls
             if (hl == null)     // just for safety
                 return;
 
+            this.Cursor = Cursors.WaitCursor;
+
             current_historylist = hl;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
@@ -179,6 +181,8 @@ namespace EDDiscovery.UserControls
             }
 
             FireChangeSelection();
+
+            this.Cursor = Cursors.Default;
         }
 
 

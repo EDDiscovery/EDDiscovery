@@ -17,29 +17,74 @@
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EliteDangerousCore.Inara
 {
     public static class InaraSync
     {
-        public static bool Refresh(Action<string> logger, HistoryList history)
+        private class InaraQueueEntry
         {
+            public JToken eventinfo;
+            public EDCommander cmdr;
+        }
+
+        private static ConcurrentQueue<InaraQueueEntry> eventqueue = new ConcurrentQueue<InaraQueueEntry>();
+        private static Thread ThreadInaraSync;
+        private static int running = 0;
+        private static bool Exit = false;
+        private static AutoResetEvent queuedevents = new AutoResetEvent(false);
+        private static ManualResetEvent exitevent = new ManualResetEvent(false);
+        private static long CmdrCredits = 0;
+
+        #region Public IF
+
+        public static bool Refresh(Action<string> logger, HistoryList history, EDCommander cmdr)
+        {
+            List<JToken> events = RefreshList(history);
+            if (events.Count > 0)
+                Submit(events,cmdr);
+            return true;
+        }
+
+        public static bool NewEvent(Action<string> log, HistoryEntry he)
+        {
+            List<JToken> events = NewEntryList(he);
+            if (events.Count > 0)
+                Submit(events,he.Commander);
+            return true;
+        }
+
+        public static void StopSync()
+        {
+            Exit = true;
+            exitevent.Set();
+            queuedevents.Set();     // also trigger in case we are in thread hold
+        }
+
+        #endregion
+
+        #region Formatters
+
+        public static List<JToken> RefreshList(HistoryList history)         // may create NULL entries if some material items not found
+        {
+            List<JToken> eventstosend = new List<JToken>();
+
             HistoryEntry last = history.GetLast;
             if (last != null)
             {
-                List<JToken> eventstosend = new List<JToken>();
-
                 JournalStatistics stats = history.GetLastJournalEntry<JournalStatistics>(x => x.EntryType == JournalTypeEnum.Statistics);
                 if (stats != null)
                     eventstosend.Add(InaraClass.setCommanderGameStatistics(stats.Json, stats.EventTimeUTC));
 
                 JournalRank rank = history.GetLastJournalEntry<JournalRank>(x => x.EntryType == JournalTypeEnum.Rank);
                 JournalProgress progress = history.GetLastJournalEntry<JournalProgress>(x => x.EntryType == JournalTypeEnum.Progress);
-                if (rank != null )
+                if (rank != null)
                 {
                     eventstosend.Add(InaraClass.setCommanderRankPilot("combat", (int)rank.Combat, progress?.Combat ?? -1, rank.EventTimeUTC));
                     eventstosend.Add(InaraClass.setCommanderRankPilot("trade", (int)rank.Trade, progress?.Trade ?? -1, rank.EventTimeUTC));
@@ -73,27 +118,29 @@ namespace EliteDangerousCore.Inara
                 eventstosend.Add(InaraClass.setCommanderStorageModules(last.StoredModules.StoredModules, last.EventTimeUTC));
 
                 eventstosend.Add(InaraClass.setCommanderCredits(last.Credits, last.EventTimeUTC));
+                CmdrCredits = last.Credits;
 
                 var si = last.ShipInformation;
-                eventstosend.Add(InaraClass.setCommanderShip(si.ShipFD, si.ID, last.EventTimeUTC,  
+                eventstosend.Add(InaraClass.setCommanderShip(si.ShipFD, si.ID, last.EventTimeUTC,
                                                             si.ShipUserName, si.ShipUserIdent, true, si.Hot,
-                                                            si.HullValue , si.ModulesValue, si.Rebuy, last.System.Name, 
-                                                            last.IsDocked ? last.WhereAmI : null , last.IsDocked ? last.MarketID : null));
+                                                            si.HullValue, si.ModulesValue, si.Rebuy, last.System.Name,
+                                                            last.IsDocked ? last.WhereAmI : null, last.IsDocked ? last.MarketID : null));
 
                 eventstosend.Add(InaraClass.setCommanderShipLoadout(si.ShipFD, si.ID, si.Modules.Values, last.EventTimeUTC));
+
                 InaraClass inara = new InaraClass();
-                inara.Send(eventstosend);
+                System.IO.File.WriteAllText(@"c:\code\inarastart.json", inara.ToJSONString(eventstosend));
             }
 
-            return true;
+            return eventstosend;
         }
 
 
-        public static bool NewEvent(Action<string> log, HistoryEntry he)
+        public static List<JToken> NewEntryList(HistoryEntry he)         // may create NULL entries if some material items not found
         {
             List<JToken> eventstosend = new List<JToken>();
 
-            switch( he.journalEntry.EventTypeID)
+            switch (he.journalEntry.EventTypeID)
             {
                 case JournalTypeEnum.ShipyardBuy:
                     {
@@ -103,6 +150,10 @@ namespace EliteDangerousCore.Inara
                             eventstosend.Add(InaraClass.setCommanderShip(je.StoreOldShipFD, je.StoreOldShipId.Value, he.EventTimeUTC, curship: false, starsystemName: he.System.Name, stationName: he.WhereAmI));
                         if (je.SellOldShipFD != null)
                             eventstosend.Add(InaraClass.delCommanderShip(je.SellOldShipFD, je.SellOldShipId.Value, he.EventTimeUTC));
+
+                        eventstosend.Add(InaraClass.setCommanderCredits(he.Credits, he.EventTimeUTC));
+                        CmdrCredits = he.Credits;
+
                         break;
                     }
 
@@ -117,6 +168,8 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalShipyardSell;
                         eventstosend.Add(InaraClass.delCommanderShip(je.ShipTypeFD, je.SellShipId, he.EventTimeUTC));
+                        eventstosend.Add(InaraClass.setCommanderCredits(he.Credits, he.EventTimeUTC));
+                        CmdrCredits = he.Credits;
                         break;
                     }
 
@@ -131,14 +184,25 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.ShipyardTransfer:
                     {
                         var je = he.journalEntry as JournalShipyardTransfer;
-                        eventstosend.Add(InaraClass.setCommanderShipTransfer(je.ShipTypeFD,je.ShipId, he.System.Name, he.WhereAmI, he.MarketID, je.nTransferTime??0, he.EventTimeUTC));
+                        eventstosend.Add(InaraClass.setCommanderShipTransfer(je.ShipTypeFD, je.ShipId, he.System.Name, he.WhereAmI, he.MarketID, je.nTransferTime ?? 0, he.EventTimeUTC));
                         break;
                     }
 
                 case JournalTypeEnum.Loadout:
                     {
+                        var je = he.journalEntry as JournalLoadout;
                         var si = he.ShipInformation;
-                        eventstosend.Add(InaraClass.setCommanderShipLoadout(si.ShipFD, si.ID, si.Modules.Values, he.EventTimeUTC));
+                        if (je.ShipId == si.ID)
+                        {
+                            eventstosend.Add(InaraClass.setCommanderShipLoadout(je.ShipFD, je.ShipId, si.Modules.Values, he.EventTimeUTC));
+                            eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipId, he.EventTimeUTC,
+                                                                    je.ShipName, je.ShipIdent, true, null,
+                                                                    je.HullValue, je.ModulesValue, je.Rebuy));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("ERROR IN EDD Inara system:Current ship does not match loadout");
+                        }
                         break;
                     }
 
@@ -153,7 +217,7 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.Docked:
                     {
                         var je = he.journalEntry as JournalDocked;
-                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, he.System.Name, he.WhereAmI, he.EventTimeUTC));
+                        eventstosend.Add(InaraClass.addCommanderTravelDock(he.ShipInformation.ShipFD, he.ShipInformation.ID, je.StarSystem, je.StationName, je.MarketID, he.EventTimeUTC));
                         break;
                     }
 
@@ -171,36 +235,29 @@ namespace EliteDangerousCore.Inara
                         break;
                     }
 
+                case JournalTypeEnum.MissionAccepted:
+                    {
+                        var je = he.journalEntry as JournalMissionAccepted;
+                        eventstosend.Add(InaraClass.addCommanderMission(je, he.System.Name, he.WhereAmI));
+                        break;
+                    }
+                case JournalTypeEnum.MissionAbandoned:
+                    {
+                        var je = he.journalEntry as JournalMissionAbandoned;
+                        eventstosend.Add(InaraClass.setCommanderMissionAbandoned(je.MissionId, he.EventTimeUTC));
+                        break;
+                    }
+                case JournalTypeEnum.MissionFailed:
+                    {
+                        var je = he.journalEntry as JournalMissionFailed;
+                        eventstosend.Add(InaraClass.setCommanderMissionFailed(je.MissionId, he.EventTimeUTC));
+                        break;
+                    }
+
                 case JournalTypeEnum.MissionCompleted:
                     {
                         var je = he.journalEntry as JournalMissionCompleted;
-                        if (je.PermitsAwarded != null)
-                        {
-                            foreach (string s in je.PermitsAwarded)
-                                eventstosend.Add(InaraClass.addCommanderPermit(s, he.EventTimeUTC));
-                        }
-
-                        // more stuff later.
-
-                        if ( je.CommodityReward != null )
-                        {
-                            foreach (var x in je.CommodityReward)
-                            {
-                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, x.Name, he.EventTimeUTC);
-                                if (entry != null)
-                                    eventstosend.Add(entry);
-                            }
-                        }
-
-                        if ( je.MaterialsReward != null )
-                        {
-                            foreach (var x in je.MaterialsReward)
-                            {
-                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, x.Name, he.EventTimeUTC);
-                                if (entry != null)
-                                    eventstosend.Add(entry);
-                            }
-                        }
+                        eventstosend.Add(InaraClass.setCommanderMissionCompleted(je));
                         break;
                     }
 
@@ -215,18 +272,9 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalMaterialTrade;
                         if (je.Paid != null)
-                        {
-                            JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Paid.Material, he.EventTimeUTC);
-                            if (entry != null)
-                                eventstosend.Add(entry);
-                        }
-
+                            eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Paid.Material, he.EventTimeUTC));
                         if (je.Received != null)
-                        {
-                            JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Received.Material, he.EventTimeUTC);
-                            if (entry != null)
-                                eventstosend.Add(entry);
-                        }
+                            eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Received.Material, he.EventTimeUTC));
 
                         break;
                     }
@@ -239,9 +287,7 @@ namespace EliteDangerousCore.Inara
                         {
                             foreach (KeyValuePair<string, int> k in je.Ingredients)
                             {
-                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC);
-                                if (entry != null)
-                                    eventstosend.Add(entry);
+                                eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC));
                             }
                         }
                         break;
@@ -254,44 +300,175 @@ namespace EliteDangerousCore.Inara
                         {
                             foreach (KeyValuePair<string, int> k in je.Materials)
                             {
-                                JToken entry = InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC);
-                                if (entry != null)
-                                    eventstosend.Add(entry);
+                                eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, k.Key, he.EventTimeUTC));
                             }
                         }
                         break;
                     }
                 case JournalTypeEnum.Died:
                     {
-                        eventstosend.Add(InaraClass.setCommanderInventoryCargo(null, he.EventTimeUTC));
+                        var je = he.journalEntry as JournalDied;
+                        string[] killers = je.Killers != null ? je.Killers.Select(x => x.Name).ToArray() : null;
+                        eventstosend.Add(InaraClass.addCommanderCombatDeath(he.System.Name, killers, he.EventTimeUTC));
                         break;
                     }
+
+                case JournalTypeEnum.Interdicted:
+                    {
+                        var je = he.journalEntry as JournalInterdicted;
+                        eventstosend.Add(InaraClass.addCommanderCombatInterdicted(he.System.Name, je.Interdictor, je.IsPlayer, je.Submitted, he.EventTimeUTC));
+                        break;
+                    }
+                case JournalTypeEnum.Interdiction:
+                    {
+                        var je = he.journalEntry as JournalInterdiction;
+                        eventstosend.Add(InaraClass.addCommanderCombatInterdiction(he.System.Name, je.Interdicted.HasChars() ? je.Interdicted : je.Faction, je.IsPlayer, je.Success, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.EscapeInterdiction:
+                    {
+                        var je = he.journalEntry as JournalEscapeInterdiction;
+                        eventstosend.Add(InaraClass.addCommanderCombatInterdictionEscape(he.System.Name, je.Interdictor, je.IsPlayer, he.EventTimeUTC));
+                        break;
+                    }
+
+                case JournalTypeEnum.PVPKill:
+                    {
+                        var je = he.journalEntry as JournalPVPKill;
+                        eventstosend.Add(InaraClass.addCommanderCombatKill(he.System.Name, je.Victim, he.EventTimeUTC));
+                        break;
+                    }
+
                 case JournalTypeEnum.CargoDepot:
+                    {
+                        var je = he.journalEntry as JournalCargoDepot;
+                        if (je.CargoType.HasChars() && je.Count > 0)
+                            eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.CargoType, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.CollectCargo:
+                    {
+                        var je = he.journalEntry as JournalCollectCargo;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Type, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.EjectCargo:
+                    {
+                        var je = he.journalEntry as JournalEjectCargo;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Type, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.EngineerContribution:
+                    {
+                        var je = he.journalEntry as JournalEngineerContribution;
+                        if (je.Commodity.HasChars())
+                            eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Commodity, he.EventTimeUTC));
+                        if (je.Material.HasChars())
+                            eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Material, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.MarketBuy:
+                    {
+                        var je = he.journalEntry as JournalMarketBuy;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Type, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.MarketSell:
+                    {
+                        var je = he.journalEntry as JournalMarketSell;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Type, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.MaterialCollected:
+                    {
+                        var je = he.journalEntry as JournalMaterialCollected;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Name, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.MaterialDiscarded:
+                    {
+                        var je = he.journalEntry as JournalMaterialDiscarded;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Name, he.EventTimeUTC));
+                        break;
+                    }
                 case JournalTypeEnum.MiningRefined:
                     {
-                        var x = he.MaterialCommodity.LastChange;
-                        if ( x != null)
-                        {
-                            if (x.category.Equals(MaterialCommodities.CommodityCategory))
-                                eventstosend.Add(InaraClass.setCommanderInventoryCargoItem(x.fdname, x.count, null, he.EventTimeUTC));
-                            else
-                                eventstosend.Add(InaraClass.setCommanderInventoryMaterialsItem(x.fdname, x.count, he.EventTimeUTC));
-                        }
+                        var je = he.journalEntry as JournalMiningRefined;
+                        eventstosend.Add(InaraClass.setCommanderInventoryItem(he.MaterialCommodity, je.Type, he.EventTimeUTC));
                         break;
                     }
 
-                // EDDItemSet/cargo/Materials - not doing, handled by initial sync
+                    // EDDItemSet/cargo/Materials - not doing, handled by initial sync
             }
 
-            return true;
+            //if ( Math.Abs(CmdrCredits-he.Credits) > 500000 )
+            //{
+            //    eventstosend.Add(InaraClass.setCommanderCredits(he.Credits, he.EventTimeUTC));
+            //    CmdrCredits = he.Credits;
+            //}
+
+            eventstosend = eventstosend.Where(x => x != null).ToList();     // remove any nulls
+
+            return eventstosend;
         }
+
+        #endregion
+
+        #region Thread
+
+        public static void Submit(List<JToken> list, EDCommander cmdrn)
+        {
+            foreach (var x in list)
+                eventqueue.Enqueue(new InaraQueueEntry() { eventinfo = x, cmdr = cmdrn });
+
+            queuedevents.Set();
+
+            // Start the sync thread if it's not already running
+            if (Interlocked.CompareExchange(ref running, 1, 0) == 0)
+            {
+                Exit = false;
+                exitevent.Reset();
+                ThreadInaraSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
+                ThreadInaraSync.Name = "Inara Journal Sync";
+                ThreadInaraSync.IsBackground = true;
+                ThreadInaraSync.Start();
+            }
+        }
+
+        private static void SyncThread()
+        {
+            try
+            {
+                running = 1;
+
+                while (eventqueue.Count != 0)      // while stuff to send
+                {
+                    
+                    exitevent.WaitOne(10000);       // min time between sends..
+
+                    if (Exit)
+                        break;
+
+                    if (eventqueue.IsEmpty)
+                        queuedevents.WaitOne(120000);       // wait for another event keeping the thread open.. Note stop also sets this
+
+                    if (Exit)
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+            }
+            finally
+            {
+                running = 0;
+            }
+        }
+
+        #endregion
     }
 }
 
