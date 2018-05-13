@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         private HistoryEntry lastHE;
+        private HistoryEntry lastFSD;
 
         private Font displayfont;
 
@@ -60,7 +61,7 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
-            displayLastFSDOrScoop(lastHE);
+            displayLastFSDOrScoop(lastHE, lastFSD);
         }
 
         #region Display
@@ -73,19 +74,20 @@ namespace EDDiscovery.UserControls
         private void Display(HistoryList hl)            // when user clicks around..  HE may be null here
         {
             HistoryEntry lfs = hl.GetLastHistoryEntry(x => x.IsFuelScoop);
-            HistoryEntry hex = hl.GetLastHistoryEntry(x => x.IsFSDJump);
+            HistoryEntry fsd = hl.GetLastHistoryEntry(x => x.IsFSDJump);
             HistoryEntry fuel = hl.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.RefuelAll
                     || x.journalEntry.EventTypeID == JournalTypeEnum.RefuelPartial);
+            HistoryEntry hex = fsd;
             if (lfs != null && lfs.EventTimeUTC >= hex.EventTimeUTC)
                 hex = lfs;
             if (fuel != null && fuel.EventTimeUTC >= hex.EventTimeUTC)
                 hex = fuel;
-            displayLastFSDOrScoop(hex);
+            displayLastFSDOrScoop(hex, fsd);
         }
 
         public void NewTarget(Object sender)
         {
-            displayLastFSDOrScoop(lastHE);
+            displayLastFSDOrScoop(lastHE, lastFSD);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
@@ -94,11 +96,12 @@ namespace EDDiscovery.UserControls
         }
 
 
-        void displayLastFSDOrScoop(HistoryEntry he)
+        void displayLastFSDOrScoop(HistoryEntry he, HistoryEntry lastfsd)
         {
             pictureBox.ClearImageList();
 
             lastHE = he;
+            lastFSD = lastfsd;
 
             if (he != null)
             {
@@ -161,14 +164,14 @@ namespace EDDiscovery.UserControls
                     if ( ji != null )
                     { 
                         HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
-                        if (lastJet != null && lastJet.EventTimeLocal > lastHE.EventTimeLocal)
+                        if (lastJet != null && lastJet.EventTimeLocal > lastfsd.EventTimeLocal)
                         {
-                            double jumpdistance = ji.avgsinglejump * (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
-                            line += String.Format(" [{0:N1}ly @ BOOST]", jumpdistance);
+                            double boostval = (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
+                            line += String.Format(" [cur {0:N1}ly, avg {1:N1}ly, max {2:N1}ly @ BOOST]", ji.cursinglejump * boostval, ji.avgsinglejump * boostval, ji.curfumessinglejump * boostval);
                         }
                         else
                         {
-                            line += String.Format(" [{0:N1}ly, {1:N1}ly / {2:N0}]", ji.avgsinglejump, ji.maxjumprange, ji.maxjumps);
+                            line += String.Format(" [cur {0:N1}ly, avg {1:N1}ly, max {2:N1}ly, {3:N1}ly / {4:N0}]", ji.cursinglejump, ji.avgsinglejump, ji.curfumessinglejump, ji.maxjumprange, ji.maxjumps);
                         }
                     }
 
