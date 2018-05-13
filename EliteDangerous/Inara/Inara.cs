@@ -97,7 +97,7 @@ namespace EliteDangerousCore.Inara
             return jo;
         }
 
-        static private JArray EventArray(params JToken[] events)           // group events
+        static private JArray EventArray(params JToken[] events)           // group events.  
         {
             JArray earray = new JArray();
             foreach (JToken t in events)
@@ -127,13 +127,19 @@ namespace EliteDangerousCore.Inara
 
         #region Send and receive
 
+
+        public string ToJSONString(List<JToken> events)
+        {
+            JToken finaljson = Request(events.ToArray());
+            return finaljson.ToString(Newtonsoft.Json.Formatting.Indented);
+        }
+
         public string Send(List<JToken> events)
         {
             if (!ValidCredentials)
                 return null;
 
-            JToken finaljson = Request(events.ToArray());
-            string request = finaljson.ToString(Newtonsoft.Json.Formatting.Indented);
+            string request = ToJSONString(events);
             File.WriteAllText(@"c:\code\json.txt", request);
 
             return "";
@@ -189,7 +195,8 @@ namespace EliteDangerousCore.Inara
         {
             JObject eventData = new JObject();
             eventData["engineerName"] = name;
-            eventData["rankStage"] = progress;
+            if ( progress.HasChars() )
+                eventData["rankStage"] = progress;
             eventData["rankValue"] = value;
             return Event("setCommanderRankEngineer", dt, eventData);
         }
@@ -272,17 +279,19 @@ namespace EliteDangerousCore.Inara
 
         static public JToken setCommanderInventoryItem(MaterialCommoditiesList list, string name, DateTime dt)
         {
-            var item = list.Find(name);
+            var item = list.FindFD(name);
             if (item != null)
             {
                 if (item.category.Equals(MaterialCommodities.CommodityCategory))
-                    return setCommanderInventoryMaterialsItem(item.fdname, item.count, dt);
-                else
                     return setCommanderInventoryCargoItem(item.fdname, item.count, null, dt);
+                else
+                    return setCommanderInventoryMaterialsItem(item.fdname, item.count, dt);
             }
             else
+            {
+                System.Diagnostics.Debug.WriteLine("Can't find " + name + " in mat db");
                 return null;
-            
+            }
         }
 
         static public JToken setCommanderStorageModules(IEnumerable<ModulesInStore.StoredModule> list, DateTime dt)
@@ -365,6 +374,10 @@ namespace EliteDangerousCore.Inara
 
         static public JToken setCommanderShipLoadout(string fdname, int id, IEnumerable<ShipModule> list, DateTime dt)
         {
+            JObject eventData = new JObject();
+            eventData["shipType"] = fdname;
+            eventData["shipGameID"] = id;
+
             JArray items = new JArray();
             foreach (var x in list)
             {
@@ -420,7 +433,8 @@ namespace EliteDangerousCore.Inara
                 items.Add(data);
             }
 
-            return Event("setCommanderShipLoadout", dt, items);
+            eventData["shipLoadout"] = items;
+            return Event("setCommanderShipLoadout", dt, eventData);
         }
 
         static public JToken setCommanderShipTransfer(string fdname, int id, string starsystem, string station, long? marketid, int transfertimesec, DateTime dt)
@@ -437,13 +451,15 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderShipTransfer", dt, eventData);
         }
 
-        static public JToken addCommanderTravelDock(string fdname, int id, string starsystem, string station, DateTime dt)
+        static public JToken addCommanderTravelDock(string fdname, int id, string starsystem, string station, long ? marketid, DateTime dt)
         {
             JObject eventData = new JObject();
             eventData["shipType"] = fdname;
             eventData["shipGameID"] = id;
             eventData["starsystemName"] = starsystem;
             eventData["stationName"] = station;
+            if (marketid != null)
+                eventData["marketID"] = marketid;
             return Event("addCommanderTravelDock", dt, eventData);
         }
 
@@ -468,58 +484,178 @@ namespace EliteDangerousCore.Inara
             return Event("addCommanderTravelLocation", dt, eventData);
         }
 
-        static public JToken addCommanderMission(JournalMissionAccepted mission)
+        static public JToken addCommanderMission(JournalMissionAccepted mission, string starsystem, string station)
         {
             JObject eventData = new JObject();
+            eventData["missionName"] = mission.FDName;
+            eventData["missionGameID"] = mission.MissionId;
+            eventData["missionExpiry"] = mission.Expiry.ToStringZulu();
+
+            if (mission.Influence.HasChars())
+                eventData["influenceGain"] = mission.Influence;
+
+            if (mission.Reputation.HasChars())
+                eventData["reputationGain"] = mission.Reputation;
+
+            eventData["starsystemNameOrigin"] = starsystem;
+            eventData["stationNameOrigin"] = station;
+
+            eventData["minorfactionNameOrigin"] = mission.Faction;
+
+            if (mission.DestinationSystem.HasChars())
+                eventData["starsystemNameTarget"] = mission.DestinationSystem;
+            if (mission.DestinationStation.HasChars())
+                eventData["stationNameTarget"] = mission.DestinationStation;
+
+            if (mission.TargetFaction.HasChars())
+                eventData["minorfactionNameTarget"] = mission.TargetFaction;
+
+            if (mission.Commodity.HasChars())
+                eventData["commodityName"] = mission.Commodity;
+            if ( mission.Count != null)
+                eventData["commodityCount"] = mission.Count.Value;
+
+            if (mission.Target.HasChars())
+                eventData["targetName"] = mission.Target;
+            if (mission.TargetType.HasChars())
+                eventData["targetType"] = mission.TargetType;
+            if (mission.KillCount != null)
+                eventData["killCount"] = mission.KillCount;
+
+            if (mission.PassengerType.HasChars())
+                eventData["passengerType"] = mission.PassengerType;
+            if (mission.PassengerCount != null)
+                eventData["passengerCount"] = mission.PassengerCount.Value;
+            if (mission.PassengerVIPs != null)
+                eventData["passengerIsVIP"] = mission.PassengerVIPs.Value;
+            if (mission.PassengerWanted != null)
+                eventData["passengerIsWanted"] = mission.PassengerWanted.Value;
+
             return Event("addCommanderMission", mission.EventTimeUTC, eventData);
         }
 
-        static public JToken setCommanderMissionAbandoned(JournalMissionAbandoned mission)
+        static public JToken setCommanderMissionAbandoned(int id, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("setCommanderMissionAbandoned", mission.EventTimeUTC, eventData);
+            eventData["missionGameID"] = id;
+            return Event("setCommanderMissionAbandoned", dt, eventData);
         }
 
         static public JToken setCommanderMissionCompleted(JournalMissionCompleted mission)
         {
             JObject eventData = new JObject();
+            eventData["missionGameID"] = mission.MissionId;
+
+            if (mission.Donation != null)
+                eventData["donationCredits"] = mission.Donation.Value;
+            if (mission.Reward != null)
+                eventData["rewardCredits"] = mission.Reward.Value;
+
+            if (mission.PermitsAwarded != null && mission.PermitsAwarded.Length > 0)
+            {
+                JArray ent = new JArray();
+                foreach (var p in mission.PermitsAwarded)
+                {
+                    JObject o = new JObject();
+                    o["starSystemName"] = p;
+                    ent.Add(o);
+                }
+
+                eventData["rewardPermits"] = ent;
+            }
+            if (mission.CommodityReward != null && mission.CommodityReward.Length > 0)
+            {
+                JArray ent = new JArray();
+                foreach (var p in mission.CommodityReward)
+                {
+                    JObject o = new JObject();
+                    o["itemName"] = p.Name;
+                    o["itemCount"] = p.Count;
+                    ent.Add(o);
+                }
+
+                eventData["rewardCommodities"] = ent;
+            }
+            if (mission.MaterialsReward != null && mission.MaterialsReward.Length > 0)
+            {
+                JArray ent = new JArray();
+                foreach (var p in mission.MaterialsReward)
+                {
+                    JObject o = new JObject();
+                    o["itemName"] = p.Name;
+                    o["itemCount"] = p.Count;
+                    ent.Add(o);
+                }
+
+                eventData["rewardMaterials"] = ent;
+            }
+
             return Event("setCommanderMissionCompleted", mission.EventTimeUTC, eventData);
         }
 
-        static public JToken setCommanderMissionCompleted(JournalMissionFailed mission)
+        static public JToken setCommanderMissionFailed(int id, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("setCommanderMissionFailed", mission.EventTimeUTC, eventData);
+            eventData["missionGameID"] = id;
+            return Event("setCommanderMissionFailed", dt, eventData);
         }
 
-        static public JToken addCommanderCombatDeath(string starsystem, string[] killers, bool isplayer, DateTime dt)
+        static public JToken addCommanderCombatDeath(string starsystem, string[] killers, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("addCommanderCombatDeath", null, eventData);
+            eventData["starsystemName"] = starsystem;
+            if ( killers != null )
+            {
+                if (killers.Length == 1)
+                    eventData["opponentName"] = killers[0];
+                else
+                {
+                    JArray ent = new JArray();
+                    foreach (var p in killers)
+                        ent.Add(p);
+
+                    eventData["wingOpponentNames"] = ent;
+                }
+            }
+
+            return Event("addCommanderCombatDeath", dt, eventData);
         }
 
         static public JToken addCommanderCombatInterdicted(string starsystem, string opponent, bool isplayer, bool issubmit, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("addCommanderCombatInterdicted", null, eventData);
+            eventData["starsystemName"] = starsystem;
+            eventData["opponentName"] = opponent;
+            eventData["isPlayer"] = isplayer;
+            eventData["isSubmit"] = issubmit;
+            return Event("addCommanderCombatInterdicted", dt, eventData);
         }
 
         static public JToken addCommanderCombatInterdiction(string starsystem, string opponent, bool isplayer, bool issuccess, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("addCommanderCombatInterdiction", null, eventData);
+            eventData["starsystemName"] = starsystem;
+            eventData["opponentName"] = opponent;
+            eventData["isPlayer"] = isplayer;
+            eventData["isSuccess"] = issuccess;
+            return Event("addCommanderCombatInterdiction", dt, eventData);
         }
 
         static public JToken addCommanderCombatInterdictionEscape(string starsystem, string opponent, bool isplayer, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("addCommanderCombatInterdictionEscape", null, eventData);
+            eventData["starsystemName"] = starsystem;
+            eventData["opponentName"] = opponent;
+            eventData["isPlayer"] = isplayer;
+            return Event("addCommanderCombatInterdictionEscape", dt, eventData);
         }
 
         static public JToken addCommanderCombatKill(string starsystem, string opponent, DateTime dt)
         {
             JObject eventData = new JObject();
-            return Event("addCommanderCombatKill", null, eventData);
+            eventData["starsystemName"] = starsystem;
+            eventData["opponentName"] = opponent;
+            return Event("addCommanderCombatKill", dt, eventData);
         }
 
         #endregion

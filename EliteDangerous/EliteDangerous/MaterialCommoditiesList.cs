@@ -94,9 +94,8 @@ namespace EliteDangerousCore
 
         public List<MaterialCommodities> List { get { return list; } }
 
-        public MaterialCommodities LastChange { get; private set; } = null;         // last one changed
-
         public MaterialCommodities Find(string name) { return list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)); }
+        public MaterialCommodities FindFD(string fdname) { return list.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)); }
 
         public List<MaterialCommodities> Sort(bool commodity)
         {
@@ -174,7 +173,6 @@ namespace EliteDangerousCore
             if (mc.count > 0 && num > 0)      // if bought (defensive with mc.count)
                 mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
 
-            LastChange = mc;
             //log.WriteLine("MC Change:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
@@ -187,8 +185,6 @@ namespace EliteDangerousCore
                 MaterialCommodities mc = new MaterialCommodities(list[index]);      // new clone of
                 list[index] = mc;       // replace ours with new one
                 mc.count = Math.Max(mc.count - num, 0);
-
-                LastChange = mc;
 
                 //log.WriteLine("MC Craft:" + fdname + " " + num + " " + mc.count);
             }
@@ -206,8 +202,6 @@ namespace EliteDangerousCore
             mc.count = num;
             if (price > 0)
                 mc.price = price;
-
-            LastChange = mc;
 
             //log.WriteLine("MC Set:" + cat + " " + fdname + " " + num + " " + mc.count);
         }

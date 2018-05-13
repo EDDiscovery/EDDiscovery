@@ -594,7 +594,7 @@ namespace EDDiscovery
 
             if (EDCommander.Current.SyncToEdsm)
             {
-                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history);
+                EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
