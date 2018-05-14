@@ -185,8 +185,9 @@ namespace EDDiscovery
 
             //Make sure the primary splitter is set up.. and rational
 
+            string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
+
             {
-                string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
                 string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
 
                 if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
@@ -208,6 +209,16 @@ namespace EDDiscovery
 
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+
+            if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null )  // double check we have a primary tab and tg..
+            {
+                MessageBox.Show("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
+                                "This is a adnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
+                                "Report this code : " + (tabControlMain.PrimaryTab == null) + " " + SQLiteConnectionUser.GetSettingString(primarycontrolname, "Not Present") + Environment.NewLine +
+                                "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
+                                "Click on Reset tabs, then Run program, which may clear the problem." );
+                Application.Exit();
+            }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
 
