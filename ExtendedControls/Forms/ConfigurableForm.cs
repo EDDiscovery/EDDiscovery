@@ -74,10 +74,10 @@ namespace ExtendedControls
             public string comboboxitems;        // fill in for combobox
             public Size? comboboxdropdownsize;  // may be null, fill in for combobox
             public string customdateformat;     // fill in for datetimepicker
-            public double numberboxdoubleminimum;   // for double box
-            public double numberboxdoublemaximum;
-            public long numberboxlongminimum;   // for long box
-            public long numberboxlongmaximum;
+            public double numberboxdoubleminimum = double.MinValue;   // for double box
+            public double numberboxdoublemaximum = double.MaxValue;
+            public long numberboxlongminimum = long.MinValue;   // for long box
+            public long numberboxlongmaximum = long.MaxValue;
             public string numberboxformat;      // for both number boxes
 
             public Control control; // if controltype is set, don't set.  If controltype=null, pass your control type.
@@ -407,7 +407,7 @@ namespace ExtendedControls
                 ent.control = c;
                 c.Size = ent.size;
                 c.Location = ent.pos;
-                System.Diagnostics.Debug.WriteLine("Control " + c.GetType().ToString() + " at " + c.Location + " " + c.Size);
+                //System.Diagnostics.Debug.WriteLine("Control " + c.GetType().ToString() + " at " + c.Location + " " + c.Size);
                 if (!(ent.controltype == null || c is ExtendedControls.ComboBoxCustom || c is ExtendedControls.CustomDateTimePicker || c is ExtendedControls.NumberBoxDouble || c is ExtendedControls.NumberBoxLong ))        // everything but get text
                     c.Text = ent.text;
                 c.Tag = ent;     // point control tag at ent structure
@@ -424,15 +424,48 @@ namespace ExtendedControls
                         Trigger?.Invoke(logicalname, en.controlname, this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
                     };
                 }
-
-                if (c is ExtendedControls.TextBoxBorder)
+                else if (c is ExtendedControls.NumberBoxDouble)
+                {
+                    ExtendedControls.NumberBoxDouble cb = c as ExtendedControls.NumberBoxDouble;
+                    cb.Minimum = ent.numberboxdoubleminimum;
+                    cb.Maximum = ent.numberboxdoublemaximum;
+                    double? v = ent.text.InvariantParseDoubleNull();
+                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
+                    if (ent.numberboxformat != null)
+                        cb.Format = ent.numberboxformat;
+                    cb.ReturnPressed += (box) =>
+                    {
+                        Entry en = (Entry)(box.Tag);
+                        Trigger?.Invoke(logicalname, en.controlname + ":Return", this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                    };
+                }
+                else if (c is ExtendedControls.NumberBoxLong)
+                {
+                    ExtendedControls.NumberBoxLong cb = c as ExtendedControls.NumberBoxLong;
+                    cb.Minimum = ent.numberboxlongminimum;
+                    cb.Maximum = ent.numberboxlongmaximum;
+                    long? v = ent.text.InvariantParseLongNull();
+                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
+                    if (ent.numberboxformat != null)
+                        cb.Format = ent.numberboxformat;
+                    cb.ReturnPressed += (box) =>
+                    {
+                        Entry en = (Entry)(box.Tag);
+                        Trigger?.Invoke(logicalname, en.controlname + ":Return", this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                    };
+                }
+                else if (c is ExtendedControls.TextBoxBorder)
                 {
                     ExtendedControls.TextBoxBorder tb = c as ExtendedControls.TextBoxBorder;
                     tb.Multiline = tb.WordWrap = ent.textboxmultiline;
                     tb.ClearOnFirstChar = ent.clearonfirstchar;
+                    tb.ReturnPressed += (box) =>
+                    {
+                        Entry en = (Entry)(box.Tag);
+                        Trigger?.Invoke(logicalname, en.controlname + ":Return", this.callertag);       // pass back the logical name of dialog, the name of the control, the caller tag
+                    };
                 }
-
-                if (c is ExtendedControls.CheckBoxCustom)
+                else if (c is ExtendedControls.CheckBoxCustom)
                 {
                     ExtendedControls.CheckBoxCustom cb = c as ExtendedControls.CheckBoxCustom;
                     cb.Checked = ent.checkboxchecked;
@@ -443,27 +476,6 @@ namespace ExtendedControls
                     };
                 }
 
-                if (c is ExtendedControls.NumberBoxDouble)
-                {
-                    ExtendedControls.NumberBoxDouble cb = c as ExtendedControls.NumberBoxDouble;
-                    cb.Minimum = ent.numberboxdoubleminimum;
-                    cb.Maximum = ent.numberboxdoublemaximum;
-                    double? v = ent.text.InvariantParseDoubleNull();
-                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
-                    if (ent.numberboxformat != null)
-                        cb.Format = ent.numberboxformat;
-                }
-
-                if (c is ExtendedControls.NumberBoxLong)
-                {
-                    ExtendedControls.NumberBoxLong cb = c as ExtendedControls.NumberBoxLong;
-                    cb.Minimum = ent.numberboxlongminimum;
-                    cb.Maximum = ent.numberboxlongmaximum;
-                    long? v = ent.text.InvariantParseLongNull();
-                    cb.Value = v.HasValue ? v.Value : cb.Minimum;
-                    if (ent.numberboxformat != null)
-                        cb.Format = ent.numberboxformat;
-                }
 
                 if (c is ExtendedControls.CustomDateTimePicker)
                 {
@@ -520,8 +532,7 @@ namespace ExtendedControls
 
             theme.ApplyToFormStandardFontSize(this);
 
-            foreach( Control c in Controls[0].Controls )
-                System.Diagnostics.Debug.WriteLine("Control " + c.GetType().ToString() + " at " + c.Location + " " + c.Size);
+            //foreach( Control c in Controls[0].Controls )   System.Diagnostics.Debug.WriteLine("Control " + c.GetType().ToString() + " at " + c.Location + " " + c.Size);
 
         }
 

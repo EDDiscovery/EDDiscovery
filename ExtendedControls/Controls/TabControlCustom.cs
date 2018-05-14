@@ -266,8 +266,7 @@ namespace ExtendedControls
                         DrawTab(i, tabImageGraphics, false, mouseover == i);
                 }
 
-                System.Diagnostics.Debug.Assert(SelectedIndex < TabCount);
-
+                // seen instances of SelectedIndex being set BEFORE tab up, meaning selected index is out of range
                 if ( SelectedIndex>=0 && SelectedIndex < TabCount )      // and if its selected, we did not draw it     -- seen it above TabCount.. protect
                     DrawTab(SelectedIndex, tabImageGraphics, true, false);     // we paint the selected one last, in case it overwrites the other ones.
             }

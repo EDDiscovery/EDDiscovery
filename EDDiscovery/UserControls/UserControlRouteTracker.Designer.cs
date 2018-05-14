@@ -48,8 +48,10 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showJumpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showWaypointCoordinatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDeviationFromRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -68,15 +70,17 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setRouteToolStripMenuItem,
             this.showJumpsToolStripMenuItem,
+            this.showWaypointCoordinatesToolStripMenuItem,
+            this.showDeviationFromRouteToolStripMenuItem,
             this.autoCopyWPToolStripMenuItem,
             this.autoSetTargetToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 114);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(225, 158);
             // 
             // setRouteToolStripMenuItem
             // 
             this.setRouteToolStripMenuItem.Name = "setRouteToolStripMenuItem";
-            this.setRouteToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.setRouteToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.setRouteToolStripMenuItem.Text = "Set route";
             this.setRouteToolStripMenuItem.Click += new System.EventHandler(this.setRouteToolStripMenuItem_Click);
             // 
@@ -86,9 +90,19 @@ namespace EDDiscovery.UserControls
             this.showJumpsToolStripMenuItem.CheckOnClick = true;
             this.showJumpsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showJumpsToolStripMenuItem.Name = "showJumpsToolStripMenuItem";
-            this.showJumpsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.showJumpsToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.showJumpsToolStripMenuItem.Text = "Show Jumps To Go";
             this.showJumpsToolStripMenuItem.Click += new System.EventHandler(this.showJumpsToolStripMenuItem_Click);
+            // 
+            // showWaypointCoordinatesToolStripMenuItem
+            // 
+            this.showWaypointCoordinatesToolStripMenuItem.Checked = true;
+            this.showWaypointCoordinatesToolStripMenuItem.CheckOnClick = true;
+            this.showWaypointCoordinatesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showWaypointCoordinatesToolStripMenuItem.Name = "showWaypointCoordinatesToolStripMenuItem";
+            this.showWaypointCoordinatesToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.showWaypointCoordinatesToolStripMenuItem.Text = "Show Waypoint Coordinates";
+            this.showWaypointCoordinatesToolStripMenuItem.Click += new System.EventHandler(this.showWaypointCoordinatesToolStripMenuItem_Click);
             // 
             // autoCopyWPToolStripMenuItem
             // 
@@ -96,7 +110,7 @@ namespace EDDiscovery.UserControls
             this.autoCopyWPToolStripMenuItem.CheckOnClick = true;
             this.autoCopyWPToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoCopyWPToolStripMenuItem.Name = "autoCopyWPToolStripMenuItem";
-            this.autoCopyWPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoCopyWPToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.autoCopyWPToolStripMenuItem.Text = "Auto copy waypoint";
             this.autoCopyWPToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoCopyWPToolStripMenuItem_CheckedChanged);
             // 
@@ -106,8 +120,18 @@ namespace EDDiscovery.UserControls
             this.autoSetTargetToolStripMenuItem.CheckOnClick = true;
             this.autoSetTargetToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.autoSetTargetToolStripMenuItem.Name = "autoSetTargetToolStripMenuItem";
-            this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
+            // 
+            // showDeviationFromRouteToolStripMenuItem
+            // 
+            this.showDeviationFromRouteToolStripMenuItem.Checked = true;
+            this.showDeviationFromRouteToolStripMenuItem.CheckOnClick = true;
+            this.showDeviationFromRouteToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showDeviationFromRouteToolStripMenuItem.Name = "showDeviationFromRouteToolStripMenuItem";
+            this.showDeviationFromRouteToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.showDeviationFromRouteToolStripMenuItem.Text = "Show Deviation from route";
+            this.showDeviationFromRouteToolStripMenuItem.Click += new System.EventHandler(this.showDeviationFromRouteToolStripMenuItem_Click);
             // 
             // UserControlRouteTracker
             // 
@@ -129,5 +153,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoSetTargetToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showJumpsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showWaypointCoordinatesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showDeviationFromRouteToolStripMenuItem;
     }
 }

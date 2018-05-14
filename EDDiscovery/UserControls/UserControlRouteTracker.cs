@@ -57,6 +57,9 @@ namespace EDDiscovery.UserControls
             showJumpsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showjumps", true);
             autoCopyWPToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoCopyWP", false);
             autoSetTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autoSetTarget", false);
+            showWaypointCoordinatesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "coords", true);
+            showDeviationFromRouteToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "dev", true);
+
             string ids = SQLiteDBClass.GetSettingString(DbSave + "SelectedRoute", "-1");        // for some reason, it was saved as a string.. so keep for backwards compat
             int? id = ids.InvariantParseIntNull();
             if ( id != null )
@@ -73,6 +76,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbSave + "showjumps", showJumpsToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "autoCopyWP", autoCopyWPToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "autoSetTarget", autoSetTargetToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "coords", showWaypointCoordinatesToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -105,10 +110,10 @@ namespace EDDiscovery.UserControls
 
             Display(currentHE.System);
 
-            //t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent,100)); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
+        //   t.Interval = 200; t.Tick += (s,e)=> { Display(currentRoute.PosAlongRoute(percent,100)); percent += 0.5; }; t.Start();  // debug to make it play thru.. leave
         }
 
-         //double percent = -10; Timer t = new Timer();// play thru harness
+     //    double percent = -10; Timer t = new Timer();// play thru harness
 
         private void Display(ISystem cursys)
         {
@@ -142,29 +147,32 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
+                    double routedistance = currentRoute.CumulativeDistance();
+                    double distleft = closest.disttowaypoint + (closest.deviation < 0 ? 0 : closest.cumulativewpdist);
+
                     topline = String.Format("{0} {1} WPs, {2:N1}ly", currentRoute.Name,
-                                    currentRoute.Systems.Count, currentRoute.CumulativeDistance());
+                                    currentRoute.Systems.Count, routedistance);
 
-                    double distleft = closest.disttowaypoint + (closest.deviation<0 ? 0: closest.cumulativewpdist );
-
+                    EliteDangerousCalculations.FSDSpec.JumpInfo ji = currentHE.GetJumpInfo();
                     string jumpmsg = "";
-
-                    if (showJumpsToolStripMenuItem.Checked)
+                    if (showJumpsToolStripMenuItem.Checked && ji != null )
                     {
-                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = currentHE.GetJumpInfo();
+                        int jumps = (int)Math.Ceiling(routedistance / ji.avgsinglejump);
+                        if (jumps > 0)
+                            topline += ", " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
 
-                        if ( ji != null )
-                        {
-                            int jumps = (int)Math.Ceiling(distleft / ji.avgsinglejump);
+                        jumps = (int)Math.Ceiling(closest.disttowaypoint / ji.avgsinglejump);
 
-                            if (jumps > 0)
-                                jumpmsg = " @ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
-                        }
+                        if (jumps > 0)
+                            jumpmsg = ", " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
                         else
                             jumpmsg = " No Ship FSD Information";
                     }
 
-                    string wpposmsg = String.Format("{0} @ {1:N1},{2:N1},{3:N1} {4:N1}ly", closest.system.Name, closest.system.X, closest.system.Y, closest.system.Z, closest.disttowaypoint);
+                    string wpposmsg = closest.system.Name;
+                    if ( showWaypointCoordinatesToolStripMenuItem.Checked )
+                        wpposmsg += String.Format(" @{0:N1},{1:N1},{2:N1}", closest.system.X, closest.system.Y, closest.system.Z);
+                    wpposmsg += String.Format(" {0:N1}ly", closest.disttowaypoint);
 
                     if (closest.deviation < 0)        // if not on path
                     {
@@ -176,7 +184,8 @@ namespace EDDiscovery.UserControls
                         topline += String.Format(", Left {0:N1}ly", distleft);
                         bottomline += String.Format("To WP {0} ", closest.waypoint + 1);
                         bottomline += wpposmsg + jumpmsg;
-                        bottomline += String.Format(", Dev {0:N1}ly", closest.deviation);
+                        if ( showDeviationFromRouteToolStripMenuItem.Checked)
+                            bottomline += String.Format(", Dev {0:N1}ly", closest.deviation);
                     }
 
                     //System.Diagnostics.Debug.WriteLine("T:" + topline + Environment.NewLine + "B:" + bottomline);
@@ -224,6 +233,16 @@ namespace EDDiscovery.UserControls
         }
 
         private void showJumpsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display();
+        }
+
+        private void showWaypointCoordinatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Display();
+        }
+
+        private void showDeviationFromRouteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Display();
         }

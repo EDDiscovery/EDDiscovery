@@ -61,6 +61,8 @@ namespace ExtendedControls
 
         public void SetTipDynamically(ToolTip t, string text) { t.SetToolTip(textbox, text); } // only needed for dynamic changes..
 
+        public Action<TextBoxBorder> ReturnPressed;                              // fires if return pressed
+
         protected TextBox textbox;
         private Color bordercolor = Color.Transparent;
         private Color controlbackcolor = SystemColors.Control;
@@ -344,6 +346,11 @@ namespace ExtendedControls
         {
             lastkey = e.KeyChar;
             keyspressed++;
+
+            if (e.KeyChar == '\r')
+            {
+                ReturnPressed?.Invoke(this);
+            }
 
             OnKeyPress(e);
         }

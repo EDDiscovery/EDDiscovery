@@ -96,6 +96,7 @@
     <Compile Include="Forms\ConfigurableForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\DataGridViewDialogs.cs" />
     <Compile Include="Forms\SmartSysMenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
