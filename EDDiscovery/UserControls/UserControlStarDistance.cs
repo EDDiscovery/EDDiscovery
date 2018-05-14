@@ -220,17 +220,20 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he);
+            if (this.IsHandleCreated)
+                KickComputation(last_he);
         }
     }
 }
