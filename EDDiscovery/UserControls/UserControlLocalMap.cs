@@ -254,12 +254,14 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(last_he ?? uctg.GetCurrentHistoryEntry);
         }
 
         private void RefreshMap()

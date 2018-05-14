@@ -319,12 +319,14 @@ namespace EDDiscovery.UserControls
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            if (this.IsHandleCreated)
+                KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
         private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
@@ -366,23 +368,13 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void checkBoxDotSize_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void dataGridList_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (sysName.Equals(e.Column) && sysX.Equals(e.Column) && sysY.Equals(e.Column) && sysZ.Equals(e.Column))
                 e.SortDataGridViewColumnDate();
         }
 
-        private void comboBoxView_EnabledChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBoxView_TextChanged(object sender, EventArgs e)
+         private void comboBoxView_TextChanged(object sender, EventArgs e)
         {
             string s = comboBoxView.SelectedItem.ToString();
             if (s == "Top")
