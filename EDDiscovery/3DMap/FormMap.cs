@@ -209,8 +209,8 @@ namespace EDDiscovery
             discoveryForm.OnHistoryChange += UpdateSystemListHC;   // refresh, update the system list..
             discoveryForm.OnNewEntry -= UpdateSystemList;   // any new entries, update the system list..
             discoveryForm.OnNewEntry += UpdateSystemList;
-            discoveryForm.PrimaryCursor.OnTravelSelectionChanged -= PrimaryCursor_OnTravelSelectionChanged;
-            discoveryForm.PrimaryCursor.OnTravelSelectionChanged += PrimaryCursor_OnTravelSelectionChanged;
+            discoveryForm.OnTravelSelectionChanged -= PrimaryCursor_OnTravelSelectionChanged;
+            discoveryForm.OnTravelSelectionChanged += PrimaryCursor_OnTravelSelectionChanged;
         }
 
         public ToolStripMenuItem AddGalMapButton( string name, Object tt, bool? checkedbut)

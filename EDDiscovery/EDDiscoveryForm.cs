@@ -42,13 +42,15 @@ namespace EDDiscovery
 
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
+        private UserControls.IHistoryCursor historycursor_inuse;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
         public EDDTheme theme { get { return EDDTheme.Instance; } }
 
-        public UserControls.IHistoryCursor PrimaryCursor { get { return tabControlMain.PrimaryTab.GetTravelGrid; } }
+        public HistoryEntry CurrentHistoryEntry { get { return historycursor_inuse?.GetCurrentHistoryEntry ?? history.GetLast; } }
+        public UserControls.IHistoryCursor PrimaryCursor { get { return historycursor_inuse; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimaryTab; } }
 
         public ScreenShots.ScreenShotConverter screenshotconverter;
@@ -77,6 +79,9 @@ namespace EDDiscovery
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int,string> OnEGOSyncComplete;              // EGO Sync has completed with records on this list of stars
+        public event UserControls.ChangedSelectionHandler OnChangedSelection;  // Selection changed on primary cursor
+        public event UserControls.ChangedSelectionHEHandler OnTravelSelectionChanged;  // Travel selection changed on primary cursor
+        public event Action<UserControls.IHistoryCursor> OnHistoryCursorChanged;  // History cursor control changed
 
         #endregion
 
@@ -207,6 +212,7 @@ namespace EDDiscovery
                 }
             }
 
+            tabControlMain.HistoryCursorChanged += HistoryCursorChanged;
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
 
@@ -229,6 +235,11 @@ namespace EDDiscovery
 
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
+            }
+
+            if (historycursor_inuse == null)
+            {
+                HistoryCursorChanged(PrimarySplitter?.GetTravelGrid);
             }
 
             removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
@@ -861,7 +872,7 @@ namespace EDDiscovery
 
         private void show3DMapsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
+            Open3DMap(CurrentHistoryEntry);
         }
 
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1250,6 +1261,38 @@ namespace EDDiscovery
                 OnNewStarsForExpedition(list);
         }
 
+        public void PrimaryCursorSelectionChanged(int rowno, int colno, bool doubleclick, bool note)
+        {
+            OnChangedSelection?.Invoke(rowno, colno, doubleclick, note);
+        }
+
+        public void PrimaryCursorTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        {
+            OnTravelSelectionChanged?.Invoke(he, hl);
+        }
+
+        public void HistoryCursorChanged(UserControls.IHistoryCursor cursor)
+        {
+            OnHistoryCursorChanged?.Invoke(cursor);
+
+            if (cursor != historycursor_inuse)
+            {
+                if (historycursor_inuse != null)
+                {
+                    historycursor_inuse.OnChangedSelection -= PrimaryCursorSelectionChanged;
+                    historycursor_inuse.OnTravelSelectionChanged -= PrimaryCursorTravelSelectionChanged;
+                }
+
+                historycursor_inuse = cursor;
+
+                if (historycursor_inuse != null)
+                {
+                    historycursor_inuse.OnChangedSelection += PrimaryCursorSelectionChanged;
+                    historycursor_inuse.OnTravelSelectionChanged += PrimaryCursorTravelSelectionChanged;
+                }
+            }
+        }
+
 #endregion
 
 #region Add Ons
@@ -1409,7 +1452,7 @@ namespace EDDiscovery
 
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
-            Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
+            Open3DMap(CurrentHistoryEntry);
         }
 
         private void buttonExt2dmap_Click(object sender, EventArgs e)

@@ -34,6 +34,8 @@ namespace EDDiscovery.UserControls
         private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
         private IHistoryCursor ucursor_inuse;  // one in use
 
+        public event Action<IHistoryCursor> HistoryCursorChanged;
+
         public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(); } }
 
         public T GetUserControl<T>() where T:class
@@ -110,6 +112,8 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("--------------------" + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
+
+            HistoryCursorChanged?.Invoke(ucursor_inuse);
 
             (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
@@ -285,6 +289,8 @@ namespace EDDiscovery.UserControls
             {
                 ucursor_inuse = ucursor_history;
 
+                HistoryCursorChanged?.Invoke(ucursor_inuse);
+
                 (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
                 {
                     UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
@@ -322,6 +328,8 @@ namespace EDDiscovery.UserControls
             {
                 ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
+
+                HistoryCursorChanged?.Invoke(ucursor_inuse);
 
                 (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
                 {

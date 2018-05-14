@@ -27,6 +27,8 @@ namespace EDDiscovery
     {
         EDDiscoveryForm eddiscovery;
 
+        public event Action<UserControls.IHistoryCursor> HistoryCursorChanged;
+
         public UserControls.UserControlContainerSplitter PrimaryTab { get 
             { 
                 foreach (TabPage p in TabPages)      // all main tabs, load/display
@@ -93,6 +95,12 @@ namespace EDDiscovery
             }
 
             SelectedIndex = restoretab;
+
+            UserControls.UserControlContainerSplitter primary = PrimaryTab;
+            if (primary != null)
+            {
+                primary.HistoryCursorChanged += FireHistoryCursorChanged;
+            }
         }
 
         public void LoadTabs()     // called on Loading..
@@ -259,6 +267,10 @@ namespace EDDiscovery
             return page;
         }
 
+        private void FireHistoryCursorChanged(UserControls.IHistoryCursor hc)
+        {
+            HistoryCursorChanged?.Invoke(hc);
+        }
 
         #endregion
 
