@@ -45,6 +45,9 @@ namespace EliteDangerousCore
 
             public class JumpInfo
             {
+                public double cursinglejump;
+                public double curfumessinglejump;
+                public double unladenmaxsinglejump;
                 public double avgsinglejump;
                 public double avgsinglejumpnocargo;
                 public double maxjumprange;         // using current fuel amount
@@ -54,6 +57,9 @@ namespace EliteDangerousCore
             public JumpInfo GetJumpInfo(int cargo, double mass, double currentfuel,double avgfuel)
             {
                 JumpInfo jid = new JumpInfo();
+                jid.cursinglejump = MaxJump(cargo, mass, currentfuel);
+                jid.curfumessinglejump = MaxJump(cargo, mass, MaxFuelPerJump);
+                jid.unladenmaxsinglejump = MaxJump(0, mass, MaxFuelPerJump);
                 jid.avgsinglejump = MaxJump(cargo, mass, avgfuel);
                 jid.avgsinglejumpnocargo = MaxJump(0, mass, avgfuel);
                 jid.maxjumprange = CalculateMaxJumpDistance(cargo, mass, currentfuel, out jid.maxjumps);
