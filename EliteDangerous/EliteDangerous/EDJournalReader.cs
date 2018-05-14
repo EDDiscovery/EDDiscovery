@@ -219,6 +219,8 @@ namespace EliteDangerousCore
 
                 if (newentry != null)                           // if we got a record back, we may not because it may not be valid or be rejected..
                 {
+                    // if we don't have a commander yet, we need to queue it until we have one, since every entry needs a commander
+
                     if ((this.TravelLogUnit.CommanderId == null || this.TravelLogUnit.CommanderId < 0) && newentry.JournalEntry.EventTypeID != JournalTypeEnum.LoadGame)
                     {
                         //System.Diagnostics.Debug.WriteLine("*** Delay " + newentry.JournalEntry.EventTypeStr);
@@ -226,19 +228,16 @@ namespace EliteDangerousCore
                     }
                     else
                     {
-                        //System.Diagnostics.Debug.WriteLine("*** Send  " + newentry.JournalEntry.EventTypeStr);
-                        jent.Add(newentry);                     // else pass back
-                    }
-                }
+                        while (StartEntries.Count != 0)     // we have a commander, anything queued up, play that in first.
+                        {
+                            var dentry = StartEntries.Dequeue();
+                            dentry.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
+                            //System.Diagnostics.Debug.WriteLine("*** UnDelay " + dentry.JournalEntry.EventTypeStr);
+                            jent.Add(dentry);
+                        }
 
-                if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
-                {
-                    while (StartEntries.Count != 0)
-                    {
-                        var dentry = StartEntries.Dequeue();
-                        dentry.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
-                        //System.Diagnostics.Debug.WriteLine("*** UnDelay " + jent[0].JournalEntry.EventTypeStr);
-                        jent.Add(dentry);
+                        //System.Diagnostics.Debug.WriteLine("*** Send  " + newentry.JournalEntry.EventTypeStr);
+                        jent.Add(newentry);                     // and store in new entry
                     }
                 }
             }
