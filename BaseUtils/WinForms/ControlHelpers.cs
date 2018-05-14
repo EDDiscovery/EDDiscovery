@@ -481,5 +481,19 @@ public static class ControlHelpersStaticFunc
         e.Handled = true;
     }
 
+    // try and force this row to centre or top
+    static public void DisplayRow(this DataGridView grid, int rown, bool centre)
+    {
+        int drows = centre ? grid.DisplayedRowCount(false) : 0;
+
+        while (!grid.Rows[rown].Displayed && drows >= 0)
+        {
+            //System.Diagnostics.Debug.WriteLine("Set row to " + Math.Max(0, rowclosest - drows / 2));
+            grid.FirstDisplayedScrollingRowIndex = Math.Max(0, rown - drows / 2);
+            grid.Update();      //FORCE the update so we get an idea if its displayed
+            drows--;
+        }
+    }
+
     #endregion
 }
