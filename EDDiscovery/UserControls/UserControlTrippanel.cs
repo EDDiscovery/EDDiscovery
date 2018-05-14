@@ -48,6 +48,30 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;
+
+            showEDSMStartButtonsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showedsmbut", true);
+            showEDSMStartButtonsToolStripMenuItem.Click += Optionchanged_Click;
+
+            showFuelLevelToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "fuel", true);
+            showFuelLevelToolStripMenuItem.Click += Optionchanged_Click;
+
+            showCurrentFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dcur", true);
+            showCurrentFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
+
+            showAvgFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dmax", true);
+            showAvgFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
+
+            showMaxFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Dfume", true);
+            showMaxFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
+
+            showFSDRangeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "Drange", true);
+            showFSDRangeToolStripMenuItem.Click += Optionchanged_Click;
+
+            showTargetToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "target", true);
+            showTargetToolStripMenuItem.Click += Optionchanged_Click;
+
+            showTravelledDistanceToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "travel", true);
+            showTravelledDistanceToolStripMenuItem.Click += Optionchanged_Click;
         }
 
         public override void Closing()
@@ -55,6 +79,14 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
+            SQLiteDBClass.PutSettingBool(DbSave + "showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "fuel", showFuelLevelToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Dmax", showAvgFSDRangeToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Dfume", showMaxFSDRangeToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "Drange", showFSDRangeToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "target", showTargetToolStripMenuItem.Checked);
+            SQLiteDBClass.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
@@ -95,7 +127,6 @@ namespace EDDiscovery.UserControls
             Display(hl);
         }
 
-
         void displayLastFSDOrScoop(HistoryEntry he, HistoryEntry lastfsd)
         {
             pictureBox.ClearImageList();
@@ -108,76 +139,107 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? Color.Black : this.BackColor;
 
-                ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM", displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM");
-                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+                int coltext = 5;
 
-                ExtendedControls.PictureBoxHotspot.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
+                if (showEDSMStartButtonsToolStripMenuItem.Checked)
+                {
+                    ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM", displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM");
+                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+
+                    ExtendedControls.PictureBoxHotspot.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
+                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
+
+                    coltext = 100;
+                }
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
                 EliteDangerousCalculations.FSDSpec.JumpInfo ji = he.GetJumpInfo();          // may be null
 
-                String line = "  Target Not Set";
+                string line = String.Format("{0} [{1}]", he.System.Name, discoveryform.history.GetVisitsCount(he.System.Name));
 
-                if (TargetClass.GetTargetPosition(out string name, out Point3D tpos))
+                if (showTargetToolStripMenuItem.Checked)
                 {
-                    double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
-
-                    string mesg = "Left";
-
-                    if (ji!=null)
+                    if (TargetClass.GetTargetPosition(out string name, out Point3D tpos))
                     {
-                        int jumps = (int)Math.Ceiling(dist / ji.avgsinglejump);
-                        if (jumps > 0)
-                            mesg = "@ " + jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
-                    }
+                        double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
 
-                    line = String.Format("{0} | {1:N2}ly {2}", name, dist, mesg);
+                        string mesg = "Left";
+
+                        if (ji != null)
+                        {
+                            int jumps = (int)Math.Ceiling(dist / ji.avgsinglejump);
+                            if (jumps > 0)
+                                mesg = jumps.ToString() + ((jumps == 1) ? " jump" : " jumps");
+                        }
+
+                        line += String.Format("-> {0} {1:N1}ly {2}", name, dist, mesg);
+                    }
+                    else
+                        line += " -> Target not set";
                 }
 
-                line = String.Format("{0} [{1}] | {2}", he.System.Name, discoveryform.history.GetVisitsCount(he.System.Name) , line);
+                pictureBox.AddTextAutoSize(new Point(coltext, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
-                pictureBox.AddTextAutoSize(new Point(100, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                line = "";
 
-                line = String.Format("{0:n}{1} @ {2} | {3} | ", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly (*)" : "ly"),
+                if (showTravelledDistanceToolStripMenuItem.Checked)
+                {
+                    line = String.Format("{0:N1}{1},{2} jumps, {3}", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly*" : "ly"),
                                         he.Travelledjumps,
                                         he.TravelledSeconds);
-
-                ExtendedControls.PictureBoxHotspot.ImageElement botlineleft = pictureBox.AddTextAutoSize(new Point(100, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                }
 
                 ShipInformation si = he.ShipInformation;
+
                 if (si!=null)
                 {
-                    double fuel = si.FuelLevel;
-                    double tanksize = si.FuelCapacity;
-                    double warninglevelpercent = si.FuelWarningPercent;
+                    string addtext = "";
 
-                    line = String.Format("{0}/{1}t", fuel.ToString("N1"), tanksize.ToString("N1"));
-
-                    if ( warninglevelpercent > 0 && fuel < tanksize * warninglevelpercent / 100.0 )
+                    if (showFuelLevelToolStripMenuItem.Checked)
                     {
-                        textcolour = discoveryform.theme.TextBlockHighlightColor;
-                        line += String.Format(" < {0}%", warninglevelpercent.ToString("N1"));
+                        double fuel = si.FuelLevel;
+                        double tanksize = si.FuelCapacity;
+                        double warninglevelpercent = si.FuelWarningPercent;
+
+                        addtext = String.Format("{0}/{1}t", fuel.ToString("N1"), tanksize.ToString("N1"));
+
+                        if (warninglevelpercent > 0 && fuel < tanksize * warninglevelpercent / 100.0)
+                        {
+                            textcolour = discoveryform.theme.TextBlockHighlightColor;
+                            addtext += String.Format(" < {0}%", warninglevelpercent.ToString("N1"));
+                        }
                     }
 
                     if ( ji != null )
                     { 
                         HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
+
+                        double boostval = 1;
+
                         if (lastJet != null && lastJet.EventTimeLocal > lastfsd.EventTimeLocal)
-                        {
-                            double boostval = (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
-                            line += String.Format(" [cur {0:N1}ly, avg {1:N1}ly, max {2:N1}ly @ BOOST]", ji.cursinglejump * boostval, ji.avgsinglejump * boostval, ji.curfumessinglejump * boostval);
-                        }
-                        else
-                        {
-                            line += String.Format(" [cur {0:N1}ly, avg {1:N1}ly, max {2:N1}ly, {3:N1}ly / {4:N0}]", ji.cursinglejump, ji.avgsinglejump, ji.curfumessinglejump, ji.maxjumprange, ji.maxjumps);
-                        }
+                            boostval = (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
+
+                        string range = "";
+                        if (showCurrentFSDRangeToolStripMenuItem.Checked)
+                            range += String.Format("cur {0:N1}ly{1}", ji.cursinglejump * boostval, boostval > 1 ? " Boost" : "");
+                        if (showAvgFSDRangeToolStripMenuItem.Checked)
+                            range = range.AppendPrePad(String.Format("avg {0:N1}ly{1}", ji.avgsinglejump * boostval , boostval > 1 ? " Boost" : ""), ", ");
+                        if (showMaxFSDRangeToolStripMenuItem.Checked)
+                            range = range.AppendPrePad(String.Format("max {0:N1}ly{1}", ji.curfumessinglejump * boostval,boostval > 1 ? " Boost" : ""), ", ");
+                        if ( showFSDRangeToolStripMenuItem.Checked)
+                            range = range.AppendPrePad(String.Format("{0:N1}ly/{1:N0}", ji.maxjumprange, ji.maxjumps), ", ");
+
+                        if (range.HasChars())
+                            addtext = addtext.AppendPrePad(range, " | ");
                     }
 
-                    pictureBox.AddTextAutoSize(new Point(botlineleft.pos.Right, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                    if (addtext.HasChars())
+                        line = line.AppendPrePad(addtext, " | ");
                 }
 
+                if (line.HasChars())
+                    pictureBox.AddTextAutoSize(new Point(coltext, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
                 pictureBox.Render();
             }
@@ -220,13 +282,18 @@ namespace EDDiscovery.UserControls
                         he = list.ToArray()[1];
                         he.journalEntry.UpdateSyncFlagBit(SyncFlags.StopMarker, true , SyncFlags.StopMarker, false);
                     }
+
                     discoveryform.RefreshHistoryAsync();
                 }
             }
         }
 
-        #endregion
+        private void Optionchanged_Click(object sender, EventArgs e)
+        {
+            displayLastFSDOrScoop(lastHE, lastFSD);
+        }
 
+        #endregion
     }
 }
 
