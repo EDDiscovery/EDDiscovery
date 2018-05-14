@@ -211,14 +211,6 @@ namespace EliteDangerousCore
         {
             jent = new List<JournalReaderEntry>();
 
-            if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
-            {
-                jent.Add(StartEntries.Dequeue());
-                //System.Diagnostics.Debug.WriteLine("*** UnDelay " + jent[0].JournalEntry.EventTypeStr);
-                jent[0].JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
-                return true;
-            }
-
             bool readanything = false;
 
             while (ReadLine(out JournalReaderEntry newentry, l => ProcessLine(l, resetOnError)))
@@ -236,6 +228,17 @@ namespace EliteDangerousCore
                     {
                         //System.Diagnostics.Debug.WriteLine("*** Send  " + newentry.JournalEntry.EventTypeStr);
                         jent.Add(newentry);                     // else pass back
+                    }
+                }
+
+                if (StartEntries.Count != 0 && this.TravelLogUnit.CommanderId != null && this.TravelLogUnit.CommanderId >= 0)
+                {
+                    while (StartEntries.Count != 0)
+                    {
+                        var dentry = StartEntries.Dequeue();
+                        dentry.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
+                        //System.Diagnostics.Debug.WriteLine("*** UnDelay " + jent[0].JournalEntry.EventTypeStr);
+                        jent.Add(dentry);
                     }
                 }
             }
