@@ -358,6 +358,7 @@ namespace EDDiscovery.UserControls
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
+            jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
         }
 
         HistoryEntry rightclicksystem = null;
@@ -523,6 +524,21 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.Indexno : (discoveryform.history.Count - rightclicksystem.Indexno + 1)) : 0;
+            int selrow = dataGridViewJournal.JumpToDialog(this.FindForm(), curi, r =>
+            {
+                HistoryEntry he = r.Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+            });
+
+            if (selrow >= 0)
+            {
+                dataGridViewJournal.ClearSelection();
+                dataGridViewJournal.Rows[selrow].Selected = true;
+            }
+        }
 
 
         #region Excel

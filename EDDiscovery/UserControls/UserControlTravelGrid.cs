@@ -485,12 +485,8 @@ namespace EDDiscovery.UserControls
             if (he == null)                                 // otherwise, ignore it and return.
                 return;
 
-            string rowIdx;
-
-            if (EDDConfig.Instance.OrderRowsInverted)
-                rowIdx = he.Indexno.ToString();            // oldest has the highest index
-            else
-                rowIdx = (totalentries - he.Indexno + 1).ToString();
+            int rown = EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (totalentries - he.Indexno + 1);
+            string rowIdx = rown.ToString();
 
             var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
 
@@ -670,9 +666,19 @@ namespace EDDiscovery.UserControls
 
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
+            selectCorrectSystemToolStripMenuItem.Enabled = (rightclicksystem != null);
+            toolStripMenuItemStartStop.Enabled = (rightclicksystem != null);
             removeJournalEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             sendUnsyncedScanToEDDNToolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync);
+            runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
+            setNoteToolStripMenuItem.Enabled = (rightclicksystem != null);
+            writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclicksystem != null);
+            writeJournalToLogtoolStripMenuItem.Enabled = (rightclicksystem != null);
+            copyJournalEntryToClipboardToolStripMenuItem.Enabled = (rightclicksystem != null);
+            createEditBookmarkToolStripMenuItem.Enabled = (rightclicksystem != null);
+            gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
+            gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclicksystem != null);
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -940,11 +946,8 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-            {
-                discoveryform.history.SetStartStop(rightclicksystem);
-                discoveryform.RefreshHistoryAsync();
-            }
+            discoveryform.history.SetStartStop(rightclicksystem);
+            discoveryform.RefreshHistoryAsync();
         }
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
@@ -958,7 +961,7 @@ namespace EDDiscovery.UserControls
 
         private void sendUnsyncedScanToEDDNToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
+            if (rightclicksystem.EntryType == JournalTypeEnum.Scan && !rightclicksystem.EDDNSync)
             {
                 EDDNSync.SendEDDNEvent(discoveryform.LogLine, rightclicksystem);
             }
@@ -966,68 +969,112 @@ namespace EDDiscovery.UserControls
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-                discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
+            discoveryform.ActionRunOnEntry(rightclicksystem, Actions.ActionEventEDList.UserRightClick(rightclicksystem));
         }
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
+            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
             {
-                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclicksystem, discoveryform))
+                if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
-                    {
-                        rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
+                    rightclicksystem.SetJournalSystemNoteText(noteform.NoteText, true , EDCommander.Current.SyncToEdsm);
 
-                        discoveryform.NoteChanged(this,rightclicksystem, true);
-                    }
+                    discoveryform.NoteChanged(this,rightclicksystem, true);
                 }
+            }
+        }
+
+        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
+        {
+            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
+            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
+            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
+            //if (rightclicksystem.ShipInformation != null)
+            //    discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
+        }
+
+        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+            string json = jo?.ToString();
+            if (json != null)
+            {
+                discoveryform.LogLine(json);
             }
         }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
+            Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+            string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+            if (json != null)
             {
-                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
-                if (json != null)
-                {
-                    Clipboard.SetText(json);
-                }
+                Clipboard.SetText(json);
             }
         }
 
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
+            BookmarkForm bookmarkForm = new BookmarkForm();
+            BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
+            DateTime tme;
+            if (existing != null)
             {
-                BookmarkForm bookmarkForm = new BookmarkForm();
-                BookmarkClass existing = GlobalBookMarkList.Instance.FindBookmarkOnSystem(rightclicksystem.System.Name);
-                DateTime tme;
-                if (existing != null)
-                {
-                    tme = existing.Time;
-                    bookmarkForm.Update(existing);
-                }
-                else
-                {
-                    tme = DateTime.Now;
-                    bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme);
-                }
-                DialogResult dr = bookmarkForm.ShowDialog();
-                if (dr == DialogResult.OK)
-                {
-                    GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
-                        tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
-                }
-                if (dr == DialogResult.Abort && existing != null)
-                {
-                    GlobalBookMarkList.Instance.Delete(existing);
-                }
+                tme = existing.Time;
+                bookmarkForm.Update(existing);
+            }
+            else
+            {
+                tme = DateTime.Now;
+                bookmarkForm.NewSystemBookmark(rightclicksystem.System, "", tme);
+            }
+            DialogResult dr = bookmarkForm.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                GlobalBookMarkList.Instance.AddOrUpdateBookmark(existing, true, rightclicksystem.System.Name, rightclicksystem.System.X, rightclicksystem.System.Y, rightclicksystem.System.Z,
+                    tme, bookmarkForm.Notes, bookmarkForm.SurfaceLocations);
+            }
+            if (dr == DialogResult.Abort && existing != null)
+            {
+                GlobalBookMarkList.Instance.Delete(existing);
+            }
 
-                dataGridViewTravel.Refresh();
+            dataGridViewTravel.Refresh();
+        }
+
+        private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int curi = rightclicksystem != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclicksystem.Indexno : (discoveryform.history.Count - rightclicksystem.Indexno + 1)) : 0;
+            int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
+            {
+                HistoryEntry he = r.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                return EDDConfig.Instance.OrderRowsInverted ? he.Indexno : (discoveryform.history.Count - he.Indexno + 1);
+            });
+
+            if (selrow >= 0)
+            {
+                dataGridViewTravel.ClearSelection();
+                dataGridViewTravel.Rows[selrow].Selected = true;
+            }
+        }
+
+        private void gotoNextStartStopMarkerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for( int rown = rightclickrow+1; rown < dataGridViewTravel.Rows.Count; rown++ )
+            {
+                DataGridViewRow r = dataGridViewTravel.Rows[rown];
+                if (r.Visible)
+                {
+                    HistoryEntry h = r.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                    if (h.StartMarker || h.StopMarker)
+                    {
+                        dataGridViewTravel.DisplayRow(r.Index, true);
+                        dataGridViewTravel.ClearSelection();
+                        dataGridViewTravel.Rows[r.Index].Selected = true;
+                        break;
+                    }
+                }
             }
         }
 
@@ -1046,6 +1093,7 @@ namespace EDDiscovery.UserControls
         {
             HistoryChanged(current_historylist,true);
         }
+
 
         private void buttonField_Click(object sender, EventArgs e)
         {
@@ -1083,26 +1131,6 @@ namespace EDDiscovery.UserControls
                 string str = inara.ToJSONString(list);
                 discoveryform.LogLine(str);
                 System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
-            }
-        }
-
-        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
-        {
-            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
-            cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
-        }
-
-        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rightclicksystem != null && rightclicksystem.journalEntry != null)
-            {
-                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-                string json = jo?.ToString();
-                if (json != null)
-                {
-                    discoveryform.LogLine(json);
-                }
             }
         }
 

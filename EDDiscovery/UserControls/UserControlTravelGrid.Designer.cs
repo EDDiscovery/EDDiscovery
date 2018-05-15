@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
             this.labelTime = new System.Windows.Forms.Label();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gotoEntryNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.starMapColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +68,7 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectCorrectSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
+            this.gotoNextStartStopMarkerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -236,6 +238,7 @@ namespace EDDiscovery.UserControls
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeSortingOfColumnsToolStripMenuItem,
+            this.gotoEntryNumberToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
             this.starMapColourToolStripMenuItem,
             this.hideSystemToolStripMenuItem,
@@ -244,6 +247,7 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem,
             this.selectCorrectSystemToolStripMenuItem,
             this.toolStripMenuItemStartStop,
+            this.gotoNextStartStopMarkerToolStripMenuItem,
             this.removeJournalEntryToolStripMenuItem,
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
@@ -256,6 +260,7 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(388, 444);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -264,6 +269,13 @@ namespace EDDiscovery.UserControls
             this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove Sorting of Columns";
             this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
+            // 
+            // gotoEntryNumberToolStripMenuItem
+            // 
+            this.gotoEntryNumberToolStripMenuItem.Name = "gotoEntryNumberToolStripMenuItem";
+            this.gotoEntryNumberToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.gotoEntryNumberToolStripMenuItem.Text = "Jump to Entry";
+            this.gotoEntryNumberToolStripMenuItem.Click += new System.EventHandler(this.gotoEntryNumberToolStripMenuItem_Click);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -352,6 +364,13 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItemStartStop.Size = new System.Drawing.Size(387, 22);
             this.toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
             this.toolStripMenuItemStartStop.Click += new System.EventHandler(this.toolStripMenuItemStartStop_Click);
+            // 
+            // gotoNextStartStopMarkerToolStripMenuItem
+            // 
+            this.gotoNextStartStopMarkerToolStripMenuItem.Name = "gotoNextStartStopMarkerToolStripMenuItem";
+            this.gotoNextStartStopMarkerToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.gotoNextStartStopMarkerToolStripMenuItem.Text = "Jump to next Start/Stop marker";
+            this.gotoNextStartStopMarkerToolStripMenuItem.Click += new System.EventHandler(this.gotoNextStartStopMarkerToolStripMenuItem_Click);
             // 
             // removeJournalEntryToolStripMenuItem
             // 
@@ -599,5 +618,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
         private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughInaraSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gotoEntryNumberToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem gotoNextStartStopMarkerToolStripMenuItem;
     }
 }

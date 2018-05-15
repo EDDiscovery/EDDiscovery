@@ -86,6 +86,8 @@ namespace EliteDangerousCore
 
             ShipInformation newsm = null;       // if we change anything, we need a new clone..
 
+            Dictionary<string, ShipModule> moduleSlots = sm.Modules.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
             foreach (ShipModule m in modulelist)
             {
                 if (!sm.Contains(m.Slot) || !sm.Same(m))  // no slot, or not the same data.. (ignore localised item)
@@ -104,6 +106,27 @@ namespace EliteDangerousCore
 
                     newsm.SetModule(m);                   // update entry only.. rest will still point to same entries
                 }
+
+                moduleSlots.Remove(m.Slot);
+            }
+
+            // Remove modules not in loadout
+            if (moduleSlots.Count != 0)
+            {
+                List<ShipModule> modulesToRemove = moduleSlots.Values.ToList();
+
+                if (newsm == null)
+                {
+                    newsm = sm.ShallowClone();
+                }
+
+                foreach (ShipModule m in modulesToRemove)
+                {
+                    System.Diagnostics.Trace.WriteLine($"Warning: Module {m.Item} in slot {m.Slot} is missing from loadout");
+                    newsm = newsm.RemoveModule(m.Slot, m.Item);
+                }
+
+                Ships[sid] = newsm;
             }
         }
 
