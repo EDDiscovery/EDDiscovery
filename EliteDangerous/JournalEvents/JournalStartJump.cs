@@ -29,6 +29,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalStartJump(JObject evt) : base(evt, JournalTypeEnum.StartJump)
         {
             JumpType = evt["JumpType"].Str();
+            IsHyperspace = JumpType.Equals("Hyperspace", System.StringComparison.InvariantCultureIgnoreCase);
             StarSystem = evt["StarSystem"].Str();
             StarClass = evt["StarClass"].Str();
             FriendlyStarClass = (StarClass.Length > 0) ? Bodies.StarName(Bodies.StarStr2Enum(StarClass)) : "";
@@ -36,15 +37,17 @@ namespace EliteDangerousCore.JournalEvents
         }
 
         public string JumpType { get; set; }            // Hyperspace, Supercruise
+        public bool IsHyperspace { get; set; }
         public string StarSystem { get; set; }
         public long? SystemAddress { get; set; }
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 
+        public override string FillSummary { get { return "Charging FSD"; } }
+
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",JumpType , "< to " , StarSystem, "" , FriendlyStarClass);
+            info = BaseUtils.FieldBuilder.Build("", JumpType, "< to ",StarSystem, "" , FriendlyStarClass);
             detailed = "";
         }
     }

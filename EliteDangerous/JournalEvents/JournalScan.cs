@@ -609,10 +609,10 @@ namespace EliteDangerousCore.JournalEvents
 
             MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
 
-            if (mc != null)
+            if (mc != null && (historicmatlist != null || currentmatlist != null))
             {
                 MaterialCommodities historic = historicmatlist?.Find(mc.name);
-                MaterialCommodities current = Object.ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
+                MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
                 int? limit = MaterialCommodityDB.MaterialLimit(mc);
 
                 string matinfo = historic?.count.ToString() ?? "0";

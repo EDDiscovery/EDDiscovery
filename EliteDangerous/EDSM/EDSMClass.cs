@@ -731,8 +731,12 @@ namespace EliteDangerousCore.EDSM
                 ["event"] = "Scan",
                 ["EDDFromEDSMBodie"] = true,
                 ["BodyName"] = jo["name"],
-                ["discovery"] = jo["discovery"],
             };
+
+            if (jo["discovery"] != null && jo["discovery"].HasValues)       // much more defense around this.. EDSM gives discovery=null back
+            {
+                jout["discovery"] = jo["discovery"];
+            }
 
             if (jo["orbitalInclination"] != null) jout["OrbitalInclination"] = jo["orbitalInclination"];
             if (jo["orbitalEccentricity"] != null) jout["Eccentricity"] = jo["orbitalEccentricity"];
