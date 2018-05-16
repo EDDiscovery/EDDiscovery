@@ -605,7 +605,7 @@ namespace EDDiscovery
                 }
             }
 
-            if (EDCommander.Current.SyncToEdsm)
+            if (EDCommander.Current.SyncToInara)
             {
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
@@ -684,9 +684,9 @@ namespace EDDiscovery
                 EDSMJournalSync.SendEDSMEvents(LogLine, he);
             }
 
-            if (EDCommander.Current.SyncToEdsm)
+            if (EDCommander.Current.SyncToInara)
             {
-                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, he);
+                EliteDangerousCore.Inara.InaraSync.NewEvent(LogLine, history, he);
             }
 
             if (EDDNClass.IsEDDNMessage(he.EntryType,he.EventTimeUTC) && he.AgeOfEntry() < TimeSpan.FromDays(1.0) && EDCommander.Current.SyncToEddn == true)
@@ -815,12 +815,9 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            //actioncontroller.ReLoad();
-            //actioncontroller.CheckWarn();
-            //actioncontroller.onStartup();
-
-            EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass();
-            inara.getCommanderProfile("Robby");
+            actioncontroller.ReLoad();
+            actioncontroller.CheckWarn();
+            actioncontroller.onStartup();
          }
 
         private void sendUnsyncedEGOScansToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1140,6 +1137,22 @@ namespace EDDiscovery
             List<HistoryEntry> hlsyncunsyncedlist = Controller.history.FilterByScanNotEDDNSynced;        // first entry is oldest
 
             EDDNSync.SendEDDNEvents(LogLine, hlsyncunsyncedlist);
+        }
+
+        private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string rwsystime = SQLiteConnectionSystem.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
+            DateTime upload;
+            if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
+                upload = new DateTime(2000, 1, 1);
+
+            if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
+            {
+                EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
+                SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding");
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)

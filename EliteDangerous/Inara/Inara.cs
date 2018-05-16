@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,18 +13,12 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Net;
 using System.Reflection;
-using System.Web;
 using System.Linq;
 
 namespace EliteDangerousCore.Inara
@@ -66,67 +60,7 @@ namespace EliteDangerousCore.Inara
             }
         }
 
-        #region Formatters
-
-        static private JToken Event(string eventname, JToken eventData)       // an event
-        {
-            JObject jo = new JObject();
-            jo["eventName"] = eventname;
-            jo["eventTimestamp"] = DateTime.UtcNow.ToStringZulu();
-            jo["eventData"] = eventData;
-            return jo;
-        }
-
-        static private JToken Event(string eventname, DateTime utc, JToken eventData)       // an event
-        {
-            JObject jo = new JObject();
-            jo["eventName"] = eventname;
-            jo["eventTimestamp"] = utc;
-            jo["eventData"] = eventData;
-            return jo;
-        }
-
-        private JToken Header()         // Inara header
-        {
-            JObject jo = new JObject();
-            jo["appName"] = fromSoftware;
-            jo["appVersion"] = fromSoftwareVersion;
-            jo["isDeveloped"] = true;
-            jo["APIkey"] = apiKey;
-            jo["commanderName"] = commanderName;
-            return jo;
-        }
-
-        static private JArray EventArray(params JToken[] events)           // group events.  
-        {
-            JArray earray = new JArray();
-            foreach (JToken t in events)
-                earray.Add(t);
-            return earray;
-        }
-
-        private JToken Request(JToken singleevent)              // request for a single event
-        {
-            JObject jouter = new JObject();
-            jouter["header"] = Header();
-            JArray ja = new JArray();
-            ja.Add(singleevent);
-            jouter["events"] = ja;
-            return jouter;
-        }
-
-        private JToken Request(JToken[] events)                 // request for multi events
-        {
-            JObject jouter = new JObject();
-            jouter["header"] = Header();
-            jouter["events"] = EventArray(events);
-            return jouter;
-        }
-
-        #endregion
-
         #region Send and receive
-
 
         public string ToJSONString(List<JToken> events)
         {
@@ -136,39 +70,76 @@ namespace EliteDangerousCore.Inara
 
         public string Send(List<JToken> events)
         {
-            if (!ValidCredentials)
-                return null;
-
-            string request = ToJSONString(events);
-            File.WriteAllText(@"c:\code\json.txt", request);
-
-            return "";
+            return Send(events, out List<JObject> datalist);
         }
 
-        //example..
-        public string getCommanderProfile(string commandername)
+        public string Send(List<JToken> events, out List<JObject> datalist) // string returned is errors, null if none..
         {
+            datalist = new List<JObject>();
+
             if (!ValidCredentials)
-                return null;
+                return "No valid Inara Credentials" + Environment.NewLine;
 
-            JObject eventData = new JObject();
-            eventData["searchName"] = "Robbie";
-            JToken finaljson = Request(Event("getCommanderProfile", eventData));
-            string request = finaljson.ToString(Newtonsoft.Json.Formatting.Indented);
+            string request = ToJSONString(events);
 
-            File.WriteAllText(@"c:\code\json.txt", request);
+            File.WriteAllText(@"c:\code\json.txt", request); System.Diagnostics.Debug.WriteLine("Send inara " + request);
 
             var response = RequestPost(request, InaraAPI, handleException: true);
 
             if (response.Error)
-                return null;
+                return "No Response" + Environment.NewLine;
 
-            return response.Body; 
+            string ret = "";
+
+            try
+            {
+                JObject resp = JObject.Parse(response.Body);
+
+                JObject header = (JObject)resp["header"];
+                int headerstatus = header["eventStatus"].Int();     // this is the response to the input header - error if user credentials bad etc
+
+                if (headerstatus >= 300 || headerstatus < 200)      // 2xx good
+                {
+                    ret += "Rejected Send: " + header["eventStatusText"].Str() + Environment.NewLine + "Check Inara User name and API Key" + Environment.NewLine;
+                }
+                else
+                {
+                    JArray responses = (JArray)resp["events"];
+
+                    for( int i = 0; i < responses.Count;  i++)      // for each event.. check response..
+                    {
+                        JObject ro = (JObject)responses[i];
+                        int eventstate = ro["eventStatus"].Int();
+
+                        datalist.Add(ro["eventData"] as JObject);       // may be null!  if no data is returned by Inara.. Only a few data requestes exists
+
+                        if ( i >= events.Count )            // inara is giving more event responses than what we asked for!
+                            ret += "Too many responses to events requested" + Environment.NewLine;
+                        else if (eventstate >= 300 || eventstate < 200 )         // 2xx good
+                            ret += "Error to request " + (events[i])["eventName"].Str() + " " + events[i].ToString() + " with " + ro["eventStatusText"].Str() + Environment.NewLine;
+                    }
+                }
+            }
+            catch( Exception e)
+            {
+                ret = "Exception " + e.ToString() + Environment.NewLine;
+            }
+
+            //if (ret == "") ret = "ALL OK"; // debug!
+
+            return ret.HasChars() ? ret : null;
         }
 
         #endregion
 
         #region Formatters
+
+        static public JToken getCommanderProfile(string name, DateTime dt)
+        {
+            JObject eventData = new JObject();
+            eventData["searchName"] = name;
+            return Event("getCommanderProfile", dt, eventData);
+        }
 
         static public JToken addCommanderPermit(string starsystem, DateTime dt)
         {
@@ -348,23 +319,23 @@ namespace EliteDangerousCore.Inara
             JObject eventData = new JObject();
             eventData["shipType"] = fdname;
             eventData["shipGameID"] = id;
-            if ( username!=null )
+            if ( username.HasChars())
                 eventData["shipName"] = username;
-            if ( userid != null )
+            if ( userid.HasChars())
                 eventData["shipIdent"] = userid;
-            if ( curship != null )
+            if ( curship != null)
                 eventData["isCurrentShip"] = curship.Value;
             if ( ishot.HasValue )
                 eventData["isHot"] = ishot.Value;
-            if (shipHullValue.HasValue)
+            if (shipHullValue.HasValue && shipHullValue.Value > 0)
                 eventData["shipHullValue"] = shipHullValue.Value;
-            if (shipModulesValue.HasValue)
+            if (shipModulesValue.HasValue && shipModulesValue.Value > 0)
                 eventData["shipModulesValue"] = shipModulesValue.Value;
-            if (shipRebuyCost.HasValue)
+            if (shipRebuyCost.HasValue && shipRebuyCost.Value > 0)
                 eventData["shipRebuyCost"] = shipRebuyCost.Value;
-            if (starsystemName != null)
+            if (starsystemName.HasChars())
                 eventData["starsystemName"] = starsystemName;
-            if (stationName != null)
+            if (stationName.HasChars())
                 eventData["stationName"] = stationName;
             if (MarketID != null)
                 eventData["marketID"] = MarketID;
@@ -374,6 +345,9 @@ namespace EliteDangerousCore.Inara
 
         static public JToken setCommanderShipLoadout(string fdname, int id, IEnumerable<ShipModule> list, DateTime dt)
         {
+            if (list.Count() == 0)      // no loadout, nothing to send..
+                return null;
+
             JObject eventData = new JObject();
             eventData["shipType"] = fdname;
             eventData["shipGameID"] = id;
@@ -412,7 +386,7 @@ namespace EliteDangerousCore.Inara
                         {
                             JObject mod = new JObject();
                             eng["name"] = y.Label;
-                            if (y.ValueStr != null)
+                            if (y.ValueStr.HasChars())
                                 eng["value"] = y.ValueStr;
                             else
                             {
@@ -473,15 +447,15 @@ namespace EliteDangerousCore.Inara
             return Event("addCommanderTravelFSDJump", dt, eventData);
         }
 
-        static public JToken addCommanderTravelLocation(string starsystem, string station, long? marketid, DateTime dt)
+        static public JToken setCommanderTravelLocation(string starsystem, string station, long? marketid, DateTime dt)
         {
             JObject eventData = new JObject();
             eventData["starsystemName"] = starsystem;
-            if (station != null)
+            if (station.HasChars())
                 eventData["stationName"] = station;
             if (marketid != null)
                 eventData["marketID"] = marketid;
-            return Event("addCommanderTravelLocation", dt, eventData);
+            return Event("setCommanderTravelLocation", dt, eventData);
         }
 
         static public JToken addCommanderMission(JournalMissionAccepted mission, string starsystem, string station)
@@ -658,6 +632,108 @@ namespace EliteDangerousCore.Inara
             return Event("addCommanderCombatKill", dt, eventData);
         }
 
+        static public JToken setCommunityGoal(JournalCommunityGoal.CommunityGoal goals, DateTime dt)
+        {
+            JObject eventData = new JObject();
+
+            eventData["communitygoalGameID"] = goals.CGID;
+            eventData["communitygoalName"] = goals.Title;
+            eventData["starsystemName"] = goals.SystemName;
+            eventData["stationName"] = goals.MarketName;
+            eventData["goalExpiry"] = goals.Expiry.ToStringZulu();
+            if (goals.TierReachedInt.HasValue)
+                eventData["tierReached"] = goals.TierReachedInt.Value;
+            // no evidence of this being in journals eventData["tierMax"] = goals.
+            if (goals.TopRankSize.HasValue)
+                eventData["topRankSize"] = goals.TopRankSize.Value;
+            eventData["isCompleted"] = goals.IsComplete;
+            eventData["contributorsNum"] = goals.NumContributors;
+            eventData["contributionsTotal"] = goals.CurrentTotal;
+            if (goals.TopTierBonus.HasChars())
+                eventData["completionBonus"] = goals.TopTierBonus;
+
+            return Event("setCommunityGoal", dt, eventData);
+        }
+
+        static public JToken setCommandersCommunityGoalProgress(JournalCommunityGoal.CommunityGoal goals, DateTime dt)
+        {
+            if (goals.Bonus.HasValue)
+            {
+                JObject eventData = new JObject();
+
+                eventData["communitygoalGameID"] = goals.CGID;
+                eventData["contribution"] = goals.NumContributors;
+                eventData["percentileBand"] = goals.PlayerPercentileBand;
+                eventData["percentileBandReward"] = goals.Bonus.Value;
+
+                return Event("setCommanderCommunityGoalProgress", dt, eventData);
+            }
+            else
+                return null;
+
+        }
+
         #endregion
+
+        #region Helpers for Format
+
+        static private JToken Event(string eventname, JToken eventData)       // an event
+        {
+            JObject jo = new JObject();
+            jo["eventName"] = eventname;
+            jo["eventTimestamp"] = DateTime.UtcNow.ToStringZulu();
+            jo["eventData"] = eventData;
+            return jo;
+        }
+
+        static private JToken Event(string eventname, DateTime utc, JToken eventData)       // an event
+        {
+            JObject jo = new JObject();
+            jo["eventName"] = eventname;
+            jo["eventTimestamp"] = utc;
+            jo["eventData"] = eventData;
+            return jo;
+        }
+
+        private JToken Header()         // Inara header
+        {
+            JObject jo = new JObject();
+            jo["appName"] = fromSoftware;
+            jo["appVersion"] = fromSoftwareVersion;
+            jo["isDeveloped"] = true;
+            jo["APIkey"] = apiKey;
+            jo["commanderName"] = commanderName;
+            return jo;
+        }
+
+        static private JArray EventArray(params JToken[] events)           // group events.  
+        {
+            JArray earray = new JArray();
+            foreach (JToken t in events)
+                earray.Add(t);
+            return earray;
+        }
+
+        private JToken Request(JToken singleevent)              // request for a single event
+        {
+            JObject jouter = new JObject();
+            jouter["header"] = Header();
+            JArray ja = new JArray();
+            ja.Add(singleevent);
+            jouter["events"] = ja;
+            return jouter;
+        }
+
+        private JToken Request(JToken[] events)                 // request for multi events
+        {
+            JObject jouter = new JObject();
+            jouter["header"] = Header();
+            jouter["events"] = EventArray(events);
+            return jouter;
+        }
+
+        #endregion
+
+
     }
 }

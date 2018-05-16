@@ -920,7 +920,7 @@ namespace EDDiscovery.UserControls
         {
             Point p = MousePosition;
             cfs.FilterButton(DbFilterSave, contextMenuStripConfig.PointToScreen(new Point(0, 0)), new Size(180,400), 
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)

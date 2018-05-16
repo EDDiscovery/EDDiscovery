@@ -40,6 +40,7 @@ namespace EDDiscovery.Icons
         public static Image Main_Admin_ResetHistory { get { return IconSet.GetIcon("Controls.Main.Admin.ResetHistory"); } }
         public static Image Main_Admin_SendUnsyncedEDDN { get { return IconSet.GetIcon("Controls.Main.Admin.SendUnsyncedEDDN"); } }
         public static Image Main_Admin_SendUnsyncedEGO { get { return IconSet.GetIcon("Controls.Main.Admin.SendUnsyncedEGO"); } }
+        public static Image Main_Admin_SendInara { get { return IconSet.GetIcon("Controls.Main.Admin.SendUnsyncedEGO"); } }
         public static Image Main_Admin_ShowLogFiles { get { return IconSet.GetIcon("Controls.Main.Admin.ShowLogFiles"); } }
         public static Image Main_Help_About { get { return IconSet.GetIcon("Controls.Main.Help.About"); } }
         public static Image Main_Help_CheckForNewRelease { get { return IconSet.GetIcon("Controls.Main.Help.CheckForNewRelease"); } }

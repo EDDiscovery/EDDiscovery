@@ -140,7 +140,7 @@ namespace EliteDangerousCore
 
             //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
 
-            if (!JournalFieldNaming.IsSRVOrFighter(ship))
+            if (!ShipModuleData.IsSRVOrFighter(shipfd))
                 currentid = sid;
         }
 

@@ -90,22 +90,6 @@ namespace EliteDangerousCore
             return string.Format("{0}°{1} {2}'{3}\"", arcsec / 3600, marker, (arcsec / 60) % 60, arcsec % 60);
         }
 
-
-        static public bool IsSRV(string inname) // better name
-        {
-            return inname.Contains("SRV");
-        }
-
-        static public bool IsFighter(string inname) // better name
-        {
-            return inname.Contains("F63") || inname.Contains("Fighter");
-        }
-
-        static public bool IsSRVOrFighter(string inname )
-        {
-            return IsSRV(inname) || IsFighter(inname);
-        }
-
         static public string GetBetterMissionName(string inname)
         {
             return inname.Replace("_name", "").SplitCapsWordFull();
