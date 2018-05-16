@@ -694,8 +694,7 @@ namespace EliteDangerousCore.EDSM
                         try
                         {
                             JObject jbody = EDSMClass.ConvertFromEDSMBodies(edsmbody);
-                            JournalScan js = new JournalScan(jbody);
-                            js.EdsmID = edsmid;
+                            JournalScan js = new JournalScan(jbody, edsmid);
 
                             bodies.Add(js);
                         }

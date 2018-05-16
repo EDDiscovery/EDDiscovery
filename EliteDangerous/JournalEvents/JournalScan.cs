@@ -208,6 +208,11 @@ namespace EliteDangerousCore.JournalEvents
             public int BodyID;
         }
 
+        public JournalScan(JObject evt, long edsmid) : this(evt)
+        {
+            EdsmID = edsmid;
+        }
+
         public JournalScan(JObject evt) : base(evt, JournalTypeEnum.Scan)
         {
             ScanType = evt["ScanType"].Str();
@@ -383,13 +388,6 @@ namespace EliteDangerousCore.JournalEvents
                 info = detailed;
                 detailed = "";
             }
-        }
-
-
-        private void ConvertFromEDSMBodies()
-        {
-            EventTimeUTC = DateTime.UtcNow;
-            throw new NotImplementedException();
         }
 
         public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)

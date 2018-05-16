@@ -222,8 +222,7 @@ namespace EliteDangerousCore.EDSM
                                 foreach (JournalFSDJump jfsd in toadd)
                                 {
                                     System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
-                                    jfsd.TLUId = tlu.id;        // update its TLU id to the TLU made above
-                                    jfsd.CommanderId = tlu.CommanderId.Value;       // and its commander ID
+                                    jfsd.SetTLUCommander( tlu.id, jfsd.CommanderId);        // update its TLU id to the TLU made above
                                     jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);
                                 }
                             }

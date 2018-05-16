@@ -204,26 +204,26 @@ namespace EDDiscovery.UserControls
             reserved = 3;
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent)
+        public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent)
         {
             List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
             events.Sort();
-            FilterButton(db, ctr, back, fore, parent, events);
+            FilterButton(db, ctr, back, fore, fnt, parent, events);
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
+        public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent, List<string> list)
         {
-            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 2, 400), back, fore, parent, list);
+            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 2, 600), back, fore, fnt, parent, list);
         }
 
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent)
+        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Font fnt, Form parent)
         {
             List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
             events.Sort();
-            FilterButton(db, p, s, back, fore, parent, events);
+            FilterButton(db, p, s, back, fore, fnt, parent, events);
         }
 
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent, List<string> list)
+        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Font fnt, Form parent, List<string> list)
         {
             if (cc == null)
             {
@@ -244,6 +244,7 @@ namespace EDDiscovery.UserControls
                 cc.CheckedChanged += FilterCheckChanged;
                 cc.PositionSize(p,s);
                 cc.SetColour(back,fore);
+                cc.SetFont(fnt);
                 cc.Show(parent);
             }
             else

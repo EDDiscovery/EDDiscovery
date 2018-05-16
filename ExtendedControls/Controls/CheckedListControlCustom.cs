@@ -64,11 +64,16 @@ namespace ExtendedControls
             SetSize = s;
         }
 
-        public void SetColour( Color backcolour , Color textc )
+        public void SetColour(Color backcolour, Color textc)
         {
             BackColor = backcolour;
             clb.BackColor = backcolour;
             clb.ForeColor = textc;
+        }
+
+        public void SetFont(Font fnt)
+        {
+            clb.Font = fnt;
         }
 
         public void SetChecked(string value, int ignore = 0 )

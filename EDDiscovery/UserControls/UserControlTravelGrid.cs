@@ -935,7 +935,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (var jent in jents)
                     {
-                        jent.EdsmID = (int)form.AssignedEdsmId;
+                        jent.SetEDSMId(form.AssignedEdsmId);
                         jent.Update();
                     }
 
@@ -1086,7 +1086,7 @@ namespace EDDiscovery.UserControls
         {
             Button b = sender as Button;
             cfs.FilterButton(DbFilterSave, b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)
@@ -1121,7 +1121,20 @@ namespace EDDiscovery.UserControls
         {
             if (rightclicksystem != null )
             {
-                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclicksystem);
+                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history, rightclicksystem);
+
+                foreach (Newtonsoft.Json.Linq.JToken j in list)
+                {
+                    j["eventTimestamp"] = DateTime.UtcNow.ToStringZulu();       // mangle time to now to allow it to send.
+                    if (j["eventName"].Str() == "addCommanderMission")
+                    {
+                        j["eventData"]["missionExpiry"] = DateTime.UtcNow.AddDays(1).ToStringZulu();       // mangle mission time to now to allow it to send.
+                    }
+                    if (j["eventName"].Str() == "setCommunityGoal")
+                    {
+                        j["eventData"]["goalExpiry"] = DateTime.UtcNow.AddDays(5).ToStringZulu();       // mangle expiry time
+                    }
+                }
 
                 Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
                 string json = jo?.ToString();
@@ -1131,6 +1144,14 @@ namespace EDDiscovery.UserControls
                 string str = inara.ToJSONString(list);
                 discoveryform.LogLine(str);
                 System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
+
+                if (list.Count > 0)
+                {
+                    string strres = inara.Send(list);
+                    discoveryform.LogLine(strres);
+                }
+                else
+                    discoveryform.LogLine("No Events");
             }
         }
 
