@@ -31,6 +31,7 @@ namespace EliteDangerousCore.Inara
             public JToken eventinfo;
             public Action<string> logger;
             public EDCommander cmdr;
+            public bool verbose;
         }
 
         private static ConcurrentQueue<InaraQueueEntry> eventqueue = new ConcurrentQueue<InaraQueueEntry>();
@@ -47,7 +48,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = RefreshList(history);
             if (events.Count > 0)
-                Submit(events,logger, cmdr);
+                Submit(events,logger, cmdr, true);
             return true;
         }
 
@@ -55,7 +56,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = HistoricList(history);
             if (events.Count > 0)
-                Submit(events, logger, cmdr);
+                Submit(events, logger, cmdr, true);
             return true;
         }
 
@@ -63,7 +64,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = NewEntryList(history,he);
             if (events.Count > 0)
-                Submit(events,logger, he.Commander);
+                Submit(events,logger, he.Commander, false);
             return true;
         }
 
@@ -486,10 +487,10 @@ namespace EliteDangerousCore.Inara
 
 #region Thread
 
-        public static void Submit(List<JToken> list, Action<string> logger, EDCommander cmdrn)
+        public static void Submit(List<JToken> list, Action<string> logger, EDCommander cmdrn, bool verbose)
         {
             foreach (var x in list)
-                eventqueue.Enqueue(new InaraQueueEntry() { eventinfo = x, cmdr = cmdrn , logger = logger});
+                eventqueue.Enqueue(new InaraQueueEntry() { eventinfo = x, cmdr = cmdrn , logger = logger, verbose = verbose});
 
             queuedevents.Set();
 
@@ -522,13 +523,15 @@ namespace EliteDangerousCore.Inara
                     {
                         List<JToken> tosend = new List<JToken>() { firstheq.eventinfo };
 
-                        int maxpergo = 20;
+                        int maxpergo = 50;
+                        bool verbose = false;
 
                         // if not too many, and we have another, and the commander is the same 
                         while (tosend.Count < maxpergo && eventqueue.TryPeek(out InaraQueueEntry nextheq) && nextheq.cmdr.Nr == firstheq.cmdr.Nr)
                         {
                             eventqueue.TryDequeue(out nextheq);     // and remove it
                             tosend.Add(nextheq.eventinfo);
+                            verbose |= nextheq.verbose;
                         }
 
                         InaraClass inara = new InaraClass(firstheq.cmdr);
@@ -536,8 +539,10 @@ namespace EliteDangerousCore.Inara
                         if ( errs != null)
                         {
                             //System.Diagnostics.Debug.WriteLine("Inara reports error" + errs);
-                            firstheq?.logger("INARA Sync Error: " + errs);
+                            firstheq?.logger("INARA Send Error: " + errs);
                         }
+                        else if ( verbose )
+                            firstheq?.logger("Sent " + tosend.Count + " events to INARA" );
                     }
 
                     exitevent.WaitOne(10000);       // space out events well

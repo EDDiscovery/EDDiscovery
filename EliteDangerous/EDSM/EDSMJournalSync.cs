@@ -279,8 +279,7 @@ namespace EliteDangerousCore.EDSM
 
                         string logline = $"Adding {first.EntryType.ToString()} event to EDSM journal sync ({first.EventSummary})";
                         System.Diagnostics.Trace.WriteLine(logline);
-                        if (!manual)
-                            hqe.Logger?.Invoke(logline);
+                        //removed too verbose if (!manual)  hqe.Logger?.Invoke(logline);
 
                         if (holdEvents.Contains(first.EntryType) || (first.EntryType == JournalTypeEnum.Location && first.IsDocked))
                         {
