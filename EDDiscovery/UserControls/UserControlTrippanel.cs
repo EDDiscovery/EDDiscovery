@@ -280,7 +280,7 @@ namespace EDDiscovery.UserControls
                     if (list.Count() > 1 && he.isTravelling)
                     {
                         he = list.ToArray()[1];
-                        he.journalEntry.UpdateSyncFlagBit(SyncFlags.StopMarker, true , SyncFlags.StopMarker, false);
+                        he.journalEntry.UpdateSyncFlagBit(SyncFlags.StopMarker, true , SyncFlags.StartMarker, false);
                     }
 
                     discoveryform.RefreshHistoryAsync();
