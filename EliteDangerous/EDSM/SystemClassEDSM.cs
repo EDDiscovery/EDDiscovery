@@ -61,80 +61,87 @@ namespace EliteDangerousCore.EDSM
                 RemoveHiddenSystems(strhiddensystems);
         }
 
-        public static void RemoveHiddenSystems(string json)
+        public static void RemoveHiddenSystems(string json)         // protected against bad json
         {
-            JsonTextReader jr = new JsonTextReader(new StringReader(json));
-            bool jr_eof = false;
-
-            while (!jr_eof)
+            try
             {
-                using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
+                JsonTextReader jr = new JsonTextReader(new StringReader(json));
+                bool jr_eof = false;
+
+                while (!jr_eof)
                 {
-                    using (DbTransaction txn = cn2.BeginTransaction())
+                    using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
                     {
-                        DbCommand infoinscmd = null;
-                        DbCommand infodelcmd = null;
-                        DbCommand namedelcmd = null;
-
-                        try
+                        using (DbTransaction txn = cn2.BeginTransaction())
                         {
-                            infoinscmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn);
-                            infoinscmd.AddParameter("@name", DbType.String);
-                            infoinscmd.AddParameter("@id_edsm", DbType.Int64);
-                            infoinscmd.AddParameter("@id_edsm_mergedto", DbType.Int64);
-                            infodelcmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn);
-                            infodelcmd.AddParameter("@EdsmId", DbType.Int64);
-                            namedelcmd = cn2.CreateCommand("DELETE FROM SystemNames WHERE EdsmId=@EdsmId", txn);
-                            namedelcmd.AddParameter("@EdsmId", DbType.Int64);
+                            DbCommand infoinscmd = null;
+                            DbCommand infodelcmd = null;
+                            DbCommand namedelcmd = null;
 
-                            while (!SQLiteConnectionSystem.IsReadWaiting)
+                            try
                             {
-                                if (!jr.Read())
+                                infoinscmd = cn2.CreateCommand("INSERT OR IGNORE INTO SystemAliases (name, id_edsm, id_edsm_mergedto) VALUES (@name, @id_edsm, @id_edsm_mergedto)", txn);
+                                infoinscmd.AddParameter("@name", DbType.String);
+                                infoinscmd.AddParameter("@id_edsm", DbType.Int64);
+                                infoinscmd.AddParameter("@id_edsm_mergedto", DbType.Int64);
+                                infodelcmd = cn2.CreateCommand("DELETE FROM EdsmSystems WHERE EdsmId=@EdsmId", txn);
+                                infodelcmd.AddParameter("@EdsmId", DbType.Int64);
+                                namedelcmd = cn2.CreateCommand("DELETE FROM SystemNames WHERE EdsmId=@EdsmId", txn);
+                                namedelcmd.AddParameter("@EdsmId", DbType.Int64);
+
+                                while (!SQLiteConnectionSystem.IsReadWaiting)
                                 {
-                                    jr_eof = true;
-                                    break;
-                                }
-
-                                if (jr.TokenType == JsonToken.StartObject)
-                                {
-                                    JObject jo = JObject.Load(jr);
-
-                                    long edsmid = (long)jo["id"];
-                                    string name = (string)jo["system"];
-                                    string action = (string)jo["action"];
-                                    long mergedto = 0;
-
-                                    if (jo["mergedTo"] != null)
+                                    if (!jr.Read())
                                     {
-                                        mergedto = (long)jo["mergedTo"];
+                                        jr_eof = true;
+                                        break;
                                     }
 
-                                    Console.Write("Remove " + edsmid);
-                                    infodelcmd.Parameters["@EdsmId"].Value = edsmid;
-                                    infodelcmd.ExecuteNonQuery();
-                                    namedelcmd.Parameters["@EdsmId"].Value = edsmid;
-                                    namedelcmd.ExecuteNonQuery();
-
-                                    if (mergedto > 0)
+                                    if (jr.TokenType == JsonToken.StartObject)
                                     {
-                                        infoinscmd.Parameters["@name"].Value = name;
-                                        infoinscmd.Parameters["@id_edsm"].Value = edsmid;
-                                        infoinscmd.Parameters["@id_edsm_mergedto"].Value = mergedto;
-                                        infoinscmd.ExecuteNonQuery();
+                                        JObject jo = JObject.Load(jr);
+
+                                        long edsmid = (long)jo["id"];
+                                        string name = (string)jo["system"];
+                                        string action = (string)jo["action"];
+                                        long mergedto = 0;
+
+                                        if (jo["mergedTo"] != null)
+                                        {
+                                            mergedto = (long)jo["mergedTo"];
+                                        }
+
+                                        Console.Write("Remove " + edsmid);
+                                        infodelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                        infodelcmd.ExecuteNonQuery();
+                                        namedelcmd.Parameters["@EdsmId"].Value = edsmid;
+                                        namedelcmd.ExecuteNonQuery();
+
+                                        if (mergedto > 0)
+                                        {
+                                            infoinscmd.Parameters["@name"].Value = name;
+                                            infoinscmd.Parameters["@id_edsm"].Value = edsmid;
+                                            infoinscmd.Parameters["@id_edsm_mergedto"].Value = mergedto;
+                                            infoinscmd.ExecuteNonQuery();
+                                        }
                                     }
                                 }
+
+                                txn.Commit();
                             }
-
-                            txn.Commit();
-                        }
-                        finally
-                        {
-                            if (infoinscmd != null) infoinscmd.Dispose();
-                            if (infodelcmd != null) infodelcmd.Dispose();
-                            if (namedelcmd != null) namedelcmd.Dispose();
+                            finally
+                            {
+                                if (infoinscmd != null) infoinscmd.Dispose();
+                                if (infodelcmd != null) infodelcmd.Dispose();
+                                if (namedelcmd != null) namedelcmd.Dispose();
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("SysClassEDSM Exception " + e.ToString());
             }
         }
 
@@ -248,19 +255,19 @@ namespace EliteDangerousCore.EDSM
 
         #region Parse and store in DB
 
-        public static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        private static long ParseEDSMUpdateSystemsString(string json, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StringReader sr = new StringReader(json))
                 return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
+        private static long ParseEDSMUpdateSystemsFile(string filename, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true)
         {
             using (StreamReader sr = new StreamReader(filename))         // read directly from file..
                 return ParseEDSMUpdateSystemsStream(sr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache);
         }
 
-        public static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
+        private static long ParseEDSMUpdateSystemsStream(TextReader sr, bool[] grididallow, ref DateTime date, bool removenonedsmids, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
                 return ParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  removenonedsmids, cancelRequested, reportProgress, useCache, useTempSystems);
@@ -271,7 +278,7 @@ namespace EliteDangerousCore.EDSM
             return DoParseEDSMUpdateSystemsReader(jr, grididallow, ref date,  cancelRequested, reportProgress, useCache, useTempSystems);
         }
 
-        // returns no of updates + inserts, not no of items processed.  
+        // returns no of updates + inserts, not no of items processed.   Protect yourself against bad json 
 
         private static long DoParseEDSMUpdateSystemsReader(JsonTextReader jr, bool[] grididallowed, ref DateTime maxdate, Func<bool> cancelRequested, Action<int, string> reportProgress, bool useCache = true, bool useTempSystems = false)
         {
@@ -629,8 +636,15 @@ namespace EliteDangerousCore.EDSM
 
                 DateTime maxdate = new DateTime(2000, 1, 1);
 
-                using (var reader = new StreamReader(s))
-                    updates = ParseEDSMUpdateSystemsStream(reader, grididallow, ref maxdate, true, PendingClose, ReportProgress, useCache: false, useTempSystems: true);
+                try
+                {
+                    using (var reader = new StreamReader(s))
+                        updates = ParseEDSMUpdateSystemsStream(reader, grididallow, ref maxdate, true, PendingClose, ReportProgress, useCache: false, useTempSystems: true);
+                }
+                catch( Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SysClassEDSM.3 Exception " + e.ToString());
+                }
 
                 if (!PendingClose())       // abort, without saving time, to make it do it again
                 {
@@ -741,15 +755,23 @@ namespace EliteDangerousCore.EDSM
                 DateTime prevrectime = lastrecordtime;
                 System.Diagnostics.Debug.WriteLine("Last record time {0} JSON size {1}", lastrecordtime.ToUniversalTime() , json.Length);
 
-                long updated = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
-                System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
+                long updated = 0;
 
-                System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
-
-                // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
-                if ( lastrecordtime <= prevrectime )     
+                try
                 {
-                    lastrecordtime += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
+                    updated = ParseEDSMUpdateSystemsString(json, grididallow, ref lastrecordtime, false, PendingClose, ReportProgress, false);
+                    System.Diagnostics.Debug.WriteLine($".. Updated {updated} to {lastrecordtime.ToUniversalTime().ToString()}");
+                    System.Diagnostics.Debug.WriteLine("Updated to time {0}", lastrecordtime.ToUniversalTime());
+
+                    // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
+                    if (lastrecordtime <= prevrectime)
+                    {
+                        lastrecordtime += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
+                    }
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("SysClassEDSM.2 Exception " + e.ToString());
                 }
 
                 updates += updated;
