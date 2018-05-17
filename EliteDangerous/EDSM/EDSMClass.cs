@@ -235,7 +235,7 @@ namespace EliteDangerousCore.EDSM
 
         #region For System DB update
 
-        public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)
+        public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)      // protect yourself against JSON errors!
         {
             DateTime gammadate = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc);
             if (startdate < gammadate)
@@ -254,7 +254,7 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public string GetHiddenSystems()
+        public string GetHiddenSystems()   // protect yourself against JSON errors!
         {
             try
             {
@@ -295,51 +295,58 @@ namespace EliteDangerousCore.EDSM
             return response.Body;
         }
 
-        public void GetComments(Action<string> logout = null)
+        public void GetComments(Action<string> logout = null)           // Protected against bad JSON
         {
             var json = GetComments(new DateTime(2011, 1, 1));
 
             if (json != null)
             {
-                JObject msg = JObject.Parse(json);
-                int msgnr = msg["msgnum"].Value<int>();
-
-                JArray comments = (JArray)msg["comments"];
-                if (comments != null)
+                try
                 {
-                    int commentsadded = 0;
+                    JObject msg = JObject.Parse(json);                  // protect against bad json - seen in the wild
+                    int msgnr = msg["msgnum"].Value<int>();
 
-                    foreach (JObject jo in comments)
+                    JArray comments = (JArray)msg["comments"];
+                    if (comments != null)
                     {
-                        string name = jo["system"].Value<string>();
-                        string note = jo["comment"].Value<string>();
-                        string utctime = jo["lastUpdate"].Value<string>();
-                        int edsmid = 0;
+                        int commentsadded = 0;
 
-                        if (!Int32.TryParse(jo["systemId"].Str("0"), out edsmid))
-                            edsmid = 0;
-
-                        DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss",
-                                    CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
-
-                        SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
-
-                        if (curnote != null)                // curnote uses local time to store
+                        foreach (JObject jo in comments)
                         {
-                            if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
+                            string name = jo["system"].Value<string>();
+                            string note = jo["comment"].Value<string>();
+                            string utctime = jo["lastUpdate"].Value<string>();
+                            int edsmid = 0;
+
+                            if (!Int32.TryParse(jo["systemId"].Str("0"), out edsmid))
+                                edsmid = 0;
+
+                            DateTime localtime = DateTime.ParseExact(utctime, "yyyy-MM-dd HH:mm:ss",
+                                        CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime();
+
+                            SystemNoteClass curnote = SystemNoteClass.GetNoteOnSystem(name, edsmid);
+
+                            if (curnote != null)                // curnote uses local time to store
                             {
-                                curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid, true);
+                                if (localtime.Ticks > curnote.Time.Ticks)   // if newer, add on (verified with EDSM 29/9/2016)
+                                {
+                                    curnote.UpdateNote(curnote.Note + ". EDSM: " + note, true, localtime, edsmid, true);
+                                    commentsadded++;
+                                }
+                            }
+                            else
+                            {
+                                SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid, true);   // new one!  its an FSD one as well
                                 commentsadded++;
                             }
                         }
-                        else
-                        {
-                            SystemNoteClass.MakeSystemNote(note, localtime, name, 0, edsmid, true);   // new one!  its an FSD one as well
-                            commentsadded++;
-                        }
-                    }
 
-                    logout?.Invoke(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
+                        logout?.Invoke(string.Format("EDSM Comments downloaded/updated {0}", commentsadded));
+                    }
+                }
+                catch ( Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed due to " + e.ToString());
                 }
             }
         }
@@ -385,6 +392,8 @@ namespace EliteDangerousCore.EDSM
 
         #region Log Sync for log fetcher
 
+        // Protected against bad JSON
+
         public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime)
         {
             log = new List<JournalFSDJump>();
@@ -412,55 +421,64 @@ namespace EliteDangerousCore.EDSM
             if (json == null)
                 return 0;
 
-            JObject msg = JObject.Parse(json);
-            int msgnr = msg["msgnum"].Int(0);
-
-            JArray logs = (JArray)msg["logs"];
-
-            if (logs != null)
+            try
             {
-                string startdatestr = msg["startDateTime"].Value<string>();
-                string enddatestr = msg["endDateTime"].Value<string>();
-                if (startdatestr == null || !DateTime.TryParseExact(startdatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime))
-                    logstarttime = DateTime.MaxValue;
-                if (enddatestr == null || !DateTime.TryParseExact(enddatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime))
-                    logendtime = DateTime.MinValue;
 
-                using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+                JObject msg = JObject.Parse(json);
+                int msgnr = msg["msgnum"].Int(0);
+
+                JArray logs = (JArray)msg["logs"];
+
+                if (logs != null)
                 {
-                    foreach (JObject jo in logs)
+                    string startdatestr = msg["startDateTime"].Value<string>();
+                    string enddatestr = msg["endDateTime"].Value<string>();
+                    if (startdatestr == null || !DateTime.TryParseExact(startdatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logstarttime))
+                        logstarttime = DateTime.MaxValue;
+                    if (enddatestr == null || !DateTime.TryParseExact(enddatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime))
+                        logendtime = DateTime.MinValue;
+
+                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
                     {
-                        string name = jo["system"].Value<string>();
-                        string ts = jo["date"].Value<string>();
-                        long id = jo["systemId"].Value<long>();
-                        bool firstdiscover = jo["firstDiscover"].Value<bool>();
-                        DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal|DateTimeStyles.AssumeUniversal); // UTC time
-
-                        ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId, name: name);
-                        if (sc == null)
+                        foreach (JObject jo in logs)
                         {
-                            if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
-                                sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
+                            string name = jo["system"].Value<string>();
+                            string ts = jo["date"].Value<string>();
+                            long id = jo["systemId"].Value<long>();
+                            bool firstdiscover = jo["firstDiscover"].Value<bool>();
+                            DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
 
+                            ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId, name: name);
                             if (sc == null)
                             {
-                                sc = new SystemClass(name)
-                                {
-                                    EDSMID = id
-                                };
-                            }
-                        }
+                                if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit
+                                    sc = GetSystemsByName(name)?.FirstOrDefault(s => s.EDSMID == id);
 
-                        JournalFSDJump fsd = new JournalFSDJump(etutc, sc , EliteConfigInstance.InstanceConfig.DefaultMapColour, firstdiscover, (int)SyncFlags.EDSM);
-                        log.Add(fsd);
+                                if (sc == null)
+                                {
+                                    sc = new SystemClass(name)
+                                    {
+                                        EDSMID = id
+                                    };
+                                }
+                            }
+
+                            JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EliteConfigInstance.InstanceConfig.DefaultMapColour, firstdiscover, (int)SyncFlags.EDSM);
+                            log.Add(fsd);
+                        }
                     }
                 }
-            }
 
-            return msgnr;
+                return msgnr;
+            }
+            catch ( Exception e )
+            {
+                System.Diagnostics.Debug.WriteLine("Failed due to " + e.ToString());
+                return 499;     // BAD JSON
+            }
         }
 
-        private List<ISystem> GetSystemsByName(string systemName, bool uselike = false)
+        private List<ISystem> GetSystemsByName(string systemName, bool uselike = false)     // Protect yourself against bad JSON
         {
             string query = String.Format("api-v1/systems?systemName={0}&showCoordinates=1&showId=1&showInformation=1&showPermit=1", Uri.EscapeDataString(systemName));
 
@@ -526,6 +544,8 @@ namespace EliteDangerousCore.EDSM
 
         #region System Information
 
+        // protected against bad JSON
+
         public List<Tuple<ISystem,double>> GetSphereSystems(String systemName, double maxradius, double minradius)      // may return null
         {
             string query = String.Format("api-v1/sphere-systems?systemName={0}&radius={1}&minRadius={2}&showCoordinates=1&showId=1", Uri.EscapeDataString(systemName), maxradius , minradius);
@@ -563,8 +583,10 @@ namespace EliteDangerousCore.EDSM
                         return systems;
                     }
                 }
-                catch       // json may be garbage
-                { }
+                catch( Exception e)      // json may be garbage
+                {
+                    System.Diagnostics.Debug.WriteLine("Failed due to " + e.ToString());
+                }
             }
 
             return null;
@@ -619,7 +641,7 @@ namespace EliteDangerousCore.EDSM
 
         #region Body info
 
-        private JObject GetBodies(string sysName)
+        private JObject GetBodies(string sysName)       // protect yourself from bad JSON
         {
             string encodedSys = HttpUtility.UrlEncode(sysName);
 
@@ -636,7 +658,7 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
-        private JObject GetBodies(long edsmID)
+        private JObject GetBodies(long edsmID)          // protect yourself from bad JSON
         {
             string query = "bodies?systemId=" + edsmID.ToString();
             var response = RequestGet("api-system-v1/" + query, handleException: true);
@@ -674,7 +696,7 @@ namespace EliteDangerousCore.EDSM
                 , ret, handleException: true);
         }
 
-        public static List<JournalScan> GetBodiesList(long edsmid)
+        public static List<JournalScan> GetBodiesList(long edsmid)          // protected against bad json
         {
             try
             {
@@ -723,7 +745,7 @@ namespace EliteDangerousCore.EDSM
             return null;
         }
 
-        private static JObject ConvertFromEDSMBodies(JObject jo)
+        private static JObject ConvertFromEDSMBodies(JObject jo)        // protect yourself against bad JSON
         {
             JObject jout = new JObject
             {
@@ -877,14 +899,14 @@ namespace EliteDangerousCore.EDSM
 
         #region Journal Events
 
-        public List<string> GetJournalEventsToDiscard()
+        public List<string> GetJournalEventsToDiscard()     // protect yourself against bad JSON
         {
             string action = "api-journal-v1/discard";
             var response = RequestGet(action);
             return JArray.Parse(response.Body).Select(v => v.Str()).ToList();
         }
 
-        public List<JObject> SendJournalEvents(List<JObject> entries, out string errmsg)
+        public List<JObject> SendJournalEvents(List<JObject> entries, out string errmsg)    // protected against bad JSON
         {
             JArray message = new JArray(entries);
 
@@ -903,17 +925,27 @@ namespace EliteDangerousCore.EDSM
                 return null;
             }
 
-            JObject resp = JObject.Parse(response.Body);
-            errmsg = resp["msg"]?.ToString();
-
-            int msgnr = resp["msgnum"].Int();
-
-            if (msgnr >= 200 || msgnr < 100)
+            try
             {
+
+                JObject resp = JObject.Parse(response.Body);
+                errmsg = resp["msg"]?.ToString();
+
+                int msgnr = resp["msgnum"].Int();
+
+                if (msgnr >= 200 || msgnr < 100)
+                {
+                    return null;
+                }
+
+                return resp["events"].Select(e => (JObject)e).ToList();
+            }
+            catch(Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Failed due to " + e.ToString());
+                errmsg = e.ToString();
                 return null;
             }
-
-            return resp["events"].Select(e => (JObject)e).ToList();
         }
 
         #endregion
