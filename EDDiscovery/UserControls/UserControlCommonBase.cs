@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         // When a grid or splitter is open, displaynumber for its children based on its own number
         // 1050 is historical.. 1000..1049 was reserved for the previous history window splitters
 
-        protected int DisplayNumberOfSplitter(int numopenedinside)  // grid children are assigned this range..
+        protected int DisplayNumberOfSplitter(int numopenedinside)  // splitter children are assigned this range..
         { return 1050 + displaynumber * 100 + numopenedinside; }
 
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
