@@ -660,6 +660,30 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry prev = discoveryform.history.PreviousFrom(rightclicksystem, true);    // null can be passed in safely
 
+            if (rightclicksystem != null)
+            {
+                if (rightclicksystem.StartMarker)
+                {
+                    toolStripMenuItemStartStop.Text = "Clear Start marker";
+                }
+                else if (rightclicksystem.StopMarker)
+                {
+                    toolStripMenuItemStartStop.Text = "Clear Stop marker";
+                }
+                else if (rightclicksystem.isTravelling)
+                {
+                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations";
+                }
+                else
+                {
+                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations";
+                }
+            }
+            else
+            {
+                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
+            }
+
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclicksystem != null);
             selectCorrectSystemToolStripMenuItem.Enabled = (rightclicksystem != null);
