@@ -117,8 +117,8 @@ namespace EDDiscovery.UserControls
                 if (uccb != null)     // tab strip may not have a control set..
                 {
                     int tagid = (int)c.Tag;
-                    int displaynumber = DisplayNumberOfGridInstance(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                    //System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
+                    int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
+                    System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
 
                     uccb.Init(discoveryform, displaynumber);
                     uccb.SetCursor(ucursor_inuse);
@@ -227,12 +227,12 @@ namespace EDDiscovery.UserControls
                 tabstrip.OnPostCreateTab += (tab, ctrl, i) =>       // only called during dynamic creation..
                 {
                     int tabstripid = (int)tab.Tag;       // tag from tab strip
-                    int displaynumber = DisplayNumberOfGridInstance(tabstripid);                         // tab strip - use tag to remember display id which helps us save context.
+                    int displaynumber = DisplayNumberOfSplitter(tabstripid);                         // tab strip - use tag to remember display id which helps us save context.
                     UserControlCommonBase uc = ctrl as UserControlCommonBase;
 
                     if (uc != null)
                     {
-                        //System.Diagnostics.Debug.WriteLine("Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
+                        System.Diagnostics.Debug.WriteLine("Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
                         uc.Init(discoveryform, displaynumber);
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();
