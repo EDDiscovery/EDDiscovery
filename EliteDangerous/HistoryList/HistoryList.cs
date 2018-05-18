@@ -926,6 +926,8 @@ namespace EliteDangerousCore
                 }
             }
 
+            reportProgress(-1, "Done");
+
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
             hist.CommanderId = CurrentCommander;
