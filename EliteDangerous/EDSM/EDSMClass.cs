@@ -886,6 +886,13 @@ namespace EliteDangerousCore.EDSM
                 startype = "Unknown";
             else if (EDSM2StarNames.ContainsKey(startype))
                 startype = EDSM2StarNames[startype];
+            else if (startype.StartsWith("White Dwarf (", StringComparison.InvariantCultureIgnoreCase))
+            {
+                int start = startype.IndexOf("(") + 1;
+                int len = startype.IndexOf(")") - start;
+                if (len > 0)
+                    startype = startype.Substring(start, len);
+            }
             else   // Remove extra text from EDSM   ex  "F (White) Star" -> "F"
             {
                 int index = startype.IndexOf("(");
