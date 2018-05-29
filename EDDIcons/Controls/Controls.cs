@@ -222,6 +222,10 @@ namespace EDDiscovery.Icons
         #region EDDiscovery.UserControls.UserControlPlot
         public static Image Plot_Dots { get { return IconSet.GetIcon("Controls.Plot.Dots"); } }
         #endregion
+        #region EDDiscovery.UserControls.UserControlSysInfo
+        public static Image firstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
+        public static Image notfirstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.notfirstdiscover"); } }
+        #endregion
         #region TabStrip
         public static Image TabStrip_ArrowLeft { get { return IconSet.GetIcon("Controls.TabStrip.ArrowLeft"); } }
         public static Image TabStrip_ArrowRight { get { return IconSet.GetIcon("Controls.TabStrip.ArrowRight"); } }
