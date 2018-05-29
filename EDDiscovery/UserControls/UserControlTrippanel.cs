@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;
+            discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
 
             showEDSMStartButtonsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showedsmbut", true);
             showEDSMStartButtonsToolStripMenuItem.Click += Optionchanged_Click;
@@ -74,6 +75,7 @@ namespace EDDiscovery.UserControls
             showTravelledDistanceToolStripMenuItem.Click += Optionchanged_Click;
         }
 
+
         public override void Closing()
         {
             discoveryform.OnHistoryChange -= Display;
@@ -93,7 +95,7 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
-            displayLastFSDOrScoop(lastHE, lastFSD);
+            DisplayState(lastHE, lastFSD);
         }
 
         #region Display
@@ -114,12 +116,18 @@ namespace EDDiscovery.UserControls
                 hex = lfs;
             if (fuel != null && fuel.EventTimeUTC >= hex.EventTimeUTC)
                 hex = fuel;
-            displayLastFSDOrScoop(hex, fsd);
+            DisplayState(hex, fsd);
         }
 
         public void NewTarget(Object sender)
         {
-            displayLastFSDOrScoop(lastHE, lastFSD);
+            DisplayState(lastHE, lastFSD);
+        }
+
+        private void Discoveryform_OnEDSMSyncComplete(int arg1, string arg2)
+        {
+            //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
+            DisplayState(lastHE, lastFSD);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
@@ -127,7 +135,7 @@ namespace EDDiscovery.UserControls
             Display(hl);
         }
 
-        void displayLastFSDOrScoop(HistoryEntry he, HistoryEntry lastfsd)
+        void DisplayState(HistoryEntry he, HistoryEntry lastfsd)
         {
             pictureBox.ClearImageList();
 
@@ -179,7 +187,16 @@ namespace EDDiscovery.UserControls
                         line += " -> Target not set";
                 }
 
-                pictureBox.AddTextAutoSize(new Point(coltext, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
+
+                int line1hpos = coltext;
+                if ( firstdiscovery )
+                {
+                    pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer", false);
+                    line1hpos += 24;
+                }
+
+                pictureBox.AddTextAutoSize(new Point(line1hpos, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
                 line = "";
 
@@ -217,7 +234,7 @@ namespace EDDiscovery.UserControls
 
                         double boostval = 1;
 
-                        if (lastJet != null && lastJet.EventTimeLocal > lastfsd.EventTimeLocal)
+                        if (lastJet != null && lastfsd != null && lastJet.EventTimeLocal > lastfsd.EventTimeLocal)
                             boostval = (lastJet.journalEntry as EliteDangerousCore.JournalEvents.JournalJetConeBoost).BoostValue;
 
                         string range = "";
@@ -290,7 +307,7 @@ namespace EDDiscovery.UserControls
 
         private void Optionchanged_Click(object sender, EventArgs e)
         {
-            displayLastFSDOrScoop(lastHE, lastFSD);
+            DisplayState(lastHE, lastFSD);
         }
 
         #endregion
