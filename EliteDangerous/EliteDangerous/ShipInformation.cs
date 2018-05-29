@@ -578,45 +578,69 @@ namespace EliteDangerousCore
 
         public string ToJSONCoriolis(out string errstring)
         {
-            JObject jo = new JObject();
-
-            jo["name"] = ShipFD; 
-
-            JObject mlist = new JObject();
-
             errstring = "";
 
+            JObject jo = new JObject();
+
+            jo["event"] = "Loadout";
+            jo["Ship"] = ShipFD;
+
+            JArray mlist = new JArray();
             foreach (ShipModule sm in Modules.Values)
             {
                 JObject module = new JObject();
 
                 ShipModuleData.ShipModule si = ShipModuleData.Instance.GetItemProperties(sm.ItemFD);
 
-                if (si.ModuleID == 0)   
+                if (si.ModuleID == 0)
                 {
                     errstring += sm.Item + ":" + sm.ItemFD + Environment.NewLine;
                 }
                 else
                 {
-                    if (si.ModuleID > 0)   // -1 is no EDID but still export
-                        module["id"] = si.ModuleID;
+                    module["Item"] = sm.ItemFD;
+                    module["Slot"] = sm.SlotFD;
+                    module["On"] = sm.Enabled.HasValue ? sm.Enabled : true;
+                    module["Priority"] = sm.Priority.HasValue ? sm.Priority : 0;
 
-                    module["name"] = sm.ItemFD;
-                    module["on"] = sm.Enabled.HasValue ? sm.Enabled : true;
-                    module["priority"] = sm.Priority.HasValue ? sm.Priority : 0;
+                    if (sm.Engineering != null)
+                        module["Engineering"] = ToJsonCoriolisEngineering(sm);
 
-                    JObject minfo = new JObject();
-                    minfo["module"] = module;
-
-                    mlist[sm.SlotFD] = minfo;
+                    mlist.Add(module);
                 }
             }
 
-            jo["modules"] = mlist;
+            jo["Modules"] = mlist;
 
             System.Diagnostics.Debug.WriteLine("Export " + jo.ToString(Newtonsoft.Json.Formatting.Indented));
 
             return jo.ToString(Newtonsoft.Json.Formatting.Indented);
+        }
+
+        private JObject ToJsonCoriolisEngineering(ShipModule module)
+        {
+            JObject engineering = new JObject();
+
+            engineering["BlueprintID"] = module.Engineering.BlueprintID;
+            engineering["BlueprintName"] = module.Engineering.BlueprintName;
+            engineering["Level"] = module.Engineering.Level;
+            engineering["Quality"] = module.Engineering.Quality;
+
+            JArray modifiers = new JArray();
+            foreach (ShipModule.EngineeringModifiers modifier in module.Engineering.Modifiers)
+            {
+                JObject jmodifier = new JObject();
+                jmodifier["Label"] = modifier.Label;
+                jmodifier["Value"] = modifier.Value;
+                jmodifier["OriginalValue"] = modifier.OriginalValue;
+                jmodifier["LessIsGood"] = modifier.LessIsGood;
+                modifiers.Add(jmodifier);
+            }
+
+
+            engineering["Modifiers"] = modifiers;
+            engineering["ExperimentalEffect"] = module.Engineering.ExperimentalEffect;
+            return engineering;
         }
 
         public string ToJSONLoadout()
