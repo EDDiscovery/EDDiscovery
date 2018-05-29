@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
 
             object[] rowobj = { typename,
                                 sm.Item, sm.Slot, ammo,
-                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant()+"t") : "",
+                                sm.Mass > 0 ? (sm.Mass.ToStringInvariant("0.#")+"t") : "",
                                 sm.Engineering?.FriendlyBlueprintName ?? "",
                                 value, sm.PE() };
 
