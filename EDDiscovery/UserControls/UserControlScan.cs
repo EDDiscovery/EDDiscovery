@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
                 Color fillc = Color.Yellow;
                 string abv = sd.Key.Substring(0, 1);
 
-                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(sd.Key);
+                MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(sd.Key);
 
                 if (mc != null)
                 {
@@ -556,7 +556,7 @@ namespace EDDiscovery.UserControls
 
                     if (checkBoxCustomHideFullMats.Checked)                 // check full
                     {
-                        int? limit = MaterialCommodityDB.MaterialLimit(mc);
+                        int? limit = MaterialCommodityData.MaterialLimit(mc);
                         MaterialCommodities matnow = last_he.MaterialCommodity.Find(mc.name);
 
                         // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;

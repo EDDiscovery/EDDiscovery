@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
+            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);

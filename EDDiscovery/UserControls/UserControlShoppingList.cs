@@ -25,7 +25,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using EliteDangerousCore.JournalEvents;
-using static EliteDangerousCore.MaterialCommodityDB;
+using static EliteDangerousCore.MaterialCommodityData;
 
 namespace EDDiscovery.UserControls
 {
@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;
-                        MaterialCommodityDB md =  GetCachedMaterial(mat.Key);
+                        MaterialCommodityData md =  GetCachedMaterial(mat.Key);
                         int max = MaterialLimit(md).Value;
                         wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
                                                                         mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);

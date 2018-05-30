@@ -171,7 +171,7 @@ namespace EDDiscovery
 
             // open all the major tabs except the built in ones
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
-            MaterialCommodityDB.SetUpInitialTable();
+            MaterialCommodityData.SetUpInitialTable();
 
 
             // Tab reset Setup

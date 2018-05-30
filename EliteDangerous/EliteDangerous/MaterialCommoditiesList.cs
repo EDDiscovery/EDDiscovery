@@ -27,9 +27,9 @@ namespace EliteDangerousCore
     {
         public int count { get; set; }
         public double price { get; set; }
-        public MaterialCommodityDB Details { get; set; }
+        public MaterialCommodityData Details { get; set; }
 
-        public MaterialCommodities(MaterialCommodityDB c)
+        public MaterialCommodities(MaterialCommodityData c)
         {
             count = scratchpad = 0;
             price = 0;
@@ -51,10 +51,10 @@ namespace EliteDangerousCore
         public Color colour { get { return Details.colour; } }
 
         #region Static properties and methods linking to MaterialCommodity
-        public static string CommodityCategory { get { return MaterialCommodityDB.CommodityCategory; } }
-        public static string MaterialRawCategory { get { return MaterialCommodityDB.MaterialRawCategory; } }
-        public static string MaterialEncodedCategory { get { return MaterialCommodityDB.MaterialEncodedCategory; } }
-        public static string MaterialManufacturedCategory { get { return MaterialCommodityDB.MaterialManufacturedCategory; } }
+        public static string CommodityCategory { get { return MaterialCommodityData.CommodityCategory; } }
+        public static string MaterialRawCategory { get { return MaterialCommodityData.MaterialRawCategory; } }
+        public static string MaterialEncodedCategory { get { return MaterialCommodityData.MaterialEncodedCategory; } }
+        public static string MaterialManufacturedCategory { get { return MaterialCommodityData.MaterialManufacturedCategory; } }
         #endregion
 
         public int scratchpad { get; set; }        // for synthesis dialog..
@@ -74,7 +74,7 @@ namespace EliteDangerousCore
 
         public bool ContainsRares() // function on purpose
         {
-            return list.FindIndex(x => x.type.Equals(MaterialCommodityDB.CommodityTypeRareGoods) && x.count > 0) != -1;
+            return list.FindIndex(x => x.type.Equals(MaterialCommodityData.CommodityTypeRareGoods) && x.count > 0) != -1;
         }
 
         public MaterialCommoditiesList Clone(bool clearzeromaterials, bool clearzerocommodities)       // returns a new copy of this class.. all items a copy
@@ -150,7 +150,7 @@ namespace EliteDangerousCore
             }
             else
             {
-                MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname);    // get a MCDB of this
+                MaterialCommodityData mcdb = MaterialCommodityData.EnsurePresent(cat,fdname);    // get a MCDB of this
                 MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
 
