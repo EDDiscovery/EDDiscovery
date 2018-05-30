@@ -14,10 +14,83 @@ namespace NetLogEntry
     {
         public class EngEntry
         {
+            public string corolisclass;
+            public string corolisclasstext;
+            public string corolisfrontierid;
             public string fdname;
             public string grade;
             public string englist;
         }
+
+        public class NameConvert
+        {
+            public string c; public string cnv; public string frontier;
+            public NameConvert(string a, string b, string f = "") { c = a; cnv = b; frontier = f.HasChars() ? f : b.Replace(" ", ""); }
+        }
+
+        public static NameConvert[] conversions = new NameConvert[]
+        {
+            new NameConvert("am", "Auto Field-Maintenance Unit","AFM"),       // from corolis.  Third column is to match it against frontier data fdname first part
+            new NameConvert("bh", "Bulkheads", "Armour"),
+            new NameConvert("bl", "Beam Laser"),
+            new NameConvert("bsg", "Bi-Weave Shield Generator"),
+            new NameConvert("c", "Cannon"),
+            new NameConvert("cc", "Collector Limpet Controller", "CollectionLimpet"),
+            new NameConvert("ch", "Chaff Launcher"),
+            new NameConvert("cr", "Cargo Rack"),
+            new NameConvert("cs", "Manifest Scanner", "CargoScanner"),
+            new NameConvert("dc", "Docking Computer"),
+            new NameConvert("ec", "Electronic Countermeasure","ECM"),
+            new NameConvert("fc", "Fragment Cannon","FragCannon"),
+            new NameConvert("fh", "Fighter Hangar"),
+            new NameConvert("fi", "FSD Interdictor","FSDinterdictor"),
+            new NameConvert("fs", "Fuel Scoop"),
+            new NameConvert("fsd", "Frame Shift Drive","FSD"),
+            new NameConvert("ft", "Fuel Tank"),
+            new NameConvert("fx", "Fuel Transfer Limpet Controller","FuelTransferLimpet"),
+            new NameConvert("hb", "Hatch Breaker Limpet Controller","HatchBreakerLimpet"),
+            new NameConvert("hr", "Hull Reinforcement Package", "HullReinforcement"),
+            new NameConvert("hs", "Heat Sink Launcher"),
+            new NameConvert("kw", "Kill Warrant Scanner"),
+            new NameConvert("ls", "Life Support"),
+            new NameConvert("mc", "Multi cannon"),
+            new NameConvert("axmc", "AX Multi-cannon"),
+            new NameConvert("ml", "Mining Laser"),
+            new NameConvert("mr", "Missile Rack","Missile"),
+            new NameConvert("axmr", "AX Missile Rack"),
+            new NameConvert("mrp", "Module Reinforcement Package"),
+            new NameConvert("nl", "Mine Launcher","Mine"),
+            new NameConvert("pa", "Plasma Accelerator"),
+            new NameConvert("pas", "Planetary Approach Suite"),
+            new NameConvert("pc", "Prospector Limpet Controller","ProspectingLimpet"),
+            new NameConvert("pce", "Economy Class Passenger Cabin"),
+            new NameConvert("pci", "Business Class Passenger Cabin"),
+            new NameConvert("pcm", "First Class Passenger Cabin"),
+            new NameConvert("pcq", "Luxury Passenger Cabin"),
+            new NameConvert("pd", "Power Distributor"),
+            new NameConvert("pl", "Pulse Laser"),
+            new NameConvert("po", "Point Defence"),
+            new NameConvert("pp", "Power Plant"),
+            new NameConvert("psg", "Prismatic Shield Generator"),
+            new NameConvert("pv", "Planetary Vehicle Hangar"),
+            new NameConvert("rf", "Refinery", "Refineries"),
+            new NameConvert("rfl", "Remote Release Flak Launcher"),
+            new NameConvert("rg", "Rail Gun"),
+            new NameConvert("s", "Sensor"),
+            new NameConvert("sb", "Shield Booster"),
+            new NameConvert("sc", "Stellar Scanners"),
+            new NameConvert("scb", "Shield Cell Bank"),
+            new NameConvert("sfn", "Shutdown Field Neutraliser"),
+            new NameConvert("sg", "Shield Generator"),
+            new NameConvert("ss", "Surface Scanner"),
+            new NameConvert("t", "thrusters","Engine"),
+            new NameConvert("tp", "Torpedo Pylon", "Torpedo"),
+            new NameConvert("ul", "Burst Laser"),
+            new NameConvert("ws", "Frame Shift Wake Scanner", "WakeScanner"),
+            new NameConvert("rpl", "Repair Limpet Controller"),
+            new NameConvert("xs", "Xeno Scanner"),
+
+        };
 
         static public List<EngEntry> GetEng(string rootpath)
         {
@@ -32,6 +105,8 @@ namespace NetLogEntry
 
                 foreach (JProperty m in modulesjo.Children())
                 {
+                    string clsname = m.Name;
+
                     JObject jm = (JObject)m.First;
 
                     JObject blueprints = (JObject)jm["blueprints"];
@@ -56,9 +131,12 @@ namespace NetLogEntry
                             {
                                 englist = englist.AppendPrePad(s, ",");
                             }
-                            list.Add(new EngEntry() { fdname = bpname, grade = grname, englist = englist });
 
-                            //Console.WriteLine("Eng " + bpname + " : " + grname + " : " + englist);
+                            NameConvert namec = Array.Find(conversions, x => x.c == clsname);
+                            list.Add(new EngEntry() { corolisclass = clsname, corolisclasstext = namec.cnv, corolisfrontierid = namec.frontier,
+                                fdname = bpname, grade = grname, englist = englist });
+
+                          //  Console.WriteLine("Eng " + clsname + " : " + namec.frontier + ":" + bpname + " : " + grname + " : " + englist);
 
                         }
 
@@ -132,7 +210,7 @@ namespace NetLogEntry
 
                             string name = fdname.SplitCapsWordFull();
                             string cat = name.Word(new char[] { ' ' }, 1);
-                            string classline = "new EngineeringRecipe(\"" + name + "\", \"" + indlist + "\", \"" + cat + "\", \"" + gr.Name + "\", \"" + englist + "\" }";
+                            string classline = "new EngineeringRecipe(\"" + name + "\", \"" + indlist + "\", \"" + cat + "\", \"" + gr.Name + "\", \"" + englist + "\" ),";
 
                             ret += classline + Environment.NewLine;
                         }

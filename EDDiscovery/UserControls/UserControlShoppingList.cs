@@ -256,9 +256,9 @@ namespace EDDiscovery.UserControls
                 if (showMaxInjections)
                 {
                     Recipes.ResetUsed(mcl);
-                    Tuple<int, int, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    Tuple<int, int, string, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
                     wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
                 }
 

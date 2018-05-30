@@ -74,9 +74,9 @@ namespace NetLogEntry
 
                 if (level != null)
                 {
-                    fdname = fdname.Substring(0,fdname.LastIndexOf('_'));
-
-                    //Console.WriteLine(name + " : " + descr + ":" + matid1.Value + "x" + matid1count.Value);
+                    fdname = fdname.Substring(0, fdname.LastIndexOf('_'));      //examples, AFM_Shielded, Armour_Heavy Duty
+                    string fdfront = fdname.Substring(0, fdname.IndexOf('_'));
+                    string fdback = fdname.Substring(fdname.IndexOf('_')+1).Replace(" ","");
 
                     string ing = MatName(matid1, matid1count, filemats);
                     ing = ing.AppendPrePad(MatName(matid2, matid2count, filemats), ",");
@@ -86,44 +86,42 @@ namespace NetLogEntry
                     if (cat == "FS Dinterdictor")
                         cat = "FSD Interdictor";
 
-                    string lookupname = fdname;
-                    lookupname = lookupname.Replace(" ", "");
-                    if (lookupname.StartsWith("BeamLaser_") || lookupname.StartsWith("BurstLaser_") || lookupname.StartsWith("Cannon_") ||
-                                lookupname.StartsWith("FragCannon_") || lookupname.StartsWith("Mine_") || lookupname.StartsWith("Missile_") ||
-                                lookupname.StartsWith("Multicannon_") || lookupname.StartsWith("PlasmaAccelerator_") ||
-                                lookupname.StartsWith("PulseLaser_") || lookupname.StartsWith("RailGun") || lookupname.StartsWith("Torpedo")
-                        )
-                        lookupname = "Weapon" + lookupname.Substring(lookupname.IndexOf("_"));
-                    else if (lookupname.StartsWith("CargoScanner_FastScan"))
-                        lookupname = "Sensor_CargoScanner_FastScan";
-                    else if (lookupname.StartsWith("CargoScanner_LongRange"))
-                        lookupname = "Sensor_CargoScanner_LongRange";
-                    else if (lookupname.StartsWith("CargoScanner_WideAngle"))
-                        lookupname = "Sensor_CargoScanner_WideAngle";
-                    else if (lookupname.StartsWith("SurfaceScanner_"))
-                        lookupname = "Sensor_SurfaceScanner" + lookupname.Substring(lookupname.IndexOf("_"));
-                    else if (lookupname.StartsWith("WakeScanner_") && !(lookupname.Contains("Light") || lookupname.Contains("Reinforced") || lookupname.Contains("Shielded")))
-                        lookupname = "Sensor_WakeScanner" + lookupname.Substring(lookupname.IndexOf("_"));
-                    else if (lookupname.StartsWith("KillWarrantScanner_FastScan") || lookupname.StartsWith("KillWarrantScanner_WideAngle"))
-                        lookupname = "Sensor_KillWarrantScanner" + lookupname.Substring(lookupname.IndexOf("_"));
-                    else if (lookupname.StartsWith("Sensor_"))
-                        lookupname = "Sensor_Sensor" + lookupname.Substring(lookupname.IndexOf("_"));
+                    List<CorolisEngineering.EngEntry> modulelist = (from x in englist where x.corolisfrontierid == fdfront select x).ToList();
 
-                    CorolisEngineering.EngEntry eng = englist.Find(x => x.fdname == lookupname && x.grade == level.ToString());
+                    string engnames = "Not Known";
+
+                    if ( modulelist.Count == 0 )
+                    {
+                        Console.WriteLine("No matching corolis module found " + fdname + ":" + fdfront);
+                    }
+                    else
+                    {
+                        CorolisEngineering.EngEntry anylevelentry = (from x in modulelist where x.fdname.IndexOf(fdback, StringComparison.InvariantCultureIgnoreCase) >= 0 select x).FirstOrDefault();
+                        CorolisEngineering.EngEntry entry = (from x in modulelist where x.fdname.IndexOf(fdback, StringComparison.InvariantCultureIgnoreCase) >= 0 && x.grade == level.ToString() select x).FirstOrDefault();
+
+                        if (entry == null)
+                        {
+                            if ( anylevelentry!=null )
+                                Console.WriteLine("Possible mismatched grade for " + fdname + ":" + fdfront + ":" + fdback + " at " + level);
+                            else
+                                Console.WriteLine("No matching engineering found for " + fdname + ":" + fdfront + ":" + fdback);
+
+                            modulelist = null;
+                        }
+                        else
+                        {
+                            //Console.WriteLine("engineering found for FDName: " + fdname + ": Entry " + entry.fdname);
+                            engnames = entry.englist;
+                        }
+                    }
 
                     if (ukname.StartsWith("Misc "))
                         ukname = ukname.Substring(5);
 
-                    if (eng != null)
+                    if (modulelist != null)
                     {
-                        string engnames = eng.englist;
-                        string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" }";
+                        string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
                         ret += classline + Environment.NewLine;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Corolis no data for " + fdname + "," + level);
-
                     }
                 }
             }
