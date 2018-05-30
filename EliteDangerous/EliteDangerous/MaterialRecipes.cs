@@ -118,11 +118,11 @@ namespace EliteDangerousCore
                 {
                     string dispName;
                     if (mi > 0)
-                    { dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname; }
+                    { dispName = (list[mi].category == MaterialCommodityData.MaterialEncodedCategory || list[mi].category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname; }
                     else
                     {
-                        MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
-                        dispName = (db.category == MaterialCommodityDB.MaterialEncodedCategory || db.category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + db.name : db.shortname;
+                        MaterialCommodityData db = MaterialCommodityData.GetCachedMaterialByShortName(ingredient);
+                        dispName = (db.category == MaterialCommodityData.MaterialEncodedCategory || db.category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + db.name : db.shortname;
                     }
                     string s = (need - got).ToStringInvariant() + dispName;
                     if (needed.Length == 0)
@@ -145,7 +145,7 @@ namespace EliteDangerousCore
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.count[i] * made;
                     list[mi].scratchpad -= used;
-                    string dispName = (list[mi].category == MaterialCommodityDB.MaterialEncodedCategory || list[mi].category == MaterialCommodityDB.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
+                    string dispName = (list[mi].category == MaterialCommodityData.MaterialEncodedCategory || list[mi].category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
                     usedstr.AppendPrePad(used.ToStringInvariant() + dispName, ",");
                 }
 
@@ -177,7 +177,7 @@ namespace EliteDangerousCore
                             shoppingList[shopentry].scratchpad += (need - got);
                         else
                         {
-                            MaterialCommodityDB db = MaterialCommodityDB.GetCachedMaterialByShortName(ingredient);
+                            MaterialCommodityData db = MaterialCommodityData.GetCachedMaterialByShortName(ingredient);
                             if (db != null)       // MUST be there, its well know, but will check..
                             {
                                 MaterialCommodities mc = new MaterialCommodities(db);        // make a new entry
@@ -198,7 +198,7 @@ namespace EliteDangerousCore
 
         public static string UsedInSynthesis(string name)
         {
-            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(name);
             return Recipes.UsedInSynthesisAbv(mc?.shortname ?? "--");
         }
 

@@ -77,7 +77,7 @@ namespace NetLogEntry
         {
             string ret = "";
 
-            EliteDangerousCore.MaterialCommodityDB.SetUpInitialTable();
+            EliteDangerousCore.MaterialCommodityData.SetUpInitialTable();
 
             List<EngEntry> list = GetEng(rootpath);
             
@@ -110,7 +110,7 @@ namespace NetLogEntry
 
                         foreach (JProperty hp in ingredients.Children())
                         {
-                            EliteDangerousCore.MaterialCommodityDB mat = EliteDangerousCore.MaterialCommodityDB.GetCachedMaterialByName(hp.Name);
+                            EliteDangerousCore.MaterialCommodityData mat = EliteDangerousCore.MaterialCommodityData.GetCachedMaterialByName(hp.Name);
                             if (mat == null)
                                 Console.WriteLine(hp.Name + " **** Not found in " + fdname + " " + grname);
                             else

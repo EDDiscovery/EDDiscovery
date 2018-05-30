@@ -551,7 +551,7 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             StarScan.LoadBodyDesignationMap();
-            MaterialCommodityDB.SetUpInitialTable();
+            MaterialCommodityData.SetUpInitialTable();
 
             SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
 

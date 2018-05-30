@@ -24,7 +24,7 @@ namespace NetLogEntry
                 if (matrow >= 0)
                 {
                     string name = mat[matrow]["F"].Trim();
-                    EliteDangerousCore.MaterialCommodityDB mc = EliteDangerousCore.MaterialCommodityDB.GetCachedMaterialByName(name);
+                    EliteDangerousCore.MaterialCommodityData mc = EliteDangerousCore.MaterialCommodityData.GetCachedMaterialByName(name);
 
                     if (mc != null)
                         return matcount.Value.ToString() + mc.shortname; //+ "(" + mc.name + ")";
@@ -38,7 +38,7 @@ namespace NetLogEntry
 
         static public string Process(string rootpath)            // overall index of items
         {
-            EliteDangerousCore.MaterialCommodityDB.SetUpInitialTable();
+            EliteDangerousCore.MaterialCommodityData.SetUpInitialTable();
             string ret = "// DATA FROM Frontiers excel spreadsheet with corolis modules.json to give engineers names" + Environment.NewLine;
             ret += "// DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this" + Environment.NewLine;
             ret += "" + Environment.NewLine;
