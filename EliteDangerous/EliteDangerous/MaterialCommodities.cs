@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore.DB;
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -64,7 +64,14 @@ namespace EliteDangerousCore
             int i = lst.FindIndex(x => x.shortname.Equals(shortname));
             return i >= 0 ? lst[i] : null;
         }
-        
+
+        public static MaterialCommodityDB GetCachedMaterialByName(string name)
+        {
+            List<MaterialCommodityDB> lst = cachelist.Values.ToList();
+            int i = lst.FindIndex(x => x.name.Equals(name,System.StringComparison.InvariantCultureIgnoreCase));
+            return i >= 0 ? lst[i] : null;
+        }
+
         public MaterialCommodityDB()
         {
         }
@@ -100,7 +107,7 @@ namespace EliteDangerousCore
             cachelist[this.fdname.ToLower()] = this;
         }
 
-        public static MaterialCommodityDB EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn)  // By FDNAME
+        public static MaterialCommodityDB EnsurePresent(string cat, string fdname)  // By FDNAME
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {

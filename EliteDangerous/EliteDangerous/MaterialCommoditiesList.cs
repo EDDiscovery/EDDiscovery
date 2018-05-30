@@ -150,7 +150,7 @@ namespace EliteDangerousCore
             }
             else
             {
-                MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname, conn);    // get a MCDB of this
+                MaterialCommodityDB mcdb = MaterialCommodityDB.EnsurePresent(cat,fdname);    // get a MCDB of this
                 MaterialCommodities mc = new MaterialCommodities(mcdb);        // make a new entry
                 list.Add(mc);
 
