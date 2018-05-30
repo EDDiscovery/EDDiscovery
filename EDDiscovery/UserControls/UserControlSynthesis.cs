@@ -104,6 +104,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[0].Value = r.name; // debug rno + ":" + r.name;
                     row.Cells[1].Value = r.level;
                     row.Cells[6].Value = r.ingredientsstring;
+                    row.Cells[6].ToolTipText = r.ingredientsstringlong;
                     row.Tag = rno;
                     row.Visible = false;
                 }
@@ -250,7 +251,7 @@ namespace EDDiscovery.UserControls
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        Tuple<int, int, string> res = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string, string> res = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -258,6 +259,7 @@ namespace EDDiscovery.UserControls
                             row.Cells[3].Value = Wanted[rno].ToStringInvariant();
                             row.Cells[4].Value = res.Item2.ToStringInvariant();
                             row.Cells[5].Value = res.Item3;
+                            row.Cells[5].ToolTipText = res.Item4;
                         }
                     }
                     if (Wanted[rno] > 0 && (dataGridViewSynthesis.Rows[i].Visible || isEmbedded))
