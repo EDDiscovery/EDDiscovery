@@ -95,21 +95,75 @@ namespace BaseUtils
 
     public class CVSFile
     {
-        public class Line
+        public class Row
         {
-            public Line()
+            public Row()
             {
-                cells = new List<string>();
+                Cells = new List<string>();
             }
 
-            public List<string> cells;
+            public List<string> Cells;
+
+            static public int CellNameToIndex(string s)
+            {
+                s = s.ToLower();
+                if (s.Length == 1)      // later, cope with An, Bn etc.
+                    return s[0] - 'a';
+                else
+                    return int.MaxValue;
+            }
+
+            public string this[int cell]
+            {
+                get
+                {
+                    return (cell < Cells.Count) ? Cells[cell] : null;
+                }
+            }
+
+            public string this[string cellname]
+            {
+                get
+                {
+                    int cell = CellNameToIndex(cellname);
+                    return (cell < Cells.Count) ? Cells[cell] : null;
+                }
+            }
+
+            public int? GetInt(int cell)
+            {
+                return cell < Cells.Count ? Cells[cell].InvariantParseIntNull() : null;
+            }
+            public int? GetInt(string cellname)
+            {
+                int cell = CellNameToIndex(cellname);
+                return cell < Cells.Count ? Cells[cell].InvariantParseIntNull() : null;
+            }
+
+            public long? GetLong(int cell)
+            {
+                return cell < Cells.Count ? Cells[cell].InvariantParseLongNull() : null;
+            }
+            public long? GetLong(string cellname)
+            {
+                int cell = CellNameToIndex(cellname);
+                return cell < Cells.Count ? Cells[cell].InvariantParseLongNull() : null;
+            }
         }
 
-        public List<Line> rows;
+        public List<Row> Rows;
+
+        public Row this[int row]
+        {
+            get
+            {
+                return (row < Rows.Count) ? Rows[row] : null;
+            }
+        }
 
         public bool Read(string file)
         {
-            rows = new List<Line>();
+            Rows = new List<Row>();
 
             try
             {
@@ -121,22 +175,22 @@ namespace BaseUtils
 
                         CVSRead.State st;
 
-                        Line l = new Line();
+                        Row l = new Row();
 
                         string str;
                         while ((st = cvs.Next(out str)) != CVSRead.State.EOF)
                         {
-                            l.cells.Add(str);
+                            l.Cells.Add(str);
 
                             if (st == CVSRead.State.ItemEOL)
                             {
-                                rows.Add(l);
-                                l = new Line();
+                                Rows.Add(l);
+                                l = new Row();
                             }
                         }
 
-                        if (l.cells.Count > 0)
-                            rows.Add(l);
+                        if (l.Cells.Count > 0)
+                            Rows.Add(l);
 
                         return true;
                     }
@@ -146,6 +200,52 @@ namespace BaseUtils
             {
                 return false;
             }
+        }
+
+        public Tuple<int, int> Find(string s, StringComparison cmp = StringComparison.InvariantCulture)
+        {
+            for (int r = 0; r < Rows.Count; r++)
+            {
+                for (int c = 0; c < Rows[r].Cells.Count; c++)
+                {
+                    if (Rows[r].Cells[c].Equals(s, cmp))
+                        return new Tuple<int, int>(r, c);
+                }
+            }
+
+            return null;
+        }
+
+        public int FindInRow(int r, string s, StringComparison cmp = StringComparison.InvariantCulture)
+        {
+            if (r < Rows.Count)
+            {
+                for (int c = 0; c < Rows[r].Cells.Count; c++)
+                {
+                    if (Rows[r].Cells[c].Equals(s, cmp))
+                        return c;
+                }
+            }
+
+            return -1;
+        }
+
+        public int FindInColumn(string cellname, string s, StringComparison cmp = StringComparison.InvariantCulture)
+        {
+            int cell = Row.CellNameToIndex(cellname);
+            return cell != int.MaxValue ? FindInColumn(cell, s, cmp) : -1;
+        }
+
+        public int FindInColumn(int c, string s, StringComparison cmp)
+        {
+            for (int r = 0; r < Rows.Count; r++)
+            {
+                string cv = Rows[r].Cells[c];
+                if (cv != null && cv.Equals(s, cmp))
+                    return r;
+            }
+
+            return -1;
         }
     }
 }
