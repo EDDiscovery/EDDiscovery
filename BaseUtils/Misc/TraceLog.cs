@@ -73,7 +73,9 @@ namespace BaseUtils
 
         public static void Init()
         {
-            string logname = Path.Combine(logroot, "Log", $"Trace_{DateTime.Now.ToString("yyyyMMddHHmmss")}");
+            System.Diagnostics.Debug.WriteLine("Trace log initialised");
+
+            string logname = Path.Combine(logroot, "Log", $"Trace_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}");
             LogFileBaseName = logname;
             LogFileWriterThread = new Thread(LogWriterThreadProc);
             LogFileWriterThread.IsBackground = true;
@@ -124,7 +126,7 @@ namespace BaseUtils
                                 }
                                 else
                                 {
-                                    writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] {msg}");
+                                    writer.WriteLine($"[{DateTime.UtcNow.ToStringZulu()}] {msg}");
                                     writer.Flush();
                                     msgrepeats[msg] = 0;
                                     linenum++;
@@ -141,10 +143,10 @@ namespace BaseUtils
                                 {
                                     if (rptkvp.Value >= 1)
                                     {
-                                        writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] {rptkvp.Key}");
+                                        writer.WriteLine($"[{DateTime.UtcNow.ToStringZulu()}] {rptkvp.Key}");
                                         if (rptkvp.Value > 1)
                                         {
-                                            writer.WriteLine($"[{DateTime.UtcNow.ToString("u")}] Last message repeated {(rptkvp.Value)} times");
+                                            writer.WriteLine($"[{DateTime.UtcNow.ToStringZulu()}] Last message repeated {(rptkvp.Value)} times");
                                         }
                                     }
                                 }

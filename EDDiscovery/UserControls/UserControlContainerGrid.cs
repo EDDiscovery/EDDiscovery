@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
             int dnum = DisplayNumberOfGrid(numopenedinside);
-            System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
+            System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 

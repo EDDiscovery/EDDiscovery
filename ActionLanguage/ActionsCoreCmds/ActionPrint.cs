@@ -43,7 +43,7 @@ namespace ActionLanguage
             if (ap.functions.ExpandString(UserData.ReplaceEscapeControlChars(), out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
             {
                 ap.actioncontroller.LogLine(res);
-                System.Diagnostics.Debug.WriteLine("PRINT " + res);
+                System.Diagnostics.Trace.WriteLine("PRINT " + res);
             }
             else
                 ap.ReportError(res);
