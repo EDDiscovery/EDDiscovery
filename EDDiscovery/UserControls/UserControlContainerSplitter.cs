@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
                 {
                     int tagid = (int)c.Tag;
                     int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                    System.Diagnostics.Debug.WriteLine("Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
+                    System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
 
                     uccb.Init(discoveryform, displaynumber);
                     uccb.SetCursor(ucursor_inuse);
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
 
                     if (uc != null)
                     {
-                        System.Diagnostics.Debug.WriteLine("Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
+                        System.Diagnostics.Trace.WriteLine("SP:Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
                         uc.Init(discoveryform, displaynumber);
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();

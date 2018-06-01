@@ -352,10 +352,10 @@ namespace EDDiscovery
 
         private static void InitializeDatabases()
         {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
         }
 
         private static void InitializeConfig()
@@ -387,7 +387,7 @@ namespace EDDiscovery
 
             SQLiteConnectionUser.EarlyReadRegister();
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
         }
 
         #endregion
@@ -645,7 +645,7 @@ namespace EDDiscovery
         {
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform EDSM/EDDB sync");
             try
             {
                 bool[] grids = new bool[GridId.MaxGridID];
@@ -802,10 +802,10 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath,
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents);
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
             }
             catch (Exception ex)
             {
@@ -825,7 +825,7 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
 
                 if (hist != null)
                 {
@@ -837,15 +837,16 @@ namespace EDDiscovery
 
                     ReportProgress(-1, "");
 
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays");
                     RefreshDisplays();
-                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JM On");
 
                 journalmonitor.StartMonitor();
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + "Call Refresh Complete");
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
@@ -856,7 +857,7 @@ namespace EDDiscovery
 
                 LogLine("History refresh complete.");
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
             }
         }
 
