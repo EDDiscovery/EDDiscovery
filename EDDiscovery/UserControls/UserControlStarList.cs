@@ -146,6 +146,8 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load start");
+
             rowsbyjournalid.Clear();
             systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
@@ -186,6 +188,8 @@ namespace EDDiscovery.UserControls
                 rowno = -1;
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
 
             if (sortcol >= 0)
             {

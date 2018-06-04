@@ -164,12 +164,16 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Scn " + displaynumber + " Load start");
+
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
             SetControlText((last_sn == null) ? "No Scan" : last_sn.system.Name);
 
             if (last_sn != null)     // 
             {
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Scn " + displaynumber + " Begin Display");
+
                 BuildSystemInfo(last_sn);
 
                 Point curpos = new Point(leftmargin, topmargin);
@@ -279,6 +283,9 @@ namespace EDDiscovery.UserControls
             }
 
             imagebox.Render();      // replaces image..
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ScN " + displaynumber + " Load Finish");
+
         }
 
         private void BuildSystemInfo(StarScan.SystemNode system)

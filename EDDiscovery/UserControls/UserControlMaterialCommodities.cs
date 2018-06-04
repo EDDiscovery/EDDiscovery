@@ -117,6 +117,8 @@ namespace EDDiscovery.UserControls
             if (mcl == null)
                 return;
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Begin Display");
+
             List<MaterialCommodities> mc = mcl.Sort(!materials);
 
             if (mc.Count > 0)
@@ -158,6 +160,8 @@ namespace EDDiscovery.UserControls
             {
                 labelNoItems.Visible = true;
             }
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Load Finished");
         }
 
         #endregion
