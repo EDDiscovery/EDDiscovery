@@ -65,11 +65,15 @@ namespace EliteDangerousCore.JournalEvents
             public long PlayerContribution { get; set; }
             public int NumContributors { get; set; }
             public int PlayerPercentileBand { get; set; }
-            // TBD TopTier in 3.0 journal.. need to see it
-            public int TopRankSize { get; set; }
-            public bool PlayerInTopRank { get; set; }
-            public string TierReached { get; set; }
-            public long Bonus { get; set; }
+            public string TopTierName { get; set; }     
+            public string TopTierBonus { get; set; }    
+
+            public int? TopRankSize { get; set; }           // optional
+            public bool? PlayerInTopRank { get; set; }      // optional
+
+            public string TierReached { get; set; }         // only when reached first success rank
+            public int? TierReachedInt { get; set; }        // its defined as Tier X, this is X
+            public long? Bonus { get; set; }            
 
             public CommunityGoal(JObject jo)
             {
@@ -83,10 +87,22 @@ namespace EliteDangerousCore.JournalEvents
                 PlayerContribution = jo["PlayerContribution"].Long();
                 NumContributors = jo["NumContributors"].Int();
                 PlayerPercentileBand = jo["PlayerPercentileBand"].Int();
-                TopRankSize = jo["TopRankSize"].Int();
-                PlayerInTopRank = jo["PlayerInTopRank"].Bool();
+
+                JObject toptier = (JObject)jo["TopTier"];
+                if ( toptier != null )
+                {
+                    TopTierName = toptier["Name"].Str();
+                    TopTierBonus = toptier["Bonus"].Str();
+                }
+
+                TopRankSize = jo["TopRankSize"].IntNull();
+                PlayerInTopRank = jo["PlayerInTopRank"].BoolNull();
+
                 TierReached = jo["TierReached"].Str();
-                Bonus = jo["Bonus"].Long();
+                if (TierReached.StartsWith("Tier "))
+                    TierReachedInt = TierReached.Substring(5).InvariantParseIntNull();
+
+                Bonus = jo["Bonus"].LongNull();
             }
 
             public override string ToString()
@@ -102,7 +118,7 @@ namespace EliteDangerousCore.JournalEvents
                      nl,"At:", MarketName, "Expires:", exp,
                      nl,"Not Complete;Complete", IsComplete,  "Current Total:" , CurrentTotal, "Contribution:", PlayerContribution, "Num Contributors:", NumContributors,
                      nl,"Player % Band:", PlayerPercentileBand, "Top Rank:", TopRankSize, "Not In Top Rank;In Top Rank", PlayerInTopRank,
-                     nl,"Tier Reached:", TierReached,  "Bonus:" , Bonus
+                     nl,"Tier Reached:", TierReached,  "Bonus:" , Bonus, "Top Tier Name", TopTierName , "TT. Bonus" , TopTierBonus
                       );
             }
         }

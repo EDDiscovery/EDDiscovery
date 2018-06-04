@@ -279,8 +279,7 @@ namespace EliteDangerousCore.EDSM
 
                         string logline = $"Adding {first.EntryType.ToString()} event to EDSM journal sync ({first.EventSummary})";
                         System.Diagnostics.Trace.WriteLine(logline);
-                        if (!manual)
-                            hqe.Logger?.Invoke(logline);
+                        //removed too verbose if (!manual)  hqe.Logger?.Invoke(logline);
 
                         if (holdEvents.Contains(first.EntryType) || (first.EntryType == JournalTypeEnum.Location && first.IsDocked))
                         {
@@ -410,7 +409,7 @@ namespace EliteDangerousCore.EDSM
                     json["_systemAddress"] = he.System.SystemAddress;
                 if (he.IsDocked)
                 {
-                    json["_stationName"] = he.StationName;
+                    json["_stationName"] = he.WhereAmI;
                     if (he.MarketID != null)
                         json["_stationMarketId"] = he.MarketID;
                 }

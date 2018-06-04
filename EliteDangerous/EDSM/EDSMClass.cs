@@ -49,7 +49,7 @@ namespace EliteDangerousCore.EDSM
 
             base.httpserveraddress = ServerAddress;
 
-            apiKey = EDCommander.Current.APIKey;
+            apiKey = EDCommander.Current.EDSMAPIKey;
             commanderName = string.IsNullOrEmpty(EDCommander.Current.EdsmName) ? EDCommander.Current.Name : EDCommander.Current.EdsmName;
         }
 
@@ -57,7 +57,7 @@ namespace EliteDangerousCore.EDSM
         {
             if (cmdr != null)
             {
-                apiKey = cmdr.APIKey;
+                apiKey = cmdr.EDSMAPIKey;
                 commanderName = string.IsNullOrEmpty(cmdr.EdsmName) ? cmdr.Name : cmdr.EdsmName;
             }
         }
@@ -716,8 +716,7 @@ namespace EliteDangerousCore.EDSM
                         try
                         {
                             JObject jbody = EDSMClass.ConvertFromEDSMBodies(edsmbody);
-                            JournalScan js = new JournalScan(jbody);
-                            js.EdsmID = edsmid;
+                            JournalScan js = new JournalScan(jbody, edsmid);
 
                             bodies.Add(js);
                         }

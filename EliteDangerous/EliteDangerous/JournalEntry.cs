@@ -237,19 +237,19 @@ namespace EliteDangerousCore
     public abstract class JournalEntry
     {
         #region Instance properties and fields
-        public long Id;                          // this is the entry ID
-        public long TLUId;                       // this ID of the journal tlu (aka TravelLogId)
-        public int CommanderId;                 // commander Id of entry
+        public long Id { get; private set; }                    // this is the entry ID
+        public long TLUId { get; private set; }                 // this ID of the journal tlu (aka TravelLogId)
+        public int CommanderId { get; private set; }            // commander Id of entry
 
-        public JournalTypeEnum EventTypeID;
+        public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
-        public string EventSummaryName;     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
+        public string EventSummaryName { get; private set; }     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
 
-        public DateTime EventTimeUTC;
+        public DateTime EventTimeUTC { get;  set; }
 
-        public long EdsmID;                      // 0 = unassigned, >0 = assigned
+        public long EdsmID { get; protected set; }                      // 0 = unassigned, >0 = assigned
 
-        private int Synced;                     // sync flags
+        private int Synced { get; set; }                     // sync flags
 
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
 
@@ -274,6 +274,20 @@ namespace EliteDangerousCore
         }
 
         public bool IsUIEvent { get { return this is IUIEvent; } }
+
+        public void SetTLUCommander(long t, int cmdr)         // used during log reading..
+        {
+            TLUId = t;
+            CommanderId = cmdr;
+        }
+        public void SetCommander(int cmdr)         // used during log reading..
+        {
+            CommanderId = cmdr;
+        }
+        public void SetEDSMId(long edsmid)          // used if edsm id is changed
+        {
+            EdsmID = edsmid;
+        }
 
         #endregion
 

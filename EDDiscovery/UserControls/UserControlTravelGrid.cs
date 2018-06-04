@@ -116,6 +116,7 @@ namespace EDDiscovery.UserControls
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
             writeJournalToLogtoolStripMenuItem.Visible = false;
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -159,6 +160,7 @@ namespace EDDiscovery.UserControls
                 return;
 
             current_historylist = hl;
+            this.Cursor = Cursors.WaitCursor;
 
             Tuple<long, int> pos = CurrentGridPosByJID();
 
@@ -217,6 +219,8 @@ namespace EDDiscovery.UserControls
             }
 
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+
+            this.Cursor = Cursors.Default;
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
@@ -958,7 +962,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (var jent in jents)
                     {
-                        jent.EdsmID = (int)form.AssignedEdsmId;
+                        jent.SetEDSMId(form.AssignedEdsmId);
                         jent.Update();
                     }
 
@@ -1037,48 +1041,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string laststring = "";
-            string lasttype = "";
-            int lasttypecount = 0;
-
-            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
-
-            if (dataGridViewTravel.SelectedRows.Count > 0)
-            {
-                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
-                foreach (DataGridViewRow rw in rows)
-                {
-                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
-                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
-
-
-                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
-                    if (!same || lasttypecount < 10)
-                    {
-                        lasttype = he.journalEntry.EventTypeStr;
-                        lasttypecount = (same) ? ++lasttypecount : 0;
-
-                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
-                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
-
-                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
-                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
-
-                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
-
-                        if (s.Length > 0 && !s.Equals(laststring))
-                        {
-                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
-                            laststring = s;
-                        }
-                    }
-                }
-            }
-        }
-
         private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
             BookmarkForm bookmarkForm = new BookmarkForm();
@@ -1151,7 +1113,7 @@ namespace EDDiscovery.UserControls
         {
             Button b = sender as Button;
             cfs.FilterButton(DbFilterSave, b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)
@@ -1175,6 +1137,90 @@ namespace EDDiscovery.UserControls
                 fieldfilter = frm.result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
+            }
+        }
+
+        #endregion
+
+        #region DEBUG clicks - only for special people who build the debug version!
+
+        private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null )
+            {
+                List<Newtonsoft.Json.Linq.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(discoveryform.history, rightclicksystem);
+
+                foreach (Newtonsoft.Json.Linq.JToken j in list)
+                {
+                    j["eventTimestamp"] = DateTime.UtcNow.ToStringZulu();       // mangle time to now to allow it to send.
+                    if (j["eventName"].Str() == "addCommanderMission")
+                    {
+                        j["eventData"]["missionExpiry"] = DateTime.UtcNow.AddDays(1).ToStringZulu();       // mangle mission time to now to allow it to send.
+                    }
+                    if (j["eventName"].Str() == "setCommunityGoal")
+                    {
+                        j["eventData"]["goalExpiry"] = DateTime.UtcNow.AddDays(5).ToStringZulu();       // mangle expiry time
+                    }
+                }
+
+                Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
+                string json = jo?.ToString();
+                discoveryform.LogLine(json);
+
+                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass();
+                string str = inara.ToJSONString(list);
+                discoveryform.LogLine(str);
+                System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
+
+                if (list.Count > 0)
+                {
+                    string strres = inara.Send(list);
+                    discoveryform.LogLine(strres);
+                }
+                else
+                    discoveryform.LogLine("No Events");
+            }
+        }
+
+        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string laststring = "";
+            string lasttype = "";
+            int lasttypecount = 0;
+
+            discoveryform.DEBUGGETAC.AsyncMode = false;     // to force it to do all the action code before returning..
+
+            if (dataGridViewTravel.SelectedRows.Count > 0)
+            {
+                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
+                foreach (DataGridViewRow rw in rows)
+                {
+                    HistoryEntry he = rw.Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry;
+                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
+
+
+                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
+                    if (!same || lasttypecount < 10)
+                    {
+                        lasttype = he.journalEntry.EventTypeStr;
+                        lasttypecount = (same) ? ++lasttypecount : 0;
+
+                        discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
+                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
+                        discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+
+                        Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();
+                        string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+
+                        string s = discoveryform.DEBUGGETAC.Globals["GlobalSaySaid"];
+
+                        if (s.Length > 0 && !s.Equals(laststring))
+                        {
+                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            laststring = s;
+                        }
+                    }
+                }
             }
         }
 

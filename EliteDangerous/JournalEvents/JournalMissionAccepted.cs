@@ -64,6 +64,8 @@ namespace EliteDangerousCore.JournalEvents
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscore it
             TargetLocalised = evt["Target_localised"].Str().Alt(TargetFriendly);        // not all
 
+            KillCount = evt["KillCount"].IntNull();
+
             DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
 
@@ -90,38 +92,43 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public string Faction { get; set; }                 // in MissionAccepted order
-        public string Name { get; set; }
-        public string FDName { get; set; }
+        public int MissionId { get; private set; }
 
-        public string TargetType { get; set; }
-        public string TargetTypeFriendly { get; set; }
-        public string TargetTypeLocalised { get; set; }
-        public string TargetFaction { get; set; }
-        public string DestinationSystem { get; set; }
-        public string DestinationStation { get; set; }
-        public string Target { get; set; }
-        public string TargetFriendly { get; set; }
-        public string TargetLocalised { get; set; }     // not all.. only for radars etc.
-        public DateTime Expiry { get; set; }            // MARKED as 2000 if not there..
+        public string Faction { get; private set; }                 // in MissionAccepted order
+        public string Name { get; private set; }
+        public string FDName { get; private set; }
+
+        public string DestinationSystem { get; private set; }
+        public string DestinationStation { get; private set; }
+
+        public string TargetType { get; private set; }
+        public string TargetTypeFriendly { get; private set; }
+        public string TargetTypeLocalised { get; private set; }
+        public string TargetFaction { get; private set; }
+        public string Target { get; private set; }
+        public string TargetFriendly { get; private set; }
+        public string TargetLocalised { get; private set; }     // not all.. only for radars etc.
+        public int? KillCount { get; private set; }
+
+        public DateTime Expiry { get; private set; }            // MARKED as 2000 if not there..
         public bool ExpiryValid { get { return Expiry.Year >= 2014; } }
-        public string Influence { get; set; }
-        public string Reputation { get; set; }
-        public int MissionId { get; set; }
 
-        public string Commodity { get; set; }               //fdname, this is for delivery missions, stuff being transported
-        public string CommodityLocalised { get; set; }
-        public string FriendlyCommodity { get; set; }       //db name
-        public int? Count { get; set; }
+        public string Influence { get; private set; }
+        public string Reputation { get; private set; }
 
-        public int? PassengerCount { get; set; }            // for passenger missions
-        public bool? PassengerVIPs { get; set; }
-        public bool? PassengerWanted { get; set; }
-        public string PassengerType { get; set; }
+        public string Commodity { get; private set; }               //fdname, this is for delivery missions, stuff being transported
+        public string CommodityLocalised { get; private set; }
+        public string FriendlyCommodity { get; private set; }       //db name
+        public int? Count { get; private set; }
 
-        public int? Reward { get; set; }
+        public int? PassengerCount { get; private set; }            // for passenger missions
+        public bool? PassengerVIPs { get; private set; }
+        public bool? PassengerWanted { get; private set; }
+        public string PassengerType { get; private set; }
 
-        public bool? Wing { get; set; }     // 3.02
+        public int? Reward { get; private set; }
+
+        public bool? Wing { get; private set; }     // 3.02
 
         public override void FillInformation(out string info, out string detailed) //V
         {
@@ -147,6 +154,7 @@ namespace EliteDangerousCore.JournalEvents
                                            "Type:", TargetTypeFriendly,
                                            "Target Faction:", TargetFaction,
                                            "Target Type:", TargetTypeLocalised,
+                                           "Kill Count:", KillCount, 
                                            "Passengers:", PassengerCount);
         }
 

@@ -95,6 +95,7 @@ namespace EliteDangerousCore
         public List<MaterialCommodities> List { get { return list; } }
 
         public MaterialCommodities Find(string name) { return list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)); }
+        public MaterialCommodities FindFD(string fdname) { return list.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)); }
 
         public List<MaterialCommodities> Sort(bool commodity)
         {
