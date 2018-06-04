@@ -101,7 +101,7 @@ namespace EliteDangerousCore.Inara
 
                 if (headerstatus >= 300 || headerstatus < 200)      // 2xx good
                 {
-                    ret += "Rejected Send: " + header["eventStatusText"].Str() + Environment.NewLine + "Check Inara User name and API Key" + Environment.NewLine;
+                    ret += "Rejected Send: " + header["eventStatusText"].Str() + Environment.NewLine;
                 }
                 else
                 {
