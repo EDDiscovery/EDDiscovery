@@ -775,16 +775,6 @@ namespace EliteDangerousCore
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                //using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where CommanderID=@commander and EventTime >= @after and EventTime <= @before Order by EventTime ASC"))
-                //{
-                //    if (commander == -999)
-                //        cmd.CommandText = "select * from JournalEntries where EventTime >= @after and EventTime <= @before Order by EventTime ";
-
-                //    cmd.AddParameterWithValue("@commander", commander);
-                //    cmd.AddParameterWithValue("@before", before ?? DateTime.MaxValue);
-                //    cmd.AddParameterWithValue("@after", after ?? DateTime.MinValue);
-
-
                 using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries"))
                 {
                     string cnd = "";

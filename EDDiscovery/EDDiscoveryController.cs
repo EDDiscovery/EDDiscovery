@@ -794,7 +794,7 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name );
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath,
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete with " + hist.Count + " records");
