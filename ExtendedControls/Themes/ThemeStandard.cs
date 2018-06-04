@@ -71,7 +71,7 @@ namespace ExtendedControls
                                         Color l,
                                         Color grpb, Color grpt, Color grlines,
                                         Color tabborderlines,
-                                        Color ttb, Color ttborder, Color ttbuttonchecked, 
+                                        Color ttb, Color ttborder, Color ttbuttonchecked,
                                         Color sPanel,
                                         bool wf, double op, string ft, float fs)            // ft = empty means don't set it
             {
@@ -157,7 +157,7 @@ namespace ExtendedControls
         public Color GridBorderBack { get { return currentsettings.colors[Settings.CI.grid_borderback]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderback] = value; } }
         public Color GridCellText { get { return currentsettings.colors[Settings.CI.grid_celltext]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_celltext] = value; } }
         public Color GridBorderLines { get { return currentsettings.colors[Settings.CI.grid_borderlines]; } set { SetCustom(); currentsettings.colors[Settings.CI.grid_borderlines] = value; } }
-        
+
         public Color TextBlockColor { get { return currentsettings.colors[Settings.CI.textbox_fore]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_fore] = value; } }
         public Color TextBlockHighlightColor { get { return currentsettings.colors[Settings.CI.textbox_highlight]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_highlight] = value; } }
         public Color TextBlockSuccessColor { get { return currentsettings.colors[Settings.CI.textbox_success]; } set { SetCustom(); currentsettings.colors[Settings.CI.textbox_success] = value; } }
@@ -369,8 +369,8 @@ namespace ExtendedControls
                                                Color.White,  // label
                                                baizegreen, Color.White, Color.LightGreen, // group
                                                Color.LightGreen,    // tabcontrol
-                                               baizegreen, Color.White, Color.White, 
-                                               baizegreen, 
+                                               baizegreen, Color.White, Color.White,
+                                               baizegreen,
                                                false, 95, "Microsoft Sans Serif", 8.25F));
         }
 
@@ -529,12 +529,12 @@ namespace ExtendedControls
                 {
                     if (ctrl.Image != null)     // any images, White and a gray (for historic reasons) gets replaced.
                     {
-                        System.Drawing.Imaging.ColorMap colormap1 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        System.Drawing.Imaging.ColorMap colormap1 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images
                         colormap1.OldColor = Color.FromArgb(134, 134, 134);                                        // gray is defined as the forecolour to use in system mode
                         colormap1.NewColor = ctrl.ForeColor;
                         //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map " + colormap1.OldColor + " to " + colormap1.NewColor);
 
-                        System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images
                         colormap2.OldColor = Color.FromArgb(255, 255, 255);                                        // gray is defined as the forecolour to use in system mode
                         colormap2.NewColor = ctrl.ForeColor;
                         //System.Diagnostics.Debug.WriteLine("Theme Image in " + ctrl.Name + " Map " + colormap2.OldColor + " to " + colormap2.NewColor);
@@ -675,7 +675,7 @@ namespace ExtendedControls
                 ctrl.MouseOverColor = currentsettings.colors[Settings.CI.label].Multiply(mouseoverscaling);
                 ctrl.MouseSelectedColor = currentsettings.colors[Settings.CI.label].Multiply(mouseselectedscaling);
 
-                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images
                 colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
                 colormap.NewColor = ctrl.ForeColor;
                 ctrl.SetDrawnBitmapRemapTable(new System.Drawing.Imaging.ColorMap[] { colormap });
@@ -732,7 +732,7 @@ namespace ExtendedControls
                     }
                     else
                     {
-                        System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images    
+                        System.Drawing.Imaging.ColorMap colormap = new System.Drawing.Imaging.ColorMap();       // any drawn panel with drawn images
                         colormap.OldColor = Color.White;                                                        // white is defined as the forecolour
                         colormap.NewColor = ctrl.ForeColor;
                         System.Drawing.Imaging.ColorMap colormap2 = new System.Drawing.Imaging.ColorMap();
@@ -790,7 +790,7 @@ namespace ExtendedControls
                 ctrl.DefaultCellStyle.ForeColor = currentsettings.colors[Settings.CI.grid_celltext];
                 ctrl.DefaultCellStyle.SelectionBackColor = ctrl.DefaultCellStyle.ForeColor;
                 ctrl.DefaultCellStyle.SelectionForeColor = ctrl.DefaultCellStyle.BackColor;
-                
+
                 ctrl.GridColor = currentsettings.colors[Settings.CI.grid_borderlines];
                 ctrl.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
                 ctrl.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -811,7 +811,7 @@ namespace ExtendedControls
                             cbocol.FlatStyle = FlatStyle.Popup;
                     }
                 }
-                
+
                 if (myControl.Name.Contains("dataGridViewTravel") && fnt.Size > 10F)
                     fnt2 = new Font(currentsettings.fontname, 10F);
                 else
@@ -820,12 +820,6 @@ namespace ExtendedControls
                 ctrl.ColumnHeadersDefaultCellStyle.Font = fnt2;
                 ctrl.RowHeadersDefaultCellStyle.Font = fnt2;
                 ctrl.Columns[0].DefaultCellStyle.Font = fnt2;
-                
-                using (Graphics g = ctrl.CreateGraphics())
-                {
-                    SizeF sz = g.MeasureString("99999", fnt2);
-                    ctrl.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
-                }
             }
             else if (myControl is VScrollBarCustom && !(parent is ListControlCustom || parent is RichTextBoxScroll))
             {                   // selected items need VScroll controlled here. Others control it themselves

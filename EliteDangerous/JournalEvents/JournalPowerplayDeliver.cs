@@ -30,17 +30,19 @@ namespace EliteDangerousCore.JournalEvents
         {
             Power = evt["Power"].Str();
             Type = evt["Type"].Str();
+            Type_Localised = evt["Type_Localised"].Str().Alt(Type);
             Count = evt["Count"].Int();
 
         }
         public string Power { get; set; }
         public string Type { get; set; }
+        public string Type_Localised { get; set; }
         public int Count { get; set; }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
             
-            info = BaseUtils.FieldBuilder.Build("", Power, "Type:", Type, "Count:", Count);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Type:", Type_Localised, "Count:", Count);
             detailed = "";
         }
     }
