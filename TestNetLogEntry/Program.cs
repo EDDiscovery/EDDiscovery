@@ -121,6 +121,16 @@ namespace NetLogEntry
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
+            else if (arg1.Equals("CorolisEng", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string ret = CorolisEngineering.ProcessEngineering(args.Next);
+                Console.WriteLine(ret);
+            }
+            else if (arg1.Equals("FrontierData", StringComparison.InvariantCultureIgnoreCase))
+            {
+                string ret = FrontierData.Process(args.Next);
+                Console.WriteLine(ret);
+            }
             else
             {
                 Journal.JournalEntry(arg1, args.Next, args, repeatdelay);
@@ -167,7 +177,9 @@ namespace NetLogEntry
                               "CorolisModules rootfolder - process corolis-data\\modules\\<folder>\n" +
                               "CorolisModule name - process corolis-data\\modules\\<folder>\n" +
                               "CorolisShips rootfolder - process corolis-data\\ships\n" +
-                              "CorolisShip name - process corolis-data\\ships\n"
+                              "CorolisShip name - process corolis-data\\ships\n" +
+                              "Coroliseng rootfolder - process corolis-data\\modifications\n" + 
+                              "FrontierData rootfolder - process cvs file export of frontier data\n"
                               );
 
         }

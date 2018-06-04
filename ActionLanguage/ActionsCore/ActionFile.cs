@@ -164,7 +164,7 @@ namespace ActionLanguage
 
                     fileencoding = sr.CurrentEncoding;
 
-                    System.Diagnostics.Debug.WriteLine("File " + filename + " is in " + fileencoding.BodyName + "   is utc8nobom? " + Equals(utc8nobom, fileencoding));
+                    System.Diagnostics.Trace.WriteLine("File " + filename + " is in " + fileencoding.BodyName + "   is utc8nobom? " + Equals(utc8nobom, fileencoding));
 
                     if (firstline == "{")
                     {
@@ -310,7 +310,7 @@ namespace ActionLanguage
         {
             try
             {
-                var utc8nobom = new UTF8Encoding(false); System.Diagnostics.Debug.WriteLine("File " + filepath + " written in " + fileencoding.BodyName + " is utf8 no bom " + Equals(utc8nobom,fileencoding));
+                var utc8nobom = new UTF8Encoding(false); System.Diagnostics.Trace.WriteLine("File " + filepath + " written in " + fileencoding.BodyName + " is utf8 no bom " + Equals(utc8nobom,fileencoding));
 
                 using (StreamWriter sr = new StreamWriter(filepath, false, fileencoding))
                 {

@@ -210,8 +210,8 @@ namespace EDDiscovery.UserControls
                             string ret = "";
                             foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
-                                MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(mat.Key);
-                                if (mc != null && MaterialCommodityDB.IsJumponium(mc.name))
+                                MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(mat.Key);
+                                if (mc != null && MaterialCommodityData.IsJumponium(mc.name))
                                     ret = ret.AppendPrePad(mc.name, ", ");
                             }
 

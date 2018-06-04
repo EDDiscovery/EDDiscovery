@@ -33,7 +33,7 @@ namespace EDDiscovery
 {
     public class EDDConfig : EliteDangerousCore.IEliteConfig
     {
-        private static EDDConfig _instance;
+        private static EDDConfig instance;
 
         private EDDConfig()
         {
@@ -43,48 +43,33 @@ namespace EDDiscovery
         {
             get
             {
-                if (_instance == null)
+                if (instance == null)
                 {
-                    _instance = new EDDConfig();
-                    EliteDangerousCore.EliteConfigInstance.InstanceConfig = _instance;        // hook up so classes can see this which use this IF
+                    instance = new EDDConfig();
+                    EliteDangerousCore.EliteConfigInstance.InstanceConfig = instance;        // hook up so classes can see this which use this IF
                 }
-                return _instance;
+                return instance;
             }
         }
 
         #region Discrete Controls
 
-        private bool _EDSMLog;
-        private bool _useNotifyIcon = false;
-        private bool _orderrowsinverted = false;
-        private bool _minimizeToNotifyIcon = false;
-        private bool _keepOnTop = false; /**< Whether to keep the windows on top or not */
-        private bool _displayUTC = false;
-        private bool _clearMaterials = false;
-        private bool _clearCommodities = false;
-        private bool _autoLoadPopouts = false;
-        private bool _autoSavePopouts = false;
-        private bool _showuievents = false;
-        private System.Windows.Forms.Keys _clickthrukey = System.Windows.Forms.Keys.ShiftKey;
-        private string _defaultwavedevice = "Default";
-        private string _defaultvoicedevice = "Default";
-        private bool _EDSMEDDBDownload = true;
-        private string _EDSMGridIDs = "All";
-
-        public bool EDSMLog
-        {
-            get
-            {
-                return _EDSMLog;
-            }
-
-            set
-            {
-                _EDSMLog = value;
-                SQLiteConnectionUser.PutSettingBool("EDSMLog", value);
-            }
-        }
-
+        private bool useNotifyIcon = false;
+        private bool orderrowsinverted = false;
+        private bool minimizeToNotifyIcon = false;
+        private bool keepOnTop = false; /**< Whether to keep the windows on top or not */
+        private bool displayUTC = false;
+        private bool clearMaterials = false;
+        private bool clearCommodities = false;
+        private bool autoLoadPopouts = false;
+        private bool autoSavePopouts = false;
+        private bool showuievents = false;
+        private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
+        private string defaultwavedevice = "Default";
+        private string defaultvoicedevice = "Default";
+        private bool edsmeddbdownload = true;
+        private string edsmgridids = "All";
+        private int fullhistoryloaddaylimit = 0;     //0 means not in use
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -93,11 +78,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _useNotifyIcon;
+                return useNotifyIcon;
             }
             set
             {
-                _useNotifyIcon = value;
+                useNotifyIcon = value;
                 SQLiteConnectionUser.PutSettingBool("UseNotifyIcon", value);
             }
         }
@@ -106,11 +91,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _orderrowsinverted;
+                return orderrowsinverted;
             }
             set
             {
-                _orderrowsinverted = value;
+                orderrowsinverted = value;
                 SQLiteConnectionUser.PutSettingBool("OrderRowsInverted", value);
             }
         }
@@ -124,11 +109,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _minimizeToNotifyIcon;
+                return minimizeToNotifyIcon;
             }
             set
             {
-                _minimizeToNotifyIcon = value;
+                minimizeToNotifyIcon = value;
                 SQLiteConnectionUser.PutSettingBool("MinimizeToNotifyIcon", value);
             }
         }
@@ -137,11 +122,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _keepOnTop;
+                return keepOnTop;
             }
             set
             {
-                _keepOnTop = value;
+                keepOnTop = value;
                 SQLiteConnectionUser.PutSettingBool("KeepOnTop", value);
             }
         }
@@ -150,11 +135,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _displayUTC;
+                return displayUTC;
             }
             set
             {
-                _displayUTC = value;
+                displayUTC = value;
                 SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
             }
         }
@@ -163,11 +148,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _clearMaterials;
+                return clearMaterials;
             }
             set
             {
-                _clearMaterials = value;
+                clearMaterials = value;
                 SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
             }
         }
@@ -176,11 +161,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _clearCommodities;
+                return clearCommodities;
             }
             set
             {
-                _clearCommodities = value;
+                clearCommodities = value;
                 SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
             }
         }
@@ -189,11 +174,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _autoLoadPopouts;
+                return autoLoadPopouts;
             }
             set
             {
-                _autoLoadPopouts = value;
+                autoLoadPopouts = value;
                 SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
             }
         }
@@ -202,11 +187,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _autoSavePopouts;
+                return autoSavePopouts;
             }
             set
             {
-                _autoSavePopouts = value;
+                autoSavePopouts = value;
                 SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
             }
         }
@@ -215,11 +200,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _defaultwavedevice;
+                return defaultwavedevice;
             }
             set
             {
-                _defaultwavedevice = value;
+                defaultwavedevice = value;
                 SQLiteConnectionUser.PutSettingString("WaveAudioDevice", value);
             }
         }
@@ -228,11 +213,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _defaultvoicedevice;
+                return defaultvoicedevice;
             }
             set
             {
-                _defaultvoicedevice = value;
+                defaultvoicedevice = value;
                 SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
             }
         }
@@ -241,11 +226,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _showuievents;
+                return showuievents;
             }
             set
             {
-                _showuievents = value;
+                showuievents = value;
                 SQLiteConnectionUser.PutSettingBool("ShowUIEvents", value);
             }
         }
@@ -254,11 +239,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _clickthrukey;
+                return clickthrukey;
             }
             set
             {
-                _clickthrukey = value;
+                clickthrukey = value;
                 SQLiteConnectionUser.PutSettingInt("ClickThruKey", (int)value);
             }
         }
@@ -267,11 +252,11 @@ namespace EDDiscovery
         {
             get
             {
-                return _EDSMEDDBDownload;
+                return edsmeddbdownload;
             }
             set
             {
-                _EDSMEDDBDownload = value;
+                edsmeddbdownload = value;
                 SQLiteConnectionUser.PutSettingBool("EDSMEDDBDownloadData", value);
             }
         }
@@ -280,12 +265,25 @@ namespace EDDiscovery
         {
             get
             {
-                return _EDSMGridIDs;
+                return edsmgridids;
             }
             set
             {
-                _EDSMGridIDs = value;
+                edsmgridids = value;
                 SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value);
+            }
+        }
+
+        public int FullHistoryLoadDayLimit          // 0 = full load.
+        {
+            get
+            {
+                return fullhistoryloaddaylimit;
+            }
+            set
+            {
+                fullhistoryloaddaylimit = value;
+                SQLiteConnectionUser.PutSettingInt("FullHistoryLoadDayLimit", value);
             }
         }
 
@@ -297,22 +295,22 @@ namespace EDDiscovery
         {
             try
             {
-                _useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
-                _EDSMLog = SQLiteConnectionUser.GetSettingBool("EDSMLog", false, conn);
-                _orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
-                _minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
-                _keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
-                _displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
-                _clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
-                _clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
-                _autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
-                _autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
-                _defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
-                _defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
-                _showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
-                _clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
-                _EDSMEDDBDownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
-                _EDSMGridIDs = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
+                useNotifyIcon = SQLiteConnectionUser.GetSettingBool("UseNotifyIcon", false, conn);
+                orderrowsinverted = SQLiteConnectionUser.GetSettingBool("OrderRowsInverted", false, conn);
+                minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
+                keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
+                displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
+                clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
+                clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
+                autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
+                autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
+                defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
+                defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
+                showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
+                clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
+                edsmeddbdownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
+                edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
+                fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

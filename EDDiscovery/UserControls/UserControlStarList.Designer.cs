@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,7 +71,6 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -278,8 +278,15 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem,
             this.setNoteToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(221, 114);
+            this.historyContextMenu.Size = new System.Drawing.Size(221, 92);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            // 
+            // removeSortingOfColumnsToolStripMenuItem
+            // 
+            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
+            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
+            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -396,6 +403,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.Size = new System.Drawing.Size(847, 578);
             this.dataGridViewStarList.TabIndex = 3;
             this.dataGridViewStarList.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
+            this.dataGridViewStarList.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewStarList_RowPostPaint);
             this.dataGridViewStarList.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewStarList_SortCompare);
             this.dataGridViewStarList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
             this.dataGridViewStarList.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
@@ -435,13 +443,6 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation.MinimumWidth = 50;
             this.ColumnInformation.Name = "ColumnInformation";
             this.ColumnInformation.ReadOnly = true;
-            // 
-            // removeSortingOfColumnsToolStripMenuItem
-            // 
-            this.removeSortingOfColumnsToolStripMenuItem.Name = "removeSortingOfColumnsToolStripMenuItem";
-            this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
-            this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
             // 
             // UserControlStarList
             // 

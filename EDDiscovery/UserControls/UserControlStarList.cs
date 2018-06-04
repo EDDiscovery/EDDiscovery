@@ -146,6 +146,8 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load start");
+
             rowsbyjournalid.Clear();
             systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
@@ -186,6 +188,8 @@ namespace EDDiscovery.UserControls
                 rowno = -1;
 
             dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
 
             if (sortcol >= 0)
             {
@@ -435,6 +439,23 @@ namespace EDDiscovery.UserControls
             }
 
             return infostr;
+        }
+
+        private void dataGridViewStarList_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridView grid = sender as DataGridView;
+            int rown = EDDConfig.Instance.OrderRowsInverted ? (grid.RowCount - e.RowIndex) : (e.RowIndex + 1);
+            string rowIdx = rown.ToString();
+
+            var headerBounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+
+            using (var centerFormat = new StringFormat() { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
+            {
+                e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
+                    e.Graphics.DrawString(rowIdx, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+            }
+
         }
 
         #endregion

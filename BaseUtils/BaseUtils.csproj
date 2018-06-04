@@ -49,6 +49,8 @@
     <Compile Include="Collections\CollectionStaticHelpers.cs" />
     <Compile Include="Collections\SortedListDuplicates.cs" />
     <Compile Include="Dates\DateObjectExtensions.cs" />
+    <Compile Include="DebugTraceAndLogs\ExceptionCatcher.cs" />
+    <Compile Include="DebugTraceAndLogs\LogClean.cs" />
     <Compile Include="EMK\Point3D.cs" />
     <Compile Include="EMK\Vector3D.cs" />
     <Compile Include="Files\AssociateExe.cs" />
@@ -63,18 +65,18 @@
     <Compile Include="HTTP\ResponseData.cs" />
     <Compile Include="Keys\EnhancedSendKeys.cs" />
     <Compile Include="Misc\CommandArgs.cs" />
-    <Compile Include="Misc\ExceptionForm.cs">
+    <Compile Include="DebugTraceAndLogs\ExceptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Misc\ExceptionForm.Designer.cs">
+    <Compile Include="DebugTraceAndLogs\ExceptionForm.Designer.cs">
       <DependentUpon>ExceptionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Misc\FileHandles.cs" />
+    <Compile Include="CHash\FileHandles.cs" />
     <Compile Include="Keys\KeyObjectExtensions.cs" />
     <Compile Include="Misc\Maps2d.cs" />
-    <Compile Include="Misc\NativeMethods.cs" />
-    <Compile Include="Misc\Processes.cs" />
-    <Compile Include="Misc\AppTicks.cs" />
+    <Compile Include="Win32\NativeMethods.cs" />
+    <Compile Include="Win32\Processes.cs" />
+    <Compile Include="DebugTraceAndLogs\AppTicks.cs" />
     <Compile Include="Misc\SHA.cs" />
     <Compile Include="WinForms\BitMapHelpers.cs" />
     <Compile Include="WinForms\ColorObjectExtensions.cs" />
@@ -89,11 +91,11 @@
     <Compile Include="Files\LogToFile.cs" />
     <Compile Include="JSON\JSONObjectExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Misc\PropertyNames.cs" />
+    <Compile Include="CHash\PropertyNames.cs" />
     <Compile Include="Strings\StringObjectExtensions.cs" />
     <Compile Include="Strings\StringParser.cs" />
-    <Compile Include="Misc\TraceLog.cs" />
-    <Compile Include="Misc\Win32Constants.cs" />
+    <Compile Include="DebugTraceAndLogs\TraceLog.cs" />
+    <Compile Include="Win32\Win32Constants.cs" />
     <Compile Include="WinForms\ControlHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +104,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Misc\ExceptionForm.resx">
+    <EmbeddedResource Include="DebugTraceAndLogs\ExceptionForm.resx">
       <DependentUpon>ExceptionForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

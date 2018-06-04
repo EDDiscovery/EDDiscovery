@@ -98,6 +98,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNoteChanged += OnNoteChanged;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
 
+            panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -156,14 +157,11 @@ namespace EDDiscovery.UserControls
             if ( last_he != null )
             {
                 SetControlText(he.System.Name);
-                string name = he.System.Name;
 
                 HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, he);
 
-                if (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover)
-                    name = "(FD)*" + name;
-
-                textBoxSystem.Text = name;
+                textBoxSystem.Text = he.System.Name;
+                panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
                 discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
@@ -360,6 +358,11 @@ namespace EDDiscovery.UserControls
 
         }
 
+        private void clickTextBox(object sender, EventArgs e)
+        {
+            Clipboard.SetText(((Control)sender).Text);
+        }
+
         private void toolStripSystem_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelSystem);
@@ -472,10 +475,12 @@ namespace EDDiscovery.UserControls
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
             toolStripSkinny.Checked = (Selection & (1 << BitSelSkinny)) != 0;
 
-            int data1pos = textBoxCredits.Left - labelCredits.Left;      // basing it on actual pos allow the auto font scale to work
-            int lab2pos = textBoxCredits.Right + 4 - labelCredits.Left;
-            int data2pos = lab2pos + data1pos;
-            int col2pos = lab2pos;
+            int data1offset = textBoxCredits.Left - labelCredits.Left;      // offset between first item to initial label - basing it on actual pos allow the auto font scale to work
+            int lab2offset = textBoxCredits.Right + 4 - labelCredits.Left;  // offset between second label and initial label
+            int data2offset = lab2offset + data1offset;                     // offset between data 2 pos and initial label
+            int coloffset = lab2offset;                                     // offset between each column
+
+            System.Diagnostics.Debug.WriteLine("Sys Info first data {0} second lab {1} second data {2} col offset {3}", data1offset, lab2offset, data2offset, coloffset);
 
             int maxvert = 0;
 
@@ -485,10 +490,12 @@ namespace EDDiscovery.UserControls
 
                 for ( int c = 0; c < HorzPositions; c++ )
                 { 
-                    Point labpos = new Point(3 + c * col2pos, ver);
-                    Point datapos = new Point(labpos.X + data1pos, labpos.Y);
-                    Point labpos2 = new Point(labpos.X + lab2pos, labpos.Y);
-                    Point datapos2 = new Point(labpos.X + data2pos, labpos.Y);
+                    Point labpos = new Point(3 + c * coloffset, ver);
+                    Point datapos = new Point(labpos.X + data1offset, labpos.Y);
+                    Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
+                    Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
+
+                    System.Diagnostics.Debug.WriteLine("R{0}C{1} {2} {3} ( {4} {5} )", r,c, labpos, datapos, labpos2, datapos2);
 
                     int bitno = Lines[r].items[c]-1;    // stored +1
 
@@ -509,6 +516,8 @@ namespace EDDiscovery.UserControls
                             {
                                 case BitSelSystem:
                                     this.SetPos(ref labpos, labelSysName, datapos, textBoxSystem, vspacing, si);
+                                    panelFD.Location = new Point(textBoxSystem.Right, textBoxSystem.Top);
+                                    panelFD.Visible = true;
 
                                     if (!selEDSMonNextLine && (Selection & (1 << BitSelEDSM)) != 0)
                                     {
@@ -615,8 +624,6 @@ namespace EDDiscovery.UserControls
 
                             Lines[r].yend = labpos.Y - 1;
                             maxvert = Math.Max(labpos.Y, maxvert);        // update vertical
-
-                            //System.Diagnostics.Debug.WriteLine("Sel " + i + " " + Order[i] + " on " + ison + " ypos " + YStart[i] +"-" + YEnd[i]);
                         }
                     }
                 }
@@ -865,6 +872,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
     }
 }

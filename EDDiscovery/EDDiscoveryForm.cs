@@ -145,7 +145,7 @@ namespace EDDiscovery
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
             PanelInformation.InitIcons();
@@ -160,7 +160,7 @@ namespace EDDiscovery
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
             msg.Invoke("Repairing Canopy");
@@ -170,8 +170,8 @@ namespace EDDiscovery
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             // open all the major tabs except the built in ones
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
-            MaterialCommodityDB.SetUpInitialTable();
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
+            MaterialCommodityData.SetUpInitialTable();
 
 
             // Tab reset Setup
@@ -240,12 +240,12 @@ namespace EDDiscovery
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
 
             msg.Invoke("Activating Sensors");
 
@@ -255,12 +255,10 @@ namespace EDDiscovery
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
-
-            SetUpLogging();
 
             EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
@@ -292,7 +290,7 @@ namespace EDDiscovery
                 });
             };
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
 
             Controller.InitComplete();
         }
@@ -302,7 +300,7 @@ namespace EDDiscovery
         {
             try
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
 
                 Controller.PostInit_Loaded();
 
@@ -315,7 +313,7 @@ namespace EDDiscovery
                     buttonReloadActions.Visible = true;
                 }
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
             }
             catch (Exception ex)
             {
@@ -326,7 +324,7 @@ namespace EDDiscovery
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown");
             Controller.PostInit_Shown();
 
             if (!themeok)
@@ -337,7 +335,7 @@ namespace EDDiscovery
 
             actioncontroller.onStartup();
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
 
             // Form is fully loaded, we can do tab actions now
 
@@ -555,7 +553,7 @@ namespace EDDiscovery
         private void Controller_RefreshComplete()
         {
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
 
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
@@ -610,7 +608,7 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
@@ -626,7 +624,7 @@ namespace EDDiscovery
                 {
                     // hang over from rares indenting.
                     {
-                        System.Diagnostics.Debug.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
+                        System.Diagnostics.Trace.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
                         try
                         {
                             Capi.GetProfile();
@@ -1516,15 +1514,6 @@ namespace EDDiscovery
         }
 
 #endregion
-
-#region Misc
-
-        public void SetUpLogging()      // controls logging of HTTP stuff
-        {
-            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDOptions.Instance.AppDataDirectory : null;
-        }
-
-        #endregion
 
     }
 }

@@ -260,7 +260,6 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(388, 444);
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -500,6 +499,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
+            this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
             this.dataGridViewTravel.TabIndex = 3;

@@ -59,6 +59,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,8 +68,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\EliteDangerous\EliteDangerous\MaterialCommodities.cs">
+      <Link>MaterialCommodities.cs</Link>
+    </Compile>
+    <Compile Include="CoriolisEngineering.cs" />
     <Compile Include="CorolisData.cs" />
     <Compile Include="EDDB.cs" />
+    <Compile Include="FrontierData.cs" />
     <Compile Include="Journal.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

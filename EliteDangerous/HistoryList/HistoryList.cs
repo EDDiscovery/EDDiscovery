@@ -850,7 +850,9 @@ namespace EliteDangerousCore
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
-                                    bool Keepuievents = true)
+                                    bool Keepuievents = true,
+                                    int fullhistoryloaddaylimit = 0
+                                    )
         {
             HistoryList hist = new HistoryList();
 
@@ -865,9 +867,23 @@ namespace EliteDangerousCore
                 }
             }
 
-            reportProgress(-1, "Resolving systems");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Files read " );
 
-            List<JournalEntry> jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            reportProgress(-1, "Reading Database");
+
+            List<JournalEntry> jlist;
+            
+            if ( fullhistoryloaddaylimit >0 )
+            {
+                jlist = JournalEntry.GetAll(CurrentCommander, 
+                    ids: JournalEntry.EssentialEvents, 
+                    allidsafter: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
+                    ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+            }
+            else
+                jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database read " + jlist.Count);
 
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
@@ -875,6 +891,8 @@ namespace EliteDangerousCore
             {
                 HistoryEntry prev = null;
                 JournalEntry jprev = null;
+
+                reportProgress(-1, "Creating History");
 
                 foreach (JournalEntry je in jlist)
                 {
@@ -930,6 +948,8 @@ namespace EliteDangerousCore
                     }
                 }
             }
+
+            reportProgress(-1, "Done");
 
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 

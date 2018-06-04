@@ -451,10 +451,13 @@ namespace EliteDangerousCore.DB
             {
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Name ON TravelLogUnit (Name)",
                 "CREATE INDEX IF NOT EXISTS TravelLogUnit_Commander ON TravelLogUnit(CommanderId)",
+
+                "CREATE INDEX IF NOT EXISTS JournalEntry_CommanderId ON JournalEntries (CommanderId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_TravelLogId ON JournalEntries (TravelLogId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTypeId ON JournalEntries (EventTypeId)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventType ON JournalEntries (EventType)",
                 "CREATE INDEX IF NOT EXISTS JournalEntry_EventTime ON JournalEntries (EventTime)",
+
                 "CREATE INDEX IF NOT EXISTS MaterialsCommodities_ClassName ON MaterialsCommodities (Name)",
                 "CREATE INDEX IF NOT EXISTS MaterialsCommodities_FDName ON MaterialsCommodities (FDName)",
             };

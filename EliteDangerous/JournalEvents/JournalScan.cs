@@ -605,13 +605,13 @@ namespace EliteDangerousCore.JournalEvents
         {
             StringBuilder scanText = new StringBuilder();
 
-            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(name);
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(name);
 
             if (mc != null && (historicmatlist != null || currentmatlist != null))
             {
                 MaterialCommodities historic = historicmatlist?.Find(mc.name);
                 MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
-                int? limit = MaterialCommodityDB.MaterialLimit(mc);
+                int? limit = MaterialCommodityData.MaterialLimit(mc);
 
                 string matinfo = historic?.count.ToString() ?? "0";
                 if (limit != null)
