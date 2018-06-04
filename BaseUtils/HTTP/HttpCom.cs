@@ -103,7 +103,7 @@ namespace BaseUtils
                     if (headers != null)
                         request.Headers.Add(headers);
 
-                    System.Diagnostics.Debug.WriteLine("HTTP" + method + " TO " + (httpserveraddress + action) + " Thread" + System.Threading.Thread.CurrentThread.Name);
+                    System.Diagnostics.Trace.WriteLine("HTTP" + method + " TO " + (httpserveraddress + action) + " Thread" + System.Threading.Thread.CurrentThread.Name);
                     WriteLog(method + " " + request.RequestUri, postData);
 
                     HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -111,7 +111,8 @@ namespace BaseUtils
                     var data = getResponseData(response);
                     response.Close();
 
-                    WriteLog(data.Body, "");
+                    System.Diagnostics.Trace.WriteLine("..HTTP" + method + " Response " + data.StatusCode);
+                    WriteLog("Response", data.Body.Left(512));
 
                     return data;
                 }
@@ -166,18 +167,12 @@ namespace BaseUtils
         }
 
 
-
-        private static void GetRequestStreamCallback(IAsyncResult asynchronousResult)
-        {
-        }
-
-
         private static Object LOCK = new Object();
         static public  void WriteLog(string str1, string str2)
         {
             //System.Diagnostics.Debug.WriteLine("From:" + Environment.StackTrace.StackTrace("WriteLog",10) + Environment.NewLine + "HTTP:" + str1 + ":" + str2);
 
-            if (LogPath == null)
+            if (LogPath == null || !Directory.Exists(LogPath))
                 return;
 
             if (str1 != null && str1.ToUpper().Contains("PASSWORD"))
@@ -190,11 +185,11 @@ namespace BaseUtils
             {
                 lock(LOCK)
                 {
-                    string filename = Path.Combine(LogPath, "Log", "HTTP_" + DateTime.Now.ToString("yyyyMMdd") + ".log");
+                    string filename = Path.Combine(LogPath, "HTTP_" + DateTime.Now.ToString("yyyy-MM-dd") + ".hlog");
 
                     using (StreamWriter w = File.AppendText(filename))
                     {
-                        w.WriteLine(DateTime.Now.ToLongTimeString() + "; " + str1 + "; " + str2);
+                        w.WriteLine(DateTime.UtcNow.ToStringZulu() + ": " + str1 + ": " + str2);
                     }
                 }
             }

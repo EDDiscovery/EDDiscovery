@@ -196,6 +196,8 @@ namespace EDDiscovery.UserControls
 
             List<Tuple<Recipes.Recipe, int>> wantedList = null;
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Begin Display");
+
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
@@ -316,6 +318,8 @@ namespace EDDiscovery.UserControls
 
             if (OnDisplayComplete != null)
                 OnDisplayComplete(wantedList);
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Load Finished");
         }
 
         #endregion

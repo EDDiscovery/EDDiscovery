@@ -74,6 +74,13 @@ namespace ExtendedControls
                 _explicitCollection = vals as IList;
             }
 
+
+            public ObjectCollection(string[] vals)
+            {
+                _explicitCollection = vals.ToList() as IList;
+            }
+
+
             public string this[int index]
             {
                 get
@@ -163,6 +170,11 @@ namespace ExtendedControls
             }
 
             public static implicit operator ObjectCollection(List<string> vals)
+            {
+                return new ObjectCollection(vals);
+            }
+
+            public static implicit operator ObjectCollection(string[] vals)
             {
                 return new ObjectCollection(vals);
             }
