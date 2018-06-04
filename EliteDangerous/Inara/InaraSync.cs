@@ -214,7 +214,6 @@ namespace EliteDangerousCore.Inara
                         break;
                     }
 
-
                 case JournalTypeEnum.Docked:  // VERIFIED 18/5/2018 from historic upload test
                     {
                         var je = he.journalEntry as JournalDocked;
@@ -514,7 +513,7 @@ namespace EliteDangerousCore.Inara
 
                 while (eventqueue.Count != 0)      // while stuff to send
                 {
-                    exitevent.WaitOne(1000);       // wait in case others are being generated
+                    exitevent.WaitOne(10000);       // wait in case others are being generated
 
                     if (Exit)
                         break;
@@ -545,7 +544,7 @@ namespace EliteDangerousCore.Inara
                             firstheq?.logger("Sent " + tosend.Count + " events to INARA" );
                     }
 
-                    exitevent.WaitOne(10000);       // space out events well
+                    exitevent.WaitOne(30000);       // space out events well
 
                     if (Exit)
                         break;
