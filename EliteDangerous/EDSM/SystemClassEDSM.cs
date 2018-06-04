@@ -685,7 +685,7 @@ namespace EliteDangerousCore.EDSM
 
             if (DateTime.UtcNow.Subtract(lastrecordtime).TotalHours <= 1)  // If we have partial synced for 1 hour, don't waste our time
             {
-                System.Diagnostics.Debug.WriteLine("Reject partial sync, last record less than 1 hour old");
+                System.Diagnostics.Debug.WriteLine("EDSM No partial sync, last record less than 1 hour old");
                 return updates;
             }
 

@@ -260,8 +260,6 @@ namespace EDDiscovery
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
 
-            SetUpLogging();
-
             EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
                 this.BeginInvoke((MethodInvoker)delegate
@@ -1492,15 +1490,6 @@ namespace EDDiscovery
         }
 
 #endregion
-
-#region Misc
-
-        public void SetUpLogging()      // controls logging of HTTP stuff
-        {
-            BaseUtils.HttpCom.LogPath = EDDConfig.Instance.EDSMLog ? EDDOptions.Instance.AppDataDirectory : null;
-        }
-
-        #endregion
 
     }
 }

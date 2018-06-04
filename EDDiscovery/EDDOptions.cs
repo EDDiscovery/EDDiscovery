@@ -37,7 +37,7 @@ namespace EDDiscovery
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
         public bool No3DMap { get; private set; }
-        public bool TraceLog { get; private set; }
+        public string TraceLog { get; private set; }        // null = auto file, or fixed name
         public bool LogExceptions { get; private set; }
         public bool DisableShowDebugInfoInTitle { get; private set; }
         public string OptionsFile { get; private set; }
@@ -230,6 +230,11 @@ namespace EDDiscovery
                 IconsPath = optval;
                 return true;
             }
+            else if (optname == "-tracelog")
+            {
+                TraceLog = optval;
+                return true;
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -242,7 +247,6 @@ namespace EDDiscovery
                     case "showactionbutton": ActionButton = true; break;
                     case "noload": NoLoad = true; break;
                     case "nosystems": NoSystemsLoad = true; break;
-                    case "tracelog": TraceLog = true; break;
                     case "logexceptions": LogExceptions = true; break;
                     case "nogithubpacks": DontAskGithubForPacks = true; break;
                     case "edsmbeta":

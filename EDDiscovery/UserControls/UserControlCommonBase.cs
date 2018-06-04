@@ -159,6 +159,18 @@ namespace EDDiscovery.UserControls
                         dgv.Columns[i].Width = w;
                     //System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", Name, k, w, dgv.Columns[i].Width);
                 }
+
+                int hwidth = SQLiteConnectionUser.GetSettingInt(root + "HW", 0);
+                if (hwidth > 0)
+                    dgv.RowHeadersWidth = hwidth;
+                else
+                {
+                    using (Graphics g = dgv.CreateGraphics())
+                    {
+                        SizeF sz = g.MeasureString("999999", discoveryform.theme.GetFont);
+                        dgv.RowHeadersWidth = (int)(sz.Width + 6);        // size it to the text, need a little more for rounding
+                    }
+                }
             }
         }
 
@@ -170,6 +182,8 @@ namespace EDDiscovery.UserControls
                 SQLiteDBClass.PutSettingInt(k, dgv.Columns[i].Width);
                 //System.Diagnostics.Debug.WriteLine("Save {0} {1} {2}", Name, k, dgv.Columns[i].Width);
             }
+
+            SQLiteConnectionUser.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
         }
 
         #endregion

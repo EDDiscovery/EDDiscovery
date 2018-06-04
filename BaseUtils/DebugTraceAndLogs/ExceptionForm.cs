@@ -33,12 +33,15 @@ namespace BaseUtils
                 Owner = parent,
                 StartPosition = parent != null ? FormStartPosition.CenterParent : FormStartPosition.WindowsDefaultLocation
             };
+
             DialogResult res = f.ShowDialog(parent);
 
             if (isFatal || res != DialogResult.Ignore)
             {
                 Environment.Exit(1);
             }
+
+            f.Dispose();
             return res;
         }
 
