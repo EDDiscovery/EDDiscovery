@@ -72,7 +72,6 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            checkBoxEDSMLog.Checked = EDDiscoveryForm.EDDConfig.EDSMLog;
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
@@ -111,6 +110,12 @@ namespace EDDiscovery.UserControls
 
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
+
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All", ">7 days old", ">30 days old", ">60 days old", ">90 days old", ">180 days old", "> 365 days old" };
+            comboBoxCustomHistoryLoadTime.Tag = new int[] { 0,7,30,60,90,180,365 };
+            int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit); 
+            comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
+            comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
         }
 
         public override void Closing()
@@ -138,7 +143,16 @@ namespace EDDiscovery.UserControls
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged += ParentForm_TopMostChanged;
         }
-                       
+
+        private void ComboBoxCustomHistoryLoadTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomHistoryLoadTime.SelectedIndex >= 0)       // paranoia
+            {
+                EDDConfig.Instance.FullHistoryLoadDayLimit = (comboBoxCustomHistoryLoadTime.Tag as int[])[comboBoxCustomHistoryLoadTime.SelectedIndex];
+                discoveryform.RefreshHistoryAsync();
+            }
+        }
+
         private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
         {
             EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
@@ -425,12 +439,6 @@ namespace EDDiscovery.UserControls
         private void checkBoxCustomCopyToClipboard_CheckedChanged(object sender, EventArgs e)
         {
             discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
-        }
-
-        private void checkBoxEDSMLog_CheckStateChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.EDSMLog = checkBoxEDSMLog.Checked;
-            discoveryform.SetUpLogging();
         }
 
         private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
