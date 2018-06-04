@@ -136,6 +136,22 @@ namespace EliteDangerousCore
             return Array.Find(vlist, x=>ifd.Contains(x))!=null;
         }
 
+        static public bool IsSRV(string ifd)
+        {
+            return ifd.Equals("testbuggy", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        static public bool IsFighter(string ifd)
+        {
+            ifd = ifd.ToLower();
+            return ifd.Equals("federation_fighter") || ifd.Equals("empire_fighter") || ifd.Equals("independent_fighter");
+        }
+
+        static public bool IsSRVOrFighter(string ifd)
+        {
+            return IsSRV(ifd) || IsFighter(ifd);
+        }
+
         #region classes
 
         public interface ShipInfo

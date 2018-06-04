@@ -119,11 +119,8 @@ namespace EliteDangerousCore
                         {
                             jo["EDDMapColor"] = defaultMapColour;
 
-                            JournalLocOrJump je = new JournalFSDJump(jo)
-                            {
-                                TLUId = (int)reader.TravelLogUnit.id,
-                                CommanderId = currentcmdrid,
-                            };
+                            JournalLocOrJump je = new JournalFSDJump(jo);
+                            je.SetTLUCommander(reader.TravelLogUnit.id, currentcmdrid);
 
                             while (ji < vsSystemsEnts.Count && vsSystemsEnts[ji].EventTimeUTC < je.EventTimeUTC)
                             {

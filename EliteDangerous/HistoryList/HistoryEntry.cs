@@ -74,13 +74,12 @@ namespace EliteDangerousCore
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public bool IsInHyperSpace { get { return hyperspace.HasValue && hyperspace.Value == true; } }
         public string WhereAmI { get { return whereami; } }
-        public string ShipType { get { return shiptype; } }
+        public string ShipType { get { return shiptype; } }         // NOT FD - translated name
         public int ShipId { get { return shipid; } }
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
         public string GameMode { get { return gamemode; } }
         public string Group { get { return group; } }
         public string GameModeGroup { get { return gamemode + ((group != null && group.Length > 0) ? (":" + group) : ""); } }
-        public string StationName { get { return stationName; } }
         public bool? Wanted { get { return wanted; } }
         public long? MarketID { get { return marketId; } }
 
@@ -115,13 +114,12 @@ namespace EliteDangerousCore
         private bool? docked;                       // are we docked.  Null if don't know, else true/false
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private bool? hyperspace;                   // are we in hyperspace..
-        private string whereami = "";               // where we think we are
+        private string whereami = "";               // where we think we are, station name, body, starsystem
         private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
         private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship      
         private string gamemode = "Unknown";        // game mode, from LoadGame event
         private string group = "";                  // group..
-        private string stationName = null;
         private long? marketId = null;
         private bool? wanted = null;
 
@@ -247,7 +245,6 @@ namespace EliteDangerousCore
                 if (prev.wanted.HasValue)
                     he.wanted = prev.wanted;
 
-                he.stationName = prev.stationName;
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
                 he.whereami = prev.whereami;
@@ -260,6 +257,7 @@ namespace EliteDangerousCore
             {
                 JournalLocation jl = je as JournalLocation;
                 he.docked = jl.Docked;
+                he.marketId = jl.Docked ? jl.MarketID : null;
                 he.landed = jl.Latitude.HasValue;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
                 he.hyperspace = false;
@@ -270,13 +268,11 @@ namespace EliteDangerousCore
                 JournalDocked jl = je as JournalDocked;
                 he.docked = true;
                 he.whereami = jl.StationName;
-                he.stationName = jl.StationName;
                 he.marketId = jl.MarketID;
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
             {
                 he.docked = false;
-                he.stationName = null;
                 he.marketId = null;
             }
             else if (je.EventTypeID == JournalTypeEnum.Touchdown)

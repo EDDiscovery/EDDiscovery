@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
         {
             Button b = sender as Button;
             cfs.FilterButton(DbFilterSave, b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm() ,
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm() ,
                              EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger", "LedgerNC")
                              );
         }

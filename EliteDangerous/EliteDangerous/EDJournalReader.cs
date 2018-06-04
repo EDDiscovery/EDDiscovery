@@ -198,8 +198,7 @@ namespace EliteDangerousCore
                 return null;
             }
 
-            je.TLUId = (int)TravelLogUnit.id;
-            je.CommanderId = cmdrid;
+            je.SetTLUCommander(TravelLogUnit.id, cmdrid);
 
             return new JournalReaderEntry { JournalEntry = je, Json = jo };
         }
@@ -231,7 +230,7 @@ namespace EliteDangerousCore
                         while (StartEntries.Count != 0)     // we have a commander, anything queued up, play that in first.
                         {
                             var dentry = StartEntries.Dequeue();
-                            dentry.JournalEntry.CommanderId = (int)TravelLogUnit.CommanderId;
+                            dentry.JournalEntry.SetCommander(TravelLogUnit.CommanderId.Value);
                             //System.Diagnostics.Debug.WriteLine("*** UnDelay " + dentry.JournalEntry.EventTypeStr);
                             jent.Add(dentry);
                         }

@@ -100,7 +100,7 @@ namespace EliteDangerousCore.EDDN
                         }
                         else if (EDDNSync.SendToEDDN(he))
                         {
-                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            // removed - too verbose logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                             eventcount++;
                         }
 
