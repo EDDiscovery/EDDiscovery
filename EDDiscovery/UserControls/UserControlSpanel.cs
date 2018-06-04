@@ -148,14 +148,18 @@ namespace EDDiscovery.UserControls
             dividercheck.Interval = 500;
 
             string tabs = SQLiteDBClass.GetSettingString(DbSave + "PanelTabs", "");
-            try
-            {
-                List<int> tablist = tabs.Split(',').Select(int.Parse).ToList();
 
-                for (int i = 0; i < tablist.Count && i < columnpos.Count; i++)      // for what we have, and not more than pre-populated, fill
-                    columnpos[i] = tablist[i];
+            if (tabs.HasChars())
+            {
+                try
+                {
+                    List<int> tablist = tabs.Split(',').Select(int.Parse).ToList();
+
+                    for (int i = 0; i < tablist.Count && i < columnpos.Count; i++)      // for what we have, and not more than pre-populated, fill
+                        columnpos[i] = tablist[i];
+                }
+                catch { }
             }
-            catch { }
 
             displayfont = discoveryform.theme.GetFont;
 
@@ -271,7 +275,12 @@ namespace EDDiscovery.UserControls
                                 "", economy,
                                 "", gov
                                 );
-                            AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null);
+
+
+                            HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
+                            bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
+
+                            AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer");
 
                             rowpos += rowheight;
                         }
@@ -459,14 +468,22 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        void AddColText(int coli, int nextcol , int rowpos, int rowh, string text, Color textcolour, Color backcolour, string tooltip)
+        void AddColText(int coli, int nextcol , int rowpos, int rowh, string text, Color textcolour, Color backcolour, string tooltip, Image opt = null , string imagetooltip = null)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
             {
                 int endpos = (nextcol == 0) ? 1920 : (columnpos[nextcol] - columnpos[coli] - 4);
 
+                int colpos = scanpostextoffset.X + columnpos[coli];
+
+                if ( opt != null )
+                {
+                    pictureBox.AddImage(new Rectangle(colpos, rowpos, 24, 24), Icons.Controls.firstdiscover, null, imagetooltip, false);
+                    colpos += 24;
+                }
+
                 ExtendedControls.PictureBoxHotspot.ImageElement e =
-                                pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[coli], rowpos),
+                                pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
                                 new Size(endpos, rowh),
                                 text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
 

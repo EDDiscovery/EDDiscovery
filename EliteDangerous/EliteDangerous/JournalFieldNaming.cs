@@ -32,7 +32,7 @@ namespace EliteDangerousCore
 
         static public string FDNameTranslation(string old)
         {
-            return MaterialCommodityDB.FDNameTranslation(old);
+            return MaterialCommodityData.FDNameTranslation(old);
         }
 
         static public string NormaliseMaterialCategory(string cat)
@@ -49,7 +49,7 @@ namespace EliteDangerousCore
 
         public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
-            MaterialCommodityDB mc = MaterialCommodityDB.GetCachedMaterial(fdname);
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(fdname);
 
             if (mc != null)
                 return mc.name;

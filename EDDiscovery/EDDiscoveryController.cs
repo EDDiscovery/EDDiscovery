@@ -111,7 +111,34 @@ namespace EDDiscovery
         public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
             msg.Invoke("Checking Config");
-            InitializeConfig();
+
+            EDDOptions.Instance.Init();
+
+            string logpath = EDDOptions.Instance.LogAppDirectory();
+
+            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
+            BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.log", 10, 256);        
+
+            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog != null)
+            {
+                TraceLog.RedirectTrace(logpath, EDDOptions.Instance.TraceLog);
+            }
+
+            if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)
+            {
+                ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
+            }
+
+            if (EDDOptions.Instance.LogExceptions)
+            {
+                FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
+            }
+
+            HttpCom.LogPath = logpath;
+
+            SQLiteConnectionUser.EarlyReadRegister();
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
@@ -133,13 +160,10 @@ namespace EDDiscovery
 
         public void Init()      // ED Discovery calls this during its init
         {
-            if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
+            TraceLog.LogFileWriterException += ex =>            // now we can attach the log writing highter into it
             {
-                TraceLog.LogFileWriterException += ex =>
-                {
-                    LogLineHighlight($"Log Writer Exception: {ex}");
-                };
-            }
+                LogLineHighlight($"Log Writer Exception: {ex}");
+            };
 
             backgroundWorker = new Thread(BackgroundWorkerThread);
             backgroundWorker.IsBackground = true;
@@ -352,42 +376,10 @@ namespace EDDiscovery
 
         private static void InitializeDatabases()
         {
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
-        }
-
-        private static void InitializeConfig()
-        {
-            EDDOptions.Instance.Init();
-
-            string logpath = "";
-            try
-            {
-                logpath = EDDOptions.Instance.LogAppDirectory();
-                TraceLog.logroot = EDDOptions.Instance.AppDataDirectory;
-                TraceLog.urlfeedback = Properties.Resources.URLProjectFeedback;
-
-                if (!Debugger.IsAttached || EDDOptions.Instance.TraceLog)
-                {
-                    TraceLog.Init();
-                }
-
-                if (EDDOptions.Instance.LogExceptions)
-                {
-                    TraceLog.RegisterFirstChanceExceptionHandler();
-                }
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine($"Unable to create the folder '{logpath}'");
-                Trace.WriteLine($"Exception: {ex.Message}");
-            }
-
-            SQLiteConnectionUser.EarlyReadRegister();
-
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
         }
 
         #endregion
@@ -551,7 +543,7 @@ namespace EDDiscovery
         private void BackgroundInit()
         {
             StarScan.LoadBodyDesignationMap();
-            MaterialCommodityDB.SetUpInitialTable();
+            MaterialCommodityData.SetUpInitialTable();
 
             SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
 
@@ -645,7 +637,7 @@ namespace EDDiscovery
         {
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform EDSM/EDDB sync");
             try
             {
                 bool[] grids = new bool[GridId.MaxGridID];
@@ -802,10 +794,10 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
                 hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath,
-                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents);
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete");
+                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete with " + hist.Count + " records");
             }
             catch (Exception ex)
             {
@@ -825,7 +817,7 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
 
                 if (hist != null)
                 {
@@ -837,15 +829,16 @@ namespace EDDiscovery
 
                     ReportProgress(-1, "");
 
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays");
                     RefreshDisplays();
-                    Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " JMOn");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JM On");
 
                 journalmonitor.StartMonitor();
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " RFcomplete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Call Refresh Complete");
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
@@ -856,7 +849,7 @@ namespace EDDiscovery
 
                 LogLine("History refresh complete.");
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " refresh history complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history complete");
             }
         }
 

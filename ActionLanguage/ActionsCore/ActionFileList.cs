@@ -235,12 +235,12 @@ namespace ActionLanguage
                 {
                     if (indexof == -1)
                     {
-                        System.Diagnostics.Debug.WriteLine("Add pack " + af.name);
+                        System.Diagnostics.Trace.WriteLine("Add pack " + af.name);
                         actionfiles.Add(af);
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine("Update Pack " + af.name);
+                        System.Diagnostics.Trace.WriteLine("Update Pack " + af.name);
                     }
                 }
                 else
@@ -249,7 +249,7 @@ namespace ActionLanguage
                     if (indexof != -1)
                     {
                         actionfiles.RemoveAt(indexof);          // remove dead packs
-                        System.Diagnostics.Debug.WriteLine("Delete Pack " + af.name);
+                        System.Diagnostics.Trace.WriteLine("Delete Pack " + af.name);
                     }
                 }
             }

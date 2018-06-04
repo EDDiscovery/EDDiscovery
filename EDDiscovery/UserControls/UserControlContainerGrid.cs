@@ -86,8 +86,11 @@ namespace EDDiscovery.UserControls
 
                 foreach (int item in zorder)
                 {
-                    UserControlContainerResizable uccr = uccrlist[item];
-                    panelPlayfield.Controls.SetChildIndex(uccr, ppos++);
+                    if (item >= 0 && item < uccrlist.Count)
+                    {
+                        UserControlContainerResizable uccr = uccrlist[item];
+                        panelPlayfield.Controls.SetChildIndex(uccr, ppos++);
+                    }
                 }
             }
 
@@ -182,8 +185,8 @@ namespace EDDiscovery.UserControls
 
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
-            int dnum = DisplayNumberOfGridInstance(numopenedinside);
-            //System.Diagnostics.Debug.WriteLine("  Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
+            int dnum = DisplayNumberOfGrid(numopenedinside);
+            System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 

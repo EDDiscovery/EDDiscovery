@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EliteDangerousCore.DB;
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -21,7 +21,7 @@ using System.Linq;
 namespace EliteDangerousCore
 {
     // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
-    public class MaterialCommodityDB
+    public class MaterialCommodityData
     {
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
         public string name { get; set; }                    // name of it in nice text
@@ -50,26 +50,33 @@ namespace EliteDangerousCore
         public const int VeryRareCap = 100;
 
         // name key is lower case normalised
-        private static Dictionary<string, MaterialCommodityDB> cachelist = new Dictionary<string, MaterialCommodityDB>();
+        private static Dictionary<string, MaterialCommodityData> cachelist = new Dictionary<string, MaterialCommodityData>();
 
-        public static MaterialCommodityDB GetCachedMaterial(string fdname)
+        public static MaterialCommodityData GetCachedMaterial(string fdname)
         {
             fdname = fdname.ToLower();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
-        public static MaterialCommodityDB GetCachedMaterialByShortName(string shortname)
+        public static MaterialCommodityData GetCachedMaterialByShortName(string shortname)
         {
-            List<MaterialCommodityDB> lst = cachelist.Values.ToList();
+            List<MaterialCommodityData> lst = cachelist.Values.ToList();
             int i = lst.FindIndex(x => x.shortname.Equals(shortname));
             return i >= 0 ? lst[i] : null;
         }
-        
-        public MaterialCommodityDB()
+
+        public static MaterialCommodityData GetCachedMaterialByName(string name)
+        {
+            List<MaterialCommodityData> lst = cachelist.Values.ToList();
+            int i = lst.FindIndex(x => x.name.Equals(name,System.StringComparison.InvariantCultureIgnoreCase));
+            return i >= 0 ? lst[i] : null;
+        }
+
+        public MaterialCommodityData()
         {
         }
 
-        public MaterialCommodityDB(string cs, string n, string fd, string t, string shortn, Color cl)
+        public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl)
         {
             category = cs;
             name = n;
@@ -89,7 +96,7 @@ namespace EliteDangerousCore
             return null;
         }
 
-        public static int? MaterialLimit(MaterialCommodityDB mat)
+        public static int? MaterialLimit(MaterialCommodityData mat)
         {
             if (string.IsNullOrEmpty(mat?.type)) return null;
             return MaterialLimit(mat.type);
@@ -100,11 +107,11 @@ namespace EliteDangerousCore
             cachelist[this.fdname.ToLower()] = this;
         }
 
-        public static MaterialCommodityDB EnsurePresent(string cat, string fdname, SQLiteConnectionUser conn)  // By FDNAME
+        public static MaterialCommodityData EnsurePresent(string cat, string fdname)  // By FDNAME
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {
-                MaterialCommodityDB mcdb = new MaterialCommodityDB(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green);
+                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname );
             }
@@ -189,7 +196,7 @@ namespace EliteDangerousCore
         private static bool Add(string catname, Color colour, string aliasname, string typeofit, string shortname = "", string fdName = "")
         {
             string fdn = (fdName.Length > 0) ? fdName : aliasname.FDName();
-            MaterialCommodityDB mc = new MaterialCommodityDB(catname, aliasname, fdn, typeofit, shortname, colour);
+            MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour);
             mc.SetCache();
             return true;
         }

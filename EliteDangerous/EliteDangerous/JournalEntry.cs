@@ -58,7 +58,7 @@ namespace EliteDangerousCore
         CrewAssign = 126,
         CrewFire = 127,
         CrewHire = 128,
-        CrewLaunchFighter = 1268, 
+        CrewLaunchFighter = 1268,
         CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
         CrewMemberRoleChange = 1285,
@@ -203,13 +203,16 @@ namespace EliteDangerousCore
         USSDrop = 940,
         VehicleSwitch = 950,
         WingAdd = 960,
-        WingInvite = 965, 
+        WingInvite = 965,
         WingJoin = 970,
         WingLeave = 980,
+
+        // EDD Entries
 
         EDDItemSet = 2000,
         EDDCommodityPrices = 2010,
 
+        // Specials Event IDs for ICON selection - alternate Icons for these events
         RestockVehicle_SRV = 10750,
         RestockVehicle_Fighter = 10751,
         ShieldState_ShieldsUp = 10830,
@@ -288,9 +291,42 @@ namespace EliteDangerousCore
 
         #endregion
 
-
-
         #region Static properties and fields
+
+        static public JournalTypeEnum[] EssentialEvents = new JournalTypeEnum[]     // 
+            {
+                // due to materials/commodities
+                JournalTypeEnum.Cargo, JournalTypeEnum.CargoDepot,JournalTypeEnum.CollectCargo,
+                JournalTypeEnum.EjectCargo,
+                JournalTypeEnum.EngineerContribution,
+                JournalTypeEnum.EngineerCraft, JournalTypeEnum.MarketBuy, JournalTypeEnum.MarketSell,
+                JournalTypeEnum.MaterialCollected, JournalTypeEnum.MaterialDiscarded, JournalTypeEnum.Materials, JournalTypeEnum.MaterialTrade,
+                JournalTypeEnum.Synthesis, JournalTypeEnum.TechnologyBroker,
+
+                // Missions
+                JournalTypeEnum.MissionAccepted, JournalTypeEnum.MissionCompleted, JournalTypeEnum.MissionAbandoned, JournalTypeEnum.MissionFailed, JournalTypeEnum.MissionRedirected,
+
+                // Combat
+                JournalTypeEnum.Bounty, JournalTypeEnum.CommitCrime, JournalTypeEnum.FactionKillBond,  JournalTypeEnum.PVPKill,
+                JournalTypeEnum.Died, JournalTypeEnum.Resurrect, JournalTypeEnum.SelfDestruct, 
+
+                // Journey
+                JournalTypeEnum.FSDJump, JournalTypeEnum.Location, JournalTypeEnum.Docked,
+
+                // Ship state
+                JournalTypeEnum.Loadout, JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleSell,
+                JournalTypeEnum.ModuleRetrieve,
+                JournalTypeEnum.ModuleSellRemote, JournalTypeEnum.ModuleStore, JournalTypeEnum.ModuleSwap, JournalTypeEnum.SellShipOnRebuy,
+                JournalTypeEnum.SetUserShipName, JournalTypeEnum.ShipyardBuy, JournalTypeEnum.ShipyardNew, JournalTypeEnum.ShipyardSell, 
+                JournalTypeEnum.ShipyardSwap , JournalTypeEnum.ShipyardTransfer, JournalTypeEnum.StoredModules, JournalTypeEnum.StoredShips,
+
+                // scan
+                JournalTypeEnum.Scan, JournalTypeEnum.SellExplorationData, 
+
+                // misc
+                JournalTypeEnum.ClearSavedGame, 
+            };
+
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
 
         /// <summary>
@@ -744,7 +780,8 @@ namespace EliteDangerousCore
             }
         }
 
-        static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null)
+        static public List<JournalEntry> GetAll(int commander = -999, DateTime? after = null, DateTime? before = null , 
+                            JournalTypeEnum[] ids = null , DateTime? allidsafter = null )
         {
             Dictionary<long, TravelLogUnit> tlus = TravelLogUnit.GetAll().ToDictionary(t => t.id);
 
@@ -752,14 +789,42 @@ namespace EliteDangerousCore
 
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {
-                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries where CommanderID=@commander and EventTime >= @after and EventTime <= @before Order by EventTime ASC"))
+                using (DbCommand cmd = cn.CreateCommand("select * from JournalEntries"))
                 {
-                    if (commander == -999)
-                        cmd.CommandText = "select * from JournalEntries where EventTime >= @after and EventTime <= @before Order by EventTime ";
+                    string cnd = "";
+                    if (commander != -999)
+                    {
+                        cnd = cnd.AppendPrePad("CommanderID = @commander", " and ");
+                        cmd.AddParameterWithValue("@commander", commander);
+                    }
+                    if (after != null)
+                    {
+                        cnd = cnd.AppendPrePad("EventTime >= @after", " and ");
+                        cmd.AddParameterWithValue("@after", after.Value);
+                    }
+                    if (before != null)
+                    {
+                        cnd = cnd.AppendPrePad("EventTime <= @before", " and ");
+                        cmd.AddParameterWithValue("@before", before.Value);
+                    }
+                    if ( ids != null )
+                    {
+                        int[] array = Array.ConvertAll(ids, x => (int)x);
+                        if (allidsafter != null)
+                        {
+                            cmd.AddParameterWithValue("@idafter", allidsafter.Value);
+                            cnd = cnd.AppendPrePad("(EventTypeId in (" + string.Join(",", array) + ") Or EventTime>=@idafter)", " and ");
+                        }
+                        else
+                        {
+                            cnd = cnd.AppendPrePad("EventTypeId in (" + string.Join(",", array) + ")", " and ");
+                        }
+                    }
 
-                    cmd.AddParameterWithValue("@commander", commander);
-                    cmd.AddParameterWithValue("@before", before ?? DateTime.MaxValue);
-                    cmd.AddParameterWithValue("@after", after ?? DateTime.MinValue);
+                    if (cnd.HasChars())
+                        cmd.CommandText += " where " + cnd;
+
+                    cmd.CommandText += " Order By EventTime ASC";
 
                     DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
 

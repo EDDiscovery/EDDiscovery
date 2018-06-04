@@ -239,7 +239,7 @@ namespace EliteDangerousCore
             try
             {
                 string sel = System.IO.File.ReadAllText(optsel);
-                System.Diagnostics.Debug.WriteLine("Bindings file " + sel);
+                System.Diagnostics.Trace.WriteLine("Bindings file " + sel);
 
                 FileInfo[] allFiles = Directory.EnumerateFiles(path, sel + "*.binds", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
 

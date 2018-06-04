@@ -117,6 +117,8 @@ namespace EDDiscovery.UserControls
             if (mcl == null)
                 return;
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Begin Display");
+
             List<MaterialCommodities> mc = mcl.Sort(!materials);
 
             if (mc.Count > 0)
@@ -129,7 +131,8 @@ namespace EDDiscovery.UserControls
 
                     if (materials)
                     {
-                        rowobj = new[] { m.name, m.shortname, m.category, m.type, $"{m.count.ToString()}/{(MaterialCommodityDB.MaterialLimit(m.type)??0).ToString()}" };
+                        rowobj = new[] { m.name, m.shortname, m.category, m.type + " (" + (MaterialCommodityData.MaterialLimit(m.type)??0).ToString() + ")" ,
+                            m.count.ToString() };
                     }
                     else
                     {
@@ -157,6 +160,8 @@ namespace EDDiscovery.UserControls
             {
                 labelNoItems.Visible = true;
             }
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Load Finished");
         }
 
         #endregion

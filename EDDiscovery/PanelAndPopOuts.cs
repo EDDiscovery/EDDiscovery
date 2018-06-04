@@ -305,6 +305,9 @@ namespace EDDiscovery.Forms
                 int numopened = usercontrolsforms.CountOf(ctrl.GetType()) + 1;
                 string windowtitle = poi.WindowTitle + " " + ((numopened > 1) ? numopened.ToString() : "");
                 string refname = poi.WindowRefName + numopened.ToString();
+
+                System.Diagnostics.Trace.WriteLine("PO:Make " + windowtitle + " ucf " + ctrl.GetType().Name);
+
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
                             poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);
 

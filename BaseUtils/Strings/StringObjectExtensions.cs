@@ -847,6 +847,26 @@ public static class ObjectExtensionsStrings
         return s.Substring(0, i);
     }
 
+    public static string Word(this string s, char[] stopchars, int number)      // word 1,2,3 etc or NULL if out of words
+    {
+        int startpos = 0;
+        int i = 0;
+        while (i < s.Length)
+        {
+            bool stop = Array.IndexOf(stopchars, s[i]) != -1;
+            i++;
+            if ( stop )
+            {
+                if ( --number == 0 )
+                    return s.Substring(startpos, i - startpos - 1);
+                else
+                    startpos = i;
+            }
+        }
+
+        return (number==1) ? s.Substring(startpos) : null;      // if only 1 left, the EOL is the end char, so return
+    }
+
     public static bool IsPrefix(ref string s, string t, StringComparison c = StringComparison.InvariantCulture)
     {
         if (s.StartsWith(t, c))

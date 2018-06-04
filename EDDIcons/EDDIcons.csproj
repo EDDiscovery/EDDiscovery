@@ -680,5 +680,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Panels\SplitterControl.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\SysInfo\firstdiscover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Controls\readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

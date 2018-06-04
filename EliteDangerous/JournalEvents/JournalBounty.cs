@@ -44,6 +44,21 @@ namespace EliteDangerousCore.JournalEvents
 
             SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObjectProtected<BountyReward[]>();
+
+            Target = evt["Target"].StrNull();       // only set for skimmer target missions
+
+            if ( Rewards == null )                  // for skimmers, its Faction/Reward.  Bug in manual reported to FD 23/5/2018
+            {
+                string faction = evt["Faction"].StrNull();
+                long? reward = evt["Reward"].IntNull();
+
+                if (faction != null && reward != null)
+                {
+                    Rewards = new BountyReward[1];
+                    Rewards[0] = new BountyReward() { Faction = faction, Reward = reward.Value };
+                    TotalReward = reward.Value;
+                }
+            }
         }
 
         public long TotalReward { get; set; }

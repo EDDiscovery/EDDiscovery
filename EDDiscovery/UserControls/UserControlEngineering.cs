@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityDB.GetCachedMaterialByShortName(sn).name)).ToList();
+            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).name)).ToList();
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
@@ -110,6 +110,7 @@ namespace EDDiscovery.UserControls
                 row.Cells[Module.Index].Value = r.modulesstring;
                 row.Cells[Level.Index].Value = r.level;
                 row.Cells[Recipe.Index].Value = r.ingredientsstring;
+                row.Cells[Recipe.Index].ToolTipText = r.ingredientsstringlong;
                 row.Cells[Engineers.Index].Value = r.engineersstring;
                 row.Tag = rno;
                 row.Visible = false;
@@ -195,6 +196,8 @@ namespace EDDiscovery.UserControls
 
             List<Tuple<Recipes.Recipe, int>> wantedList = null;
 
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Begin Display");
+
             if (last_he != null)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
@@ -215,8 +218,14 @@ namespace EDDiscovery.UserControls
                 string[] upgArray = upgrades.Split(';');
                 string materials = SQLiteDBClass.GetSettingString(DbMaterialFilterSave, "All");
                 List<string> matList;
-                if (materials == "All" || materials == "None") { matList = new List<string>(); }
-                else { matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList(); }
+                if (materials == "All" || materials == "None")
+                {
+                    matList = new List<string>();
+                }
+                else
+                {
+                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
+                }
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
@@ -263,12 +272,13 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
-                        Tuple<int, int, string> res = Recipes.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string,string> res = Recipes.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
                         dataGridViewEngineering[Available.Index, i].Value = res.Item2.ToStringInvariant();
                         dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
+                        dataGridViewEngineering[Notes.Index, i].ToolTipText = res.Item4;
 
                     }
                     if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
@@ -308,6 +318,8 @@ namespace EDDiscovery.UserControls
 
             if (OnDisplayComplete != null)
                 OnDisplayComplete(wantedList);
+
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Load Finished");
         }
 
         #endregion

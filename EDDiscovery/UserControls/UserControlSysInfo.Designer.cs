@@ -115,6 +115,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel = new ExtendedControls.TextBoxBorder();
             this.textBoxCredits = new ExtendedControls.TextBoxBorder();
             this.labelCredits = new System.Windows.Forms.Label();
+            this.panelFD = new ExtendedControls.PanelNoTheme();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -347,10 +348,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxBody.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxBody.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBody.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxBody.BorderColorScaling = 0.5F;
             this.textBoxBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBody.ClearOnFirstChar = false;
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBody.InErrorCondition = false;
             this.textBoxBody.Location = new System.Drawing.Point(52, 80);
             this.textBoxBody.Multiline = false;
             this.textBoxBody.Name = "textBoxBody";
@@ -363,6 +367,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.TabStop = false;
             this.textBoxBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxBody.WordWrap = true;
+            this.textBoxBody.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxBody.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxBody.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxBody.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -383,10 +388,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxPosition.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxPosition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxPosition.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxPosition.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxPosition.BorderColorScaling = 0.5F;
             this.textBoxPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxPosition.ClearOnFirstChar = false;
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxPosition.InErrorCondition = false;
             this.textBoxPosition.Location = new System.Drawing.Point(52, 104);
             this.textBoxPosition.Multiline = false;
             this.textBoxPosition.Name = "textBoxPosition";
@@ -399,6 +407,7 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.TabStop = false;
             this.textBoxPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxPosition.WordWrap = true;
+            this.textBoxPosition.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxPosition.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -420,10 +429,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxVisits.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxVisits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxVisits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxVisits.BorderColorScaling = 0.5F;
             this.textBoxVisits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxVisits.ClearOnFirstChar = false;
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxVisits.InErrorCondition = false;
             this.textBoxVisits.Location = new System.Drawing.Point(52, 56);
             this.textBoxVisits.Multiline = false;
             this.textBoxVisits.Name = "textBoxVisits";
@@ -436,6 +448,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.TabStop = false;
             this.textBoxVisits.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxVisits.WordWrap = true;
+            this.textBoxVisits.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxVisits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxVisits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxVisits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -483,10 +496,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxAllegiance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxAllegiance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxAllegiance.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxAllegiance.BorderColorScaling = 0.5F;
             this.textBoxAllegiance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxAllegiance.ClearOnFirstChar = false;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxAllegiance.InErrorCondition = false;
             this.textBoxAllegiance.Location = new System.Drawing.Point(191, 231);
             this.textBoxAllegiance.Multiline = false;
             this.textBoxAllegiance.Name = "textBoxAllegiance";
@@ -499,6 +515,7 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.TabStop = false;
             this.textBoxAllegiance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxAllegiance.WordWrap = true;
+            this.textBoxAllegiance.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxAllegiance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxAllegiance.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxAllegiance.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -507,10 +524,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxGovernment.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxGovernment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxGovernment.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxGovernment.BorderColorScaling = 0.5F;
             this.textBoxGovernment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxGovernment.ClearOnFirstChar = false;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxGovernment.InErrorCondition = false;
             this.textBoxGovernment.Location = new System.Drawing.Point(53, 249);
             this.textBoxGovernment.Multiline = false;
             this.textBoxGovernment.Name = "textBoxGovernment";
@@ -523,6 +543,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.TabStop = false;
             this.textBoxGovernment.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxGovernment.WordWrap = true;
+            this.textBoxGovernment.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxGovernment.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxGovernment.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxGovernment.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -557,10 +578,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxEconomy.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxEconomy.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxEconomy.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxEconomy.BorderColorScaling = 0.5F;
             this.textBoxEconomy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxEconomy.ClearOnFirstChar = false;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxEconomy.InErrorCondition = false;
             this.textBoxEconomy.Location = new System.Drawing.Point(191, 249);
             this.textBoxEconomy.Multiline = false;
             this.textBoxEconomy.Name = "textBoxEconomy";
@@ -573,6 +597,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.TabStop = false;
             this.textBoxEconomy.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxEconomy.WordWrap = true;
+            this.textBoxEconomy.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxEconomy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxEconomy.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxEconomy.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -581,10 +606,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxState.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxState.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxState.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxState.BorderColorScaling = 0.5F;
             this.textBoxState.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxState.ClearOnFirstChar = false;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxState.InErrorCondition = false;
             this.textBoxState.Location = new System.Drawing.Point(53, 231);
             this.textBoxState.Multiline = false;
             this.textBoxState.Name = "textBoxState";
@@ -597,6 +625,7 @@ namespace EDDiscovery.UserControls
             this.textBoxState.TabStop = false;
             this.textBoxState.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxState.WordWrap = true;
+            this.textBoxState.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxState.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxState.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxState.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -633,10 +662,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxHomeDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxHomeDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxHomeDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxHomeDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxHomeDist.BorderColorScaling = 0.5F;
             this.textBoxHomeDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxHomeDist.ClearOnFirstChar = false;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxHomeDist.InErrorCondition = false;
             this.textBoxHomeDist.Location = new System.Drawing.Point(60, 161);
             this.textBoxHomeDist.Multiline = false;
             this.textBoxHomeDist.Name = "textBoxHomeDist";
@@ -649,6 +681,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.TabStop = false;
             this.textBoxHomeDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxHomeDist.WordWrap = true;
+            this.textBoxHomeDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxHomeDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxHomeDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxHomeDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -684,10 +717,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxSolDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSolDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSolDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSolDist.BorderColorScaling = 0.5F;
             this.textBoxSolDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSolDist.ClearOnFirstChar = false;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSolDist.InErrorCondition = false;
             this.textBoxSolDist.Location = new System.Drawing.Point(245, 160);
             this.textBoxSolDist.Multiline = false;
             this.textBoxSolDist.Name = "textBoxSolDist";
@@ -700,6 +736,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.TabStop = false;
             this.textBoxSolDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSolDist.WordWrap = true;
+            this.textBoxSolDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxSolDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxSolDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxSolDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -790,9 +827,11 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.textBoxTarget.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTarget.BorderColorScaling = 0.5F;
             this.textBoxTarget.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTarget.ClearOnFirstChar = false;
             this.textBoxTarget.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
@@ -803,6 +842,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxTarget.InErrorCondition = false;
             this.textBoxTarget.Location = new System.Drawing.Point(54, 335);
             this.textBoxTarget.Multiline = false;
             this.textBoxTarget.Name = "textBoxTarget";
@@ -816,6 +856,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
+            this.textBoxTarget.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTarget.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxTarget_KeyUp);
             this.textBoxTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -825,10 +866,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTargetDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxTargetDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTargetDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTargetDist.BorderColorScaling = 0.5F;
             this.textBoxTargetDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTargetDist.ClearOnFirstChar = false;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTargetDist.InErrorCondition = false;
             this.textBoxTargetDist.Location = new System.Drawing.Point(164, 335);
             this.textBoxTargetDist.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
             this.textBoxTargetDist.Multiline = false;
@@ -843,6 +887,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip1.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
+            this.textBoxTargetDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTargetDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxTargetDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -855,10 +900,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxSystem.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxSystem.BorderColorScaling = 0.5F;
             this.textBoxSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxSystem.ClearOnFirstChar = false;
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxSystem.InErrorCondition = false;
             this.textBoxSystem.Location = new System.Drawing.Point(52, 8);
             this.textBoxSystem.Multiline = false;
             this.textBoxSystem.Name = "textBoxSystem";
@@ -871,6 +919,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.TabStop = false;
             this.textBoxSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSystem.WordWrap = true;
+            this.textBoxSystem.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxSystem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -927,10 +976,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxGameMode.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxGameMode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxGameMode.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGameMode.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxGameMode.BorderColorScaling = 0.5F;
             this.textBoxGameMode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxGameMode.ClearOnFirstChar = false;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxGameMode.InErrorCondition = false;
             this.textBoxGameMode.Location = new System.Drawing.Point(54, 523);
             this.textBoxGameMode.Multiline = false;
             this.textBoxGameMode.Name = "textBoxGameMode";
@@ -943,6 +995,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.TabStop = false;
             this.textBoxGameMode.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxGameMode.WordWrap = true;
+            this.textBoxGameMode.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxGameMode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxGameMode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxGameMode.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -951,10 +1004,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTravelDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxTravelDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTravelDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelDist.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelDist.BorderColorScaling = 0.5F;
             this.textBoxTravelDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTravelDist.ClearOnFirstChar = false;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTravelDist.InErrorCondition = false;
             this.textBoxTravelDist.Location = new System.Drawing.Point(54, 549);
             this.textBoxTravelDist.Multiline = false;
             this.textBoxTravelDist.Name = "textBoxTravelDist";
@@ -967,6 +1023,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.TabStop = false;
             this.textBoxTravelDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelDist.WordWrap = true;
+            this.textBoxTravelDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTravelDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxTravelDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -975,10 +1032,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTravelTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxTravelTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTravelTime.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelTime.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelTime.BorderColorScaling = 0.5F;
             this.textBoxTravelTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTravelTime.ClearOnFirstChar = false;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTravelTime.InErrorCondition = false;
             this.textBoxTravelTime.Location = new System.Drawing.Point(131, 549);
             this.textBoxTravelTime.Multiline = false;
             this.textBoxTravelTime.Name = "textBoxTravelTime";
@@ -991,6 +1051,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.TabStop = false;
             this.textBoxTravelTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelTime.WordWrap = true;
+            this.textBoxTravelTime.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTravelTime.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxTravelTime.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -999,10 +1060,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxTravelJumps.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxTravelJumps.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxTravelJumps.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelJumps.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxTravelJumps.BorderColorScaling = 0.5F;
             this.textBoxTravelJumps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxTravelJumps.ClearOnFirstChar = false;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxTravelJumps.InErrorCondition = false;
             this.textBoxTravelJumps.Location = new System.Drawing.Point(211, 549);
             this.textBoxTravelJumps.Multiline = false;
             this.textBoxTravelJumps.Name = "textBoxTravelJumps";
@@ -1015,6 +1079,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.TabStop = false;
             this.textBoxTravelJumps.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTravelJumps.WordWrap = true;
+            this.textBoxTravelJumps.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelJumps.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxTravelJumps.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxTravelJumps.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1035,10 +1100,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxCargo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxCargo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxCargo.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCargo.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxCargo.BorderColorScaling = 0.5F;
             this.textBoxCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCargo.ClearOnFirstChar = false;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxCargo.InErrorCondition = false;
             this.textBoxCargo.Location = new System.Drawing.Point(54, 433);
             this.textBoxCargo.Multiline = false;
             this.textBoxCargo.Name = "textBoxCargo";
@@ -1051,6 +1119,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.TabStop = false;
             this.textBoxCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxCargo.WordWrap = true;
+            this.textBoxCargo.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxCargo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxCargo.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxCargo.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1059,10 +1128,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxMaterials.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxMaterials.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxMaterials.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxMaterials.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxMaterials.BorderColorScaling = 0.5F;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxMaterials.ClearOnFirstChar = false;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxMaterials.InErrorCondition = false;
             this.textBoxMaterials.Location = new System.Drawing.Point(60, 492);
             this.textBoxMaterials.Multiline = false;
             this.textBoxMaterials.Name = "textBoxMaterials";
@@ -1075,6 +1147,7 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.TabStop = false;
             this.textBoxMaterials.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxMaterials.WordWrap = true;
+            this.textBoxMaterials.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxMaterials.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxMaterials.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxMaterials.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1107,10 +1180,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxData.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxData.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxData.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxData.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxData.BorderColorScaling = 0.5F;
             this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxData.ClearOnFirstChar = false;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxData.InErrorCondition = false;
             this.textBoxData.Location = new System.Drawing.Point(51, 466);
             this.textBoxData.Multiline = false;
             this.textBoxData.Name = "textBoxData";
@@ -1123,6 +1199,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.TabStop = false;
             this.textBoxData.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxData.WordWrap = true;
+            this.textBoxData.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxData.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxData.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1143,10 +1220,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxShip.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxShip.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxShip.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxShip.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxShip.BorderColorScaling = 0.5F;
             this.textBoxShip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxShip.ClearOnFirstChar = false;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxShip.InErrorCondition = false;
             this.textBoxShip.Location = new System.Drawing.Point(54, 361);
             this.textBoxShip.Multiline = false;
             this.textBoxShip.Name = "textBoxShip";
@@ -1159,6 +1239,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.TabStop = false;
             this.textBoxShip.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxShip.WordWrap = true;
+            this.textBoxShip.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxShip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxShip.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxShip.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1179,10 +1260,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxFuel.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxFuel.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxFuel.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFuel.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFuel.BorderColorScaling = 0.5F;
             this.textBoxFuel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFuel.ClearOnFirstChar = false;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFuel.InErrorCondition = false;
             this.textBoxFuel.Location = new System.Drawing.Point(53, 387);
             this.textBoxFuel.Multiline = false;
             this.textBoxFuel.Name = "textBoxFuel";
@@ -1195,6 +1279,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.TabStop = false;
             this.textBoxFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxFuel.WordWrap = true;
+            this.textBoxFuel.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxFuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxFuel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxFuel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1203,10 +1288,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxCredits.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxCredits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxCredits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCredits.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxCredits.BorderColorScaling = 0.5F;
             this.textBoxCredits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxCredits.ClearOnFirstChar = false;
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxCredits.InErrorCondition = false;
             this.textBoxCredits.Location = new System.Drawing.Point(60, 644);
             this.textBoxCredits.Multiline = false;
             this.textBoxCredits.Name = "textBoxCredits";
@@ -1219,6 +1307,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.TabStop = false;
             this.textBoxCredits.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxCredits.WordWrap = true;
+            this.textBoxCredits.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxCredits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxCredits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxCredits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1235,11 +1324,21 @@ namespace EDDiscovery.UserControls
             this.labelCredits.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelCredits.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // panelFD
+            // 
+            this.panelFD.BackgroundImage = global::EDDiscovery.Icons.Controls.firstdiscover;
+            this.panelFD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.panelFD.Location = new System.Drawing.Point(206, 8);
+            this.panelFD.Name = "panelFD";
+            this.panelFD.Size = new System.Drawing.Size(24, 24);
+            this.panelFD.TabIndex = 46;
+            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip;
+            this.Controls.Add(this.panelFD);
             this.Controls.Add(this.labelSysName);
             this.Controls.Add(this.textBoxSystem);
             this.Controls.Add(this.labelOpen);
@@ -1370,5 +1469,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripRemoveAll;
+        private ExtendedControls.PanelNoTheme panelFD;
     }
 }
