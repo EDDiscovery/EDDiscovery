@@ -106,7 +106,6 @@ namespace EDDiscovery
         public void LogLineHighlight(string text) { Controller.LogLineHighlight(text); }
         public void LogLineSuccess(string text) { Controller.LogLineSuccess(text); }
         public void LogLineColor(string text, Color color) { Controller.LogLineColor(text, color); }
-        public void ReportProgress(int percent, string message) { Controller.ReportProgress(percent, message); }
         #endregion
 
         #region History
@@ -128,7 +127,8 @@ namespace EDDiscovery
         {
             RestoreFormPositionRegKey = "Form";
 
-            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
+            Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, 
+                                                        () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
             Controller.OnBgSafeClose += Controller_BgSafeClose;
@@ -137,7 +137,8 @@ namespace EDDiscovery
             Controller.OnRefreshCommanders += Controller_RefreshCommanders;
             Controller.OnRefreshComplete += Controller_RefreshComplete;
             Controller.OnRefreshStarting += Controller_RefreshStarting;
-            Controller.OnReportProgress += Controller_ReportProgress;
+            Controller.OnReportSyncProgress += Controller_ReportSyncProgress;
+            Controller.OnReportRefreshProgress += Controller_ReportRefreshProgress;
             Controller.OnSyncComplete += Controller_SyncComplete;
             Controller.OnSyncStarting += Controller_SyncStarting;
             Controller.OnInitialisationComplete += Controller_InitialisationComplete;
@@ -739,27 +740,41 @@ namespace EDDiscovery
 
         }
 
-        private void Controller_ReportProgress(int percentComplete, string message)
+        string syncprogressstring="",refreshprogressstring="";
+
+        private void Controller_ReportSyncProgress(int percentComplete, string message)
         {
             if (!Controller.PendingClose)
             {
                 if (percentComplete >= 0)
                 {
-                    this.toolStripProgressBar1.Visible = true;
-                    this.toolStripProgressBar1.Value = percentComplete;
+                    toolStripProgressBar1.Visible = true;
+                    toolStripProgressBar1.Value = percentComplete;
                 }
                 else
                 {
-                    this.toolStripProgressBar1.Visible = false;
+                    toolStripProgressBar1.Visible = false;
                 }
 
-                this.toolStripStatusLabel1.Text = message;
+                syncprogressstring = message;
+                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
             }
         }
 
-#endregion
+        private void Controller_ReportRefreshProgress(int percentComplete, string message)      // percent not implemented for this
+        {
+            if (!Controller.PendingClose)
+            {
+                System.Diagnostics.Debug.WriteLine("Refresh msg " + message);
+                refreshprogressstring = message;
+                toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
+                Update();       // nasty but it works - needed since we are doing UI work here and the UI thread will be blocked
+            }
+        }
 
-#region Closing
+        #endregion
+
+        #region Closing
 
         private void EDDiscoveryForm_FormClosing(object sender, FormClosingEventArgs e)     // when user asks for a close
         {
