@@ -696,16 +696,24 @@ namespace EliteDangerousCore.EDSM
                 , ret, handleException: true);
         }
 
-        public static List<JournalScan> GetBodiesList(long edsmid)          // protected against bad json
+        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true) // get this edsmid,  optionally lookup web protected against bad json
         {
             try
             {
                 if (DictEDSMBodies!=null &&  DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                {
+                   // System.Diagnostics.Debug.WriteLine(".. found EDSM Lookup bodies from cache " + edsmid);
                     return DictEDSMBodies[edsmid];
+                }
+
+                if (!edsmweblookup)      // must be set for a web lookup
+                    return null;
 
                 List<JournalScan> bodies = new List<JournalScan>();
 
                 EDSMClass edsm = new EDSMClass();
+
+                //System.Diagnostics.Debug.WriteLine("EDSM Web Lookup bodies " + edsmid);
 
                 JObject jo = edsm.GetBodies(edsmid);  // Colonia 
 

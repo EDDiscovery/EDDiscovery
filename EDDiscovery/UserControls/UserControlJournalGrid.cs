@@ -247,7 +247,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)            
+        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)
         {
             DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
             item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);

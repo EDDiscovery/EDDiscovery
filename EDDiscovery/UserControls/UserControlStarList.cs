@@ -68,7 +68,9 @@ namespace EDDiscovery.UserControls
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
         private HistoryList current_historylist;
-        
+
+        Timer searchtimer;
+
         public UserControlStarList()
         {
             InitializeComponent();
@@ -100,10 +102,13 @@ namespace EDDiscovery.UserControls
             this.checkBoxJumponium.CheckedChanged += new System.EventHandler(this.buttonJumponium_CheckedChanged);
 
             discoveryform.OnHistoryChange += HistoryChanged;
-            discoveryform.OnNewEntry += AddNewEntry;                        
+            discoveryform.OnNewEntry += AddNewEntry;
+
+            searchtimer = new Timer() { Interval = 500 };
+            searchtimer.Tick += Searchtimer_Tick;
         }
-        
-                
+
+
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewStarList, DbColumnSave);
@@ -168,7 +173,9 @@ namespace EDDiscovery.UserControls
 
             foreach( List<HistoryEntry> syslist in systemsentered.Values ) // will be in order of entry..
             {
-                AddNewHistoryRow(false, syslist);      // add, with the properties of the first (latest) entry, giving the number of entries..
+                DataGridViewRow rw = CreateHistoryRow(syslist, textBoxFilter.Text);
+                if (rw != null)
+                    dataGridViewStarList.Rows.Add(rw);
             }
 
             dataGridViewStarList.FilterGridView(textBoxFilter.Text);
@@ -219,44 +226,49 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void AddNewHistoryRow(bool insert, List<HistoryEntry> syslist)            // second part of add history row, adds item to view.
+        private DataGridViewRow CreateHistoryRow(List<HistoryEntry> syslist, string search)
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             HistoryEntry he = syslist[0];
-            
-            int visits = syslist.Count;                        
-            object[] rowobj = { EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal, he.System.Name, $"{visits:N0}", Infoline(syslist) };
 
-            int rownr;
-            if (insert)
+            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal;
+            string visits = $"{syslist.Count:N0}";
+            string info = Infoline(syslist);
+
+            if (search.HasChars())
             {
-                dataGridViewStarList.Rows.Insert(0, rowobj);
-                rownr = 0;
+                string timestr = time.ToString();
+                bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                he.System.Name.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                visits.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                info.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                if (!matched)
+                    return null;
             }
-            else
-            {
-                dataGridViewStarList.Rows.Add(rowobj);
-                rownr = dataGridViewStarList.Rows.Count - 1;
-            }
 
-            foreach( HistoryEntry hel in syslist )
-                rowsbyjournalid[hel.Journalid] = dataGridViewStarList.Rows[rownr];      // all JIDs in this array, to this row
+            var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info);
 
-            dataGridViewStarList.Rows[rownr].Tag = syslist;
+            foreach ( HistoryEntry hel in syslist )
+                rowsbyjournalid[hel.Journalid] = rw;      // all JIDs in this array, to this row
 
-            dataGridViewStarList.Rows[rownr].DefaultCellStyle.ForeColor = (he.System.HasCoordinate || he.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
+            rw.Tag = syslist;
+
+            rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate || he.EntryType != JournalTypeEnum.FSDJump) ? discoveryform.theme.VisitedSystemColor : discoveryform.theme.NonVisitedSystemColor;
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             string tip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
-            dataGridViewStarList.Rows[rownr].Cells[0].Tag = false;  //[0] records if checked EDSm
+            rw.Cells[0].Tag = false;  //[0] records if checked EDSm
 
-            dataGridViewStarList.Rows[rownr].Cells[0].ToolTipText = tip;
-            dataGridViewStarList.Rows[rownr].Cells[1].ToolTipText = tip;
-            dataGridViewStarList.Rows[rownr].Cells[2].ToolTipText = tip;
-            dataGridViewStarList.Rows[rownr].Cells[3].ToolTipText = tip;                       
+            rw.Cells[0].ToolTipText = tip;
+            rw.Cells[1].ToolTipText = tip;
+            rw.Cells[2].ToolTipText = tip;
+            rw.Cells[3].ToolTipText = tip;
+
+            return rw;
         }
 
         string Infoline(List<HistoryEntry> syslist)
@@ -460,6 +472,8 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region UI
+
         Tuple<long, int> CurrentGridPosByJID()          // Returns JID, column index.  JID = -1 if cell is not defined
         {
             long jid = (dataGridViewStarList.CurrentCell != null) ? (dataGridViewStarList.Rows[dataGridViewStarList.CurrentCell.RowIndex].Tag as List<HistoryEntry>)[0].Journalid : -1;
@@ -567,17 +581,18 @@ namespace EDDiscovery.UserControls
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            Tuple<long, int> pos = CurrentGridPosByJID();
-
-            dataGridViewStarList.FilterGridView(textBoxFilter.Text); 
-
-            int rowno = FindGridPosByJID(pos.Item1, true);
-            if (rowno >= 0)
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];
+            searchtimer.Stop();
+            searchtimer.Start();
         }
 
+        private void Searchtimer_Tick(object sender, EventArgs e)
+        {
+            searchtimer.Stop();
+            this.Cursor = Cursors.WaitCursor;
+            HistoryChanged(current_historylist, false);
+            this.Cursor = Cursors.Default;
+        }
 
-        #region Clicks
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
