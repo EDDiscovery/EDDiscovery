@@ -144,8 +144,6 @@ namespace EDDiscovery
 
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
-
-            Controller.OnInitialisationComplete += Controller_InitialisationComplete;
         }
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
@@ -261,6 +259,7 @@ namespace EDDiscovery
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
+
             ApplyTheme();
 
             notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
@@ -332,15 +331,18 @@ namespace EDDiscovery
                 Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
             }
 
+            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
+                PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
+
             actioncontroller.onStartup();
-
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown complete");
-
-            // Form is fully loaded, we can do tab actions now
 
             tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
 
             actioncontroller.CheckWarn();
+
+            screenshotconverter.Start();
+
+            checkInstallerTask = CheckForNewInstallerAsync();
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
@@ -491,7 +493,7 @@ namespace EDDiscovery
 
             labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
 
-            Controller.RefreshDisplays();
+            //?????Controller.RefreshDisplays(); // why? removed in june 18..
         }
 
 #endregion
@@ -517,16 +519,6 @@ namespace EDDiscovery
         private void Controller_RefreshCommanders()
         {
             LoadCommandersListBox();             // in case a new commander has been detected
-        }
-
-        private void Controller_InitialisationComplete()        // background init in controller complete..
-        {
-            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
-                PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
-
-            screenshotconverter.Start();
-
-            checkInstallerTask = CheckForNewInstallerAsync();
         }
 
         private void Controller_RefreshStarting()

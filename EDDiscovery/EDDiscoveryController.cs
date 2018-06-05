@@ -46,14 +46,12 @@ namespace EDDiscovery
 
         // IN ORDER OF CALLING DURING A REFRESH
 
-        public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made (EDDiscoveryForm uses this to refresh commander stuff).  History is not valid here.
                                                                             // ALSO called if Loadgame is received.
 
+        public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
-        public event Action OnInitialisationComplete;                       // UI.  Called AFTER first initial history load only
-
         public event Action<int, string> OnReportRefreshProgress;           // UI. Refresh progress reporter
 
         // DURING A new Journal entry by the monitor, in order..
@@ -77,7 +75,7 @@ namespace EDDiscovery
         public event Action OnBgSafeClose;                                  // BK. Background close, in BCK thread
         public event Action OnFinalClose;                                   // UI. Final close, in UI thread
 
-        // During SYNC events and on start up
+        // During SYNC events
 
         public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
         public event Action OnSyncComplete;                                 // UI. SYNC has completed
@@ -317,9 +315,9 @@ namespace EDDiscovery
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
         {
             history.ProcessUserHistoryListEntries(h => h.EntryOrder);
-
-            RefreshDisplays();
+            OnHistoryChange?.Invoke(history);
         }
+
         #endregion
 
         #region EDSM / EDDB
@@ -625,8 +623,6 @@ namespace EDDiscovery
             {
                 LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable");
             }
-
-            InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
         }
 
         #endregion
@@ -834,7 +830,9 @@ namespace EDDiscovery
                     EdsmLogFetcher.StopCheck();
 
                     Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays");
-                    RefreshDisplays();
+
+                    OnHistoryChange?.Invoke(history);
+
                     Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
 
@@ -843,6 +841,7 @@ namespace EDDiscovery
                 journalmonitor.StartMonitor();
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Call Refresh Complete");
+
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
