@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
                 AddNewHistoryRow(false, syslist);      // add, with the properties of the first (latest) entry, giving the number of entries..
             }
 
-            StaticFilters.FilterGridView(dataGridViewStarList, textBoxFilter.Text);
+            dataGridViewStarList.FilterGridView(textBoxFilter.Text);
 
             int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
@@ -569,7 +569,7 @@ namespace EDDiscovery.UserControls
         {
             Tuple<long, int> pos = CurrentGridPosByJID();
 
-            StaticFilters.FilterGridView(dataGridViewStarList, textBoxFilter.Text);
+            dataGridViewStarList.FilterGridView(textBoxFilter.Text); 
 
             int rowno = FindGridPosByJID(pos.Item1, true);
             if (rowno >= 0)

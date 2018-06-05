@@ -247,14 +247,14 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
-    <Compile Include="UserControls\FindSystemsUserControl.cs">
+    <Compile Include="UserControls\Helpers\FindSystemsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\FindSystemsUserControl.Designer.cs">
+    <Compile Include="UserControls\Helpers\FindSystemsUserControl.Designer.cs">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\IHistoryCursor.cs" />
-    <Compile Include="UserControls\StarDistanceComputer.cs" />
+    <Compile Include="UserControls\Helpers\StarDistanceComputer.cs" />
     <Compile Include="UserControls\UserControlBookmarks.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -278,8 +278,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\FilterHelpers.cs" />
-    <Compile Include="UserControls\TargetClassHelpers.cs" />
+    <Compile Include="UserControls\Helpers\FilterHelpers.cs" />
+    <Compile Include="UserControls\Helpers\TargetClassHelpers.cs" />
     <Compile Include="EDDApplicationContext.cs" />
     <Compile Include="EDDiscoveryController.cs" />
     <Compile Include="Forms\CommanderForm.cs">
@@ -415,7 +415,7 @@
     <Compile Include="UserControls\UserControlSettings.Designer.cs">
       <DependentUpon>UserControlSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\TravelHistoryFilter.cs" />
+    <Compile Include="UserControls\Helpers\TravelHistoryFilter.cs" />
     <Compile Include="UserControls\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -470,10 +470,10 @@
     <Compile Include="UserControls\UserControlLocalMap.Designer.cs">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\SurfaceBookmarksForm.cs">
+    <Compile Include="UserControls\Helpers\SurfaceBookmarksForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\SurfaceBookmarksForm.Designer.cs">
+    <Compile Include="UserControls\Helpers\SurfaceBookmarksForm.Designer.cs">
       <DependentUpon>SurfaceBookmarksForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
@@ -581,10 +581,10 @@
     <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
       <DependentUpon>UserControlStarDistance.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\StatsTimeUserControl.cs">
+    <Compile Include="UserControls\Helpers\StatsTimeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\StatsTimeUserControl.Designer.cs">
+    <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlStarList.cs">
@@ -638,7 +638,7 @@
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\FindSystemsUserControl.resx">
+    <EmbeddedResource Include="UserControls\Helpers\FindSystemsUserControl.resx">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
@@ -698,7 +698,7 @@
     <EmbeddedResource Include="UserControls\UserControlLocalMap.resx">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\SurfaceBookmarksForm.resx">
+    <EmbeddedResource Include="UserControls\Helpers\SurfaceBookmarksForm.resx">
       <DependentUpon>SurfaceBookmarksForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
@@ -749,7 +749,7 @@
     <EmbeddedResource Include="UserControls\UserControlStats.resx">
       <DependentUpon>UserControlStats.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\StatsTimeUserControl.resx">
+    <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStarList.resx">
