@@ -129,18 +129,22 @@ namespace EDDiscovery
 
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, 
                                                         () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
-            Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
-            Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
+
             Controller.OnBgSafeClose += Controller_BgSafeClose;
             Controller.OnFinalClose += Controller_FinalClose;
-            Controller.OnInitialSyncComplete += Controller_InitialSyncComplete;
+
             Controller.OnRefreshCommanders += Controller_RefreshCommanders;
             Controller.OnRefreshComplete += Controller_RefreshComplete;
             Controller.OnRefreshStarting += Controller_RefreshStarting;
-            Controller.OnReportSyncProgress += Controller_ReportSyncProgress;
-            Controller.OnReportRefreshProgress += Controller_ReportRefreshProgress;
-            Controller.OnSyncComplete += Controller_SyncComplete;
-            Controller.OnSyncStarting += Controller_SyncStarting;
+            Controller.OnReportRefreshProgress += ReportRefreshProgress;
+
+            Controller.OnSyncStarting += () => { edsmRefreshTimer.Enabled = false; };
+            Controller.OnSyncComplete += () => { edsmRefreshTimer.Enabled = true; };
+            Controller.OnReportSyncProgress += ReportSyncProgress;
+
+            Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
+            Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
+
             Controller.OnInitialisationComplete += Controller_InitialisationComplete;
         }
 
@@ -293,33 +297,27 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
 
+            labelInfoBoxTop.Text = "";
+
             Controller.InitComplete();
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
+
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            try
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
+
+            Controller.PostInit_Loaded();
+
+            tabControlMain.LoadTabs();
+
+            if (EDDOptions.Instance.ActionButton)
             {
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
-
-                Controller.PostInit_Loaded();
-
-                ShowInfoPanel("Loading. Please wait!", true);
-
-                tabControlMain.LoadTabs();
-
-                if (EDDOptions.Instance.ActionButton)
-                {
-                    buttonReloadActions.Visible = true;
-                }
-
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
+                buttonReloadActions.Visible = true;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("EDDiscoveryForm_Load exception: " + ex.Message + "\n" + "Trace: " + ex.StackTrace);
-            }
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
         }
 
         // OnShown is called every time Show is called
@@ -397,7 +395,7 @@ namespace EDDiscovery
                     {
                         newRelease = rel;
                         this.BeginInvoke(new Action(() => Controller.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                        this.BeginInvoke(new Action(() => ShowInfoPanel("New Release Available!", true)));
+                        this.BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!"));
                         return true;
                     }
                 }
@@ -515,23 +513,20 @@ namespace EDDiscovery
 #endregion
 
 #region Controller event handlers 
-        private void Controller_InitialSyncComplete()
+
+        private void Controller_RefreshCommanders()
         {
+            LoadCommandersListBox();             // in case a new commander has been detected
+        }
+
+        private void Controller_InitialisationComplete()        // background init in controller complete..
+        {
+            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
+                PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
+
             screenshotconverter.Start();
 
-            ShowInfoPanel("", false);
-
             checkInstallerTask = CheckForNewInstallerAsync();
-        }
-
-        private void Controller_SyncStarting()      
-        {
-            edsmRefreshTimer.Enabled = false;
-        }
-
-        private void Controller_SyncComplete()
-        {
-            edsmRefreshTimer.Enabled = true;
         }
 
         private void Controller_RefreshStarting()
@@ -540,20 +535,8 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onRefreshStart);
         }
 
-        private void Controller_RefreshCommanders()
-        {
-            LoadCommandersListBox();             // in case a new commander has been detected
-        }
-
-        private void Controller_InitialisationComplete()
-        {
-            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
-                PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
-        }
-
         private void Controller_RefreshComplete()
         {
-
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
 
             RefreshButton(true);
@@ -742,7 +725,7 @@ namespace EDDiscovery
 
         string syncprogressstring="",refreshprogressstring="";
 
-        private void Controller_ReportSyncProgress(int percentComplete, string message)
+        private void ReportSyncProgress(int percentComplete, string message)
         {
             if (!Controller.PendingClose)
             {
@@ -761,11 +744,10 @@ namespace EDDiscovery
             }
         }
 
-        private void Controller_ReportRefreshProgress(int percentComplete, string message)      // percent not implemented for this
+        private void ReportRefreshProgress(int percentComplete, string message)      // percent not implemented for this
         {
             if (!Controller.PendingClose)
             {
-                System.Diagnostics.Debug.WriteLine("Refresh msg " + message);
                 refreshprogressstring = message;
                 toolStripStatusLabel1.Text = ObjectExtensionsStrings.AppendPrePad(syncprogressstring, refreshprogressstring, " | ");
                 Update();       // nasty but it works - needed since we are doing UI work here and the UI thread will be blocked
@@ -782,7 +764,7 @@ namespace EDDiscovery
             if (!Controller.ReadyForFinalClose)
             {
                 e.Cancel = true;
-                ShowInfoPanel("Closing, please wait!", true);
+                ReportRefreshProgress(-1, "Closing, please wait!");
                 actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                 Controller.Shutdown();
             }
@@ -819,12 +801,6 @@ namespace EDDiscovery
 #endregion
 
 #region Buttons, Mouse, Menus, NotifyIcon
-
-        public void ShowInfoPanel(string message, bool visible)
-        {
-            labelInfoBoxTop.Text = message;
-            labelInfoBoxTop.Visible = visible;
-        }
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {

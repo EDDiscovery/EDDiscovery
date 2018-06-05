@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare4 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +65,7 @@ namespace EDDiscovery
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsuncedEDDNEventsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendUnsyncedEGOScansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportVistedStarsListToEliteDangerousToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addOnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,7 +115,6 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMenuTop = new System.Windows.Forms.Panel();
-            this.sendHistoricDataToInaraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
@@ -133,7 +133,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(313, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(221, 24);
             this.menuStrip1.TabIndex = 16;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -309,6 +309,14 @@ namespace EDDiscovery
             this.sendUnsyncedEGOScansToolStripMenuItem.Text = "Send unsynced EGO scans";
             this.sendUnsyncedEGOScansToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEGOScansToolStripMenuItem_Click);
             // 
+            // sendHistoricDataToInaraToolStripMenuItem
+            // 
+            this.sendHistoricDataToInaraToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_SendUnsyncedEGO;
+            this.sendHistoricDataToInaraToolStripMenuItem.Name = "sendHistoricDataToInaraToolStripMenuItem";
+            this.sendHistoricDataToInaraToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.sendHistoricDataToInaraToolStripMenuItem.Text = "Send to Inara historic data (previous ships, stored modules)";
+            this.sendHistoricDataToInaraToolStripMenuItem.Click += new System.EventHandler(this.sendHistoricDataToInaraToolStripMenuItem_Click);
+            // 
             // clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem
             // 
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_ClearEDSMIDs;
@@ -466,9 +474,9 @@ namespace EDDiscovery
             this.labelInfoBoxTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoBoxTop.Location = new System.Drawing.Point(382, 4);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
-            this.labelInfoBoxTop.Size = new System.Drawing.Size(108, 13);
+            this.labelInfoBoxTop.Size = new System.Drawing.Size(83, 13);
             this.labelInfoBoxTop.TabIndex = 0;
-            this.labelInfoBoxTop.Text = "Loading. Please wait!";
+            this.labelInfoBoxTop.Text = "Information Text";
             this.labelInfoBoxTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelInfoBoxTop_MouseDown);
             this.labelInfoBoxTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
@@ -764,7 +772,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare4;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -812,14 +820,6 @@ namespace EDDiscovery
             this.panelMenuTop.TabIndex = 1;
             this.panelMenuTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.panelMenuTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
-            // 
-            // sendHistoricDataToInaraToolStripMenuItem
-            // 
-            this.sendHistoricDataToInaraToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Admin_SendUnsyncedEGO;
-            this.sendHistoricDataToInaraToolStripMenuItem.Name = "sendHistoricDataToInaraToolStripMenuItem";
-            this.sendHistoricDataToInaraToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
-            this.sendHistoricDataToInaraToolStripMenuItem.Text = "Send to Inara historic data (previous ships, stored modules)";
-            this.sendHistoricDataToInaraToolStripMenuItem.Click += new System.EventHandler(this.sendHistoricDataToInaraToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
