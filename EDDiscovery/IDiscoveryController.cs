@@ -45,7 +45,6 @@ namespace EDDiscovery
         void LogLineHighlight(string text);
         void LogLineSuccess(string text);
         void LogLineColor(string text, Color color);
-        void ReportProgress(int percent, string message);
         #endregion
 
         #region History

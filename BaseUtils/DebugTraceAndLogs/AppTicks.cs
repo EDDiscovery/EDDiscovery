@@ -26,7 +26,7 @@ namespace BaseUtils
         static System.Diagnostics.Stopwatch stopwatch;
         static long prevtick;
 
-        public static long TickCount
+        public static long TickCount        // current tick, with stopwatch creation
         {
             get
             {
@@ -36,20 +36,29 @@ namespace BaseUtils
                     stopwatch.Start();
                 }
 
-                prevtick = stopwatch.ElapsedMilliseconds;
-                return prevtick;
+                return stopwatch.ElapsedMilliseconds;
             }
         }
 
-        public static string TickCount100
+        public static string TickCountContinuous     // delta without last point reset
         {
             get
             {
-                long lasttick = prevtick;
                 long tc = TickCount;
-                //System.Diagnostics.Debug.WriteLine(lasttick + " " + tc);
-                return string.Format("{0} +{1}", tc, tc - lasttick);
+                return string.Format("{0} +{1}", tc, tc - prevtick);
             }
         }
+
+        public static string TickCount100       // strange name but keep for now.. reset last point
+        {
+            get
+            {
+                long tc = TickCount;
+                string s = string.Format("{0} +{1}", tc, tc - prevtick);
+                prevtick = tc;
+                return s;
+            }
+        }
+
     }
 }
