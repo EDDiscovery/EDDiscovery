@@ -22,17 +22,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using System.Linq;
 
 namespace EDDiscovery
 {
-    public class EDDiscoveryController : IDiscoveryController
+    public class EDDiscoveryController 
     {
         #region Public Interface
         #region Variables
@@ -81,7 +79,6 @@ namespace EDDiscovery
 
         // During SYNC events and on start up
 
-        public event Action OnInitialSyncComplete;                          // UI. Called during startup after CheckSystems done.
         public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
         public event Action OnSyncComplete;                                 // UI. SYNC has completed
         public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
@@ -495,7 +492,7 @@ namespace EDDiscovery
 
         private void BackgroundWorkerThread()     
         {
-            readyForInitialLoad.WaitOne();
+            readyForInitialLoad.WaitOne();      // wait for shown in form
 
             BackgroundInit();       // main init code
 
@@ -590,8 +587,6 @@ namespace EDDiscovery
             SystemNoteClass.GetAllSystemNotes();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-
-            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
 
             if (PendingClose) return;
 

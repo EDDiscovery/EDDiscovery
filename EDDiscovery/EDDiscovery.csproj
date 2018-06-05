@@ -303,7 +303,6 @@
     <Compile Include="Forms\VersioningManager.cs" />
     <Compile Include="Actions\ActionsFromInputDevices.cs" />
     <Compile Include="PanelAndPopOuts.cs" />
-    <Compile Include="IDiscoveryController.cs" />
     <Compile Include="Forms\AssignTravelLogSystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1003,7 +1002,8 @@
       <Output TaskParameter="ExitCode" PropertyName="GitExitCode" />
     </Exec>
     <PropertyGroup Condition="$(GitExitCode) != 0">
-      <GitCommitHash></GitCommitHash>
+      <GitCommitHash>
+      </GitCommitHash>
       <GitCommitHash Condition="Exists('$(MSBuildProjectDirectory)/../.git/HEAD')">$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../.git/HEAD'))</GitCommitHash>
       <Pattern>^ref: (.*)$</Pattern>
       <GitCommitRef Condition="$([System.Text.RegularExpressions.Regex]::IsMatch($(GitCommitHash), $(Pattern)))">$([System.Text.RegularExpressions.Regex]::Match($(GitCommitHash), $(Pattern)).Groups[1].Value)</GitCommitRef>
