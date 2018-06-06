@@ -70,6 +70,9 @@ namespace EDDiscovery.UserControls
         private HistoryList current_historylist;
 
         Timer searchtimer;
+        Timer autoupdateedsm;
+        int autoupdaterowstart = 0;
+        int autoupdaterowoffset = 0;
 
         public UserControlStarList()
         {
@@ -106,8 +109,9 @@ namespace EDDiscovery.UserControls
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
+            autoupdateedsm = new Timer() { Interval = 2000 };
+            autoupdateedsm.Tick += Autoupdateedsm_Tick;
         }
-
 
         public override void LoadLayout()
         {
@@ -136,6 +140,8 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
         {
+            autoupdateedsm.Stop();
+
             if (hl == null)     // just for safety
                 return;
 
@@ -206,8 +212,13 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Fire HC");
 
+            autoupdaterowoffset = autoupdaterowstart = 0;
+            autoupdateedsm.Start();
+
             FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
         }
+
+
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
@@ -260,8 +271,6 @@ namespace EDDiscovery.UserControls
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
             string tip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
-
-            rw.Cells[0].Tag = false;  //[0] records if checked EDSm
 
             rw.Cells[0].ToolTipText = tip;
             rw.Cells[1].ToolTipText = tip;
@@ -503,15 +512,53 @@ namespace EDDiscovery.UserControls
         public void CheckEDSM()
         {
             if (dataGridViewStarList.CurrentCell != null)
-            {
-                DataGridViewRow row = dataGridViewStarList.CurrentRow;
-                List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
+                CheckEDSM(dataGridViewStarList.CurrentRow);
+        }
 
-                if ((bool)row.Cells[0].Tag == false && checkBoxEDSM.Checked)
+        public void CheckEDSM(DataGridViewRow row)
+        {
+            List<HistoryEntry> syslist = row.Tag as List<HistoryEntry>;
+
+            discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup
+            row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist);
+        }
+
+        private void Autoupdateedsm_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
+        {
+            if (dataGridViewStarList.FirstDisplayedCell != null && checkBoxEDSM.Checked)
+            {
+                int top = dataGridViewStarList.FirstDisplayedCell.RowIndex;
+                if (top != autoupdaterowstart)
                 {
-                    discoveryform.history.starscan?.FindSystem(syslist[0].System, true);  // try an EDSM lookup
-                    row.Cells[StarHistoryColumns.OtherInformation].Value = Infoline(syslist);
-                    row.Cells[0].Tag = true;
+                    autoupdaterowstart = top;
+                    autoupdaterowoffset = 0;
+                }
+
+                while (true)
+                {
+                    int row = autoupdaterowstart + autoupdaterowoffset;
+                    DataGridViewRow rw = (row >= 0 && row < dataGridViewStarList.Rows.Count) ? dataGridViewStarList.Rows[row] : null;
+
+                    if (rw == null || rw.Displayed == false)        // don't go beyond end or beyond displayed area
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Stop at " + row + " " + autoupdaterowoffset);
+                        break;
+                    }
+
+                    autoupdaterowoffset++;
+
+                    List<HistoryEntry> syslist = rw.Tag as List<HistoryEntry>;
+
+                    if (!discoveryform.history.starscan.HasWebLookupOccurred(syslist[0].System))        // if we have done a lookup, we can skip this one quickly
+                    {
+                        //System.Diagnostics.Debug.WriteLine("EDSM Update row" + row);
+                        CheckEDSM(rw);
+                        break;
+                    }
+                    else
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Skip row as already checked " + row);
+                    }
                 }
             }
         }
