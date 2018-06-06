@@ -154,16 +154,15 @@ namespace EDDiscovery.UserControls
             result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotalevents);
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
-
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
             for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
             {
-                AddNewJournalRow(false, result[ii]);      // for every one in filter, add a row.
+                DataGridViewRow rw = CreateHistoryRow(result[ii], textBoxFilter.Text);
+                if (rw != null)
+                    dataGridViewJournal.Rows.Add(rw);
             }
-
-            StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
 
             UpdateToolTipsForFilter();
 
@@ -189,32 +188,6 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.Default;
         }
 
-
-        private void AddNewJournalRow(bool insert, HistoryEntry item)            // second part of add history row, adds item to view.
-        {
-            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
-
-            string detail = EventDescription;
-            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
-
-            var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewJournal, EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal, "", item.EventSummary, detail);
-            rw.Cells[JournalHistoryColumns.HistoryTag].Tag = item;
-
-            int rownr = 0;
-
-            if (insert)
-            {
-                dataGridViewJournal.Rows.Insert(rownr, rw);
-            }
-            else
-            {
-                rownr = dataGridViewJournal.Rows.Add(rw);
-            }   
-
-            rowsbyjournalid[item.Journalid] = dataGridViewJournal.Rows[rownr];
-        }
-
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
             bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
@@ -232,9 +205,9 @@ namespace EDDiscovery.UserControls
                 UpdateToolTipsForFilter();
             }
 
-            if ( add )
+            if (add)
             {
-                AddNewJournalRow(true, he);
+                dataGridViewJournal.Rows.Insert(0, CreateHistoryRow(he, textBoxFilter.Text));
 
                 var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
@@ -274,6 +247,33 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private DataGridViewRow CreateHistoryRow(HistoryEntry item, string search)
+        {
+            DateTime time = EDDiscoveryForm.EDDConfig.DisplayUTC ? item.EventTimeUTC : item.EventTimeLocal;
+            item.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
+            string detail = EventDescription;
+            detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15,Environment.NewLine + "..."), Environment.NewLine);
+
+            if (search.HasChars())
+            {
+                string timestr = time.ToString();
+                bool matched = timestr.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                item.EventSummary.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                detail.IndexOf(search, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                if (!matched)
+                    return null;
+            }
+
+            var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridViewJournal, time, "", item.EventSummary, detail);
+
+            rw.Cells[JournalHistoryColumns.HistoryTag].Tag = item;
+
+            rowsbyjournalid[item.Journalid] = rw;
+            return rw;
+        }
+
+
         private void UpdateToolTipsForFilter()
         {
             string ms = " showing " + dataGridViewJournal.Rows.Count + " original " + (current_historylist?.Count() ?? 0);
@@ -308,15 +308,7 @@ namespace EDDiscovery.UserControls
         {
             searchtimer.Stop();
             this.Cursor = Cursors.WaitCursor;
-
-            Tuple<long, int> pos = CurrentGridPosByJID();
-
-            StaticFilters.FilterGridView(dataGridViewJournal, textBoxFilter.Text);
-
-            int rowno = FindGridPosByJID(pos.Item1,true);
-            if (rowno >= 0)
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
-
+            Display(current_historylist, false);
             this.Cursor = Cursors.Default;
         }
 

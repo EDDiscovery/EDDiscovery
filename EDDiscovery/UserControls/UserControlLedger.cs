@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
 
                     }
 
-                    StaticFilters.FilterGridView(dataGridViewLedger, textBoxFilter.Text);
+                    dataGridViewLedger.FilterGridView(textBoxFilter.Text);
 
                     labelNoItems.Visible = false;
                 }
@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
-            StaticFilters.FilterGridView(dataGridViewLedger, textBoxFilter.Text);
+            dataGridViewLedger.FilterGridView(textBoxFilter.Text);
         }
 
         private void EventFilterChanged(object sender, EventArgs e)
