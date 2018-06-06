@@ -277,7 +277,7 @@ namespace EDDiscovery.UserControls
             double deltaLong = (targetLong.Value - longitude.Value) * PI / 180;
             double deltaLat = (targetLat.Value - latitude.Value) * PI / 180;
 
-            double a = Sin(deltaLat / 2) * Sin(deltaLat / 2) + Cos(lat1) * Cos(lat2) * Sin(deltaLat) * Sin(deltaLat);
+            double a = Sin(deltaLat / 2) * Sin(deltaLat / 2) + Cos(lat1) * Cos(lat2) * Sin(deltaLong / 2) * Sin(deltaLong / 2);
             double c = 2 * Atan2(Sqrt(a), Sqrt(1 - a));
 
             return bodyRadius.Value * c;
