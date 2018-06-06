@@ -170,6 +170,12 @@ namespace EliteDangerousCore
             }
         };
 
+        public bool HasWebLookupOccurred(ISystem sys)       // have we had a web checkup on this system?  false if sys does not exist
+        {
+            SystemNode sn = FindSystemNode(sys);
+            return (sn != null && sn.EDSMWebChecked);
+        }
+
         public SystemNode FindSystem(ISystem sys, bool edsmweblookup)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
@@ -184,7 +190,7 @@ namespace EliteDangerousCore
             {
                 List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup); // lookup, with optional web
 
-                //System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
+                //if ( edsmweblookup) System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
 
                 if (jl != null) // found some bodies.. either from cache or from EDSM..
                 {
@@ -198,11 +204,11 @@ namespace EliteDangerousCore
                 if (sn == null) // refind to make sure SN is set
                     sn = FindSystemNode(sys);
 
-                if (sn != null) // if we checked the web, set to indicate we did a GetBodies.. 
+                if (sn != null) // if we found it, set to indicate we did a cache check
                 {
                     sn.EDSMCacheCheck = true;
 
-                    if (edsmweblookup)
+                    if (edsmweblookup)      // and if we did a web check, set it too..
                         sn.EDSMWebChecked = true;
                 }
             }
