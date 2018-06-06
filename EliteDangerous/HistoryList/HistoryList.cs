@@ -949,13 +949,15 @@ namespace EliteDangerousCore
                 }
             }
 
-            reportProgress(-1, "Done");
-
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
 
             hist.CommanderId = CurrentCommander;
 
+            reportProgress(-1, "Updating user statistics");
+
             hist.ProcessUserHistoryListEntries(h => h.ToList());      // here, we update the DBs in HistoryEntry and any global DBs in historylist
+
+            reportProgress(-1, "Done");
 
             return hist;
         }

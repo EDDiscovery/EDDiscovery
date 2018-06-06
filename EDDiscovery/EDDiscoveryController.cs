@@ -22,17 +22,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using System.Linq;
 
 namespace EDDiscovery
 {
-    public class EDDiscoveryController : IDiscoveryController
+    public class EDDiscoveryController 
     {
         #region Public Interface
         #region Variables
@@ -48,13 +46,13 @@ namespace EDDiscovery
 
         // IN ORDER OF CALLING DURING A REFRESH
 
-        public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made (EDDiscoveryForm uses this to refresh commander stuff).  History is not valid here.
                                                                             // ALSO called if Loadgame is received.
 
+        public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
         public event Action<HistoryList> OnHistoryChange;                   // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
         public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
-        public event Action OnInitialisationComplete;                       // UI.  Called AFTER first initial history load only
+        public event Action<int, string> OnReportRefreshProgress;           // UI. Refresh progress reporter
 
         // DURING A new Journal entry by the monitor, in order..
 
@@ -77,12 +75,11 @@ namespace EDDiscovery
         public event Action OnBgSafeClose;                                  // BK. Background close, in BCK thread
         public event Action OnFinalClose;                                   // UI. Final close, in UI thread
 
-        // During SYNC events and on start up
+        // During SYNC events
 
-        public event Action OnInitialSyncComplete;                          // UI. Called during startup after CheckSystems done.
         public event Action OnSyncStarting;                                 // UI. EDSM/EDDB sync starting
         public event Action OnSyncComplete;                                 // UI. SYNC has completed
-        public event Action<int, string> OnReportProgress;                  // UI. SYNC progress reporter
+        public event Action<int, string> OnReportSyncProgress;              // UI. SYNC progress reporter
 
         // Due to background taskc completing async to the rest
 
@@ -254,10 +251,15 @@ namespace EDDiscovery
             }
         }
 
-        public void ReportProgress(int percent, string message)
+        public void ReportSyncProgress(int percent, string message)
         {
-            InvokeAsyncOnUiThread(() => OnReportProgress?.Invoke(percent, message));
+            InvokeAsyncOnUiThread(() => OnReportSyncProgress?.Invoke(percent, message));
         }
+        public void ReportRefreshProgress(int percent, string message)
+        {
+            InvokeAsyncOnUiThread(() => OnReportRefreshProgress?.Invoke(percent, message));
+        }
+
         #endregion
 
         #region History
@@ -313,9 +315,9 @@ namespace EDDiscovery
         public void RecalculateHistoryDBs()         // call when you need to recalc the history dbs - not the whole history. Use RefreshAsync for that
         {
             history.ProcessUserHistoryListEntries(h => h.EntryOrder);
-
-            RefreshDisplays();
+            OnHistoryChange?.Invoke(history);
         }
+
         #endregion
 
         #region EDSM / EDDB
@@ -488,7 +490,7 @@ namespace EDDiscovery
 
         private void BackgroundWorkerThread()     
         {
-            readyForInitialLoad.WaitOne();
+            readyForInitialLoad.WaitOne();      // wait for shown in form
 
             BackgroundInit();       // main init code
 
@@ -548,7 +550,7 @@ namespace EDDiscovery
             SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems");
-            ReportProgress(-1, "");
+            ReportSyncProgress(-1, "");
 
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
@@ -583,9 +585,6 @@ namespace EDDiscovery
             SystemNoteClass.GetAllSystemNotes();
 
             LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
-
-            ReportProgress(-1, "");
-            InvokeAsyncOnUiThread(() => OnInitialSyncComplete?.Invoke());
 
             if (PendingClose) return;
 
@@ -624,8 +623,6 @@ namespace EDDiscovery
             {
                 LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable");
             }
-
-            InvokeAsyncOnUiThread(() => OnInitialisationComplete?.Invoke());
         }
 
         #endregion
@@ -644,8 +641,6 @@ namespace EDDiscovery
                 foreach (int i in GridId.FromString(EDDConfig.Instance.EDSMGridIDs))
                     grids[i] = true;
 
-                ReportProgress(-1, "");
-
                 syncstate.ClearCounters();
 
                 if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_sync)
@@ -655,7 +650,7 @@ namespace EDDiscovery
                         // Download new systems
                         try
                         {
-                            syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportSyncProgress, LogLine, LogLineHighlight);
                             syncstate.perform_edsm_fullsync = false;
                         }
                         catch (Exception ex)
@@ -671,7 +666,7 @@ namespace EDDiscovery
 
                         try
                         {
-                            syncstate.eddb_sync_count = EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(() => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                            syncstate.eddb_sync_count = EliteDangerousCore.EDDB.SystemClassEDDB.PerformEDDBFullSync(() => PendingClose, ReportSyncProgress, LogLine, LogLineHighlight);
                             syncstate.perform_eddb_sync = false;
                         }
                         catch (Exception ex)
@@ -685,10 +680,9 @@ namespace EDDiscovery
                 {
                     SQLiteConnectionSystem.CreateSystemsTableIndexes();         // again check indexes.. sometimes SQL does not create them due to schema change
 
-                    syncstate.edsm_updatesync_count = EliteDangerousCore.EDSM.SystemClassEDSM.PerformEDSMUpdateSync(grids, () => PendingClose, ReportProgress, LogLine, LogLineHighlight);
+                    syncstate.edsm_updatesync_count = EliteDangerousCore.EDSM.SystemClassEDSM.PerformEDSMUpdateSync(grids, () => PendingClose, ReportSyncProgress, LogLine, LogLineHighlight);
                 }
 
-                ReportProgress(-1, "");
             }
             catch (OperationCanceledException)
             {
@@ -708,8 +702,6 @@ namespace EDDiscovery
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-            ReportProgress(-1, "");
-
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
                 LogLine(string.Format("EDSM update complete with {0} systems", syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
@@ -726,6 +718,8 @@ namespace EDDiscovery
             }
 
             OnSyncComplete?.Invoke();
+
+            ReportSyncProgress(-1, "");
 
             resyncEDSMEDDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
@@ -794,9 +788,15 @@ namespace EDDiscovery
             try
             {
                 refreshWorkerArgs = args;
+
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
-                hist = HistoryList.LoadHistory(journalmonitor, () => PendingClose, (p, s) => ReportProgress(p, $"Processing log file {s}"), args.NetLogPath,
-                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
+
+                hist = HistoryList.LoadHistory(journalmonitor, 
+                    () => PendingClose, 
+                    (p, s) => ReportRefreshProgress(p, $"Processing log file {s}"), args.NetLogPath,
+                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
+                    EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
+
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete with " + hist.Count + " records");
             }
             catch (Exception ex)
@@ -805,6 +805,8 @@ namespace EDDiscovery
             }
 
             initComplete.WaitOne();
+
+            ReportRefreshProgress(-1, "Refresh Displays");
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshComplete(hist));
         }
@@ -827,10 +829,10 @@ namespace EDDiscovery
 
                     EdsmLogFetcher.StopCheck();
 
-                    ReportProgress(-1, "");
-
                     Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays");
-                    RefreshDisplays();
+
+                    OnHistoryChange?.Invoke(history);
+
                     Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
                 }
 
@@ -839,6 +841,7 @@ namespace EDDiscovery
                 journalmonitor.StartMonitor();
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Call Refresh Complete");
+
                 OnRefreshComplete?.Invoke();                            // History is completed
 
                 if (history.CommanderId >= 0)
@@ -848,6 +851,8 @@ namespace EDDiscovery
                 readyForNewRefresh.Set();
 
                 LogLine("History refresh complete.");
+
+                ReportRefreshProgress(-1, "");
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history complete");
             }

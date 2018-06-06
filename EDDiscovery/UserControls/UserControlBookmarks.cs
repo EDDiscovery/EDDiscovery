@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
 
             SaveBackAnyChanges();
 
-            StaticFilters.FilterGridView(dataGridViewBookMarks, textBoxFilter.Text);
+            dataGridViewBookMarks.FilterGridView(textBoxFilter.Text);
 
             RefreshCurrentEdit();
 

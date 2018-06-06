@@ -39,7 +39,8 @@ namespace EliteDangerousCore
         {
             public ISystem system;
             public SortedList<string, ScanNode> starnodes;
-            public bool EDSMAdded = false;
+            public bool EDSMCacheCheck = false;
+            public bool EDSMWebChecked = false;
             public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
@@ -169,32 +170,46 @@ namespace EliteDangerousCore
             }
         };
 
-        public SystemNode FindSystem(ISystem sys, bool useedsm)    // optionally, see if EDSM has a valid system, if so, add, return update SN
+        public bool HasWebLookupOccurred(ISystem sys)       // have we had a web checkup on this system?  false if sys does not exist
+        {
+            SystemNode sn = FindSystemNode(sys);
+            return (sn != null && sn.EDSMWebChecked);
+        }
+
+        public SystemNode FindSystem(ISystem sys, bool edsmweblookup)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
 
             SystemNode sn = FindSystemNode(sys);
 
-            if (useedsm)
+            // System.Diagnostics.Debug.WriteLine("Scan Lookup " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMAdded ?? false));
+
+            // must have an ID, and either not there or we have not checked EDSM yet in some way
+
+            if (sys.EDSMID > 0 && (sn == null || sn.EDSMCacheCheck == false || ( edsmweblookup && !sn.EDSMWebChecked) )) 
             {
-                if ((sn == null || (sn != null && sn.EDSMAdded == false)) && sys.EDSMID > 0)   // null, or not scanned, and with EDSM ID
+                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup); // lookup, with optional web
+
+                //if ( edsmweblookup) System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
+
+                if (jl != null) // found some bodies.. either from cache or from EDSM..
                 {
-                    List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID);
-
-                    if (jl != null)
+                    foreach (JournalScan js in jl)
                     {
-                        foreach (JournalScan js in jl)
-                        {
-                            js.BodyDesignation = GetBodyDesignation(js, sys.Name);
-                            Process(js, sys, true);
-                        }
+                        js.BodyDesignation = GetBodyDesignation(js, sys.Name);
+                        Process(js, sys, true);
                     }
-                   
-                    if (sn == null)
-                        sn = FindSystemNode(sys);
+                }
 
-                    if (sn != null)
-                        sn.EDSMAdded = true;
+                if (sn == null) // refind to make sure SN is set
+                    sn = FindSystemNode(sys);
+
+                if (sn != null) // if we found it, set to indicate we did a cache check
+                {
+                    sn.EDSMCacheCheck = true;
+
+                    if (edsmweblookup)      // and if we did a web check, set it too..
+                        sn.EDSMWebChecked = true;
                 }
             }
 

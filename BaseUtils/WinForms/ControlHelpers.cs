@@ -419,7 +419,7 @@ public static class ControlHelpersStaticFunc
 
     #endregion
 
-    #region Sort
+    #region Data Grid Views
 
     static public void SortDataGridViewColumnNumeric(this DataGridViewSortCompareEventArgs e, string removetext= null)
     {
@@ -494,6 +494,61 @@ public static class ControlHelpersStaticFunc
             drows--;
         }
     }
+
+    public static void FilterGridView(this DataGridView vw, string searchstr)       // can be VERY SLOW for large grids
+    {
+        vw.SuspendLayout();
+        vw.Enabled = false;
+
+        bool[] visible = new bool[vw.RowCount];
+        bool visibleChanged = false;
+
+        foreach (DataGridViewRow row in vw.Rows.OfType<DataGridViewRow>())
+        {
+            bool found = false;
+
+            if (searchstr.Length < 1)
+                found = true;
+            else
+            {
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    if (cell.Value != null)
+                    {
+                        if (cell.Value.ToString().IndexOf(searchstr, 0, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            visible[row.Index] = found;
+            visibleChanged |= found != row.Visible;
+        }
+
+        if (visibleChanged)
+        {
+            var selectedrow = vw.SelectedRows.OfType<DataGridViewRow>().Select(r => r.Index).FirstOrDefault();
+            DataGridViewRow[] rows = vw.Rows.OfType<DataGridViewRow>().ToArray();
+            vw.Rows.Clear();
+
+            for (int i = 0; i < rows.Length; i++)
+            {
+                rows[i].Visible = visible[i];
+            }
+
+            vw.Rows.Clear();
+            vw.Rows.AddRange(rows.ToArray());
+
+            vw.Rows[selectedrow].Selected = true;
+        }
+
+        vw.Enabled = true;
+        vw.ResumeLayout();
+    }
+
 
     #endregion
 }
