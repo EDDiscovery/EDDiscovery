@@ -1,22 +1,35 @@
-﻿using System;
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BaseUtils
 {
     public class LineStore
     {
-        public int[] items;     // 0 is blank
-        public int ystart;
-        public int yend;
+        public int[] Items;     // 0 is blank
+        public int YStart;
+        public int YEnd;
 
         public bool Blank()
         {
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < Items.Length; i++)
             {
-                if (items[i] > 0)
+                if (Items[i] > 0)
                     return false;
             }
             return true;
@@ -37,7 +50,7 @@ namespace BaseUtils
                     line[w] = v;
                 }
 
-                ls.Add(new LineStore() { items = line });
+                ls.Add(new LineStore() { Items = line });
             }
             //DumpOrder(ls, "Restore");
             return ls;
@@ -48,7 +61,7 @@ namespace BaseUtils
             string s = "";
             foreach (LineStore l in lines)
             {
-                string v = string.Join(",", l.items);
+                string v = string.Join(",", l.Items);
                 s = s.AppendPrePad(v,",");
             }
             return s;
@@ -58,14 +71,24 @@ namespace BaseUtils
         {
             for (int i = 0; i < lines.Count; i++)
             {
-                if (i == 0 && y < lines[i].ystart)
+                if (i == 0 && y < lines[i].YStart)
                     return i;
 
-                if (y >= lines[i].ystart && y <= lines[i].yend)
+                if (y >= lines[i].YStart && y <= lines[i].YEnd)
                     return i;
             }
 
             return -1;
+        }
+
+        public static LineStore FindValue(List<LineStore> lines, int v)
+        {
+            foreach( LineStore ls in lines)
+            {
+                if (Array.IndexOf(ls.Items, v) >= 0)
+                    return ls;
+            }
+            return null;
         }
 
         public static void CompressOrder(List<LineStore> lines)
@@ -84,7 +107,7 @@ namespace BaseUtils
             System.Diagnostics.Debug.WriteLine("--- " + s);
             for (int i = 0; i < lines.Count; i++)
             {
-                System.Diagnostics.Debug.WriteLine(string.Join(",", lines[i].items));
+                System.Diagnostics.Debug.WriteLine(string.Join(",", lines[i].Items));
             }
         }
     }

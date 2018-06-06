@@ -116,6 +116,9 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits = new ExtendedControls.TextBoxBorder();
             this.labelCredits = new System.Windows.Forms.Label();
             this.panelFD = new ExtendedControls.PanelNoTheme();
+            this.richTextBoxScrollMissions = new ExtendedControls.RichTextBoxScroll();
+            this.labelMissions = new System.Windows.Forms.Label();
+            this.toolStripMissionList = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -140,11 +143,12 @@ namespace EDDiscovery.UserControls
             this.toolStripCredits,
             this.toolStripGameMode,
             this.toolStripTravel,
+            this.toolStripMissionList,
             this.toolStripSkinny,
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 466);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 510);
             // 
             // toolStripSystem
             // 
@@ -1333,6 +1337,59 @@ namespace EDDiscovery.UserControls
             this.panelFD.Size = new System.Drawing.Size(24, 24);
             this.panelFD.TabIndex = 46;
             // 
+            // richTextBoxScrollMissions
+            // 
+            this.richTextBoxScrollMissions.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBoxScrollMissions.BorderColorScaling = 0.5F;
+            this.richTextBoxScrollMissions.HideScrollBar = true;
+            this.richTextBoxScrollMissions.Location = new System.Drawing.Point(54, 575);
+            this.richTextBoxScrollMissions.Name = "richTextBoxScrollMissions";
+            this.richTextBoxScrollMissions.ReadOnly = false;
+            this.richTextBoxScrollMissions.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.richTextBoxScrollMissions.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.richTextBoxScrollMissions.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxScrollMissions.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.richTextBoxScrollMissions.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.richTextBoxScrollMissions.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxScrollMissions.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.richTextBoxScrollMissions.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.richTextBoxScrollMissions.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.richTextBoxScrollMissions.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.richTextBoxScrollMissions.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.richTextBoxScrollMissions.ScrollBarWidth = 20;
+            this.richTextBoxScrollMissions.ShowLineCount = false;
+            this.richTextBoxScrollMissions.Size = new System.Drawing.Size(200, 50);
+            this.richTextBoxScrollMissions.TabIndex = 0;
+            this.richTextBoxScrollMissions.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.richTextBoxScrollMissions.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxScrollMissions.TextBoxChanged += new ExtendedControls.RichTextBoxScroll.OnTextBoxChanged(this.richTextBoxNote_TextBoxChanged);
+            this.richTextBoxScrollMissions.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
+            this.richTextBoxScrollMissions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.richTextBoxScrollMissions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.richTextBoxScrollMissions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // labelMissions
+            // 
+            this.labelMissions.AutoSize = true;
+            this.labelMissions.Location = new System.Drawing.Point(1, 575);
+            this.labelMissions.Name = "labelMissions";
+            this.labelMissions.Size = new System.Drawing.Size(47, 13);
+            this.labelMissions.TabIndex = 28;
+            this.labelMissions.Text = "Missions";
+            this.labelMissions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.labelMissions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.labelMissions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
+            // displayMissionListToolStripMenuItem
+            // 
+            this.toolStripMissionList.Checked = true;
+            this.toolStripMissionList.CheckOnClick = true;
+            this.toolStripMissionList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMissionList.Name = "displayMissionListToolStripMenuItem";
+            this.toolStripMissionList.Size = new System.Drawing.Size(255, 22);
+            this.toolStripMissionList.Text = "Display Mission List";
+            this.toolStripMissionList.Click += new System.EventHandler(this.toolStripMissionsList_Click);
+            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1373,7 +1430,9 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.textBoxGovernment);
             this.Controls.Add(this.labelEconomy);
             this.Controls.Add(this.textBoxEconomy);
+            this.Controls.Add(this.labelMissions);
             this.Controls.Add(this.labelNote);
+            this.Controls.Add(this.richTextBoxScrollMissions);
             this.Controls.Add(this.richTextBoxNote);
             this.Controls.Add(this.labelFuel);
             this.Controls.Add(this.labelData);
@@ -1470,5 +1529,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripRemoveAll;
         private ExtendedControls.PanelNoTheme panelFD;
+        private ExtendedControls.RichTextBoxScroll richTextBoxScrollMissions;
+        private System.Windows.Forms.Label labelMissions;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMissionList;
     }
 }
