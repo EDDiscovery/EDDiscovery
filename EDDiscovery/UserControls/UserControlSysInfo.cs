@@ -53,10 +53,11 @@ namespace EDDiscovery.UserControls
         const int BitSelCredits = 14;
         const int BitSelGameMode = 15;
         const int BitSelTravel = 16;
+        const int BitSelMissions = 17;
 
         int[] SmallItems = new int[] {BitSelFuel,BitSelCargo,BitSelVisits, BitSelMats, BitSelData , BitSelCredits };
 
-        const int BitSelTotal = 17;
+        const int BitSelTotal = 18;
         const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 28;
         const int BitSelSkinny = 29;
@@ -85,7 +86,7 @@ namespace EDDiscovery.UserControls
                                                         toolStripSystemState, toolStripNotes, toolStripTarget,
                                                         toolStripShip, toolStripFuel , toolStripCargo, toolStripMaterialCounts,  toolStripDataCount,
                                                         toolStripCredits,
-                                                        toolStripGameMode,toolStripTravel,  };
+                                                        toolStripGameMode,toolStripTravel, toolStripMissionList };
 
             Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
             string rs = SQLiteDBClass.GetSettingString(DbOSave, "-");
@@ -93,6 +94,15 @@ namespace EDDiscovery.UserControls
                 Reset();
             else
                 Lines = BaseUtils.LineStore.Restore(rs, HorzPositions);
+
+            for (int bit = 0; bit < BitSelTotal; bit++)     // new bits added will not be in older lists, need to add on in!
+            {
+                if (BaseUtils.LineStore.FindValue(Lines, bit + 1) == null)   // if can't find
+                {
+                    //System.Diagnostics.Debug.WriteLine("Missing item " + bit);
+                    Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { bit + 1, 0, 0, 0, 0, 0, 0, 0 } });
+                }
+            }
 
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
@@ -201,6 +211,25 @@ namespace EDDiscovery.UserControls
                 textBoxEconomy.Text = economy;
                 textBoxGovernment.Text = gov;
                 textBoxState.Text = factionstate;
+
+                List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+
+                if (mcurrent == null || mcurrent.Count == 0)
+                    richTextBoxScrollMissions.Text = "No Missions";
+                else
+                {
+                    string t = "";
+                    foreach (MissionState ms in mcurrent)
+                    {
+                        t = ObjectExtensionsStrings.AppendPrePad(t,
+                            JournalFieldNaming.ShortenMissionName(ms.Mission.Name) 
+                            + " Exp:" + (EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime())
+                            + " @ " + ms.DestinationSystemStation(),
+                            Environment.NewLine);
+                    }
+
+                    richTextBoxScrollMissions.Text = t;
+                }
 
                 SetNote(he.snc != null ? he.snc.Note : "");
                 textBoxGameMode.Text = he.GameModeGroup;
@@ -436,6 +465,11 @@ namespace EDDiscovery.UserControls
             ToggleSelection(sender, BitSelFuel);
         }
 
+        private void toolStripMissionsList_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelMissions);
+        }
+
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
             Selection = (Selection | ((1 << BitSelTotal) - 1)) ^ ((1 << BitSelTotal) - 1);
@@ -480,13 +514,13 @@ namespace EDDiscovery.UserControls
             int data2offset = lab2offset + data1offset;                     // offset between data 2 pos and initial label
             int coloffset = lab2offset;                                     // offset between each column
 
-            System.Diagnostics.Debug.WriteLine("Sys Info first data {0} second lab {1} second data {2} col offset {3}", data1offset, lab2offset, data2offset, coloffset);
+            //System.Diagnostics.Debug.WriteLine("Sys Info first data {0} second lab {1} second data {2} col offset {3}", data1offset, lab2offset, data2offset, coloffset);
 
             int maxvert = 0;
 
             for( int r = 0; r < Lines.Count; r++ )
             {
-                Lines[r].ystart = -1;
+                Lines[r].YStart = -1;
 
                 for ( int c = 0; c < HorzPositions; c++ )
                 { 
@@ -495,9 +529,9 @@ namespace EDDiscovery.UserControls
                     Point labpos2 = new Point(labpos.X + lab2offset, labpos.Y);
                     Point datapos2 = new Point(labpos.X + data2offset, labpos.Y);
 
-                    System.Diagnostics.Debug.WriteLine("R{0}C{1} {2} {3} ( {4} {5} )", r,c, labpos, datapos, labpos2, datapos2);
+                   // System.Diagnostics.Debug.WriteLine("R{0}C{1} {2} {3} ( {4} {5} )", r,c, labpos, datapos, labpos2, datapos2);
 
-                    int bitno = Lines[r].items[c]-1;    // stored +1
+                    int bitno = Lines[r].Items[c]-1;    // stored +1
 
                     if (bitno >= 0)
                     {
@@ -506,10 +540,11 @@ namespace EDDiscovery.UserControls
                         toolstriplist[bitno].Enabled = false;
                         toolstriplist[bitno].Checked = ison;
                         toolstriplist[bitno].Enabled = true;
+                       // System.Diagnostics.Debug.WriteLine("Toolstrip " + bitno + " set to " + ison);
 
                         if (ison)
                         {
-                            Lines[r].ystart = ver;
+                            Lines[r].YStart = ver;
                             int si = r * HorzPositions + c;
 
                             switch (bitno)
@@ -617,12 +652,16 @@ namespace EDDiscovery.UserControls
                                     this.SetPos(ref labpos, labelCredits, datapos, textBoxCredits, vspacing, si);
                                     break;
 
+                                case BitSelMissions:
+                                    this.SetPos(ref labpos, labelMissions, datapos, richTextBoxScrollMissions, richTextBoxScrollMissions.Height + 8, si);
+                                    break;
+
                                 default:
                                     System.Diagnostics.Debug.WriteLine("Ignoring unknown type");
                                     break;
                             }
 
-                            Lines[r].yend = labpos.Y - 1;
+                            Lines[r].YEnd = labpos.Y - 1;
                             maxvert = Math.Max(labpos.Y, maxvert);        // update vertical
                         }
                     }
@@ -645,14 +684,14 @@ namespace EDDiscovery.UserControls
             Selection = BitSelDefault;
             Lines = new List<BaseUtils.LineStore>();
             for (int i = 0; i < BitSelTotal; i++)
-                Lines.Add(new BaseUtils.LineStore() { items = new int[HorzPositions] { i+1, 0, 0, 0, 0, 0, 0, 0 } });
+                Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] { i + 1, 0, 0, 0, 0, 0, 0, 0 } });
 
-            Lines[BitSelFuel].items[1] = BitSelCargo + 1;
-            Lines[BitSelCargo].items[0] = 0;
-            Lines[BitSelMats].items[1] = BitSelData + 1;
-            Lines[BitSelData].items[0] = 0;
-            Lines[BitSelVisits].items[1] = BitSelCredits + 1;
-            Lines[BitSelCredits].items[0] = 0;
+            Lines[BitSelFuel].Items[1] = BitSelCargo + 1;
+            Lines[BitSelCargo].Items[0] = 0;
+            Lines[BitSelMats].Items[1] = BitSelData + 1;
+            Lines[BitSelData].Items[0] = 0;
+            Lines[BitSelVisits].Items[1] = BitSelCredits + 1;
+            Lines[BitSelCredits].Items[0] = 0;
 
             BaseUtils.LineStore.CompressOrder(Lines);
             BaseUtils.LineStore.DumpOrder(Lines, "Reset");
@@ -777,28 +816,28 @@ namespace EDDiscovery.UserControls
                     if (torow == -1)    // if at end
                     {
                         torow = Lines.Count;        // fresh row here
-                        Lines.Add(new BaseUtils.LineStore() { items = new int[HorzPositions] });
+                        Lines.Add(new BaseUtils.LineStore() { Items = new int[HorzPositions] });
                     }
 
                     int tocol = Math.Min(xpos / col2pos, HorzPositions - 1);
 
                     System.Diagnostics.Debug.WriteLine("Move " + fromrow +":"+ fromcol+" -> " + torow +":" + tocol);
 
-                    bool oneleftisnotshort = tocol > 0 && Lines[torow].items[tocol - 1] > 0 && Array.IndexOf(SmallItems, Lines[torow].items[tocol - 1] - 1) == -1;
+                    bool oneleftisnotshort = tocol > 0 && Lines[torow].Items[tocol - 1] > 0 && Array.IndexOf(SmallItems, Lines[torow].Items[tocol - 1] - 1) == -1;
                     bool onerightisnotblank = tocol < HorzPositions - 1 &&    // not last
-                                            Array.IndexOf(SmallItems, Lines[fromrow].items[fromcol]) == -1 && // one moving in is two columns
-                                            Lines[torow].items[tocol + 1] > 0;      // and occupied
+                                            Array.IndexOf(SmallItems, Lines[fromrow].Items[fromcol]) == -1 && // one moving in is two columns
+                                            Lines[torow].Items[tocol + 1] > 0;      // and occupied
 
-                    if (Lines[torow].items[tocol] > 0 || oneleftisnotshort || onerightisnotblank )      // occupied
+                    if (Lines[torow].Items[tocol] > 0 || oneleftisnotshort || onerightisnotblank )      // occupied
                     {
-                        Lines.Insert(torow, new BaseUtils.LineStore() { items = new int[HorzPositions] });    // fresh row in here
+                        Lines.Insert(torow, new BaseUtils.LineStore() { Items = new int[HorzPositions] });    // fresh row in here
 
                         if (fromrow > torow)            // adjust from down if torow is in front of it
                             fromrow++;
                     }
 
-                    Lines[torow].items[tocol] = Lines[fromrow].items[fromcol];
-                    Lines[fromrow].items[fromcol] = -1;
+                    Lines[torow].Items[tocol] = Lines[fromrow].Items[fromcol];
+                    Lines[fromrow].Items[fromcol] = -1;
 
                     BaseUtils.LineStore.CompressOrder(Lines);
                     BaseUtils.LineStore.DumpOrder(Lines, "Move");
@@ -872,5 +911,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
