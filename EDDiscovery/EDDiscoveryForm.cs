@@ -43,6 +43,8 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
 
+        public EDDiscovery.DLL.EDDDLLManager DLLManager;
+
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
         static public EDDConfig EDDConfig { get { return EDDConfig.Instance; } }
@@ -80,7 +82,7 @@ namespace EDDiscovery
 
         #endregion
 
-        #region IDiscoveryController interface
+      
         #region Properties
         public HistoryList history { get { return Controller.history; } }
         public string LogText { get { return Controller.LogText; } }
@@ -117,8 +119,7 @@ namespace EDDiscovery
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
         #endregion
 
-        #endregion
-
+      
         #region Initialisation
 
         // note we do not do the traditional Initialize component here.. we wait for splash form to call it
@@ -298,6 +299,8 @@ namespace EDDiscovery
 
             labelInfoBoxTop.Text = "";
 
+            DLLManager = new DLL.EDDDLLManager();
+
             Controller.InitComplete();
         }
 
@@ -343,6 +346,26 @@ namespace EDDiscovery
             screenshotconverter.Start();
 
             checkInstallerTask = CheckForNewInstallerAsync();
+
+            string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
+
+            string res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, alloweddlls);
+
+            if ( res.HasChars() )
+            {
+                if (ExtendedControls.MessageBoxTheme.Show(this, "The following application extension DLLs have been found" + Environment.NewLine +
+                                "Do you wish to allow these to be used?" + Environment.NewLine +
+                                res + Environment.NewLine +
+                                "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine + 
+                                "or deinstall the action pack which introduced the DLL",
+                                "Warning - DLL extensions Found",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls + res);
+                    DLLManager.UnLoad();
+                    DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, alloweddlls);
+                }
+            }
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
@@ -584,6 +607,8 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
 
+            DLLManager.Refresh(EDCommander.Current.Name, DLL.EDDDLLCaller.CreateFromHistoryEntry(history.GetLast));
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
 
@@ -672,6 +697,9 @@ namespace EDDiscovery
             {
                 EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
             }
+
+            DLLManager.NewJournalEntry( DLL.EDDDLLCaller.CreateFromHistoryEntry(he));
+
         }
 
         private void Controller_NewUIEvent(UIEvent uievent)      
@@ -785,6 +813,8 @@ namespace EDDiscovery
             notifyIcon1.Visible = false;
 
             actioncontroller.CloseDown();
+
+            DLLManager.UnLoad();
 
             Close();
             Application.Exit();
