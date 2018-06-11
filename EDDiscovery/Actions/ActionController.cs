@@ -116,6 +116,7 @@ namespace EDDiscovery.Actions
 
             ActionBase.AddCommand("Bookmarks", typeof(ActionBookmarks), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Commodities", typeof(ActionCommodities), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("DLLCall", typeof(ActionDLLCall), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("EliteBindings", typeof(ActionEliteBindings), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Event", typeof(ActionEventCmd), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Historytab", typeof(ActionHistoryTab), ActionBase.ActionType.Cmd);
