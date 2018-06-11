@@ -119,8 +119,8 @@ namespace EDDiscovery.Forms
             {
                 if (MessageBox.Show(this, "Current system database is located at:" + Environment.NewLine + Environment.NewLine +
                                 "System: " + opt.SystemDatabasePath +
-                                Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine + 
-                                "No user settings will be lost", 
+                                Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
+                                "No user settings will be lost",
                                 "Delete/Rebuild System Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     File.Delete(opt.SystemDatabasePath);
@@ -131,5 +131,28 @@ namespace EDDiscovery.Forms
 
         }
 
+        private void buttonRemoveDLLs_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
+            opt.Init();
+
+            string dllfolder = opt.DLLAppDirectory();
+
+            if (MessageBox.Show(this, "Current add on DLL folder is located at:" + Environment.NewLine  +
+                            dllfolder + 
+                            Environment.NewLine + Environment.NewLine + "Do you wish to delete all DLLs?",
+                            "Delete Extension DLLs", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+            {
+                var dir = new DirectoryInfo(dllfolder);
+                foreach (var file in dir.EnumerateFiles("*.dll"))
+                {
+                    try
+                    {
+                        file.Delete();
+                    }
+                    catch { }
+                }
+            }
+        }
     }
 }

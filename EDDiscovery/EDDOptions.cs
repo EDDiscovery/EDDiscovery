@@ -47,7 +47,7 @@ namespace EDDiscovery
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
-            string path = Path.Combine(EDDOptions.Instance.AppDataDirectory, subfolder);
+            string path = Path.Combine(AppDataDirectory, subfolder);
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
             return path;
