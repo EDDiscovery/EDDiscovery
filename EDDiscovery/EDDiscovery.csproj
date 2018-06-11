@@ -174,7 +174,11 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
+    <Compile Include="DLL\EDDDLLCaller.cs" />
+    <Compile Include="DLL\EDDDLLManager.cs" />
+    <Compile Include="DLL\EDDInterface.cs" />
     <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -906,6 +910,7 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <OutputFilename ParameterType="System.String" Required="true" />

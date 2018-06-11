@@ -277,6 +277,15 @@ namespace BaseUtils.Win32
             /// <summary>The maximum tracking size of the window. This value defaults to slighter larger than the size of the virtual screen.</summary>
             public System.Drawing.Point ptMaxTrackSize;
         }
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr LoadLibrary(string dllToLoad);
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, string procedureName);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool FreeLibrary(IntPtr hModule);
     }
 
     public class SafeNativeMethods

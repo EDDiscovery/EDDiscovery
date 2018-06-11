@@ -63,6 +63,7 @@ namespace EDDiscovery
         public string LogAppDirectory() { return SubAppDirectory("Log"); }
         public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
+        public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
