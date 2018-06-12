@@ -166,44 +166,5 @@ namespace EDDiscovery.DLL
 
             return null;
         }
-
-
-        static public EDDDLLIF.JournalEntry CreateFromHistoryEntry(EliteDangerousCore.HistoryEntry he)
-        {
-            if (he == null)
-            {
-                return new EDDDLLIF.JournalEntry() { ver = 1, indexno = -1 };
-            }
-            else
-            {
-                EDDDLLIF.JournalEntry je = new EDDDLLIF.JournalEntry()
-                {
-                    ver = 1,
-                    indexno = he.Indexno,
-                    utctime = he.EventTimeUTC.ToStringZulu(),
-                    name = he.EventSummary,
-                    systemname = he.System.Name,
-                    x = he.System.X,
-                    y = he.System.Y,
-                    z = he.System.Z,
-                    travelleddistance = he.TravelledDistance,
-                    travelledseconds = (long)he.TravelledSeconds.TotalSeconds,
-                    islanded = he.IsLanded,
-                    isdocked = he.IsDocked,
-                    whereami = he.WhereAmI,
-                    shiptype = he.ShipType,
-                    gamemode = he.GameMode,
-                    group = he.Group,
-                    credits = he.Credits,
-                    eventid = he.journalEntry.EventTypeStr
-                };
-
-                he.journalEntry.FillInformation(out je.info, out je.detailedinfo);
-
-                je.materials = (from x in he.MaterialCommodity.Sort(false) select x.name + ":" + x.count.ToStringInvariant()).ToArray();
-                je.commodities = (from x in he.MaterialCommodity.Sort(true) select x.name + ":" + x.count.ToStringInvariant()).ToArray();
-                return je;
-            }
-        }
     }
 }

@@ -74,7 +74,7 @@ namespace EDDiscovery.Actions
 
                             if ( h != null)
                             {
-                                Tuple<bool,bool> ret = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionJournalEntry(exp[0], DLL.EDDDLLCaller.CreateFromHistoryEntry(h));
+                                Tuple<bool,bool> ret = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionJournalEntry(exp[0], DLL.EDDDLLCallerHE.CreateFromHistoryEntry(h));
                                 if ( ret.Item1 == false )
                                     ap.ReportError("DLLCall cannot find DLL '" + exp[0] + "'");
                                 else if ( ret.Item2 == false )

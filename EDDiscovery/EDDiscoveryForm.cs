@@ -607,7 +607,7 @@ namespace EDDiscovery
                 EliteDangerousCore.Inara.InaraSync.Refresh(LogLine, history, EDCommander.Current);
             }
 
-            DLLManager.Refresh(EDCommander.Current.Name, DLL.EDDDLLCaller.CreateFromHistoryEntry(history.GetLast));
+            DLLManager.Refresh(EDCommander.Current.Name, DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
@@ -698,7 +698,7 @@ namespace EDDiscovery
                 EliteDangerousCore.EGO.EGOSync.SendEGOEvents(LogLine, he);
             }
 
-            DLLManager.NewJournalEntry( DLL.EDDDLLCaller.CreateFromHistoryEntry(he));
+            DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
 
         }
 
