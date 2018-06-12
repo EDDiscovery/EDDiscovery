@@ -120,6 +120,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
+            if (Commodity != null && Count != null)
+            {
+                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -(int)Count, 0, conn);
+            }
+
             if (CommodityReward != null)
             {
                 foreach (CommodityRewards c in CommodityReward)
