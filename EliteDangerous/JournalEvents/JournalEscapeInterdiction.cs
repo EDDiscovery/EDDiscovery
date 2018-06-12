@@ -28,16 +28,17 @@ namespace EliteDangerousCore.JournalEvents
         public JournalEscapeInterdiction(JObject evt ) : base(evt, JournalTypeEnum.EscapeInterdiction)
         {
             Interdictor = evt["Interdictor"].Str();
+            Interdictor_Localised = evt["Interdictor_Localised"].Str().Alt(Interdictor);
             IsPlayer = evt["IsPlayer"].Bool();
         }
 
         public string Interdictor { get; set; }
+        public string Interdictor_Localised { get; set; }
         public bool IsPlayer { get; set; }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
-            info = BaseUtils.FieldBuilder.Build("By ", Interdictor, "< (NPC);(Player)", IsPlayer);
+            info = BaseUtils.FieldBuilder.Build("By ", Interdictor_Localised, "< (NPC);(Player)", IsPlayer);
             detailed = "";
         }
     }
