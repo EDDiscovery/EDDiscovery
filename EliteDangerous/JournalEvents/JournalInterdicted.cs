@@ -33,6 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Submitted = evt["Submitted"].Bool();
             Interdictor = evt["Interdictor"].Str();
+            Interdictor_Localised = evt["Interdictor_Localised"].Str().Alt(Interdictor);
             IsPlayer = evt["IsPlayer"].Bool();
             CombatRank = CombatRank.Harmless;
             if (!evt["CombatRank"].Empty())
@@ -42,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         }
         public bool Submitted { get; set; }
         public string Interdictor { get; set; }
+        public string Interdictor_Localised { get; set; }
         public bool IsPlayer { get; set; }
         public CombatRank CombatRank { get; set; }
         public string Faction { get; set; }
@@ -50,7 +52,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) //V
         {
             
-            info = BaseUtils.FieldBuilder.Build(";Submitted", Submitted, "< To ", Interdictor, "< (NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
+            info = BaseUtils.FieldBuilder.Build(";Submitted", Submitted, "< To ", Interdictor_Localised, "< (NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
             detailed = "";
         }
     }

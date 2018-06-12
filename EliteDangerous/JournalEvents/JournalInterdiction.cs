@@ -33,6 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Success = evt["Success"].Bool();
             Interdicted = evt["Interdicted"].Str();
+            Interdicted_Localised = evt["Interdicted_Localised"].Str().Alt(Interdicted);
             IsPlayer = evt["IsPlayer"].Bool();
             CombatRank = CombatRank.Harmless;
             if (!evt["CombatRank"].Empty())
@@ -42,6 +43,7 @@ namespace EliteDangerousCore.JournalEvents
         }
         public bool Success { get; set; }
         public string Interdicted { get; set; }
+        public string Interdicted_Localised { get; set; }
         public bool IsPlayer { get; set; }
         public CombatRank CombatRank { get; set; }
         public string Faction { get; set; }
@@ -50,7 +52,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) //V
         {
             
-            info = BaseUtils.FieldBuilder.Build("Failed to interdict;Interdicted", Success, "< ", Interdicted, "< (NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
+            info = BaseUtils.FieldBuilder.Build("Failed to interdict;Interdicted", Success, "< ", Interdicted_Localised, "< (NPC);(Player)", IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:", Faction, "Power:", Power);
             detailed = "";
         }
     }
