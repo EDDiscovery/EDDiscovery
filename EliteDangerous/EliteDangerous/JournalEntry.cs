@@ -384,12 +384,13 @@ namespace EliteDangerousCore
         public JournalEntry(DateTime utc, int synced , JournalTypeEnum jtype)       // manual creation via NEW
         {
             EventTypeID = jtype;
+            EventSummaryName = FillSummary;     // after creation, so journal fields are populated.
             EventTimeUTC = utc;
             Synced = synced;
             TLUId = 0;
         }
 
-        public JournalEntry(JObject jo, JournalTypeEnum jtype)
+        public JournalEntry(JObject jo, JournalTypeEnum jtype)              // called by journal entries to create themselves
         {
             EventTypeID = jtype;
             EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
