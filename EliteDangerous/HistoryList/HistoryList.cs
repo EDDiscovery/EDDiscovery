@@ -216,6 +216,11 @@ namespace EliteDangerousCore
             return historylist.Find(x => x.Journalid == jid);
         }
 
+        public HistoryEntry GetByIndex(int index)
+        {
+            return (index >= 1 && index <= historylist.Count) ? historylist[index - 1] : null;
+        }
+
         public int GetIndex(long jid)
         {
             return EntryOrder.FindIndex(x => x.Journalid == jid);

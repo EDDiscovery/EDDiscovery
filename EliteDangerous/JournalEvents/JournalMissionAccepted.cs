@@ -132,35 +132,41 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
+            info = MissionBasicInfo();
+            detailed = MissionDetailedInfo();
+        }
 
+        public string MissionBasicInfo()          // other stuff for the mission panel which it does not already cover
+        {
             DateTime exp = Expiry;
             if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
-            info = BaseUtils.FieldBuilder.Build("", Name, 
-                                      "< from ", Faction, 
-                                      "System:", DestinationSystem, 
-                                      "Station:", DestinationStation, 
+            return BaseUtils.FieldBuilder.Build("", Name,
+                                      "< from ", Faction,
+                                      "System:", DestinationSystem,
+                                      "Station:", DestinationStation,
                                       "Expiry:", exp,
                                       "Influence:", Influence,
                                       "Reputation:", Reputation,
                                       "Reward:; cr;N0", Reward,
                                       "; (Wing)", Wing);
-                        
+        }
 
-            detailed = BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised, 
-                                           "Target:", TargetLocalised, 
+        public string MissionDetailedInfo()          // other stuff for the mission panel which it does not already cover
+        {
+            return BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised,
+                                           "Target:", TargetLocalised,
                                            "Type:", TargetTypeFriendly,
                                            "Target Faction:", TargetFaction,
                                            "Target Type:", TargetTypeLocalised,
-                                           "Kill Count:", KillCount, 
+                                           "Kill Count:", KillCount,
                                            "Passengers:", PassengerCount);
         }
 
-        public string MissionInformation()          // other stuff for the mission panel which it does not already cover
+        public string MissionAuxInfo()          // other stuff for the mission panel which it does not already cover
         {
-            return BaseUtils.FieldBuilder.Build(  "Influence:", Influence,
+            return BaseUtils.FieldBuilder.Build("Influence:", Influence,
                                         "Reputation:", Reputation,
                                         "Deliver:", CommodityLocalised,
                                         "Target:", TargetLocalised,

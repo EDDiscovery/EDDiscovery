@@ -44,6 +44,7 @@ namespace EDDiscovery
         private Actions.ActionController actioncontroller;
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
+        public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
@@ -300,6 +301,7 @@ namespace EDDiscovery
             labelInfoBoxTop.Text = "";
 
             DLLManager = new DLL.EDDDLLManager();
+            DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
             Controller.InitComplete();
         }
@@ -349,23 +351,46 @@ namespace EDDiscovery
 
             string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
 
-            string res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, alloweddlls);
+            DLLCallBacks.RequestHistory = DLLRequestHistory;
+            DLLCallBacks.RunAction = DLLRunAction;
 
-            if ( res.HasChars() )
+            Tuple<string,string,string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+
+            if ( res.Item3.HasChars() )
             {
                 if (ExtendedControls.MessageBoxTheme.Show(this, "The following application extension DLLs have been found" + Environment.NewLine +
                                 "Do you wish to allow these to be used?" + Environment.NewLine +
-                                res + Environment.NewLine +
+                                res.Item3 + Environment.NewLine +
                                 "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine + 
-                                "or deinstall the action pack which introduced the DLL",
+                                "or deinstall the action pack which introduced the DLL" + Environment.NewLine + 
+                                "or hold down shift when launching and use the Remove all Extensions DLL option",
                                 "Warning - DLL extensions Found",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls + res);
+                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls + res.Item3);
                     DLLManager.UnLoad();
-                    DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, alloweddlls);
+                    res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
             }
+
+            if (res.Item1.HasChars())
+                LogLine("DLLs loaded: " + res.Item1);
+            if (res.Item2.HasChars())
+                LogLineHighlight("DLLs failed to load: " + res.Item1);
+        }
+
+        public bool DLLRunAction( string eventname, string paras )
+        {
+            System.Diagnostics.Debug.WriteLine("Run " + eventname + "(" + paras + ")");
+            actioncontroller.ActionRun(Actions.ActionEventEDList.DLLEvent(eventname),new Conditions.ConditionVariables(paras,Conditions.ConditionVariables.FromMode.MultiEntryComma));
+            return true;
+        }
+
+        public bool DLLRequestHistory(long index, bool isjid, out EDDiscovery.DLL.EDDDLLIF.JournalEntry f)
+        {
+            HistoryEntry he = isjid ? history.GetByJID(index) : history.GetByIndex((int)index);
+            f = EDDiscovery.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he);
+            return he != null;
         }
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)

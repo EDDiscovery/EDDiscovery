@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             {
                 DateTime hetime = last_he.EventTimeUTC;
 
-                List<MissionState> mcurrent = (from MissionState ms in ml.Missions.Values where ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+                List<MissionState> mcurrent = ml.GetAllCurrentMissions(hetime);
 
                 var totalReward = 0;
                 foreach (MissionState ms in mcurrent)
@@ -172,9 +172,9 @@ namespace EDDiscovery.UserControls
                 cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission")) : "Name";
                 cColValue.HeaderText = (totalReward != 0) ? $"Value (cr):\n{totalReward:N0}" : "Value (cr)";
 
-//                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";
+                //                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";
 
-                List<MissionState> mprev = (from MissionState ms in ml.Missions.Values where !ms.InProgressDateTime(hetime) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
+                List<MissionState> mprev = ml.GetAllExpiredMissions(hetime);
 
                 DateTime startdate = customDateTimePickerStart.Checked ? customDateTimePickerStart.Value : new DateTime(1980, 1, 1);
                 DateTime enddate = customDateTimePickerEnd.Checked ? customDateTimePickerEnd.Value : new DateTime(2999, 1, 1);

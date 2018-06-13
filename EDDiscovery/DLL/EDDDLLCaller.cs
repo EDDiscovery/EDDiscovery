@@ -59,7 +59,7 @@ namespace EDDiscovery.DLL
             return false;
         }
 
-        public bool Init(string ourversion)
+        public bool Init(string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks)
         {
             if (pDll != IntPtr.Zero)
             {
@@ -68,7 +68,7 @@ namespace EDDiscovery.DLL
                 EDDDLLIF.EDDInitialise edinit = (EDDDLLIF.EDDInitialise)Marshal.GetDelegateForFunctionPointer(
                                                                                                 peddinit,
                                                                                                 typeof(EDDDLLIF.EDDInitialise));
-                Version = edinit(ourversion);
+                Version = edinit(ourversion, dllfolder, callbacks);
 
                 bool ok = Version != null && Version.Length > 0;
 
@@ -166,5 +166,6 @@ namespace EDDiscovery.DLL
 
             return null;
         }
+
     }
 }

@@ -28,40 +28,48 @@ namespace EDDiscovery.DLL
 
         private List<EDDDLLCaller> dlls = new List<EDDDLLCaller>();
 
-        public string Load(string directory, string ourversion, string allowed)
+        // return loaded, failed, notallowed
+        public Tuple<string,string,string> Load(string directory, string ourversion, string dllfolder, EDDDLLIF.EDDCallBacks callbacks, string allowed)
         {
-            string res = "";
+            string loaded = "";
+            string failed = "";
+            string notallowed = "";
 
             if (!Directory.Exists(directory))
-                return "No Folder";
-
-            FileInfo[] allFiles = Directory.EnumerateFiles(directory, "*.dll", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-
-            foreach (FileInfo f in allFiles)
+                failed = "DLL Folder does not exist";
+            else
             {
-                string name = "<" + System.IO.Path.GetFileNameWithoutExtension(f.FullName) + ">";
+                FileInfo[] allFiles = Directory.EnumerateFiles(directory, "*.dll", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
-                EDDDLLCaller caller = new EDDDLLCaller();
+                string[] allowedfiles = allowed.Split(',');
 
-                if (caller.Load(f.FullName))        // if loaded (meaning it loaded, and its got EDDInitialise)
+                foreach (FileInfo f in allFiles)
                 {
-                    if (allowed.IndexOf(name, StringComparison.InvariantCultureIgnoreCase) >= 0)    // if allowed..
+                    string filename = System.IO.Path.GetFileNameWithoutExtension(f.FullName);
+
+                    EDDDLLCaller caller = new EDDDLLCaller();
+
+                    if (caller.Load(f.FullName))        // if loaded (meaning it loaded, and its got EDDInitialise)
                     {
-                        if (caller.Init(ourversion))       // must init
+                        if (allowed.Equals("All", StringComparison.InvariantCultureIgnoreCase) || allowedfiles.Contains(filename, StringComparer.InvariantCultureIgnoreCase))    // if allowed..
                         {
-                            dlls.Add(caller);
+                            if (caller.Init(ourversion, dllfolder, callbacks))       // must init
+                            {
+                                dlls.Add(caller);
+                                loaded = ObjectExtensionsStrings.AppendPrePad(loaded, caller.Name, ",");
+                            }
+                            else
+                                failed += ObjectExtensionsStrings.AppendPrePad(failed, caller.Name, ",");
                         }
                         else
-                            return "DLL " + name + " Failed";
-                    }
-                    else
-                    {
-                        res += name;
+                        {
+                            notallowed += ObjectExtensionsStrings.AppendPrePad(notallowed, caller.Name, ",");
+                        }
                     }
                 }
             }
 
-            return res;
+            return new Tuple<string, string,string>(loaded,failed,notallowed);
         }
 
         public void UnLoad()
@@ -113,7 +121,7 @@ namespace EDDiscovery.DLL
         }
 
         // NULL/False if no DLL found, or <string,true> if DLL found, string may be null if DLL does not implement action command
-        public Tuple<string,bool> ActionCommand(string dllname, string cmd, string[] paras)     
+        public Tuple<string, bool> ActionCommand(string dllname, string cmd, string[] paras)
         {
             if (dllname.Equals("All", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -121,11 +129,11 @@ namespace EDDiscovery.DLL
 
                 foreach (EDDDLLCaller caller in dlls)
                 {
-                    string r = caller.ActionCommand(cmd,paras);
+                    string r = caller.ActionCommand(cmd, paras);
                     if (r != null)
                         ret += r + ";";
                 }
-                    
+
                 return new Tuple<string, bool>(ret, true);
             }
             else

@@ -47,7 +47,12 @@ namespace EliteDangerousCore
 
         public string Info()            // looking at state
         {
-            return Mission.MissionInformation() + ((Completed != null) ? (Environment.NewLine + Completed.MissionInformation()) : "");
+            return Mission.MissionAuxInfo() + ((Completed != null) ? (Environment.NewLine + Completed.MissionInformation()) : "");
+        }
+
+        public string FullInfo()
+        {
+            return Mission.MissionBasicInfo() + "," + Mission.MissionDetailedInfo() + ((Completed != null) ? (Environment.NewLine + Completed.MissionInformation()) : "");
         }
 
         public string StateText
@@ -166,6 +171,9 @@ namespace EliteDangerousCore
         }
 
         public List<MissionState> GetAllCombatMissionsLatestFirst() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 && x.Mission.ExpiryValid orderby x.Mission.EventTimeUTC descending select x).ToList(); }
+
+        public List<MissionState> GetAllCurrentMissions(DateTime curtime) { return (from MissionState ms in Missions.Values where ms.InProgressDateTime(curtime) orderby ms.Mission.EventTimeUTC descending select ms).ToList(); }
+        public List<MissionState> GetAllExpiredMissions(DateTime curtime) { return (from MissionState ms in Missions.Values where !ms.InProgressDateTime(curtime) orderby ms.Mission.EventTimeUTC descending select ms).ToList(); }
 
         // can't think of a better way, don't want to put it in the actual entries since it should all be here.. can't be bothered to refactor so they have a common ancestor.
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
