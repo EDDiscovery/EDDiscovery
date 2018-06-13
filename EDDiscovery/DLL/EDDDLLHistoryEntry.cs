@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -56,6 +57,7 @@ namespace EDDiscovery.DLL
 
                 je.materials = (from x in he.MaterialCommodity.Sort(false) select x.name + ":" + x.count.ToStringInvariant()).ToArray();
                 je.commodities = (from x in he.MaterialCommodity.Sort(true) select x.name + ":" + x.count.ToStringInvariant()).ToArray();
+                je.currentmissions = he.MissionList.GetAllCurrentMissions(he.EventTimeUTC).Select(x=>x.FullInfo()).ToArray();
                 return je;
             }
         }

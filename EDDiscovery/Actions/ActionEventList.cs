@@ -72,7 +72,10 @@ namespace EDDiscovery.Actions
         public static ActionEvent EventCmd(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "ActionProgram", ""); }
 
         // UI Event
-        public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI"+ ui.EventTypeStr, "EliteUIEvent", ""); }
+        public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI" + ui.EventTypeStr, "EliteUIEvent", ""); }
+
+        // DLL Event
+        public static ActionEvent DLLEvent(string eventname) { return new ActionEventEDList(eventname, "DLLEvent", ""); }
 
         // Journal or Travel grid, run actions on this event
         public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", ""); }

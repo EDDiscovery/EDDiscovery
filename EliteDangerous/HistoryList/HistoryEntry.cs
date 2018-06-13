@@ -29,7 +29,7 @@ namespace EliteDangerousCore
     {
         #region Variables
 
-        public int Indexno;            // for display purposes.
+        public int Indexno;            // for display purposes.  from 1 to number of records
 
         public JournalEntry journalEntry;       // MUST be present
 
