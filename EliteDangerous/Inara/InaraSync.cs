@@ -94,6 +94,9 @@ namespace EliteDangerousCore.Inara
                                                             last.IsDocked ? last.WhereAmI : null, last.IsDocked ? last.MarketID : null));
 
                 eventstosend.Add(InaraClass.setCommanderCredits(last.Credits, last.EventTimeUTC));
+
+                eventstosend.Add(InaraClass.setCommanderTravelLocation(last.System.Name, last.IsDocked ? last.WhereAmI : null, last.MarketID.HasValue ? last.MarketID : null, last.EventTimeUTC));
+
                 CmdrCredits = last.Credits;
             }
 
