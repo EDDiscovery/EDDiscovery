@@ -243,7 +243,6 @@ namespace EliteDangerousCore
 
         public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
-        public string EventSummaryName { get; private set; }     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
 
         public DateTime EventTimeUTC { get;  set; }
 
@@ -270,6 +269,20 @@ namespace EliteDangerousCore
                 }
 
                 return beta ?? false;
+            }
+        }
+
+        private string _EventSummaryName;  // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
+        public string EventSummaryName
+        {
+            get
+            {
+                if (_EventSummaryName == null)
+                {
+                    _EventSummaryName = FillSummary;
+                }
+
+                return _EventSummaryName;
             }
         }
 
@@ -1142,7 +1155,7 @@ namespace EliteDangerousCore
                     ret = (JournalEntry)Activator.CreateInstance(jtype, jo);
             }
 
-            ret.EventSummaryName = ret.FillSummary;     // after creation, so journal fields are populated.
+            ret._EventSummaryName = ret.FillSummary;     // after creation, so journal fields are populated.
             return ret;
         }
 
