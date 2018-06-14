@@ -701,7 +701,7 @@ namespace EliteDangerousCore.Inara
             JObject jo = new JObject();
             jo["appName"] = fromSoftware;
             jo["appVersion"] = fromSoftwareVersion;
-            jo["isDeveloped"] = true;
+            jo["isDeveloped"] = false;
             jo["APIkey"] = apiKey;
             jo["commanderName"] = commanderName;
             return jo;
