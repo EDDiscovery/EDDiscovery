@@ -39,7 +39,7 @@ namespace EliteDangerousCore
             {
                 FDShipType = JournalFieldNaming.NormaliseFDShipName(ShipType);
                 ShipType = JournalFieldNaming.GetBetterShipName(FDShipType);
-                ShipType_Localised = ShipType_Localised.Alt(ShipType);
+                ShipType_Localised = JournalFieldNaming.CheckLocalisation(ShipType_Localised??"",ShipType);
             }
 
             public bool Equals(ShipyardItem other)

@@ -29,9 +29,9 @@ namespace EliteDangerousCore.JournalEvents
         public JournalFactionKillBond(JObject evt ) : base(evt, JournalTypeEnum.FactionKillBond)
         {
             AwardingFaction = evt["AwardingFaction"].Str();
-            AwardingFaction_Localised = evt["AwardingFaction_Localised"].Str();
+            AwardingFaction_Localised = JournalFieldNaming.CheckLocalisation(evt["AwardingFaction_Localised"].Str(),AwardingFaction);
             VictimFaction = evt["VictimFaction"].Str();
-            VictimFaction_Localised = evt["VictimFaction_Localised"].Str();
+            VictimFaction_Localised = JournalFieldNaming.CheckLocalisation(evt["VictimFaction_Localised"].Str(),VictimFaction);
             Reward = evt["Reward"].Long();
         }
 
@@ -49,8 +49,8 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed) //V
         {
             
-            info = BaseUtils.FieldBuilder.Build("Reward:;N0", Reward, "< from ", AwardingFaction_Localised.Alt(AwardingFaction),
-                "< , due to ", VictimFaction_Localised.Alt(VictimFaction));
+            info = BaseUtils.FieldBuilder.Build("Reward:;N0", Reward, "< from ", AwardingFaction_Localised,
+                "< , due to ", VictimFaction_Localised);
             detailed = "";
         }
     }

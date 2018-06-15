@@ -27,7 +27,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDatalinkScan(JObject evt ) : base(evt, JournalTypeEnum.DatalinkScan)
         {
             Message = evt["Message"].Str();
-            MessageLocalised = evt["Message_Localised"].Str().Alt(Message);
+            MessageLocalised = JournalFieldNaming.CheckLocalisation(evt["Message_Localised"].Str(),Message);
 
         }
         public string Message { get; set; }

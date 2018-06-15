@@ -38,12 +38,12 @@ namespace EliteDangerousCore.JournalEvents
             Commodity = evt["Commodity"].Str();
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
-            Commodity_Localised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
+            Commodity_Localised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Material = evt["Material"].Str();
             Material = JournalFieldNaming.FDNameTranslation(Material);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyMaterial = JournalFieldNaming.RMat(Material);
-            Material_Localised = evt["Material_Localised"].Str().Alt(FriendlyMaterial);
+            Material_Localised = JournalFieldNaming.CheckLocalisation(evt["Material_Localised"].Str(),FriendlyMaterial);
 
             Quantity = evt["Quantity"].Int();
             TotalQuantity = evt["TotalQuantity"].Int();

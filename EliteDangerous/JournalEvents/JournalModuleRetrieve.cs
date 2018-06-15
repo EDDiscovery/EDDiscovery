@@ -41,13 +41,13 @@ namespace EliteDangerousCore.JournalEvents
 
             RetrievedItemFD = JournalFieldNaming.NormaliseFDItemName(evt["RetrievedItem"].Str());
             RetrievedItem = JournalFieldNaming.GetBetterItemName(RetrievedItemFD);
-            RetrievedItemLocalised = evt["RetrievedItem_Localised"].Str().Alt(RetrievedItem);
+            RetrievedItemLocalised = JournalFieldNaming.CheckLocalisation(evt["RetrievedItem_Localised"].Str(),RetrievedItem);
 
             EngineerModifications = evt["EngineerModifications"].Str().SplitCapsWordFull();
 
             SwapOutItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SwapOutItem"].Str());
             SwapOutItem = JournalFieldNaming.GetBetterItemName(SwapOutItemFD);
-            SwapOutItemLocalised = evt["SwapOutItem_Localised"].Str().Alt(SwapOutItem);
+            SwapOutItemLocalised = JournalFieldNaming.CheckLocalisation(evt["SwapOutItem_Localised"].Str(),SwapOutItem);
 
             Cost = evt["Cost"].Long();
 

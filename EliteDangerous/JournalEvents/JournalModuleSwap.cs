@@ -38,13 +38,13 @@ namespace EliteDangerousCore.JournalEvents
 
             FromItemFD = JournalFieldNaming.NormaliseFDItemName(evt["FromItem"].Str());
             FromItem = JournalFieldNaming.GetBetterItemName(FromItemFD);
-            FromItemLocalised = evt["FromItem_Localised"].Str().Alt(FromItem);
+            FromItemLocalised = JournalFieldNaming.CheckLocalisation(evt["FromItem_Localised"].Str(),FromItem);
 
             ToItemFD = JournalFieldNaming.NormaliseFDItemName(evt["ToItem"].Str());
             ToItem = JournalFieldNaming.GetBetterItemName(ToItemFD);
             if (ToItem.Equals("Null"))      // Frontier bug.. something Null is here.. remove
                 ToItem = ToItemFD = "";
-            ToItemLocalised = evt["ToItem_Localised"].Str().Alt(ToItem);        // if ToItem is null or not there, this won't be
+            ToItemLocalised = JournalFieldNaming.CheckLocalisation(evt["ToItem_Localised"].Str(),ToItem);        // if ToItem is null or not there, this won't be
 
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
             Ship = JournalFieldNaming.GetBetterShipName(ShipFD);

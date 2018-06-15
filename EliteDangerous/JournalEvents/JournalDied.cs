@@ -65,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (Killer k in Killers)
                 {
                     k.Ship = JournalFieldNaming.GetBetterShipName(k.Ship);
-                    k.Name_Localised = k.Name_Localised.Alt(k.Name);
+                    k.Name_Localised = JournalFieldNaming.CheckLocalisation(k.Name_Localised??"",k.Name);
                 }
             }
         }

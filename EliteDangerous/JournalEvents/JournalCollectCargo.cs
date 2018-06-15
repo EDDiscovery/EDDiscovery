@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             Type = evt["Type"].Str();                               //FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
-            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);         // always ensure we have one
+            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),FriendlyType);         // always ensure we have one
             Stolen = evt["Stolen"].Bool();
         }
 

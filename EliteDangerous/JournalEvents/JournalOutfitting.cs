@@ -20,17 +20,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening outfitting
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //•	Items: Array of records
-    //o   id
-    //o   Name
-    //o   Name_Localised
-    //o   BuyPrice
-
     [JournalEntryType(JournalTypeEnum.Outfitting)]
     public class JournalOutfitting : JournalEntry, IAdditionalFiles
     {

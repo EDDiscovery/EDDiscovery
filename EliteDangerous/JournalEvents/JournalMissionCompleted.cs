@@ -44,19 +44,19 @@ namespace EliteDangerousCore.JournalEvents
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
-            CommodityLocalised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
+            CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);        // remove $, underscores etc
-            TargetTypeLocalised = evt["TargetTypeLocalised"].Str().Alt(TargetTypeFriendly);     // may be empty..
+            TargetTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["TargetTypeLocalised"].Str(),TargetTypeFriendly);     // may be empty..
 
             TargetFaction = evt["TargetFaction"].Str();
 
             Target = evt["Target"].Str();
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscores etc
-            TargetLocalised = evt["Target_Localised"].Str().Alt(TargetFriendly);        // copied from Accepted.. no evidence
+            TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_Localised"].Str(),TargetFriendly);        // copied from Accepted.. no evidence
 
             Reward = evt["Reward"].LongNull();
             Donation = evt["Donation"].LongNull();
@@ -250,12 +250,12 @@ namespace EliteDangerousCore.JournalEvents
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
                 FriendlyName = JournalFieldNaming.RMat(Name);
-                Name_Localised = Name_Localised.Alt(FriendlyName);
+                Name_Localised = JournalFieldNaming.CheckLocalisation(Name_Localised??"",FriendlyName);
 
                 if (Category != null)
                 {
                     Category = JournalFieldNaming.NormaliseMaterialCategory(Category);
-                    Category_Localised = Category_Localised.Alt(Category);
+                    Category_Localised = JournalFieldNaming.CheckLocalisation(Category_Localised??"",Category);
                 }
             }
         }

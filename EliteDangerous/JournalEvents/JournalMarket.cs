@@ -19,26 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening commodities market
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //•	Items: Array of records
-    //o   id
-    //o   Name
-    //o   Name_Localised
-    //o   BuyPrice
-    //o   SellPrice
-    //o   MeanPrice
-    //o   StockBracket
-    //o   DemandBracket
-    //o   Stock
-    //o   Demand
-    //o   Consumer
-    //o   Producer
-    //o   Rare
-
     [JournalEntryType(JournalTypeEnum.Market)]
     public class JournalMarket : JournalCommodityPricesBase, IAdditionalFiles
     {

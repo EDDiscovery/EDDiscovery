@@ -41,11 +41,11 @@ namespace EliteDangerousCore.JournalEvents
                 ShipFD = JournalFieldNaming.NormaliseFDShipName(ShipFD);
                 Ship = JournalFieldNaming.GetBetterShipName(ShipFD);
             }
-            Ship_Localised = evt["Ship_Localised"].Str().Alt(Ship);
+            Ship_Localised = JournalFieldNaming.CheckLocalisation(evt["Ship_Localised"].Str(),Ship);
 
             ScanStage = evt["ScanStage"].IntNull();         
             PilotName = evt["PilotName"].StrNull();
-            PilotName_Localised = evt["PilotName_Localised"].Str().Alt(PilotName);
+            PilotName_Localised = JournalFieldNaming.CheckLocalisation(evt["PilotName_Localised"].Str(),PilotName);
 
             PilotRank = evt["PilotRank"].StrNull();
             ShieldHealth = evt["ShieldHealth"].DoubleNull();

@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalSendText(JObject evt) : base(evt, JournalTypeEnum.SendText)
         {
             To = evt["To"].Str();
-            To_Localised = evt["To_Localised"].Str().Alt(To);
+            To_Localised = JournalFieldNaming.CheckLocalisation(evt["To_Localised"].Str(),To);
             Message = evt["Message"].Str();
         }
         public string To { get; set; }

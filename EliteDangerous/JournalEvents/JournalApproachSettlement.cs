@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalApproachSettlement(JObject evt) : base(evt, JournalTypeEnum.ApproachSettlement)
         {
             Name = evt["Name"].Str();
-            Name_Localised = evt["Name_Localised"].Str().Alt(Name);
+            Name_Localised = JournalFieldNaming.CheckLocalisation(evt["Name_Localised"].Str(),Name);
             MarketID = evt["MarketID"].LongNull();
         }
 

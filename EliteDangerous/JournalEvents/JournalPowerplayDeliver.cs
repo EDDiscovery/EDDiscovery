@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Power = evt["Power"].Str();
             Type = evt["Type"].Str();
-            Type_Localised = evt["Type_Localised"].Str().Alt(Type);
+            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),Type);
             Count = evt["Count"].Int();
 
         }

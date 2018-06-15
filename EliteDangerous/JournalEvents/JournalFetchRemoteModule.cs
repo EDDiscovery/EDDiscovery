@@ -35,7 +35,7 @@ namespace EliteDangerousCore.JournalEvents
 
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
             StoredItem = JournalFieldNaming.GetBetterItemName(StoredItemFD);
-            StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
+            StoredItemLocalised = JournalFieldNaming.CheckLocalisation(evt["StoredItem_Localised"].Str(),StoredItem);
 
             TransferCost = evt["TransferCost"].Long();
 

@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name, translate to FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = JournalFieldNaming.RMat(Type);
-            Type_Localised = evt["Type_Localised"].Str().Alt(FriendlyType);
+            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),FriendlyType);
         }
 
         public string Type { get; set; }                                        // FIXED fdname always.. vital it stays this way
