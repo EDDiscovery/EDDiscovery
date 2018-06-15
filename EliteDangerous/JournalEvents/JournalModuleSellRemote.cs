@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
 
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
             SellItem = JournalFieldNaming.GetBetterItemName(SellItemFD);
-            SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
+            SellItemLocalised = JournalFieldNaming.CheckLocalisation(evt["SellItem_Localised"].Str(),SellItem);
 
             SellPrice = evt["SellPrice"].Long();
 

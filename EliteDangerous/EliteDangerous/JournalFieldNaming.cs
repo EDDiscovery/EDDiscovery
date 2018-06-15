@@ -180,5 +180,10 @@ namespace EliteDangerousCore
             }
         }
 
+        static public string CheckLocalisation(string loc, string alt)      // instances of ! # $int in localisation strings, screen out
+        {
+            bool invalid = loc.Length < 2 || loc.StartsWith("$int", StringComparison.InvariantCultureIgnoreCase) || loc.StartsWith("$hpt", StringComparison.InvariantCultureIgnoreCase);
+            return invalid ? alt.SplitCapsWordFull() : loc;
+        }
     }
 }

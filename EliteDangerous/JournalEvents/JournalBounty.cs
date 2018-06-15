@@ -40,7 +40,7 @@ namespace EliteDangerousCore.JournalEvents
             TotalReward = evt["TotalReward"].Long();     // others of them..
 
             VictimFaction = evt["VictimFaction"].Str();
-            VictimFactionLocalised = evt["VictimFaction_Localised"].Str().Alt(VictimFaction);
+            VictimFactionLocalised = JournalFieldNaming.CheckLocalisation(evt["VictimFaction_Localised"].Str(),VictimFaction);
 
             SharedWithOthers = evt["SharedWithOthers"].Bool(false);
             Rewards = evt["Rewards"]?.ToObjectProtected<BountyReward[]>();

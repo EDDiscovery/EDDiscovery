@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalUSSDrop(JObject evt ) : base(evt, JournalTypeEnum.USSDrop)
         {
             USSType = evt["USSType"].Str();
-            USSTypeLocalised = evt["USSType_Localised"].Str().Alt(USSType);
+            USSTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["USSType_Localised"].Str(),USSType);
             USSThreat = evt["USSThreat"].Int();
         }
         public string USSType { get; set; }

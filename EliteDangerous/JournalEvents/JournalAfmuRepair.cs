@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
             Module = JournalFieldNaming.GetBetterItemName(ModuleFD);
-            ModuleLocalised = evt["Module_Localised"].Str().Alt(Module);
+            ModuleLocalised = JournalFieldNaming.CheckLocalisation(evt["Module_Localised"].Str(),Module);
             FullyRepaired = evt["FullyRepaired"].Bool();
             Health = evt["Health"].Float()*100.0F;
         }

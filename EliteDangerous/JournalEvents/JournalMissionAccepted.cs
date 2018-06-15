@@ -56,13 +56,13 @@ namespace EliteDangerousCore.JournalEvents
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);    // remove $, underscore it
-            TargetTypeLocalised = evt["TargetType_Localised"].Str().Alt(TargetTypeFriendly);
+            TargetTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["TargetType_Localised"].Str(),TargetTypeFriendly);
 
             TargetFaction = evt["TargetFaction"].Str();
 
             Target = evt["Target"].Str();
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscore it
-            TargetLocalised = evt["Target_localised"].Str().Alt(TargetFriendly);        // not all
+            TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_localised"].Str(),TargetFriendly);        // not all
 
             KillCount = evt["KillCount"].IntNull();
 
@@ -76,7 +76,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());        // instances of $_name, fix to fdname
             FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
-            CommodityLocalised = evt["Commodity_Localised"].Str().Alt(FriendlyCommodity);
+            CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
             Expiry = evt["Expiry"].DateTimeUTC();

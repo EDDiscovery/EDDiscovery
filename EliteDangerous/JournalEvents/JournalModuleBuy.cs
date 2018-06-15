@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
 
             BuyItemFD = JournalFieldNaming.NormaliseFDItemName(evt["BuyItem"].Str());
             BuyItem = JournalFieldNaming.GetBetterItemName(BuyItemFD);
-            BuyItemLocalised = evt["BuyItem_Localised"].Str().Alt(BuyItem);
+            BuyItemLocalised = JournalFieldNaming.CheckLocalisation(evt["BuyItem_Localised"].Str(),BuyItem);
             BuyPrice = evt["BuyPrice"].Long();
 
             ShipFD = JournalFieldNaming.NormaliseFDShipName(evt["Ship"].Str());
@@ -46,12 +46,12 @@ namespace EliteDangerousCore.JournalEvents
 
             SellItemFD = JournalFieldNaming.NormaliseFDItemName(evt["SellItem"].Str());
             SellItem = JournalFieldNaming.GetBetterItemName(SellItemFD);
-            SellItemLocalised = evt["SellItem_Localised"].Str().Alt(SellItem);
+            SellItemLocalised = JournalFieldNaming.CheckLocalisation(evt["SellItem_Localised"].Str(),SellItem);
             SellPrice = evt["SellPrice"].LongNull();
 
             StoredItemFD = JournalFieldNaming.NormaliseFDItemName(evt["StoredItem"].Str());
             StoredItem = JournalFieldNaming.GetBetterItemName(StoredItemFD);
-            StoredItemLocalised = evt["StoredItem_Localised"].Str().Alt(StoredItem);
+            StoredItemLocalised = JournalFieldNaming.CheckLocalisation(evt["StoredItem_Localised"].Str(),StoredItem);
 
             MarketID = evt["MarketID"].LongNull();
         }

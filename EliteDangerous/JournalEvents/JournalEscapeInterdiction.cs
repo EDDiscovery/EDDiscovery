@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalEscapeInterdiction(JObject evt ) : base(evt, JournalTypeEnum.EscapeInterdiction)
         {
             Interdictor = evt["Interdictor"].Str();
-            Interdictor_Localised = evt["Interdictor_Localised"].Str().Alt(Interdictor);
+            Interdictor_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdictor_Localised"].Str(),Interdictor);
             IsPlayer = evt["IsPlayer"].Bool();
         }
 

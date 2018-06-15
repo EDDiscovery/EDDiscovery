@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Success = evt["Success"].Bool();
             Interdicted = evt["Interdicted"].Str();
-            Interdicted_Localised = evt["Interdicted_Localised"].Str().Alt(Interdicted);
+            Interdicted_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdicted_Localised"].Str(),Interdicted);
             IsPlayer = evt["IsPlayer"].Bool();
             CombatRank = CombatRank.Harmless;
             if (!evt["CombatRank"].Empty())

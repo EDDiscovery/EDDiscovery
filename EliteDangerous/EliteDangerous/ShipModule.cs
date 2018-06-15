@@ -198,7 +198,7 @@ namespace EliteDangerousCore
                 Quality = evt["Quality"].Double(0);
                 // EngineerCraft has it as Apply.. Loadout has just ExperimentalEffect.  Check both
                 ExperimentalEffect = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "ExperimentalEffect", "ApplyExperimentalEffect" });
-                ExperimentalEffect_Localised = evt["ExperimentalEffect_Localised"].Str().Alt(ExperimentalEffect);
+                ExperimentalEffect_Localised = JournalFieldNaming.CheckLocalisation(evt["ExperimentalEffect_Localised"].Str(),ExperimentalEffect);
 
                 Modifiers = evt["Modifiers"]?.ToObjectProtected<EngineeringModifiers[]>();
 

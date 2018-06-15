@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (ItemsUnlocked != null)
                 foreach (Unlocked u in ItemsUnlocked)
-                    u.Name_Localised = u.Name_Localised.Alt(u.Name);
+                    u.Name_Localised = JournalFieldNaming.CheckLocalisation(u.Name_Localised??"",u.Name);
 
             if (CommodityList != null)
                 foreach (Commodities c in CommodityList)

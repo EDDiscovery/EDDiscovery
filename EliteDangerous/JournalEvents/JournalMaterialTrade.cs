@@ -54,12 +54,12 @@ namespace EliteDangerousCore.JournalEvents
             {
                 Material = JournalFieldNaming.FDNameTranslation(Material);
                 FriendlyMaterial = JournalFieldNaming.RMat(Material);
-                Material_Localised = Material_Localised.Alt(FriendlyMaterial);       // ensure.
+                Material_Localised = JournalFieldNaming.CheckLocalisation(Material_Localised??"",FriendlyMaterial);       // ensure.
 
                 if (Category != null)       // some entries do not have this
                 {
                     Category = JournalFieldNaming.NormaliseMaterialCategory(Category);  // fix up any strangeness
-                    Category_Localised = Category_Localised.Alt(Category);
+                    Category_Localised = JournalFieldNaming.CheckLocalisation(Category_Localised??"",Category);
                 }
             }
         }

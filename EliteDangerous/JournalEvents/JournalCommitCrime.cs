@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
             CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
             Faction = evt["Faction"].Str();
             Victim = evt["Victim"].Str();
-            VictimLocalised = evt["Victim_Localised"].Str().Alt(Victim);
+            VictimLocalised = JournalFieldNaming.CheckLocalisation(evt["Victim_Localised"].Str(),Victim);
             Fine = evt["Fine"].LongNull();
             Bounty = evt["Bounty"].LongNull();
         }

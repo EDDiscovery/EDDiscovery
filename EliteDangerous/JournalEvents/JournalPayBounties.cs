@@ -27,7 +27,7 @@ namespace EliteDangerousCore.JournalEvents
             BrokerPercentage = evt["BrokerPercentage"].Double();
             AllFines = evt["AllFines"].Bool();
             Faction = evt["Faction"].Str();
-            Faction_Localised = evt["Faction_Localised"].Str().Alt(Faction);
+            Faction_Localised = JournalFieldNaming.CheckLocalisation(evt["Faction_Localised"].Str(),Faction);
             ShipId = evt["ShipID"].Int();
         }
 

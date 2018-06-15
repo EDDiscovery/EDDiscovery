@@ -29,7 +29,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             ItemFD = JournalFieldNaming.NormaliseFDItemName(evt["Item"].Str());
             Item = JournalFieldNaming.GetBetterItemName(ItemFD);
-            ItemLocalised = evt["Item_Localised"].Str().Alt(Item);
+            ItemLocalised = JournalFieldNaming.CheckLocalisation(evt["Item_Localised"].Str(),Item);
             Cost = evt["Cost"].Long();
         }
 
