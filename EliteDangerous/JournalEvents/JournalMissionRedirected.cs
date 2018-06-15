@@ -18,23 +18,12 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when a mission is updated with a new destination
-    //Parameters
-    // MissionID
-    // MissionName
-    // NewDestinationStation
-    // OldDestinationStation
-    // NewDestinationSystem
-
-//{ "timestamp": "2017-08-01T09:04:07Z", "event": "MissionRedirected", "MissionID": 65367315, "NewDestinationStation": "Metcalf Orbital", "OldDestinationStation": "Cuffey Orbital", "NewDestinationSystem": "Cemiess", "OldDestinationSystem": "Vequess" }
-
-
-[JournalEntryType(JournalTypeEnum.MissionRedirected)]
+    [JournalEntryType(JournalTypeEnum.MissionRedirected)]
     public class JournalMissionRedirected : JournalEntry, IMissions
     {
         public JournalMissionRedirected(JObject evt ) : base(evt, JournalTypeEnum.MissionRedirected)
         {
-            FDName = evt["MissionName"].Str();
+            FDName = evt["Name"].Str();
             Name = JournalFieldNaming.GetBetterMissionName(FDName);
             MissionId = evt["MissionID"].Int();
             NewDestinationStation = evt["NewDestinationStation"].Str();
