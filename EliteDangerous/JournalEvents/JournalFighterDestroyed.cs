@@ -20,10 +20,15 @@ namespace EliteDangerousCore.JournalEvents
 {
 
     [JournalEntryType(JournalTypeEnum.FighterDestroyed)]
-    public class JournalFighterDestroyed : JournalEntry
+    public class JournalFighterDestroyed : JournalEntry, IShipInformation
     {
         public JournalFighterDestroyed(JObject evt ) : base(evt, JournalTypeEnum.FighterDestroyed)
         {
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {
+            shp.FighterDestroyed();
         }
 
         public override void FillInformation(out string info, out string detailed) //V

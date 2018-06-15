@@ -99,12 +99,18 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add("Travel History Entry");
             comboBoxShips.Items.Add("Stored Modules");
 
-            var now = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem == null select x1.Value.ShipNameIdentType).ToList();
+            var ownedships = (from x1 in shm.Ships where x1.Value.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var notownedships = (from x1 in shm.Ships where x1.Value.State != ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            var fightersrvs = (from x1 in shm.Ships where ShipModuleData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+
+            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
             comboBoxShips.Items.AddRange(now);
-            var stored = (from x1 in shm.Ships where x1.Value.Sold == false && x1.Value.StoredAtSystem != null select x1.Value.ShipNameIdentType).ToList();
+
+            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
             comboBoxShips.Items.AddRange(stored);
-            var sold = (from x1 in shm.Ships where x1.Value.Sold == true select x1.Value.ShipNameIdentType).ToList();
-            comboBoxShips.Items.AddRange(sold);
+
+            comboBoxShips.Items.AddRange(notownedships.Select(x => x.ShipNameIdentType).ToList());
+            comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
             if (cursel == "")
                 cursel = SQLiteDBClass.GetSettingString(DbShipSave, "");
@@ -397,7 +403,9 @@ namespace EDDiscovery.UserControls
             int ctrlleft = 150;
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Fuel Warning:", new Point(10, 40), new Size(140, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)") { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble), 
+                last_si.FuelWarningPercent.ToStringInvariant(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)")
+                { numberboxdoubleminimum = 0, numberboxdoublemaximum = 100, numberboxformat = "0.##" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK", new Point(width - 100, 70), new Size(80, 24), "Press to Accept"));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(width - 200, 70), new Size(80, 24), "Press to Cancel"));

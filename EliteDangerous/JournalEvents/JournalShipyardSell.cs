@@ -57,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
             //Debug.WriteLine(EventTimeUTC + " SELL");
-            shp.Sell(ShipType, SellShipId);
+            shp.Sell(ShipTypeFD, SellShipId);
         }
 
         public override void FillInformation(out string info, out string detailed) //V

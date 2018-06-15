@@ -82,7 +82,7 @@ namespace EliteDangerousCore
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
 
-            //System.Diagnostics.Debug.WriteLine("Loadout " + sm.ID + " " + sm.ShipFD);
+            //System.Diagnostics.Debug.WriteLine("Loadout " + sid);
 
             ShipInformation newsm = null;       // if we change anything, we need a new clone..
 
@@ -138,7 +138,7 @@ namespace EliteDangerousCore
 
             Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
 
-            //System.Diagnostics.Debug.WriteLine("Load Game " + sm.ID + " " + sm.Ship);
+            //System.Diagnostics.Debug.WriteLine("Load Game " + sid);
 
             if (!ShipModuleData.IsSRVOrFighter(shipfd))
                 currentid = sid;
@@ -158,6 +158,13 @@ namespace EliteDangerousCore
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
         }
 
+        public void DestroyedSRV()
+        {
+            //System.Diagnostics.Debug.WriteLine("Destroyed SRV");
+            if (HaveCurrentShip)
+                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+        }
+
         public void LaunchFighter(bool pc)
         {
             //System.Diagnostics.Debug.WriteLine("Launch Fighter");
@@ -168,6 +175,13 @@ namespace EliteDangerousCore
         public void DockFighter()
         {
             //System.Diagnostics.Debug.WriteLine("Dock Fighter");
+            if (HaveCurrentShip)
+                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+        }
+
+        public void FighterDestroyed()      // even if NPC controlled, no harm in setting back to none since we must be in ship
+        {
+            //System.Diagnostics.Debug.WriteLine("Fighter Destroyed");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
         }
@@ -199,7 +213,7 @@ namespace EliteDangerousCore
 
                 if (Ships.ContainsKey(oldship))
                 {
-                    //System.Diagnostics.Debug.WriteLine(e.StoreOldShipFD + " Swap Store at " + system + ":" + station);
+                    //System.Diagnostics.Debug.WriteLine(oldship + " Swap Store at " + system + ":" + station);
                     Ships[oldship] = Ships[oldship].Store(station, system);
                 }
                 else
@@ -212,8 +226,9 @@ namespace EliteDangerousCore
                 System.Diagnostics.Debug.WriteLine(e.StoreOldShipFD + " Cant find to swap");
             }
 
-            //System.Diagnostics.Debug.WriteLine(e.ShipFD + " Swap to at " + system );
             string sid = Key(e.ShipFD, e.ShipId);           //swap to new ship
+
+            //System.Diagnostics.Debug.WriteLine(sid + " Swap to at " + system);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             sm = sm.SetShipDetails(e.ShipType, e.ShipFD);   // shallow copy if changed
@@ -225,6 +240,7 @@ namespace EliteDangerousCore
         public void ShipyardNew(string ship, string shipFD, int id)
         {
             string sid = Key(shipFD, id);
+            //System.Diagnostics.Debug.WriteLine(sid + " New");
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SetShipDetails(ship, shipFD); // shallow copy if changed
@@ -236,12 +252,12 @@ namespace EliteDangerousCore
             string sid = Key(ShipFD, id);
             if (Ships.ContainsKey(sid))       // if we don't have it, don't worry
             {
-                //System.Diagnostics.Debug.WriteLine(ShipFD + " Sell ");
+                //System.Diagnostics.Debug.WriteLine(sid + " Sold ");
                 Ships[sid] = Ships[sid].SellShip();
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine(ShipFD + " can't find to Sell");
+                System.Diagnostics.Debug.WriteLine(sid + " can't find to Sell");
             }
         }
 
@@ -260,12 +276,12 @@ namespace EliteDangerousCore
             string sid = Key(ShipFD, id);
             if (Ships.ContainsKey(sid))       // if we don't have it, don't worry
             {
-                //System.Diagnostics.Debug.WriteLine(ShipFD + " store on buy at " + system);
+                //System.Diagnostics.Debug.WriteLine(sid + " store on buy at " + system);
                 Ships[sid] = Ships[sid].Store(station, system);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine(ShipFD + " cannot find ship to store on buy");
+                System.Diagnostics.Debug.WriteLine(sid + " cannot find ship to store on buy");
             }
         }
 
@@ -273,8 +289,9 @@ namespace EliteDangerousCore
         {
             foreach (var i in ships)
             {
-                //System.Diagnostics.Debug.WriteLine(i.ShipTypeFD + " Stored info " + i.StarSystem + ":" + i.StationName + " transit" + i.InTransit);
                 string sid = Key(i.ShipTypeFD, i.ShipID);
+                //System.Diagnostics.Debug.WriteLine(sid + " Stored info " + i.StarSystem + ":" + i.StationName + " transit" + i.InTransit);
+
                 ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
                 sm = sm.SetShipDetails(i.ShipType, i.ShipTypeFD,i.Name);  // set up minimum stuff we know about it
 
@@ -440,11 +457,11 @@ namespace EliteDangerousCore
             if (Ships.ContainsKey(id))
             {
                 ShipInformation sm = Ships[id];
-                if (!sm.Sold)               // if not sold, ok
+                if (sm.State == ShipInformation.ShipState.Owned)               // if owned, ok
                     return sm;
                 else
                 {
-                    Ships[Key(sm.ShipFD, newsoldid++)] = sm;                      // okay, we place this information on 30000+  all Ids of this will now refer to new entry
+                    Ships[Key(sm.ShipFD, newsoldid++)] = sm;              // okay, we place this information on back ID list+  all Ids of this will now refer to new entry
                 }
             }
 

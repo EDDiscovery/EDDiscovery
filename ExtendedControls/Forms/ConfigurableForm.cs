@@ -71,7 +71,7 @@ namespace ExtendedControls
             public bool checkboxchecked;        // fill in for checkbox
             public bool textboxmultiline;       // fill in for textbox
             public bool clearonfirstchar;       // fill in for textbox
-            public string comboboxitems;        // fill in for combobox
+            public string comboboxitems;        // fill in for combobox. comma separ list.
             public Size? comboboxdropdownsize;  // may be null, fill in for combobox
             public string customdateformat;     // fill in for datetimepicker
             public double numberboxdoubleminimum = double.MinValue;   // for double box
