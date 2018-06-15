@@ -79,7 +79,7 @@ namespace EliteDangerousCore
 
             //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, shipfd, id);            // this either gets current ship or makes a new one.
             Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
 
             //System.Diagnostics.Debug.WriteLine("Loadout " + sid);
@@ -134,7 +134,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(shipfd, id);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, shipfd, id);            // this either gets current ship or makes a new one.
 
             Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
 
@@ -230,7 +230,7 @@ namespace EliteDangerousCore
 
             //System.Diagnostics.Debug.WriteLine(sid + " Swap to at " + system);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
             sm = sm.SetShipDetails(e.ShipType, e.ShipFD);   // shallow copy if changed
             sm = sm.SwapTo();                               // swap into
             Ships[sid] = sm;
@@ -242,7 +242,7 @@ namespace EliteDangerousCore
             string sid = Key(shipFD, id);
             //System.Diagnostics.Debug.WriteLine(sid + " New");
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, shipFD, id);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SetShipDetails(ship, shipFD); // shallow copy if changed
             currentid = sid;
         }
@@ -264,7 +264,7 @@ namespace EliteDangerousCore
         public void Transfer(string ship, string shipFD, int id, string fromsystem, string tosystem, string tostation, DateTime arrivaltime)
         {
             string sid = Key(shipFD, id);
-            ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, shipFD, id);              // this either gets current ship or makes a new one.
             sm = sm.SetShipDetails(ship, shipFD);               // set up minimum stuff we know about it
             sm = sm.Transfer(tosystem, tostation, arrivaltime);    // transfer set up
             Ships[sid] = sm;
@@ -292,7 +292,7 @@ namespace EliteDangerousCore
                 string sid = Key(i.ShipTypeFD, i.ShipID);
                 //System.Diagnostics.Debug.WriteLine(sid + " Stored info " + i.StarSystem + ":" + i.StationName + " transit" + i.InTransit);
 
-                ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+                ShipInformation sm = EnsureShip(sid, i.ShipTypeFD, i.ShipID);              // this either gets current ship or makes a new one.
                 sm = sm.SetShipDetails(i.ShipType, i.ShipTypeFD,i.Name);  // set up minimum stuff we know about it
 
                 if ( !i.InTransit )                                 // if in transit, we don't know where it is, ignore
@@ -306,7 +306,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipID);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipID);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SetShipDetails(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent); // will clone if data changed..
             currentid = sid;           // must be in it to do this
         }
@@ -315,7 +315,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);              // this either gets current ship or makes a new one.
 
             if (e.StoredItem.Length > 0)                             // if we stored something
                 StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
@@ -336,7 +336,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.RemoveModule(e.Slot, e.SellItem);
 
             if (e.SellItem.Length > 0)
@@ -349,7 +349,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SwapModule(e.FromSlot, e.FromSlotFD, e.FromItem, e.FromItemFD, e.FromItemLocalised,
                                             e.ToSlot, e.ToSlotFD, e.ToItem, e.ToItemFD, e.ToItemLocalised);
             currentid = sid;           // must be in it to do this
@@ -359,7 +359,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
 
             if (e.ReplacementItem.Length > 0)
                 Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
@@ -374,7 +374,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
 
             if (e.SwapOutItem.Length > 0)
                 StoredModules = StoredModules.StoreModule(e.SwapOutItem, e.SwapOutItemLocalised);
@@ -393,7 +393,7 @@ namespace EliteDangerousCore
         {
             string sid = Key(e.ShipFD, e.ShipId);
 
-            ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            ShipInformation sm = EnsureShip(sid, e.ShipFD, e.ShipId);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.RemoveModules(e.ModuleItems);
             StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
         }
@@ -452,7 +452,7 @@ namespace EliteDangerousCore
 
         #region Helpers
 
-        private ShipInformation EnsureShip(string id)      // ensure we have an ID of this type..
+        private ShipInformation EnsureShip(string id, string fdname, int i)      // ensure we have an ID of this type..
         {
             if (Ships.ContainsKey(id))
             {
@@ -467,9 +467,7 @@ namespace EliteDangerousCore
 
             //System.Diagnostics.Debug.WriteLine("Made new ship " + id);
 
-            int i;
-            id.Substring(id.IndexOf(":") + 1).InvariantParse(out i);
-            ShipInformation smn = new ShipInformation(i);
+            ShipInformation smn = new ShipInformation(i, fdname);
             Ships[id] = smn;
             return smn;
         }
