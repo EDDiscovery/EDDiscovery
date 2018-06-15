@@ -144,9 +144,9 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalShipyardBuy;
 
-                        if (je.StoreOldShipFD != null)
+                        if (je.StoreOldShipFD != null && je.StoreOldShipId.HasValue)
                             eventstosend.Add(InaraClass.setCommanderShip(je.StoreOldShipFD, je.StoreOldShipId.Value, he.EventTimeUTC, curship: false, starsystemName: he.System.Name, stationName: he.WhereAmI));
-                        if (je.SellOldShipFD != null)
+                        if (je.SellOldShipFD != null && je.SellOldShipId.HasValue )
                             eventstosend.Add(InaraClass.delCommanderShip(je.SellOldShipFD, je.SellOldShipId.Value, he.EventTimeUTC));
 
                         eventstosend.Add(InaraClass.setCommanderCredits(he.Credits, he.EventTimeUTC));
@@ -190,16 +190,19 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalLoadout;
                         var si = he.ShipInformation;
-                        if (je.ShipId == si.ID)
+                        if (je.ShipFD.HasChars() && !ShipModuleData.IsSRVOrFighter(je.ShipFD)) // if it has an FDname (defensive) and is not SRV/Fighter
                         {
-                            eventstosend.Add(InaraClass.setCommanderShipLoadout(je.ShipFD, je.ShipId, si.Modules.Values, he.EventTimeUTC));
-                            eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipId, he.EventTimeUTC,
-                                                                    je.ShipName, je.ShipIdent, true, null,
-                                                                    je.HullValue, je.ModulesValue, je.Rebuy));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("ERROR IN EDD Inara system:Current ship does not match loadout");
+                            if (je.ShipId == si.ID)
+                            {
+                                eventstosend.Add(InaraClass.setCommanderShipLoadout(je.ShipFD, je.ShipId, si.Modules.Values, he.EventTimeUTC));
+                                eventstosend.Add(InaraClass.setCommanderShip(je.ShipFD, je.ShipId, he.EventTimeUTC,
+                                                                        je.ShipName, je.ShipIdent, true, null,
+                                                                        je.HullValue, je.ModulesValue, je.Rebuy));
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("ERROR IN EDD Inara system:Current ship does not match loadout");
+                            }
                         }
                         break;
                     }
