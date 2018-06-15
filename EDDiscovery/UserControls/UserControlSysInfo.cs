@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl)
         {
-            //System.Diagnostics.Debug.WriteLine("system info kicked " + uctg.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("SI:Display ");
 
             if (neverdisplayed)
             {
@@ -287,6 +287,7 @@ namespace EDDiscovery.UserControls
         private void SetNote(string text)
         {
             noteenabled = false;
+            //System.Diagnostics.Debug.WriteLine("SI:Note text " + text);
             richTextBoxNote.Text = text;
             noteenabled = true;
         }
@@ -732,6 +733,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null && noteenabled)
             {
+                //System.Diagnostics.Debug.WriteLine("SI:leave note changed: " + richTextBoxNote.Text);
                 last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), true , EDCommander.Current.SyncToEdsm);   // commit, maybe send to edsm
                 discoveryform.NoteChanged(this, last_he, true);
             }
@@ -741,14 +743,17 @@ namespace EDDiscovery.UserControls
         {
             if (last_he != null && noteenabled)
             {
+                //System.Diagnostics.Debug.WriteLine("SI:type note changed: " + richTextBoxNote.Text);
                 last_he.SetJournalSystemNoteText(richTextBoxNote.Text.Trim(), false, false);        // no commit, no send to edsm..
                 discoveryform.NoteChanged(this, last_he, false);
             }
         }
+
         private void OnNoteChanged(Object sender, HistoryEntry he, bool arg)  // BEWARE we do this as well..
         {
             if ( !Object.ReferenceEquals(this,sender) )     // so, make sure this sys info is not sending it
             {
+                //System.Diagnostics.Debug.WriteLine("SI:On note changed: " + he.snc.Note);
                 SetNote(he.snc != null ? he.snc.Note : "");
             }
         }
@@ -757,6 +762,8 @@ namespace EDDiscovery.UserControls
         {
             if (IsNotesShowing)
             {
+                //System.Diagnostics.Debug.WriteLine("SI:Focus on Note due to key");
+
                 richTextBoxNote.Select(richTextBoxNote.Text.Length, 0);     // move caret to end and focus.
                 richTextBoxNote.ScrollToCaret();
                 richTextBoxNote.Focus();

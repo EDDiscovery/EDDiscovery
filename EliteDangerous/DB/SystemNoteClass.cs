@@ -159,7 +159,7 @@ namespace EliteDangerousCore.DB
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Editmem note " + Journalid + " " + SystemName + " " + Note);
+                System.Diagnostics.Debug.WriteLine("Note edit in memory " + Journalid + " " + SystemName + " " + Note);
             }
 
             return this;

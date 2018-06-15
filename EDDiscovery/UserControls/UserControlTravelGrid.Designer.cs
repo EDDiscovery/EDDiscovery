@@ -73,11 +73,12 @@ namespace EDDiscovery.UserControls
             this.sendUnsyncedScanToEDDNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
@@ -87,7 +88,6 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -259,7 +259,7 @@ namespace EDDiscovery.UserControls
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.runSelectionThroughInaraSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 444);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -399,27 +399,6 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem.Text = "Set Note";
             this.setNoteToolStripMenuItem.Click += new System.EventHandler(this.setNoteToolStripMenuItem_Click);
             // 
-            // writeEventInfoToLogDebugToolStripMenuItem
-            // 
-            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
-            // 
-            // writeJournalToLogtoolStripMenuItem
-            // 
-            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
-            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
-            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
-            // 
-            // runActionsAcrossSelectionToolSpeechStripMenuItem
-            // 
-            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Name = "runActionsAcrossSelectionToolSpeechStripMenuItem";
-            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Text = "Run actions across selection for speech debugging (Debug)";
-            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Click += new System.EventHandler(this.runActionsAcrossSelectionToolStripMenuItem_Click);
-            // 
             // copyJournalEntryToClipboardToolStripMenuItem
             // 
             this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
@@ -433,6 +412,34 @@ namespace EDDiscovery.UserControls
             this.createEditBookmarkToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
             this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
+            // 
+            // writeJournalToLogtoolStripMenuItem
+            // 
+            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
+            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
+            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
+            // 
+            // writeEventInfoToLogDebugToolStripMenuItem
+            // 
+            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
+            // 
+            // runActionsAcrossSelectionToolSpeechStripMenuItem
+            // 
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Name = "runActionsAcrossSelectionToolSpeechStripMenuItem";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Text = "Run actions across selection for speech debugging (Debug)";
+            this.runActionsAcrossSelectionToolSpeechStripMenuItem.Click += new System.EventHandler(this.runActionsAcrossSelectionToolStripMenuItem_Click);
+            // 
+            // runSelectionThroughInaraSystemToolStripMenuItem
+            // 
+            this.runSelectionThroughInaraSystemToolStripMenuItem.Name = "runSelectionThroughInaraSystemToolStripMenuItem";
+            this.runSelectionThroughInaraSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runSelectionThroughInaraSystemToolStripMenuItem.Text = "Run selection through Inara System (Debug)";
+            this.runSelectionThroughInaraSystemToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughInaraSystemToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -549,13 +556,6 @@ namespace EDDiscovery.UserControls
             this.ColumnNote.MinimumWidth = 20;
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
-            // 
-            // runSelectionThroughInaraSystemToolStripMenuItem
-            // 
-            this.runSelectionThroughInaraSystemToolStripMenuItem.Name = "runSelectionThroughInaraSystemToolStripMenuItem";
-            this.runSelectionThroughInaraSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.runSelectionThroughInaraSystemToolStripMenuItem.Text = "Run selection through Inara System (Debug)";
-            this.runSelectionThroughInaraSystemToolStripMenuItem.Click += new System.EventHandler(this.runSelectionThroughInaraSystemToolStripMenuItem_Click);
             // 
             // UserControlTravelGrid
             // 
