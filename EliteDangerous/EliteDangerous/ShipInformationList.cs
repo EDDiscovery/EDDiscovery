@@ -132,16 +132,18 @@ namespace EliteDangerousCore
 
         public void LoadGame(int id, string ship, string shipfd, string name, string ident, double fuellevel, double fueltotal)        // LoadGame..
         {
-            string sid = Key(shipfd, id);
-
-            ShipInformation sm = EnsureShip(sid, shipfd, id);            // this either gets current ship or makes a new one.
-
-            Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
-
-            //System.Diagnostics.Debug.WriteLine("Load Game " + sid);
-
             if (!ShipModuleData.IsSRVOrFighter(shipfd))
+            {
+                string sid = Key(shipfd, id);
+
+                ShipInformation sm = EnsureShip(sid, shipfd, id);            // this either gets current ship or makes a new one.
+
+                Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, fuellevel, fueltotal);   // this makes a shallow copy if any data has changed..
+
+                //System.Diagnostics.Debug.WriteLine("Load Game " + sid);
+
                 currentid = sid;
+            }
         }
 
         public void LaunchSRV()
