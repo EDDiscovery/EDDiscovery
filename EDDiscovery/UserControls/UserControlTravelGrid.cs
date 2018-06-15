@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewTravel.CurrentCell != null)
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
-                //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
+                //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
                 if (OnChangedSelection != null)
                     OnChangedSelection(row, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
                 if (OnTravelSelectionChanged != null)
@@ -441,6 +441,7 @@ namespace EDDiscovery.UserControls
             if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
             {
                 string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
+                //System.Diagnostics.Debug.WriteLine("TG:Note changed " + s);
                 rowsbyjournalid[he.Journalid].Cells[TravelHistoryColumns.Note].Value = s;
             }
         }

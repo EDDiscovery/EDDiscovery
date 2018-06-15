@@ -63,6 +63,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCredits = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripGameMode = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripTravel = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMissionList = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSkinny = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
@@ -118,7 +119,6 @@ namespace EDDiscovery.UserControls
             this.panelFD = new ExtendedControls.PanelNoTheme();
             this.richTextBoxScrollMissions = new ExtendedControls.RichTextBoxScroll();
             this.labelMissions = new System.Windows.Forms.Label();
-            this.toolStripMissionList = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 510);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 488);
             // 
             // toolStripSystem
             // 
@@ -323,6 +323,16 @@ namespace EDDiscovery.UserControls
             this.toolStripTravel.Size = new System.Drawing.Size(255, 22);
             this.toolStripTravel.Text = "Display Travel Trip Statistics";
             this.toolStripTravel.Click += new System.EventHandler(this.toolStripTravel_Click);
+            // 
+            // toolStripMissionList
+            // 
+            this.toolStripMissionList.Checked = true;
+            this.toolStripMissionList.CheckOnClick = true;
+            this.toolStripMissionList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripMissionList.Name = "toolStripMissionList";
+            this.toolStripMissionList.Size = new System.Drawing.Size(255, 22);
+            this.toolStripMissionList.Text = "Display Mission List";
+            this.toolStripMissionList.Click += new System.EventHandler(this.toolStripMissionsList_Click);
             // 
             // toolStripSkinny
             // 
@@ -1362,8 +1372,6 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.TabIndex = 0;
             this.richTextBoxScrollMissions.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScrollMissions.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxScrollMissions.TextBoxChanged += new ExtendedControls.RichTextBoxScroll.OnTextBoxChanged(this.richTextBoxNote_TextBoxChanged);
-            this.richTextBoxScrollMissions.Leave += new System.EventHandler(this.richTextBoxNote_Leave);
             this.richTextBoxScrollMissions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.richTextBoxScrollMissions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.richTextBoxScrollMissions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
@@ -1379,16 +1387,6 @@ namespace EDDiscovery.UserControls
             this.labelMissions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.labelMissions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelMissions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
-            // 
-            // displayMissionListToolStripMenuItem
-            // 
-            this.toolStripMissionList.Checked = true;
-            this.toolStripMissionList.CheckOnClick = true;
-            this.toolStripMissionList.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripMissionList.Name = "displayMissionListToolStripMenuItem";
-            this.toolStripMissionList.Size = new System.Drawing.Size(255, 22);
-            this.toolStripMissionList.Text = "Display Mission List";
-            this.toolStripMissionList.Click += new System.EventHandler(this.toolStripMissionsList_Click);
             // 
             // UserControlSysInfo
             // 
