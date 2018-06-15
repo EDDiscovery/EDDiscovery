@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -20,7 +21,7 @@ namespace EliteDangerousCore.JournalEvents
 {
 
     [JournalEntryType(JournalTypeEnum.FighterDestroyed)]
-    public class JournalFighterDestroyed : JournalEntry
+    public class JournalFighterDestroyed : JournalEntry, IShipInformation
     {
         public JournalFighterDestroyed(JObject evt ) : base(evt, JournalTypeEnum.FighterDestroyed)
         {
@@ -31,6 +32,11 @@ namespace EliteDangerousCore.JournalEvents
             
             info = "";
             detailed = "";
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, SQLiteConnectionUser conn)
+        {
+            shp.DockFighter();
         }
     }
 }
