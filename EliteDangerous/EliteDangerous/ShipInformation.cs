@@ -280,15 +280,16 @@ namespace EliteDangerousCore
 
         #region Creating and changing
 
-        public ShipInformation(int id)
+        public ShipInformation(int id, string fdname)
         {
             ID = id;
+            ShipFD = fdname;
             Modules = new Dictionary<string, ShipModule>();
         }
 
         public ShipInformation ShallowClone()          // shallow clone.. does not clone the ship modules, just the dictionary
         {
-            ShipInformation sm = new ShipInformation(this.ID);
+            ShipInformation sm = new ShipInformation(this.ID, this.ShipFD);
             sm.State = this.State;
             sm.ShipType = this.ShipType;
             sm.ShipFD = this.ShipFD;
