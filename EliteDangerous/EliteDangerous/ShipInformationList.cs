@@ -128,6 +128,7 @@ namespace EliteDangerousCore
 
                 Ships[sid] = newsm;
             }
+            VerifyList();
         }
 
         public void LoadGame(int id, string ship, string shipfd, string name, string ident, double fuellevel, double fueltotal)        // LoadGame..
@@ -142,6 +143,7 @@ namespace EliteDangerousCore
 
             if (!ShipModuleData.IsSRVOrFighter(shipfd))
                 currentid = sid;
+            VerifyList();
         }
 
         public void LaunchSRV()
@@ -149,6 +151,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Launch SRV");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.SRV);
+            VerifyList();
         }
 
         public void DockSRV()
@@ -156,6 +159,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Dock SRV");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+            VerifyList();
         }
 
         public void DestroyedSRV()
@@ -163,6 +167,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Destroyed SRV");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+            VerifyList();
         }
 
         public void LaunchFighter(bool pc)
@@ -170,6 +175,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Launch Fighter");
             if (HaveCurrentShip && pc == true)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.Fighter);
+            VerifyList();
         }
 
         public void DockFighter()
@@ -177,6 +183,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Dock Fighter");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+            VerifyList();
         }
 
         public void FighterDestroyed()      // even if NPC controlled, no harm in setting back to none since we must be in ship
@@ -184,6 +191,7 @@ namespace EliteDangerousCore
             //System.Diagnostics.Debug.WriteLine("Fighter Destroyed");
             if (HaveCurrentShip)
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+            VerifyList();
         }
 
         public void Resurrect()
@@ -192,6 +200,7 @@ namespace EliteDangerousCore
             {
                 Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
             }
+            VerifyList();
         }
 
         public void VehicleSwitch(string to)
@@ -203,6 +212,7 @@ namespace EliteDangerousCore
                 else
                     Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
             }
+            VerifyList();
         }
 
         public void ShipyardSwap(JournalShipyardSwap e, string station, string system)
@@ -235,6 +245,7 @@ namespace EliteDangerousCore
             sm = sm.SwapTo();                               // swap into
             Ships[sid] = sm;
             currentid = sid;
+            VerifyList();
         }
 
         public void ShipyardNew(string ship, string shipFD, int id)
@@ -245,6 +256,7 @@ namespace EliteDangerousCore
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SetShipDetails(ship, shipFD); // shallow copy if changed
             currentid = sid;
+            VerifyList();
         }
 
         public void Sell(string ShipFD, int id)
@@ -259,6 +271,7 @@ namespace EliteDangerousCore
             {
                 System.Diagnostics.Debug.WriteLine(sid + " can't find to Sell");
             }
+            VerifyList();
         }
 
         public void Transfer(string ship, string shipFD, int id, string fromsystem, string tosystem, string tostation, DateTime arrivaltime)
@@ -269,6 +282,7 @@ namespace EliteDangerousCore
             sm = sm.Transfer(tosystem, tostation, arrivaltime);    // transfer set up
             Ships[sid] = sm;
             //System.Diagnostics.Debug.WriteLine(shipFD + " Transfer from " + fromsystem + " to " + tosystem + ":" + tostation + " arrives " + arrivaltime.ToString());
+            VerifyList();
         }
 
         public void Store(string ShipFD, int id, string station, string system)
@@ -283,6 +297,7 @@ namespace EliteDangerousCore
             {
                 System.Diagnostics.Debug.WriteLine(sid + " cannot find ship to store on buy");
             }
+            VerifyList();
         }
 
         public void StoredShips(StoredShipInformation[] ships)
@@ -300,6 +315,7 @@ namespace EliteDangerousCore
 
                 Ships[sid] = sm;
             }
+            VerifyList();
         }
 
         public void SetUserShipName(JournalSetUserShipName e)
@@ -309,6 +325,7 @@ namespace EliteDangerousCore
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
             Ships[sid] = sm.SetShipDetails(e.Ship, e.ShipFD, e.ShipName, e.ShipIdent); // will clone if data changed..
             currentid = sid;           // must be in it to do this
+            VerifyList();
         }
 
         public void ModuleBuy(JournalModuleBuy e)
@@ -316,6 +333,7 @@ namespace EliteDangerousCore
             string sid = Key(e.ShipFD, e.ShipId);
 
             ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // shallow copy if changed
 
             if (e.StoredItem.Length > 0)                             // if we stored something
                 StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
@@ -329,7 +347,7 @@ namespace EliteDangerousCore
             if (e.StoredItem.Length > 0)
                 itemlocalisation[e.StoredItem] = e.StoredItemLocalised;
 
-            currentid = sid;           // must be in it to do this
+            VerifyList();
         }
 
         public void ModuleSell(JournalModuleSell e)
@@ -337,12 +355,14 @@ namespace EliteDangerousCore
             string sid = Key(e.ShipFD, e.ShipId);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // shallow copy if changed
             Ships[sid] = sm.RemoveModule(e.Slot, e.SellItem);
 
             if (e.SellItem.Length > 0)
                 itemlocalisation[e.SellItem] = e.SellItemLocalised;
 
-            currentid = sid;           // must be in it to do this
+            VerifyList();
         }
 
         public void ModuleSwap(JournalModuleSwap e)
@@ -350,9 +370,10 @@ namespace EliteDangerousCore
             string sid = Key(e.ShipFD, e.ShipId);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // shallow copy if changed
             Ships[sid] = sm.SwapModule(e.FromSlot, e.FromSlotFD, e.FromItem, e.FromItemFD, e.FromItemLocalised,
                                             e.ToSlot, e.ToSlotFD, e.ToItem, e.ToItemFD, e.ToItemLocalised);
-            currentid = sid;           // must be in it to do this
+            VerifyList();
         }
 
         public void ModuleStore(JournalModuleStore e)
@@ -361,13 +382,15 @@ namespace EliteDangerousCore
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
 
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // shallow copy if changed
+
             if (e.ReplacementItem.Length > 0)
                 Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.ReplacementItem, e.ReplacementItemFD, e.ReplacementItemLocalised);
             else
                 Ships[sid] = sm.RemoveModule(e.Slot, e.StoredItem);
 
             StoredModules = StoredModules.StoreModule(e.StoredItem, e.StoredItemLocalised);
-            currentid = sid;           // must be in it to do this
+            VerifyList();
         }
 
         public void ModuleRetrieve(JournalModuleRetrieve e)
@@ -376,12 +399,14 @@ namespace EliteDangerousCore
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
 
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // shallow copy if changed
             if (e.SwapOutItem.Length > 0)
                 StoredModules = StoredModules.StoreModule(e.SwapOutItem, e.SwapOutItemLocalised);
 
             Ships[sid] = sm.AddModule(e.Slot, e.SlotFD, e.RetrievedItem, e.RetrievedItemFD, e.RetrievedItemLocalised);
 
             StoredModules = StoredModules.RemoveModule(e.RetrievedItem);
+            VerifyList();
         }
 
         public void ModuleSellRemote(JournalModuleSellRemote e)
@@ -394,13 +419,16 @@ namespace EliteDangerousCore
             string sid = Key(e.ShipFD, e.ShipId);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
+            sm = sm.SetShipDetails(e.Ship, e.ShipFD);   // will clone if data changed..
             Ships[sid] = sm.RemoveModules(e.ModuleItems);
             StoredModules = StoredModules.StoreModule(e.ModuleItems, itemlocalisation);
+            VerifyList();
         }
 
         public void UpdateStoredModules(JournalStoredModules s)
         {
             StoredModules = StoredModules.UpdateStoredModules(s.ModuleItems);
+            VerifyList();
         }
 
         public void FSDJump(JournalFSDJump e)
@@ -409,6 +437,7 @@ namespace EliteDangerousCore
             {
                 Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelLevel);
             }
+            VerifyList();
         }
 
         public void FuelScoop(JournalFuelScoop e)
@@ -417,6 +446,7 @@ namespace EliteDangerousCore
             {
                 Ships[currentid] = CurrentShip.SetFuelLevel(e.Total);
             }
+            VerifyList();
         }
 
         public void RefuelAll(JournalRefuelAll e)
@@ -425,6 +455,7 @@ namespace EliteDangerousCore
             {
                 Ships[currentid] = CurrentShip.SetFuelLevel(CurrentShip.FuelCapacity);
             }
+            VerifyList();
         }
 
         public void RefuelPartial(JournalRefuelPartial e)
@@ -440,6 +471,7 @@ namespace EliteDangerousCore
 
                 Ships[currentid] = CurrentShip.SetFuelLevel(level);
             }
+            VerifyList();
         }
 
         public void EngineerCraft(JournalEngineerCraftBase c)
@@ -448,6 +480,7 @@ namespace EliteDangerousCore
             {
                 Ships[currentid] = CurrentShip.Craft(c.Slot, c.Module, c.Engineering);
             }
+            VerifyList();
         }
 
         #region Helpers
@@ -472,6 +505,14 @@ namespace EliteDangerousCore
             ShipInformation smn = new ShipInformation(i);
             Ships[id] = smn;
             return smn;
+        }
+
+        void VerifyList()       // included so when debugging we can turn this on and verify the list after every action. Journals are so random they sometimes throw up problems.
+        {
+            //foreach( KeyValuePair<string,ShipInformation> i in Ships)
+            //{
+                //System.Diagnostics.Debug.Assert(i.Value.ShipFD.HasChars());
+            //}
         }
 
         #endregion

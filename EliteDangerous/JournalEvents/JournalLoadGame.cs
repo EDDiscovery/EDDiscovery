@@ -90,7 +90,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent, FuelLevel, FuelCapacity);
+            if ( ShipFD.HasChars() )        // must have a ship name - there have been load games without it.
+                shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent, FuelLevel, FuelCapacity);
         }
 
     }
