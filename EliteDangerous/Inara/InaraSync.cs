@@ -114,7 +114,7 @@ namespace EliteDangerousCore.Inara
                 foreach( var s in history.shipinformationlist.Ships )
                 {
                     ShipInformation si = s.Value;
-                    if ( si.SubVehicle == ShipInformation.SubVehicleType.None && si.Sold == false && !ShipModuleData.IsSRVOrFighter(si.ShipFD) )
+                    if ( si.SubVehicle == ShipInformation.SubVehicleType.None && si.State == ShipInformation.ShipState.Owned && !ShipModuleData.IsSRVOrFighter(si.ShipFD))
                     {
                         // loadout may be null if nothing in it.
                         eventstosend.Add(InaraClass.setCommanderShipLoadout(si.ShipFD, si.ID, si.Modules.Values, DateTime.UtcNow));

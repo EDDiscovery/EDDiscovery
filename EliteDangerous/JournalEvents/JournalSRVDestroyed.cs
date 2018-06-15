@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.DockSRV();
+            shp.DestroyedSRV();
         }
 
         public override void FillInformation(out string info, out string detailed) //V

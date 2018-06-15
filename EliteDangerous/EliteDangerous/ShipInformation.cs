@@ -31,7 +31,8 @@ namespace EliteDangerousCore
         #region Information interface
 
         public int ID { get; private set; }                 // its ID.     ID's are moved to high range when sold
-        public bool Sold { get; set; }                      // if sold.
+        public enum ShipState { Owned, Sold, Destroyed};
+        public ShipState State { get; set; } = ShipState.Owned; // if owned, sold, destroyed. Default owned
         public string ShipType { get; private set; }        // ship type name, nice, fer-de-lance, etc. can be null
         public string ShipFD { get; private set; }          // ship type name, fdname
         public string ShipUserName { get; private set; }    // ship name, may be empty or null
@@ -52,6 +53,7 @@ namespace EliteDangerousCore
         }
 
         public SubVehicleType SubVehicle { get; private set; } = SubVehicleType.None;    // if in a sub vehicle or mothership
+
         public Dictionary<string, ShipModule> Modules { get; private set; }
 
         public bool InTransit { get { return TransferArrivalTimeUTC.CompareTo(DateTime.UtcNow)>0; } }
@@ -74,8 +76,8 @@ namespace EliteDangerousCore
                 sb.AppendPrePad(" in Fighter");
             else
             {
-                if (Sold)
-                    sb.Append(" (Sold)");
+                if (State != ShipState.Owned)
+                    sb.Append(" (" + State.ToString() + ")");
 
                 if (InTransit)
                     sb.Append(" (Tx to " + StoredAtSystem + ")");
@@ -140,8 +142,8 @@ namespace EliteDangerousCore
                 if (empty)
                     res += " (" + ID.ToString() + ")";
 
-                if (Sold)
-                    res += " (Sold)";
+                if (State != ShipState.Owned)
+                    res += " (" + State.ToString() + ")";
 
                 if (InTransit)
                     res += " (Tx to " + StoredAtSystem + ")";
@@ -287,7 +289,7 @@ namespace EliteDangerousCore
         public ShipInformation ShallowClone()          // shallow clone.. does not clone the ship modules, just the dictionary
         {
             ShipInformation sm = new ShipInformation(this.ID);
-            sm.Sold = this.Sold;
+            sm.State = this.State;
             sm.ShipType = this.ShipType;
             sm.ShipFD = this.ShipFD;
             sm.ShipUserName = this.ShipUserName;
@@ -519,7 +521,7 @@ namespace EliteDangerousCore
         public ShipInformation SellShip()
         {
             ShipInformation sm = this.ShallowClone();
-            sm.Sold = true;
+            sm.State = ShipState.Sold;
             sm.ClearStorage();
             return sm;
         }
