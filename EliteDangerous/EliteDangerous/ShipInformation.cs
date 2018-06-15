@@ -25,7 +25,7 @@ using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("{ID} {ShipType} {Modules.Count}")]
+    [System.Diagnostics.DebuggerDisplay("{ID}:{ShipType}:{ShipFD}:{Modules.Count}")]
     public class ShipInformation
     {
         #region Information interface
@@ -348,7 +348,7 @@ namespace EliteDangerousCore
                                     double fuellevel = 0, double fueltotal = 0,
                                     long hullvalue = 0, long modulesvalue = 0, long rebuy = 0)
         {
-            if (ship != ShipType || (name != null && name != ShipUserName) ||
+            if (ShipFD != shipfd || ship != ShipType || (name != null && name != ShipUserName) ||
                                 (ident != null && ident != ShipUserIdent) ||
                                 (fuellevel != 0 && fuellevel != FuelLevel) ||
                                 (fueltotal != 0 && fueltotal != FuelCapacity) ||
