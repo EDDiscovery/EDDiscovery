@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
+            discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             SQLiteDBClass.PutSettingBool(DbSave + "showedsmbut", showEDSMStartButtonsToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "fuel", showFuelLevelToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "Dcur", showCurrentFSDRangeToolStripMenuItem.Checked);
