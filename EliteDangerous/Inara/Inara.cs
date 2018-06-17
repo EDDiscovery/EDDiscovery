@@ -644,7 +644,8 @@ namespace EliteDangerousCore.Inara
             eventData["goalExpiry"] = goals.Expiry.ToStringZulu();
             if (goals.TierReachedInt.HasValue)
                 eventData["tierReached"] = goals.TierReachedInt.Value;
-            // no evidence of this being in journals eventData["tierMax"] = goals.
+            if (goals.TopTierInt.HasValue)
+                eventData["tierMax"] = goals.TopTierInt;
             if (goals.TopRankSize.HasValue)
                 eventData["topRankSize"] = goals.TopRankSize.Value;
             eventData["isCompleted"] = goals.IsComplete;
