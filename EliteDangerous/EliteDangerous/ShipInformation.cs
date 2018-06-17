@@ -522,6 +522,7 @@ namespace EliteDangerousCore
         {
             ShipInformation sm = this.ShallowClone();
             sm.State = ShipState.Sold;
+            sm.SubVehicle = SubVehicleType.None;
             sm.ClearStorage();
             return sm;
         }
@@ -530,6 +531,7 @@ namespace EliteDangerousCore
         {
             ShipInformation sm = this.ShallowClone();
             //if (sm.StoredAtSystem != null) { if (sm.StoredAtSystem.Equals(system)) System.Diagnostics.Debug.WriteLine("..Previous known stored at" + sm.StoredAtSystem + ":" + sm.StoredAtStation); else System.Diagnostics.Debug.WriteLine("************************ DISGREEE..Previous known stored at" + sm.StoredAtSystem + ":" + sm.StoredAtStation); }
+            sm.SubVehicle = SubVehicleType.None;
             sm.StoredAtSystem = system;
             sm.StoredAtStation = station ?? sm.StoredAtStation;     // we may get one with just the system, so use the previous station if we have one
             //System.Diagnostics.Debug.WriteLine(".." + ShipFD + " Stored at " + sm.StoredAtSystem + ":" + sm.StoredAtStation);
