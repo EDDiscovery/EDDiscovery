@@ -1524,7 +1524,7 @@ namespace EDDiscovery
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.Activated += (s, ea) =>
+            popoutdropdown.Shown += (s, ea) =>
             {
                 Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
                 popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
