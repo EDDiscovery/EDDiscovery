@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -22,7 +23,7 @@ namespace EliteDangerousCore.JournalEvents
     //Parameters:
     //•	Starsystem
     [JournalEntryType(JournalTypeEnum.SupercruiseEntry)]
-    public class JournalSupercruiseEntry : JournalEntry
+    public class JournalSupercruiseEntry : JournalEntry, IShipInformation
     {
         public JournalSupercruiseEntry(JObject evt ) : base(evt, JournalTypeEnum.SupercruiseEntry)
         {
@@ -38,6 +39,11 @@ namespace EliteDangerousCore.JournalEvents
             
             info = StarSystem;
             detailed = "";
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, SQLiteConnectionUser conn)
+        {
+            shp.SupercruiseEntry(this);
         }
     }
 }
