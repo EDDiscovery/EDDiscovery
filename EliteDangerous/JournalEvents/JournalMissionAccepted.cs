@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Globalization;
@@ -46,7 +47,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MissionAccepted)]
-    public class JournalMissionAccepted : JournalEntry, IMissions
+    public class JournalMissionAccepted : JournalEntry, IMissions, IMaterialCommodityJournalEntry
     {
         public JournalMissionAccepted(JObject evt ) : base(evt, JournalTypeEnum.MissionAccepted)
         {       
@@ -180,6 +181,14 @@ namespace EliteDangerousCore.JournalEvents
         public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
         {
             mlist.Accepted(this,sys,body);
+        }
+
+        public void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
+        {
+            if (Commodity != null && Count != null)
+            {
+                mc.Change(MaterialCommodities.CommodityCategory, Commodity, (int)Count, 0, conn);
+            }
         }
     }
 }
