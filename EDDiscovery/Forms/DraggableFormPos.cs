@@ -37,6 +37,7 @@ namespace EDDiscovery.Forms
         public DraggableFormPos()
         { 
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterParent;
         }
 
         #region Temp Resizing Ask for a different area but don't save it
