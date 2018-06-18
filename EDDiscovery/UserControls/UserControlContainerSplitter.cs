@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             return found;
         }
 
-        public string DbWindows { get { return "SplitterControlWindows" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        public string DbWindows { get { return DBName("SplitterControlWindows" ); } }
 
         const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
         const int NoTabPanelSelected = -1;        // -1 is no tab selected

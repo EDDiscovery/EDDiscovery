@@ -43,6 +43,9 @@ namespace EDDiscovery.UserControls
         protected int DisplayNumberOfGrid(int numopenedinside)      // grid children are assigned this range..  allow range for splitters.
         { return 1050 + (DisplayNumberStartExtraTabsMax+1) * 100 + displaynumber * 100 + numopenedinside; }
 
+        protected string DBName(string basename, string itemname = "" )
+        { return EDDConfig.Instance.ProfilePrefix + basename + ((displaynumber > 0) ? displaynumber.ToString() : "") + itemname; }
+
         // Common parameters of a UCCB
 
         public int displaynumber { get; protected set; }

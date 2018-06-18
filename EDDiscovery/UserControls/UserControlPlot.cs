@@ -40,7 +40,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlPlot : UserControlCommonBase
     {
-        private string DbSave { get { return "PlotPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("PlotPanel" ); } }
 
         private StarDistanceComputer computer;
 

@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlRouteTracker :   UserControlCommonBase
     {
         private Font displayfont;
-        private string DbSave { get { return "RouteTracker" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("RouteTracker" ); } }
         private SavedRouteClass currentRoute;
         private  HistoryEntry currentHE;
         private string lastsystem;

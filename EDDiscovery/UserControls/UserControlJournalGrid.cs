@@ -37,11 +37,11 @@ namespace EDDiscovery.UserControls
         private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string DbFilterSave { get { return "JournalGridControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbColumnSave { get { return "JournalGrid" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbHistorySave { get { return "JournalEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbFieldFilter { get { return "JournalGridControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbAutoTop { get { return "JournalGridControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbFilterSave { get { return DBName("JournalGridControlEventFilter" ); } }
+        private string DbColumnSave { get { return DBName("JournalGrid", "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("JournalEDUIHistory" ); } }
+        private string DbFieldFilter { get { return DBName("JournalGridControlFieldFilter" ); } }
+        private string DbAutoTop { get { return DBName("JournalGridControlAutoTop" ); } }
 
         public delegate void PopOut();
         public PopOut OnPopOut;

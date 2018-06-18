@@ -41,12 +41,12 @@ namespace EDDiscovery.UserControls
         private bool showSystemAvailability;
         private bool useEDSMForSystemAvailability;
         private bool useHistoric = false;
-        private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowAllMatsLandedSave { get { return "ShoppingListShowPlanetMats" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBTechBrokerFilterSave { get { return "ShoppingListTechBrokerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD" ); } }
+        private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats" ); } }
+        private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable" ); } }
+        private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability" ); } }
+        private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
+        private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter" ); } }
         
         #region Init
 

@@ -18,7 +18,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlRoute : UserControlCommonBase
     {
-        private string DbSave(string s) { return ("UCRoute") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "_" + s; }
+        private string DbSave(string s) { return DBName("UCRoute" ,  "_" + s); }
 
         private List<ISystem> routeSystems; // only valid systems get passed back
         private bool changesilence;

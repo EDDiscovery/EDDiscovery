@@ -34,9 +34,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSpanel : UserControlCommonBase
     {
-        private string DbSave { get { return "SPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbFilterSave { get { return "SPanelEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbFieldFilter { get { return "SPanelFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("SPanel" ); } }
+        private string DbFilterSave { get { return DBName("SPanelEventFilter" ); } }
+        private string DbFieldFilter { get { return DBName("SPanelFieldFilter" ); } }
 
         EventFilterSelector cfs = new EventFilterSelector();
         private ConditionLists fieldfilter = new ConditionLists();

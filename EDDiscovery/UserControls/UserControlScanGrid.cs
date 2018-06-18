@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
-        private string DbColumnSave { get { return ("ScanGridPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbColumnSave { get { return DBName("ScanGridPanel" ,  "DGVCol"); } }
 
         public UserControlScanGrid()
         {

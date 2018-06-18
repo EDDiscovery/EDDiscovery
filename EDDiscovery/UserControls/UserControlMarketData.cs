@@ -32,9 +32,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMarketData : UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("MarketDataGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbBuyOnly { get { return "MarketDataBuyOnly" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbAutoSwap { get { return "MarketDataAutoSwap" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return DBName("MarketDataGrid" ,  "DGVCol"); } }
+        private string DbBuyOnly { get { return DBName("MarketDataBuyOnly" ); } }
+        private string DbAutoSwap { get { return DBName("MarketDataAutoSwap" ); } }
 
         #region Init
 

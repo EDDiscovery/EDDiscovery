@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487
         }
 
-        private string DbSave { get { return "StarDistancePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("StarDistancePanel" ); } }
 
         private StarDistanceComputer computer = null;
         private HistoryEntry last_he = null;
