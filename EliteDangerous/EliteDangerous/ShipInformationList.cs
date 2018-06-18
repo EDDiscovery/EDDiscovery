@@ -431,11 +431,20 @@ namespace EliteDangerousCore
             VerifyList();
         }
 
+        public void SupercruiseEntry(JournalSupercruiseEntry e)
+        {
+            if (HaveCurrentShip)
+            {
+                Ships[currentid] = CurrentShip.SetSubVehicle(ShipInformation.SubVehicleType.None);
+            }
+            VerifyList();
+        }
+
         public void FSDJump(JournalFSDJump e)
         {
             if (HaveCurrentShip)
             {
-                Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelLevel);
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelLevel).SetSubVehicle(ShipInformation.SubVehicleType.None);
             }
             VerifyList();
         }
