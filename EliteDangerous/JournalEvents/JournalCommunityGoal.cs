@@ -65,7 +65,8 @@ namespace EliteDangerousCore.JournalEvents
             public long PlayerContribution { get; set; }
             public int NumContributors { get; set; }
             public int PlayerPercentileBand { get; set; }
-            public string TopTierName { get; set; }     
+            public string TopTierName { get; set; }
+            public int? TopTierInt { get; set; }
             public string TopTierBonus { get; set; }    
 
             public int? TopRankSize { get; set; }           // optional
@@ -93,6 +94,8 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     TopTierName = toptier["Name"].Str();
                     TopTierBonus = toptier["Bonus"].Str();
+                    if (TopTierName.StartsWith("Tier "))
+                        TopTierInt = TopTierName.Substring(5).InvariantParseIntNull();
                 }
 
                 TopRankSize = jo["TopRankSize"].IntNull();
