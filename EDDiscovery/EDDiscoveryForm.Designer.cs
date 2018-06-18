@@ -115,6 +115,7 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMenuTop = new System.Windows.Forms.Panel();
+            this.comboBoxCustomProfiles = new ExtendedControls.ComboBoxCustom();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.notifyIconContextMenuStrip1.SuspendLayout();
@@ -597,6 +598,7 @@ namespace EDDiscovery
             // panelToolBar
             // 
             this.panelToolBar.BackColor = System.Drawing.Color.Transparent;
+            this.panelToolBar.Controls.Add(this.comboBoxCustomProfiles);
             this.panelToolBar.Controls.Add(this.comboBoxCommander);
             this.panelToolBar.Controls.Add(this.buttonExtEDSMSync);
             this.panelToolBar.Controls.Add(this.buttonExtPopOut);
@@ -654,7 +656,7 @@ namespace EDDiscovery
             // buttonExtEDSMSync
             // 
             this.buttonExtEDSMSync.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_SyncEDSM;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(332, 3);
+            this.buttonExtEDSMSync.Location = new System.Drawing.Point(426, 3);
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
             this.buttonExtEDSMSync.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDSMSync.TabIndex = 2;
@@ -666,7 +668,7 @@ namespace EDDiscovery
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Popouts;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(362, 3);
+            this.buttonExtPopOut.Location = new System.Drawing.Point(456, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
             this.buttonExtPopOut.TabIndex = 2;
@@ -678,7 +680,7 @@ namespace EDDiscovery
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_EditAddons;
-            this.buttonExtEditAddOns.Location = new System.Drawing.Point(422, 3);
+            this.buttonExtEditAddOns.Location = new System.Drawing.Point(516, 3);
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
             this.buttonExtEditAddOns.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEditAddOns.TabIndex = 2;
@@ -690,7 +692,7 @@ namespace EDDiscovery
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_ManageAddOns;
-            this.buttonExtManageAddOns.Location = new System.Drawing.Point(392, 3);
+            this.buttonExtManageAddOns.Location = new System.Drawing.Point(486, 3);
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
             this.buttonExtManageAddOns.Size = new System.Drawing.Size(24, 24);
             this.buttonExtManageAddOns.TabIndex = 2;
@@ -715,7 +717,7 @@ namespace EDDiscovery
             this.buttonExt2dmap.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt2dmap.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Open2DMap;
             this.buttonExt2dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt2dmap.Location = new System.Drawing.Point(210, 3);
+            this.buttonExt2dmap.Location = new System.Drawing.Point(304, 3);
             this.buttonExt2dmap.Name = "buttonExt2dmap";
             this.buttonExt2dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt2dmap.TabIndex = 2;
@@ -730,7 +732,7 @@ namespace EDDiscovery
             this.buttonExt3dmap.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt3dmap.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Open3DMap;
             this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt3dmap.Location = new System.Drawing.Point(270, 3);
+            this.buttonExt3dmap.Location = new System.Drawing.Point(364, 3);
             this.buttonExt3dmap.Name = "buttonExt3dmap";
             this.buttonExt3dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt3dmap.TabIndex = 2;
@@ -820,6 +822,35 @@ namespace EDDiscovery
             this.panelMenuTop.TabIndex = 1;
             this.panelMenuTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.panelMenuTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
+            // 
+            // comboBoxCustomProfiles
+            // 
+            this.comboBoxCustomProfiles.ArrowWidth = 1;
+            this.comboBoxCustomProfiles.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomProfiles.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomProfiles.DataSource = null;
+            this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomProfiles.DisplayMember = "";
+            this.comboBoxCustomProfiles.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomProfiles.DropDownHeight = 106;
+            this.comboBoxCustomProfiles.DropDownWidth = 75;
+            this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomProfiles.ItemHeight = 13;
+            this.comboBoxCustomProfiles.Location = new System.Drawing.Point(197, 4);
+            this.comboBoxCustomProfiles.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
+            this.comboBoxCustomProfiles.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomProfiles.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomProfiles.ScrollBarWidth = 16;
+            this.comboBoxCustomProfiles.SelectedIndex = -1;
+            this.comboBoxCustomProfiles.SelectedItem = null;
+            this.comboBoxCustomProfiles.SelectedValue = null;
+            this.comboBoxCustomProfiles.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxCustomProfiles.TabIndex = 4;
+            this.comboBoxCustomProfiles.Text = "comboBoxCustom1";
+            this.comboBoxCustomProfiles.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomProfiles, "Use to select new profile or edit profile settings");
+            this.comboBoxCustomProfiles.ValueMember = "";
             // 
             // EDDiscoveryForm
             // 
@@ -925,5 +956,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem renameTabToolStripMenuItem;
         private System.Windows.Forms.Panel panelMenuTop;
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomProfiles;
     }
 }

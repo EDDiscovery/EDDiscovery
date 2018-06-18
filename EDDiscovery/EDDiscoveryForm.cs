@@ -191,27 +191,7 @@ namespace EDDiscovery
 
             //Make sure the primary splitter is set up.. and rational
 
-            string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
-
-            {
-                string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
-
-                if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
-                {
-                    string typeprefix = EDDOptions.Instance.TabsReset ? "?????" : "TravelControl";      // if we have a tab reset, look up a nonsense name, to give default
-
-                    int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
-                    int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                    int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
-                    int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
-
-                    string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
-                                    "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
-                                    "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
-
-                    SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
-                }
-            }
+            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
 
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
@@ -220,7 +200,6 @@ namespace EDDiscovery
             {
                 MessageBox.Show("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                 "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
-                                "Report this code : " + (tabControlMain.PrimaryTab == null) + " " + SQLiteConnectionUser.GetSettingString(primarycontrolname, "Not Present") + Environment.NewLine +
                                 "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
                                 "Click on Reset tabs, then Run program, which may clear the problem." );
                 Application.Exit();
@@ -304,7 +283,23 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
+            comboBoxCustomProfiles.Items.AddRange(new string[] { "Default", "P1", "P2" });
+            comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
+
             Controller.InitComplete();
+        }
+
+        private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            tabControlMain.CloseTabList();
+
+            EDDConfig.ProfileNumber = comboBoxCustomProfiles.SelectedIndex;
+            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+            tabControlMain.TabPages.Clear();
+            tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+            tabControlMain.LoadTabs();
+            ApplyTheme();
+            LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -342,7 +337,11 @@ namespace EDDiscovery
 
             actioncontroller.onStartup();
 
-            tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
+            tabControlMain.SelectedIndexChanged += (snd, ea) => 
+            {
+                if (tabControlMain.SelectedIndex>=0 )   // may go to -1 on a clear all
+                    ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
+            };
 
             actioncontroller.CheckWarn();
 
@@ -378,6 +377,8 @@ namespace EDDiscovery
                 LogLine("DLLs loaded: " + res.Item1);
             if (res.Item2.HasChars())
                 LogLineHighlight("DLLs failed to load: " + res.Item1);
+
+            LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
         }
 
         public bool DLLRunAction( string eventname, string paras )
