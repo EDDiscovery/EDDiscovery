@@ -30,13 +30,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSynthesis : UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("SynthesisGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbWSave { get { return "SynthesisWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbOSave { get { return "SynthesisOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbRecipeFilterSave { get { return "SynthesisRecipeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbLevelFilterSave { get { return "SynthesisLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbMaterialFilterSave { get { return "SynthesisMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHistoricMatsSave { get { return "SynthesisHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return DBName("SynthesisGrid" ,  "DGVCol"); } }
+        private string DbWSave { get { return DBName("SynthesisWanted" ); } }
+        private string DbOSave { get { return DBName("SynthesisOrder" ); } }
+        private string DbRecipeFilterSave { get { return DBName("SynthesisRecipeFilter" ); } }
+        private string DbLevelFilterSave { get { return DBName("SynthesisLevelFilter" ); } }
+        private string DbMaterialFilterSave { get { return DBName("SynthesisMaterialFilter" ); } }
+        private string DbHistoricMatsSave { get { return DBName("SynthesisHistoricMaterials" ); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms

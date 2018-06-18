@@ -74,11 +74,11 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbHistorySave { get { return "EDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbFieldFilter { get { return "TravelHistoryControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbAutoTop { get { return "TravelHistoryControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter" ); } }
+        private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
+        private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
+        private string DbAutoTop { get { return DBName("TravelHistoryControlAutoTop" ); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 

@@ -265,7 +265,7 @@ namespace EDDiscovery.Forms
                 {
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
-                    SQLiteConnectionUser.PutSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
+                    SQLiteConnectionUser.PutSettingInt(EDDConfig.Instance.ProfilePrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace EDDiscovery.Forms
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                int numtoopen = SQLiteConnectionUser.GetSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), 0);
+                int numtoopen = SQLiteConnectionUser.GetSettingInt(EDDConfig.Instance.ProfilePrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), 0);
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);

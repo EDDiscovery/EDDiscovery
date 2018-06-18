@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlExploration :  UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbColumnSave { get { return DBName("ModulesGrid",  "DGVCol"); } }
 
         private ExplorationSetClass currentexplorationset;
 

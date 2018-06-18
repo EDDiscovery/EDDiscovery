@@ -33,8 +33,8 @@ namespace EDDiscovery.UserControls
     {
         public bool IsNotesShowing { get { return richTextBoxNote.Visible; } }
 
-        private string DbSelection { get { return ("SystemInformationPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Sel"; } }
-        private string DbOSave { get { return "SystemInformationPanel" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Order"; } }
+        private string DbSelection { get { return DBName("SystemInformationPanel" ,  "Sel"); } }
+        private string DbOSave { get { return DBName("SystemInformationPanel" ,  "Order"); } }
 
         const int BitSelSystem = 0;
         const int BitSelEDSM = 1;

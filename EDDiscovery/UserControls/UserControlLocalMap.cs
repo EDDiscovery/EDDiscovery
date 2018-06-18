@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
     {
         #region init
 
-        private string DbSave { get { return "MapPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("MapPanel" ); } }
 
         private StarDistanceComputer computer;
 
