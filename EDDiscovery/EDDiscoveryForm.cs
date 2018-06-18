@@ -1517,16 +1517,17 @@ namespace EDDiscovery
 
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
+            Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
             popoutdropdown = new ExtendedControls.DropDownCustom("", true);
-
+            popoutdropdown.StartPosition = FormStartPosition.Manual;
+            popoutdropdown.Location = location;
             popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
             popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
             popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.Activated += (s, ea) =>
+            popoutdropdown.Shown += (s, ea) =>
             {
-                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
                 popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
                 this.Invalidate(true);
             };
