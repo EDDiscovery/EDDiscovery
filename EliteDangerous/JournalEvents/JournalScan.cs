@@ -546,7 +546,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("\nEstimated value: {0:N0}", EstimatedValue);
 
             if (EDSMDiscoveryCommander != null)
-                scanText.AppendFormat("\n\nDiscovered by " + EDSMDiscoveryCommander + " on " + EDSMDiscoveryUTC.ToStringZulu());
+                scanText.AppendFormat("\n\nDiscovered by {0} on {1}", EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
