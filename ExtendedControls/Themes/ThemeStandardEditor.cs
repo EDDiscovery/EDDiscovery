@@ -190,24 +190,36 @@ namespace ExtendedControls
 
         private void textBox_Font_MouseClick(object sender, MouseEventArgs e)
         {
-            FontDialog fd = new FontDialog();
-            fd.Font = new Font(theme.FontName, theme.FontSize);
-            fd.MinSize = 4;
-            fd.MaxSize = 12;
-
-            if (fd.ShowDialog(this) == DialogResult.OK)
+            using (FontDialog fd = new FontDialog())
             {
-                if (fd.Font.Style == FontStyle.Regular)
-                {
-                    theme.FontName = fd.Font.Name;
-                    theme.FontSize = fd.Font.Size;
-                    UpdatePatchesEtc();
-                    ApplyChanges?.Invoke();
-                }
-                else
-                    ExtendedControls.MessageBoxTheme.Show(this, "Font does not have regular style");
-            }
+                fd.Font = new Font(theme.FontName, theme.FontSize);
+                fd.MinSize = 4;
+                fd.MaxSize = 12;
+                DialogResult result;
 
+                try
+                {
+                    result = fd.ShowDialog(this);
+                }
+                catch (ArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
+
+                if (result == DialogResult.OK)
+                {
+                    if (fd.Font.Style == FontStyle.Regular)
+                    {
+                        theme.FontName = fd.Font.Name;
+                        theme.FontSize = fd.Font.Size;
+                        UpdatePatchesEtc();
+                        ApplyChanges?.Invoke();
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(this, "Font does not have regular style");
+                }
+            }
         }
 
         private void comboBox_TextBorder_SelectionChangeCommitted(object sender, EventArgs e)
