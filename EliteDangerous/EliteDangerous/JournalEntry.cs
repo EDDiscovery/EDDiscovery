@@ -681,6 +681,7 @@ namespace EliteDangerousCore
                 jo["faction"] = faction;
                 jo["commodities"] = jcommodities;
                 JournalEDDCommodityPrices jis = new JournalEDDCommodityPrices(jo);
+                jis.EventSummaryName = jis.FillSummary;
                 jis.CommanderId = cmdrid;
                 jis.Add(jo, cn);
 
