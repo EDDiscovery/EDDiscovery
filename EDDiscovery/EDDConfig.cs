@@ -305,7 +305,7 @@ namespace EDDiscovery
         {
             get
             {
-                return profilenumber == 0 ? "" : ("P" + profilenumber.ToStringInvariant() + "_");
+                return profilenumber == 0 ? "" : ("ProfileEntry" + profilenumber.ToStringInvariant() + ":");
             }
         }
 

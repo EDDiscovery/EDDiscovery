@@ -42,6 +42,7 @@ namespace EDDiscovery
 
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
+        private Profiles profiles;
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
         public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
@@ -283,7 +284,15 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
-            comboBoxCustomProfiles.Items.AddRange(new string[] { "Default", "P1", "P2" });
+            profiles = new Profiles();
+            profiles.LoadProfiles();
+            if (EDDConfig.Instance.ProfileNumber > profiles.Count) // check rationality of number.
+                EDDConfig.Instance.ProfileNumber = 0;
+
+            comboBoxCustomProfiles.Items.AddRange(profiles.Names());
+            comboBoxCustomProfiles.Items.Add("Edit Profiles");
+
+            comboBoxCustomProfiles.SelectedIndex = EDDConfig.Instance.ProfileNumber;
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             Controller.InitComplete();
@@ -291,15 +300,27 @@ namespace EDDiscovery
 
         private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            tabControlMain.CloseTabList();
+            if (comboBoxCustomProfiles.SelectedIndex >= 0)
+            {
+                if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
+                {
+                    Forms.ProfileEditor pe = new ProfileEditor();
+                    pe.Init(profiles, this.Icon);
+                    pe.ShowDialog();
+                }
+                else
+                {
+                    tabControlMain.CloseTabList();
 
-            EDDConfig.ProfileNumber = comboBoxCustomProfiles.SelectedIndex;
-            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
-            tabControlMain.TabPages.Clear();
-            tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-            tabControlMain.LoadTabs();
-            ApplyTheme();
-            LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
+                    EDDConfig.ProfileNumber = comboBoxCustomProfiles.SelectedIndex;
+                    UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+                    tabControlMain.TabPages.Clear();
+                    tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                    tabControlMain.LoadTabs();
+                    ApplyTheme();
+                    LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
+                }
+            }
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -354,7 +375,7 @@ namespace EDDiscovery
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
 
-            Tuple<string,string,string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
 
             if ( res.Item3.HasChars() )
             {
@@ -840,6 +861,7 @@ namespace EDDiscovery
             notifyIcon1.Visible = false;
 
             actioncontroller.CloseDown();
+            profiles.SaveProfiles();
 
             DLLManager.UnLoad();
 

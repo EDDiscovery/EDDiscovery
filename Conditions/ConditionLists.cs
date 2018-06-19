@@ -32,6 +32,19 @@ namespace Conditions
         {
         }
 
+        public ConditionLists(ConditionLists other)
+        {
+            foreach (Condition c in other.conditionlist)
+                conditionlist.Add(new Condition(c));        //copy, not reference
+
+            groupname = new List<string>(other.groupname);
+        }
+
+        public ConditionLists(string condtext)
+        {
+            Read(condtext);
+        }
+
         public Condition Get(int n) { return (n < conditionlist.Count) ? conditionlist[n] : null; }
         public string GetGroupName(int n) { return (n < groupname.Count) ? groupname[n] : null; }
 

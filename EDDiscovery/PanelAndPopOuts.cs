@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.Forms
+namespace EDDiscovery
 {
     static public class PanelInformation
     {
@@ -239,12 +239,12 @@ namespace EDDiscovery.Forms
         public PopOutControl( EDDiscoveryForm ed )
         {
             discoveryform = ed;
-            usercontrolsforms = new UserControlFormList(discoveryform);
+            usercontrolsforms = new Forms.UserControlFormList(discoveryform);
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
-        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
-        public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+        public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
+        public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         public void ShowAllPopOutsInTaskBar()
         {
@@ -293,7 +293,7 @@ namespace EDDiscovery.Forms
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
-            UserControlForm tcf = usercontrolsforms.NewForm();
+            Forms.UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(selected);
