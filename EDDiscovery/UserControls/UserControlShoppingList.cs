@@ -281,12 +281,6 @@ namespace EDDiscovery.UserControls
                 pictureBoxList.Render();
                 font.Dispose();
 
-                // if transparent, we don't show the eng/synth panels
-
-                userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
-                userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
-                buttonTechBroker.Visible = buttonTechBroker.Enabled = !IsTransparent;
-
                 splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
 
                 if (IsTransparent)
@@ -301,6 +295,12 @@ namespace EDDiscovery.UserControls
                 }
 
             }
+
+            // if transparent, we don't show the eng/synth panels
+            userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
+            userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
+            buttonTechBroker.Visible = buttonTechBroker.Enabled = !IsTransparent;
+
         }
 
         #endregion
