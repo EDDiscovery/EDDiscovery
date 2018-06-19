@@ -59,11 +59,11 @@ namespace EDDiscovery.DLL
                                 loaded = ObjectExtensionsStrings.AppendPrePad(loaded, caller.Name, ",");
                             }
                             else
-                                failed += ObjectExtensionsStrings.AppendPrePad(failed, caller.Name, ",");
+                                failed = ObjectExtensionsStrings.AppendPrePad(failed, caller.Name, ",");
                         }
                         else
                         {
-                            notallowed += ObjectExtensionsStrings.AppendPrePad(notallowed, caller.Name, ",");
+                            notallowed = ObjectExtensionsStrings.AppendPrePad(notallowed, caller.Name, ",");
                         }
                     }
                 }
