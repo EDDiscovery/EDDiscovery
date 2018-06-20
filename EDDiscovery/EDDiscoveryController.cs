@@ -146,6 +146,7 @@ namespace EDDiscovery
 
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
+            EDDProfiles.Instance.LoadProfiles();
 
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons

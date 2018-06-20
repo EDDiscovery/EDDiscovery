@@ -455,7 +455,7 @@ namespace EDDiscovery.UserControls
 
         public static void CheckPrimarySplitterControlSettings()
         {
-            string primarycontrolname = EDDConfig.Instance.ProfilePrefix + "SplitterControlWindows";                   // primary name for first splitter
+            string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
 
             string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
 
