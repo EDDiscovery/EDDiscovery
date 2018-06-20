@@ -248,7 +248,7 @@
     <Compile Include="MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Profiles.cs" />
+    <Compile Include="EDDProfiles.cs" />
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>

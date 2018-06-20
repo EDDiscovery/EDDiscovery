@@ -42,7 +42,6 @@ namespace EDDiscovery
 
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
-        private Profiles profiles;
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
         public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
@@ -284,15 +283,10 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
-            profiles = new Profiles();
-            profiles.LoadProfiles();
-            if (EDDConfig.Instance.ProfileNumber > profiles.Count) // check rationality of number.
-                EDDConfig.Instance.ProfileNumber = 0;
-
-            comboBoxCustomProfiles.Items.AddRange(profiles.Names());
+            comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
             comboBoxCustomProfiles.Items.Add("Edit Profiles");
 
-            comboBoxCustomProfiles.SelectedIndex = EDDConfig.Instance.ProfileNumber;
+            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOfCurrent();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             Controller.InitComplete();
@@ -300,25 +294,45 @@ namespace EDDiscovery
 
         private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxCustomProfiles.SelectedIndex >= 0)
+            if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
             {
+                bool updateprofile = false;
+
                 if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
                 {
                     Forms.ProfileEditor pe = new ProfileEditor();
-                    pe.Init(profiles, this.Icon);
-                    pe.ShowDialog();
+                    pe.Init(EDDProfiles.Instance, this.Icon);
+                    if (pe.ShowDialog() == DialogResult.OK)
+                    {
+                        List<EDDProfiles.Profile> res = pe.Result;
+                        updateprofile = EDDProfiles.Instance.UpdateProfiles(res);       // see if the current one has changed...
+
+                        comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+                        comboBoxCustomProfiles.Items.Clear();
+                        comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
+                        comboBoxCustomProfiles.Items.Add("Edit Profiles");
+                        comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOfCurrent();
+                        comboBoxCustomProfiles.Enabled = true;
+                    }
                 }
                 else
                 {
                     tabControlMain.CloseTabList();
 
-                    EDDConfig.ProfileNumber = comboBoxCustomProfiles.SelectedIndex;
+                    if ( EDDProfiles.Instance.ChangeCurrent(comboBoxCustomProfiles.SelectedIndex) )     // change to, if we have changed, update
+                        updateprofile = true;
+                }
+
+                if ( updateprofile )
+                { 
                     UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
                     tabControlMain.TabPages.Clear();
                     tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
                     tabControlMain.LoadTabs();
                     ApplyTheme();
-                    LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
+                    LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
+
+                    //tbd popups
                 }
             }
         }
@@ -399,7 +413,7 @@ namespace EDDiscovery
             if (res.Item2.HasChars())
                 LogLineHighlight("DLLs failed to load: " + res.Item1);
 
-            LogLineHighlight("Profile " + EDDConfig.ProfileNumber + " Loaded");
+            LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
         }
 
         public bool DLLRunAction( string eventname, string paras )
@@ -861,7 +875,8 @@ namespace EDDiscovery
             notifyIcon1.Visible = false;
 
             actioncontroller.CloseDown();
-            profiles.SaveProfiles();
+
+            EDDProfiles.Instance.SaveProfiles();
 
             DLLManager.UnLoad();
 
@@ -1407,7 +1422,7 @@ namespace EDDiscovery
 
         public bool IsMenuItemInstalled(string menuname)
         {
-            foreach( ToolStripMenuItem tsi in menuStrip1.Items )
+            foreach( ToolStripMenuItem tsi in menuStrip.Items )
             {
                 List<ToolStripItem> presentlist = (from ToolStripItem s in tsi.DropDownItems where s.Name.Equals(menuname) select s).ToList();
                 if (presentlist.Count() > 0)

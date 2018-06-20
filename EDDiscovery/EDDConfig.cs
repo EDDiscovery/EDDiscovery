@@ -70,7 +70,6 @@ namespace EDDiscovery
         private bool edsmeddbdownload = true;
         private string edsmgridids = "All";
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
-        private int profilenumber = 0;      // 0 is base profile, compatible with previous EDs
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -288,28 +287,7 @@ namespace EDDiscovery
             }
         }
 
-        public int ProfileNumber
-        {
-            get
-            {
-                return profilenumber;
-            }
-            set
-            {
-                profilenumber = value;
-                SQLiteConnectionUser.PutSettingInt("ProfileNumber", value);
-            }
-        }
-
-        public string ProfilePrefix
-        {
-            get
-            {
-                return profilenumber == 0 ? "" : ("ProfileEntry" + profilenumber.ToStringInvariant() + ":");
-            }
-        }
-
-        #endregion
+         #endregion
 
         #region Update at start
 
@@ -333,7 +311,6 @@ namespace EDDiscovery
                 edsmeddbdownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
                 edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
-                profilenumber = SQLiteConnectionUser.GetSettingInt("ProfileNumber", 0);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

@@ -13,6 +13,8 @@ namespace EDDiscovery.Forms
 {
     public partial class ProfileEditor : ExtendedControls.DraggableForm
     {
+        public List<EDDProfiles.Profile> Result;            // pass back result
+
         class Group
         {
             public Panel panel;
@@ -21,18 +23,27 @@ namespace EDDiscovery.Forms
             public ExtendedControls.ButtonExt editbutton;
             public ExtendedControls.ButtonExt deletebutton;
             public ConditionLists condition;
+            public int Id;
+
+            public void Dispose()
+            {
+                name.Dispose();
+                stdtrigger.Dispose();
+                editbutton.Dispose();
+                deletebutton.Dispose();
+            }
         }
 
         List<Group> groups = new List<Group>();
 
-        Profiles profiles;
+        EDDProfiles profiles;
 
         public ProfileEditor()
         {
             InitializeComponent();
         }
 
-        public void Init(Profiles pr, Icon ic)
+        public void Init(EDDProfiles pr, Icon ic)
         {
             profiles = pr;
             Icon = ic;
@@ -42,9 +53,9 @@ namespace EDDiscovery.Forms
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
 
             SuspendLayout();
-            foreach (Profiles.Profile p in profiles.ProfileList)
+            foreach (EDDProfiles.Profile p in profiles.ProfileList)
             {
-                AddProfile(p.Name, p.Condition );
+                AddProfile(p.Id, p.Name, p.Condition );
             }
 
             PositionPanels();
@@ -55,9 +66,12 @@ namespace EDDiscovery.Forms
         int textheightmargin = 3;
         int panelleftmargin = 3;
 
-        private void AddProfile(string name, ConditionLists condition )
+        private void AddProfile(int id, string name, ConditionLists condition )
         {
             Group g = new Group();
+
+            g.Id = id;
+
             g.panel = new Panel();
             g.panel.BorderStyle = BorderStyle.FixedSingle;
             g.panel.Tag = g;
@@ -72,8 +86,8 @@ namespace EDDiscovery.Forms
             g.stdtrigger.Location = new Point(210, textheightmargin);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
             g.stdtrigger.Items.Add("Custom");
-            g.stdtrigger.Items.AddRange(Profiles.StandardTriggers.Select((p1) => p1.Name));
-            g.stdtrigger.SelectedIndex = Profiles.FindTriggerIndex(condition) + 1;
+            g.stdtrigger.Items.AddRange(EDDProfiles.StandardTriggers.Select((p1) => p1.Name));
+            g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(condition) + 1;
             g.stdtrigger.SelectedIndexChanged += Stdtrigger_SelectedIndexChanged;
             g.stdtrigger.Tag = g;
             g.panel.Controls.Add(g.stdtrigger);
@@ -102,10 +116,22 @@ namespace EDDiscovery.Forms
             groups.Add(g);
         }
 
-        private void Deletebutton_Click(object sender, EventArgs e)
+        private void PositionPanels()
         {
-            throw new NotImplementedException();
+            int vpos = 4;
+            int panelwidth = Math.Max(panelVScrollMain.Width - panelVScrollMain.ScrollBarWidth, 10) - panelleftmargin * 2;
+
+            foreach (Group g in groups)
+            {
+                g.panel.Location = new Point(panelleftmargin, vpos);
+                g.panel.Size = new Size(panelwidth, 32);
+                g.deletebutton.Visible = g.Id!=0;
+                vpos += g.panel.Height + 4;
+            }
+
+            buttonMore.Location = new Point(panelleftmargin, vpos);
         }
+
 
         bool disabletriggers = false;
 
@@ -118,7 +144,7 @@ namespace EDDiscovery.Forms
             {
                 g.condition = frm.result;
                 disabletriggers = true;
-                g.stdtrigger.SelectedIndex = Profiles.FindTriggerIndex(g.condition) + 1;
+                g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(g.condition) + 1;
                 disabletriggers = false;
             }
         }
@@ -130,23 +156,8 @@ namespace EDDiscovery.Forms
 
             if ( !disabletriggers && c.SelectedIndex>=1)
             {
-                g.condition = new ConditionLists(Profiles.StandardTriggers[c.SelectedIndex - 1].Condition);
+                g.condition = new ConditionLists(EDDProfiles.StandardTriggers[c.SelectedIndex - 1].Condition);
             }
-        }
-
-        private void PositionPanels()
-        {
-            int vpos = 4;
-            int panelwidth = Math.Max(panelVScrollMain.Width - panelVScrollMain.ScrollBarWidth, 10) - panelleftmargin * 2;
-
-            foreach ( Group g in groups )
-            {
-                g.panel.Location = new Point(panelleftmargin, vpos);
-                g.panel.Size = new Size(panelwidth, 32);
-                vpos += g.panel.Height + 4;
-            }
-
-            buttonMore.Location = new Point(panelleftmargin, vpos);
         }
 
         private void buttonMore_Click(object sender, EventArgs e)
@@ -157,8 +168,8 @@ namespace EDDiscovery.Forms
 
             string pname = "Profile " + pno.ToStringInvariant();
 
-            SuspendLayout();
-            AddProfile(pname, new ConditionLists( Profiles.StandardTriggers[Profiles.NoTriggerIndex].Condition ));
+            SuspendLayout();        // add with an unknown ID as its new
+            AddProfile(-1, pname, new ConditionLists(EDDProfiles.StandardTriggers[EDDProfiles.NoTriggerIndex].Condition));
             PositionPanels();
             ResumeLayout();
         }
@@ -170,7 +181,29 @@ namespace EDDiscovery.Forms
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
+            Result = new List<EDDProfiles.Profile>();
+            foreach( Group g in groups)
+            {
+                Result.Add(new EDDProfiles.Profile(g.Id, g.name.Text, g.condition.ToString()));
+            }
+
+            DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void Deletebutton_Click(object sender, EventArgs e)
+        {
+            if ( groups.Count>1)
+            {
+                Group g = ((Control)sender).Tag as Group;
+
+                SuspendLayout();
+                panelVScrollMain.Controls.Remove(g.panel);
+                g.Dispose();
+                groups.Remove(g);
+                PositionPanels();
+                ResumeLayout();
+            }
         }
 
         private void label_index_MouseDown(object sender, MouseEventArgs e)
