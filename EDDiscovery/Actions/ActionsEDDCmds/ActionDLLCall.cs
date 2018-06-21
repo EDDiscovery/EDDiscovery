@@ -90,14 +90,25 @@ namespace EDDiscovery.Actions
                     {
                         string[] paras = exp.GetRange(2, exp.Count - 2).ToArray();
 
-                        Tuple<string, bool> res = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionCommand(exp[0], exp[1], paras);
+                        List<Tuple<bool, string, string>> res = (ap.actioncontroller as ActionController).DiscoveryForm.DLLManager.ActionCommand(exp[0], exp[1], paras);
 
-                        if (res.Item2 == false)
-                            ap.ReportError("DLLCall cannot find DLL '" + exp[0] + "'");
-                        else if (res.Item1 == null)
-                            ap.ReportError("DLL '" + exp[0] + "' does not implement ActionCommand");
+                        ap["DLLCalled"] = res.Count.ToStringInvariant();
+
+                        if ( res.Count == 0 )       // if no calls
+                            ap.ReportError("No DLLs found");
                         else
-                            ap["DLLResult"] = res.Item1;
+                        {
+                            for( int i = 0; i < res.Count; i++)
+                            {
+                                ap["DLL[" + (i + 1).ToStringInvariant() + "]"] = res[i].Item2;
+
+                                if (res[i].Item1 == false)       // error, create an error
+                                    ap.ReportError("DLL " + res[i].Item2 + ": " + res[i].Item3);
+                                else
+                                    ap["DLLResult[" + (i + 1).ToStringInvariant() + "]"] = res[i].Item3;
+                            }
+
+                        }
                     }
                 }
                 else

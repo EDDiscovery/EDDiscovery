@@ -123,27 +123,38 @@ namespace EDDiscovery.DLL
             }
         }
 
-        // NULL/False if no DLL found, or <string,true> if DLL found, string may be null if DLL does not implement action command
-        public Tuple<string, bool> ActionCommand(string dllname, string cmd, string[] paras)
+        // List of DLL results, empty if no DLLs were found
+        // else list of results. bool = true no error, false error.  String contains error string, or result string
+        public List<Tuple<bool,string,string>> ActionCommand(string dllname, string cmd, string[] paras)
         {
+            List<Tuple<bool,string,string>> resultlist = new List<Tuple<bool,string,string>>();
+
             if (dllname.Equals("All", StringComparison.InvariantCultureIgnoreCase))
             {
-                string ret = "";
-
                 foreach (EDDDLLCaller caller in dlls)
-                {
-                    string r = caller.ActionCommand(cmd, paras);
-                    if (r != null)
-                        ret += r + ";";
-                }
-
-                return new Tuple<string, bool>(ret, true);
+                    resultlist.Add(AC(caller, cmd, paras));
             }
             else
             {
                 EDDDLLCaller caller = FindCaller(dllname);
-                return caller != null ? new Tuple<string, bool>(caller.ActionCommand(cmd, paras), true) : new Tuple<string, bool>(null, false);
+                if ( caller != null )
+                    resultlist.Add(AC(caller, cmd, paras));
+                else
+                    resultlist.Add(new Tuple<bool,string,string>(false, dllname, "Cannot find DLL "));
             }
+
+            return resultlist;
+        }
+
+        public Tuple<bool,string,string> AC(EDDDLLCaller caller, string cmd, string[] paras)
+        {
+            string r = caller.ActionCommand(cmd, paras);
+            if (r == null)
+                return new Tuple<bool,string,string>(false, caller.Name, "DLL does not implement ActionCommand");
+            else if (r.Length > 0 && r[0] == '+')
+                return new Tuple<bool,string,string>(true, caller.Name, r.Mid(1));
+            else
+                return new Tuple<bool,string,string>(false, caller.Name, r.Mid(1));
         }
     }
 }
