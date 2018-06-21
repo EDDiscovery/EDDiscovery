@@ -376,7 +376,7 @@ namespace EDDiscovery
             if (res.Item1.HasChars())
                 LogLine("DLLs loaded: " + res.Item1);
             if (res.Item2.HasChars())
-                LogLineHighlight("DLLs failed to load: " + res.Item1);
+                LogLineHighlight("DLLs failed to load: " + res.Item2);
         }
 
         public bool DLLRunAction( string eventname, string paras )

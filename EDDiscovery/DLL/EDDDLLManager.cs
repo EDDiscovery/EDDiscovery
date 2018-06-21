@@ -56,14 +56,17 @@ namespace EDDiscovery.DLL
                             if (caller.Init(ourversion, dllfolder, callbacks))       // must init
                             {
                                 dlls.Add(caller);
-                                loaded = ObjectExtensionsStrings.AppendPrePad(loaded, caller.Name, ",");
+                                loaded = loaded.AppendPrePad(caller.Name, ",");
                             }
                             else
-                                failed = ObjectExtensionsStrings.AppendPrePad(failed, caller.Name, ",");
+                            {
+                                string errstr = caller.Version.HasChars() ? (": " + caller.Version.Substring(1)) : "";
+                                failed = failed.AppendPrePad(caller.Name + errstr, ",");
+                            }
                         }
                         else
                         {
-                            notallowed = ObjectExtensionsStrings.AppendPrePad(notallowed, caller.Name, ",");
+                            notallowed = notallowed.AppendPrePad(caller.Name, ",");
                         }
                     }
                 }
