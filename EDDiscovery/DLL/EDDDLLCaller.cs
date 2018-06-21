@@ -70,7 +70,7 @@ namespace EDDiscovery.DLL
                                                                                                 typeof(EDDDLLIF.EDDInitialise));
                 Version = edinit(ourversion, dllfolder, callbacks);
 
-                bool ok = Version != null && Version.Length > 0;
+                bool ok = Version != null && Version.Length > 0 && Version[0] != '!';
 
                 if (ok)
                     return true;
