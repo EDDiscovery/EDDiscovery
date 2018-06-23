@@ -207,7 +207,9 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                dataGridViewJournal.Rows.Insert(0, CreateHistoryRow(he, textBoxFilter.Text));
+                var row = CreateHistoryRow(he, textBoxFilter.Text);
+                if (row != null)
+                    dataGridViewJournal.Rows.Insert(0, row);
 
                 var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
