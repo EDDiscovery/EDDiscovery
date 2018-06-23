@@ -243,7 +243,9 @@ namespace EDDiscovery.UserControls
 
             if (add)
             {
-                dataGridViewTravel.Rows.Insert(0, CreateHistoryRow(he, textBoxFilter.Text));
+                var row = CreateHistoryRow(he, textBoxFilter.Text);
+                if (row != null)
+                    dataGridViewTravel.Rows.Insert(0, row);
             }
 
             if (OnNewEntry != null)
