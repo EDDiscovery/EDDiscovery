@@ -16,6 +16,7 @@
 using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
@@ -137,6 +138,14 @@ namespace EliteDangerousCore.JournalEvents
             detailed = MissionDetailedInfo();
         }
 
+        private static HashSet<string> DeliveryMissions = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase)
+        {
+            "Mission_Delivery",
+            "Mission_Delivery_Boom",
+            "Chain_HelpFinishTheOrder",
+            "Mission_Delivery_War"
+        };
+
         public string MissionBasicInfo()          // other stuff for the mission panel which it does not already cover
         {
             DateTime exp = Expiry;
@@ -185,7 +194,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
         {
-            if (Commodity != null && Count != null && Name == "Mission_Delivery")
+            if (Commodity != null && Count != null && DeliveryMissions.Contains(Name))
             {
                 mc.Change(MaterialCommodities.CommodityCategory, Commodity, (int)Count, 0, conn);
             }
