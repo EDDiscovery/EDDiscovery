@@ -48,16 +48,17 @@ namespace EDDiscovery.UserControls
             this.splitContainerVertical = new ExtendedControls.SplitContainerCustom();
             this.pictureBoxList = new ExtendedControls.PictureBoxHotspot();
             this.splitContainerRightHorz = new ExtendedControls.SplitContainerCustom();
+            this.buttonTechBroker = new ExtendedControls.ButtonExt();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
             this.contextMenuConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showAllMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showBodyMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonTechBroker = new ExtendedControls.ButtonExt();
+            this.onlyCapacityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -118,6 +119,16 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.SplitterDistance = 214;
             this.splitContainerRightHorz.TabIndex = 0;
             // 
+            // buttonTechBroker
+            // 
+            this.buttonTechBroker.Location = new System.Drawing.Point(3, 3);
+            this.buttonTechBroker.Name = "buttonTechBroker";
+            this.buttonTechBroker.Size = new System.Drawing.Size(121, 23);
+            this.buttonTechBroker.TabIndex = 1;
+            this.buttonTechBroker.Text = "Tech Broker Unlocks";
+            this.buttonTechBroker.UseVisualStyleBackColor = true;
+            this.buttonTechBroker.Click += new System.EventHandler(this.buttonTechBroker_Click);
+            // 
             // userControlSynthesis
             // 
             this.userControlSynthesis.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -142,13 +153,13 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showMaxFSDInjectionsToolStripMenuItem,
-            this.showAllMaterialsWhenLandedToolStripMenuItem,
+            this.showBodyMaterialsWhenLandedToolStripMenuItem,
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem,
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem,
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
             this.useHistoricMaterialCountsToolStripMenuItem});
             this.contextMenuConfig.Name = "contextMenuConfig";
-            this.contextMenuConfig.Size = new System.Drawing.Size(369, 136);
+            this.contextMenuConfig.Size = new System.Drawing.Size(369, 158);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -160,13 +171,15 @@ namespace EDDiscovery.UserControls
             this.showMaxFSDInjectionsToolStripMenuItem.Text = "Show Max FSD Injections";
             this.showMaxFSDInjectionsToolStripMenuItem.Click += new System.EventHandler(this.showMaxFSDInjectionsToolStripMenuItem_Click);
             // 
-            // showAllMaterialsWhenLandedToolStripMenuItem
+            // showBodyMaterialsWhenLandedToolStripMenuItem
             // 
-            this.showAllMaterialsWhenLandedToolStripMenuItem.CheckOnClick = true;
-            this.showAllMaterialsWhenLandedToolStripMenuItem.Name = "showAllMaterialsWhenLandedToolStripMenuItem";
-            this.showAllMaterialsWhenLandedToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
-            this.showAllMaterialsWhenLandedToolStripMenuItem.Text = "Show Body Materials When Landed";
-            this.showAllMaterialsWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAllMaterialsWhenLandedToolStripMenuItem_Click);
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.CheckOnClick = true;
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.onlyCapacityToolStripMenuItem});
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.Name = "showBodyMaterialsWhenLandedToolStripMenuItem";
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.Text = "Show Body Materials When Landed";
+            this.showBodyMaterialsWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAllMaterialsWhenLandedToolStripMenuItem_Click);
             // 
             // showAvailableMaterialsInListWhenLandedToolStripMenuItem
             // 
@@ -200,15 +213,13 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
-            // buttonTechBroker
+            // onlyCapacityToolStripMenuItem
             // 
-            this.buttonTechBroker.Location = new System.Drawing.Point(3, 3);
-            this.buttonTechBroker.Name = "buttonTechBroker";
-            this.buttonTechBroker.Size = new System.Drawing.Size(121, 23);
-            this.buttonTechBroker.TabIndex = 1;
-            this.buttonTechBroker.Text = "Tech Broker Unlocks";
-            this.buttonTechBroker.UseVisualStyleBackColor = true;
-            this.buttonTechBroker.Click += new System.EventHandler(this.buttonTechBroker_Click);
+            this.onlyCapacityToolStripMenuItem.CheckOnClick = true;
+            this.onlyCapacityToolStripMenuItem.Name = "onlyCapacityToolStripMenuItem";
+            this.onlyCapacityToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.onlyCapacityToolStripMenuItem.Text = "Hide when storage full";
+            this.onlyCapacityToolStripMenuItem.Click += new System.EventHandler(this.onlyCapacityToolStripMenuItem_Click);
             // 
             // UserControlShoppingList
             // 
@@ -240,11 +251,12 @@ namespace EDDiscovery.UserControls
         private UserControlEngineering userControlEngineering;
         private System.Windows.Forms.ContextMenuStrip contextMenuConfig;
         private System.Windows.Forms.ToolStripMenuItem showMaxFSDInjectionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem showAllMaterialsWhenLandedToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showBodyMaterialsWhenLandedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsInListWhenLandedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonTechBroker;
+        private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
     }
 }
