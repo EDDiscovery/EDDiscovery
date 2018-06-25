@@ -367,7 +367,7 @@ namespace EDDiscovery
                                 "Warning - DLL extensions Found",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls + res.Item3);
+                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3,","));
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
