@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
-        private List<Tuple<string, string>> matLookUp;
+        private Dictionary<string, string> matLookUp;
 
         private string DbColumnSave { get { return ("EngineeringGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
         private string DbWSave { get { return "EngineeringWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
@@ -93,8 +93,8 @@ namespace EDDiscovery.UserControls
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).name)).ToList();
-            List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
+            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetCachedMaterialByShortName(sn).name, sn => sn);
+            List<string> matLongNames = matLookUp.Keys.ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
+                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x) && matLookUp.ContainsKey(x)).Select(m => matLookUp[m]).ToList();
                 }
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
