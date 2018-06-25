@@ -112,6 +112,7 @@ namespace NetLogEntry
                         {
                             //Console.WriteLine("engineering found for FDName: " + fdname + ": Entry " + entry.fdname);
                             engnames = entry.englist;
+                            engnames = engnames.Replace("Chung", "Cheung");     // fix found misspelling 25 june 18
                         }
                     }
 
