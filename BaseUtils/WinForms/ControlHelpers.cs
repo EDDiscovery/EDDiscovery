@@ -301,6 +301,16 @@ public static class ControlHelpersStaticFunc
         return v;
     }
 
+    static public double GetPanelsSizeSum(this SplitContainer sp)                    // get the splitter panels size sum
+    {
+        int a = (sp.Orientation == Orientation.Vertical) ? sp.Width : sp.Height;
+        if (a == 0)     // Sometimes the size is {0,0} if minimized. Calc dimension from the inner panels. See issue #1508.
+            a = (sp.Orientation == Orientation.Vertical ? sp.Panel1.Width + sp.Panel2.Width : sp.Panel1.Height + sp.Panel2.Height) + sp.SplitterWidth;
+        double s = (double)a;
+        //System.Diagnostics.Debug.WriteLine($"SplitContainer {sp.Name} {sp.DisplayRectangle} {sp.SplitterDistance} Get PanelSizeSum {a} -> {s:N2}");
+        return s;
+    }
+
     // Make a tree of splitters, controlled by the string in sp
 
     static public SplitContainer SplitterTreeMakeFromCtrlString(BaseUtils.StringParser sp, 
