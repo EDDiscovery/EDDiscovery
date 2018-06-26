@@ -37,6 +37,15 @@
             this.toolStripMergePanel1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSplitPanel2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMergePanel2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.equalSizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem12 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem23 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem32 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem21 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem31 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripSplitter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,44 +72,114 @@
             this.toolStripSplitPanel1,
             this.toolStripMergePanel1,
             this.toolStripSplitPanel2,
-            this.toolStripMergePanel2});
+            this.toolStripMergePanel2,
+            this.toolStripSeparator1,
+            this.equalSizeToolStripMenuItem});
             this.contextMenuStripSplitter.Name = "contextMenuStripSplitter";
-            this.contextMenuStripSplitter.Size = new System.Drawing.Size(179, 114);
+            this.contextMenuStripSplitter.Size = new System.Drawing.Size(181, 164);
             // 
             // toolStripOrientation
             // 
             this.toolStripOrientation.Name = "toolStripOrientation";
-            this.toolStripOrientation.Size = new System.Drawing.Size(178, 22);
+            this.toolStripOrientation.Size = new System.Drawing.Size(180, 22);
             this.toolStripOrientation.Text = "Change Orientation";
             this.toolStripOrientation.Click += new System.EventHandler(this.toolStripOrientation_Click);
             // 
             // toolStripSplitPanel1
             // 
             this.toolStripSplitPanel1.Name = "toolStripSplitPanel1";
-            this.toolStripSplitPanel1.Size = new System.Drawing.Size(178, 22);
+            this.toolStripSplitPanel1.Size = new System.Drawing.Size(180, 22);
             this.toolStripSplitPanel1.Text = "Split Panel1";
             this.toolStripSplitPanel1.Click += new System.EventHandler(this.toolStripSplitPanel1_Click);
             // 
             // toolStripMergePanel1
             // 
             this.toolStripMergePanel1.Name = "toolStripMergePanel1";
-            this.toolStripMergePanel1.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMergePanel1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMergePanel1.Text = "Merge Panel 1";
             this.toolStripMergePanel1.Click += new System.EventHandler(this.toolStripMergePanel1_Click);
             // 
             // toolStripSplitPanel2
             // 
             this.toolStripSplitPanel2.Name = "toolStripSplitPanel2";
-            this.toolStripSplitPanel2.Size = new System.Drawing.Size(178, 22);
+            this.toolStripSplitPanel2.Size = new System.Drawing.Size(180, 22);
             this.toolStripSplitPanel2.Text = "Split Panel 2";
             this.toolStripSplitPanel2.Click += new System.EventHandler(this.toolStripSplitPanel2_Click);
             // 
             // toolStripMergePanel2
             // 
             this.toolStripMergePanel2.Name = "toolStripMergePanel2";
-            this.toolStripMergePanel2.Size = new System.Drawing.Size(178, 22);
+            this.toolStripMergePanel2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMergePanel2.Text = "Merge Panel 2";
             this.toolStripMergePanel2.Click += new System.EventHandler(this.toolStripMergePanel2_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(175, 6);
+            // 
+            // equalSizeToolStripMenuItem
+            // 
+            this.equalSizeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem13,
+            this.toolStripMenuItem12,
+            this.toolStripMenuItem23,
+            this.toolStripMenuItem11,
+            this.toolStripMenuItem32,
+            this.toolStripMenuItem21,
+            this.toolStripMenuItem31});
+            this.equalSizeToolStripMenuItem.Name = "equalSizeToolStripMenuItem";
+            this.equalSizeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.equalSizeToolStripMenuItem.Text = "Ratio";
+            // 
+            // toolStripMenuItem12
+            // 
+            this.toolStripMenuItem12.Name = "toolStripMenuItem12";
+            this.toolStripMenuItem12.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem12.Text = "1:2";
+            this.toolStripMenuItem12.Click += new System.EventHandler(this.toolStripMenuItem12_Click);
+            // 
+            // toolStripMenuItem23
+            // 
+            this.toolStripMenuItem23.Name = "toolStripMenuItem23";
+            this.toolStripMenuItem23.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem23.Text = "2:3";
+            this.toolStripMenuItem23.Click += new System.EventHandler(this.toolStripMenuItem23_Click);
+            // 
+            // toolStripMenuItem11
+            // 
+            this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+            this.toolStripMenuItem11.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem11.Text = "1:1";
+            this.toolStripMenuItem11.Click += new System.EventHandler(this.toolStripMenuItem11_Click);
+            // 
+            // toolStripMenuItem32
+            // 
+            this.toolStripMenuItem32.Name = "toolStripMenuItem32";
+            this.toolStripMenuItem32.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem32.Text = "3:2";
+            this.toolStripMenuItem32.Click += new System.EventHandler(this.toolStripMenuItem32_Click);
+            // 
+            // toolStripMenuItem21
+            // 
+            this.toolStripMenuItem21.Name = "toolStripMenuItem21";
+            this.toolStripMenuItem21.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem21.Text = "2:1";
+            this.toolStripMenuItem21.Click += new System.EventHandler(this.toolStripMenuItem21_Click);
+            // 
+            // toolStripMenuItem13
+            // 
+            this.toolStripMenuItem13.Name = "toolStripMenuItem13";
+            this.toolStripMenuItem13.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem13.Text = "1:3";
+            this.toolStripMenuItem13.Click += new System.EventHandler(this.toolStripMenuItem13_Click);
+            // 
+            // toolStripMenuItem31
+            // 
+            this.toolStripMenuItem31.Name = "toolStripMenuItem31";
+            this.toolStripMenuItem31.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem31.Text = "3:1";
+            this.toolStripMenuItem31.Click += new System.EventHandler(this.toolStripMenuItem31_Click);
             // 
             // UserControlContainerSplitter
             // 
@@ -123,5 +202,14 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripSplitPanel2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMergePanel1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMergePanel2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem equalSizeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem11;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem12;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem23;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem32;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem21;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem13;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem31;
     }
 }

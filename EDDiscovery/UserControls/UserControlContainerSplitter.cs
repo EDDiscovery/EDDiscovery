@@ -273,8 +273,7 @@ namespace EDDiscovery.UserControls
             toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels");
             return sc;
         }
-
-
+        
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
         {
             bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
@@ -364,7 +363,7 @@ namespace EDDiscovery.UserControls
         #region Clicks
 
         SplitContainer currentsplitter = null;
-
+        
         private void Sc_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -376,7 +375,7 @@ namespace EDDiscovery.UserControls
                 toolStripSplitPanel2.Text = v ? "Split Right Panel" : "Split Bottom Panel";
                 toolStripMergePanel1.Text = v ? "Merge Left Panel" : "Merge Top Panel";
                 toolStripMergePanel2.Text = v ? "Merge Right Panel" : "Merge Bottom Panel";
-
+                
                 toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
                 toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);
                 toolStripMergePanel1.Enabled = currentsplitter.Panel1.Controls[0] is SplitContainer;
@@ -414,6 +413,48 @@ namespace EDDiscovery.UserControls
         {
             currentsplitter.Merge(1);
             AssignTHC();        // because we may have removed the cursor
+        }
+        
+        private void toolStripMenuItem13_Click(object sender, EventArgs e)
+        {
+            double psize = currentsplitter.GetPanelsSizeSum() / 4;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem12_Click(object sender, EventArgs e)
+        {
+            double psize = currentsplitter.GetPanelsSizeSum() / 3;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem23_Click(object sender, EventArgs e)
+        {
+            double psize = (currentsplitter.GetPanelsSizeSum() / 5) * 2;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem11_Click(object sender, EventArgs e)
+        {
+            double psize = currentsplitter.GetPanelsSizeSum() / 2;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem32_Click(object sender, EventArgs e)
+        {
+            double psize = (currentsplitter.GetPanelsSizeSum() / 5) * 3;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem21_Click(object sender, EventArgs e)
+        {
+            double psize = (currentsplitter.GetPanelsSizeSum() / 3) * 2;
+            currentsplitter.SplitterDistance = (int)psize;
+        }
+
+        private void toolStripMenuItem31_Click(object sender, EventArgs e)
+        {
+            double psize = (currentsplitter.GetPanelsSizeSum() / 4) * 3;
+            currentsplitter.SplitterDistance = (int)psize;
         }
 
         int GetFreeTag()            // find a free tag number in all of the TagStrips around.. Tag holds the number allocated.
@@ -477,6 +518,5 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion 
-
     }
 }
