@@ -632,8 +632,8 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomProfiles.DisplayMember = "";
             this.comboBoxCustomProfiles.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomProfiles.DropDownHeight = 106;
-            this.comboBoxCustomProfiles.DropDownWidth = 75;
+            this.comboBoxCustomProfiles.DropDownHeight = 400;
+            this.comboBoxCustomProfiles.DropDownWidth = 150;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomProfiles.ItemHeight = 13;
             this.comboBoxCustomProfiles.Location = new System.Drawing.Point(197, 4);
@@ -645,7 +645,7 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.SelectedIndex = -1;
             this.comboBoxCustomProfiles.SelectedItem = null;
             this.comboBoxCustomProfiles.SelectedValue = null;
-            this.comboBoxCustomProfiles.Size = new System.Drawing.Size(75, 21);
+            this.comboBoxCustomProfiles.Size = new System.Drawing.Size(100, 21);
             this.comboBoxCustomProfiles.TabIndex = 4;
             this.comboBoxCustomProfiles.Text = "comboBoxCustom1";
             this.comboBoxCustomProfiles.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -685,7 +685,7 @@ namespace EDDiscovery
             // buttonExtEDSMSync
             // 
             this.buttonExtEDSMSync.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_SyncEDSM;
-            this.buttonExtEDSMSync.Location = new System.Drawing.Point(426, 3);
+            this.buttonExtEDSMSync.Location = new System.Drawing.Point(428, 3);
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
             this.buttonExtEDSMSync.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDSMSync.TabIndex = 2;
@@ -697,7 +697,7 @@ namespace EDDiscovery
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Popouts;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(456, 3);
+            this.buttonExtPopOut.Location = new System.Drawing.Point(458, 3);
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(24, 24);
             this.buttonExtPopOut.TabIndex = 2;
@@ -709,7 +709,7 @@ namespace EDDiscovery
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_EditAddons;
-            this.buttonExtEditAddOns.Location = new System.Drawing.Point(516, 3);
+            this.buttonExtEditAddOns.Location = new System.Drawing.Point(518, 3);
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
             this.buttonExtEditAddOns.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEditAddOns.TabIndex = 2;
@@ -721,7 +721,7 @@ namespace EDDiscovery
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_ManageAddOns;
-            this.buttonExtManageAddOns.Location = new System.Drawing.Point(486, 3);
+            this.buttonExtManageAddOns.Location = new System.Drawing.Point(488, 3);
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
             this.buttonExtManageAddOns.Size = new System.Drawing.Size(24, 24);
             this.buttonExtManageAddOns.TabIndex = 2;
@@ -746,7 +746,7 @@ namespace EDDiscovery
             this.buttonExt2dmap.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt2dmap.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Open2DMap;
             this.buttonExt2dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt2dmap.Location = new System.Drawing.Point(304, 3);
+            this.buttonExt2dmap.Location = new System.Drawing.Point(306, 3);
             this.buttonExt2dmap.Name = "buttonExt2dmap";
             this.buttonExt2dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt2dmap.TabIndex = 2;
@@ -761,7 +761,7 @@ namespace EDDiscovery
             this.buttonExt3dmap.BackColor = System.Drawing.Color.Transparent;
             this.buttonExt3dmap.Image = global::EDDiscovery.Icons.Controls.Main_Toolbar_Open3DMap;
             this.buttonExt3dmap.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonExt3dmap.Location = new System.Drawing.Point(364, 3);
+            this.buttonExt3dmap.Location = new System.Drawing.Point(366, 3);
             this.buttonExt3dmap.Name = "buttonExt3dmap";
             this.buttonExt3dmap.Size = new System.Drawing.Size(56, 24);
             this.buttonExt3dmap.TabIndex = 2;

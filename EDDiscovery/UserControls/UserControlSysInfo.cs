@@ -175,7 +175,8 @@ namespace EDDiscovery.UserControls
 
                 discoveryform.history.FillEDSM(he); // Fill in any EDSM info we have
 
-                textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
+                //textBoxBody.Text = he.WhereAmI + ((he.IsInHyperSpace) ? " (HS)": "");
+                textBoxBody.Text = he.WhereAmI + " (" + he.BodyType + ")";
 
                 if (he.System.HasCoordinate)         // cursystem has them?
                 {

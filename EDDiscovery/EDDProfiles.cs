@@ -30,39 +30,55 @@ namespace EDDiscovery
 
         public class StandardTrigger
         {
-            public StandardTrigger(string n, string c ) { Name = n; Condition = c; }
+            public StandardTrigger(string n, string c, string b ) { Name = n; TripCondition = c; BackCondition = b; }
             public string Name;
-            public string Condition;
+            public string TripCondition;
+            public string BackCondition;
         }
 
         static public StandardTrigger[] StandardTriggers = new StandardTrigger[] 
         {
-            new StandardTrigger("No Trigger","Condition AlwaysFalse"),      // always the first.
-            new StandardTrigger("Docked","TriggerName $== Docked"),
+            new StandardTrigger("No Trigger","Condition AlwaysFalse","Condition AlwaysFalse"),      // always the first.
+            new StandardTrigger("Normal Space","TriggerName $== UnDocked Or TriggerName $== LeaveBody Or TriggerName $== StartJump","Condition AlwaysFalse"),
+            new StandardTrigger("Planet","TriggerName $== ApproachBody","Condition AlwaysFalse"),
+            new StandardTrigger("Docked","TriggerName $== Docked","Condition AlwaysFalse"),
+            new StandardTrigger("Undocked","TriggerName $== Undocked","Condition AlwaysFalse"),
+            new StandardTrigger("Hardpoints","TriggerName $== UIHardpointsDeployed And EventClass_Deployed IsTrue","TriggerName $== UIHardpointsDeployed And EventClass_Deployed IsFalse"),
+            new StandardTrigger("SRV","TriggerName $== LaunchSRV","TriggerName $== SRVDestroyed Or TriggerName $== DockSRV"),
+            new StandardTrigger("Fighter","TriggerName $== LaunchFighter And PlayerControlled IsTrue","TriggerName $== DockFighter"),
         };
 
-        static public int FindTriggerIndex(ConditionLists cond )
+        static public int FindTriggerIndex(ConditionLists trigger, ConditionLists back )
         {
-            return Array.FindIndex(StandardTriggers, x => x.Condition.Equals(cond.ToString()));
+            return Array.FindIndex(StandardTriggers, x => x.TripCondition.Equals(trigger.ToString()) && x.BackCondition.Equals(back.ToString()));
         }
 
         static public int NoTriggerIndex = 0;
+
+        static public int DefaultId = 100;          // 100, so you can tell index from IDs during debugging
 
         public class Profile
         {
             public int Id;
             public string Name;
-            public ConditionLists Condition;
+            public ConditionLists TripCondition;
+            public ConditionLists BackCondition;
 
-            public Profile(int internalnumber, string name, string condition)
+            public Profile(int internalnumber, string name, string tripcondition, string backcondition)
             {
                 Id = internalnumber;
                 Name = name;
-                Condition = new Conditions.ConditionLists();
-                Condition.Read(condition);
-                if (Condition.Count == 0)
+                TripCondition = new Conditions.ConditionLists();
+                TripCondition.Read(tripcondition);
+                if (TripCondition.Count == 0)
                 {
-                    Condition.Read("Condition AlwaysFalse");
+                    TripCondition.Read("Condition AlwaysFalse");
+                }
+                BackCondition = new Conditions.ConditionLists();
+                BackCondition.Read(backcondition);
+                if (BackCondition.Count == 0)
+                {
+                    BackCondition.Read("Condition AlwaysFalse");
                 }
             }
         }
@@ -71,11 +87,16 @@ namespace EDDiscovery
 
         public List<Profile> ProfileList { get; private set; }
         public int Count { get { return ProfileList.Count; } }
+        public Profile PowerOn { get; private set; }
         public Profile Current { get; private set; }
         public List<string> Names() { return ProfileList.Select(x => x.Name).ToList(); }
-        public int IndexOfCurrent() { return ProfileList.FindIndex(x => x.Id == Current.Id); }
 
-        public string UserControlsPrefix { get { return Current.Id == 0 ? "" : ("Profile_" + Current.Id + "_"); } }
+        public int IndexOf(int id) { return ProfileList.FindIndex(x => x.Id == id); }
+        public int IdOfIndex(int index) { return ProfileList[index].Id; }
+
+        public Stack<int> History { get; private set; } = new Stack<int>();
+
+        public string UserControlsPrefix { get { return Current.Id == DefaultId ? "" : ("Profile_" + Current.Id + "_"); } }
 
         static public string ProfilePrefix(int id) { return "Profile_" + id + "_"; }
 
@@ -86,26 +107,32 @@ namespace EDDiscovery
 
             foreach (int profileid in profileints)
             {
-                StringParser sp = new StringParser(SQLiteConnectionUser.GetSettingString(ProfilePrefix(profileid) + "Settings", "Default,Condition AlwaysFalse"));
+                StringParser sp = new StringParser(SQLiteConnectionUser.GetSettingString(ProfilePrefix(profileid) + "Settings", ""));
 
                 string name = sp.NextQuotedWordComma();
-                string condition = sp.NextQuotedWord();
+                string tripcondition = sp.NextQuotedWordComma();
+                string backcondition = sp.NextQuotedWord();
 
-                if (name != null && condition != null)
+                if (name != null && tripcondition != null && backcondition != null)
                 {
-                    Profile p = new Profile(profileid, name, condition);
+                    Profile p = new Profile(profileid, name, tripcondition, backcondition);
+                    System.Diagnostics.Debug.WriteLine("Profile {0} {1} {2}", name, tripcondition, backcondition);
                     ProfileList.Add(p);
                 }
-                else
-                    break;
             }
 
-            int curid = SQLiteConnectionUser.GetSettingInt("ProfileCurrentID", 0);
+            if ( ProfileList.Count == 0 )
+            {
+                ProfileList.Add(new Profile(DefaultId, "Default", "Condition AlwaysFalse", "Condition AlwaysFalse"));
+            }
 
-            Current = ProfileList.Find(x => x.Id == curid) ?? ProfileList[0];
+            int curid = SQLiteConnectionUser.GetSettingInt("ProfilePowerOnID", DefaultId);
+
+            PowerOn = Current = ProfileList.Find(x => x.Id == curid) ?? ProfileList[0];
+            History.Push(Current.Id);
         }
 
-        public void SaveProfiles()
+        private void SaveProfiles()
         {
             string ids = "";
             foreach (Profile p in ProfileList)
@@ -113,15 +140,15 @@ namespace EDDiscovery
                 string idstr = p.Id.ToStringInvariant();
                 SQLiteConnectionUser.PutSettingString(ProfilePrefix(p.Id) + "Settings",
                             p.Name.QuoteString(comma: true) + "," +
-                            p.Condition.ToString().QuoteString(comma: true));
+                            p.TripCondition.ToString().QuoteString(comma: true) + "," + p.BackCondition.ToString().QuoteString(comma: true)
+                            );
                 ids = ids.AppendPrePad(idstr, ",");
-
             }
+
             SQLiteConnectionUser.PutSettingString("ProfileIDs", ids);
-            SQLiteConnectionUser.PutSettingInt("ProfileCurrentID", Current.Id);
         }
 
-        public bool UpdateProfiles(List<Profile> newset )        // true reload
+        public bool UpdateProfiles(List<Profile> newset, int poweronindex )        // true reload - Current is invalid if true, must reload to new profile
         {
             List<Profile> toberemoved = new List<Profile>();
 
@@ -137,7 +164,8 @@ namespace EDDiscovery
                 {                           // existing in both, update
                     System.Diagnostics.Debug.WriteLine("Update ID " + p.Id);
                     p.Name = c.Name;        // update name and condition
-                    p.Condition = c.Condition;
+                    p.TripCondition = c.TripCondition;
+                    p.BackCondition = c.BackCondition;
                }
             }
 
@@ -151,14 +179,13 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine("Delete ID " + p.Id);
                 SQLiteConnectionUser.DeleteKey(ProfilePrefix(p.Id) + "%");       // all profiles string
                 ProfileList.Remove(p);
-
             }
-
-            int[] curids = (from x in ProfileList select x.Id).ToArray();
 
             foreach ( Profile p in newset.Where((p)=>p.Id==-1))
             {
-                int id = 1;
+                int[] curids = (from x in ProfileList select x.Id).ToArray();
+
+                int id = DefaultId+1;
                 for(; id <10000; id++ )
                 {
                     if (Array.IndexOf(curids, id) == -1)
@@ -170,23 +197,81 @@ namespace EDDiscovery
                 ProfileList.Add(p);
             }
 
-            if ( removedcurrent )
-                Current = ProfileList[0];
+            poweronindex = poweronindex >= 0 ? poweronindex : 0;
+            SQLiteConnectionUser.PutSettingInt("ProfilePowerOnID", ProfileList[poweronindex].Id);
+            PowerOn = ProfileList[poweronindex];
 
             SaveProfiles();
+            History.Clear();        // because an ID may have gone awol
 
             return removedcurrent;
         }
 
-        public bool ChangeCurrent(int indexof)
+        public bool ChangeToId(int id)
         {
-            if (indexof >= 0 && indexof < ProfileList.Count && ProfileList.IndexOf(Current) != indexof)
+            int indexof = ProfileList.FindIndex(x => x.Id == id);
+
+            if (indexof >= 0 && id != Current.Id )
             {
                 Current = ProfileList[indexof];
+                History.Push(Current.Id);
                 return true;
             }
             else
                 return false;
+        }
+
+        public int ActionOn(ConditionVariables vars, out string errlist)        // -1 no change, else id of new profile
+        {
+            errlist = string.Empty;
+
+            //System.Diagnostics.Debug.WriteLine("Profile check on " + vars.ToString(separ: Environment.NewLine));
+
+            ConditionFunctions functions = new ConditionFunctions(vars, null);
+
+            foreach (Profile p in ProfileList)
+            {
+                bool? condres = p.TripCondition.CheckAll(vars, out string err, null, functions);     // may return null.. and will return errlist
+
+                if (err == null)
+                {
+                    bool res = condres.HasValue && condres.Value;
+
+                    if (res)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Profile " + p.Name + " Tripped due to " + p.TripCondition.ToString());
+                        return p.Id;
+                    }
+                }
+                else
+                    errlist = errlist.AppendPrePad(err, ",");
+            }
+
+            bool? backres = Current.BackCondition.CheckAll(vars, out string err2, null, functions);     // check the back condition on the current profile..
+
+            if (err2 == null)
+            {
+                bool res = backres.HasValue && backres.Value;
+
+                if (res)
+                {
+                    System.Diagnostics.Debug.WriteLine("Profile " + Current.Name + " Back Tripped due to " + Current.BackCondition.ToString());
+
+                    if ( History.Count>=2)       // we may have an empty history (because its been erased due to editing) or only a single entry (ours).. so just double check
+                    {
+                        History.Pop();  // pop us
+                        return History.Pop();       // and return ID of 1 before to use
+                    }
+                    else
+                    {       // not an error, just a state of being ;-)
+                        System.Diagnostics.Debug.WriteLine("Profile " + Current.Name + " Back Tripped but no history to go back to!");
+                    }
+                }
+            }
+            else
+                errlist = errlist.AppendPrePad(err2, ",");
+
+            return -1;
         }
 
     }

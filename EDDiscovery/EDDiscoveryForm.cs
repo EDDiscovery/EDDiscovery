@@ -286,55 +286,10 @@ namespace EDDiscovery
             comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
             comboBoxCustomProfiles.Items.Add("Edit Profiles");
 
-            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOfCurrent();
+            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             Controller.InitComplete();
-        }
-
-        private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
-            {
-                bool updateprofile = false;
-
-                if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
-                {
-                    Forms.ProfileEditor pe = new ProfileEditor();
-                    pe.Init(EDDProfiles.Instance, this.Icon);
-                    if (pe.ShowDialog() == DialogResult.OK)
-                    {
-                        List<EDDProfiles.Profile> res = pe.Result;
-                        updateprofile = EDDProfiles.Instance.UpdateProfiles(res);       // see if the current one has changed...
-
-                        comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
-                        comboBoxCustomProfiles.Items.Clear();
-                        comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-                        comboBoxCustomProfiles.Items.Add("Edit Profiles");
-                        comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOfCurrent();
-                        comboBoxCustomProfiles.Enabled = true;
-                    }
-                }
-                else
-                {
-                    tabControlMain.CloseTabList();
-
-                    if ( EDDProfiles.Instance.ChangeCurrent(comboBoxCustomProfiles.SelectedIndex) )     // change to, if we have changed, update
-                        updateprofile = true;
-                }
-
-                if ( updateprofile )
-                { 
-                    UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
-                    tabControlMain.TabPages.Clear();
-                    tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-                    tabControlMain.LoadTabs();
-                    ApplyTheme();
-                    LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
-
-                    //tbd popups
-                }
-            }
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called
@@ -762,17 +717,30 @@ namespace EDDiscovery
 
             DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
 
+            CheckActionProfile(he);
         }
 
-        private void Controller_NewUIEvent(UIEvent uievent)      
+        private void Controller_NewUIEvent(UIEvent uievent)
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
 
             string prefix = "EventClass_";
             cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            cv[prefix+"UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
+            cv[prefix + "UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
-            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv); 
+            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
+
+            if (!uievent.EventRefresh)      // don't send the refresh events thru the system..  see if profiles need changing
+            {
+                Actions.ActionVars.TriggerVars(cv, "UI" + uievent.EventTypeStr, "UIEvent");
+
+                int i = EDDProfiles.Instance.ActionOn(cv, out string errlist);
+                if (i >= 0)
+                    ChangeToProfileId(i, true);
+
+                if (errlist.HasChars())
+                    LogLine("Profile reports errors in triggers" + errlist);
+            }
         }
 
         private void SendPricestoEDDN(HistoryEntry he, CMarket market)
@@ -875,8 +843,6 @@ namespace EDDiscovery
             notifyIcon1.Visible = false;
 
             actioncontroller.CloseDown();
-
-            EDDProfiles.Instance.SaveProfiles();
 
             DLLManager.UnLoad();
 
@@ -1506,6 +1472,7 @@ namespace EDDiscovery
 
         }
 
+
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
             Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
@@ -1548,9 +1515,90 @@ namespace EDDiscovery
 
         }
 
-#endregion
+        #endregion
 
-#region PopOuts
+        #region Profiles
+        private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
+            {
+                if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
+                {
+                    Forms.ProfileEditor pe = new ProfileEditor();
+                    pe.Init(EDDProfiles.Instance, this.Icon);
+                    if (pe.ShowDialog() == DialogResult.OK)
+                    {
+                        bool removedcurprofile = EDDProfiles.Instance.UpdateProfiles(pe.Result, pe.PowerOnIndex);       // see if the current one has changed...
+
+                        comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+                        comboBoxCustomProfiles.SelectedIndex = -1;
+                        comboBoxCustomProfiles.Items.Clear();
+                        comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
+                        comboBoxCustomProfiles.Items.Add("Edit Profiles");
+                        comboBoxCustomProfiles.Enabled = true;
+
+                        if (removedcurprofile)
+                            ChangeToProfileId(EDDProfiles.DefaultId, false );
+                    }
+
+                    comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+                    comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
+                    comboBoxCustomProfiles.Enabled = true;
+                }
+                else
+                {
+                    ChangeToProfileId(EDDProfiles.Instance.IdOfIndex(comboBoxCustomProfiles.SelectedIndex), true);
+                }
+            }
+        }
+
+        private void ChangeToProfileId(int id, bool checksavecur)
+        {
+            if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
+            {
+                if (checksavecur)
+                {
+                    tabControlMain.CloseTabList();
+                    PopOuts.SaveCurrentPopouts();
+                }
+
+                comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
+                comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
+                comboBoxCustomProfiles.Enabled = true;
+
+                EDDProfiles.Instance.ChangeToId(id);
+
+                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+                tabControlMain.TabPages.Clear();
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                tabControlMain.LoadTabs();
+                ApplyTheme();
+
+                PopOuts.LoadSavedPopouts();
+
+                LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
+            }
+        }
+
+        public void CheckActionProfile(HistoryEntry he)
+        {
+            Conditions.ConditionVariables eventvars = new Conditions.ConditionVariables();
+            Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, "JournalEvent");
+            Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
+            Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
+            Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
+
+            int i = EDDProfiles.Instance.ActionOn(eventvars, out string errlist);
+            if (i >= 0)
+                ChangeToProfileId(i, true);
+
+            if (errlist.HasChars())
+                LogLine("Profile reports errors in triggers" + errlist);
+        }
+
+        #endregion
+
+        #region PopOuts
 
         ExtendedControls.DropDownCustom popoutdropdown;
 
