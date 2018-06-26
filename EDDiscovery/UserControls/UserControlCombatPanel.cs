@@ -29,8 +29,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCombatPanel : UserControlCommonBase
     {
-        private string DbSave { get { return "CombatPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbColumnSave { get { return ("CombatPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbSave { get { return DBName("CombatPanel" ); } }
+        private string DbColumnSave { get { return DBName("CombatPanel" ,  "DGVCol"); } }
 
         private long total_kills = 0;
         private long faction_kills = 0;

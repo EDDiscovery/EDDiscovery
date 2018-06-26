@@ -24,7 +24,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EDDiscovery.Forms
+namespace EDDiscovery
 {
     static public class PanelInformation
     {
@@ -239,12 +239,12 @@ namespace EDDiscovery.Forms
         public PopOutControl( EDDiscoveryForm ed )
         {
             discoveryform = ed;
-            usercontrolsforms = new UserControlFormList(discoveryform);
+            usercontrolsforms = new Forms.UserControlFormList(discoveryform);
         }
 
         public int Count { get { return usercontrolsforms.Count;  } }
-        public UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
-        public UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
+        public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
+        public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
         public void ShowAllPopOutsInTaskBar()
         {
@@ -265,7 +265,7 @@ namespace EDDiscovery.Forms
                 {
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
-                    SQLiteConnectionUser.PutSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
+                    SQLiteConnectionUser.PutSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace EDDiscovery.Forms
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                int numtoopen = SQLiteConnectionUser.GetSettingInt("SavedPanelInformation.PopOuts:" + p.ToString(), 0);
+                int numtoopen = SQLiteConnectionUser.GetSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), 0);
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
@@ -293,7 +293,7 @@ namespace EDDiscovery.Forms
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {
-            UserControlForm tcf = usercontrolsforms.NewForm();
+            Forms.UserControlForm tcf = usercontrolsforms.NewForm();
             tcf.Icon = Properties.Resources.edlogo_3mo_icon;
 
             UserControlCommonBase ctrl = PanelInformation.Create(selected);

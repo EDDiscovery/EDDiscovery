@@ -32,9 +32,9 @@ namespace EDDiscovery.UserControls
     {
         EventFilterSelector cfs = new EventFilterSelector();
 
-        private string DbFilterSave { get { return "LedgerGridEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbColumnSave { get { return ("LedgerGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbHistorySave { get { return "LedgerGridEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbFilterSave { get { return DBName("LedgerGridEventFilter" ); } }
+        private string DbColumnSave { get { return DBName("LedgerGrid" ,  "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("LedgerGridEDUIHistory" ); } }
 
         #region Init
 

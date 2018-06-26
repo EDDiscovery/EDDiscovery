@@ -58,12 +58,12 @@ namespace EDDiscovery.UserControls
         }
 
         private const int DefaultRowHeight = 26;
-        private string DbColumnSave { get { return "StarListControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbHistorySave { get { return "StarListControlEDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbAutoTop { get { return "StarListControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbEDSM { get { return "StarListControlEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowJumponium { get { return "StarListControlJumponium" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowClasses { get { return "StarListControlShowClasses" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }        
+        private string DbColumnSave { get { return DBName("StarListControl" ,  "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("StarListControlEDUIHistory" ); } }
+        private string DbAutoTop { get { return DBName("StarListControlAutoTop" ); } }
+        private string DbEDSM { get { return DBName("StarListControlEDSM" ); } }
+        private string DbShowJumponium { get { return DBName("StarListControlJumponium" ); } }
+        private string DbShowClasses { get { return DBName("StarListControlShowClasses" ); } }        
 
         private Dictionary<string, List<HistoryEntry>> systemsentered = new Dictionary<string, List<HistoryEntry>>();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();

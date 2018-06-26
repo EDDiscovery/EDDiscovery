@@ -74,6 +74,7 @@ namespace EliteDangerousCore
         public bool IsDocked { get { return docked.HasValue && docked.Value == true; } }
         public bool IsInHyperSpace { get { return hyperspace.HasValue && hyperspace.Value == true; } }
         public string WhereAmI { get { return whereami; } }
+        public string BodyType { get { return bodytype; } }
         public string ShipType { get { return shiptype; } }         // NOT FD - translated name
         public int ShipId { get { return shipid; } }
         public bool MultiPlayer { get { return onCrewWithCaptain != null; } }
@@ -115,6 +116,7 @@ namespace EliteDangerousCore
         private bool? landed;                       // are we landed on the planet surface.  Null if don't know, else true/false
         private bool? hyperspace;                   // are we in hyperspace..
         private string whereami = "";               // where we think we are, station name, body, starsystem
+        private string bodytype = "";               // body type
         private int shipid = -1;                    // ship id, -1 unknown
         private string shiptype = "Unknown";        // and the ship
         private string onCrewWithCaptain = null;    // if not null, your in another multiplayer ship      
@@ -248,6 +250,7 @@ namespace EliteDangerousCore
                 he.shiptype = prev.shiptype;
                 he.shipid = prev.shipid;
                 he.whereami = prev.whereami;
+                he.bodytype = prev.bodytype;
                 he.onCrewWithCaptain = prev.onCrewWithCaptain;
                 he.gamemode = prev.gamemode;
                 he.group = prev.group;
@@ -260,6 +263,7 @@ namespace EliteDangerousCore
                 he.marketId = jl.Docked ? jl.MarketID : null;
                 he.landed = jl.Latitude.HasValue;
                 he.whereami = jl.Docked ? jl.StationName : jl.Body;
+                he.bodytype = jl.BodyType;
                 he.hyperspace = false;
                 he.wanted = jl.Wanted;
             }
@@ -268,6 +272,7 @@ namespace EliteDangerousCore
                 JournalDocked jl = je as JournalDocked;
                 he.docked = true;
                 he.whereami = jl.StationName;
+                he.bodytype = "Station";
                 he.marketId = jl.MarketID;
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
@@ -282,17 +287,28 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
             {
                 he.whereami = (je as JournalSupercruiseEntry).StarSystem;
+                he.bodytype = "Star";
                 he.hyperspace = true;
             }
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
             {
                 he.whereami = (je as JournalSupercruiseExit).Body;
+                he.bodytype = (je as JournalSupercruiseExit).BodyType;
                 he.hyperspace = false;
+            }
+            else if (je.EventTypeID == JournalTypeEnum.ApproachBody)
+            {
+                he.bodytype = "Planet";     // don't record new whereami, as we don't want to lose it yet.
+            }
+            else if (je.EventTypeID == JournalTypeEnum.LeaveBody)
+            {
+                he.bodytype = "Star";
             }
             else if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
                 JournalFSDJump ju = (je as JournalFSDJump);
                 he.whereami = ju.StarSystem;
+                he.bodytype = "Star";
                 he.hyperspace = true;
                 he.wanted = ju.Wanted;
             }
@@ -380,7 +396,6 @@ namespace EliteDangerousCore
                     }
                 }
             }
-
 
             return he;
         }

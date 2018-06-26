@@ -45,6 +45,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
                 vars[prefix + "Hyperspace"] = he.IsInHyperSpace ? "1" : "0";
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
+                vars[prefix + "BodyType"] = he.BodyType;
                 vars[prefix + "ShipType"] = he.ShipType;
                 vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
                 vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);

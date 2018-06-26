@@ -63,7 +63,7 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextQuotedWord();
                 }
 
-                Forms.PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
+                PopOutControl poc = (ap.actioncontroller as ActionController).DiscoveryForm.PopOuts;
 
                 if (cmdname == null)
                 {
@@ -170,7 +170,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {       // pop out not found..
-                        Forms.PanelInformation.PanelIDs? id = Forms.PanelInformation.GetPanelIDByWindowsRefName(cmdname);
+                        PanelInformation.PanelIDs? id = PanelInformation.GetPanelIDByWindowsRefName(cmdname);
 
                         if (id!=null)
                         {

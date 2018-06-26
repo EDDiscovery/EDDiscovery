@@ -287,7 +287,7 @@ namespace EDDiscovery
             }
         }
 
-        #endregion
+         #endregion
 
         #region Update at start
 

@@ -31,8 +31,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlStats : UserControlCommonBase
     {
-        private string DbSelectedTabSave { get { return "StatsSelectedTab" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbStatsTreeStateSave { get { return "StatsTreeExpanded" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSelectedTabSave { get { return DBName("StatsSelectedTab" ); } }
+        private string DbStatsTreeStateSave { get { return DBName("StatsTreeExpanded" ); } }
 
         #region Init
 

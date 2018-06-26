@@ -30,13 +30,13 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlMissions : UserControlCommonBase
     {
-        private string DbColumnSaveCurrent { get { return ("MissionsGridCurrent") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbColumnSavePrevious { get { return ("MissionsGridPrevious") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbStartDate { get { return ("MissionsStartDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbEndDate { get { return ("MissionsEndDate") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbStartDateChecked { get { return ("MissionsStartDateCheck") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbEndDateChecked { get { return ("MissionsEndDateCheck") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbSplitter { get { return ("MissionsSplitter") + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSaveCurrent { get { return DBName("MissionsGridCurrent" ,  "DGVCol"); } }
+        private string DbColumnSavePrevious { get { return DBName("MissionsGridPrevious" ,  "DGVCol"); } }
+        private string DbStartDate { get { return DBName("MissionsStartDate" ); } }
+        private string DbEndDate { get { return DBName("MissionsEndDate" ); } }
+        private string DbStartDateChecked { get { return DBName("MissionsStartDateCheck" ); } }
+        private string DbEndDateChecked { get { return DBName("MissionsEndDateCheck" ); } }
+        private string DbSplitter { get { return DBName("MissionsSplitter") ; } }
 
         #region Init
 

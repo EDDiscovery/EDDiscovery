@@ -34,12 +34,12 @@ namespace EDDiscovery.UserControls
         int displaynumber = 0;
         EDDiscoveryForm discoveryform;
 
-        private string DbStar { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Star"; } }
-        private string DbRadiusMax { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "RadiusMax"; } }
-        private string DbRadiusMin { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "RadiusMin"; } }
-        private string DbX { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "X"; } }
-        private string DbY { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Y"; } }
-        private string DbZ { get { return "UCFindSystem" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "Z"; } }
+        private string DbStar { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem","Star"); } }
+        private string DbRadiusMax { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "RadiusMax"); } }
+        private string DbRadiusMin { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "RadiusMin"); } }
+        private string DbX { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "X"); } }
+        private string DbY { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "Y"); } }
+        private string DbZ { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "Z"); } }
 
         public FindSystemsUserControl()
         {
