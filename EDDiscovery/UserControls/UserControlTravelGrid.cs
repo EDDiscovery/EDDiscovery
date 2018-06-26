@@ -114,7 +114,6 @@ namespace EDDiscovery.UserControls
                 fieldfilter.FromJSON(filter);        // load filter
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
-            writeJournalToLogtoolStripMenuItem.Visible = false;
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
             runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
             runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
