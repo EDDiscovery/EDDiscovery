@@ -36,9 +36,9 @@ namespace EDDiscovery.UserControls
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 
-        private string DbWindows { get { return "GridControlWindows" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbPositions { get { return "GridControlPositons" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbZOrder { get { return "GridControlZOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbWindows { get { return DBName("GridControlWindows" ); } }
+        private string DbPositions { get { return DBName("GridControlPositons" ); } }
+        private string DbZOrder { get { return DBName("GridControlZOrder" ); } }
 
         ExtendedControls.DropDownCustom popoutdropdown;
 

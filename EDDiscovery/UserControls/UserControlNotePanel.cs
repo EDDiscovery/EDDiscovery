@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlNotePanel : UserControlCommonBase
     {
-        private string DbSave { get { return "NotePanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("NotePanel" ); } }
 
         HistoryEntry lastHE;
 

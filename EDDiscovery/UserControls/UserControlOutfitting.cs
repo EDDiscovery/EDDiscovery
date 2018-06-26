@@ -31,8 +31,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlOutfitting : UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("OutfittingGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbYardSave { get { return "OutfittingSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return DBName("OutfittingGrid" ,  "DGVCol"); } }
+        private string DbYardSave { get { return DBName("OutfittingSelect" ); } }
 
         #region Init
 

@@ -74,11 +74,11 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private string DbFilterSave { get { return "TravelHistoryControlEventFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbColumnSave { get { return "TravelControl" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbHistorySave { get { return "EDUIHistory" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbFieldFilter { get { return "TravelHistoryControlFieldFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbAutoTop { get { return "TravelHistoryControlAutoTop" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter" ); } }
+        private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
+        private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
+        private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
+        private string DbAutoTop { get { return DBName("TravelHistoryControlAutoTop" ); } }
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -114,9 +114,9 @@ namespace EDDiscovery.UserControls
                 fieldfilter.FromJSON(filter);        // load filter
 #if !DEBUG
             writeEventInfoToLogDebugToolStripMenuItem.Visible = false;
-            writeJournalToLogtoolStripMenuItem.Visible = false;
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible = false;
             runSelectionThroughInaraSystemToolStripMenuItem.Visible = false;
+            runEntryThroughProfileSystemToolStripMenuItem.Visible = false;
 #endif
 
             searchtimer = new Timer() { Interval = 500 };
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
         }
 
-        #endregion
+#endregion
 
         public override void InitialDisplay()
         {
@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #region Clicks
+#region Clicks
 
         HistoryEntry rightclicksystem = null;
         int rightclickrow = -1;
@@ -647,9 +647,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region TravelHistoryRightClick
+#region TravelHistoryRightClick
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -691,7 +691,6 @@ namespace EDDiscovery.UserControls
             runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclicksystem != null);
             setNoteToolStripMenuItem.Enabled = (rightclicksystem != null);
             writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclicksystem != null);
-            writeJournalToLogtoolStripMenuItem.Enabled = (rightclicksystem != null);
             copyJournalEntryToClipboardToolStripMenuItem.Enabled = (rightclicksystem != null);
             createEditBookmarkToolStripMenuItem.Enabled = (rightclicksystem != null);
             gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
@@ -1012,23 +1011,15 @@ namespace EDDiscovery.UserControls
             //    discoveryform.LogLine(rightclicksystem.ShipInformation.ToString());
         }
 
-        private void writeJournalToLogtoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-            string json = jo?.ToString();
-            if (json != null)
-            {
-                discoveryform.LogLine(json);
-            }
-        }
 
         private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Newtonsoft.Json.Linq.JObject jo = rightclicksystem.journalEntry.GetJson();
-            string json = jo?.ToString(Newtonsoft.Json.Formatting.None);
+            string json = jo?.ToString(Newtonsoft.Json.Formatting.Indented);
             if (json != null)
             {
                 Clipboard.SetText(json);
+                discoveryform.LogLine(json);
             }
         }
 
@@ -1096,9 +1087,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region Event Filter
+#region Event Filter
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -1131,9 +1122,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region DEBUG clicks - only for special people who build the debug version!
+#region DEBUG clicks - only for special people who build the debug version!
 
         private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1171,6 +1162,11 @@ namespace EDDiscovery.UserControls
                 else
                     discoveryform.LogLine("No Events");
             }
+        }
+
+        private void runEntryThroughProfileSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            discoveryform.CheckActionProfile(rightclicksystem);
         }
 
         private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1215,9 +1211,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
+#endregion
 
-        #region Excel
+#region Excel
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
@@ -1348,7 +1344,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        #endregion
+#endregion
 
     }
 }

@@ -31,8 +31,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlModules : UserControlCommonBase
     {
-        private string DbColumnSave { get { return ("ModulesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbShipSave { get { return "ModulesGridShipSelect" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return DBName("ModulesGrid",  "DGVCol"); } }
+        private string DbShipSave { get { return DBName("ModulesGridShipSelect" ); } }
 
         #region Init
 

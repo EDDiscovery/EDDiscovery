@@ -233,6 +233,12 @@
     <Compile Include="Forms\GalaxySectorSelect.Designer.cs">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProfileEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProfileEditor.Designer.cs">
+      <DependentUpon>ProfileEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\SafeModeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -242,6 +248,7 @@
     <Compile Include="MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="EDDProfiles.cs" />
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
@@ -630,6 +637,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProfileEditor.resx">
+      <DependentUpon>ProfileEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SafeModeForm.resx">
       <DependentUpon>SafeModeForm.cs</DependentUpon>

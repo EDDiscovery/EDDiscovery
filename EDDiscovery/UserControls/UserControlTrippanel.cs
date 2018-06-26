@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
     {
         //static String TITLE = "Trip panel";
 
-        private string DbSave { get { return "TripPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("TripPanel" ); } }
 
         private HistoryEntry lastHE;
         private HistoryEntry lastFSD;
