@@ -376,7 +376,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxBody.SelectionLength = 0;
             this.textBoxBody.SelectionStart = 0;
-            this.textBoxBody.Size = new System.Drawing.Size(152, 20);
+            this.textBoxBody.Size = new System.Drawing.Size(199, 20);
             this.textBoxBody.TabIndex = 3;
             this.textBoxBody.TabStop = false;
             this.textBoxBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;

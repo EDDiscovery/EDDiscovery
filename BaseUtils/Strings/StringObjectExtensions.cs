@@ -970,5 +970,15 @@ public static class ObjectExtensionsStrings
         return null;
     }
 
+    static public string Tx(this string s, string id)       //demo of new translator system
+    {
+        return s;
+    }
+
+    static public string Tx(this string s, string root, string id)       //demo of new translator system
+    {
+        return s;
+    }
+
 }
 

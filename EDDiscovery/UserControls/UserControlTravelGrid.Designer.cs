@@ -75,7 +75,6 @@ namespace EDDiscovery.UserControls
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createEditBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.writeJournalToLogtoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,6 +87,7 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -239,27 +239,27 @@ namespace EDDiscovery.UserControls
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeSortingOfColumnsToolStripMenuItem,
             this.gotoEntryNumberToolStripMenuItem,
-            this.mapGotoStartoolStripMenuItem,
-            this.starMapColourToolStripMenuItem,
-            this.hideSystemToolStripMenuItem,
-            this.moveToAnotherCommanderToolStripMenuItem,
-            this.addToTrilaterationToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem,
-            this.selectCorrectSystemToolStripMenuItem,
+            this.setNoteToolStripMenuItem,
+            this.createEditBookmarkToolStripMenuItem,
             this.toolStripMenuItemStartStop,
             this.gotoNextStartStopMarkerToolStripMenuItem,
+            this.mapGotoStartoolStripMenuItem,
+            this.viewOnEDSMToolStripMenuItem,
+            this.starMapColourToolStripMenuItem,
+            this.addToTrilaterationToolStripMenuItem,
+            this.moveToAnotherCommanderToolStripMenuItem,
+            this.hideSystemToolStripMenuItem,
+            this.selectCorrectSystemToolStripMenuItem,
             this.removeJournalEntryToolStripMenuItem,
             this.sendUnsyncedScanToEDDNToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
-            this.setNoteToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem,
-            this.createEditBookmarkToolStripMenuItem,
-            this.writeJournalToLogtoolStripMenuItem,
             this.writeEventInfoToLogDebugToolStripMenuItem,
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
-            this.runSelectionThroughInaraSystemToolStripMenuItem});
+            this.runSelectionThroughInaraSystemToolStripMenuItem,
+            this.runEntryThroughProfileSystemToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 466);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 488);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -403,7 +403,7 @@ namespace EDDiscovery.UserControls
             // 
             this.copyJournalEntryToClipboardToolStripMenuItem.Name = "copyJournalEntryToClipboardToolStripMenuItem";
             this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard";
+            this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard/Log";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
             // 
             // createEditBookmarkToolStripMenuItem
@@ -413,18 +413,11 @@ namespace EDDiscovery.UserControls
             this.createEditBookmarkToolStripMenuItem.Text = "Create/Edit Bookmark";
             this.createEditBookmarkToolStripMenuItem.Click += new System.EventHandler(this.createEditBookmarkToolStripMenuItem_Click);
             // 
-            // writeJournalToLogtoolStripMenuItem
-            // 
-            this.writeJournalToLogtoolStripMenuItem.Name = "writeJournalToLogtoolStripMenuItem";
-            this.writeJournalToLogtoolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.writeJournalToLogtoolStripMenuItem.Text = "Write Journal Entry to Log (Debug)";
-            this.writeJournalToLogtoolStripMenuItem.Click += new System.EventHandler(this.writeJournalToLogtoolStripMenuItem_Click);
-            // 
             // writeEventInfoToLogDebugToolStripMenuItem
             // 
             this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
             this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event info to Log (Debug)";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event class info to Log (Debug)";
             this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
             // runActionsAcrossSelectionToolSpeechStripMenuItem
@@ -557,6 +550,13 @@ namespace EDDiscovery.UserControls
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             // 
+            // runEntryThroughProfileSystemToolStripMenuItem
+            // 
+            this.runEntryThroughProfileSystemToolStripMenuItem.Name = "runEntryThroughProfileSystemToolStripMenuItem";
+            this.runEntryThroughProfileSystemToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.runEntryThroughProfileSystemToolStripMenuItem.Text = "Run entry through Profile System (Debug)";
+            this.runEntryThroughProfileSystemToolStripMenuItem.Click += new System.EventHandler(this.runEntryThroughProfileSystemToolStripMenuItem_Click);
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -609,7 +609,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
         private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem writeJournalToLogtoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsAcrossSelectionToolSpeechStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Icon;
@@ -620,5 +619,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughInaraSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoEntryNumberToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoNextStartStopMarkerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runEntryThroughProfileSystemToolStripMenuItem;
     }
 }
