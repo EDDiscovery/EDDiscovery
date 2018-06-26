@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
     {
         public bool materials = false;
 
-        private string DbColumnSave { get { return ((materials) ? "MaterialsGrid" : "CommoditiesGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid" ,  "DGVCol"); } }
 
         #region Init
 

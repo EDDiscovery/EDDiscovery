@@ -31,9 +31,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCompass : UserControlCommonBase
     {
-        string DbLatSave { get { return "CompassLatTarget" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        string DbLongSave { get { return "CompassLongTarget" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        string DbHideSave { get { return "CompassAutoHide" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        string DbLatSave { get { return DBName("CompassLatTarget" ); } }
+        string DbLongSave { get { return DBName("CompassLongTarget" ); } }
+        string DbHideSave { get { return DBName("CompassAutoHide" ); } }
 
         double? latitude = null;
         double? longitude = null;

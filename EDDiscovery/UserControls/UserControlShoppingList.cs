@@ -13,10 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using EDDiscovery.Controls;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using EliteDangerousCore.JournalEvents;
 using static EliteDangerousCore.MaterialCommodityData;
 
 namespace EDDiscovery.UserControls
@@ -37,16 +36,19 @@ namespace EDDiscovery.UserControls
         private RecipeFilterSelector tbs;
         private bool showMaxInjections;
         private bool showPlanetMats;
+        private bool hidePlanetMatsWithNoCapacity;
         private bool showListAvailability;
         private bool showSystemAvailability;
         private bool useEDSMForSystemAvailability;
         private bool useHistoric = false;
-        private string DbShowInjectionsSave { get { return "ShoppingListShowFSD" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbShowAllMatsLandedSave { get { return "ShoppingListShowPlanetMats" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHighlightAvailableMats { get { return "ShoppingListHighlightAvailable" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBShowSystemAvailability { get { return "ShoppingListSystemAvailability" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBUseEDSMForSystemAvailability { get { return "ShoppingListUseEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DBTechBrokerFilterSave { get { return "ShoppingListTechBrokerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+
+        private string DbShowInjectionsSave { get { return DBName("ShoppingListShowFSD" ); } }
+        private string DbShowAllMatsLandedSave { get { return DBName("ShoppingListShowPlanetMats" ); } }
+        private string DbHideFullMatsLandedSave { get { return DBName("ShoppingListHideFullMats"); } }
+        private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable" ); } }
+        private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability" ); } }
+        private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
+        private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter" ); } }
         
         #region Init
 
@@ -69,6 +71,7 @@ namespace EDDiscovery.UserControls
 
             showMaxInjections = SQLiteDBClass.GetSettingBool(DbShowInjectionsSave, true);
             showPlanetMats = SQLiteDBClass.GetSettingBool(DbShowAllMatsLandedSave, true);
+            hidePlanetMatsWithNoCapacity = SQLiteDBClass.GetSettingBool(DbHideFullMatsLandedSave, false);
             showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
             useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
@@ -94,6 +97,7 @@ namespace EDDiscovery.UserControls
             RevertToNormalSize();
             SQLiteDBClass.PutSettingBool(DbShowInjectionsSave, showMaxInjections);
             SQLiteDBClass.PutSettingBool(DbShowAllMatsLandedSave, showPlanetMats);
+            SQLiteDBClass.PutSettingBool(DbHideFullMatsLandedSave, hidePlanetMatsWithNoCapacity);
             SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
             SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
@@ -110,7 +114,8 @@ namespace EDDiscovery.UserControls
             userControlEngineering.InitialDisplay();
             userControlSynthesis.InitialDisplay();
             showMaxFSDInjectionsToolStripMenuItem.Checked = showMaxInjections;
-            showAllMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
+            showBodyMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
+            onlyCapacityToolStripMenuItem.Checked = hidePlanetMatsWithNoCapacity;
             showAvailableMaterialsInListWhenLandedToolStripMenuItem.Checked = showListAvailability;
             useHistoricMaterialCountsToolStripMenuItem.Checked = useHistoric;
             showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem.Checked = showSystemAvailability;
@@ -270,8 +275,11 @@ namespace EDDiscovery.UserControls
                         int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;
                         MaterialCommodityData md =  GetCachedMaterial(mat.Key);
                         int max = MaterialLimit(md).Value;
-                        wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
-                                                                        mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
+                        if(!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
+                        {
+                            wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
+                                                                            mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
+                        }
                     }
                 }
 
@@ -353,6 +361,12 @@ namespace EDDiscovery.UserControls
             Button b = sender as Button;
             tbs.FilterButton(DBTechBrokerFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+        }
+                
+        private void onlyCapacityToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            hidePlanetMatsWithNoCapacity = ((ToolStripMenuItem)sender).Checked;
+            Display();
         }
     }
 }

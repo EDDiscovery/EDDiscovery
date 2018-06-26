@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlCommonBase
     {
-        private string DbColumnSave { get { return "UCEDSM" + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbColumnSave { get { return DBName("UCEDSM" ,  "DGVCol"); } }
 
         #region Init
 
