@@ -183,11 +183,16 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             dividercheck.Stop();
+            scanhide.Stop();
 
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnNewTarget -= NewTarget;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
+            scanhide.Tick -= HideScanData;
+            dividercheck.Tick -= DividerCheck;
+            scanhide.Dispose();
+            dividercheck.Dispose();
 
             SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)config);
             SQLiteDBClass.PutSettingInt(DbSave + "ConfigH", (int)(config>>32));
