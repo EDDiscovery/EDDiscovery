@@ -186,31 +186,12 @@ namespace EDDiscovery
                 SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
                 SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
                 SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+                SQLiteConnectionUser.DeleteKey("ProfileNumber");                    // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
 
-            string primarycontrolname = "SplitterControlWindows";                   // primary name for first splitter
-
-            {
-                string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
-
-                if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
-                {
-                    string typeprefix = EDDOptions.Instance.TabsReset ? "?????" : "TravelControl";      // if we have a tab reset, look up a nonsense name, to give default
-
-                    int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
-                    int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                    int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
-                    int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
-
-                    string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
-                                    "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
-                                    "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
-
-                    SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
-                }
-            }
+            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
 
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
@@ -219,7 +200,6 @@ namespace EDDiscovery
             {
                 MessageBox.Show("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                 "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
-                                "Report this code : " + (tabControlMain.PrimaryTab == null) + " " + SQLiteConnectionUser.GetSettingString(primarycontrolname, "Not Present") + Environment.NewLine +
                                 "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
                                 "Click on Reset tabs, then Run program, which may clear the problem." );
                 Application.Exit();
@@ -303,6 +283,12 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
+            comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
+            comboBoxCustomProfiles.Items.Add("Edit Profiles");
+
+            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
+            comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
+
             Controller.InitComplete();
         }
 
@@ -341,7 +327,11 @@ namespace EDDiscovery
 
             actioncontroller.onStartup();
 
-            tabControlMain.SelectedIndexChanged += (snd, ea) => { ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text)); };
+            tabControlMain.SelectedIndexChanged += (snd, ea) => 
+            {
+                if (tabControlMain.SelectedIndex>=0 )   // may go to -1 on a clear all
+                    ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
+            };
 
             actioncontroller.CheckWarn();
 
@@ -354,7 +344,7 @@ namespace EDDiscovery
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
 
-            Tuple<string,string,string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
+            Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
 
             if ( res.Item3.HasChars() )
             {
@@ -367,7 +357,7 @@ namespace EDDiscovery
                                 "Warning - DLL extensions Found",
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls + res.Item3);
+                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3,","));
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
@@ -377,6 +367,8 @@ namespace EDDiscovery
                 LogLine("DLLs loaded: " + res.Item1);
             if (res.Item2.HasChars())
                 LogLineHighlight("DLLs failed to load: " + res.Item2);
+
+            LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
         }
 
         public bool DLLRunAction( string eventname, string paras )
@@ -725,17 +717,30 @@ namespace EDDiscovery
 
             DLLManager.NewJournalEntry( DLL.EDDDLLCallerHE.CreateFromHistoryEntry(he));
 
+            CheckActionProfile(he);
         }
 
-        private void Controller_NewUIEvent(UIEvent uievent)      
+        private void Controller_NewUIEvent(UIEvent uievent)
         {
             Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
 
             string prefix = "EventClass_";
             cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            cv[prefix+"UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
+            cv[prefix + "UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
-            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv); 
+            actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
+
+            if (!uievent.EventRefresh)      // don't send the refresh events thru the system..  see if profiles need changing
+            {
+                Actions.ActionVars.TriggerVars(cv, "UI" + uievent.EventTypeStr, "UIEvent");
+
+                int i = EDDProfiles.Instance.ActionOn(cv, out string errlist);
+                if (i >= 0)
+                    ChangeToProfileId(i, true);
+
+                if (errlist.HasChars())
+                    LogLine("Profile reports errors in triggers" + errlist);
+            }
         }
 
         private void SendPricestoEDDN(HistoryEntry he, CMarket market)
@@ -1383,7 +1388,7 @@ namespace EDDiscovery
 
         public bool IsMenuItemInstalled(string menuname)
         {
-            foreach( ToolStripMenuItem tsi in menuStrip1.Items )
+            foreach( ToolStripMenuItem tsi in menuStrip.Items )
             {
                 List<ToolStripItem> presentlist = (from ToolStripItem s in tsi.DropDownItems where s.Name.Equals(menuname) select s).ToList();
                 if (presentlist.Count() > 0)
@@ -1467,6 +1472,7 @@ namespace EDDiscovery
 
         }
 
+
         private void buttonExt3dmap_Click(object sender, EventArgs e)
         {
             Open3DMap(PrimaryCursor.GetCurrentHistoryEntry);
@@ -1509,9 +1515,90 @@ namespace EDDiscovery
 
         }
 
-#endregion
+        #endregion
 
-#region PopOuts
+        #region Profiles
+        private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
+            {
+                if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
+                {
+                    Forms.ProfileEditor pe = new ProfileEditor();
+                    pe.Init(EDDProfiles.Instance, this.Icon);
+                    if (pe.ShowDialog() == DialogResult.OK)
+                    {
+                        bool removedcurprofile = EDDProfiles.Instance.UpdateProfiles(pe.Result, pe.PowerOnIndex);       // see if the current one has changed...
+
+                        comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+                        comboBoxCustomProfiles.SelectedIndex = -1;
+                        comboBoxCustomProfiles.Items.Clear();
+                        comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
+                        comboBoxCustomProfiles.Items.Add("Edit Profiles");
+                        comboBoxCustomProfiles.Enabled = true;
+
+                        if (removedcurprofile)
+                            ChangeToProfileId(EDDProfiles.DefaultId, false );
+                    }
+
+                    comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+                    comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
+                    comboBoxCustomProfiles.Enabled = true;
+                }
+                else
+                {
+                    ChangeToProfileId(EDDProfiles.Instance.IdOfIndex(comboBoxCustomProfiles.SelectedIndex), true);
+                }
+            }
+        }
+
+        private void ChangeToProfileId(int id, bool checksavecur)
+        {
+            if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
+            {
+                if (checksavecur)
+                {
+                    tabControlMain.CloseTabList();
+                    PopOuts.SaveCurrentPopouts();
+                }
+
+                comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
+                comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
+                comboBoxCustomProfiles.Enabled = true;
+
+                EDDProfiles.Instance.ChangeToId(id);
+
+                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+                tabControlMain.TabPages.Clear();
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                tabControlMain.LoadTabs();
+                ApplyTheme();
+
+                PopOuts.LoadSavedPopouts();
+
+                LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
+            }
+        }
+
+        public void CheckActionProfile(HistoryEntry he)
+        {
+            Conditions.ConditionVariables eventvars = new Conditions.ConditionVariables();
+            Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, "JournalEvent");
+            Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
+            Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
+            Actions.ActionVars.SystemVars(eventvars, he?.System, "Event");
+
+            int i = EDDProfiles.Instance.ActionOn(eventvars, out string errlist);
+            if (i >= 0)
+                ChangeToProfileId(i, true);
+
+            if (errlist.HasChars())
+                LogLine("Profile reports errors in triggers" + errlist);
+        }
+
+        #endregion
+
+        #region PopOuts
 
         ExtendedControls.DropDownCustom popoutdropdown;
 

@@ -27,6 +27,8 @@ namespace BaseUtils
         private int pos;        // always left after an operation on the next non space char
         private string line;
 
+        #region Strings
+
         public StringParser(string l)
         {
             line = l;
@@ -222,7 +224,7 @@ namespace BaseUtils
                         ret = ret.ToLower();
 
                     return (replaceescape) ? ret.ReplaceEscapeControlChars() : ret;
-                }
+                  }
             }
             else
                 return null;
@@ -295,10 +297,38 @@ namespace BaseUtils
             return sl;
         }
 
+        #endregion
+
+        #region Numbers and Bools
+
+        public bool? NextBool(string terminators = " ")
+        {
+            string s = NextWord(terminators);
+            return s?.InvariantParseBoolNull();
+        }
+
+        public bool? NextBoolComma(string terminators = " ")
+        {
+            bool? res = NextBool(terminators);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
+        }
+
         public double? NextDouble(string terminators = " ")
         {
             string s = NextWord(terminators);
             return s?.InvariantParseDoubleNull();
+        }
+
+        public double? NextDoubleComma(string terminators = " ")
+        {
+            double? res = NextDouble(terminators);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
         }
 
         public int? NextInt(string terminators = " ")
@@ -307,11 +337,33 @@ namespace BaseUtils
             return s?.InvariantParseIntNull();
         }
 
+        public int? NextIntComma(string terminators = " ")
+        {
+            int? res = NextInt(terminators);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
+        }
+
         public long? NextLong(string terminators = " ")
         {
             string s = NextWord(terminators);
             return s?.InvariantParseLongNull();
         }
+
+        public long? NextLongComma(string terminators = " ")
+        {
+            long? res = NextLong(terminators);
+            if (IsEOL || IsCharMoveOn(','))
+                return res;
+            else
+                return null;
+        }
+
+        #endregion
+
+        #region Find
 
         // Move pointer to string if found
 
@@ -336,6 +388,10 @@ namespace BaseUtils
                 return def;
         }
 
+        #endregion
+
+        #region Multi strings
+
         public static List<string> ParseOptionallyQuotedStringList(string s, bool lowercase = false, bool replaceescape = false)
         {
             List<string> list = new List<string>();
@@ -350,5 +406,7 @@ namespace BaseUtils
 
             return list;
         }
+
+        #endregion
     }
 }

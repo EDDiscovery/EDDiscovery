@@ -33,18 +33,18 @@ namespace EDDiscovery.UserControls
         RecipeFilterSelector matfs;
 
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
-        private List<Tuple<string, string>> matLookUp;
+        private Dictionary<string, string> matLookUp;
 
-        private string DbColumnSave { get { return ("EngineeringGrid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
-        private string DbWSave { get { return "EngineeringWanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbOSave { get { return "EngineeringOrder" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbSelSave { get { return "EngineeringList" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbEngFilterSave { get { return "EngineeringGridControlEngineerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbModFilterSave { get { return "EngineeringGridControlModuleFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbLevelFilterSave { get { return "EngineeringGridControlLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbUpgradeFilterSave { get { return "EngineeringGridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbMaterialFilterSave { get { return "EngineeringGridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
-        private string DbHistoricMatsSave { get { return "EngineeringGridHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbColumnSave { get { return DBName("EngineeringGrid" ,  "DGVCol"); } }
+        private string DbWSave { get { return DBName("EngineeringWanted" ); } }
+        private string DbOSave { get { return DBName("EngineeringOrder" ); } }
+        private string DbSelSave { get { return DBName("EngineeringList" ); } }
+        private string DbEngFilterSave { get { return DBName("EngineeringGridControlEngineerFilter" ); } }
+        private string DbModFilterSave { get { return DBName("EngineeringGridControlModuleFilter" ); } }
+        private string DbLevelFilterSave { get { return DBName("EngineeringGridControlLevelFilter" ); } }
+        private string DbUpgradeFilterSave { get { return DBName("EngineeringGridControlUpgradeFilter" ); } }
+        private string DbMaterialFilterSave { get { return DBName("EngineeringGridControlMaterialFilter" ); } }
+        private string DbHistoricMatsSave { get { return DBName("EngineeringGridHistoricMaterials" ); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -93,8 +93,8 @@ namespace EDDiscovery.UserControls
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string,string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).name)).ToList();
-            List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
+            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetCachedMaterialByShortName(sn).name, sn => sn);
+            List<string> matLongNames = matLookUp.Keys.ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.Changed += FilterChanged;
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x)).Select(m => matLookUp.Where(u => u.Item2 == m).First().Item1).ToList();
+                    matList = materials.Split(';').Where(x => !string.IsNullOrEmpty(x) && matLookUp.ContainsKey(x)).Select(m => matLookUp[m]).ToList();
                 }
                 
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)

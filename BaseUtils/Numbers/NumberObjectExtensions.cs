@@ -180,6 +180,34 @@ public static class ObjectExtensionsNumbersBool
 
     #endregion
 
+    #region Bool
+
+    static public bool? InvariantParseBoolNull(this string s)
+    {
+        bool i;
+        if (s != null)
+        {
+            if (bool.TryParse(s, out i))
+            {
+                return i;
+            }
+            else if (s.InvariantParse(out int v))
+            {
+                return v != 0;
+            }
+        }
+
+        return null;
+    }
+
+    static public bool InvariantParseBool(this string s, bool def)
+    {
+        bool? i = InvariantParseBoolNull(s);
+        return i.HasValue ? i.Value : def;
+    }
+
+    #endregion
+
     #region Version
 
     static public int[] VersionFromString(this string s)

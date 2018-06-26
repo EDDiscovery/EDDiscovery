@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
         Font stdfont = new Font("Microsoft Sans Serif", 8.25F);
         Font stdfontUnderline = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
 
-        private string DbSave { get { return "ScanPanel" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSave { get { return DBName("ScanPanel" ); } }
 
         HistoryEntry last_he = null;
         Point last_maxdisplayarea;
