@@ -506,7 +506,7 @@ namespace EDDiscovery.UserControls
 
                 int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
                 int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
+                int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.NearestSystems));
                 int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
 
                 string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +

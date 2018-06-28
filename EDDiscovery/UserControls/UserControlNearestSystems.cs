@@ -31,9 +31,9 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarDistance : UserControlCommonBase
+    public partial class UserControlNearestSystems : UserControlCommonBase
     {
-        public UserControlStarDistance()
+        public UserControlNearestSystems()
         {
             InitializeComponent();
             var corner = dataGridViewNearest.TopLeftHeaderCell; // work around #1487

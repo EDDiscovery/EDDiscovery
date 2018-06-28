@@ -31,7 +31,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlSystemsList : UserControlCommonBase, IHistoryCursor
     {
         #region Public IF
 
@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
         int autoupdaterowstart = 0;
         int autoupdaterowoffset = 0;
 
-        public UserControlStarList()
+        public UserControlSystemsList()
         {
             InitializeComponent();
             var corner = dataGridViewStarList.TopLeftHeaderCell; // work around #1487

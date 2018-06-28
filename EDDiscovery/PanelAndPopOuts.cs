@@ -83,7 +83,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
-            { new PanelInfo( PanelIDs.SystemsList, typeof(UserControlSystemsList), "Systems List", "SystemsList", "Visited systems list", transparent: false) },
+            { new PanelInfo( PanelIDs.SystemsList, typeof(UserControlSystemsList), "Visited Systems List", "SystemsList", "Visited systems list", transparent: false) },
 
             // about what your stats
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
