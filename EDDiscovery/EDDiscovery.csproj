@@ -587,11 +587,11 @@
     <Compile Include="UserControls\UserControlMaterialCommodities.Designer.cs">
       <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlStarDistance.cs">
+    <Compile Include="UserControls\UserControlNearestSystems.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
-      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlNearestSystems.Designer.cs">
+      <DependentUpon>UserControlNearestSystems.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.cs">
       <SubType>UserControl</SubType>
@@ -599,11 +599,11 @@
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlStarList.cs">
+    <Compile Include="UserControls\UserControlSystemsList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlStarList.Designer.cs">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    <Compile Include="UserControls\UserControlSystemsList.Designer.cs">
+      <DependentUpon>UserControlSystemsList.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlTravelGrid.cs">
       <SubType>UserControl</SubType>
@@ -758,8 +758,8 @@
     <EmbeddedResource Include="UserControls\UserControlSpanel.resx">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
-      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlNearestSystems.resx">
+      <DependentUpon>UserControlNearestSystems.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlStats.resx">
       <DependentUpon>UserControlStats.cs</DependentUpon>
@@ -767,8 +767,8 @@
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStarList.resx">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\UserControlSystemsList.resx">
+      <DependentUpon>UserControlSystemsList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
       <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
