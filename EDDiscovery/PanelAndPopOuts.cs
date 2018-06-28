@@ -31,7 +31,7 @@ namespace EDDiscovery
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
             Log,                    // BEWARE
-            StarDistance,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
+            NearestSystems,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
             Materials,              // BEWARE
             Commodities,            // 
             Ledger,                 // 4
@@ -52,7 +52,7 @@ namespace EDDiscovery
             NotePanel,
             RouteTracker,           // 20
             Grid,
-            StarList,
+            SystemsList,
             EstimatedValues,
             EDSM,                   // 24
             ShoppingList,
@@ -83,7 +83,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
-            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", "Visited star list", transparent: false) },
+            { new PanelInfo( PanelIDs.SystemsList, typeof(UserControlSystemsList), "Systems List", "SystemsList", "Visited systems list", transparent: false) },
 
             // about what your stats
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
@@ -106,7 +106,7 @@ namespace EDDiscovery
             // Scans and stars
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
-            { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","List of nearest stars") },
+            { new PanelInfo( PanelIDs.NearestSystems, typeof(UserControlNearestSystems), "Nearest Systems", "NearestSystems","List of nearest systems") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated scan values of bodies in system", transparent: false) },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Local Map", "LocalMap", "3D Map of systems in range", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },

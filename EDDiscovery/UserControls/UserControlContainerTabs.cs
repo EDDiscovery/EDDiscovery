@@ -29,7 +29,7 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlContainerSplitter: UserControlCommonBase        // circular, huh! neat!
+    public partial class UserControlContainerTabs : UserControlCommonBase        // circular, huh! neat!
     {
         private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
         private IHistoryCursor ucursor_inuse;  // one in use
@@ -65,12 +65,12 @@ namespace EDDiscovery.UserControls
             return found;
         }
 
-        public string DbWindows { get { return DBName("SplitterControlWindows" ); } }
+        public string DbWindows { get { return "SplitterControlWindows" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
         const int NoTabPanelSelected = -1;        // -1 is no tab selected
 
-        public UserControlContainerSplitter()
+        public UserControlContainerTabs()
         {
             InitializeComponent();
         }
@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()     
         {
-            string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels
+            string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a tabcontainer without any selected tab
 
             string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, defaultview);
 
@@ -273,7 +273,8 @@ namespace EDDiscovery.UserControls
             toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels");
             return sc;
         }
-        
+
+
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one
         {
             bool changedinuse = Object.ReferenceEquals(ucursor_inuse, ucursor_history);   // if we are using the history as the current tg
@@ -305,7 +306,7 @@ namespace EDDiscovery.UserControls
                 panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlJournalGrid), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
 
             if (v == null)
-                panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlSystemsList), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
+                panelPlayfield.Controls[0].RunActionOnTree((c) => c.GetType() == typeof(UserControlStarList), (c) => { v = c as UserControlCommonBase; }); // see if we can find a TG
 
             IHistoryCursor uctgfound = (v != null) ? (v as IHistoryCursor) : null;    // if found, set to it
             return uctgfound;
@@ -363,7 +364,7 @@ namespace EDDiscovery.UserControls
         #region Clicks
 
         SplitContainer currentsplitter = null;
-        
+
         private void Sc_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -375,7 +376,7 @@ namespace EDDiscovery.UserControls
                 toolStripSplitPanel2.Text = v ? "Split Right Panel" : "Split Bottom Panel";
                 toolStripMergePanel1.Text = v ? "Merge Left Panel" : "Merge Top Panel";
                 toolStripMergePanel2.Text = v ? "Merge Right Panel" : "Merge Bottom Panel";
-                
+
                 toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
                 toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);
                 toolStripMergePanel1.Enabled = currentsplitter.Panel1.Controls[0] is SplitContainer;
@@ -414,48 +415,6 @@ namespace EDDiscovery.UserControls
             currentsplitter.Merge(1);
             AssignTHC();        // because we may have removed the cursor
         }
-        
-        private void toolStripMenuItem13_Click(object sender, EventArgs e)
-        {
-            double psize = currentsplitter.GetPanelsSizeSum() / 4;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem12_Click(object sender, EventArgs e)
-        {
-            double psize = currentsplitter.GetPanelsSizeSum() / 3;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem23_Click(object sender, EventArgs e)
-        {
-            double psize = (currentsplitter.GetPanelsSizeSum() / 5) * 2;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem11_Click(object sender, EventArgs e)
-        {
-            double psize = currentsplitter.GetPanelsSizeSum() / 2;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem32_Click(object sender, EventArgs e)
-        {
-            double psize = (currentsplitter.GetPanelsSizeSum() / 5) * 3;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem21_Click(object sender, EventArgs e)
-        {
-            double psize = (currentsplitter.GetPanelsSizeSum() / 3) * 2;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
-
-        private void toolStripMenuItem31_Click(object sender, EventArgs e)
-        {
-            double psize = (currentsplitter.GetPanelsSizeSum() / 4) * 3;
-            currentsplitter.SplitterDistance = (int)psize;
-        }
 
         int GetFreeTag()            // find a free tag number in all of the TagStrips around.. Tag holds the number allocated.
         {
@@ -492,31 +451,5 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Default
-
-        public static void CheckPrimarySplitterControlSettings()
-        {
-            string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
-
-            string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
-
-            if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
-            {
-                string typeprefix = EDDOptions.Instance.TabsReset ? "?????" : "TravelControl";      // if we have a tab reset, look up a nonsense name, to give default
-
-                int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
-                int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
-                int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
-
-                string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
-                                "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
-                                "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
-
-                SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
-            }
-        }
-
-        #endregion 
     }
 }

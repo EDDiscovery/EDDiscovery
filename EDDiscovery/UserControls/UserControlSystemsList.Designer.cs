@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlStarList
+    partial class UserControlSystemsList
     {
         /// <summary> 
         /// Required designer variable.

@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
                 v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlJournalGrid));   // find one with Journal grid if no TG
 
             if (v == null)
-                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlStarList));   // find one with Journal grid if no TG
+                v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlSystemsList));   // find one with Journal grid if no TG
 
             IHistoryCursor uctgfound = (v != null) ? (v.control as IHistoryCursor) : null;    // if found, set to it
 

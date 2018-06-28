@@ -18,7 +18,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlStarDistance
+    partial class UserControlNearestSystems
     {
         /// <summary> 
         /// Required designer variable.
