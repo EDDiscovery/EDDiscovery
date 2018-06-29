@@ -174,9 +174,12 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
+            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
+
             // open all the major tabs except the built in ones
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
             MaterialCommodityData.SetUpInitialTable();
+
 
 
             // Tab reset Setup
@@ -257,8 +260,6 @@ namespace EDDiscovery
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             actioncontroller.ReLoad();          // load system up here
-
-            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
 
