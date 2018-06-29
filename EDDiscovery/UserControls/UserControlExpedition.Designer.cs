@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportRoute = new System.Windows.Forms.ToolStripButton();
@@ -54,8 +54,8 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelCml = new System.Windows.Forms.Label();
+            this.labelP2P = new System.Windows.Forms.Label();
             this.txtP2PDIstance = new ExtendedControls.TextBoxBorder();
             this.txtCmlDistance = new ExtendedControls.TextBoxBorder();
             this.buttonReverseRoute = new ExtendedControls.ButtonExt();
@@ -80,17 +80,17 @@ namespace EDDiscovery.UserControls
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxMenuItemUndelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.ctxMenuCombo.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
             this.toolStripButtonImportFile,
             this.toolStripButtonImportRoute,
@@ -99,11 +99,10 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonDelete,
             this.toolStripButtonShowOn3DMap,
             this.toolStripComboBoxRouteSelection});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(787, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(787, 25);
+            this.toolStrip.TabIndex = 0;
             // 
             // toolStripButtonNew
             // 
@@ -196,8 +195,8 @@ namespace EDDiscovery.UserControls
             // 
             // panelRouteInfo
             // 
-            this.panelRouteInfo.Controls.Add(this.label2);
-            this.panelRouteInfo.Controls.Add(this.label1);
+            this.panelRouteInfo.Controls.Add(this.labelCml);
+            this.panelRouteInfo.Controls.Add(this.labelP2P);
             this.panelRouteInfo.Controls.Add(this.txtP2PDIstance);
             this.panelRouteInfo.Controls.Add(this.txtCmlDistance);
             this.panelRouteInfo.Controls.Add(this.buttonReverseRoute);
@@ -215,32 +214,35 @@ namespace EDDiscovery.UserControls
             this.panelRouteInfo.Size = new System.Drawing.Size(787, 89);
             this.panelRouteInfo.TabIndex = 1;
             // 
-            // label2
+            // labelCml
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(439, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(72, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "Cml Distance:";
+            this.labelCml.AutoSize = true;
+            this.labelCml.Location = new System.Drawing.Point(439, 64);
+            this.labelCml.Name = "labelCml";
+            this.labelCml.Size = new System.Drawing.Size(72, 13);
+            this.labelCml.TabIndex = 12;
+            this.labelCml.Text = "Cml Distance:";
             // 
-            // label1
+            // labelP2P
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(439, 37);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "P2P Distance:";
+            this.labelP2P.AutoSize = true;
+            this.labelP2P.Location = new System.Drawing.Point(439, 37);
+            this.labelP2P.Name = "labelP2P";
+            this.labelP2P.Size = new System.Drawing.Size(75, 13);
+            this.labelP2P.TabIndex = 11;
+            this.labelP2P.Text = "P2P Distance:";
             // 
             // txtP2PDIstance
             // 
             this.txtP2PDIstance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.txtP2PDIstance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.txtP2PDIstance.BackErrorColor = System.Drawing.Color.Red;
             this.txtP2PDIstance.BorderColor = System.Drawing.Color.Transparent;
             this.txtP2PDIstance.BorderColorScaling = 0.5F;
             this.txtP2PDIstance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtP2PDIstance.ClearOnFirstChar = false;
             this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.txtP2PDIstance.InErrorCondition = false;
             this.txtP2PDIstance.Location = new System.Drawing.Point(517, 32);
             this.txtP2PDIstance.Multiline = false;
             this.txtP2PDIstance.Name = "txtP2PDIstance";
@@ -257,10 +259,13 @@ namespace EDDiscovery.UserControls
             // 
             this.txtCmlDistance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.txtCmlDistance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.txtCmlDistance.BackErrorColor = System.Drawing.Color.Red;
             this.txtCmlDistance.BorderColor = System.Drawing.Color.Transparent;
             this.txtCmlDistance.BorderColorScaling = 0.5F;
             this.txtCmlDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCmlDistance.ClearOnFirstChar = false;
             this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.txtCmlDistance.InErrorCondition = false;
             this.txtCmlDistance.Location = new System.Drawing.Point(517, 58);
             this.txtCmlDistance.Multiline = false;
             this.txtCmlDistance.Name = "txtCmlDistance";
@@ -373,10 +378,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxRouteName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxRouteName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxRouteName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxRouteName.BorderColorScaling = 0.5F;
             this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxRouteName.InErrorCondition = false;
             this.textBoxRouteName.Location = new System.Drawing.Point(81, 4);
             this.textBoxRouteName.Multiline = false;
             this.textBoxRouteName.Name = "textBoxRouteName";
@@ -514,11 +522,11 @@ namespace EDDiscovery.UserControls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataGridViewRouteSystems);
             this.Controls.Add(this.panelRouteInfo);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Name = "UserControlExpedition";
             this.Size = new System.Drawing.Size(787, 550);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.panelRouteInfo.ResumeLayout(false);
             this.panelRouteInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).EndInit();
@@ -531,7 +539,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelRouteInfo;
@@ -559,8 +567,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripButton toolStripButtonImportFile;
         private System.Windows.Forms.ToolStripButton toolStripButtonImportRoute;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelCml;
+        private System.Windows.Forms.Label labelP2P;
         private ExtendedControls.TextBoxBorder txtP2PDIstance;
         private ExtendedControls.TextBoxBorder txtCmlDistance;
         private System.Windows.Forms.ToolStripMenuItem setTargetToolStripMenuItem;

@@ -47,12 +47,12 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.labelExtMin = new System.Windows.Forms.Label();
+            this.labelExtMax = new System.Windows.Forms.Label();
+            this.comboBoxView = new ExtendedControls.ComboBoxCustom();
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
-            this.panelTop = new System.Windows.Forms.Panel();
-            this.labelExt1 = new System.Windows.Forms.Label();
-            this.labelExt3 = new System.Windows.Forms.Label();
-            this.comboBoxView = new ExtendedControls.ComboBoxCustom();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,9 +60,6 @@ namespace EDDiscovery.UserControls
             this.pDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sVGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tXTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.zoomToolStripMenuZoom = new System.Windows.Forms.ToolStripMenuItem();
-            this.resetToolStripReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem125 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,7 +69,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem35 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataGridList = new System.Windows.Forms.DataGridView();
             this.sysName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sysX = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -85,9 +82,71 @@ namespace EDDiscovery.UserControls
             this.reportView = new ExtendedControls.TextBoxBorder();
             this.panelTop.SuspendLayout();
             this.menuStrip.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
             this.SuspendLayout();
+            // 
+            // panelTop
+            // 
+            this.panelTop.BackColor = System.Drawing.SystemColors.Control;
+            this.panelTop.Controls.Add(this.labelExtMin);
+            this.panelTop.Controls.Add(this.labelExtMax);
+            this.panelTop.Controls.Add(this.comboBoxView);
+            this.panelTop.Controls.Add(this.textMinRadius);
+            this.panelTop.Controls.Add(this.textMaxRadius);
+            this.panelTop.Controls.Add(this.menuStrip);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(1026, 26);
+            this.panelTop.TabIndex = 25;
+            // 
+            // labelExtMin
+            // 
+            this.labelExtMin.AutoSize = true;
+            this.labelExtMin.BackColor = System.Drawing.Color.Transparent;
+            this.labelExtMin.Location = new System.Drawing.Point(2, 7);
+            this.labelExtMin.Name = "labelExtMin";
+            this.labelExtMin.Size = new System.Drawing.Size(24, 13);
+            this.labelExtMin.TabIndex = 31;
+            this.labelExtMin.Text = "Min";
+            // 
+            // labelExtMax
+            // 
+            this.labelExtMax.AutoSize = true;
+            this.labelExtMax.Location = new System.Drawing.Point(86, 7);
+            this.labelExtMax.Name = "labelExtMax";
+            this.labelExtMax.Size = new System.Drawing.Size(27, 13);
+            this.labelExtMax.TabIndex = 32;
+            this.labelExtMax.Text = "Max";
+            // 
+            // comboBoxView
+            // 
+            this.comboBoxView.ArrowWidth = 1;
+            this.comboBoxView.BorderColor = System.Drawing.Color.White;
+            this.comboBoxView.ButtonColorScaling = 0.5F;
+            this.comboBoxView.DataSource = null;
+            this.comboBoxView.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxView.DisplayMember = "";
+            this.comboBoxView.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxView.DropDownHeight = 106;
+            this.comboBoxView.DropDownWidth = 75;
+            this.comboBoxView.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxView.ItemHeight = 13;
+            this.comboBoxView.Location = new System.Drawing.Point(175, 2);
+            this.comboBoxView.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxView.Name = "comboBoxView";
+            this.comboBoxView.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxView.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxView.ScrollBarWidth = 16;
+            this.comboBoxView.SelectedIndex = -1;
+            this.comboBoxView.SelectedItem = null;
+            this.comboBoxView.SelectedValue = null;
+            this.comboBoxView.Size = new System.Drawing.Size(98, 21);
+            this.comboBoxView.TabIndex = 9;
+            this.comboBoxView.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxView, "Orientation of the Plot");
+            this.comboBoxView.ValueMember = "";
+            this.comboBoxView.SelectedIndexChanged += new System.EventHandler(this.comboBoxView_SelectedIndexChanged);
             // 
             // textMinRadius
             // 
@@ -102,7 +161,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
-            this.textMinRadius.Location = new System.Drawing.Point(26, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(45, 3);
             this.textMinRadius.Maximum = 100000D;
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
@@ -114,7 +173,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.Size = new System.Drawing.Size(36, 20);
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textMinRadius, "Minimum Range");
+            this.toolTip.SetToolTip(this.textMinRadius, "Minimum Range");
             this.textMinRadius.Value = 0D;
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
@@ -132,7 +191,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(91, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(130, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -144,86 +203,20 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.Size = new System.Drawing.Size(36, 20);
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum Range");
+            this.toolTip.SetToolTip(this.textMaxRadius, "Maximum Range");
             this.textMaxRadius.Value = 0D;
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
-            // 
-            // panelTop
-            // 
-            this.panelTop.BackColor = System.Drawing.SystemColors.Control;
-            this.panelTop.Controls.Add(this.labelExt1);
-            this.panelTop.Controls.Add(this.labelExt3);
-            this.panelTop.Controls.Add(this.comboBoxView);
-            this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.textMaxRadius);
-            this.panelTop.Controls.Add(this.menuStrip);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(394, 26);
-            this.panelTop.TabIndex = 25;
-            // 
-            // labelExt1
-            // 
-            this.labelExt1.AutoSize = true;
-            this.labelExt1.BackColor = System.Drawing.Color.Transparent;
-            this.labelExt1.Location = new System.Drawing.Point(2, 7);
-            this.labelExt1.Name = "labelExt1";
-            this.labelExt1.Size = new System.Drawing.Size(24, 13);
-            this.labelExt1.TabIndex = 31;
-            this.labelExt1.Text = "Min";
-            // 
-            // labelExt3
-            // 
-            this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(63, 7);
-            this.labelExt3.Name = "labelExt3";
-            this.labelExt3.Size = new System.Drawing.Size(27, 13);
-            this.labelExt3.TabIndex = 32;
-            this.labelExt3.Text = "Max";
-            // 
-            // comboBoxView
-            // 
-            this.comboBoxView.ArrowWidth = 1;
-            this.comboBoxView.BorderColor = System.Drawing.Color.White;
-            this.comboBoxView.ButtonColorScaling = 0.5F;
-            this.comboBoxView.DataSource = null;
-            this.comboBoxView.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxView.DisplayMember = "";
-            this.comboBoxView.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxView.DropDownHeight = 106;
-            this.comboBoxView.DropDownWidth = 75;
-            this.comboBoxView.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxView.ItemHeight = 13;
-            this.comboBoxView.Location = new System.Drawing.Point(134, 3);
-            this.comboBoxView.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxView.Name = "comboBoxView";
-            this.comboBoxView.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxView.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxView.ScrollBarWidth = 16;
-            this.comboBoxView.SelectedIndex = -1;
-            this.comboBoxView.SelectedItem = null;
-            this.comboBoxView.SelectedValue = null;
-            this.comboBoxView.Size = new System.Drawing.Size(53, 21);
-            this.comboBoxView.TabIndex = 9;
-            this.comboBoxView.Text = "comboBoxCustom1";
-            this.comboBoxView.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip1.SetToolTip(this.comboBoxView, "Orientation of the Plot");
-            this.comboBoxView.ValueMember = "";
-            this.comboBoxView.SelectedIndexChanged += new System.EventHandler(this.comboBoxView_SelectedIndexChanged);
-            this.comboBoxView.TextChanged += new System.EventHandler(this.comboBoxView_TextChanged);
             // 
             // menuStrip
             // 
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(190, -1);
+            this.menuStrip.Location = new System.Drawing.Point(284, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(160, 29);
+            this.menuStrip.Size = new System.Drawing.Size(40, 29);
             this.menuStrip.TabIndex = 33;
-            this.menuStrip.Text = "menuStrip1";
             // 
             // optionsToolStripMenuItem
             // 
@@ -246,54 +239,36 @@ namespace EDDiscovery.UserControls
             this.sVGToolStripMenuItem,
             this.tXTToolStripMenuItem});
             this.exportToToolStripMenuItem.Name = "exportToToolStripMenuItem";
-            this.exportToToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.exportToToolStripMenuItem.Text = "Export to...";
             // 
             // pNGToolStripMenuItem
             // 
             this.pNGToolStripMenuItem.Name = "pNGToolStripMenuItem";
-            this.pNGToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pNGToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.pNGToolStripMenuItem.Text = "PNG";
             this.pNGToolStripMenuItem.Click += new System.EventHandler(this.pNGToolStripMenuItem_Click);
             // 
             // pDFToolStripMenuItem
             // 
             this.pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
-            this.pDFToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.pDFToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.pDFToolStripMenuItem.Text = "PDF";
             this.pDFToolStripMenuItem.Click += new System.EventHandler(this.pDFToolStripMenuItem_Click);
             // 
             // sVGToolStripMenuItem
             // 
             this.sVGToolStripMenuItem.Name = "sVGToolStripMenuItem";
-            this.sVGToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sVGToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.sVGToolStripMenuItem.Text = "SVG";
             this.sVGToolStripMenuItem.Click += new System.EventHandler(this.sVGToolStripMenuItem_Click);
             // 
             // tXTToolStripMenuItem
             // 
             this.tXTToolStripMenuItem.Name = "tXTToolStripMenuItem";
-            this.tXTToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.tXTToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.tXTToolStripMenuItem.Text = "TXT";
             this.tXTToolStripMenuItem.Click += new System.EventHandler(this.tXTToolStripMenuItem_Click);
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.zoomToolStripMenuZoom,
-            this.resetToolStripReset});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(68, 48);
-            // 
-            // zoomToolStripMenuZoom
-            // 
-            this.zoomToolStripMenuZoom.Name = "zoomToolStripMenuZoom";
-            this.zoomToolStripMenuZoom.Size = new System.Drawing.Size(67, 22);
-            // 
-            // resetToolStripReset
-            // 
-            this.resetToolStripReset.Name = "resetToolStripReset";
-            this.resetToolStripReset.Size = new System.Drawing.Size(67, 22);
             // 
             // toolStripMenuItem1
             // 
@@ -359,7 +334,7 @@ namespace EDDiscovery.UserControls
             this.dataGridList.Name = "dataGridList";
             this.dataGridList.ReadOnly = true;
             this.dataGridList.RowHeadersVisible = false;
-            this.dataGridList.Size = new System.Drawing.Size(394, 362);
+            this.dataGridList.Size = new System.Drawing.Size(1026, 669);
             this.dataGridList.TabIndex = 30;
             this.dataGridList.Visible = false;
             this.dataGridList.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridList_SortCompare);
@@ -407,9 +382,8 @@ namespace EDDiscovery.UserControls
             this.plotViewTop.Location = new System.Drawing.Point(0, 26);
             this.plotViewTop.Name = "plotViewTop";
             this.plotViewTop.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewTop.Size = new System.Drawing.Size(394, 362);
+            this.plotViewTop.Size = new System.Drawing.Size(1026, 669);
             this.plotViewTop.TabIndex = 31;
-            this.plotViewTop.Text = "plotView1";
             this.plotViewTop.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewTop.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewTop.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
@@ -422,9 +396,8 @@ namespace EDDiscovery.UserControls
             this.plotViewSide.Location = new System.Drawing.Point(0, 26);
             this.plotViewSide.Name = "plotViewSide";
             this.plotViewSide.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewSide.Size = new System.Drawing.Size(394, 362);
+            this.plotViewSide.Size = new System.Drawing.Size(1026, 669);
             this.plotViewSide.TabIndex = 33;
-            this.plotViewSide.Text = "plotView1";
             this.plotViewSide.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewSide.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewSide.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
@@ -437,9 +410,8 @@ namespace EDDiscovery.UserControls
             this.plotViewFront.Location = new System.Drawing.Point(0, 26);
             this.plotViewFront.Name = "plotViewFront";
             this.plotViewFront.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewFront.Size = new System.Drawing.Size(394, 362);
+            this.plotViewFront.Size = new System.Drawing.Size(1026, 669);
             this.plotViewFront.TabIndex = 34;
-            this.plotViewFront.Text = "plotView1";
             this.plotViewFront.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewFront.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
             this.plotViewFront.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
@@ -464,7 +436,7 @@ namespace EDDiscovery.UserControls
             this.reportView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.reportView.SelectionLength = 0;
             this.reportView.SelectionStart = 0;
-            this.reportView.Size = new System.Drawing.Size(394, 362);
+            this.reportView.Size = new System.Drawing.Size(1026, 669);
             this.reportView.TabIndex = 2;
             this.reportView.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.reportView.WordWrap = true;
@@ -482,12 +454,11 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.reportView);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlPlot";
-            this.Size = new System.Drawing.Size(394, 388);
+            this.Size = new System.Drawing.Size(1026, 695);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).EndInit();
             this.ResumeLayout(false);
 
@@ -497,8 +468,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMinRadius;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
-        private ContextMenuStrip contextMenuStrip;
-        private ToolStripMenuItem zoomToolStripMenuZoom;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem125;
         private ToolStripMenuItem toolStripMenuItem15;
@@ -508,9 +477,8 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem toolStripMenuItem35;
         private ToolStripMenuItem toolStripMenuItem4;
-        private ToolStripMenuItem resetToolStripReset;
         private ExtendedControls.ComboBoxCustom comboBoxView;
-        private ToolTip toolTip1;
+        private ToolTip toolTip;
         private DataGridView dataGridList;
         private DataGridViewTextBoxColumn sysName;
         private DataGridViewTextBoxColumn sysX;
@@ -521,8 +489,8 @@ namespace EDDiscovery.UserControls
         private OxyPlot.WindowsForms.PlotView plotViewSide;
         private OxyPlot.WindowsForms.PlotView plotViewFront;
         private ExtendedControls.TextBoxBorder reportView;
-        private Label labelExt1;
-        private Label labelExt3;
+        private Label labelExtMin;
+        private Label labelExtMax;
         private MenuStrip menuStrip;
         private ToolStripMenuItem optionsToolStripMenuItem;
         private ToolStripMenuItem exportToToolStripMenuItem;

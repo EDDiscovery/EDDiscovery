@@ -43,17 +43,17 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelName = new System.Windows.Forms.Label();
+            this.labelCo = new System.Windows.Forms.Label();
             this.labelBookmarkNotes = new System.Windows.Forms.Label();
             this.labelTimeMade = new System.Windows.Forms.Label();
             this.textBoxBookmarkNotes = new ExtendedControls.RichTextBoxScroll();
             this.textBoxX = new ExtendedControls.TextBoxBorder();
             this.textBoxY = new ExtendedControls.TextBoxBorder();
             this.textBoxZ = new ExtendedControls.TextBoxBorder();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.labelX = new System.Windows.Forms.Label();
+            this.labelY = new System.Windows.Forms.Label();
+            this.labelZ = new System.Windows.Forms.Label();
             this.textBoxTime = new ExtendedControls.TextBoxBorder();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.buttonCancel = new ExtendedControls.ButtonExt();
@@ -66,27 +66,27 @@ namespace EDDiscovery.Forms
             this.panelOuter = new System.Windows.Forms.Panel();
             this.labelBadSystem = new System.Windows.Forms.Label();
             this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
-            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
+            this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
             this.panelOuter.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // labelName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Name";
+            this.labelName.AutoSize = true;
+            this.labelName.Location = new System.Drawing.Point(9, 16);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(35, 13);
+            this.labelName.TabIndex = 0;
+            this.labelName.Text = "Name";
             // 
-            // label2
+            // labelCo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 46);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Co-ordinates";
+            this.labelCo.AutoSize = true;
+            this.labelCo.Location = new System.Drawing.Point(9, 46);
+            this.labelCo.Name = "labelCo";
+            this.labelCo.Size = new System.Drawing.Size(66, 13);
+            this.labelCo.TabIndex = 0;
+            this.labelCo.Text = "Co-ordinates";
             // 
             // labelBookmarkNotes
             // 
@@ -204,32 +204,32 @@ namespace EDDiscovery.Forms
             this.textBoxZ.WordWrap = true;
             this.textBoxZ.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // label3
+            // labelX
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(115, 46);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(15, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "x:";
+            this.labelX.AutoSize = true;
+            this.labelX.Location = new System.Drawing.Point(115, 46);
+            this.labelX.Name = "labelX";
+            this.labelX.Size = new System.Drawing.Size(15, 13);
+            this.labelX.TabIndex = 0;
+            this.labelX.Text = "x:";
             // 
-            // label6
+            // labelY
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(248, 46);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(15, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "y:";
+            this.labelY.AutoSize = true;
+            this.labelY.Location = new System.Drawing.Point(248, 46);
+            this.labelY.Name = "labelY";
+            this.labelY.Size = new System.Drawing.Size(15, 13);
+            this.labelY.TabIndex = 0;
+            this.labelY.Text = "y:";
             // 
-            // label7
+            // labelZ
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(370, 46);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(15, 13);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "z:";
+            this.labelZ.AutoSize = true;
+            this.labelZ.Location = new System.Drawing.Point(370, 46);
+            this.labelZ.Name = "labelZ";
+            this.labelZ.Size = new System.Drawing.Size(15, 13);
+            this.labelZ.TabIndex = 0;
+            this.labelZ.Text = "z:";
             // 
             // textBoxTime
             // 
@@ -355,17 +355,17 @@ namespace EDDiscovery.Forms
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.labelBadSystem);
             this.panelOuter.Controls.Add(this.textBoxName);
-            this.panelOuter.Controls.Add(this.userControlSurfaceBookmarks);
+            this.panelOuter.Controls.Add(this.SurfaceBookmarks);
             this.panelOuter.Controls.Add(this.buttonEDSM);
-            this.panelOuter.Controls.Add(this.label1);
+            this.panelOuter.Controls.Add(this.labelName);
             this.panelOuter.Controls.Add(this.checkBoxTarget);
-            this.panelOuter.Controls.Add(this.label2);
+            this.panelOuter.Controls.Add(this.labelCo);
             this.panelOuter.Controls.Add(this.buttonDelete);
-            this.panelOuter.Controls.Add(this.label3);
+            this.panelOuter.Controls.Add(this.labelX);
             this.panelOuter.Controls.Add(this.buttonCancel);
-            this.panelOuter.Controls.Add(this.label6);
+            this.panelOuter.Controls.Add(this.labelY);
             this.panelOuter.Controls.Add(this.buttonOK);
-            this.panelOuter.Controls.Add(this.label7);
+            this.panelOuter.Controls.Add(this.labelZ);
             this.panelOuter.Controls.Add(this.textBoxZ);
             this.panelOuter.Controls.Add(this.labelBookmarkNotes);
             this.panelOuter.Controls.Add(this.textBoxY);
@@ -424,12 +424,12 @@ namespace EDDiscovery.Forms
             this.textBoxName.WordWrap = true;
             this.textBoxName.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // userControlSurfaceBookmarks1
+            // SurfaceBookmarks
             // 
-            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(13, 310);
-            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks1";
-            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(852, 205);
-            this.userControlSurfaceBookmarks.TabIndex = 12;
+            this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 310);
+            this.SurfaceBookmarks.Name = "SurfaceBookmarks";
+            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 205);
+            this.SurfaceBookmarks.TabIndex = 12;
             // 
             // BookmarkForm
             // 
@@ -449,17 +449,17 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.Label labelCo;
         private System.Windows.Forms.Label labelBookmarkNotes;
         private System.Windows.Forms.Label labelTimeMade;
         private ExtendedControls.RichTextBoxScroll textBoxBookmarkNotes;
         private ExtendedControls.TextBoxBorder textBoxX;
         private ExtendedControls.TextBoxBorder textBoxY;
         private ExtendedControls.TextBoxBorder textBoxZ;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label labelX;
+        private System.Windows.Forms.Label labelY;
+        private System.Windows.Forms.Label labelZ;
         private ExtendedControls.TextBoxBorder textBoxTime;
         private ExtendedControls.ButtonExt buttonOK;
         private ExtendedControls.ButtonExt buttonCancel;
@@ -470,7 +470,7 @@ namespace EDDiscovery.Forms
         private ExtendedControls.CheckBoxCustom checkBoxTarget;
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.Panel panelOuter;
-        private UserControls.SurfaceBookmarksForm userControlSurfaceBookmarks;
+        private UserControls.SurfaceBookmarksForm SurfaceBookmarks;
         private ExtendedControls.AutoCompleteTextBox textBoxName;
         private System.Windows.Forms.Label labelBadSystem;
     }

@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
             this.ColumnText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jumpToEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStartStop = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,12 +65,11 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.buttonField = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSearch = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.jumpToEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(294, 202);
+            this.historyContextMenu.Size = new System.Drawing.Size(294, 180);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -195,6 +195,13 @@ namespace EDDiscovery.UserControls
             this.removeSortingOfColumnsToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
             this.removeSortingOfColumnsToolStripMenuItem.Text = "Remove sorting of columns";
             this.removeSortingOfColumnsToolStripMenuItem.Click += new System.EventHandler(this.removeSortingOfColumnsToolStripMenuItem_Click);
+            // 
+            // jumpToEntryToolStripMenuItem
+            // 
+            this.jumpToEntryToolStripMenuItem.Name = "jumpToEntryToolStripMenuItem";
+            this.jumpToEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.jumpToEntryToolStripMenuItem.Text = "Jump to Entry";
+            this.jumpToEntryToolStripMenuItem.Click += new System.EventHandler(this.jumpToEntryToolStripMenuItem_Click);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -244,7 +251,7 @@ namespace EDDiscovery.UserControls
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.buttonField);
             this.panel1.Controls.Add(this.textBoxFilter);
-            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.labelSearch);
             this.panel1.Controls.Add(this.buttonFilter);
             this.panel1.Controls.Add(this.comboBoxJournalWindow);
             this.panel1.Controls.Add(this.labelTime);
@@ -319,14 +326,14 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // label1
+            // labelSearch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(159, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(159, 7);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 24;
+            this.labelSearch.Text = "Search";
             // 
             // buttonFilter
             // 
@@ -384,13 +391,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
-            // jumpToEntryToolStripMenuItem
-            // 
-            this.jumpToEntryToolStripMenuItem.Name = "jumpToEntryToolStripMenuItem";
-            this.jumpToEntryToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-            this.jumpToEntryToolStripMenuItem.Text = "Jump to Entry";
-            this.jumpToEntryToolStripMenuItem.Click += new System.EventHandler(this.jumpToEntryToolStripMenuItem_Click);
-            // 
             // UserControlJournalGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -414,7 +414,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewJournal;
         private System.Windows.Forms.Panel panel1;
         private ExtendedControls.TextBoxBorder textBoxFilter;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSearch;
         private ExtendedControls.ButtonExt buttonFilter;
         private ExtendedControls.ComboBoxCustom comboBoxJournalWindow;
         private System.Windows.Forms.Label labelTime;

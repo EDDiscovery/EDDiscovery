@@ -55,6 +55,9 @@ namespace EDDiscovery.UserControls
             checkBoxAutoSwap.Checked = SQLiteDBClass.GetSettingBool(DbAutoSwap, false);
 
             discoveryform.OnNewEntry += OnChanged;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -134,7 +137,7 @@ namespace EDDiscovery.UserControls
             int currentoffset = (dataGridViewMarketData.CurrentRow != null) ? Math.Max(0,dataGridViewMarketData.CurrentRow.Index - firstdisplayed) : 0;
             
             dataGridViewMarketData.Rows.Clear();
-            labelLocation.Text = "No Data";
+            labelLocation.Text = "No Data".Tx();
             toolTip.SetToolTip(labelLocation, null);
 
             HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
@@ -233,7 +236,7 @@ namespace EDDiscovery.UserControls
 
                         int rowno = dataGridViewMarketData.Rows.Add(rowobj);
                         dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =
-                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item";
+                        dataGridViewMarketData.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".Tx(this,"Conly");
                     }
                 }
 
@@ -274,8 +277,8 @@ namespace EDDiscovery.UserControls
             comboBoxCustomFrom.Items.Clear();
             comboBoxCustomTo.Items.Clear();
 
-            comboBoxCustomFrom.Items.Add("Travel History Entry Last");
-            comboBoxCustomTo.Items.Add("None");
+            comboBoxCustomFrom.Items.Add("Travel History Entry Last".Tx(this,"LEntry"));
+            comboBoxCustomTo.Items.Add("None".Tx());
 
             comboboxentries.Clear();
 
@@ -284,7 +287,7 @@ namespace EDDiscovery.UserControls
             foreach (HistoryEntry h in hlcpb)
             {
                 comboboxentries.Add(h);
-                string v = h.System.Name + ":" + h.WhereAmI + " on " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
+                string v = h.System.Name + ":" + h.WhereAmI + " " + "on".Tx() + " " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? h.EventTimeUTC.ToString() : h.EventTimeLocal.ToString());
                 if (h.journalEntry is JournalEDDCommodityPrices)
                     v += " (CAPI)";
                 comboBoxCustomFrom.Items.Add(v);
@@ -318,7 +321,7 @@ namespace EDDiscovery.UserControls
         {
             if (comboBoxCustomFrom.Enabled)
             {
-                if (comboBoxCustomFrom.Text.Contains("Travel History"))
+                if (comboBoxCustomFrom.SelectedIndex == 0 )
                 {
                     eddmd_left = null;
                     Display();

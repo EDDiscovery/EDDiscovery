@@ -52,7 +52,19 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
+            comboBoxCustomLanguage.Items = BaseUtils.Translator.Languages(EDDOptions.Instance.TranslatorDirectory());
+            comboBoxCustomLanguage.Items.Add("Auto");
+            comboBoxCustomLanguage.Items.Add("Undefined");
+            if (comboBoxCustomLanguage.Items.Contains(EDDConfig.Instance.Language))
+                comboBoxCustomLanguage.SelectedItem = EDDConfig.Instance.Language;
+            else
+                comboBoxCustomLanguage.SelectedIndex = comboBoxCustomLanguage.Items.Count - 1;
+            comboBoxCustomLanguage.SelectedIndexChanged += ComboBoxCustomLanguage_SelectedIndexChanged;
+
             discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
         }
 
         void SetEntryThemeComboBox()
@@ -188,7 +200,7 @@ namespace EDDiscovery.UserControls
                     btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Command name is not valid or duplicate" , "Cannot create Commander", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "Commander name is not valid or duplicate".Tx(this,"AddC") , "Cannot create Commander".Tx(this,"AddT"), MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -257,13 +269,15 @@ namespace EDDiscovery.UserControls
             string fontwanted = null;                                               // don't check custom, only a stored theme..
             if (!themename.Equals("Custom") && !discoveryform.theme.IsFontAvailableInTheme(themename, out fontwanted))
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                      "The font used by this theme is not available on your system." + Environment.NewLine +
-                      "The font needed is \"" + fontwanted + "\"." + Environment.NewLine +
+                string warning = string.Format(
+                      ("The font used by this theme is not available on your system." + Environment.NewLine +
+                      "The font needed is \"{0}\"." + Environment.NewLine +
                       "Install this font to fully use this theme." + Environment.NewLine +
                       "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine + Environment.NewLine +
-                      "Would you like to load this theme using a replacement font?",
-                      "Warning", MessageBoxButtons.YesNo);
+                      "Would you like to load this theme using a replacement font?").Tx(this, "Font"), fontwanted);
+
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.YesNo);
+
                 if (res != DialogResult.Yes)
                 {
                     // Reset the combo box to the previous theme name and don't change anything else.
@@ -463,6 +477,14 @@ namespace EDDiscovery.UserControls
             }
             else
                 textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
+        }
+
+
+        private void ComboBoxCustomLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
+            ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this,"Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #region EDSM Galaxy

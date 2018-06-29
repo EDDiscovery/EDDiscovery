@@ -149,9 +149,9 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataVisualization.Charting.Series series99 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series100 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series101 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.labelExt1 = new System.Windows.Forms.Label();
+            this.labelExtMin = new System.Windows.Forms.Label();
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
-            this.labelExt3 = new System.Windows.Forms.Label();
+            this.labelExtMax = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
@@ -184,14 +184,14 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
             this.SuspendLayout();
             // 
-            // labelExt1
+            // labelExtMin
             // 
-            this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(3, 6);
-            this.labelExt1.Name = "labelExt1";
-            this.labelExt1.Size = new System.Drawing.Size(24, 13);
-            this.labelExt1.TabIndex = 3;
-            this.labelExt1.Text = "Min";
+            this.labelExtMin.AutoSize = true;
+            this.labelExtMin.Location = new System.Drawing.Point(3, 6);
+            this.labelExtMin.Name = "labelExtMin";
+            this.labelExtMin.Size = new System.Drawing.Size(24, 13);
+            this.labelExtMin.TabIndex = 3;
+            this.labelExtMin.Text = "Min";
             // 
             // textMinRadius
             // 
@@ -222,14 +222,14 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
-            // labelExt3
+            // labelExtMax
             // 
-            this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(75, 6);
-            this.labelExt3.Name = "labelExt3";
-            this.labelExt3.Size = new System.Drawing.Size(27, 13);
-            this.labelExt3.TabIndex = 3;
-            this.labelExt3.Text = "Max";
+            this.labelExtMax.AutoSize = true;
+            this.labelExtMax.Location = new System.Drawing.Point(75, 6);
+            this.labelExtMax.Name = "labelExtMax";
+            this.labelExtMax.Size = new System.Drawing.Size(27, 13);
+            this.labelExtMax.TabIndex = 3;
+            this.labelExtMax.Text = "Max";
             // 
             // textMaxRadius
             // 
@@ -264,9 +264,9 @@ namespace EDDiscovery.UserControls
             // 
             this.panelTop.BackColor = System.Drawing.SystemColors.Control;
             this.panelTop.Controls.Add(this.slideMaxItems);
-            this.panelTop.Controls.Add(this.labelExt1);
+            this.panelTop.Controls.Add(this.labelExtMin);
             this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.labelExt3);
+            this.panelTop.Controls.Add(this.labelExtMax);
             this.panelTop.Controls.Add(this.textMaxRadius);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -1053,7 +1053,6 @@ namespace EDDiscovery.UserControls
             this.chartMap.Size = new System.Drawing.Size(350, 350);
             this.chartMap.SuppressExceptions = true;
             this.chartMap.TabIndex = 29;
-            this.chartMap.Text = "chart2";
             this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseDown);
             this.chartMap.MouseEnter += new System.EventHandler(this.chartMap_MouseEnter);
             this.chartMap.MouseLeave += new System.EventHandler(this.chartMap_MouseLeave);
@@ -1219,7 +1218,7 @@ namespace EDDiscovery.UserControls
             this.background.TabStop = false;
             this.background.MouseDown += new System.Windows.Forms.MouseEventHandler(this.background_MouseDown);
             // 
-            // UserControlMap
+            // UserControlLocalMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1227,7 +1226,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.chartMap);
             this.Controls.Add(this.background);
-            this.Name = "UserControlMap";
+            this.Name = "UserControlLocalMap";
             this.Size = new System.Drawing.Size(380, 406);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserControlMap_MouseClick);
@@ -1243,9 +1242,9 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.Label labelExt1;
+        private System.Windows.Forms.Label labelExtMin;
         private ExtendedControls.NumberBoxDouble textMinRadius;
-        private System.Windows.Forms.Label labelExt3;
+        private System.Windows.Forms.Label labelExtMax;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMap;

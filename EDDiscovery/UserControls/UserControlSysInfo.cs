@@ -109,6 +109,10 @@ namespace EDDiscovery.UserControls
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip1,this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -216,7 +220,7 @@ namespace EDDiscovery.UserControls
                 List<MissionState> mcurrent = (from MissionState ms in he.MissionList.Missions.Values where ms.InProgressDateTime(last_he.EventTimeUTC) orderby ms.Mission.EventTimeUTC descending select ms).ToList();
 
                 if (mcurrent == null || mcurrent.Count == 0)
-                    richTextBoxScrollMissions.Text = "No Missions";
+                    richTextBoxScrollMissions.Text = "No Missions".Tx(this, "NoMissions");
                 else
                 {
                     string t = "";
@@ -263,7 +267,7 @@ namespace EDDiscovery.UserControls
                     else if (he.ShipInformation.FuelCapacity > 0)
                         textBoxFuel.Text = he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
                     else
-                        textBoxFuel.Text = "N/A";
+                        textBoxFuel.Text = "N/A".Tx();
                 }
                 else
                     textBoxShip.Text = textBoxFuel.Text = "";
@@ -336,7 +340,7 @@ namespace EDDiscovery.UserControls
                         if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                             Process.Start(url);
                         else
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".Tx(this,"SysUnk"));
                     }
                 }
             }
@@ -361,19 +365,19 @@ namespace EDDiscovery.UserControls
             {
                 textBoxTarget.Text = name;
                 textBoxTarget.Select(textBoxTarget.Text.Length, textBoxTarget.Text.Length);
-                textBoxTargetDist.Text = "No Pos";
+                textBoxTargetDist.Text = "No Pos".Tx();
 
                 HistoryEntry cs = discoveryform.history.GetLastWithPosition;
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
 
-                textBoxTarget.SetTipDynamically(toolTip1, "Position is " + x.ToString("0.00") + "," + y.ToString("0.00") + "," + z.ToString("0.00"));
+                textBoxTarget.SetTipDynamically(toolTip1, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".Tx(this, "Pos"), x,y,z));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter");
+                textBoxTarget.SetTipDynamically(toolTip1, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".Tx(this,"Target"));
             }
         }
 
@@ -385,7 +389,7 @@ namespace EDDiscovery.UserControls
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
             else
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System unknown to EDSM".Tx(this,"SysUnk"));
 
         }
 

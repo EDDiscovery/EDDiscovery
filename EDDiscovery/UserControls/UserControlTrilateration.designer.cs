@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.trilatContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToWantedSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             this.addAllLocalSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addAllEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_controls = new System.Windows.Forms.Panel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -71,6 +71,7 @@ namespace EDDiscovery.UserControls
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelNoCoords = new System.Windows.Forms.ToolStripLabel();
             this.toolStripAddFromHistory = new System.Windows.Forms.ToolStripButton();
+            this.toolStripAddRecentHistory = new System.Windows.Forms.ToolStripButton();
             this.splitContainerCustom1 = new ExtendedControls.SplitContainerCustom();
             this.splitContainerCustom2 = new ExtendedControls.SplitContainerCustom();
             this.dataViewScroller_Distances = new ExtendedControls.DataViewScrollerPanel();
@@ -87,11 +88,10 @@ namespace EDDiscovery.UserControls
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumnClosestSystemsSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.toolStripAddRecentHistory = new System.Windows.Forms.ToolStripButton();
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
             this.panel_controls.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCustom1)).BeginInit();
             this.splitContainerCustom1.Panel1.SuspendLayout();
             this.splitContainerCustom1.Panel2.SuspendLayout();
@@ -184,16 +184,16 @@ namespace EDDiscovery.UserControls
             // 
             // panel_controls
             // 
-            this.panel_controls.Controls.Add(this.toolStrip1);
+            this.panel_controls.Controls.Add(this.toolStrip);
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 0);
             this.panel_controls.Name = "panel_controls";
             this.panel_controls.Size = new System.Drawing.Size(924, 28);
             this.panel_controls.TabIndex = 24;
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSubmitDistances,
             this.toolStripButtonNew,
             this.toolStripSeparator1,
@@ -207,11 +207,10 @@ namespace EDDiscovery.UserControls
             this.toolStripLabelNoCoords,
             this.toolStripAddFromHistory,
             this.toolStripAddRecentHistory});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(924, 25);
-            this.toolStrip1.TabIndex = 24;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(924, 25);
+            this.toolStrip.TabIndex = 24;
             // 
             // toolStripButtonSubmitDistances
             // 
@@ -309,6 +308,16 @@ namespace EDDiscovery.UserControls
             this.toolStripAddFromHistory.Text = "Add 20 oldest";
             this.toolStripAddFromHistory.ToolTipText = "Add the oldest 20 unknown systems from history to wanted list";
             this.toolStripAddFromHistory.Click += new System.EventHandler(this.toolStripAddFromHistory_Click);
+            // 
+            // toolStripAddRecentHistory
+            // 
+            this.toolStripAddRecentHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripAddRecentHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAddRecentHistory.Name = "toolStripAddRecentHistory";
+            this.toolStripAddRecentHistory.Size = new System.Drawing.Size(88, 22);
+            this.toolStripAddRecentHistory.Text = "Add 20 newest";
+            this.toolStripAddRecentHistory.ToolTipText = "Add 20 most recent systems with no coordinates";
+            this.toolStripAddRecentHistory.Click += new System.EventHandler(this.toolStripAddRecentHistory_Click);
             // 
             // splitContainerCustom1
             // 
@@ -517,14 +526,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
             this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewClosestSystems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewClosestSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewClosestSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Source,
@@ -555,16 +564,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumnClosestSystemsSystem.Name = "dataGridViewTextBoxColumnClosestSystemsSystem";
             this.dataGridViewTextBoxColumnClosestSystemsSystem.ReadOnly = true;
             // 
-            // toolStripAddRecentHistory
-            // 
-            this.toolStripAddRecentHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripAddRecentHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripAddRecentHistory.Name = "toolStripAddRecentHistory";
-            this.toolStripAddRecentHistory.Size = new System.Drawing.Size(88, 22);
-            this.toolStripAddRecentHistory.Text = "Add 20 newest";
-            this.toolStripAddRecentHistory.ToolTipText = "Add 20 most recent systems with no coordinates";
-            this.toolStripAddRecentHistory.Click += new System.EventHandler(this.toolStripAddRecentHistory_Click);
-            // 
             // UserControlTrilateration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -577,8 +576,8 @@ namespace EDDiscovery.UserControls
             this.wantedContextMenu.ResumeLayout(false);
             this.panel_controls.ResumeLayout(false);
             this.panel_controls.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.splitContainerCustom1.Panel1.ResumeLayout(false);
             this.splitContainerCustom1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCustom1)).EndInit();
@@ -623,7 +622,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem addAllEDSMSystemsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonSubmitDistances;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

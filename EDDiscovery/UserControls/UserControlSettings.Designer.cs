@@ -89,13 +89,15 @@ namespace EDDiscovery.UserControls
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.groupBox3dmap = new ExtendedControls.GroupBoxCustom();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelMapCol = new System.Windows.Forms.Label();
+            this.labelZoom = new System.Windows.Forms.Label();
+            this.labelOpenOn = new System.Windows.Forms.Label();
+            this.labelHome = new System.Windows.Forms.Label();
             this.groupBoxCommanders = new ExtendedControls.GroupBoxCustom();
             this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.groupBoxCustomLanguage = new ExtendedControls.GroupBoxCustom();
+            this.comboBoxCustomLanguage = new ExtendedControls.ComboBoxCustom();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxCustomHistoryLoad.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
@@ -105,6 +107,7 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.SuspendLayout();
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
+            this.groupBoxCustomLanguage.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -652,7 +655,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCommanders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCommanders.Size = new System.Drawing.Size(671, 150);
             this.dataGridViewCommanders.TabIndex = 2;
-            this.toolTip.SetToolTip(this.dataGridViewCommanders, "Configure commanders");
             // 
             // ColumnCommander
             // 
@@ -841,13 +843,13 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.BackColorScaling = 0.5F;
             this.groupBox3dmap.BorderColor = System.Drawing.Color.LightGray;
             this.groupBox3dmap.BorderColorScaling = 0.5F;
-            this.groupBox3dmap.Controls.Add(this.label17);
+            this.groupBox3dmap.Controls.Add(this.labelMapCol);
             this.groupBox3dmap.Controls.Add(this.textBoxDefaultZoom);
-            this.groupBox3dmap.Controls.Add(this.label5);
+            this.groupBox3dmap.Controls.Add(this.labelZoom);
             this.groupBox3dmap.Controls.Add(this.radioButtonHistorySelection);
             this.groupBox3dmap.Controls.Add(this.radioButtonCentreHome);
-            this.groupBox3dmap.Controls.Add(this.label4);
-            this.groupBox3dmap.Controls.Add(this.label3);
+            this.groupBox3dmap.Controls.Add(this.labelOpenOn);
+            this.groupBox3dmap.Controls.Add(this.labelHome);
             this.groupBox3dmap.Controls.Add(this.textBoxHomeSystem);
             this.groupBox3dmap.Controls.Add(this.panel_defaultmapcolor);
             this.groupBox3dmap.FillClientAreaWithAlternateColor = false;
@@ -860,41 +862,41 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.TextPadding = 0;
             this.groupBox3dmap.TextStartPosition = -1;
             // 
-            // label17
+            // labelMapCol
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(199, 74);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(92, 13);
-            this.label17.TabIndex = 7;
-            this.label17.Text = "Default Map Color";
+            this.labelMapCol.AutoSize = true;
+            this.labelMapCol.Location = new System.Drawing.Point(199, 74);
+            this.labelMapCol.Name = "labelMapCol";
+            this.labelMapCol.Size = new System.Drawing.Size(92, 13);
+            this.labelMapCol.TabIndex = 7;
+            this.labelMapCol.Text = "Default Map Color";
             // 
-            // label5
+            // labelZoom
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 73);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(71, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Default Zoom";
+            this.labelZoom.AutoSize = true;
+            this.labelZoom.Location = new System.Drawing.Point(10, 73);
+            this.labelZoom.Name = "labelZoom";
+            this.labelZoom.Size = new System.Drawing.Size(71, 13);
+            this.labelZoom.TabIndex = 5;
+            this.labelZoom.Text = "Default Zoom";
             // 
-            // label4
+            // labelOpenOn
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 49);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(90, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Open Centred On";
+            this.labelOpenOn.AutoSize = true;
+            this.labelOpenOn.Location = new System.Drawing.Point(10, 49);
+            this.labelOpenOn.Name = "labelOpenOn";
+            this.labelOpenOn.Size = new System.Drawing.Size(90, 13);
+            this.labelOpenOn.TabIndex = 2;
+            this.labelOpenOn.Text = "Open Centred On";
             // 
-            // label3
+            // labelHome
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 22);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(72, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Home System";
+            this.labelHome.AutoSize = true;
+            this.labelHome.Location = new System.Drawing.Point(10, 22);
+            this.labelHome.Name = "labelHome";
+            this.labelHome.Size = new System.Drawing.Size(72, 13);
+            this.labelHome.TabIndex = 1;
+            this.labelHome.Text = "Home System";
             // 
             // groupBoxCommanders
             // 
@@ -957,11 +959,57 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
             // 
+            // groupBoxCustomLanguage
+            // 
+            this.groupBoxCustomLanguage.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomLanguage.BackColorScaling = 0.5F;
+            this.groupBoxCustomLanguage.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
+            this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
+            this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 529);
+            this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
+            this.groupBoxCustomLanguage.Size = new System.Drawing.Size(426, 51);
+            this.groupBoxCustomLanguage.TabIndex = 21;
+            this.groupBoxCustomLanguage.TabStop = false;
+            this.groupBoxCustomLanguage.Text = "Language";
+            this.groupBoxCustomLanguage.TextPadding = 0;
+            this.groupBoxCustomLanguage.TextStartPosition = -1;
+            // 
+            // comboBoxCustomLanguage
+            // 
+            this.comboBoxCustomLanguage.ArrowWidth = 1;
+            this.comboBoxCustomLanguage.BackColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomLanguage.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxCustomLanguage.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomLanguage.DataSource = null;
+            this.comboBoxCustomLanguage.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomLanguage.DisplayMember = "";
+            this.comboBoxCustomLanguage.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomLanguage.DropDownHeight = 150;
+            this.comboBoxCustomLanguage.DropDownWidth = 267;
+            this.comboBoxCustomLanguage.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomLanguage.ItemHeight = 13;
+            this.comboBoxCustomLanguage.Location = new System.Drawing.Point(10, 19);
+            this.comboBoxCustomLanguage.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomLanguage.Name = "comboBoxCustomLanguage";
+            this.comboBoxCustomLanguage.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomLanguage.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomLanguage.ScrollBarWidth = 16;
+            this.comboBoxCustomLanguage.SelectedIndex = -1;
+            this.comboBoxCustomLanguage.SelectedItem = null;
+            this.comboBoxCustomLanguage.SelectedValue = null;
+            this.comboBoxCustomLanguage.Size = new System.Drawing.Size(209, 21);
+            this.comboBoxCustomLanguage.TabIndex = 0;
+            this.comboBoxCustomLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.comboBoxCustomLanguage.ValueMember = "";
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBoxCustomHistoryLoad);
+            this.Controls.Add(this.groupBoxCustomLanguage);
             this.Controls.Add(this.groupBoxCustomEDSM);
             this.Controls.Add(this.groupBoxCustomScreenShots);
             this.Controls.Add(this.groupBoxPopOuts);
@@ -985,6 +1033,7 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.PerformLayout();
             this.groupBoxCommanders.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.groupBoxCustomLanguage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -995,17 +1044,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewCommanders;
         private ExtendedControls.GroupBoxCustom groupBox3dmap;
         private ExtendedControls.NumberBoxDouble textBoxDefaultZoom;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelZoom;
         private ExtendedControls.RadioButtonCustom radioButtonHistorySelection;
         private ExtendedControls.RadioButtonCustom radioButtonCentreHome;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelOpenOn;
+        private System.Windows.Forms.Label labelHome;
         private ExtendedControls.AutoCompleteTextBox textBoxHomeSystem;
         private ExtendedControls.ComboBoxCustom comboBoxTheme;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.PanelNoTheme panel_defaultmapcolor;
         private ExtendedControls.ButtonExt buttonSaveTheme;
-        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label labelMapCol;
         private ExtendedControls.ButtonExt button_edittheme;
         private ExtendedControls.GroupBoxCustom groupBoxTheme;
         private ExtendedControls.CheckBoxCustom checkBoxOrderRowsInverted;
@@ -1041,5 +1090,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.GroupBoxCustom groupBoxCustomHistoryLoad;
         private ExtendedControls.ComboBoxCustom comboBoxCustomHistoryLoadTime;
         private System.Windows.Forms.Label labelHistorySel;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomLanguage;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomLanguage;
     }
 }

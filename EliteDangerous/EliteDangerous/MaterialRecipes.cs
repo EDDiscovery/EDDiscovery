@@ -1191,8 +1191,8 @@ namespace EliteDangerousCore
             {
                 dbstring = db;
                 cc = new ExtendedControls.CheckedListControlCustom();
-                cc.Items.Add("All");
-                cc.Items.Add("None");
+                cc.Items.Add("All".Tx());
+                cc.Items.Add("None".Tx());
 
                 cc.Items.AddRange(list.ToArray());
 
@@ -1212,7 +1212,7 @@ namespace EliteDangerousCore
         private void SetFilterSet()
         {
             string list = cc.GetChecked(reserved);
-            cc.SetChecked(list.Equals("All"), 0, 1);
+            cc.SetChecked(list.Equals("All"), 0, 1);        // note All/None is the logic name used in the save.. does not need translating
             cc.SetChecked(list.Equals("None"), 1, 1);
 
         }

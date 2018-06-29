@@ -87,7 +87,6 @@ namespace EDDiscovery.UserControls
             this.CustomDateTimePickerTo.ShowUpDown = false;
             this.CustomDateTimePickerTo.Size = new System.Drawing.Size(120, 24);
             this.CustomDateTimePickerTo.TabIndex = 8;
-            this.CustomDateTimePickerTo.Text = "customDateTimePicker2";
             this.CustomDateTimePickerTo.TextBackColor = System.Drawing.Color.DarkBlue;
             this.CustomDateTimePickerTo.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
             this.CustomDateTimePickerTo.Visible = false;
@@ -107,7 +106,6 @@ namespace EDDiscovery.UserControls
             this.CustomDateTimePickerFrom.ShowUpDown = false;
             this.CustomDateTimePickerFrom.Size = new System.Drawing.Size(120, 24);
             this.CustomDateTimePickerFrom.TabIndex = 7;
-            this.CustomDateTimePickerFrom.Text = "customDateTimePicker1";
             this.CustomDateTimePickerFrom.TextBackColor = System.Drawing.Color.DarkBlue;
             this.CustomDateTimePickerFrom.Value = new System.DateTime(2017, 7, 10, 21, 10, 15, 925);
             this.CustomDateTimePickerFrom.Visible = false;

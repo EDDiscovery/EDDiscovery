@@ -172,9 +172,9 @@ namespace EDDiscovery.UserControls
             this.lblSystemInfo.Location = new System.Drawing.Point(403, 10);
             this.lblSystemInfo.Margin = new System.Windows.Forms.Padding(0, 4, 0, 0);
             this.lblSystemInfo.Name = "lblSystemInfo";
-            this.lblSystemInfo.Size = new System.Drawing.Size(35, 13);
+            this.lblSystemInfo.Size = new System.Drawing.Size(43, 13);
             this.lblSystemInfo.TabIndex = 30;
-            this.lblSystemInfo.Text = "label1";
+            this.lblSystemInfo.Text = "<code>";
             this.toolTip.SetToolTip(this.lblSystemInfo, "Right click on panel to show/hide the toolbar");
             // 
             // panelControls

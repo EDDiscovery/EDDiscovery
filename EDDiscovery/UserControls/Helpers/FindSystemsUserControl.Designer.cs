@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelRadMin = new System.Windows.Forms.Label();
             this.labelFilter = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelRadMax = new System.Windows.Forms.Label();
             this.buttonExtDBLookup = new ExtendedControls.ButtonExt();
             this.buttonExtEDSMSphere = new ExtendedControls.ButtonExt();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
@@ -43,19 +43,19 @@
             this.numberBoxDoubleX = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleY = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleZ = new ExtendedControls.NumberBoxDouble();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelX = new System.Windows.Forms.Label();
+            this.labelY = new System.Windows.Forms.Label();
+            this.labelZ = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // labelRadMin
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 62);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
-            this.label1.TabIndex = 34;
-            this.label1.Text = "Radius ly Min";
+            this.labelRadMin.AutoSize = true;
+            this.labelRadMin.Location = new System.Drawing.Point(6, 62);
+            this.labelRadMin.Name = "labelRadMin";
+            this.labelRadMin.Size = new System.Drawing.Size(70, 13);
+            this.labelRadMin.TabIndex = 34;
+            this.labelRadMin.Text = "Radius ly Min";
             // 
             // labelFilter
             // 
@@ -66,14 +66,14 @@
             this.labelFilter.TabIndex = 35;
             this.labelFilter.Text = "Star Name";
             // 
-            // label2
+            // labelRadMax
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(49, 88);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
-            this.label2.TabIndex = 34;
-            this.label2.Text = "Max";
+            this.labelRadMax.AutoSize = true;
+            this.labelRadMax.Location = new System.Drawing.Point(49, 88);
+            this.labelRadMax.Name = "labelRadMax";
+            this.labelRadMax.Size = new System.Drawing.Size(27, 13);
+            this.labelRadMax.TabIndex = 34;
+            this.labelRadMax.Text = "Max";
             // 
             // buttonExtDBLookup
             // 
@@ -311,32 +311,32 @@
             this.numberBoxDoubleZ.WordWrap = true;
             this.numberBoxDoubleZ.Enter += new System.EventHandler(this.numberBoxDoubleXYZ_Enter);
             // 
-            // label3
+            // labelX
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(50, 36);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(28, 13);
-            this.label3.TabIndex = 35;
-            this.label3.Text = "Or X";
+            this.labelX.AutoSize = true;
+            this.labelX.Location = new System.Drawing.Point(69, 36);
+            this.labelX.Name = "labelX";
+            this.labelX.Size = new System.Drawing.Size(14, 13);
+            this.labelX.TabIndex = 35;
+            this.labelX.Text = "X";
             // 
-            // label4
+            // labelY
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(198, 36);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(14, 13);
-            this.label4.TabIndex = 35;
-            this.label4.Text = "Y";
+            this.labelY.AutoSize = true;
+            this.labelY.Location = new System.Drawing.Point(198, 36);
+            this.labelY.Name = "labelY";
+            this.labelY.Size = new System.Drawing.Size(14, 13);
+            this.labelY.TabIndex = 35;
+            this.labelY.Text = "Y";
             // 
-            // label5
+            // labelZ
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(330, 36);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(14, 13);
-            this.label5.TabIndex = 35;
-            this.label5.Text = "Z";
+            this.labelZ.AutoSize = true;
+            this.labelZ.Location = new System.Drawing.Point(330, 36);
+            this.labelZ.Name = "labelZ";
+            this.labelZ.Size = new System.Drawing.Size(14, 13);
+            this.labelZ.TabIndex = 35;
+            this.labelZ.Text = "Z";
             // 
             // FindSystemsUserControl
             // 
@@ -354,11 +354,11 @@
             this.Controls.Add(this.numberBoxDoubleX);
             this.Controls.Add(this.numberBoxMinRadius);
             this.Controls.Add(this.textBoxSystemName);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.labelRadMax);
+            this.Controls.Add(this.labelRadMin);
+            this.Controls.Add(this.labelZ);
+            this.Controls.Add(this.labelY);
+            this.Controls.Add(this.labelX);
             this.Controls.Add(this.labelFilter);
             this.Name = "FindSystemsUserControl";
             this.Size = new System.Drawing.Size(664, 241);
@@ -373,9 +373,9 @@
         private ExtendedControls.ButtonExt buttonExtEDSMSphere;
         private ExtendedControls.ButtonExt buttonExtExcel;
         private ExtendedControls.AutoCompleteTextBox textBoxSystemName;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelRadMin;
         private System.Windows.Forms.Label labelFilter;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelRadMax;
         private ExtendedControls.NumberBoxDouble numberBoxMinRadius;
         private ExtendedControls.NumberBoxDouble numberBoxMaxRadius;
         private ExtendedControls.ButtonExt buttonExtDBSphere;
@@ -384,8 +384,8 @@
         private ExtendedControls.NumberBoxDouble numberBoxDoubleX;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleY;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleZ;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelX;
+        private System.Windows.Forms.Label labelY;
+        private System.Windows.Forms.Label labelZ;
     }
 }

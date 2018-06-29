@@ -198,10 +198,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxItems2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxItems2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxItems2.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxItems2.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxItems2.BorderColorScaling = 0.5F;
             this.textBoxItems2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxItems2.ClearOnFirstChar = false;
             this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxItems2.InErrorCondition = false;
             this.textBoxItems2.Location = new System.Drawing.Point(360, 3);
             this.textBoxItems2.Multiline = false;
             this.textBoxItems2.Name = "textBoxItems2";
@@ -219,10 +222,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxItems1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxItems1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxItems1.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxItems1.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxItems1.BorderColorScaling = 0.5F;
             this.textBoxItems1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxItems1.ClearOnFirstChar = false;
             this.textBoxItems1.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxItems1.InErrorCondition = false;
             this.textBoxItems1.Location = new System.Drawing.Point(210, 3);
             this.textBoxItems1.Multiline = false;
             this.textBoxItems1.Name = "textBoxItems1";
@@ -241,18 +247,18 @@ namespace EDDiscovery.UserControls
             this.labelItems2.AutoSize = true;
             this.labelItems2.Location = new System.Drawing.Point(310, 4);
             this.labelItems2.Name = "labelItems2";
-            this.labelItems2.Size = new System.Drawing.Size(35, 13);
+            this.labelItems2.Size = new System.Drawing.Size(43, 13);
             this.labelItems2.TabIndex = 3;
-            this.labelItems2.Text = "label1";
+            this.labelItems2.Text = "<code>";
             // 
             // labelItems1
             // 
             this.labelItems1.AutoSize = true;
             this.labelItems1.Location = new System.Drawing.Point(160, 4);
             this.labelItems1.Name = "labelItems1";
-            this.labelItems1.Size = new System.Drawing.Size(35, 13);
+            this.labelItems1.Size = new System.Drawing.Size(43, 13);
             this.labelItems1.TabIndex = 3;
-            this.labelItems1.Text = "label1";
+            this.labelItems1.Text = "<code>";
             // 
             // checkBoxClear
             // 

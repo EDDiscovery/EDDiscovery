@@ -68,15 +68,27 @@ namespace EDDiscovery.UserControls
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
             comboBoxView.Enabled = false;
-            comboBoxView.Items.Add("Top");
-            comboBoxView.Items.Add("Front");
-            comboBoxView.Items.Add("Side");
-            comboBoxView.Items.Add("Grid");
-            comboBoxView.Items.DefaultIfEmpty("Top");
-            comboBoxView.SelectedItem = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "Top");
+            comboBoxView.Items.Add("Top".Tx(this));
+            comboBoxView.Items.Add("Front".Tx(this));
+            comboBoxView.Items.Add("Side".Tx(this));
+            comboBoxView.Items.Add("Grid".Tx(this));
+            comboBoxView.Items.Add("Report".Tx(this));
+
+            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "!!");
+            if (comboBoxView.Items.Contains(sel))
+                comboBoxView.SelectedItem = sel;
+            else
+                comboBoxView.SelectedIndex = 0;
+
             comboBoxView.Enabled = true;
 
             computer = new StarDistanceComputer();
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(menuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            SelectView();
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -151,7 +163,7 @@ namespace EDDiscovery.UserControls
 
         private void FillPlot(BaseUtils.SortedListDoubleDuplicate<ISystem> csl, ISystem currentSystem)
         {
-            SetControlText("2D Plot of systems in range from " + currentSystem.Name);
+            SetControlText(string.Format("2D Plot of systems in range from {0} ".Tx(this,"2d") , currentSystem.Name));
 
             var pointSize = 4;
 
@@ -208,17 +220,18 @@ namespace EDDiscovery.UserControls
             modelSide.Series.Add(inrangeSeriesSide);
 
             // titles
-            modelTop.Title = "Plot around " + currentSystemName + ", viewed from the top";
-            modelFront.Title = "Plot around " + currentSystemName + ", viewed from the front";
-            modelSide.Title = "Plot around " + currentSystemName + ", viewed from the side";
+            modelTop.Title = string.Format("Plot around {0}, viewed from the top".Tx(this, "PTOP"), currentSystemName);
+            modelFront.Title = string.Format("Plot around {0}, viewed from the front".Tx(this, "PFRONT"), currentSystemName);
+            modelSide.Title = string.Format("Plot around {0}, viewed from the side".Tx(this, "PSIDE"), currentSystemName);
 
             // Title of the report           
-            reportView.Text += ("\nSystems around " + currentSystemName + ", from " + textMinRadius.Value.ToString() + " to " + textMaxRadius.Value.ToString() + "Ly: " + csl.Count.ToString() + "\n");
+            reportView.Text += string.Format(("Systems around {0}, from {1} to {2}, Ly: {3}").Tx(this,"SysAROUND") ,currentSystemName, 
+                textMinRadius.Value.ToString(), textMaxRadius.Value.ToString() ,csl.Count.ToString() );
 
             // Fill with some information for the report                    
             //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
-            reportView.Text += ("\nVisits: " + discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
-            reportView.Text += ("\nNotes: " + currentSystem.SystemNote + "\n");
+            reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").Tx(this,"Vs") ,discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
+            reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).Tx(this,"Nt") ,currentSystem.SystemNote);
 
             // If the are any system inside the defined range...
             if (csl.Count() > 0)
@@ -241,9 +254,9 @@ namespace EDDiscovery.UserControls
                         var sysZ = tvp.Value.Z;
 
                         // print information on each member of the list;
-                        reportView.Text += ("\n" + tvp.Value.Name.ToString() + ", distant " + distFromCurrentSys + "Ly ");
-                        reportView.Text += ("\n" + "Visits: " + visits.ToString());
-                        reportView.Text += ("\nCoordinates: " + "X:" + sysX + ", Y:" + sysY + ", Z:" + sysZ);
+                        reportView.Text += string.Format((Environment.NewLine + "{0} distance {1:N2} Ly").Tx(this,"D1"), tvp.Value.Name.ToString() , distFromCurrentSys);
+                        reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").Tx(this,"D2") , visits.ToString());
+                        reportView.Text += string.Format((Environment.NewLine + "    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}" + Environment.NewLine).Tx(this,"D3") ,sysX , sysY , sysZ);
 
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
                         object[] plotobj = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
@@ -307,13 +320,10 @@ namespace EDDiscovery.UserControls
                     currentSeriesTop.TrackerFormatString = currentTracker;
                     currentSeriesFront.TrackerFormatString = currentTracker;
                     currentSeriesSide.TrackerFormatString = currentTracker;
-
-                    // End of the systems list
-                    reportView.Text += ("\n");
                 }
 
                 // End of the Report
-                reportView.Text += ("\n\nReport created on " + DateTime.Now.ToString());
+                reportView.Text += Environment.NewLine + Environment.NewLine + " @ " + DateTime.Now.ToString();
             }
         }
 
@@ -331,8 +341,13 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string s = comboBoxView.SelectedItem.ToString();
-            if (s == "Top")
+            SelectView();
+        }
+
+        private void SelectView()
+        { 
+            int i = comboBoxView.SelectedIndex;
+            if (i==0)
             {
                 plotViewTop.Visible = true;
                 plotViewFront.Visible = false;
@@ -340,7 +355,7 @@ namespace EDDiscovery.UserControls
                 dataGridList.Visible = false;
                 reportView.Visible = false;
             }
-            if (s == "Front")
+            else if (i==1)
             {
                 plotViewTop.Visible = false;
                 plotViewFront.Visible = true;
@@ -348,7 +363,7 @@ namespace EDDiscovery.UserControls
                 dataGridList.Visible = false;
                 reportView.Visible = false;
             }
-            if (s == "Side")
+            else if (i==2)
             {
                 plotViewTop.Visible = false;
                 plotViewFront.Visible = false;
@@ -356,13 +371,19 @@ namespace EDDiscovery.UserControls
                 dataGridList.Visible = false;
                 reportView.Visible = false;
             }
-            if (s == "Grid")
+            else if (i==3)
             {
+                plotViewTop.Visible = false;
+                plotViewFront.Visible = false;
+                plotViewSide.Visible = false;
                 dataGridList.Visible = true;
                 reportView.Visible = false;
             }
-            if (s == "Report")
+            else if (i==4)
             {
+                plotViewTop.Visible = false;
+                plotViewFront.Visible = false;
+                plotViewSide.Visible = false;
                 dataGridList.Visible = false;
                 reportView.Visible = true;
             }
@@ -372,36 +393,6 @@ namespace EDDiscovery.UserControls
         {
             if (sysName.Equals(e.Column) && sysX.Equals(e.Column) && sysY.Equals(e.Column) && sysZ.Equals(e.Column))
                 e.SortDataGridViewColumnDate();
-        }
-
-         private void comboBoxView_TextChanged(object sender, EventArgs e)
-        {
-            string s = comboBoxView.SelectedItem.ToString();
-            if (s == "Top")
-            {
-                dataGridList.Visible = false;
-                reportView.Visible = false;
-            }
-            if (s == "Front")
-            {
-                dataGridList.Visible = false;
-                reportView.Visible = false;
-            }
-            if (s == "Side")
-            {
-                dataGridList.Visible = false;
-                reportView.Visible = false;
-            }
-            if (s == "Grid")
-            {
-                dataGridList.Visible = true;
-                reportView.Visible = false;
-            }
-            if (s == "Report")
-            {
-                dataGridList.Visible = false;
-                reportView.Visible = true;
-            }
         }
 
         string OutPath = "";
