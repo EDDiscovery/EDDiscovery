@@ -50,6 +50,9 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -94,8 +97,10 @@ namespace EDDiscovery.UserControls
             OutfittingList ofl = hl.outfitting;
             string cursel = comboBoxYards.Text;
 
+            string the = "Travel History Entry".Tx(this);
+
             comboBoxYards.Items.Clear();
-            comboBoxYards.Items.Add("Travel History Entry");
+            comboBoxYards.Items.Add(the);
 
             comboBoxYards.Items.AddRange(ShipModuleData.Instance.GetAllModTypes());
 
@@ -106,7 +111,7 @@ namespace EDDiscovery.UserControls
                 cursel = SQLiteDBClass.GetSettingString(DbYardSave, "");
 
             if (cursel == "" || !comboBoxYards.Items.Contains(cursel))
-                cursel = "Travel History Entry";
+                cursel = the;
 
             comboBoxYards.Enabled = false;
             comboBoxYards.SelectedItem = cursel;
@@ -140,7 +145,7 @@ namespace EDDiscovery.UserControls
 
             Outfitting yard = null;
 
-            if (comboBoxYards.Text.Contains("Travel") || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
+            if (comboBoxYards.SelectedIndex == 0 || comboBoxYards.Text.Length == 0)  // second is due to the order History gets called vs this on start
             {
                 HistoryEntry lastshipyard = discoveryform.history.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.Outfitting, last_he);
                 if (lastshipyard != null)
@@ -187,13 +192,18 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            labelYard.Text = moduletype + " locations";
+            labelYard.Text = moduletype;
             labelYard.Visible = true;
-            Col1.HeaderText = "Date";
-            Col2.HeaderText = "Yard";
-            Col3.HeaderText = "Item";
-            Col4.HeaderText = "Distance";
-            ColPrice.HeaderText = "Price";
+            Col1.HeaderText = "Date".Tx(this);
+            Col1.Tag = "DT";
+            Col2.HeaderText = "Yard".Tx(this);
+            Col2.Tag = null;
+            Col3.HeaderText = "Item".Tx(this);
+            Col3.Tag = null;
+            Col4.HeaderText = "Distance".Tx(this);
+            Col4.Tag = "ly";
+            ColPrice.HeaderText = "Price".Tx(this);
+            ColPrice.Tag = "cr";
         }
 
         private void DisplayYard(Outfitting yard)
@@ -214,12 +224,16 @@ namespace EDDiscovery.UserControls
             labelYard.Text = yard.Ident(EDDiscoveryForm.EDDConfig.DisplayUTC) + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
 
-            Col1.HeaderText = "Type";
-            Col2.HeaderText = "Item";
-            Col3.HeaderText = "Info";
-            Col4.HeaderText = "Mass";
+            Col1.HeaderText = "Type".Tx(this);
+            Col1.Tag = null;
+            Col2.HeaderText = "Item".Tx(this);
+            Col2.Tag = null;
+            Col3.HeaderText = "Info".Tx(this);
+            Col3.Tag = null;
+            Col4.HeaderText = "Mass".Tx(this);
+            Col4.Tag = "t";
         }
- 
+
         #endregion
 
 
@@ -234,15 +248,15 @@ namespace EDDiscovery.UserControls
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            string name = e.Column.HeaderText;
-            if (name == "Date")
-                e.SortDataGridViewColumnDate();
-            else if (name == "Distance")
-                e.SortDataGridViewColumnNumeric("ly");
-            else if (name == "Price")
-                e.SortDataGridViewColumnNumeric("cr");
-            else if (name == "Mass")
-                e.SortDataGridViewColumnNumeric("t");
+            if ( e.Column.Tag != null )
+            {
+                string t = (string)e.Column.Tag;
+
+                if (t == "DT")
+                    e.SortDataGridViewColumnDate();
+                else
+                    e.SortDataGridViewColumnNumeric(t);
+            }
         }
 
     }

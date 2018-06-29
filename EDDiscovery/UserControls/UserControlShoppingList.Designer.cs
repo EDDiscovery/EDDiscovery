@@ -44,21 +44,21 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerVertical = new ExtendedControls.SplitContainerCustom();
             this.pictureBoxList = new ExtendedControls.PictureBoxHotspot();
             this.splitContainerRightHorz = new ExtendedControls.SplitContainerCustom();
             this.buttonTechBroker = new ExtendedControls.ButtonExt();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
-            this.contextMenuConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showBodyMaterialsWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onlyCapacityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onlyCapacityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -68,12 +68,12 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel1.SuspendLayout();
             this.splitContainerRightHorz.Panel2.SuspendLayout();
             this.splitContainerRightHorz.SuspendLayout();
-            this.contextMenuConfig.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // splitContainerVertical
             // 
@@ -149,17 +149,17 @@ namespace EDDiscovery.UserControls
             this.userControlEngineering.Size = new System.Drawing.Size(844, 352);
             this.userControlEngineering.TabIndex = 0;
             // 
-            // contextMenuConfig
+            // contextMenuStrip
             // 
-            this.contextMenuConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showMaxFSDInjectionsToolStripMenuItem,
             this.showBodyMaterialsWhenLandedToolStripMenuItem,
             this.showAvailableMaterialsInListWhenLandedToolStripMenuItem,
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem,
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
             this.useHistoricMaterialCountsToolStripMenuItem});
-            this.contextMenuConfig.Name = "contextMenuConfig";
-            this.contextMenuConfig.Size = new System.Drawing.Size(369, 158);
+            this.contextMenuStrip.Name = "contextMenuConfig";
+            this.contextMenuStrip.Size = new System.Drawing.Size(369, 158);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -180,6 +180,14 @@ namespace EDDiscovery.UserControls
             this.showBodyMaterialsWhenLandedToolStripMenuItem.Size = new System.Drawing.Size(368, 22);
             this.showBodyMaterialsWhenLandedToolStripMenuItem.Text = "Show Body Materials When Landed";
             this.showBodyMaterialsWhenLandedToolStripMenuItem.Click += new System.EventHandler(this.showAllMaterialsWhenLandedToolStripMenuItem_Click);
+            // 
+            // onlyCapacityToolStripMenuItem
+            // 
+            this.onlyCapacityToolStripMenuItem.CheckOnClick = true;
+            this.onlyCapacityToolStripMenuItem.Name = "onlyCapacityToolStripMenuItem";
+            this.onlyCapacityToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.onlyCapacityToolStripMenuItem.Text = "Hide when storage full";
+            this.onlyCapacityToolStripMenuItem.Click += new System.EventHandler(this.onlyCapacityToolStripMenuItem_Click);
             // 
             // showAvailableMaterialsInListWhenLandedToolStripMenuItem
             // 
@@ -213,14 +221,6 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
-            // onlyCapacityToolStripMenuItem
-            // 
-            this.onlyCapacityToolStripMenuItem.CheckOnClick = true;
-            this.onlyCapacityToolStripMenuItem.Name = "onlyCapacityToolStripMenuItem";
-            this.onlyCapacityToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.onlyCapacityToolStripMenuItem.Text = "Hide when storage full";
-            this.onlyCapacityToolStripMenuItem.Click += new System.EventHandler(this.onlyCapacityToolStripMenuItem_Click);
-            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -237,19 +237,19 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).EndInit();
             this.splitContainerRightHorz.ResumeLayout(false);
-            this.contextMenuConfig.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.SplitContainerCustom splitContainerVertical;
         private ExtendedControls.PictureBoxHotspot pictureBoxList;
         private ExtendedControls.SplitContainerCustom splitContainerRightHorz;
         private UserControlSynthesis userControlSynthesis;
         private UserControlEngineering userControlEngineering;
-        private System.Windows.Forms.ContextMenuStrip contextMenuConfig;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showMaxFSDInjectionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showBodyMaterialsWhenLandedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsInListWhenLandedToolStripMenuItem;

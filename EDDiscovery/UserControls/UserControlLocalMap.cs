@@ -71,6 +71,10 @@ namespace EDDiscovery.UserControls
             var style = chartMap.ChartAreas[0].Area3DStyle;
             style.Rotation = Math.Min(180, Math.Max(-180, style.Rotation - (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationX", xr)))));
             style.Inclination = Math.Min(90, Math.Max(-90, style.Inclination + (Convert.ToInt32(SQLiteConnectionUser.GetSettingDouble(DbSave + "MapRotationY", yr)))));
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -131,7 +135,7 @@ namespace EDDiscovery.UserControls
 
         private void FillMap(SortedList<double, ISystem> csl, ISystem centerSystem)
         {
-            SetControlText("3D Map of closest systems from " + centerSystem.Name);
+            SetControlText(string.Format("3D Map of closest systems from {0}".Tx(this,"3dmap"), centerSystem.Name));
 
             for (int s = 0; s <= 100; s++)
             {

@@ -163,13 +163,13 @@ namespace EDDiscovery.UserControls
 
             displayfont = discoveryform.theme.GetFont;
 
-            pictureBox.ContextMenuStrip = contextMenuStripConfig;
+            pictureBox.ContextMenuStrip = contextMenuStrip;
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
+            cfs.ConfigureThirdOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
@@ -178,6 +178,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
             discoveryform.OnNewTarget += NewTarget;
             discoveryform.OnNewUIEvent += OnNewUIEvent;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
         public override void Closing()
@@ -313,8 +316,8 @@ namespace EDDiscovery.UserControls
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
-                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown";
-                            AddColText(0, 0, rowpos, rowheight, "Target: " + name + " @ " + dist +" ly", textcolour, backcolour, null);
+                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
+                            AddColText(0, 0, rowpos, rowheight, "Target".Tx() + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
 
@@ -391,7 +394,7 @@ namespace EDDiscovery.UserControls
             {
                 Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
                 ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
-                                            "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM");
+                                            "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM".Tx(this,"TVE"));
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
                 edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
@@ -941,7 +944,7 @@ namespace EDDiscovery.UserControls
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            cfs.FilterButton(DbFilterSave, contextMenuStripConfig.PointToScreen(new Point(0, 0)), new Size(180,400), 
+            cfs.FilterButton(DbFilterSave, contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(180,400), 
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
         }
 
@@ -955,7 +958,7 @@ namespace EDDiscovery.UserControls
             Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
             List<string> namelist = new List<string>() { "Note" };
             namelist.AddRange(discoveryform.Globals.NameList);
-            frm.InitFilter("Summary Panel: Filter out fields",
+            frm.InitFilter("Summary Panel: Filter out fields".Tx(this,"SPF"),
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },

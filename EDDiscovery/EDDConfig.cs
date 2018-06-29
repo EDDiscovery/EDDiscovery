@@ -70,6 +70,7 @@ namespace EDDiscovery
         private bool edsmeddbdownload = true;
         private string edsmgridids = "All";
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
+        private string language = "Auto";
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -287,7 +288,20 @@ namespace EDDiscovery
             }
         }
 
-         #endregion
+        public string Language         // as standard culture en-gb or en etc, or Auto
+        {
+            get
+            {
+                return language;
+            }
+            set
+            {
+                language = value;
+                SQLiteConnectionUser.PutSettingString("DefaultLanguage", value);
+            }
+        }
+
+        #endregion
 
         #region Update at start
 
@@ -311,6 +325,7 @@ namespace EDDiscovery
                 edsmeddbdownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
                 edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
+                language = SQLiteConnectionUser.GetSettingString("DefaultLanguage", "Auto");
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

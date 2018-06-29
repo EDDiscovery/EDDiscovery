@@ -74,6 +74,7 @@
     <Compile Include="CHash\FileHandles.cs" />
     <Compile Include="Keys\KeyObjectExtensions.cs" />
     <Compile Include="Misc\Maps2d.cs" />
+    <Compile Include="Translator\Translator.cs" />
     <Compile Include="Win32\NativeMethods.cs" />
     <Compile Include="Win32\Processes.cs" />
     <Compile Include="DebugTraceAndLogs\AppTicks.cs" />

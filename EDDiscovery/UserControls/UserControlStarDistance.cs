@@ -60,6 +60,10 @@ namespace EDDiscovery.UserControls
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
             checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -127,7 +131,7 @@ namespace EDDiscovery.UserControls
 
             if (csl != null && csl.Any())
             {
-                SetControlText("From " + name);
+                SetControlText(string.Format("From {0}".Tx(this,"From"), name));
                 foreach (KeyValuePair<double, ISystem> tvp in csl)
                 {
                     double dist = Math.Sqrt(tvp.Key);   // distances are stored squared for speed, back to normal.
@@ -206,7 +210,7 @@ namespace EDDiscovery.UserControls
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NoEDSMSys"));
             }
 
             this.Cursor = Cursors.Default;

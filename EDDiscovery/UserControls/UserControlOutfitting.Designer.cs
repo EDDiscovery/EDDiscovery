@@ -46,17 +46,17 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewOutfitting = new System.Windows.Forms.DataGridView();
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelYard = new System.Windows.Forms.Label();
             this.labelYardSel = new System.Windows.Forms.Label();
             this.comboBoxYards = new ExtendedControls.ComboBoxCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOutfitting)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -94,37 +94,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewOutfitting.Size = new System.Drawing.Size(780, 540);
             this.dataGridViewOutfitting.TabIndex = 1;
             this.dataGridViewOutfitting.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
-            // 
-            // Col1
-            // 
-            this.Col1.HeaderText = "";
-            this.Col1.MinimumWidth = 50;
-            this.Col1.Name = "Col1";
-            this.Col1.ReadOnly = true;
-            // 
-            // Col2
-            // 
-            this.Col2.HeaderText = "";
-            this.Col2.Name = "Col2";
-            this.Col2.ReadOnly = true;
-            // 
-            // Col3
-            // 
-            this.Col3.HeaderText = "";
-            this.Col3.Name = "Col3";
-            this.Col3.ReadOnly = true;
-            // 
-            // Col4
-            // 
-            this.Col4.HeaderText = "";
-            this.Col4.Name = "Col4";
-            this.Col4.ReadOnly = true;
-            // 
-            // ColPrice
-            // 
-            this.ColPrice.HeaderText = "";
-            this.ColPrice.Name = "ColPrice";
-            this.ColPrice.ReadOnly = true;
             // 
             // vScrollBarCustomMC
             // 
@@ -212,6 +181,37 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.comboBoxYards, "Select ship to view");
             this.comboBoxYards.ValueMember = "";
             this.comboBoxYards.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // Col1
+            // 
+            this.Col1.HeaderText = "<code>";
+            this.Col1.MinimumWidth = 50;
+            this.Col1.Name = "Col1";
+            this.Col1.ReadOnly = true;
+            // 
+            // Col2
+            // 
+            this.Col2.HeaderText = "<code>";
+            this.Col2.Name = "Col2";
+            this.Col2.ReadOnly = true;
+            // 
+            // Col3
+            // 
+            this.Col3.HeaderText = "<code>";
+            this.Col3.Name = "Col3";
+            this.Col3.ReadOnly = true;
+            // 
+            // Col4
+            // 
+            this.Col4.HeaderText = "<code>";
+            this.Col4.Name = "Col4";
+            this.Col4.ReadOnly = true;
+            // 
+            // ColPrice
+            // 
+            this.ColPrice.HeaderText = "<code>";
+            this.ColPrice.Name = "ColPrice";
+            this.ColPrice.ReadOnly = true;
             // 
             // UserControlOutfitting
             // 

@@ -111,8 +111,11 @@ namespace EDDiscovery.UserControls
             }
 
             isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
-            
+
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

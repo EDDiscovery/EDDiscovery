@@ -78,6 +78,8 @@ namespace EDDiscovery.UserControls
             buttonExtExcel.Visible = showexcel;
 
             ValidateEnable();
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ });
         }
 
         public void Closing()

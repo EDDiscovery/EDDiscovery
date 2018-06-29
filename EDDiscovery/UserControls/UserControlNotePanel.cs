@@ -60,6 +60,9 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
         public override void LoadLayout()

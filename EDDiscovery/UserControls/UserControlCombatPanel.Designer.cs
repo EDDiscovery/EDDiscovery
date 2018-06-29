@@ -47,17 +47,8 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.panelStatus = new System.Windows.Forms.Panel();
-            this.panelTop = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanelCombat = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewCombat = new System.Windows.Forms.DataGridView();
-            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Reward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.labelCredits = new ExtendedControls.LabelExt();
             this.labelTotalKills = new ExtendedControls.LabelExt();
             this.labelFactionKills = new ExtendedControls.LabelExt();
@@ -66,19 +57,28 @@ namespace EDDiscovery.UserControls
             this.labelFaction = new ExtendedControls.LabelExt();
             this.labelTotalReward = new ExtendedControls.LabelExt();
             this.labelFactionReward = new ExtendedControls.LabelExt();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.checkBoxCustomGridOn = new ExtendedControls.CheckBoxCustom();
             this.comboBoxCustomCampaign = new ExtendedControls.ComboBoxCustom();
             this.buttonExtEditCampaign = new ExtendedControls.ButtonExt();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.dataViewScrollerPanelCombat = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataGridViewCombat = new System.Windows.Forms.DataGridView();
+            this.Time = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Reward = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelStatus.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.dataViewScrollerPanelCombat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
             this.SuspendLayout();
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // panelStatus
             // 
@@ -96,6 +96,86 @@ namespace EDDiscovery.UserControls
             this.panelStatus.Size = new System.Drawing.Size(798, 56);
             this.panelStatus.TabIndex = 5;
             // 
+            // labelCredits
+            // 
+            this.labelCredits.Location = new System.Drawing.Point(4, 3);
+            this.labelCredits.Name = "labelCredits";
+            this.labelCredits.Size = new System.Drawing.Size(100, 24);
+            this.labelCredits.TabIndex = 4;
+            this.labelCredits.Text = "Credits";
+            this.labelCredits.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelCredits, "Current Credits");
+            // 
+            // labelTotalKills
+            // 
+            this.labelTotalKills.Location = new System.Drawing.Point(110, 3);
+            this.labelTotalKills.Name = "labelTotalKills";
+            this.labelTotalKills.Size = new System.Drawing.Size(100, 24);
+            this.labelTotalKills.TabIndex = 4;
+            this.labelTotalKills.Text = "Kills";
+            this.labelTotalKills.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelTotalKills, "Total kills in campaign");
+            // 
+            // labelFactionKills
+            // 
+            this.labelFactionKills.Location = new System.Drawing.Point(110, 29);
+            this.labelFactionKills.Name = "labelFactionKills";
+            this.labelFactionKills.Size = new System.Drawing.Size(100, 24);
+            this.labelFactionKills.TabIndex = 4;
+            this.labelFactionKills.Text = "Faction Kills";
+            this.labelFactionKills.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelFactionKills, "Faction Kills");
+            // 
+            // labelBalance
+            // 
+            this.labelBalance.Location = new System.Drawing.Point(315, 3);
+            this.labelBalance.Name = "labelBalance";
+            this.labelBalance.Size = new System.Drawing.Size(100, 24);
+            this.labelBalance.TabIndex = 4;
+            this.labelBalance.Text = "Balance";
+            this.labelBalance.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelBalance, "Total reward less any costs (fines, rebuys etc)");
+            // 
+            // labelTotalCrimes
+            // 
+            this.labelTotalCrimes.Location = new System.Drawing.Point(420, 3);
+            this.labelTotalCrimes.Name = "labelTotalCrimes";
+            this.labelTotalCrimes.Size = new System.Drawing.Size(100, 24);
+            this.labelTotalCrimes.TabIndex = 4;
+            this.labelTotalCrimes.Text = "Crimes";
+            this.labelTotalCrimes.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelTotalCrimes, "How many times you\'ve been caught!");
+            // 
+            // labelFaction
+            // 
+            this.labelFaction.Location = new System.Drawing.Point(3, 29);
+            this.labelFaction.Name = "labelFaction";
+            this.labelFaction.Size = new System.Drawing.Size(100, 24);
+            this.labelFaction.TabIndex = 4;
+            this.labelFaction.Text = "Faction";
+            this.labelFaction.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelFaction, "Target Faction");
+            // 
+            // labelTotalReward
+            // 
+            this.labelTotalReward.Location = new System.Drawing.Point(210, 3);
+            this.labelTotalReward.Name = "labelTotalReward";
+            this.labelTotalReward.Size = new System.Drawing.Size(100, 24);
+            this.labelTotalReward.TabIndex = 4;
+            this.labelTotalReward.Text = "TotalReward";
+            this.labelTotalReward.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelTotalReward, "Total reward");
+            // 
+            // labelFactionReward
+            // 
+            this.labelFactionReward.Location = new System.Drawing.Point(210, 29);
+            this.labelFactionReward.Name = "labelFactionReward";
+            this.labelFactionReward.Size = new System.Drawing.Size(100, 24);
+            this.labelFactionReward.TabIndex = 4;
+            this.labelFactionReward.Text = "FactionReward";
+            this.labelFactionReward.TextBackColor = System.Drawing.SystemColors.Control;
+            this.toolTip.SetToolTip(this.labelFactionReward, "Reward associated with destroying the faction ships");
+            // 
             // panelTop
             // 
             this.panelTop.Controls.Add(this.checkBoxCustomGridOn);
@@ -106,6 +186,64 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(798, 32);
             this.panelTop.TabIndex = 5;
+            // 
+            // checkBoxCustomGridOn
+            // 
+            this.checkBoxCustomGridOn.AutoSize = true;
+            this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomGridOn.FontNerfReduction = 0.5F;
+            this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(284, 7);
+            this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
+            this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
+            this.checkBoxCustomGridOn.TabIndex = 3;
+            this.checkBoxCustomGridOn.Text = "Grid";
+            this.checkBoxCustomGridOn.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomGridOn, "Show grid when in transparent mode");
+            this.checkBoxCustomGridOn.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxCustomCampaign
+            // 
+            this.comboBoxCustomCampaign.ArrowWidth = 1;
+            this.comboBoxCustomCampaign.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomCampaign.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomCampaign.DataSource = null;
+            this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomCampaign.DisplayMember = "";
+            this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomCampaign.DropDownHeight = 400;
+            this.comboBoxCustomCampaign.DropDownWidth = 600;
+            this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomCampaign.ItemHeight = 13;
+            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 3);
+            this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
+            this.comboBoxCustomCampaign.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomCampaign.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomCampaign.ScrollBarWidth = 16;
+            this.comboBoxCustomCampaign.SelectedIndex = -1;
+            this.comboBoxCustomCampaign.SelectedItem = null;
+            this.comboBoxCustomCampaign.SelectedValue = null;
+            this.comboBoxCustomCampaign.Size = new System.Drawing.Size(222, 21);
+            this.comboBoxCustomCampaign.TabIndex = 1;
+            this.comboBoxCustomCampaign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomCampaign, "Select Campaign to view");
+            this.comboBoxCustomCampaign.ValueMember = "";
+            this.comboBoxCustomCampaign.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomCampaign_SelectedIndexChanged);
+            // 
+            // buttonExtEditCampaign
+            // 
+            this.buttonExtEditCampaign.Location = new System.Drawing.Point(228, 3);
+            this.buttonExtEditCampaign.Name = "buttonExtEditCampaign";
+            this.buttonExtEditCampaign.Size = new System.Drawing.Size(50, 24);
+            this.buttonExtEditCampaign.TabIndex = 2;
+            this.buttonExtEditCampaign.Text = "Edit";
+            this.toolTip.SetToolTip(this.buttonExtEditCampaign, "Edit user defined campaign");
+            this.buttonExtEditCampaign.UseVisualStyleBackColor = true;
+            this.buttonExtEditCampaign.Click += new System.EventHandler(this.buttonExtEditCampaign_Click);
             // 
             // dataViewScrollerPanelCombat
             // 
@@ -131,13 +269,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(778, 23);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(778, 21);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 250);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 252);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -218,144 +356,6 @@ namespace EDDiscovery.UserControls
             this.Reward.Name = "Reward";
             this.Reward.ReadOnly = true;
             // 
-            // labelCredits
-            // 
-            this.labelCredits.Location = new System.Drawing.Point(4, 3);
-            this.labelCredits.Name = "labelCredits";
-            this.labelCredits.Size = new System.Drawing.Size(100, 24);
-            this.labelCredits.TabIndex = 4;
-            this.labelCredits.Text = "Credits";
-            this.labelCredits.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelCredits, "Current Credits");
-            // 
-            // labelTotalKills
-            // 
-            this.labelTotalKills.Location = new System.Drawing.Point(110, 3);
-            this.labelTotalKills.Name = "labelTotalKills";
-            this.labelTotalKills.Size = new System.Drawing.Size(100, 24);
-            this.labelTotalKills.TabIndex = 4;
-            this.labelTotalKills.Text = "Kills";
-            this.labelTotalKills.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelTotalKills, "Total kills in campaign");
-            // 
-            // labelFactionKills
-            // 
-            this.labelFactionKills.Location = new System.Drawing.Point(110, 29);
-            this.labelFactionKills.Name = "labelFactionKills";
-            this.labelFactionKills.Size = new System.Drawing.Size(100, 24);
-            this.labelFactionKills.TabIndex = 4;
-            this.labelFactionKills.Text = "Faction Kills";
-            this.labelFactionKills.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelFactionKills, "Faction Kills");
-            // 
-            // labelBalance
-            // 
-            this.labelBalance.Location = new System.Drawing.Point(315, 3);
-            this.labelBalance.Name = "labelBalance";
-            this.labelBalance.Size = new System.Drawing.Size(100, 24);
-            this.labelBalance.TabIndex = 4;
-            this.labelBalance.Text = "Balance";
-            this.labelBalance.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelBalance, "Total reward less any costs (fines, rebuys etc)");
-            // 
-            // labelTotalCrimes
-            // 
-            this.labelTotalCrimes.Location = new System.Drawing.Point(420, 3);
-            this.labelTotalCrimes.Name = "labelTotalCrimes";
-            this.labelTotalCrimes.Size = new System.Drawing.Size(100, 24);
-            this.labelTotalCrimes.TabIndex = 4;
-            this.labelTotalCrimes.Text = "Crimes";
-            this.labelTotalCrimes.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelTotalCrimes, "How many times you\'ve been caught!");
-            // 
-            // labelFaction
-            // 
-            this.labelFaction.Location = new System.Drawing.Point(3, 29);
-            this.labelFaction.Name = "labelFaction";
-            this.labelFaction.Size = new System.Drawing.Size(100, 24);
-            this.labelFaction.TabIndex = 4;
-            this.labelFaction.Text = "Faction";
-            this.labelFaction.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelFaction, "Target Faction");
-            // 
-            // labelTotalReward
-            // 
-            this.labelTotalReward.Location = new System.Drawing.Point(210, 3);
-            this.labelTotalReward.Name = "labelTotalReward";
-            this.labelTotalReward.Size = new System.Drawing.Size(100, 24);
-            this.labelTotalReward.TabIndex = 4;
-            this.labelTotalReward.Text = "TotalReward";
-            this.labelTotalReward.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelTotalReward, "Total reward");
-            // 
-            // labelFactionReward
-            // 
-            this.labelFactionReward.Location = new System.Drawing.Point(210, 29);
-            this.labelFactionReward.Name = "labelFactionReward";
-            this.labelFactionReward.Size = new System.Drawing.Size(100, 24);
-            this.labelFactionReward.TabIndex = 4;
-            this.labelFactionReward.Text = "FactionReward";
-            this.labelFactionReward.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip1.SetToolTip(this.labelFactionReward, "Reward associated with destroying the faction ships");
-            // 
-            // checkBoxCustomGridOn
-            // 
-            this.checkBoxCustomGridOn.AutoSize = true;
-            this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomGridOn.FontNerfReduction = 0.5F;
-            this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(284, 7);
-            this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
-            this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
-            this.checkBoxCustomGridOn.TabIndex = 3;
-            this.checkBoxCustomGridOn.Text = "Grid";
-            this.checkBoxCustomGridOn.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCustomGridOn, "Show grid when in transparent mode");
-            this.checkBoxCustomGridOn.UseVisualStyleBackColor = true;
-            // 
-            // comboBoxCustomCampaign
-            // 
-            this.comboBoxCustomCampaign.ArrowWidth = 1;
-            this.comboBoxCustomCampaign.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCampaign.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomCampaign.DataSource = null;
-            this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxCustomCampaign.DisplayMember = "";
-            this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomCampaign.DropDownHeight = 400;
-            this.comboBoxCustomCampaign.DropDownWidth = 600;
-            this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCampaign.ItemHeight = 13;
-            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 3);
-            this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
-            this.comboBoxCustomCampaign.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCampaign.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCampaign.ScrollBarWidth = 16;
-            this.comboBoxCustomCampaign.SelectedIndex = -1;
-            this.comboBoxCustomCampaign.SelectedItem = null;
-            this.comboBoxCustomCampaign.SelectedValue = null;
-            this.comboBoxCustomCampaign.Size = new System.Drawing.Size(222, 21);
-            this.comboBoxCustomCampaign.TabIndex = 1;
-            this.comboBoxCustomCampaign.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip1.SetToolTip(this.comboBoxCustomCampaign, "Select Campaign to view");
-            this.comboBoxCustomCampaign.ValueMember = "";
-            this.comboBoxCustomCampaign.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomCampaign_SelectedIndexChanged);
-            // 
-            // buttonExtEditCampaign
-            // 
-            this.buttonExtEditCampaign.Location = new System.Drawing.Point(228, 3);
-            this.buttonExtEditCampaign.Name = "buttonExtEditCampaign";
-            this.buttonExtEditCampaign.Size = new System.Drawing.Size(50, 24);
-            this.buttonExtEditCampaign.TabIndex = 2;
-            this.buttonExtEditCampaign.Text = "Edit";
-            this.toolTip1.SetToolTip(this.buttonExtEditCampaign, "Edit user defined campaign");
-            this.buttonExtEditCampaign.UseVisualStyleBackColor = true;
-            this.buttonExtEditCampaign.Click += new System.EventHandler(this.buttonExtEditCampaign_Click);
-            // 
             // UserControlCombatPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -375,7 +375,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private ExtendedControls.ComboBoxCustom comboBoxCustomCampaign;
         private ExtendedControls.ButtonExt buttonExtEditCampaign;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanelCombat;
@@ -396,6 +396,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.LabelExt labelCredits;
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.CheckBoxCustom checkBoxCustomGridOn;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

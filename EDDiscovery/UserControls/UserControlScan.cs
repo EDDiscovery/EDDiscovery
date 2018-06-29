@@ -73,6 +73,10 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
 
             imagebox.ClickElement += ClickElement;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -168,7 +172,7 @@ namespace EDDiscovery.UserControls
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
-            SetControlText((last_sn == null) ? "No Scan" : last_sn.system.Name);
+            SetControlText((last_sn == null) ? "No Scan".Tx() : last_sn.system.Name);
 
             if (last_sn != null)     // 
             {
@@ -307,7 +311,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            return $"Approx value: {value:N0}";
+            return string.Format("Approx value: {0:N0}".Tx(this,"AV"), value);
         }
 
         // return right bottom of area used from curpos
@@ -494,7 +498,7 @@ namespace EDDiscovery.UserControls
                 if (sn.BeltData != null)
                     tip = sn.BeltData.RingInformationMoons(true);
                 else
-                    tip = sn.ownname + "\n\nNo scan data available";
+                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".Tx(this, "NSD");
 
                 if (sn.children != null && sn.children.Count != 0)
                 {
@@ -515,9 +519,9 @@ namespace EDDiscovery.UserControls
             else
             {
                 if (sn.type == StarScan.ScanNodeType.barycentre)
-                    tip = "Barycentre of " + sn.ownname;
+                    tip = string.Format("Barycentre of {0}".Tx(this,"BC") , sn.ownname);
                 else
-                    tip = sn.ownname + "\n\nNo scan data available";
+                    tip = sn.ownname + Environment.NewLine + Environment.NewLine + "No scan data available".Tx(this, "NSD");
 
                 endpoint = CreateImageLabel(pc, notscanned, new Point(curpos.X + offset, curpos.Y + alignv), size, sn.customname ?? sn.ownname, tip, alignv + labelvoff, false, false);
                 offset += size.Width / 2;       // return the middle used was this..

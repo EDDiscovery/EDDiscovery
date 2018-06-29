@@ -45,16 +45,16 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miGMPNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.miSystemNotes = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
-            this.pictureBox.ContextMenuStrip = this.contextMenuStrip1;
+            this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Margin = new System.Windows.Forms.Padding(0);
@@ -62,13 +62,13 @@ namespace EDDiscovery.UserControls
             this.pictureBox.Size = new System.Drawing.Size(150, 150);
             this.pictureBox.TabIndex = 1;
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.miGMPNotes,
             this.miSystemNotes});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(240, 48);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(240, 70);
             // 
             // miGMPNotes
             // 
@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "UserControlNotePanel";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem miSystemNotes;
         private System.Windows.Forms.ToolStripMenuItem miGMPNotes;
     }

@@ -147,6 +147,10 @@ namespace EDDiscovery
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
             EDDProfiles.Instance.LoadProfiles();
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory());
+            BaseUtils.Translator.Instance.AddExcludedControls(new string[] 
+            { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",
+                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox" });
 
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons

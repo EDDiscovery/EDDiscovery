@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewLogEntry += AppendText;
             AppendText(discoveryform.LogText, discoveryform.theme.TextBlockColor);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip,this);
         }
 
         public override void InitialDisplay()

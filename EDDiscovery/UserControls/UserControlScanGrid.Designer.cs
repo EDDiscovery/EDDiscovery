@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             this.Distance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.SuspendLayout();
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewScangrid;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImageColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;

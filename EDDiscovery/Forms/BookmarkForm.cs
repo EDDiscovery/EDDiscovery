@@ -37,7 +37,7 @@ namespace EDDiscovery.Forms
         public string y { get { return textBoxY.Text; } }
         public string z { get { return textBoxZ.Text; } }
         public bool IsTarget { get { return checkBoxTarget.Checked;  } }
-        public PlanetMarks SurfaceLocations { get { return userControlSurfaceBookmarks.PlanetMarks; } }
+        public PlanetMarks SurfaceLocations { get { return SurfaceBookmarks.PlanetMarks; } }
         
         private string edsmurl = null;
         bool validatestarname = false;
@@ -46,6 +46,8 @@ namespace EDDiscovery.Forms
         {
             InitializeComponent();
             EDDTheme.Instance.ApplyToFormStandardFontSize(this);
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks });
         }
 
         #region External Initialisation
@@ -141,7 +143,7 @@ namespace EDDiscovery.Forms
             {
                 var edsm = new EDSMClass();
                 edsmurl = edsm.GetUrlToEDSMSystem(name);
-                userControlSurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
+                SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
             }
 
             buttonOK.Enabled = true;
@@ -150,7 +152,7 @@ namespace EDDiscovery.Forms
         public void Update(BookmarkClass bk, string planet, double latitude, double longitude)  // from compass, bookmark at planet/lat/long
         {
             Update(bk);
-            userControlSurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
+            SurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
         }
 
         public void NewSystemBookmark(ISystem system, string note, DateTime tme)    // from multipe, create a new system bookmark
@@ -163,7 +165,7 @@ namespace EDDiscovery.Forms
             buttonDelete.Hide();
             var edsm = new EDSMClass();
             edsmurl = edsm.GetUrlToEDSMSystem(system.Name,system.EDSMID);
-            userControlSurfaceBookmarks.Init(system.Name);
+            SurfaceBookmarks.Init(system.Name);
             buttonOK.Enabled = true;
         }
 
@@ -171,7 +173,7 @@ namespace EDDiscovery.Forms
         public void NewSystemBookmark(ISystem system, string note, DateTime tme, string planet, double latitude, double longitude)
         {
             NewSystemBookmark(system, note, tme);
-            userControlSurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
+            SurfaceBookmarks.AddSurfaceLocation(planet, latitude, longitude);
         }
 
         public void NewFreeEntrySystemBookmark(DateTime tme)     // new system bookmark anywhere
@@ -188,7 +190,7 @@ namespace EDDiscovery.Forms
             buttonDelete.Hide();
             buttonEDSM.Enabled = false;
             buttonOK.Enabled = false;
-            userControlSurfaceBookmarks.Init("");
+            SurfaceBookmarks.Init("");
         }
 
         public void GMO(string name, string descr , bool istarget , string url )    // from formmap, new GMO bookmark
@@ -212,8 +214,8 @@ namespace EDDiscovery.Forms
 
         private void HideTime() { labelTimeMade.Hide(); textBoxTime.Hide(); ShiftControls(textBoxBookmarkNotes, textBoxTime); }
         private void HideBookmarkNotes() { labelBookmarkNotes.Hide(); textBoxBookmarkNotes.Hide(); ShiftControls(textBoxTravelNote, textBoxBookmarkNotes); }
-        private void HideTravelNote() { labelTravelNote.Hide(); labelTravelNoteEdit.Hide(); textBoxTravelNote.Hide(); ShiftControls(userControlSurfaceBookmarks, textBoxTravelNote); }
-        private void HideSurfaceBookmarks() { userControlSurfaceBookmarks.Hide(); ShiftControls(buttonOK, userControlSurfaceBookmarks); }
+        private void HideTravelNote() { labelTravelNote.Hide(); labelTravelNoteEdit.Hide(); textBoxTravelNote.Hide(); ShiftControls(SurfaceBookmarks, textBoxTravelNote); }
+        private void HideSurfaceBookmarks() { SurfaceBookmarks.Hide(); ShiftControls(buttonOK, SurfaceBookmarks); }
         private void HideEDSM() { buttonEDSM.Hide(); checkBoxTarget.Left = buttonEDSM.Left; }
 
         void ShiftControls(Control bot, Control top)
@@ -264,7 +266,7 @@ namespace EDDiscovery.Forms
                     InitialisePos(f);
                     var edsm = new EDSMClass();
                     edsmurl = edsm.GetUrlToEDSMSystem(f.Name,f.EDSMID);
-                    userControlSurfaceBookmarks.Init(f.Name);
+                    SurfaceBookmarks.Init(f.Name);
                 }
                 else
                     textBoxX.Text = textBoxY.Text = textBoxZ.Text = "";

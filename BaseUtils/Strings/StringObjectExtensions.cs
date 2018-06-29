@@ -126,6 +126,18 @@ public static class ObjectExtensionsStrings
         }
     }
 
+    public static string ReplaceNonAlphaNumeric(this string obj)
+    {
+        if (obj == null)
+            return null;
+        else
+        {
+            char[] arr = obj.ToCharArray();
+            arr = Array.FindAll<char>(arr, (c => char.IsLetterOrDigit(c)));
+            return new string(arr);
+        }
+    }
+
     public static string QuoteString(this string obj, bool comma = false, bool bracket = false, bool space = true)
     {
         if (obj.Length == 0 || obj.Contains("\"") || obj[obj.Length-1]==' ' || (space && obj.Contains(" ")) || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
@@ -968,16 +980,6 @@ public static class ObjectExtensionsStrings
         }
 
         return null;
-    }
-
-    static public string Tx(this string s, string id)       //demo of new translator system
-    {
-        return s;
-    }
-
-    static public string Tx(this string s, string root, string id)       //demo of new translator system
-    {
-        return s;
     }
 
 }

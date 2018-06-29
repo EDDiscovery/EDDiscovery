@@ -111,6 +111,10 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             autoupdateedsm = new Timer() { Interval = 2000 };
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void LoadLayout()
@@ -200,7 +204,7 @@ namespace EDDiscovery.UserControls
             else
                 rowno = -1;
 
-            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
 
@@ -287,7 +291,7 @@ namespace EDDiscovery.UserControls
             bool hasMaterials = false;
 
             if (syslist.Count > 1)
-                infostr = "First visit " + syslist.Last().EventTimeLocal.ToShortDateString();
+                infostr = string.Format("First visit {0}".Tx(this,"FV"),syslist.Last().EventTimeLocal.ToShortDateString());
 
             HistoryEntry he = syslist[0];
             StarScan.SystemNode node = discoveryform.history.starscan?.FindSystem(he.System,false);
@@ -298,7 +302,7 @@ namespace EDDiscovery.UserControls
             {
                 if (node.starnodes != null)
                 {
-                    infostr = infostr.AppendPrePad(node.starnodes.Count.ToStringInvariant() + " Star" + ((node.starnodes.Count > 1) ? "s" : ""), Environment.NewLine);
+                    infostr = infostr.AppendPrePad(string.Format("{0} Star(s)".Tx(this, "CS"), node.starnodes.Count) , Environment.NewLine);
                     string extrainfo = "";
                     string prefix = Environment.NewLine;
                     int total = 0;
@@ -314,34 +318,33 @@ namespace EDDiscovery.UserControls
                             {
                                 // Sagittarius A* is a special body: is the centre of the Milky Way, and the only one which is classified as a Super Massive Black Hole. As far as we know...                                
                                 if (sc.StarTypeID == EDStar.SuperMassiveBlackHole)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a super massive black hole", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a super massive black hole".Tx(this,"SMBH"), sc.BodyName) , prefix);
 
                                 // black holes
                                 if (sc.StarTypeID == EDStar.H)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a black hole", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a black hole".Tx(this, "BH"), sc.BodyName), prefix);
 
                                 // neutron stars
                                 if (sc.StarTypeID == EDStar.N)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a neutron star", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a neutron star".Tx(this, "NS"), sc.BodyName), prefix);
 
                                 // white dwarf (D, DA, DAB, DAO, DAZ, DAV, DB, DBZ, DBV, DO, DOV, DQ, DC, DCV, DX)
                                 string WhiteDwarf = "White Dwarf";
                                 if (sc.StarTypeText.Contains(WhiteDwarf))
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " white dwarf star", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} white dwarf star".Tx(this, "WD"), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // wolf rayet (W, WN, WNC, WC, WO)
                                 string WolfRayet = "Wolf-Rayet";
                                 if (sc.StarTypeText.Contains(WolfRayet))
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeID + " wolf-rayet star", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1} wolf-rayet star".Tx(this, "WR"), sc.BodyName, sc.StarTypeID), prefix);
 
                                 // giants. It should recognize all classes of giants.
-                                string Giant = "Giant";
-                                if (sc.StarTypeText.Contains(Giant))
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a " + sc.StarTypeText, prefix);
+                                if (sc.StarTypeText.Contains("Giant"))
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a {1}".Tx(this, "OTHER"), sc.BodyName, sc.StarTypeText), prefix);
 
                                 // rogue planets - not sure if they really exists, but they are in the journal, so...
                                 if (sc.StarTypeID == EDStar.RoguePlanet)
-                                    extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a rogue planet", prefix);
+                                    extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a rogue planet".Tx(this, "RP"), sc.BodyName), prefix);
                             }
 
                             else
@@ -356,22 +359,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth-like moon
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like moon", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like moon".Tx(this, "ELM"), sc.BodyName), prefix);
 
                                     // Terraformable water moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water moon", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water moon".Tx(this, "TWM"), sc.BodyName), prefix);
                                     // Water moon
                                     if (sc.Terraformable == false && sc.PlanetTypeID == EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water moon", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water moon".Tx(this, "WM"), sc.BodyName), prefix);
 
                                     // Terraformable moon
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable moon", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable moon".Tx(this, "TM"), sc.BodyName), prefix);
 
                                     // Ammonia moon
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia moon", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia moon".Tx(this, "AM"), sc.BodyName), prefix);
                                 }
 
                                 else
@@ -380,22 +383,22 @@ namespace EDDiscovery.UserControls
                                 {
                                     // Earth Like planet
                                     if (sc.PlanetTypeID == EDPlanet.Earthlike_body)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an earth like planet", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an earth like planet".Tx(this, "ELP"), sc.BodyName), prefix);
 
                                     // Terraformable water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == true)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable water world", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable water world".Tx(this, "TWW"), sc.BodyName), prefix);
                                     // Water world
                                     if (sc.PlanetTypeID == EDPlanet.Water_world && sc.Terraformable == false)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a water world", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a water world".Tx(this, "WW"), sc.BodyName), prefix);
 
                                     // Terraformable planet
                                     if (sc.Terraformable == true && sc.PlanetTypeID != EDPlanet.Water_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is a terraformable planet", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is a terraformable planet".Tx(this, "TP"), sc.BodyName), prefix);
 
                                     // Ammonia world
                                     if (sc.PlanetTypeID == EDPlanet.Ammonia_world)
-                                        extrainfo = extrainfo.AppendPrePad(sc.BodyName + " is an ammonia world", prefix);
+                                        extrainfo = extrainfo.AppendPrePad(string.Format("{0} is an ammonia world".Tx(this, "AW"), sc.BodyName), prefix);
                                 }
                             }
                         }
@@ -430,13 +433,13 @@ namespace EDDiscovery.UserControls
                                 StringBuilder jumpLevel = new StringBuilder();
 
                                 if (basic != 0)
-                                    jumpLevel.AppendPrePad(basic + "/" + Recipes.FindSynthesis("FSD", "Basic").Count + " Basic", ", ");
+                                    jumpLevel.AppendPrePad(basic + "/" + Recipes.FindSynthesis("FSD", "Basic").Count + " Basic".Tx(this,"BFSD"), ", ");
                                 if (standard != 0)
-                                    jumpLevel.AppendPrePad(standard + "/" + Recipes.FindSynthesis("FSD", "Standard").Count + " Standard", ", ");
+                                    jumpLevel.AppendPrePad(standard + "/" + Recipes.FindSynthesis("FSD", "Standard").Count + " Standard".Tx(this,"SFSD"), ", ");
                                 if (premium != 0)
-                                    jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium", ", ");
+                                    jumpLevel.AppendPrePad(premium + "/" + Recipes.FindSynthesis("FSD", "Premium").Count + " Premium".Tx(this,"PFSD"), ", ");
 
-                                jumponium = jumponium.AppendPrePad("\n" + sn.ScanData.BodyName + " has " + jumpLevel + " level elements.");
+                                jumponium = jumponium.AppendPrePad(Environment.NewLine + string.Format("{0} has {1} level elements.".Tx(this, "LE"), sn.ScanData.BodyName ,jumpLevel));
                             }
                         }
                     }
@@ -444,7 +447,7 @@ namespace EDDiscovery.UserControls
                     total -= node.starnodes.Count;
                     if (total > 0)
                     {   // tell us that a system has other bodies, and how much, beside stars
-                        infostr = infostr.AppendPrePad(total.ToStringInvariant() + " Other bod" + ((total > 1) ? "ies" : "y"), ", ");
+                        infostr = infostr.AppendPrePad(string.Format("{0} Other bodies".Tx(this,"OB"), total.ToStringInvariant()), ", ");
                         infostr = infostr.AppendPrePad(extrainfo, prefix);                                                
                     }
                     else
@@ -453,7 +456,7 @@ namespace EDDiscovery.UserControls
                     }
                     if (hasMaterials == true && checkBoxJumponium.Checked == true)
                     {
-                        infostr = infostr.AppendPrePad("\n\nThis system has materials for FSD boost: ");
+                        infostr = infostr.AppendPrePad(Environment.NewLine + Environment.NewLine + "This system has materials for FSD boost: ".Tx(this,"FSD"));
                         infostr = infostr.AppendPrePad(jumponium);
                     }
                 }
@@ -727,7 +730,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NoEDSM"));
 
             this.Cursor = Cursors.Default;
         }

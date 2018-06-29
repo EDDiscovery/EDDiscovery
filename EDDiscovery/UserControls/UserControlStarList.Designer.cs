@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.labelTime = new System.Windows.Forms.Label();
-            this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,7 +72,7 @@ namespace EDDiscovery.UserControls
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel.SuspendLayout();
-            this.historyContextMenu.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
             this.SuspendLayout();
@@ -270,16 +270,16 @@ namespace EDDiscovery.UserControls
             this.labelTime.TabIndex = 0;
             this.labelTime.Text = "Time";
             // 
-            // historyContextMenu
+            // contextMenuStrip
             // 
-            this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.removeSortingOfColumnsToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem,
             this.setNoteToolStripMenuItem});
-            this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(221, 92);
-            this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
+            this.contextMenuStrip.Name = "historyContextMenu";
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 114);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
             // 
@@ -379,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem,
             this.ColumnVisits,
             this.ColumnInformation});
-            this.dataGridViewStarList.ContextMenuStrip = this.historyContextMenu;
+            this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -454,7 +454,7 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(870, 610);
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
-            this.historyContextMenu.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).EndInit();
             this.ResumeLayout(false);
@@ -471,7 +471,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         public System.Windows.Forms.DataGridView dataGridViewStarList;
-        private System.Windows.Forms.ContextMenuStrip historyContextMenu;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
