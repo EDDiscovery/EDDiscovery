@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
 
         public static TravelHistoryFilter FromDays(int days)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(days), string.Format("{0} hours".Tx(typeof(TravelHistoryFilter), "Days"),days));
+            return new TravelHistoryFilter(TimeSpan.FromDays(days), string.Format("{0} days".Tx(typeof(TravelHistoryFilter), "Days"),days));
         }
 
         public static TravelHistoryFilter FromWeeks(int weeks)
