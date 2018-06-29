@@ -66,6 +66,9 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             compassControl.SlewRateDegreesSec = 40;
             compassControl.AutoSetStencilTicks = true;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelExtTargetLong });
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void Closing()
@@ -383,6 +386,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonNewBookmark_Click(object sender, EventArgs e)
         {
+            if (last_he == null)
+                return;
+
             BookmarkForm frm = new BookmarkForm();
             DateTime tme = DateTime.Now;
             if (bookMark == null)

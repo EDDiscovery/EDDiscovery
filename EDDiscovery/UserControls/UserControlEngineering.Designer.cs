@@ -46,15 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewEngineering = new System.Windows.Forms.DataGridView();
-            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Module = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Engineers = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.chkHistoric = new ExtendedControls.CheckBoxCustom();
@@ -64,7 +55,16 @@ namespace EDDiscovery.UserControls
             this.buttonFilterLevel = new ExtendedControls.ButtonExt();
             this.buttonFilterEngineer = new ExtendedControls.ButtonExt();
             this.buttonFilterModule = new ExtendedControls.ButtonExt();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ModuleCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LevelCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvailableCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RecipeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EngineersCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEngineering)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -93,14 +93,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewEngineering.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.UpgradeCol,
-            this.Module,
-            this.Level,
+            this.ModuleCol,
+            this.LevelCol,
             this.MaxCol,
             this.WantedCol,
-            this.Available,
-            this.Notes,
-            this.Recipe,
-            this.Engineers});
+            this.AvailableCol,
+            this.NotesCol,
+            this.RecipeCol,
+            this.EngineersCol});
             this.dataGridViewEngineering.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEngineering.Name = "dataGridViewEngineering";
             this.dataGridViewEngineering.RowHeadersVisible = false;
@@ -113,83 +113,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEngineering.DragOver += new System.Windows.Forms.DragEventHandler(this.dataGridViewEngineering_DragOver);
             this.dataGridViewEngineering.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseDown);
             this.dataGridViewEngineering.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEngineering_MouseMove);
-            // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "Upgrade/Mat";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Module
-            // 
-            this.Module.HeaderText = "Module";
-            this.Module.MinimumWidth = 50;
-            this.Module.Name = "Module";
-            this.Module.ReadOnly = true;
-            this.Module.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Level
-            // 
-            this.Level.FillWeight = 25F;
-            this.Level.HeaderText = "Level";
-            this.Level.MinimumWidth = 50;
-            this.Level.Name = "Level";
-            this.Level.ReadOnly = true;
-            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Available
-            // 
-            this.Available.FillWeight = 25F;
-            this.Available.HeaderText = "Avail.";
-            this.Available.MinimumWidth = 50;
-            this.Available.Name = "Available";
-            this.Available.ReadOnly = true;
-            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 150F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Recipe
-            // 
-            this.Recipe.FillWeight = 50F;
-            this.Recipe.HeaderText = "Recipe";
-            this.Recipe.MinimumWidth = 15;
-            this.Recipe.Name = "Recipe";
-            this.Recipe.ReadOnly = true;
-            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Engineers
-            // 
-            this.Engineers.HeaderText = "Engineers";
-            this.Engineers.MinimumWidth = 50;
-            this.Engineers.Name = "Engineers";
-            this.Engineers.ReadOnly = true;
-            this.Engineers.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // vScrollBarCustomMC
             // 
@@ -234,7 +157,7 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(800, 32);
             this.panelButtons.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
+            this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
             // 
             // chkHistoric
             // 
@@ -251,7 +174,7 @@ namespace EDDiscovery.UserControls
             this.chkHistoric.TabIndex = 6;
             this.chkHistoric.Text = "Use Cursor Positon";
             this.chkHistoric.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
+            this.toolTip.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
         " the latest materials.");
             this.chkHistoric.UseVisualStyleBackColor = true;
             this.chkHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
@@ -264,7 +187,7 @@ namespace EDDiscovery.UserControls
             this.buttonClear.Size = new System.Drawing.Size(88, 23);
             this.buttonClear.TabIndex = 5;
             this.buttonClear.Text = "Clear Wanted";
-            this.toolTip1.SetToolTip(this.buttonClear, "Set all wanted values to zero");
+            this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
             // 
@@ -275,7 +198,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterMaterial.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterMaterial.TabIndex = 4;
             this.buttonFilterMaterial.Text = "Filter By Material";
-            this.toolTip1.SetToolTip(this.buttonFilterMaterial, "Filter the table by material");
+            this.toolTip.SetToolTip(this.buttonFilterMaterial, "Filter the table by material");
             this.buttonFilterMaterial.UseVisualStyleBackColor = true;
             this.buttonFilterMaterial.Click += new System.EventHandler(this.buttonFilterMaterial_Click);
             // 
@@ -286,7 +209,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterUpgrade.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterUpgrade.TabIndex = 3;
             this.buttonFilterUpgrade.Text = "Filter By Upgrade";
-            this.toolTip1.SetToolTip(this.buttonFilterUpgrade, "Filter the table by upgrade type");
+            this.toolTip.SetToolTip(this.buttonFilterUpgrade, "Filter the table by upgrade type");
             this.buttonFilterUpgrade.UseVisualStyleBackColor = true;
             this.buttonFilterUpgrade.Click += new System.EventHandler(this.buttonFilterUpgrade_Click);
             // 
@@ -297,7 +220,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterLevel.TabIndex = 2;
             this.buttonFilterLevel.Text = "Filter By Level";
-            this.toolTip1.SetToolTip(this.buttonFilterLevel, "Filter the table by level");
+            this.toolTip.SetToolTip(this.buttonFilterLevel, "Filter the table by level");
             this.buttonFilterLevel.UseVisualStyleBackColor = true;
             this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
             // 
@@ -308,7 +231,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterEngineer.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterEngineer.TabIndex = 1;
             this.buttonFilterEngineer.Text = "Filter By Engineer";
-            this.toolTip1.SetToolTip(this.buttonFilterEngineer, "Filter the table by engineer");
+            this.toolTip.SetToolTip(this.buttonFilterEngineer, "Filter the table by engineer");
             this.buttonFilterEngineer.UseVisualStyleBackColor = true;
             this.buttonFilterEngineer.Click += new System.EventHandler(this.buttonFilterEngineer_Click);
             // 
@@ -319,13 +242,90 @@ namespace EDDiscovery.UserControls
             this.buttonFilterModule.Size = new System.Drawing.Size(100, 23);
             this.buttonFilterModule.TabIndex = 0;
             this.buttonFilterModule.Text = "Filter By Module";
-            this.toolTip1.SetToolTip(this.buttonFilterModule, "Filter the table by module type");
+            this.toolTip.SetToolTip(this.buttonFilterModule, "Filter the table by module type");
             this.buttonFilterModule.UseVisualStyleBackColor = true;
             this.buttonFilterModule.Click += new System.EventHandler(this.buttonFilterModule_Click);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
+            // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // ModuleCol
+            // 
+            this.ModuleCol.HeaderText = "Module";
+            this.ModuleCol.MinimumWidth = 50;
+            this.ModuleCol.Name = "ModuleCol";
+            this.ModuleCol.ReadOnly = true;
+            this.ModuleCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // LevelCol
+            // 
+            this.LevelCol.FillWeight = 25F;
+            this.LevelCol.HeaderText = "Level";
+            this.LevelCol.MinimumWidth = 50;
+            this.LevelCol.Name = "LevelCol";
+            this.LevelCol.ReadOnly = true;
+            this.LevelCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // AvailableCol
+            // 
+            this.AvailableCol.FillWeight = 25F;
+            this.AvailableCol.HeaderText = "Avail.";
+            this.AvailableCol.MinimumWidth = 50;
+            this.AvailableCol.Name = "AvailableCol";
+            this.AvailableCol.ReadOnly = true;
+            this.AvailableCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // NotesCol
+            // 
+            this.NotesCol.FillWeight = 150F;
+            this.NotesCol.HeaderText = "Notes";
+            this.NotesCol.MinimumWidth = 50;
+            this.NotesCol.Name = "NotesCol";
+            this.NotesCol.ReadOnly = true;
+            this.NotesCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // RecipeCol
+            // 
+            this.RecipeCol.FillWeight = 50F;
+            this.RecipeCol.HeaderText = "Recipe";
+            this.RecipeCol.MinimumWidth = 15;
+            this.RecipeCol.Name = "RecipeCol";
+            this.RecipeCol.ReadOnly = true;
+            this.RecipeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // EngineersCol
+            // 
+            this.EngineersCol.HeaderText = "Engineers";
+            this.EngineersCol.MinimumWidth = 50;
+            this.EngineersCol.Name = "EngineersCol";
+            this.EngineersCol.ReadOnly = true;
+            this.EngineersCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // UserControlEngineering
             // 
@@ -349,22 +349,22 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewEngineering;
         private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ButtonExt buttonFilterLevel;
         private ExtendedControls.ButtonExt buttonFilterEngineer;
         private ExtendedControls.ButtonExt buttonFilterModule;
         private ExtendedControls.ButtonExt buttonFilterUpgrade;
         private ExtendedControls.ButtonExt buttonFilterMaterial;
         private ExtendedControls.ButtonExt buttonClear;
+        private ExtendedControls.CheckBoxCustom chkHistoric;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Module;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Level;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ModuleCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn LevelCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn WantedCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Available;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Engineers;
-        private ExtendedControls.CheckBoxCustom chkHistoric;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AvailableCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RecipeCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EngineersCol;
     }
 }

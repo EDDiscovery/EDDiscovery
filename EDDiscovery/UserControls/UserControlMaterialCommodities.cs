@@ -47,23 +47,24 @@ namespace EDDiscovery.UserControls
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewMC.RowTemplate.Height = 26;
 
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
             if (materials)
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
-                labelItems1.Text = "Data";
-                labelItems2.Text = "Mats";
+                labelItems1.Text = "Data".Tx(this);
+                labelItems2.Text = "Mats".Tx(this);
             }
             else
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //shortname
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[1]);       //then category to give name,type,number, avg price
-                labelItems1.Text = "Total";
+                labelItems1.Text = "Total".Tx(this);
                 textBoxItems2.Visible = labelItems2.Visible = false;
-
             }
 
             SetCheckBoxes();
-
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

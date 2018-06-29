@@ -54,57 +54,57 @@ namespace EDDiscovery.UserControls
 
         private TravelHistoryFilter()
         {
-            Label = "All";
+            Label = "All".Tx();
         }
 
         public static TravelHistoryFilter FromHours(int hours)
         {
-            return new TravelHistoryFilter(TimeSpan.FromHours(hours), $"{hours} hours");
+            return new TravelHistoryFilter(TimeSpan.FromHours(hours), string.Format("{0} hours".Tx(typeof(TravelHistoryFilter), "Hours"),hours));
         }
 
         public static TravelHistoryFilter FromDays(int days)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(days), $"{days} days");
+            return new TravelHistoryFilter(TimeSpan.FromDays(days), string.Format("{0} days".Tx(typeof(TravelHistoryFilter), "Days"),days));
         }
 
         public static TravelHistoryFilter FromWeeks(int weeks)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "One Week" : $"{weeks} weeks");
+            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "One Week".Tx(typeof(TravelHistoryFilter), "1Week") : string.Format( "{0} weeks".Tx(typeof(TravelHistoryFilter), "Weeks"), weeks));
         }
 
         public static TravelHistoryFilter LastMonth()
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(30), "Month");
+            return new TravelHistoryFilter(TimeSpan.FromDays(30), "Month".Tx(typeof(TravelHistoryFilter), "Month"));
         }
 
         public static TravelHistoryFilter LastQuarter()
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(90), "Quarter");
+            return new TravelHistoryFilter(TimeSpan.FromDays(90), "Quarter".Tx(typeof(TravelHistoryFilter), "Quarter"));
         }
 
         public static TravelHistoryFilter LastHalfYear()
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(180), "Half year");
+            return new TravelHistoryFilter(TimeSpan.FromDays(180), "Half year".Tx(typeof(TravelHistoryFilter), "HYear"));
         }
 
         public static TravelHistoryFilter LastYear()
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(365), "Year");
+            return new TravelHistoryFilter(TimeSpan.FromDays(365), "Year".Tx(typeof(TravelHistoryFilter), "Year"));
         }
 
         public static TravelHistoryFilter Last(int number)
         {
-            return new TravelHistoryFilter(number, $"Last {number} entries");
+            return new TravelHistoryFilter(number, string.Format("Last {0} entries".Tx(typeof(TravelHistoryFilter), "LastN"), number));
         }
 
         public static TravelHistoryFilter LastDock()
         {
-            return new TravelHistoryFilter(true, false, $"Last dock");
+            return new TravelHistoryFilter(true, false, $"Last dock".Tx(typeof(TravelHistoryFilter), "LDock"));
         }
 
         public static TravelHistoryFilter StartEnd()
         {
-            return new TravelHistoryFilter(false, true, $"Start/End Flag");
+            return new TravelHistoryFilter(false, true, $"Start/End Flag".Tx(typeof(TravelHistoryFilter), "StartEnd"));
         }
 
         public List<HistoryEntry> Filter(HistoryList hl )
@@ -229,8 +229,8 @@ namespace EDDiscovery.UserControls
             {
                 dbstring = db;
                 cc = new ExtendedControls.CheckedListControlCustom();
-                cc.Items.Add("All");
-                cc.Items.Add("None");
+                cc.Items.Add("All".Tx());       // displayed, translate
+                cc.Items.Add("None".Tx());
 
                 if (selectedlist != null)
                     cc.Items.Add(selectedlistname);

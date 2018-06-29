@@ -50,13 +50,17 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;
 
-            cfs.ConfigureThirdOption("Cash Transactions", string.Join(";", EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
+            cfs.ConfigureThirdOption("Cash Transactions".Tx(this), string.Join(";", EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
 
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldockstartend:false);
 
             discoveryform.OnHistoryChange += Redisplay;
             discoveryform.OnNewEntry += NewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void LoadLayout()
@@ -137,7 +141,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time" : "Time";
+            dataGridViewLedger.Columns[0].HeaderText = utctime ? "Game Time".Tx() : "Time".Tx();
             dataGridViewLedger.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridViewLedger.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
         }

@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
                 cb.Tag = 999;
                 cb.Padding = new Padding(10);
                 cb.QuickInit(EDDiscovery.Icons.Controls.Selector_Background,
-                            (i==0) ? "NO ADD ONS!" : i.ToString() + " Add Ons",
+                            (i==0) ? "NO ADD ONS!".Tx(this) : i.ToString() + " Add Ons".Tx(this),
                             EDDTheme.Instance.GetFontAtSize(11),
                             (i==0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
                             centre,
@@ -89,8 +89,8 @@ namespace EDDiscovery.UserControls
                             new Size(48, 48),
                             ButtonPress);
 
-                toolTip1.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons");
-                toolTip1.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!");
+                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".Tx(this,"TTA"));
+                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".Tx(this,"TTB"));
                 panelVScroll.Controls.Add(cb);    
                 EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);       // need to theme up the button
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
@@ -116,9 +116,9 @@ namespace EDDiscovery.UserControls
                             new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab },
                             new Size(48, 48),
                             ButtonPress);
-                toolTip1.SetToolTip(cb.Buttons[0], "Pop out in a new window");
-                toolTip1.SetToolTip(cb.Buttons[1], "Open as a new menu tab");
-                toolTip1.SetToolTip(cb.Decals[0], pi.Description);
+                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".Tx(this,"PP1"));
+                toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".Tx(this, "MT1"));
+                toolTip.SetToolTip(cb.Decals[0], pi.Description);
                 EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);
                 cb.Buttons[0].BackColor = centre; // need to reset the colour back!
                 EDDTheme.Instance.ApplyToControls(cb.Buttons[1], null, true);

@@ -52,14 +52,14 @@ namespace EDDiscovery.UserControls
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.findSystemsUserControl1 = new EDDiscovery.UserControls.FindSystemsUserControl();
+            this.findSystemsUserControl = new EDDiscovery.UserControls.FindSystemsUserControl();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).BeginInit();
-            this.historyContextMenu.SuspendLayout();
+            this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel1
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
             this.ColumnCurrentDistance,
             this.ColumnPosition,
             this.ColumnID});
-            this.dataGridViewEDSM.ContextMenuStrip = this.historyContextMenu;
+            this.dataGridViewEDSM.ContextMenuStrip = this.contextMenu;
             this.dataGridViewEDSM.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewEDSM.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewEDSM.Name = "dataGridViewEDSM";
@@ -166,13 +166,13 @@ namespace EDDiscovery.UserControls
             this.ColumnID.Name = "ColumnID";
             this.ColumnID.ReadOnly = true;
             // 
-            // historyContextMenu
+            // contextMenu
             // 
-            this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mapGotoStartoolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem});
-            this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(187, 48);
+            this.contextMenu.Name = "historyContextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(187, 48);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -195,25 +195,25 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
-            // findSystemsUserControl1
+            // findSystemsUserControl
             // 
-            this.findSystemsUserControl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.findSystemsUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.findSystemsUserControl1.Name = "findSystemsUserControl1";
-            this.findSystemsUserControl1.Size = new System.Drawing.Size(804, 126);
-            this.findSystemsUserControl1.TabIndex = 32;
+            this.findSystemsUserControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.findSystemsUserControl.Location = new System.Drawing.Point(0, 0);
+            this.findSystemsUserControl.Name = "findSystemsUserControl";
+            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 126);
+            this.findSystemsUserControl.TabIndex = 32;
             // 
             // UserControlEDSM
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
-            this.Controls.Add(this.findSystemsUserControl1);
+            this.Controls.Add(this.findSystemsUserControl);
             this.Name = "UserControlEDSM";
             this.Size = new System.Drawing.Size(804, 716);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).EndInit();
-            this.historyContextMenu.ResumeLayout(false);
+            this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -223,11 +223,11 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.DataGridView dataGridViewEDSM;
-        private System.Windows.Forms.ContextMenuStrip historyContextMenu;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private FindSystemsUserControl findSystemsUserControl1;
+        private FindSystemsUserControl findSystemsUserControl;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCentreDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;

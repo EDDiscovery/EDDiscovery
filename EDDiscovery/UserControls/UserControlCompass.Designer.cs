@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.labelTargetLat = new ExtendedControls.LabelExt();
             this.labelExtTargetLong = new ExtendedControls.LabelExt();
             this.checkBoxHideTransparent = new ExtendedControls.CheckBoxCustom();
@@ -56,9 +56,9 @@ namespace EDDiscovery.UserControls
             this.compassControl = new ExtendedControls.CompassControl();
             this.SuspendLayout();
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // labelTargetLat
             // 
@@ -162,6 +162,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.BorderColor = System.Drawing.Color.White;
             this.comboBoxBookmarks.ButtonColorScaling = 0.5F;
             this.comboBoxBookmarks.DataSource = null;
+            this.comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxBookmarks.DisplayMember = "";
             this.comboBoxBookmarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxBookmarks.DropDownHeight = 200;
@@ -208,6 +209,7 @@ namespace EDDiscovery.UserControls
             // 
             this.compassControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.compassControl.AutoSetStencilTicks = false;
             this.compassControl.BackColor = System.Drawing.Color.LightBlue;
             this.compassControl.Bearing = 0D;
             this.compassControl.Bug = double.NaN;
@@ -229,7 +231,6 @@ namespace EDDiscovery.UserControls
             this.compassControl.StencilMajorTicksAt = 20;
             this.compassControl.StencilMinorTicksAt = 5;
             this.compassControl.TabIndex = 14;
-            this.compassControl.Text = "compassControl1";
             this.compassControl.TickHeightPercentage = 60;
             this.compassControl.WidthDegrees = 180;
             // 
@@ -254,7 +255,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.LabelExt labelTargetLat;
         private ExtendedControls.LabelExt labelExtTargetLong;
         private ExtendedControls.CheckBoxCustom checkBoxHideTransparent;

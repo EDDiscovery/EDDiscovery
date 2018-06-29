@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.RowTemplate.Height = 26;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
+            cfs.ConfigureThirdOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
@@ -93,6 +93,9 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
         }
 
         public override void LoadLayout()
@@ -173,7 +176,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
             }
 
-            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load Finish");
 
@@ -278,10 +281,10 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = " showing " + dataGridViewJournal.Rows.Count + " original " + (current_historylist?.Count() ?? 0);
-            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? ("Filtered " + fdropdown + ms) : "Select the entries by age, " + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? ("Filtered " + ftotalevents + ms) : "Filter out entries based on event type, " + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
+            string ms = string.Format(" showing {0} original {1}".Tx(this, "TT1"), dataGridViewJournal.Rows.Count, current_historylist?.Count() ?? 0);
+            comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".Tx(this, "TTFilt2"), ftotalevents + ms) : "Filter out entries based on event type, ".Tx(this, "TTEvent") + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".Tx(this, "TTFilt3"), ftotalfilters + ms) : "Filter out entries matching the field selection, ".Tx(this, "TTTotal") + ms);
         }
 
 	    #endregion
@@ -406,7 +409,7 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
-                info.Info("Journal Record: " + (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                info.Info( (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
                 info.ShowDialog(FindForm());
@@ -447,7 +450,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NotSynced"));
 
             this.Cursor = Cursors.Default;
         }

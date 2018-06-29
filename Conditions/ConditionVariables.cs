@@ -438,7 +438,7 @@ namespace Conditions
 
         public void AddDataOfType(Object o, Type rettype, string name, int depth )
         {
-            if (depth < 0 )      // 0, list, class, object, .. limit depth
+            if (depth < 0)      // 0, list, class, object, .. limit depth
                 return;
 
             //System.Diagnostics.Debug.WriteLine("Object " + name + " " + rettype.Name);

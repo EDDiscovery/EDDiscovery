@@ -47,6 +47,9 @@ namespace EDDiscovery.UserControls
                 UpdateComboBox(systemName);
 
             Edited = false;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
         public void Disable()

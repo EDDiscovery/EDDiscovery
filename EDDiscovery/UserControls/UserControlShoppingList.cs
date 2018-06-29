@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             showListAvailability = SQLiteDBClass.GetSettingBool(DbHighlightAvailableMats, true);
             showSystemAvailability = SQLiteDBClass.GetSettingBool(DBShowSystemAvailability, true);
             useEDSMForSystemAvailability = SQLiteDBClass.GetSettingBool(DBUseEDSMForSystemAvailability, false);
-            pictureBoxList.ContextMenuStrip = contextMenuConfig;
+            pictureBoxList.ContextMenuStrip = contextMenuStrip;
 
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
@@ -83,6 +83,10 @@ namespace EDDiscovery.UserControls
             List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.name).ToList();
             tbs = new RecipeFilterSelector(techBrokerList);
             tbs.Changed += TechBrokerSelectionChanged;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSynthesis, userControlEngineering });
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void SetCursor(IHistoryCursor cur)
@@ -190,7 +194,7 @@ namespace EDDiscovery.UserControls
                 if (shoppinglist.Any())
                 {
                     double available;
-                    wantedList.Append("Needed Mats:\n");
+                    wantedList.Append("Needed Mats".Tx(this,"NM") + ":" +  Environment.NewLine);
                     List<string> capExceededMats = new List<string>();
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.name))      // and add new..
                     {
@@ -246,7 +250,7 @@ namespace EDDiscovery.UserControls
 
                     if(capExceededMats.Any())
                     {
-                        wantedList.Append("\nFilling Shopping List would exceed capacity for:");
+                        wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for:".Tx(this,"FS"));
                         foreach(string mat in capExceededMats)
                         {
                             wantedList.Append($"\n  {mat}");
@@ -255,7 +259,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    wantedList.Append("No materials currently required.");
+                    wantedList.Append("No materials currently required.".Tx(this,"NoMat"));
                 }
 
                 if (showMaxInjections)
@@ -264,12 +268,13 @@ namespace EDDiscovery.UserControls
                     Tuple<int, int, string, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
                     Tuple<int, int, string, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
                     Tuple<int, int, string, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
-                    wantedList.Append($"\nMax FSD Injections\n   {basic.Item1} Basic\n   {standard.Item1} Standard\n   {premium.Item1} Premium");
+                    wantedList.Append(Environment.NewLine +
+                        string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".Tx(this,"FSD"), basic.Item1, standard.Item1, premium.Item1));
                 }
 
                 if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
-                    wantedList.Append($"\n\nMaterials on {last_he.WhereAmI}\n");
+                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".Tx(this,"MO"), last_he.WhereAmI) + Environment.NewLine );
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.fdname == mat.Key).FirstOrDefault()?.count;

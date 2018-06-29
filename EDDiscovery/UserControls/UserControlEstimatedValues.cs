@@ -43,6 +43,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnNewEntry += NewEntry;
+            BaseUtils.Translator.Instance.Translate(this);
         }
 
         public override void LoadLayout()
@@ -94,13 +95,13 @@ namespace EDDiscovery.UserControls
 
             if (last_he == null)
             {
-                SetControlText("No Scan");
+                SetControlText("No Scan".Tx());
                 return;
             }
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
 
-            SetControlText((last_sn == null) ? "No Scan" : ("Estimated Scan Values for " + last_sn.system.Name));
+            SetControlText((last_sn == null) ? "No Scan".Tx() : string.Format("Estimated Scan Values for {0}".Tx(this,"SV"), last_sn.system.Name));
 
             if (last_sn != null)
             {

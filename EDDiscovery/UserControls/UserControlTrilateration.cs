@@ -50,9 +50,15 @@ namespace EDDiscovery.UserControls
         {
             ColumnSystem.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
             FreezeTrilaterationUI();
-            toolStripTextBoxSystem.Text = "Press Start New";
+            toolStripTextBoxSystem.Text = "Press Start New".Tx(this,"ToolStripText");
 
             discoveryform.OnNewStarsForTrilat += Discoveryform_OnNewStarsForTrilat;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(wantedContextMenu, this);
+            BaseUtils.Translator.Instance.Translate(trilatContextMenu, this);
+            BaseUtils.Translator.Instance.Translate(toolStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void Closing()
@@ -213,7 +219,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (enteredSystems.Where(es => es.Name == value).Count() > 0)
                 {
-                    LogTextHighlight("Duplicate system entry is not allowed" + Environment.NewLine);
+                    LogTextHighlight("Duplicate system entry is not allowed".Tx(this,"DUP") + Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
                         if (!dataGridViewDistances.Rows[e.RowIndex].IsNewRow)
@@ -374,7 +380,7 @@ namespace EDDiscovery.UserControls
 
         private bool Query(string msg)
         {
-            return MessageBoxTheme.Show(FindForm(), msg, "Trilateration Panel", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
+            return MessageBoxTheme.Show(FindForm(), msg, "Trilateration Panel".Tx(this,"TP"), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
@@ -385,10 +391,11 @@ namespace EDDiscovery.UserControls
 
                 if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    string question1 = $"You are about to submit distances from {targetsystem.Name}.\nThe most recent known location in your history is {he.System.Name}.\nSubmit distances without changing 'From' system?";
+                    string question1 = string.Format("You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?".Tx(this,"CHK"), targetsystem.Name , he.System.Name);
+
                     if (!Query(question1))
                     {
-                        string question2 = $"Update 'From' system to current position ({he.System.Name}) and submit entered distances?";
+                        string question2 = string.Format("Update 'From' system to current position ({0}) and submit entered distances?".Tx(this,"UPD"), he.System.Name);
                         if (Query(question2))
                         {
                             targetsystem = he.System;
@@ -398,7 +405,7 @@ namespace EDDiscovery.UserControls
                             return;
                     }
                 }
-                LogText("Submitting system to EDSM, please wait..." + Environment.NewLine);
+                LogText("Submitting system to EDSM, please wait...".Tx(this,"Sub") + Environment.NewLine);
                 FreezeTrilaterationUI();
 
                 EDSMSubmissionThread = new Thread(SubmitToEDSM) { Name = "EDSM Submission" };
@@ -508,7 +515,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    LogText(String.Format("{0} is pushed from EDSM and cannot be removed", sysName) + Environment.NewLine);
+                    LogText(String.Format("{0} is pushed from EDSM and cannot be removed".Tx(this,"NOTREM"), sysName) + Environment.NewLine);
                 }
             }
         }
@@ -526,7 +533,7 @@ namespace EDDiscovery.UserControls
             {
                 string sysName = cellVal.ToString();
                 EDSMClass edsm = new EDSMClass();
-                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+                if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NoEDSM") + Environment.NewLine);
             }
             this.Cursor = Cursors.Default;
         }
@@ -541,7 +548,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
             EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable" + Environment.NewLine);
+            if (!edsm.ShowSystemInEDSM(sysName)) LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".Tx(this, "NoEDSM") + Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
@@ -648,7 +655,7 @@ namespace EDDiscovery.UserControls
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!");
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!".Tx(this, "Cmdr"));
                         UnfreezeTrilaterationUI();
                     }));
                     return;
@@ -711,17 +718,17 @@ namespace EDDiscovery.UserControls
 
                     if (respOk && trilatOk)
                     {
-                        LogTextSuccess("EDSM submission succeeded, trilateration successful." + Environment.NewLine);
+                        LogTextSuccess("EDSM submission succeeded, trilateration successful.".Tx(this,"Horray") + Environment.NewLine);
                         discoveryform.RefreshHistoryAsync();
                         checkForUnknownSystemsNowKnown();
                     }
                     else if (respOk)
                     {
-                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances." + Environment.NewLine);
+                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances.".Tx(this, "Failed") + Environment.NewLine);
                     }
                     else
                     {
-                        LogTextHighlight("EDSM submission failed." + Environment.NewLine);
+                        LogTextHighlight("EDSM submission failed.".Tx(this,"Dead") + Environment.NewLine);
                     }
                 });
             }
@@ -827,7 +834,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added" + Environment.NewLine);
+                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added".Tx(this,"Co") + Environment.NewLine);
                 }
             }
             return system;
@@ -851,7 +858,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown";
+                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".Tx(this,"PU");
                 dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = discoveryform.theme.NonVisitedSystemColor;
             }
         }
@@ -952,7 +959,7 @@ namespace EDDiscovery.UserControls
                     {
                         systemCell.Tag = newSystem;
                         dataGridViewDistances[3, i].Style.ForeColor = discoveryform.theme.VisitedSystemColor;
-                        dataGridViewDistances[3, i].Value = "Position found";
+                        dataGridViewDistances[3, i].Value = "Position found".Tx(this,"PF");
                     }
                 }
             }

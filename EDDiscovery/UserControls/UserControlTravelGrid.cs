@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs.ConfigureThirdOption("Travel", "Docked;FSD Jump;Undocked;");
+            cfs.ConfigureThirdOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
@@ -125,6 +125,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
         }
 
         public override void LoadLayout()
@@ -209,7 +212,7 @@ namespace EDDiscovery.UserControls
             else
                 rowno = -1;
 
-            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time" : "Time";
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load Finish");
 
@@ -334,10 +337,10 @@ namespace EDDiscovery.UserControls
 
         private void UpdateToolTipsForFilter()
         {
-            string ms = " showing " + dataGridViewTravel.Rows.Count + " original " + (current_historylist?.Count()??0);
-            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? ("Filtered " + fdropdown + ms) : "Select the entries by age, " + ms);
-            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? ("Filtered " + ftotalevents + ms) : "Filter out entries based on event type, " + ms);
-            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? ("Total filtered out " + ftotalfilters + ms) : "Filter out entries matching the field selection, " + ms);
+            string ms = string.Format(" showing {0} original {1}".Tx(this, "TT1"), dataGridViewTravel.Rows.Count, current_historylist?.Count() ?? 0);
+            comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
+            toolTip.SetToolTip(buttonFilter, (ftotalevents > 0) ? string.Format("Filtered {0}".Tx(this, "TTFilt2"), ftotalevents + ms) : "Filter out entries based on event type, ".Tx(this, "TTEvent") + ms);
+            toolTip.SetToolTip(buttonField, (ftotalfilters > 0) ? string.Format("Total filtered out {0}".Tx(this, "TTFilt3"), ftotalfilters + ms) : "Filter out entries matching the field selection, ".Tx(this, "TTTotal") + ms);
         }
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -604,7 +607,7 @@ namespace EDDiscovery.UserControls
                 if (infodetailed.Lines() >= 15) // too long for inline expansion
                 {
                     ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                    info.Info("Journal Record: " + (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
+                    info.Info((EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
                         FindForm().Icon, infodetailed);
                     info.Size = new Size(1200, 800);
                     info.ShowDialog(FindForm());
@@ -662,24 +665,24 @@ namespace EDDiscovery.UserControls
             {
                 if (rightclicksystem.StartMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Start marker";
+                    toolStripMenuItemStartStop.Text = "Clear Start marker".Tx(this, "CSTART");
                 }
                 else if (rightclicksystem.StopMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Stop marker";
+                    toolStripMenuItemStartStop.Text = "Clear Stop marker".Tx(this, "CSTOP");
                 }
                 else if (rightclicksystem.isTravelling)
                 {
-                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations";
+                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".Tx(this, "SETSTOPTC");
                 }
                 else
                 {
-                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations";
+                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".Tx(this, "SETSTARTTC");
                 }
             }
             else
             {
-                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations";
+                toolStripMenuItemStartStop.Text = "Set Start/Stop point for travel calculations".Tx(this, "SETSTSTOP"); ;
             }
 
             mapGotoStartoolStripMenuItem.Enabled = (rightclicksystem != null && rightclicksystem.System.HasCoordinate);
@@ -886,7 +889,7 @@ namespace EDDiscovery.UserControls
             }
 
             if (!edsm.ShowSystemInEDSM(rightclicksystem.System.Name, id_edsm))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"NotSynced"));
 
             this.Cursor = Cursors.Default;
         }
@@ -941,7 +944,7 @@ namespace EDDiscovery.UserControls
 
             if (journalent == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Could not find Location or FSDJump entry associated with selected journal entry");
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Could not find Location or FSDJump entry associated with selected journal entry".Tx(this,"NOLOC"));
                 return;
             }
 
@@ -969,7 +972,8 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").Tx(this, "Remove");
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "WARNING".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();

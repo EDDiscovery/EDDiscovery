@@ -58,13 +58,13 @@ namespace EDDiscovery.UserControls
             this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.checkBoxAutoSwap = new ExtendedControls.CheckBoxCustom();
             this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelVs = new System.Windows.Forms.Label();
             this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
             this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.checkBoxAutoSwap = new ExtendedControls.CheckBoxCustom();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMarketData)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
             // 
             this.panelButtons.Controls.Add(this.checkBoxAutoSwap);
             this.panelButtons.Controls.Add(this.checkBoxBuyOnly);
-            this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.labelVs);
             this.panelButtons.Controls.Add(this.comboBoxCustomTo);
             this.panelButtons.Controls.Add(this.comboBoxCustomFrom);
             this.panelButtons.Controls.Add(this.labelLocation);
@@ -230,6 +230,23 @@ namespace EDDiscovery.UserControls
             this.panelButtons.TabIndex = 2;
             this.toolTip.SetToolTip(this.panelButtons, "When arriving at a station where you are comparing against (on the right)\r\nswap t" +
         "he comparision to the previous market data.\r\nUseful when doing A->B->A trading");
+            // 
+            // checkBoxAutoSwap
+            // 
+            this.checkBoxAutoSwap.AutoSize = true;
+            this.checkBoxAutoSwap.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxAutoSwap.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxAutoSwap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoSwap.FontNerfReduction = 0.5F;
+            this.checkBoxAutoSwap.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(658, 9);
+            this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
+            this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
+            this.checkBoxAutoSwap.TabIndex = 29;
+            this.checkBoxAutoSwap.Text = "AutoSwap";
+            this.checkBoxAutoSwap.TickBoxReductionSize = 10;
+            this.checkBoxAutoSwap.UseVisualStyleBackColor = true;
             // 
             // checkBoxBuyOnly
             // 
@@ -249,14 +266,14 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxBuyOnly, "Show items you can buy only");
             this.checkBoxBuyOnly.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // labelVs
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(355, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(19, 13);
-            this.label1.TabIndex = 28;
-            this.label1.Text = "Vs";
+            this.labelVs.AutoSize = true;
+            this.labelVs.Location = new System.Drawing.Point(355, 13);
+            this.labelVs.Name = "labelVs";
+            this.labelVs.Size = new System.Drawing.Size(19, 13);
+            this.labelVs.TabIndex = 28;
+            this.labelVs.Text = "Vs";
             // 
             // comboBoxCustomTo
             // 
@@ -264,6 +281,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomTo.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomTo.ButtonColorScaling = 0.5F;
             this.comboBoxCustomTo.DataSource = null;
+            this.comboBoxCustomTo.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomTo.DisplayMember = "";
             this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomTo.DropDownHeight = 150;
@@ -281,6 +299,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomTo.SelectedValue = null;
             this.comboBoxCustomTo.Size = new System.Drawing.Size(176, 21);
             this.comboBoxCustomTo.TabIndex = 27;
+            this.comboBoxCustomTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomTo, "Click to select a comparision market data set");
             this.comboBoxCustomTo.ValueMember = "";
             this.comboBoxCustomTo.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomTo_SelectedIndexChanged);
@@ -291,6 +310,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomFrom.ButtonColorScaling = 0.5F;
             this.comboBoxCustomFrom.DataSource = null;
+            this.comboBoxCustomFrom.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomFrom.DisplayMember = "";
             this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomFrom.DropDownHeight = 150;
@@ -308,6 +328,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomFrom.SelectedValue = null;
             this.comboBoxCustomFrom.Size = new System.Drawing.Size(176, 21);
             this.comboBoxCustomFrom.TabIndex = 27;
+            this.comboBoxCustomFrom.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomFrom, "Click to select between tracking the cursor or a particular market data set");
             this.comboBoxCustomFrom.ValueMember = "";
             this.comboBoxCustomFrom.SelectedIndexChanged += new System.EventHandler(this.comboBoxCustomFrom_SelectedIndexChanged);
@@ -324,23 +345,6 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // checkBoxAutoSwap
-            // 
-            this.checkBoxAutoSwap.AutoSize = true;
-            this.checkBoxAutoSwap.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxAutoSwap.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxAutoSwap.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxAutoSwap.FontNerfReduction = 0.5F;
-            this.checkBoxAutoSwap.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxAutoSwap.Location = new System.Drawing.Point(658, 9);
-            this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
-            this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
-            this.checkBoxAutoSwap.TabIndex = 29;
-            this.checkBoxAutoSwap.Text = "AutoSwap";
-            this.checkBoxAutoSwap.TickBoxReductionSize = 10;
-            this.checkBoxAutoSwap.UseVisualStyleBackColor = true;
             // 
             // UserControlMarketData
             // 
@@ -368,7 +372,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelLocation;
         private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
         private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelVs;
         private ExtendedControls.CheckBoxCustom checkBoxBuyOnly;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
