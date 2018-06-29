@@ -395,7 +395,9 @@ namespace EDDiscovery.UserControls
 
         private void clickTextBox(object sender, EventArgs e)
         {
-            Clipboard.SetText(((Control)sender).Text);
+            string text = ((Control)sender).Text;
+            if (text != null)
+                Clipboard.SetText(text);
         }
 
         private void toolStripSystem_Click(object sender, EventArgs e)
