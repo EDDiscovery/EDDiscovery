@@ -30,9 +30,11 @@ namespace BaseUtils
             rootpath = "c:\\";
         }
 
-        public LogToFile(string s)
+        public LogToFile(string s, string f = null, bool t = true)
         {
             rootpath = s;
+            filename = f;
+            time = t;
         }
 
         public void Dispose()
@@ -41,11 +43,14 @@ namespace BaseUtils
         }
 
         string rootpath;
+        string filename = null;
+        bool time = true;
+
         StreamWriter debugout = null;
         Stopwatch debugtimer = null;
         Object lockit = new object();
 
-        public void SetFile(string p)
+        public void SetFile(string p, string f = null, bool t = true)      // f = null pick timedate one
         {
             lock (lockit)
             {
@@ -58,6 +63,8 @@ namespace BaseUtils
                 }
 
                 rootpath = p;
+                filename = f;
+                time = t;
             }
         }
 
@@ -66,13 +73,11 @@ namespace BaseUtils
             lock (lockit)
             {
                 if (debugout == null)
-                {
-                    debugout = new StreamWriter(Path.Combine(rootpath, "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
-                    debugtimer = new Stopwatch();
-                    debugtimer.Start();
-                }
-
-                debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
+                    CreateFile();
+                if ( time )
+                    debugout.WriteLine((debugtimer.ElapsedMilliseconds % 100000) + ":" + s);
+                else
+                    debugout.WriteLine(s);
                 debugout.Flush();
             }
         }
@@ -84,15 +89,13 @@ namespace BaseUtils
             lock (lockit)
             {
                 if (debugout == null)
-                {
-                    debugout = new StreamWriter(Path.Combine(rootpath, "debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log"));
-                    debugtimer = new Stopwatch();
-                    debugtimer.Start();
-                }
+                    CreateFile();
 
                 if (atstart)
                 {
-                    debugout.Write((debugtimer.ElapsedMilliseconds % 100000) + ":");
+                    if ( time )
+                        debugout.Write((debugtimer.ElapsedMilliseconds % 100000) + ":");
+
                     atstart = false;
                 }
 
@@ -105,6 +108,13 @@ namespace BaseUtils
                 else
                     debugout.Write(s);
             }
+        }
+
+        private void CreateFile()
+        {
+            debugout = new StreamWriter(Path.Combine(rootpath, filename.HasChars() ? filename : ("debuglog-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".log")));
+            debugtimer = new Stopwatch();
+            debugtimer.Start();
         }
     }
 }

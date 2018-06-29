@@ -25,6 +25,10 @@ namespace EDDiscovery.UserControls
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSurfaceBookmarks });
+            BaseUtils.Translator.Instance.Translate(contextMenuStripBookmarks, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void Closing()

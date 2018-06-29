@@ -44,9 +44,8 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSpanel));
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
-            this.contextMenuStripConfig = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showSystemInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemTargetLine = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,7 +96,7 @@ namespace EDDiscovery.UserControls
             this.buttonExt11 = new ExtendedControls.ButtonExt();
             this.buttonExt12 = new ExtendedControls.ButtonExt();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.contextMenuStripConfig.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
@@ -110,9 +109,9 @@ namespace EDDiscovery.UserControls
             this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
             this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
             // 
-            // contextMenuStripConfig
+            // contextMenuStrip
             // 
-            this.contextMenuStripConfig.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showSystemInformationToolStripMenuItem,
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem,
             this.toolStripMenuItemTargetLine,
@@ -133,8 +132,8 @@ namespace EDDiscovery.UserControls
             this.configureFieldFilterToolStripMenuItem,
             this.surfaceScanDetailsToolStripMenuItem,
             this.showInPositionToolStripMenuItem});
-            this.contextMenuStripConfig.Name = "contextMenuStripConfig";
-            this.contextMenuStripConfig.Size = new System.Drawing.Size(347, 466);
+            this.contextMenuStrip.Name = "contextMenuStripConfig";
+            this.contextMenuStrip.Size = new System.Drawing.Size(347, 466);
             // 
             // showSystemInformationToolStripMenuItem
             // 
@@ -152,7 +151,7 @@ namespace EDDiscovery.UserControls
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.CheckOnClick = true;
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Name = "showHabitationMinimumAndMaximumDistanceToolStripMenuItem";
-            this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Size = new System.Drawing.Size(346, 44);
+            this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Text = "Show Habitation Minimum and Maximum Distance";
             this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Click += new System.EventHandler(this.showHabitationMinimumAndMaximumDistanceToolStripMenuItem_Click);
             // 
@@ -466,9 +465,6 @@ namespace EDDiscovery.UserControls
             // buttonExt0
             // 
             this.buttonExt0.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt0.BorderColorScaling = 1.25F;
-            this.buttonExt0.ButtonColorScaling = 0.5F;
-            this.buttonExt0.ButtonDisabledScaling = 0.5F;
             this.buttonExt0.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt0.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt0.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -486,9 +482,6 @@ namespace EDDiscovery.UserControls
             // buttonExt1
             // 
             this.buttonExt1.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt1.BorderColorScaling = 1.25F;
-            this.buttonExt1.ButtonColorScaling = 0.5F;
-            this.buttonExt1.ButtonDisabledScaling = 0.5F;
             this.buttonExt1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt1.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -506,9 +499,6 @@ namespace EDDiscovery.UserControls
             // buttonExt2
             // 
             this.buttonExt2.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt2.BorderColorScaling = 1.25F;
-            this.buttonExt2.ButtonColorScaling = 0.5F;
-            this.buttonExt2.ButtonDisabledScaling = 0.5F;
             this.buttonExt2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt2.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -526,9 +516,6 @@ namespace EDDiscovery.UserControls
             // buttonExt3
             // 
             this.buttonExt3.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt3.BorderColorScaling = 1.25F;
-            this.buttonExt3.ButtonColorScaling = 0.5F;
-            this.buttonExt3.ButtonDisabledScaling = 0.5F;
             this.buttonExt3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt3.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -546,9 +533,6 @@ namespace EDDiscovery.UserControls
             // buttonExt4
             // 
             this.buttonExt4.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt4.BorderColorScaling = 1.25F;
-            this.buttonExt4.ButtonColorScaling = 0.5F;
-            this.buttonExt4.ButtonDisabledScaling = 0.5F;
             this.buttonExt4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt4.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -566,9 +550,6 @@ namespace EDDiscovery.UserControls
             // buttonExt5
             // 
             this.buttonExt5.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt5.BorderColorScaling = 1.25F;
-            this.buttonExt5.ButtonColorScaling = 0.5F;
-            this.buttonExt5.ButtonDisabledScaling = 0.5F;
             this.buttonExt5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt5.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -586,9 +567,6 @@ namespace EDDiscovery.UserControls
             // buttonExt6
             // 
             this.buttonExt6.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt6.BorderColorScaling = 1.25F;
-            this.buttonExt6.ButtonColorScaling = 0.5F;
-            this.buttonExt6.ButtonDisabledScaling = 0.5F;
             this.buttonExt6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt6.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -606,9 +584,6 @@ namespace EDDiscovery.UserControls
             // buttonExt7
             // 
             this.buttonExt7.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt7.BorderColorScaling = 1.25F;
-            this.buttonExt7.ButtonColorScaling = 0.5F;
-            this.buttonExt7.ButtonDisabledScaling = 0.5F;
             this.buttonExt7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt7.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -626,9 +601,6 @@ namespace EDDiscovery.UserControls
             // buttonExt8
             // 
             this.buttonExt8.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt8.BorderColorScaling = 1.25F;
-            this.buttonExt8.ButtonColorScaling = 0.5F;
-            this.buttonExt8.ButtonDisabledScaling = 0.5F;
             this.buttonExt8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt8.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -646,9 +618,6 @@ namespace EDDiscovery.UserControls
             // buttonExt9
             // 
             this.buttonExt9.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt9.BorderColorScaling = 1.25F;
-            this.buttonExt9.ButtonColorScaling = 0.5F;
-            this.buttonExt9.ButtonDisabledScaling = 0.5F;
             this.buttonExt9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt9.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -666,9 +635,6 @@ namespace EDDiscovery.UserControls
             // buttonExt10
             // 
             this.buttonExt10.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt10.BorderColorScaling = 1.25F;
-            this.buttonExt10.ButtonColorScaling = 0.5F;
-            this.buttonExt10.ButtonDisabledScaling = 0.5F;
             this.buttonExt10.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt10.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt10.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -686,9 +652,6 @@ namespace EDDiscovery.UserControls
             // buttonExt11
             // 
             this.buttonExt11.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt11.BorderColorScaling = 1.25F;
-            this.buttonExt11.ButtonColorScaling = 0.5F;
-            this.buttonExt11.ButtonDisabledScaling = 0.5F;
             this.buttonExt11.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt11.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt11.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -706,9 +669,6 @@ namespace EDDiscovery.UserControls
             // buttonExt12
             // 
             this.buttonExt12.BackColor = System.Drawing.Color.Transparent;
-            this.buttonExt12.BorderColorScaling = 1.25F;
-            this.buttonExt12.ButtonColorScaling = 0.5F;
-            this.buttonExt12.ButtonDisabledScaling = 0.5F;
             this.buttonExt12.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             this.buttonExt12.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             this.buttonExt12.Image = global::EDDiscovery.Icons.Controls.SPanel_ResizeColumn;
@@ -745,7 +705,7 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(892, 680);
             this.Resize += new System.EventHandler(this.UserControlSpanel_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.contextMenuStripConfig.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -753,7 +713,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripConfig;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTargetLine;
         private System.Windows.Forms.ToolStripMenuItem EDSMButtonToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTime;

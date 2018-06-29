@@ -125,7 +125,12 @@ namespace Conditions
 
             bool winborder = ExtendedControls.ThemeableFormsInstance.Instance.ApplyToForm(this, SystemFonts.DefaultFont);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
-            initialtitle = this.Text = label_index.Text = t;
+
+            this.Text = t;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { label_index, buttonMore});
+
+            initialtitle = label_index.Text = this.Text;
         }
 
         public void LoadConditions( ConditionLists clist )

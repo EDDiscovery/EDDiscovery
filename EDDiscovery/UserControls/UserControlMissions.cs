@@ -73,6 +73,9 @@ namespace EDDiscovery.UserControls
             customDateTimePickerEnd.Checked = SQLiteDBClass.GetSettingBool(DbEndDateChecked, false);
 
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -169,8 +172,8 @@ namespace EDDiscovery.UserControls
 
                 int count = mcurrent.Count();
 
-                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission")) : "Name";
-                cColValue.HeaderText = (totalReward != 0) ? $"Value (cr):\n{totalReward:N0}" : "Value (cr)";
+                cColName.HeaderText = (count > 0) ? (count.ToStringInvariant() + (count > 1 ? " Missions".Tx(this,"MPlural") : " Mission".Tx(this,"MSingular"))) : "Name".Tx(this,"Name");
+                cColValue.HeaderText = (totalReward != 0) ? string.Format("Value (cr):\n{0:N0}".Tx(this,"Value") ,totalReward) : "Value (cr)".Tx(this,"ValueN");
 
                 //                cColValue.HeaderText = (count>0) ? (count.ToStringInvariant() + (count > 1 ? " Missions" : " Mission") + (totalReward>0 ? $", {totalReward:N0}" : "")) : "Value";
 
@@ -220,7 +223,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 labelValue.Visible = (value != 0);
-                labelValue.Text = "Value: " + value.ToStringInvariant() + " C:" + completed.ToStringInvariant() + " A:" + abandonded.ToStringInvariant() + " F:" + failed.ToStringInvariant();
+                labelValue.Text = "Value: ".Tx(this,"ValueC") + value.ToStringInvariant() + " C:" + completed.ToStringInvariant() + " A:" + abandonded.ToStringInvariant() + " F:" + failed.ToStringInvariant();
             }
         }
 

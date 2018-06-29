@@ -55,6 +55,9 @@ namespace EDDiscovery.UserControls
         {
             currentexplorationset = new ExplorationSetClass();
             discoveryform.OnNewEntry += NewEntry;
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolStrip, this);
+            BaseUtils.Translator.Instance.Translate(contextMenuCopyPaste, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -209,7 +212,7 @@ namespace EDDiscovery.UserControls
 
                 if (sys == null && sysname != "")
                 {
-                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known";
+                    dataGridViewExplore.Rows[rowindex].ErrorText = "System not known".Tx();
                 }
                 else
                 {
@@ -267,7 +270,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 currentexplorationset.Save(textBoxFileName.Text);
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Saved to " + textBoxFileName.Text, "Exploration Set");
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Saved to {0} Exploration Set".Tx(this,"Saved"), textBoxFileName.Text));
             }
         }
 
@@ -276,7 +279,7 @@ namespace EDDiscovery.UserControls
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Text Files|*.txt";
-            ofd.Title = "Select a exploration set file";
+            ofd.Title = "Select a exploration set file".Tx(this, "SelectSet");
 
             if (ofd.ShowDialog(FindForm()) != System.Windows.Forms.DialogResult.OK)
                 return;
@@ -289,7 +292,7 @@ namespace EDDiscovery.UserControls
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"There was a problem opening file {ofd.FileName}", "Import file",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("There was a problem opening file {0}".Tx(this, "OpenE"), ofd.FileName), "Warning".Tx(),
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -319,8 +322,7 @@ namespace EDDiscovery.UserControls
             if (systems.Count == 0)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "The imported file contains no known system names",
-                    "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    "The imported file contains no known system names".Tx(this,"NoSys"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -344,13 +346,13 @@ namespace EDDiscovery.UserControls
                     || (dataGridViewExplore.Rows.Count == 1 && dataGridViewExplore[0, 0].Value == null))
                 {
                     ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "There is no route to export ", "Export route", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    "There is no route to export".Tx(this,"NoRoute"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }
 
                 SaveFileDialog dlg = new SaveFileDialog();
                 dlg.Filter = "Route export| *.txt";
-                dlg.Title = "Export route";
+                dlg.Title = "Export route".Tx(this,"Export");
                 if (currentexplorationset != null && !String.IsNullOrWhiteSpace(currentexplorationset.Name))
                     dlg.FileName = currentexplorationset.Name + ".txt";
                 else
@@ -371,12 +373,10 @@ namespace EDDiscovery.UserControls
                             writer.WriteLine(sysname);
                     }
                 }
-
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Export complete to {filename}", "Export route");
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), $"Error exporting route. Is file {filename} open?", "Export route",
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("Error exporting route. Is file {0} open?".Tx(this,"ErrorW"),filename), "Warning".Tx(),
                       MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -385,7 +385,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripButtonClear_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to clear the route list?", "Delete Entries", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to clear the route list?".Tx(this,"Clear"), "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 ClearExplorationSet();
             }
@@ -416,8 +416,8 @@ namespace EDDiscovery.UserControls
 
                 if (systems.Count == 0)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names",
-                        "Unsaved", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".Tx(this,"NoSys"),
+                        "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
                 {
@@ -432,7 +432,7 @@ namespace EDDiscovery.UserControls
             };
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("UC", null, "", new Point(5, 30), new Size(740, 150), null) { control = usc });
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel", new Point(650, 190), new Size(80, 24), "Press to Cancel"));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(650, 190), new Size(80, 24),""));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(750, 240), new Point(-999, -999), "Add Systems", 
+            f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(750, 240), new Point(-999, -999), "Add Systems".Tx(this,"AddSys"), 
                                 callback: () => { usc.Font = EDDTheme.Instance.GetFontStandardFontSize(); usc.Init(0, false, discoveryform); });
             usc.Closing();
         }
@@ -467,7 +467,7 @@ namespace EDDiscovery.UserControls
 
                 if (sysname != "" && sys == null && !edsm.IsKnownSystem(sysname))
                 {
-                    row.ErrorText = "System not known to EDSM";
+                    row.ErrorText = "System not known to EDSM".Tx(this,"EDSMUnk");
                 }
                 else
                 {
@@ -612,7 +612,7 @@ namespace EDDiscovery.UserControls
             ISystem sc = SystemCache.FindSystem((string)obj);
             if (sc == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates", "Edit bookmark", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unknown system, system is without co-ordinates".Tx(this, "UnknownS"), "Warning".Tx(), MessageBoxButtons.OK);
             }
             else
                 TargetHelpers.showBookmarkForm(this, discoveryform, sc, null, false);

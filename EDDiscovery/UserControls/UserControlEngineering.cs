@@ -107,11 +107,11 @@ namespace EDDiscovery.UserControls
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
                 row.Cells[UpgradeCol.Index].Value = r.name; // debug rno + ":" + r.name;
-                row.Cells[Module.Index].Value = r.modulesstring;
-                row.Cells[Level.Index].Value = r.level;
-                row.Cells[Recipe.Index].Value = r.ingredientsstring;
-                row.Cells[Recipe.Index].ToolTipText = r.ingredientsstringlong;
-                row.Cells[Engineers.Index].Value = r.engineersstring;
+                row.Cells[ModuleCol.Index].Value = r.modulesstring;
+                row.Cells[LevelCol.Index].Value = r.level;
+                row.Cells[RecipeCol.Index].Value = r.ingredientsstring;
+                row.Cells[RecipeCol.Index].ToolTipText = r.ingredientsstringlong;
+                row.Cells[EngineersCol.Index].Value = r.engineersstring;
                 row.Tag = rno;
                 row.Visible = false;
             }
@@ -119,6 +119,9 @@ namespace EDDiscovery.UserControls
             isHistoric = SQLiteDBClass.GetSettingBool(DbHistoricMatsSave, false);
             
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -276,9 +279,9 @@ namespace EDDiscovery.UserControls
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
-                        dataGridViewEngineering[Available.Index, i].Value = res.Item2.ToStringInvariant();
-                        dataGridViewEngineering[Notes.Index, i].Value = res.Item3;
-                        dataGridViewEngineering[Notes.Index, i].ToolTipText = res.Item4;
+                        dataGridViewEngineering[AvailableCol.Index, i].Value = res.Item2.ToStringInvariant();
+                        dataGridViewEngineering[NotesCol.Index, i].Value = res.Item3;
+                        dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
 
                     }
                     if (Wanted[rno] > 0 && (visible || isEmbedded))      // embedded, need to 
@@ -303,7 +306,7 @@ namespace EDDiscovery.UserControls
                                 cell.Value = c.name;
                             else if (cell.OwningColumn == WantedCol)
                                 cell.Value = c.scratchpad.ToStringInvariant();
-                            else if (cell.OwningColumn == Notes)
+                            else if (cell.OwningColumn == NotesCol)
                                 cell.Value = c.shortname;
                             else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
                                 cell.Value = string.Empty;

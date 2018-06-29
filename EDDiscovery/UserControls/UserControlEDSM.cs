@@ -49,9 +49,13 @@ namespace EDDiscovery.UserControls
             dataGridViewEDSM.RowTemplate.Height = 26;
             dataGridViewEDSM.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            findSystemsUserControl1.Init(displaynumber, true,discoveryform);
-            findSystemsUserControl1.Excel += RunExcel;
-            findSystemsUserControl1.ReturnSystems += StarsFound;
+            findSystemsUserControl.Init(displaynumber, true,discoveryform);
+            findSystemsUserControl.Excel += RunExcel;
+            findSystemsUserControl.ReturnSystems += StarsFound;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { findSystemsUserControl });
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+            BaseUtils.Translator.Instance.Translate(contextMenu, this);
         }
 
         public override void LoadLayout()
@@ -66,7 +70,7 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEDSM, DbColumnSave);
-            findSystemsUserControl1.Closing();
+            findSystemsUserControl.Closing();
         }
 
         #endregion

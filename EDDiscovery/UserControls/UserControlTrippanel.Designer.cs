@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showEDSMStartButtonsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTravelledDistanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,12 +55,12 @@ namespace EDDiscovery.UserControls
             this.showMaxFSDRangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFSDRangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
-            this.pictureBox.ContextMenuStrip = this.contextMenuStrip1;
+            this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
@@ -68,9 +68,9 @@ namespace EDDiscovery.UserControls
             this.pictureBox.TabIndex = 0;
             this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showEDSMStartButtonsToolStripMenuItem,
             this.showTargetToolStripMenuItem,
             this.showTravelledDistanceToolStripMenuItem,
@@ -79,8 +79,8 @@ namespace EDDiscovery.UserControls
             this.showAvgFSDRangeToolStripMenuItem,
             this.showMaxFSDRangeToolStripMenuItem,
             this.showFSDRangeToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(211, 202);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(211, 202);
             // 
             // showEDSMStartButtonsToolStripMenuItem
             // 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlTrippanel";
             this.Size = new System.Drawing.Size(728, 570);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showEDSMStartButtonsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showFuelLevelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCurrentFSDRangeToolStripMenuItem;

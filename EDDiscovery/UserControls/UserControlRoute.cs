@@ -76,6 +76,9 @@ namespace EDDiscovery.UserControls
             textBox_Range.ReadOnly = false;
             comboBoxRoutingMetric.Enabled = true;
 
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -237,7 +240,9 @@ namespace EDDiscovery.UserControls
 
             if (plotter.possiblejumps > 100)
             {
-                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), "This will result in a large number (" + plotter.possiblejumps.ToString("0") + ") of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please", "Confirm you want to compute", MessageBoxButtons.YesNo);
+                DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
+                    string.Format(("This will result in a large number ({0})) of jumps" + Environment.NewLine + Environment.NewLine + "Confirm please").Tx(this,"Confirm"), 
+                    plotter.possiblejumps), "Warning".Tx(), MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -268,7 +273,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry", "No Route", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up, retry".Tx(this,"NoRoute"), "Warning".Tx(), MessageBoxButtons.OK);
                 return;
             }
         }

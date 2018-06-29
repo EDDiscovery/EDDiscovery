@@ -74,7 +74,6 @@ namespace EDDiscovery
         };
 
         // This is the order they are presented to the user..   you can shuffle them to your hearts content
-        // ****** DO NOT add UserControlHistory - the display numbers used are special and not okay for a generic panel.  Since you can do the same via a grid, its okay
         // description = empty means not user selectable
 
         static private List<PanelInfo> PanelList = new List<PanelInfo>()
@@ -146,9 +145,14 @@ namespace EDDiscovery
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
 
-        public static void InitIcons()
+        public static void Init()
         {
             PanelTypeIcons = new IconGroup<PanelIDs>("Panels");
+            foreach (PanelInfo i in PanelList)
+            {
+                i.Description = BaseUtils.Translator.Instance.Translate(i.Description, "PopOutInfo." + i.PopoutID + ".Description");
+                i.WindowTitle = BaseUtils.Translator.Instance.Translate(i.WindowTitle, "PopOutInfo." + i.PopoutID + ".Title");
+            }
         }
 
         public class PanelInfo

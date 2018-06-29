@@ -153,7 +153,7 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
             msg.Invoke("Modulating Shields");
             Controller.Init();
-            PanelInformation.InitIcons();
+            PanelInformation.Init();
 
             // Some components require the controller to be initialized
             // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
@@ -170,6 +170,8 @@ namespace EDDiscovery
 
             msg.Invoke("Repairing Canopy");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
+
+            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
@@ -238,8 +240,6 @@ namespace EDDiscovery
 
             actioncontroller.ReLoad();          // load system up here
 
-            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
-
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
 
             ApplyTheme();
@@ -290,6 +290,9 @@ namespace EDDiscovery
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             Controller.InitComplete();
+
+            BaseUtils.Translator.Instance.Translate(menuStrip, this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
         }
 
         // OnLoad is called the first time the form is shown, before OnShown or OnActivated are called

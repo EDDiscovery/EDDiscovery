@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.closestContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
@@ -59,26 +59,26 @@ namespace EDDiscovery.UserControls
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelExt1 = new System.Windows.Forms.Label();
+            this.labelExtMin = new System.Windows.Forms.Label();
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
-            this.labelExt3 = new System.Windows.Forms.Label();
+            this.labelExtMax = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
             this.checkBoxCube = new ExtendedControls.CheckBoxCustom();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.closestContextMenu.SuspendLayout();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
-            // closestContextMenu
+            // contextMenuStrip
             // 
-            this.closestContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToTrilaterationToolStripMenuItem1,
             this.viewOnEDSMToolStripMenuItem1});
-            this.closestContextMenu.Name = "closestContextMenu";
-            this.closestContextMenu.Size = new System.Drawing.Size(177, 48);
+            this.contextMenuStrip.Name = "closestContextMenu";
+            this.contextMenuStrip.Size = new System.Drawing.Size(177, 48);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             this.colName,
             this.colDistance,
             this.colVisited});
-            this.dataGridViewNearest.ContextMenuStrip = this.closestContextMenu;
+            this.dataGridViewNearest.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -205,14 +205,14 @@ namespace EDDiscovery.UserControls
             this.colVisited.Name = "colVisited";
             this.colVisited.ReadOnly = true;
             // 
-            // labelExt1
+            // labelExtMin
             // 
-            this.labelExt1.AutoSize = true;
-            this.labelExt1.Location = new System.Drawing.Point(3, 6);
-            this.labelExt1.Name = "labelExt1";
-            this.labelExt1.Size = new System.Drawing.Size(24, 13);
-            this.labelExt1.TabIndex = 3;
-            this.labelExt1.Text = "Min";
+            this.labelExtMin.AutoSize = true;
+            this.labelExtMin.Location = new System.Drawing.Point(3, 6);
+            this.labelExtMin.Name = "labelExtMin";
+            this.labelExtMin.Size = new System.Drawing.Size(24, 13);
+            this.labelExtMin.TabIndex = 3;
+            this.labelExtMin.Text = "Min";
             // 
             // textMinRadius
             // 
@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.DelayBeforeNotification = 500;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
-            this.textMinRadius.Location = new System.Drawing.Point(30, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(43, 3);
             this.textMinRadius.Maximum = 100000D;
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
@@ -239,19 +239,19 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.Size = new System.Drawing.Size(52, 20);
             this.textMinRadius.TabIndex = 1;
             this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
+            this.toolTip.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
             this.textMinRadius.Value = 0D;
             this.textMinRadius.WordWrap = true;
             this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
             // 
-            // labelExt3
+            // labelExtMax
             // 
-            this.labelExt3.AutoSize = true;
-            this.labelExt3.Location = new System.Drawing.Point(88, 6);
-            this.labelExt3.Name = "labelExt3";
-            this.labelExt3.Size = new System.Drawing.Size(27, 13);
-            this.labelExt3.TabIndex = 3;
-            this.labelExt3.Text = "Max";
+            this.labelExtMax.AutoSize = true;
+            this.labelExtMax.Location = new System.Drawing.Point(96, 6);
+            this.labelExtMax.Name = "labelExtMax";
+            this.labelExtMax.Size = new System.Drawing.Size(27, 13);
+            this.labelExtMax.TabIndex = 3;
+            this.labelExtMax.Text = "Max";
             // 
             // textMaxRadius
             // 
@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.DelayBeforeNotification = 500;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(121, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(136, 3);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.Size = new System.Drawing.Size(52, 20);
             this.textMaxRadius.TabIndex = 1;
             this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
+            this.toolTip.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
             this.textMaxRadius.Value = 0D;
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
@@ -286,9 +286,9 @@ namespace EDDiscovery.UserControls
             // panelTop
             // 
             this.panelTop.Controls.Add(this.checkBoxCube);
-            this.panelTop.Controls.Add(this.labelExt1);
+            this.panelTop.Controls.Add(this.labelExtMin);
             this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.labelExt3);
+            this.panelTop.Controls.Add(this.labelExtMax);
             this.panelTop.Controls.Add(this.textMaxRadius);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -304,14 +304,14 @@ namespace EDDiscovery.UserControls
             this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCube.FontNerfReduction = 0.5F;
             this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCube.Location = new System.Drawing.Point(181, 5);
+            this.checkBoxCube.Location = new System.Drawing.Point(195, 5);
             this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCube.Name = "checkBoxCube";
             this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
             this.checkBoxCube.TabIndex = 4;
             this.checkBoxCube.Text = "Cube";
             this.checkBoxCube.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
+            this.toolTip.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
             this.checkBoxCube.UseVisualStyleBackColor = true;
             this.checkBoxCube.CheckedChanged += new System.EventHandler(this.checkBoxCube_CheckedChanged);
             // 
@@ -323,7 +323,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlStarDistance";
             this.Size = new System.Drawing.Size(352, 572);
-            this.closestContextMenu.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
             this.panelTop.ResumeLayout(false);
@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
         }               
 
         #endregion
-        private System.Windows.Forms.ContextMenuStrip closestContextMenu;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
@@ -342,12 +342,12 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;
-        private System.Windows.Forms.Label labelExt1;
+        private System.Windows.Forms.Label labelExtMin;
         private ExtendedControls.NumberBoxDouble textMinRadius;
-        private System.Windows.Forms.Label labelExt3;
+        private System.Windows.Forms.Label labelExtMax;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
-        private ToolTip toolTip1;
+        private ToolTip toolTip;
         private ExtendedControls.CheckBoxCustom checkBoxCube;
     }
 }

@@ -45,37 +45,37 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.pictureBox = new ExtendedControls.PictureBoxHotspot();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showJumpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showWaypointCoordinatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showDeviationFromRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCopyWPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoSetTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showDeviationFromRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox
             // 
-            this.pictureBox.ContextMenuStrip = this.contextMenuStrip1;
+            this.pictureBox.ContextMenuStrip = this.contextMenuStrip;
             this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(150, 150);
             this.pictureBox.TabIndex = 1;
             // 
-            // contextMenuStrip1
+            // contextMenuStrip
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.setRouteToolStripMenuItem,
             this.showJumpsToolStripMenuItem,
             this.showWaypointCoordinatesToolStripMenuItem,
             this.showDeviationFromRouteToolStripMenuItem,
             this.autoCopyWPToolStripMenuItem,
             this.autoSetTargetToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(225, 158);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(225, 158);
             // 
             // setRouteToolStripMenuItem
             // 
@@ -104,6 +104,16 @@ namespace EDDiscovery.UserControls
             this.showWaypointCoordinatesToolStripMenuItem.Text = "Show Waypoint Coordinates";
             this.showWaypointCoordinatesToolStripMenuItem.Click += new System.EventHandler(this.showWaypointCoordinatesToolStripMenuItem_Click);
             // 
+            // showDeviationFromRouteToolStripMenuItem
+            // 
+            this.showDeviationFromRouteToolStripMenuItem.Checked = true;
+            this.showDeviationFromRouteToolStripMenuItem.CheckOnClick = true;
+            this.showDeviationFromRouteToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showDeviationFromRouteToolStripMenuItem.Name = "showDeviationFromRouteToolStripMenuItem";
+            this.showDeviationFromRouteToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.showDeviationFromRouteToolStripMenuItem.Text = "Show Deviation from route";
+            this.showDeviationFromRouteToolStripMenuItem.Click += new System.EventHandler(this.showDeviationFromRouteToolStripMenuItem_Click);
+            // 
             // autoCopyWPToolStripMenuItem
             // 
             this.autoCopyWPToolStripMenuItem.Checked = true;
@@ -123,16 +133,6 @@ namespace EDDiscovery.UserControls
             this.autoSetTargetToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.autoSetTargetToolStripMenuItem.Text = "Auto set target";
             // 
-            // showDeviationFromRouteToolStripMenuItem
-            // 
-            this.showDeviationFromRouteToolStripMenuItem.Checked = true;
-            this.showDeviationFromRouteToolStripMenuItem.CheckOnClick = true;
-            this.showDeviationFromRouteToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showDeviationFromRouteToolStripMenuItem.Name = "showDeviationFromRouteToolStripMenuItem";
-            this.showDeviationFromRouteToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
-            this.showDeviationFromRouteToolStripMenuItem.Text = "Show Deviation from route";
-            this.showDeviationFromRouteToolStripMenuItem.Click += new System.EventHandler(this.showDeviationFromRouteToolStripMenuItem_Click);
-            // 
             // UserControlRouteTracker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.pictureBox);
             this.Name = "UserControlRouteTracker";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private ExtendedControls.PictureBoxHotspot pictureBox;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem setRouteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoSetTargetToolStripMenuItem;

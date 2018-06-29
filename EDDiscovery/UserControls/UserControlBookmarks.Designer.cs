@@ -34,28 +34,28 @@
             this.buttonNew = new ExtendedControls.ButtonExt();
             this.buttonEdit = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewBookMarks = new System.Windows.Forms.DataGridView();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.BookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.X = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Y = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Z = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColX = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
-            this.dataViewScrollerPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).BeginInit();
             this.contextMenuStripBookmarks.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +66,7 @@
             this.panelButtons.Controls.Add(this.buttonNew);
             this.panelButtons.Controls.Add(this.buttonEdit);
             this.panelButtons.Controls.Add(this.textBoxFilter);
-            this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.labelSearch);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
@@ -80,7 +80,7 @@
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(32, 32);
             this.buttonDelete.TabIndex = 27;
-            this.toolTip1.SetToolTip(this.buttonDelete, "Delete selected bookmark");
+            this.toolTip.SetToolTip(this.buttonDelete, "Delete selected bookmark");
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -91,7 +91,7 @@
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(32, 32);
             this.buttonNew.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.buttonNew, "New Bookmark");
+            this.toolTip.SetToolTip(this.buttonNew, "New Bookmark");
             this.buttonNew.UseVisualStyleBackColor = true;
             this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
             // 
@@ -102,7 +102,7 @@
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(32, 32);
             this.buttonEdit.TabIndex = 3;
-            this.toolTip1.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
+            this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
             this.buttonEdit.UseVisualStyleBackColor = true;
             this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
@@ -127,49 +127,49 @@
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxFilter, "Search for Bookmark");
+            this.toolTip.SetToolTip(this.textBoxFilter, "Search for Bookmark");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // label1
+            // labelSearch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 6);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 26;
-            this.label1.Text = "Search";
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(3, 6);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 26;
+            this.labelSearch.Text = "Search";
             // 
-            // splitContainer1
+            // splitContainer
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 32);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 32);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer1.Panel1
+            // splitContainer.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.dataViewScrollerPanel1);
+            this.splitContainer.Panel1.Controls.Add(this.dataViewScrollerPanel);
             // 
-            // splitContainer1.Panel2
+            // splitContainer.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.userControlSurfaceBookmarks);
-            this.splitContainer1.Size = new System.Drawing.Size(676, 411);
-            this.splitContainer1.SplitterDistance = 204;
-            this.splitContainer1.TabIndex = 1;
+            this.splitContainer.Panel2.Controls.Add(this.userControlSurfaceBookmarks);
+            this.splitContainer.Size = new System.Drawing.Size(676, 411);
+            this.splitContainer.SplitterDistance = 204;
+            this.splitContainer.TabIndex = 1;
             // 
-            // dataViewScrollerPanel1
+            // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewBookMarks);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 0);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(676, 204);
-            this.dataViewScrollerPanel1.TabIndex = 5;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewBookMarks);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 204);
+            this.dataViewScrollerPanel.TabIndex = 5;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom1
             // 
@@ -206,12 +206,12 @@
             this.dataGridViewBookMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewBookMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewBookMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Type,
-            this.BookmarkName,
-            this.Description,
-            this.X,
-            this.Y,
-            this.Z});
+            this.ColType,
+            this.ColBookmarkName,
+            this.ColDescription,
+            this.ColX,
+            this.ColY,
+            this.ColZ});
             this.dataGridViewBookMarks.ContextMenuStrip = this.contextMenuStripBookmarks;
             this.dataGridViewBookMarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
@@ -224,42 +224,42 @@
             this.dataGridViewBookMarks.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewBookMarks_SortCompare);
             this.dataGridViewBookMarks.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewBookMarks_MouseDown);
             // 
-            // Type
+            // ColType
             // 
-            this.Type.HeaderText = "Bookmark Type";
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
+            this.ColType.HeaderText = "Bookmark Type";
+            this.ColType.Name = "ColType";
+            this.ColType.ReadOnly = true;
             // 
-            // BookmarkName
+            // ColBookmarkName
             // 
-            this.BookmarkName.FillWeight = 200F;
-            this.BookmarkName.HeaderText = "Bookmark Name";
-            this.BookmarkName.Name = "BookmarkName";
-            this.BookmarkName.ReadOnly = true;
+            this.ColBookmarkName.FillWeight = 200F;
+            this.ColBookmarkName.HeaderText = "Bookmark Name";
+            this.ColBookmarkName.Name = "ColBookmarkName";
+            this.ColBookmarkName.ReadOnly = true;
             // 
-            // Description
+            // ColDescription
             // 
-            this.Description.FillWeight = 200F;
-            this.Description.HeaderText = "Description";
-            this.Description.Name = "Description";
+            this.ColDescription.FillWeight = 200F;
+            this.ColDescription.HeaderText = "Description";
+            this.ColDescription.Name = "ColDescription";
             // 
-            // X
+            // ColX
             // 
-            this.X.HeaderText = "X";
-            this.X.Name = "X";
-            this.X.ReadOnly = true;
+            this.ColX.HeaderText = "X";
+            this.ColX.Name = "ColX";
+            this.ColX.ReadOnly = true;
             // 
-            // Y
+            // ColY
             // 
-            this.Y.HeaderText = "Y";
-            this.Y.Name = "Y";
-            this.Y.ReadOnly = true;
+            this.ColY.HeaderText = "Y";
+            this.ColY.Name = "ColY";
+            this.ColY.ReadOnly = true;
             // 
-            // Z
+            // ColZ
             // 
-            this.Z.HeaderText = "Z";
-            this.Z.Name = "Z";
-            this.Z.ReadOnly = true;
+            this.ColZ.HeaderText = "Z";
+            this.ColZ.Name = "ColZ";
+            this.ColZ.ReadOnly = true;
             // 
             // contextMenuStripBookmarks
             // 
@@ -296,17 +296,17 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.panelButtons);
             this.Name = "UserControlBookmarks";
             this.Size = new System.Drawing.Size(676, 443);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
-            this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).EndInit();
             this.contextMenuStripBookmarks.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -317,22 +317,22 @@
 
         private System.Windows.Forms.Panel panelButtons;
         private ExtendedControls.TextBoxBorder textBoxFilter;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label labelSearch;
+        private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.DataGridView dataGridViewBookMarks;
         private SurfaceBookmarksForm userControlSurfaceBookmarks;
         private ExtendedControls.ButtonExt buttonNew;
         private ExtendedControls.ButtonExt buttonEdit;
         private ExtendedControls.ButtonExt buttonDelete;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BookmarkName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Description;
-        private System.Windows.Forms.DataGridViewTextBoxColumn X;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Y;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Z;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColBookmarkName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColDescription;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColX;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColZ;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBookmarks;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;

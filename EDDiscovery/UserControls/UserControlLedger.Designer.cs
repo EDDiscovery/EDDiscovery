@@ -54,19 +54,19 @@ namespace EDDiscovery.UserControls
             this.Debits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStripLedger = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
             this.buttonFilter = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSearch = new System.Windows.Forms.Label();
             this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
-            this.contextMenuStripLedger.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -107,7 +107,7 @@ namespace EDDiscovery.UserControls
             this.Debits,
             this.Balance,
             this.NormProfit});
-            this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStripLedger;
+            this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
             this.dataGridViewLedger.RowHeadersVisible = false;
@@ -168,10 +168,10 @@ namespace EDDiscovery.UserControls
             // 
             // contextMenuStripLedger
             // 
-            this.contextMenuStripLedger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemGotoItem});
-            this.contextMenuStripLedger.Name = "contextMenuStripLedger";
-            this.contextMenuStripLedger.Size = new System.Drawing.Size(175, 48);
+            this.contextMenuStrip.Name = "contextMenuStripLedger";
+            this.contextMenuStrip.Size = new System.Drawing.Size(175, 26);
             // 
             // toolStripMenuItemGotoItem
             // 
@@ -214,7 +214,7 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Controls.Add(this.labelTime);
             this.panelButtons.Controls.Add(this.buttonFilter);
             this.panelButtons.Controls.Add(this.textBoxFilter);
-            this.panelButtons.Controls.Add(this.label1);
+            this.panelButtons.Controls.Add(this.labelSearch);
             this.panelButtons.Controls.Add(this.comboBoxHistoryWindow);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
@@ -233,9 +233,6 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
-            this.buttonFilter.BorderColorScaling = 1.25F;
-            this.buttonFilter.ButtonColorScaling = 0.5F;
-            this.buttonFilter.ButtonDisabledScaling = 0.5F;
             this.buttonFilter.Location = new System.Drawing.Point(444, 4);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(75, 23);
@@ -249,10 +246,13 @@ namespace EDDiscovery.UserControls
             // 
             this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderColorScaling = 0.5F;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(278, 6);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
@@ -267,14 +267,14 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
-            // label1
+            // labelSearch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(220, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 24;
-            this.label1.Text = "Search";
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(220, 7);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 24;
+            this.labelSearch.Text = "Search";
             // 
             // comboBoxHistoryWindow
             // 
@@ -282,6 +282,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.BorderColor = System.Drawing.Color.Red;
             this.comboBoxHistoryWindow.ButtonColorScaling = 0.5F;
             this.comboBoxHistoryWindow.DataSource = null;
+            this.comboBoxHistoryWindow.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxHistoryWindow.DisplayMember = "";
             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxHistoryWindow.DropDownHeight = 200;
@@ -299,6 +300,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxHistoryWindow.SelectedValue = null;
             this.comboBoxHistoryWindow.Size = new System.Drawing.Size(100, 21);
             this.comboBoxHistoryWindow.TabIndex = 0;
+            this.comboBoxHistoryWindow.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxHistoryWindow, "Select the entries by age");
             this.comboBoxHistoryWindow.ValueMember = "";
             this.comboBoxHistoryWindow.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -318,7 +320,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.ResumeLayout(false);
             this.dataViewScrollerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
-            this.contextMenuStripLedger.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -334,9 +336,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelNoItems;
         private ExtendedControls.ButtonExt buttonFilter;
         internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSearch;
         private ExtendedControls.TextBoxBorder textBoxFilter;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStripLedger;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
