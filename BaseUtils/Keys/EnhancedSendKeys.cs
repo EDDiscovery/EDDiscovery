@@ -115,8 +115,11 @@ namespace BaseUtils
 
                 int d1 = -1, d2 = -1, d3 = -1;
 
-                if (s[0] == '[')
+                if (s.Length >= 1 && s[0] == '[')
                 {
+                    if (!s.Contains(']'))
+                        return "Missing closing ] in delay";
+
                     s = s.Substring(1);
                     string word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']', ',' });
                     if (!word.InvariantParse(out d1))
@@ -145,6 +148,9 @@ namespace BaseUtils
                 }
 
                 KMode kmd = KMode.press;
+
+                if (s.Length == 0)
+                    return "Invalid no characters after delay";
 
                 if (s[0] == '^' || s[0] == '<')
                 {
