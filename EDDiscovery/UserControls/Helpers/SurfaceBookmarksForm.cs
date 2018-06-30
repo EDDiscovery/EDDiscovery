@@ -80,20 +80,20 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (Location loc in pl.Locations)
                     {
-                        if (((DataGridViewComboBoxCell)dataGridViewMarks.Rows[0].Cells[0]).Items.Contains(pl.Name))
+                        System.Diagnostics.Debug.WriteLine("Rows " + dataGridViewMarks.Rows.Count);
+                        using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                         {
-                            using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
-                            {
-                                dr.Cells[0].Value = pl.Name;
-                                dr.Cells[0].ReadOnly = true;
-                                dr.Cells[1].Value = loc.Name;
-                                dr.Cells[1].ReadOnly = true;
-                                dr.Cells[2].Value = loc.Comment;
-                                dr.Cells[3].Value = loc.Latitude.ToString("F4");
-                                dr.Cells[4].Value = loc.Longitude.ToString("F4");
-                                ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
-                                dr.Tag = loc;
-                            }
+                            if (!BodyName.Items.Contains(pl.Name))      // ensure planet in collection so we don't get errors..
+                                BodyName.Items.Add(pl.Name);
+
+                            dr.Cells[0].Value = pl.Name;
+                            dr.Cells[0].ReadOnly = true;
+                            dr.Cells[1].Value = loc.Name;
+                            dr.Cells[2].Value = loc.Comment;
+                            dr.Cells[3].Value = loc.Latitude.ToString("F4");
+                            dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                            ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
+                            dr.Tag = loc;
                         }
                     }
                 }
@@ -108,6 +108,9 @@ namespace EDDiscovery.UserControls
         {
             using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
             {
+                if (!BodyName.Items.Contains(planet))
+                    BodyName.Items.Add(planet);
+
                 dr.Cells[0].Value = planet;
                 dr.Cells[0].ReadOnly = true;
                 dr.Cells[1].Value = "Enter a name";
@@ -123,9 +126,7 @@ namespace EDDiscovery.UserControls
         {
             ISystem thisSystem = EDDApplicationContext.EDDMainForm.history.FindSystem(systemName);
 
-            DataGridViewComboBoxColumn c = (DataGridViewComboBoxColumn)dataGridViewMarks.Columns["BodyName"];
-
-            c.Items.Clear();
+            BodyName.Items.Clear();
             if (thisSystem != null)
             {
                 var landables = EDDApplicationContext.EDDMainForm.history.starscan.FindSystem(thisSystem, true)?.Bodies?.Where(b => b.ScanData != null && b.ScanData.IsLandable)?.Select(b => b.fullname);
@@ -135,7 +136,7 @@ namespace EDDiscovery.UserControls
                     foreach (string s in landables)
                     {
                         //System.Diagnostics.Debug.WriteLine("Drop " + s);
-                        c.Items.Add(s);
+                        BodyName.Items.Add(s);
                     }
                 }
             }
@@ -170,6 +171,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+
             DataGridViewRow rw = dataGridViewMarks.Rows[e.RowIndex];
             bool valid = ValidRow(rw);
             ((DataGridViewCheckBoxCell)rw.Cells[5]).Value = valid;
@@ -177,7 +179,7 @@ namespace EDDiscovery.UserControls
             if (valid)
             {
                 Edited = true;
-                //System.Diagnostics.Debug.WriteLine("Commit " + rw.Cells[0].Value.ToString());
+                System.Diagnostics.Debug.WriteLine("Commit " + rw.Cells[0].Value.ToString());
 
                 Location newLoc = rw.Tag != null ? (Location)rw.Tag : new Location();
                 newLoc.Name = rw.Cells[1].Value.ToString();
@@ -186,8 +188,7 @@ namespace EDDiscovery.UserControls
                 newLoc.Longitude = Double.Parse(rw.Cells[4].Value.ToString());
                 planetmarks.AddOrUpdateLocation(rw.Cells[0].Value.ToString(), newLoc);
                 rw.Tag = newLoc;
-                rw.Cells[0].ReadOnly = true;    // can't change the planet or location name once it's in the collection or we'll not be able to look it up again
-                rw.Cells[1].ReadOnly = true;
+                rw.Cells[0].ReadOnly = true;    // can't change the planet.  Can change the name as we are directly editing the loc in memory
                 Changed?.Invoke(planetmarks);
             }
         }
