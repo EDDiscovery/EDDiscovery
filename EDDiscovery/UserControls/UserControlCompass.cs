@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
         double? bodyRadius = null;
         bool autoHideTargetCoords = false;
         HistoryEntry last_he;
-        BookmarkClass bookMark;
+        BookmarkClass currentBookMark;
         bool externallyForcedBookmark = false;
         PlanetMarks.Location externalLocation;
         string externalLocationName;
@@ -66,6 +66,7 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
             compassControl.SlewRateDegreesSec = 40;
             compassControl.AutoSetStencilTicks = true;
+            buttonNewBookmark.Enabled = false;
         }
 
         public override void Closing()
@@ -124,14 +125,9 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange(HistoryList obj) // need to handle this in case commander changed..
         {
-            HistoryEntry curhe = discoveryform.history.GetLast;
-            bool differentsystem = last_he != null && curhe != null && last_he.System.Name != curhe.System.Name;
-            last_he = curhe;
-            if (differentsystem)
-            {
-                bookMark = null;
-                PopulateBookmarkCombo();
-            }
+            last_he = discoveryform.history.GetLast;
+            currentBookMark = null;
+            PopulateBookmarkCombo();
 
             OnNewEntry(last_he, discoveryform.history);
         }
@@ -290,17 +286,18 @@ namespace EDDiscovery.UserControls
                 buttonNewBookmark.Enabled = false;
                 return;
             }
+
             buttonNewBookmark.Enabled = true;
-            if (bookMark != null && bookMark.StarName == last_he.System.Name)
+            if (currentBookMark != null && currentBookMark.StarName == last_he.System.Name)
             {
                 return;
             }
             string selection = externallyForcedBookmark ? externalLocationName : comboBoxBookmarks.Text;
             comboBoxBookmarks.Items.Clear();
-            bookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
-            if (bookMark != null)
+            currentBookMark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(last_he.System.Name);
+            if (currentBookMark != null)
             {
-                List<PlanetMarks.Planet> planetMarks = bookMark.PlanetaryMarks?.Planets;
+                List<PlanetMarks.Planet> planetMarks = currentBookMark.PlanetaryMarks?.Planets;
 
                 if (heading.HasValue)
                 {
@@ -354,8 +351,8 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxBookmarks_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (bookMark == null || bookMark.PlanetaryMarks == null || bookMark.PlanetaryMarks.Planets == null) return;
-            foreach (PlanetMarks.Planet pl in bookMark.PlanetaryMarks.Planets)
+            if (currentBookMark == null || currentBookMark.PlanetaryMarks == null || currentBookMark.PlanetaryMarks.Planets == null) return;
+            foreach (PlanetMarks.Planet pl in currentBookMark.PlanetaryMarks.Planets)
             {
                 if (pl.Locations != null && pl.Locations.Any())
                 {
@@ -385,7 +382,7 @@ namespace EDDiscovery.UserControls
         {
             BookmarkForm frm = new BookmarkForm();
             DateTime tme = DateTime.Now;
-            if (bookMark == null)
+            if (currentBookMark == null)
             {
                 if (latitude.HasValue)
                 {
@@ -400,11 +397,11 @@ namespace EDDiscovery.UserControls
             {
                 if (latitude.HasValue)
                 {
-                    frm.Update(bookMark, last_he.WhereAmI, latitude.Value, longitude.Value);
+                    frm.Update(currentBookMark, last_he.WhereAmI, latitude.Value, longitude.Value);
                 }
                 else
                 {
-                    frm.Update(bookMark);
+                    frm.Update(currentBookMark);
                 }
             }
 
@@ -412,12 +409,12 @@ namespace EDDiscovery.UserControls
             DialogResult dr = frm.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                bookMark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bookMark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes, frm.SurfaceLocations);
+                currentBookMark = GlobalBookMarkList.Instance.AddOrUpdateBookmark(currentBookMark, true, frm.StarHeading, double.Parse(frm.x), double.Parse(frm.y), double.Parse(frm.z), tme, frm.Notes, frm.SurfaceLocations);
             }
             if (dr == DialogResult.Abort)
             {
-                GlobalBookMarkList.Instance.Delete(bookMark);
-                bookMark = null;
+                GlobalBookMarkList.Instance.Delete(currentBookMark);
+                currentBookMark = null;
             }
 
             PopulateBookmarkCombo();
@@ -426,8 +423,8 @@ namespace EDDiscovery.UserControls
 
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
-            if (bookMark != null && bookMark.id == bk.id)
-                bookMark = null;
+            if (currentBookMark != null && currentBookMark.id == bk.id)
+                currentBookMark = null;
 
             PopulateBookmarkCombo();
             DisplayCompass();
