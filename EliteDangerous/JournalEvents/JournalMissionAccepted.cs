@@ -194,7 +194,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
         {
-            if (Commodity != null && Count != null && DeliveryMissions.Contains(Name))
+            if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName))
             {
                 mc.Change(MaterialCommodities.CommodityCategory, Commodity, (int)Count, 0, conn);
             }
