@@ -125,7 +125,7 @@ namespace BaseUtils
                     if (!word.InvariantParse(out d1))
                         return "Delay not properly given";
 
-                    if (s[0] == ',')
+                    if (s.Length >= 1 && s[0] == ',')
                     {
                         s = s.Substring(1);
                         word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']', ',' });
@@ -133,7 +133,7 @@ namespace BaseUtils
                             return "Second Delay not properly given";
                     }
 
-                    if (s[0] == ',')
+                    if (s.Length >= 1 && s[0] == ',')
                     {
                         s = s.Substring(1);
                         word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']' });
@@ -141,7 +141,7 @@ namespace BaseUtils
                             return "Third Delay not properly given";
                     }
 
-                    if (s[0] == ']')
+                    if (s.Length >= 1 && s[0] == ']')
                         s = s.Substring(1);
                     else
                         return "Missing closing ] in delay";
