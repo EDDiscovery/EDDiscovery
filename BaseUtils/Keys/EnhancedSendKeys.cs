@@ -115,7 +115,7 @@ namespace BaseUtils
 
                 int d1 = -1, d2 = -1, d3 = -1;
 
-                if (s[0] == '[')
+                if (s.Length >= 1 && s[0] == '[')
                 {
                     s = s.Substring(1);
                     string word = ObjectExtensionsStrings.FirstWord(ref s, new char[] { ']', ',' });
