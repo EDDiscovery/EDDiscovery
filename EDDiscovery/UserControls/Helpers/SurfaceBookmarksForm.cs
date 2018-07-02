@@ -52,16 +52,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
-        public void Disable()
-        {
-            Edited = false;
-            planetmarks = null;
-            dataGridViewMarks.CancelEdit();
-            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack.Multiply(0.5F);
-            dataGridViewMarks.Rows.Clear();
-            dataGridViewMarks.Enabled = false;
-        }
-
         public void Init(string systemName, PlanetMarks pm)          // from UCB or Bookmark form, Init with a bookmark
         {
             Edited = false;
@@ -110,6 +100,16 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
+        public void Disable()
+        {
+            Edited = false;
+            planetmarks = null;
+            dataGridViewMarks.CancelEdit();
+            dataGridViewMarks.ColumnHeadersDefaultCellStyle.BackColor = dataGridViewMarks.RowHeadersDefaultCellStyle.BackColor = EDDTheme.Instance.GridBorderBack.Multiply(0.5F);
+            dataGridViewMarks.Rows.Clear();
+            dataGridViewMarks.Enabled = false;
+        }
+
         public void AddSurfaceLocation(string planet, double latitude, double longitude)    // call After Reset to add a surface bookmark
         {
             using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
 
                 dr.Cells[0].Value = planet;
                 dr.Cells[0].ReadOnly = true;
-                dr.Cells[1].Value = "Enter a name";
+                dr.Cells[1].Value = "Enter a name".Tx("Enter");
                 dr.Cells[2].Value = "";
                 dr.Cells[3].Value = latitude.ToString("F4");
                 dr.Cells[4].Value = longitude.ToString("F4");
@@ -152,13 +152,95 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
-        private void dataGridViewMarks_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        int rightclickrow = -1;
+
+        private void dataGridViewMarks_MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Row.Tag != null)
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
             {
-                planetmarks.DeleteLocation(e.Row.Cells[0].Value.ToString(), ((Location)e.Row.Tag).Name);
-                Edited = true;
-                Changed?.Invoke(planetmarks);
+                rightclickrow = -1;
+            }
+
+            if (dataGridViewMarks.SelectedCells.Count < 2 || dataGridViewMarks.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = dataGridViewMarks.HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    dataGridViewMarks.ClearSelection();                // select row under cursor.
+                    dataGridViewMarks.Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on Marks map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                    }
+                }
+            }
+        }
+
+        private void contextMenuStrip_Opening(object sender, CancelEventArgs e)
+        {
+            if (rightclickrow >= 0)
+            {
+                deleteToolStripMenuItem.Enabled = dataGridViewMarks.Rows[rightclickrow].IsNewRow == false;
+                var check = (DataGridViewCheckBoxCell)dataGridViewMarks.Rows[rightclickrow].Cells[5];
+                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true;
+            }
+        }
+
+        private void addPlanetManuallyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+
+            int width = 430;
+            int ctrlleft = 150;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Planet:".Tx(this,"PL"), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.TextBoxBorder),
+                "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".Tx(this, "EPN")));
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx()));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx()));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                {
+                    f.DialogResult = DialogResult.OK;
+                    f.Close();
+                }
+                else if (controlname == "Cancel")
+                {
+                    f.DialogResult = DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 110), new Point(-999, -999), "Manually Add Planet".Tx(this, "MAP"));
+
+            string pname = f.Get("Planet");
+            if (res == DialogResult.OK && pname.HasChars())
+            {
+                if ( !BodyName.Items.Contains(pname))
+                    BodyName.Items.Add(pname);
+            }
+        }
+
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclickrow >= 0)
+            {
+                DataGridViewRow rw = dataGridViewMarks.Rows[rightclickrow];
+
+                if (rw.Tag != null)
+                {
+                    planetmarks.DeleteLocation(rw.Cells[0].Value.ToString(), ((Location)rw.Tag).Name);
+                    dataGridViewMarks.Rows.RemoveAt(rightclickrow);
+                    Edited = true;
+                    Changed?.Invoke(planetmarks);
+                }
+                else if (!rw.IsNewRow)
+                    dataGridViewMarks.Rows.RemoveAt(rightclickrow); // its not a saved one, just a spurious one..
             }
         }
 
@@ -172,8 +254,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
-
+        private void dataGridViewMarks_UserDeletingRow(object sender, DataGridViewRowCancelEventArgs e)
+        {
+            if (e.Row.Tag != null)
+            {
+                planetmarks.DeleteLocation(e.Row.Cells[0].Value.ToString(), ((Location)e.Row.Tag).Name);
+                Edited = true;
+                Changed?.Invoke(planetmarks);
+            }
+        }
 
         private void dataGridViewMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
@@ -226,8 +315,11 @@ namespace EDDiscovery.UserControls
             if (dr.Cells[3].Value == null || dr.Cells[4].Value == null) return false;
             if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) return false;
             if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon)) return false;
-
             return dr.Cells[0].Value?.ToString() != "" && dr.Cells[1].Value?.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
         }
+
+
+        #endregion
+
     }
 }
