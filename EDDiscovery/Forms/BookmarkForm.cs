@@ -68,7 +68,7 @@ namespace EDDiscovery.Forms
 
         public void NotedSystem(string name, string note, bool istarget)          // from target, a system with notes
         {
-            this.Text = "System Information".Tx(this);
+            this.Text = "System Information".Tx(this,"SI");
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
             checkBoxTarget.Checked = istarget;
@@ -84,8 +84,8 @@ namespace EDDiscovery.Forms
 
         public void NewRegionBookmark(DateTime tme)              // from map, a region bookmark at this time
         {
-            this.Text = "Create Region Bookmark".Tx(this);
-            textBoxName.Text = "Enter a region name...".Tx(this);
+            this.Text = "Create Region Bookmark".Tx(this,"RB");
+            textBoxName.Text = "Enter a region name...".Tx(this,"RN");
             textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = tme.ToString();
             textBoxX.ReadOnly = false;
@@ -122,7 +122,7 @@ namespace EDDiscovery.Forms
                 name = bk.Heading;
             }
 
-            this.Text = "Update Bookmark".Tx(this);
+            this.Text = "Update Bookmark".Tx(this,"UB");
             buttonOK.Text = "Update".Tx(this);
             textBoxName.Text = name;
             textBoxName.ReadOnly = !bk.isRegion;
@@ -157,7 +157,7 @@ namespace EDDiscovery.Forms
 
         public void NewSystemBookmark(ISystem system, string note, DateTime tme)    // from multipe, create a new system bookmark
         {
-            this.Text = "New System Bookmark".Tx(this);
+            this.Text = "New System Bookmark".Tx(this,"SB");
             textBoxName.Text = system.Name;
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme.ToString();
@@ -178,8 +178,8 @@ namespace EDDiscovery.Forms
 
         public void NewFreeEntrySystemBookmark(DateTime tme)     // new system bookmark anywhere
         {
-            this.Text = "New System Bookmark".Tx(this);
-            textBoxName.Text = "Enter a system name...".Tx(this);
+            this.Text = "New System Bookmark".Tx(this,"NSB");
+            textBoxName.Text = "Enter a system name...".Tx(this,"ESN");
             validatestarname = true;
             textBoxName.SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
             textBoxName.ClearOnFirstChar = true;
@@ -195,7 +195,7 @@ namespace EDDiscovery.Forms
 
         public void GMO(string name, string descr , bool istarget , string url )    // from formmap, new GMO bookmark
         {
-            this.Text = "Galactic Mapping Object".Tx(this);
+            this.Text = "Galactic Mapping Object".Tx(this,"GMO");
             textBoxName.Text = name;
             textBoxBookmarkNotes.Text = descr.WordWrap(40);
             textBoxBookmarkNotes.CursorToEnd();

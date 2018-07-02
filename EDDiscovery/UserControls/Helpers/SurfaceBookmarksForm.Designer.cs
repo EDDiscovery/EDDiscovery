@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.sendToCompassToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addPlanetManuallyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelSurface = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
@@ -53,16 +55,33 @@ namespace EDDiscovery.UserControls
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sendToCompassToolStripMenuItem});
+            this.sendToCompassToolStripMenuItem,
+            this.deleteToolStripMenuItem,
+            this.addPlanetManuallyToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(165, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(185, 92);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // sendToCompassToolStripMenuItem
             // 
             this.sendToCompassToolStripMenuItem.Name = "sendToCompassToolStripMenuItem";
-            this.sendToCompassToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.sendToCompassToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.sendToCompassToolStripMenuItem.Text = "Send to compass";
             this.sendToCompassToolStripMenuItem.Click += new System.EventHandler(this.sendToCompassToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.deleteToolStripMenuItem.Text = "Delete Row";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // addPlanetManuallyToolStripMenuItem
+            // 
+            this.addPlanetManuallyToolStripMenuItem.Name = "addPlanetManuallyToolStripMenuItem";
+            this.addPlanetManuallyToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
+            this.addPlanetManuallyToolStripMenuItem.Text = "Manually Add Planet";
+            this.addPlanetManuallyToolStripMenuItem.Click += new System.EventHandler(this.addPlanetManuallyToolStripMenuItem_Click);
             // 
             // labelSurface
             // 
@@ -144,6 +163,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewMarks_CellEndEdit);
             this.dataGridViewMarks.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewMarks_CellValidating);
             this.dataGridViewMarks.UserDeletingRow += new System.Windows.Forms.DataGridViewRowCancelEventHandler(this.dataGridViewMarks_UserDeletingRow);
+            this.dataGridViewMarks.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewMarks_MouseDown);
             // 
             // BodyName
             // 
@@ -213,5 +233,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addPlanetManuallyToolStripMenuItem;
     }
 }

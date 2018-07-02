@@ -137,7 +137,8 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()       // on start up, this will have an empty history
         {
             last_he = discoveryform.history.GetLast;
-            OnNewEntry(last_he, discoveryform.history);
+            PopulateBookmarkCombo();
+            DisplayCompass();
         }
 
         private void OnNewEntry(HistoryEntry he, HistoryList hl)
@@ -181,6 +182,8 @@ namespace EDDiscovery.UserControls
                     case JournalTypeEnum.LeaveBody:
                         latitude = null;
                         longitude = null;
+                        break;
+                    case JournalTypeEnum.FSDJump:       // to allow us to do PopulateBookmark..
                         break;
                     default:
                         return;
