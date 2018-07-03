@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -25,19 +26,20 @@ namespace EliteDangerousCore
     {
         public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
         public string name { get; set; }                    // name of it in nice text
-        public string fdname { get; set; }                  // fdnames
-        public string type { get; set; }                    // and its type, for materials its rarity, for commodities its group ("Metals" etc).
+        public string fdname { get; set; }                  // fdname, lower case..
+        public string type { get; set; }                    // and its type, for materials its rarity class, for commodities its group ("Metals" etc).
         public string shortname { get; set; }               // short abv. name
         public Color colour { get; set; }                   // colour if its associated with one
+        public bool rarity { get; set; }                    // if it is a rare commodity
+
+        public bool IsRareCommodity { get { return rarity && category.Equals(CommodityCategory); } }
 
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
         public static string MaterialEncodedCategory = "Encoded";
         public static string MaterialManufacturedCategory = "Manufactured";
 
-        public static string CommodityTypeRareGoods = "Rare Goods";
-
-        public static string MaterialFreqVeryRare = "Very Rare";
+        public static string MaterialFreqVeryRare = "Very Rare";    // type field for materials
         public static string MaterialFreqRare = "Rare";
         public static string MaterialFreqStandard = "Standard";
         public static string MaterialFreqCommon = "Common";
@@ -72,11 +74,26 @@ namespace EliteDangerousCore
             return i >= 0 ? lst[i] : null;
         }
 
+        public static MaterialCommodityData[] GetAll()
+        {
+            return cachelist.Values.ToArray();
+        }
+
+        public static MaterialCommodityData[] GetMaterials()
+        {
+            return cachelist.Values.Where(x => x.category != CommodityCategory).ToArray();
+        }
+
+        public static MaterialCommodityData[] GetCommodities()
+        {
+            return cachelist.Values.Where(x => x.category == CommodityCategory).ToArray();
+        }
+
         public MaterialCommodityData()
         {
         }
 
-        public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl)
+        public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl, bool rare)
         {
             category = cs;
             name = n;
@@ -84,6 +101,7 @@ namespace EliteDangerousCore
             type = t;
             shortname = shortn;
             colour = cl;
+            rarity = rare;
         }
 
         public static int? MaterialLimit(string type)
@@ -111,7 +129,7 @@ namespace EliteDangerousCore
         {
             if (!cachelist.ContainsKey(fdname.ToLower()))
             {
-                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green);
+                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, false);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname );
             }
@@ -140,43 +158,42 @@ namespace EliteDangerousCore
             return Color.Black;
         }
 
-        private static bool AddRare(string fdname, string aliasname)
-        {
-            return Add(CommodityCategory, Color.Green, aliasname, CommodityTypeRareGoods, "", fdname);
-        }
+        // Mats
 
-        private static bool AddRaw(string name, string typeofit, string shortname)
+        private static bool AddRaw(string name, string typeofit, string shortname, string fdname = "")
         {
-            return Add(MaterialRawCategory, CByType(typeofit), name, typeofit, shortname);
+            return AddEntry(MaterialRawCategory, CByType(typeofit), name, typeofit, shortname, fdname);
         }
 
         private static bool AddEnc(string name, string typeofit, string shortname, string fdname="")
         {
-            return Add(MaterialEncodedCategory, CByType(typeofit), name, typeofit, shortname, fdname);
+            return AddEntry(MaterialEncodedCategory, CByType(typeofit), name, typeofit, shortname, fdname);
         }
 
         private static bool AddManu(string name, string typeofit, string shortname , string fdname="")
         {
-            return Add(MaterialManufacturedCategory, CByType(typeofit), name, typeofit, shortname , fdname);
+            return AddEntry(MaterialManufacturedCategory, CByType(typeofit), name, typeofit, shortname , fdname);
         }
 
-        private static bool AddCommodity(string aliasnamelist, string typeofit, string fdname = "")        // fdname only if not a list.
+        // Commods
+
+        private static bool AddCommodityRare(string aliasname, string typeofit, string fdname)
         {
-            return AddList(CommodityCategory, Color.Green, aliasnamelist, typeofit, "", fdname);
+            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, "", fdname, true);
         }
 
-        private static bool AddCommodityO(string typeofit, string fdname, string aliasnamelist)        // for FD order
+        private static bool AddCommodity(string aliasname, string typeofit, string fdname )        // fdname only if not a list.
         {
-            return AddList(CommodityCategory, Color.Green, aliasnamelist, typeofit, "", fdname);
+            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, "", fdname);
         }
 
-        private static bool AddCommoditySN(string aliasname, string typeofit, string shortname, string fdname = "")
+        private static bool AddCommoditySN(string aliasname, string typeofit, string shortname, string fdname )
         {
-            return Add(CommodityCategory, Color.Green, aliasname, typeofit, shortname, fdname);
+            return AddEntry(CommodityCategory, Color.Green, aliasname, typeofit, shortname, fdname);
         }
 
         // fdname only useful if aliasname is not a list.
-        private static bool AddList(string category, Color colour, string aliasnamelist, string typeofit, string shortname = "" , string fdname = "")
+        private static bool AddCommodityList(string aliasnamelist, string typeofit)
         {
             string[] list = aliasnamelist.Split(';');
 
@@ -184,7 +201,7 @@ namespace EliteDangerousCore
             {
                 if (name.Length > 0)   // just in case a semicolon slips thru
                 {
-                    if (!Add(category, colour, name, typeofit, shortname, fdname))
+                    if (!AddEntry(CommodityCategory, Color.Green, name, typeofit, "", ""))
                     {
                         return false;
                     }
@@ -193,10 +210,14 @@ namespace EliteDangerousCore
             return true;
         }
 
-        private static bool Add(string catname, Color colour, string aliasname, string typeofit, string shortname = "", string fdName = "")
+        private static bool AddEntry(string catname, Color colour, string aliasname, string typeofit, string shortname, string fdName, bool comrare = false)
         {
-            string fdn = (fdName.Length > 0) ? fdName : aliasname.FDName();
-            MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour);
+            System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null,"ShortName repeat " + aliasname + " " + shortname);
+            System.Diagnostics.Debug.Assert(cachelist.ContainsKey(fdName) == false, "Repeated entry " + fdName);
+
+            string fdn = (fdName.Length > 0) ? fdName.ToLower() : aliasname.FDName();       // always lower case fdname
+
+            MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour, comrare);
             mc.SetCache();
             return true;
         }
@@ -211,7 +232,8 @@ namespace EliteDangerousCore
 
         public static void SetUpInitialTable()
         {
-            
+            #region Materials  - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+
             AddRaw("Carbon", MaterialFreqVeryCommon, "C");
             AddRaw("Iron", MaterialFreqVeryCommon, "Fe");
             AddRaw("Nickel", MaterialFreqVeryCommon, "Ni");
@@ -244,215 +266,6 @@ namespace EliteDangerousCore
             AddRaw("Polonium", MaterialFreqRare, "Po");
             AddRaw("Antimony", MaterialFreqRare, "Sb");
 
-            AddCommodity("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
-
-            AddCommodity("Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
-
-            AddCommodity("Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
-
-            string im = "Industrial Materials";
-            AddCommodity("Ceramic Composites;Insulating Membrane;Polymers;Semiconductors;Superconductors", im);
-            AddCommoditySN("Meta-Alloys", im, "MA", "metaalloys");
-            AddCommoditySN("Micro-Weave Cooling Hoses", im, "MWCH", "coolinghoses");
-            AddCommoditySN("Neofabric Insulation", im, "NFI");
-            AddCommoditySN("CMM Composite", im, "CMMC");
-
-            string ld = "Legal Drugs";
-            AddCommodity("Beer;Bootleg Liquor;Liquor;Tobacco;Wine;Lavian Brandy", ld);
-            AddCommodity("Narcotics", ld, "basicnarcotics");
-
-            string m = "Machinery";
-            AddCommodity("Atmospheric Processors;Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
-            AddCommodity("Heatsink Interlink;HN Shock Mount;Marine Equipment", m);
-            AddCommodity("Microbial Furnaces;Mineral Extractors;Modular Terminals;Power Generators", m);
-            AddCommodity("Skimmer Components;Thermal Cooling Units;Water Purifiers", m);
-            AddCommoditySN("Energy Grid Assembly", m, "EGA", "powergridassembly");
-            AddCommoditySN("Radiation Baffle", m, "RB");
-            AddCommoditySN("Magnetic Emitter Coil", m, "MEC");
-            AddCommoditySN("Articulation Motors", m, "AM");
-            AddCommoditySN("Reinforced Mounting Plate", m, "RMP");
-            AddCommoditySN("Power Transfer Bus", m, "PTB");
-            AddCommoditySN("Power Converter", m, "PC");
-            AddCommoditySN("Ion Distributor", m, "ID");
-
-            string md = "Medicines";
-            AddCommodity("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
-            AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
-
-            AddCommodity("Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lanthanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
-
-            string mi = "Minerals";
-            AddCommodity("Bauxite;Bertrandite;Bromellite;Coltan;Cryolite;Gallite;Goslarite;Methane Clathrate", mi);
-            AddCommodity("Methanol Monohydrate", mi, "methanolmonohydratecrystals");
-            AddCommodity("Indite;Jadeite;Lepidolite;Lithium Hydroxide;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", mi);
-            AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
-
-            string sv = "Salvage";
-            AddCommodity("Ai Relics;Ancient Artefact;Antimatter Containment Unit;Antiquities;Assault Plans;Black Box;Commercial Samples;Data Core;Diplomatic Bag;Encrypted Correspondence;Encrypted Data Storage;Experimental Chemicals;Fossil Remnants", sv);
-            AddCommodity("Galactic Travel Guide;Geological Samples;Hostage;Military Intelligence;Military Plans;Mysterious Idol;Occupied CryoPod;Occupied Escape Pod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials;Prototype Tech", sv);
-            AddCommodity("Rare Artwork;Rebel Transmissions;Salvageable Wreckage;Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Technical Blueprints;Trade Data;Unknown Probe;Unstable Data Core", sv);
-            AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
-            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
-
-            AddCommodityO(sv, "AncientRelic", "Ancient Relic");
-            AddCommodityO(sv, "AncientOrb","Ancient Orb");
-            AddCommodityO(sv, "AncientCasket","Ancient Casket");
-            AddCommodityO(sv, "AncientTablet", "Ancient Tablet");
-            AddCommodityO(sv, "AncientUrn","Ancient Urn");
-            AddCommodityO(sv, "AncientTotem","Ancient Totem");
-
-            AddCommodity("Imperial Slaves;Slaves", "Slavery");
-
-            string tc = "Technology";
-            AddCommodity("Advanced Catalysers;Animal Monitors;Aquaponic Systems;Bioreducing Lichen;Computer Components", tc);
-            AddCommodity("Auto-Fabricators", tc, "autofabricators");
-            AddCommodity("Land Enrichment Systems;Medical Diagnostic Equipment;Micro Controllers", tc);
-            AddCommodity("Nanobreakers;Resonating Separators;Robotics;Structural Regulators;Telemetry Suite",tc);
-            AddCommodity("H.E. Suits", tc, "hazardousenvironmentsuits");
-            AddCommodity("Hardware Diagnostic Sensor", tc, "diagnosticsensor");
-            AddCommodity("Muon Imager", tc, "mutomimager");
-
-            AddCommodity("Conductive Fabrics;Leather;Military Grade Fabrics;Natural Fabrics;Synthetic Fabrics", "Textiles");
-
-            AddCommodity("Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
-
-            string wp = "Weapons";
-            AddCommodity("Battle Weapons;Landmines;Personal Weapons;Reactive Armour", wp);
-            AddCommodity("Non-Lethal Weapons", wp, "nonlethalweapons");
-           
-            AddRare("aepyornisegg", "Aepyornis Egg"); //!
-
-            AddRare("aerialedenapple", "Eden Apples of Aerial");
-            AddRare("aganipperush", "Aganippe Rush");
-            AddRare("alacarakmoskinart", "Alacarakmo Skin Art");
-            AddRare("albinoquechuamammoth", "Albino Quechua Mammoth");
-            AddRare("alieneggs", "Leathery Eggs");
-            AddRare("altairianskin", "Altairian Skin");
-            AddRare("alyabodilysoap", "Alya Body Soap");
-            AddRare("anduligafireworks", "Anduliga Fire Works");
-            AddRare("anynacoffee", "Any Na Coffee");
-            AddRare("aroucaconventualsweets", "Arouca Conventual Sweets");
-            AddRare("azcancriformula42", "Az Cancri Formula 42");
-            AddRare("baltahsinevacuumkrill", "Baltah sine Vacuum Krill");
-            AddRare("bankiamphibiousleather", "Banki Amphibious Leather");
-            AddRare("bastsnakegin", "Bast Snake Gin");
-            AddRare("belalansrayleather", "Belalans Ray Leather");
-            AddRare("bluemilk", "Azure Milk");
-            AddRare("borasetanipathogenetics", "Borasetani Pathogenetics");
-            AddRare("burnhambiledistillate", "Burnham Bile Distillate");
-            AddRare("cd75catcoffee", "CD-75 Kitten Brand Coffee");
-            AddRare("centaurimegagin", "Centauri Mega Gin");
-            AddRare("ceremonialheiketea", "Ceremonial Heike Tea");
-            AddRare("cetirabbits", "Ceti Rabbits");
-            AddRare("chameleoncloth", "Chameleon Cloth");
-            AddRare("chateaudeaegaeon", "Chateau De Aegaeon");
-            AddRare("cherbonesbloodcrystals", "Cherbones Blood Crystals");
-            AddRare("chieridanimarinepaste", "Chi Eridani Marine Paste");
-            AddRare("coquimspongiformvictuals", "Coquim Spongiform Victuals");
-            AddRare("crystallinespheres", "Crystalline Spheres");
-            AddRare("damnacarapaces", "Damna Carapaces");
-            AddRare("deltaphoenicispalms", "Delta Phoenicis Palms");
-            AddRare("deuringastruffles", "Deuringas Truffles");
-            AddRare("disomacorn", "Diso Ma Corn");
-            AddRare("eleuthermals", "Eleu Thermals");
-            AddRare("eraninpearlwhisky", "Eranin Pearl Whiskey");
-            AddRare("eshuumbrellas", "Eshu Umbrellas");
-            AddRare("esusekucaviar", "Esuseku Caviar");
-            AddRare("ethgrezeteabuds", "Ethgreze Tea Buds");
-            AddRare("fujintea", "Fujin Tea");
-            AddRare("galactictravelguide", "Galactic Travel Guide");
-            AddRare("geawendancedust", "Geawen Dance Dust");
-            AddRare("gerasiangueuzebeer", "Gerasian Gueuze Beer");
-            AddRare("giantirukamasnails", "Giant Irukama Snails");
-            AddRare("giantverrix", "Giant Verrix");
-            AddRare("gilyasignatureweapons", "Gilya Signature Weapons");
-            AddRare("gomanyauponcoffee", "Goman Yaupon Coffee");
-            AddRare("haidneblackbrew", "Haidne Black Brew");
-            AddRare("havasupaidreamcatcher", "Havasupai Dream Catcher");
-            AddRare("helvetitjpearls", "Helvetitj Pearls");
-            AddRare("hip10175bushmeat", "Hip 10175 Bush Meat");
-            AddRare("hip118311swarm", "Hip 118311 Swarm");
-            AddRare("hipproto-squid", "HIP Proto-Squid"); 
-            AddRare("hiporganophosphates", "Hip Organophosphates");
-            AddRare("holvaduellingblades", "Holva Duelling Blades");
-            AddRare("honestypills", "Honesty Pills");
-            AddRare("hr7221wheat", "HR 7221 Wheat");
-            AddRare("indibourbon", "Indi Bourbon");
-            AddRare("jaquesquinentianstill", "Jaques Quinentian Still");
-            AddRare("jaradharrepuzzlebox", "Jaradharre Puzzle Box");
-            AddRare("jarouarice", "Jaroua Rice");
-            AddRare("jotunmookah", "Jotun Mookah");
-            AddRare("kachiriginleaches", "Kachirigin Filter Leeches");
-            AddRare("kamitracigars", "Kamitra Cigars");
-            AddRare("kamorinhistoricweapons", "Kamorin Historic Weapons");
-            AddRare("karetiicouture", "Karetii Couture");
-            AddRare("karsukilocusts", "Karsuki Locusts");
-            AddRare("kinagoviolins", "Kinago Violins");
-            AddRare("konggaale", "Kongga Ale");
-            AddRare("korrokungpellets", "Koro Kung Pellets");                   // Note that the (revised) identifier has two 'r's while the alias has one.
-            AddRare("lavianbrandy", "Lavian Brandy");
-            AddRare("leestianeviljuice", "Leestian Evil Juice");
-            AddRare("voidextractcoffee", "Void Extract Coffee");
-            AddRare("livehecateseaworms", "Live Hecate Sea Worms");
-            AddRare("ltthypersweet", "Ltt Hypersweet");
-            AddRare("lyraeweed", "Lyrae Weed");
-            AddRare("masterchefs", "Master Chefs");
-            AddRare("mechucoshightea", "Mechucos High Tea");
-            AddRare("medbstarlube", "Medb Starlube");
-            AddRare("mokojingbeastfeast", "Mokojing Beast Feast");
-            AddRare("momusbogspaniel", "Momus Bog Spaniel");
-            AddRare("motronaexperiencejelly", "Motrona Experience Jelly");
-            AddRare("mukusubiichitin-os", "Mukusubii Chitin-Os");
-            AddRare("mulachigiantfungus", "Mulachi Giant Fungus");
-            AddRare("neritusberries", "Neritus Berries");
-            AddRare("ngadandarifireopals", "Ngadandari Fire Opals");
-            AddRare("ngunamodernantiques", "Nguna Modern Antiques");
-            AddRare("njangarisaddles", "Njangari Saddles");
-            AddRare("noneuclidianexotanks", "Non Euclidian Exotanks");
-            AddRare("ochoengchillies", "Ochoeng Chillies");
-            AddRare("onionhead", "Onion Head");
-            AddRare("onionheadalphastrain", "Onionhead Alpha Strain");
-            AddRare("onionheadbetastrain", "Onionhead Beta Strain");
-            AddRare("ophiuchexinoartefacts", "Ophiuch Exino Artefacts");
-            AddRare("orrerianviciousbrew", "Orrerian Vicious Brew");
-            AddRare("pantaaprayersticks", "Pantaa Prayer Sticks");
-            AddRare("pavoniseargrubs", "Pavonis Ear Grubs");
-            AddRare("rajukrustoves", "Rajukru Multi-Stoves");
-            AddRare("rapabaosnakeskins", "Rapa Bao Snake Skins");
-            AddRare("rusanioldsmokey", "Rusani Old Smokey");
-            AddRare("sanumameat", "Sanuma Decorative Meat");
-            AddRare("saxonwine", "Saxon Wine");
-            AddRare("soontillrelics", "Soontill Relics");
-            AddRare("sothiscrystallinegold", "Sothis Crystalline Gold");
-            AddRare("tanmarktranquiltea", "Tanmark Tranquil Tea");
-            AddRare("tarachspice", "Tarach Spice");
-            AddRare("taurichimes", "Tauri Chimes");
-            AddRare("terramaterbloodbores", "Terra Mater Blood Bores");
-            AddRare("thehuttonmug", "The Hutton Mug");
-            AddRare("thrutiscream", "Thrutis Cream");
-            AddRare("tiegfriessynthsilk", "Tiegfries Synth Silk");
-            AddRare("tiolcewaste2pasteunits", "Tiolce Waste2paste Units");
-            AddRare("toxandjivirocide", "Toxandji Virocide");
-            AddRare("transgeniconionhead", "Lucan Onion Head");
-            AddRare("uszaiantreegrub", "Uszaian Tree Grub");
-            AddRare("utgaroarmillenialeggs", "Utgaroar Millennial Eggs");       // Note that the (revised) identifier has one 'n' while the alias has two.
-            AddRare("uzumokulow-gwings", "Uzumoku Low-G Wings");
-            AddRare("vanayequiceratomorphafur", "Vanayequi Ceratomorpha Fur");
-            AddRare("vegaslimweed", "Vega Slimweed");
-            AddRare("vherculisbodyrub", "V Herculis Body Rub");
-            AddRare("vidavantianlace", "Vidavantian Lace");
-            AddRare("volkhabbeedrones", "Volkhab Bee Drones");
-            AddRare("watersofshintara", "Waters Of shintara");
-            AddRare("wheemetewheatcakes", "Wheemete Wheat Cakes");
-            AddRare("witchhaulkobebeef", "Witchhaul Kobe Beef");
-            AddRare("wolffesh", "Wolf Fesh");
-            AddRare("wulpahyperboresystems", "Wulpa Hyperbore Systems");
-            AddRare("wuthielokufroth", "Wuthielo ku froth");
-            AddRare("xihecompanions", "Xihe Biomorphic Companions");
-            AddRare("yasokondileaf", "Yaso Kondi Leaf");
-            AddRare("zeesszeantglue", "Zeessze Ant Grub Glue");
-            AddRare("trinketsofhiddenfortune", "Trinkets Of Hidden Fortune");
-
             // very common data
             AddEnc("Anomalous Bulk Scan Data", MaterialFreqVeryCommon, "ABSD", "bulkscandata");
             AddEnc("Atypical Disrupted Wake Echoes", MaterialFreqVeryCommon, "ADWE", "disruptedwakeechoes");
@@ -478,24 +291,21 @@ namespace EliteDangerousCore
             AddEnc("Untypical Shield Scans", MaterialFreqStandard, "USS", "shielddensityreports");
             AddEnc("Abnormal Compact Emissions Data", MaterialFreqStandard, "CED", "compactemissionsdata");
             AddEnc("Pattern Alpha Obelisk Data", MaterialFreqStandard, "PAOD", "ancientbiologicaldata");
-            AddEnc("Ship Flight Data", MaterialFreqStandard, "SFD");     // from INARA - FDName needs checking
             // rare data
-            AddEnc( "Aberrant Shield Pattern Analysis", MaterialFreqRare, "ASPA", "shieldpatternanalysis");
-            AddEnc( "Atypical Encryption Archives", MaterialFreqRare, "AEA", "encryptionarchives");
-            AddEnc( "Decoded Emission Data", MaterialFreqRare, "DED");
-            AddEnc( "Divergent Scan Data", MaterialFreqRare, "DSD", "encodedscandata");
-            AddEnc( "Eccentric Hyperspace Trajectories", MaterialFreqRare, "EHT", "hyperspacetrajectories");
-            AddEnc( "Security Firmware Patch", MaterialFreqRare, "SFP", "securityfirmware");
-            AddEnc( "Pattern Delta Obelisk Data", MaterialFreqRare, "PDOD", "ancientlanguagedata");
-            AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS");  // from INARA - FDName needs checking
-            AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS", "guardian_moduleblueprint");
+            AddEnc("Aberrant Shield Pattern Analysis", MaterialFreqRare, "ASPA", "shieldpatternanalysis");
+            AddEnc("Atypical Encryption Archives", MaterialFreqRare, "AEA", "encryptionarchives");
+            AddEnc("Decoded Emission Data", MaterialFreqRare, "DED");
+            AddEnc("Divergent Scan Data", MaterialFreqRare, "DSD", "encodedscandata");
+            AddEnc("Eccentric Hyperspace Trajectories", MaterialFreqRare, "EHT", "hyperspacetrajectories");
+            AddEnc("Security Firmware Patch", MaterialFreqRare, "SFP", "securityfirmware");
+            AddEnc("Pattern Delta Obelisk Data", MaterialFreqRare, "PDOD", "ancientlanguagedata");
             // very rare data
             AddEnc("Classified Scan Fragment", MaterialFreqVeryRare, "CFSD", "classifiedscandata");
             AddEnc("Modified Embedded Firmware", MaterialFreqVeryRare, "EFW", "embeddedfirmware");
-            AddEnc( "Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
-            AddEnc( "Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
-            AddEnc( "Peculiar Shield Frequency Data", MaterialFreqVeryRare, "PSFD", "shieldfrequencydata");
-            AddEnc( "Pattern Epsilon Obelisk Data", MaterialFreqVeryRare, "PEOD", "ancienttechnologicaldata");
+            AddEnc("Adaptive Encryptors Capture", MaterialFreqVeryRare, "AEC", "adaptiveencryptors");
+            AddEnc("Datamined Wake Exceptions", MaterialFreqVeryRare, "DWEx", "dataminedwake");
+            AddEnc("Peculiar Shield Frequency Data", MaterialFreqVeryRare, "PSFD", "shieldfrequencydata");
+            AddEnc("Pattern Epsilon Obelisk Data", MaterialFreqVeryRare, "PEOD", "ancienttechnologicaldata");
             //very common manufactured
             AddManu("Basic Conductors", MaterialFreqVeryCommon, "BaC");
             AddManu("Chemical Storage Units", MaterialFreqVeryCommon, "CSU");
@@ -506,9 +316,7 @@ namespace EliteDangerousCore
             AddManu("Mechanical Scrap", MaterialFreqVeryCommon, "MS");
             AddManu("Salvaged Alloys", MaterialFreqVeryCommon, "SAll");
             AddManu("Worn Shield Emitters", MaterialFreqVeryCommon, "WSE");
-            AddManu( "Tempered Alloys", MaterialFreqVeryCommon, "TeA");
-            AddManu("Guardian Sentinel Wreckage Components", MaterialFreqVeryCommon, "GSWC", "guardian_sentinel_wreckagecomponents");
-            AddManu("Guardian Power Cell", MaterialFreqVeryCommon, "GPCe", "guardian_powercell");
+            AddManu("Tempered Alloys", MaterialFreqVeryCommon, "TeA");
             // common manufactured
             AddManu("Chemical Processors", MaterialFreqCommon, "CP");
             AddManu("Conductive Components", MaterialFreqCommon, "CCo");
@@ -519,10 +327,9 @@ namespace EliteDangerousCore
             AddManu("Heat Resistant Ceramics", MaterialFreqCommon, "HRC");
             AddManu("Hybrid Capacitors", MaterialFreqCommon, "HC");
             AddManu("Mechanical Equipment", MaterialFreqCommon, "ME");
-            AddManu("Shield Emitters", MaterialFreqCommon, "SE");
-            AddManu("Guardian Power Conduit", MaterialFreqCommon, "GPC", "guardian_powerconduit");
+            AddManu("Shield Emitters", MaterialFreqCommon, "SHE");
             // standard manufactured
-            AddManu("Chemical Distillery", MaterialFreqStandard, "CD");
+            AddManu("Chemical Distillery", MaterialFreqStandard, "CHD");
             AddManu("Conductive Ceramics", MaterialFreqStandard, "CCe");
             AddManu("Electrochemical Arrays", MaterialFreqStandard, "EA");
             AddManu("Focus Crystals", MaterialFreqStandard, "FoC");
@@ -532,48 +339,58 @@ namespace EliteDangerousCore
             AddManu("Phase Alloys", MaterialFreqStandard, "PA");
             AddManu("Precipitated Alloys", MaterialFreqStandard, "PAll");
             AddManu("Shielding Sensors", MaterialFreqStandard, "SS");
-            AddManu("Weapon Parts", MaterialFreqStandard, "WP");    // from INARA - FDName needs checking
+
+            // new to 3.1 frontier data
+
+            AddManu("Guardian Power Cell", MaterialFreqVeryCommon, "GPCe", "guardian_powercell");
+            AddManu("Guardian Power Conduit", MaterialFreqCommon, "GPC", "guardian_powerconduit");
             AddManu("Guardian Technology Component", MaterialFreqStandard, "GTC", "guardian_techcomponent");
             AddManu("Guardian Sentinel Weapon Parts", MaterialFreqStandard, "GSWP", "guardian_sentinel_weaponparts");
-            AddManu("Bio-Mechanical Conduits", MaterialFreqStandard, "BMC");    // from INARA - FDName needs checking
-            AddManu("Propulsion Elements", MaterialFreqStandard, "PE"); // from INARA - FDName needs checking
-            AddManu("Wreckage Components", MaterialFreqStandard, "WC"); // from INARA - FDName needs checking
+            AddManu("Guardian Sentinel Wreckage Components", MaterialFreqVeryCommon, "GSWC", "guardian_sentinel_wreckagecomponents");
+            AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS", "guardian_weaponblueprint");
+            AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS", "guardian_moduleblueprint");
+
+            AddManu("Bio-Mechanical Conduits", MaterialFreqStandard, "BMC", "TG_BioMechanicalConduits");
+            AddManu("Propulsion Elements", MaterialFreqStandard, "PE", "TG_PropulsionElement");
+            AddManu("Weapon Parts", MaterialFreqStandard, "WP", "TG_WeaponParts");
+            AddManu("Wreckage Components", MaterialFreqStandard, "WRC", "TG_WreckageComponents");
+            AddEnc("Ship Flight Data", MaterialFreqStandard, "SFD", "TG_ShipFlightData");
+            AddEnc("Ship Systems Data", MaterialFreqStandard, "SSD", "TG_ShipSystemsData");
+
             // rare manufactured
-            AddManu( "Chemical Manipulators", MaterialFreqRare, "CM");
-            AddManu( "Compound Shielding", MaterialFreqRare, "CoS");
-            AddManu( "Conductive Polymers", MaterialFreqRare, "CPo");
-            AddManu( "Configurable Components", MaterialFreqRare, "CCom");
-            AddManu( "Heat Vanes", MaterialFreqRare, "HV");
-            AddManu( "Polymer Capacitors", MaterialFreqRare, "PCa");
-            AddManu( "Proto Light Alloys", MaterialFreqRare, "PLA");
-            AddManu( "Refined Focus Crystals", MaterialFreqRare, "RFC");
-            AddManu( "Proprietary Composites", MaterialFreqRare, "FPC", "fedproprietarycomposites");
+            AddManu("Chemical Manipulators", MaterialFreqRare, "CM");
+            AddManu("Compound Shielding", MaterialFreqRare, "CoS");
+            AddManu("Conductive Polymers", MaterialFreqRare, "CPo");
+            AddManu("Configurable Components", MaterialFreqRare, "CCom");
+            AddManu("Heat Vanes", MaterialFreqRare, "HV");
+            AddManu("Polymer Capacitors", MaterialFreqRare, "PCa");
+            AddManu("Proto Light Alloys", MaterialFreqRare, "PLA");
+            AddManu("Refined Focus Crystals", MaterialFreqRare, "RFC");
+            AddManu("Proprietary Composites", MaterialFreqRare, "FPC", "fedproprietarycomposites");
             AddManu("Thermic Alloys", MaterialFreqRare, "ThA");
             // very rare manufactured
-            AddManu( "Core Dynamics Composites", MaterialFreqVeryRare, "FCC", "fedcorecomposites");
-            AddManu( "Biotech Conductors", MaterialFreqVeryRare, "BiC");
-            AddManu( "Exquisite Focus Crystals", MaterialFreqVeryRare, "EFC");
-            AddManu( "Imperial Shielding", MaterialFreqVeryRare, "IS");
-            AddManu( "Improvised Components", MaterialFreqVeryRare, "IC");
-            AddManu( "Military Grade Alloys", MaterialFreqVeryRare, "MGA");
-            AddManu( "Military Supercapacitors", MaterialFreqVeryRare, "MSC");
-            AddManu( "Pharmaceutical Isolators", MaterialFreqVeryRare, "PI");
-            AddManu( "Proto Heat Radiators", MaterialFreqVeryRare, "PHR");
-            AddManu( "Proto Radiolic Alloys", MaterialFreqVeryRare, "PRA");
+            AddManu("Core Dynamics Composites", MaterialFreqVeryRare, "FCC", "fedcorecomposites");
+            AddManu("Biotech Conductors", MaterialFreqVeryRare, "BiC");
+            AddManu("Exquisite Focus Crystals", MaterialFreqVeryRare, "EFC");
+            AddManu("Imperial Shielding", MaterialFreqVeryRare, "IS");
+            AddManu("Improvised Components", MaterialFreqVeryRare, "IC");
+            AddManu("Military Grade Alloys", MaterialFreqVeryRare, "MGA");
+            AddManu("Military Supercapacitors", MaterialFreqVeryRare, "MSC");
+            AddManu("Pharmaceutical Isolators", MaterialFreqVeryRare, "PI");
+            AddManu("Proto Heat Radiators", MaterialFreqVeryRare, "PHR");
+            AddManu("Proto Radiolic Alloys", MaterialFreqVeryRare, "PRA");
 
-            //Unknowns, data from INARA and cometbourne, July 17
-            // Renamed in 2.4
-            AddRare("unknownartifact", "Thargoid Sensor");
-            AddRare("unknownprobe", "Thargoid Probe");
-            AddRare("unknownlink", "Thargoid Link");
-            AddRare("unknownbiologicalmatter", "Thargoid Biological Matter");
-            AddRare("unknownresin", "Thargoid Resin");
-            AddRare("unknowntechnologysamples", "Thargoid Technology Samples");
+            AddCommodity("Thargoid Sensor", "Salvage", "UnknownArtifact");
+            AddCommodity("Thargoid Probe", "Salvage", "UnknownArtifact2");
+            AddCommodity("Thargoid Link", "Salvage", "UnknownArtifact3");
+            AddCommodity("Thargoid Resin", "Salvage", "UnknownResin");
+            AddCommodity("Thargoid Biological Matter", "Salvage", "UnknownBiologicalMatter");
+            AddCommodity("Thargoid Technology Samples", "Salvage", "UnknownTechnologySamples");
 
             AddManu("Thargoid Carapace", MaterialFreqCommon, "UKCP", "unknowncarapace");
             AddManu("Thargoid Energy Cell", MaterialFreqStandard, "UKEC", "unknownenergycell");
             AddManu("Thargoid Organic Circuitry", MaterialFreqVeryRare, "UKOC", "unknownorganiccircuitry");
-            AddManu("Thargoid Technology Components", MaterialFreqRare, "UKTC", "unknowntechnologycomponents");
+            AddManu("Thargoid Technological Components", MaterialFreqRare, "UKTC", "unknowntechnologycomponents");
             AddManu("Sensor Fragment", MaterialFreqVeryRare, "UES", "unknownenergysource");
 
             AddEnc("Thargoid Material Composition Data", MaterialFreqStandard, "UMCD", "tg_compositiondata");
@@ -582,27 +399,320 @@ namespace EliteDangerousCore
             AddEnc("Thargoid Ship Signature", MaterialFreqStandard, "USSig", "unknownshipsignature");
             AddEnc("Thargoid Wake Data", MaterialFreqRare, "UWD", "unknownwakedata");
 
-            // INARA - no idea what the FD IDs are
+            #endregion
 
-            //Unknown Material Composition Data   Standard
-            //Unknown Residue Data Analysis Rare
-            //Unknown Structural Data Common
-            //Unknown Technology Components
+            #region Commodities - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
 
+            AddCommodityList("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
-            //CheckAnthor(); // Check here..
-            //CheckEDData();
+            AddCommodityList("Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
 
-            // beyond Anthor but seen in logs
-            AddCommodity("Drones", "Drones");
+            AddCommodityList("Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
+
+            string im = "Industrial Materials";
+            AddCommodityList("Ceramic Composites;Insulating Membrane;Polymers;Semiconductors;Superconductors", im);
+            AddCommoditySN("Meta-Alloys", im, "MA", "metaalloys");
+            AddCommoditySN("Micro-Weave Cooling Hoses", im, "MWCH", "coolinghoses");
+            AddCommoditySN("Neofabric Insulation", im, "NFI", "");
+            AddCommoditySN("CMM Composite", im, "CMMC" , "");
+
+            AddCommodityList("Beer;Bootleg Liquor;Liquor;Tobacco;Wine", "Legal Drugs");
+
+            string m = "Machinery";
+
+            AddCommodity("Atmospheric Processors", "Machinery", "AtmosphericExtractors");
+            AddCommodity("Marine Equipment", "Machinery", "MarineSupplies");
+            AddCommodity("Microbial Furnaces", "Machinery", "HeliostaticFurnaces");
+            AddCommodity("Skimmer Components", "Machinery", "SkimerComponents");
+
+            AddCommodityList("Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
+            AddCommoditySN("HN Shock Mount", m ,"HNSM", "");
+            AddCommodityList("Mineral Extractors;Modular Terminals;Power Generators", m);
+            AddCommodityList("Thermal Cooling Units;Water Purifiers", m);
+            AddCommoditySN("Heatsink Interlink", m, "HSI", "");
+            AddCommoditySN("Energy Grid Assembly", m, "EGA", "powergridassembly");
+            AddCommoditySN("Radiation Baffle", m, "RB" , "");
+            AddCommoditySN("Magnetic Emitter Coil", m, "MEC", "");
+            AddCommoditySN("Articulation Motors", m, "AM", "");
+            AddCommoditySN("Reinforced Mounting Plate", m, "RMP", "");
+            AddCommoditySN("Power Transfer Bus", m, "PTB", "PowerTransferConduits");
+            AddCommoditySN("Power Converter", m, "PC", "");
+            AddCommoditySN("Ion Distributor", m, "ID", "");
+
+            string md = "Medicines";
+            AddCommodityList("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
+            AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
+
+            AddCommodityList("Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lanthanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
+            AddCommodity("Platinum Alloy", "Metals", "PlatinumAloy");
+
+            string mi = "Minerals";
+            AddCommodityList("Bauxite;Bertrandite;Bromellite;Coltan;Cryolite;Gallite;Goslarite;Methane Clathrate", mi);
+            AddCommodityList("Indite;Jadeite;Lepidolite;Lithium Hydroxide;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", mi);
+            AddCommodity("Methanol Monohydrate Crystals", mi, "methanolmonohydratecrystals");
+            AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
+
+            string sv = "Salvage";
+            AddCommodity("Trinkets of Hidden Fortune", "Salvage", "TrinketsOfFortune");
+            AddCommodity("Gene Bank", "Salvage", "GeneBank");
+            AddCommodity("Time Capsule", "Salvage", "TimeCapsule");
+            AddCommodity("Damaged Escape Pod", "Salvage", "DamagedEscapePod");
+            AddCommodity("Thargoid Heart", "Salvage", "ThargoidHeart");
+            AddCommodity("Thargoid Cyclops Tissue Sample", "Salvage", "ThargoidTissueSampleType1");
+            AddCommodity("Thargoid Basilisk Tissue Sample", "Salvage", "ThargoidTissueSampleType2");
+            AddCommodity("Thargoid Medusa Tissue Sample", "Salvage", "ThargoidTissueSampleType3");
+            AddCommodity("Thargoid Scout Tissue Sample", "Salvage", "ThargoidScoutTissueSample");
+            AddCommodity("Wreckage Components", "Salvage", "WreckageComponents");
+            AddCommodity("Antique Jewellery", "Salvage", "AntiqueJewellery");
+
+            AddCommodityList("Ai Relics;Antimatter Containment Unit;Antiquities;Assault Plans;Data Core;Diplomatic Bag;Encrypted Correspondence;Fossil Remnants", sv);
+            AddCommodityList("Geological Samples;Hostage;Military Intelligence;Mysterious Idol;Occupied CryoPod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials", sv);
+            AddCommodityList("Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Unstable Data Core", sv);
+            AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
+            AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
+            AddCommodity("Ancient Artefact", "Salvage", "USSCargoAncientArtefact");
+            AddCommodity("Black Box", "Salvage", "USSCargoBlackBox");
+            AddCommodity("Commercial Samples", "Salvage", "ComercialSamples");
+            AddCommodity("Encrypted Data Storage", "Salvage", "EncriptedDataStorage");
+            AddCommodity("Experimental Chemicals", "Salvage", "USSCargoExperimentalChemicals");
+            AddCommodity("Military Plans", "Salvage", "USSCargoMilitaryPlans");
+            AddCommodity("Occupied Escape Pod", "Salvage", "OccupiedCryoPod");
+            AddCommodity("Prototype Tech", "Salvage", "USSCargoPrototypeTech");
+            AddCommodity("Rare Artwork", "Salvage", "USSCargoRareArtwork");
+            AddCommodity("Rebel Transmissions", "Salvage", "USSCargoRebelTransmissions");
+            AddCommodity("Technical Blueprints", "Salvage", "USSCargoTechnicalBlueprints");
+            AddCommodity("Trade Data", "Salvage", "USSCargoTradeData");
+            AddCommodity("Ancient Relic",sv, "AncientRelic" );
+            AddCommodity("Ancient Orb",sv, "AncientOrb");
+            AddCommodity("Ancient Casket",sv, "AncientCasket");
+            AddCommodity("Ancient Tablet",sv, "AncientTablet");
+            AddCommodity("Ancient Urn",sv, "AncientUrn");
+            AddCommodity("Ancient Totem",sv, "AncientTotem");
+
+            AddCommodity("Narcotics", "Narcotics", "BasicNarcotics");
+
+            AddCommodityList("Imperial Slaves;Slaves", "Slaves");
+
+            string tc = "Technology";
+            AddCommoditySN("Ion Distributor", "Technology", "IOD", "IonDistributor");
+            AddCommodityList("Advanced Catalysers;Animal Monitors;Aquaponic Systems;Bioreducing Lichen;Computer Components", tc);
+            AddCommodity("Auto-Fabricators", tc, "autofabricators");
+            AddCommoditySN("Micro Controllers", tc, "MCC", "MicroControllers");
+            AddCommodityList("Medical Diagnostic Equipment", tc);
+            AddCommodityList("Nanobreakers;Resonating Separators;Robotics;Structural Regulators;Telemetry Suite",tc);
+            AddCommodity("H.E. Suits", tc, "hazardousenvironmentsuits");
+            AddCommoditySN("Hardware Diagnostic Sensor", tc, "DIS" , "diagnosticsensor");
+            AddCommodity("Muon Imager", tc, "mutomimager");
+            AddCommodity("Land Enrichment Systems", "Technology", "TerrainEnrichmentSystems");
+
+            AddCommodityList("Conductive Fabrics;Leather;Military Grade Fabrics;Natural Fabrics;Synthetic Fabrics", "Textiles");
+
+            AddCommodityList("Biowaste;Chemical Waste;Scrap;Toxic Waste", "Waste");
+
+            string wp = "Weapons";
+            AddCommodityList("Battle Weapons;Landmines;Personal Weapons;Reactive Armour", wp);
+            AddCommodity("Non-Lethal Weapons", wp, "nonlethalweapons");
+
+            #endregion
+
+            #region Rare Commodities - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+
+            AddCommodityRare("The Hutton Mug", "Consumer Items", "TheHuttonMug");
+            AddCommodityRare("Eranin Pearl Whisky", "Legal Drugs", "EraninPearlWhisky");
+            AddCommodityRare("Lavian Brandy", "Legal Drugs", "LavianBrandy");
+            AddCommodityRare("HIP 10175 Bush Meat", "Foods", "HIP10175BushMeat");
+            AddCommodityRare("Albino Quechua Mammoth Meat", "Foods", "AlbinoQuechuaMammoth");
+            AddCommodityRare("Utgaroar Millennial Eggs", "Foods", "UtgaroarMillenialEggs");
+            AddCommodityRare("Witchhaul Kobe Beef", "Foods", "WitchhaulKobeBeef");
+            AddCommodityRare("Karsuki Locusts", "Foods", "KarsukiLocusts");
+            AddCommodityRare("Giant Irukama Snails", "Foods", "GiantIrukamaSnails");
+            AddCommodityRare("Baltah'sine Vacuum Krill", "Foods", "BaltahSineVacuumKrill");
+            AddCommodityRare("Ceti Rabbits", "Foods", "CetiRabbits");
+            AddCommodityRare("Kachirigin Filter Leeches", "Medicines", "KachiriginLeaches");
+            AddCommodityRare("Lyrae Weed", "Narcotics", "LyraeWeed");
+            AddCommodityRare("Onionhead", "Narcotics", "OnionHead");
+            AddCommodityRare("Tarach Spice", "Narcotics", "TarachTorSpice");
+            AddCommodityRare("Wolf Fesh", "Narcotics", "Wolf1301Fesh");
+            AddCommodityRare("Borasetani Pathogenetics", "Weapons", "BorasetaniPathogenetics");
+            AddCommodityRare("HIP 118311 Swarm", "Weapons", "HIP118311Swarm");
+            AddCommodityRare("Kongga Ale", "Legal Drugs", "KonggaAle");
+            AddCommodityRare("Wuthielo Ku Froth", "Legal Drugs", "WuthieloKuFroth");
+            AddCommodityRare("Alacarakmo Skin Art", "Consumer Items", "AlacarakmoSkinArt");
+            AddCommodityRare("Eleu Thermals", "Consumer Items", "EleuThermals");
+            AddCommodityRare("Eshu Umbrellas", "Consumer Items", "EshuUmbrellas");
+            AddCommodityRare("Karetii Couture", "Consumer Items", "KaretiiCouture");
+            AddCommodityRare("Njangari Saddles", "Consumer Items", "NjangariSaddles");
+            AddCommodityRare("Any Na Coffee", "Foods", "AnyNaCoffee");
+            AddCommodityRare("CD-75 Kitten Brand Coffee", "Foods", "CD75CatCoffee");
+            AddCommodityRare("Goman Yaupon Coffee", "Foods", "GomanYauponCoffee");
+            AddCommodityRare("Volkhab Bee Drones", "Machinery", "VolkhabBeeDrones");
+            AddCommodityRare("Kinago Violins", "Consumer Items", "KinagoInstruments");
+            AddCommodityRare("Nguna Modern Antiques", "Consumer Items", "NgunaModernAntiques");
+            AddCommodityRare("Rajukru Multi-Stoves", "Consumer Items", "RajukruStoves");
+            AddCommodityRare("Tiolce Waste2Paste Units", "Consumer Items", "TiolceWaste2PasteUnits");
+            AddCommodityRare("Chi Eridani Marine Paste", "Foods", "ChiEridaniMarinePaste");
+            AddCommodityRare("Esuseku Caviar", "Foods", "EsusekuCaviar");
+            AddCommodityRare("Live Hecate Sea Worms", "Foods", "LiveHecateSeaWorms");
+            AddCommodityRare("Helvetitj Pearls", "Foods", "HelvetitjPearls");
+            AddCommodityRare("HIP Proto-Squid", "Foods", "HIP41181Squid");
+            AddCommodityRare("Coquim Spongiform Victuals", "Foods", "CoquimSpongiformVictuals");
+            AddCommodityRare("Eden Apples Of Aerial", "Foods", "AerialEdenApple");
+            AddCommodityRare("Neritus Berries", "Foods", "NeritusBerries");
+            AddCommodityRare("Ochoeng Chillies", "Foods", "OchoengChillies");
+            AddCommodityRare("Deuringas Truffles", "Foods", "DeuringasTruffles");
+            AddCommodityRare("HR 7221 Wheat", "Foods", "HR7221Wheat");
+            AddCommodityRare("Jaroua Rice", "Foods", "JarouaRice");
+            AddCommodityRare("Belalans Ray Leather", "Textiles", "BelalansRayLeather");
+            AddCommodityRare("Damna Carapaces", "Textiles", "DamnaCarapaces");
+            AddCommodityRare("Rapa Bao Snake Skins", "Textiles", "RapaBaoSnakeSkins");
+            AddCommodityRare("Vanayequi Ceratomorpha Fur", "Textiles", "VanayequiRhinoFur");
+            AddCommodityRare("Bast Snake Gin", "Legal Drugs", "BastSnakeGin");
+            AddCommodityRare("Thrutis Cream", "Legal Drugs", "ThrutisCream");
+            AddCommodityRare("Wulpa Hyperbore Systems", "Machinery", "WulpaHyperboreSystems");
+            AddCommodityRare("Aganippe Rush", "Medicines", "AganippeRush");
+            AddCommodityRare("Terra Mater Blood Bores", "Medicines", "TerraMaterBloodBores");
+            AddCommodityRare("Holva Duelling Blades", "Weapons", "HolvaDuellingBlades");
+            AddCommodityRare("Kamorin Historic Weapons", "Weapons", "KamorinHistoricWeapons");
+            AddCommodityRare("Gilya Signature Weapons", "Weapons", "GilyaSignatureWeapons");
+            AddCommodityRare("Delta Phoenicis Palms", "Chemicals", "DeltaPhoenicisPalms");
+            AddCommodityRare("Toxandji Virocide", "Chemicals", "ToxandjiVirocide");
+            AddCommodityRare("Xihe Biomorphic Companions", "Technology", "XiheCompanions");
+            AddCommodityRare("Sanuma Decorative Meat", "Foods", "SanumaMEAT");
+            AddCommodityRare("Ethgreze Tea Buds", "Foods", "EthgrezeTeaBuds");
+            AddCommodityRare("Ceremonial Heike Tea", "Foods", "CeremonialHeikeTea");
+            AddCommodityRare("Tanmark Tranquil Tea", "Foods", "TanmarkTranquilTea");
+            AddCommodityRare("AZ Cancri Formula 42", "Technology", "AZCancriFormula42");
+            AddCommodityRare("Sothis Crystalline Gold", "Metals", "SothisCrystallineGold");
+            AddCommodityRare("Kamitra Cigars", "Legal Drugs", "KamitraCigars");
+            AddCommodityRare("Rusani Old Smokey", "Legal Drugs", "RusaniOldSmokey");
+            AddCommodityRare("Yaso Kondi Leaf", "Legal Drugs", "YasoKondiLeaf");
+            AddCommodityRare("Chateau De Aegaeon", "Legal Drugs", "ChateauDeAegaeon");
+            AddCommodityRare("The Waters Of Shintara", "Medicines", "WatersOfShintara");
+            AddCommodityRare("Ophiuch Exino Artefacts", "Consumer Items", "OphiuchiExinoArtefacts");
+            AddCommodityRare("Baked Greebles", "Foods", "BakedGreebles");
+            AddCommodityRare("Aepyornis Egg", "Foods", "CetiAepyornisEgg");
+            AddCommodityRare("Saxon Wine", "Legal Drugs", "SaxonWine");
+            AddCommodityRare("Centauri Mega Gin", "Legal Drugs", "CentauriMegaGin");
+            AddCommodityRare("Anduliga Fire Works", "Chemicals", "AnduligaFireWorks");
+            AddCommodityRare("Banki Amphibious Leather", "Textiles", "BankiAmphibiousLeather");
+            AddCommodityRare("Cherbones Blood Crystals", "Minerals", "CherbonesBloodCrystals");
+            AddCommodityRare("Motrona Experience Jelly", "Narcotics", "MotronaExperienceJelly");
+            AddCommodityRare("Geawen Dance Dust", "Narcotics", "GeawenDanceDust");
+            AddCommodityRare("Gerasian Gueuze Beer", "Legal Drugs", "GerasianGueuzeBeer");
+            AddCommodityRare("Haiden Black Brew", "Foods", "HaidneBlackBrew");
+            AddCommodityRare("Havasupai Dream Catcher", "Consumer Items", "HavasupaiDreamCatcher");
+            AddCommodityRare("Burnham Bile Distillate", "Legal Drugs", "BurnhamBileDistillate");
+            AddCommodityRare("Hip Organophosphates", "Chemicals", "HIPOrganophosphates");
+            AddCommodityRare("Jaradharre Puzzle Box", "Consumer Items", "JaradharrePuzzlebox");
+            AddCommodityRare("Koro Kung Pellets", "Chemicals", "KorroKungPellets");
+            AddCommodityRare("Void Extract Coffee", "Foods", "LFTVoidExtractCoffee");
+            AddCommodityRare("Honesty Pills", "Medicines", "HonestyPills");
+            AddCommodityRare("Non Euclidian Exotanks", "Machinery", "NonEuclidianExotanks");
+            AddCommodityRare("LTT Hyper Sweet", "Foods", "LTTHyperSweet");
+            AddCommodityRare("Mechucos High Tea", "Foods", "MechucosHighTea");
+            AddCommodityRare("Medb Starlube", "Industrial Materials", "MedbStarlube");
+            AddCommodityRare("Mokojing Beast Feast", "Foods", "MokojingBeastFeast");
+            AddCommodityRare("Mukusubii Chitin-os", "Foods", "MukusubiiChitinOs");
+            AddCommodityRare("Mulachi Giant Fungus", "Foods", "MulachiGiantFungus");
+            AddCommodityRare("Ngadandari Fire Opals", "Minerals", "NgadandariFireOpals");
+            AddCommodityRare("Tiegfries Synth Silk", "Textiles", "TiegfriesSynthSilk");
+            AddCommodityRare("Uzumoku Low-G Wings", "Consumer Items", "UzumokuLowGWings");
+            AddCommodityRare("V Herculis Body Rub", "Medicines", "VHerculisBodyRub");
+            AddCommodityRare("Wheemete Wheat Cakes", "Foods", "WheemeteWheatCakes");
+            AddCommodityRare("Vega Slimweed", "Medicines", "VegaSlimWeed");
+            AddCommodityRare("Altairian Skin", "Consumer Items", "AltairianSkin");
+            AddCommodityRare("Pavonis Ear Grubs", "Narcotics", "PavonisEarGrubs");
+            AddCommodityRare("Jotun Mookah", "Consumer Items", "JotunMookah");
+            AddCommodityRare("Giant Verrix", "Machinery", "GiantVerrix");
+            AddCommodityRare("Indi Bourbon", "Legal Drugs", "IndiBourbon");
+            AddCommodityRare("Arouca Conventual Sweets", "Foods", "AroucaConventualSweets");
+            AddCommodityRare("Tauri Chimes", "Medicines", "TauriChimes");
+            AddCommodityRare("Zeessze Ant Grub Glue", "Consumer Items", "ZeesszeAntGlue");
+            AddCommodityRare("Pantaa Prayer Sticks", "Medicines", "PantaaPrayerSticks");
+            AddCommodityRare("Fujin Tea", "Medicines", "FujinTea");
+            AddCommodityRare("Chameleon Cloth", "Textiles", "ChameleonCloth");
+            AddCommodityRare("Orrerian Vicious Brew", "Foods", "OrrerianViciousBrew");
+            AddCommodityRare("Uszaian Tree Grub", "Foods", "UszaianTreeGrub");
+            AddCommodityRare("Momus Bog Spaniel", "Consumer Items", "MomusBogSpaniel");
+            AddCommodityRare("Diso Ma Corn", "Foods", "DisoMaCorn");
+            AddCommodityRare("Leestian Evil Juice", "Legal Drugs", "LeestianEvilJuice");
+            AddCommodityRare("Azure Milk", "Legal Drugs", "BlueMilk");
+            AddCommodityRare("Leathery Eggs", "Consumer Items", "AlienEggs");
+            AddCommodityRare("Alya Body Soap", "Medicines", "AlyaBodilySoap");
+            AddCommodityRare("Vidavantian Lace", "Consumer Items", "VidavantianLace");
+            AddCommodityRare("Lucan Onionhead", "Narcotics", "TransgenicOnionHead");
+            AddCommodityRare("Jaques Quinentian Still", "Consumer Items", "JaquesQuinentianStill");
+            AddCommodityRare("Soontill Relics", "Consumer Items", "SoontillRelics");
+            AddCommodityRare("Onionhead Alpha Strain", "Narcotics", "OnionHeadA");
+            AddCommodityRare("Onionhead Beta Strain", "Narcotics", "OnionHeadB");
+            AddCommodityRare("Galactic Travel Guide", "Salvage", "GalacticTravelGuide");
+            AddCommodityRare("Crom Silver Fesh", "Narcotics", "AnimalEffigies");
+            AddCommodityRare("Shan's Charis Orchid", "Consumer Items", "ShansCharisOrchid");
+            AddCommodityRare("Buckyball Beer Mats", "Consumer Items", "BuckyballBeerMats");
+            AddCommodityRare("Master Chefs", "Slaves", "MasterChefs");
+            AddCommodityRare("Personal Gifts", "Consumer Items", "PersonalGifts");
+            AddCommodityRare("Crystalline Spheres", "Consumer Items", "CrystallineSpheres");
+            AddCommodityRare("Ultra-Compact Processor Prototypes", "Consumer Items", "Advert1");
+            AddCommodityRare("Harma Silver Sea Rum", "Narcotics", "HarmaSilverSeaRum");
+            AddCommodityRare("Earth Relics", "Salvage", "EarthRelics");
+
+            #endregion
+
+            #region Powerplay - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+
+            AddCommodity("Aisling Media Materials", "PowerPlay", "AislingMediaMaterials");
+            AddCommodity("Aisling Sealed Contracts", "PowerPlay", "AislingMediaResources");
+            AddCommodity("Aisling Programme Materials", "PowerPlay", "AislingPromotionalMaterials");
+            AddCommodity("Alliance Trade Agreements", "PowerPlay", "AllianceTradeAgreements");
+            AddCommodity("Alliance Legislative Contracts", "PowerPlay", "AllianceLegaslativeContracts");
+            AddCommodity("Alliance Legislative Records", "PowerPlay", "AllianceLegaslativeRecords");
+            AddCommodity("Lavigny Corruption Reports", "PowerPlay", "LavignyCorruptionDossiers");
+            AddCommodity("Lavigny Field Supplies", "PowerPlay", "LavignyFieldSupplies");
+            AddCommodity("Lavigny Garrison Supplies", "PowerPlay", "LavignyGarisonSupplies");
+            AddCommodity("Core Restricted Package", "PowerPlay", "RestrictedPackage");
+            AddCommodity("Liberal Propaganda", "PowerPlay", "LiberalCampaignMaterials");
+            AddCommodity("Liberal Federal Aid", "PowerPlay", "FederalAid");
+            AddCommodity("Liberal Federal Packages", "PowerPlay", "FederalTradeContracts");
+            AddCommodity("Marked Military Arms", "PowerPlay", "LoanedArms");
+            AddCommodity("Patreus Field Supplies", "PowerPlay", "PatreusFieldSupplies");
+            AddCommodity("Patreus Garrison Supplies", "PowerPlay", "PatreusGarisonSupplies");
+            AddCommodity("Hudson's Restricted Intel", "PowerPlay", "RestrictedIntel");
+            AddCommodity("Hudson's Field Supplies", "PowerPlay", "RepublicanFieldSupplies");
+            AddCommodity("Hudson Garrison Supplies", "PowerPlay", "RepublicanGarisonSupplies");
+            AddCommodity("Sirius Franchise Package", "PowerPlay", "SiriusFranchisePackage");
+            AddCommodity("Sirius Corporate Contracts", "PowerPlay", "SiriusCommercialContracts");
+            AddCommodity("Sirius Industrial Equipment", "PowerPlay", "SiriusIndustrialEquipment");
+            AddCommodity("Torval Trade Agreements", "PowerPlay", "TorvalCommercialContracts");
+            AddCommodity("Torval Political Prisoners", "PowerPlay", "ImperialPrisoner");
+            AddCommodity("Utopian Publicity", "PowerPlay", "UtopianPublicity");
+            AddCommodity("Utopian Supplies", "PowerPlay", "UtopianFieldSupplies");
+            AddCommodity("Utopian Dissident", "PowerPlay", "UtopianDissident");
+            AddCommodity("Kumo Contraband Package", "PowerPlay", "IllicitConsignment");
+            AddCommodity("Unmarked Military supplies", "PowerPlay", "UnmarkedWeapons");
+            AddCommodity("Onionhead Samples", "PowerPlay", "OnionheadSamples");
+            AddCommodity("Revolutionary supplies", "PowerPlay", "CounterCultureSupport");
+            AddCommodity("Onionhead Derivatives", "PowerPlay", "OnionheadDerivatives");
+            AddCommodity("Out Of Date Goods", "PowerPlay", "OutOfDateGoods");
+            AddCommodity("Grom Underground Support", "PowerPlay", "UndergroundSupport");
+            AddCommodity("Grom Counter Intelligence", "PowerPlay", "GromCounterIntelligence");
+            AddCommodity("Yuri Grom's Military Supplies", "PowerPlay", "GromWarTrophies");
+            AddCommodity("Marked Slaves", "PowerPlay", "MarkedSlaves");
+            AddCommodity("Torval Deeds", "PowerPlay", "TorvalDeeds");
+
+            #endregion
+
+            // seen in logs
+            AddCommodity("Drones", "Drones","Drones");
 
             //foreach (MaterialCommodityDB d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
         }
 
 
-        static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>() // Key: old_identifier, Value: new_identifier
+        public static Dictionary<string, string> fdnamemangling = new Dictionary<string, string>() // Key: old_identifier, Value: new_identifier
         {
             //2.2 to 2.3 changed some of the identifier names.. change the 2.2 ones to 2.3!  Anthor data from his materials db file
+
+            // July 2018 - removed many, changed above, to match FD 3.1 excel output - we use their IDs.  Netlogentry frontierdata checks these..
 
             { "aberrantshieldpatternanalysis"       ,  "shieldpatternanalysis" },
             { "adaptiveencryptorscapture"           ,  "adaptiveencryptors" },
@@ -641,32 +751,13 @@ namespace EliteDangerousCore
             { "xihebiomorphiccompanions"            ,  "xihecompanions" },
             { "zeesszeantgrubglue"                  ,  "zeesszeantglue" },
 
-            //aliases found in commodities files from Anthor, change to last name in list.
-            {"micro-weavecoolinghoses","coolinghoses"},
-            {"atmosphericextractors","atmosphericprocessors"},
-            {"marinesupplies","marineequipment"},
-            {"heliostaticfurnaces","microbialfurnaces"},
-            {"skimercomponents","skimmercomponents"},
+            {"micro-weavecoolinghoses","coolinghoses"},     
             {"energygridassembly","powergridassembly"},
-            {"powertransferconduits","powertransferbus"},
+
             {"methanolmonohydrate","methanolmonohydratecrystals"},
-            {"terrainenrichmentsystems","landenrichmentsystems"},
             {"muonimager","mutomimager"},
             {"hardwarediagnosticsensor","diagnosticsensor"},
-            {"usscargotradedata","tradedata"},
-            {"usscargoblackbox","blackbox"},
-            {"usscargomilitaryplans","militaryplans"},
-            {"usscargoancientartefact","ancientartefact"},
-            {"usscargorareartwork","rareartwork"},
-            {"usscargoexperimentalchemicals","experimentalchemicals"},
-            {"usscargorebeltransmissions","rebeltransmissions"},
-            {"usscargoprototypetech","prototypetech"},
-            {"usscargotechnicalblueprints","technicalblueprints"},
-            {"unknownartifact2","unknownprobe"},
-            {"unknownartifact3","unknownlink"},
 
-            //From logs
-            {"encripteddatastorage", "encrypteddatastorage" },
         };
 
         static public string FDNameTranslation(string old)
@@ -681,700 +772,7 @@ namespace EliteDangerousCore
                 return old;
         }
 
-
-
         #endregion
-
-#if false
-
-        #region Anthor check 30 may 2017        
-        // **** KEEP THIS, We will periodically ask Anthor for his files and then we can double check. 
-
-        // Or, just review the second ~half of https://github.com/EDSM-NET/Alias/blob/master/Station/Commodity/Type.php
-
-        // WARNING !!!!
-
-        // WARNING !!!!
-
-        // WARNING !!!!
-
-        // WARNING !!!!
-
-        // Use Robby ProcessAnthorData program to generate these tables from Anthors PHP - don't do it manually.!!!!!!!!!!!!!!!!
-
-        class Alias {
-            public string fdname; public string alias; public int num;
-            public Alias(string f, string a, int n ) { fdname = f;alias = a;num = n; }
-        };
-
-
-        static List<Alias> EDSM_User_Alias_Materials = new List<Alias>() {
-            new Alias("antimony","Antimony",1),
-            new Alias("arsenic","Arsenic",2),
-            new Alias("basicconductors","Basic Conductors",3),
-            new Alias("biotechconductors","Biotech Conductors",4),
-            new Alias("cadmium","Cadmium",5),
-            new Alias("carbon","Carbon",6),
-            new Alias("chemicaldistillery","Chemical Distillery",7),
-            new Alias("chemicalmanipulators","Chemical Manipulators",8),
-            new Alias("chemicalprocessors","Chemical Processors",9),
-            new Alias("chemicalstorageunits","Chemical Storage Units",10),
-            new Alias("chromium","Chromium",11),
-            new Alias("compactcomposites","Compact Composites",12),
-            new Alias("compoundshielding","Compound Shielding",13),
-            new Alias("conductiveceramics","Conductive Ceramics",14),
-            new Alias("conductivecomponents","Conductive Components",15),
-            new Alias("conductivepolymers","Conductive Polymers",16),
-            new Alias("configurablecomponents","Configurable Components",17),
-            new Alias("fedcorecomposites","Core Dynamics Composites",18),
-            new Alias("crystalshards","Crystal Shards",19),
-            new Alias("electrochemicalarrays","Electrochemical Arrays",20),
-            new Alias("exquisitefocuscrystals","Exquisite Focus Crystals",21),
-            new Alias("filamentcomposites","Filament Composites",22),
-            new Alias("uncutfocuscrystals","Flawed Focus Crystals",23),
-            new Alias("focuscrystals","Focus Crystals",24),
-            new Alias("galvanisingalloys","Galvanising Alloys",25),
-            new Alias("germanium","Germanium",26),
-            new Alias("gridresistors","Grid Resistors",27),
-            new Alias("heatconductionwiring","Heat Conduction Wiring",28),
-            new Alias("heatdispersionplate","Heat Dispersion Plate",29),
-            new Alias("heatexchangers","Heat Exchangers",30),
-            new Alias("heatresistantceramics","Heat Resistant Ceramics",31),
-            new Alias("heatvanes","Heat Vanes",32),
-            new Alias("highdensitycomposites","High Density Composites",33),
-            new Alias("hybridcapacitors","Hybrid Capacitors",34),
-            new Alias("imperialshielding","Imperial Shielding",35),
-            new Alias("improvisedcomponents","Improvised Components",36),
-            new Alias("iron","Iron",37),
-            new Alias("manganese","Manganese",38),
-            new Alias("mechanicalcomponents","Mechanical Components",39),
-            new Alias("mechanicalequipment","Mechanical Equipment",40),
-            new Alias("mechanicalscrap","Mechanical Scrap",41),
-            new Alias("mercury","Mercury",42),
-            new Alias("militarygradealloys","Military Grade Alloys",43),
-            new Alias("militarysupercapacitors","Military Supercapacitors",44),
-            new Alias("molybdenum","Molybdenum",45),
-            new Alias("nickel","Nickel",46),
-            new Alias("niobium","Niobium",47),
-            new Alias("pharmaceuticalisolators","Pharmaceutical Isolators",48),
-            new Alias("phasealloys","Phase Alloys",49),
-            new Alias("phosphorus","Phosphorus",50),
-            new Alias("polonium","Polonium",51),
-            new Alias("polymercapacitors","Polymer Capacitors",52),
-            new Alias("precipitatedalloys","Precipitated Alloys",53),
-            new Alias("fedproprietarycomposites","Proprietary Composites",54),
-            new Alias("protoheatradiators","Proto Heat Radiators",55),
-            new Alias("protolightalloys","Proto Light Alloys",56),
-            new Alias("protoradiolicalloys","Proto Radiolic Alloys",57),
-            new Alias("refinedfocuscrystals","Refined Focus Crystals",58),
-            new Alias("ruthenium","Ruthenium",59),
-            new Alias("salvagedalloys","Salvaged Alloys",60),
-            new Alias("selenium","Selenium",61),
-            new Alias("shieldemitters","Shield Emitters",62),
-            new Alias("shieldingsensors","Shielding Sensors",63),
-            new Alias("sulphur","Sulphur",64),
-            new Alias("technetium","Technetium",65),
-            new Alias("tellurium","Tellurium",66),
-            new Alias("temperedalloys","Tempered Alloys",67),
-            new Alias("thermicalloys","Thermic Alloys",68),
-            new Alias("tin","Tin",69),
-            new Alias("tungsten","Tungsten",70),
-            new Alias("unknownenergysource","Unknown Fragment",71),
-            new Alias("vanadium","Vanadium",72),
-            new Alias("wornshieldemitters","Worn Shield Emitters",73),
-            new Alias("yttrium","Yttrium",74),
-            new Alias("zinc","Zinc",75),
-            new Alias("zirconium","Zirconium",76),
-        };
-        static List<Alias> EDSM_User_Alias_Data = new List<Alias>() {
-            new Alias("shieldpatternanalysis","Aberrant Shield Pattern Analysis",1),
-            new Alias("compactemissionsdata","Abnormal Compact Emission Data",2),
-            new Alias("adaptiveencryptors","Adaptive Encryptors Capture",3),
-            new Alias("bulkscandata","Anomalous Bulk Scan Data",4),
-            new Alias("fsdtelemetry","Anomalous FSD Telemetry",5),
-            new Alias("disruptedwakeechoes","Atypical Disrupted Wake Echoes",6),
-            new Alias("encryptionarchives","Atypical Encryption Archives",7),
-            new Alias("scandatabanks","Classified Scan Databanks",8),
-            new Alias("classifiedscandata","Classified Scan Fragment",9),
-            new Alias("industrialfirmware","Cracked Industrial Firmware",10),
-            new Alias("dataminedwake","Datamined Wake Exceptions",11),
-            new Alias("decodedemissiondata","Decoded Emission Data",12),
-            new Alias("shieldcyclerecordings","Distorted Shield Cycle Recordings",13),
-            new Alias("encodedscandata","Divergent Scan Data",14),
-            new Alias("hyperspacetrajectories","Eccentric Hyperspace Trajectories",15),
-            new Alias("scrambledemissiondata","Exceptional Scrambled Emission Data",16),
-            new Alias("shieldsoakanalysis","Inconsistent Shield Soak Analysis",17),
-            new Alias("archivedemissiondata","Irregular Emission Data",18),
-            new Alias("consumerfirmware","Modified Consumer Firmware",19),
-            new Alias("embeddedfirmware","Modified Embedded Firmware",20),
-            new Alias("symmetrickeys","Open Symmetric Keys",21),
-            new Alias("ancientbiologicaldata","Pattern Alpha Obelisk Data",22),
-            new Alias("ancientculturaldata","Pattern Beta Obelisk Data",23),
-            new Alias("ancientlanguagedata","Pattern Delta Obelisk Data",24),
-            new Alias("ancienttechnologicaldata","Pattern Epsilon Obelisk Data",25),
-            new Alias("ancienthistoricaldata","Pattern Gamma Obelisk Data",26),
-            new Alias("shieldfrequencydata","Peculiar Shield Frequency Data",27),
-            new Alias("securityfirmware","Security Firmware Patch",28),
-            new Alias("legacyfirmware","Specialised Legacy Firmware",29),
-            new Alias("wakesolutions","Strange Wake Solutions",30),
-            new Alias("encryptioncodes","Tagged Encryption Codes",31),
-            new Alias("emissiondata","Unexpected Emission Data",32),
-            new Alias("scanarchives","Unidentified Scan Archives",33),
-            new Alias("unknownenergysource","Unknown Fragment",34),
-            new Alias("shielddensityreports","Untypical Shield Scans",35),
-            new Alias("encryptedfiles","Unusual Encrypted Files",36),
-            new Alias("unknownshipsignature","Unknown Ship Signature",37),
-            new Alias("unknownwakedata","Unknown Wake Data",38),
-        };
-
-        static string getGradeMat(string alias)
-        {
-            int number = EDSM_User_Alias_Materials.Find(x => x.alias.Equals(alias)).num;
-
-            if (Array.IndexOf(new int[] { 1, 4, 18, 21, 35, 36, 43, 44, 48, 51, 55, 57, 59, 65, 66, 71 }, number) >= 0)
-            {
-                return "Very Rare";
-            }
-
-            if (Array.IndexOf(new int[] { 5, 8, 13, 16, 17, 32, 42, 45, 52, 54, 56, 58, 67, 69, 74 }, number) >= 0)
-            {
-                return "Rare";
-            }
-
-            if (Array.IndexOf(new int[] { 2, 7, 14, 20, 24, 30, 33, 39, 47, 49, 53, 61, 63, 70, 76 }, number) >= 0)
-            {
-                return "Standard";
-            }
-
-            if (Array.IndexOf(new int[] { 9, 11, 15, 22, 23, 25, 26, 29, 31, 34, 38, 40, 62, 72, 75 }, number) >= 0)
-            {
-                return "Common";
-            }
-
-            return "Very Common";
-        }
-
-
-        static string getGradeData(string alias)
-        {
-            int number = EDSM_User_Alias_Data.Find(x => x.alias.Equals(alias)).num;
-
-            if (Array.IndexOf(new int[] { 2, 3, 9, 11, 20, 25, 27, 38 }, number) >= 0)
-            {
-                return "Very Rare";
-            }
-
-            if (Array.IndexOf(new int[] { 1, 7, 12, 14, 15, 24, 28, 37 }, number) >= 0)
-            {
-                return "Rare";
-            }
-
-            if (Array.IndexOf(new int[] { 8, 10, 21, 22, 30, 32, 35 }, number) >= 0)
-            {
-                return "Standard";
-            }
-
-            if (Array.IndexOf(new int[] { 5, 17, 18, 19, 23, 31, 33 }, number) >= 0)
-            {
-                return "Common";
-            }
-
-            return "Very Common";
-        }
-
-        static List<Alias> EDSM_System_Station_Commodities_Alias_Type = new List<Alias>() {
-            new Alias("explosives","Explosives",101),
-            new Alias("hydrogenfuel","Hydrogen Fuel",102),
-            new Alias("mineraloil","Mineral Oil",103),
-            new Alias("pesticides","Pesticides",104),
-            new Alias("syntheticreagents","Synthetic Reagents",105),
-            new Alias("surfacestabilisers","Surface Stabilisers",106),
-            new Alias("nerveagents","Nerve Agents",107),
-            new Alias("deltaphoenicispalms","Delta Phoenicis Palms",108),
-            new Alias("toxandjivirocide","Toxandji Virocide",109),
-            new Alias("anduligafireworks","Anduliga Fire Works",110),
-            new Alias("hiporganophosphates","HIP Organophosphates",111),
-            new Alias("korokungpellets","Koro Kung Pellets",112),
-            new Alias("water","Water",113),
-            new Alias("hydrogenperoxide","Hydrogen Peroxide",114),
-            new Alias("liquidoxygen","Liquid Oxygen",115),
-            new Alias("clothing","Clothing",201),
-            new Alias("consumertechnology","Consumer Technology",202),
-            new Alias("domesticappliances","Domestic Appliances",203),
-            new Alias("evacuationshelter","Evacuation Shelter",204),
-            new Alias("alacarakmoskinart","Alacarakmo Skin Art",205),
-            new Alias("eleuthermals","Eleu Thermals",206),
-            new Alias("eshuumbrellas","Eshu Umbrellas",207),
-            new Alias("karetiicouture","Karetii Couture",208),
-            new Alias("njangarisaddles","Njangari Saddles",209),
-            new Alias("kinagoviolins","Kinago Violins",210),
-            new Alias("ngunamodernantiques","Nguna Modern Antiques",211),
-            new Alias("rajukrumulti-stoves","Rajukru Multi-Stoves",212),
-            new Alias("tiolcewaste2pasteunits","Tiolce Waste2Paste Units",213),
-            new Alias("ophiuchexinoartefacts","Ophiuch Exino Artefacts",214),
-            new Alias("havasupaidreamcatcher","Havasupai Dream Catcher",215),
-            new Alias("jaradharrepuzzlebox","Jaradharre Puzzle Box",216),
-            new Alias("uzumokulow-gwings","Uzumoku Low-G Wings",217),
-            new Alias("altairianskin","Altairian Skin",218),
-            new Alias("jotunmookah","Jotun Mookah",219),
-            new Alias("zeesszeantgrubglue","Zeessze Ant Grub Glue",220),
-            new Alias("momusbogspaniel","Momus Bog Spaniel",221),
-            new Alias("leatheryeggs","Leathery Eggs",222),
-            new Alias("vidavantianlace","Vidavantian Lace",223),
-            new Alias("jaquesquinentianstill","Jaques Quinentian Still",224),
-            new Alias("soontillrelics","Soontill Relics",225),
-            new Alias("thehuttonmug","The Hutton Mug",226),
-            new Alias("crystallinespheres","Crystalline Spheres",227),
-            new Alias("survivalequipment","Survival Equipment",228),
-            new Alias("beer","Beer",301),
-            new Alias("liquor","Liquor",302),
-            new Alias("basicnarcotics","Narcotics",303),
-            new Alias("tobacco","Tobacco",304),
-            new Alias("wine","Wine",305),
-            new Alias("eraninpearlwhiskey","Eranin Pearl Whiskey",306),
-            new Alias("lucanonionhead","Lucan Onion Head",307),
-            new Alias("motronaexperiencejelly","Motrona Experience Jelly",308),
-            new Alias("onionhead","Onion Head",309),
-            new Alias("rusanioldsmokey","Rusani Old Smokey",310),
-            new Alias("tarachspice","Tarach Spice",311),
-            new Alias("wolffesh","Wolf Fesh",312),
-            new Alias("wuthielokufroth","Wuthielo Ku Froth",313),
-            new Alias("bootlegliquor","Bootleg Liquor",314),
-            new Alias("lavianbrandy","Lavian Brandy",315),
-            new Alias("lyraeweed","Lyrae Weed",316),
-            new Alias("konggaale","Kongga Ale",317),
-            new Alias("bastsnakegin","Bast Snake Gin",318),
-            new Alias("thrutiscream","Thrutis Cream",319),
-            new Alias("kamitracigars","Kamitra Cigars",320),
-            new Alias("yasokondileaf","Yaso Kondi Leaf",321),
-            new Alias("chateaudeaegaeon","Chateau De Aegaeon",322),
-            new Alias("saxonwine","Saxon Wine",323),
-            new Alias("centaurimegagin","Centauri Mega Gin",324),
-            new Alias("geawendancedust","Geawen Dance Dust",325),
-            new Alias("gerasiangueuzebeer","Gerasian Gueuze Beer",326),
-            new Alias("burnhambiledistillate","Burnham Bile Distillate",327),
-            new Alias("pavoniseargrubs","Pavonis Ear Grubs",328),
-            new Alias("indibourbon","Indi Bourbon",329),
-            new Alias("leestianeviljuice","Leestian Evil Juice",330),
-            new Alias("azuremilk","Azure Milk",331),
-            new Alias("onionheadalphastrain","Onionhead Alpha Strain",332),
-            new Alias("onionheadbetastrain","Onionhead Beta Strain",333),
-            new Alias("algae","Algae",401),
-            new Alias("animalmeat","Animal Meat",402),
-            new Alias("coffee","Coffee",403),
-            new Alias("fish","Fish",404),
-            new Alias("foodcartridges","Food Cartridges",405),
-            new Alias("fruitandvegetables","Fruit and Vegetables",406),
-            new Alias("grain","Grain",407),
-            new Alias("syntheticmeat","Synthetic Meat",408),
-            new Alias("tea","Tea",409),
-            new Alias("hip10175bushmeat","HIP 10175 Bush Meat",410),
-            new Alias("albinoquechuamammoth","Albino Quechua Mammoth",411),
-            new Alias("utgaroarmillennialeggs","Utgaroar Millennial Eggs",412),
-            new Alias("witchhaulkobebeef","Witchhaul Kobe Beef",413),
-            new Alias("karsukilocusts","Karsuki Locusts",414),
-            new Alias("giantirukamasnails","Giant Irukama Snails",415),
-            new Alias("baltahsinevacuumkrill","Baltah Sine Vacuum Krill",416),
-            new Alias("cetirabbits","Ceti Rabbits",417),
-            new Alias("anynacoffee","Any Na Coffee",418),
-            new Alias("cd-75kittenbrandcoffee","CD-75 Kitten Brand Coffee",419),
-            new Alias("gomanyauponcoffee","Goman Yaupon Coffee",420),
-            new Alias("chieridanimarinepaste","Chi Eridani Marine Paste",421),
-            new Alias("esusekucaviar","Esuseku Caviar",422),
-            new Alias("livehecateseaworms","Live Hecate Sea Worms",423),
-            new Alias("helvetitjpearls","Helvetitj Pearls",424),
-            new Alias("hipproto-squid","HIP Proto-Squid",425),
-            new Alias("coquimspongiformvictuals","Coquim Spongiform Victuals",426),
-            new Alias("edenapplesofaerial","Eden Apples Of Aerial",427),
-            new Alias("neritusberries","Neritus Berries",428),
-            new Alias("ochoengchillies","Ochoeng Chillies",429),
-            new Alias("deuringastruffles","Deuringas Truffles",430),
-            new Alias("hr7221wheat","HR 7221 Wheat",431),
-            new Alias("jarouarice","Jaroua Rice",432),
-            new Alias("sanumadecorativemeat","Sanuma Decorative Meat",433),
-            new Alias("ethgrezeteabuds","Ethgreze Tea Buds",434),
-            new Alias("ceremonialheiketea","Ceremonial Heike Tea",435),
-            new Alias("tanmarktranquiltea","Tanmark Tranquil Tea",436),
-            new Alias("aepyornisegg","Aepyornis Egg",437),
-            new Alias("haidneblackbrew","Haidne Black Brew",438),
-            new Alias("voidextractcoffee","Void Extract Coffee",439),
-            new Alias("ltthypersweet","LTT Hypersweet",440),
-            new Alias("mechucoshightea","Mechucos High Tea",441),
-            new Alias("mokojingbeastfeast","Mokojing Beast Feast",442),
-            new Alias("mukusubiichitin-os","Mukusubii Chitin-Os",443),
-            new Alias("mulachigiantfungus","Mulachi Giant Fungus",444),
-            new Alias("wheemetewheatcakes","Wheemete Wheat Cakes",445),
-            new Alias("aroucaconventualsweets","Arouca Conventual Sweets",446),
-            new Alias("orrerianviciousbrew","Orrerian Vicious Brew",447),
-            new Alias("uszaiantreegrub","Uszaian Tree Grub",448),
-            new Alias("disomacorn","Diso Ma Corn",449),
-            new Alias("polymers","Polymers",501),
-            new Alias("semiconductors","Semiconductors",502),
-            new Alias("superconductors","Superconductors",503),
-            new Alias("metaalloys","Meta-Alloys",504),
-            new Alias("ceramiccomposites","Ceramic Composites",505),
-            new Alias("medbstarlube","Medb Starlube",506),
-            new Alias("insulatingmembrane","Insulating Membrane",507),
-            new Alias("cmmcomposite","CMM Composite",508),
-            new Alias("coolinghoses","Micro-Weave Cooling Hoses",509),
-            new Alias("neofabricinsulation","Neofabric Insulation",510),
-            new Alias("atmosphericprocessors","Atmospheric Processors",601),
-            new Alias("cropharvesters","Crop Harvesters",602),
-            new Alias("marineequipment","Marine Equipment",603),
-            new Alias("microbialfurnaces","Microbial Furnaces",604),
-            new Alias("mineralextractors","Mineral Extractors",605),
-            new Alias("powergenerators","Power Generators",606),
-            new Alias("waterpurifiers","Water Purifiers",607),
-            new Alias("thermalcoolingunits","Thermal Cooling Units",608),
-            new Alias("skimmercomponents","Skimmer Components",609),
-            new Alias("geologicalequipment","Geological Equipment",610),
-            new Alias("buildingfabricators","Building Fabricators",611),
-            new Alias("volkhabbeedrones","Volkhab Bee Drones",612),
-            new Alias("wulpahyperboresystems","Wulpa Hyperbore Systems",613),
-            new Alias("noneuclidianexotanks","Non Euclidian Exotanks",614),
-            new Alias("giantverrix","Giant Verrix",615),
-            new Alias("articulationmotors","Articulation Motors",616),
-            new Alias("hnshockmount","HN Shock Mount",617),
-            new Alias("emergencypowercells","Emergency Power Cells",618),
-            new Alias("powerconverter","Power Converter",619),
-            new Alias("powergridassembly","Energy Grid Assembly",620),
-            new Alias("powertransferbus","Power Transfer Bus",621),
-            new Alias("radiationbaffle","Radiation Baffle",622),
-            new Alias("exhaustmanifold","Exhaust Manifold",623),
-            new Alias("reinforcedmountingplate","Reinforced Mounting Plate",624),
-            new Alias("heatsinkinterlink","Heatsink Interlink",625),
-            new Alias("magneticemittercoil","Magnetic Emitter Coil",626),
-            new Alias("modularterminals","Modular Terminals",627),
-            new Alias("agriculturalmedicines","Agri-Medicines",701),
-            new Alias("basicmedicines","Basic Medicines",702),
-            new Alias("combatstabilisers","Combat Stabilisers",703),
-            new Alias("performanceenhancers","Performance Enhancers",704),
-            new Alias("progenitorcells","Progenitor Cells",705),
-            new Alias("terramaterbloodbores","Terra Mater Blood Bores",706),
-            new Alias("kachiriginfilterleeches","Kachirigin Filter Leeches",707),
-            new Alias("aganipperush","Aganippe Rush",708),
-            new Alias("watersofshintara","Waters Of Shintara",709),
-            new Alias("honestypills","Honesty Pills",710),
-            new Alias("vherculisbodyrub","V Herculis Body Rub",711),
-            new Alias("vegaslimweed","Vega Slimweed",712),
-            new Alias("taurichimes","Tauri Chimes",713),
-            new Alias("pantaaprayersticks","Pantaa Prayer Sticks",714),
-            new Alias("fujintea","Fujin Tea",715),
-            new Alias("alyabodysoap","Alya Body Soap",716),
-            new Alias("advancedmedicines","Advanced Medicines",717),
-            new Alias("aluminium","Aluminium",801),
-            new Alias("beryllium","Beryllium",802),
-            new Alias("cobalt","Cobalt",803),
-            new Alias("copper","Copper",804),
-            new Alias("gallium","Gallium",805),
-            new Alias("gold","Gold",806),
-            new Alias("indium","Indium",807),
-            new Alias("lithium","Lithium",808),
-            new Alias("palladium","Palladium",809),
-            new Alias("platinum","Platinum",810),
-            new Alias("silver","Silver",811),
-            new Alias("tantalum","Tantalum",812),
-            new Alias("titanium","Titanium",813),
-            new Alias("uranium","Uranium",814),
-            new Alias("osmium","Osmium",815),
-            new Alias("thorium","Thorium",816),
-            new Alias("thallium","Thallium",817),
-            new Alias("lanthanum","Lanthanum",818),
-            new Alias("bismuth","Bismuth",819),
-            new Alias("hafnium178","Hafnium 178",820),
-            new Alias("sothiscrystallinegold","Sothis Crystalline Gold",821),
-            new Alias("praseodymium","Praseodymium",822),
-            new Alias("samarium","Samarium",823),
-            new Alias("bauxite","Bauxite",901),
-            new Alias("bertrandite","Bertrandite",902),
-            new Alias("coltan","Coltan",903),
-            new Alias("gallite","Gallite",904),
-            new Alias("indite","Indite",905),
-            new Alias("lepidolite","Lepidolite",906),
-            new Alias("rutile","Rutile",907),
-            new Alias("uraninite","Uraninite",908),
-            new Alias("painite","Painite",909),
-            new Alias("pyrophyllite","Pyrophyllite",910),
-            new Alias("moissanite","Moissanite",911),
-            new Alias("goslarite","Goslarite",912),
-            new Alias("cryolite","Cryolite",913),
-            new Alias("cherbonesbloodcrystals","Cherbones Blood Crystals",914),
-            new Alias("ngadandarifireopals","Ngadandari Fire Opals",915),
-            new Alias("taaffeite","Taaffeite",916),
-            new Alias("jadeite","Jadeite",917),
-            new Alias("bromellite","Bromellite",918),
-            new Alias("lowtemperaturediamond","Low Temperature Diamonds",919),
-            new Alias("methanolmonohydratecrystals","Methanol Monohydrate",920),
-            new Alias("lithiumhydroxide","Lithium Hydroxide",921),
-            new Alias("methaneclathrate","Methane Clathrate",922),
-            new Alias("imperialslaves","Imperial Slaves",1001),
-            new Alias("slaves","Slaves",1002),
-            new Alias("masterchefs","Master Chefs",1003),
-            new Alias("advancedcatalysers","Advanced Catalysers",1101),
-            new Alias("animalmonitors","Animal Monitors",1102),
-            new Alias("aquaponicsystems","Aquaponic Systems",1103),
-            new Alias("autofabricators","Auto-Fabricators",1104),
-            new Alias("bioreducinglichen","Bioreducing Lichen",1105),
-            new Alias("computercomponents","Computer Components",1106),
-            new Alias("hazardousenvironmentsuits","H.E. Suits",1107),
-            new Alias("landenrichmentsystems","Land Enrichment Systems",1108),
-            new Alias("resonatingseparators","Resonating Separators",1109),
-            new Alias("robotics","Robotics",1110),
-            new Alias("structuralregulators","Structural Regulators",1111),
-            new Alias("mutomimager","Muon Imager",1112),
-            new Alias("xihebiomorphiccompanions","Xihe Biomorphic Companions",1113),
-            new Alias("azcancriformula42","Az Cancri Formula 42",1114),
-            new Alias("nanobreakers","Nanobreakers",1115),
-            new Alias("telemetrysuite","Telemetry Suite",1116),
-            new Alias("microcontrollers","Micro Controllers",1117),
-            new Alias("iondistributor","Ion Distributor",1118),
-            new Alias("diagnosticsensor","Hardware Diagnostic Sensor",1119),
-            new Alias("medicaldiagnosticequipment","Medical Diagnostic Equipment",1120),
-            new Alias("leather","Leather",1201),
-            new Alias("naturalfabrics","Natural Fabrics",1202),
-            new Alias("syntheticfabrics","Synthetic Fabrics",1203),
-            new Alias("belalansrayleather","Belalans Ray Leather",1204),
-            new Alias("damnacarapaces","Damna Carapaces",1205),
-            new Alias("rapabaosnakeskins","Rapa Bao Snake Skins",1206),
-            new Alias("vanayequiceratomorphafur","Vanayequi Ceratomorpha Fur",1207),
-            new Alias("bankiamphibiousleather","Banki Amphibious Leather",1208),
-            new Alias("tiegfriessynthsilk","Tiegfries Synth Silk",1209),
-            new Alias("chameleoncloth","Chameleon Cloth",1210),
-            new Alias("conductivefabrics","Conductive Fabrics",1211),
-            new Alias("militarygradefabrics","Military Grade Fabrics",1212),
-            new Alias("biowaste","Biowaste",1301),
-            new Alias("chemicalwaste","Chemical Waste",1302),
-            new Alias("scrap","Scrap",1303),
-            new Alias("toxicwaste","Toxic Waste",1304),
-            new Alias("nonlethalweapons","Non-lethal Weapons",1401),
-            new Alias("personalweapons","Personal Weapons",1402),
-            new Alias("reactivearmour","Reactive Armour",1403),
-            new Alias("battleweapons","Battle Weapons",1404),
-            new Alias("kamorinhistoricweapons","Kamorin Historic Weapons",1405),
-            new Alias("landmines","Landmines",1406),
-            new Alias("borasetanipathogenetics","Borasetani Pathogenetics",1407),
-            new Alias("hip118311swarm","HIP 118311 Swarm",1408),
-            new Alias("holvaduellingblades","Holva Duelling Blades",1409),
-            new Alias("gilyasignatureweapons","Gilya Signature Weapons",1410),
-            new Alias("airelics","Ai Relics",1601),
-            new Alias("antiquities","Antiquities",1602),
-            new Alias("sap8corecontainer","Sap 8 Core Container",1603),
-            new Alias("trinketsofhiddenfortune","Trinkets Of Hidden Fortune",1604),
-            new Alias("tradedata","Trade Data",1605),
-            new Alias("occupiedcryopod","Occupied CryoPod",1606),
-            new Alias("blackbox","Black Box",1607),
-            new Alias("militaryplans","Military Plans",1608),
-            new Alias("ancientartefact","Ancient Artefact",1609),
-            new Alias("rareartwork","Rare Artwork",1610),
-            new Alias("experimentalchemicals","Experimental Chemicals",1611),
-            new Alias("rebeltransmissions","Rebel Transmissions",1612),
-            new Alias("prototypetech","Prototype Tech",1613),
-            new Alias("technicalblueprints","Technical Blueprints",1614),
-            new Alias("unknownartifact","Unknown Artefact",1615),
-            new Alias("militaryintelligence","Military Intelligence",1616),
-            new Alias("salvageablewreckage","Salvageable Wreckage",1617),
-            new Alias("encrypteddatastorage","Encrypted Data Storage",1618),
-            new Alias("personaleffects","Personal Effects",1619),
-            new Alias("commercialsamples","Commercial Samples",1620),
-            new Alias("tacticaldata","Tactical Data",1621),
-            new Alias("assaultplans","Assault Plans",1622),
-            new Alias("encryptedcorrespondence","Encrypted Correspondence",1623),
-            new Alias("diplomaticbag","Diplomatic Bag",1624),
-            new Alias("scientificresearch","Scientific Research",1625),
-            new Alias("scientificsamples","Scientific Samples",1626),
-            new Alias("politicalprisoner","Political Prisoner",1627),
-            new Alias("hostage","Hostage",1628),
-            new Alias("geologicalsamples","Geological Samples",1629),
-            new Alias("unstabledatacore","Unstable Data Core",1630),
-            new Alias("occupiedescapepod","Occupied Escape Pod",1631),
-            new Alias("datacore","Data Core",1632),
-            new Alias("galactictravelguide","Galactic Travel Guide",1633),
-            new Alias("mysteriousidol","Mysterious Idol",1634),
-            new Alias("prohibitedresearchmaterials","Prohibited Research Materials",1635),
-            new Alias("antimattercontainmentunit","Antimatter Containment Unit",1636),
-            new Alias("spacepioneerrelics","Space Pioneer Relics",1637),
-            new Alias("fossilremnants","Fossil Remnants",1638),
-            new Alias("unknownprobe","Unknown Probe",1639),
-            new Alias("preciousgems","Precious Gems",1640),
-            new Alias("unknownartifact","Unknown Artefact",1615),
-            new Alias("unknownlink","Unknown Link",1641),
-            new Alias("unknownbiologicalmatter","Unknown Biological Matter",1642),
-            new Alias("unknownresin","Unknown Resin",1643),
-            new Alias("unknowntechnologysamples","Unknown Technology Samples",1644),
-        };
-
-
-
-        static void CheckAnthor()
-        {
-            foreach (Alias a in EDSM_User_Alias_Materials)
-            {
-                string realname = a.alias;
-                string fdname = a.fdname;
-                string grade = getGradeMat(a.alias);
-
-                //System.Diagnostics.Debug.WriteLine(a.num + ":" + realname + "=" + a.fdname + "=" + grade);
-
-                MaterialCommodityDB db = GetCachedMaterial(fdname);
-                if (db == null)
-                    System.Diagnostics.Debug.WriteLine("  **1 NOT FOUND BY FDNAME: " + fdname);
-                else if (db.name != realname)
-                    System.Diagnostics.Debug.WriteLine("  **1 Alias name disagres " + db.name + " vs " + realname);
-                else if (db.type != grade)
-                    System.Diagnostics.Debug.WriteLine("  **1 Type disagres " + db.type + " vs " + grade);
-
-            }
-
-            foreach (Alias a in EDSM_User_Alias_Data)
-            {
-                string realname = a.alias;
-                string fdname = a.fdname;
-                string grade = getGradeData(a.alias);
-
-                //System.Diagnostics.Debug.WriteLine(a.num + ":" + realname + "=" + a.fdname + "=" + grade);
-
-                MaterialCommodityDB db = GetCachedMaterial(fdname);
-                if (db == null)
-                    System.Diagnostics.Debug.WriteLine("  **2 NOT FOUND BY FDNAME: " + fdname);
-                else if (db.name != realname)
-                    System.Diagnostics.Debug.WriteLine("  **2 Alias name disagres " + db.name + " vs " + realname);
-            }
-
-            
-            foreach (Alias a in EDSM_System_Station_Commodities_Alias_Type)
-            {
-                string realname = a.alias;
-                string fdname = a.fdname;
-
-                //System.Diagnostics.Debug.WriteLine(a.num + ":" + realname + "=" + a.fdname);
-
-                MaterialCommodityDB db = GetCachedMaterial(fdname);
-                if (db == null)
-                    System.Diagnostics.Debug.WriteLine("  **3 NOT FOUND BY FDNAME: " + fdname);
-                else if (!db.name.Equals(realname,StringComparison.InvariantCultureIgnoreCase))
-                    System.Diagnostics.Debug.WriteLine("  **3 Alias name disagres " + db.name + " vs " + realname);
-            }
-
-            foreach (KeyValuePair<string, MaterialCommodityDB> k in cachelist)
-            {
-                string fdname = k.Value.fdname;
-                Alias a = EDSM_User_Alias_Data.Find(x => x.fdname.Equals(fdname));
-
-                if ( a != null )
-                {
-                    if (!k.Value.category.Equals(MaterialEncodedCategory) && !k.Value.category.Equals(MaterialManufacturedCategory))
-                    {
-                        System.Diagnostics.Debug.WriteLine("  4. ** Category not matched " + k.Value.category);
-                    }
-                }
-                else
-                {
-                    a = EDSM_User_Alias_Materials.Find(x => x.fdname.Equals(fdname));
-
-                    if ( a != null )
-                    {
-                        if (!k.Value.category.Equals(MaterialRawCategory) && !k.Value.category.Equals(MaterialManufacturedCategory))
-                        {
-                            System.Diagnostics.Debug.WriteLine("  5. ** Category not matched " + k.Value.category + "," + k.Value.fdname);
-                        }
-                    }
-                    else
-                    {
-                        a = EDSM_System_Station_Commodities_Alias_Type.Find(x => x.fdname.Equals(fdname));
-
-                        if (a != null)
-                        {
-                            if (!k.Value.category.Equals(CommodityCategory))
-                            {
-                                System.Diagnostics.Debug.WriteLine("  6. ** Category not matched " + k.Value.category);
-                            }
-
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("Failed to match " + fdname);
-                        }
-                    }
-                }
-
-                foreach( KeyValuePair<string,string> mk in fdnamemangling )
-                {
-                    MaterialCommodityDB p = GetCachedMaterial(mk.Value);
-
-                    if ( p == null )
-                    {
-                        System.Diagnostics.Debug.WriteLine("Mangle " + mk.Value + " does not exist");
-                    }
-                }
-            }
-
-        }
-
-        #endregion
-
-        #region ED Check
-
-        static void CheckEDData()
-        {
-            ExportImport.CVSFile cvs = new ExportImport.CVSFile();
-            if (cvs.Read(@"c:\code\Docs\23Materials.csv"))
-            {
-                foreach (ExportImport.CVSFile.Line l in cvs.rows)
-                {
-                    string matname = l.cells[1];
-
-                    MaterialCommodityDB entry = GetCachedMaterial(matname.ToLower());
-                    if (entry != null)
-                    {
-                        string fdlongname = l.cells[4].Trim();  // some spurious spaces seen
-                        if (entry.name.Equals(fdlongname))
-                        {
-                            //System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name matches");
-                        }
-                        else
-                            System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name NOT matches " + l.cells[4] + " vs " + entry.name);
-                    }
-                    else
-                        System.Diagnostics.Debug.WriteLine("FD data " + matname + " is NOT in DB");
-                }
-
-            }
-
-            if (cvs.Read(@"c:\code\Docs\23commods.csv"))
-            {
-                foreach (ExportImport.CVSFile.Line l in cvs.rows)
-                {
-                    string category = l.cells[1];
-                    string commodname = l.cells[2].ToLower();
-                    string fdlongname = l.cells[3];
-
-                    MaterialCommodityDB entry = GetCachedMaterial(commodname);
-                    if (entry != null)
-                    {
-                        if (entry.name.Equals(fdlongname, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            //System.Diagnostics.Debug.WriteLine("FD data " + matname + " is in DB, name matches");
-                        }
-                        else
-                            System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is in DB, name NOT matches " + fdlongname + " vs " + entry.name);
-                    }
-                    else if (fdnamemangling.ContainsKey(commodname))
-                    {
-                        System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is NAME mangled to " + fdnamemangling[commodname]);
-
-                    }
-                    else
-                        System.Diagnostics.Debug.WriteLine("FD data " + commodname + " is NOT in DB");
-                }
-
-            }
-        }
-
-        #endregion
-
-#endif
-
-
     }
 }
 
