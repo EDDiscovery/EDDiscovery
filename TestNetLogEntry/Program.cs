@@ -93,7 +93,7 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolisships", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -101,7 +101,7 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolisship", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -109,14 +109,14 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolismodules", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolismodule", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);

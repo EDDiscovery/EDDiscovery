@@ -93,6 +93,7 @@ namespace BaseUtils
         }
     }
 
+    [System.Diagnostics.DebuggerDisplay("CVS File Rows {Rows.Count}")]
     public class CVSFile
     {
         public class Row
@@ -107,10 +108,14 @@ namespace BaseUtils
             static public int CellNameToIndex(string s)
             {
                 s = s.ToLower();
-                if (s.Length == 1)      // later, cope with An, Bn etc.
-                    return s[0] - 'a';
-                else
-                    return int.MaxValue;
+                int col = int.MaxValue;
+                if (s.Length >= 1)      // later, cope with An, Bn etc.
+                    col = s[0] - 'a';
+
+                if (s.Length >= 2)
+                    col = (col+1) * 26 + (s[1] - 'a');
+
+                return col;
             }
 
             public string this[int cell]
@@ -126,6 +131,15 @@ namespace BaseUtils
                 get
                 {
                     int cell = CellNameToIndex(cellname);
+                    return (cell < Cells.Count) ? Cells[cell] : null;
+                }
+            }
+
+            public string this[string cellname,int offset]
+            {
+                get
+                {
+                    int cell = CellNameToIndex(cellname) + offset;
                     return (cell < Cells.Count) ? Cells[cell] : null;
                 }
             }
@@ -153,6 +167,8 @@ namespace BaseUtils
 
         public List<Row> Rows;
 
+        public List<Row> RowsExcludingHeaderRow { get { return (Rows != null && Rows.Count > 1) ? Rows.GetRange(1, Rows.Count - 1) : null; } }
+
         public Row this[int row]
         {
             get
@@ -164,6 +180,9 @@ namespace BaseUtils
         public bool Read(string file)
         {
             Rows = new List<Row>();
+
+            if (!File.Exists(file))
+                return false;
 
             try
             {
@@ -202,13 +221,18 @@ namespace BaseUtils
             }
         }
 
-        public Tuple<int, int> Find(string s, StringComparison cmp = StringComparison.InvariantCulture)
+        public Tuple<int, int> Find(string s, StringComparison cmp = StringComparison.InvariantCulture, bool trim = false)
         {
             for (int r = 0; r < Rows.Count; r++)
             {
                 for (int c = 0; c < Rows[r].Cells.Count; c++)
                 {
-                    if (Rows[r].Cells[c].Equals(s, cmp))
+                    string cv = Rows[r].Cells[c];
+
+                    if (trim)
+                        cv = cv.Trim();
+
+                    if (cv.Equals(s, cmp))
                         return new Tuple<int, int>(r, c);
                 }
             }
@@ -216,33 +240,44 @@ namespace BaseUtils
             return null;
         }
 
-        public int FindInRow(int r, string s, StringComparison cmp = StringComparison.InvariantCulture)
+        public int FindInRow(int r, string s, StringComparison cmp = StringComparison.InvariantCulture, bool trim = false)
         {
             if (r < Rows.Count)
             {
                 for (int c = 0; c < Rows[r].Cells.Count; c++)
                 {
-                    if (Rows[r].Cells[c].Equals(s, cmp))
-                        return c;
+                    string cv = Rows[r].Cells[c];
+
+                    if (trim)
+                        cv = cv.Trim();
+
+                    if (cv.Equals(s, cmp))
+                        return r;
                 }
             }
 
             return -1;
         }
 
-        public int FindInColumn(string cellname, string s, StringComparison cmp = StringComparison.InvariantCulture)
+        public int FindInColumn(string cellname, string s, StringComparison cmp = StringComparison.InvariantCulture, bool trim = false)
         {
             int cell = Row.CellNameToIndex(cellname);
             return cell != int.MaxValue ? FindInColumn(cell, s, cmp) : -1;
         }
 
-        public int FindInColumn(int c, string s, StringComparison cmp)
+        public int FindInColumn(int c, string s, StringComparison cmp = StringComparison.InvariantCulture, bool trim = false)
         {
             for (int r = 0; r < Rows.Count; r++)
             {
                 string cv = Rows[r].Cells[c];
-                if (cv != null && cv.Equals(s, cmp))
-                    return r;
+                if (cv != null)
+                {
+                    if (trim)
+                        cv = cv.Trim();
+
+                    if (cv.Equals(s, cmp))
+                        return r;
+                }
             }
 
             return -1;

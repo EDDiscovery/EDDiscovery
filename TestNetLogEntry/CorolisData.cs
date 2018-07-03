@@ -53,6 +53,7 @@ namespace NetLogEntry
 
             foreach (FileInfo f in allFiles)
             {
+                Console.WriteLine("Processing " + f.FullName);
                 string json = File.ReadAllText(f.FullName, Encoding.UTF8);
 
                 JObject jo = new JObject();
@@ -157,10 +158,12 @@ namespace NetLogEntry
               new Tuple<string,string>("Federation_Gunship", "federal_gunship"),
               new Tuple<string,string>("FerDeLance", "fer_de_lance"),
               new Tuple<string,string>("Hauler", "hauler"),
+              new Tuple<string,string>("Krait_MkII", "krait_mkii"),
               new Tuple<string,string>("Independant_Trader", "keelback"),
               new Tuple<string,string>("Orca", "orca"),
               new Tuple<string,string>("Python", "python"),
               new Tuple<string,string>("SideWinder", "sidewinder"),
+              new Tuple<string,string>("TypeX_3", "alliance_challenger"),
               new Tuple<string,string>("Type6", "type_6_transporter"),
               new Tuple<string,string>("Type7", "type_7_transport"),
               new Tuple<string,string>("Type9", "type_9_heavy"),

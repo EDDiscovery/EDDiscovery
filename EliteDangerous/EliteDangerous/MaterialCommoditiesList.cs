@@ -49,6 +49,7 @@ namespace EliteDangerousCore
         public string type { get { return Details.type; } }
         public string shortname { get { return Details.shortname; } }
         public Color colour { get { return Details.colour; } }
+        public bool rarity { get { return Details.rarity; } }
 
         #region Static properties and methods linking to MaterialCommodity
         public static string CommodityCategory { get { return MaterialCommodityData.CommodityCategory; } }
@@ -74,7 +75,7 @@ namespace EliteDangerousCore
 
         public bool ContainsRares() // function on purpose
         {
-            return list.FindIndex(x => x.type.Equals(MaterialCommodityData.CommodityTypeRareGoods) && x.count > 0) != -1;
+            return list.FindIndex(x => x.Details.IsRareCommodity && x.count > 0) != -1;
         }
 
         public MaterialCommoditiesList Clone(bool clearzeromaterials, bool clearzerocommodities)       // returns a new copy of this class.. all items a copy
