@@ -75,11 +75,13 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void Closing()
         {
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
@@ -90,6 +92,11 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             KickComputation(uctg.GetCurrentHistoryEntry);
+        }
+
+        private void Discoveryform_OnHistoryChange(HistoryList obj)
+        {
+            KickComputation(obj.GetLast);   // copes with getlast = null
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
