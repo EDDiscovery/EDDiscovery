@@ -139,6 +139,7 @@
     <Compile Include="EliteDangerous\ShipInformation.cs" />
     <Compile Include="EliteDangerous\ShipStored.cs" />
     <Compile Include="EliteDangerous\ShipYard.cs" />
+    <Compile Include="EliteDangerous\StarDistanceComputer.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
     <Compile Include="DB\SystemCache.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />

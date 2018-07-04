@@ -48,7 +48,7 @@
             this.contextMenuStripBookmarks = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
+            this.userControlSurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -320,7 +320,7 @@
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.DataGridView dataGridViewBookMarks;
-        private SurfaceBookmarksForm userControlSurfaceBookmarks;
+        private EDDiscovery.Forms.SurfaceBookmarkUserControl userControlSurfaceBookmarks;
         private ExtendedControls.ButtonExt buttonNew;
         private ExtendedControls.ButtonExt buttonEdit;
         private ExtendedControls.ButtonExt buttonDelete;
