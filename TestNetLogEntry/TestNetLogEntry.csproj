@@ -87,6 +87,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Bindings.cs" />
+    <Compile Include="ScanTranslate.cs" />
     <Compile Include="Speech.cs" />
     <Compile Include="Status.cs" />
   </ItemGroup>

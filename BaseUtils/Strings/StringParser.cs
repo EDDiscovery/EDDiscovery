@@ -27,12 +27,12 @@ namespace BaseUtils
         private int pos;        // always left after an operation on the next non space char
         private string line;
 
-        #region Strings
+        #region Init and basic status
 
-        public StringParser(string l)
+        public StringParser(string l, int p = 0)
         {
             line = l;
-            pos = 0;
+            pos = p;
             SkipSpace();
         }
 
@@ -110,9 +110,13 @@ namespace BaseUtils
             return pos < line.Length;
         }
 
+        #endregion
+
+        #region WORDs bare or quoted
+
         // WORD defined by terminators. options to lowercase it and de-escape it
 
-        public string NextWord(string terminators = " " , bool lowercase = false, bool replacescape = false)
+        public string NextWord(string terminators = " ", bool lowercase = false, bool replacescape = false)
         {
             if (pos >= line.Length)     // null if there is nothing..
                 return null;
@@ -230,6 +234,10 @@ namespace BaseUtils
                 return null;
         }
 
+        #endregion
+
+        #region List of quoted words
+
         // Read a quoted word list off, delimiters definable, and with an optional move on char, and the lowercard/replaceescape options
         // null list on error
         public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , 
@@ -299,6 +307,65 @@ namespace BaseUtils
 
         #endregion
 
+        #region optional Brackets quoted word... word or "word" or ( ("group of words" txt "words" txt ) ) just like a c# expression
+
+        // returns a tuple list, bool = true if string, false if text 
+        public List<Tuple<string,bool>> NextOptionallyBracketedQuotedWords(bool lowercase = false, bool replacescape = false)       // null in error
+        {
+            if (pos < line.Length)
+            {
+                if (IsCharMoveOn('('))  // if (, we go multi bracketed
+                {
+                    List<Tuple<string, bool>> slist = new List<Tuple<string, bool>>();
+                    string acc = "";
+                    int bracketlevel = 1;
+
+                    while (pos < line.Length)
+                    {
+                        if (line[pos] == '"' || line[pos] == '\'')
+                        {
+                            if (acc.Length > 0)
+                            {
+                                slist.Add(new Tuple<string, bool>(acc, false));
+                                acc = "";
+                            }
+
+                            string s = NextQuotedWord(lowercase: lowercase, replaceescape: replacescape);
+                            if (s == null)
+                                return null;
+
+                            slist.Add(new Tuple<string, bool>(s, true));
+                        }
+                        else if (IsCharMoveOn(')'))
+                        {
+                            if (--bracketlevel == 0)
+                            {
+                                if (acc.Length > 0)
+                                    slist.Add(new Tuple<string, bool>(acc, false));
+                                return slist;
+                            }
+                        }
+                        else if (IsCharMoveOn('('))
+                        {
+                            bracketlevel++;
+                        }
+                        else
+                            acc += line[pos++];
+                    }
+                }
+                else
+                {
+                    string s = NextQuotedWord(lowercase: lowercase, replaceescape: replacescape);
+                    if ( s != null )
+                        return new List<Tuple<string,bool>>() { new Tuple<string,bool>(s,true) };
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
         #region Numbers and Bools
 
         public bool? NextBool(string terminators = " ")
@@ -359,6 +426,53 @@ namespace BaseUtils
                 return res;
             else
                 return null;
+        }
+
+        #endregion
+
+        #region Reversing
+
+        public bool ReverseBack( bool quotes = true, bool brackets = true)      // one or both must be true
+        {
+            System.Diagnostics.Debug.Assert(quotes || brackets);
+            int bracketlevel = 0;
+            bool inquotes = false;
+
+            while( pos > 0 )
+            {
+                pos--;
+                char c = line[pos];
+
+                if (!inquotes)
+                {
+                    if (brackets && c == ')')
+                    {
+                        bracketlevel++;
+                    }
+                    else if (brackets && c == '(')
+                    {
+                        bracketlevel--;
+                        if (bracketlevel <= 0)
+                            return true;
+                    }
+                    else if (quotes && c == '"')
+                    {
+                        inquotes = true;
+                    }
+                }
+                else if (quotes && c == '"')
+                {
+                    if ( pos>0 && line[pos-1] != '\\')
+                    {
+                        inquotes = !inquotes;
+
+                        if (!inquotes && bracketlevel == 0)
+                            return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         #endregion

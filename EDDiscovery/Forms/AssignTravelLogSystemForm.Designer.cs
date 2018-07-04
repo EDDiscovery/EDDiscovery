@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
             // lblEDSMLink
             // 
             this.lblEDSMLink.AutoSize = true;
-            this.lblEDSMLink.Location = new System.Drawing.Point(186, 216);
+            this.lblEDSMLink.Location = new System.Drawing.Point(249, 216);
             this.lblEDSMLink.Name = "lblEDSMLink";
             this.lblEDSMLink.Size = new System.Drawing.Size(58, 13);
             this.lblEDSMLink.TabIndex = 21;
@@ -158,15 +158,12 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(478, 282);
+            this.panel1.Size = new System.Drawing.Size(530, 287);
             this.panel1.TabIndex = 22;
             // 
             // btnFindSystem
             // 
-            this.btnFindSystem.BorderColorScaling = 1.25F;
-            this.btnFindSystem.ButtonColorScaling = 0.5F;
-            this.btnFindSystem.ButtonDisabledScaling = 0.5F;
-            this.btnFindSystem.Location = new System.Drawing.Point(370, 133);
+            this.btnFindSystem.Location = new System.Drawing.Point(433, 133);
             this.btnFindSystem.Name = "btnFindSystem";
             this.btnFindSystem.Size = new System.Drawing.Size(75, 23);
             this.btnFindSystem.TabIndex = 19;
@@ -180,13 +177,14 @@ namespace EDDiscovery.Forms
             this.cbSystemLink.BorderColor = System.Drawing.Color.White;
             this.cbSystemLink.ButtonColorScaling = 0.5F;
             this.cbSystemLink.DataSource = null;
+            this.cbSystemLink.DisableBackgroundDisabledShadingGradient = false;
             this.cbSystemLink.DisplayMember = "";
             this.cbSystemLink.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.cbSystemLink.DropDownHeight = 106;
             this.cbSystemLink.DropDownWidth = 216;
             this.cbSystemLink.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cbSystemLink.ItemHeight = 13;
-            this.cbSystemLink.Location = new System.Drawing.Point(189, 98);
+            this.cbSystemLink.Location = new System.Drawing.Point(252, 98);
             this.cbSystemLink.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.cbSystemLink.Name = "cbSystemLink";
             this.cbSystemLink.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -197,15 +195,13 @@ namespace EDDiscovery.Forms
             this.cbSystemLink.SelectedValue = null;
             this.cbSystemLink.Size = new System.Drawing.Size(256, 21);
             this.cbSystemLink.TabIndex = 5;
+            this.cbSystemLink.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.cbSystemLink.ValueMember = "";
             this.cbSystemLink.SelectedIndexChanged += new System.EventHandler(this.cbSystemLink_SelectedIndexChanged);
             // 
             // btnCancel
             // 
-            this.btnCancel.BorderColorScaling = 1.25F;
-            this.btnCancel.ButtonColorScaling = 0.5F;
-            this.btnCancel.ButtonDisabledScaling = 0.5F;
-            this.btnCancel.Location = new System.Drawing.Point(280, 246);
+            this.btnCancel.Location = new System.Drawing.Point(343, 246);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 18;
@@ -215,10 +211,7 @@ namespace EDDiscovery.Forms
             // 
             // btnOK
             // 
-            this.btnOK.BorderColorScaling = 1.25F;
-            this.btnOK.ButtonColorScaling = 0.5F;
-            this.btnOK.ButtonDisabledScaling = 0.5F;
-            this.btnOK.Location = new System.Drawing.Point(370, 246);
+            this.btnOK.Location = new System.Drawing.Point(433, 246);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 17;
@@ -228,94 +221,198 @@ namespace EDDiscovery.Forms
             // 
             // tbLogSystemName
             // 
+            this.tbLogSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbLogSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbLogSystemName.BackErrorColor = System.Drawing.Color.Red;
             this.tbLogSystemName.BorderColor = System.Drawing.Color.Transparent;
             this.tbLogSystemName.BorderColorScaling = 0.5F;
-            this.tbLogSystemName.Location = new System.Drawing.Point(189, 14);
+            this.tbLogSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLogSystemName.ClearOnFirstChar = false;
+            this.tbLogSystemName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbLogSystemName.InErrorCondition = false;
+            this.tbLogSystemName.Location = new System.Drawing.Point(252, 14);
+            this.tbLogSystemName.Multiline = false;
             this.tbLogSystemName.Name = "tbLogSystemName";
             this.tbLogSystemName.ReadOnly = true;
+            this.tbLogSystemName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbLogSystemName.SelectionLength = 0;
+            this.tbLogSystemName.SelectionStart = 0;
             this.tbLogSystemName.Size = new System.Drawing.Size(256, 20);
             this.tbLogSystemName.TabIndex = 7;
+            this.tbLogSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.tbLogSystemName.WordWrap = true;
             // 
             // tbVisitedDate
             // 
+            this.tbVisitedDate.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbVisitedDate.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbVisitedDate.BackErrorColor = System.Drawing.Color.Red;
             this.tbVisitedDate.BorderColor = System.Drawing.Color.Transparent;
             this.tbVisitedDate.BorderColorScaling = 0.5F;
-            this.tbVisitedDate.Location = new System.Drawing.Point(189, 40);
+            this.tbVisitedDate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbVisitedDate.ClearOnFirstChar = false;
+            this.tbVisitedDate.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbVisitedDate.InErrorCondition = false;
+            this.tbVisitedDate.Location = new System.Drawing.Point(252, 40);
+            this.tbVisitedDate.Multiline = false;
             this.tbVisitedDate.Name = "tbVisitedDate";
             this.tbVisitedDate.ReadOnly = true;
+            this.tbVisitedDate.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbVisitedDate.SelectionLength = 0;
+            this.tbVisitedDate.SelectionStart = 0;
             this.tbVisitedDate.Size = new System.Drawing.Size(256, 20);
             this.tbVisitedDate.TabIndex = 8;
+            this.tbVisitedDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.tbVisitedDate.WordWrap = true;
             // 
             // tbSysCoordZ
             // 
+            this.tbSysCoordZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbSysCoordZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbSysCoordZ.BackErrorColor = System.Drawing.Color.Red;
             this.tbSysCoordZ.BorderColor = System.Drawing.Color.Transparent;
             this.tbSysCoordZ.BorderColorScaling = 0.5F;
-            this.tbSysCoordZ.Location = new System.Drawing.Point(370, 175);
+            this.tbSysCoordZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbSysCoordZ.ClearOnFirstChar = false;
+            this.tbSysCoordZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbSysCoordZ.InErrorCondition = false;
+            this.tbSysCoordZ.Location = new System.Drawing.Point(433, 175);
+            this.tbSysCoordZ.Multiline = false;
             this.tbSysCoordZ.Name = "tbSysCoordZ";
             this.tbSysCoordZ.ReadOnly = true;
+            this.tbSysCoordZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbSysCoordZ.SelectionLength = 0;
+            this.tbSysCoordZ.SelectionStart = 0;
             this.tbSysCoordZ.Size = new System.Drawing.Size(75, 20);
             this.tbSysCoordZ.TabIndex = 15;
             this.tbSysCoordZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbSysCoordZ.WordWrap = true;
             // 
             // tbLogCoordX
             // 
+            this.tbLogCoordX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbLogCoordX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbLogCoordX.BackErrorColor = System.Drawing.Color.Red;
             this.tbLogCoordX.BorderColor = System.Drawing.Color.Transparent;
             this.tbLogCoordX.BorderColorScaling = 0.5F;
-            this.tbLogCoordX.Location = new System.Drawing.Point(189, 66);
+            this.tbLogCoordX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLogCoordX.ClearOnFirstChar = false;
+            this.tbLogCoordX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbLogCoordX.InErrorCondition = false;
+            this.tbLogCoordX.Location = new System.Drawing.Point(252, 66);
+            this.tbLogCoordX.Multiline = false;
             this.tbLogCoordX.Name = "tbLogCoordX";
             this.tbLogCoordX.ReadOnly = true;
+            this.tbLogCoordX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbLogCoordX.SelectionLength = 0;
+            this.tbLogCoordX.SelectionStart = 0;
             this.tbLogCoordX.Size = new System.Drawing.Size(75, 20);
             this.tbLogCoordX.TabIndex = 9;
             this.tbLogCoordX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbLogCoordX.WordWrap = true;
             // 
             // tbSysCoordY
             // 
+            this.tbSysCoordY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbSysCoordY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbSysCoordY.BackErrorColor = System.Drawing.Color.Red;
             this.tbSysCoordY.BorderColor = System.Drawing.Color.Transparent;
             this.tbSysCoordY.BorderColorScaling = 0.5F;
-            this.tbSysCoordY.Location = new System.Drawing.Point(280, 175);
+            this.tbSysCoordY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbSysCoordY.ClearOnFirstChar = false;
+            this.tbSysCoordY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbSysCoordY.InErrorCondition = false;
+            this.tbSysCoordY.Location = new System.Drawing.Point(343, 175);
+            this.tbSysCoordY.Multiline = false;
             this.tbSysCoordY.Name = "tbSysCoordY";
             this.tbSysCoordY.ReadOnly = true;
+            this.tbSysCoordY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbSysCoordY.SelectionLength = 0;
+            this.tbSysCoordY.SelectionStart = 0;
             this.tbSysCoordY.Size = new System.Drawing.Size(75, 20);
             this.tbSysCoordY.TabIndex = 14;
             this.tbSysCoordY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbSysCoordY.WordWrap = true;
             // 
             // tbLogCoordY
             // 
+            this.tbLogCoordY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbLogCoordY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbLogCoordY.BackErrorColor = System.Drawing.Color.Red;
             this.tbLogCoordY.BorderColor = System.Drawing.Color.Transparent;
             this.tbLogCoordY.BorderColorScaling = 0.5F;
-            this.tbLogCoordY.Location = new System.Drawing.Point(280, 66);
+            this.tbLogCoordY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLogCoordY.ClearOnFirstChar = false;
+            this.tbLogCoordY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbLogCoordY.InErrorCondition = false;
+            this.tbLogCoordY.Location = new System.Drawing.Point(343, 66);
+            this.tbLogCoordY.Multiline = false;
             this.tbLogCoordY.Name = "tbLogCoordY";
             this.tbLogCoordY.ReadOnly = true;
+            this.tbLogCoordY.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbLogCoordY.SelectionLength = 0;
+            this.tbLogCoordY.SelectionStart = 0;
             this.tbLogCoordY.Size = new System.Drawing.Size(75, 20);
             this.tbLogCoordY.TabIndex = 10;
             this.tbLogCoordY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbLogCoordY.WordWrap = true;
             // 
             // tbSysCoordX
             // 
+            this.tbSysCoordX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbSysCoordX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbSysCoordX.BackErrorColor = System.Drawing.Color.Red;
             this.tbSysCoordX.BorderColor = System.Drawing.Color.Transparent;
             this.tbSysCoordX.BorderColorScaling = 0.5F;
-            this.tbSysCoordX.Location = new System.Drawing.Point(189, 175);
+            this.tbSysCoordX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbSysCoordX.ClearOnFirstChar = false;
+            this.tbSysCoordX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbSysCoordX.InErrorCondition = false;
+            this.tbSysCoordX.Location = new System.Drawing.Point(252, 175);
+            this.tbSysCoordX.Multiline = false;
             this.tbSysCoordX.Name = "tbSysCoordX";
             this.tbSysCoordX.ReadOnly = true;
+            this.tbSysCoordX.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbSysCoordX.SelectionLength = 0;
+            this.tbSysCoordX.SelectionStart = 0;
             this.tbSysCoordX.Size = new System.Drawing.Size(75, 20);
             this.tbSysCoordX.TabIndex = 13;
             this.tbSysCoordX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbSysCoordX.WordWrap = true;
             // 
             // tbLogCoordZ
             // 
+            this.tbLogCoordZ.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbLogCoordZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbLogCoordZ.BackErrorColor = System.Drawing.Color.Red;
             this.tbLogCoordZ.BorderColor = System.Drawing.Color.Transparent;
             this.tbLogCoordZ.BorderColorScaling = 0.5F;
-            this.tbLogCoordZ.Location = new System.Drawing.Point(370, 66);
+            this.tbLogCoordZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbLogCoordZ.ClearOnFirstChar = false;
+            this.tbLogCoordZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.tbLogCoordZ.InErrorCondition = false;
+            this.tbLogCoordZ.Location = new System.Drawing.Point(433, 66);
+            this.tbLogCoordZ.Multiline = false;
             this.tbLogCoordZ.Name = "tbLogCoordZ";
             this.tbLogCoordZ.ReadOnly = true;
+            this.tbLogCoordZ.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbLogCoordZ.SelectionLength = 0;
+            this.tbLogCoordZ.SelectionStart = 0;
             this.tbLogCoordZ.Size = new System.Drawing.Size(75, 20);
             this.tbLogCoordZ.TabIndex = 11;
             this.tbLogCoordZ.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbLogCoordZ.WordWrap = true;
             // 
             // tbManualSystemName
             // 
+            this.tbManualSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.tbManualSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.tbManualSystemName.BackErrorColor = System.Drawing.Color.Red;
             this.tbManualSystemName.BorderColor = System.Drawing.Color.Transparent;
             this.tbManualSystemName.BorderColorScaling = 0.5F;
+            this.tbManualSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tbManualSystemName.ClearOnFirstChar = false;
+            this.tbManualSystemName.ControlBackground = System.Drawing.SystemColors.Control;
             this.tbManualSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.tbManualSystemName.DropDownBorderColor = System.Drawing.Color.Green;
             this.tbManualSystemName.DropDownHeight = 200;
@@ -325,16 +422,24 @@ namespace EDDiscovery.Forms
             this.tbManualSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.tbManualSystemName.DropDownWidth = 0;
             this.tbManualSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tbManualSystemName.Location = new System.Drawing.Point(189, 135);
+            this.tbManualSystemName.InErrorCondition = false;
+            this.tbManualSystemName.Location = new System.Drawing.Point(252, 135);
+            this.tbManualSystemName.Multiline = false;
             this.tbManualSystemName.Name = "tbManualSystemName";
+            this.tbManualSystemName.ReadOnly = false;
+            this.tbManualSystemName.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.tbManualSystemName.SelectionLength = 0;
+            this.tbManualSystemName.SelectionStart = 0;
             this.tbManualSystemName.Size = new System.Drawing.Size(166, 20);
             this.tbManualSystemName.TabIndex = 12;
+            this.tbManualSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.tbManualSystemName.WordWrap = true;
             // 
             // AssignTravelLogSystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(478, 282);
+            this.ClientSize = new System.Drawing.Size(530, 287);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "AssignTravelLogSystemForm";
