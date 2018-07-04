@@ -131,6 +131,12 @@ namespace NetLogEntry
                 string ret = FrontierData.Process(args.Next);
                 Console.WriteLine(ret);
             }
+            else if (arg1.Equals("scantranslate", StringComparison.InvariantCultureIgnoreCase))
+            {
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                string ret = ScanTranslate.Process(allFiles);
+                Console.WriteLine(ret);
+            }
             else
             {
                 Journal.JournalEntry(arg1, args.Next, args, repeatdelay);

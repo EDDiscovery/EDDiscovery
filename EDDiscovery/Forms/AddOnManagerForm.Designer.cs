@@ -75,7 +75,7 @@ namespace EDDiscovery.Forms
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1087, 26);
+            this.panelTop.Size = new System.Drawing.Size(1228, 26);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
@@ -83,7 +83,7 @@ namespace EDDiscovery.Forms
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(1064, 0);
+            this.panel_close.Location = new System.Drawing.Point(1205, 0);
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
             this.panel_close.Selectable = false;
@@ -96,7 +96,7 @@ namespace EDDiscovery.Forms
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(1034, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(1175, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
             this.panel_minimize.Selectable = false;
@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
             this.panelOuter.Location = new System.Drawing.Point(0, 26);
             this.panelOuter.Name = "panelOuter";
             this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
-            this.panelOuter.Size = new System.Drawing.Size(1087, 581);
+            this.panelOuter.Size = new System.Drawing.Size(1228, 581);
             this.panelOuter.TabIndex = 32;
             // 
             // splitContainer1
@@ -141,7 +141,7 @@ namespace EDDiscovery.Forms
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.richTextBoxScrollDescription);
-            this.splitContainer1.Size = new System.Drawing.Size(1079, 573);
+            this.splitContainer1.Size = new System.Drawing.Size(1220, 573);
             this.splitContainer1.SplitterDistance = 358;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -154,7 +154,7 @@ namespace EDDiscovery.Forms
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(1079, 358);
+            this.panelVScroll.Size = new System.Drawing.Size(1220, 358);
             this.panelVScroll.TabIndex = 2;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -169,7 +169,7 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(1059, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(1200, 0);
             this.vScrollBarCustom1.Maximum = -305;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -219,7 +219,7 @@ namespace EDDiscovery.Forms
             this.richTextBoxScrollDescription.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxScrollDescription.ScrollBarWidth = 20;
             this.richTextBoxScrollDescription.ShowLineCount = false;
-            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(1079, 211);
+            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(1220, 211);
             this.richTextBoxScrollDescription.TabIndex = 1;
             this.richTextBoxScrollDescription.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScrollDescription.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -231,13 +231,13 @@ namespace EDDiscovery.Forms
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelOK.Location = new System.Drawing.Point(0, 607);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(1087, 30);
+            this.panelOK.Size = new System.Drawing.Size(1228, 30);
             this.panelOK.TabIndex = 10;
             // 
             // buttonExtGlobals
             // 
             this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtGlobals.Location = new System.Drawing.Point(3, 3);
+            this.buttonExtGlobals.Location = new System.Drawing.Point(144, 3);
             this.buttonExtGlobals.Name = "buttonExtGlobals";
             this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
             this.buttonExtGlobals.TabIndex = 7;
@@ -248,7 +248,7 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(1008, 4);
+            this.buttonOK.Location = new System.Drawing.Point(1149, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 7;
@@ -260,7 +260,7 @@ namespace EDDiscovery.Forms
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(0, 637);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(1087, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(1228, 22);
             this.statusStripCustom.TabIndex = 31;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
@@ -268,7 +268,7 @@ namespace EDDiscovery.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1087, 659);
+            this.ClientSize = new System.Drawing.Size(1228, 659);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);

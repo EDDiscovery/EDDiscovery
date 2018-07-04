@@ -38,7 +38,7 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonExtCAPI = new ExtendedControls.ButtonExt();
             this.checkBoxCustomEDDNTo = new ExtendedControls.CheckBoxCustom();
             this.checkBoxCustomEDSMFrom = new ExtendedControls.CheckBoxCustom();
@@ -56,36 +56,36 @@
             this.checkBoxCustomInara = new ExtendedControls.CheckBoxCustom();
             this.textBoxBorderInaraName = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderInaraAPIKey = new ExtendedControls.TextBoxBorder();
-            this.groupBoxCustom4 = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxCustomCAPI = new ExtendedControls.GroupBoxCustom();
             this.checkBoxCAPIEnable = new ExtendedControls.CheckBoxCustom();
             this.labelCAPIState = new System.Windows.Forms.Label();
             this.labelCAPIPassword = new System.Windows.Forms.Label();
             this.labelCAPILogin = new System.Windows.Forms.Label();
-            this.groupBoxCustom3 = new ExtendedControls.GroupBoxCustom();
-            this.groupBoxCustom2 = new ExtendedControls.GroupBoxCustom();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.groupBoxCustom1 = new ExtendedControls.GroupBoxCustom();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.groupBoxCustomEDDN = new ExtendedControls.GroupBoxCustom();
+            this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
+            this.labelEDSMN = new System.Windows.Forms.Label();
+            this.labelEDSMAPI = new System.Windows.Forms.Label();
+            this.groupBoxCustomJournal = new ExtendedControls.GroupBoxCustom();
+            this.labelCN = new System.Windows.Forms.Label();
+            this.labelJL = new System.Windows.Forms.Label();
             this.buttonCancel = new ExtendedControls.ButtonExt();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.groupBoxCustom5 = new ExtendedControls.GroupBoxCustom();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.groupBoxCustom6 = new ExtendedControls.GroupBoxCustom();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+            this.groupBoxCustomEGO = new ExtendedControls.GroupBoxCustom();
+            this.labelEGON = new System.Windows.Forms.Label();
+            this.labelEGOAPI = new System.Windows.Forms.Label();
+            this.groupBoxCustomInara = new ExtendedControls.GroupBoxCustom();
+            this.labelINARAN = new System.Windows.Forms.Label();
+            this.labelInaraAPI = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
-            this.groupBoxCustom4.SuspendLayout();
-            this.groupBoxCustom3.SuspendLayout();
-            this.groupBoxCustom2.SuspendLayout();
-            this.groupBoxCustom1.SuspendLayout();
-            this.groupBoxCustom5.SuspendLayout();
-            this.groupBoxCustom6.SuspendLayout();
+            this.groupBoxCustomCAPI.SuspendLayout();
+            this.groupBoxCustomEDDN.SuspendLayout();
+            this.groupBoxCustomEDSM.SuspendLayout();
+            this.groupBoxCustomJournal.SuspendLayout();
+            this.groupBoxCustomEGO.SuspendLayout();
+            this.groupBoxCustomInara.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelTop
@@ -96,14 +96,14 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(606, 26);
+            this.panelTop.Size = new System.Drawing.Size(652, 26);
             this.panelTop.TabIndex = 31;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(583, 0);
+            this.panel_close.Location = new System.Drawing.Point(629, 0);
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
             this.panel_close.Selectable = false;
@@ -116,7 +116,7 @@
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(553, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(599, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
             this.panel_minimize.Selectable = false;
@@ -140,7 +140,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 230);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(606, 10);
+            this.panel1.Size = new System.Drawing.Size(652, 10);
             this.panel1.TabIndex = 10;
             // 
             // panel2
@@ -148,7 +148,7 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 281);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(606, 10);
+            this.panel2.Size = new System.Drawing.Size(652, 10);
             this.panel2.TabIndex = 11;
             // 
             // panel4
@@ -156,7 +156,7 @@
             this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel4.Location = new System.Drawing.Point(0, 130);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(606, 10);
+            this.panel4.Size = new System.Drawing.Size(652, 10);
             this.panel4.TabIndex = 11;
             // 
             // panel5
@@ -164,21 +164,21 @@
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 26);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(606, 10);
+            this.panel5.Size = new System.Drawing.Size(652, 10);
             this.panel5.TabIndex = 12;
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // buttonExtCAPI
             // 
-            this.buttonExtCAPI.Location = new System.Drawing.Point(418, 27);
+            this.buttonExtCAPI.Location = new System.Drawing.Point(467, 23);
             this.buttonExtCAPI.Name = "buttonExtCAPI";
-            this.buttonExtCAPI.Size = new System.Drawing.Size(102, 23);
+            this.buttonExtCAPI.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCAPI.TabIndex = 8;
-            this.buttonExtCAPI.Text = "CAPI State";
-            this.toolTip1.SetToolTip(this.buttonExtCAPI, "Perform operation indicated");
+            this.buttonExtCAPI.Text = "<code>";
+            this.toolTip.SetToolTip(this.buttonExtCAPI, "Perform operation indicated");
             this.buttonExtCAPI.UseVisualStyleBackColor = true;
             this.buttonExtCAPI.Click += new System.EventHandler(this.buttonExtCAPI_Click);
             // 
@@ -197,7 +197,7 @@
             this.checkBoxCustomEDDNTo.TabIndex = 4;
             this.checkBoxCustomEDDNTo.Text = "Send Event Information to EDDN";
             this.checkBoxCustomEDDNTo.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCustomEDDNTo, "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, I" +
+            this.toolTip.SetToolTip(this.checkBoxCustomEDDNTo, "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, I" +
         "nara with data from commanders. All data is made anonymised");
             this.checkBoxCustomEDDNTo.UseVisualStyleBackColor = true;
             // 
@@ -209,14 +209,14 @@
             this.checkBoxCustomEDSMFrom.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomEDSMFrom.FontNerfReduction = 0.5F;
             this.checkBoxCustomEDSMFrom.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomEDSMFrom.Location = new System.Drawing.Point(427, 60);
+            this.checkBoxCustomEDSMFrom.Location = new System.Drawing.Point(467, 60);
             this.checkBoxCustomEDSMFrom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEDSMFrom.Name = "checkBoxCustomEDSMFrom";
             this.checkBoxCustomEDSMFrom.Size = new System.Drawing.Size(110, 17);
             this.checkBoxCustomEDSMFrom.TabIndex = 4;
             this.checkBoxCustomEDSMFrom.Text = "Sync From EDSM";
             this.checkBoxCustomEDSMFrom.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCustomEDSMFrom, "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" +
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMFrom, "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" +
         "");
             this.checkBoxCustomEDSMFrom.UseVisualStyleBackColor = true;
             // 
@@ -228,24 +228,24 @@
             this.checkBoxCustomEDSMTo.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomEDSMTo.FontNerfReduction = 0.5F;
             this.checkBoxCustomEDSMTo.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomEDSMTo.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxCustomEDSMTo.Location = new System.Drawing.Point(467, 32);
             this.checkBoxCustomEDSMTo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEDSMTo.Name = "checkBoxCustomEDSMTo";
             this.checkBoxCustomEDSMTo.Size = new System.Drawing.Size(96, 17);
             this.checkBoxCustomEDSMTo.TabIndex = 4;
             this.checkBoxCustomEDSMTo.Text = "Sync to EDSM";
             this.checkBoxCustomEDSMTo.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCustomEDSMTo, "Send your travel and ship data to EDSM");
+            this.toolTip.SetToolTip(this.checkBoxCustomEDSMTo, "Send your travel and ship data to EDSM");
             this.checkBoxCustomEDSMTo.UseVisualStyleBackColor = true;
             // 
             // buttonExtBrowse
             // 
-            this.buttonExtBrowse.Location = new System.Drawing.Point(494, 60);
+            this.buttonExtBrowse.Location = new System.Drawing.Point(534, 60);
             this.buttonExtBrowse.Name = "buttonExtBrowse";
-            this.buttonExtBrowse.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtBrowse.Size = new System.Drawing.Size(100, 23);
             this.buttonExtBrowse.TabIndex = 4;
             this.buttonExtBrowse.Text = "Browse";
-            this.toolTip1.SetToolTip(this.buttonExtBrowse, "Browse to the the journal folder");
+            this.toolTip.SetToolTip(this.buttonExtBrowse, "Browse to the the journal folder");
             this.buttonExtBrowse.UseVisualStyleBackColor = true;
             this.buttonExtBrowse.Click += new System.EventHandler(this.buttonExtBrowse_Click);
             // 
@@ -257,14 +257,14 @@
             this.checkBoxEGOSync.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxEGOSync.FontNerfReduction = 0.5F;
             this.checkBoxEGOSync.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxEGOSync.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxEGOSync.Location = new System.Drawing.Point(467, 32);
             this.checkBoxEGOSync.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEGOSync.Name = "checkBoxEGOSync";
             this.checkBoxEGOSync.Size = new System.Drawing.Size(88, 17);
             this.checkBoxEGOSync.TabIndex = 4;
             this.checkBoxEGOSync.Text = "Sync to EGO";
             this.checkBoxEGOSync.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
+            this.toolTip.SetToolTip(this.checkBoxEGOSync, "Send your scan data to EGO");
             this.checkBoxEGOSync.UseVisualStyleBackColor = true;
             // 
             // textBoxEGOName
@@ -278,7 +278,7 @@
             this.textBoxEGOName.ClearOnFirstChar = false;
             this.textBoxEGOName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxEGOName.InErrorCondition = false;
-            this.textBoxEGOName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxEGOName.Location = new System.Drawing.Point(200, 30);
             this.textBoxEGOName.Multiline = false;
             this.textBoxEGOName.Name = "textBoxEGOName";
             this.textBoxEGOName.ReadOnly = false;
@@ -288,7 +288,7 @@
             this.textBoxEGOName.Size = new System.Drawing.Size(231, 20);
             this.textBoxEGOName.TabIndex = 3;
             this.textBoxEGOName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
+            this.toolTip.SetToolTip(this.textBoxEGOName, "Give the user name for this commander on EGO");
             this.textBoxEGOName.WordWrap = true;
             // 
             // textBoxEGOAPI
@@ -302,7 +302,7 @@
             this.textBoxEGOAPI.ClearOnFirstChar = false;
             this.textBoxEGOAPI.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxEGOAPI.InErrorCondition = false;
-            this.textBoxEGOAPI.Location = new System.Drawing.Point(160, 60);
+            this.textBoxEGOAPI.Location = new System.Drawing.Point(200, 60);
             this.textBoxEGOAPI.Multiline = false;
             this.textBoxEGOAPI.Name = "textBoxEGOAPI";
             this.textBoxEGOAPI.ReadOnly = false;
@@ -312,7 +312,7 @@
             this.textBoxEGOAPI.Size = new System.Drawing.Size(231, 20);
             this.textBoxEGOAPI.TabIndex = 3;
             this.textBoxEGOAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website\\nGet an EGO API key from https://www.elite" +
+            this.toolTip.SetToolTip(this.textBoxEGOAPI, "Enter the API key from the EGO Website\\nGet an EGO API key from https://www.elite" +
         "galaxyonline.com in the account menu");
             this.textBoxEGOAPI.WordWrap = true;
             // 
@@ -327,7 +327,7 @@
             this.textBoxBorderCompanionPassword.ClearOnFirstChar = false;
             this.textBoxBorderCompanionPassword.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderCompanionPassword.InErrorCondition = false;
-            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(160, 88);
+            this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(200, 88);
             this.textBoxBorderCompanionPassword.Multiline = false;
             this.textBoxBorderCompanionPassword.Name = "textBoxBorderCompanionPassword";
             this.textBoxBorderCompanionPassword.ReadOnly = false;
@@ -337,7 +337,7 @@
             this.textBoxBorderCompanionPassword.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionPassword.TabIndex = 7;
             this.textBoxBorderCompanionPassword.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
+            this.toolTip.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
             this.textBoxBorderCompanionPassword.WordWrap = true;
             this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
             // 
@@ -352,7 +352,7 @@
             this.textBoxBorderCompanionLogin.ClearOnFirstChar = false;
             this.textBoxBorderCompanionLogin.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderCompanionLogin.InErrorCondition = false;
-            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(160, 58);
+            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(200, 58);
             this.textBoxBorderCompanionLogin.Multiline = false;
             this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
             this.textBoxBorderCompanionLogin.ReadOnly = false;
@@ -362,7 +362,6 @@
             this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCompanionLogin.TabIndex = 5;
             this.textBoxBorderCompanionLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderCompanionLogin, "Enter your Frontier Login ID");
             this.textBoxBorderCompanionLogin.WordWrap = true;
             this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
             // 
@@ -377,7 +376,7 @@
             this.textBoxBorderEDSMName.ClearOnFirstChar = false;
             this.textBoxBorderEDSMName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderEDSMName.InErrorCondition = false;
-            this.textBoxBorderEDSMName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderEDSMName.Location = new System.Drawing.Point(200, 30);
             this.textBoxBorderEDSMName.Multiline = false;
             this.textBoxBorderEDSMName.Name = "textBoxBorderEDSMName";
             this.textBoxBorderEDSMName.ReadOnly = false;
@@ -387,7 +386,7 @@
             this.textBoxBorderEDSMName.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderEDSMName.TabIndex = 3;
             this.textBoxBorderEDSMName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderEDSMName, "Give the name this commander is known as in EDSM");
+            this.toolTip.SetToolTip(this.textBoxBorderEDSMName, "Give the name this commander is known as in EDSM");
             this.textBoxBorderEDSMName.WordWrap = true;
             // 
             // textBoxBorderEDSMAPI
@@ -401,7 +400,7 @@
             this.textBoxBorderEDSMAPI.ClearOnFirstChar = false;
             this.textBoxBorderEDSMAPI.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderEDSMAPI.InErrorCondition = false;
-            this.textBoxBorderEDSMAPI.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderEDSMAPI.Location = new System.Drawing.Point(200, 60);
             this.textBoxBorderEDSMAPI.Multiline = false;
             this.textBoxBorderEDSMAPI.Name = "textBoxBorderEDSMAPI";
             this.textBoxBorderEDSMAPI.ReadOnly = false;
@@ -411,7 +410,7 @@
             this.textBoxBorderEDSMAPI.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderEDSMAPI.TabIndex = 3;
             this.textBoxBorderEDSMAPI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderEDSMAPI, "Enter the API key from the EDSM Website\\nGet an EDSM API key from https://www.eds" +
+            this.toolTip.SetToolTip(this.textBoxBorderEDSMAPI, "Enter the API key from the EDSM Website\\nGet an EDSM API key from https://www.eds" +
         "m.net in \"My account\" menu");
             this.textBoxBorderEDSMAPI.WordWrap = true;
             // 
@@ -426,7 +425,7 @@
             this.textBoxBorderJournal.ClearOnFirstChar = false;
             this.textBoxBorderJournal.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderJournal.InErrorCondition = false;
-            this.textBoxBorderJournal.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderJournal.Location = new System.Drawing.Point(200, 60);
             this.textBoxBorderJournal.Multiline = false;
             this.textBoxBorderJournal.Name = "textBoxBorderJournal";
             this.textBoxBorderJournal.ReadOnly = false;
@@ -436,7 +435,7 @@
             this.textBoxBorderJournal.Size = new System.Drawing.Size(310, 20);
             this.textBoxBorderJournal.TabIndex = 3;
             this.textBoxBorderJournal.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderJournal, resources.GetString("textBoxBorderJournal.ToolTip"));
+            this.toolTip.SetToolTip(this.textBoxBorderJournal, resources.GetString("textBoxBorderJournal.ToolTip"));
             this.textBoxBorderJournal.WordWrap = true;
             // 
             // textBoxBorderCmdr
@@ -450,7 +449,7 @@
             this.textBoxBorderCmdr.ClearOnFirstChar = false;
             this.textBoxBorderCmdr.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderCmdr.InErrorCondition = false;
-            this.textBoxBorderCmdr.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderCmdr.Location = new System.Drawing.Point(200, 30);
             this.textBoxBorderCmdr.Multiline = false;
             this.textBoxBorderCmdr.Name = "textBoxBorderCmdr";
             this.textBoxBorderCmdr.ReadOnly = false;
@@ -460,7 +459,7 @@
             this.textBoxBorderCmdr.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderCmdr.TabIndex = 3;
             this.textBoxBorderCmdr.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderCmdr, "Enter commander name as used in Elite Dangerous");
+            this.toolTip.SetToolTip(this.textBoxBorderCmdr, "Enter commander name as used in Elite Dangerous");
             this.textBoxBorderCmdr.WordWrap = true;
             // 
             // checkBoxCustomInara
@@ -471,14 +470,14 @@
             this.checkBoxCustomInara.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomInara.FontNerfReduction = 0.5F;
             this.checkBoxCustomInara.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomInara.Location = new System.Drawing.Point(427, 32);
+            this.checkBoxCustomInara.Location = new System.Drawing.Point(467, 32);
             this.checkBoxCustomInara.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomInara.Name = "checkBoxCustomInara";
             this.checkBoxCustomInara.Size = new System.Drawing.Size(89, 17);
             this.checkBoxCustomInara.TabIndex = 4;
             this.checkBoxCustomInara.Text = "Sync to Inara";
             this.checkBoxCustomInara.TickBoxReductionSize = 10;
-            this.toolTip1.SetToolTip(this.checkBoxCustomInara, "Sync with Inara");
+            this.toolTip.SetToolTip(this.checkBoxCustomInara, "Sync with Inara");
             this.checkBoxCustomInara.UseVisualStyleBackColor = true;
             // 
             // textBoxBorderInaraName
@@ -492,7 +491,7 @@
             this.textBoxBorderInaraName.ClearOnFirstChar = false;
             this.textBoxBorderInaraName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderInaraName.InErrorCondition = false;
-            this.textBoxBorderInaraName.Location = new System.Drawing.Point(160, 30);
+            this.textBoxBorderInaraName.Location = new System.Drawing.Point(200, 30);
             this.textBoxBorderInaraName.Multiline = false;
             this.textBoxBorderInaraName.Name = "textBoxBorderInaraName";
             this.textBoxBorderInaraName.ReadOnly = false;
@@ -502,7 +501,7 @@
             this.textBoxBorderInaraName.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderInaraName.TabIndex = 3;
             this.textBoxBorderInaraName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderInaraName, "Give the user name for this commander on Inara");
+            this.toolTip.SetToolTip(this.textBoxBorderInaraName, "Give the user name for this commander on Inara");
             this.textBoxBorderInaraName.WordWrap = true;
             // 
             // textBoxBorderInaraAPIKey
@@ -516,7 +515,7 @@
             this.textBoxBorderInaraAPIKey.ClearOnFirstChar = false;
             this.textBoxBorderInaraAPIKey.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBorderInaraAPIKey.InErrorCondition = false;
-            this.textBoxBorderInaraAPIKey.Location = new System.Drawing.Point(160, 60);
+            this.textBoxBorderInaraAPIKey.Location = new System.Drawing.Point(200, 60);
             this.textBoxBorderInaraAPIKey.Multiline = false;
             this.textBoxBorderInaraAPIKey.Name = "textBoxBorderInaraAPIKey";
             this.textBoxBorderInaraAPIKey.ReadOnly = false;
@@ -526,33 +525,33 @@
             this.textBoxBorderInaraAPIKey.Size = new System.Drawing.Size(231, 20);
             this.textBoxBorderInaraAPIKey.TabIndex = 3;
             this.textBoxBorderInaraAPIKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip1.SetToolTip(this.textBoxBorderInaraAPIKey, "Enter the API key from the Inara Website\\nGet an Inara API key from https://inara" +
+            this.toolTip.SetToolTip(this.textBoxBorderInaraAPIKey, "Enter the API key from the Inara Website\\nGet an Inara API key from https://inara" +
         ".cz");
             this.textBoxBorderInaraAPIKey.WordWrap = true;
             // 
-            // groupBoxCustom4
+            // groupBoxCustomCAPI
             // 
-            this.groupBoxCustom4.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom4.BackColorScaling = 0.5F;
-            this.groupBoxCustom4.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom4.BorderColorScaling = 0.5F;
-            this.groupBoxCustom4.Controls.Add(this.checkBoxCAPIEnable);
-            this.groupBoxCustom4.Controls.Add(this.labelCAPIState);
-            this.groupBoxCustom4.Controls.Add(this.buttonExtCAPI);
-            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionPassword);
-            this.groupBoxCustom4.Controls.Add(this.labelCAPIPassword);
-            this.groupBoxCustom4.Controls.Add(this.textBoxBorderCompanionLogin);
-            this.groupBoxCustom4.Controls.Add(this.labelCAPILogin);
-            this.groupBoxCustom4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom4.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom4.Location = new System.Drawing.Point(0, 291);
-            this.groupBoxCustom4.Name = "groupBoxCustom4";
-            this.groupBoxCustom4.Size = new System.Drawing.Size(606, 122);
-            this.groupBoxCustom4.TabIndex = 6;
-            this.groupBoxCustom4.TabStop = false;
-            this.groupBoxCustom4.Text = "Frontier Companion API (optional)";
-            this.groupBoxCustom4.TextPadding = 0;
-            this.groupBoxCustom4.TextStartPosition = -1;
+            this.groupBoxCustomCAPI.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomCAPI.BackColorScaling = 0.5F;
+            this.groupBoxCustomCAPI.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomCAPI.BorderColorScaling = 0.5F;
+            this.groupBoxCustomCAPI.Controls.Add(this.checkBoxCAPIEnable);
+            this.groupBoxCustomCAPI.Controls.Add(this.labelCAPIState);
+            this.groupBoxCustomCAPI.Controls.Add(this.buttonExtCAPI);
+            this.groupBoxCustomCAPI.Controls.Add(this.textBoxBorderCompanionPassword);
+            this.groupBoxCustomCAPI.Controls.Add(this.labelCAPIPassword);
+            this.groupBoxCustomCAPI.Controls.Add(this.textBoxBorderCompanionLogin);
+            this.groupBoxCustomCAPI.Controls.Add(this.labelCAPILogin);
+            this.groupBoxCustomCAPI.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomCAPI.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomCAPI.Location = new System.Drawing.Point(0, 291);
+            this.groupBoxCustomCAPI.Name = "groupBoxCustomCAPI";
+            this.groupBoxCustomCAPI.Size = new System.Drawing.Size(652, 122);
+            this.groupBoxCustomCAPI.TabIndex = 6;
+            this.groupBoxCustomCAPI.TabStop = false;
+            this.groupBoxCustomCAPI.Text = "Frontier Companion API (optional)";
+            this.groupBoxCustomCAPI.TextPadding = 0;
+            this.groupBoxCustomCAPI.TextStartPosition = -1;
             // 
             // checkBoxCAPIEnable
             // 
@@ -562,7 +561,7 @@
             this.checkBoxCAPIEnable.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCAPIEnable.FontNerfReduction = 0.5F;
             this.checkBoxCAPIEnable.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCAPIEnable.Location = new System.Drawing.Point(418, 70);
+            this.checkBoxCAPIEnable.Location = new System.Drawing.Point(467, 61);
             this.checkBoxCAPIEnable.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCAPIEnable.Name = "checkBoxCAPIEnable";
             this.checkBoxCAPIEnable.Size = new System.Drawing.Size(88, 17);
@@ -577,9 +576,9 @@
             this.labelCAPIState.AutoSize = true;
             this.labelCAPIState.Location = new System.Drawing.Point(6, 28);
             this.labelCAPIState.Name = "labelCAPIState";
-            this.labelCAPIState.Size = new System.Drawing.Size(93, 13);
+            this.labelCAPIState.Size = new System.Drawing.Size(43, 13);
             this.labelCAPIState.TabIndex = 9;
-            this.labelCAPIState.Text = "CAPI current state";
+            this.labelCAPIState.Text = "<code>";
             // 
             // labelCAPIPassword
             // 
@@ -595,116 +594,116 @@
             this.labelCAPILogin.AutoSize = true;
             this.labelCAPILogin.Location = new System.Drawing.Point(6, 58);
             this.labelCAPILogin.Name = "labelCAPILogin";
-            this.labelCAPILogin.Size = new System.Drawing.Size(50, 13);
+            this.labelCAPILogin.Size = new System.Drawing.Size(43, 13);
             this.labelCAPILogin.TabIndex = 4;
-            this.labelCAPILogin.Text = "Login ID:";
+            this.labelCAPILogin.Text = "<code>";
             // 
-            // groupBoxCustom3
+            // groupBoxCustomEDDN
             // 
-            this.groupBoxCustom3.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom3.BackColorScaling = 0.5F;
-            this.groupBoxCustom3.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom3.BorderColorScaling = 0.5F;
-            this.groupBoxCustom3.Controls.Add(this.checkBoxCustomEDDNTo);
-            this.groupBoxCustom3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom3.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom3.Location = new System.Drawing.Point(0, 240);
-            this.groupBoxCustom3.Name = "groupBoxCustom3";
-            this.groupBoxCustom3.Size = new System.Drawing.Size(606, 41);
-            this.groupBoxCustom3.TabIndex = 5;
-            this.groupBoxCustom3.TabStop = false;
-            this.groupBoxCustom3.Text = "EDDN";
-            this.groupBoxCustom3.TextPadding = 0;
-            this.groupBoxCustom3.TextStartPosition = -1;
+            this.groupBoxCustomEDDN.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomEDDN.BackColorScaling = 0.5F;
+            this.groupBoxCustomEDDN.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomEDDN.BorderColorScaling = 0.5F;
+            this.groupBoxCustomEDDN.Controls.Add(this.checkBoxCustomEDDNTo);
+            this.groupBoxCustomEDDN.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomEDDN.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomEDDN.Location = new System.Drawing.Point(0, 240);
+            this.groupBoxCustomEDDN.Name = "groupBoxCustomEDDN";
+            this.groupBoxCustomEDDN.Size = new System.Drawing.Size(652, 41);
+            this.groupBoxCustomEDDN.TabIndex = 5;
+            this.groupBoxCustomEDDN.TabStop = false;
+            this.groupBoxCustomEDDN.Text = "EDDN";
+            this.groupBoxCustomEDDN.TextPadding = 0;
+            this.groupBoxCustomEDDN.TextStartPosition = -1;
             // 
-            // groupBoxCustom2
+            // groupBoxCustomEDSM
             // 
-            this.groupBoxCustom2.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom2.BackColorScaling = 0.5F;
-            this.groupBoxCustom2.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom2.BorderColorScaling = 0.5F;
-            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMFrom);
-            this.groupBoxCustom2.Controls.Add(this.checkBoxCustomEDSMTo);
-            this.groupBoxCustom2.Controls.Add(this.label5);
-            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMName);
-            this.groupBoxCustom2.Controls.Add(this.textBoxBorderEDSMAPI);
-            this.groupBoxCustom2.Controls.Add(this.label6);
-            this.groupBoxCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom2.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom2.Location = new System.Drawing.Point(0, 140);
-            this.groupBoxCustom2.Margin = new System.Windows.Forms.Padding(10);
-            this.groupBoxCustom2.Name = "groupBoxCustom2";
-            this.groupBoxCustom2.Size = new System.Drawing.Size(606, 90);
-            this.groupBoxCustom2.TabIndex = 4;
-            this.groupBoxCustom2.TabStop = false;
-            this.groupBoxCustom2.Text = "EDSM Information (optional)";
-            this.groupBoxCustom2.TextPadding = 0;
-            this.groupBoxCustom2.TextStartPosition = -1;
+            this.groupBoxCustomEDSM.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomEDSM.BackColorScaling = 0.5F;
+            this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomEDSM.BorderColorScaling = 0.5F;
+            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMFrom);
+            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMTo);
+            this.groupBoxCustomEDSM.Controls.Add(this.labelEDSMN);
+            this.groupBoxCustomEDSM.Controls.Add(this.textBoxBorderEDSMName);
+            this.groupBoxCustomEDSM.Controls.Add(this.textBoxBorderEDSMAPI);
+            this.groupBoxCustomEDSM.Controls.Add(this.labelEDSMAPI);
+            this.groupBoxCustomEDSM.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(0, 140);
+            this.groupBoxCustomEDSM.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(652, 90);
+            this.groupBoxCustomEDSM.TabIndex = 4;
+            this.groupBoxCustomEDSM.TabStop = false;
+            this.groupBoxCustomEDSM.Text = "EDSM Information (optional)";
+            this.groupBoxCustomEDSM.TextPadding = 0;
+            this.groupBoxCustomEDSM.TextStartPosition = -1;
             // 
-            // label5
+            // labelEDSMN
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 13);
-            this.label5.TabIndex = 2;
-            this.label5.Text = "EDSM Name:";
+            this.labelEDSMN.AutoSize = true;
+            this.labelEDSMN.Location = new System.Drawing.Point(6, 30);
+            this.labelEDSMN.Name = "labelEDSMN";
+            this.labelEDSMN.Size = new System.Drawing.Size(72, 13);
+            this.labelEDSMN.TabIndex = 2;
+            this.labelEDSMN.Text = "EDSM Name:";
             // 
-            // label6
+            // labelEDSMAPI
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 60);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(82, 13);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "EDSM API Key:";
+            this.labelEDSMAPI.AutoSize = true;
+            this.labelEDSMAPI.Location = new System.Drawing.Point(6, 60);
+            this.labelEDSMAPI.Name = "labelEDSMAPI";
+            this.labelEDSMAPI.Size = new System.Drawing.Size(82, 13);
+            this.labelEDSMAPI.TabIndex = 2;
+            this.labelEDSMAPI.Text = "EDSM API Key:";
             // 
-            // groupBoxCustom1
+            // groupBoxCustomJournal
             // 
-            this.groupBoxCustom1.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom1.BackColorScaling = 0.5F;
-            this.groupBoxCustom1.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom1.BorderColorScaling = 0.5F;
-            this.groupBoxCustom1.Controls.Add(this.buttonExtBrowse);
-            this.groupBoxCustom1.Controls.Add(this.textBoxBorderJournal);
-            this.groupBoxCustom1.Controls.Add(this.textBoxBorderCmdr);
-            this.groupBoxCustom1.Controls.Add(this.label3);
-            this.groupBoxCustom1.Controls.Add(this.label4);
-            this.groupBoxCustom1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom1.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom1.Location = new System.Drawing.Point(0, 36);
-            this.groupBoxCustom1.Name = "groupBoxCustom1";
-            this.groupBoxCustom1.Size = new System.Drawing.Size(606, 94);
-            this.groupBoxCustom1.TabIndex = 3;
-            this.groupBoxCustom1.TabStop = false;
-            this.groupBoxCustom1.Text = "Journal Related Information";
-            this.groupBoxCustom1.TextPadding = 0;
-            this.groupBoxCustom1.TextStartPosition = -1;
+            this.groupBoxCustomJournal.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomJournal.BackColorScaling = 0.5F;
+            this.groupBoxCustomJournal.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomJournal.BorderColorScaling = 0.5F;
+            this.groupBoxCustomJournal.Controls.Add(this.buttonExtBrowse);
+            this.groupBoxCustomJournal.Controls.Add(this.textBoxBorderJournal);
+            this.groupBoxCustomJournal.Controls.Add(this.textBoxBorderCmdr);
+            this.groupBoxCustomJournal.Controls.Add(this.labelCN);
+            this.groupBoxCustomJournal.Controls.Add(this.labelJL);
+            this.groupBoxCustomJournal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomJournal.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomJournal.Location = new System.Drawing.Point(0, 36);
+            this.groupBoxCustomJournal.Name = "groupBoxCustomJournal";
+            this.groupBoxCustomJournal.Size = new System.Drawing.Size(652, 94);
+            this.groupBoxCustomJournal.TabIndex = 3;
+            this.groupBoxCustomJournal.TabStop = false;
+            this.groupBoxCustomJournal.Text = "Journal Related Information";
+            this.groupBoxCustomJournal.TextPadding = 0;
+            this.groupBoxCustomJournal.TextStartPosition = -1;
             // 
-            // label3
+            // labelCN
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 30);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(97, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Commander Name:";
+            this.labelCN.AutoSize = true;
+            this.labelCN.Location = new System.Drawing.Point(6, 30);
+            this.labelCN.Name = "labelCN";
+            this.labelCN.Size = new System.Drawing.Size(97, 13);
+            this.labelCN.TabIndex = 2;
+            this.labelCN.Text = "Commander Name:";
             // 
-            // label4
+            // labelJL
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 60);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 13);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Journal Location:";
+            this.labelJL.AutoSize = true;
+            this.labelJL.Location = new System.Drawing.Point(6, 60);
+            this.labelJL.Name = "labelJL";
+            this.labelJL.Size = new System.Drawing.Size(88, 13);
+            this.labelJL.TabIndex = 2;
+            this.labelJL.Text = "Journal Location:";
             // 
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(418, 629);
+            this.buttonCancel.Location = new System.Drawing.Point(434, 630);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 1;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -713,9 +712,9 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(519, 629);
+            this.buttonOK.Location = new System.Drawing.Point(540, 630);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 0;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -726,91 +725,91 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 413);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(606, 10);
+            this.panel3.Size = new System.Drawing.Size(652, 10);
             this.panel3.TabIndex = 32;
             // 
-            // groupBoxCustom5
+            // groupBoxCustomEGO
             // 
-            this.groupBoxCustom5.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom5.BackColorScaling = 0.5F;
-            this.groupBoxCustom5.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom5.BorderColorScaling = 0.5F;
-            this.groupBoxCustom5.Controls.Add(this.checkBoxEGOSync);
-            this.groupBoxCustom5.Controls.Add(this.label7);
-            this.groupBoxCustom5.Controls.Add(this.textBoxEGOName);
-            this.groupBoxCustom5.Controls.Add(this.textBoxEGOAPI);
-            this.groupBoxCustom5.Controls.Add(this.label8);
-            this.groupBoxCustom5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom5.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom5.Location = new System.Drawing.Point(0, 423);
-            this.groupBoxCustom5.Margin = new System.Windows.Forms.Padding(10);
-            this.groupBoxCustom5.Name = "groupBoxCustom5";
-            this.groupBoxCustom5.Size = new System.Drawing.Size(606, 91);
-            this.groupBoxCustom5.TabIndex = 33;
-            this.groupBoxCustom5.TabStop = false;
-            this.groupBoxCustom5.Text = "Elite Galaxy Online Information (optional)";
-            this.groupBoxCustom5.TextPadding = 0;
-            this.groupBoxCustom5.TextStartPosition = -1;
+            this.groupBoxCustomEGO.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomEGO.BackColorScaling = 0.5F;
+            this.groupBoxCustomEGO.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomEGO.BorderColorScaling = 0.5F;
+            this.groupBoxCustomEGO.Controls.Add(this.checkBoxEGOSync);
+            this.groupBoxCustomEGO.Controls.Add(this.labelEGON);
+            this.groupBoxCustomEGO.Controls.Add(this.textBoxEGOName);
+            this.groupBoxCustomEGO.Controls.Add(this.textBoxEGOAPI);
+            this.groupBoxCustomEGO.Controls.Add(this.labelEGOAPI);
+            this.groupBoxCustomEGO.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomEGO.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomEGO.Location = new System.Drawing.Point(0, 423);
+            this.groupBoxCustomEGO.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustomEGO.Name = "groupBoxCustomEGO";
+            this.groupBoxCustomEGO.Size = new System.Drawing.Size(652, 91);
+            this.groupBoxCustomEGO.TabIndex = 33;
+            this.groupBoxCustomEGO.TabStop = false;
+            this.groupBoxCustomEGO.Text = "Elite Galaxy Online Information (optional)";
+            this.groupBoxCustomEGO.TextPadding = 0;
+            this.groupBoxCustomEGO.TextStartPosition = -1;
             // 
-            // label7
+            // labelEGON
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(6, 30);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(64, 13);
-            this.label7.TabIndex = 2;
-            this.label7.Text = "EGO Name:";
+            this.labelEGON.AutoSize = true;
+            this.labelEGON.Location = new System.Drawing.Point(6, 30);
+            this.labelEGON.Name = "labelEGON";
+            this.labelEGON.Size = new System.Drawing.Size(64, 13);
+            this.labelEGON.TabIndex = 2;
+            this.labelEGON.Text = "EGO Name:";
             // 
-            // label8
+            // labelEGOAPI
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 60);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(74, 13);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "EGO API Key:";
+            this.labelEGOAPI.AutoSize = true;
+            this.labelEGOAPI.Location = new System.Drawing.Point(6, 60);
+            this.labelEGOAPI.Name = "labelEGOAPI";
+            this.labelEGOAPI.Size = new System.Drawing.Size(74, 13);
+            this.labelEGOAPI.TabIndex = 2;
+            this.labelEGOAPI.Text = "EGO API Key:";
             // 
-            // groupBoxCustom6
+            // groupBoxCustomInara
             // 
-            this.groupBoxCustom6.AlternateClientBackColor = System.Drawing.Color.Blue;
-            this.groupBoxCustom6.BackColorScaling = 0.5F;
-            this.groupBoxCustom6.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustom6.BorderColorScaling = 0.5F;
-            this.groupBoxCustom6.Controls.Add(this.checkBoxCustomInara);
-            this.groupBoxCustom6.Controls.Add(this.label10);
-            this.groupBoxCustom6.Controls.Add(this.textBoxBorderInaraName);
-            this.groupBoxCustom6.Controls.Add(this.textBoxBorderInaraAPIKey);
-            this.groupBoxCustom6.Controls.Add(this.label11);
-            this.groupBoxCustom6.Controls.Add(this.label12);
-            this.groupBoxCustom6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBoxCustom6.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustom6.Location = new System.Drawing.Point(0, 524);
-            this.groupBoxCustom6.Margin = new System.Windows.Forms.Padding(10);
-            this.groupBoxCustom6.Name = "groupBoxCustom6";
-            this.groupBoxCustom6.Size = new System.Drawing.Size(606, 88);
-            this.groupBoxCustom6.TabIndex = 34;
-            this.groupBoxCustom6.TabStop = false;
-            this.groupBoxCustom6.Text = "Inara Information (optional)";
-            this.groupBoxCustom6.TextPadding = 0;
-            this.groupBoxCustom6.TextStartPosition = -1;
+            this.groupBoxCustomInara.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomInara.BackColorScaling = 0.5F;
+            this.groupBoxCustomInara.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomInara.BorderColorScaling = 0.5F;
+            this.groupBoxCustomInara.Controls.Add(this.checkBoxCustomInara);
+            this.groupBoxCustomInara.Controls.Add(this.labelINARAN);
+            this.groupBoxCustomInara.Controls.Add(this.textBoxBorderInaraName);
+            this.groupBoxCustomInara.Controls.Add(this.textBoxBorderInaraAPIKey);
+            this.groupBoxCustomInara.Controls.Add(this.labelInaraAPI);
+            this.groupBoxCustomInara.Controls.Add(this.label12);
+            this.groupBoxCustomInara.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBoxCustomInara.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomInara.Location = new System.Drawing.Point(0, 524);
+            this.groupBoxCustomInara.Margin = new System.Windows.Forms.Padding(10);
+            this.groupBoxCustomInara.Name = "groupBoxCustomInara";
+            this.groupBoxCustomInara.Size = new System.Drawing.Size(652, 88);
+            this.groupBoxCustomInara.TabIndex = 34;
+            this.groupBoxCustomInara.TabStop = false;
+            this.groupBoxCustomInara.Text = "Inara Information (optional)";
+            this.groupBoxCustomInara.TextPadding = 0;
+            this.groupBoxCustomInara.TextStartPosition = -1;
             // 
-            // label10
+            // labelINARAN
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(6, 30);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(65, 13);
-            this.label10.TabIndex = 2;
-            this.label10.Text = "Inara Name:";
+            this.labelINARAN.AutoSize = true;
+            this.labelINARAN.Location = new System.Drawing.Point(6, 30);
+            this.labelINARAN.Name = "labelINARAN";
+            this.labelINARAN.Size = new System.Drawing.Size(65, 13);
+            this.labelINARAN.TabIndex = 2;
+            this.labelINARAN.Text = "Inara Name:";
             // 
-            // label11
+            // labelInaraAPI
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(6, 60);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(75, 13);
-            this.label11.TabIndex = 2;
-            this.label11.Text = "Inara API Key:";
+            this.labelInaraAPI.AutoSize = true;
+            this.labelInaraAPI.Location = new System.Drawing.Point(6, 60);
+            this.labelInaraAPI.Name = "labelInaraAPI";
+            this.labelInaraAPI.Size = new System.Drawing.Size(75, 13);
+            this.labelInaraAPI.TabIndex = 2;
+            this.labelInaraAPI.Text = "Inara API Key:";
             // 
             // label12
             // 
@@ -825,25 +824,25 @@
             this.panel6.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel6.Location = new System.Drawing.Point(0, 514);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(606, 10);
+            this.panel6.Size = new System.Drawing.Size(652, 10);
             this.panel6.TabIndex = 35;
             // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 662);
-            this.Controls.Add(this.groupBoxCustom6);
+            this.ClientSize = new System.Drawing.Size(652, 663);
+            this.Controls.Add(this.groupBoxCustomInara);
             this.Controls.Add(this.panel6);
-            this.Controls.Add(this.groupBoxCustom5);
+            this.Controls.Add(this.groupBoxCustomEGO);
             this.Controls.Add(this.panel3);
-            this.Controls.Add(this.groupBoxCustom4);
+            this.Controls.Add(this.groupBoxCustomCAPI);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.groupBoxCustom3);
+            this.Controls.Add(this.groupBoxCustomEDDN);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.groupBoxCustom2);
+            this.Controls.Add(this.groupBoxCustomEDSM);
             this.Controls.Add(this.panel4);
-            this.Controls.Add(this.groupBoxCustom1);
+            this.Controls.Add(this.groupBoxCustomJournal);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -855,18 +854,18 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.CommanderForm_FormClosed);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            this.groupBoxCustom4.ResumeLayout(false);
-            this.groupBoxCustom4.PerformLayout();
-            this.groupBoxCustom3.ResumeLayout(false);
-            this.groupBoxCustom3.PerformLayout();
-            this.groupBoxCustom2.ResumeLayout(false);
-            this.groupBoxCustom2.PerformLayout();
-            this.groupBoxCustom1.ResumeLayout(false);
-            this.groupBoxCustom1.PerformLayout();
-            this.groupBoxCustom5.ResumeLayout(false);
-            this.groupBoxCustom5.PerformLayout();
-            this.groupBoxCustom6.ResumeLayout(false);
-            this.groupBoxCustom6.PerformLayout();
+            this.groupBoxCustomCAPI.ResumeLayout(false);
+            this.groupBoxCustomCAPI.PerformLayout();
+            this.groupBoxCustomEDDN.ResumeLayout(false);
+            this.groupBoxCustomEDDN.PerformLayout();
+            this.groupBoxCustomEDSM.ResumeLayout(false);
+            this.groupBoxCustomEDSM.PerformLayout();
+            this.groupBoxCustomJournal.ResumeLayout(false);
+            this.groupBoxCustomJournal.PerformLayout();
+            this.groupBoxCustomEGO.ResumeLayout(false);
+            this.groupBoxCustomEGO.PerformLayout();
+            this.groupBoxCustomInara.ResumeLayout(false);
+            this.groupBoxCustomInara.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -875,22 +874,22 @@
 
         private ExtendedControls.ButtonExt buttonOK;
         private ExtendedControls.ButtonExt buttonCancel;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label labelCN;
+        private System.Windows.Forms.Label labelJL;
+        private System.Windows.Forms.Label labelEDSMN;
+        private System.Windows.Forms.Label labelEDSMAPI;
         private ExtendedControls.TextBoxBorder textBoxBorderJournal;
         private ExtendedControls.TextBoxBorder textBoxBorderCmdr;
         private ExtendedControls.TextBoxBorder textBoxBorderEDSMAPI;
         private ExtendedControls.TextBoxBorder textBoxBorderEDSMName;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom1;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomJournal;
         private ExtendedControls.ButtonExt buttonExtBrowse;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom2;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom3;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomEDSM;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomEDDN;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMFrom;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEDSMTo;
         private ExtendedControls.CheckBoxCustom checkBoxCustomEDDNTo;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom4;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomCAPI;
         private ExtendedControls.TextBoxBorder textBoxBorderCompanionPassword;
         private System.Windows.Forms.Label labelCAPIPassword;
         private ExtendedControls.TextBoxBorder textBoxBorderCompanionLogin;
@@ -905,21 +904,21 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Label labelCAPIState;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panel3;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom5;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomEGO;
         private ExtendedControls.CheckBoxCustom checkBoxEGOSync;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label labelEGON;
         private ExtendedControls.TextBoxBorder textBoxEGOName;
         private ExtendedControls.TextBoxBorder textBoxEGOAPI;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label labelEGOAPI;
         private ExtendedControls.CheckBoxCustom checkBoxCAPIEnable;
-        private ExtendedControls.GroupBoxCustom groupBoxCustom6;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomInara;
         private ExtendedControls.CheckBoxCustom checkBoxCustomInara;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label labelINARAN;
         private ExtendedControls.TextBoxBorder textBoxBorderInaraName;
         private ExtendedControls.TextBoxBorder textBoxBorderInaraAPIKey;
-        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label labelInaraAPI;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Panel panel6;
     }

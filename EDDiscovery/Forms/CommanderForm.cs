@@ -21,6 +21,9 @@ namespace EDDiscovery.Forms
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyToFormStandardFontSize(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
         }
 
         private void CommanderForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -75,11 +78,11 @@ namespace EDDiscovery.Forms
 
         void UpdateCAPIState()
         {
-            buttonExtCAPI.Text = "Login";           // default state.. information needed.
-            labelCAPIState.Text = "No Credentials";
-            labelCAPILogin.Text = "Login ID:";
+            buttonExtCAPI.Text = "Login".Tx(this);           // default state.. information needed.  
+            labelCAPIState.Text = "No Credentials".Tx(this);
+            labelCAPILogin.Text = "Login ID:".Tx(this);
             textBoxBorderCompanionLogin.Visible = textBoxBorderCompanionPassword.Visible = labelCAPILogin.Visible = labelCAPIPassword.Visible = true;
-            toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs");
+            toolTip.SetToolTip(textBoxBorderCompanionLogin, "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs".Tx(this,"TTCAPI"));
             buttonExtCAPI.Enabled = false;
             checkBoxCAPIEnable.Visible = false;
 
@@ -90,11 +93,11 @@ namespace EDDiscovery.Forms
 
                 if (s == CompanionCredentials.State.CONFIRMED)
                 {
-                    labelCAPIState.Text = "Confirmed Credentials";
+                    labelCAPIState.Text = "Confirmed Credentials".Tx(this,"CC");
                     textBoxBorderCompanionLogin.Visible = labelCAPILogin.Visible = 
                     textBoxBorderCompanionPassword.Visible = labelCAPIPassword.Visible = false;
                     textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
-                    buttonExtCAPI.Text = "Clear";
+                    buttonExtCAPI.Text = "Clear".Tx(this);
                     buttonExtCAPI.Enabled = true;
                     checkBoxCAPIEnable.Location = labelCAPILogin.Location;
                     checkBoxCAPIEnable.Visible = true;
@@ -102,13 +105,13 @@ namespace EDDiscovery.Forms
                 }
                 else if (s == CompanionCredentials.State.NEEDS_CONFIRMATION)
                 {
-                    labelCAPIState.Text = "Require Confirmation";
-                    labelCAPILogin.Text = "Confirm Code:";
+                    labelCAPIState.Text = "Require Confirmation".Tx(this,"RC");
+                    labelCAPILogin.Text = "Confirm Code:".Tx(this,"CFC");
                     textBoxBorderCompanionPassword.Visible = labelCAPIPassword.Visible = false;
                     textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
-                    buttonExtCAPI.Text = "Clear";           // default state is clear/abort
+                    buttonExtCAPI.Text = "Clear".Tx(this);           // default state is clear/abort
                     buttonExtCAPI.Enabled = true;
-                    toolTip1.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier");
+                    toolTip.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier".Tx(this, "Confirm"));
 
                     if ( capi.NeedLogin )
                     {
@@ -116,9 +119,10 @@ namespace EDDiscovery.Forms
                         {
                             capi.LoginAs(textBoxBorderCmdr.Text);
                         }
-                        catch ( Exception ex)
+                        catch (Exception ex)
                         {
-                            ExtendedControls.MessageBoxTheme.Show(this, "Login Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            ExtendedControls.MessageBoxTheme.Show(this, 
+                                string.Format(("Login Failed: " + Environment.NewLine + "{0}").Tx(this,"LIF"), ex.Message), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     }
                 }
@@ -129,7 +133,7 @@ namespace EDDiscovery.Forms
 
         private void buttonExtCAPI_Click(object sender, EventArgs e)
         {
-            if (buttonExtCAPI.Text == "Login")
+            if (buttonExtCAPI.Text == "Login".Tx(this))
             {
                 try
                 {
@@ -137,12 +141,12 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this, "Failed to login to Frontier Companion API:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this, string.Format(("Failed to login to Frontier Companion API:" + Environment.NewLine + "{0}").Tx(this,"FL"), ex.Message), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            else if (buttonExtCAPI.Text == "Clear")
+            else if (buttonExtCAPI.Text == "Clear".Tx(this))
             {
-                if ( ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to delete the credentials stored for this commander", "Companion API Clear Credentials", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                if ( ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to delete the credentials stored for this commander".Tx(this,"CD"), "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     capi.Logout();
                     CompanionCredentials.DeleteCredentials(textBoxBorderCmdr.Text);
@@ -156,7 +160,7 @@ namespace EDDiscovery.Forms
                 }
                 catch (Exception ex)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this, "Confirm Failed:" + Environment.NewLine + ex.Message, "Companion API Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this, string.Format(("Confirm Failed:" + Environment.NewLine + "{0}").Tx(this,"CF"),ex.Message), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
@@ -168,7 +172,8 @@ namespace EDDiscovery.Forms
         {
             if (textBoxBorderCompanionLogin.Text.Length>0 || textBoxBorderCompanionPassword.Text.Length>0)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this, "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?", "Warning CAPI Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(this, 
+                    "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?".Tx(this,"Abandon"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.Cancel)
                     return;
             }
 
@@ -213,7 +218,7 @@ namespace EDDiscovery.Forms
                 if (textBoxBorderCompanionPassword.Visible)     // Login..
                     buttonExtCAPI.Enabled = (textBoxBorderCompanionLogin.Text.Length > 0 && textBoxBorderCompanionPassword.Text.Length > 0);
                 else
-                    buttonExtCAPI.Text = textBoxBorderCompanionLogin.Text.Length > 0 ? "Confirm" : "Clear";           // single enabled, in confirm, set to confirm if text, else clear
+                    buttonExtCAPI.Text = textBoxBorderCompanionLogin.Text.Length > 0 ? "Confirm".Tx(this) : "Clear".Tx(this);           // single enabled, in confirm, set to confirm if text, else clear
             }
         }
 
@@ -226,7 +231,7 @@ namespace EDDiscovery.Forms
         private void buttonExtBrowse_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.Description = "Select folder where Journal*.log files are stored by Frontier in";
+            fbd.Description = "Select folder where Journal*.log files are stored by Frontier in".Tx(this,"LF");
 
             if (fbd.ShowDialog(this) == DialogResult.OK)
                 textBoxBorderJournal.Text = fbd.SelectedPath;

@@ -140,10 +140,15 @@ public static class ObjectExtensionsStrings
 
     public static string QuoteString(this string obj, bool comma = false, bool bracket = false, bool space = true)
     {
-        if (obj.Length == 0 || obj.Contains("\"") || obj[obj.Length-1]==' ' || (space && obj.Contains(" ")) || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
+        if (obj.Length == 0 || obj.Contains("\"") || obj[obj.Length - 1] == ' ' || (space && obj.Contains(" ")) || (bracket && obj.Contains(")")) || (comma && obj.Contains(",")))
             obj = "\"" + obj.Replace("\"", "\\\"") + "\"";
 
         return obj;
+    }
+
+    public static string AlwaysQuoteString(this string obj)
+    {
+        return "\"" + obj.Replace("\"", "\\\"") + "\"";
     }
 
     public static string Skip(this string s, string t, StringComparison c = StringComparison.InvariantCulture)
