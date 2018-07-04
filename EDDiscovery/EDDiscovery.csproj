@@ -266,7 +266,6 @@
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\IHistoryCursor.cs" />
-    <Compile Include="UserControls\Helpers\StarDistanceComputer.cs" />
     <Compile Include="UserControls\UserControlBookmarks.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -482,11 +481,11 @@
     <Compile Include="UserControls\UserControlLocalMap.Designer.cs">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\SurfaceBookmarksForm.cs">
+    <Compile Include="Forms\SurfaceBookmarksUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Helpers\SurfaceBookmarksForm.Designer.cs">
-      <DependentUpon>SurfaceBookmarksForm.cs</DependentUpon>
+    <Compile Include="Forms\SurfaceBookmarksUC.Designer.cs">
+      <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
@@ -713,8 +712,8 @@
     <EmbeddedResource Include="UserControls\UserControlLocalMap.resx">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Helpers\SurfaceBookmarksForm.resx">
-      <DependentUpon>SurfaceBookmarksForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\SurfaceBookmarksUC.resx">
+      <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>

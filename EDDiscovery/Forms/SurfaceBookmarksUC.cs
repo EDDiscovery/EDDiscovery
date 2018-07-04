@@ -12,11 +12,11 @@ using EliteDangerousCore.DB;
 using static EliteDangerousCore.DB.PlanetMarks;
 using EDDiscovery.Forms;
 
-namespace EDDiscovery.UserControls
+namespace EDDiscovery.Forms
 {
     // now a leaf class - does not know about callers data.. much easier to understand
 
-    public partial class SurfaceBookmarksForm : UserControl
+    public partial class SurfaceBookmarkUserControl : UserControl
     {
         public bool Edited = false;         // set if edit taken
         public PlanetMarks PlanetMarks { get { return planetmarks; } }      // current set..
@@ -28,7 +28,7 @@ namespace EDDiscovery.UserControls
 
         #region Initialisation
 
-        public SurfaceBookmarksForm()
+        public SurfaceBookmarkUserControl()
         {
             InitializeComponent();
         }

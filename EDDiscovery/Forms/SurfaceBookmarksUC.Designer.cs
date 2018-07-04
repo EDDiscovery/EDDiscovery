@@ -1,8 +1,8 @@
 ﻿using static ExtendedControls.ThemeStandard;
 
-namespace EDDiscovery.UserControls
+namespace EDDiscovery.Forms
 {
-    partial class SurfaceBookmarksForm
+    partial class SurfaceBookmarkUserControl
     {
         /// <summary> 
         /// Required designer variable.

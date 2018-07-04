@@ -19,7 +19,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace EDDiscovery.UserControls
+namespace EliteDangerousCore
 {
     public class StarDistanceComputer
     {

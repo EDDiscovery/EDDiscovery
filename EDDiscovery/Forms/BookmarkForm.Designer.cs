@@ -66,7 +66,7 @@ namespace EDDiscovery.Forms
             this.panelOuter = new System.Windows.Forms.Panel();
             this.labelBadSystem = new System.Windows.Forms.Label();
             this.textBoxName = new ExtendedControls.AutoCompleteTextBox();
-            this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarksForm();
+            this.SurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.panelOuter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -470,7 +470,7 @@ namespace EDDiscovery.Forms
         private ExtendedControls.CheckBoxCustom checkBoxTarget;
         private ExtendedControls.ButtonExt buttonEDSM;
         private System.Windows.Forms.Panel panelOuter;
-        private UserControls.SurfaceBookmarksForm SurfaceBookmarks;
+        private SurfaceBookmarkUserControl SurfaceBookmarks;
         private ExtendedControls.AutoCompleteTextBox textBoxName;
         private System.Windows.Forms.Label labelBadSystem;
     }
