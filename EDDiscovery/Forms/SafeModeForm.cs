@@ -154,5 +154,30 @@ namespace EDDiscovery.Forms
                 }
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
+            opt.Init();
+
+            string apfolder = opt.ActionsAppDirectory();
+
+            if (MessageBox.Show(this, "Current Action Pack folder is located at:" + Environment.NewLine +
+                            apfolder +
+                            Environment.NewLine + Environment.NewLine + "Do you wish to delete all Action Packs?",
+                            "Delete Action Packs", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+            {
+                var dir = new DirectoryInfo(apfolder);
+                foreach (var file in dir.EnumerateFiles("*.act"))
+                {
+                    try
+                    {
+                        file.Delete();
+                    }
+                    catch { }
+                }
+            }
+
+        }
     }
 }
