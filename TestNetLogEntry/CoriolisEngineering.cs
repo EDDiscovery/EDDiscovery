@@ -96,6 +96,9 @@ namespace NetLogEntry
         {
             List<EngEntry> list = new List<EngEntry>();
 
+            if (!File.Exists(rootpath))
+                return list;
+
             try
             {
                 string modulespath = Path.Combine(rootpath, "modules.json");

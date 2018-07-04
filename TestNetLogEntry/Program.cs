@@ -42,7 +42,7 @@ namespace NetLogEntry
 
             string arg1 = args.Next;
 
-            if (arg1 == null )
+            if (arg1 == null)
             {
                 Help();
                 return;
@@ -60,7 +60,7 @@ namespace NetLogEntry
                 return;
             }
 
-            if ( args.Left < 1)
+            if (args.Left < 1)
             {
                 Help();
                 return;
@@ -93,7 +93,7 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolisships", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -101,7 +101,7 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolisship", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -109,14 +109,14 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolismodules", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolismodule", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
@@ -156,7 +156,7 @@ namespace NetLogEntry
                               "         CapShipBond faction victimfaction reward\n" +
                               "Scans    ScanPlanet name\n" +
                               "         ScanStar ScanEarth\n" +
-                              "         NavBeaconScan\n"+
+                              "         NavBeaconScan\n" +
                               "Ships    SellShipOnRebuy\n" +
                               "Others   SearchANdRescue MiningRefined\n" +
                               "         RepairDrone CommunityGoal\n" +
@@ -171,14 +171,14 @@ namespace NetLogEntry
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +
-                              "DeviceMappings <filename>\n"+
+                              "DeviceMappings <filename>\n" +
                               "StatusMove <various paras see entry>\n" +
                               "Status <Status flags>...  multiple ones are: supercruise, landed, fight (see code)\n" +
                               "CorolisModules rootfolder - process corolis-data\\modules\\<folder>\n" +
                               "CorolisModule name - process corolis-data\\modules\\<folder>\n" +
                               "CorolisShips rootfolder - process corolis-data\\ships\n" +
                               "CorolisShip name - process corolis-data\\ships\n" +
-                              "Coroliseng rootfolder - process corolis-data\\modifications\n" + 
+                              "Coroliseng rootfolder - process corolis-data\\modifications\n" +
                               "FrontierData rootfolder - process cvs file export of frontier data\n"
                               );
 
