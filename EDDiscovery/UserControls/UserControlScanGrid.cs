@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
-        private string DbColumnSave { get { return DBName("ScanGridPanel" ,  "DGVCol"); } }
+        private string DbColumnSave { get { return ("ScanGridPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
         public UserControlScanGrid()
         {
@@ -54,9 +54,6 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnNewEntry += NewEntry;
-
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void LoadLayout()
@@ -96,28 +93,25 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
-            if (he != null && (last_he == null || he.System != last_he.System))
+            if (he != null && (last_he == null || he.System.Name != last_he.System.Name))
             {
                 last_he = he;
                 DrawSystem();
-                dataGridViewScangrid.Refresh();
-                dataGridViewScangrid.ClearSelection();
             }
         }
 
         void DrawSystem() // draw last_sn, last_he
         {
+            int firstdisplayedrow = dataGridViewScangrid.RowCount > 0 ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+
             dataGridViewScangrid.Rows.Clear();
 
+            SetControlText("No Scan");
+
             if (last_he == null)
-            {
-                SetControlText("No Scan".Tx());
                 return;
-            }
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
-
-            SetControlText("No Scan".Tx());
 
             if (last_sn != null)
             {
@@ -138,12 +132,12 @@ namespace EDDiscovery.UserControls
 
                         if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                         {
-                            bdClass.Append(" " + "Moon".Tx());
+                            bdClass.Append(" Moon");
                         }
 
                         if (sn.ScanData.IsStar && sn.ScanData.BodyName.EndsWith(" A"))
                         {
-                            bdDist.AppendFormat("Main Star".Tx());
+                            bdDist.AppendFormat("Main Star");
                         }
                         else if (sn.ScanData.nSemiMajorAxis.HasValue)
                         {
@@ -155,11 +149,11 @@ namespace EDDiscovery.UserControls
 
                         // display stars and stellar bodies mass
                         if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass".Tx() + ": " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+                            bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone".Tx() + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
                         // tell us that a bodie is landable, and shows its gravity
                         if (sn.ScanData.IsLandable == true)
@@ -172,27 +166,27 @@ namespace EDDiscovery.UserControls
                                 Gg = " (G: " + g.Value.ToString("N1") + ")";
                             }
 
-                            bdDetails.Append("Landable".Tx() + Gg + ". ");
+                            bdDetails.Append("Landable" + Gg + ". ");
                         }
 
                         // append the terraformable state to the planet class
                         if (sn.ScanData.Terraformable == true)
-                            bdDetails.Append("Terraformable".Tx() + ". ");
+                            bdDetails.Append("Terraformable. ");
 
                         // tell us that there is some volcanic activity
                         if (sn.ScanData.Volcanism != null)
-                            bdDetails.Append("Volcanism".Tx() +". ");
+                            bdDetails.Append("Volcanism. ");
 
                         // have some ring?
                         if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
                         {
                             if (sn.ScanData.Rings.Count() > 1)
                             {
-                                bdDetails.Append(string.Format( "Has {0} rings: ".Tx(this,"Rings") , sn.ScanData.Rings.Count()));
+                                bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings: ");
                             }
                             else
                             {
-                                bdDetails.Append("Has 1 ring: ".Tx("Ring"));
+                                bdDetails.Append("Has 1 ring: ");
                             }
 
                             for (int i = 0; i < sn.ScanData.Rings.Length; i++)
@@ -219,11 +213,11 @@ namespace EDDiscovery.UserControls
                             }
 
                             if (ret.Length > 0)
-                                bdDetails.Append("\n" + "This body contains: ".Tx(this,"BC") + ret );
+                                bdDetails.Append("\n" + "This body contains: " + ret );
                         }
 
                         int value = sn.ScanData.EstimatedValue;
-                        bdDetails.Append(Environment.NewLine + "Value".Tx() + " " + value.ToString("N0"));
+                        bdDetails.Append("\nValue " + value.ToString("N0"));
 
                         //if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
                         //    bdDetails.Append("\n" + "Discovered by: " + sn.ScanData.EDSMDiscoveryCommander + " on " + sn.ScanData.EDSMDiscoveryUTC.ToStringYearFirst());
@@ -250,7 +244,10 @@ namespace EDDiscovery.UserControls
                 }
 
                 // display total scan values
-                SetControlText(string.Format("Scan Summary for {0}. {1}".Tx(this,"SS"), last_sn.system.Name, BuildScanValue(last_sn)));
+                SetControlText("Scan Summary for " + last_sn.system.Name + ". " + BuildScanValue(last_sn));
+
+                if (firstdisplayedrow >= 0)
+                    dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
             }
         }
 
@@ -279,7 +276,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            return string.Format("Approx total scan value: {0:N0}".Tx(this,"AV"), value);
+            return $"Approx total scan value: {value:N0}";
         }
 
         private void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

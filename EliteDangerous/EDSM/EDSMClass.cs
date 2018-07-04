@@ -794,7 +794,10 @@ namespace EliteDangerousCore.EDSM
                     jout["Landable"] = jo["isLandable"];
                     jout["MassEM"] = jo["earthMasses"];
                     jout["Volcanism"] = jo["volcanismType"];
-                    jout["Atmosphere"] = jo["atmosphereType"];
+                    string atmos = jo["atmosphereType"].StrNull();
+                    if ( atmos != null && atmos.IndexOf("atmosphere",StringComparison.InvariantCultureIgnoreCase)==-1)
+                        atmos += " atmosphere";
+                    jout["Atmosphere"] = atmos;
                     jout["Radius"] = jo["radius"].Double() * 1000.0; // km -> metres
                     jout["PlanetClass"] = EDSMPlanet2JournalName(jo["subType"].Str());
                     if (jo["terraformingState"] != null) jout["TerraformState"] = jo["terraformingState"];
