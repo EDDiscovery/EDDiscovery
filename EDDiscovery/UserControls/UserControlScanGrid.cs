@@ -93,28 +93,25 @@ namespace EDDiscovery.UserControls
 
         private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
-            if (he != null && (last_he == null || he.System != last_he.System))
+            if (he != null && (last_he == null || he.System.Name != last_he.System.Name))
             {
                 last_he = he;
                 DrawSystem();
-                dataGridViewScangrid.Refresh();
-                dataGridViewScangrid.ClearSelection();
             }
         }
 
         void DrawSystem() // draw last_sn, last_he
         {
+            int firstdisplayedrow = dataGridViewScangrid.RowCount > 0 ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+
             dataGridViewScangrid.Rows.Clear();
 
+            SetControlText("No Scan");
+
             if (last_he == null)
-            {
-                SetControlText("No Scan");
                 return;
-            }
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
-
-            SetControlText("No Scan");
 
             if (last_sn != null)
             {
@@ -248,6 +245,9 @@ namespace EDDiscovery.UserControls
 
                 // display total scan values
                 SetControlText("Scan Summary for " + last_sn.system.Name + ". " + BuildScanValue(last_sn));
+
+                if (firstdisplayedrow >= 0)
+                    dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
             }
         }
 
