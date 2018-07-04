@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -803,7 +803,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare1;
+            this.tabControlMain.TabStyle = tabStyleSquare2;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -870,6 +870,8 @@ namespace EDDiscovery
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EDDiscoveryForm_FormClosing);
             this.Load += new System.EventHandler(this.EDDiscoveryForm_Load);
             this.Shown += new System.EventHandler(this.EDDiscoveryForm_Shown);
+            this.ResizeBegin += new System.EventHandler(this.EDDiscoveryForm_ResizeBegin);
+            this.ResizeEnd += new System.EventHandler(this.EDDiscoveryForm_ResizeEnd);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EDDiscoveryForm_MouseDown);
             this.Resize += new System.EventHandler(this.EDDiscoveryForm_Resize);
             this.menuStrip.ResumeLayout(false);

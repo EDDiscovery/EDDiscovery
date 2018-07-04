@@ -74,18 +74,19 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem = new ExtendedControls.AutoCompleteTextBox();
             this.panel_defaultmapcolor = new ExtendedControls.PanelNoTheme();
             this.buttonEditCommander = new ExtendedControls.ButtonExt();
+            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
+            this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.JournalDirCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnDeleteCommander = new ExtendedControls.ButtonExt();
-            this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.GroupBoxCustom();
             this.labelHistorySel = new System.Windows.Forms.Label();
             this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
             this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
+            this.checkBoxCustomResize = new ExtendedControls.CheckBoxCustom();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.groupBox3dmap = new ExtendedControls.GroupBoxCustom();
@@ -205,7 +206,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(218, 19);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
-            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(95, 23);
+            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(126, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
             this.buttonExtEDSMConfigureArea.Text = "Galaxy Select";
             this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
@@ -289,7 +290,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtScreenshot.Location = new System.Drawing.Point(232, 19);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
-            this.buttonExtScreenshot.Size = new System.Drawing.Size(95, 23);
+            this.buttonExtScreenshot.Size = new System.Drawing.Size(126, 23);
             this.buttonExtScreenshot.TabIndex = 10;
             this.buttonExtScreenshot.Text = "Configure";
             this.toolTip.SetToolTip(this.buttonExtScreenshot, "Configure further screenshot options");
@@ -419,6 +420,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoSave.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxAutoSave, "Save pop out state on exit");
             this.checkBoxAutoSave.UseVisualStyleBackColor = true;
+            this.checkBoxAutoSave.CheckedChanged += new System.EventHandler(this.checkBoxAutoSave_CheckedChanged);
             // 
             // checkBoxAutoLoad
             // 
@@ -437,6 +439,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoLoad.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxAutoLoad, "Auto show pop outs");
             this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
+            this.checkBoxAutoLoad.CheckedChanged += new System.EventHandler(this.checkBoxAutoLoad_CheckedChanged);
             // 
             // checkBoxKeepOnTop
             // 
@@ -446,7 +449,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
             this.checkBoxKeepOnTop.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(10, 63);
+            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(218, 113);
             this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
             this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
@@ -480,7 +483,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTheme.SelectedIndex = -1;
             this.comboBoxTheme.SelectedItem = null;
             this.comboBoxTheme.SelectedValue = null;
-            this.comboBoxTheme.Size = new System.Drawing.Size(209, 21);
+            this.comboBoxTheme.Size = new System.Drawing.Size(270, 21);
             this.comboBoxTheme.TabIndex = 0;
             this.comboBoxTheme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxTheme, "Select the theme to use");
@@ -488,9 +491,9 @@ namespace EDDiscovery.UserControls
             // 
             // button_edittheme
             // 
-            this.button_edittheme.Location = new System.Drawing.Point(232, 63);
+            this.button_edittheme.Location = new System.Drawing.Point(154, 48);
             this.button_edittheme.Name = "button_edittheme";
-            this.button_edittheme.Size = new System.Drawing.Size(95, 23);
+            this.button_edittheme.Size = new System.Drawing.Size(126, 23);
             this.button_edittheme.TabIndex = 10;
             this.button_edittheme.Text = "Edit Theme";
             this.toolTip.SetToolTip(this.button_edittheme, "Edit theme and change colours fonts");
@@ -499,9 +502,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSaveTheme
             // 
-            this.buttonSaveTheme.Location = new System.Drawing.Point(232, 19);
+            this.buttonSaveTheme.Location = new System.Drawing.Point(9, 48);
             this.buttonSaveTheme.Name = "buttonSaveTheme";
-            this.buttonSaveTheme.Size = new System.Drawing.Size(95, 23);
+            this.buttonSaveTheme.Size = new System.Drawing.Size(126, 23);
             this.buttonSaveTheme.TabIndex = 7;
             this.buttonSaveTheme.Text = "Save Theme";
             this.toolTip.SetToolTip(this.buttonSaveTheme, "Save theme to disk");
@@ -625,12 +628,34 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonEditCommander.Location = new System.Drawing.Point(713, 60);
             this.buttonEditCommander.Name = "buttonEditCommander";
-            this.buttonEditCommander.Size = new System.Drawing.Size(71, 23);
+            this.buttonEditCommander.Size = new System.Drawing.Size(90, 23);
             this.buttonEditCommander.TabIndex = 5;
             this.buttonEditCommander.Text = "Edit";
             this.toolTip.SetToolTip(this.buttonEditCommander, "Edit selected commander");
             this.buttonEditCommander.UseVisualStyleBackColor = true;
             this.buttonEditCommander.Click += new System.EventHandler(this.buttonEditCommander_Click);
+            // 
+            // btnDeleteCommander
+            // 
+            this.btnDeleteCommander.Location = new System.Drawing.Point(713, 100);
+            this.btnDeleteCommander.Name = "btnDeleteCommander";
+            this.btnDeleteCommander.Size = new System.Drawing.Size(90, 23);
+            this.btnDeleteCommander.TabIndex = 3;
+            this.btnDeleteCommander.Text = "Delete";
+            this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete selected commander");
+            this.btnDeleteCommander.UseVisualStyleBackColor = true;
+            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
+            // 
+            // buttonAddCommander
+            // 
+            this.buttonAddCommander.Location = new System.Drawing.Point(713, 20);
+            this.buttonAddCommander.Name = "buttonAddCommander";
+            this.buttonAddCommander.Size = new System.Drawing.Size(90, 23);
+            this.buttonAddCommander.TabIndex = 0;
+            this.buttonAddCommander.Text = "Add";
+            this.toolTip.SetToolTip(this.buttonAddCommander, "Add a new commander");
+            this.buttonAddCommander.UseVisualStyleBackColor = true;
+            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
             // dataGridViewCommanders
             // 
@@ -693,28 +718,6 @@ namespace EDDiscovery.UserControls
             this.NotesCol.Name = "NotesCol";
             this.NotesCol.ReadOnly = true;
             // 
-            // btnDeleteCommander
-            // 
-            this.btnDeleteCommander.Location = new System.Drawing.Point(713, 100);
-            this.btnDeleteCommander.Name = "btnDeleteCommander";
-            this.btnDeleteCommander.Size = new System.Drawing.Size(71, 23);
-            this.btnDeleteCommander.TabIndex = 3;
-            this.btnDeleteCommander.Text = "Delete";
-            this.toolTip.SetToolTip(this.btnDeleteCommander, "Delete selected commander");
-            this.btnDeleteCommander.UseVisualStyleBackColor = true;
-            this.btnDeleteCommander.Click += new System.EventHandler(this.btnDeleteCommander_Click);
-            // 
-            // buttonAddCommander
-            // 
-            this.buttonAddCommander.Location = new System.Drawing.Point(713, 20);
-            this.buttonAddCommander.Name = "buttonAddCommander";
-            this.buttonAddCommander.Size = new System.Drawing.Size(71, 23);
-            this.buttonAddCommander.TabIndex = 0;
-            this.buttonAddCommander.Text = "Add";
-            this.toolTip.SetToolTip(this.buttonAddCommander, "Add a new commander");
-            this.buttonAddCommander.UseVisualStyleBackColor = true;
-            this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
-            // 
             // groupBoxCustomHistoryLoad
             // 
             this.groupBoxCustomHistoryLoad.AlternateClientBackColor = System.Drawing.Color.Blue;
@@ -754,7 +757,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
             this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 463);
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 494);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
             this.groupBoxCustomEDSM.Size = new System.Drawing.Size(379, 60);
             this.groupBoxCustomEDSM.TabIndex = 21;
@@ -775,7 +778,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 423);
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 397);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
             this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(426, 100);
             this.groupBoxCustomScreenShots.TabIndex = 20;
@@ -790,6 +793,8 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.BackColorScaling = 0.5F;
             this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPopOuts.BorderColorScaling = 0.5F;
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxKeepOnTop);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBoxPopOuts.Controls.Add(this.comboBoxClickThruKey);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
@@ -801,12 +806,32 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
             this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 290);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
-            this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 165);
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 192);
             this.groupBoxPopOuts.TabIndex = 19;
             this.groupBoxPopOuts.TabStop = false;
             this.groupBoxPopOuts.Text = "Window Options";
             this.groupBoxPopOuts.TextPadding = 0;
             this.groupBoxPopOuts.TextStartPosition = -1;
+            // 
+            // checkBoxCustomResize
+            // 
+            this.checkBoxCustomResize.AutoSize = true;
+            this.checkBoxCustomResize.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomResize.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomResize.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomResize.FontNerfReduction = 0.5F;
+            this.checkBoxCustomResize.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 156);
+            this.checkBoxCustomResize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomResize.Name = "checkBoxCustomResize";
+            this.checkBoxCustomResize.Size = new System.Drawing.Size(186, 17);
+            this.checkBoxCustomResize.TabIndex = 6;
+            this.checkBoxCustomResize.Text = "Redraw the screen during resizing";
+            this.checkBoxCustomResize.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomResize, "Check to allow EDD to redraw the screen during main window resize. Only disable i" +
+        "f its too slow");
+            this.checkBoxCustomResize.UseVisualStyleBackColor = true;
+            this.checkBoxCustomResize.CheckedChanged += new System.EventHandler(this.checkBoxCustomResize_CheckedChanged);
             // 
             // labelTKey
             // 
@@ -823,14 +848,13 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.BackColorScaling = 0.5F;
             this.groupBoxTheme.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxTheme.BorderColorScaling = 0.5F;
-            this.groupBoxTheme.Controls.Add(this.checkBoxKeepOnTop);
             this.groupBoxTheme.Controls.Add(this.comboBoxTheme);
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
             this.groupBoxTheme.Location = new System.Drawing.Point(3, 312);
             this.groupBoxTheme.Name = "groupBoxTheme";
-            this.groupBoxTheme.Size = new System.Drawing.Size(426, 108);
+            this.groupBoxTheme.Size = new System.Drawing.Size(426, 82);
             this.groupBoxTheme.TabIndex = 18;
             this.groupBoxTheme.TabStop = false;
             this.groupBoxTheme.Text = "Theme";
@@ -967,7 +991,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 529);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 503);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(426, 51);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -1028,7 +1052,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
             this.groupBoxTheme.ResumeLayout(false);
-            this.groupBoxTheme.PerformLayout();
             this.groupBox3dmap.ResumeLayout(false);
             this.groupBox3dmap.PerformLayout();
             this.groupBoxCommanders.ResumeLayout(false);
@@ -1092,5 +1115,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelHistorySel;
         private ExtendedControls.GroupBoxCustom groupBoxCustomLanguage;
         private ExtendedControls.ComboBoxCustom comboBoxCustomLanguage;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomResize;
     }
 }

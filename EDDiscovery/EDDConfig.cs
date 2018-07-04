@@ -71,6 +71,7 @@ namespace EDDiscovery
         private string edsmgridids = "All";
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
         private string language = "Auto";
+        private bool drawduringresize = true;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -301,6 +302,19 @@ namespace EDDiscovery
             }
         }
 
+        public bool DrawDuringResize
+        {
+            get
+            {
+                return drawduringresize;
+            }
+            set
+            {
+                drawduringresize = value;
+                SQLiteConnectionUser.PutSettingBool("DrawDuringResizeWindow", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -326,6 +340,7 @@ namespace EDDiscovery
                 edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "All"); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = SQLiteConnectionUser.GetSettingString("DefaultLanguage", "Auto");
+                drawduringresize = SQLiteConnectionUser.GetSettingBool("DrawDuringResizeWindow", true);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }
