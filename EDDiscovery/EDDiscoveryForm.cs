@@ -405,6 +405,21 @@ namespace EDDiscovery
             }
         }
 
+        private void EDDiscoveryForm_ResizeBegin(object sender, EventArgs e)
+        {
+            if (!EDDConfig.Instance.DrawDuringResize)
+                this.SuspendLayout();
+        }
+
+        private void EDDiscoveryForm_ResizeEnd(object sender, EventArgs e)
+        {
+            if (!EDDConfig.Instance.DrawDuringResize)
+                this.ResumeLayout();
+
+        }
+
+
+
         #endregion
 
         #region New Installer

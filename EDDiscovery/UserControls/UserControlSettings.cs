@@ -63,27 +63,6 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
 
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip,this);
-        }
-
-        void SetEntryThemeComboBox()
-        {
-            int i = discoveryform.theme.GetIndexOfCurrentTheme();
-            if (i == -1)
-                comboBoxTheme.SelectedItem = "Custom";
-            else
-                comboBoxTheme.SelectedIndex = i;
-        }
-
-        private void ResetThemeList()
-        {
-            comboBoxTheme.Items = discoveryform.theme.GetThemeList();
-            comboBoxTheme.Items.Add("Custom");
-        }
-
-        public override void InitialDisplay()
-        {
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
@@ -92,6 +71,7 @@ namespace EDDiscovery.UserControls
             checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
             checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
             checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
+            checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
@@ -123,18 +103,25 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
-            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All", ">7 days old", ">30 days old", ">60 days old", ">90 days old", ">180 days old", "> 365 days old" };
-            comboBoxCustomHistoryLoadTime.Tag = new int[] { 0,7,30,60,90,180,365 };
-            int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit); 
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), "> 365 days old".Tx(this) };
+            comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 365 };
+            int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit);
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
+
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip,this);
+        }
+
+        public override void InitialDisplay()
+        {
         }
 
         public override void Closing()
         {
-            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;   // ok to do here..
-            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
-            if (textBoxHomeSystem.Text != EDDiscoveryForm.EDDConfig.HomeSystem.Name) ValidateAndSaveHomeSystem();     // make sure any change is persisted
+            if (textBoxHomeSystem.Text != EDDiscoveryForm.EDDConfig.HomeSystem.Name)
+                ValidateAndSaveHomeSystem();     // make sure any change is persisted
+
             discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
             themeeditor?.Dispose();
@@ -156,24 +143,7 @@ namespace EDDiscovery.UserControls
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged += ParentForm_TopMostChanged;
         }
 
-        private void ComboBoxCustomHistoryLoadTime_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (comboBoxCustomHistoryLoadTime.SelectedIndex >= 0)       // paranoia
-            {
-                EDDConfig.Instance.FullHistoryLoadDayLimit = (comboBoxCustomHistoryLoadTime.Tag as int[])[comboBoxCustomHistoryLoadTime.SelectedIndex];
-                discoveryform.RefreshHistoryAsync();
-            }
-        }
-
-        private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
-        }
-
-        private void radioButtonCentreHome_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.MapCentreOnSelection = radioButtonHistorySelection.Checked;
-        }
+        #region Commanders
 
         public void UpdateCommandersListBox()
         {
@@ -248,19 +218,39 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public void panel_defaultmapcolor_Click(object sender, EventArgs e)
+
+        #endregion
+
+        #region History
+
+        private void checkBoxShowUIEvents_CheckedChanged(object sender, EventArgs e)
         {
-            ColorDialog mapColorDialog = new ColorDialog();
-            mapColorDialog.AllowFullOpen = true;
-            mapColorDialog.FullOpen = true;
-            mapColorDialog.Color = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
-            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
+            EDDConfig.Instance.ShowUIEvents = checkBoxShowUIEvents.Checked;
+        }
+
+        private void checkBoxOrderRowsInverted_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
+        }
+
+        private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
+            discoveryform.RefreshDisplays();
+        }
+
+        private void ComboBoxCustomHistoryLoadTime_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomHistoryLoadTime.SelectedIndex >= 0)       // paranoia
             {
-                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color.ToArgb();
-                EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
-                panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+                EDDConfig.Instance.FullHistoryLoadDayLimit = (comboBoxCustomHistoryLoadTime.Tag as int[])[comboBoxCustomHistoryLoadTime.SelectedIndex];
+                discoveryform.RefreshHistoryAsync();
             }
         }
+
+        #endregion
+
+        #region Theme
 
         private void comboBoxTheme_SelectedIndexChanged(object sender, EventArgs e) // theme selected..
         {
@@ -283,7 +273,7 @@ namespace EDDiscovery.UserControls
                     // Reset the combo box to the previous theme name and don't change anything else.
                     SetEntryThemeComboBox();
                     return;
-                }   
+                }
             }
 
             if (!discoveryform.theme.SetThemeByName(themename))
@@ -349,78 +339,31 @@ namespace EDDiscovery.UserControls
             buttonSaveTheme.Enabled = true;
         }
 
-        private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
+        void SetEntryThemeComboBox()
         {
-            var frm = FindForm();
-
-            EDDConfig.Instance.KeepOnTop = frm.TopMost = checkBoxKeepOnTop.Checked;
-            if (themeeditor != null)
-                themeeditor.TopMost = checkBoxKeepOnTop.Checked;
+            int i = discoveryform.theme.GetIndexOfCurrentTheme();
+            if (i == -1)
+                comboBoxTheme.SelectedItem = "Custom";
+            else
+                comboBoxTheme.SelectedIndex = i;
         }
 
-        private void ParentForm_TopMostChanged(object sender, EventArgs e)
+        private void ResetThemeList()
         {
-            checkBoxKeepOnTop.Checked = (sender as Form).TopMost;
+            comboBoxTheme.Items = discoveryform.theme.GetThemeList();
+            comboBoxTheme.Items.Add("Custom");
         }
 
-        private void checkBoxShowUIEvents_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.ShowUIEvents = checkBoxShowUIEvents.Checked;
-        }
+        #endregion
 
-        private void checkBoxOrderRowsInverted_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.OrderRowsInverted = checkBoxOrderRowsInverted.Checked;
-        }
-
-        private void checkBoxMinimizeToNotifyIcon_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
-        }
-
-        public void DisableNotifyIcon()
-        {
-            checkBoxUseNotifyIcon.Checked = false;
-        }
-
-        private void checkBoxUseNotifyIcon_CheckedChanged(object sender, EventArgs e)
-        {
-            bool chk = checkBoxUseNotifyIcon.Checked;
-            EDDiscoveryForm.EDDConfig.UseNotifyIcon = chk;
-            checkBoxMinimizeToNotifyIcon.Enabled = chk;
-            discoveryform.useNotifyIconChanged(chk);
-        }
-
-        private void checkBoxUTC_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.DisplayUTC = checkBoxUTC.Checked;
-            discoveryform.RefreshDisplays();
-        }
-
-        private void buttonSaveSetup_Click(object sender, EventArgs e)
-        {
-            discoveryform.SaveCurrentPopOuts();
-        }
-
-        private void buttonReloadSaved_Click(object sender, EventArgs e)
-        {
-            discoveryform.LoadSavedPopouts();
-        }
-
-
-        private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
-            Keys k = c.Text.ToVkey();
-            EDDConfig.Instance.ClickThruKey = k;
-        }
+        #region Screenshots
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
             ScreenShots.ScreenShotConfigureForm frm = new ScreenShots.ScreenShotConfigureForm();
             frm.Init(discoveryform.screenshotconverter, discoveryform.screenshotconverter.MarkHiRes);
 
-            if ( frm.ShowDialog(FindForm()) == DialogResult.OK )
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
                 discoveryform.screenshotconverter.Stop();
                 discoveryform.screenshotconverter.ScreenshotsDir = frm.ScreenshotsDir;
@@ -437,12 +380,12 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)
         {
-            discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked; 
+            discoveryform.screenshotconverter.AutoConvert = checkBoxCustomEnableScreenshots.Checked;
         }
 
         private void checkBoxCustomRemoveOriginals_CheckedChanged(object sender, EventArgs e)
         {
-            discoveryform.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked; 
+            discoveryform.screenshotconverter.RemoveOriginal = checkBoxCustomRemoveOriginals.Checked;
         }
 
         private void checkBoxCustomMarkHiRes_CheckedChanged(object sender, EventArgs e)
@@ -455,9 +398,45 @@ namespace EDDiscovery.UserControls
             discoveryform.screenshotconverter.CopyToClipboard = checkBoxCustomCopyToClipboard.Checked;
         }
 
-        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
+        #endregion
+
+
+        #region Language
+
+        private void ComboBoxCustomLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
+            ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this, "Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        #endregion
+
+
+        #region 3dmap
+
+        private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
+        }
+
+        private void radioButtonCentreHome_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.MapCentreOnSelection = radioButtonHistorySelection.Checked;
+        }
+
+        public void panel_defaultmapcolor_Click(object sender, EventArgs e)
+        {
+            ColorDialog mapColorDialog = new ColorDialog();
+            mapColorDialog.AllowFullOpen = true;
+            mapColorDialog.FullOpen = true;
+            mapColorDialog.Color = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color.ToArgb();
+                EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
+                panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
+            }
         }
 
         private void textBoxHomeSystem_Leave(object sender, EventArgs e)
@@ -479,15 +458,82 @@ namespace EDDiscovery.UserControls
                 textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
         }
 
+        #endregion
 
-        private void ComboBoxCustomLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        #region window options
+
+        private void checkBoxAutoLoad_CheckedChanged(object sender, EventArgs e)
         {
-            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
-            EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
-            ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this,"Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
+            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
         }
 
-        #region EDSM Galaxy
+        private void checkBoxAutoSave_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
+        }
+
+        private void buttonSaveSetup_Click(object sender, EventArgs e)
+        {
+            discoveryform.SaveCurrentPopOuts();
+        }
+
+        private void buttonReloadSaved_Click(object sender, EventArgs e)
+        {
+            discoveryform.LoadSavedPopouts();
+        }
+
+        private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            Keys k = c.Text.ToVkey();
+            EDDConfig.Instance.ClickThruKey = k;
+        }
+
+        private void checkBoxMinimizeToNotifyIcon_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon = checkBoxMinimizeToNotifyIcon.Checked;
+        }
+
+        private void checkBoxCustomResize_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDiscoveryForm.EDDConfig.DrawDuringResize = checkBoxCustomResize.Checked;
+        }
+
+        public void DisableNotifyIcon()
+        {
+            checkBoxUseNotifyIcon.Checked = false;
+        }
+
+        private void checkBoxUseNotifyIcon_CheckedChanged(object sender, EventArgs e)
+        {
+            bool chk = checkBoxUseNotifyIcon.Checked;
+            EDDiscoveryForm.EDDConfig.UseNotifyIcon = chk;
+            checkBoxMinimizeToNotifyIcon.Enabled = chk;
+            discoveryform.useNotifyIconChanged(chk);
+        }
+
+        private void checkBoxKeepOnTop_CheckedChanged(object sender, EventArgs e)
+        {
+            var frm = FindForm();
+
+            EDDConfig.Instance.KeepOnTop = frm.TopMost = checkBoxKeepOnTop.Checked;
+            if (themeeditor != null)
+                themeeditor.TopMost = checkBoxKeepOnTop.Checked;
+        }
+
+        private void ParentForm_TopMostChanged(object sender, EventArgs e)
+        {
+            checkBoxKeepOnTop.Checked = (sender as Form).TopMost;
+        }
+
+        #endregion
+
+        #region EDDB EDSM
+
+        private void checkBoxCustomEDSMDownload_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.EDSMEDDBDownload = checkBoxCustomEDSMEDDBDownload.Checked;
+        }
 
         ExtendedControls.InfoForm info;
         System.Windows.Forms.Timer removetimer;
@@ -500,7 +546,7 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.MessageBoxTheme.Show(this, "Failed", "No map downloaded - please wait for it to download");
             }
-            else if ( gss.ShowDialog() == DialogResult.OK )
+            else if (gss.ShowDialog() == DialogResult.OK)
             {
                 EDDConfig.Instance.EDSMGridIDs = gss.Selection;
 
@@ -510,19 +556,19 @@ namespace EDDiscovery.UserControls
                 }
                 else if (gss.Action == GalaxySectorSelect.ActionToDo.Remove)
                 {
-                    System.Diagnostics.Debug.WriteLine("Remove " );
+                    System.Diagnostics.Debug.WriteLine("Remove ");
 
                     info = new ExtendedControls.InfoForm();
-                    info.Info("Remove Sectors", EDDiscovery.Properties.Resources.edlogo_3mo_icon,
-                                "Removing " + gss.Removed.Count + " Sector(s)." + Environment.NewLine + Environment.NewLine +
+                    info.Info("Remove Sectors".Tx(this), EDDiscovery.Properties.Resources.edlogo_3mo_icon,
+                                ("Removing " + gss.Removed.Count + " Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine +
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine);
+                                "the process has finished" + Environment.NewLine + Environment.NewLine).Tx(this,"GalRemove"));
                     info.EnableClose = false;
                     info.Show(discoveryform);
 
-                    taskremovesectors = Task.Factory.StartNew(()=> RemoveSectors(gss.AllRemoveSectors,(s) => discoveryform.Invoke(new Action(()=> { info.AddText(s); }))));
+                    taskremovesectors = Task.Factory.StartNew(() => RemoveSectors(gss.AllRemoveSectors, (s) => discoveryform.Invoke(new Action(() => { info.AddText(s); }))));
 
                     removetimer = new Timer() { Interval = 200 };
                     removetimer.Tick += Removetimer_Tick;
@@ -541,7 +587,7 @@ namespace EDDiscovery.UserControls
             SystemClassDB.Vacuum();
         }
 
-        private Task taskremovesectors= null;
+        private Task taskremovesectors = null;
 
         private void Removetimer_Tick(object sender, EventArgs e)
         {
@@ -550,13 +596,12 @@ namespace EDDiscovery.UserControls
                 removetimer.Stop();
                 taskremovesectors.Dispose();
                 info.EnableClose = true;
-                info.AddText("Finished, Please close the window." + Environment.NewLine + 
-                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine);
+                info.AddText(("Finished, Please close the window." + Environment.NewLine +
+                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine).Tx(this,"GalFini"));
             }
         }
 
         #endregion
-
     }
 }
 
