@@ -24,7 +24,7 @@ namespace EliteDangerousCore.JournalEvents
 
     //•	Security
     [JournalEntryType(JournalTypeEnum.BuyDrones)]
-    public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry
+    public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalBuyDrones(JObject evt ) : base(evt, JournalTypeEnum.BuyDrones)
         {
@@ -38,6 +38,11 @@ namespace EliteDangerousCore.JournalEvents
         public int Count { get; set; }
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodities.CommodityCategory, "drones", Count, 0, conn);
+        }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
