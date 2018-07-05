@@ -69,7 +69,7 @@ namespace EDDiscovery
             startDate = new DateTime(2010, 1, 1);
             if ( !AddImages() )
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "2DMaps", "No maps available", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(this, "No maps available".Tx(this),"Warning".Tx(), MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
                 Close();
                 return;
             }
@@ -83,12 +83,12 @@ namespace EDDiscovery
 
             toolStripComboBoxTime.Items.AddRange(new string[] {
             "Distant Worlds Expedition",
-            "FGE Expedition start",
-            "Last Week",
-            "Last Month",
-            "Last Year",
-            "All",
-            "Custom"});
+            "FGE Expedition",
+            "Last Week".Tx(this),
+            "Last Month".Tx(this),
+            "Last Year".Tx(this),
+            "All".Tx(this),
+            "Custom".Tx(this)});
 
             toolStripComboExpo.SelectedIndex = 0;
             toolStripComboBoxTime.SelectedIndex = 0;
@@ -100,7 +100,8 @@ namespace EDDiscovery
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyToFormStandardFontSize(this);
             statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
-            
+
+            BaseUtils.Translator.Instance.Translate(this);
         }
 
         private void Form2dClosing(object sender, FormClosingEventArgs e)

@@ -84,9 +84,8 @@ namespace EDDiscovery
             this.toolStripButtonSave});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(510, 29);
+            this.toolStrip.Size = new System.Drawing.Size(541, 29);
             this.toolStrip.TabIndex = 1;
-            this.toolStrip.Text = "toolStrip1";
             // 
             // toolStripComboExpo
             // 
@@ -153,7 +152,6 @@ namespace EDDiscovery
             this.toolStripButtonZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomIn.Name = "toolStripButtonZoomIn";
             this.toolStripButtonZoomIn.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomIn.Text = "toolStripButton1";
             this.toolStripButtonZoomIn.ToolTipText = "Zoom in";
             this.toolStripButtonZoomIn.Click += new System.EventHandler(this.toolStripButtonZoomIn_Click);
             // 
@@ -164,7 +162,6 @@ namespace EDDiscovery
             this.toolStripButtonZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomOut.Name = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomOut.Text = "toolStripButtonZoomOut";
             this.toolStripButtonZoomOut.ToolTipText = "Zoom out";
             this.toolStripButtonZoomOut.Click += new System.EventHandler(this.toolStripButtonZoomOut_Click);
             // 
@@ -175,7 +172,6 @@ namespace EDDiscovery
             this.toolStripButtonZoomtoFit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonZoomtoFit.Name = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.Size = new System.Drawing.Size(26, 26);
-            this.toolStripButtonZoomtoFit.Text = "toolStripButtonZoomtoFit";
             this.toolStripButtonZoomtoFit.ToolTipText = "Zoom to best fit";
             this.toolStripButtonZoomtoFit.Click += new System.EventHandler(this.toolStripButtonZoomtoFit_Click);
             // 

@@ -31,7 +31,7 @@
             this.panelBottom = new System.Windows.Forms.Panel();
             this.checkBoxRawJournal = new ExtendedControls.CheckBoxCustom();
             this.buttonCancel = new ExtendedControls.ButtonExt();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelCVSSep = new System.Windows.Forms.Label();
             this.radioButtonSemiColon = new ExtendedControls.RadioButtonCustom();
             this.buttonExport = new ExtendedControls.ButtonExt();
             this.radioButtonComma = new ExtendedControls.RadioButtonCustom();
@@ -44,15 +44,17 @@
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
+            this.panelTop = new System.Windows.Forms.Panel();
             this.panelBottom.SuspendLayout();
             this.panelOuter.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelBottom
             // 
             this.panelBottom.Controls.Add(this.checkBoxRawJournal);
             this.panelBottom.Controls.Add(this.buttonCancel);
-            this.panelBottom.Controls.Add(this.label1);
+            this.panelBottom.Controls.Add(this.labelCVSSep);
             this.panelBottom.Controls.Add(this.radioButtonSemiColon);
             this.panelBottom.Controls.Add(this.buttonExport);
             this.panelBottom.Controls.Add(this.radioButtonComma);
@@ -60,7 +62,7 @@
             this.panelBottom.Controls.Add(this.checkBoxCustomAutoOpen);
             this.panelBottom.Location = new System.Drawing.Point(6, 107);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(257, 133);
+            this.panelBottom.Size = new System.Drawing.Size(359, 154);
             this.panelBottom.TabIndex = 0;
             // 
             // checkBoxRawJournal
@@ -71,7 +73,7 @@
             this.checkBoxRawJournal.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxRawJournal.FontNerfReduction = 0.5F;
             this.checkBoxRawJournal.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxRawJournal.Location = new System.Drawing.Point(146, 40);
+            this.checkBoxRawJournal.Location = new System.Drawing.Point(184, 14);
             this.checkBoxRawJournal.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxRawJournal.Name = "checkBoxRawJournal";
             this.checkBoxRawJournal.Size = new System.Drawing.Size(98, 17);
@@ -83,28 +85,29 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(98, 106);
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.Location = new System.Drawing.Point(141, 126);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 5;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // label1
+            // labelCVSSep
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 45);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "CSV Separator";
+            this.labelCVSSep.AutoSize = true;
+            this.labelCVSSep.Location = new System.Drawing.Point(9, 65);
+            this.labelCVSSep.Name = "labelCVSSep";
+            this.labelCVSSep.Size = new System.Drawing.Size(77, 13);
+            this.labelCVSSep.TabIndex = 2;
+            this.labelCVSSep.Text = "CSV Separator";
             // 
             // radioButtonSemiColon
             // 
             this.radioButtonSemiColon.AutoSize = true;
             this.radioButtonSemiColon.FontNerfReduction = 0.5F;
-            this.radioButtonSemiColon.Location = new System.Drawing.Point(12, 84);
+            this.radioButtonSemiColon.Location = new System.Drawing.Point(184, 86);
             this.radioButtonSemiColon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonSemiColon.Name = "radioButtonSemiColon";
             this.radioButtonSemiColon.RadioButtonColor = System.Drawing.Color.Gray;
@@ -119,9 +122,10 @@
             // 
             // buttonExport
             // 
-            this.buttonExport.Location = new System.Drawing.Point(179, 106);
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExport.Location = new System.Drawing.Point(247, 126);
             this.buttonExport.Name = "buttonExport";
-            this.buttonExport.Size = new System.Drawing.Size(75, 23);
+            this.buttonExport.Size = new System.Drawing.Size(100, 23);
             this.buttonExport.TabIndex = 5;
             this.buttonExport.Text = "Export";
             this.buttonExport.UseVisualStyleBackColor = true;
@@ -131,7 +135,7 @@
             // 
             this.radioButtonComma.AutoSize = true;
             this.radioButtonComma.FontNerfReduction = 0.5F;
-            this.radioButtonComma.Location = new System.Drawing.Point(12, 61);
+            this.radioButtonComma.Location = new System.Drawing.Point(184, 63);
             this.radioButtonComma.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonComma.Name = "radioButtonComma";
             this.radioButtonComma.RadioButtonColor = System.Drawing.Color.Gray;
@@ -169,7 +173,7 @@
             this.checkBoxCustomAutoOpen.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomAutoOpen.FontNerfReduction = 0.5F;
             this.checkBoxCustomAutoOpen.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(146, 14);
+            this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(12, 37);
             this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomAutoOpen.Name = "checkBoxCustomAutoOpen";
             this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(91, 17);
@@ -190,7 +194,7 @@
             this.customDateTimePickerFrom.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerFrom.ShowCheckBox = false;
             this.customDateTimePickerFrom.ShowUpDown = false;
-            this.customDateTimePickerFrom.Size = new System.Drawing.Size(245, 23);
+            this.customDateTimePickerFrom.Size = new System.Drawing.Size(270, 23);
             this.customDateTimePickerFrom.TabIndex = 2;
             this.customDateTimePickerFrom.TextBackColor = System.Drawing.Color.DarkBlue;
             this.customDateTimePickerFrom.Value = new System.DateTime(2017, 9, 15, 14, 17, 6, 509);
@@ -207,7 +211,7 @@
             this.customDateTimePickerTo.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerTo.ShowCheckBox = false;
             this.customDateTimePickerTo.ShowUpDown = false;
-            this.customDateTimePickerTo.Size = new System.Drawing.Size(245, 23);
+            this.customDateTimePickerTo.Size = new System.Drawing.Size(270, 23);
             this.customDateTimePickerTo.TabIndex = 3;
             this.customDateTimePickerTo.TextBackColor = System.Drawing.Color.DarkBlue;
             this.customDateTimePickerTo.Value = new System.DateTime(2017, 9, 15, 14, 17, 10, 468);
@@ -218,10 +222,11 @@
             this.comboBoxCustomExportType.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomExportType.ButtonColorScaling = 0.5F;
             this.comboBoxCustomExportType.DataSource = null;
+            this.comboBoxCustomExportType.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomExportType.DisplayMember = "";
             this.comboBoxCustomExportType.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomExportType.DropDownHeight = 106;
-            this.comboBoxCustomExportType.DropDownWidth = 200;
+            this.comboBoxCustomExportType.DropDownWidth = 1;
             this.comboBoxCustomExportType.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomExportType.ItemHeight = 13;
             this.comboBoxCustomExportType.Location = new System.Drawing.Point(18, 8);
@@ -233,14 +238,15 @@
             this.comboBoxCustomExportType.SelectedIndex = -1;
             this.comboBoxCustomExportType.SelectedItem = null;
             this.comboBoxCustomExportType.SelectedValue = null;
-            this.comboBoxCustomExportType.Size = new System.Drawing.Size(245, 21);
+            this.comboBoxCustomExportType.Size = new System.Drawing.Size(270, 21);
             this.comboBoxCustomExportType.TabIndex = 4;
+            this.comboBoxCustomExportType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomExportType.ValueMember = "";
             // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(269, 0);
+            this.panel_close.Location = new System.Drawing.Point(351, 2);
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
             this.panel_close.Selectable = false;
@@ -253,7 +259,7 @@
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(239, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(327, 2);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
             this.panel_minimize.Selectable = false;
@@ -280,20 +286,30 @@
             this.panelOuter.Controls.Add(this.panelBottom);
             this.panelOuter.Controls.Add(this.customDateTimePickerFrom);
             this.panelOuter.Controls.Add(this.customDateTimePickerTo);
-            this.panelOuter.Location = new System.Drawing.Point(5, 25);
+            this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelOuter.Location = new System.Drawing.Point(0, 32);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(285, 246);
+            this.panelOuter.Size = new System.Drawing.Size(378, 275);
             this.panelOuter.TabIndex = 31;
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.label_index);
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(378, 32);
+            this.panelTop.TabIndex = 32;
             // 
             // ExportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 278);
+            this.ClientSize = new System.Drawing.Size(378, 307);
             this.Controls.Add(this.panelOuter);
-            this.Controls.Add(this.panel_close);
-            this.Controls.Add(this.panel_minimize);
-            this.Controls.Add(this.label_index);
+            this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "ExportForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -302,8 +318,9 @@
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.panelOuter.ResumeLayout(false);
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -312,7 +329,7 @@
         private System.Windows.Forms.Panel panelBottom;
         private ExtendedControls.RadioButtonCustom radioButtonSemiColon;
         private ExtendedControls.RadioButtonCustom radioButtonComma;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelCVSSep;
         private ExtendedControls.CheckBoxCustom checkBoxIncludeHeader;
         private ExtendedControls.CustomDateTimePicker customDateTimePickerFrom;
         private ExtendedControls.CustomDateTimePicker customDateTimePickerTo;
@@ -325,5 +342,6 @@
         private ExtendedControls.ButtonExt buttonExport;
         private System.Windows.Forms.Panel panelOuter;
         private ExtendedControls.CheckBoxCustom checkBoxRawJournal;
+        private System.Windows.Forms.Panel panelTop;
     }
 }

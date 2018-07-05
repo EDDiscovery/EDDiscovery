@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class RecordStep : Form
+    public partial class RecordStep : ExtendedControls.DraggableForm
     {
         public long Elapsed = 0;
 
@@ -68,6 +68,12 @@ namespace EDDiscovery.Forms
             checkBoxPos.Checked = true;
             checkBoxChangeZoom.Checked = true;
             ValidateData();
+
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            panelTop.Visible = panelTop.Enabled = !winborder;
+
+            BaseUtils.Translator.Instance.Translate(this);
         }
 
         private void buttonOK_Click(object sender, EventArgs e)
@@ -174,6 +180,21 @@ namespace EDDiscovery.Forms
         private void checkBoxChangeZoom_CheckedChanged(object sender, EventArgs e)
         {
             ValidateData();
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void label_index_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
         }
     }
 }

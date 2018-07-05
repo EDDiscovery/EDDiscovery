@@ -44,6 +44,7 @@ namespace EDDiscovery
         public bool DontAskGithubForPacks { get; private set; }
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
+        public bool CheckReleaseInDebug { get; private set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -251,6 +252,7 @@ namespace EDDiscovery
                     case "nosystems": NoSystemsLoad = true; break;
                     case "logexceptions": LogExceptions = true; break;
                     case "nogithubpacks": DontAskGithubForPacks = true; break;
+                    case "checkrelease": CheckReleaseInDebug = true; break;
                     case "edsmbeta":
                         EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
                         break;

@@ -45,9 +45,9 @@ namespace EDDiscovery.Forms
         {
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonTransfer = new ExtendedControls.ButtonExt();
             this.comboBoxCommanders = new ExtendedControls.ComboBoxCustom();
-            this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,14 +73,21 @@ namespace EDDiscovery.Forms
             this.panel1.Size = new System.Drawing.Size(322, 139);
             this.panel1.TabIndex = 4;
             // 
+            // buttonExtCancel
+            // 
+            this.buttonExtCancel.Location = new System.Drawing.Point(89, 103);
+            this.buttonExtCancel.Name = "buttonExtCancel";
+            this.buttonExtCancel.Size = new System.Drawing.Size(100, 23);
+            this.buttonExtCancel.TabIndex = 4;
+            this.buttonExtCancel.Text = "Cancel";
+            this.buttonExtCancel.UseVisualStyleBackColor = true;
+            this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
+            // 
             // buttonTransfer
             // 
-            this.buttonTransfer.BorderColorScaling = 1.25F;
-            this.buttonTransfer.ButtonColorScaling = 0.5F;
-            this.buttonTransfer.ButtonDisabledScaling = 0.5F;
-            this.buttonTransfer.Location = new System.Drawing.Point(234, 100);
+            this.buttonTransfer.Location = new System.Drawing.Point(205, 103);
             this.buttonTransfer.Name = "buttonTransfer";
-            this.buttonTransfer.Size = new System.Drawing.Size(75, 23);
+            this.buttonTransfer.Size = new System.Drawing.Size(100, 23);
             this.buttonTransfer.TabIndex = 3;
             this.buttonTransfer.Text = "Transfer";
             this.buttonTransfer.UseVisualStyleBackColor = true;
@@ -92,6 +99,7 @@ namespace EDDiscovery.Forms
             this.comboBoxCommanders.BorderColor = System.Drawing.Color.White;
             this.comboBoxCommanders.ButtonColorScaling = 0.5F;
             this.comboBoxCommanders.DataSource = null;
+            this.comboBoxCommanders.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommanders.DisplayMember = "";
             this.comboBoxCommanders.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommanders.DropDownHeight = 106;
@@ -109,21 +117,9 @@ namespace EDDiscovery.Forms
             this.comboBoxCommanders.SelectedValue = null;
             this.comboBoxCommanders.Size = new System.Drawing.Size(290, 21);
             this.comboBoxCommanders.TabIndex = 0;
+            this.comboBoxCommanders.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCommanders.ValueMember = "";
             this.comboBoxCommanders.SelectedIndexChanged += new System.EventHandler(this.comboBoxCommanders_SelectedIndexChanged);
-            // 
-            // buttonExtCancel
-            // 
-            this.buttonExtCancel.BorderColorScaling = 1.25F;
-            this.buttonExtCancel.ButtonColorScaling = 0.5F;
-            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
-            this.buttonExtCancel.Location = new System.Drawing.Point(141, 100);
-            this.buttonExtCancel.Name = "buttonExtCancel";
-            this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonExtCancel.TabIndex = 4;
-            this.buttonExtCancel.Text = "Cancel";
-            this.buttonExtCancel.UseVisualStyleBackColor = true;
-            this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
             // MoveToCommander
             // 

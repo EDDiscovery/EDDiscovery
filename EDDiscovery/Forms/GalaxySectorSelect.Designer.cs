@@ -36,11 +36,11 @@
             this.buttonExtCancel = new ExtendedControls.ButtonExt();
             this.buttonExtSet = new ExtendedControls.ButtonExt();
             this.labelZ = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.labelZName = new System.Windows.Forms.Label();
             this.labelX = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelXName = new System.Windows.Forms.Label();
             this.labelID = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelSectorName = new System.Windows.Forms.Label();
             this.comboBoxSelections = new ExtendedControls.ComboBoxCustom();
             this.statusStripCustom = new ExtendedControls.StatusStripCustom();
             this.panelOuter = new System.Windows.Forms.Panel();
@@ -67,11 +67,11 @@
             this.panelTop.Controls.Add(this.buttonExtCancel);
             this.panelTop.Controls.Add(this.buttonExtSet);
             this.panelTop.Controls.Add(this.labelZ);
-            this.panelTop.Controls.Add(this.label3);
+            this.panelTop.Controls.Add(this.labelZName);
             this.panelTop.Controls.Add(this.labelX);
-            this.panelTop.Controls.Add(this.label2);
+            this.panelTop.Controls.Add(this.labelXName);
             this.panelTop.Controls.Add(this.labelID);
-            this.panelTop.Controls.Add(this.label1);
+            this.panelTop.Controls.Add(this.labelSectorName);
             this.panelTop.Controls.Add(this.comboBoxSelections);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -135,14 +135,14 @@
             this.labelZ.TabIndex = 1;
             this.labelZ.Text = "-";
             // 
-            // label3
+            // labelZName
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(310, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(14, 13);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "Z";
+            this.labelZName.AutoSize = true;
+            this.labelZName.Location = new System.Drawing.Point(310, 9);
+            this.labelZName.Name = "labelZName";
+            this.labelZName.Size = new System.Drawing.Size(14, 13);
+            this.labelZName.TabIndex = 1;
+            this.labelZName.Text = "Z";
             // 
             // labelX
             // 
@@ -153,14 +153,14 @@
             this.labelX.TabIndex = 1;
             this.labelX.Text = "-";
             // 
-            // label2
+            // labelXName
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(230, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(14, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "X";
+            this.labelXName.AutoSize = true;
+            this.labelXName.Location = new System.Drawing.Point(230, 9);
+            this.labelXName.Name = "labelXName";
+            this.labelXName.Size = new System.Drawing.Size(14, 13);
+            this.labelXName.TabIndex = 1;
+            this.labelXName.Text = "X";
             // 
             // labelID
             // 
@@ -171,14 +171,14 @@
             this.labelID.TabIndex = 1;
             this.labelID.Text = "-";
             // 
-            // label1
+            // labelSectorName
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(390, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Sector";
+            this.labelSectorName.AutoSize = true;
+            this.labelSectorName.Location = new System.Drawing.Point(390, 9);
+            this.labelSectorName.Name = "labelSectorName";
+            this.labelSectorName.Size = new System.Drawing.Size(38, 13);
+            this.labelSectorName.TabIndex = 1;
+            this.labelSectorName.Text = "Sector";
             // 
             // comboBoxSelections
             // 
@@ -186,6 +186,7 @@
             this.comboBoxSelections.BorderColor = System.Drawing.Color.White;
             this.comboBoxSelections.ButtonColorScaling = 0.5F;
             this.comboBoxSelections.DataSource = null;
+            this.comboBoxSelections.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxSelections.DisplayMember = "";
             this.comboBoxSelections.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxSelections.DropDownHeight = 106;
@@ -204,6 +205,7 @@
             this.comboBoxSelections.Size = new System.Drawing.Size(178, 21);
             this.comboBoxSelections.TabIndex = 0;
             this.comboBoxSelections.Text = "comboBoxCustom1";
+            this.comboBoxSelections.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxSelections.ValueMember = "";
             this.comboBoxSelections.SelectedIndexChanged += new System.EventHandler(this.comboBoxSelections_SelectedIndexChanged);
             // 
@@ -252,11 +254,11 @@
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.ComboBoxCustom comboBoxSelections;
         private System.Windows.Forms.Label labelZ;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label labelZName;
         private System.Windows.Forms.Label labelX;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelXName;
         private System.Windows.Forms.Label labelID;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelSectorName;
         private ExtendedControls.ButtonExt buttonExtSet;
         private ExtendedControls.ButtonExt buttonExtCancel;
         private ExtendedControls.DrawnPanel panel_close;

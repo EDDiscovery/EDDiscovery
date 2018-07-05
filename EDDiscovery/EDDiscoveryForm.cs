@@ -428,8 +428,12 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-#if !DEBUG
+#if DEBUG
+                if (EDDOptions.Instance.CheckReleaseInDebug )
+                    CheckForNewinstaller();
+#else
                 CheckForNewinstaller();
+                
 #endif
             });
         }
@@ -874,6 +878,7 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory());
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();

@@ -56,7 +56,11 @@ namespace EDDiscovery.Forms
                 Height -= d;
             }
             checkBoxRawJournal.Visible = checkBoxRawJournal.Enabled = allowRawJournalExport;
-            if (!allowRawJournalExport) checkBoxRawJournal.Checked = false;
+            if (!allowRawJournalExport)
+                checkBoxRawJournal.Checked = false;
+
+            BaseUtils.Translator.Instance.Translate(this);
+
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -80,7 +84,7 @@ namespace EDDiscovery.Forms
             SaveFileDialog dlg = new SaveFileDialog();
 
             dlg.Filter = ExportAsJournals ? "Journal export| *.log" : "CSV export| *.csv";
-            dlg.Title = $"Export current History view to {(ExportAsJournals ? "Journal file" : "Excel(csv)")}";
+            dlg.Title = string.Format("Export current History view to {0}".Tx(this,"ECH"), ExportAsJournals ? "Journal file".Tx(this,"JF") : "Excel(csv)");
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {

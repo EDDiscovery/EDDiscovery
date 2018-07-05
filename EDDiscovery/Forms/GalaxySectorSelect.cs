@@ -56,13 +56,13 @@ namespace EDDiscovery.Forms
 
         List<Tuple<string, string>> defaultsel = new List<Tuple<string, string>>()
         {
-            new Tuple<string,string>("Custom",""),
-            new Tuple<string,string>("Reset","Reset"),
-            new Tuple<string,string>("All","All"),
-            new Tuple<string,string>("None",""),
-            new Tuple<string, string>("Bubble","810"),
-            new Tuple<string, string>("Extended Bubble","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
-            new Tuple<string, string>("Bubble+Colonia","608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
+            new Tuple<string,string>("Custom".Tx(typeof(GalaxySectorSelect)),""),
+            new Tuple<string,string>("Reset".Tx(typeof(GalaxySectorSelect)),"Reset"),
+            new Tuple<string,string>("All".Tx(typeof(GalaxySectorSelect)),"All"),
+            new Tuple<string,string>("None".Tx(typeof(GalaxySectorSelect)),""),
+            new Tuple<string, string>("Bubble".Tx(typeof(GalaxySectorSelect)),"810"),
+            new Tuple<string, string>("Extended Bubble".Tx(typeof(GalaxySectorSelect)),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012"),
+            new Tuple<string, string>("Bubble+Colonia".Tx(typeof(GalaxySectorSelect)),"608,609,610,611,612,708,709,710,711,712,808,809,810,811,812,908,909,910,911,912,1008,1009,1010,1011,1012,1108,1109,1110,1207,1208,1209,1306,1307,1308,1405,1406,1407,1504,1505,1603,1604,1703"),
         };
 
         public GalaxySectorSelect()
@@ -93,6 +93,8 @@ namespace EDDiscovery.Forms
                     EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
                     bool winborder = theme.ApplyToFormStandardFontSize(this);
                     statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+
+                    BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
 
                     SetComboBox();
 
@@ -157,12 +159,12 @@ namespace EDDiscovery.Forms
 
             if (added)                            // we added some..
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this, "You have added new sectors!" + Environment.NewLine +
-                        "This will require a complete re-download of the EDSM data" + Environment.NewLine +
-                        "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(this, 
+                    ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").Tx(this,"RD"), 
+                    "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     if (!EDDConfig.Instance.EDSMEDDBDownload)
-                        ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated", "Warning - EDSM/EDDB Sync Disabled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").Tx(this,"NoSync"), "Warning".Tx(this), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;
                 }
@@ -177,9 +179,9 @@ namespace EDDiscovery.Forms
                 {
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
-                    if (ExtendedControls.MessageBoxTheme.Show(this, "You have removed sectors!" + Environment.NewLine +
-                            "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine +
-                            "Confirm you wish to do this?", "Warning!", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (ExtendedControls.MessageBoxTheme.Show(this, 
+                        ("You have removed sectors!" + Environment.NewLine + "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine + "Confirm you wish to do this?").Tx(this,"RS"), 
+                        "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         Action = ActionToDo.Remove;
                     }
