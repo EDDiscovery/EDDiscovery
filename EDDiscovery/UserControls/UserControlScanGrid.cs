@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
+
         private string DbColumnSave { get { return ("ScanGridPanel") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
 
         public UserControlScanGrid()
@@ -78,177 +79,189 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
+            DrawSystem(uctg.GetCurrentHistoryEntry, false);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl) // called when a new entry is made.. check to see if its a scan update
         {
-            // if he valid, and last is null, or not he, or we have a new scan
-            if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
-            {
-                last_he = he;
-                DrawSystem();
-            }
+            DrawSystem(he, he.EntryType == JournalTypeEnum.Scan);
         }
 
         private void Display(HistoryEntry he, HistoryList hl) // Called at first start or hooked to change cursor
         {
-            if (he != null && (last_he == null || he.System.Name != last_he.System.Name))
-            {
-                last_he = he;
-                DrawSystem();
-            }
+            DrawSystem(he, false);
         }
 
-        void DrawSystem() // draw last_sn, last_he
+        void DrawSystem(HistoryEntry he, bool force)
         {
-            int firstdisplayedrow = dataGridViewScangrid.RowCount > 0 ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+            StarScan.SystemNode scannode = null;
+
+            bool samesys = last_he != null && he != null && he.System.Name == last_he.System.Name;
+
+            System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:"  + force);
+
+            if (he == null)     //  no he, no display
+            {
+                last_he = null;
+                dataGridViewScangrid.Rows.Clear();
+                SetControlText("No Scan");
+                return;
+            }
+            else
+            {
+                scannode = discoveryform.history.starscan.FindSystem(he.System, true);        // get data with EDSM
+
+                if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
+                {
+                    last_he = null;
+                    dataGridViewScangrid.Rows.Clear();
+                    SetControlText("No Scan");
+                    return;
+                }
+
+                if (samesys && !force)      // same system, no force, no redisplay
+                    return;
+            }
+
+            last_he = he;
+
+            // only record first row if same system 
+            int firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
 
             dataGridViewScangrid.Rows.Clear();
 
-            SetControlText("No Scan");
+            List<StarScan.ScanNode> all_nodes = scannode.Bodies.ToList();// flatten tree of scan nodes to prepare for listing
 
-            if (last_he == null)
-                return;
-
-            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, true);
-
-            if (last_sn != null)
+            foreach (StarScan.ScanNode sn in all_nodes)
             {
-                List<StarScan.ScanNode> all_nodes = last_sn.Bodies.ToList();// flatten tree of scan nodes to prepare for listing
-
-                foreach (StarScan.ScanNode sn in all_nodes)
+                if (sn.ScanData != null && sn.ScanData.BodyName != null)
                 {
-                    if (sn.ScanData != null && sn.ScanData.BodyName != null)
+                    StringBuilder bdClass = new StringBuilder();
+                    StringBuilder bdDist = new StringBuilder();
+                    StringBuilder bdDetails = new StringBuilder();
+
+                    if (sn.ScanData.PlanetClass != null)
+                        bdClass.Append(sn.ScanData.PlanetClass);
+                    if (sn.ScanData.StarTypeText != null)
+                        bdClass.Append(sn.ScanData.StarTypeText);
+
+                    if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                     {
-                        StringBuilder bdClass = new StringBuilder();
-                        StringBuilder bdDist = new StringBuilder();
-                        StringBuilder bdDetails = new StringBuilder();
+                        bdClass.Append(" Moon");
+                    }
 
-                        if (sn.ScanData.PlanetClass != null)
-                            bdClass.Append(sn.ScanData.PlanetClass);
-                        if (sn.ScanData.StarTypeText != null)
-                            bdClass.Append(sn.ScanData.StarTypeText);
+                    if (sn.ScanData.IsStar && sn.ScanData.BodyName.EndsWith(" A"))
+                    {
+                        bdDist.AppendFormat("Main Star");
+                    }
+                    else if (sn.ScanData.nSemiMajorAxis.HasValue)
+                    {
+                        if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > JournalScan.oneAU_m / 10)
+                            bdDist.AppendFormat("{0:0.00}AU ({1:0.00}ls)", (sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m);
+                        else
+                            bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
+                    }
 
-                        if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                    // display stars and stellar bodies mass
+                    if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
+                        bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+
+                    // habitable zone for stars - do not display for black holes.
+                    if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+                        bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+
+                    // tell us that a bodie is landable, and shows its gravity
+                    if (sn.ScanData.IsLandable == true)
+                    {
+                        string Gg = "";
+
+                        if (sn.ScanData.nSurfaceGravity.HasValue)
                         {
-                            bdClass.Append(" Moon");
+                            double? g = sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2;
+                            Gg = " (G: " + g.Value.ToString("N1") + ")";
                         }
 
-                        if (sn.ScanData.IsStar && sn.ScanData.BodyName.EndsWith(" A"))
+                        bdDetails.Append("Landable" + Gg + ". ");
+                    }
+
+                    // append the terraformable state to the planet class
+                    if (sn.ScanData.Terraformable == true)
+                        bdDetails.Append("Terraformable. ");
+
+                    // tell us that there is some volcanic activity
+                    if (sn.ScanData.Volcanism != null)
+                        bdDetails.Append("Volcanism. ");
+
+                    // have some ring?
+                    if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
+                    {
+                        if (sn.ScanData.Rings.Count() > 1)
                         {
-                            bdDist.AppendFormat("Main Star");
-                        }
-                        else if (sn.ScanData.nSemiMajorAxis.HasValue)
-                        {
-                            if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > JournalScan.oneAU_m / 10)
-                                bdDist.AppendFormat("{0:0.00}AU ({1:0.00}ls)", (sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m);
-                            else
-                                bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
-                        }
-
-                        // display stars and stellar bodies mass
-                        if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass: " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
-
-                        // habitable zone for stars - do not display for black holes.
-                        if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                            bdDetails.AppendFormat("Habitable Zone: {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
-
-                        // tell us that a bodie is landable, and shows its gravity
-                        if (sn.ScanData.IsLandable == true)
-                        {
-                            string Gg = "";
-
-                            if (sn.ScanData.nSurfaceGravity.HasValue)
-                            {
-                                double? g = sn.ScanData.nSurfaceGravity / JournalScan.oneGee_m_s2;
-                                Gg = " (G: " + g.Value.ToString("N1") + ")";
-                            }
-
-                            bdDetails.Append("Landable" + Gg + ". ");
-                        }
-
-                        // append the terraformable state to the planet class
-                        if (sn.ScanData.Terraformable == true)
-                            bdDetails.Append("Terraformable. ");
-
-                        // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism != null)
-                            bdDetails.Append("Volcanism. ");
-
-                        // have some ring?
-                        if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
-                        {
-                            if (sn.ScanData.Rings.Count() > 1)
-                            {
-                                bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings: ");
-                            }
-                            else
-                            {
-                                bdDetails.Append("Has 1 ring: ");
-                            }
-
-                            for (int i = 0; i < sn.ScanData.Rings.Length; i++)
-                            {
-                                string RingName = sn.ScanData.Rings[i].Name;
-                                bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
-                                bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
-                            }
-                        }
-
-                        // print the main atmospheric composition
-                        if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
-                            bdDetails.Append(sn.ScanData.Atmosphere + ". ");
-
-                        // materials                        
-                        if (sn.ScanData.HasMaterials)
-                        {
-                            string ret = "";
-                            foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
-                            {
-                                MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(mat.Key);
-                                if (mc != null && MaterialCommodityData.IsJumponium(mc.name))
-                                    ret = ret.AppendPrePad(mc.name, ", ");
-                            }
-
-                            if (ret.Length > 0)
-                                bdDetails.Append("\n" + "This body contains: " + ret );
-                        }
-
-                        int value = sn.ScanData.EstimatedValue;
-                        bdDetails.Append("\nValue " + value.ToString("N0"));
-
-                        //if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
-                        //    bdDetails.Append("\n" + "Discovered by: " + sn.ScanData.EDSMDiscoveryCommander + " on " + sn.ScanData.EDSMDiscoveryUTC.ToStringYearFirst());
-
-                        Image img = null;
-
-                        if (sn.ScanData.IsStar == true)
-                        {
-                            img = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
+                            bdDetails.Append("Has " + sn.ScanData.Rings.Count() + " rings: ");
                         }
                         else
                         {
-                            img = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
+                            bdDetails.Append("Has 1 ring: ");
                         }
 
-                        dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
-
-                        DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
-
-                        cur.Tag = img;
-                        cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+                        for (int i = 0; i < sn.ScanData.Rings.Length; i++)
+                        {
+                            string RingName = sn.ScanData.Rings[i].Name;
+                            bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
+                            bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+                        }
                     }
+
+                    // print the main atmospheric composition
+                    if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
+                        bdDetails.Append(sn.ScanData.Atmosphere + ". ");
+
+                    // materials                        
+                    if (sn.ScanData.HasMaterials)
+                    {
+                        string ret = "";
+                        foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
+                        {
+                            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(mat.Key);
+                            if (mc != null && MaterialCommodityData.IsJumponium(mc.name))
+                                ret = ret.AppendPrePad(mc.name, ", ");
+                        }
+
+                        if (ret.Length > 0)
+                            bdDetails.Append("\n" + "This body contains: " + ret);
+                    }
+
+                    int value = sn.ScanData.EstimatedValue;
+                    bdDetails.Append("\nValue " + value.ToString("N0"));
+
+                    //if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
+                    //    bdDetails.Append("\n" + "Discovered by: " + sn.ScanData.EDSMDiscoveryCommander + " on " + sn.ScanData.EDSMDiscoveryUTC.ToStringYearFirst());
+
+                    Image img = null;
+
+                    if (sn.ScanData.IsStar == true)
+                    {
+                        img = sn.ScanData.GetStarTypeImage(); // if is a star, use the Star image
+                    }
+                    else
+                    {
+                        img = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
+                    }
+
+                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+
+                    DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+
+                    cur.Tag = img;
+                    cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
+                            sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                 }
-
-                // display total scan values
-                SetControlText("Scan Summary for " + last_sn.system.Name + ". " + BuildScanValue(last_sn));
-
-                if (firstdisplayedrow >= 0)
-                    dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
             }
+
+            SetControlText("Scan Summary for " + scannode.system.Name + ". " + BuildScanValue(scannode));
+
+            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
+                dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
         }
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
