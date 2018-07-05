@@ -852,6 +852,11 @@ namespace EliteDangerousCore
              { "paintjob_viper_mkiv_tactical_grey", new ShipModule(-1,0, "Paintjob Viper MK IV Tactical Grey", VanityType ) },
              { "paintjob_viper_mkiv_tactical_green", new ShipModule(-1,0, "Paintjob Viper MK IV Tactical Green", VanityType ) },
              { "paintjob_viper_mkiv_squadron_black", new ShipModule(-1,0, "Paintjob Viper MK IV Squadron Black", VanityType ) },
+
+             { "decal_trade_dealer", new ShipModule(-1,0, "Decal Trade Dealer", VanityType ) },
+             { "decal_combat_novice", new ShipModule(-1,0, "Decal Combat Novice", VanityType ) },
+             { "decal_trade_merchant", new ShipModule(-1,0, "Decal Trade Merchant", VanityType ) },
+             { "nameplate_shipname_black", new ShipModule(-1,0, "Nameplate Shipname Black", VanityType ) },
           };
 
         #endregion

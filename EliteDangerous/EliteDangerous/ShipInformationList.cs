@@ -194,11 +194,14 @@ namespace EliteDangerousCore
             VerifyList();
         }
 
-        public void Resurrect()
+        public void Resurrect(bool abandonedship)
         {
             if (HaveCurrentShip)           // resurrect always in ship
             {
-                Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
+                if (abandonedship)
+                    Ships[currentid] = Ships[currentid].Destroyed();
+                else
+                    Ships[currentid] = Ships[currentid].SetSubVehicle(ShipInformation.SubVehicleType.None);
             }
             VerifyList();
         }
