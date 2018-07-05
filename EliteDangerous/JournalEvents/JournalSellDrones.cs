@@ -25,7 +25,7 @@ namespace EliteDangerousCore.JournalEvents
     //•	SellPrice
     //•	TotalSale
     [JournalEntryType(JournalTypeEnum.SellDrones)]
-    public class JournalSellDrones : JournalEntry, ILedgerJournalEntry
+    public class JournalSellDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalSellDrones(JObject evt) : base(evt, JournalTypeEnum.SellDrones)
         {
@@ -39,6 +39,11 @@ namespace EliteDangerousCore.JournalEvents
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
 
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodities.CommodityCategory, "drones", -Count, 0, conn);
+        }
+
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " drones", TotalSale);
@@ -46,8 +51,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",Type, "Count:" , Count , "Each:; cr;N0" , SellPrice, "Amount:; cr;N0" , TotalSale);
+
+            info = BaseUtils.FieldBuilder.Build("", Type, "Count:", Count, "Each:; cr;N0", SellPrice, "Amount:; cr;N0", TotalSale);
             detailed = "";
         }
     }
