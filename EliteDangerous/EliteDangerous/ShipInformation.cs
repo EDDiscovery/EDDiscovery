@@ -527,6 +527,15 @@ namespace EliteDangerousCore
             return sm;
         }
 
+        public ShipInformation Destroyed()
+        {
+            ShipInformation sm = this.ShallowClone();
+            sm.State = ShipState.Destroyed;
+            sm.SubVehicle = SubVehicleType.None;
+            sm.ClearStorage();
+            return sm;
+        }
+
         public ShipInformation Store(string station, string system)
         {
             ShipInformation sm = this.ShallowClone();
