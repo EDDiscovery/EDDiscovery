@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
 {
-    public partial class SetNoteForm : Form
+    public partial class SetNoteForm : ExtendedControls.DraggableForm
     {
         private EDDiscoveryForm _discoveryForm;
         public HistoryEntry HistoryEntry { get; private set; }
@@ -35,7 +35,10 @@ namespace EDDiscovery.Forms
             this.labelDetails.Text = EventDescription;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            panelTop.Visible = panelTop.Enabled = !winborder;
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelTimestamp, labelSystem, labelSummary, labelDetails });
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -49,6 +52,21 @@ namespace EDDiscovery.Forms
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void panelTop_MouseDown(object sender, MouseEventArgs e)
+        {
+            OnCaptionMouseDown((Control)sender, e);
+        }
+
+        private void panel_minimize_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

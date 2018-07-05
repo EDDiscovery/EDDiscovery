@@ -54,7 +54,7 @@
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(0, 26);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(1005, 504);
+            this.panelOuter.Size = new System.Drawing.Size(885, 504);
             this.panelOuter.TabIndex = 0;
             // 
             // panelVScrollMain
@@ -66,7 +66,7 @@
             this.panelVScrollMain.Location = new System.Drawing.Point(0, 0);
             this.panelVScrollMain.Name = "panelVScrollMain";
             this.panelVScrollMain.ScrollBarWidth = 20;
-            this.panelVScrollMain.Size = new System.Drawing.Size(1003, 502);
+            this.panelVScrollMain.Size = new System.Drawing.Size(883, 502);
             this.panelVScrollMain.TabIndex = 0;
             this.panelVScrollMain.VerticalScrollBarDockRight = true;
             // 
@@ -91,7 +91,7 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(983, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(863, 0);
             this.vScrollBarCustom1.Maximum = -458;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -117,7 +117,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1005, 26);
+            this.panelTop.Size = new System.Drawing.Size(885, 26);
             this.panelTop.TabIndex = 31;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
@@ -125,7 +125,7 @@
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(982, 0);
+            this.panel_close.Location = new System.Drawing.Point(862, 0);
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
             this.panel_close.Selectable = false;
@@ -138,7 +138,7 @@
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(952, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(832, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
             this.panel_minimize.Selectable = false;
@@ -166,13 +166,13 @@
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelOK.Location = new System.Drawing.Point(0, 530);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(1005, 30);
+            this.panelOK.Size = new System.Drawing.Size(885, 30);
             this.panelOK.TabIndex = 32;
             // 
             // buttonExtGlobals
             // 
             this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtGlobals.Location = new System.Drawing.Point(-79, 3);
+            this.buttonExtGlobals.Location = new System.Drawing.Point(-199, 3);
             this.buttonExtGlobals.Name = "buttonExtGlobals";
             this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
             this.buttonExtGlobals.TabIndex = 7;
@@ -182,9 +182,9 @@
             // buttonExtCancel
             // 
             this.buttonExtCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtCancel.Location = new System.Drawing.Point(845, 4);
+            this.buttonExtCancel.Location = new System.Drawing.Point(666, 5);
             this.buttonExtCancel.Name = "buttonExtCancel";
-            this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCancel.TabIndex = 7;
             this.buttonExtCancel.Text = "Cancel";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
@@ -193,9 +193,9 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(926, 4);
+            this.buttonOK.Location = new System.Drawing.Point(782, 5);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 7;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -205,7 +205,7 @@
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(0, 560);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(1005, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(885, 22);
             this.statusStripCustom.TabIndex = 32;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
@@ -213,7 +213,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1005, 582);
+            this.ClientSize = new System.Drawing.Size(885, 582);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);

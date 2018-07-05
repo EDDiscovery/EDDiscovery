@@ -53,10 +53,8 @@ namespace EDDiscovery.Forms
             if (framed)
             {
                 // hide the caption panel, and resize the bottom panel to fit.
-                var yoff = panel1.Location.Y - pnlCaption.Location.Y;
+                var yoff = panelMain.Location.Y - pnlCaption.Location.Y;
                 pnlCaption.Visible = false;
-                panel1.Location = pnlCaption.Location;
-                panel1.Height += yoff;
             }
             else
             {
@@ -79,6 +77,8 @@ namespace EDDiscovery.Forms
                 if (string.IsNullOrEmpty(_release.MsiInstallerLink))
                     buttonMsiInstaller.Visible = false;
             }
+
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { lblCaption });
 
             base.OnLoad(e);
         }

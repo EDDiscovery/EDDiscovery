@@ -43,133 +43,234 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBoxPos = new System.Windows.Forms.TextBox();
-            this.textBoxDir = new System.Windows.Forms.TextBox();
-            this.textBoxZoom = new System.Windows.Forms.TextBox();
-            this.textBoxFlyTime = new System.Windows.Forms.TextBox();
-            this.textBoxPanTime = new System.Windows.Forms.TextBox();
-            this.textBoxWait = new System.Windows.Forms.TextBox();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.textBoxMessage = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.textBoxZoomTime = new System.Windows.Forms.TextBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.textBoxMsgTime = new System.Windows.Forms.TextBox();
-            this.checkBoxWaitForSlew = new System.Windows.Forms.CheckBox();
-            this.checkBoxPos = new System.Windows.Forms.CheckBox();
-            this.checkBoxPan = new System.Windows.Forms.CheckBox();
-            this.checkBoxChangeZoom = new System.Windows.Forms.CheckBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.checkBoxWaitComplete = new System.Windows.Forms.CheckBox();
-            this.checkBoxDisplayMessageWhenComplete = new System.Windows.Forms.CheckBox();
+            this.labelGoto = new System.Windows.Forms.Label();
+            this.labelPAt = new System.Windows.Forms.Label();
+            this.labelTimeChange = new System.Windows.Forms.Label();
+            this.labelTimeDir = new System.Windows.Forms.Label();
+            this.labelZoom = new System.Windows.Forms.Label();
+            this.textBoxPos = new ExtendedControls.TextBoxBorder();
+            this.textBoxDir = new ExtendedControls.TextBoxBorder();
+            this.textBoxZoom = new ExtendedControls.TextBoxBorder();
+            this.textBoxFlyTime = new ExtendedControls.TextBoxBorder();
+            this.textBoxPanTime = new ExtendedControls.TextBoxBorder();
+            this.textBoxWait = new ExtendedControls.TextBoxBorder();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.textBoxMessage = new ExtendedControls.TextBoxBorder();
+            this.labelMsg = new System.Windows.Forms.Label();
+            this.labelWait = new System.Windows.Forms.Label();
+            this.textBoxZoomTime = new ExtendedControls.TextBoxBorder();
+            this.labelZoomTime = new System.Windows.Forms.Label();
+            this.labelMsgTime = new System.Windows.Forms.Label();
+            this.textBoxMsgTime = new ExtendedControls.TextBoxBorder();
+            this.checkBoxWaitForSlew = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxPos = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxPan = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxChangeZoom = new ExtendedControls.CheckBoxCustom();
+            this.labelTMEInfo = new System.Windows.Forms.Label();
+            this.checkBoxWaitComplete = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxDisplayMessageWhenComplete = new ExtendedControls.CheckBoxCustom();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.label_index = new System.Windows.Forms.Label();
+            this.panelMain = new System.Windows.Forms.Panel();
+            this.panelTop.SuspendLayout();
+            this.panelMain.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label1
+            // labelGoto
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 49);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Go to";
+            this.labelGoto.AutoSize = true;
+            this.labelGoto.Location = new System.Drawing.Point(3, 52);
+            this.labelGoto.Name = "labelGoto";
+            this.labelGoto.Size = new System.Drawing.Size(33, 13);
+            this.labelGoto.TabIndex = 0;
+            this.labelGoto.Text = "Go to";
             // 
-            // label2
+            // labelPAt
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(26, 112);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(58, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Pointing At";
+            this.labelPAt.AutoSize = true;
+            this.labelPAt.Location = new System.Drawing.Point(3, 115);
+            this.labelPAt.Name = "labelPAt";
+            this.labelPAt.Size = new System.Drawing.Size(58, 13);
+            this.labelPAt.TabIndex = 0;
+            this.labelPAt.Text = "Pointing At";
             // 
-            // label3
+            // labelTimeChange
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(26, 76);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(137, 13);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Time to take to change pos";
+            this.labelTimeChange.AutoSize = true;
+            this.labelTimeChange.Location = new System.Drawing.Point(2, 79);
+            this.labelTimeChange.Name = "labelTimeChange";
+            this.labelTimeChange.Size = new System.Drawing.Size(137, 13);
+            this.labelTimeChange.TabIndex = 0;
+            this.labelTimeChange.Text = "Time to take to change pos";
             // 
-            // label4
+            // labelTimeDir
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(26, 142);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(160, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Time to take to change direction";
+            this.labelTimeDir.AutoSize = true;
+            this.labelTimeDir.Location = new System.Drawing.Point(3, 145);
+            this.labelTimeDir.Name = "labelTimeDir";
+            this.labelTimeDir.Size = new System.Drawing.Size(160, 13);
+            this.labelTimeDir.TabIndex = 0;
+            this.labelTimeDir.Text = "Time to take to change direction";
             // 
-            // label6
+            // labelZoom
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(26, 182);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(34, 13);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Zoom";
+            this.labelZoom.AutoSize = true;
+            this.labelZoom.Location = new System.Drawing.Point(3, 185);
+            this.labelZoom.Name = "labelZoom";
+            this.labelZoom.Size = new System.Drawing.Size(34, 13);
+            this.labelZoom.TabIndex = 0;
+            this.labelZoom.Text = "Zoom";
             // 
             // textBoxPos
             // 
-            this.textBoxPos.Location = new System.Drawing.Point(196, 49);
+            this.textBoxPos.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxPos.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxPos.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxPos.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxPos.BorderColorScaling = 0.5F;
+            this.textBoxPos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxPos.ClearOnFirstChar = false;
+            this.textBoxPos.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxPos.InErrorCondition = false;
+            this.textBoxPos.Location = new System.Drawing.Point(273, 52);
+            this.textBoxPos.Multiline = false;
             this.textBoxPos.Name = "textBoxPos";
             this.textBoxPos.ReadOnly = true;
+            this.textBoxPos.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxPos.SelectionLength = 0;
+            this.textBoxPos.SelectionStart = 0;
             this.textBoxPos.Size = new System.Drawing.Size(186, 20);
             this.textBoxPos.TabIndex = 1;
+            this.textBoxPos.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxPos.WordWrap = true;
             // 
             // textBoxDir
             // 
-            this.textBoxDir.Location = new System.Drawing.Point(196, 112);
+            this.textBoxDir.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxDir.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxDir.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxDir.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxDir.BorderColorScaling = 0.5F;
+            this.textBoxDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxDir.ClearOnFirstChar = false;
+            this.textBoxDir.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxDir.InErrorCondition = false;
+            this.textBoxDir.Location = new System.Drawing.Point(273, 115);
+            this.textBoxDir.Multiline = false;
             this.textBoxDir.Name = "textBoxDir";
             this.textBoxDir.ReadOnly = true;
+            this.textBoxDir.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxDir.SelectionLength = 0;
+            this.textBoxDir.SelectionStart = 0;
             this.textBoxDir.Size = new System.Drawing.Size(186, 20);
             this.textBoxDir.TabIndex = 1;
+            this.textBoxDir.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxDir.WordWrap = true;
             // 
             // textBoxZoom
             // 
-            this.textBoxZoom.Location = new System.Drawing.Point(196, 182);
+            this.textBoxZoom.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxZoom.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxZoom.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxZoom.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxZoom.BorderColorScaling = 0.5F;
+            this.textBoxZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxZoom.ClearOnFirstChar = false;
+            this.textBoxZoom.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxZoom.InErrorCondition = false;
+            this.textBoxZoom.Location = new System.Drawing.Point(273, 185);
+            this.textBoxZoom.Multiline = false;
             this.textBoxZoom.Name = "textBoxZoom";
             this.textBoxZoom.ReadOnly = true;
+            this.textBoxZoom.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxZoom.SelectionLength = 0;
+            this.textBoxZoom.SelectionStart = 0;
             this.textBoxZoom.Size = new System.Drawing.Size(100, 20);
             this.textBoxZoom.TabIndex = 1;
+            this.textBoxZoom.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxZoom.WordWrap = true;
             // 
             // textBoxFlyTime
             // 
-            this.textBoxFlyTime.Location = new System.Drawing.Point(196, 76);
+            this.textBoxFlyTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxFlyTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxFlyTime.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxFlyTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFlyTime.BorderColorScaling = 0.5F;
+            this.textBoxFlyTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxFlyTime.ClearOnFirstChar = false;
+            this.textBoxFlyTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFlyTime.InErrorCondition = false;
+            this.textBoxFlyTime.Location = new System.Drawing.Point(273, 79);
+            this.textBoxFlyTime.Multiline = false;
             this.textBoxFlyTime.Name = "textBoxFlyTime";
+            this.textBoxFlyTime.ReadOnly = false;
+            this.textBoxFlyTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxFlyTime.SelectionLength = 0;
+            this.textBoxFlyTime.SelectionStart = 0;
             this.textBoxFlyTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxFlyTime.TabIndex = 1;
+            this.textBoxFlyTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxFlyTime.WordWrap = true;
             this.textBoxFlyTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxPanTime
             // 
-            this.textBoxPanTime.Location = new System.Drawing.Point(196, 142);
+            this.textBoxPanTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxPanTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxPanTime.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxPanTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxPanTime.BorderColorScaling = 0.5F;
+            this.textBoxPanTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxPanTime.ClearOnFirstChar = false;
+            this.textBoxPanTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxPanTime.InErrorCondition = false;
+            this.textBoxPanTime.Location = new System.Drawing.Point(273, 145);
+            this.textBoxPanTime.Multiline = false;
             this.textBoxPanTime.Name = "textBoxPanTime";
+            this.textBoxPanTime.ReadOnly = false;
+            this.textBoxPanTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxPanTime.SelectionLength = 0;
+            this.textBoxPanTime.SelectionStart = 0;
             this.textBoxPanTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxPanTime.TabIndex = 2;
+            this.textBoxPanTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxPanTime.WordWrap = true;
             this.textBoxPanTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // textBoxWait
             // 
-            this.textBoxWait.Location = new System.Drawing.Point(196, 12);
+            this.textBoxWait.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxWait.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxWait.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxWait.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxWait.BorderColorScaling = 0.5F;
+            this.textBoxWait.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxWait.ClearOnFirstChar = false;
+            this.textBoxWait.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxWait.InErrorCondition = false;
+            this.textBoxWait.Location = new System.Drawing.Point(273, 17);
+            this.textBoxWait.Multiline = false;
             this.textBoxWait.Name = "textBoxWait";
+            this.textBoxWait.ReadOnly = false;
+            this.textBoxWait.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxWait.SelectionLength = 0;
+            this.textBoxWait.SelectionStart = 0;
             this.textBoxWait.Size = new System.Drawing.Size(100, 20);
             this.textBoxWait.TabIndex = 0;
+            this.textBoxWait.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxWait.WordWrap = true;
             this.textBoxWait.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // buttonOK
             // 
-            this.buttonOK.Location = new System.Drawing.Point(302, 391);
+            this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOK.Location = new System.Drawing.Point(458, 377);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 5;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -177,9 +278,10 @@ namespace EDDiscovery.Forms
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(198, 391);
+            this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.Location = new System.Drawing.Point(335, 377);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
+            this.buttonCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonCancel.TabIndex = 6;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -187,207 +289,364 @@ namespace EDDiscovery.Forms
             // 
             // textBoxMessage
             // 
-            this.textBoxMessage.Location = new System.Drawing.Point(196, 248);
+            this.textBoxMessage.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxMessage.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxMessage.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxMessage.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxMessage.BorderColorScaling = 0.5F;
+            this.textBoxMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxMessage.ClearOnFirstChar = false;
+            this.textBoxMessage.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxMessage.InErrorCondition = false;
+            this.textBoxMessage.Location = new System.Drawing.Point(273, 251);
+            this.textBoxMessage.Multiline = false;
             this.textBoxMessage.Name = "textBoxMessage";
+            this.textBoxMessage.ReadOnly = false;
+            this.textBoxMessage.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxMessage.SelectionLength = 0;
+            this.textBoxMessage.SelectionStart = 0;
             this.textBoxMessage.Size = new System.Drawing.Size(186, 20);
             this.textBoxMessage.TabIndex = 3;
+            this.textBoxMessage.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxMessage.WordWrap = true;
             this.textBoxMessage.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // label7
+            // labelMsg
             // 
-            this.label7.Location = new System.Drawing.Point(25, 248);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(132, 20);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Message to display";
+            this.labelMsg.AutoSize = true;
+            this.labelMsg.Location = new System.Drawing.Point(2, 251);
+            this.labelMsg.Name = "labelMsg";
+            this.labelMsg.Size = new System.Drawing.Size(97, 13);
+            this.labelMsg.TabIndex = 0;
+            this.labelMsg.Text = "Message to display";
             // 
-            // label8
+            // labelWait
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(25, 12);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(150, 13);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "Wait for this time before action";
+            this.labelWait.AutoSize = true;
+            this.labelWait.Location = new System.Drawing.Point(3, 17);
+            this.labelWait.Name = "labelWait";
+            this.labelWait.Size = new System.Drawing.Size(150, 13);
+            this.labelWait.TabIndex = 0;
+            this.labelWait.Text = "Wait for this time before action";
             // 
             // textBoxZoomTime
             // 
-            this.textBoxZoomTime.Location = new System.Drawing.Point(196, 208);
+            this.textBoxZoomTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxZoomTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxZoomTime.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxZoomTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxZoomTime.BorderColorScaling = 0.5F;
+            this.textBoxZoomTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxZoomTime.ClearOnFirstChar = false;
+            this.textBoxZoomTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxZoomTime.InErrorCondition = false;
+            this.textBoxZoomTime.Location = new System.Drawing.Point(273, 211);
+            this.textBoxZoomTime.Multiline = false;
             this.textBoxZoomTime.Name = "textBoxZoomTime";
+            this.textBoxZoomTime.ReadOnly = false;
+            this.textBoxZoomTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxZoomTime.SelectionLength = 0;
+            this.textBoxZoomTime.SelectionStart = 0;
             this.textBoxZoomTime.Size = new System.Drawing.Size(100, 20);
             this.textBoxZoomTime.TabIndex = 2;
+            this.textBoxZoomTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxZoomTime.WordWrap = true;
             this.textBoxZoomTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
-            // label11
+            // labelZoomTime
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(26, 208);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(108, 13);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "Time to take to Zoom";
+            this.labelZoomTime.AutoSize = true;
+            this.labelZoomTime.Location = new System.Drawing.Point(3, 211);
+            this.labelZoomTime.Name = "labelZoomTime";
+            this.labelZoomTime.Size = new System.Drawing.Size(108, 13);
+            this.labelZoomTime.TabIndex = 0;
+            this.labelZoomTime.Text = "Time to take to Zoom";
             // 
-            // label12
+            // labelMsgTime
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(26, 280);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(122, 13);
-            this.label12.TabIndex = 0;
-            this.label12.Text = "Message on screen time";
+            this.labelMsgTime.AutoSize = true;
+            this.labelMsgTime.Location = new System.Drawing.Point(3, 286);
+            this.labelMsgTime.Name = "labelMsgTime";
+            this.labelMsgTime.Size = new System.Drawing.Size(122, 13);
+            this.labelMsgTime.TabIndex = 0;
+            this.labelMsgTime.Text = "Message on screen time";
             // 
             // textBoxMsgTime
             // 
-            this.textBoxMsgTime.Location = new System.Drawing.Point(195, 277);
+            this.textBoxMsgTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxMsgTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxMsgTime.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxMsgTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxMsgTime.BorderColorScaling = 0.5F;
+            this.textBoxMsgTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxMsgTime.ClearOnFirstChar = false;
+            this.textBoxMsgTime.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxMsgTime.InErrorCondition = false;
+            this.textBoxMsgTime.Location = new System.Drawing.Point(272, 280);
+            this.textBoxMsgTime.Multiline = false;
             this.textBoxMsgTime.Name = "textBoxMsgTime";
+            this.textBoxMsgTime.ReadOnly = false;
+            this.textBoxMsgTime.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxMsgTime.SelectionLength = 0;
+            this.textBoxMsgTime.SelectionStart = 0;
             this.textBoxMsgTime.Size = new System.Drawing.Size(101, 20);
             this.textBoxMsgTime.TabIndex = 3;
+            this.textBoxMsgTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxMsgTime.WordWrap = true;
             this.textBoxMsgTime.TextChanged += new System.EventHandler(this.textBox_TextChanged);
             // 
             // checkBoxWaitForSlew
             // 
             this.checkBoxWaitForSlew.AutoSize = true;
-            this.checkBoxWaitForSlew.Location = new System.Drawing.Point(302, 15);
+            this.checkBoxWaitForSlew.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxWaitForSlew.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxWaitForSlew.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxWaitForSlew.FontNerfReduction = 0.5F;
+            this.checkBoxWaitForSlew.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxWaitForSlew.Location = new System.Drawing.Point(376, 20);
+            this.checkBoxWaitForSlew.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxWaitForSlew.Name = "checkBoxWaitForSlew";
             this.checkBoxWaitForSlew.Size = new System.Drawing.Size(87, 17);
             this.checkBoxWaitForSlew.TabIndex = 7;
             this.checkBoxWaitForSlew.Text = "Wait for slew";
+            this.checkBoxWaitForSlew.TickBoxReductionSize = 10;
             this.checkBoxWaitForSlew.UseVisualStyleBackColor = true;
             this.checkBoxWaitForSlew.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
             // 
             // checkBoxPos
             // 
             this.checkBoxPos.AutoSize = true;
-            this.checkBoxPos.Location = new System.Drawing.Point(302, 80);
+            this.checkBoxPos.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxPos.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxPos.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxPos.FontNerfReduction = 0.5F;
+            this.checkBoxPos.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxPos.Location = new System.Drawing.Point(379, 83);
+            this.checkBoxPos.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPos.Name = "checkBoxPos";
             this.checkBoxPos.Size = new System.Drawing.Size(56, 17);
             this.checkBoxPos.TabIndex = 7;
             this.checkBoxPos.Text = "Go To";
+            this.checkBoxPos.TickBoxReductionSize = 10;
             this.checkBoxPos.UseVisualStyleBackColor = true;
             this.checkBoxPos.CheckedChanged += new System.EventHandler(this.checkBoxGoTo_CheckedChanged);
             // 
             // checkBoxPan
             // 
             this.checkBoxPan.AutoSize = true;
-            this.checkBoxPan.Location = new System.Drawing.Point(302, 145);
+            this.checkBoxPan.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxPan.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxPan.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxPan.FontNerfReduction = 0.5F;
+            this.checkBoxPan.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxPan.Location = new System.Drawing.Point(379, 148);
+            this.checkBoxPan.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPan.Name = "checkBoxPan";
             this.checkBoxPan.Size = new System.Drawing.Size(79, 17);
             this.checkBoxPan.TabIndex = 7;
             this.checkBoxPan.Text = "Change Dir";
+            this.checkBoxPan.TickBoxReductionSize = 10;
             this.checkBoxPan.UseVisualStyleBackColor = true;
             this.checkBoxPan.CheckedChanged += new System.EventHandler(this.checkBoxChangeDir_CheckedChanged);
             // 
             // checkBoxChangeZoom
             // 
             this.checkBoxChangeZoom.AutoSize = true;
-            this.checkBoxChangeZoom.Location = new System.Drawing.Point(302, 211);
+            this.checkBoxChangeZoom.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxChangeZoom.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxChangeZoom.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxChangeZoom.FontNerfReduction = 0.5F;
+            this.checkBoxChangeZoom.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxChangeZoom.Location = new System.Drawing.Point(379, 214);
+            this.checkBoxChangeZoom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxChangeZoom.Name = "checkBoxChangeZoom";
             this.checkBoxChangeZoom.Size = new System.Drawing.Size(93, 17);
             this.checkBoxChangeZoom.TabIndex = 7;
             this.checkBoxChangeZoom.Text = "Change Zoom";
+            this.checkBoxChangeZoom.TickBoxReductionSize = 10;
             this.checkBoxChangeZoom.UseVisualStyleBackColor = true;
             this.checkBoxChangeZoom.CheckedChanged += new System.EventHandler(this.checkBoxChangeZoom_CheckedChanged);
             // 
-            // label13
+            // labelTMEInfo
             // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(303, 284);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(73, 13);
-            this.label13.TabIndex = 0;
-            this.label13.Text = "0=default time";
+            this.labelTMEInfo.AutoSize = true;
+            this.labelTMEInfo.Location = new System.Drawing.Point(380, 287);
+            this.labelTMEInfo.Name = "labelTMEInfo";
+            this.labelTMEInfo.Size = new System.Drawing.Size(73, 13);
+            this.labelTMEInfo.TabIndex = 0;
+            this.labelTMEInfo.Text = "0=default time";
             // 
             // checkBoxWaitComplete
             // 
             this.checkBoxWaitComplete.AutoSize = true;
-            this.checkBoxWaitComplete.Location = new System.Drawing.Point(198, 317);
+            this.checkBoxWaitComplete.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxWaitComplete.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxWaitComplete.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxWaitComplete.FontNerfReduction = 0.5F;
+            this.checkBoxWaitComplete.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxWaitComplete.Location = new System.Drawing.Point(272, 316);
+            this.checkBoxWaitComplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxWaitComplete.Name = "checkBoxWaitComplete";
             this.checkBoxWaitComplete.Size = new System.Drawing.Size(158, 17);
             this.checkBoxWaitComplete.TabIndex = 7;
             this.checkBoxWaitComplete.Text = "Wait for actions to complete";
+            this.checkBoxWaitComplete.TickBoxReductionSize = 10;
             this.checkBoxWaitComplete.UseVisualStyleBackColor = true;
             this.checkBoxWaitComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
             // 
             // checkBoxDisplayMessageWhenComplete
             // 
             this.checkBoxDisplayMessageWhenComplete.AutoSize = true;
-            this.checkBoxDisplayMessageWhenComplete.Location = new System.Drawing.Point(195, 349);
+            this.checkBoxDisplayMessageWhenComplete.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxDisplayMessageWhenComplete.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxDisplayMessageWhenComplete.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxDisplayMessageWhenComplete.FontNerfReduction = 0.5F;
+            this.checkBoxDisplayMessageWhenComplete.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxDisplayMessageWhenComplete.Location = new System.Drawing.Point(272, 339);
+            this.checkBoxDisplayMessageWhenComplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxDisplayMessageWhenComplete.Name = "checkBoxDisplayMessageWhenComplete";
             this.checkBoxDisplayMessageWhenComplete.Size = new System.Drawing.Size(174, 17);
             this.checkBoxDisplayMessageWhenComplete.TabIndex = 7;
             this.checkBoxDisplayMessageWhenComplete.Text = "Display Message with complete";
+            this.checkBoxDisplayMessageWhenComplete.TickBoxReductionSize = 10;
             this.checkBoxDisplayMessageWhenComplete.UseVisualStyleBackColor = true;
             this.checkBoxDisplayMessageWhenComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.panel_close);
+            this.panelTop.Controls.Add(this.panel_minimize);
+            this.panelTop.Controls.Add(this.label_index);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(571, 32);
+            this.panelTop.TabIndex = 32;
+            this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.Location = new System.Drawing.Point(548, 0);
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.Selectable = false;
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 27;
+            this.panel_close.TabStop = false;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
+            // 
+            // panel_minimize
+            // 
+            this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.Location = new System.Drawing.Point(518, 0);
+            this.panel_minimize.Name = "panel_minimize";
+            this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.Selectable = false;
+            this.panel_minimize.Size = new System.Drawing.Size(24, 24);
+            this.panel_minimize.TabIndex = 26;
+            this.panel_minimize.TabStop = false;
+            this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
+            // 
+            // label_index
+            // 
+            this.label_index.AutoSize = true;
+            this.label_index.Location = new System.Drawing.Point(3, 8);
+            this.label_index.Name = "label_index";
+            this.label_index.Size = new System.Drawing.Size(67, 13);
+            this.label_index.TabIndex = 23;
+            this.label_index.Text = "Record Step";
+            this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
+            // 
+            // panelMain
+            // 
+            this.panelMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelMain.Controls.Add(this.labelGoto);
+            this.panelMain.Controls.Add(this.labelPAt);
+            this.panelMain.Controls.Add(this.checkBoxWaitForSlew);
+            this.panelMain.Controls.Add(this.checkBoxChangeZoom);
+            this.panelMain.Controls.Add(this.textBoxWait);
+            this.panelMain.Controls.Add(this.labelZoom);
+            this.panelMain.Controls.Add(this.labelWait);
+            this.panelMain.Controls.Add(this.checkBoxPan);
+            this.panelMain.Controls.Add(this.labelZoomTime);
+            this.panelMain.Controls.Add(this.checkBoxPos);
+            this.panelMain.Controls.Add(this.labelMsgTime);
+            this.panelMain.Controls.Add(this.checkBoxDisplayMessageWhenComplete);
+            this.panelMain.Controls.Add(this.labelTimeChange);
+            this.panelMain.Controls.Add(this.checkBoxWaitComplete);
+            this.panelMain.Controls.Add(this.labelTimeDir);
+            this.panelMain.Controls.Add(this.labelTMEInfo);
+            this.panelMain.Controls.Add(this.buttonCancel);
+            this.panelMain.Controls.Add(this.labelMsg);
+            this.panelMain.Controls.Add(this.buttonOK);
+            this.panelMain.Controls.Add(this.textBoxPos);
+            this.panelMain.Controls.Add(this.textBoxMsgTime);
+            this.panelMain.Controls.Add(this.textBoxDir);
+            this.panelMain.Controls.Add(this.textBoxMessage);
+            this.panelMain.Controls.Add(this.textBoxFlyTime);
+            this.panelMain.Controls.Add(this.textBoxZoom);
+            this.panelMain.Controls.Add(this.textBoxZoomTime);
+            this.panelMain.Controls.Add(this.textBoxPanTime);
+            this.panelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelMain.Location = new System.Drawing.Point(0, 32);
+            this.panelMain.Name = "panelMain";
+            this.panelMain.Size = new System.Drawing.Size(571, 418);
+            this.panelMain.TabIndex = 33;
             // 
             // RecordStep
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(412, 426);
-            this.Controls.Add(this.checkBoxChangeZoom);
-            this.Controls.Add(this.checkBoxPan);
-            this.Controls.Add(this.checkBoxPos);
-            this.Controls.Add(this.checkBoxDisplayMessageWhenComplete);
-            this.Controls.Add(this.checkBoxWaitComplete);
-            this.Controls.Add(this.checkBoxWaitForSlew);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.textBoxMsgTime);
-            this.Controls.Add(this.textBoxMessage);
-            this.Controls.Add(this.textBoxWait);
-            this.Controls.Add(this.textBoxZoomTime);
-            this.Controls.Add(this.textBoxPanTime);
-            this.Controls.Add(this.textBoxZoom);
-            this.Controls.Add(this.textBoxFlyTime);
-            this.Controls.Add(this.textBoxDir);
-            this.Controls.Add(this.textBoxPos);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(571, 450);
+            this.Controls.Add(this.panelMain);
+            this.Controls.Add(this.panelTop);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "RecordStep";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "RecordStep";
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
+            this.panelMain.ResumeLayout(false);
+            this.panelMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBoxPos;
-        private System.Windows.Forms.TextBox textBoxDir;
-        private System.Windows.Forms.TextBox textBoxZoom;
-        private System.Windows.Forms.TextBox textBoxFlyTime;
-        private System.Windows.Forms.TextBox textBoxPanTime;
-        private System.Windows.Forms.TextBox textBoxWait;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.TextBox textBoxMessage;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBoxZoomTime;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBoxMsgTime;
-        private System.Windows.Forms.CheckBox checkBoxWaitForSlew;
-        private System.Windows.Forms.CheckBox checkBoxPos;
-        private System.Windows.Forms.CheckBox checkBoxPan;
-        private System.Windows.Forms.CheckBox checkBoxChangeZoom;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.CheckBox checkBoxWaitComplete;
-        private System.Windows.Forms.CheckBox checkBoxDisplayMessageWhenComplete;
+        private System.Windows.Forms.Label labelGoto;
+        private System.Windows.Forms.Label labelPAt;
+        private System.Windows.Forms.Label labelTimeChange;
+        private System.Windows.Forms.Label labelTimeDir;
+        private System.Windows.Forms.Label labelZoom;
+        private ExtendedControls.TextBoxBorder textBoxPos;
+        private ExtendedControls.TextBoxBorder textBoxDir;
+        private ExtendedControls.TextBoxBorder textBoxZoom;
+        private ExtendedControls.TextBoxBorder textBoxFlyTime;
+        private ExtendedControls.TextBoxBorder textBoxPanTime;
+        private ExtendedControls.TextBoxBorder textBoxWait;
+        private ExtendedControls.ButtonExt buttonOK;
+        private ExtendedControls.ButtonExt buttonCancel;
+        private ExtendedControls.TextBoxBorder textBoxMessage;
+        private System.Windows.Forms.Label labelMsg;
+        private System.Windows.Forms.Label labelWait;
+        private ExtendedControls.TextBoxBorder textBoxZoomTime;
+        private System.Windows.Forms.Label labelZoomTime;
+        private System.Windows.Forms.Label labelMsgTime;
+        private ExtendedControls.TextBoxBorder textBoxMsgTime;
+        private ExtendedControls.CheckBoxCustom checkBoxWaitForSlew;
+        private ExtendedControls.CheckBoxCustom checkBoxPos;
+        private ExtendedControls.CheckBoxCustom checkBoxPan;
+        private ExtendedControls.CheckBoxCustom checkBoxChangeZoom;
+        private System.Windows.Forms.Label labelTMEInfo;
+        private ExtendedControls.CheckBoxCustom checkBoxWaitComplete;
+        private ExtendedControls.CheckBoxCustom checkBoxDisplayMessageWhenComplete;
+        private System.Windows.Forms.Panel panelTop;
+        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.DrawnPanel panel_minimize;
+        private System.Windows.Forms.Label label_index;
+        private System.Windows.Forms.Panel panelMain;
     }
 }

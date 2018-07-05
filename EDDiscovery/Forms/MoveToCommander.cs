@@ -43,6 +43,8 @@ namespace EDDiscovery.Forms
             comboBoxCommanders.ValueMember = "Nr";
             comboBoxCommanders.DataSource = commanders;
 
+            BaseUtils.Translator.Instance.Translate(this);
+
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             theme.ApplyToFormStandardFontSize(this);
 

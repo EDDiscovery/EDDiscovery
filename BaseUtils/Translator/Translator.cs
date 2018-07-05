@@ -19,7 +19,12 @@ public static class TranslatorExtensions
         return BaseUtils.Translator.Instance.Translate(s, c.GetType().Name, id);
     }
 
-    static public string Tx(this string s, Object c)              // use the type with string as id
+    static public string Tx(this string s, Type c)    // use a type definition using the string as the id
+    {
+        return BaseUtils.Translator.Instance.Translate(s, c.Name, s.ReplaceNonAlphaNumeric());
+    }
+
+    static public string Tx(this string s, Object c)              // use the object type with string as id
     {
         return BaseUtils.Translator.Instance.Translate(s, c.GetType().Name, s.ReplaceNonAlphaNumeric());
     }
@@ -28,11 +33,12 @@ public static class TranslatorExtensions
     {
         return BaseUtils.Translator.Instance.Translate(s, c.Name, id);
     }
+
 }
 
 namespace BaseUtils
 {
-    // specials : if text = <code> its presumed its a code filled in entry and not suitable for translation
+    // specials : if text in a control = <code> its presumed its a code filled in entry and not suitable for translation
     // in translator file, .Label means use the previous first word prefix stored, for shortness
     // using Label: "English" @ means for debug, replace @ with <english> as the foreign word
 
@@ -56,12 +62,19 @@ namespace BaseUtils
         {
         }
 
+        // You can call this multiple times if required for debugging purposes
+
         public void LoadTranslation(string language, CultureInfo uicurrent, string txfolder)
         {
 #if DEBUG
+            if (logger != null)
+                logger.Dispose();
+
             logger = new LogToFile();
             logger.SetFile(txfolder, "ids.txt", false);
 #endif
+            translations = null;        // forget any
+
             List<string> languages = Languages(txfolder);
 
             // uicurrent = CultureInfo.CreateSpecificCulture("es"); // debug

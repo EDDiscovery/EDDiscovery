@@ -16,8 +16,6 @@ namespace EDDiscovery.Forms
         public List<EDDProfiles.Profile> Result;            // pass back result
         public int PowerOnIndex = -1;
 
-        const string TxName = "ProfileEditor";
-
         class Group
         {
             public Panel panel;
@@ -60,6 +58,8 @@ namespace EDDiscovery.Forms
             bool winborder = theme.ApplyToFormStandardFontSize(this);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
 
+            BaseUtils.Translator.Instance.Translate(this);
+
             SuspendLayout();
             foreach (EDDProfiles.Profile p in profiles.ProfileList)
             {
@@ -93,7 +93,7 @@ namespace EDDiscovery.Forms
             g.stdtrigger = new ExtendedControls.ComboBoxCustom();
             g.stdtrigger.Location = new Point(210, textheightmargin);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
-            g.stdtrigger.Items.Add("Custom");
+            g.stdtrigger.Items.Add("Custom".Tx(this));
             g.stdtrigger.Items.AddRange(EDDProfiles.StandardTriggers.Select((p1) => p1.Name));
             g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(tripcondition,backcondition) + 1;
             g.stdtrigger.SelectedIndexChanged += Stdtrigger_SelectedIndexChanged;
@@ -102,37 +102,36 @@ namespace EDDiscovery.Forms
 
             g.edittriggerbutton = new ExtendedControls.ButtonExt();
             g.edittriggerbutton.Location = new Point(420, textheightmargin);
-            g.edittriggerbutton.Size = new Size(80, 24);
-            g.edittriggerbutton.Text = "Trigger".Tx(TxName,"Trigger");
+            g.edittriggerbutton.Size = new Size(100, 24);
+            g.edittriggerbutton.Text = "Trigger".Tx(this);
             g.edittriggerbutton.Tag = g;
             g.edittriggerbutton.Click += EditTrigger_Click;
             g.panel.Controls.Add(g.edittriggerbutton);
 
             g.editbacktriggerbutton = new ExtendedControls.ButtonExt();
-            g.editbacktriggerbutton.Location = new Point(510, textheightmargin);
-            g.editbacktriggerbutton.Size = new Size(80, 24);
-            g.editbacktriggerbutton.Text = "Back".Tx(TxName,"Back");
+            g.editbacktriggerbutton.Location = new Point(530, textheightmargin);
+            g.editbacktriggerbutton.Size = new Size(100, 24);
+            g.editbacktriggerbutton.Text = "Back".Tx(this);
             g.editbacktriggerbutton.Tag = g;
             g.editbacktriggerbutton.Click += EditBack_Click;
             g.panel.Controls.Add(g.editbacktriggerbutton);
 
             g.chkbox = new ExtendedControls.CheckBoxCustom();
-            g.chkbox.Location = new Point(600, textheightmargin);
-            g.chkbox.Size = new Size(100, 24);
-            g.chkbox.Text = "Startup".Tx(TxName,"Startup");
+            g.chkbox.Location = new Point(640, textheightmargin);
+            g.chkbox.Size = new Size(150, 24);
+            g.chkbox.Text = "Startup".Tx(this);
             g.chkbox.Tag = g;
             g.chkbox.Checked = poweron;
             g.chkbox.Click += Chkbox_Click;
             g.panel.Controls.Add(g.chkbox);
 
             g.deletebutton = new ExtendedControls.ButtonExt();
-            g.deletebutton.Location = new Point(710, textheightmargin);
+            g.deletebutton.Location = new Point(panelVScrollMain.Width-60, textheightmargin);
             g.deletebutton.Size = new Size(24, 24);
             g.deletebutton.Text = "X";
             g.deletebutton.Tag = g;
             g.deletebutton.Click += Deletebutton_Click;
             g.panel.Controls.Add(g.deletebutton);
-
 
             g.triggercondition = new ConditionLists(tripcondition);        // copy so we can edit
             g.backcondition = new ConditionLists(backcondition);
@@ -166,7 +165,7 @@ namespace EDDiscovery.Forms
         {
             Group g = ((Control)sender).Tag as Group;
             ConditionFilterForm frm = new ConditionFilterForm();
-            frm.InitCondition(string.Format("Edit Profile {0} Trigger".Tx(TxName,"TrigEdit"), g.name.Text), this.Icon, new List<string>(), g.triggercondition);
+            frm.InitCondition(string.Format("Edit Profile {0} Trigger".Tx(this,"TrigEdit"), g.name.Text), this.Icon, new List<string>(), g.triggercondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 g.triggercondition = frm.result;
@@ -179,7 +178,7 @@ namespace EDDiscovery.Forms
         {
             Group g = ((Control)sender).Tag as Group;
             ConditionFilterForm frm = new ConditionFilterForm();
-            frm.InitCondition(string.Format("Edit Profile {0} Back Trigger".Tx(TxName,"BackEdit"), g.name.Text), this.Icon, new List<string>(), g.backcondition);
+            frm.InitCondition(string.Format("Edit Profile {0} Back Trigger".Tx(this,"BackEdit"), g.name.Text), this.Icon, new List<string>(), g.backcondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 g.backcondition = frm.result;
@@ -240,8 +239,7 @@ namespace EDDiscovery.Forms
             Group g = ((Control)sender).Tag as Group;
 
             if (ExtendedControls.MessageBoxTheme.Show(this,
-                        string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine +
-                        "This will remove all the profile information and" + Environment.NewLine + "is not reversible!").Tx(TxName, "DeleteWarning"), g.name.Text), "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine + "This will remove all the profile information and" + Environment.NewLine + "is not reversible!").Tx(this, "DeleteWarning"), g.name.Text), "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
 
                 SuspendLayout();

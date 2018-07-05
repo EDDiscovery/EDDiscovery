@@ -150,7 +150,7 @@ namespace EDDiscovery
             BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory());
             BaseUtils.Translator.Instance.AddExcludedControls(new string[] 
             { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",
-                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox" });
+                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker"  });
 
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
