@@ -317,7 +317,7 @@ namespace EDDiscovery.UserControls
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
                             string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
-                            AddColText(0, 0, rowpos, rowheight, "Target".Tx() + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null);
+                            AddColText(0, 0, rowpos, rowheight, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null);
                             rowpos += rowheight;
                         }
 

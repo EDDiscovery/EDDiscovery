@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
                     ShipModuleData.ShipModule sm = ShipModuleData.Instance.GetItemProperties(item.FDName);
                     itemname = itemname.AppendPrePad(sm.InfoMassPower(true), ", ");
 
-                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown", item.BuyPrice.ToString("N1") + "cr" };
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), item.BuyPrice.ToString("N1") + "cr" };
                     dataGridViewOutfitting.Rows.Add(rowobj);
                 }
             }

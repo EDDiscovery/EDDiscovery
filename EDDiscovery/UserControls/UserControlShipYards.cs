@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
             {
                 double distance = discoveryform.history.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDiscoveryForm.EDDConfig.DisplayUTC ? i.Item1.Datetime.ToString() : i.Item1.Datetime.ToLocalTime().ToString();
-                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown", i.Item2.ShipPrice.ToString("N1") + "cr" };
+                object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), i.Item2.ShipPrice.ToString("N1") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
