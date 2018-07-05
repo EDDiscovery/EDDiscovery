@@ -26,12 +26,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Resurrect)]
     public class JournalResurrect : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
-        public JournalResurrect(JObject evt ) : base(evt, JournalTypeEnum.Resurrect)
+        public JournalResurrect(JObject evt) : base(evt, JournalTypeEnum.Resurrect)
         {
             Option = evt["Option"].Str().SplitCapsWordFull();
             Cost = evt["Cost"].Long();
             Bankrupt = evt["Bankrupt"].Bool();
-
         }
 
         public string Option { get; set; }
@@ -45,13 +44,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.Resurrect();
+            shp.Resurrect(Option.Equals("free", System.StringComparison.InvariantCultureIgnoreCase));    // if free, we did not rebuy the ship
         }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Option:",Option, "Cost:; cr;N0" , Cost, ";Bankrupt" , Bankrupt);
+            info = BaseUtils.FieldBuilder.Build("Option:", Option, "Cost:; cr;N0", Cost, ";Bankrupt", Bankrupt);
             detailed = "";
         }
     }
