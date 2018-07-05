@@ -20,7 +20,7 @@ namespace EliteDangerousCore.JournalEvents
 {
 
     [JournalEntryType(JournalTypeEnum.LaunchDrone)]
-    public class JournalLaunchDrone : JournalEntry
+    public class JournalLaunchDrone : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalLaunchDrone(JObject evt ) : base(evt, JournalTypeEnum.LaunchDrone)
         {
@@ -30,6 +30,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Type { get; set; }
         public string FriendlyType { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodities.CommodityCategory, "drones", -1, 0, conn);
+        }
 
         public override void FillInformation(out string info, out string detailed) //V
         {
