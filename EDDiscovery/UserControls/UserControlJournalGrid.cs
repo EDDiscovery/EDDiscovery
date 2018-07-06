@@ -171,6 +171,8 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
+            dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
             for (int i = 0; i < result.Count; i += 1000)
@@ -186,7 +188,17 @@ namespace EDDiscovery.UserControls
 
             foreach (var chunk in chunks)
             {
-                todo.Enqueue(() => dataGridViewJournal.Rows.AddRange(CreateHistoryRows(chunk, filtertext).ToArray()));
+                todo.Enqueue(() =>
+                {
+                    dataGridViewJournal.SuspendLayout();
+                    foreach (var item in chunk)
+                    {
+                        var row = CreateHistoryRow(item, filtertext);
+                        if (row != null)
+                            dataGridViewJournal.Rows.Add(row);
+                    }
+                    dataGridViewJournal.ResumeLayout();
+                });
             }
 
             todo.Enqueue(() =>
@@ -199,8 +211,6 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
                 }
-
-                dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load Finish");
 
@@ -329,16 +339,6 @@ namespace EDDiscovery.UserControls
 
             rowsbyjournalid[item.Journalid] = rw;
             return rw;
-        }
-
-        private List<DataGridViewRow> CreateHistoryRows(IEnumerable<HistoryEntry> items, string search)
-        {
-            List<DataGridViewRow> rows = new List<DataGridViewRow>();
-            foreach (var item in items)
-            {
-                rows.Add(CreateHistoryRow(item, search));
-            }
-            return rows;
         }
 
         private void UpdateToolTipsForFilter()
