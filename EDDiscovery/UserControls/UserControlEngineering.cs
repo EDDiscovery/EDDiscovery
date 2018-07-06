@@ -35,16 +35,18 @@ namespace EDDiscovery.UserControls
         private List<string> levels = new List<string> { "1", "2", "3", "4", "5", "Experimental" };
         private Dictionary<string, string> matLookUp;
 
-        private string DbColumnSave { get { return DBName("EngineeringGrid" ,  "DGVCol"); } }
-        private string DbWSave { get { return DBName("EngineeringWanted" ); } }
-        private string DbOSave { get { return DBName("EngineeringOrder" ); } }
-        private string DbSelSave { get { return DBName("EngineeringList" ); } }
-        private string DbEngFilterSave { get { return DBName("EngineeringGridControlEngineerFilter" ); } }
-        private string DbModFilterSave { get { return DBName("EngineeringGridControlModuleFilter" ); } }
-        private string DbLevelFilterSave { get { return DBName("EngineeringGridControlLevelFilter" ); } }
-        private string DbUpgradeFilterSave { get { return DBName("EngineeringGridControlUpgradeFilter" ); } }
-        private string DbMaterialFilterSave { get { return DBName("EngineeringGridControlMaterialFilter" ); } }
-        private string DbHistoricMatsSave { get { return DBName("EngineeringGridHistoricMaterials" ); } }
+        public string PrefixName = "Engineering";
+
+        private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbWSave { get { return PrefixName + "Wanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbOSave { get { return PrefixName + "Order" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbSelSave { get { return PrefixName + "List" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbEngFilterSave { get { return PrefixName + "GridControlEngineerFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbModFilterSave { get { return PrefixName + "GridControlModuleFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbLevelFilterSave { get { return PrefixName + "GridControlLevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbUpgradeFilterSave { get { return PrefixName + "GridControlUpgradeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbMaterialFilterSave { get { return PrefixName + "GridControlMaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbHistoricMatsSave { get { return PrefixName + "GridHistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -68,9 +70,11 @@ namespace EDDiscovery.UserControls
             dataGridViewEngineering.RowTemplate.Height = 26;
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
-            if (Order.Distinct().Count() != Order.Length)       // if not distinct..
+            if (Order.Max() >= Recipes.EngineeringRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
+            {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
+            }
 
             Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
 
