@@ -119,7 +119,7 @@ namespace EDDiscovery.Forms
 
                 dr.Cells[0].Value = planet;
                 dr.Cells[0].ReadOnly = true;
-                dr.Cells[1].Value = "Enter a name".Tx("Enter");
+                dr.Cells[1].Value = "Enter a name".Tx(this,"Enter");
                 dr.Cells[2].Value = "";
                 dr.Cells[3].Value = latitude.ToString("F4");
                 dr.Cells[4].Value = longitude.ToString("F4");
@@ -198,8 +198,8 @@ namespace EDDiscovery.Forms
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.TextBoxBorder),
                 "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".Tx(this, "EPN")));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx()));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx()));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(this)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {

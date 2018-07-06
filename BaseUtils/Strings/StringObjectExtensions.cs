@@ -99,6 +99,11 @@ public static class ObjectExtensionsStrings
             return string.Empty;
     }
 
+    public static bool Contains(this string data, string comparision, StringComparison c = StringComparison.CurrentCulture )        //extend for case
+    {
+        return data.IndexOf(comparision, c) >= 0;
+    }
+
     public static string Alt(this string obj, string alt)
     {
         return (obj == null || obj.Length == 0) ? alt : obj;
