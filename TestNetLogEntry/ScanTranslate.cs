@@ -10,10 +10,10 @@ namespace NetLogEntry
 {
     public static class ScanTranslate
     {
-        static public string ProcessLine(string line, int txpos, List<string> done)
+        static public Tuple<string,bool> ProcessLine(string line, int txpos, List<string> localsdone, List<string> globalsdone)
         {
             bool ok = false;
-            bool dotit = true;
+            bool local = true;
             string txphrase = "";
             string keyword = "";
 
@@ -43,7 +43,31 @@ namespace NetLogEntry
                         StringParser s1 = new StringParser(line, txpos + 4);
 
                         string nextword = s1.NextWord(",)");
-                        if (nextword != null && nextword == "this")
+
+                        if (nextword != null && nextword.StartsWith("typeof("))
+                        {
+                            nextword = nextword.Substring(7);
+
+                            if ( s1.IsCharMoveOn(')'))
+                            {
+                                if (s1.IsCharMoveOn(','))
+                                {
+                                    keyword = s1.NextQuotedWord(")");
+
+                                    if (keyword != null)
+                                    {
+                                        keyword = nextword + "." + keyword;
+                                        ok = true;
+                                    }
+                                }
+                                else if (s1.IsCharMoveOn(')'))
+                                {
+                                    keyword = nextword + "."+ txphrase.ReplaceNonAlphaNumeric();
+                                    ok = true;
+                                }
+                            }
+                        }
+                        else if (nextword != null && (nextword == "this" || nextword == "t"))
                         {
                             if (s1.IsCharMoveOn(','))
                             {
@@ -51,45 +75,61 @@ namespace NetLogEntry
 
                                 if (keyword != null)
                                 {
+                                    keyword = "." + keyword;
                                     ok = true;
                                 }
                             }
                             else if (s1.IsCharMoveOn(')'))
                             {
-                                keyword = txphrase.ReplaceNonAlphaNumeric();
+                                keyword = "." + txphrase.ReplaceNonAlphaNumeric();
                                 ok = true;
                             }
                         }
                         else if (s1.IsCharMoveOn(')'))
                         {
                             keyword = txphrase.ReplaceNonAlphaNumeric();
-                            dotit = false;
+                            local = false;
                             ok = true;
                         }
                     }
                 }
             }
 
-            if (dotit)
-                keyword = "." + keyword;
-
             if (!ok)
-                return "Miss formed " + line + Environment.NewLine;
-            else if ( done.Contains(keyword))
+                return new Tuple<string, bool>("Miss formed " + line + Environment.NewLine,false);
+            else if ( local )
             {
-                //return "Repeat " + keyword + Environment.NewLine;
-                return "";
+                if (localsdone.Contains(keyword))
+                {
+                    return new Tuple<string, bool>(null, false);
+                }
+                else
+                {
+                    localsdone.Add(keyword);
+                    return new Tuple<string, bool>(keyword + ": " + txphrase.AlwaysQuoteString() + " @" + Environment.NewLine,false);
+                }
             }
             else
             {
-                done.Add(keyword);
-                return keyword + ": " + txphrase.AlwaysQuoteString() + " @" + Environment.NewLine;
+                if ( globalsdone.Contains(keyword))
+                {
+                    return new Tuple<string, bool>(null, true);
+                }
+                else
+                {
+                    globalsdone.Add(keyword);
+                    return new Tuple<string, bool>(keyword + ": " + txphrase.AlwaysQuoteString() + " @" + Environment.NewLine,true);
+                }
             }
+           
         }
 
         static public string Process(FileInfo[] files)            // overall index of items
         {
-            string ret = "";
+            string locals = "";
+            string globals = "////////////////// Globals " + Environment.NewLine;
+            string designers = "";
+            List<string> globalsdone = new List<string>();
 
             foreach (var fi in files)
             {
@@ -97,31 +137,97 @@ namespace NetLogEntry
 
                 using (StreamReader sr = new StreamReader(fi.FullName, utc8nobom))         // read directly from file.. presume UTF8 no bom
                 {
+                    string classname = "";
+
                     List<string> done = new List<string>();
 
-                    string line;
+                    bool donelocaltitle = false;
+                    bool donedesignerstitle = false;
+
+                    string line,previousline="";
+
                     while ((line = sr.ReadLine()) != null)
                     {
-                        int startpos = 0;
+                        int startpos = previousline.Length;
+
+                        string combined = previousline + line;
 
                         while (true)
                         {
-                            int txpos = line.IndexOf(".Tx(", startpos);
+                            int txpos = combined.IndexOf(".Tx(", startpos);
 
                             if (txpos != -1)
                             {
-                                ret += ProcessLine(line, txpos,done);
+                                Tuple<string, bool> ret = ProcessLine(combined, txpos,done , globalsdone);
+
+                                if (ret.Item1 != null)
+                                {
+                                    if (ret.Item2 == false)
+                                    {
+                                        if (!donelocaltitle)
+                                        {
+                                            locals += "///////////////////////////////////////////////////// " + Path.GetFileNameWithoutExtension(fi.FullName) + Environment.NewLine;
+                                            donelocaltitle = true;
+                                        }
+                                        locals += ret.Item1;
+                                    }
+                                    else
+                                        globals += ret.Item1;
+                                }
+
                                 startpos = txpos + 4;
                             }
                             else
                                 break;
                         }
 
+                        int textpos = line.IndexOf(".Text = ");
+                        int thispos = line.IndexOf("this.");
+
+                        if ( textpos > 0 && thispos > 0)
+                        {
+                            StringParser p = new StringParser(line.Substring(textpos + 7));
+                            string text = p.NextQuotedWord();
+                            //Console.WriteLine(line);
+
+                            int namelength = textpos - thispos - 5;
+
+                            if (namelength > 0)
+                            {
+                                string name = line.Substring(thispos + 5, namelength);
+
+                                if (text != "<code>" &&
+                                    !name.Contains("comboBox", StringComparison.InvariantCultureIgnoreCase) &&
+                                    !name.Contains("Vscroll", StringComparison.InvariantCultureIgnoreCase) &&
+                                    !name.Contains("TextBox", StringComparison.InvariantCultureIgnoreCase) &&
+                                    !name.Contains("RichText", StringComparison.InvariantCultureIgnoreCase)
+                                    )
+                                {
+                                    if (!donedesignerstitle)
+                                    {
+                                        designers += "///////////////////////////////////////////////////// " + Path.GetFileNameWithoutExtension(fi.FullName) + Environment.NewLine;
+                                        donedesignerstitle = true;
+                                    }
+
+                                    designers += classname + "." + name + ": " + text.AlwaysQuoteString() + " @" + Environment.NewLine;
+
+                                }
+                            }
+                        }
+
+                        int clspos = line.IndexOf("partial class ");
+
+                        if (clspos >= 0)
+                            classname = line.Substring(clspos + 13).Trim();
+
+                        // TBD tooltips            this.toolTip.SetToolTip(this.checkBoxMoveToTop, "Select if cursor moves to top entry when a new entry is received");
+
+                        previousline = line;
                     }
                 }
             }
 
-            return ret;
+            return locals + Environment.NewLine + globals + Environment.NewLine + designers;
         }
     }
 }

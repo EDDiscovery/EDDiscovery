@@ -185,7 +185,8 @@ namespace NetLogEntry
                               "CorolisShips rootfolder - process corolis-data\\ships\n" +
                               "CorolisShip name - process corolis-data\\ships\n" +
                               "Coroliseng rootfolder - process corolis-data\\modifications\n" +
-                              "FrontierData rootfolder - process cvs file export of frontier data\n"
+                              "FrontierData rootfolder - process cvs file exports of frontier data\n" +
+                              "scantranslate filespecwildcard - process source files and look for .Tx( definitions\n"
                               );
 
         }

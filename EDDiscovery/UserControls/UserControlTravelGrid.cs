@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
@@ -202,7 +202,7 @@ namespace EDDiscovery.UserControls
 
             if (rowno >= 0)
             {
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ?
             }
             else if (dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
             {
@@ -434,7 +434,7 @@ namespace EDDiscovery.UserControls
         }
 
         void CheckForSelection(Keys code)
-        { 
+        {
             bool cursorkeydown = (code == Keys.Up || code == Keys.Down || code == Keys.PageDown || code == Keys.PageUp || code == Keys.Left || code == Keys.Right);
 
             if (cursorkeydown)
@@ -973,7 +973,7 @@ namespace EDDiscovery.UserControls
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").Tx(this, "Remove");
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "WARNING".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclicksystem.Journalid);
                 discoveryform.RefreshHistoryAsync();
@@ -1272,7 +1272,7 @@ namespace EDDiscovery.UserControls
                             fsd.BoostUsed,
                             he.snc != null ? he.snc.Note : "",
                         };
-                        
+
                     };
                 }
                 else

@@ -762,6 +762,9 @@ namespace EDDiscovery.UserControls
                 return true;
             else
             {
+
+             //   here get scanner to complain
+
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("There are unsaved changes to the current route." + Environment.NewLine
                     + "Would you like to save the current route before proceeding?").Tx(this,"Unsaved"), "Warning".Tx(), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
                 switch (result)

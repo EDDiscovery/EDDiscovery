@@ -13,7 +13,9 @@ namespace ExtendedControls
 {
     public partial class MessageBoxTheme : DraggableForm
     {
-        static public DialogResult Show(IWin32Window window, string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
+        // null in caption prints "Warning"
+
+        static public DialogResult Show(IWin32Window window, string text, string caption = null , MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
             using (MessageBoxTheme msg = new MessageBoxTheme(text, caption, buttons, icon, windowicon))
             {
@@ -21,14 +23,14 @@ namespace ExtendedControls
             }   
         }
 
-        static public MessageBoxTheme ShowModeless(IWin32Window window, string text, string caption = "Warning", MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
+        static public MessageBoxTheme ShowModeless(IWin32Window window, string text, string caption = null, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
             MessageBoxTheme msg = new MessageBoxTheme(text, caption, null, icon, windowicon);
             msg.Show(window);
             return msg;
         }
 
-        static public DialogResult Show(string text, string caption = "Warning", MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
+        static public DialogResult Show(string text, string caption = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None, Icon windowicon = null)
         {
             using (MessageBoxTheme msg = new MessageBoxTheme(text, caption, buttons, icon, windowicon))
             {
@@ -45,14 +47,14 @@ namespace ExtendedControls
         Rectangle textarea;             // The area where we will draw the message text
         int ystart;                     // How far down does the text start from this.ClientArea.Top?
 
-        public MessageBoxTheme(string text, string caption, MessageBoxButtons? buttons = MessageBoxButtons.OK, MessageBoxIcon messageBoxIcon = MessageBoxIcon.None, Icon formIcon = null)
+        public MessageBoxTheme(string text, string caption = null, MessageBoxButtons? buttons = MessageBoxButtons.OK, MessageBoxIcon messageBoxIcon = MessageBoxIcon.None, Icon formIcon = null)
         {
             InitializeComponent();
 
             DialogResult = DialogResult.None;
 
             this.msgText = text;
-            this.Text = labelCaption.Text = caption ?? string.Empty;
+            this.Text = labelCaption.Text = caption ?? "Warning".Tx(this);
             this.buttons = buttons;
             this.mbIcon = messageBoxIcon;
             if (formIcon != null)
@@ -75,40 +77,40 @@ namespace ExtendedControls
                     buttonExt1.Visible = buttonExt2.Visible = buttonExt3.Visible = false;
                     break;
                 case MessageBoxButtons.AbortRetryIgnore:
-                    buttonExt1.DialogResult = DialogResult.Ignore; buttonExt1.Text = "Ignore".Tx();
-                    buttonExt2.DialogResult = DialogResult.Retry; buttonExt2.Text = "Retry".Tx();
-                    buttonExt3.DialogResult = DialogResult.Abort; buttonExt3.Text = "Abort".Tx();
+                    buttonExt1.DialogResult = DialogResult.Ignore; buttonExt1.Text = "Ignore".Tx(this);
+                    buttonExt2.DialogResult = DialogResult.Retry; buttonExt2.Text = "Retry".Tx(this);
+                    buttonExt3.DialogResult = DialogResult.Abort; buttonExt3.Text = "Abort".Tx(this);
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt3;
                     break;
                 case MessageBoxButtons.OKCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx();
-                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "OK".Tx();
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx(this);
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "OK".Tx(this);
                     buttonExt3.Visible = false;
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.RetryCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx();
-                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "Retry".Tx();
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx(this);
+                    buttonExt2.DialogResult = DialogResult.OK; buttonExt2.Text = "Retry".Tx(this);
                     buttonExt3.Visible = false;
                     this.AcceptButton = buttonExt2;
                     this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.YesNo:
-                    buttonExt1.DialogResult = DialogResult.No; buttonExt1.Text = "No".Tx();
-                    buttonExt2.DialogResult = DialogResult.Yes; buttonExt2.Text = "Yes".Tx();
+                    buttonExt1.DialogResult = DialogResult.No; buttonExt1.Text = "No".Tx(this);
+                    buttonExt2.DialogResult = DialogResult.Yes; buttonExt2.Text = "Yes".Tx(this);
                     buttonExt3.Visible = false;
                     break;
                 case MessageBoxButtons.YesNoCancel:
-                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx();
-                    buttonExt2.DialogResult = DialogResult.No; buttonExt2.Text = "No".Tx();
-                    buttonExt3.DialogResult = DialogResult.Yes; buttonExt3.Text = "Yes".Tx();
+                    buttonExt1.DialogResult = DialogResult.Cancel; buttonExt1.Text = "Cancel".Tx(this);
+                    buttonExt2.DialogResult = DialogResult.No; buttonExt2.Text = "No".Tx(this);
+                    buttonExt3.DialogResult = DialogResult.Yes; buttonExt3.Text = "Yes".Tx(this);
                     this.AcceptButton = this.CancelButton = buttonExt1;
                     break;
                 case MessageBoxButtons.OK:
                 default:
-                    buttonExt1.DialogResult = DialogResult.OK; buttonExt1.Text = "OK".Tx();
+                    buttonExt1.DialogResult = DialogResult.OK; buttonExt1.Text = "OK".Tx(this);
                     buttonExt2.Visible = false;
                     buttonExt3.Visible = false;
                     this.AcceptButton = this.CancelButton = buttonExt1;
