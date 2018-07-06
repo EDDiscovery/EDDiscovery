@@ -77,6 +77,7 @@ namespace EDDiscovery.UserControls
             // 
             // splitContainerVertical
             // 
+            this.splitContainerVertical.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerVertical.Location = new System.Drawing.Point(0, 0);
             this.splitContainerVertical.Name = "splitContainerVertical";
             // 
@@ -88,8 +89,8 @@ namespace EDDiscovery.UserControls
             // splitContainerVertical.Panel2
             // 
             this.splitContainerVertical.Panel2.Controls.Add(this.splitContainerRightHorz);
-            this.splitContainerVertical.Size = new System.Drawing.Size(971, 572);
-            this.splitContainerVertical.SplitterDistance = 120;
+            this.splitContainerVertical.Size = new System.Drawing.Size(1142, 626);
+            this.splitContainerVertical.SplitterDistance = 141;
             this.splitContainerVertical.TabIndex = 0;
             // 
             // pictureBoxList
@@ -97,7 +98,7 @@ namespace EDDiscovery.UserControls
             this.pictureBoxList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxList.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxList.Name = "pictureBoxList";
-            this.pictureBoxList.Size = new System.Drawing.Size(120, 572);
+            this.pictureBoxList.Size = new System.Drawing.Size(141, 626);
             this.pictureBoxList.TabIndex = 0;
             // 
             // splitContainerRightHorz
@@ -115,8 +116,8 @@ namespace EDDiscovery.UserControls
             // splitContainerRightHorz.Panel2
             // 
             this.splitContainerRightHorz.Panel2.Controls.Add(this.userControlEngineering);
-            this.splitContainerRightHorz.Size = new System.Drawing.Size(847, 572);
-            this.splitContainerRightHorz.SplitterDistance = 214;
+            this.splitContainerRightHorz.Size = new System.Drawing.Size(997, 626);
+            this.splitContainerRightHorz.SplitterDistance = 234;
             this.splitContainerRightHorz.TabIndex = 0;
             // 
             // buttonTechBroker
@@ -136,7 +137,7 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userControlSynthesis.Location = new System.Drawing.Point(0, 32);
             this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(844, 179);
+            this.userControlSynthesis.Size = new System.Drawing.Size(994, 199);
             this.userControlSynthesis.TabIndex = 0;
             // 
             // userControlEngineering
@@ -146,7 +147,7 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Right)));
             this.userControlEngineering.Location = new System.Drawing.Point(0, -1);
             this.userControlEngineering.Name = "userControlEngineering";
-            this.userControlEngineering.Size = new System.Drawing.Size(844, 352);
+            this.userControlEngineering.Size = new System.Drawing.Size(994, 386);
             this.userControlEngineering.TabIndex = 0;
             // 
             // contextMenuStrip
@@ -159,7 +160,7 @@ namespace EDDiscovery.UserControls
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem,
             this.useHistoricMaterialCountsToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuConfig";
-            this.contextMenuStrip.Size = new System.Drawing.Size(369, 158);
+            this.contextMenuStrip.Size = new System.Drawing.Size(369, 136);
             // 
             // showMaxFSDInjectionsToolStripMenuItem
             // 
@@ -227,7 +228,7 @@ namespace EDDiscovery.UserControls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerVertical);
             this.Name = "UserControlShoppingList";
-            this.Size = new System.Drawing.Size(971, 572);
+            this.Size = new System.Drawing.Size(1142, 626);
             this.splitContainerVertical.Panel1.ResumeLayout(false);
             this.splitContainerVertical.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).EndInit();
