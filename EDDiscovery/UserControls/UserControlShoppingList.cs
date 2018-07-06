@@ -61,10 +61,12 @@ namespace EDDiscovery.UserControls
         {
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.isEmbedded = true;
+            userControlEngineering.PrefixName = "SLEngineering";            // makes it unique to the SL
             userControlEngineering.Init(discoveryform, displaynumber);
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.isEmbedded = true;
+            userControlSynthesis.PrefixName = "SLSynthesis";            // makes it unique to the SL
             userControlSynthesis.Init(discoveryform, displaynumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay

@@ -30,13 +30,15 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSynthesis : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("SynthesisGrid" ,  "DGVCol"); } }
-        private string DbWSave { get { return DBName("SynthesisWanted" ); } }
-        private string DbOSave { get { return DBName("SynthesisOrder" ); } }
-        private string DbRecipeFilterSave { get { return DBName("SynthesisRecipeFilter" ); } }
-        private string DbLevelFilterSave { get { return DBName("SynthesisLevelFilter" ); } }
-        private string DbMaterialFilterSave { get { return DBName("SynthesisMaterialFilter" ); } }
-        private string DbHistoricMatsSave { get { return DBName("SynthesisHistoricMaterials" ); } }
+        public string PrefixName = "Synthesis";
+
+        private string DbColumnSave { get { return (PrefixName + "Grid") + ((displaynumber > 0) ? displaynumber.ToString() : "") + "DGVCol"; } }
+        private string DbWSave { get { return PrefixName + "Wanted" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbOSave { get { return PrefixName + "Order" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbRecipeFilterSave { get { return PrefixName + "RecipeFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbLevelFilterSave { get { return PrefixName + "LevelFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbMaterialFilterSave { get { return PrefixName + "MaterialFilter" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
+        private string DbHistoricMatsSave { get { return PrefixName + "HistoricMaterials" + ((displaynumber > 0) ? displaynumber.ToString() : ""); } }
 
         int[] Order;        // order
         int[] Wanted;       // wanted, in order terms
@@ -67,9 +69,11 @@ namespace EDDiscovery.UserControls
             dataGridViewSynthesis.RowTemplate.Height = 26;
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
-            if (Order.Distinct().Count() != Order.Length)       // if not distinct..
+            if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
+            {
                 for (int i = 0; i < Order.Length; i++)          // reset
                     Order[i] = i;
+            }
 
             Wanted = SQLiteDBClass.GetSettingString(DbWSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
 
