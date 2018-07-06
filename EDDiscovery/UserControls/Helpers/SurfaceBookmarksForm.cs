@@ -171,7 +171,6 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-
             DataGridViewRow rw = dataGridViewMarks.Rows[e.RowIndex];
             bool valid = ValidRow(rw);
             ((DataGridViewCheckBoxCell)rw.Cells[5]).Value = valid;
@@ -183,7 +182,7 @@ namespace EDDiscovery.UserControls
 
                 Location newLoc = rw.Tag != null ? (Location)rw.Tag : new Location();
                 newLoc.Name = rw.Cells[1].Value.ToString();
-                newLoc.Comment = rw.Cells[2].Value?.ToString();
+                newLoc.Comment = rw.Cells[2].Value != null ? rw.Cells[2].Value.ToString() : ""; // not required to set descr.
                 newLoc.Latitude = Double.Parse(rw.Cells[3].Value.ToString());
                 newLoc.Longitude = Double.Parse(rw.Cells[4].Value.ToString());
                 planetmarks.AddOrUpdateLocation(rw.Cells[0].Value.ToString(), newLoc);
@@ -217,11 +216,16 @@ namespace EDDiscovery.UserControls
 
         private bool ValidRow(DataGridViewRow dr)
         {
-            if (dr.Cells[3].Value == null || dr.Cells[4].Value == null) return false;
-            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat)) return false;
-            if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon)) return false;
+            if (dr.Cells[0].Value == null || dr.Cells[1].Value == null || dr.Cells[3].Value == null || dr.Cells[4].Value == null)
+                return false;
 
-            return dr.Cells[0].Value?.ToString() != "" && dr.Cells[1].Value?.ToString() != "" && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
+            if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat))
+                return false;
+
+            if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon))
+                return false;
+
+            return dr.Cells[0].Value.ToString().HasChars() && dr.Cells[1].Value.ToString().HasChars() && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
         }
     }
 }
