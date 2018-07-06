@@ -200,6 +200,8 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
+            dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+
             List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
             for (int i = 0; i < result.Count; i += 1000)
@@ -212,10 +214,49 @@ namespace EDDiscovery.UserControls
 
             todo.Clear();
             string filtertext = textBoxFilter.Text;
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
-            foreach (var chunk in chunks)
+            if (chunks.Count != 0)
             {
-                todo.Enqueue(() => dataGridViewTravel.Rows.AddRange(CreateHistoryRows(chunk, filtertext).ToArray()));
+                var chunk = chunks[0];
+
+                dataGridViewTravel.SuspendLayout();
+                foreach (var item in chunk)
+                {
+                    var row = CreateHistoryRow(item, filtertext);
+                    if (row != null)
+                        dataGridViewTravel.Rows.Add(row);
+                }
+                dataGridViewTravel.ResumeLayout();
+
+                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
+
+                if (rowno >= 0)
+                {
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                    FireChangeSelection();
+                }
+                else if (pos.Item1 < 0 && dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
+                {
+                    rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Description];
+                    FireChangeSelection();
+                }
+            }
+
+            foreach (var chunk in chunks.Skip(1))
+            {
+                todo.Enqueue(() =>
+                {
+                    dataGridViewTravel.SuspendLayout();
+                    foreach (var item in chunk)
+                    {
+                        var row = CreateHistoryRow(item, filtertext);
+                        if (row != null)
+                            dataGridViewTravel.Rows.Add(row);
+                    }
+                    dataGridViewTravel.ResumeLayout();
+                });
             }
 
             todo.Enqueue(() =>
@@ -235,8 +276,6 @@ namespace EDDiscovery.UserControls
                 }
                 else
                     rowno = -1;
-
-                dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load Finish");
 
@@ -385,16 +424,6 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid[item.Journalid] = rw;
             return rw;
 
-        }
-
-        private List<DataGridViewRow> CreateHistoryRows(IEnumerable<HistoryEntry> items, string search)
-        {
-            List<DataGridViewRow> rows = new List<DataGridViewRow>();
-            foreach (var item in items)
-            {
-                rows.Add(CreateHistoryRow(item, search));
-            }
-            return rows;
         }
 
         private void UpdateToolTipsForFilter()

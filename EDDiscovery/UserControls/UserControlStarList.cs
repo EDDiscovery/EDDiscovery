@@ -178,6 +178,8 @@ namespace EDDiscovery.UserControls
             systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
 
+            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
@@ -205,7 +207,17 @@ namespace EDDiscovery.UserControls
 
             foreach (var syslistchunk in syslistchunks)
             {
-                todo.Enqueue(() => dataGridViewStarList.Rows.AddRange(CreateHistoryRows(syslistchunk, filtertext).ToArray()));
+                todo.Enqueue(() =>
+                {
+                    dataGridViewStarList.SuspendLayout();
+                    foreach (var syslist in syslistchunk)
+                    {
+                        var row = CreateHistoryRow(syslist, filtertext);
+                        if (row != null)
+                            dataGridViewStarList.Rows.Add(row);
+                    }
+                    dataGridViewStarList.Rows.AddRange(CreateHistoryRows(syslistchunk, filtertext).ToArray());
+                });
             }
 
             todo.Enqueue(() =>
@@ -225,8 +237,6 @@ namespace EDDiscovery.UserControls
                 }
                 else
                     rowno = -1;
-
-                dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
 
