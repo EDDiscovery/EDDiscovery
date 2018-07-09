@@ -30,7 +30,7 @@ using EliteDangerousCore.DB;
 
 namespace EDDiscovery
 {
-    public class EDDiscoveryController 
+    public class EDDiscoveryController
     {
         #region Public Interface
         #region Variables
@@ -147,10 +147,6 @@ namespace EDDiscovery
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
             EDDProfiles.Instance.LoadProfiles();
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory());
-            BaseUtils.Translator.Instance.AddExcludedControls(new string[] 
-            { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",
-                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker"  });
 
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
@@ -213,8 +209,7 @@ namespace EDDiscovery
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
-                LogLineHighlight("Closing down, please wait..");
-                Console.WriteLine("Close.. safe close launched");
+                LogLineHighlight("Closing down, please wait..".Tx(this,"CD"));
                 closeRequested.Set();
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
                 journalqueuedelaytimer.Dispose();
@@ -576,7 +571,7 @@ namespace EDDiscovery
 
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14)  // Over 14 days do a sync from EDSM for galmap
                 {
-                    LogLine("Get galactic mapping from EDSM.");
+                    LogLine("Get galactic mapping from EDSM.".Tx(this,"EDSM"));
                     galacticMapping.DownloadFromEDSM();
                     SQLiteConnectionSystem.PutSettingString("EDSMGalMapLast", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
                 }
@@ -588,7 +583,7 @@ namespace EDDiscovery
             SystemClassDB.AddToAutoComplete(galacticMapping.GetGMONames());
             SystemNoteClass.GetAllSystemNotes();
 
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.");
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".Tx(this,"LN"));
 
             if (PendingClose) return;
 
@@ -596,13 +591,13 @@ namespace EDDiscovery
             {
                 if (EDCommander.Current.SyncToEddn)  // Both EDD and EDMC should not sync to EDDN.
                 {
-                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!");
+                    LogLineHighlight("EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!".Tx(this,"EDMC"));
                 }
             }
 
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
-                LogLine("Reading travel history");
+                LogLine("Reading travel history".Tx(this,"RTH"));
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 
@@ -617,15 +612,15 @@ namespace EDDiscovery
                 {
                     string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
 
-                    LogLine("Full synchronisation to the " + databases + " databases required."+ Environment.NewLine +
+                    LogLine(string.Format("Full synchronisation to the {0} databases required."+ Environment.NewLine +
                                     "This will take a while, up to 15 minutes, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.");
+                                    "Please continue running ED Discovery until refresh is complete.".Tx(this,"SyncEDSM"), databases ));
                 }
 
             }
             else
             {
-                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable");
+                LogLine("Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable".Tx(this,"SyncOff"));
             }
         }
 
@@ -707,17 +702,17 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.edsm_updatesync_count > 0)
-                LogLine(string.Format("EDSM update complete with {0} systems", syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
+                LogLine(string.Format("EDSM update complete with {0} systems".Tx(this, "EDSMU"), syncstate.edsm_fullsync_count + syncstate.edsm_updatesync_count));
 
             if (syncstate.eddb_sync_count > 0)
-                LogLine(string.Format("EDDB update complete with {0} systems", syncstate.eddb_sync_count));
+                LogLine(string.Format("EDDB update complete with {0} systems".Tx(this, "EDDBU"), syncstate.eddb_sync_count));
 
             long totalsystems = SystemClassDB.GetTotalSystems();
-            LogLineSuccess($"Loading completed, total of {totalsystems:N0} systems stored");
+            LogLineSuccess(string.Format("Loading completed, total of {0:N0} systems stored".Tx(this, "SYST"), totalsystems ));
 
             if (syncstate.edsm_fullsync_count > 0 || syncstate.eddb_sync_count > 0 || syncstate.edsm_updatesync_count > 20000)   // if we have done a resync, or a major update sync (arb no)
             {
-                LogLine("Refresh due to updating EDSM or EDDB data");
+                LogLine("Refresh due to updating EDSM or EDDB data".Tx(this,"Refresh"));
                 RefreshHistoryAsync();
             }
 
@@ -797,7 +792,7 @@ namespace EDDiscovery
 
                 hist = HistoryList.LoadHistory(journalmonitor, 
                     () => PendingClose, 
-                    (p, s) => ReportRefreshProgress(p, $"Processing log file {s}"), args.NetLogPath,
+                    (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this,"PLF") , s)), args.NetLogPath,
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
                     EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
 
@@ -810,7 +805,7 @@ namespace EDDiscovery
 
             initComplete.WaitOne();
 
-            ReportRefreshProgress(-1, "Refresh Displays");
+            ReportRefreshProgress(-1, "Refresh Displays".Tx(this,"RD"));
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshComplete(hist));
         }
@@ -854,7 +849,7 @@ namespace EDDiscovery
                 refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();
 
-                LogLine("History refresh complete.");
+                LogLine("History refresh complete.".Tx(this,"HRC"));
 
                 ReportRefreshProgress(-1, "");
 
@@ -869,7 +864,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadMaps(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new EDDiscovery maps");
+            LogLine("Checking for new EDDiscovery maps".Tx(this,"Maps"));
 
             Task.Factory.StartNew(() =>
             {
@@ -891,7 +886,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadExpeditions(Func<bool> cancelRequested)
         {
-            LogLine("Checking for new Expedition data");
+            LogLine("Checking for new Expedition data".Tx(this,"EXPD"));
 
             Task.Factory.StartNew(() =>
             {

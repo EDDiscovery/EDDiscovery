@@ -10,14 +10,14 @@ namespace NetLogEntry
 {
     public static class ScanTranslate
     {
-        static public Tuple<string,bool> ProcessLine(string line, int txpos, List<string> localsdone, List<string> globalsdone)
+        static public Tuple<string,bool> ProcessLine(string combinedline, string curline, int txpos, List<string> localsdone, List<string> globalsdone)
         {
             bool ok = false;
             bool local = true;
             string txphrase = "";
             string keyword = "";
 
-            StringParser s0 = new StringParser(line, txpos);
+            StringParser s0 = new StringParser(combinedline, txpos);
 
             if (s0.ReverseBack())
             {
@@ -27,10 +27,14 @@ namespace NetLogEntry
                 {
                     foreach (var t in res)
                     {
+                        string ns = t.Item1.Replace(" ", "");
+
                         if (t.Item2)
                             txphrase += t.Item1;
-                        else if (t.Item1.Contains("Environment.NewLine"))
+                        else if (ns == "+Environment.NewLine+")
                             txphrase += "\\r\\n";
+                        else if (ns == "+")
+                            txphrase += "";
                         else
                         {
                             txphrase = null;
@@ -40,7 +44,7 @@ namespace NetLogEntry
 
                     if (txphrase != null)
                     {
-                        StringParser s1 = new StringParser(line, txpos + 4);
+                        StringParser s1 = new StringParser(combinedline, txpos + 4);
 
                         string nextword = s1.NextWord(",)");
 
@@ -96,7 +100,7 @@ namespace NetLogEntry
             }
 
             if (!ok)
-                return new Tuple<string, bool>("Miss formed " + line + Environment.NewLine,false);
+                return new Tuple<string, bool>("Miss formed " + curline + Environment.NewLine,false);
             else if ( local )
             {
                 if (localsdone.Contains(keyword))
@@ -144,13 +148,13 @@ namespace NetLogEntry
                     bool donelocaltitle = false;
                     bool donedesignerstitle = false;
 
-                    string line,previousline="";
+                    string line,previoustext="";
 
                     while ((line = sr.ReadLine()) != null)
                     {
-                        int startpos = previousline.Length;
+                        int startpos = previoustext.Length;
 
-                        string combined = previousline + line;
+                        string combined = previoustext + line;
 
                         while (true)
                         {
@@ -158,7 +162,7 @@ namespace NetLogEntry
 
                             if (txpos != -1)
                             {
-                                Tuple<string, bool> ret = ProcessLine(combined, txpos,done , globalsdone);
+                                Tuple<string, bool> ret = ProcessLine(combined, line, txpos,done , globalsdone);
 
                                 if (ret.Item1 != null)
                                 {
@@ -180,6 +184,11 @@ namespace NetLogEntry
                             else
                                 break;
                         }
+
+                        previoustext += line;
+                        if (previoustext.Length > 20000)
+                            previoustext = previoustext.Substring(10000);
+
 
                         int textpos = line.IndexOf(".Text = ");
                         int thispos = line.IndexOf("this.");
@@ -222,7 +231,6 @@ namespace NetLogEntry
 
                         // TBD tooltips            this.toolTip.SetToolTip(this.checkBoxMoveToTop, "Select if cursor moves to top entry when a new entry is received");
 
-                        previousline = line;
                     }
                 }
             }

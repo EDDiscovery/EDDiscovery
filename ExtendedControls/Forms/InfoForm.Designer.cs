@@ -46,17 +46,17 @@ namespace ExtendedControls
             this.components = new System.ComponentModel.Container();
             this.buttonOK = new ExtendedControls.ButtonExt();
             this.textBoxInfo = new ExtendedControls.RichTextBoxScroll();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
             this.labelCaption = new System.Windows.Forms.Label();
             this.panel_close = new ExtendedControls.DrawnPanel();
             this.panel_minimize = new ExtendedControls.DrawnPanel();
             this.panelTop = new System.Windows.Forms.Panel();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.statusStripBottom = new ExtendedControls.StatusStripCustom();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelBottom.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
@@ -98,14 +98,28 @@ namespace ExtendedControls
             this.textBoxInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemCopy});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(103, 26);
+            // 
+            // toolStripMenuItemCopy
+            // 
+            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
+            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(102, 22);
+            this.toolStripMenuItemCopy.Text = "Copy";
+            this.toolStripMenuItemCopy.Click += new System.EventHandler(this.toolStripMenuItemCopy_Click);
+            // 
             // labelCaption
             // 
             this.labelCaption.AutoSize = true;
             this.labelCaption.Location = new System.Drawing.Point(3, 3);
             this.labelCaption.Name = "labelCaption";
-            this.labelCaption.Size = new System.Drawing.Size(98, 13);
+            this.labelCaption.Size = new System.Drawing.Size(43, 13);
             this.labelCaption.TabIndex = 6;
-            this.labelCaption.Text = "Captiony thing here";
+            this.labelCaption.Text = "<code>";
             this.labelCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseDown);
             this.labelCaption.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelTop_MouseUp);
             // 
@@ -164,20 +178,6 @@ namespace ExtendedControls
             this.statusStripBottom.TabIndex = 27;
             this.statusStripBottom.Text = "statusStripCustom1";
             // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemCopy});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(103, 26);
-            // 
-            // toolStripMenuItemCopy
-            // 
-            this.toolStripMenuItemCopy.Name = "toolStripMenuItemCopy";
-            this.toolStripMenuItemCopy.Size = new System.Drawing.Size(102, 22);
-            this.toolStripMenuItemCopy.Text = "Copy";
-            this.toolStripMenuItemCopy.Click += new System.EventHandler(this.toolStripMenuItemCopy_Click);
-            // 
             // InfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -189,13 +189,13 @@ namespace ExtendedControls
             this.Controls.Add(this.statusStripBottom);
             this.Name = "InfoForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "InfoForm";
+            this.Text = "<code>";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InfoForm_FormClosing);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.InfoForm_Layout);
+            this.contextMenuStrip.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.panelBottom.ResumeLayout(false);
-            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
