@@ -70,16 +70,18 @@ namespace EliteDangerousCore.JournalEvents
             if (JumpDist > 0)
                 sb.Append(JumpDist.ToString("0.00") + " ly");
             if (FuelUsed > 0)
-                sb.Append(", Fuel " + FuelUsed.ToString("0.0") + "t");
+                sb.Append(", Fuel ".Tx(this) + FuelUsed.ToString("0.0") + "t");
             if (FuelLevel > 0)
-                sb.Append(" left " + FuelLevel.ToString("0.0") + "t");
+                sb.Append(" left ".Tx(this) + FuelLevel.ToString("0.0") + "t");
 
             string econ = Economy_Localised.Alt(Economy);
             if (econ.Equals("None"))
                 econ = "";
 
             sb.Append(" ");
-            sb.Append(BaseUtils.FieldBuilder.Build("Faction:", Faction, "<;(Wanted) ", Wanted, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population));
+            sb.Append(BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction, "<;(Wanted) ".Txb(this), Wanted, 
+                                                    "State:".Txb(this), FactionState, "Allegiance:".Txb(this), Allegiance, 
+                                                    "Economy:".Txb(this), econ, "Population:".Txb(this), Population));
             info = sb.ToString();
 
             sb.Clear();
@@ -88,10 +90,15 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance));
+                    sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:".Txb(this), i.FactionState, 
+                                                                    "Government:".Txb(this), i.Government, 
+                                                                    "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"), 
+                                                                    "Allegiance:".Txb(this), i.Allegiance));
+
                     if (i.PendingStates != null)
                     {
-                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:"));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this)));
+
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
 
@@ -99,7 +106,8 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (i.RecoveringStates != null)
                     {
-                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:"));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this)));
+
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
                     }
