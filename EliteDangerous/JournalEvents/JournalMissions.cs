@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,14 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when starting game
-    //Parameters:
-    //•	Active: Array of records
-    //o   id
-    //o   Name
-    //o   PassengerMission
-    //o   Expires
-
     [JournalEntryType(JournalTypeEnum.Missions)]
     public class JournalMissions : JournalEntry
     {
@@ -44,25 +36,25 @@ namespace EliteDangerousCore.JournalEvents
         public MissionItem[] FailedMissions { get; set; }
         public MissionItem[] CompletedMissions { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Active ", ActiveMissions?.Length, "Failed ", FailedMissions?.Length, "Completed ", CompletedMissions?.Length);
+            info = BaseUtils.FieldBuilder.Build("Active:".Txb(this), ActiveMissions?.Length, "Failed:".Txb(this), FailedMissions?.Length, "Completed:".Txb(this), CompletedMissions?.Length);
             detailed = "";
             if (ActiveMissions != null && ActiveMissions.Length>0)
             {
-                detailed = detailed.AppendPrePad("Active:" , Environment.NewLine);
+                detailed = detailed.AppendPrePad("Active:".Txb(this), Environment.NewLine);
                 foreach (var x in ActiveMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
             if (FailedMissions != null && FailedMissions.Length>0)
             {
-                detailed = detailed.AppendPrePad("Failed:" , Environment.NewLine);
+                detailed = detailed.AppendPrePad("Failed:".Txb(this), Environment.NewLine);
                 foreach (var x in FailedMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
             if (CompletedMissions != null && CompletedMissions.Length > 0)
             {
-                detailed = detailed.AppendPrePad("Completed:" , Environment.NewLine);
+                detailed = detailed.AppendPrePad("Completed:".Txb(this), Environment.NewLine);
                 foreach (var x in CompletedMissions)
                     detailed = detailed.AppendPrePad("    " + x.Format(), Environment.NewLine);
             }
@@ -94,7 +86,7 @@ namespace EliteDangerousCore.JournalEvents
 
             public string Format()
             {
-                return BaseUtils.FieldBuilder.Build("", FriendlyName, "<;(Passenger)", PassengerMission, " Expires ", ExpiryTimeUTC.ToLocalTime());
+                return BaseUtils.FieldBuilder.Build("", FriendlyName, "<;(Passenger)".Tx(this), PassengerMission, " " + "Expires:".Tx(this), ExpiryTimeUTC.ToLocalTime());
             }
         }
     }

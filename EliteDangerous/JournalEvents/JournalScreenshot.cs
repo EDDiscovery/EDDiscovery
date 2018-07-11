@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,22 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-     When Written: when a screen snapshot is saved
-    Parameters:
-     Filename: filename of screenshot
-     Width: size in pixels
-     Height: size in pixels
-     System: current star system
-     Body: name of nearest body
-     Latitude
-     Longitude
-    The latitude and longitude will be included if on a planet or in low-altitude flight
-    Example:
-    { "timestamp":"2016-06-10T14:32:03Z","event":"Screenshot",
-    "Filename":"_Screenshots/Screenshot_0151.bmp", "Width":1600, "Height":900, "System":"Shinrarta
-    Dezhra", "Body":"Founders World" } 
-     */
     [JournalEntryType(JournalTypeEnum.Screenshot)]
     public class JournalScreenshot : JournalEntry
     {
@@ -50,6 +34,7 @@ namespace EliteDangerousCore.JournalEvents
             nAltitude = evt["Altitude"].DoubleNull();
             nHeading = evt["Heading"].DoubleNull();
         }
+
         public string Filename { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -60,10 +45,9 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAltitude { get; set; }
         public double? nHeading { get; set; }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
-            
-            info = BaseUtils.FieldBuilder.Build("At " , Body , "< in " , System , "File:", Filename, "Width:", Width , "Height:", Height, "Latitude:", JournalFieldNaming.RLat(nLatitude), "Longitude:", JournalFieldNaming.RLong(nLongitude));
+            info = BaseUtils.FieldBuilder.Build("At ".Tx(this), Body , "< in ".Tx(this), System , "File:".Tx(this), Filename, "Width:".Tx(this), Width , "Height:".Tx(this), Height, "Latitude:".Txb(this), JournalFieldNaming.RLat(nLatitude), "Longitude:".Txb(this), JournalFieldNaming.RLong(nLongitude));
             detailed = "";
         }
 

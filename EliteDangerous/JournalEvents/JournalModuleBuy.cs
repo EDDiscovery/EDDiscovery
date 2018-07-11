@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,15 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when buying a module in outfitting
-    //Parameters:
-    //•	Slot: the outfitting slot
-    //•	BuyItem: the module being purchased
-    //•	BuyPrice: price paid
-    //•	Ship: the players ship
-    //If replacing an existing module:
-    //•	SellItem: item being sold
-    //•	SellPrice: sale price
     [JournalEntryType(JournalTypeEnum.ModuleBuy)]
     public class JournalModuleBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -91,14 +82,14 @@ namespace EliteDangerousCore.JournalEvents
             shp.ModuleBuy(this);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised, "< into ", Slot, "Cost:; cr;N0", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("", BuyItemLocalised, "< into ".Txb(this), Slot, "Cost:; cr;N0".Txb(this), BuyPrice);
             if (SellItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", SellItemLocalised, "Price:; cr;N0", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:".Txb(this), SellItemLocalised, "Price:; cr;N0".Txb(this), SellPrice);
             if (StoredItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoredItemLocalised);
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:".Txb(this), StoredItemLocalised);
 
             detailed = "";
         }

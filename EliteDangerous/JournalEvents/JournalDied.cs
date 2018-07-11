@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,14 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: player was killed
-    //Parameters:
-    //•	KillerName
-    //•	KillerShip
-    //•	KillerRank
-    //When written: player was killed by a wing
-    //Parameters:
-    //•	Killers: a JSON array of objects containing player name, ship, and rank
     [JournalEntryType(JournalTypeEnum.Died)]
     public class JournalDied : JournalEntry, IMissions, IMaterialCommodityJournalEntry
     {
@@ -82,23 +74,17 @@ namespace EliteDangerousCore.JournalEvents
             mc.Died();
         }
 
-
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = "";
             if (Killers != null)
             {
-                info = "Killed by ";
-                bool comma = false;
-
                 foreach (Killer k in Killers)
                 {
-                    if (comma)
-                        info += ", ";
-                    comma = true;
-                    info += k.Name_Localised + " in ship type " + k.Ship + " rank " + k.Rank;
+                    info = info.AppendPrePad(string.Format("{0} in ship type {1} rank {2}".Txb(this,"Died") , k.Name_Localised , k.Ship , k.Rank) , ", ");
                 }
+
+                info = "Killed by ".Txb(this) + info;
             }
 
             detailed = "";

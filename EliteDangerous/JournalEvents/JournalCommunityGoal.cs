@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,35 +21,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-
-    /*
-    When written: when checking the status of a community goal
-   This event contains the current status of all community goals the player is currently subscribed to
-   Parameters:
-    CurrentGoals: an array with an entry for each CG, containing:
-   o CGID: a unique ID number for this CG
-   o Title: the description of the CG
-   o SystemName
-   o MarketName
-   o Expiry: time and date
-   o IsComplete: Boolean
-   o CurrentTotal
-   o PlayerContribution
-   o NumContributors
-   o PlayerPercentileBand
-   If the community goal is constructed with a fixed-size top rank (ie max reward for top 10 players)
-   o TopRankSize: (integer)
-   o PlayerInTopRank: (Boolean)
-   If the community goal has reached the first success tier:
-   o TierReached
-   o Bonus
-   Example:
-   { "timestamp":"2017-08-14T13:20:28Z", "event":"CommunityGoal", "CurrentGoals":[ { "CGID":726,
-   "Title":"Alliance Research Initiative – Trade", "SystemName":"Kaushpoos", "MarketName":"Neville
-   Horizons", "Expiry":"2017-08-17T14:58:14Z", "IsComplete":false, "CurrentTotal":10062,
-   "PlayerContribution":562, "NumContributors":101, "TopRankSize":10, "PlayerInTopRank":false,
-   "TierReached":"Tier 1", "PlayerPercentileBand":50, "Bonus":200000 } ] } 
-       */
     [JournalEntryType(JournalTypeEnum.CommunityGoal)]
     public class JournalCommunityGoal : JournalEntry
     {
@@ -117,11 +88,11 @@ namespace EliteDangerousCore.JournalEvents
                     exp = exp.ToLocalTime();
 
                 return BaseUtils.FieldBuilder.Build(
-                     "Title:", Title, "System:", SystemName,
-                     nl,"At:", MarketName, "Expires:", exp,
-                     nl,"Not Complete;Complete", IsComplete,  "Current Total:" , CurrentTotal, "Contribution:", PlayerContribution, "Num Contributors:", NumContributors,
-                     nl,"Player % Band:", PlayerPercentileBand, "Top Rank:", TopRankSize, "Not In Top Rank;In Top Rank", PlayerInTopRank,
-                     nl,"Tier Reached:", TierReached,  "Bonus:" , Bonus, "Top Tier Name", TopTierName , "TT. Bonus" , TopTierBonus
+                     "Title:".Tx(this), Title, "System:".Tx(this), SystemName,                  
+                     nl,"At:".Tx(this), MarketName, "Expires:".Tx(this), exp,
+                     nl,"Not Complete;Complete".Tx(this), IsComplete,  "Current Total:".Tx(this), CurrentTotal, "Contribution:".Tx(this), PlayerContribution, "Num Contributors:".Tx(this), NumContributors,
+                     nl,"Player % Band:".Tx(this), PlayerPercentileBand, "Top Rank:".Tx(this), TopRankSize, "Not In Top Rank;In Top Rank".Tx(this), PlayerInTopRank,
+                     nl,"Tier Reached:".Tx(this), TierReached,  "Bonus:".Tx(this), Bonus, "Top Tier Name".Tx(this), TopTierName , "TT. Bonus".Tx(this), TopTierBonus
                       );
             }
         }
@@ -148,9 +119,8 @@ namespace EliteDangerousCore.JournalEvents
         public List<CommunityGoal> CommunityGoals;
         public string CommunityGoalList;
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = CommunityGoalList;
             detailed = "";
             if ( CommunityGoals!=null )

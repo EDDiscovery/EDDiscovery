@@ -131,16 +131,35 @@ public static class ObjectExtensionsStrings
         }
     }
 
-    public static string ReplaceNonAlphaNumeric(this string obj)
+    public static string FirstAlphaNumericText(this string obj)     // skip to find first alpha text ignoring whitespace
     {
         if (obj == null)
             return null;
         else
         {
-            char[] arr = obj.ToCharArray();
-            arr = Array.FindAll<char>(arr, (c => char.IsLetterOrDigit(c)));
-            return new string(arr);
+            string ret = "";
+            int i = 0;
+            while (i < obj.Length && !char.IsLetterOrDigit(obj[i]))
+                i++;
+
+            for(; i < obj.Length; i++)
+            {
+                if (char.IsLetterOrDigit(obj[i]))
+                    ret += obj[i];
+                else if (!char.IsWhiteSpace(obj[i]) )
+                    break;
+            }
+
+            return ret;
+
         }
+    }
+
+    public static string ReplaceNonAlphaNumeric(this string obj)
+    {
+        char[] arr = obj.ToCharArray();
+        arr = Array.FindAll<char>(arr, (c => char.IsLetterOrDigit(c)));
+        return new string(arr);
     }
 
     public static string QuoteString(this string obj, bool comma = false, bool bracket = false, bool space = true)

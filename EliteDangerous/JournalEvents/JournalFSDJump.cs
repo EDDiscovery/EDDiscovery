@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -62,34 +62,34 @@ namespace EliteDangerousCore.JournalEvents
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
         public bool EDSMFirstDiscover { get; set; }
 
-        public override string FillSummary { get { return "Jump to " + StarSystem; } }
+        public override string FillSummary { get { return string.Format("Jump to {0}".Tx(this), StarSystem); } }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
             info = "";
             if (JumpDist > 0)
                 info += JumpDist.ToString("0.00") + " ly";
             if (FuelUsed > 0)
-                info += ", Fuel " + FuelUsed.ToString("0.0") + "t";
+                info += "," +" Fuel ".Tx(this) + FuelUsed.ToString("0.0") + "t";
             if (FuelLevel > 0)
-                info += " left " + FuelLevel.ToString("0.0") + "t";
+                info += " left ".Tx(this) + FuelLevel.ToString("0.0") + "t";
 
             string econ = Economy_Localised.Alt(Economy);
             if (econ.Equals("None"))
                 econ = "";
 
             info += " ";
-            info += BaseUtils.FieldBuilder.Build("Faction:", Faction, "<;(Wanted) ", Wanted, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population);
+            info += BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction, "<;(Wanted) ".Txb(this), Wanted, "State:".Txb(this), FactionState, "Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), econ, "Population:".Txb(this), Population);
             detailed = "";
 
             if ( Factions != null )
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    detailed += BaseUtils.FieldBuilder.Build("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance) ;
+                    detailed += BaseUtils.FieldBuilder.Build("", i.Name, "State:".Txb(this), i.FactionState, "Government:".Txb(this), i.Government, "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"), "Allegiance:".Txb(this), i.Allegiance) ;
                     if (i.PendingStates != null)
                     {
-                        detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:");
+                        detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
                             detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
 
@@ -97,7 +97,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (i.RecoveringStates != null)
                     {
-                        detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:");
+                        detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
                             detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
                     }

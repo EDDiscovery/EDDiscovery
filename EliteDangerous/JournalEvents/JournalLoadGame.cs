@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -73,18 +73,18 @@ namespace EliteDangerousCore.JournalEvents
 
         public bool? Horizons { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Credits:;;N0", Credits);
-            detailed = BaseUtils.FieldBuilder.Build("Mode:", GameMode , "Group:" , Group , "Not Landed;Landed" , StartLanded , "Fuel Level:;;0.0", FuelLevel , "Capacity:;;0.0" , FuelCapacity);
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, "Credits:;;N0".Txb(this), Credits);
+            detailed = BaseUtils.FieldBuilder.Build("Mode:".Txb(this), GameMode , "Group:".Txb(this), Group , "Not Landed;Landed".Txb(this), StartLanded , "Fuel Level:;;0.0".Txb(this), FuelLevel , "Capacity:;;0.0".Txb(this), FuelCapacity);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             if (mcl.CashTotal != Credits)
             {
-                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Cash total differs, adjustment", Credits - mcl.CashTotal);
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Cash total differs, adjustment".Txb(this), Credits - mcl.CashTotal);
             }
         }
 

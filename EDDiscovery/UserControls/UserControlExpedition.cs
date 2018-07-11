@@ -403,7 +403,7 @@ namespace EDDiscovery.UserControls
         {
             if (latestplottedroute == null || latestplottedroute.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".Tx(this,"Nonames"), "Warning".Tx());
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".Tx(this,"Createroute"), "Warning".Tx());
                 return;
             }
             else if (!PromptAndSaveIfNeeded())
@@ -429,7 +429,7 @@ namespace EDDiscovery.UserControls
             {
                 if (rt.Systems.Count < 1)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".Tx(this,"NoRoute"),
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".Tx(this,"NoRouteExport"),
                         "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     return;
                 }

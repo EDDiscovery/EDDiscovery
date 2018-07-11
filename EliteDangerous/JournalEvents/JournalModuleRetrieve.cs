@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,15 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when fetching a previously stored module
-    //Parameters:
-    //•	Slot
-    //•	Ship
-    //•	ShipID
-    //•	RetrievedItem
-    //•	EngineerModifications: name of modification blueprint, if any
-    //•	SwapOutItem (if slot was not empty)
-    //•	Cost
     [JournalEntryType(JournalTypeEnum.ModuleRetrieve)]
     public class JournalModuleRetrieve : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -88,15 +79,15 @@ namespace EliteDangerousCore.JournalEvents
             shp.ModuleRetrieve(this);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised, "< into ", Slot ,";Hot!", Hot );
+            info = BaseUtils.FieldBuilder.Build("", RetrievedItemLocalised, "< into ".Txb(this), Slot ,";(Hot)".Txb(this), Hot );
             if ( Cost>0)
-                info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost);
+                info += " " + BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Cost);
 
             if (SwapOutItem.Length > 0)
-                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", SwapOutItemLocalised);
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:".Txb(this), SwapOutItemLocalised);
             detailed = "";
         }
 

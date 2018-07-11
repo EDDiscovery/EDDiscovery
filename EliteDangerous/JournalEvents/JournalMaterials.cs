@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,15 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: at startup, when loading from main menu into game
-    //Parameters:
-    //•	Raw: array of raw materials(each with name and count)
-    //•	Manufactured: array of manufactured items
-    //•	Encoded: array of scanned data
-
-    //Example:
-    //{ "timestamp":"2017-02-10T14:25:51Z", "event":"Materials", "Raw":[ { "Name":"chromium", "Count":28 }, { "Name":"zinc", "Count":18 }, { "Name":"iron", "Count":23 }, { "Name":"sulphur", "Count":19 } ], "Manufactured":[ { "Name":"refinedfocuscrystals", "Count":10 }, { "Name":"highdensitycomposites", "Count":3 }, { "Name":"mechanicalcomponents", "Count":3 } ], "Encoded":[ { "Name":"emissiondata", "Count":32 }, { "Name":"shielddensityreports", "Count":23 } } ] }
-
     [JournalEntryType(JournalTypeEnum.Materials)]
     public class JournalMaterials : JournalEntry, IMaterialCommodityJournalEntry
     {
@@ -69,29 +60,29 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
             
             info = "";
             detailed = "";
             if (Raw != null && Raw.Length>0)
             {
-                info += BaseUtils.FieldBuilder.Build("Raw:; ", Raw.Length);
-                detailed += "Raw:" + List(Raw);
+                info += BaseUtils.FieldBuilder.Build("Raw:".Tx(this) + "; ", Raw.Length);
+                detailed += "Raw:".Tx(this) + List(Raw);
             }
             if (Manufactured != null && Manufactured.Length>0)
             {
-                info += BaseUtils.FieldBuilder.Build("Manufactured:; ", Manufactured.Length);// NOT DONE
+                info += BaseUtils.FieldBuilder.Build("Manufactured:".Tx(this) + "; ", Manufactured.Length);// NOT DONE
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
-                detailed += "Manufactured:" + List(Manufactured);
+                detailed += "Manufactured:".Tx(this) + List(Manufactured);
             }
             if (Encoded != null && Encoded.Length > 0)
             {
-                info += BaseUtils.FieldBuilder.Build("Encoded:; ", Encoded.Length);// NOT DONE
+                info += BaseUtils.FieldBuilder.Build("Encoded:".Tx(this) + "; ", Encoded.Length);// NOT DONE
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
-                detailed += "Manufactured:" + List(Encoded);
+                detailed += "Encoded:".Tx(this) + List(Encoded);
             }
         }
 
@@ -102,7 +93,7 @@ namespace EliteDangerousCore.JournalEvents
             foreach (Material m in mat)
             {
                 sb.Append(Environment.NewLine);
-                sb.Append(BaseUtils.FieldBuilder.Build(" ", m.FriendlyName, "; items", m.Count));
+                sb.Append(BaseUtils.FieldBuilder.Build(" ", m.FriendlyName, "; items".Txb(this), m.Count));
             }
             return sb.ToString();
         }

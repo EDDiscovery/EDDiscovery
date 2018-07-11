@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when voting for a system expansion
-    //Parameters:
-    //•	Power
-    //•	Votes
-    //•	System
     [JournalEntryType(JournalTypeEnum.PowerplayVote)]
     public class JournalPowerplayVote : JournalEntry
     {
@@ -32,14 +27,14 @@ namespace EliteDangerousCore.JournalEvents
             System = evt["System"].Str();
             Votes = evt["Votes"].Int();
         }
+
         public string Power { get; set; }
         public string System { get; set; }
         public int Votes { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", Power, "System:", System, "Votes:", Votes);
+            info = BaseUtils.FieldBuilder.Build("", Power, "System:".Txb(this), System, "Votes:".Txb(this), Votes);
             detailed = "";
         }
     }

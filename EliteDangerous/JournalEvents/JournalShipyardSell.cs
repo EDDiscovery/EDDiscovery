@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -22,16 +22,9 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-
     [JournalEntryType(JournalTypeEnum.ShipyardSell)]
     public class JournalShipyardSell : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
-        //When Written: when selling a ship stored in the shipyard
-        //Parameters:
-        //•	ShipType: type of ship being sold
-        //•	SellShipID
-        //•	ShipPrice: sale price
-        //•	System: (if ship is in another system) name of system
         public JournalShipyardSell(JObject evt ) : base(evt, JournalTypeEnum.ShipyardSell)
         {
             MarketID = evt["MarketID"].LongNull();
@@ -60,10 +53,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Sell(ShipTypeFD, SellShipId);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0", ShipPrice , "At:" , System);
+            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0".Txb(this), ShipPrice , "At:".Tx(this) , System);
             detailed = "";
         }
     }

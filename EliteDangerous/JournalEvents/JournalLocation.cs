@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -22,19 +22,6 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     //When written: at startup, or when being resurrected at a station
-    //Parameters:
-    //•	StarSystem: name of destination starsystem
-    //•	StarPos: star position, as a Json array [x, y, z], in light years
-    //•	Body: star’s body name
-    //•	Docked: true (if docked)
-    //•	StationName: station name, (if docked)
-    //•	StationType: (if docked)
-    //•	Faction: star system controlling faction
-    //•	FactionState
-    //•	Allegiance
-    //•	Economy
-    //•	Government
-    //•	Security
     [JournalEntryType(JournalTypeEnum.Location)]
     public class JournalLocation : JournalLocOrJump, ISystemStationEntry, IBodyNameAndID
     {
@@ -71,29 +58,29 @@ namespace EliteDangerousCore.JournalEvents
         public override string FillSummary { get
             {
                 if (Docked)
-                    return "At " + StationName;
+                    return string.Format("At {0}".Tx(this, "AtStat"), StationName);
                 else if (Latitude.HasValue && Longitude.HasValue)
-                    return "Landed on " + Body;
+                    return string.Format("Landed on {0}".Tx(this, "LND"), Body);
                 else
-                    return "At " + StarSystem;
+                    return string.Format("At {0}".Tx(this, "AtStar"), StarSystem);
             } }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             if (Docked)
             {
-                info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem);
-                detailed = BaseUtils.FieldBuilder.Build(";Wanted", Wanted, "Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised, "Security:", Security_Localised);
+                info = BaseUtils.FieldBuilder.Build("Type ".Txb(this), StationType, "< in system ".Txb(this), StarSystem);
+                detailed = BaseUtils.FieldBuilder.Build("<;(Wanted) ".Txb(this), Wanted, "Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised, "Security:".Txb(this), Security_Localised);
 
                 if (Factions != null)
                     foreach (FactionInformation f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:", f.FactionState, "Gov:", f.Government, "Inf:;%", (int)(f.Influence * 100), "Allegiance:", f.Allegiance);
+                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState, "Government:".Txb(this), f.Government, "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance);
 
                         if (f.PendingStates != null)
                         {
-                            detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:");
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
                             foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
                                 detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
 
@@ -101,7 +88,7 @@ namespace EliteDangerousCore.JournalEvents
 
                         if (f.RecoveringStates != null)
                         {
-                            detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:");
+                            detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
                             foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
                                 detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
                         }
@@ -115,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                info = BaseUtils.FieldBuilder.Build("In space near ", Body, "< of type ", BodyType);
+                info = BaseUtils.FieldBuilder.Build("In space near ".Txb(this), Body, "< of type ".Txb(this), BodyType);
                 detailed = "";
             }
         }

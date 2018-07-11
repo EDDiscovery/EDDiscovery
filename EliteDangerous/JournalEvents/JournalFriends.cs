@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //{ "timestamp":"2017-06-26T17:06:50Z", "event":"Friends", "Status":"Offline", "Name":"Finwen" }
     [JournalEntryType(JournalTypeEnum.Friends)]
     public class JournalFriends : JournalEntry
     {
@@ -58,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public int OnlineCount { get; set; }        // always counts
         public int OfflineCount { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
             detailed = "";
@@ -67,13 +66,13 @@ namespace EliteDangerousCore.JournalEvents
             {
                 info = "";
                 if (OfflineCount + OnlineCount < NameList.Count)
-                    info = BaseUtils.FieldBuilder.Build("Number of Statuses:", NameList.Count);
+                    info = BaseUtils.FieldBuilder.Build("Number of Statuses:".Txb(this), NameList.Count);
 
                 if (OnlineCount > 0)
-                    info = info.AppendPrePad("Online:" + OnlineCount.ToStringInvariant(), ", ");
+                    info = info.AppendPrePad("Online:".Txb(this) + OnlineCount.ToStringInvariant(), ", ");
 
                 if (OfflineCount > 0)
-                    info = info.AppendPrePad("Offline:" + OfflineCount.ToStringInvariant(), ", ");
+                    info = info.AppendPrePad("Offline:".Txb(this) + OfflineCount.ToStringInvariant(), ", ");
 
                 for ( int i = 0; i < StatusList.Count; i++ )
                     detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", NameList[i], "", StatusList[i]) , System.Environment.NewLine);

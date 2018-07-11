@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when dropping from Supercruise at a USS
-    //Parameters:
-    //•	USSType: description of USS
-    //•	USSThreat: threat level
     [JournalEntryType(JournalTypeEnum.USSDrop)]
     public class JournalUSSDrop : JournalEntry
     {
@@ -31,14 +27,14 @@ namespace EliteDangerousCore.JournalEvents
             USSTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["USSType_Localised"].Str(),USSType);
             USSThreat = evt["USSThreat"].Int();
         }
+
         public string USSType { get; set; }
         public int USSThreat { get; set; }
         public string USSTypeLocalised { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Type:",USSTypeLocalised, "Threat:" , USSThreat);
+            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), USSTypeLocalised, "Threat:".Txb(this), USSThreat);
             detailed = "";
         }
     }

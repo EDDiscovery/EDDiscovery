@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,15 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when putting multiple modules into storage
-//Parameters:
-//•	Ship
-//•	ShipId
-//•	Items: Array of records
-//o   Slot
-//o   Name
-//o   EngineerModifications(only present if modified)
-
     [JournalEntryType(JournalTypeEnum.MassModuleStore)]
     public class JournalMassModuleStore : JournalEntry, IShipInformation
     {
@@ -62,18 +53,16 @@ namespace EliteDangerousCore.JournalEvents
             shp.MassModuleStore(this);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Total modules:", ModuleItems?.Count());
+            info = BaseUtils.FieldBuilder.Build("Total modules:".Txb(this), ModuleItems?.Count());
             detailed = "";
 
             if ( ModuleItems != null )
                 foreach (ModuleItem m in ModuleItems)
                 {
-                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, ";(Hot)", m.Hot), ", ");
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, ";(Hot)".Txb(this), m.Hot), ", ");
                 }
-                
         }
 
         public class ModuleItem

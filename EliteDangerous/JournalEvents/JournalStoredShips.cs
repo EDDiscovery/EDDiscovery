@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,25 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening shipyard
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //• ShipsHere: Array of records
-    //o   ShipID
-    //o   ShipType
-    //o   Name
-    //o   Value
-    //•	ShipsRemote: Array of records
-    //o   ShipID
-    //o   ShipType
-    //o   StarSystem
-    //o   ShipMarketID
-    //o   TransferPrice
-    //o   TransferTime
-    //o   Value
-
     [JournalEntryType(JournalTypeEnum.StoredShips)]
     public class JournalStoredShips : JournalEntry, IShipInformation
     {
@@ -69,27 +50,27 @@ namespace EliteDangerousCore.JournalEvents
         public StoredShipInformation[] ShipsHere { get; set; }
         public StoredShipInformation[] ShipsRemote { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("At starport:",ShipsHere?.Count(),"Other locations:",ShipsRemote?.Count() );
+            info = BaseUtils.FieldBuilder.Build("At starport:".Tx(this), ShipsHere?.Count(),"Other locations:".Tx(this), ShipsRemote?.Count() );
             detailed = "";
             if (ShipsHere != null)
             {
                 foreach (StoredShipInformation m in ShipsHere)
-                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.ShipType, "; cr;N0", m.Value, ";(Hot)", m.Hot), System.Environment.NewLine);
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.ShipType, "; cr;N0".Tx(this,"SSP"), m.Value, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);
             }
             if (ShipsRemote != null)
             {
-                detailed = detailed.AppendPrePad("Remote:", System.Environment.NewLine + System.Environment.NewLine);
+                detailed = detailed.AppendPrePad("Remote:".Tx(this), System.Environment.NewLine + System.Environment.NewLine);
 
                 foreach (StoredShipInformation m in ShipsRemote)
                 {
                     if (m.InTransit)
                     {
                         detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("; ",m.Name,
-                                    "<; in transit", m.ShipType, 
-                                    "Value:; cr;N0", m.Value, ";(Hot)", m.Hot), System.Environment.NewLine);
+                                    "<; in transit".Tx(this), m.ShipType, 
+                                    "Value:; cr;N0".Txb(this), m.Value, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);
 
                     }
                     else
@@ -97,9 +78,9 @@ namespace EliteDangerousCore.JournalEvents
                         detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build(
                             "; ", m.Name,
                             "<", m.ShipType, 
-                            "< at ", m.StarSystem, 
-                            "Transfer Cost:; cr;N0", m.TransferPrice, "Time:", m.TransferTimeString, 
-                            "Value:; cr;N0", m.Value, ";(Hot)", m.Hot), System.Environment.NewLine);
+                            "< at ".Txb(this), m.StarSystem, 
+                            "Transfer Cost:; cr;N0".Txb(this), m.TransferPrice, "Time:".Txb(this), m.TransferTimeString, 
+                            "Value:; cr;N0".Txb(this), m.Value, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);
                     }
                 }
             }

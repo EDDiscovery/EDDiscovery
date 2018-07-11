@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,17 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-When written: when the game music 'mood' changes
-Parameters:
- MusicTrack: (name)
-Possible track names are: NoTrack, MainMenu, CQCMenu, SystemMap, GalaxyMap, GalacticPowers
-CQC, DestinationFromHyperspace, DestinationFromSupercruise, Supercruise, Combat_Unknown
-Unknown_Encounter, CapitalShip, CombatLargeDogFight, Combat_Dogfight, Combat_SRV
-Unknown_Settlement, DockingComputer, Starport, Unknown_Exploration, Exploration
-Note: Other music track names may be used in future 
-     */
-
     public enum EDMusicTrackEnum
     {
         None = 0, Unknown = 1,
@@ -51,10 +40,9 @@ Note: Other music track names may be used in future
         public string MusicTrack { get; set; }
         public EDMusicTrackEnum MusicTrackID { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("MusicTrack:", MusicTrack);
+            info = BaseUtils.FieldBuilder.Build("Music Track:".Txb(this), MusicTrack);
             detailed = "";
         }
 

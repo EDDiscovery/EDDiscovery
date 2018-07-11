@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,12 +17,6 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: landing on a planet surface
-//    Parameters:
-//•	Latitude(only if player is landing)
-//•	Longitude(only if player is landing)
-//•	PlayerControlled: (bool) false if ship was recalled from SRV, true if player is landing
-
     [JournalEntryType(JournalTypeEnum.Touchdown)]
     public class JournalTouchdown : JournalEntry
     {
@@ -36,10 +30,9 @@ namespace EliteDangerousCore.JournalEvents
         public double Longitude { get; set; }
         public bool? PlayerControlled { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;", PlayerControlled);
+            info = JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude) + BaseUtils.FieldBuilder.Build(", NPC Controlled;".Txb(this), PlayerControlled);
             detailed = "";
         }
     }

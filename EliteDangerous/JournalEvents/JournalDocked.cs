@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,36 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-
-    /*
-    When written: when landing at landing pad in a space station, outpost, or surface settlement
-    Parameters:
-     StationName: name of station
-     StationType: type of station
-     StarSystem: name of system
-     CockpitBreach:true (only if landing with breached cockpit)
-     StationFaction: station’s controlling faction
-     FactionState
-     StationAllegiance
-     StationEconomy
-     StationGovernment
-     DistFromStarLS
-     StationServices: (Array of strings)
-    Example:
-    { "timestamp":"2017-08-18T10:52:26Z", "event":"Docked", "StationName":"Goddard Hub",
-    "StationType":"Coriolis", "StarSystem":"HR 3499", "StationFaction":"Labour of HR 3499",
-    "StationGovernment":"$government_Democracy;", "StationGovernment_Localised":"Democracy",
-    "StationAllegiance":"Federation", "StationServices":[ "Dock", "Autodock", "BlackMarket",
-    "Commodities", "Contacts", "Exploration", "Missions", "Outfitting", "CrewLounge", "Rearm",
-    "Refuel", "Repair", "Shipyard", "Tuning", "MissionsGenerated", "FlightController",
-    "StationOperations", "Powerplay", "SearchAndRescue" ], "StationEconomy":"$economy_Industrial;",
-    "StationEconomy_Localised":"Industrial", "DistFromStarLS":129.454132 }
-    StationServices can include:
-    Dock, Autodock, BlackMarket, Commodities, Contacts, Exploration, Initiatives, Missions,
-    Outfitting,CrewLounge, Rearm, Refuel, Repair, Shipyard, Tuning, Workshop, MissionsGenerated,
-    Facilitator, Research, FlightController, StationOperations, OnDockMission, Powerplay,
-    SearchAndRescue, 
-     */
     [JournalEntryType(JournalTypeEnum.Docked)]
     public class JournalDocked : JournalEntry, ISystemStationEntry
     {
@@ -110,19 +80,21 @@ namespace EliteDangerousCore.JournalEvents
             public double Proportion;
         }
 
-        public override string FillSummary { get { return $"At {StationName}"; } }
+        public override string FillSummary { get { return string.Format("At {0}".Tx(this), StationName); } }
 
-        public override void FillInformation(out string info, out string detailed)      //V
+        public override void FillInformation(out string info, out string detailed)      
         {
-            info = BaseUtils.FieldBuilder.Build("Type ", StationType, "< in system ", StarSystem, ";Wanted" , Wanted, "Faction:", Faction, "< in state ", FactionState);
-            detailed = BaseUtils.FieldBuilder.Build("Allegiance:", Allegiance, "Economy:", Economy_Localised, "Government:", Government_Localised);
+            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), StationType, "< in system ".Txb(this), StarSystem, ";(Wanted)".Txb(this), Wanted, 
+                "Faction:".Txb(this), Faction,  "< in state ".Txb(this), FactionState);
+
+            detailed = BaseUtils.FieldBuilder.Build("Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised);
 
             if (StationServices != null)
             {
                 string l = "";
                 foreach (string s in StationServices)
                     l = l.AppendPrePad(s, ", ");
-                detailed += System.Environment.NewLine + "Station services:" + l;
+                detailed += System.Environment.NewLine + "Station services:".Txb(this) + l;
             }
 
             if ( EconomyList != null )
@@ -130,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
                 string l = "";
                 foreach (Economies e in EconomyList)
                     l = l.AppendPrePad(e.Name_Localised.Alt(e.Name) + " " + (e.Proportion * 100).ToString("0.#") + "%", ", ");
-                detailed += System.Environment.NewLine + "Economies:" + l;
+                detailed += System.Environment.NewLine + "Economies:".Txb(this) + l;
             }
         }
 
