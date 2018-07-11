@@ -43,7 +43,6 @@ namespace EDDiscovery.UserControls
         #region Events
 
         // implement IHistoryCursor fields
-        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         #endregion
@@ -653,8 +652,6 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewStarList.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                if (OnChangedSelection != null)
-                    OnChangedSelection(row, dataGridViewStarList.CurrentCell.ColumnIndex, false, false);
                 if (OnTravelSelectionChanged != null)
                     OnTravelSelectionChanged((dataGridViewStarList.Rows[row].Tag as List<HistoryEntry>)[0], current_historylist);
             }

@@ -48,7 +48,6 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
@@ -697,8 +696,6 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewJournal.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                if (OnChangedSelection != null)
-                    OnChangedSelection(row, dataGridViewJournal.CurrentCell.ColumnIndex, false, false);
                 if (OnTravelSelectionChanged != null)
                     OnTravelSelectionChanged(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
             }

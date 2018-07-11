@@ -19,12 +19,10 @@ namespace EDDiscovery.UserControls
 {
     // Any UCs wanting to be a cursor, must implement this interface
 
-    public delegate void ChangedSelectionHandler(int rowno, int colno, bool doubleclick, bool note);
     public delegate void ChangedSelectionHEHandler(HistoryEntry he, HistoryList hl);
 
     public interface IHistoryCursor
     {
-        event ChangedSelectionHandler OnChangedSelection;           // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
         void FireChangeSelection();                                 // fire a change sel event to everyone
         void GotoPosByJID(long jid);                                // goto a pos by JID

@@ -46,7 +46,6 @@ namespace EDDiscovery.UserControls
         #region Events
 
         // implement IHistoryCursor fields
-        public event ChangedSelectionHandler OnChangedSelection;   // After a change of selection by the user, or after a OnHistoryChanged, or after a sort.
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
 
         // for primary travel grid for auto note jump
@@ -484,8 +483,6 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
-                if (OnChangedSelection != null)
-                    OnChangedSelection(row, dataGridViewTravel.CurrentCell.ColumnIndex, false, dataGridViewTravel.CurrentCell.ColumnIndex == TravelHistoryColumns.Note);
                 if (OnTravelSelectionChanged != null)
                     OnTravelSelectionChanged(dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
             }
