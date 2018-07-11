@@ -52,9 +52,11 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
-            comboBoxCustomLanguage.Items = BaseUtils.Translator.Languages(EDDOptions.Instance.TranslatorDirectory());
+            comboBoxCustomLanguage.Items = BaseUtils.Translator.Languages(EDDOptions.Instance.TranslatorDirectory(), true);
+            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.Languages(EDDOptions.ExeDirectory(), true));
+
             comboBoxCustomLanguage.Items.Add("Auto");
-            comboBoxCustomLanguage.Items.Add("Undefined");
+            comboBoxCustomLanguage.Items.Add("None");
             if (comboBoxCustomLanguage.Items.Contains(EDDConfig.Instance.Language))
                 comboBoxCustomLanguage.SelectedItem = EDDConfig.Instance.Language;
             else
@@ -103,7 +105,7 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
-            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), "> 365 days old".Tx(this) };
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this,"DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), "> 365 days old".Tx(this) };
             comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 365 };
             int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit);
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
@@ -560,11 +562,11 @@ namespace EDDiscovery.UserControls
 
                     info = new ExtendedControls.InfoForm();
                     info.Info("Remove Sectors".Tx(this), EDDiscovery.Properties.Resources.edlogo_3mo_icon,
-                                ("Removing " + gss.Removed.Count + " Sector(s)." + Environment.NewLine + Environment.NewLine +
+                                string.Format( ("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
                                 "You may continue to use EDD while this operation takes place" + Environment.NewLine +
                                 "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine).Tx(this,"GalRemove"));
+                                "the process has finished" + Environment.NewLine + Environment.NewLine).Tx(this,"GalRemove"), gss.Removed.Count ));
                     info.EnableClose = false;
                     info.Show(discoveryform);
 

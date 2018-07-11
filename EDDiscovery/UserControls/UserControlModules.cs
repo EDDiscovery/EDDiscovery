@@ -207,9 +207,9 @@ namespace EDDiscovery.UserControls
             if (fsdspec != null)
             {
                 EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsdspec.GetJumpInfo(0, modulemass + hullmass, si.FuelCapacity, si.FuelCapacity / 2);
-                AddInfoLine("FSD Avg Jump".Tx(this), ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo".Tx(this), fsdspec.ToString());
+                AddInfoLine("FSD Avg Jump".Tx(this), ji.avgsinglejumpnocargo.ToStringInvariant("N2") + "ly", "Half tank, no cargo".Tx(this,"HT"), fsdspec.ToString());
                 DataGridViewRow rw = dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1];
-                AddInfoLine("FSD Max Range".Tx(this), ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo".Tx(this), fsdspec.ToString());
+                AddInfoLine("FSD Max Range".Tx(this), ji.maxjumprange.ToStringInvariant("N2") + "ly", "Full Tank, no cargo".Tx(this,"FT"), fsdspec.ToString());
                 AddInfoLine("FSD Maximum Fuel per jump".Tx(this), fsdspec.MaxFuelPerJump.ToStringInvariant()+"t","", fsdspec.ToString());
             }
 

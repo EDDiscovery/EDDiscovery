@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: Player has escaped interdiction
-    //Parameters:
-    //•	Interdictor: interdicting pilot name
-    //•	IsPlayer: whether player or npc
     [JournalEntryType(JournalTypeEnum.EscapeInterdiction)]
     public class JournalEscapeInterdiction : JournalEntry
     {
@@ -36,9 +32,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Interdictor_Localised { get; set; }
         public bool IsPlayer { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("By ", Interdictor_Localised, "< (NPC);(Player)", IsPlayer);
+            info = BaseUtils.FieldBuilder.Build("By:".Txb(this), Interdictor_Localised, "< (NPC);(Player)".Txb(this), IsPlayer);
             detailed = "";
         }
     }

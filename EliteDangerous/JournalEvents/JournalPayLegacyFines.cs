@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When Written: when paying legacy fines
-    //    Parameters:
-    //•	Amount: (total amount paid , including any broker fee)
-    //•	BrokerPercentage(present if paid via a Broker)
     [JournalEntryType(JournalTypeEnum.PayLegacyFines)]
     public class JournalPayLegacyFines : JournalEntry, ILedgerJournalEntry
     {
@@ -38,12 +34,11 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Broker " + BrokerPercentage.ToString("0.0") + "%", -Amount);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Amount);
             if (BrokerPercentage > 0)
-                info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
+                info += string.Format(", Broker took {0:N0}%".Txb(this), BrokerPercentage);
             detailed = "";
         }
     }

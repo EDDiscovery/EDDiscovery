@@ -70,7 +70,6 @@ namespace EDDiscovery
         #endregion
 
         #region Callbacks from us
-
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;  // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
@@ -80,10 +79,9 @@ namespace EDDiscovery
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
         public event Action<int,string> OnEGOSyncComplete;              // EGO Sync has completed with records on this list of stars
-
         #endregion
 
-      
+     
         #region Properties
         public HistoryList history { get { return Controller.history; } }
         public string LogText { get { return Controller.LogText; } }
@@ -120,7 +118,6 @@ namespace EDDiscovery
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
         #endregion
 
-      
         #region Initialisation
 
         // note we do not do the traditional Initialize component here.. we wait for splash form to call it
@@ -151,7 +148,14 @@ namespace EDDiscovery
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
+
             msg.Invoke("Modulating Shields");
+
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory());
+            BaseUtils.Translator.Instance.AddExcludedControls(new string[]
+            { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",     // Controls not for translation..
+                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker" , "NumericUpDownCustom" });
+
             Controller.Init();
             PanelInformation.Init();
 
@@ -200,16 +204,18 @@ namespace EDDiscovery
 
             if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null )  // double check we have a primary tab and tg..
             {
-                MessageBox.Show("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
+                MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                 "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
                                 "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
-                                "Click on Reset tabs, then Run program, which may clear the problem." );
+                                "Click on Reset tabs, then Run program, which may clear the problem.").Tx(this,"TSF") );
                 Application.Exit();
             }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
 
-            foreach(PanelInformation.PanelIDs pid in pids)
+            BaseUtils.Translator.Instance.Translate(contextMenuStripTabs, this);        // need to translate BEFORE we add in extra items
+
+            foreach (PanelInformation.PanelIDs pid in pids)
             {
                 ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid, 
                     (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
@@ -221,8 +227,9 @@ namespace EDDiscovery
             removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
             renameTabToolStripMenuItem.Click += (s, e) => 
             {
-                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this, "Name:", tabControlMain.TabPages[tabControlMain.LastTabClicked].Text, 
-                                "Rename Tab", this.Icon, false, "Enter a new name for the tab");
+                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this, 
+                                "Name:".Tx(this,"RTABL"), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text, 
+                                "Rename Tab".Tx(this,"RTABT"), this.Icon, false, "Enter a new name for the tab".Tx(this,"RTABTT"));
                 if (newvalue != null)
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
@@ -283,10 +290,7 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
-            comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-            comboBoxCustomProfiles.Items.Add("Edit Profiles");
-
-            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
+            UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             Controller.InitComplete();
@@ -309,7 +313,7 @@ namespace EDDiscovery
             {
                 buttonReloadActions.Visible = true;
             }
-
+            
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
         }
 
@@ -321,8 +325,8 @@ namespace EDDiscovery
 
             if (!themeok)
             {
-                Controller.LogLineHighlight("The theme stored has missing colors or other missing information");
-                Controller.LogLineHighlight("Correct the missing colors or other information manually using the Theme Editor in Settings");
+                Controller.LogLineHighlight(("The theme stored has missing colors or other missing information" + Environment.NewLine + 
+                "Correct the missing colors or other information manually using the Theme Editor in Settings").Tx(this,"ThemeW"));
             }
 
             if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
@@ -351,13 +355,14 @@ namespace EDDiscovery
 
             if ( res.Item3.HasChars() )
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this, "The following application extension DLLs have been found" + Environment.NewLine +
+                if (ExtendedControls.MessageBoxTheme.Show(this, 
+                                string.Format( ("The following application extension DLLs have been found" + Environment.NewLine +
                                 "Do you wish to allow these to be used?" + Environment.NewLine +
-                                res.Item3 + Environment.NewLine +
+                                "{0} " + Environment.NewLine +
                                 "If you do not, either remove the DLLs from the DLL folder in ED Appdata" + Environment.NewLine + 
                                 "or deinstall the action pack which introduced the DLL" + Environment.NewLine + 
-                                "or hold down shift when launching and use the Remove all Extensions DLL option",
-                                "Warning - DLL extensions Found",
+                                "or hold down shift when launching and use the Remove all Extensions DLL option").Tx(this,"DLLW"), res.Item3),
+                                "Warning".Tx(),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3,","));
@@ -367,11 +372,11 @@ namespace EDDiscovery
             }
 
             if (res.Item1.HasChars())
-                LogLine("DLLs loaded: " + res.Item1);
+                LogLine(string.Format("DLLs loaded: {0}".Tx(this,"DLLL"), res.Item1));
             if (res.Item2.HasChars())
-                LogLineHighlight("DLLs failed to load: " + res.Item2);
+                LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(this,"DLLF") ,res.Item2));
 
-            LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
+            LogLine(string.Format("Profile {0} Loaded".Tx(this,"PROFL"), EDDProfiles.Instance.Current.Name ));
         }
 
         public bool DLLRunAction( string eventname, string paras )
@@ -458,8 +463,8 @@ namespace EDDiscovery
                     if (v1.CompareTo(v2) > 0) // Test if newer installer exists:
                     {
                         newRelease = rel;
-                        this.BeginInvoke(new Action(() => Controller.LogLineHighlight("New EDDiscovery installer available: " + rel.ReleaseName)));
-                        this.BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!"));
+                        this.BeginInvoke(new Action(() => Controller.LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(this,"NI") ,rel.ReleaseName))));
+                        this.BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx(this,"NRA")));
                         return true;
                     }
                 }
@@ -607,18 +612,18 @@ namespace EDDiscovery
                 {
                     if ( isdisabled)
                     {
-                        LogLine("Companion API is disabled in commander settings");
+                        LogLine("Companion API is disabled in commander settings".Tx(this,"CAPINA"));
                     }
                     else
                     {
                         try
                         {
                             Capi.LoginAs(EDCommander.Current.Name);
-                            LogLine("Logged into Companion API");
+                            LogLine("Logged into Companion API".Tx(this,"CAPION"));
                         }
                         catch (Exception ex)
                         {
-                            LogLineHighlight("Companion API log in failed: " + ex.Message);
+                            LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this,"CAPIF"), ex.Message));
                             if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                                 LogLineHighlight(ex.StackTrace);
                         }
@@ -635,7 +640,7 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
-                    LogLineHighlight("Companion API get failed: " + ex.Message);
+                    LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this, "CAPIF"), ex.Message));
                     if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
                         LogLineHighlight(ex.StackTrace);
                 }
@@ -650,6 +655,7 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
         }
+
 
         private void Controller_NewEntrySecond(HistoryEntry he, HistoryList hl)         // called after all UI's have had their chance
         {
@@ -674,19 +680,19 @@ namespace EDDiscovery
 
                             if (!Capi.Profile.Cmdr.docked)
                             {
-                                LogLineHighlight("CAPI not docked. Server API lagging!");
+                                LogLineHighlight("CAPI not docked. Server API lagging!".Tx(this,"CAPIND"));
                             }
                             else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
                             {
-                                LogLineHighlight("CAPI profileSystemRequired is " + dockevt.StarSystem + ", profile station is " + Capi.Profile.CurrentStarSystem.name);
+                                LogLineHighlight(string.Format("CAPI profileSystemRequired is {0}, profile station is {1}".Tx(this, "CAPISS"), dockevt.StarSystem,Capi.Profile.CurrentStarSystem.name));
                             }
                             else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
                             {
-                                LogLineHighlight("CAPI profileStationRequired is " + dockevt.StationName + ", profile station is " + Capi.Profile.StarPort.name);
+                                LogLineHighlight(string.Format("CAPI profileStationRequired is {0}, profile station is {1} ".Tx(this, "CAPISN"), dockevt.StationName, Capi.Profile.StarPort.name));
                             }
                             else if (!dockevt.StationName.Equals(market.name))
                             {
-                                LogLineHighlight("CAPI stationname  " + dockevt.StationName + ",´market station is " + market.name);
+                                LogLineHighlight(string.Format("CAPI stationname {0}, market station is {1} ".Tx(this,"CAPIMN"), dockevt.StationName , market.name));
                             }
                             else
                             {
@@ -704,7 +710,7 @@ namespace EDDiscovery
                         }
                         catch (Exception ex)
                         {
-                            LogLineHighlight("Companion API get failed: " + ex.Message);
+                            LogLineHighlight("Companion API get failed: ".Tx(this,"CAPIEX") + ex.Message);
                         }
                     }
                 }
@@ -713,7 +719,7 @@ namespace EDDiscovery
             if (he.IsFSDJump)
             {
                 int count = history.GetVisitsCount(he.System.Name);
-                LogLine(string.Format("Arrived at system {0} Visit No. {1}", he.System.Name, count));
+                LogLine(string.Format("Arrived at system {0} Visit No. {1}".Tx(this,"Arrived"), he.System.Name, count));
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
@@ -761,7 +767,7 @@ namespace EDDiscovery
                     ChangeToProfileId(i, true);
 
                 if (errlist.HasChars())
-                    LogLine("Profile reports errors in triggers" + errlist);
+                    LogLine("Profile reports errors in triggers:".Tx(this, "PE1") + errlist);
             }
         }
 
@@ -782,7 +788,7 @@ namespace EDDiscovery
 
                 if (msg != null)
                 {
-                    LogLine($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                    LogLine(string.Format("Sent {0} event to EDDN ({1})".Tx(this,"EDDN"), he.EntryType.ToString(), he.EventSummary));
                     if (eddn.PostMessage(msg))
                     {
                     }
@@ -790,7 +796,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogLineHighlight("EDDN: Send commodities prices failed: " + ex.Message);
+                LogLineHighlight("EDDN: Send commodities prices failed: ".Tx(this,"EDDNEX") + ex.Message);
             }
 
         }
@@ -836,7 +842,7 @@ namespace EDDiscovery
             if (!Controller.ReadyForFinalClose)
             {
                 e.Cancel = true;
-                ReportRefreshProgress(-1, "Closing, please wait!");
+                ReportRefreshProgress(-1, "Closing, please wait!".Tx(this,"Closing"));
                 actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                 Controller.Shutdown();
             }
@@ -878,7 +884,7 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory());
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory());
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
@@ -908,21 +914,14 @@ namespace EDDiscovery
 
         private void showLogfilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                EDCommander cmdr = EDCommander.Current;
+            EDCommander cmdr = EDCommander.Current;
 
-                if (cmdr != null)
-                {
-                    string cmdrfolder = cmdr.JournalDir;
-                    if (cmdrfolder.Length < 1)
-                        cmdrfolder = EDJournalClass.GetDefaultJournalDir();
-                    Process.Start(cmdrfolder);
-                }
-            }
-            catch (Exception ex)
+            if (cmdr != null)
             {
-                MessageBox.Show(this, "Show log files exception: " + ex.Message);
+                string cmdrfolder = cmdr.JournalDir;
+                if (cmdrfolder.Length < 1)
+                    cmdrfolder = EDJournalClass.GetDefaultJournalDir();
+                Process.Start(cmdrfolder);
             }
         }
 
@@ -939,19 +938,19 @@ namespace EDDiscovery
         private void forceEDDBUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
             else if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
-                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+                ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
         }
 
         private void syncEDSMSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it");
-            else if (ExtendedControls.MessageBoxTheme.Show(this, "This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?", "EDSM Download Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
+            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").Tx(this,"EDSMQ"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
                 if (!Controller.AsyncPerformSync(edsmfullsync: true))      // we want it to have run, to completion, to allow another go..
-                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait");
+                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
             }
         }
 
@@ -999,10 +998,11 @@ namespace EDDiscovery
 
         private void howToRunInSafeModeToResetVariousParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExtendedControls.MessageBoxTheme.Show(this, "To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
+            ExtendedControls.MessageBoxTheme.Show(this, 
+                            ("To start in safe mode, exit the program, hold down the shift key" + Environment.NewLine +
                             "and double click on the EDD program icon.  You will then be in the safe mode dialog." + Environment.NewLine +
-                            "You can reset various parameters and move the data bases to other locations.",
-                            "How to run safe mode", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            "You can reset various parameters and move the data bases to other locations.").Tx(this, "SafeMode"),
+                            "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -1018,17 +1018,18 @@ namespace EDDiscovery
 
         private void clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset the assigned EDSM ID\r\n" +
+            if (ExtendedControls.MessageBoxTheme.Show(this, 
+                                ("Confirm you wish to reset the assigned EDSM ID\r\n" +
                                 "to all the current commander history entries,\r\n" +
-                                " and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
-                                "This will not change your history, but when you next refresh, \r\n" +
+                                "and clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\n" +
+                                "This will not change your history, but when you next refresh,\r\n" +
                                 "it will try and reassign EDSM systems to your history and notes.\r\n" +
                                 "Use only if you think that the assignment of EDSM systems to entries is grossly wrong," +
                                 "or notes are going missing\r\n" +
                                 "\r\n" +
                                 "You can manually change one EDSM assigned system by right clicking\r\n" +
-                                "on the travel history and selecting the option"
-                                , "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+                                "on the travel history and selecting the option").Tx(this,"ResetEDSMID")
+                                , "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ClearEDSMID(EDCommander.CurrentCmdrID);
                 SystemNoteClass.ClearEDSMID();
@@ -1075,7 +1076,7 @@ namespace EDDiscovery
 
         private void dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".Tx(this,"ResetCMDR"), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -1100,16 +1101,16 @@ namespace EDDiscovery
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(this,"No new release found", "EDDiscovery", MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(this,"No new release found".Tx(this,"NoRel"), "Warning".Tx(), MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander", "WARNING", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".Tx(this,"RevFSD"), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                Controller.LogLine("Removed " + n + " FSD entries");
+                Controller.LogLine(string.Format("Removed {0} FSD entries".Tx(this,"FSDRem") , n));
                 Controller.RefreshHistoryAsync();
             }
         }
@@ -1130,7 +1131,7 @@ namespace EDDiscovery
                 SaveFileDialog dlg = new SaveFileDialog();
 
                 dlg.Filter = "ImportedStars export| *.txt";
-                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file";
+                dlg.Title = "Could not find VisitedStarsCache.dat file, choose file".Tx(this,"VSLNF");
                 dlg.FileName = "ImportStars.txt";
 
                 if (dlg.ShowDialog(this) != DialogResult.OK)
@@ -1152,12 +1153,12 @@ namespace EDDiscovery
                     }
                 }
 
-                ExtendedControls.MessageBoxTheme.Show(this, "File " + exportfilename + " created." + Environment.NewLine
-                    + (found ? "Restart Elite Dangerous to have this file read into the galaxy map" : ""), "Export visited stars");
+                ExtendedControls.MessageBoxTheme.Show(this, string.Format(("File {0} created." + Environment.NewLine + "{1}").Tx(this,"VSLEXP"),
+                    exportfilename, (found ? "Restart Elite Dangerous to have this file read into the galaxy map".Tx(this,"VSLRestart") : "" )), "Warning".Tx());
             }
             catch (IOException)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Error writing " + exportfilename, "Export visited stars", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this, string.Format("Error writing {0} export visited stars".Tx(this,"VSLFileErr"), exportfilename), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -1216,7 +1217,7 @@ namespace EDDiscovery
                 SQLiteConnectionSystem.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding");
+                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".Tx(this,"InaraW"), "Warning".Tx());
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -1513,7 +1514,7 @@ namespace EDDiscovery
 
         private void buttonExtRefresh_Click(object sender, EventArgs e)
         {
-            LogLine("Refresh History.");
+            LogLine("Refresh History.".Tx(this,"RH"));
             RefreshHistoryAsync();
         }
 
@@ -1523,7 +1524,7 @@ namespace EDDiscovery
 
             if (!edsm.ValidCredentials)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set");
+                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".Tx(this,"NoEDSMAPI"));
                 return;
             }
 
@@ -1533,7 +1534,7 @@ namespace EDDiscovery
             }
             catch (Exception ex)
             {
-                LogLine($"EDSM Sync failed: {ex.Message}");
+                LogLine(string.Format("EDSM Sync failed: {0}".Tx(this,"EDSMSyncE"), ex.Message));
             }
 
         }
@@ -1541,11 +1542,22 @@ namespace EDDiscovery
         #endregion
 
         #region Profiles
+
+        private void UpdateProfileComboBox()
+        {
+            comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
+            comboBoxCustomProfiles.Items.Clear();
+            comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
+            comboBoxCustomProfiles.Items.Add("Edit Profiles".Tx(this, "EP"));
+            comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
+            comboBoxCustomProfiles.Enabled = true;
+        }
+
         private void ComboBoxCustomProfiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (comboBoxCustomProfiles.SelectedIndex >= 0 && comboBoxCustomProfiles.Enabled)
             {
-                if ((string)comboBoxCustomProfiles.SelectedItem == "Edit Profiles")
+                if (comboBoxCustomProfiles.SelectedIndex == comboBoxCustomProfiles.Items.Count-1)    // last one if edit profiles
                 {
                     Forms.ProfileEditor pe = new ProfileEditor();
                     pe.Init(EDDProfiles.Instance, this.Icon);
@@ -1553,20 +1565,11 @@ namespace EDDiscovery
                     {
                         bool removedcurprofile = EDDProfiles.Instance.UpdateProfiles(pe.Result, pe.PowerOnIndex);       // see if the current one has changed...
 
-                        comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
-                        comboBoxCustomProfiles.SelectedIndex = -1;
-                        comboBoxCustomProfiles.Items.Clear();
-                        comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-                        comboBoxCustomProfiles.Items.Add("Edit Profiles");
-                        comboBoxCustomProfiles.Enabled = true;
-
                         if (removedcurprofile)
                             ChangeToProfileId(EDDProfiles.DefaultId, false );
                     }
 
-                    comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
-                    comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
-                    comboBoxCustomProfiles.Enabled = true;
+                    UpdateProfileComboBox();
                 }
                 else
                 {
@@ -1599,7 +1602,7 @@ namespace EDDiscovery
 
                 PopOuts.LoadSavedPopouts();
 
-                LogLine("Profile " + EDDProfiles.Instance.Current.Name + " Loaded");
+                LogLine(string.Format("Profile {0} Loaded".Tx(this,"PL"), EDDProfiles.Instance.Current.Name ));
             }
         }
 
@@ -1616,7 +1619,7 @@ namespace EDDiscovery
                 ChangeToProfileId(i, true);
 
             if (errlist.HasChars())
-                LogLine("Profile reports errors in triggers" + errlist);
+                LogLine("Profile reports errors in triggers:".Tx(this, "PE1") + errlist); 
         }
 
         #endregion
@@ -1662,7 +1665,8 @@ namespace EDDiscovery
             PopOuts.LoadSavedPopouts();
         }
 
-#endregion
+        #endregion
+
 
     }
 }

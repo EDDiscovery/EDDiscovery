@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,13 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when approaching an astronomical body
-    //Parameters:
-    // •	StarSystem
-    // •	SystemAddress
-    // •	Body
-    // •	BodyID
-
     [JournalEntryType(JournalTypeEnum.ApproachBody)]
     public class JournalApproachBody : JournalEntry, IBodyNameAndID
     {
@@ -43,9 +36,8 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyType { get { return "Planet"; } }
         public string BodyDesignation { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = Body;
             detailed = "";
         }

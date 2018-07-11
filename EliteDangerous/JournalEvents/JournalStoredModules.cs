@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,7 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-   
     [JournalEntryType(JournalTypeEnum.StoredModules)]
     public class JournalStoredModules : JournalEntry, IShipInformation
     {
@@ -48,18 +47,19 @@ namespace EliteDangerousCore.JournalEvents
             shp.UpdateStoredModules(this);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Total:", ModuleItems?.Count());
+            info = BaseUtils.FieldBuilder.Build("Total:".Txb(this), ModuleItems?.Count());
             detailed = "";
 
             if (ModuleItems != null)
             {
                 foreach (ModulesInStore.StoredModule m in ModuleItems)
                 {
-                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ", m.StarSystem, "Transfer Cost:; cr;N0", m
-                                .TransferCost, "Time:", m.TransferTimeString, "Value:; cr;N0", m.TransferCost, ";(Hot)", m.Hot), System.Environment.NewLine);
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ".Txb(this), m.StarSystem, 
+                                "Transfer Cost:; cr;N0".Txb(this), m.TransferCost, 
+                                "Time:".Txb(this), m.TransferTimeString, 
+                                "Value:; cr;N0".Txb(this), m.TransferCost, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);
                 }
             }
         }

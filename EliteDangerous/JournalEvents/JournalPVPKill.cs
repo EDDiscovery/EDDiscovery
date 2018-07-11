@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,27 +18,21 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when this player has killed another player
-    //Parameters:
-    //•	Victim: name of victim
-    //•	CombatRank: victim’s rank in range 0..8
     [JournalEntryType(JournalTypeEnum.PVPKill)]
     public class JournalPVPKill : JournalEntry
     {
         public JournalPVPKill(JObject evt) : base(evt, JournalTypeEnum.PVPKill)
         {
             Victim = evt["Victim"].Str();
-
             CombatRank = (CombatRank)evt["CombatRank"].Int();
-
         }
+
         public string Victim { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",Victim, "Rank:" , CombatRank.ToString().SplitCapsWord());
+            info = BaseUtils.FieldBuilder.Build("",Victim, "Rank:".Txb(this) , CombatRank.ToString().SplitCapsWord());
             detailed = "";
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,18 +18,9 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: at startup
-    //Parameters:
-    //•	Combat: percent progress to next rank
-    //•	Trade: 		“
-    //•	Explore: 	“
-    //•	Empire: 	“
-    //•	Federation: 	“
-    //•	CQC: 		“ ranks: 0=’Helpless’, 1=’Mostly Helpless’, 2=’Amateur’, 3=’Semi Professional’, 4=’Professional’, 5=’Champion’, 6=’Hero’, 7=’Legend’, 8=’Elite’
     [JournalEntryType(JournalTypeEnum.Progress)]
     public class JournalProgress : JournalEntry
     {
-
         public JournalProgress(JObject evt ) : base(evt, JournalTypeEnum.Progress)
         {
             Combat = evt["Combat"].Int();
@@ -47,15 +38,14 @@ namespace EliteDangerousCore.JournalEvents
         public int Federation { get; set; }
         public int CQC { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Combat:;%", Combat,
-                                      "Trade:;%", Trade,
-                                      "Exploration:;%", Explore,
-                                      "Federation:;%", Federation,
-                                      "Empire:;%", Empire,
-                                      "CQC:;%", CQC);
+            info = BaseUtils.FieldBuilder.Build("Combat:;%".Tx(this), Combat,
+                                      "Trade:;%".Tx(this), Trade,
+                                      "Exploration:;%".Tx(this), Explore,
+                                      "Federation:;%".Tx(this), Federation,
+                                      "Empire:;%".Tx(this), Empire,
+                                      "CQC:;%".Tx(this), CQC);
             detailed = "";
         }
     }

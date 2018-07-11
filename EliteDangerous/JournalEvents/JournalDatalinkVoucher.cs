@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when scanning a datalink generates a reward
-//    Parameters:
-//•	Reward: value in credits
-//•	VictimFaction
-//•	PayeeFaction
     [JournalEntryType(JournalTypeEnum.DatalinkVoucher)]
     public class JournalDatalinkVoucher : JournalEntry, ILedgerNoCashJournalEntry
     {
@@ -31,8 +26,8 @@ namespace EliteDangerousCore.JournalEvents
             VictimFaction = evt["VictimFaction"].Str();
             Reward = evt["Reward"].Long();
             PayeeFaction = evt["PayeeFaction"].Str();
-
         }
+
         public string PayeeFaction { get; set; }
         public long Reward { get; set; }
         public string VictimFaction { get; set; }
@@ -42,10 +37,10 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, PayeeFaction + " " + Reward.ToString("N0"));
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("Reward ; cr;N0", Reward, "< from faction ", PayeeFaction, "against ", VictimFaction);
+            info = BaseUtils.FieldBuilder.Build("Reward:; cr;N0".Txb(this), Reward, "< from faction ".Txb(this), PayeeFaction, "Against ".Txb(this), VictimFaction);
             detailed = "";
         }
     }

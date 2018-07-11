@@ -133,8 +133,21 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("scantranslate", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
-                string ret = ScanTranslate.Process(allFiles);
+                string path = args.Next;
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", path, SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                bool combine = false;
+                bool showrepeat = false;
+
+                while( args.More )
+                {
+                    string a = args.Next.ToLower();
+                    if (a == "combine")
+                        combine = true;
+                    if (a == "showrepeats" )
+                        showrepeat = true;
+                }
+
+                string ret = ScanTranslate.Process(allFiles,combine, showrepeat);
                 Console.WriteLine(ret);
             }
             else
@@ -186,7 +199,7 @@ namespace NetLogEntry
                               "CorolisShip name - process corolis-data\\ships\n" +
                               "Coroliseng rootfolder - process corolis-data\\modifications\n" +
                               "FrontierData rootfolder - process cvs file exports of frontier data\n" +
-                              "scantranslate filespecwildcard - process source files and look for .Tx( definitions\n"
+                              "scantranslate filespecwildcard [Combine] [ShowRepeats]- process source files and look for .Tx definitions\n"
                               );
 
         }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,18 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-     When written: when repairing modules using the Auto Field Maintenance Unit (AFMU)
-    Parameters:
-     Module: module name
-     FullyRepaired: (bool)
-     Health; (float 0.0..1.0)
-    If the AFMU runs out of ammo, the module may not be fully repaired.
-    Example:
-    { "timestamp":"2017-08-14T15:41:50Z", "event":"AfmuRepairs",
-    "Module":"$modularcargobaydoor_name;", "Module_Localised":"Cargo Hatch",
-    "FullyRepaired":true, "Health":1.000000 } 
-     */
     [JournalEntryType(JournalTypeEnum.AfmuRepairs)]
     public class JournalAfmuRepairs : JournalEntry
     {
@@ -48,9 +36,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool FullyRepaired { get; set; }
         public float Health { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = BaseUtils.FieldBuilder.Build("", ModuleLocalised, "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
             detailed = "";
         }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
-    //Parameters:
-    //•	StationName: name of station
-
-    //•	Security
     [JournalEntryType(JournalTypeEnum.RefuelAll)]
     public class JournalRefuelAll : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -37,13 +32,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Amount " + Amount.ToString() + "t", -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString() + "t", -Cost);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0", Cost, "Fuel:; tons;0.0", Amount);
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Cost, "Fuel:; tons;0.0".Txb(this), Amount);
             detailed = "";
         }
 

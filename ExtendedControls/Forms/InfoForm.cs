@@ -58,6 +58,8 @@ namespace ExtendedControls
             {
                 panelTop.Visible = false;
             }
+
+            BaseUtils.Translator.Instance.Translate(this);
         }
 
 

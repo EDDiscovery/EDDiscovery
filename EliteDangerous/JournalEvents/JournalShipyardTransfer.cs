@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,19 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-    When Written: when requesting a ship at another station be transported to this station
-    Parameters:
-     ShipType: type of ship
-     ShipID
-     System: where it is
-     Distance: how far away
-     TransferPrice: cost of transfer
-     TransferTime: time taken in seconds
-    Example:
-    { "timestamp":"2016-07-21T15:19:49Z", "event":"ShipyardTransfer", "ShipType":"SideWinder",
-    "ShipID":7, "System":"Eranin", "Distance":85.639145, "TransferPrice":580 }
-     * */
     [JournalEntryType(JournalTypeEnum.ShipyardTransfer)]
     public class JournalShipyardTransfer : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -80,10 +67,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Transfer(ShipType, ShipTypeFD, ShipId, FromSystem, system.Name, whereami, arrival);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Of ", ShipType, "< from " , FromSystem , "Distance:; ly;0.0" , Distance , "Price:; cr;N0", TransferPrice, "TransferTime:", FriendlyTransferTime);
+            info = BaseUtils.FieldBuilder.Build("Of ".Tx(this), ShipType, "< from ".Txb(this), FromSystem , "Distance:; ly;0.0".Txb(this), Distance , "Price:; cr;N0", TransferPrice, "Transfer Time:".Txb(this), FriendlyTransferTime);
             detailed = "";
         }
     }

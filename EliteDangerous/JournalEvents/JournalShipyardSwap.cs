@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,14 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when switching to another ship already stored at this station
-    //Parameters:
-    //•	ShipType: type of ship being switched to
-    //•	ShipID
-    //•	StoreOldShip: (if storing old ship) type of ship being stored
-    //•	StoreShipID
-    //•	SellOldShip: (if selling old ship) type of ship being sold      -- NO EVIDENCE
-    //•	SellShipID -- NO EVIDENCE
     [JournalEntryType(JournalTypeEnum.ShipyardSwap)]
     public class JournalShipyardSwap : JournalEntry, IShipInformation
     {
@@ -43,6 +35,8 @@ namespace EliteDangerousCore.JournalEvents
             StoreShipId = evt["StoreShipID"].IntNull();
 
             MarketID = evt["MarketID"].LongNull();
+
+            //•	SellShipID -- NO EVIDENCE seen
         }
 
         public string ShipFD { get; set; }
@@ -61,10 +55,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.ShipyardSwap(this, whereami, system.Name);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Swap ",StoreOldShip, "< for a " , ShipType);
+            info = BaseUtils.FieldBuilder.Build("Swap ".Tx(this),StoreOldShip, "< for a ".Tx(this) , ShipType);
             detailed = "";
         }
     }

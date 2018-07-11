@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when the player restarts after death
-    //Parameters:
-    //•	Option: the option selected on the insurance rebuy screen
-    //•	Cost: the price paid
-    //•	Bankrupt: whether the commander declared bankruptcy
     [JournalEntryType(JournalTypeEnum.Resurrect)]
     public class JournalResurrect : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -47,9 +42,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.Resurrect(Option.Equals("free", System.StringComparison.InvariantCultureIgnoreCase));    // if free, we did not rebuy the ship
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Option:", Option, "Cost:; cr;N0", Cost, ";Bankrupt", Bankrupt);
+            info = BaseUtils.FieldBuilder.Build("Option:".Txb(this), Option, "Cost:; cr;N0".Txb(this), Cost, ";Bankrupt".Txb(this), Bankrupt);
             detailed = "";
         }
     }

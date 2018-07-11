@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
             Col1.Tag = null;
             Col2.HeaderText = "Manufacturer".Tx(this);
             Col2.Tag = null;
-            Col3.HeaderText = "Mass/Speed".Tx(this);
+            Col3.HeaderText = "Mass/Speed".Tx(this,"MS");
             Col3.Tag = null;
             ColPrice.HeaderText = "Price".Tx(this);
             ColPrice.Tag = "cr";

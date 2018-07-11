@@ -26,7 +26,6 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalLegacyConvert(JObject evt) : base(evt, JournalTypeEnum.EngineerLegacyConvert)     // same as craft.
         {
-
         }
     }
 }

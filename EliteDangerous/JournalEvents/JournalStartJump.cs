@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: at the start of a Hyperspace or Supercruise jump(start of countdown)
-//Parameters:
-//•	JumpType: "Hyperspace" or "Supercruise"
-//•	StarClass: star type(only for a hyperspace jump)
-
     [JournalEntryType(JournalTypeEnum.StartJump)]
     public class JournalStartJump : JournalEntry
     {
@@ -43,11 +38,11 @@ namespace EliteDangerousCore.JournalEvents
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 
-        public override string FillSummary { get { return "Charging FSD"; } }
+        public override string FillSummary { get { return "Charging FSD".Tx(this); } }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("", JumpType, "< to ",StarSystem, "" , FriendlyStarClass);
+            info = BaseUtils.FieldBuilder.Build("", JumpType, "< to ".Txb(this), StarSystem, "" , FriendlyStarClass);
             detailed = "";
         }
     }

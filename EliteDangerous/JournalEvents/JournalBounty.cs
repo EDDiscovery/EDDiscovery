@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -20,12 +20,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: player is awarded a bounty for a kill
-    //Parameters:
-    //•	Faction: the faction awarding the bounty
-    //•	Reward: the reward value
-    //•	VictimFaction: the victim’s faction
-    //•	SharedWithOthers: whether shared with other players
     [JournalEntryType(JournalTypeEnum.Bounty)]
     public class JournalBounty : JournalEntry, ILedgerNoCashJournalEntry
     {
@@ -70,16 +64,13 @@ namespace EliteDangerousCore.JournalEvents
 
         public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            string n = (VictimFactionLocalised.Length > 0) ? VictimFactionLocalised : VictimFaction;
-            n += " total " + TotalReward.ToString("N0");
-
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, n);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, string.Format("{0} total {1:N0}".Txb(this,"LegBounty"), VictimFactionLocalised, TotalReward));
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:", (string)Target, "Victim faction:", VictimFactionLocalised);
+            info = BaseUtils.FieldBuilder.Build("; cr;N0", TotalReward, "Target:".Txb(this), (string)Target, "Victim faction:".Txb(this), VictimFactionLocalised);
 
             detailed = "";
             if ( Rewards!=null)
@@ -89,7 +80,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (detailed.Length > 0)
                         detailed += ", ";
 
-                    detailed += BaseUtils.FieldBuilder.Build("Faction:", r.Faction, "; cr;N0", r.Reward);
+                    detailed += BaseUtils.FieldBuilder.Build("Faction:".Txb(this), r.Faction, "; cr;N0", r.Reward);
                 }
             }
         }

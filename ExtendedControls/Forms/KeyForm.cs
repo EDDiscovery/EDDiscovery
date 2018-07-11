@@ -119,6 +119,10 @@ namespace ExtendedControls
                 textBoxKeys.ReadOnly = false;
 
             DisplayKeyString();
+
+            BaseUtils.Translator.Instance.Translate(this);
+
+            labelCaption.Text = this.Text;
         }
 
         void AddMF()
@@ -207,7 +211,7 @@ namespace ExtendedControls
             Keys ctrlKey = KeyObjectExtensions.ControlKey(checkBoxCtrl.Checked, checkBoxCtrl.Text.Contains("Right"));
             Keys altKey = KeyObjectExtensions.MenuKey(checkBoxAlt.Checked, checkBoxAlt.Text.Contains("Right"));
 
-            checkBoxKey.Text = basekeystroke.HasChars() ? basekeystroke : "Press Key";
+            checkBoxKey.Text = basekeystroke.HasChars() ? basekeystroke : "Press Key".Tx(this,"PK");
 
             //System.Diagnostics.Debug.WriteLine("T" + textBoxKeys.Text + " at " + curinsertpoint + " " + fullname);
 
@@ -306,16 +310,16 @@ namespace ExtendedControls
             if (target.HasChars())
             {
                 if (target == BaseUtils.EnhancedSendKeys.CurrentWindow || target.Equals(DefaultProcessID))
-                    MessageBoxTheme.Show(this, "Name a process to test sending keys");
+                    MessageBoxTheme.Show(this, "Name a process to test sending keys".Tx(this,"NOPN"));
                 else
                 {
                     string err = BaseUtils.EnhancedSendKeys.SendToProcess(textBoxKeys.Text, DefaultDelay <= DefaultDelayID ? 10 : DefaultDelay, 2 , 2, textBoxSendTo.Text, additionalkeyparser);
                     if (err.Length > 0)
-                        MessageBoxTheme.Show(this, "Error " + err + " - check entry");
+                        MessageBoxTheme.Show(this, string.Format("Error {0} - check entry".Tx(this,"KERR") , err));
                 }
             }
             else
-                MessageBoxTheme.Show(this, "No process names to send keys to");
+                MessageBoxTheme.Show(this, "No process names to send keys to".Tx(this,"NOP"));
         }
 
         private void textBox_Enter(object sender, EventArgs e)

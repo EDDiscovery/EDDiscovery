@@ -19,10 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when synthesis is used to repair or rearm
-    //Parameters:
-    //•	Name: synthesis blueprint
-    //•	Materials: JSON object listing materials used and quantities
     [JournalEntryType(JournalTypeEnum.Synthesis)]
     public class JournalSynthesis : JournalEntry, IMaterialCommodityJournalEntry
     {
@@ -68,9 +64,8 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = Name;
             if (Materials != null)
                 foreach (KeyValuePair<string, int> k in Materials)

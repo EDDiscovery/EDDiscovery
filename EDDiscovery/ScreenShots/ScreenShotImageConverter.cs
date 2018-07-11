@@ -110,7 +110,7 @@ namespace EDDiscovery.ScreenShots
 
             if (!UpdateOutputFolderWithSubFolder())  // add on any sub folder options to output folder
             {
-                logit("Cannot convert " + InputFileExtension.ToString() + " into the same folder as they are stored into" + Environment.NewLine + Environment.NewLine + "Pick a different conversion folder or a different output format");
+                logit(string.Format(("Cannot convert {0} into the same folder as they are stored into" + Environment.NewLine + "Pick a different conversion folder or a different output format").Tx(this,"FolderErr"), InputFileExtension.ToString()));
                 return false;
             }
 
@@ -148,7 +148,7 @@ namespace EDDiscovery.ScreenShots
 
                 System.Diagnostics.Debug.WriteLine("Convert " + InputFilename + " at " + SystemName + " to " + OutputFilename);
 
-                logit("Converted " + Path.GetFileName(InputFilename) + " to " + Path.GetFileName(OutputFilename));
+                logit(string.Format("Converted {0} to {1}".Tx(this,"CNV"), Path.GetFileName(InputFilename) , Path.GetFileName(OutputFilename)));
             }
 
             return Converted;
@@ -307,7 +307,7 @@ namespace EDDiscovery.ScreenShots
 
                 if (throwOnError)
                 {
-                    logit($"Unable to open screenshot '{filename}': {ex.Message}");
+                    logit(string.Format("Unable to open screenshot '{0}': {1}".Tx(this,"ERRF") , filename , ex.Message));
                     throw;
                 }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,10 +18,7 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //{ "timestamp":"2017-06-27T01:32:36Z", "event":"EngineerContribution", "Engineer":"Liz Ryder", "Type":"Commodity", "Commodity":"landmines", "Quantity":200, "TotalQuantity":200 }
-    //{ "timestamp":"2017-06-27T03:02:37Z", "event":"EngineerContribution", "Engineer":"Tiana Fortune", "Type":"Materials", "Material":"decodedemissiondata", "Quantity":50, "TotalQuantity":50 }
-
-[JournalEntryType(JournalTypeEnum.EngineerContribution)]
+    [JournalEntryType(JournalTypeEnum.EngineerContribution)]
     public class JournalEngineerContribution : JournalEntry , ILedgerJournalEntry , IMaterialCommodityJournalEntry
     {
         public JournalEngineerContribution(JObject evt ) : base(evt, JournalTypeEnum.EngineerContribution)
@@ -81,13 +78,13 @@ namespace EliteDangerousCore.JournalEvents
 
         protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             if (unknownType==true)
                 info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
              else
-                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:", Type, "Commodity:", Commodity_Localised, "Material:", Material_Localised, "Quantity:", Quantity, "TotalQuantity:", TotalQuantity);
+                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:".Txb(this), Type, "Commodity:".Txb(this), Commodity_Localised, 
+                    "Material:".Txb(this), Material_Localised, "Quantity:".Txb(this), Quantity, "TotalQuantity:".Txb(this), TotalQuantity);
             detailed = "";
         }
     }
