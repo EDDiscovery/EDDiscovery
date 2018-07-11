@@ -78,8 +78,29 @@ namespace EDDiscovery.Actions
             {
                 audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
                 audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
-                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.WindowsSpeechEngine());
-                voicerecon = new AudioExtensions.VoiceRecognitionWindows();
+                ISpeechEngine speechengine;
+
+                try
+                {
+                    speechengine = new AudioExtensions.WindowsSpeechEngine();
+                }
+                catch (Exception ex)
+                {
+                    ctrl.LogLineHighlight(String.Format("Error initializing Windows speech synthesis engine: {0}\nSpeech synthesis will be unavailable".Tx(), ex.Message));
+                    speechengine = new AudioExtensions.DummySpeechEngine();
+                }
+
+                speechsynth = new AudioExtensions.SpeechSynthesizer(speechengine);
+
+                try
+                {
+                    voicerecon = new AudioExtensions.VoiceRecognitionWindows();
+                }
+                catch (Exception ex)
+                {
+                    ctrl.LogLineHighlight(String.Format("Error initializing Windows speech recognition engine: {0}\nSpeech recognition will be unavailable".Tx(), ex.Message));
+                    voicerecon = new AudioExtensions.VoiceRecognitionDummy();
+                }
             }
             else
             {

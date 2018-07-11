@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When Written: when selling unwanted drones back to the market
-    //Parameters:
-    //•	Type
-    //•	Count
-    //•	SellPrice
-    //•	TotalSale
     [JournalEntryType(JournalTypeEnum.SellDrones)]
     public class JournalSellDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
     {
@@ -46,13 +40,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " drones", TotalSale);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " " + "Drones".Txb(this), TotalSale);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-
-            info = BaseUtils.FieldBuilder.Build("", Type, "Count:", Count, "Each:; cr;N0", SellPrice, "Amount:; cr;N0", TotalSale);
+            info = BaseUtils.FieldBuilder.Build("", Type, "Count:".Txb(this), Count, "Price:; cr;N0".Txb(this), SellPrice, "Amount:; cr;N0".Txb(this), TotalSale);
             detailed = "";
         }
     }

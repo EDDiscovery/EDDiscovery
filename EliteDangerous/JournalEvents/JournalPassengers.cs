@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,15 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//The "Passengers" event contains:
-
-//"Manifest": array of passenger records, each containing:
-//o MissionID (int)
-//o Type (string)
-//o VIP (bool)
-//o Wanted (bool)
-//o Count (int)
-//from hchalkley
     [JournalEntryType(JournalTypeEnum.Passengers)]
     public class JournalPassengers : JournalEntry
     {
@@ -43,6 +34,7 @@ namespace EliteDangerousCore.JournalEvents
 
             public Passengers()
             { }
+
             public Passengers(int i, string t, bool v, bool w, int c)
             {
                 MissionID = i; Type = t; VIP = v; Wanted = w; Count = c;
@@ -68,8 +60,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) //U
         {
-            
-            info = "No Passengers";
+            info = "No Passengers".Txb(this);
 
             if (Manifest != null && Manifest.Length > 0)
             {
@@ -78,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     if (info.Length > 0)
                         info += ", ";
-                    info += BaseUtils.FieldBuilder.Build("", p.Type , "< ", p.Count , "; (VIP)" , p.VIP , "; (Wanted)" , p.Wanted);
+                    info += BaseUtils.FieldBuilder.Build("", p.Type , "< ", p.Count , "; (VIP)" , p.VIP , ";(Wanted)".Txb(this), p.Wanted);
                 }
             }
 

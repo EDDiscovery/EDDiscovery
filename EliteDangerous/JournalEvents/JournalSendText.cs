@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when a text message is sent to another player
-    //Parameters:
-    //•	To
-    //•	Message
     [JournalEntryType(JournalTypeEnum.SendText)]
     public class JournalSendText : JournalEntry
     {
@@ -31,14 +27,14 @@ namespace EliteDangerousCore.JournalEvents
             To_Localised = JournalFieldNaming.CheckLocalisation(evt["To_Localised"].Str(),To);
             Message = evt["Message"].Str();
         }
+
         public string To { get; set; }
         public string To_Localised { get; set; }
         public string Message { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("To:", To_Localised, "Msg:", Message);
+            info = BaseUtils.FieldBuilder.Build("To:".Tx(this), To_Localised, "Msg:".Tx(this), Message);
             detailed = "";
         }
     }

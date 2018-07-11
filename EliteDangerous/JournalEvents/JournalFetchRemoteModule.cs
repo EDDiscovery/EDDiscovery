@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,15 +17,6 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when requesting a module is transferred from storage at another station
-//Parameters:
-//•	StorageSlot
-//•	StoredItem
-//•	ServerId
-//•	TransferCost
-//•	Ship
-//•	ShipId
-//* TransferTime: (in seconds) 
     [JournalEntryType(JournalTypeEnum.FetchRemoteModule)]
     public class JournalFetchRemoteModule : JournalEntry, ILedgerJournalEntry
     {
@@ -65,10 +56,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, StoredItemLocalised + " on " + Ship, -TransferCost);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "Cost:", TransferCost, "into ship:", Ship, "Transfer Time:", FriendlyTransferTime);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "Cost:; cr;N0".Txb(this), TransferCost, "Into ship:".Txb(this), Ship, "Transfer Time:".Txb(this), FriendlyTransferTime);
             detailed = "";
         }
     }

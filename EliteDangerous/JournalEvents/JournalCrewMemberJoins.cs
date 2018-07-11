@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: When another player joins your ship's crew
-//Parameters:
-//•	Crew: player's commander name
-
     [JournalEntryType(JournalTypeEnum.CrewMemberJoins)]
     public class JournalCrewMemberJoins : JournalEntry
     {
@@ -32,9 +28,8 @@ namespace EliteDangerousCore.JournalEvents
         }
         public string Crew { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = Crew;
             detailed = "";
         }

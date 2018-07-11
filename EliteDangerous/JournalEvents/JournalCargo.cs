@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,13 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: at startup, when loading from main menu
-//Parameters:
-//•	Inventory: array of cargo, with Name and Count for each
-
-//Example:
-//{ "timestamp":"2017-02-10T14:25:51Z", "event":"Cargo", "Inventory":[ { "Name":"syntheticmeat", "Count":2 }, { "Name":"evacuationshelter", "Count":1 }, { "Name":"progenitorcells", "Count":3 }, { "Name":"bioreducinglichen", "Count":1 }, { "Name":"neofabricinsulation", "Count":2 } ] }
-
     [JournalEntryType(JournalTypeEnum.Cargo)]
     public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry
     {
@@ -57,10 +50,10 @@ namespace EliteDangerousCore.JournalEvents
 
         public Cargo[] Inventory { get; set; }      // may be NULL
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = "No Cargo";
+            info = "No Cargo".Txb(this);
             detailed = "";
 
             if (Inventory != null && Inventory.Length > 0)
@@ -69,7 +62,7 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (Cargo c in Inventory)
                     total += c.Count;
 
-                info = "Cargo, " + total + " items";
+                info = string.Format("Cargo, {0} items".Txb(this), total);
                 detailed = "";
 
                 foreach (Cargo c in Inventory)
@@ -79,7 +72,7 @@ namespace EliteDangerousCore.JournalEvents
                     int? stolen = null;
                     if (c.Stolen > 0)
                         stolen = c.Stolen;
-                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items", c.Count , "(;)" , stolen);
+                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen);
                 }
             }
         }

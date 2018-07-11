@@ -18,14 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when the player's ship has been scanned
-//(note the "Scan Detected" indication is at the start of the scan, this is written at the end of a successful scan)
-//Parameters:
-//•	ScanType: Cargo, Crime, Cabin, Data or Unknown
-
-//Example:
-//{ "timestamp":"2017-02-13T12:30:09Z", "event":"Scanned", "ScanType":"Cargo" }
-
     [JournalEntryType(JournalTypeEnum.Scanned)]
     public class JournalScanned : JournalEntry
     {
@@ -33,11 +25,11 @@ namespace EliteDangerousCore.JournalEvents
         {
             ScanType = evt["ScanType"].Str().SplitCapsWordFull();
         }
+
         public string ScanType { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = ScanType;
             detailed = "";
         }

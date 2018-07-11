@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,9 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when the player requests docking at a station
-    //Parameters:
-    //•	StationName: name of station
     [JournalEntryType(JournalTypeEnum.DockingRequested)]
     public class JournalDockingRequested : JournalEntry
     {
@@ -35,9 +32,8 @@ namespace EliteDangerousCore.JournalEvents
         public string StationType { get; set; }
         public long? MarketID { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = StationName;
             detailed = "";
         }

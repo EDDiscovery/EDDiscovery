@@ -99,11 +99,11 @@ namespace ExtendedControls
                 y += vspacing;
             }
 
-            ExtendedControls.ButtonExt confirmation = new ExtendedControls.ButtonExt() { Text = "Ok", Left = tbs[0].Right - 80, Width = 80, Top = y, DialogResult = DialogResult.OK };
+            ExtendedControls.ButtonExt confirmation = new ExtendedControls.ButtonExt() { Text = "Ok".Tx(), Left = tbs[0].Right - 80, Width = 80, Top = y, DialogResult = DialogResult.OK };
             outer.Controls.Add(confirmation);
             confirmation.Click += (sender, e) => { prompt.Close(); };
 
-            ExtendedControls.ButtonExt cancel = new ExtendedControls.ButtonExt() { Text = "Cancel", Left = confirmation.Location.X - 90, Width = 80, Top = confirmation.Top, DialogResult = DialogResult.Cancel };
+            ExtendedControls.ButtonExt cancel = new ExtendedControls.ButtonExt() { Text = "Cancel".Tx(), Left = confirmation.Location.X - 90, Width = 80, Top = confirmation.Top, DialogResult = DialogResult.Cancel };
             outer.Controls.Add(cancel);
             cancel.Click += (sender, e) => { prompt.Close(); };
 

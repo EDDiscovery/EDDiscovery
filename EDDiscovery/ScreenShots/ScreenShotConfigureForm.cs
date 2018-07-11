@@ -55,6 +55,9 @@ namespace EDDiscovery.ScreenShots
             SetNumEnabled();
 
             textBoxFileNameExample.Text = ScreenShotImageConverter.CreateFileName("Sol", "Earth", "HighResScreenshot_0000.bmp", comboBoxFileNameFormat.SelectedIndex, hires, DateTime.Now);
+
+            BaseUtils.Translator.Instance.Translate(this);
+            label_index.Text = this.Text;
         }
 
         private void ScreenShotConfigureForm_FormClosed(object sender, FormClosedEventArgs e)

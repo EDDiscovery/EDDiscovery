@@ -11,7 +11,7 @@ public static class TranslatorExtensions
 {
     static public string Tx(this string s)              // use the text, alpha numeric only, as the translation id
     {
-        return BaseUtils.Translator.Instance.Translate(s, s.ReplaceNonAlphaNumeric());
+        return BaseUtils.Translator.Instance.Translate(s, s.FirstAlphaNumericText());
     }
 
     static public string Tx(this string s, Object c, string id)     // use the type plus an id
@@ -19,14 +19,24 @@ public static class TranslatorExtensions
         return BaseUtils.Translator.Instance.Translate(s, c.GetType().Name, id);
     }
 
+    static public string Txb(this string s, Object c, string id)     // use the base type plus an id
+    {
+        return BaseUtils.Translator.Instance.Translate(s, c.GetType().BaseType.Name, id);
+    }
+
     static public string Tx(this string s, Type c)    // use a type definition using the string as the id
     {
-        return BaseUtils.Translator.Instance.Translate(s, c.Name, s.ReplaceNonAlphaNumeric());
+        return BaseUtils.Translator.Instance.Translate(s, c.Name, s.FirstAlphaNumericText());
     }
 
     static public string Tx(this string s, Object c)              // use the object type with string as id
     {
-        return BaseUtils.Translator.Instance.Translate(s, c.GetType().Name, s.ReplaceNonAlphaNumeric());
+        return BaseUtils.Translator.Instance.Translate(s, c.GetType().Name, s.FirstAlphaNumericText());
+    }
+
+    static public string Txb(this string s, Object c)     // use the base type using the string as the id
+    {
+        return BaseUtils.Translator.Instance.Translate(s, c.GetType().BaseType.Name, s.FirstAlphaNumericText());
     }
 
     static public string Tx(this string s, Type c, string id)    // use a type definition with id
@@ -40,7 +50,7 @@ namespace BaseUtils
 {
     // specials : if text in a control = <code> its presumed its a code filled in entry and not suitable for translation
     // in translator file, .Label means use the previous first word prefix stored, for shortness
-    // using Label: "English" @ means for debug, replace @ with <english> as the foreign word
+    // using Label: "English" @ means for debug, replace @ with <english> as the foreign word in the debug build. In release, just use the in-code text
 
     public class Translator
     {
@@ -55,7 +65,7 @@ namespace BaseUtils
 
         LogToFile logger = null;
 
-        Dictionary<string, string> translations = null;
+        Dictionary<string, string> translations = null;         // translation result can be null, which means, use the in-game english string
         List<string> ExcludedControls = new List<string>();
 
         private Translator()
@@ -64,102 +74,122 @@ namespace BaseUtils
 
         // You can call this multiple times if required for debugging purposes
 
-        public void LoadTranslation(string language, CultureInfo uicurrent, string txfolder)
+        public void LoadTranslation(string language, CultureInfo uicurrent, string writabletxfolder1, string txfolder2)
         {
 #if DEBUG
             if (logger != null)
                 logger.Dispose();
 
             logger = new LogToFile();
-            logger.SetFile(txfolder, "ids.txt", false);
+            logger.SetFile(writabletxfolder1, "ids.txt", false);
 #endif
             translations = null;        // forget any
 
-            List<string> languages = Languages(txfolder);
+            List<string> languagesfolder1 = Languages(writabletxfolder1,false);     // full paths
+            List<string> languagesfolder2 = Languages(txfolder2,false);
 
             // uicurrent = CultureInfo.CreateSpecificCulture("es"); // debug
 
+            string langfile = null;
+
             if (language == "Auto")
             {
-                language = FindLanguage(languages, uicurrent.Name);
+                langfile = FindLanguage(languagesfolder1, uicurrent.Name);
+
+                if (langfile == null)
+                    langfile = FindLanguage(languagesfolder2, uicurrent.Name);
 
                 if (language == null)
-                    language = FindLanguage(languages, uicurrent.TwoLetterISOLanguageName);
+                    langfile = FindLanguage(languagesfolder1, uicurrent.TwoLetterISOLanguageName);
 
                 if (language == null)
+                    langfile = FindLanguage(languagesfolder2, uicurrent.TwoLetterISOLanguageName);
+
+                if (langfile == null)
                     return;
             }
-
-            string langfile = Path.Combine(txfolder, language + ".tlf");
-
-            if (File.Exists(langfile))
+            else
             {
-                System.Diagnostics.Debug.WriteLine("Load Language " + langfile);
-                logger?.WriteLine("Read " + langfile);
+                langfile = Path.Combine(writabletxfolder1, language + ".tlf");
 
-                try
+                if (!File.Exists(langfile))
                 {
-                    var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
+                    langfile = Path.Combine(txfolder2, language + ".tlf");
 
-                    StreamReader sr = new StreamReader(langfile, utc8nobom);
+                    if (!File.Exists(langfile))
+                        return;
+                }
+            }
 
-                    translations = new Dictionary<string, string>();
+            System.Diagnostics.Debug.WriteLine("Load Language " + langfile);
+            logger?.WriteLine("Read " + langfile);
 
-                    string prefix = "";
+            try
+            {
+                var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
 
-                    string line = null;
-                    while ((line = sr.ReadLine()) != null)
+                StreamReader sr = new StreamReader(langfile, utc8nobom);
+
+                translations = new Dictionary<string, string>();
+
+                string prefix = "";
+
+                string line = null;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    line = line.Trim();
+                    if (line.Length > 0 && !line.StartsWith("//"))
                     {
-                        line = line.Trim();
-                        if (line.Length > 0 && !line.StartsWith("//"))
+                        StringParser s = new StringParser(line);
+
+                        string id = s.NextWord(" :");
+
+                        if (id.StartsWith(".") && prefix.HasChars())
+                            id = prefix + id;
+                        else
+                            prefix = id.Word(new char[] { '.' });
+
+                        if (s.IsCharMoveOn(':'))
                         {
-                            StringParser s = new StringParser(line);
+                            s.NextQuotedWord(replaceescape: true);  // ignore the english for ref purposes only
 
-                            string id = s.NextWord(" :").ToLower();
+                            string foreign = null;
+                            bool err = false;
 
-                            if (s.IsCharMoveOn(':'))
+                            if (s.IsStringMoveOn("=>"))
                             {
-                                string english = s.NextQuotedWord(replaceescape: true);
-                                string foreign = null;
+                                foreign = s.NextQuotedWord(replaceescape: true);
+                                err = foreign == null;
+                            }
+                            else if (s.IsCharMoveOn('@'))
+                                foreign = null;
+                            else
+                                err = false;
 
-                                if (s.IsStringMoveOn("=>"))
-                                    foreign = s.NextQuotedWord(replaceescape: true);
-                                else if (s.IsCharMoveOn('@'))      // debug marker
-                                    foreign = "<" + english + ">";
-
-                                if (foreign != null)
+                            if ( err == true )
+                            {
+                                logger?.WriteLine(string.Format("*** Translator ID but no translation {0}", id));
+                                System.Diagnostics.Debug.WriteLine("*** Translator ID but no translation {0}", id);
+                            }
+                            else
+                            {
+                                if (!translations.ContainsKey(id))
                                 {
-                                    //  System.Diagnostics.Debug.WriteLine("{0}: {1} => {2}", id, english, foreign);
-
-                                    //                                    make LF work
-
-                                    if (id.StartsWith(".") && prefix.HasChars())
-                                        id = prefix + id;
-                                    else
-                                        prefix = id.Word(new char[] { '.' });
-
-                                    if (!translations.ContainsKey(id))
-                                    {
-                                        //logger?.WriteLine(string.Format("New {0}: \"{1}\" => \"{2}\"", id, english, foreign));
-                                        translations[id] = foreign;
-                                    }
-                                    else
-                                    {
-                                        logger?.WriteLine(string.Format("*** Translator Repeat {0}: \"{1}\" => \"{2}\"", id, english, foreign));
-                                        System.Diagnostics.Debug.WriteLine("*** Translator Repeat {0}: {1} => {2}", id, english, foreign);
-                                    }
+                                    //logger?.WriteLine(string.Format("New {0}: \"{1}\" => \"{2}\"", id, english, foreign));
+                                    translations[id] = foreign;
                                 }
                                 else
                                 {
-                                    logger?.WriteLine(string.Format("*** Translator ID but no translation \"{0}\": \"{1}\"", id, english));
-                                    System.Diagnostics.Debug.WriteLine("*** Translator ID but no translation {0}: {1}", id, english);
+                                    logger?.WriteLine(string.Format("*** Translator Repeat {0}", id));
                                 }
+
                             }
+
                         }
                     }
                 }
-                catch { }
             }
+            catch { }
         }
 
         public void AddExcludedControls(string [] s)
@@ -167,17 +197,18 @@ namespace BaseUtils
             ExcludedControls.AddRange(s);
         }
 
-        static public List<string> Languages(string txfolder)
+        static public List<string> Languages(string txfolder, bool nameonly)
         {
             FileInfo[] allFiles = Directory.EnumerateFiles(txfolder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
 
-            return allFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToList();
+            return nameonly ? allFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToList() : allFiles.Select(x => x.Name).ToList();
         }
 
-        static public string FindLanguage(List<string> lang, string isoname)
+        static public string FindLanguage(List<string> lang, string isoname)    // take filename part only, see if filename text-<iso> is present
         {
             return lang.Find(x =>
             {
+                string filename = Path.GetFileNameWithoutExtension(x);
                 int dash = x.IndexOf('-');
                 return dash != -1 && x.Substring(dash + 1).Equals(isoname);
             });
@@ -185,17 +216,21 @@ namespace BaseUtils
 
         public string Translate(string normal, string id)
         {
-            string key = id.ToLower();
             if (translations != null && !normal.Equals("<code>") )
             {
+                string key = id;
                 if (translations.ContainsKey(key))
                 {
-                    //System.Diagnostics.Debug.WriteLine("Translate: \"{0}\" => \"{1}\"", id, translations[id]);
-                    return translations[key];
+#if DEBUG
+                    return translations[key] ?? ('\'' + normal + '\'');     // debug more we quote them to show its not translated, else in release we just print
+#else
+                    return translations[key] ?? normal;
+#endif
                 }
                 else
                 {
                     logger?.WriteLine(string.Format("{0}: {1} @", id, normal.EscapeControlChars().AlwaysQuoteString()));
+                    translations.Add(key, normal);
                     //System.Diagnostics.Debug.WriteLine("*** Missing Translate ID: {0}: \"{1}\" => \"{2}\"", id, normal.EscapeControlChars(), "<" + normal.EscapeControlChars() + ">");
                     return normal;
                 }

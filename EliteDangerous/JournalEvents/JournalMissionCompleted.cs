@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,20 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when a mission is completed
-    //Parameters:
-    //•	Name: mission type
-    //•	Faction: faction name
-    //Optional parameters (depending on mission type)
-    //•	Commodity: $Commodity_Name;
-    //•	Commodity_Localised: commodity type
-    //•	Count
-    //•	Target
-    //•	TargetType
-    //•	TargetFaction
-    //•	Reward: value of reward
-    //•	Donation: donation offered (for altruism missions)
-    //•	PermitsAwarded:[] (names of any permits awarded, as a JSON array)
     [JournalEntryType(JournalTypeEnum.MissionCompleted)]
     public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry, IMissions
     {
@@ -154,20 +140,20 @@ namespace EliteDangerousCore.JournalEvents
             mlist.Completed(this);
         }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
             
             info = BaseUtils.FieldBuilder.Build("", Name,
-                                        "< from ", Faction,
-                                        "Reward:; cr;N0", Reward,
-                                        "Donation:", Donation,
-                                        "System:", DestinationSystem,
-                                        "Station:", DestinationStation);
+                                        "< from ".Txb(this), Faction,
+                                        "Reward:; cr;N0".Txb(this), Reward,
+                                        "Donation:".Txb(this), Donation,
+                                        "System:".Txb(this), DestinationSystem,
+                                        "Station:".Txb(this), DestinationStation);
 
-            detailed = BaseUtils.FieldBuilder.Build("Commodity:", CommodityLocalised,
-                                            "Target:", TargetLocalised,
-                                            "Type:", TargetTypeLocalised,
-                                            "Target Faction:", TargetFaction);
+            detailed = BaseUtils.FieldBuilder.Build("Commodity:".Txb(this), CommodityLocalised,
+                                            "Target:".Txb(this), TargetLocalised,
+                                            "Type:".Txb(this), TargetTypeLocalised,
+                                            "Target Faction:".Txb(this), TargetFaction);
 
             detailed += PermitsList();
             detailed += CommoditiesList();
@@ -180,7 +166,7 @@ namespace EliteDangerousCore.JournalEvents
             if (PermitsAwarded != null && PermitsAwarded.Length > 0)
             {
                 if (pretty)
-                    detailed += "Permits:";
+                    detailed += "Permits:".Txb(this);
 
                 for (int i = 0; i < PermitsAwarded.Length; i++)
                     detailed += ((i > 0) ? "," : "") + PermitsAwarded[i];
@@ -197,7 +183,7 @@ namespace EliteDangerousCore.JournalEvents
             if (CommodityReward != null && CommodityReward.Length > 0)
             {
                 if (pretty)
-                    detailed += "Rewards:";
+                    detailed += "Rewards:".Txb(this);
                 for (int i = 0; i < CommodityReward.Length; i++)
                 {
                     CommodityRewards c = CommodityReward[i];
@@ -216,7 +202,8 @@ namespace EliteDangerousCore.JournalEvents
             if (MaterialsReward != null && MaterialsReward.Length > 0)
             {
                 if (pretty)
-                    detailed += "Rewards:";
+                    detailed += "Rewards:".Txb(this);
+
                 for (int i = 0; i < MaterialsReward.Length; i++)
                 {
                     MaterialRewards m = MaterialsReward[i];

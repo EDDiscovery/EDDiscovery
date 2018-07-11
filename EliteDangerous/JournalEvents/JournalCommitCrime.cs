@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,14 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when a crime is recorded against the player
-    //Parameters:
-    //•	CrimeType
-    //•	Faction
-    //Optional parameters (depending on crime)
-    //•	Victim
-    //•	Fine
-    //•	Bounty
     [JournalEntryType(JournalTypeEnum.CommitCrime)]
     public class JournalCommitCrime : JournalEntry, ILedgerNoCashJournalEntry
     {
@@ -54,18 +46,17 @@ namespace EliteDangerousCore.JournalEvents
                 v = Faction;
 
             if (Fine.HasValue)
-                v += " Fine " + Fine.Value.ToString("N0");
+                v += string.Format(" Fine {0:N0}".Tx(this), Fine.Value);
 
             if (Bounty.HasValue)
-                v += " Bounty " + Bounty.Value.ToString("N0");
+                v += string.Format(" Bounty {0:N0}".Tx(this,"Bounty"), Bounty.Value);
 
-            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, CrimeType + " on " + v);
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, string.Format("{0} on {1}".Txb(this) , CrimeType , v));
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ", Faction, "Against ", VictimLocalised, "Cost ; cr;N0", Fine, "Bounty ; cr;N0", Bounty);
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "< on faction ".Txb(this), Faction, "Against ".Txb(this), VictimLocalised, "Cost:; cr;N0".Txb(this), Fine, "Bounty:; cr;N0".Txb(this), Bounty);
             detailed = "";
         }
     }

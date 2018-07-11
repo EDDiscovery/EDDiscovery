@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,13 +21,6 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Promotion)]
     public class JournalPromotion : JournalEntry
     {
-        //        When written: when the player’s rank increases
-        //Parameters: one of the following
-        //•	Combat: new rank
-        //•	Trade: new rank
-        //•	Explore: new rank
-        //•	CQC: new rank
-
         public JournalPromotion(JObject evt) : base(evt, JournalTypeEnum.Promotion)
         {
             int? c = evt["Combat"].IntNull();
@@ -62,15 +55,14 @@ namespace EliteDangerousCore.JournalEvents
         public FederationRank? Federation { get; set; }
         public EmpireRank? Empire { get; set; }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Combat:", Combat.HasValue ? Combat.ToString() : null,
-                                      "Trade:", Trade.HasValue ? Trade.ToString() : null,
-                                      "Exploration:", Explore.HasValue ? Explore.ToString() : null,
-                                      "Empire:", Empire.HasValue ? Empire.ToString() : null,
-                                      "Federation:", Federation.HasValue ? Federation.ToString() : null,
-                                      "CQC:", CQC.HasValue ? CQC.ToString() : null);
+            info = BaseUtils.FieldBuilder.Build("Combat:".Tx(this), Combat.HasValue ? Combat.ToString() : null,
+                                      "Trade:".Tx(this), Trade.HasValue ? Trade.ToString() : null,
+                                      "Exploration:".Tx(this), Explore.HasValue ? Explore.ToString() : null,
+                                      "Empire:".Tx(this), Empire.HasValue ? Empire.ToString() : null,
+                                      "Federation:".Tx(this), Federation.HasValue ? Federation.ToString() : null,
+                                      "CQC:".Tx(this), CQC.HasValue ? CQC.ToString() : null);
             detailed = "";
         }
     }

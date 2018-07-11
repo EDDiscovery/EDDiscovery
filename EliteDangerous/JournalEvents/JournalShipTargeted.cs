@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,16 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: player has a ship targeted
-    //Parameters:
-    //* TargetLocked
-    //* Ship
-    //* Ship_Localised
-    //* ScanStage
-    //* PilotName
-    //* PilotName_Localised
-    //* PilotRank
-
     [JournalEntryType(JournalTypeEnum.ShipTargeted)]
     public class JournalShipTargeted : JournalEntry
     {
@@ -74,9 +64,8 @@ namespace EliteDangerousCore.JournalEvents
         public string SubSystem { get; set; }           // 3 null
         public double? SubSystemHealth { get; set; }    // 3 null
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             if (TargetLocked)
             {
                 if (ScanStage == null)
@@ -90,27 +79,27 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else if (ScanStage.Value == 1)
                 {
-                    info = BaseUtils.FieldBuilder.Build("", PilotName_Localised, " Rank ", PilotRank, " in ", Ship_Localised);
+                    info = BaseUtils.FieldBuilder.Build("", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
                 }
                 else if (ScanStage.Value == 2)
                 {
-                    info = BaseUtils.FieldBuilder.Build("Shield ;;0.0", ShieldHealth, "Hull ;;0.0", HullHealth,
-                        "", PilotName_Localised, " Rank ", PilotRank, " in ", Ship_Localised);
+                    info = BaseUtils.FieldBuilder.Build("Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
+                        "", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
 
                 }
                 else if (ScanStage.Value == 3)
                 {
-                    info = BaseUtils.FieldBuilder.Build("Faction ", Faction,
-                                    "", LegalStatus, "Bounty ", Bounty, 
-                                    "", SubSystem, "< at ;;0.0", SubSystemHealth,
-                                    "Shield ;;0.0", ShieldHealth, "Hull ;;0.0", HullHealth,
-                                    "", PilotName_Localised, " Rank ", PilotRank, " in ", Ship_Localised);
+                    info = BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction,
+                                    "", LegalStatus, "Bounty:; cr;N0".Txb(this), Bounty, 
+                                    "", SubSystem, "< at ;;N1".Tx(this), SubSystemHealth,
+                                    "Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
+                                    "", PilotName_Localised, " " + "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
                 }
                 else
                     info = "Unknown Scan Stage type - report to EDD team";
             }
             else
-                info = "Lost Target";
+                info = "Lost Target".Txb(this);
 
             detailed = "";
         }

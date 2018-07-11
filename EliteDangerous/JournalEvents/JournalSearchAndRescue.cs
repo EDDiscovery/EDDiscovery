@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//When written: when delivering items to a Search and Rescue contact
-//Parameters:
-// Name
-// Count
-// Reward
-
     [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
     public class JournalSearchAndRescue : JournalEntry
     {
@@ -43,10 +37,9 @@ namespace EliteDangerousCore.JournalEvents
         public long Reward { get; set; }
         public long? MarketID { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",FriendlyName , "Num:" , Count, "Reward:" , Reward);
+            info = BaseUtils.FieldBuilder.Build("",FriendlyName , "Num:".Txb(this), Count, "Reward:".Tx(this), Reward);
             detailed = "";
         }
     }

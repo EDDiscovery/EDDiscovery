@@ -18,9 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when in a crew on someone else's ship, player switched crew role
-//Parameters:
-//•	Role: name of selected role(Idle, FireCon, FighterCon)
     [JournalEntryType(JournalTypeEnum.ChangeCrewRole)]
     public class JournalChangeCrewRole : JournalEntry
     {
@@ -31,9 +28,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Role { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = Role;
             detailed = "";
         }

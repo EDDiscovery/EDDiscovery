@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when selling a module in outfitting
-    //Parameters:
-    //•	Slot
-    //•	SellItem
-    //•	SellPrice
-    //•	Ship
     [JournalEntryType(JournalTypeEnum.ModuleSell)]
     public class JournalModuleSell : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -67,10 +61,10 @@ namespace EliteDangerousCore.JournalEvents
         {
             shp.ModuleSell(this);
         }
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised, "< from ", Slot, "Price:; cr;N0", SellPrice);
+            info = BaseUtils.FieldBuilder.Build("", SellItemLocalised, "< from ".Txb(this), Slot, "Price:; cr;N0".Txb(this), SellPrice);
             detailed = "";
         }
 

@@ -110,9 +110,9 @@ namespace EDDiscovery.Forms
             this.label_index.AutoSize = true;
             this.label_index.Location = new System.Drawing.Point(3, 3);
             this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(88, 13);
+            this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
-            this.label_index.Text = "Add-On Manager";
+            this.label_index.Text = "<code>";
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.label_index.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
             // 
@@ -237,9 +237,9 @@ namespace EDDiscovery.Forms
             // buttonExtGlobals
             // 
             this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtGlobals.Location = new System.Drawing.Point(144, 3);
+            this.buttonExtGlobals.Location = new System.Drawing.Point(3, 3);
             this.buttonExtGlobals.Name = "buttonExtGlobals";
-            this.buttonExtGlobals.Size = new System.Drawing.Size(75, 23);
+            this.buttonExtGlobals.Size = new System.Drawing.Size(100, 23);
             this.buttonExtGlobals.TabIndex = 7;
             this.buttonExtGlobals.Text = "Globals";
             this.buttonExtGlobals.UseVisualStyleBackColor = true;
@@ -248,9 +248,9 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(1149, 4);
+            this.buttonOK.Location = new System.Drawing.Point(1116, 3);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
+            this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 7;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -275,7 +275,7 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.statusStripCustom);
             this.Name = "AddOnManagerForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Add-On Manager";
+            this.Text = "<code>";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DownloadManagerForm_FormClosing);
             this.Shown += new System.EventHandler(this.DownloadManager_Shown);
             this.panelTop.ResumeLayout(false);

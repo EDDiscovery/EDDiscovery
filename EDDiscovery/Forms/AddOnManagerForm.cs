@@ -255,12 +255,12 @@ namespace EDDiscovery.Forms
                     else if (di.state == VersioningManager.ItemState.NotPresent)
                     {
                         isversion = true;
-                        text = "Version ".Tx(this) + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                        text = "Version".Tx(this) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
                     }
                     else
                     {
                         isversion = true;
-                        text = "New version ".Tx(this) + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
+                        text = "New version".Tx(this) + " " + di.downloadedversion.ToString(".") + ((di.localmodified) ? "*" : "");
                     }
 
                     g.actionlabel = new Label();

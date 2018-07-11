@@ -376,37 +376,37 @@ namespace EliteDangerousCore
             switch (id)       // see journal, section 11.2
             {
                 case EDStar.O:
-                    return string.Format("Luminous Hot Main Sequence {0} star", id.ToString());
+                    return string.Format("Luminous Hot Main Sequence {0} star".Tx(typeof(Bodies), "HMS"), id.ToString());
 
                 case EDStar.B:
                     // also have an B1V
-                    return string.Format("Luminous Blue Main Sequence {0} star", id.ToString());
+                    return string.Format("Luminous Blue Main Sequence {0} star".Tx(typeof(Bodies), "BMS"), id.ToString());
 
                 case EDStar.A:
                     // also have an A3V..
-                    return string.Format("Bluish-White Main Sequence {0} star", id.ToString());
+                    return string.Format("Bluish-White Main Sequence {0} star".Tx(typeof(Bodies), "BWMS"), id.ToString());
 
                 case EDStar.F:
-                    return string.Format("White Main Sequence {0} star", id.ToString());
+                    return string.Format("White Main Sequence {0} star".Tx(typeof(Bodies), "WMS"), id.ToString());
 
                 case EDStar.G:
                     // also have a G8V
-                    return string.Format("Yellow Main Sequence {0} star", id.ToString());
+                    return string.Format("Yellow Main Sequence {0} star".Tx(typeof(Bodies), "YMS"), id.ToString());
 
                 case EDStar.K:
                     // also have a K0V
-                    return string.Format("Orange Main Sequence {0} star", id.ToString());
+                    return string.Format("Orange Main Sequence {0} star".Tx(typeof(Bodies), "OMS"), id.ToString());
                 case EDStar.M:
                     // also have a M1VA
-                    return string.Format("Red Main Sequence {0} star", id.ToString());
+                    return string.Format("Red Main Sequence {0} star".Tx(typeof(Bodies), "RMS"), id.ToString());
 
                 // dwarfs
                 case EDStar.L:
-                    return string.Format("Dark Red Non Main Sequence {0} star", id.ToString());
+                    return string.Format("Dark Red Non Main Sequence {0} star".Tx(typeof(Bodies), "DRNS"), id.ToString());
                 case EDStar.T:
-                    return string.Format("Methane Dwarf star");
+                    return string.Format("Methane Dwarf star".Tx(typeof(Bodies), "MD"));
                 case EDStar.Y:
-                    return string.Format("Brown Dwarf star");
+                    return string.Format("Brown Dwarf star".Tx(typeof(Bodies), "BD"));
 
                 // proto stars
                 case EDStar.AeBe:    // Herbig
@@ -420,7 +420,7 @@ namespace EliteDangerousCore
                 case EDStar.WNC:
                 case EDStar.WC:
                 case EDStar.WO:
-                    return string.Format("Wolf-Rayet {0} star", id.ToString());
+                    return string.Format("Wolf-Rayet {0} star".Tx(typeof(Bodies), "WR"), id.ToString());
 
                 // Carbon
                 case EDStar.CS:
@@ -428,13 +428,13 @@ namespace EliteDangerousCore
                 case EDStar.CN:
                 case EDStar.CJ:
                 case EDStar.CHd:
-                    return string.Format("Carbon {0} star", id.ToString());
+                    return string.Format("Carbon {0} star".Tx(typeof(Bodies), "C"), id.ToString());
 
                 case EDStar.MS: //seen in log https://en.wikipedia.org/wiki/S-type_star
-                    return string.Format("Intermediate low Zirconium Monoxide Type star");
+                    return string.Format("Intermediate low Zirconium Monoxide Type star".Tx(typeof(Bodies), "IZ"));
 
                 case EDStar.S:   // seen in log, data from http://elite-dangerous.wikia.com/wiki/Stars
-                    return string.Format("Cool Giant Zirconium Monoxide rich Type star");
+                    return string.Format("Cool Giant Zirconium Monoxide rich Type star".Tx(typeof(Bodies), "CGZ"));
 
                 // white dwarf
                 case EDStar.D:
@@ -452,35 +452,35 @@ namespace EliteDangerousCore
                 case EDStar.DC:
                 case EDStar.DCV:
                 case EDStar.DX:
-                    return string.Format("White Dwarf {0} star", id.ToString());
+                    return string.Format("White Dwarf {0} star".Tx(typeof(Bodies), "WD"), id.ToString());
 
                 case EDStar.N:
-                    return "Neutron Star";
+                    return "Neutron Star".Tx(typeof(Bodies), "NS");
 
                 case EDStar.H:
 
-                    return "Black Hole";
+                    return "Black Hole".Tx(typeof(Bodies), "BH");
 
                 case EDStar.X:
                     // currently speculative, not confirmed with actual data... in journal
-                    return "Exotic";
+                    return "Exotic".Tx(typeof(Bodies), "EX");
 
                 // Journal.. really?  need evidence these actually are formatted like this.
 
                 case EDStar.SuperMassiveBlackHole:
-                    return "Super Massive Black Hole";
+                    return "Super Massive Black Hole".Tx(typeof(Bodies), "SMBH");
                 case EDStar.A_BlueWhiteSuperGiant:
-                    return "Blue White Super Giant";
+                    return "Blue White Super Giant".Tx(typeof(Bodies), "BSG");
                 case EDStar.F_WhiteSuperGiant:
-                    return "F White Super Giant";
+                    return "F White Super Giant".Tx(typeof(Bodies), "WSG");
                 case EDStar.M_RedSuperGiant:
-                    return "M Red Super Giant";
+                    return "M Red Super Giant".Tx(typeof(Bodies), "MSR");
                 case EDStar.M_RedGiant:
-                    return "M Red Giant";
+                    return "M Red Giant".Tx(typeof(Bodies), "MOG");
                 case EDStar.K_OrangeGiant:
-                    return "K Orange Giant";
+                    return "K Orange Giant".Tx(typeof(Bodies), "KOG");
                 case EDStar.RoguePlanet:
-                    return "Rogue Planet";
+                    return "Rogue Planet".Tx(typeof(Bodies), "RP");
 
                 default:
                     return string.Format("Class {0} star\n", id.ToString());
