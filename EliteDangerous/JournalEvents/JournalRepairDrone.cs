@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,14 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-     When written: when the player's ship has been repaired by a repair drone
-    Parameters:
-     HullRepaired
-     CockpitRepaired
-     CorrosionRepaired
-    Each of these is a number indicating the amount of damage that has been repaired 
-     */
     [JournalEntryType(JournalTypeEnum.RepairDrone)]
     public class JournalRepairDrone : JournalEntry
     {
@@ -40,10 +32,10 @@ namespace EliteDangerousCore.JournalEvents
         public double CockpitRepaired { get; set; }
         public double CorrosionRepaired { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Hull:", HullRepaired.ToString("0.0"), "Cockpit:", CockpitRepaired.ToString("0.0"), "Corrosion:", CorrosionRepaired.ToString("0.0"));
+            info = BaseUtils.FieldBuilder.Build("Hull:".Tx(this), HullRepaired.ToString("0.0"), "Cockpit:".Txb(this), CockpitRepaired.ToString("0.0"), 
+                                "Corrosion:".Txb(this), CorrosionRepaired.ToString("0.0"));
             detailed = "";
         }
     }

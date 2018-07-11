@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,15 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when storing a module in Outfitting
-//    Parameters:
-//•	Slot
-//•	Ship
-//•	ShipID
-//•	StoredItem
-//•	EngineerModifications: name of modification blueprint, if any
-//•	ReplacementItem(if a core module)
-//•	Cost(if any)
     [JournalEntryType(JournalTypeEnum.ModuleStore)]
     public class JournalModuleStore : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -79,7 +70,7 @@ namespace EliteDangerousCore.JournalEvents
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
             string s = (StoredItemLocalised.Length > 0) ? StoredItemLocalised : StoredItem;
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s +" on " + Ship, -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, s +" on ".Txb(this) + Ship, -Cost);
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
@@ -87,13 +78,13 @@ namespace EliteDangerousCore.JournalEvents
             shp.ModuleStore(this);
         }
 
-        public override void FillInformation(out string info, out string detailed)  //V
+        public override void FillInformation(out string info, out string detailed)  
         {
             
-            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "< from ", Slot , ";Hot!", Hot, "Cost:" , Cost);
+            info = BaseUtils.FieldBuilder.Build("", StoredItemLocalised, "< from ".Txb(this), Slot , ";(Hot)".Txb(this), Hot, "Cost:; cr;N0".Txb(this), Cost);
             if (ReplacementItem.Length > 0)
-                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:", ReplacementItemLocalised);
-            detailed = BaseUtils.FieldBuilder.Build("Modifications:", EngineerModifications);
+                info = ", " + BaseUtils.FieldBuilder.Build("Replaced by:".Txb(this), ReplacementItemLocalised);
+            detailed = BaseUtils.FieldBuilder.Build("Modifications:".Txb(this), EngineerModifications);
         }
     }
 }

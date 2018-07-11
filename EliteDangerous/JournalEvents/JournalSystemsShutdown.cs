@@ -18,16 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: shortly after a certain scripted hyperdiction event begins.
-    //Parameters:
-    // •	N/A: No parameters.
-    //
-    //Example:
-    //  {
-    //      "timestamp": "2017-01-09T16:21:57Z",
-    //      "event": "SystemsShutdown"
-    //  }
-
     [JournalEntryType(JournalTypeEnum.SystemsShutdown)]
     public class JournalSystemsShutdown : JournalEntry
     {
@@ -35,7 +25,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            
             info = "";
             detailed = "";
         }

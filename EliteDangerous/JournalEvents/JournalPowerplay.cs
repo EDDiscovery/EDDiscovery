@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: when collecting powerplay commodities for delivery
-    //Parameters:
-    //•	Power: name of power
-    //•	Type: type of commodity
-    //•	Count: number of units
     [JournalEntryType(JournalTypeEnum.Powerplay)]
     public class JournalPowerplay : JournalEntry
     {
@@ -45,10 +40,9 @@ namespace EliteDangerousCore.JournalEvents
         public TimeSpan TimePledgedSpan { get; set; }
         public string TimePledgedString { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", Power, "Rank:", Rank, "Merits:", Merits, "Votes:", Votes, "Pledged:" , TimePledgedString);
+            info = BaseUtils.FieldBuilder.Build("", Power, "Rank:".Txb(this), Rank, "Merits:".Txb(this), Merits, "Votes:".Txb(this), Votes, "Pledged:".Txb(this), TimePledgedString);
             detailed = "";
         }
     }

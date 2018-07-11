@@ -19,11 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: When another player leaves your ship's crew
-    //Parameters:
-    //•	Crew: player's commander name
-    // Role:
-    // { "timestamp":"2017-04-11T18:11:06Z", "event":"CrewMemberRoleChange", "Crew":"[cmdr name]", "Role":"Idle" }
     [JournalEntryType(JournalTypeEnum.CrewMemberRoleChange)]
     public class JournalCrewMemberRoleChange : JournalEntry
     {
@@ -32,14 +27,13 @@ namespace EliteDangerousCore.JournalEvents
             Crew = evt["Crew"].Str();
             Role = evt["Role"].Str().SplitCapsWord();
         }
+
         public string Crew { get; set; }
         public string Role { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            //info = Crew;
-            info = BaseUtils.FieldBuilder.Build("Crew:", Crew, "Role:", Role);
+            info = BaseUtils.FieldBuilder.Build("Crew:".Txb(this), Crew, "Role:".Txb(this), Role);
             detailed = "";
         }
     }

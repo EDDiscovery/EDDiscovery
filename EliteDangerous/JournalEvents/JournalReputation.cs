@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,9 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: target is under attack
-    //Parameters:
-    //* Target
     [JournalEntryType(JournalTypeEnum.Reputation)]
     public class JournalReputation : JournalEntry
     {
@@ -37,10 +34,9 @@ namespace EliteDangerousCore.JournalEvents
         public double? Independent { get; set; }
         public double? Alliance { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Federation:;;0.#",Federation , "Empire:;;0.#" , Empire, "Independent:;;0.#", Independent , "Alliance:;;0.#", Alliance);
+            info = BaseUtils.FieldBuilder.Build("Federation:;;0.#".Tx(this), Federation , "Empire:;;0.#".Tx(this), Empire, "Independent:;;0.#".Tx(this), Independent , "Alliance:;;0.#".Tx(this), Alliance);
             detailed = "";
         }
 

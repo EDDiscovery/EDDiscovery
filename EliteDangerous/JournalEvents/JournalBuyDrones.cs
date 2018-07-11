@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,11 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: liftoff from a landing pad in a station, outpost or settlement
-    //Parameters:
-    //•	StationName: name of station
-
-    //•	Security
     [JournalEntryType(JournalTypeEnum.BuyDrones)]
     public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
     {
@@ -49,10 +44,9 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count + " drones", -TotalCost);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-
-            info = BaseUtils.FieldBuilder.Build("Type:", Type, "Count:", Count, "Total Cost:; cr;N0", TotalCost, "each:; cr;N0", BuyPrice);
+            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), Type, "Count:".Txb(this), Count, "Total Cost:; cr;N0".Txb(this), TotalCost, "each:; cr;N0".Txb(this), BuyPrice);
             detailed = "";
         }
     }

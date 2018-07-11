@@ -19,14 +19,11 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when requesting an engineer upgrade
-
     [JournalEntryType(JournalTypeEnum.EngineerCraft)]
     public class JournalEngineerCraft : JournalEngineerCraftBase
     {
         public JournalEngineerCraft(JObject evt) : base(evt, JournalTypeEnum.EngineerCraft)
         {
-
         }
     }
 
@@ -100,10 +97,9 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("In ", Slot , "" , Module, "By ", Engineering.Engineer, "Blueprint ", Engineering.FriendlyBlueprintName, "Level ", Engineering.Level);
+            info = BaseUtils.FieldBuilder.Build("In Slot:".Txb(this), Slot , "" , Module, "By:".Txb(this), Engineering.Engineer, "Blueprint:".Txb(this), Engineering.FriendlyBlueprintName, "Level:".Txb(this), Engineering.Level);
 
             detailed = "";
             if (Ingredients != null)
@@ -112,8 +108,5 @@ namespace EliteDangerousCore.JournalEvents
                     detailed += BaseUtils.FieldBuilder.Build("", JournalFieldNaming.RMat(k.Key), "", k.Value) + "; ";
             }
         }
-
-        // Engineering data - used here and for Loadout.
-
     }
 }

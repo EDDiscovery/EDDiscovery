@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when the captain in multicrew disbands the crew
-//Parameters:
-// OnCrime: (bool) true if crew disbanded as a result of a crime in a lawful session
-    // { "timestamp":"2017-04-12T11:32:30Z", "event":"EndCrewSession", "OnCrime":false } 
     [JournalEntryType(JournalTypeEnum.EndCrewSession)]
     public class JournalEndCrewSession : JournalEntry
     {
@@ -32,10 +28,9 @@ namespace EliteDangerousCore.JournalEvents
         }
         public bool OnCrime { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build(";Crime", OnCrime);
+            info = BaseUtils.FieldBuilder.Build("; Due to Crime".Txb(this), OnCrime);
             detailed = "";
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -67,20 +67,20 @@ namespace EliteDangerousCore.JournalEvents
                 mc.Change(MaterialCommodities.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
-                info = BaseUtils.FieldBuilder.Build("Collected:", Count, "< of " , FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", ItemsToGo, "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Collected:".Txb(this), Count, "< of ".Txb(this), FriendlyCargoType, "Total:".Txb(this), ItemsDelivered, "To Go:", ItemsToGo, "Progress:;%;N1".Txb(this), ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.Deliver)
             {
-                info = BaseUtils.FieldBuilder.Build("Delivered:", Count, "< of ", FriendlyCargoType, "Total:", ItemsDelivered, "To Go:", ItemsToGo , "Progress:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Delivered:".Txb(this), Count, "< of ".Txb(this), FriendlyCargoType, "Total:".Txb(this), ItemsDelivered, "To Go:", ItemsToGo , "Progress:;%;N1".Txb(this), ProgressPercent);
             }
             else if (UpdateEnum == UpdateTypeEnum.WingUpdate)
             {
-                info = BaseUtils.FieldBuilder.Build("Update, Collected:", ItemsCollected, "Delivered:", ItemsDelivered, "To Go:", ItemsToGo , "Progress Left:;%;N1", ProgressPercent);
+                info = BaseUtils.FieldBuilder.Build("Update, Collected:".Txb(this), ItemsCollected, "Delivered:".Txb(this), ItemsDelivered, "To Go:".Txb(this), ItemsToGo , "Progress Left:;%;N1".Txb(this), ProgressPercent);
             }
             else
             {

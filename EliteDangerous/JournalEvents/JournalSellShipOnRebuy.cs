@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,17 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-/*
- When written: When selling a stored ship to raise funds when on insurance/rebuy screen
-Parameters:
- ShipType
- System
- SellShipId
- ShipPrice
-Example:
-{ "timestamp":"2017-07-20T08:56:39Z", "event":"SellShipOnRebuy", "ShipType":"Dolphin",
-"System":"Shinrarta Dezhra", "SellShipId":4, "ShipPrice":4110183 } 
- */
     [JournalEntryType(JournalTypeEnum.SellShipOnRebuy)]
     public class JournalSellShipOnRebuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -40,7 +29,6 @@ Example:
             System = evt["System"].Str();
             SellShipId = evt["SellShipId"].Int();
             ShipPrice = evt["ShipPrice"].Long();
-
         }
 
         public string ShipTypeFD { get; set; }
@@ -56,14 +44,12 @@ Example:
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            Debug.WriteLine(EventTimeUTC + " SELLREBUY");
             shp.Sell(ShipType, SellShipId);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Ship:",ShipType, "System:" , System, "Price:" , ShipPrice);
+            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), ShipType, "System:".Txb(this), System, "Price:; cr;N0".Txb(this), ShipPrice);
             detailed = "";
         }
     }

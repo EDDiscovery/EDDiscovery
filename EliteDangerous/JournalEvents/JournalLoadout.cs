@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -90,10 +90,11 @@ namespace EliteDangerousCore.JournalEvents
             shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("Ship:", Ship, "Name:", ShipName, "Ident:", ShipIdent, "Modules:", ShipModules.Count , "Hull:; cr;N0", HullValue , "Modules:; cr;N0" , ModulesValue , "Rebuy:; cr;N0", Rebuy);
+            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, 
+                "Modules:".Tx(this), ShipModules.Count , "Hull:; cr;N0".Txb(this), HullValue , "Modules:; cr;N0".Txb(this), ModulesValue , "Rebuy:; cr;N0".Txb(this), Rebuy);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)
@@ -101,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (detailed.Length > 0)
                     detailed += Environment.NewLine;
 
-                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item , "" , m.PE(), "Blueprint:" , m.Engineering?.FriendlyBlueprintName, "<+" , m.Engineering?.ExperimentalEffect_Localised, "< by " , m.Engineering?.Engineer );
+                detailed += BaseUtils.FieldBuilder.Build("", m.Slot, "<:", m.Item , "" , m.PE(), "Blueprint:".Txb(this), m.Engineering?.FriendlyBlueprintName, "<+" , m.Engineering?.ExperimentalEffect_Localised, "< " , m.Engineering?.Engineer );
             }
         }
     }

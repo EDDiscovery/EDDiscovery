@@ -18,13 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    /*
-    When written: when scanning a navigation beacon, before the scan data for all the bodies in the
-    system is written into the journal
-    Parameters:
-     NumBodies
-    */
-
     [JournalEntryType(JournalTypeEnum.NavBeaconScan)]
     public class JournalNavBeaconScan : JournalEntry
     {
@@ -37,10 +30,9 @@ namespace EliteDangerousCore.JournalEvents
         public int NumBodies { get; set; }           
         public long? SystemAddress{ get; set; }            
 
-        public override void FillInformation(out string info, out string detailed) //V
-        {
-            
-            info = BaseUtils.FieldBuilder.Build("Bodies:", NumBodies);
+        public override void FillInformation(out string info, out string detailed) 
+        {            
+            info = BaseUtils.FieldBuilder.Build("Bodies:".Txb(this), NumBodies);
             detailed = "";
         }
     }

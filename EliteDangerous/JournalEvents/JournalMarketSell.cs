@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,16 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when selling goods in the market
-    //Parameters:
-    //•	Type: cargo type
-    //•	Count: number of units
-    //•	SellPrice: price per unit
-    //•	TotalSale: total sale value
-    //•	AvgPricePaid: average price paid
-    //•	IllegalGoods: (not always present) whether goods are illegal here
-    //•	StolenGoods: (not always present) whether goods were stolen
-    //•	BlackMarket: (not always present) whether selling in a black market
     [JournalEntryType(JournalTypeEnum.MarketSell)]
     public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
     {
@@ -70,12 +60,11 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             long profit = TotalSale - (AvgPricePaid * Count);
-            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< at ; cr;N0", SellPrice, "Total:; cr;N0", TotalSale, "Profit:; cr;N0", profit);
-            detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal", IllegalGoods, "Not Stolen;Stolen", StolenGoods, "Market;BlackMarket", BlackMarket);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< sell price ; cr;N0".Txb(this), SellPrice, "Total Cost:; cr;N0".Txb(this), TotalSale, "Profit:; cr;N0".Txb(this), profit);
+            detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal".Txb(this), IllegalGoods, "Not Stolen;Stolen".Txb(this), StolenGoods, "Market;BlackMarket".Txb(this), BlackMarket);
         }
     }
 }

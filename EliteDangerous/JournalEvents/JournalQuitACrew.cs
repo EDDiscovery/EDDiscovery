@@ -18,25 +18,19 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: When you leave another player ship's crew
-//Parameters:
-//•	Captain: Helm player's commander name
-
-
     [JournalEntryType(JournalTypeEnum.QuitACrew)]
     public class JournalQuitACrew : JournalEntry
     {
         public JournalQuitACrew(JObject evt) : base(evt, JournalTypeEnum.QuitACrew)
         {
             Captain = evt["Captain"].Str();
-
         }
+
         public string Captain { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Captain:",Captain);
+            info = BaseUtils.FieldBuilder.Build("Captain:".Txb(this),Captain);
             detailed = "";
         }
 

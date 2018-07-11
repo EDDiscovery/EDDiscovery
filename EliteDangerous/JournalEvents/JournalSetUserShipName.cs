@@ -18,18 +18,7 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: when assigning a name to the ship in Starport Services
-//Parameters:
-//•	Ship: Ship model(eg CobraMkIII)
-//•	ShipID: player's ship ID number
-//•	UserShipName: selected name
-//•	UserShipId: selected ship id
-
-//Example:
-//{ "timestamp":"2017-01-24T10:42:38Z", "event":"SetUserShipName", "Ship":"cobramkiii", "ShipID":2, "UserShipName":"Enterprise", "UserShipId":"NCC 1701" }
-
-
-[JournalEntryType(JournalTypeEnum.SetUserShipName)]
+    [JournalEntryType(JournalTypeEnum.SetUserShipName)]
     public class JournalSetUserShipName : JournalEntry , IShipInformation
     {
         public JournalSetUserShipName(JObject evt) : base(evt, JournalTypeEnum.SetUserShipName)
@@ -52,10 +41,9 @@ namespace EliteDangerousCore.JournalEvents
             shp.SetUserShipName(this);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",ShipName,"", ShipIdent, "On:" , Ship);
+            info = BaseUtils.FieldBuilder.Build("",ShipName,"", ShipIdent, "On:".Tx(this) , Ship);
             detailed = "";
         }
     }

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When Written: when claiming payment for combat bounties and bonds
-    //Parameters:
-    //•	Type
-    //•	Amount: (Net amount received, after any broker fee)
-    //•	Faction: name of faction
-    //•	BrokerPercenentage
     [JournalEntryType(JournalTypeEnum.RedeemVoucher)]
     public class JournalRedeemVoucher : JournalEntry, ILedgerJournalEntry
     {
@@ -34,6 +28,7 @@ namespace EliteDangerousCore.JournalEvents
             Faction = evt["Faction"].Str();
             BrokerPercentage = evt["BrokerPercentage"].Double();
         }
+
         public string Type { get; set; }
         public long Amount { get; set; }
         public string Faction { get; set; }
@@ -44,12 +39,11 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " Broker " + BrokerPercentage.ToString("0.0") + "%", Amount);
         }
 
-        public override void FillInformation(out string info, out string detailed)      //V
+        public override void FillInformation(out string info, out string detailed)      
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Type:" , Type , "Amount:; cr;N0", Amount, "Faction:" , Faction);
+            info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), Type , "Amount:; cr;N0".Txb(this), Amount, "Faction:".Txb(this), Faction);
             if (BrokerPercentage > 0)
-                info += ", Broker took " + BrokerPercentage.ToString("0") + "%";
+                info += string.Format(", Broker took {0:N0}%".Txb(this), BrokerPercentage);
             detailed = "";
         }
     }

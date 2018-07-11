@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,17 +21,6 @@ using System.Text;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when buying a new ship in the shipyard
-    //Parameters:
-    //•	ShipType: ship being purchased
-    //•	ShipPrice: purchase cost
-    //•	StoreOldShip: (if storing old ship) ship type being stored
-    //•	StoreShipID
-    //•	SellOldShip: (if selling current ship) ship type being sold
-    //•	SellShipID
-    //•	SellPrice: (if selling current ship) ship sale price
-    //
-    //Note: the new ship’s ShipID will be logged in a separate event after the purchase
     [JournalEntryType(JournalTypeEnum.ShipyardBuy)]
     public class JournalShipyardBuy : JournalEntry, ILedgerJournalEntry, IShipInformation
     {
@@ -86,7 +75,6 @@ namespace EliteDangerousCore.JournalEvents
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {                                   // new will come along and provide the new ship info
-
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Buy");
             if (StoreOldShipId != null && StoreOldShipFD!=null)
                 shp.Store(StoreOldShipFD, StoreOldShipId.Value, whereami, system.Name);
@@ -95,14 +83,13 @@ namespace EliteDangerousCore.JournalEvents
                 shp.Sell(SellOldShipFD, SellOldShipId.Value);     
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0", ShipPrice);
+            info = BaseUtils.FieldBuilder.Build("", ShipType, "Amount:; cr;N0".Txb(this), ShipPrice);
             if (StoreOldShip != null)
-                info += ", " + BaseUtils.FieldBuilder.Build("Stored:", StoreOldShip);
+                info += ", " + BaseUtils.FieldBuilder.Build("Stored:".Txb(this), StoreOldShip);
             if (SellOldShip != null)
-                info += ", " + BaseUtils.FieldBuilder.Build("Sold:", StoreOldShip, "Amount:; cr;N0", SellPrice);
+                info += ", " + BaseUtils.FieldBuilder.Build("Sold:".Txb(this), StoreOldShip, "Amount:; cr;N0".Txb(this), SellPrice);
             detailed = "";
         }
 

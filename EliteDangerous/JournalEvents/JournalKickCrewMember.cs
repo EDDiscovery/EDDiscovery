@@ -18,10 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-//    When written: When you force another player to leave your ship's crew
-//Parameters:
-//•	Crew: player's commander name
-
     [JournalEntryType(JournalTypeEnum.KickCrewMember)]
     public class JournalKickCrewMember : JournalEntry
     {
@@ -34,10 +30,9 @@ namespace EliteDangerousCore.JournalEvents
         public string Crew { get; set; }
         public bool OnCrime { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("; removed", Crew , "; Crime", OnCrime);
+            info = BaseUtils.FieldBuilder.Build("Crew Member:".Txb(this), Crew , "; Due to Crime".Txb(this), OnCrime);
             detailed = "";
         }
     }

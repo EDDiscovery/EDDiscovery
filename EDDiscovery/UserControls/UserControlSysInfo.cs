@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
                     else if (he.ShipInformation.FuelCapacity > 0)
                         textBoxFuel.Text = he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
                     else
-                        textBoxFuel.Text = "N/A".Tx();
+                        textBoxFuel.Text = "N/A".Tx(this,"NA");
                 }
                 else
                     textBoxShip.Text = textBoxFuel.Text = "";

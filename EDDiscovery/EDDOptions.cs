@@ -29,7 +29,7 @@ namespace EDDiscovery
         public string UserDatabasePath { get; private set; }
         public string SystemDatabasePath { get; private set; }
         public string IconsPath { get; private set; }
-        public bool NoWindowReposition { get;  set; }
+        public bool NoWindowReposition { get; set; }
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
@@ -66,6 +66,7 @@ namespace EDDiscovery
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
         public string TranslatorDirectory() { return SubAppDirectory("Translator"); }
+        static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
 
         private string AppFolder { get; set; }      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
@@ -97,7 +98,7 @@ namespace EDDiscovery
             }
             else if (StoreDataInProgramDirectory)
             {
-                AppDataDirectory = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, appfolder);
+                AppDataDirectory = Path.Combine(ExeDirectory(), appfolder);
             }
             else
             {
@@ -286,9 +287,9 @@ namespace EDDiscovery
         {
             ProcessConfigVariables();
 
-            ProcessOptionsFileOption(System.AppDomain.CurrentDomain.BaseDirectory);     // go thru the command line looking for -optionfile, use relative base dir
+            ProcessOptionsFileOption(ExeDirectory());     // go thru the command line looking for -optionfile, use relative base dir
 
-            string optval = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "options.txt");      // options in the base folder.
+            string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the base folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
                 ProcessOptionFile(optval);
 

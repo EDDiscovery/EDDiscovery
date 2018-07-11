@@ -111,7 +111,7 @@ namespace EDDiscovery.Forms
                     textBoxBorderCompanionLogin.Text = textBoxBorderCompanionPassword.Text = "";
                     buttonExtCAPI.Text = "Clear".Tx(this);           // default state is clear/abort
                     buttonExtCAPI.Enabled = true;
-                    toolTip.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier".Tx(this, "Confirm"));
+                    toolTip.SetToolTip(textBoxBorderCompanionLogin, "Enter the confirmation code you just received via email from Frontier".Tx(this, "ConfirmCode"));
 
                     if ( capi.NeedLogin )
                     {

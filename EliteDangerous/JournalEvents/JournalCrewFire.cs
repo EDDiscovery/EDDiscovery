@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When Written: when selling unwanted drones back to the market
-    //Parameters:
-    //•	Type
-    //•	Count
-    //•	SellPrice
-    //•	TotalSale
     [JournalEntryType(JournalTypeEnum.CrewFire)]
     public class JournalCrewFire : JournalEntry
     {
@@ -36,10 +30,9 @@ namespace EliteDangerousCore.JournalEvents
         public long NpcCrewID { get; set; }
         public string Name { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("; fired", Name);
+            info = BaseUtils.FieldBuilder.Build("; fired".Txb(this), Name);
             detailed = "";
         }
     }

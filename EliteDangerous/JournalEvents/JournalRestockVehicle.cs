@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when purchasing an SRV or Fighter
-    //Parameters:
-    //•	Type: type of vehicle being purchased (SRV or fighter model)
-    //•	Loadout: variant
-    //•	Cost: purchase cost
-    //•	Count: number of vehicles purchased
     [JournalEntryType(JournalTypeEnum.RestockVehicle)]
     public class JournalRestockVehicle : JournalEntry, ILedgerJournalEntry
     {
@@ -34,6 +28,7 @@ namespace EliteDangerousCore.JournalEvents
             Cost = evt["Cost"].Long();
             Count = evt["Count"].Int();
         }
+
         public string Type { get; set; }
         public string Loadout { get; set; }
         public long Cost { get; set; }
@@ -46,10 +41,9 @@ namespace EliteDangerousCore.JournalEvents
 
         protected override JournalTypeEnum IconEventType { get { return Type.Contains("SRV") ? JournalTypeEnum.RestockVehicle_SRV : JournalTypeEnum.RestockVehicle_Fighter; } }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; cr;N0" , Cost , "Count:" , Count , "Loadout:" , Loadout);
+            info = BaseUtils.FieldBuilder.Build("",Type , "Cost:; cr;N0".Txb(this), Cost , "Count:".Txb(this), Count , "Loadout:".Txb(this), Loadout);
             detailed = "";
         }
     }

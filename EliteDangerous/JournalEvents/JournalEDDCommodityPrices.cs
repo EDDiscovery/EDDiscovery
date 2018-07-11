@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,6 @@ using EliteDangerousCore;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: by EDD when a user manually sets an item count (material or commodity)
     [JournalEntryType(JournalTypeEnum.EDDCommodityPrices)]
     public class JournalEDDCommodityPrices : JournalCommodityPricesBase
     {
@@ -28,7 +27,7 @@ namespace EliteDangerousCore.JournalEvents
             Station = evt["station"].Str();
             Faction = evt["faction"].Str();
             Commodities = new List<CCommodities>();
-
+           
             JArray jcommodities = null;
             if (!evt["commodities"].Empty())
                 jcommodities = (JArray)evt["commodities"];
@@ -58,22 +57,28 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public List<CCommodities> Commodities { get; protected set; }   // never null
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
             
-            info = BaseUtils.FieldBuilder.Build("Prices on ; items", Commodities.Count, "< at " , Station , "< in " , StarSystem);
+            info = BaseUtils.FieldBuilder.Build("Prices on ; items".Tx(typeof(JournalCommodityPricesBase),"PON"), Commodities.Count, 
+                                                "< at ".Tx(typeof(JournalCommodityPricesBase), "CPBat"), Station , 
+                                                "< in ".Tx(typeof(JournalCommodityPricesBase), "CPBin"), StarSystem);
 
             int col = 0;
             int maxcol = Commodities.Count > 60 ? 2 : 1;
-            detailed = "Items to buy:" + System.Environment.NewLine;
+            detailed = "Items to buy:".Tx(typeof(JournalCommodityPricesBase)) + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice > 0)
                 {
                     if (c.sellPrice > 0)
-                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ", c.fdname, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
+                    {
+                        detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuySell"),
+                            c.fdname, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, 
+                            ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
+                    }
                     else
-                        detailed += string.Format("{0}: {1}  ", c.fdname, c.buyPrice);
+                        detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), c.fdname, c.buyPrice);
 
                     if (++col == maxcol)
                     {
@@ -87,12 +92,12 @@ namespace EliteDangerousCore.JournalEvents
                 detailed += System.Environment.NewLine;
 
             col = 0;
-            detailed += "Sell only Items:" + System.Environment.NewLine;
+            detailed += "Sell only Items:".Tx(typeof(JournalCommodityPricesBase),"SO") + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {
                 if (c.buyPrice <= 0)
                 {
-                    detailed += string.Format("{0}: {1}  ", c.fdname, c.sellPrice);
+                    detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), c.fdname, c.sellPrice);
                     if (++col == maxcol)
                     {
                         detailed += System.Environment.NewLine;

@@ -153,7 +153,7 @@ namespace EDDiscovery
 
             string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.IconsAppDirectory() + "\\*.zip");
 
-            Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, AppDomain.CurrentDomain.BaseDirectory);
+            Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
         }
 
         public void Init()      // ED Discovery calls this during its init

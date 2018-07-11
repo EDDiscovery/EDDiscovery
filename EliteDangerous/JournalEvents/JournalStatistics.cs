@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,8 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When written: loading the game
-    //Parameters: statistics broken down by group
     [JournalEntryType(JournalTypeEnum.Statistics)]
     public class JournalStatistics : JournalEntry
     {
@@ -59,24 +57,24 @@ namespace EliteDangerousCore.JournalEvents
         public CQCClass CQC { get; set; }
         public JObject Json { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Wealth:;cr;N", BankAccount.CurrentWealth, "Notoriety Index:;;N0" , Crime.Notoriety);
+            info = BaseUtils.FieldBuilder.Build("Wealth:;cr;N".Txb(this), BankAccount.CurrentWealth, "Notoriety Index:;;N0".Txb(this), Crime.Notoriety);
 
-            detailed =  "Bank Account" + Environment.NewLine + BankAccount?.Format() + Environment.NewLine + 
-                        "Combat" + Environment.NewLine + Combat?.Format() + Environment.NewLine +
-                        "Crime" + Environment.NewLine + Crime?.Format() + Environment.NewLine +
-                        "Smuggling" + Environment.NewLine + Smuggling?.Format() + Environment.NewLine +
-                        "Trading" + Environment.NewLine + Trading?.Format() + Environment.NewLine +
-                        "Mining" + Environment.NewLine + Mining?.Format() + Environment.NewLine +
-                        "Exploration" + Environment.NewLine + Exploration?.Format() + Environment.NewLine +
-                        "Passengers" + Environment.NewLine + PassengerMissions?.Format() + Environment.NewLine +
-                        "Search and Rescue" + Environment.NewLine + SearchAndRescue?.Format() + Environment.NewLine +
-                        "Engineers" + Environment.NewLine + Crafting?.Format() + Environment.NewLine +
-                        "Crew" + Environment.NewLine + Crew?.Format() + Environment.NewLine +
-                        "Multicrew" + Environment.NewLine + Multicrew?.Format() + Environment.NewLine +
-                        "Materials and Commodity Trading" + Environment.NewLine + MaterialTraderStats?.Format() + Environment.NewLine +
-                        "CQC" + Environment.NewLine + CQC?.Format();
+            detailed =  "Bank Account".Tx(this) + Environment.NewLine + BankAccount?.Format() + Environment.NewLine + 
+                        "Combat".Tx(this) + Environment.NewLine + Combat?.Format() + Environment.NewLine +
+                        "Crime".Tx(this) + Environment.NewLine + Crime?.Format() + Environment.NewLine +
+                        "Smuggling".Tx(this) + Environment.NewLine + Smuggling?.Format() + Environment.NewLine +
+                        "Trading".Tx(this) + Environment.NewLine + Trading?.Format() + Environment.NewLine +
+                        "Mining".Tx(this) + Environment.NewLine + Mining?.Format() + Environment.NewLine +
+                        "Exploration".Tx(this) + Environment.NewLine + Exploration?.Format() + Environment.NewLine +
+                        "Passengers".Tx(this) + Environment.NewLine + PassengerMissions?.Format() + Environment.NewLine +
+                        "Search and Rescue".Tx(this) + Environment.NewLine + SearchAndRescue?.Format() + Environment.NewLine +
+                        "Engineers".Tx(this) + Environment.NewLine + Crafting?.Format() + Environment.NewLine +
+                        "Crew".Tx(this) + Environment.NewLine + Crew?.Format() + Environment.NewLine +
+                        "Multicrew".Tx(this) + Environment.NewLine + Multicrew?.Format() + Environment.NewLine +
+                        "Materials and Commodity Trading".Tx(this) + Environment.NewLine + MaterialTraderStats?.Format() + Environment.NewLine +
+                        "CQC".Tx(this) + Environment.NewLine + CQC?.Format();
         }
 
         public class BankAccountClass
@@ -93,9 +91,14 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline, 
-                    "Wealth:;cr;N0", CurrentWealth, "Spent on Ships:;cr;N0", SpentOnShips,
-                    "Spent on Outfitting:;cr;N0", SpentOnOutfitting, "Spent on Repairs:;cr;N0", SpentOnRepairs, "Spent on Fuel:;cr;N0", SpentOnFuel,
-                    "Spend on Ammo:;cr;N0", SpentOnAmmoConsumables, "Insurance Claims:;;N0", InsuranceClaims, "Spent on Insurance:;cr;N0", SpentOnInsurance);
+                    "Wealth:;cr;N0".Tx(this),  CurrentWealth, 
+                    "Spent on Ships:;cr;N0".Tx(this), SpentOnShips,
+                    "Spent on Outfitting:;cr;N0".Tx(this), SpentOnOutfitting, 
+                    "Spent on Repairs:;cr;N0".Tx(this), SpentOnRepairs, 
+                    "Spent on Fuel:;cr;N0".Tx(this), SpentOnFuel,
+                    "Spend on Ammo:;cr;N0".Tx(this), SpentOnAmmoConsumables, 
+                    "Insurance Claims:;;N0".Tx(this), InsuranceClaims, 
+                    "Spent on Insurance:;cr;N0".Tx(this), SpentOnInsurance);
             }
         }
 
@@ -113,10 +116,14 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Bounties :;;N0", BountiesClaimed, "Bounty Profits:;cr;N0", BountyHuntingProfit,
-                    "Combat Bonds:;;N0", CombatBonds, "Combat Bond Profits:;cr;N0", CombatBondProfits,
-                    "Assassinations:;;N0", Assassinations, "Assassination Profits:;cr;N0", AssassinationProfits,
-                    "Highest Reward:;cr;N0", HighestSingleReward, "Skimmers Killed:;;N0", SkimmersKilled);
+                    "Bounties :;;N0".Tx(this), BountiesClaimed, 
+                    "Bounty Profits:;cr;N0".Tx(this), BountyHuntingProfit,
+                    "Combat Bonds:;;N0".Tx(this), CombatBonds, 
+                    "Combat Bond Profits:;cr;N0".Tx(this), CombatBondProfits,
+                    "Assassinations:;;N0".Tx(this), Assassinations, 
+                    "Assassination Profits:;cr;N0".Tx(this), AssassinationProfits,
+                    "Highest Reward:;cr;N0".Tx(this), HighestSingleReward, 
+                    "Skimmers Killed:;;N0".Tx(this), SkimmersKilled);
             }
         }
 
@@ -132,9 +139,12 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Notoriety Index:;;N0", Notoriety, "Fines:;;N0", Fines,
-                    "Total Fines:;cr;N0", TotalFines, "Bounties:;;N0", BountiesReceived,
-                    "Total Bounties:;cr;N0", TotalBounties, "Highest Bounty:;cr;N0", HighestBounty);
+                    "Notoriety Index:;;N0".Tx(this), Notoriety, 
+                    "Fines:;;N0".Tx(this), Fines,
+                    "Total Fines:;cr;N0".Tx(this), TotalFines, 
+                    "Bounties:;;N0".Tx(this), BountiesReceived,
+                    "Total Bounties:;cr;N0".Tx(this), TotalBounties, 
+                    "Highest Bounty:;cr;N0".Tx(this), HighestBounty);
             }
         }
 
@@ -149,9 +159,11 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Black Markets:;;N0", BlackMarketsTradedWith, "Black Market Profits:;cr;N0", BlackMarketsProfits,
-                    "Resources Smuggled:;;N0", ResourcesSmuggled, "Average Profit:;cr;N0", AverageProfit,
-                    "Highest Single Transaction:;cr;N0", HighestSingleTransaction);
+                    "Black Markets:;;N0".Tx(this), BlackMarketsTradedWith, 
+                    "Black Market Profits:;cr;N0".Tx(this), BlackMarketsProfits,
+                    "Resources Smuggled:;;N0".Tx(this), ResourcesSmuggled, 
+                    "Average Profit:;cr;N0".Tx(this), AverageProfit,
+                    "Highest Single Transaction:;cr;N0".Tx(this), HighestSingleTransaction);
             }
         }
 
@@ -166,8 +178,11 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                        "Markets Traded:;;N0", MarketsTradedWith, "Profits:;cr;N0", MarketProfits, "No. of Resources:;;N0", ResourcesTraded,
-                        "Average Profit:;cr;N0", AverageProfit, "Highest Single Transaction:;cr;N0", HighestSingleTransaction);
+                        "Markets Traded:;;N0".Tx(this), MarketsTradedWith, 
+                        "Profits:;cr;N0".Tx(this), MarketProfits, 
+                        "No. of Resources:;;N0".Tx(this), ResourcesTraded,
+                        "Average Profit:;cr;N0".Tx(this), AverageProfit, 
+                        "Highest Single Transaction:;cr;N0".Tx(this), HighestSingleTransaction);
             }
         }
 
@@ -179,7 +194,9 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                        "Profits:;cr;N0", MiningProfits, "Quantity:;;N0", QuantityMined, "Materials Types Collected:;;N0", MaterialsCollected);
+                        "Profits:;cr;N0".Tx(this), MiningProfits, 
+                        "Quantity:;;N0".Tx(this), QuantityMined, 
+                        "Materials Types Collected:;;N0".Tx(this), MaterialsCollected);
 
 
             }
@@ -199,11 +216,15 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                        "Systems Visited:;;N0", SystemsVisited, "Profits:;cr;N0", ExplorationProfits,
-                        "Level 2 Scans:;;N0", PlanetsScannedToLevel2, "Level 3 Scans:;;N0", PlanetsScannedToLevel3,
-                        "Highest Payout:;cr;N0", HighestPayout, "Total Distance:;;N0", TotalHyperspaceDistance,
-                        "No of Jumps:;;N0", TotalHyperspaceJumps,
-                        "Greatest Distance:;;N0", GreatestDistanceFromStart, "Time Played:", TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
+                        "Systems Visited:;;N0".Tx(this), SystemsVisited, 
+                        "Profits:;cr;N0".Tx(this), ExplorationProfits,
+                        "Level 2 Scans:;;N0".Tx(this), PlanetsScannedToLevel2, 
+                        "Level 3 Scans:;;N0".Tx(this), PlanetsScannedToLevel3,
+                        "Highest Payout:;cr;N0".Tx(this), HighestPayout, 
+                        "Total Distance:;;N0".Tx(this), TotalHyperspaceDistance,
+                        "No of Jumps:;;N0".Tx(this), TotalHyperspaceJumps,
+                        "Greatest Distance:;;N0".Tx(this), GreatestDistanceFromStart, 
+                        "Time Played:".Tx(this), TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
             }
         }
 
@@ -216,7 +237,10 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Bulk Mission Passengers:;;N0", Bulk, "VIP Mission Passengers:;;N0", VIP, "Passengers Delivered:;;N0", Delivered, "Passengers Ejected:;;N0", Ejected);
+                    "Bulk Mission Passengers:;;N0".Tx(this), Bulk, 
+                    "VIP Mission Passengers:;;N0".Tx(this), VIP, 
+                    "Passengers Delivered:;;N0".Tx(this), Delivered, 
+                    "Passengers Ejected:;;N0".Tx(this), Ejected);
             }
         }
 
@@ -228,7 +252,9 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Total Items Rescued:;;N0", Traded, "Profit:;cr;N0", Profit, "Total Rescue Transactions:;;N0", Count);
+                    "Total Items Rescued:;;N0".Tx(this), Traded, 
+                    "Profit:;cr;N0".Tx(this), Profit, 
+                    "Total Rescue Transactions:;;N0".Tx(this), Count);
             }
         }
 
@@ -244,9 +270,13 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Engineers Used:;;N0", CountOfUsedEngineers, "Blueprints:;;N0", RecipesGenerated,
-                    "At Level 1:;;N0", RecipesGeneratedRank1, "At Level 2:;;N0", RecipesGeneratedRank2, "At Level 3:;;N0", RecipesGeneratedRank3,
-                    "At Level 4:;;N0", RecipesGeneratedRank4, "At Level 5:;;N0", RecipesGeneratedRank5);
+                    "Engineers Used:;;N0".Tx(this), CountOfUsedEngineers, 
+                    "Blueprints:;;N0".Tx(this), RecipesGenerated,
+                    "At Level 1:;;N0".Tx(this), RecipesGeneratedRank1, 
+                    "At Level 2:;;N0".Tx(this), RecipesGeneratedRank2, 
+                    "At Level 3:;;N0".Tx(this), RecipesGeneratedRank3,
+                    "At Level 4:;;N0".Tx(this), RecipesGeneratedRank4, 
+                    "At Level 5:;;N0".Tx(this), RecipesGeneratedRank5);
             }
         }
 
@@ -259,7 +289,8 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Total Wages:;cr;N0", NpcCrewTotalWages, "Hired:;;N0", NpcCrewHired, "Fired:;;N0", NpcCrewFired, "Killed in Action:;;N0", NpcCrewDied);
+                    "Total Wages:;cr;N0".Tx(this), NpcCrewTotalWages, "Hired:;;N0".Tx(this), NpcCrewHired, 
+                    "Fired:;;N0".Tx(this), NpcCrewFired, "Killed in Action:;;N0".Tx(this), NpcCrewDied);
             }
         }
 
@@ -274,11 +305,11 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Total Time:", TimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
-                    "Gunner Time:;;N0", GunnerTimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
-                    "Fighter Time:;;N0", FighterTimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
-                    "Credits:;cr;N0", CreditsTotal,
-                    "Fines:;cr;N0", FinesTotal);
+                    "Total Time:".Tx(this), TimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
+                    "Gunner Time:;;N0".Tx(this), GunnerTimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
+                    "Fighter Time:;;N0".Tx(this), FighterTimeTotal.SecondsToWeeksDaysHoursMinutesSeconds(),
+                    "Credits:;cr;N0".Tx(this), CreditsTotal,
+                    "Fines:;cr;N0".Tx(this), FinesTotal);
             }
         }
 
@@ -289,7 +320,7 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Commodity Trades:;;N0", TradesCompleted, "Material Traded:;;N0", MaterialsTraded);
+                    "Commodity Trades:;;N0".Tx(this), TradesCompleted, "Material Traded:;;N0".Tx(this), MaterialsTraded);
             }
         }
 
@@ -303,10 +334,10 @@ namespace EliteDangerousCore.JournalEvents
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Time Played:;;N0", TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds(),
-                    "KD Ratio:;;N", KD,
-                    "Kills:;;N0", Kills,
-                    "Win/Loss:;;N", WL);
+                    "Time Played:;;N0".Tx(this), TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds(),
+                    "KD Ratio:;;N".Tx(this), KD,
+                    "Kills:;;N0".Tx(this), Kills,
+                    "Win/Loss:;;N".Tx(this), WL);
             }
         }
     }

@@ -231,7 +231,7 @@ namespace EliteDangerousCore
         EGO = 0x04,
         StartMarker = 0x0100,           // measure distance start pos marker
         StopMarker = 0x0200,            // measure distance stop pos marker
-    };
+    }
 
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
     public abstract class JournalEntry
@@ -244,6 +244,8 @@ namespace EliteDangerousCore
         public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
         public string EventSummaryName { get; private set; }     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
+
+        public System.Drawing.Image Icon { get { return JournalTypeIcons[this.IconEventType]; } }   // Icon to paint for this
 
         public DateTime EventTimeUTC { get;  set; }
 
@@ -317,17 +319,17 @@ namespace EliteDangerousCore
                 JournalTypeEnum.Loadout, JournalTypeEnum.MassModuleStore, JournalTypeEnum.ModuleBuy, JournalTypeEnum.ModuleSell,
                 JournalTypeEnum.ModuleRetrieve,
                 JournalTypeEnum.ModuleSellRemote, JournalTypeEnum.ModuleStore, JournalTypeEnum.ModuleSwap, JournalTypeEnum.SellShipOnRebuy,
-                JournalTypeEnum.SetUserShipName, JournalTypeEnum.ShipyardBuy, JournalTypeEnum.ShipyardNew, JournalTypeEnum.ShipyardSell, 
+                JournalTypeEnum.SetUserShipName, JournalTypeEnum.ShipyardBuy, JournalTypeEnum.ShipyardNew, JournalTypeEnum.ShipyardSell,
                 JournalTypeEnum.ShipyardSwap , JournalTypeEnum.ShipyardTransfer, JournalTypeEnum.StoredModules, JournalTypeEnum.StoredShips,
 
                 // scan
                 JournalTypeEnum.Scan, JournalTypeEnum.SellExplorationData, 
 
                 // misc
-                JournalTypeEnum.ClearSavedGame, 
+                JournalTypeEnum.ClearSavedGame,
             };
 
-        private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();
+        private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();        // enum -> type
 
         /// <summary>
         /// Gets the mapping of journal type value to JournalEntry type
@@ -351,13 +353,25 @@ namespace EliteDangerousCore
             return typedict;
         }
 
+        // enum -> icons 
+
         public static IReadOnlyDictionary<JournalTypeEnum, Image> JournalTypeIcons { get; } = new IconGroup<JournalTypeEnum>("Journal");
+
+        // enum -> Summary name
+
+        private static Dictionary<JournalTypeEnum, string> SummaryNames = GetJournalSummaryNames();
+
+        private static Dictionary<JournalTypeEnum, string> GetJournalSummaryNames()
+        {
+            var v = Enum.GetValues(typeof(JournalTypeEnum)).OfType<JournalTypeEnum>();
+            return v.ToDictionary(e => e, e => e.ToString().SplitCapsWord().Tx(typeof(JournalTypeEnum),e.ToString()));
+        }
 
         #endregion
 
         #region Formatting control and Icons
 
-        protected virtual JournalTypeEnum IconEventType
+        protected virtual JournalTypeEnum IconEventType     // entry may be overridden to dynamically change icon event for an event
         {
             get
             {
@@ -365,17 +379,9 @@ namespace EliteDangerousCore
             }
         }
 
-        public virtual System.Drawing.Image Icon
-        {
-            get
-            {
-                return JournalTypeIcons[this.IconEventType];
-            }
-        }
-
         public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
 
-        public virtual string FillSummary { get { return EventTypeStr.SplitCapsWord(); } }  // entries may override if required
+        public virtual string FillSummary { get { return SummaryNames[EventTypeID];  } }  // entry may be overridden for specialist output
 
         #endregion
 

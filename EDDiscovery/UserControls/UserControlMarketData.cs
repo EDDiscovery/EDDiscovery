@@ -202,8 +202,7 @@ namespace EDDiscovery.UserControls
                                             c.stock > 0 ? c.stock.ToString() : "" ,
                                             c.meanPrice > 0 ? c.meanPrice.ToString() : "",
                                             c.ComparisionLR,
-                                            c.ComparisionRL,
-                                        };
+                                            c.ComparisionRL };
 
                         int rowno = dataGridViewMarketData.Rows.Add(rowobj);
 
@@ -231,8 +230,7 @@ namespace EDDiscovery.UserControls
                                                 "",
                                                 "",
                                                 "",
-                                                "",
-                                            };
+                                                "" };
 
                         int rowno = dataGridViewMarketData.Rows.Add(rowobj);
                         dataGridViewMarketData.Rows[rowno].Cells[0].ToolTipText =

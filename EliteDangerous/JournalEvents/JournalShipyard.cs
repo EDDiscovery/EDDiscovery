@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,16 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //    When written: when opening shipyard
-    //Parameters:
-    //•	MarketID
-    //• StationName
-    //• StarSystem
-    //•	PriceList: Array of records
-    //o   id
-    //o   Name
-    //o   ShipPrice
-
     [JournalEntryType(JournalTypeEnum.Shipyard)]
     public class JournalShipyard : JournalEntry, IAdditionalFiles
     {
@@ -60,9 +50,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool? Horizons { get; set; }
         public bool? AllowCobraMkIV { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
             info = "";
             detailed = "";
 
@@ -74,7 +63,7 @@ namespace EliteDangerousCore.JournalEvents
                         info = info.AppendPrePad(m.ShipType_Localised.Alt(m.ShipType), ", ");
                 }
                 else
-                    info = Yard.Ships.Length.ToString() + " ships";
+                    info = Yard.Ships.Length.ToString() + " " + "Ships".Txb(this);
 
                 foreach (ShipYard.ShipyardItem m in Yard.Ships)
                 {

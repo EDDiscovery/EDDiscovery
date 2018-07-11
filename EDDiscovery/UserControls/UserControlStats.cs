@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             StatToDGV("Total No of jumps: ".Tx(this), totaljumps);
             if (totaljumps > 0)
             {
-                StatToDGV("Jump History".Tx(this), "24 Hours: ".Tx(this) + hl.GetFSDJumps(new TimeSpan(1, 0, 0, 0)) +
+                StatToDGV("Jump History".Tx(this), "24 Hours: ".Tx(this,"24hc") + hl.GetFSDJumps(new TimeSpan(1, 0, 0, 0)) +
                                       ", One Week: ".Tx(this) + hl.GetFSDJumps(new TimeSpan(7, 0, 0, 0)) +
                                       ", 30 Days: ".Tx(this) + hl.GetFSDJumps(new TimeSpan(30, 0, 0, 0)) +
                                       ", One Year: ".Tx(this) + hl.GetFSDJumps(new TimeSpan(365, 0, 0, 0))
@@ -316,16 +316,16 @@ namespace EDDiscovery.UserControls
                     Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
-                    Col2.HeaderText = "24 hours";
+                    Col2.HeaderText = "24 Hours".Tx(this);
 
                     var Col3 = new DataGridViewTextBoxColumn();
-                    Col3.HeaderText = "week";
+                    Col3.HeaderText = "Week".Tx(this);
 
                     var Col4 = new DataGridViewTextBoxColumn();
-                    Col4.HeaderText = "month";
+                    Col4.HeaderText = "Month".Tx(this);
 
                     var Col5 = new DataGridViewTextBoxColumn();
-                    Col5.HeaderText = "Last dock";
+                    Col5.HeaderText = "Last dock".Tx(this);
 
                     var Col6 = new DataGridViewTextBoxColumn();
                     var Col7 = new DataGridViewTextBoxColumn();
@@ -591,13 +591,13 @@ namespace EDDiscovery.UserControls
                     Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
-                    Col2.HeaderText = "24 hours".Tx(this);
+                    Col2.HeaderText = "24 Hours".Tx(this);
 
                     var Col3 = new DataGridViewTextBoxColumn();
-                    Col3.HeaderText = "week".Tx(this);
+                    Col3.HeaderText = "Week".Tx(this);
 
                     var Col4 = new DataGridViewTextBoxColumn();
-                    Col4.HeaderText = "month".Tx(this);
+                    Col4.HeaderText = "Month".Tx(this);
 
                     var Col5 = new DataGridViewTextBoxColumn();
                     Col5.HeaderText = "Last dock".Tx(this);
@@ -693,7 +693,7 @@ namespace EDDiscovery.UserControls
                 strarr = new string[intervals];
 
                 var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Body type".Tx(this);
+                Col1.HeaderText = "Body Type".Tx(this);
                 Col1.Tag = "AlphaSort";
 
                 dataGridViewScan.Columns.Add(Col1);

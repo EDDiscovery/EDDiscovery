@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -18,12 +18,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when selling exploration data in Cartographics
-    //Parameters:
-    //•	Systems: JSON array of system names
-    //•	Discovered: JSON array of discovered bodies
-    //•	BaseValue: value of systems
-    //•	Bonus: bonus for first discoveries
     [JournalEntryType(JournalTypeEnum.SellExplorationData)]
     public class JournalSellExplorationData : JournalEntry, ILedgerJournalEntry
     {
@@ -50,20 +44,20 @@ namespace EliteDangerousCore.JournalEvents
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
         }
 
-        public override void FillInformation(out string info, out string detailed) //V
+        public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0", BaseValue, "Bonus:; cr;N0", Bonus , "Total:; cr (inc any PVP bonus);N0", TotalEarnings);
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus , 
+                                "Total:; cr;N0".Tx(this), TotalEarnings);
             detailed = "";
             if (Systems != null)
             {
-                detailed += "Scanned:";
+                detailed += "Scanned:".Txb(this);
                 foreach (string s in Systems)
                     detailed += s + " ";
             }
             if (Discovered != null)
             {
-                detailed += System.Environment.NewLine + "Discovered:";
+                detailed += System.Environment.NewLine + "Discovered:".Txb(this);
                 foreach (string s in Discovered)
                     detailed += s + " ";
             }
