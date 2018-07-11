@@ -231,13 +231,10 @@ namespace EliteDangerousCore
 
         public static string UsedInSynthesisAbv(string abv)
         {
-            string usedin = "";
-            foreach (var x in SynthesisRecipes)
-            {
-                if (x.ingredients.Contains(abv))
-                    usedin = usedin.AppendPrePad(x.name + "-" + x.level, ",");
-            }
-            return usedin;
+            if (SynthesisRecipesByMaterial.ContainsKey(abv))
+                return String.Join(",", SynthesisRecipesByMaterial[abv].Select(x => x.name + "-" + x.level));
+            else
+                return "";
         }
 
         public static SynthesisRecipe FindSynthesis(string name, string level)
@@ -335,6 +332,11 @@ namespace EliteDangerousCore
             new SynthesisRecipe("AX Explosive Munitions", "Standard", "6S,6P,2Hg,4UKOC,4PE"),
             new SynthesisRecipe("AX Explosive Munitions", "Premium", "5W,4Hg,2Po,5BMC,5PE,6SFD"),
         };
+
+        public static Dictionary<string, List<SynthesisRecipe>> SynthesisRecipesByMaterial =
+            SynthesisRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+                            .GroupBy(a => a.mat)
+                            .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
         public static List<EngineeringRecipe> EngineeringRecipes = new List<EngineeringRecipe>()
         {
@@ -1149,6 +1151,11 @@ namespace EliteDangerousCore
 
 #endregion
         };
+
+        public static Dictionary<string, List<EngineeringRecipe>> EngineeringRecipesByMaterial =
+            EngineeringRecipes.SelectMany(r => r.ingredients.Select(i => new { mat = i, recipe = r }))
+                              .GroupBy(a => a.mat)
+                              .ToDictionary(g => g.Key, g => g.Select(a => a.recipe).ToList());
 
         #region Use the netlogentry frontierdata to update this
 
