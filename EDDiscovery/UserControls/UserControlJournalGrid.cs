@@ -66,6 +66,10 @@ namespace EDDiscovery.UserControls
 
         Timer searchtimer;
 
+        Timer todotimer;
+        Queue<Action> todo = new Queue<Action>();
+        bool loadcomplete;
+
         public UserControlJournalGrid()
         {
             InitializeComponent();
@@ -91,6 +95,9 @@ namespace EDDiscovery.UserControls
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 
+            todotimer = new Timer() { Interval = 10 };
+            todotimer.Tick += Todotimer_Tick;
+
             discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += AddNewEntry;
 
@@ -105,6 +112,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            todo.Clear();
+            todotimer.Stop();
+            searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
@@ -133,6 +143,7 @@ namespace EDDiscovery.UserControls
             if (hl == null)     // just for safety
                 return;
 
+            loadcomplete = false;
             this.Cursor = Cursors.WaitCursor;
 
             current_historylist = hl;
@@ -160,39 +171,91 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            for (int ii = 0; ii < result.Count; ii++) //foreach (var item in result)
-            {
-                DataGridViewRow rw = CreateHistoryRow(result[ii], textBoxFilter.Text);
-                if (rw != null)
-                    dataGridViewJournal.Rows.Add(rw);
-            }
-
-            UpdateToolTipsForFilter();
-
-            int rowno = FindGridPosByJID(pos.Item1,true);
-
-            if (rowno >= 0)
-            {
-                dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
-            }
-
             dataGridViewJournal.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load Finish");
+            List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
-            if (sortcol >= 0)
+            for (int i = 0; i < result.Count; i += 1000)
             {
-                dataGridViewJournal.Sort(dataGridViewJournal.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                HistoryEntry[] chunk = new HistoryEntry[i + 1000 > result.Count ? result.Count - i : 1000];
+
+                result.CopyTo(i, chunk, 0, chunk.Length);
+                chunks.Add(chunk);
             }
 
-            FireChangeSelection();
+            todo.Clear();
+            string filtertext = textBoxFilter.Text;
 
-            this.Cursor = Cursors.Default;
+            foreach (var chunk in chunks)
+            {
+                todo.Enqueue(() =>
+                {
+                    dataGridViewJournal.SuspendLayout();
+                    foreach (var item in chunk)
+                    {
+                        var row = CreateHistoryRow(item, filtertext);
+                        if (row != null)
+                            dataGridViewJournal.Rows.Add(row);
+                    }
+                    dataGridViewJournal.ResumeLayout();
+                });
+            }
+
+            todo.Enqueue(() =>
+            {
+                UpdateToolTipsForFilter();
+
+                int rowno = FindGridPosByJID(pos.Item1, true);
+
+                if (rowno >= 0)
+                {
+                    dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                }
+
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load Finish");
+
+                if (sortcol >= 0)
+                {
+                    dataGridViewJournal.Sort(dataGridViewJournal.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                    dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                }
+
+                FireChangeSelection();
+
+                this.Cursor = Cursors.Default;
+
+                loadcomplete = true;
+            });
+
+            todotimer.Start();
+        }
+
+        private void Todotimer_Tick(object sender, EventArgs e)
+        {
+            ProcessTodo();
+        }
+
+        private void ProcessTodo()
+        {
+            if (todo.Count != 0)
+            {
+                var act = todo.Dequeue();
+                act();
+            }
+            else
+            {
+                todotimer.Stop();
+            }
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)               // add if in event filter, and not in field filter..
         {
+            if (!loadcomplete)
+            {
+                todo.Enqueue(() => AddNewEntry(he, hl));
+                return;
+            }
+
             bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
 
             if (!add)
@@ -277,7 +340,6 @@ namespace EDDiscovery.UserControls
             rowsbyjournalid[item.Journalid] = rw;
             return rw;
         }
-
 
         private void UpdateToolTipsForFilter()
         {

@@ -66,45 +66,49 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)  
         {
-            info = "";
+            StringBuilder sb = new StringBuilder();
             if (JumpDist > 0)
-                info += JumpDist.ToString("0.00") + " ly";
+                sb.Append(JumpDist.ToString("0.00") + " ly");
             if (FuelUsed > 0)
-                info += "," +" Fuel ".Tx(this) + FuelUsed.ToString("0.0") + "t";
+                sb.Append(", Fuel " + FuelUsed.ToString("0.0") + "t");
             if (FuelLevel > 0)
-                info += " left ".Tx(this) + FuelLevel.ToString("0.0") + "t";
+                sb.Append(" left " + FuelLevel.ToString("0.0") + "t");
 
             string econ = Economy_Localised.Alt(Economy);
             if (econ.Equals("None"))
                 econ = "";
 
-            info += " ";
-            info += BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction, "<;(Wanted) ".Txb(this), Wanted, "State:".Txb(this), FactionState, "Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), econ, "Population:".Txb(this), Population);
-            detailed = "";
+            sb.Append(" ");
+            sb.Append(BaseUtils.FieldBuilder.Build("Faction:", Faction, "<;(Wanted) ", Wanted, "State:", FactionState, "Allegiance:", Allegiance, "Economy:", econ, "Population:", Population));
+            info = sb.ToString();
+
+            sb.Clear();
 
             if ( Factions != null )
             {
                 foreach (FactionInformation i in Factions)
                 {
-                    detailed += BaseUtils.FieldBuilder.Build("", i.Name, "State:".Txb(this), i.FactionState, "Government:".Txb(this), i.Government, "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"), "Allegiance:".Txb(this), i.Allegiance) ;
+                    sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:", i.FactionState, "Gov:", i.Government, "Inf:;%", (i.Influence * 100.0).ToString("0.0"), "Alg:", i.Allegiance));
                     if (i.PendingStates != null)
                     {
-                        detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:"));
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
-                            detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
+                            sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
 
                     }
 
                     if (i.RecoveringStates != null)
                     {
-                        detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:"));
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
-                            detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
+                            sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
                     }
-                    detailed += Environment.NewLine;
+                    sb.Append(Environment.NewLine);
 
                 }
             }
+
+            detailed = sb.ToString();
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)

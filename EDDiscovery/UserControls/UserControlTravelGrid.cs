@@ -89,6 +89,10 @@ namespace EDDiscovery.UserControls
         EventFilterSelector cfs = new EventFilterSelector();
 
         Timer searchtimer;
+        Timer todotimer;
+
+        private Queue<Action> todo = new Queue<Action>();
+        private bool loadcomplete = false;
 
         public UserControlTravelGrid()
         {
@@ -122,6 +126,9 @@ namespace EDDiscovery.UserControls
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 
+            todotimer = new Timer { Interval = 20 };
+            todotimer.Tick += Todotimer_Tick;
+
             discoveryform.OnHistoryChange += HistoryChanged;
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
@@ -137,6 +144,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            todo.Clear();
+            todotimer.Stop();
+            searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
@@ -162,6 +172,7 @@ namespace EDDiscovery.UserControls
             if (hl == null)     // just for safety
                 return;
 
+            loadcomplete = false;
             current_historylist = hl;
             this.Cursor = Cursors.WaitCursor;
 
@@ -189,46 +200,126 @@ namespace EDDiscovery.UserControls
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
-            for (int ii = 0; ii < result.Count; ii++)
-            {
-                DataGridViewRow rw = CreateHistoryRow(result[ii], textBoxFilter.Text);
-                if (rw != null)
-                    dataGridViewTravel.Rows.Add(rw);
-            }
-
-            UpdateToolTipsForFilter();
-
-            int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-            if (rowno >= 0)
-            {
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ?
-            }
-            else if (dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-            {
-                rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Description];
-            }
-            else
-                rowno = -1;
-
             dataGridViewTravel.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load Finish");
+            List<HistoryEntry[]> chunks = new List<HistoryEntry[]>();
 
-            if (sortcol >= 0)
+            for (int i = 0; i < result.Count; i += 1000)
             {
-                dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                HistoryEntry[] chunk = new HistoryEntry[i + 1000 > result.Count ? result.Count - i : 1000];
+
+                result.CopyTo(i, chunk, 0, chunk.Length);
+                chunks.Add(chunk);
             }
 
-            FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+            todo.Clear();
+            string filtertext = textBoxFilter.Text;
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
-            this.Cursor = Cursors.Default;
+            if (chunks.Count != 0)
+            {
+                var chunk = chunks[0];
+
+                dataGridViewTravel.SuspendLayout();
+                foreach (var item in chunk)
+                {
+                    var row = CreateHistoryRow(item, filtertext);
+                    if (row != null)
+                        dataGridViewTravel.Rows.Add(row);
+                }
+                dataGridViewTravel.ResumeLayout();
+
+                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
+
+                if (rowno >= 0)
+                {
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                    FireChangeSelection();
+                }
+                else if (pos.Item1 < 0 && dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
+                {
+                    rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Description];
+                    FireChangeSelection();
+                }
+            }
+
+            foreach (var chunk in chunks.Skip(1))
+            {
+                todo.Enqueue(() =>
+                {
+                    dataGridViewTravel.SuspendLayout();
+                    foreach (var item in chunk)
+                    {
+                        var row = CreateHistoryRow(item, filtertext);
+                        if (row != null)
+                            dataGridViewTravel.Rows.Add(row);
+                    }
+                    dataGridViewTravel.ResumeLayout();
+                });
+            }
+
+            todo.Enqueue(() =>
+            {
+                UpdateToolTipsForFilter();
+
+                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
+
+                if (rowno >= 0)
+                {
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
+                }
+                else if (dataGridViewTravel.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
+                {
+                    rowno = dataGridViewTravel.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    dataGridViewTravel.CurrentCell = dataGridViewTravel.Rows[rowno].Cells[TravelHistoryColumns.Description];
+                }
+                else
+                    rowno = -1;
+
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load Finish");
+
+                if (sortcol >= 0)
+                {
+                    dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                    dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                }
+
+                FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+
+                this.Cursor = Cursors.Default;
+                loadcomplete = true;
+            });
+
+            todotimer.Start();
+        }
+
+        private void Todotimer_Tick(object sender, EventArgs e)
+        {
+            ProcessTodo();
+        }
+
+        private void ProcessTodo()
+        {
+            if (todo.Count != 0)
+            {
+                var act = todo.Dequeue();
+                act();
+            }
+            else
+            {
+                todotimer.Stop();
+            }
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
+            if (!loadcomplete)
+            {
+                todo.Enqueue(() => AddNewEntry(he, hl));
+                return;
+            }
+
             bool add = he.IsJournalEventInEventFilter(SQLiteDBClass.GetSettingString(DbFilterSave, "All"));
 
             if (!add)                   // filtered out, update filter total and display
@@ -443,6 +534,12 @@ namespace EDDiscovery.UserControls
 
         private void OnNoteChanged(Object sender,HistoryEntry he, bool committed)
         {
+            if (!loadcomplete)
+            {
+                todo.Enqueue(() => OnNoteChanged(sender, he, committed));
+                return;
+            }
+
             if (rowsbyjournalid.ContainsKey(he.Journalid) ) // if we can find the grid entry
             {
                 string s = (he.snc != null) ? he.snc.Note : "";     // snc may have gone null, so cope with it
@@ -461,6 +558,11 @@ namespace EDDiscovery.UserControls
 
         private void Searchtimer_Tick(object sender, EventArgs e)
         {
+            if (!loadcomplete)
+            {
+                return;
+            }
+
             searchtimer.Stop();
             this.Cursor = Cursors.WaitCursor;
             HistoryChanged(current_historylist);

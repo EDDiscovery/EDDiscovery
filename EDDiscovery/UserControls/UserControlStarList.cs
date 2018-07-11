@@ -71,8 +71,11 @@ namespace EDDiscovery.UserControls
 
         Timer searchtimer;
         Timer autoupdateedsm;
+        Timer todotimer;
         int autoupdaterowstart = 0;
         int autoupdaterowoffset = 0;
+        Queue<Action> todo = new Queue<Action>();
+        bool loadcomplete = false;
 
         public UserControlStarList()
         {
@@ -111,6 +114,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             autoupdateedsm = new Timer() { Interval = 2000 };
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
+            todotimer = new Timer() { Interval = 20 };
+            todotimer.Tick += Todotimer_Tick;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -124,6 +129,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            todo.Clear();
+            todotimer.Stop();
+            searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
@@ -144,12 +152,15 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged(HistoryList hl, bool disablesorting)           // on History change
         {
-            autoupdateedsm.Stop();
-
             if (hl == null)     // just for safety
                 return;
 
+            loadcomplete = false;
+
+            autoupdateedsm.Stop();
+
             Tuple<long, int> pos = CurrentGridPosByJID();
+            string filtertext = textBoxFilter.Text;
 
             current_historylist = hl;
 
@@ -167,11 +178,12 @@ namespace EDDiscovery.UserControls
             systemsentered.Clear();
             dataGridViewStarList.Rows.Clear();
 
+            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
+
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
             List<HistoryEntry> result = filter.Filter(hl);      // last entry, first in list
             result = HistoryList.FilterHLByTravel(result);      // keep only travel entries (location after death, FSD jumps)
-
 
             foreach (HistoryEntry he in result)        // last first..
             {
@@ -181,51 +193,98 @@ namespace EDDiscovery.UserControls
                 systemsentered[he.System.Name].Add(he);     // first entry is newest jump to, second is next last, etc
             }
 
-            foreach( List<HistoryEntry> syslist in systemsentered.Values ) // will be in order of entry..
+            List<List<HistoryEntry>> syslists = systemsentered.Values.ToList();
+            List<List<HistoryEntry>[]> syslistchunks = new List<List<HistoryEntry>[]>();
+
+            for (int i = 0; i < syslists.Count; i += 1000)
             {
-                DataGridViewRow rw = CreateHistoryRow(syslist, textBoxFilter.Text);
-                if (rw != null)
-                    dataGridViewStarList.Rows.Add(rw);
+                List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[i + 1000 > syslists.Count ? syslists.Count - i : 1000];
+                syslists.CopyTo(i, syslistchunk, 0, syslistchunk.Length);
+                syslistchunks.Add(syslistchunk);
             }
 
-            dataGridViewStarList.FilterGridView(textBoxFilter.Text);
+            todo.Clear();
 
-            int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
-
-            if (rowno >= 0)
+            foreach (var syslistchunk in syslistchunks)
             {
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well currentGridRow = (rowno!=-1) ? 
-            }
-            else if (dataGridViewStarList.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
-            {
-                rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
-                dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
-            }
-            else
-                rowno = -1;
-
-            dataGridViewStarList.Columns[0].HeaderText = EDDiscoveryForm.EDDConfig.DisplayUTC ? "Game Time".Tx() : "Time".Tx();
-
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
-
-            if (sortcol >= 0)
-            {
-                dataGridViewStarList.Sort(dataGridViewStarList.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                todo.Enqueue(() =>
+                {
+                    dataGridViewStarList.SuspendLayout();
+                    foreach (var syslist in syslistchunk)
+                    {
+                        var row = CreateHistoryRow(syslist, filtertext);
+                        if (row != null)
+                            dataGridViewStarList.Rows.Add(row);
+                    }
+                    dataGridViewStarList.Rows.AddRange(CreateHistoryRows(syslistchunk, filtertext).ToArray());
+                });
             }
 
-            //System.Diagnostics.Debug.WriteLine("Fire HC");
+            todo.Enqueue(() =>
+            {
+                dataGridViewStarList.FilterGridView(filtertext);
 
-            autoupdaterowoffset = autoupdaterowstart = 0;
-            autoupdateedsm.Start();
+                int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
-            FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+                if (rowno >= 0)
+                {
+                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well currentGridRow = (rowno!=-1) ? 
+                }
+                else if (dataGridViewStarList.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
+                {
+                    rowno = dataGridViewStarList.Rows.GetFirstRow(DataGridViewElementStates.Visible);
+                    dataGridViewStarList.CurrentCell = dataGridViewStarList.Rows[rowno].Cells[StarHistoryColumns.StarName];
+                }
+                else
+                    rowno = -1;
+
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
+
+                if (sortcol >= 0)
+                {
+                    dataGridViewStarList.Sort(dataGridViewStarList.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                    dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("Fire HC");
+
+                autoupdaterowoffset = autoupdaterowstart = 0;
+                autoupdateedsm.Start();
+
+                FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
+
+                loadcomplete = true;
+            });
+
+            todotimer.Start();
         }
 
+        private void Todotimer_Tick(object sender, EventArgs e)
+        {
+            ProcessTodo();
+        }
 
+        private void ProcessTodo()
+        {
+            if (todo.Count != 0)
+            {
+                var act = todo.Dequeue();
+                act();
+            }
+            else
+            {
+                todotimer.Stop();
+            }
+        }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)           // on new entry from discovery system
         {
+            if (!loadcomplete)
+            {
+                todo.Enqueue(new Action(() => AddNewEntry(he, hl)));
+                return;
+            }
+
             if ( he.IsFSDJump )     // FSD jumps mean move system.. so
                 HistoryChanged(hl); // just recalc all..
 
@@ -274,7 +333,7 @@ namespace EDDiscovery.UserControls
 
             he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
-            string tip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
+            string tip = String.Join(Environment.NewLine, he.EventSummary, EventDescription, EventDetailedInfo);
 
             rw.Cells[0].ToolTipText = tip;
             rw.Cells[1].ToolTipText = tip;
@@ -282,6 +341,20 @@ namespace EDDiscovery.UserControls
             rw.Cells[3].ToolTipText = tip;
 
             return rw;
+        }
+
+        private List<DataGridViewRow> CreateHistoryRows(IEnumerable<List<HistoryEntry>> syslists, string search)
+        {
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
+
+            foreach (List<HistoryEntry> syslist in syslists) // will be in order of entry..
+            {
+                DataGridViewRow rw = CreateHistoryRow(syslist, search);
+                if (rw != null)
+                    rows.Add(rw);
+            }
+
+            return rows;
         }
 
         string Infoline(List<HistoryEntry> syslist)
