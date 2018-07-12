@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             this.surfaceScanDetailsToolStripMenuItem,
             this.showInPositionToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripConfig";
-            this.contextMenuStrip.Size = new System.Drawing.Size(347, 466);
+            this.contextMenuStrip.Size = new System.Drawing.Size(347, 444);
             // 
             // showSystemInformationToolStripMenuItem
             // 

@@ -254,10 +254,14 @@ namespace EDDiscovery.UserControls
 
                     if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
                     {
+                        scantext = null;
+                        HideScanData(null, null);
                         AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
                     }
                     else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
                     {
+                        scantext = null;
+                        HideScanData(null, null);
                         AddColText(0, 0, rowpos, rowheight, (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", textcolour, backcolour, null);
                     }
                     else
