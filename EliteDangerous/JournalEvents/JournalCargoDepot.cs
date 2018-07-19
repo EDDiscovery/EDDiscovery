@@ -38,6 +38,9 @@ namespace EliteDangerousCore.JournalEvents
             ItemsToGo = TotalItemsToDeliver - ItemsDelivered;
             ProgressPercent = evt["Progress"].Double()*100;
             MarketID = evt["MarketID"].LongNull();
+
+            if (ProgressPercent < 0.01)
+                ProgressPercent = ((double)System.Math.Max(ItemsCollected, ItemsDelivered) / (double)TotalItemsToDeliver) * 100;
         }
 
         public enum UpdateTypeEnum { Unknown, Collect, Deliver, WingUpdate}
