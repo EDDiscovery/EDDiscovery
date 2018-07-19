@@ -48,7 +48,8 @@ namespace EliteDangerousCore.JournalEvents
             Donation = evt["Donation"].LongNull();
             MissionId = evt["MissionID"].Int();
 
-            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list
+            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",")
+                                                              .Replace("$MISSIONUTIL_MULTIPLE_FINAL_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
 
             PermitsAwarded = evt["PermitsAwarded"]?.ToObjectProtected<string[]>();
