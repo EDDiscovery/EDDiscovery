@@ -43,7 +43,7 @@ namespace NetLogEntry
                 if (matrow >= 0)
                 {
                     string fdname = mat[matrow]["B"].Trim();
-                    EliteDangerousCore.MaterialCommodityData mc = EliteDangerousCore.MaterialCommodityData.GetCachedMaterialByFDName(fdname);
+                    EliteDangerousCore.MaterialCommodityData mc = EliteDangerousCore.MaterialCommodityData.GetByFDName(fdname);
 
                     if (mc != null)
                         return matcount.Value.ToString() + mc.Shortname; //+ "(" + mc.name + ")";
@@ -123,7 +123,7 @@ namespace NetLogEntry
                     string category = rw[3];
                     string ukname = rw[5];
 
-                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
+                    MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
 
                     if (cached == null)
                     {
@@ -195,7 +195,7 @@ namespace NetLogEntry
 
                     bool isinararare = InaraRares.Contains(ukname);
 
-                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
+                    MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
 
                     if (cached == null || cached.Type != type)
                     {
@@ -286,7 +286,7 @@ namespace NetLogEntry
                     {
                         ing[i] = rw["F", i * 2].Trim();
                         count[i] = rw["G", i * 2].InvariantParseInt(0);
-                        mat[i] = MaterialCommodityData.GetCachedMaterialByFDName(ing[i]);
+                        mat[i] = MaterialCommodityData.GetByFDName(ing[i]);
                         if (mat[i] == null)
                         {
                             Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);

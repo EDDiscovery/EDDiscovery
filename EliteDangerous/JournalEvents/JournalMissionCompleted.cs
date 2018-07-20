@@ -109,20 +109,20 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null)
             {
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -(int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -(int)Count, 0, conn);
             }
 
             if (CommodityReward != null)
             {
                 foreach (CommodityRewards c in CommodityReward)
-                    mc.Change(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
+                    mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0, conn);
             }
 
             if (MaterialsReward != null)
             {
                 foreach( MaterialRewards m in MaterialsReward )                 // 7/3/2018 not yet fully proven.. changed in 3.02
                 {
-                    string c = m.Category.Alt(MaterialCommodities.MaterialRawCategory);     // older ones did not have this tag..
+                    string c = m.Category.Alt(MaterialCommodityData.MaterialRawCategory);     // older ones did not have this tag..
                     mc.Change(c, m.Name, m.Count, 0, conn);
                 }
             }

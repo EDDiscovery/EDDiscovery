@@ -43,7 +43,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodities.CommodityCategory, Type, Count, BuyPrice, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice, conn);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)

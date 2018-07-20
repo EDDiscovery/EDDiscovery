@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
             ufs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.EngineeringRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetCachedMaterialByShortName(sn).Name, sn => sn);
+            matLookUp = matShortNames.ToDictionary(sn => MaterialCommodityData.GetByShortName(sn).Name, sn => sn);
             List<string> matLongNames = matLookUp.Keys.ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
                     Recipes.ResetUsed(mcl);
                     List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(wantedList, mcl);
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
-                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Name))      // and add new..
+                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
                     {
 
                         int rn = dataGridViewEngineering.Rows.Add();
@@ -307,11 +307,11 @@ namespace EDDiscovery.UserControls
                         foreach (var cell in dataGridViewEngineering.Rows[rn].Cells.OfType<DataGridViewCell>())
                         {
                             if (cell.OwningColumn == UpgradeCol)
-                                cell.Value = c.Name;
+                                cell.Value = c.Details.Name;
                             else if (cell.OwningColumn == WantedCol)
                                 cell.Value = c.scratchpad.ToStringInvariant();
                             else if (cell.OwningColumn == NotesCol)
-                                cell.Value = c.Shortname;
+                                cell.Value = c.Details.Shortname;
                             else if (cell.ValueType == null || cell.ValueType.IsAssignableFrom(typeof(string)))
                                 cell.Value = string.Empty;
                         }

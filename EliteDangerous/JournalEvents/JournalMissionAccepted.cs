@@ -172,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName))
             {
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, (int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0, conn);
             }
         }
     }

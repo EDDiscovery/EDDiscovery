@@ -25,13 +25,17 @@ namespace EliteDangerousCore
     public class MaterialCommodityData
     {
         public string Category { get; private set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
+        public string TranslatedCategory { get; private set; }      // translation of above..
         public string Name { get; private set; }                    // name of it in nice text
         public string FDName { get; private set; }                  // fdname, lower case..
         public string Type { get; private set; }                    // and its type, for materials its commonality, for commodities its group ("Metals" etc).
+        public string TranslatedType { get; private set; }          // translation of above..
         public string Shortname { get; private set; }               // short abv. name
         public Color Colour { get; private set; }                   // colour if its associated with one
         public bool Rarity { get; private set; }                    // if it is a rare commodity
 
+        public bool IsCommodity { get { return Category == CommodityCategory; } }
+        public bool IsEncodedOrManufactured { get { return Category == MaterialEncodedCategory || Category == MaterialManufacturedCategory; } }
         public bool IsRareCommodity { get { return Rarity && Category.Equals(CommodityCategory); } }
         public bool IsCommonMaterial { get { return Type == MaterialFreqCommon || Type == MaterialFreqVeryCommon; } }
         public bool IsJumponium
@@ -61,16 +65,33 @@ namespace EliteDangerousCore
         public const int RareCap = 150;
         public const int VeryRareCap = 100;
 
+        public int? MaterialLimit()
+        {
+            string type = Type;
+            if (type == MaterialFreqVeryCommon) return VeryCommonCap;
+            if (type == MaterialFreqCommon) return CommonCap;
+            if (type == MaterialFreqStandard) return StandardCap;
+            if (type == MaterialFreqRare) return RareCap;
+            if (type == MaterialFreqVeryRare) return VeryRareCap;
+            return null;
+        }
+
         // name key is lower case normalised
         private static Dictionary<string, MaterialCommodityData> cachelist = new Dictionary<string, MaterialCommodityData>();
 
-        public static MaterialCommodityData GetCachedMaterialByFDName(string fdname)
+        public static MaterialCommodityData GetByFDName(string fdname)
         {
             fdname = fdname.ToLower();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
-        public static MaterialCommodityData GetCachedMaterialByShortName(string shortname)
+        public static string GetNameByFDName(string fdname, string alt) // if we have it, give name, else give alt
+        {
+            fdname = fdname.ToLower();
+            return cachelist.ContainsKey(fdname) ? cachelist[fdname].Name : alt;
+        }
+
+        public static MaterialCommodityData GetByShortName(string shortname)
         {
             List<MaterialCommodityData> lst = cachelist.Values.ToList();
             int i = lst.FindIndex(x => x.Shortname.Equals(shortname));
@@ -99,31 +120,16 @@ namespace EliteDangerousCore
         public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl, bool rare)
         {
             Category = cs;
+            TranslatedCategory = Category.Tx(typeof(MaterialCommodityData));
             Name = n;
             FDName = fd;
             Type = t;
+            TranslatedType = Type.Tx(typeof(MaterialCommodityData));
             Shortname = shortn;
             Colour = cl;
             Rarity = rare;
         }
 
-        public static int? MaterialLimit(string type)
-        {
-            if (type == MaterialFreqVeryCommon) return VeryCommonCap;
-            if (type == MaterialFreqCommon) return CommonCap;
-            if (type == MaterialFreqStandard) return StandardCap;
-            if (type == MaterialFreqRare) return RareCap;
-            if (type == MaterialFreqVeryRare) return VeryRareCap;
-            return null;
-        }
-
-        public static int? MaterialLimit(MaterialCommodityData mat)
-        {
-            if (string.IsNullOrEmpty(mat?.Type))
-                return null;
-            else
-                return MaterialLimit(mat.Type);
-        }
 
         public void SetCache()
         {
@@ -703,7 +709,7 @@ namespace EliteDangerousCore
 
             foreach (var x in cachelist.Values)
             {
-                x.Name = BaseUtils.Translator.Instance.Translate(x.Name, "MatCom." + x.FDName);
+                x.Name = BaseUtils.Translator.Instance.Translate(x.Name, "MaterialCommodityData." + x.FDName);
             }
 
             //foreach (MaterialCommodityDB d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
