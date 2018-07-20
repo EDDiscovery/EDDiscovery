@@ -67,7 +67,7 @@ namespace EliteDangerousCore.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if ( CargoType.Length>0 && Count>0)
-                mc.Change(MaterialCommodities.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
         public override void FillInformation(out string info, out string detailed) 

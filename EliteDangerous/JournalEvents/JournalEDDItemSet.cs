@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
-                    mc.Set(MaterialCommodities.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
             }
         }
 

@@ -65,9 +65,9 @@ namespace EliteDangerousCore.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Type.Equals("Commodity"))
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -Quantity, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0, conn);
             else if (Type.Equals("Materials"))
-                mc.Change(MaterialCommodities.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, conn, true);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)

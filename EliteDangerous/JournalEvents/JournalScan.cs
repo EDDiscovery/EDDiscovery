@@ -579,13 +579,13 @@ namespace EliteDangerousCore.JournalEvents
         {
             StringBuilder scanText = new StringBuilder();
 
-            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
+            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
 
             if (mc != null && (historicmatlist != null || currentmatlist != null))
             {
                 MaterialCommodities historic = historicmatlist?.Find(mc);
                 MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc);
-                int? limit = MaterialCommodityData.MaterialLimit(mc);
+                int? limit = mc.MaterialLimit();
 
                 string matinfo = historic?.Count.ToString() ?? "0";
                 if (limit != null)
@@ -594,7 +594,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (current != null && (historic == null || historic.Count != current.Count) )
                     matinfo += " Cur " + current.Count.ToString();
 
-                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.Name, mc.Shortname, mc.Type, percent.ToString("N1"), matinfo);
+                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.Name, mc.Shortname, mc.TranslatedType, percent.ToString("N1"), matinfo);
             }
             else
                 scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fdname.ToLower()),

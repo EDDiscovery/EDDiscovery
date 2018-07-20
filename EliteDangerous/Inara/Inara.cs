@@ -254,10 +254,10 @@ namespace EliteDangerousCore.Inara
             var item = list.FindFDName(name);
             if (item != null)
             {
-                if (item.Category.Equals(MaterialCommodities.CommodityCategory))
-                    return setCommanderInventoryCargoItem(item.FDName, item.Count, null, dt);
+                if (item.Details.IsCommodity)
+                    return setCommanderInventoryCargoItem(item.Details.FDName, item.Count, null, dt);
                 else
-                    return setCommanderInventoryMaterialsItem(item.FDName, item.Count, dt);
+                    return setCommanderInventoryMaterialsItem(item.Details.FDName, item.Count, dt);
             }
             else
             {

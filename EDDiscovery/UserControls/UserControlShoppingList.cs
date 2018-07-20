@@ -198,14 +198,14 @@ namespace EDDiscovery.UserControls
                     double available;
                     wantedList.Append("Needed Mats".Tx(this,"NM") + ":" +  Environment.NewLine);
                     List<string> capExceededMats = new List<string>();
-                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Name))      // and add new..
+                    foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
                     {
                         string present = "";
                         if (showListAvailability)
                         {
                             if (sd != null && sd.HasMaterials)
                             {
-                                if (sd.Materials.TryGetValue(c.FDName, out available))
+                                if (sd.Materials.TryGetValue(c.Details.FDName, out available))
                                 {
                                     present = $" {available.ToString("N1")}%";
                                 }
@@ -213,28 +213,28 @@ namespace EDDiscovery.UserControls
                                 { present = " -"; }
                             }
                         }
-                        wantedList.Append($"  {c.scratchpad} {c.Name}{present}");
-                        int? onHand = mcl.Where(m => m.Shortname == c.Shortname).FirstOrDefault()?.Count;
+                        wantedList.Append($"  {c.scratchpad} {c.Details.Name}{present}");
+                        int? onHand = mcl.Where(m => m.Details.Shortname == c.Details.Shortname).FirstOrDefault()?.Count;
                         int totalReq = c.scratchpad + (onHand.HasValue ? onHand.Value : 0);
-                        if ((c.Type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
-                            (c.Type == MaterialFreqCommon && totalReq > CommonCap) ||
-                            (c.Type == MaterialFreqStandard && totalReq > StandardCap) ||
-                            (c.Type == MaterialFreqRare && totalReq > RareCap) ||
-                            (c.Type == MaterialFreqVeryRare && totalReq > VeryRareCap))
+                        if ((c.Details.Type == MaterialFreqVeryCommon && totalReq > VeryCommonCap) ||
+                            (c.Details.Type == MaterialFreqCommon && totalReq > CommonCap) ||
+                            (c.Details.Type == MaterialFreqStandard && totalReq > StandardCap) ||
+                            (c.Details.Type == MaterialFreqRare && totalReq > RareCap) ||
+                            (c.Details.Type == MaterialFreqVeryRare && totalReq > VeryRareCap))
                         {
-                            capExceededMats.Add(c.Name);
+                            capExceededMats.Add(c.Details.Name);
                         }
                         if (!last_he.IsLanded && last_sn != null)
                         {
                             var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsEDSMBody || useEDSMForSystemAvailability) && 
-                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.FDName));
+                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Details.FDName));
                             if (landables.Count() > 0)
                             {
                                 wantedList.Append("\n    ");
                                 List<Tuple<string, double>> allMats = new List<Tuple<string, double>>();
                                 foreach (StarScan.ScanNode sn in landables)
                                 {
-                                    sn.ScanData.Materials.TryGetValue(c.FDName, out available);
+                                    sn.ScanData.Materials.TryGetValue(c.Details.FDName, out available);
                                     allMats.Add(new Tuple<string, double>(sn.fullname.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
@@ -279,9 +279,9 @@ namespace EDDiscovery.UserControls
                     wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".Tx(this,"MO"), last_he.WhereAmI) + Environment.NewLine );
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
-                        int? onHand = mcl.Where(m => m.FDName == mat.Key).FirstOrDefault()?.Count;
-                        MaterialCommodityData md =  GetCachedMaterialByFDName(mat.Key);
-                        int max = MaterialLimit(md).Value;
+                        int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;
+                        MaterialCommodityData md =  GetByFDName(mat.Key);
+                        int max = md.MaterialLimit().Value;
                         if(!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {
                             wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
