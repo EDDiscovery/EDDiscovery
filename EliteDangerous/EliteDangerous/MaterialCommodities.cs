@@ -21,7 +21,7 @@ using System.Linq;
 
 namespace EliteDangerousCore
 {
-    // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
+    // [System.Diagnostics.DebuggerDisplay("MatDB {Category} {Name} {FDName} {Type} {Shortname}")]
     public class MaterialCommodityData
     {
         public string Category { get; private set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
@@ -33,8 +33,18 @@ namespace EliteDangerousCore
         public bool Rarity { get; private set; }                    // if it is a rare commodity
 
         public bool IsRareCommodity { get { return Rarity && Category.Equals(CommodityCategory); } }
+        public bool IsCommonMaterial { get { return Type == MaterialFreqCommon || Type == MaterialFreqVeryCommon; } }
+        public bool IsJumponium
+        {
+            get
+            {
+                return (FDName.Contains("arsenic") || FDName.Contains("cadmium") || FDName.Contains("carbon")
+                    || FDName.Contains("germanium") || FDName.Contains("niobium") || FDName.Contains("polonium")
+                    || FDName.Contains("vanadium") || FDName.Contains("yttrium"));
+            }
+        }
 
-        public static string CommodityCategory = "Commodity";
+        public static string CommodityCategory = "Commodity";       // Categories 
         public static string MaterialRawCategory = "Raw";
         public static string MaterialEncodedCategory = "Encoded";
         public static string MaterialManufacturedCategory = "Manufactured";
@@ -109,8 +119,10 @@ namespace EliteDangerousCore
 
         public static int? MaterialLimit(MaterialCommodityData mat)
         {
-            if (string.IsNullOrEmpty(mat?.Type)) return null;
-            return MaterialLimit(mat.Type);
+            if (string.IsNullOrEmpty(mat?.Type))
+                return null;
+            else
+                return MaterialLimit(mat.Type);
         }
 
         public void SetCache()
@@ -213,14 +225,6 @@ namespace EliteDangerousCore
             MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour, comrare);
             mc.SetCache();
             return true;
-        }
-
-        public static bool IsJumponium(string name)
-        {
-            name = name.ToLower();
-            return (name.Contains("arsenic") || name.Contains("cadmium") || name.Contains("carbon")
-                || name.Contains("germanium") || name.Contains("niobium") || name.Contains("polonium")
-                || name.Contains("vanadium") || name.Contains("yttrium"));
         }
 
         public static void SetUpInitialTable()
@@ -696,6 +700,11 @@ namespace EliteDangerousCore
 
             // seen in logs
             AddCommodity("Drones", "Drones", "Drones");
+
+            foreach (var x in cachelist.Values)
+            {
+                x.Name = BaseUtils.Translator.Instance.Translate(x.Name, "MatCom." + x.FDName);
+            }
 
             //foreach (MaterialCommodityDB d in cachelist.Values) System.Diagnostics.Debug.WriteLine(string.Format("{0},{1},{2},{3}", d.fdname, d.name, d.category, d.type));
         }
