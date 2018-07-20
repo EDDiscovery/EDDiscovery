@@ -386,7 +386,7 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.Cargo: //VERIFIED 16/5/18
                     {
                         List<MaterialCommodities> commod = he.MaterialCommodity.Sort(true);        // all commodities
-                        var listc = commod.Where(x=>x.count>0).Select(x => new Tuple<string, int>(x.fdname, x.count));
+                        var listc = commod.Where(x=>x.Count>0).Select(x => new Tuple<string, int>(x.FDName, x.Count));
                         eventstosend.Add(InaraClass.setCommanderInventoryCargo(listc, he.EventTimeUTC));
                         break;
                     }
@@ -394,7 +394,7 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.Materials: //VERIFIED 16/5/18
                     { 
                         List<MaterialCommodities> mat = he.MaterialCommodity.Sort(false);        // all materials
-                        var listm = mat.Where(x => x.count > 0).Select(x => new Tuple<string, int>(x.fdname, x.count));
+                        var listm = mat.Where(x => x.Count > 0).Select(x => new Tuple<string, int>(x.FDName, x.Count));
                         eventstosend.Add(InaraClass.setCommanderInventoryMaterials(listm, he.EventTimeUTC));
                         break;
                     }

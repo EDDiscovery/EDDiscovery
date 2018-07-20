@@ -179,9 +179,9 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodities> notfound = new List<MaterialCommodities>();
                 foreach (MaterialCommodities m in mclist)
                 {
-                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.name));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Name));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
-                        list[index].CargoCarried = m.count; // found it, set cargo count..
+                        list[index].CargoCarried = m.Count; // found it, set cargo count..
                     else
                         notfound.Add(m);        // not found, add to list for bottom
                 }
@@ -219,13 +219,13 @@ namespace EDDiscovery.UserControls
 
                 foreach (MaterialCommodities m in notfound)
                 {
-                    if (m.count > 0)
+                    if (m.Count > 0)
                     {
-                        object[] rowobj = {     m.type,
-                                                m.name,
+                        object[] rowobj = {     m.Type,
+                                                m.Name,
                                                 "",
                                                 "",
-                                                m.count,
+                                                m.Count,
                                                 "",
                                                 "",
                                                 "",

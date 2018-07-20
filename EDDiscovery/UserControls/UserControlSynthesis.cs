@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             lfs.Changed += FilterChanged;
 
             List<string> matShortNames = Recipes.SynthesisRecipes.SelectMany(r => r.ingredients).Distinct().ToList();
-            matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).name)).ToList();
+            matLookUp = matShortNames.Select(sn => Tuple.Create<string, string>(sn, MaterialCommodityData.GetCachedMaterialByShortName(sn).Name)).ToList();
 
             List<string> matLongNames = matLookUp.Select(lu => lu.Item2).ToList();
             matLongNames.Sort();
@@ -283,11 +283,11 @@ namespace EDDiscovery.UserControls
                 {
                     Recipes.ResetUsed(mcl);
                     List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(wantedList, mcl);
-                    shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.name.CompareTo(right.name); });
+                    shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.Name.CompareTo(right.Name); });
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..
                     {
-                        Object[] values = { c.name, "", c.scratchpad.ToStringInvariant(), "", c.shortname };
+                        Object[] values = { c.Name, "", c.scratchpad.ToStringInvariant(), "", c.Shortname };
                         int rn = dataGridViewSynthesis.Rows.Add(values);
                         dataGridViewSynthesis.Rows[rn].ReadOnly = true;     // disable editing wanted..
                     }

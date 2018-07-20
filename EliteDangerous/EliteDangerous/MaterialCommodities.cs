@@ -24,15 +24,15 @@ namespace EliteDangerousCore
     // [System.Diagnostics.DebuggerDisplay("MatDB {category} {name} {fdname} {type} {shortname}")]
     public class MaterialCommodityData
     {
-        public string category { get; set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
-        public string name { get; set; }                    // name of it in nice text
-        public string fdname { get; set; }                  // fdname, lower case..
-        public string type { get; set; }                    // and its type, for materials its rarity class, for commodities its group ("Metals" etc).
-        public string shortname { get; set; }               // short abv. name
-        public Color colour { get; set; }                   // colour if its associated with one
-        public bool rarity { get; set; }                    // if it is a rare commodity
+        public string Category { get; private set; }                // either Commodity, or one of the Category types from the MaterialCollected type.
+        public string Name { get; private set; }                    // name of it in nice text
+        public string FDName { get; private set; }                  // fdname, lower case..
+        public string Type { get; private set; }                    // and its type, for materials its commonality, for commodities its group ("Metals" etc).
+        public string Shortname { get; private set; }               // short abv. name
+        public Color Colour { get; private set; }                   // colour if its associated with one
+        public bool Rarity { get; private set; }                    // if it is a rare commodity
 
-        public bool IsRareCommodity { get { return rarity && category.Equals(CommodityCategory); } }
+        public bool IsRareCommodity { get { return Rarity && Category.Equals(CommodityCategory); } }
 
         public static string CommodityCategory = "Commodity";
         public static string MaterialRawCategory = "Raw";
@@ -54,7 +54,7 @@ namespace EliteDangerousCore
         // name key is lower case normalised
         private static Dictionary<string, MaterialCommodityData> cachelist = new Dictionary<string, MaterialCommodityData>();
 
-        public static MaterialCommodityData GetCachedMaterial(string fdname)
+        public static MaterialCommodityData GetCachedMaterialByFDName(string fdname)
         {
             fdname = fdname.ToLower();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
@@ -63,14 +63,7 @@ namespace EliteDangerousCore
         public static MaterialCommodityData GetCachedMaterialByShortName(string shortname)
         {
             List<MaterialCommodityData> lst = cachelist.Values.ToList();
-            int i = lst.FindIndex(x => x.shortname.Equals(shortname));
-            return i >= 0 ? lst[i] : null;
-        }
-
-        public static MaterialCommodityData GetCachedMaterialByName(string name)
-        {
-            List<MaterialCommodityData> lst = cachelist.Values.ToList();
-            int i = lst.FindIndex(x => x.name.Equals(name, System.StringComparison.InvariantCultureIgnoreCase));
+            int i = lst.FindIndex(x => x.Shortname.Equals(shortname));
             return i >= 0 ? lst[i] : null;
         }
 
@@ -81,12 +74,12 @@ namespace EliteDangerousCore
 
         public static MaterialCommodityData[] GetMaterials()
         {
-            return cachelist.Values.Where(x => x.category != CommodityCategory).ToArray();
+            return cachelist.Values.Where(x => x.Category != CommodityCategory).ToArray();
         }
 
         public static MaterialCommodityData[] GetCommodities()
         {
-            return cachelist.Values.Where(x => x.category == CommodityCategory).ToArray();
+            return cachelist.Values.Where(x => x.Category == CommodityCategory).ToArray();
         }
 
         public MaterialCommodityData()
@@ -95,13 +88,13 @@ namespace EliteDangerousCore
 
         public MaterialCommodityData(string cs, string n, string fd, string t, string shortn, Color cl, bool rare)
         {
-            category = cs;
-            name = n;
-            fdname = fd;
-            type = t;
-            shortname = shortn;
-            colour = cl;
-            rarity = rare;
+            Category = cs;
+            Name = n;
+            FDName = fd;
+            Type = t;
+            Shortname = shortn;
+            Colour = cl;
+            Rarity = rare;
         }
 
         public static int? MaterialLimit(string type)
@@ -116,13 +109,13 @@ namespace EliteDangerousCore
 
         public static int? MaterialLimit(MaterialCommodityData mat)
         {
-            if (string.IsNullOrEmpty(mat?.type)) return null;
-            return MaterialLimit(mat.type);
+            if (string.IsNullOrEmpty(mat?.Type)) return null;
+            return MaterialLimit(mat.Type);
         }
 
         public void SetCache()
         {
-            cachelist[this.fdname.ToLower()] = this;
+            cachelist[this.FDName.ToLower()] = this;
         }
 
         public static MaterialCommodityData EnsurePresent(string cat, string fdname)  // By FDNAME
@@ -212,7 +205,7 @@ namespace EliteDangerousCore
 
         private static bool AddEntry(string catname, Color colour, string aliasname, string typeofit, string shortname, string fdName, bool comrare = false)
         {
-            System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null, "ShortName repeat " + aliasname + " " + shortname);
+            System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.Shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null, "ShortName repeat " + aliasname + " " + shortname);
             System.Diagnostics.Debug.Assert(cachelist.ContainsKey(fdName) == false, "Repeated entry " + fdName);
 
             string fdn = (fdName.Length > 0) ? fdName.ToLower() : aliasname.FDName();       // always lower case fdname
