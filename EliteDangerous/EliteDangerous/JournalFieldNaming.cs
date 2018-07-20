@@ -49,10 +49,10 @@ namespace EliteDangerousCore
 
         public static string RMat(string fdname)            // fix up fdname into a nicer name
         {
-            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(fdname);
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
 
             if (mc != null)
-                return mc.name;
+                return mc.Name;
             else
                 return fdname.SplitCapsWordFull();
         }

@@ -251,13 +251,13 @@ namespace EliteDangerousCore.Inara
 
         static public JToken setCommanderInventoryItem(MaterialCommoditiesList list, string name, DateTime dt)
         {
-            var item = list.FindFD(name);
+            var item = list.FindFDName(name);
             if (item != null)
             {
-                if (item.category.Equals(MaterialCommodities.CommodityCategory))
-                    return setCommanderInventoryCargoItem(item.fdname, item.count, null, dt);
+                if (item.Category.Equals(MaterialCommodities.CommodityCategory))
+                    return setCommanderInventoryCargoItem(item.FDName, item.Count, null, dt);
                 else
-                    return setCommanderInventoryMaterialsItem(item.fdname, item.count, dt);
+                    return setCommanderInventoryMaterialsItem(item.FDName, item.Count, dt);
             }
             else
             {

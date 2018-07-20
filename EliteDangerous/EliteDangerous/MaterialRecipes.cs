@@ -54,7 +54,7 @@ namespace EliteDangerousCore
                     count[i] = int.Parse(s);
                     MaterialCommodityData mcd = MaterialCommodityData.GetCachedMaterialByShortName(ingredients[i]);
                     System.Diagnostics.Debug.Assert(mcd != null, "Recipe is " + name + " " + indg);
-                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToStringInvariant() + " x " + mcd.name, Environment.NewLine);
+                    ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToStringInvariant() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace EliteDangerousCore
         static public void ResetUsed(List<MaterialCommodities> mcl)
         {
             for (int i = 0; i < mcl.Count; i++)
-                mcl[i].scratchpad = mcl[i].count;
+                mcl[i].scratchpad = mcl[i].Count;
         }
 
         //return maximum can make, how many made, needed string.
@@ -113,7 +113,7 @@ namespace EliteDangerousCore
             {
                 string ingredient = r.ingredients[i];
 
-                int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
+                int mi = list.FindIndex(x => x.Shortname.Equals(ingredient));
                 int got = (mi >= 0) ? list[mi].scratchpad : 0;
                 int sets = got / r.count[i];
 
@@ -127,14 +127,14 @@ namespace EliteDangerousCore
                     string displong;
                     if (mi > 0)     // if got one..
                     {
-                        dispshort = (list[mi].category == MaterialCommodityData.MaterialEncodedCategory || list[mi].category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
-                        displong = " " + list[mi].name;
+                        dispshort = (list[mi].Category == MaterialCommodityData.MaterialEncodedCategory || list[mi].Category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].Name : list[mi].Shortname;
+                        displong = " " + list[mi].Name;
                     }
                     else
                     {
                         MaterialCommodityData db = MaterialCommodityData.GetCachedMaterialByShortName(ingredient);
-                        dispshort = (db.category == MaterialCommodityData.MaterialEncodedCategory || db.category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + db.name : db.shortname;
-                        displong = " " + db.name;
+                        dispshort = (db.Category == MaterialCommodityData.MaterialEncodedCategory || db.Category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + db.Name : db.Shortname;
+                        displong = " " + db.Name;
                     }
 
                     string sshort = (need - got).ToStringInvariant() + dispshort;
@@ -163,13 +163,13 @@ namespace EliteDangerousCore
 
                 for (int i = 0; i < r.ingredients.Length; i++)
                 {
-                    int mi = list.FindIndex(x => x.shortname.Equals(r.ingredients[i]));
+                    int mi = list.FindIndex(x => x.Shortname.Equals(r.ingredients[i]));
                     System.Diagnostics.Debug.Assert(mi != -1);
                     int used = r.count[i] * made;
                     list[mi].scratchpad -= used;
 
-                    string dispshort = (list[mi].category == MaterialCommodityData.MaterialEncodedCategory || list[mi].category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].name : list[mi].shortname;
-                    string displong = " " + list[mi].name;
+                    string dispshort = (list[mi].Category == MaterialCommodityData.MaterialEncodedCategory || list[mi].Category == MaterialCommodityData.MaterialManufacturedCategory) ? " " + list[mi].Name : list[mi].Shortname;
+                    string displong = " " + list[mi].Name;
 
                     usedstrshort.AppendPrePad(used.ToStringInvariant() + dispshort, ",");
                     usedstrlong.AppendPrePad(used.ToStringInvariant() + " x " + displong, Environment.NewLine);
@@ -193,13 +193,13 @@ namespace EliteDangerousCore
                 for (int i = 0; i < r.ingredients.Length; i++)
                 {
                     string ingredient = r.ingredients[i];
-                    int mi = list.FindIndex(x => x.shortname.Equals(ingredient));
+                    int mi = list.FindIndex(x => x.Shortname.Equals(ingredient));
                     int got = (mi >= 0) ? list[mi].scratchpad : 0;
                     int need = r.count[i] * wanted;
 
                     if (got < need)
                     {
-                        int shopentry = shoppingList.FindIndex(x => x.shortname.Equals(ingredient));
+                        int shopentry = shoppingList.FindIndex(x => x.Shortname.Equals(ingredient));
                         if (shopentry >= 0)
                             shoppingList[shopentry].scratchpad += (need - got);
                         else
@@ -223,23 +223,23 @@ namespace EliteDangerousCore
             return shoppingList;
         }
 
-        public static string UsedInSynthesis(string name)
+        public static string UsedInSythesisByFDName(string fdname)
         {
-            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(name);
-            return Recipes.UsedInSynthesisAbv(mc?.shortname ?? "--");
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
+            return Recipes.UsedInSynthesisByShortName(mc?.Shortname ?? "--");
         }
 
-        public static string UsedInSynthesisAbv(string abv)
+        public static string UsedInSynthesisByShortName(string shortname)
         {
-            if (SynthesisRecipesByMaterial.ContainsKey(abv))
-                return String.Join(",", SynthesisRecipesByMaterial[abv].Select(x => x.name + "-" + x.level));
+            if (SynthesisRecipesByMaterial.ContainsKey(shortname))
+                return String.Join(",", SynthesisRecipesByMaterial[shortname].Select(x => x.name + "-" + x.level));
             else
                 return "";
         }
 
-        public static SynthesisRecipe FindSynthesis(string name, string level)
+        public static SynthesisRecipe FindSynthesis(string recipename, string level)
         {
-            return SynthesisRecipes.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
+            return SynthesisRecipes.Find(x => x.name.Equals(recipename, StringComparison.InvariantCultureIgnoreCase) && x.level.Equals(level, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public static List<SynthesisRecipe> SynthesisRecipes = new List<SynthesisRecipe>()

@@ -575,29 +575,29 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString();
         }
 
-        public string DisplayMaterial(string name, double percent, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
+        public string DisplayMaterial(string fdname, double percent, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
             StringBuilder scanText = new StringBuilder();
 
-            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(name);
+            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
 
             if (mc != null && (historicmatlist != null || currentmatlist != null))
             {
-                MaterialCommodities historic = historicmatlist?.Find(mc.name);
-                MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc.name);
+                MaterialCommodities historic = historicmatlist?.Find(mc);
+                MaterialCommodities current = ReferenceEquals(historicmatlist,currentmatlist) ? null : currentmatlist?.Find(mc);
                 int? limit = MaterialCommodityData.MaterialLimit(mc);
 
-                string matinfo = historic?.count.ToString() ?? "0";
+                string matinfo = historic?.Count.ToString() ?? "0";
                 if (limit != null)
                     matinfo += "/" + limit.Value.ToString();
 
-                if (current != null && (historic == null || historic.count != current.count) )
-                    matinfo += " Cur " + current.count.ToString();
+                if (current != null && (historic == null || historic.Count != current.Count) )
+                    matinfo += " Cur " + current.Count.ToString();
 
-                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.name, mc.shortname, mc.type, percent.ToString("N1"), matinfo);
+                scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.Name, mc.Shortname, mc.Type, percent.ToString("N1"), matinfo);
             }
             else
-                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(name.ToLower()),
+                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fdname.ToLower()),
                                                             percent.ToString("N1"));
 
             return scanText.ToNullSafeString();

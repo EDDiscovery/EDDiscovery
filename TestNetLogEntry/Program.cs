@@ -121,11 +121,6 @@ namespace NetLogEntry
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
-            else if (arg1.Equals("CorolisEng", StringComparison.InvariantCultureIgnoreCase))
-            {
-                string ret = CorolisEngineering.ProcessEngineering(args.Next);
-                Console.WriteLine(ret);
-            }
             else if (arg1.Equals("FrontierData", StringComparison.InvariantCultureIgnoreCase))
             {
                 string ret = FrontierData.Process(args.Next);

@@ -15,9 +15,21 @@ using System.Threading.Tasks;
 // output the shipdata tab to ships.csv
 // output the module tab to modules.csv
 // output the tech broker tab to techbroker.csv
-// optional: copy in corolis modules.json into the same folder
 // run it.
-// you can use either corolis engineer data (which is incorrect) or this data, which was synced with Inara . Use useenglist to change
+// will verify materials in MaterialCommododities vs the sheet
+// will verify any replacement lists of fdname 
+// will verify commodities in MaterialCommododities vs the sheet
+// will check weapon data vs the shipmoduledata file
+// will check modules vs the shipmoduledata file
+// will read tech broker info and write out a new tech broker lines - import this manually into MaterialRecipes.cs
+// will read the recipes cvs and print out the recipe lines for MaterialRecipes.cs. This is cross checked vs the englist at the bottom of the file
+//      You need to keep this englist up to date manually with Inara and other sources for engineer names...  If one is found missing, you need to 
+//      update the list at the bottom.
+
+// Keep rare list at the bottom up to date manually with Inara and other sources
+
+// it will print out any missing/mismatched data - some if to be expected.
+
 
 namespace NetLogEntry
 {
@@ -30,13 +42,13 @@ namespace NetLogEntry
                 int matrow = mat.FindInColumn("A", matid.Value.ToString());
                 if (matrow >= 0)
                 {
-                    string name = mat[matrow]["F"].Trim();
-                    EliteDangerousCore.MaterialCommodityData mc = EliteDangerousCore.MaterialCommodityData.GetCachedMaterialByName(name);
+                    string fdname = mat[matrow]["B"].Trim();
+                    EliteDangerousCore.MaterialCommodityData mc = EliteDangerousCore.MaterialCommodityData.GetCachedMaterialByFDName(fdname);
 
                     if (mc != null)
-                        return matcount.Value.ToString() + mc.shortname; //+ "(" + mc.name + ")";
+                        return matcount.Value.ToString() + mc.Shortname; //+ "(" + mc.name + ")";
                     else
-                        return matcount.Value.ToString() + name + "( **** UNKNOWN *****)";
+                        return matcount.Value.ToString() + fdname + "( **** UNKNOWN *****)";
 
                 }
             }
@@ -45,8 +57,6 @@ namespace NetLogEntry
 
         static public string Process(string rootpath)            // overall index of items
         {
-            bool useenglist = true;     // set true to use ours, set false to use coriolis
-
             EliteDangerousCore.MaterialCommodityData.SetUpInitialTable();
 
             string recipies = Path.Combine(rootpath, "recipes.csv");
@@ -93,9 +103,6 @@ namespace NetLogEntry
                 return "ERROR no techbroker csv";
             }
 
-            List<CorolisEngineering.EngEntry> englist = CorolisEngineering.GetEng(rootpath);        // can fail with no file as empty list
-
-
             // Check materials vs the excel sheet
 
             {
@@ -103,10 +110,10 @@ namespace NetLogEntry
 
                 foreach (MaterialCommodityData m in ourmats)
                 {
-                    if (filemats.FindInColumn(5, m.name, StringComparison.InvariantCultureIgnoreCase, true) == -1)
-                        Console.WriteLine("Error " + m.name + " not found in frontier data");
-                    if (filemats.FindInColumn(1, m.fdname, StringComparison.InvariantCultureIgnoreCase) == -1)
-                        Console.WriteLine("Error " + m.fdname + " not found in frontier data");
+                    if (filemats.FindInColumn(5, m.Name, StringComparison.InvariantCultureIgnoreCase, true) == -1)
+                        Console.WriteLine("Error " + m.Name + " not found in frontier data");
+                    if (filemats.FindInColumn(1, m.FDName, StringComparison.InvariantCultureIgnoreCase) == -1)
+                        Console.WriteLine("Error " + m.FDName + " not found in frontier data");
                 }
 
                 foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
@@ -116,15 +123,15 @@ namespace NetLogEntry
                     string category = rw[3];
                     string ukname = rw[5];
 
-                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterial(fdname);
+                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
 
                     if (cached == null)
                     {
                         Console.WriteLine("Error " + fdname + " not found in cache");
                     }
-                    else if (cached.category != category)
+                    else if (cached.Category != category)
                     {
-                        Console.WriteLine("Error " + fdname + " type " + category + " disagrees with " + cached.type);
+                        Console.WriteLine("Error " + fdname + " type " + category + " disagrees with " + cached.Type);
                     }
 
                 }
@@ -137,7 +144,7 @@ namespace NetLogEntry
 
                 foreach (KeyValuePair<string, string> kvp in MaterialCommodityData.fdnamemangling)
                 {
-                    if (ourcommods.Find(x => x.fdname.Equals(kvp.Value)) == null)
+                    if (ourcommods.Find(x => x.FDName.Equals(kvp.Value)) == null)
                     {
                         Console.WriteLine("Error " + kvp.Value + " replacement is not in our cache");
                     }
@@ -152,17 +159,17 @@ namespace NetLogEntry
 
                 foreach (MaterialCommodityData m in ourcommods)     // check our list vs the excel
                 {
-                    int n = filecommods.FindInColumn(3, m.name, StringComparison.InvariantCultureIgnoreCase, true);
-                    int f = filecommods.FindInColumn(2, m.fdname, StringComparison.InvariantCultureIgnoreCase);
+                    int n = filecommods.FindInColumn(3, m.Name, StringComparison.InvariantCultureIgnoreCase, true);
+                    int f = filecommods.FindInColumn(2, m.FDName, StringComparison.InvariantCultureIgnoreCase);
 
-                    bool isinararare = InaraRares.Contains(m.name);
+                    bool isinararare = InaraRares.Contains(m.Name);
 
                     if (n == -1)    // no name in excel
                     {
                         if (f != -1)
-                            Console.WriteLine("Error " + m.name + " not found but ID is " + filecommods.Rows[f][2]);
+                            Console.WriteLine("Error " + m.Name + " not found but ID is " + filecommods.Rows[f][2]);
                         else
-                            Console.WriteLine("Error " + m.name + " not found in frontier data");
+                            Console.WriteLine("Error " + m.Name + " not found in frontier data");
                     }
 
                     if (f == -1)    // no id in excel
@@ -173,11 +180,11 @@ namespace NetLogEntry
                             Console.WriteLine("! AddCommodity(\"" + rw[3] + "\", \"" + rw[1] + "\", \"" + rw[2] + "\");");
                         }
                         else
-                            Console.WriteLine("Error FDNAME " + m.fdname + " not found in frontier data");
+                            Console.WriteLine("Error FDNAME " + m.FDName + " not found in frontier data");
                     }
 
-                    if (m.rarity != isinararare)
-                        Console.WriteLine("Rarity flag incorrect for " + m.fdname);
+                    if (m.Rarity != isinararare)
+                        Console.WriteLine("Rarity flag incorrect for " + m.FDName);
                 }
 
                 foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
@@ -188,9 +195,9 @@ namespace NetLogEntry
 
                     bool isinararare = InaraRares.Contains(ukname);
 
-                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterial(fdname);
+                    MaterialCommodityData cached = MaterialCommodityData.GetCachedMaterialByFDName(fdname);
 
-                    if (cached == null || cached.type != type)
+                    if (cached == null || cached.Type != type)
                     {
                         Console.WriteLine("AddCommodity" + (isinararare ? "Rare" : "") + "(\"" + ukname + "\", \"" + type + "\", \"" + fdname + "\");");
                     }
@@ -279,13 +286,13 @@ namespace NetLogEntry
                     {
                         ing[i] = rw["F", i * 2].Trim();
                         count[i] = rw["G", i * 2].InvariantParseInt(0);
-                        mat[i] = MaterialCommodityData.GetCachedMaterial(ing[i]);
+                        mat[i] = MaterialCommodityData.GetCachedMaterialByFDName(ing[i]);
                         if (mat[i] == null)
                         {
                             Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
                             break;
                         }
-                        else if (!mat[i].shortname.HasChars())
+                        else if (!mat[i].Shortname.HasChars())
                         {
                             Console.WriteLine("Material DB entry does not have a shortname - update first " + ing[i]);
                             break;
@@ -295,11 +302,11 @@ namespace NetLogEntry
                     if (i == 5)
                     {
                         Console.WriteLine("new TechBrokerUnlockRecipe(\"" + nicename + "\",\"" +
-                            count[0].ToStringInvariant() + mat[0].shortname + "," +
-                            count[1].ToStringInvariant() + mat[1].shortname + "," +
-                            count[2].ToStringInvariant() + mat[2].shortname + "," +
-                            count[3].ToStringInvariant() + mat[3].shortname + "," +
-                            count[4].ToStringInvariant() + mat[4].shortname + "\"),");
+                            count[0].ToStringInvariant() + mat[0].Shortname + "," +
+                            count[1].ToStringInvariant() + mat[1].Shortname + "," +
+                            count[2].ToStringInvariant() + mat[2].Shortname + "," +
+                            count[3].ToStringInvariant() + mat[3].Shortname + "," +
+                            count[4].ToStringInvariant() + mat[4].Shortname + "\"),");
 
                     }
                     else
@@ -344,56 +351,16 @@ namespace NetLogEntry
                     if (cat == "FS Dinterdictor")
                         cat = "FSD Interdictor";
 
-                    List<CorolisEngineering.EngEntry> modulelist = (from x in englist where x.corolisfrontierid == fdfront select x).ToList();
-
                     string engnames = "Not Known";
 
-                    if (useenglist)
-                    {
-                        EngineerList en = Array.Find(ourenglist, x => x.cat == cat && x.ukname == ukname && x.level == level);
-                        if (en != null)
-                            engnames = en.engnames;
-                        else
-                            Console.WriteLine("No matching internal data for " + fdname + ":" + fdfront);
-
-                    }
+                    EngineerList en = Array.Find(ourenglist, x => x.cat == cat && x.ukname == ukname && x.level == level);
+                    if (en != null)
+                        engnames = en.engnames;
                     else
-                    {
-                        if (modulelist.Count == 0)
-                        {
-                            Console.WriteLine("No matching corolis module found " + fdname + ":" + fdfront);
-                        }
-                        else
-                        {
-                            CorolisEngineering.EngEntry anylevelentry = (from x in modulelist where x.fdname.IndexOf(fdback, StringComparison.InvariantCultureIgnoreCase) >= 0 select x).FirstOrDefault();
-                            CorolisEngineering.EngEntry entry = (from x in modulelist where x.fdname.IndexOf(fdback, StringComparison.InvariantCultureIgnoreCase) >= 0 && x.grade == level.ToString() select x).FirstOrDefault();
+                        Console.WriteLine("No matching internal data for " + fdname + ":" + fdfront);
 
-                            if (entry == null)
-                            {
-                                if (anylevelentry != null)
-                                    Console.WriteLine("Possible Corolis mismatched grade for " + fdname + ":" + fdfront + ":" + fdback + " at " + level);
-                                else
-                                    Console.WriteLine("No matching Corolis engineering found for " + fdname + ":" + fdfront + ":" + fdback);
-
-                                engnames = "Unknown";
-                            }
-                            else
-                            {
-                                //Console.WriteLine("engineering found for FDName: " + fdname + ": Entry " + entry.fdname);
-                                engnames = entry.englist;
-                                engnames = engnames.Replace("Chung", "Cheung");     // fix found misspelling 25 june 18
-                            }
-                        }
-
-                        // ret2 reflects out the engineer list per cat/ukname... use with corolis option to print out the corolis table
-                        ret2 += "new EngineerList( \"" + cat + "\", \"" + ukname + "\", " + level.Value.ToString() + ", \"" + engnames + "\")," + Environment.NewLine;
-                    }
-
-                    if (modulelist != null)
-                    {
-                        string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
-                        ret += classline + Environment.NewLine;
-                    }
+                    string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
+                    ret += classline + Environment.NewLine;
                 }
             }
 
