@@ -576,7 +576,7 @@ namespace EDDiscovery.UserControls
                             continue;
                     }
 
-                    if (noncommon && mc.Type.IndexOf("common", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    if (noncommon && mc.IsCommonMaterial )
                         continue;
                 }
 
