@@ -25,7 +25,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Type = evt["Type"].Str();       // fdname
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyType = JournalFieldNaming.RMat(Type);
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
             Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),FriendlyType);         // always ensure we have one
 
             Count = evt["Count"].Int();

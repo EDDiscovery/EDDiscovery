@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
             public void Normalise()
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
-                FriendlyName = JournalFieldNaming.RMat(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
             }
         }
 

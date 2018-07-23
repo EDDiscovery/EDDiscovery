@@ -71,7 +71,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (c.buyPrice > 0)
                 {
-                    string name = MaterialCommodityData.GetNameByFDName(c.fdname, c.locName);
+                    string name = MaterialCommodityData.GetNameByFDName(c.fdname);
 
                     if (c.sellPrice > 0)
                     {
@@ -99,7 +99,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (c.buyPrice <= 0)
                 {
-                    string name = MaterialCommodityData.GetNameByFDName(c.fdname, c.locName);
+                    string name = MaterialCommodityData.GetNameByFDName(c.fdname);
 
                     detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), name, c.sellPrice);
                     if (++col == maxcol)

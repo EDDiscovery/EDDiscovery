@@ -47,16 +47,6 @@ namespace EliteDangerousCore
             return cat;
         }
 
-        public static string RMat(string fdname)            // fix up fdname into a nicer name
-        {
-            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(fdname);
-
-            if (mc != null)
-                return mc.Name;
-            else
-                return fdname.SplitCapsWordFull();
-        }
-
         public static string RLat(double? lv)
         {
             if (lv.HasValue)
