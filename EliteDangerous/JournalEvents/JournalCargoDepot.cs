@@ -28,7 +28,7 @@ namespace EliteDangerousCore.JournalEvents
             System.Enum.TryParse<UpdateTypeEnum>(UpdateType, out UpdateTypeEnum u);
             UpdateEnum = u;
             CargoType = evt["CargoType"].Str();     // item counts
-            FriendlyCargoType = JournalFieldNaming.RMat(CargoType);
+            FriendlyCargoType = MaterialCommodityData.GetNameByFDName(CargoType);
             Count = evt["Count"].Int(0);
             StartMarketID = evt["StartMarketID"].Long();
             EndMarketID = evt["EndMarketID"].Long();

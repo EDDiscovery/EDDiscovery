@@ -25,7 +25,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             Name = evt["Name"].Str();
             Name = JournalFieldNaming.FDNameTranslation(Name); // some premangling
-            FriendlyName = JournalFieldNaming.RMat(Name);
+            FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
             Count = evt["Count"].Int();
             Reward = evt["Reward"].Long();
             MarketID = evt["MarketID"].LongNull();

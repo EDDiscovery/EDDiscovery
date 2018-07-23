@@ -36,12 +36,12 @@ namespace EliteDangerousCore.JournalEvents
 
             if (CommodityList != null)
                 foreach (Commodities c in CommodityList)
-                    c.FriendlyName = JournalFieldNaming.RMat(c.Name);
+                    c.FriendlyName = MaterialCommodityData.GetNameByFDName(c.Name);
 
             if (MaterialList != null)
                 foreach (Materials m in MaterialList)
                 {
-                    m.FriendlyName = JournalFieldNaming.RMat(m.Name);
+                    m.FriendlyName = MaterialCommodityData.GetNameByFDName(m.Name);
                     m.Category = JournalFieldNaming.NormaliseMaterialCategory(m.Category);
                 }
 

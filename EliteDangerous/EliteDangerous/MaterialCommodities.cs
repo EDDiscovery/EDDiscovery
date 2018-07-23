@@ -85,10 +85,10 @@ namespace EliteDangerousCore
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
-        public static string GetNameByFDName(string fdname, string alt) // if we have it, give name, else give alt
+        public static string GetNameByFDName(string fdname) // if we have it, give name, else give alt.  Also see RMat in journal field naming
         {
             fdname = fdname.ToLower();
-            return cachelist.ContainsKey(fdname) ? cachelist[fdname].Name : alt;
+            return cachelist.ContainsKey(fdname) ? cachelist[fdname].Name : fdname.SplitCapsWordFull();
         }
 
         public static MaterialCommodityData GetByShortName(string shortname)
@@ -130,8 +130,7 @@ namespace EliteDangerousCore
             Rarity = rare;
         }
 
-
-        public void SetCache()
+        private void SetCache()
         {
             cachelist[this.FDName.ToLower()] = this;
         }

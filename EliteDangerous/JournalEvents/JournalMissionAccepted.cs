@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
             MissionId = evt["MissionID"].Int();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());        // instances of $_name, fix to fdname
-            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
             CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();

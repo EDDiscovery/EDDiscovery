@@ -1989,6 +1989,11 @@ Bodies.MOG: "M Red Giant" @
 Bodies.KOG: "K Orange Giant" @
 Bodies.RP: "Rogue Planet" @
 
+/////////////////////////////////////////////////////
+///////////////////////////////////////////////////// Journals.  Note there are a lot of format strings, in both the {n} format and in FieldBuilder format
+///////////////////////////////////////////////////// Field builder uses the format "prefixtext;postfix text;Format".  Keep the semicolons right!
+/////////////////////////////////////////////////////
+
 ///////////////////////////////////////////////////// JournalBounty
 JournalEntry.LegBounty: "{0} total {1:N0}" @
 JournalEntry.Target: "Target:" @
