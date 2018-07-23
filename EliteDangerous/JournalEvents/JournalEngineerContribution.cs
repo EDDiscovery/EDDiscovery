@@ -34,12 +34,12 @@ namespace EliteDangerousCore.JournalEvents
 
             Commodity = evt["Commodity"].Str();
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
             Commodity_Localised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Material = evt["Material"].Str();
             Material = JournalFieldNaming.FDNameTranslation(Material);     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyMaterial = JournalFieldNaming.RMat(Material);
+            FriendlyMaterial = MaterialCommodityData.GetNameByFDName(Material);
             Material_Localised = JournalFieldNaming.CheckLocalisation(evt["Material_Localised"].Str(),FriendlyMaterial);
 
             Quantity = evt["Quantity"].Int();
@@ -65,9 +65,9 @@ namespace EliteDangerousCore.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Type.Equals("Commodity"))
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -Quantity, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0, conn);
             else if (Type.Equals("Materials"))
-                mc.Change(MaterialCommodities.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, conn, true);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)

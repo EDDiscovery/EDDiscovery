@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
             public void Normalise()
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
-                FriendlyName = JournalFieldNaming.RMat(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
             }
         }
 
@@ -85,7 +85,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Inventory != null)
             {
                 foreach (Cargo c in Inventory)
-                    mc.Set(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0, conn);
             }
         }
     }

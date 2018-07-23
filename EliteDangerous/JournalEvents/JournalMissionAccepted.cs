@@ -43,7 +43,8 @@ namespace EliteDangerousCore.JournalEvents
 
             KillCount = evt["KillCount"].IntNull();
 
-            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list;
+            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",")
+                                                              .Replace("$MISSIONUTIL_MULTIPLE_FINAL_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
 
             Influence = evt["Influence"].Str();
@@ -52,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
             MissionId = evt["MissionID"].Int();
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());        // instances of $_name, fix to fdname
-            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
             CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
@@ -171,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName))
             {
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, (int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0, conn);
             }
         }
     }

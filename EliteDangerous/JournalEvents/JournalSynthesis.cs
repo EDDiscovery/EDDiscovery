@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
             info = Name;
             if (Materials != null)
                 foreach (KeyValuePair<string, int> k in Materials)
-                    info += ", " + JournalFieldNaming.RMat(k.Key) + ":" + k.Value.ToString();
+                    info += ", " + MaterialCommodityData.GetNameByFDName(k.Key) + ":" + k.Value.ToString();
 
             detailed = "";
         }

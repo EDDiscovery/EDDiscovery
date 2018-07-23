@@ -28,16 +28,19 @@ namespace EliteDangerousCore.JournalEvents
             System.Enum.TryParse<UpdateTypeEnum>(UpdateType, out UpdateTypeEnum u);
             UpdateEnum = u;
             CargoType = evt["CargoType"].Str();     // item counts
-            FriendlyCargoType = JournalFieldNaming.RMat(CargoType);
+            FriendlyCargoType = MaterialCommodityData.GetNameByFDName(CargoType);
             Count = evt["Count"].Int(0);
             StartMarketID = evt["StartMarketID"].Long();
             EndMarketID = evt["EndMarketID"].Long();
             ItemsCollected = evt["ItemsCollected"].Int();
-            ItemsDelivered = evt["ItemsCollected"].Int();
+            ItemsDelivered = evt["ItemsDelivered"].Int();
             TotalItemsToDeliver = evt["TotalItemsToDeliver"].Int();
             ItemsToGo = TotalItemsToDeliver - ItemsDelivered;
             ProgressPercent = evt["Progress"].Double()*100;
             MarketID = evt["MarketID"].LongNull();
+
+            if (ProgressPercent < 0.01)
+                ProgressPercent = ((double)System.Math.Max(ItemsCollected, ItemsDelivered) / (double)TotalItemsToDeliver) * 100;
         }
 
         public enum UpdateTypeEnum { Unknown, Collect, Deliver, WingUpdate}
@@ -64,7 +67,7 @@ namespace EliteDangerousCore.JournalEvents
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if ( CargoType.Length>0 && Count>0)
-                mc.Change(MaterialCommodities.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
         public override void FillInformation(out string info, out string detailed) 

@@ -179,9 +179,9 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodities> notfound = new List<MaterialCommodities>();
                 foreach (MaterialCommodities m in mclist)
                 {
-                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.name));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.Name));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
-                        list[index].CargoCarried = m.count; // found it, set cargo count..
+                        list[index].CargoCarried = m.Count; // found it, set cargo count..
                     else
                         notfound.Add(m);        // not found, add to list for bottom
                 }
@@ -193,8 +193,10 @@ namespace EDDiscovery.UserControls
                 {
                     if (!buyonly || (c.buyPrice > 0 || c.ComparisionBuy))
                     {
-                        object[] rowobj = { c.loccategory.Alt(c.category) ,
-                                            c.locName.Alt(c.fdname.SplitCapsWordFull()) ,
+                        MaterialCommodityData mc = MaterialCommodityData.GetByFDName(c.fdname);
+
+                        object[] rowobj = { mc?.TranslatedType ?? c.loccategory.Alt(c.category) ,
+                                            mc?.Name ?? c.locName ,
                                             c.sellPrice > 0 ? c.sellPrice.ToString() : "" ,
                                             c.buyPrice > 0 ? c.buyPrice.ToString() : "" ,
                                             c.CargoCarried,
@@ -219,13 +221,13 @@ namespace EDDiscovery.UserControls
 
                 foreach (MaterialCommodities m in notfound)
                 {
-                    if (m.count > 0)
+                    if (m.Count > 0)
                     {
-                        object[] rowobj = {     m.type,
-                                                m.name,
+                        object[] rowobj = {     m.Details.TranslatedType,
+                                                m.Details.Name,
                                                 "",
                                                 "",
-                                                m.count,
+                                                m.Count,
                                                 "",
                                                 "",
                                                 "",

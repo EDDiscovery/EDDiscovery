@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodities.CommodityCategory, "drones", -1, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0, conn);
         }
 
         public override void FillInformation(out string info, out string detailed) 

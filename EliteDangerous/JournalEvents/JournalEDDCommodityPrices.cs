@@ -71,14 +71,16 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (c.buyPrice > 0)
                 {
+                    string name = MaterialCommodityData.GetNameByFDName(c.fdname);
+
                     if (c.sellPrice > 0)
                     {
                         detailed += string.Format("{0}: {1} sell {2} Diff {3} {4}%  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuySell"),
-                            c.fdname, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, 
+                            name, c.buyPrice, c.sellPrice, c.buyPrice - c.sellPrice, 
                             ((double)(c.buyPrice - c.sellPrice) / (double)c.sellPrice * 100.0).ToString("0.#"));
                     }
                     else
-                        detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), c.fdname, c.buyPrice);
+                        detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), name, c.buyPrice);
 
                     if (++col == maxcol)
                     {
@@ -97,7 +99,9 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (c.buyPrice <= 0)
                 {
-                    detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), c.fdname, c.sellPrice);
+                    string name = MaterialCommodityData.GetNameByFDName(c.fdname);
+
+                    detailed += string.Format("{0}: {1}  ".Tx(typeof(JournalCommodityPricesBase), "CPBBuy"), name, c.sellPrice);
                     if (++col == maxcol)
                     {
                         detailed += System.Environment.NewLine;
