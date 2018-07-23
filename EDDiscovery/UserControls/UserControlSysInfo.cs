@@ -391,7 +391,7 @@ namespace EDDiscovery.UserControls
         private void clickTextBox(object sender, EventArgs e)
         {
             string text = ((Control)sender).Text;
-            if (text != null)
+            if (!String.IsNullOrWhiteSpace(text))
                 Clipboard.SetText(text);
         }
 
