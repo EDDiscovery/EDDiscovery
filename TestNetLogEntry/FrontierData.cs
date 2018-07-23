@@ -364,6 +364,48 @@ namespace NetLogEntry
                 }
             }
 
+            {
+                string de = "", fr = "", es = "", ru = "", pr = "";
+                foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
+                {
+                    string fdname = rw["B"].Trim();
+                    string ukname = rw["F"].Trim();
+                    string dename = rw["H"].Trim();
+                    string frname = rw["J"].Trim();
+                    string esname = rw["L"].Trim();
+                    string runame = rw["N"].Trim();
+                    string prname = rw["P"].Trim();
+
+                    de += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                    fr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                    es += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                    ru += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                    pr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                }
+                foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
+                {
+                    string fdname = rw["C"].Trim();
+                    string ukname = rw["D"].Trim();
+                    string dename = rw["F"].Trim();
+                    string frname = rw["H"].Trim();
+                    string esname = rw["J"].Trim();
+                    string runame = rw["L"].Trim();
+                    string prname = rw["N"].Trim();
+
+                    de += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                    fr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                    es += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                    ru += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                    pr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                }
+
+                File.WriteAllText(Path.Combine(rootpath, "mat-de.part.txt"), de, Encoding.UTF8);
+                File.WriteAllText(Path.Combine(rootpath, "mat-fr.part.txt"), fr, Encoding.UTF8);
+                File.WriteAllText(Path.Combine(rootpath, "mat-es.part.txt"), es, Encoding.UTF8);
+                File.WriteAllText(Path.Combine(rootpath, "mat-ru.part.txt"), ru, Encoding.UTF8);
+                File.WriteAllText(Path.Combine(rootpath, "mat-pr.part.txt"), pr, Encoding.UTF8);
+            }
+
             return ret + ret2;
         }
 
