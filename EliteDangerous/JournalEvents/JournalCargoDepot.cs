@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
             StartMarketID = evt["StartMarketID"].Long();
             EndMarketID = evt["EndMarketID"].Long();
             ItemsCollected = evt["ItemsCollected"].Int();
-            ItemsDelivered = evt["ItemsCollected"].Int();
+            ItemsDelivered = evt["ItemsDelivered"].Int();
             TotalItemsToDeliver = evt["TotalItemsToDeliver"].Int();
             ItemsToGo = TotalItemsToDeliver - ItemsDelivered;
             ProgressPercent = evt["Progress"].Double()*100;
