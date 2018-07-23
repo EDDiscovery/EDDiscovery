@@ -1,4 +1,4 @@
-// ID is case sensitive.
+﻿// ID is case sensitive.
 // @ at end means : Debug mode : repeat english with '' around to show translation - this is for development.
 //                : Release mode : repeat in program english exactly.  This means that you don't want to translate this section, or have not got to it yet
 // The english part after the colon is a guide for what you should be replacing.  Its not actually used in the program. It could be blank for instance and EDD would
