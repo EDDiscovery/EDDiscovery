@@ -30,138 +30,138 @@ NoPos: "No Pos" => "Nessuna Posizione"
 
 //////////////////////////////////////////////////////////////// POP OUT AREA
 
-PopOutInfo.Log.Description: "Program log" => "<Registro del Programma>"
-PopOutInfo.Log.Title: "Log" => "<Registro>"
-PopOutInfo.Journal.Description: "Journal grid view" => "<Tabella del Giornale>"
-PopOutInfo.Journal.Title: "Journal" => "<Giornale>"
-PopOutInfo.TravelGrid.Description: "History grid view" => "<Tabella dello Storico>"
-PopOutInfo.TravelGrid.Title: "Travel History" => "<Storico di Viaggio>"
-PopOutInfo.StarList.Description: "Visited star list" => "<List dei Sistemi visitati>"
-PopOutInfo.StarList.Title: "Star List" => "<List dei Sistemi>"
-PopOutInfo.Materials.Description: "Materials count" => "<Liste dei Materiali>"
-PopOutInfo.Materials.Title: "Materials" => "<Materiali>"
-PopOutInfo.Commodities.Description: "Commodity count" => "<List deelle Merci>"
-PopOutInfo.Commodities.Title: "Commodities" => "<Merci>"
-PopOutInfo.Ledger.Description: "Ledger of cash related entries" => "<Ricevute d'incasso relazionate allo storico>"
-PopOutInfo.Ledger.Title: "Ledger" => "<Ricevute>"
-PopOutInfo.Missions.Description: "Mission list" => "<Missioni>"
-PopOutInfo.Missions.Title: "Missions" => "<Missioni>"
-PopOutInfo.Modules.Description: "Ships and their loadouts plus stored modules" => "<Navi, Impianti e Moduli>"
-PopOutInfo.Modules.Title: "Ships/Loadout" => "<Navi/Impianti>"
-PopOutInfo.Statistics.Description: "Statistics Information" => "<Statistiche>"
-PopOutInfo.Statistics.Title: "Statistics" => "<Statistiche>"
-PopOutInfo.MarketData.Description: "Market data view, giving commodity price information where available" => "<Dati di Mercato, mostrando i prezzi delle merci quando disponibili>"
-PopOutInfo.MarketData.Title: "Market Data" => "<Dati di Mercato>"
-PopOutInfo.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "<Informazioni sui cantieri dallo storico di visitazione>"
-PopOutInfo.ShipYardPanel.Title: "Ship Yards" => "<Cantieri>"
-PopOutInfo.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "<Informazioni sugli impianti e moduli dallo storico di visitazione>"
-PopOutInfo.OutfittingPanel.Title: "Outfitting" => "<Impianti/Moduli>"
-PopOutInfo.Synthesis.Description: "Synthesis planner" => "<Pianifica di Sintesi>"
-PopOutInfo.Synthesis.Title: "Synthesis" => "<Sintesi>"
-PopOutInfo.Engineering.Description: "Engineering planner" => "<Pianifica di Ingegneria>"
-PopOutInfo.Engineering.Title: "Engineering" => "<Ingegneria>"
-PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "<Lista di Ricerca combinando pianifica di Sintesi e di Ingegneria>"
-PopOutInfo.ShoppingList.Title: "Shopping List" => "<Lista di Ricerca>"
-PopOutInfo.Scan.Description: "Scan data on system" => "<Registri di Scansioni per sistema, in diagramma>"
-PopOutInfo.Scan.Title: "Scan" => "<Scansioni>"
-PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "<Registri di Scansioni per sistema, in tabella>"
-PopOutInfo.ScanGrid.Title: "Scan Grid" => "<Tabella di Scansioni>"
-PopOutInfo.StarDistance.Description: "List of nearest stars" => "<Lista dei Sistemi prossimi>"
-PopOutInfo.StarDistance.Title: "Nearest Stars" => "<Sistemi prossimi>"
-PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "<Stima del valore dei dati di Scansione>"
-PopOutInfo.EstimatedValues.Title: "Estimated Values" => "<Valori Stimati>"
-PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "<Mappa 3D dei Sistemi dentro i raggi definiti>"
-PopOutInfo.LocalMap.Title: "Local Map" => "<Mappa Locale>"
-PopOutInfo.Plot.Description: "2D Plot of systems in range" => "<Grafico 2D dei sistemi dentro i raggi definiti>"
-PopOutInfo.Plot.Title: "2D Plot" => "<Grafico 2D>"
-PopOutInfo.EDSM.Description: "EDSM Star finder" => "<Ricerca di Sistemi via EDSM>"
-PopOutInfo.EDSM.Title: "EDSM Star Finder" => "<Ricerca Sistemi EDSM>"
-PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "<Trilaterazione di sistemi con posizione sconosciuta>"
-PopOutInfo.Trilateration.Title: "Trilateration" => "<Trilaterazione>"
-PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "<Gestire bookmarks di Pianeti e Sistemi>"
-PopOutInfo.BookmarkManager.Title: "Bookmarks" => "<Bookmarks>"
-PopOutInfo.CombatPanel.Description: "Display combat statistics" => "<Visualizza statistiche di combattimento>"
-PopOutInfo.CombatPanel.Title: "Combat" => "<Combattimento>"
-PopOutInfo.Route.Description: "Route Finder from stored star data" => "<Preparazione di Itinerario usando i dati nella banca dati>"
-PopOutInfo.Route.Title: "Route Finder" => "<Itinerario>"
-PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "<Pianifica di Spedizione, prepara un itinerario di spedizione>"
-PopOutInfo.Expedition.Title: "Expedition" => "<Spedizioni>"
-PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "<Pianifica di Esplorazione, prepara una lista di sistemi da esplorare>"
-PopOutInfo.Exploration.Title: "Exploration" => "<Esplorazione>"
-PopOutInfo.SystemInformation.Description: "System Information" => "<Informazioni sul Sistema>"
-PopOutInfo.SystemInformation.Title: "System Information" => "<Informazioni sul Sistema>"
-PopOutInfo.Spanel.Description: "Summary panel overlay" => "<Sommario>"
-PopOutInfo.Spanel.Title: "Summary Panel" => "<Sommario>"
-PopOutInfo.Trippanel.Description: "Trip computer overlay" => "<Computer di Viaggio>"
-PopOutInfo.Trippanel.Title: "Trip Computer" => "<Computer di Viaggio>"
-PopOutInfo.NotePanel.Description: "System notes overlay" => "<Annotazioni sul Sistema>"
-PopOutInfo.NotePanel.Title: "Notes" => "<Annotazioni>"
-PopOutInfo.RouteTracker.Description: "Route tracker overlay" => "<Tracciatore di Itinerario>"
-PopOutInfo.RouteTracker.Title: "Route Tracker" => "<Tracciatore di Itinerario>"
-PopOutInfo.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "<Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate>"
-PopOutInfo.Compass.Title: "Compass" => "<Bussola Planetaria>"
-PopOutInfo.Settings.Description: "Settings for ED Discovery " => "<Configurazioni di ED Discovery >"
-PopOutInfo.Settings.Title: "Settings" => "<Configurazioni>"
-PopOutInfo.ScreenShot.Description: "Screen shot view" => "<Salva Schermata>"
-PopOutInfo.ScreenShot.Title: "Screen Shot" => "<Screenshot>"
-PopOutInfo.Grid.Description: "Grid (allows other panels to be placed in the it)" => "<Griglia (possibilita inserie e posizionare altri pannelli al suo interno)>"
-PopOutInfo.Grid.Title: "Grid" => "<Griglia>"
-PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "<Splitter (permette di creare ogni tipo di configurazione con pannelli al suo interno)>"
-PopOutInfo.SplitterControl.Title: "Splitter" => "<Splitter>"
+PopOutInfo.Log.Description: "Program log" => "Registro del Programma"
+PopOutInfo.Log.Title: "Log" => "Registro"
+PopOutInfo.Journal.Description: "Journal grid view" => "Tabella del Giornale"
+PopOutInfo.Journal.Title: "Journal" => "Giornale"
+PopOutInfo.TravelGrid.Description: "History grid view" => "Tabella dello Storico"
+PopOutInfo.TravelGrid.Title: "Travel History" => "Storico di Viaggio"
+PopOutInfo.StarList.Description: "Visited star list" => "List dei Sistemi visitati"
+PopOutInfo.StarList.Title: "Star List" => "List dei Sistemi"
+PopOutInfo.Materials.Description: "Materials count" => "Liste dei Materiali"
+PopOutInfo.Materials.Title: "Materials" => "Materiali"
+PopOutInfo.Commodities.Description: "Commodity count" => "List deelle Merci"
+PopOutInfo.Commodities.Title: "Commodities" => "Merci"
+PopOutInfo.Ledger.Description: "Ledger of cash related entries" => "Ricevute d'incasso relazionate allo storico"
+PopOutInfo.Ledger.Title: "Ledger" => "Ricevute"
+PopOutInfo.Missions.Description: "Mission list" => "Missioni"
+PopOutInfo.Missions.Title: "Missions" => "Missioni"
+PopOutInfo.Modules.Description: "Ships and their loadouts plus stored modules" => "Navi, Impianti e Moduli"
+PopOutInfo.Modules.Title: "Ships/Loadout" => "Navi/Impianti"
+PopOutInfo.Statistics.Description: "Statistics Information" => "Statistiche"
+PopOutInfo.Statistics.Title: "Statistics" => "Statistiche"
+PopOutInfo.MarketData.Description: "Market data view, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
+PopOutInfo.MarketData.Title: "Market Data" => "Dati di Mercato"
+PopOutInfo.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
+PopOutInfo.ShipYardPanel.Title: "Ship Yards" => "Cantieri"
+PopOutInfo.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
+PopOutInfo.OutfittingPanel.Title: "Outfitting" => "Impianti/Moduli"
+PopOutInfo.Synthesis.Description: "Synthesis planner" => "Pianifica di Sintesi"
+PopOutInfo.Synthesis.Title: "Synthesis" => "Sintesi"
+PopOutInfo.Engineering.Description: "Engineering planner" => "Pianifica di Ingegneria"
+PopOutInfo.Engineering.Title: "Engineering" => "Ingegneria"
+PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Lista di Ricerca combinando pianifica di Sintesi e di Ingegneria"
+PopOutInfo.ShoppingList.Title: "Shopping List" => "Lista di Ricerca"
+PopOutInfo.Scan.Description: "Scan data on system" => "Registri di Scansioni per sistema, in diagramma"
+PopOutInfo.Scan.Title: "Scan" => "Scansioni"
+PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Registri di Scansioni per sistema, in tabella"
+PopOutInfo.ScanGrid.Title: "Scan Grid" => "Tabella di Scansioni"
+PopOutInfo.StarDistance.Description: "List of nearest stars" => "Lista dei Sistemi prossimi"
+PopOutInfo.StarDistance.Title: "Nearest Stars" => "Sistemi prossimi"
+PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Stima del valore dei dati di Scansione"
+PopOutInfo.EstimatedValues.Title: "Estimated Values" => "Valori Stimati"
+PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "Mappa 3D dei Sistemi dentro i raggi definiti"
+PopOutInfo.LocalMap.Title: "Local Map" => "Mappa Locale"
+PopOutInfo.Plot.Description: "2D Plot of systems in range" => "Grafico 2D dei sistemi dentro i raggi definiti"
+PopOutInfo.Plot.Title: "2D Plot" => "Grafico 2D"
+PopOutInfo.EDSM.Description: "EDSM Star finder" => "Ricerca di Sistemi via EDSM"
+PopOutInfo.EDSM.Title: "EDSM Star Finder" => "Ricerca Sistemi EDSM"
+PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
+PopOutInfo.Trilateration.Title: "Trilateration" => "Trilaterazione"
+PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestire bookmarks di Pianeti e Sistemi"
+PopOutInfo.BookmarkManager.Title: "Bookmarks" => "Bookmarks"
+PopOutInfo.CombatPanel.Description: "Display combat statistics" => "Visualizza statistiche di combattimento"
+PopOutInfo.CombatPanel.Title: "Combat" => "Combattimento"
+PopOutInfo.Route.Description: "Route Finder from stored star data" => "Preparazione di Itinerario usando i dati nella banca dati"
+PopOutInfo.Route.Title: "Route Finder" => "Itinerario"
+PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
+PopOutInfo.Expedition.Title: "Expedition" => "Spedizioni"
+PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Pianifica di Esplorazione, prepara una lista di sistemi da esplorare"
+PopOutInfo.Exploration.Title: "Exploration" => "Esplorazione"
+PopOutInfo.SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
+PopOutInfo.SystemInformation.Title: "System Information" => "Informazioni sul Sistema"
+PopOutInfo.Spanel.Description: "Summary panel overlay" => "Sommario"
+PopOutInfo.Spanel.Title: "Summary Panel" => "Sommario"
+PopOutInfo.Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
+PopOutInfo.Trippanel.Title: "Trip Computer" => "Computer di Viaggio"
+PopOutInfo.NotePanel.Description: "System notes overlay" => "Annotazioni sul Sistema"
+PopOutInfo.NotePanel.Title: "Notes" => "Annotazioni"
+PopOutInfo.RouteTracker.Description: "Route tracker overlay" => "Tracciatore di Itinerario"
+PopOutInfo.RouteTracker.Title: "Route Tracker" => "Tracciatore di Itinerario"
+PopOutInfo.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
+PopOutInfo.Compass.Title: "Compass" => "Bussola Planetaria"
+PopOutInfo.Settings.Description: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
+PopOutInfo.Settings.Title: "Settings" => "Configurazioni"
+PopOutInfo.ScreenShot.Description: "Screen shot view" => "Salva Schermata"
+PopOutInfo.ScreenShot.Title: "Screen Shot" => "Screenshot"
+PopOutInfo.Grid.Description: "Grid (allows other panels to be placed in the it)" => "Griglia (possibilita inserie e posizionare altri pannelli al suo interno)"
+PopOutInfo.Grid.Title: "Grid" => "Griglia"
+PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Splitter (permette di creare ogni tipo di configurazione con pannelli al suo interno)"
+PopOutInfo.SplitterControl.Title: "Splitter" => "Splitter"
 PopOutInfo.PanelSelector.Description: "" => ""
 PopOutInfo.PanelSelector.Title: "+" => "+"
 
 //////////////////////////////////////////////////////////////// DISCOVERY FORM
 
-EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "<&Strumenti>"
-EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "<Configurazione>"
-EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "<Visualizza mappa &2D>"
-EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "<Visualizza mappa &3D>"
-EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "<&Finestre>"
-EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "<&Mostra tutti nella taskbar>"
-EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "<&Disabilita tutte le trasparenze>"
-EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "<E&sci>"
-EDDiscoveryForm.adminToolStripMenuItem: "A&dmin" => "<&Gestione>"
-EDDiscoveryForm.adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "<Sincronizza con EDDB>"
-EDDiscoveryForm.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "<Sincronizza con EDSM>"
-EDDiscoveryForm.adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "<Mostra la cartella del giornale del comandante corrente>"
-EDDiscoveryForm.adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "<Resetta tutta la storia del comandante corrente>"
-EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "<Leggi gli archivi di registro (log) 2.1 e anteriori>"
-EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "<Forza la rilettura degli archivi di registro (log)>"
-EDDiscoveryForm.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "<Riscansiona tutti gli archivi del giornale>"
-EDDiscoveryForm.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "<Cancella entrate FSD duplicate>"
-EDDiscoveryForm.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "<Invia eventi EDDN non sincronizzati>"
-EDDiscoveryForm.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "<Invia scansioni EGO non sincronizzate>"
-EDDiscoveryForm.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "<Invia a Inara dati storici (navi anteriori, moduli in magazzino)>"
-EDDiscoveryForm.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "<Pulischi l'ID EDSM assegnato a atutti i registri del comandante corrente>"
-EDDiscoveryForm.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "<Invia la lista dei Sistemi Visitati a Elite Dangerous>"
-EDDiscoveryForm.addOnsToolStripMenuItem: "&Add-Ons" => "<&Componenti>"
-EDDiscoveryForm.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "<&Gestire Componenti>"
-EDDiscoveryForm.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "<&Modifica Componenti Action Files>"
-EDDiscoveryForm.addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "<Modifica l'ultimo Action Pack>"
-EDDiscoveryForm.addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "<&Ferma l'Action Program corrente>"
-EDDiscoveryForm.helpToolStripMenuItem: "&Help" => "<&Aiuto>"
-EDDiscoveryForm.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "<&About>"
-EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "<&Visualizza l'archivio d'aiuto>"
-EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "<&Discord - EDD Community Chat>"
-EDDiscoveryForm.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "<&Frontier Forum Thread>"
-EDDiscoveryForm.helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "<&Pagine del progetto (GitHub)>"
-EDDiscoveryForm.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "<&Reporta un Problema o un Suggerimento>"
-EDDiscoveryForm.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "<Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri>"
-EDDiscoveryForm.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "<&Verifica per aggiornamenti>"
+EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "&Strumenti"
+EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
+EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
+EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizza mappa &3D"
+EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
+EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
+EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
+EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "E&sci"
+EDDiscoveryForm.adminToolStripMenuItem: "A&dmin" => "&Gestione"
+EDDiscoveryForm.adminToolStripMenuItem.forceEDDBUpdateToolStripMenuItem: "Synchronise with EDDB" => "Sincronizza con EDDB"
+EDDiscoveryForm.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizza con EDSM"
+EDDiscoveryForm.adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Mostra la cartella del giornale del comandante corrente"
+EDDiscoveryForm.adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Resetta tutta la storia del comandante corrente"
+EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Leggi gli archivi di registro (log) 2.1 e anteriori"
+EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Forza la rilettura degli archivi di registro (log)"
+EDDiscoveryForm.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Riscansiona tutti gli archivi del giornale"
+EDDiscoveryForm.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Cancella entrate FSD duplicate"
+EDDiscoveryForm.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Invia eventi EDDN non sincronizzati"
+EDDiscoveryForm.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "Invia scansioni EGO non sincronizzate"
+EDDiscoveryForm.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
+EDDiscoveryForm.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Pulischi l'ID EDSM assegnato a atutti i registri del comandante corrente"
+EDDiscoveryForm.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "Invia la lista dei Sistemi Visitati a Elite Dangerous"
+EDDiscoveryForm.addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
+EDDiscoveryForm.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Gestire Componenti"
+EDDiscoveryForm.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Modifica Componenti Action Files"
+EDDiscoveryForm.addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Modifica l'ultimo Action Pack"
+EDDiscoveryForm.addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Ferma l'Action Program corrente"
+EDDiscoveryForm.helpToolStripMenuItem: "&Help" => "&Aiuto"
+EDDiscoveryForm.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&About"
+EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Visualizza l'archivio d'aiuto"
+EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "&Discord - EDD Community Chat"
+EDDiscoveryForm.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forum Thread"
+EDDiscoveryForm.helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
+EDDiscoveryForm.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
+EDDiscoveryForm.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri"
+EDDiscoveryForm.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
 
 EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" @
 
-EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "<Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione>"
-EDDiscoveryForm.comboBoxCommander.ToolTip: "Select the commander to view" => "<Seleziona il comandante da visualizzare>"
-EDDiscoveryForm.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "<Sincronizza con EDSM, in ambe le direzioni>"
-EDDiscoveryForm.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "<Premi per aprire un pannello popout>"
-EDDiscoveryForm.buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "<Modifica i Componenti>"
-EDDiscoveryForm.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "<Gestisci i Componenti>"
-EDDiscoveryForm.buttonExtRefresh.ToolTip: "Refresh the history" => "<Aggiorna lo storico>"
-EDDiscoveryForm.buttonExt2dmap.ToolTip: "Open the 2D Map" => "<Apri la mappa 2D>"
-EDDiscoveryForm.buttonExt3dmap.ToolTip: "Open the 3D Map" => "<Apri la mappa 3D>"
-EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" => "<DEBUG reload action system>"
+EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
+EDDiscoveryForm.comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
+EDDiscoveryForm.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "Sincronizza con EDSM, in ambe le direzioni"
+EDDiscoveryForm.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Premi per aprire un pannello popout"
+EDDiscoveryForm.buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Modifica i Componenti"
+EDDiscoveryForm.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Gestisci i Componenti"
+EDDiscoveryForm.buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo storico"
+EDDiscoveryForm.buttonExt2dmap.ToolTip: "Open the 2D Map" => "Apri la mappa 2D"
+EDDiscoveryForm.buttonExt3dmap.ToolTip: "Open the 3D Map" => "Apri la mappa 3D"
+EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" => "DEBUG reload action system"
 
 EDDiscoveryForm.addTabToolStripMenuItem: "Insert Tab with panel.." @
 EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" @
@@ -233,19 +233,19 @@ EDDiscoveryController.CD: "Closing down, please wait.." @
 
 //////////////////////////////////////////////////////////////// Bookmarks
 
-UserControlBookmarks.ColType: "Bookmark Type" => "<Tipo di Bookmark>"
-UserControlBookmarks.ColBookmarkName: "Bookmark Name" => "<Nome del Bookmark>"
-UserControlBookmarks.ColDescription: "Description" => "<Descrizione>"
-UserControlBookmarks.ColX: "X" => "<X>"
-UserControlBookmarks.ColY: "Y" => "<Y>"
-UserControlBookmarks.ColZ: "Z" => "<Z>"
-UserControlBookmarks.labelSearch: "Search" => "<Cerca>"
-UserControlBookmarks.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "<Mostra nella mappa 3D>"
-UserControlBookmarks.openInEDSMToolStripMenuItem: "Open in EDSM" => "<Apri in EDSM>"
-UserControlBookmarks.buttonDelete.ToolTip: "Delete selected bookmark" => "<Elimina il bookmark selezionato>"
-UserControlBookmarks.buttonNew.ToolTip: "New Bookmark" => "<Nuovo Bookmark>"
-UserControlBookmarks.buttonEdit.ToolTip: "Edit Selected Bookmark" => "<Modifica il Bookmark selezionato>"
-UserControlBookmarks.textBoxFilter.ToolTip: "Search for Bookmark" => "<Cerca per Bookmark>"
+UserControlBookmarks.ColType: "Bookmark Type" => "Tipo di Bookmark"
+UserControlBookmarks.ColBookmarkName: "Bookmark Name" => "Nome del Bookmark"
+UserControlBookmarks.ColDescription: "Description" => "Descrizione"
+UserControlBookmarks.ColX: "X" => "X"
+UserControlBookmarks.ColY: "Y" => "Y"
+UserControlBookmarks.ColZ: "Z" => "Z"
+UserControlBookmarks.labelSearch: "Search" => "Cerca"
+UserControlBookmarks.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Mostra nella mappa 3D"
+UserControlBookmarks.openInEDSMToolStripMenuItem: "Open in EDSM" => "Apri in EDSM"
+UserControlBookmarks.buttonDelete.ToolTip: "Delete selected bookmark" => "Elimina il bookmark selezionato"
+UserControlBookmarks.buttonNew.ToolTip: "New Bookmark" => "Nuovo Bookmark"
+UserControlBookmarks.buttonEdit.ToolTip: "Edit Selected Bookmark" => "Modifica il Bookmark selezionato"
+UserControlBookmarks.textBoxFilter.ToolTip: "Search for Bookmark" => "Cerca per Bookmark"
 
 .CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" @
 .CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" @
@@ -253,31 +253,31 @@ UserControlBookmarks.textBoxFilter.ToolTip: "Search for Bookmark" => "<Cerca per
 
 /////////////////////////////////////////////////////////////// COmbat
 
-UserControlCombatPanel.Time: "Time" => "<Tempo>"
-UserControlCombatPanel.Event: "Event" => "<Evento>"
-UserControlCombatPanel.Description: "Description" => "<Descrizione>"
-UserControlCombatPanel.Reward: "Reward" => "<Ricompensa>"
-UserControlCombatPanel.labelCredits: "Credits" => "<Crediti>"
-UserControlCombatPanel.labelTotalKills: "Kills" => "<Abbattuti>"
-UserControlCombatPanel.labelFactionKills: "Faction Kills" => "<Abbattuti dalla Fazione>"
-UserControlCombatPanel.labelBalance: "Balance" => "<Bilancio>"
-UserControlCombatPanel.labelTotalCrimes: "Crimes" => "<Crimini>"
-UserControlCombatPanel.labelFaction: "Faction" => "<Fazione>"
-UserControlCombatPanel.labelTotalReward: "TotalReward" => "<Ricompensa Total>"
-UserControlCombatPanel.labelFactionReward: "FactionReward" => "<Ricompensa della Fazione>"
-UserControlCombatPanel.checkBoxCustomGridOn: "Grid" => "<Tabella>"
-UserControlCombatPanel.buttonExtEditCampaign: "Edit" => "<Modifica>"
-UserControlCombatPanel.labelCredits.ToolTip: "Current Credits" => "<Crediti Attuali>"
-UserControlCombatPanel.labelTotalKills.ToolTip: "Total kills in campaign" => "<Totale abbattuti nella campagna>"
-UserControlCombatPanel.labelFactionKills.ToolTip: "Faction Kills" => "<Abbattuti dalla Fazione>"
-UserControlCombatPanel.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "<Ricomepnsa totale, meno costi (multe, compre, etc)>"
-UserControlCombatPanel.labelTotalCrimes.ToolTip: "How many times you've been caught!" => "<Quante volte sei stato catturato!>"
-UserControlCombatPanel.labelFaction.ToolTip: "Target Faction" => "<Fazione Bersaglio>"
-UserControlCombatPanel.labelTotalReward.ToolTip: "Total reward" => "<Ricomensa Totale>"
-UserControlCombatPanel.labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "<Ricompensa associata alla distruzione delle nevi avversarie>"
-UserControlCombatPanel.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "<Mostra tabella quando in modo trasparente>"
-UserControlCombatPanel.comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "<Seleziona la campagna da visualizzare>"
-UserControlCombatPanel.buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "<Modifica campagna definita dall'utente>"
+UserControlCombatPanel.Time: "Time" => "Tempo"
+UserControlCombatPanel.Event: "Event" => "Evento"
+UserControlCombatPanel.Description: "Description" => "Descrizione"
+UserControlCombatPanel.Reward: "Reward" => "Ricompensa"
+UserControlCombatPanel.labelCredits: "Credits" => "Crediti"
+UserControlCombatPanel.labelTotalKills: "Kills" => "Abbattuti"
+UserControlCombatPanel.labelFactionKills: "Faction Kills" => "Abbattuti dalla Fazione"
+UserControlCombatPanel.labelBalance: "Balance" => "Bilancio"
+UserControlCombatPanel.labelTotalCrimes: "Crimes" => "Crimini"
+UserControlCombatPanel.labelFaction: "Faction" => "Fazione"
+UserControlCombatPanel.labelTotalReward: "TotalReward" => "Ricompensa Total"
+UserControlCombatPanel.labelFactionReward: "FactionReward" => "Ricompensa della Fazione"
+UserControlCombatPanel.checkBoxCustomGridOn: "Grid" => "Tabella"
+UserControlCombatPanel.buttonExtEditCampaign: "Edit" => "Modifica"
+UserControlCombatPanel.labelCredits.ToolTip: "Current Credits" => "Crediti Attuali"
+UserControlCombatPanel.labelTotalKills.ToolTip: "Total kills in campaign" => "Totale abbattuti nella campagna"
+UserControlCombatPanel.labelFactionKills.ToolTip: "Faction Kills" => "Abbattuti dalla Fazione"
+UserControlCombatPanel.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Ricomepnsa totale, meno costi (multe, compre, etc)"
+UserControlCombatPanel.labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Quante volte sei stato catturato!"
+UserControlCombatPanel.labelFaction.ToolTip: "Target Faction" => "Fazione Bersaglio"
+UserControlCombatPanel.labelTotalReward.ToolTip: "Total reward" => "Ricomensa Totale"
+UserControlCombatPanel.labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Ricompensa associata alla distruzione delle nevi avversarie"
+UserControlCombatPanel.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Mostra tabella quando in modo trasparente"
+UserControlCombatPanel.comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Seleziona la campagna da visualizzare"
+UserControlCombatPanel.buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Modifica campagna definita dall'utente"
 
 .Kills: "Kills:" @
 .Faction: "Faction:" @
@@ -310,70 +310,70 @@ UserControlCompass.labelTargetLat: "Target" @
 UserControlEDSM.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
 UserControlEDSM.viewOnEDSMToolStripMenuItem: "View on EDSM" @
 
-UserControlEDSM.ColumnStar: "Star" => "<Star>"
-UserControlEDSM.ColumnCentreDistance: "Centre Distance" => "<Centre Distance>"
-UserControlEDSM.ColumnCurrentDistance: "Current Distance" => "<Current Distance>"
-UserControlEDSM.ColumnPosition: "Position" => "<Position>"
-UserControlEDSM.ColumnID: "ID" => "<ID>"
+UserControlEDSM.ColumnStar: "Star" => "Star"
+UserControlEDSM.ColumnCentreDistance: "Centre Distance" => "Centre Distance"
+UserControlEDSM.ColumnCurrentDistance: "Current Distance" => "Current Distance"
+UserControlEDSM.ColumnPosition: "Position" => "Position"
+UserControlEDSM.ColumnID: "ID" => "ID"
 
 //////////////////////////////////////////////////////////////// Engineering
 
-UserControlEngineering.UpgradeCol: "Upgrade/Mat" => "<Miglioramenti/Mat>"
-UserControlEngineering.ModuleCol: "Module" => "<Modulo>"
-UserControlEngineering.LevelCol: "Level" => "<Livello>"
-UserControlEngineering.MaxCol: "Max" => "<Max>"
-UserControlEngineering.WantedCol: "Wanted" => "<Ricercato>"
-UserControlEngineering.AvailableCol: "Avail." => "<Disp.>"
-UserControlEngineering.NotesCol: "Notes" => "<Note>"
-UserControlEngineering.RecipeCol: "Recipe" => "<Ricetta>"
-UserControlEngineering.EngineersCol: "Engineers" => "<Ingenhere>"
-UserControlEngineering.chkHistoric: "Use Cursor Positon" => "<Usa la posizione del cursore>"
-UserControlEngineering.buttonClear: "Clear Wanted" => "<Pulischi Ricercati>"
-UserControlEngineering.buttonFilterMaterial: "Filter By Material" => "<Filtra per Materiali>"
-UserControlEngineering.buttonFilterUpgrade: "Filter By Upgrade" => "<Filtra per Miglioramenti>"
-UserControlEngineering.buttonFilterLevel: "Filter By Level" => "<Filtra per Livello>"
-UserControlEngineering.buttonFilterEngineer: "Filter By Engineer" => "<Filtra per Ingegnere>"
-UserControlEngineering.buttonFilterModule: "Filter By Module" => "<Filtra per Modulo>"
-UserControlEngineering.ToolTip: "Left click and drag on grid to reorder" => "<Premi il pulsante sinistro e trascina per riordinare la tabella>"
-UserControlEngineering.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "<Quando attivo, usa i materiali sotto il cursore da stimare, quando disattivo usa sempre l'ultimo materiale.>"
-UserControlEngineering.buttonClear.ToolTip: "Set all wanted values to zero" => "<Imposta tutti i ricercati su zero>"
-UserControlEngineering.buttonFilterMaterial.ToolTip: "Filter the table by material" => "<Filtra la tabella per Materiali>"
-UserControlEngineering.buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "<Filtra la tabella per Miglioramenti>"
-UserControlEngineering.buttonFilterLevel.ToolTip: "Filter the table by level" => "<Filtra la tabella per Livello>"
-UserControlEngineering.buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "<Filtra la tabella per Ingegnere>"
-UserControlEngineering.buttonFilterModule.ToolTip: "Filter the table by module type" => "<Filtra la tabella per Modulo>"
+UserControlEngineering.UpgradeCol: "Upgrade/Mat" => "Miglioramenti/Mat"
+UserControlEngineering.ModuleCol: "Module" => "Modulo"
+UserControlEngineering.LevelCol: "Level" => "Livello"
+UserControlEngineering.MaxCol: "Max" => "Max"
+UserControlEngineering.WantedCol: "Wanted" => "Ricercato"
+UserControlEngineering.AvailableCol: "Avail." => "Disp."
+UserControlEngineering.NotesCol: "Notes" => "Note"
+UserControlEngineering.RecipeCol: "Recipe" => "Ricetta"
+UserControlEngineering.EngineersCol: "Engineers" => "Ingenhere"
+UserControlEngineering.chkHistoric: "Use Cursor Positon" => "Usa la posizione del cursore"
+UserControlEngineering.buttonClear: "Clear Wanted" => "Pulischi Ricercati"
+UserControlEngineering.buttonFilterMaterial: "Filter By Material" => "Filtra per Materiali"
+UserControlEngineering.buttonFilterUpgrade: "Filter By Upgrade" => "Filtra per Miglioramenti"
+UserControlEngineering.buttonFilterLevel: "Filter By Level" => "Filtra per Livello"
+UserControlEngineering.buttonFilterEngineer: "Filter By Engineer" => "Filtra per Ingegnere"
+UserControlEngineering.buttonFilterModule: "Filter By Module" => "Filtra per Modulo"
+UserControlEngineering.ToolTip: "Left click and drag on grid to reorder" => "Premi il pulsante sinistro e trascina per riordinare la tabella"
+UserControlEngineering.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Quando attivo, usa i materiali sotto il cursore da stimare, quando disattivo usa sempre l'ultimo materiale."
+UserControlEngineering.buttonClear.ToolTip: "Set all wanted values to zero" => "Imposta tutti i ricercati su zero"
+UserControlEngineering.buttonFilterMaterial.ToolTip: "Filter the table by material" => "Filtra la tabella per Materiali"
+UserControlEngineering.buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "Filtra la tabella per Miglioramenti"
+UserControlEngineering.buttonFilterLevel.ToolTip: "Filter the table by level" => "Filtra la tabella per Livello"
+UserControlEngineering.buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Filtra la tabella per Ingegnere"
+UserControlEngineering.buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtra la tabella per Modulo"
 
 /////////////////////////////////////////////////////////////// Estimated Values
 
-UserControlEstimatedValues.BodyName: "Body Name" => "<Nome del Corpo>"
-UserControlEstimatedValues.EstValue: "Est Value" => "<Vaore Stimato>"
-.SV: "Estimated Scan Values for {0}" => "<Stima dei valori di scansione per {0}>"
+UserControlEstimatedValues.BodyName: "Body Name" => "Nome del Corpo"
+UserControlEstimatedValues.EstValue: "Est Value" => "Vaore Stimato"
+.SV: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
 
 /////////////////////////////////////////////////////////////// Expedition
 
-UserControlExpedition.SystemName: "System Name" => "<Nome del Sistema>"
-UserControlExpedition.Distance: "Dist." => "<Dist.>"
-UserControlExpedition.Note: "Note" => "<Nota>"
-UserControlExpedition.labelCml: "Cml Distance:" => "<Cml Distanza:>"
-UserControlExpedition.labelP2P: "P2P Distance:" => "<P2P Distanza:>"
-UserControlExpedition.buttonReverseRoute: "Reverse" => "<Inverti>"
-UserControlExpedition.labelEndDate: "End Date:" => "<Data di Termine:>"
-UserControlExpedition.labelDateStart: "Start Date:" => "<Data di Inizio:>"
-UserControlExpedition.labelRouteName: "Route Name:" => "<Nome di Itinerario:>"
-UserControlExpedition.toolStripButtonNew: "New Route" => "<Nuovo Itinerario>"
-UserControlExpedition.toolStripButtonImportFile: "Import file" => "<Importa documento>"
-UserControlExpedition.toolStripButtonImportRoute: "Import route" => "<Importa itinerario>"
-UserControlExpedition.toolStripButtonSave: "Save Route" => "<Salva Itinerario>"
-UserControlExpedition.toolStripButtonExport: "Export" => "<Esporta>"
-UserControlExpedition.toolStripButtonDelete: "Delete Route" => "<Elimina Itinerario>"
-UserControlExpedition.toolStripButtonShowOn3DMap: "Show on 3D Map" => "<Mostra sulla mappa 3D>"
-UserControlExpedition.copyToolStripMenuItem: "Copy" => "<Copia>"
-UserControlExpedition.pasteToolStripMenuItem: "Paste" => "<Incolla>"
-UserControlExpedition.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "<Inserisci linee copiate>"
-UserControlExpedition.deleteRowsToolStripMenuItem: "Delete Rows" => "<Elimina linee>"
-UserControlExpedition.setTargetToolStripMenuItem: "Set Target" => "<Imposta Obiettivo>"
-UserControlExpedition.editBookmarkToolStripMenuItem: "Edit bookmark" => "<Modifica bookmark>"
-UserControlExpedition.ctxMenuItemUndelete: "&Undelete" => "<&Ricupera>"
+UserControlExpedition.SystemName: "System Name" => "Nome del Sistema"
+UserControlExpedition.Distance: "Dist." => "Dist."
+UserControlExpedition.Note: "Note" => "Nota"
+UserControlExpedition.labelCml: "Cml Distance:" => "Cml Distanza:"
+UserControlExpedition.labelP2P: "P2P Distance:" => "P2P Distanza:"
+UserControlExpedition.buttonReverseRoute: "Reverse" => "Inverti"
+UserControlExpedition.labelEndDate: "End Date:" => "Data di Termine:"
+UserControlExpedition.labelDateStart: "Start Date:" => "Data di Inizio:"
+UserControlExpedition.labelRouteName: "Route Name:" => "Nome di Itinerario:"
+UserControlExpedition.toolStripButtonNew: "New Route" => "Nuovo Itinerario"
+UserControlExpedition.toolStripButtonImportFile: "Import file" => "Importa documento"
+UserControlExpedition.toolStripButtonImportRoute: "Import route" => "Importa itinerario"
+UserControlExpedition.toolStripButtonSave: "Save Route" => "Salva Itinerario"
+UserControlExpedition.toolStripButtonExport: "Export" => "Esporta"
+UserControlExpedition.toolStripButtonDelete: "Delete Route" => "Elimina Itinerario"
+UserControlExpedition.toolStripButtonShowOn3DMap: "Show on 3D Map" => "Mostra sulla mappa 3D"
+UserControlExpedition.copyToolStripMenuItem: "Copy" => "Copia"
+UserControlExpedition.pasteToolStripMenuItem: "Paste" => "Incolla"
+UserControlExpedition.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Inserisci linee copiate"
+UserControlExpedition.deleteRowsToolStripMenuItem: "Delete Rows" => "Elimina linee"
+UserControlExpedition.setTargetToolStripMenuItem: "Set Target" => "Imposta Obiettivo"
+UserControlExpedition.editBookmarkToolStripMenuItem: "Edit bookmark" => "Modifica bookmark"
+UserControlExpedition.ctxMenuItemUndelete: "&Undelete" => "&Ricupera"
 
 .NoRoute: "No route set up. Please add at least two systems." @
 .Delete: "Are you sure you want to delete this route?" @
@@ -392,31 +392,31 @@ UserControlExpedition.NoRouteExport: "There is no route to export " @
 
 /////////////////////////////////////////////////////////////// Exploration
 
-UserControlExploration.ColumnSystemName: "System Name" => "<Nome del Sistema>"
-UserControlExploration.ColumnDist: "Dist" => "<Dist>"
-UserControlExploration.ColumnX: "X" => "<X>"
-UserControlExploration.ColumnY: "Y" => "<Y>"
-UserControlExploration.ColumnZ: "Z" => "<Z>"
-UserControlExploration.ColumnVisits: "Visits" => "<Visite>"
-UserControlExploration.ColumnScans: "Scans" => "<Scansioni>"
-UserControlExploration.ColumnPrimaryStar: "Pri star" => "<Stella Principale>"
-UserControlExploration.ColumnInfo: "Info" => "<Info>"
-UserControlExploration.ColumnNote: "Note" => "<Note>"
-UserControlExploration.labelFilename: "Filename" => "<Nome doumento>"
-UserControlExploration.labelName: "Exploration set:" => "<Set di Esplorazione:>"
-UserControlExploration.toolStripButtonNew: "New" => "<Nuovo>"
-UserControlExploration.toolStripButtonLoad: "Load" => "<Carica>"
-UserControlExploration.toolStripButtonSave: "Save" => "<Salva>"
-UserControlExploration.tsbAddSystems: "Add Systems" => "<Aggiungi Systemi>"
-UserControlExploration.toolStripButtonImportFile: "Import Text File" => "<Importa Documento di Testo>"
-UserControlExploration.toolStripButtonExport: "Export Text File" => "<Esporta Documento di Testo>"
-UserControlExploration.toolStripButtonClear: "Clear List" => "<Pulischi Lista>"
-UserControlExploration.copyToolStripMenuItem: "Copy" => "<Copia>"
-UserControlExploration.pasteToolStripMenuItem: "Paste" => "<Incolla>"
-UserControlExploration.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "<Inserisci linee copiate>"
-UserControlExploration.deleteRowsToolStripMenuItem: "Delete Rows" => "<Elimina linee>"
-UserControlExploration.setTargetToolStripMenuItem: "Set Target" => "<Definisci obiettivo>"
-UserControlExploration.editBookmarkToolStripMenuItem: "Edit bookmark" => "<Modifica bookmark>"
+UserControlExploration.ColumnSystemName: "System Name" => "Nome del Sistema"
+UserControlExploration.ColumnDist: "Dist" => "Dist"
+UserControlExploration.ColumnX: "X" => "X"
+UserControlExploration.ColumnY: "Y" => "Y"
+UserControlExploration.ColumnZ: "Z" => "Z"
+UserControlExploration.ColumnVisits: "Visits" => "Visite"
+UserControlExploration.ColumnScans: "Scans" => "Scansioni"
+UserControlExploration.ColumnPrimaryStar: "Pri star" => "Stella Principale"
+UserControlExploration.ColumnInfo: "Info" => "Info"
+UserControlExploration.ColumnNote: "Note" => "Note"
+UserControlExploration.labelFilename: "Filename" => "Nome doumento"
+UserControlExploration.labelName: "Exploration set:" => "Set di Esplorazione:"
+UserControlExploration.toolStripButtonNew: "New" => "Nuovo"
+UserControlExploration.toolStripButtonLoad: "Load" => "Carica"
+UserControlExploration.toolStripButtonSave: "Save" => "Salva"
+UserControlExploration.tsbAddSystems: "Add Systems" => "Aggiungi Systemi"
+UserControlExploration.toolStripButtonImportFile: "Import Text File" => "Importa Documento di Testo"
+UserControlExploration.toolStripButtonExport: "Export Text File" => "Esporta Documento di Testo"
+UserControlExploration.toolStripButtonClear: "Clear List" => "Pulischi Lista"
+UserControlExploration.copyToolStripMenuItem: "Copy" => "Copia"
+UserControlExploration.pasteToolStripMenuItem: "Paste" => "Incolla"
+UserControlExploration.insertCopiedToolStripMenuItem: "Insert Copied Rows" => "Inserisci linee copiate"
+UserControlExploration.deleteRowsToolStripMenuItem: "Delete Rows" => "Elimina linee"
+UserControlExploration.setTargetToolStripMenuItem: "Set Target" => "Definisci obiettivo"
+UserControlExploration.editBookmarkToolStripMenuItem: "Edit bookmark" => "Modifica bookmark"
 
 .Saved: "Saved to {0} Exploration Set" @
 .SelectSet: "Select a exploration set file" @
@@ -432,24 +432,24 @@ UserControlExploration.editBookmarkToolStripMenuItem: "Edit bookmark" => "<Modif
 
 /////////////////////////////////////////////////////////////////// Journal
 
-UserControlJournalGrid.ColumnTime: "Time" => "<Tempo>"
-UserControlJournalGrid.Event: "Event" => "<Evento>"
-UserControlJournalGrid.ColumnType: "Description" => "<Descrizione>"
-UserControlJournalGrid.ColumnText: "Information" => "<Informazione>"
-UserControlJournalGrid.checkBoxMoveToTop: "Cursor to Top" => "<Cursore in cima>"
-UserControlJournalGrid.buttonField: "Field Filter" => "<Filtra Campi>"
-UserControlJournalGrid.labelSearch: "Search" => "<Cerca>"
-UserControlJournalGrid.buttonFilter: "Event Filter" => "<Filtra Eventi>"
-UserControlJournalGrid.labelTime: "Time" => "<Tempo>"
+UserControlJournalGrid.ColumnTime: "Time" => "Tempo"
+UserControlJournalGrid.Event: "Event" => "Evento"
+UserControlJournalGrid.ColumnType: "Description" => "Descrizione"
+UserControlJournalGrid.ColumnText: "Information" => "Informazione"
+UserControlJournalGrid.checkBoxMoveToTop: "Cursor to Top" => "Cursore in cima"
+UserControlJournalGrid.buttonField: "Field Filter" => "Filtra Campi"
+UserControlJournalGrid.labelSearch: "Search" => "Cerca"
+UserControlJournalGrid.buttonFilter: "Event Filter" => "Filtra Eventi"
+UserControlJournalGrid.labelTime: "Time" => "Tempo"
 
-UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "<Rimuovi ordinamento delle colonne>"
-UserControlJournalGrid.jumpToEntryToolStripMenuItem: "Jump to Entry" => "<Salta alla voce>"
-UserControlJournalGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "<Vai al sistema sulla mappa 3D>"
-UserControlJournalGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "<Visualizza su EDSM>"
-UserControlJournalGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "<Imposta punto d'Inizio/Fine sul computer di viaggio>"
-UserControlJournalGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "<Invia dati non sincronizzati a EDDN>"
-UserControlJournalGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "<Avvia azioni su questa voce>"
-UserControlJournalGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "<Copia voce del giornale sulla memoria>"
+UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Rimuovi ordinamento delle colonne"
+UserControlJournalGrid.jumpToEntryToolStripMenuItem: "Jump to Entry" => "Salta alla voce"
+UserControlJournalGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Vai al sistema sulla mappa 3D"
+UserControlJournalGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Visualizza su EDSM"
+UserControlJournalGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Imposta punto d'Inizio/Fine sul computer di viaggio"
+UserControlJournalGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "Invia dati non sincronizzati a EDDN"
+UserControlJournalGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Avvia azioni su questa voce"
+UserControlJournalGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "Copia voce del giornale sulla memoria"
 
 .TT1: " showing {0} original {1}" @
 .TTFilt1: "Filtered {0}" @
@@ -462,46 +462,46 @@ UserControlJournalGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journ
 
 //////////////////////////////////////////////////////////////// Ledger
 
-UserControlLedger.labelNoItems: "No Items Found" => "<No Items Found>"
-UserControlLedger.TimeCol: "Time" => "<Tempo>"
-UserControlLedger.Type: "Type" => "<Tipo>"
-UserControlLedger.Notes: "Notes" => "<Note>"
-UserControlLedger.Credits: "Credits" => "<Credit>"
-UserControlLedger.Debits: "Debits" => "<Debiti>"
-UserControlLedger.Balance: "Balance" => "<Bilancio>"
-UserControlLedger.NormProfit: "Profit Per Unit" => "<Reddito per Unitá>"
-UserControlLedger.labelTime: "Time" => "<Tempo>"
-UserControlLedger.buttonFilter: "Event Filter" => "<Filter per Eventi>"
-UserControlLedger.labelSearch: "Search" => "<Cerca>"
-UserControlLedger.buttonFilter.ToolTip: "Display entries matching this event type filter" => "<Mostra i registri che combinano con l'evento filtrato>"
-UserControlLedger.textBoxFilter.ToolTip: "Search to particular items" => "<Cerca un oggeto specifico>"
-UserControlLedger.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "<Cerca i registri per età>"
-UserControlLedger.toolStripMenuItemGotoItem: "Go to entry on grid" => "<Va al registro nella tabella>"
+UserControlLedger.labelNoItems: "No Items Found" => "No Items Found"
+UserControlLedger.TimeCol: "Time" => "Tempo"
+UserControlLedger.Type: "Type" => "Tipo"
+UserControlLedger.Notes: "Notes" => "Note"
+UserControlLedger.Credits: "Credits" => "Credit"
+UserControlLedger.Debits: "Debits" => "Debiti"
+UserControlLedger.Balance: "Balance" => "Bilancio"
+UserControlLedger.NormProfit: "Profit Per Unit" => "Reddito per Unitá"
+UserControlLedger.labelTime: "Time" => "Tempo"
+UserControlLedger.buttonFilter: "Event Filter" => "Filter per Eventi"
+UserControlLedger.labelSearch: "Search" => "Cerca"
+UserControlLedger.buttonFilter.ToolTip: "Display entries matching this event type filter" => "Mostra i registri che combinano con l'evento filtrato"
+UserControlLedger.textBoxFilter.ToolTip: "Search to particular items" => "Cerca un oggeto specifico"
+UserControlLedger.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Cerca i registri per età"
+UserControlLedger.toolStripMenuItemGotoItem: "Go to entry on grid" => "Va al registro nella tabella"
 
 .CashTransactions: "Cash Transactions" @
 
 //////////////////////////////////////////////////////////////// Local map
 
-UserControlLocalMap.labelExtMin: "Min" => "<Min>"
-UserControlLocalMap.labelExtMax: "Max" => "<Max>"
-UserControlLocalMap.toolStripMenuZoom: "Zoom" => "<Zoom>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom1: "1:1" => "<1:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" => "<1.25:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom15: "1.5:1" => "<1.5:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom175: "1.75:1" => "<1.75:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom2: "2:1" => "<2:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom25: "2.5:1" => "<2.5:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom3: "3:1" => "<3:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom35: "3.5:1" => "<3.5:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom4: "4:1" => "<4:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom5: "5:1" => "<5:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom6: "6:1" => "<6:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom8: "8:1" => "<8:1>"
-UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom10: "10:1" => "<10:1>"
-UserControlLocalMap.toolStripMenuZoomCenterMap: "Center Map" => "<Centra la Mappa>"
-UserControlLocalMap.toolStripMenuReset: "Reset" => "<Resetta>"
-UserControlLocalMap.aboutToolStripAbout: "About" => "<Informazioni>"
-UserControlLocalMap.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "<Ruota con il primo pulsante; Aumenta/diminuisci con la ruota; Muovi con il pulsante del mezzo>"
+UserControlLocalMap.labelExtMin: "Min" => "Min"
+UserControlLocalMap.labelExtMax: "Max" => "Max"
+UserControlLocalMap.toolStripMenuZoom: "Zoom" => "Zoom"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom1: "1:1" => "1:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" => "1.25:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom15: "1.5:1" => "1.5:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom175: "1.75:1" => "1.75:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom2: "2:1" => "2:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom25: "2.5:1" => "2.5:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom3: "3:1" => "3:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom35: "3.5:1" => "3.5:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom4: "4:1" => "4:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom5: "5:1" => "5:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom6: "6:1" => "6:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom8: "8:1" => "8:1"
+UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom10: "10:1" => "10:1"
+UserControlLocalMap.toolStripMenuZoomCenterMap: "Center Map" => "Centra la Mappa"
+UserControlLocalMap.toolStripMenuReset: "Reset" => "Resetta"
+UserControlLocalMap.aboutToolStripAbout: "About" => "Informazioni"
+UserControlLocalMap.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "Ruota con il primo pulsante; Aumenta/diminuisci con la ruota; Muovi con il pulsante del mezzo"
 
 .3dmap: "3D Map of closest systems from {0}" @
 
@@ -512,41 +512,41 @@ UserControlLog.clearLogToolStripMenuItem: "Pulisci il Registro" @
 
 //////////////////////////////////////////////////////////////// Market Data
 
-UserControlMarketData.CategoryCol: "Category" => "<Categoria>"
-UserControlMarketData.NameCol: "Name" => "<Nome>"
-UserControlMarketData.SellCol: "Sell" => "<Vendi>"
-UserControlMarketData.BuyCol: "Buy" => "<Compra>"
-UserControlMarketData.CargoCol: "Cargo" => "<Carico>"
-UserControlMarketData.DemandCol: "Demand" => "<Richiesto>"
-UserControlMarketData.SupplyCol: "Supply" => "<Fornitura>"
-UserControlMarketData.GalAvgCol: "Galactic Avg" => "<Media Galattica>"
-UserControlMarketData.ProfitToCol: "Profit To cr/t" => "<Reddito fino a cr/t>"
-UserControlMarketData.ProfitFromCol: "Profit From cr/t" => "<Reddito da cr/t>"
-UserControlMarketData.checkBoxAutoSwap: "AutoSwap" => "<Cambia Automaticamente>"
-UserControlMarketData.checkBoxBuyOnly: "Buy Only" => "<Comrpa soltanto>"
-UserControlMarketData.labelVs: "Vs" => "<Vs>"
-UserControlMarketData.labelLocation: "No Data" => "<Nessuna informazione>"
-UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparision to the previous market data.\r\nUseful when doing A->B->A trading" => "<Quando arrivi alla stazione da dove compari (sulla destra)\r\nscambia la comparazione con i dati del prossimo mercado.\r\nUtile quando si fa una rotta di commercio A->B->A>"
-UserControlMarketData.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "<Mostra solo i prodotti che puoi comprare>"
-UserControlMarketData.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "<Premi per scegliere i dati di mercato da comparare>"
-UserControlMarketData.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "<Premi per scegliere tra usare il cursore o dati specifici di mercato>"
+UserControlMarketData.CategoryCol: "Category" => "Categoria"
+UserControlMarketData.NameCol: "Name" => "Nome"
+UserControlMarketData.SellCol: "Sell" => "Vendi"
+UserControlMarketData.BuyCol: "Buy" => "Compra"
+UserControlMarketData.CargoCol: "Cargo" => "Carico"
+UserControlMarketData.DemandCol: "Demand" => "Richiesto"
+UserControlMarketData.SupplyCol: "Supply" => "Fornitura"
+UserControlMarketData.GalAvgCol: "Galactic Avg" => "Media Galattica"
+UserControlMarketData.ProfitToCol: "Profit To cr/t" => "Reddito fino a cr/t"
+UserControlMarketData.ProfitFromCol: "Profit From cr/t" => "Reddito da cr/t"
+UserControlMarketData.checkBoxAutoSwap: "AutoSwap" => "Cambia Automaticamente"
+UserControlMarketData.checkBoxBuyOnly: "Buy Only" => "Comrpa soltanto"
+UserControlMarketData.labelVs: "Vs" => "Vs"
+UserControlMarketData.labelLocation: "No Data" => "Nessuna informazione"
+UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparision to the previous market data.\r\nUseful when doing A->B->A trading" => "Quando arrivi alla stazione da dove compari (sulla destra)\r\nscambia la comparazione con i dati del prossimo mercado.\r\nUtile quando si fa una rotta di commercio A->B->A"
+UserControlMarketData.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Mostra solo i prodotti che puoi comprare"
+UserControlMarketData.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Premi per scegliere i dati di mercato da comparare"
+UserControlMarketData.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Premi per scegliere tra usare il cursore o dati specifici di mercato"
 
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
 
 //////////////////////////////////////////////////////////////// Material Commodities
 
-UserControlMaterials.labelNoItems: "No Items Found" => "<Nessun prodotto trovato>"
-UserControlMaterials.NameCol: "Name" => "<Nome>"
-UserControlMaterials.ShortName: "Abv" => "<Abv>"
-UserControlMaterials.Category: "Category" => "<Categoria>"
-UserControlMaterials.Type: "Type" => "<Tipo>"
-UserControlMaterials.Number: "Number" => "<Numero>"
-UserControlMaterials.Price: "Avg. Price" => "<Prezzo medio>"
-UserControlMaterials.checkBoxClear: "Remove zero items" => "<Rimuovi prodotti assenti>"
-UserControlMaterials.textBoxItems2.ToolTip: "Count of Items" => "<Conteggio>"
-UserControlMaterials.textBoxItems1.ToolTip: "Count of Items" => "<Conteggio>"
-UserControlMaterials.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "<Rimuovi prodotti assenti solo la prossima volta>"
+UserControlMaterials.labelNoItems: "No Items Found" => "Nessun prodotto trovato"
+UserControlMaterials.NameCol: "Name" => "Nome"
+UserControlMaterials.ShortName: "Abv" => "Abv"
+UserControlMaterials.Category: "Category" => "Categoria"
+UserControlMaterials.Type: "Type" => "Tipo"
+UserControlMaterials.Number: "Number" => "Numero"
+UserControlMaterials.Price: "Avg. Price" => "Prezzo medio"
+UserControlMaterials.checkBoxClear: "Remove zero items" => "Rimuovi prodotti assenti"
+UserControlMaterials.textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
+UserControlMaterials.textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
+UserControlMaterials.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Rimuovi prodotti assenti solo la prossima volta"
 
 .Data: "Data" @
 .Mats: "Mats" @
@@ -554,17 +554,17 @@ UserControlMaterials.checkBoxClear.ToolTip: "Remove zero items the time after th
 
 // Repeat of, unfort.
 
-UserControlCommodities.labelNoItems: "No Items Found" => "<Nesusn prodotto trovato>"
-UserControlCommodities.NameCol: "Name" => "<Nome>"
-UserControlCommodities.ShortName: "Abv" => "<Abv>"
-UserControlCommodities.Category: "Category" => "<Categoria>"
-UserControlCommodities.Type: "Type" => "<Tipo>"
-UserControlCommodities.Number: "Number" => "<Numero>"
-UserControlCommodities.Price: "Avg. Price" => "<Prezzo medio>"
-UserControlCommodities.checkBoxClear: "Remove zero items" => "<Rimuovi prodotti assenti>"
-UserControlCommodities.textBoxItems2.ToolTip: "Count of Items" => "<Conteggio>"
-UserControlCommodities.textBoxItems1.ToolTip: "Count of Items" => "<Conteggio>"
-UserControlCommodities.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "<Rimuovi prodotti assenti solo la prossima volta>"
+UserControlCommodities.labelNoItems: "No Items Found" => "Nesusn prodotto trovato"
+UserControlCommodities.NameCol: "Name" => "Nome"
+UserControlCommodities.ShortName: "Abv" => "Abv"
+UserControlCommodities.Category: "Category" => "Categoria"
+UserControlCommodities.Type: "Type" => "Tipo"
+UserControlCommodities.Number: "Number" => "Numero"
+UserControlCommodities.Price: "Avg. Price" => "Prezzo medio"
+UserControlCommodities.checkBoxClear: "Remove zero items" => "Rimuovi prodotti assenti"
+UserControlCommodities.textBoxItems2.ToolTip: "Count of Items" => "Conteggio"
+UserControlCommodities.textBoxItems1.ToolTip: "Count of Items" => "Conteggio"
+UserControlCommodities.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Rimuovi prodotti assenti solo la prossima volta"
 
 .Data: "Data" @
 .Mats: "Mats" @
@@ -572,26 +572,26 @@ UserControlCommodities.checkBoxClear.ToolTip: "Remove zero items the time after 
 
 //////////////////////////////////////////////////////////////// Missions
 
-UserControlMissions.cColName: "Name" => "<Nome>"
-UserControlMissions.cColStartDate: "Start Date" => "<Data d'Inizio>"
-UserControlMissions.cColEndDate: "End Date" => "<Data di Termine>"
-UserControlMissions.cColOrigin: "Origin" => "<Origine>"
-UserControlMissions.cColFromFaction: "Faction" => "<Fazione>"
-UserControlMissions.cColDestSystem: "Destination" => "<Destinazione>"
-UserControlMissions.cColTargetFaction: "Target Faction" => "<Fazione di Destino>"
-UserControlMissions.cColValue: "Value (cr)" => "<Valore (cr)>"
-UserControlMissions.cColInfo: "Info" => "<Info>"
-UserControlMissions.PcolName: "Name" => "<Nome>"
-UserControlMissions.pColStart: "Start Date" => "<Data d'Inizio>"
-UserControlMissions.pColEnd: "End Date" => "<Data di Termine>"
-UserControlMissions.pColOrigin: "Origin" => "<Origine>"
-UserControlMissions.pColFromFaction: "Faction" => "<Fazione>"
-UserControlMissions.pColDestSys: "Destination" => "<Destinazione>"
-UserControlMissions.pColTargetFaction: "Target Faction" => "<Fazione di Destino>"
-UserControlMissions.pColResult: "Result (cr)" => "<Risultato (cr)>"
-UserControlMissions.pColInfo: "Info" => "<Info>"
-UserControlMissions.labelTo: "to" => "<a>"
-UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "<Premi con il bottone sinistro per riordinare la tabella>"
+UserControlMissions.cColName: "Name" => "Nome"
+UserControlMissions.cColStartDate: "Start Date" => "Data d'Inizio"
+UserControlMissions.cColEndDate: "End Date" => "Data di Termine"
+UserControlMissions.cColOrigin: "Origin" => "Origine"
+UserControlMissions.cColFromFaction: "Faction" => "Fazione"
+UserControlMissions.cColDestSystem: "Destination" => "Destinazione"
+UserControlMissions.cColTargetFaction: "Target Faction" => "Fazione di Destino"
+UserControlMissions.cColValue: "Value (cr)" => "Valore (cr)"
+UserControlMissions.cColInfo: "Info" => "Info"
+UserControlMissions.PcolName: "Name" => "Nome"
+UserControlMissions.pColStart: "Start Date" => "Data d'Inizio"
+UserControlMissions.pColEnd: "End Date" => "Data di Termine"
+UserControlMissions.pColOrigin: "Origin" => "Origine"
+UserControlMissions.pColFromFaction: "Faction" => "Fazione"
+UserControlMissions.pColDestSys: "Destination" => "Destinazione"
+UserControlMissions.pColTargetFaction: "Target Faction" => "Fazione di Destino"
+UserControlMissions.pColResult: "Result (cr)" => "Risultato (cr)"
+UserControlMissions.pColInfo: "Info" => "Info"
+UserControlMissions.labelTo: "to" => "a"
+UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "Premi con il bottone sinistro per riordinare la tabella"
 
 .MPlural: " Missions" @
 .MSingular: " Mission" @
@@ -642,14 +642,14 @@ UserControlModules.Slot: "Spazio" @
 
 //////////////////////////////////////////////////////////////// Note Panel
 
-UserControlNotePanel.miGMPNotes: "Display galactic mapping notes" => "<Mostra le note della mappa galattica>"
-UserControlNotePanel.miSystemNotes: "Display system notes" => "<Mostra le note sul sistema>"
+UserControlNotePanel.miGMPNotes: "Display galactic mapping notes" => "Mostra le note della mappa galattica"
+UserControlNotePanel.miSystemNotes: "Display system notes" => "Mostra le note sul sistema"
 
 //////////////////////////////////////////////////////////////// Outfitting
 
-UserControlOutfitting.labelYard: "Unknown" => "<Sconosciuto>"
-UserControlOutfitting.labelYardSel: "Sel" => "<Sel>"
-UserControlOutfitting.comboBoxYards.ToolTip: "Select ship to view" => "<Seleziona la nave da vedere>"
+UserControlOutfitting.labelYard: "Unknown" => "Sconosciuto"
+UserControlOutfitting.labelYardSel: "Sel" => "Sel"
+UserControlOutfitting.comboBoxYards.ToolTip: "Select ship to view" => "Seleziona la nave da vedere"
 
 .TravelHistoryEntry: "Travel History Entry" @
 .Date: "Date" @
@@ -672,23 +672,23 @@ UserControlPanelSelector.NOADDONS: "NO ADD ONS!" @
 
 //////////////////////////////////////////////////////////////// Plot
 
-UserControlPlot.sysName: "Name" => "<Nome>"
-UserControlPlot.sysX: "X" => "<X>"
-UserControlPlot.sysY: "Y" => "<Y>"
-UserControlPlot.sysZ: "Z" => "<Z>"
-UserControlPlot.sysVisits: "Visits" => "<Visite>"
-UserControlPlot.labelExtMin: "Min" => "<Min>"
-UserControlPlot.labelExtMax: "Max" => "<Max>"
-UserControlPlot.optionsToolStripMenuItem: "Options" => "<Opzioni>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem: "Esporta..." => "<Esporta...>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "<PNG>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "<PDF>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "<SVG>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "<TXT>"
+UserControlPlot.sysName: "Name" => "Nome"
+UserControlPlot.sysX: "X" => "X"
+UserControlPlot.sysY: "Y" => "Y"
+UserControlPlot.sysZ: "Z" => "Z"
+UserControlPlot.sysVisits: "Visits" => "Visite"
+UserControlPlot.labelExtMin: "Min" => "Min"
+UserControlPlot.labelExtMax: "Max" => "Max"
+UserControlPlot.optionsToolStripMenuItem: "Options" => "Opzioni"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem: "Esporta..." => "Esporta..."
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "PNG"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "PDF"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "SVG"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "TXT"
 
-UserControlPlot.comboBoxView.ToolTip: "Orientation of the Plot" => "<Orientamento del Grafico>"
-UserControlPlot.textMinRadius.ToolTip: "Minimum Range" => "<Raggio Minimo>"
-UserControlPlot.textMaxRadius.ToolTip: "Maximum Range" => "<Raggio Massimo>"
+UserControlPlot.comboBoxView.ToolTip: "Orientation of the Plot" => "Orientamento del Grafico"
+UserControlPlot.textMinRadius.ToolTip: "Minimum Range" => "Raggio Minimo"
+UserControlPlot.textMaxRadius.ToolTip: "Maximum Range" => "Raggio Massimo"
 
 .Top: "Top" @
 .Front: "Front" @
@@ -709,53 +709,53 @@ UserControlPlot.textMaxRadius.ToolTip: "Maximum Range" => "<Raggio Massimo>"
 
 //////////////////////////////////////////////////////////////// Route
 
-UserControlRoute.SystemCol: "System" => "<Sistema>"
-UserControlRoute.DistanceCol: "Distance" => "<Distanza>"
-UserControlRoute.XCol: "X" => "<X>"
-UserControlRoute.YCol: "Y" => "<Y>"
-UserControlRoute.ZCol: "Z" => "<Z>"
-UserControlRoute.WayPointDistCol: "Dist. Waypoint" => "<Dist. Punto di Passaggio>"
-UserControlRoute.DeviationCol: "Deviation" => "<Deviazione>"
-UserControlRoute.buttonExtExcel: "2" => "<2>"
-UserControlRoute.buttonExtTravelTo: "History" => "<Storia>"
-UserControlRoute.buttonExtTravelFrom: "History" => "<Storia>"
-UserControlRoute.buttonExtTargetTo: "Target" => "<Destino>"
-UserControlRoute.buttonToEDSM: "EDSM" => "<EDSM>"
-UserControlRoute.buttonFromEDSM: "EDSM" => "<EDSM>"
-UserControlRoute.buttonTargetFrom: "Target" => "<Destino>"
-UserControlRoute.cmd3DMap: "3D Map" => "<Mappa 3D>"
-UserControlRoute.labelLy2: "ly" => "<ly>"
-UserControlRoute.labelLy1: "ly" => "<ly>"
-UserControlRoute.labelTo: "To" => "<A>"
-UserControlRoute.labelMaxJump: "Max jump" => "<Saltpo ax>"
-UserControlRoute.labelDistance: "Distance" => "<Distanza>"
-UserControlRoute.labelMetric: "Metric" => "<Metrica>"
-UserControlRoute.button_Route: "Find route" => "<Cerca rotta>"
-UserControlRoute.labelFrom: "From" => "<Da>"
-UserControlRoute.showInEDSMToolStripMenuItem: "Show in EDSM" => "<Apri su EDSM>"
-UserControlRoute.copyToolStripMenuItem: "Copy" => "<Copia>"
-UserControlRoute.buttonExtExcel.ToolTip: "Send data on grid to excel" => "<Invia dati su tabella excel>"
-UserControlRoute.textBox_ToName.ToolTip: "Alternate Name" => "<Nome Alternativo>"
-UserControlRoute.textBox_FromName.ToolTip: "Alternate name" => "<Nome Alternativo>"
-UserControlRoute.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "<Scegli la metrica da usare quando cerco per la rotta>"
-UserControlRoute.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "<Usa il registro sullo storico di viaggio come destino per la rotta>"
-UserControlRoute.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "<Usai l registro sullo storico di viaggio com partenza per la rotta >"
-UserControlRoute.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "<Usa il sistema di destino come destino della rotta>"
-UserControlRoute.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "<Apri questo destino di rotta su EDSM>"
-UserControlRoute.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "<Apri questa partenza di rotta su EDSM>"
-UserControlRoute.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "<Usa il destino come partenza per la rotta>"
-UserControlRoute.cmd3DMap.ToolTip: "Show route on 3D Map" => "<Mostra la rotta sulla mappa 3D>"
-UserControlRoute.textBox_From.ToolTip: "Select system to start the route" => "<Seleziona sistema come partenza per la rotta>"
-UserControlRoute.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "<Fornisci il tuo raggio di salto, o cerca per salti lunghi>"
-UserControlRoute.textBox_To.ToolTip: "Select the system to end in" => "<Seleziona il siostema d'arrivo>"
-UserControlRoute.textBox_Distance.ToolTip: "Distance between start and end" => "<Distanza tra partenza e arrivo>"
-UserControlRoute.textBox_ToZ.ToolTip: "Z Co-ord" => "<Z Co-ord>"
-UserControlRoute.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "<Y (Verticale) Co-ord>"
-UserControlRoute.textBox_ToX.ToolTip: "X Co-Ord" => "<X Co-Ord>"
-UserControlRoute.textBox_FromZ.ToolTip: "Z Co-ord" => "<Z Co-ord>"
-UserControlRoute.button_Route.ToolTip: "Compute the route" => "<Calcola la rotta>"
-UserControlRoute.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "<Y (Verticale) Co-ord>"
-UserControlRoute.textBox_FromX.ToolTip: "X Co-ord" => "<X Co-ord>"
+UserControlRoute.SystemCol: "System" => "Sistema"
+UserControlRoute.DistanceCol: "Distance" => "Distanza"
+UserControlRoute.XCol: "X" => "X"
+UserControlRoute.YCol: "Y" => "Y"
+UserControlRoute.ZCol: "Z" => "Z"
+UserControlRoute.WayPointDistCol: "Dist. Waypoint" => "Dist. Punto di Passaggio"
+UserControlRoute.DeviationCol: "Deviation" => "Deviazione"
+UserControlRoute.buttonExtExcel: "2" => "2"
+UserControlRoute.buttonExtTravelTo: "History" => "Storia"
+UserControlRoute.buttonExtTravelFrom: "History" => "Storia"
+UserControlRoute.buttonExtTargetTo: "Target" => "Destino"
+UserControlRoute.buttonToEDSM: "EDSM" => "EDSM"
+UserControlRoute.buttonFromEDSM: "EDSM" => "EDSM"
+UserControlRoute.buttonTargetFrom: "Target" => "Destino"
+UserControlRoute.cmd3DMap: "3D Map" => "Mappa 3D"
+UserControlRoute.labelLy2: "ly" => "ly"
+UserControlRoute.labelLy1: "ly" => "ly"
+UserControlRoute.labelTo: "To" => "A"
+UserControlRoute.labelMaxJump: "Max jump" => "Saltpo ax"
+UserControlRoute.labelDistance: "Distance" => "Distanza"
+UserControlRoute.labelMetric: "Metric" => "Metrica"
+UserControlRoute.button_Route: "Find route" => "Cerca rotta"
+UserControlRoute.labelFrom: "From" => "Da"
+UserControlRoute.showInEDSMToolStripMenuItem: "Show in EDSM" => "Apri su EDSM"
+UserControlRoute.copyToolStripMenuItem: "Copy" => "Copia"
+UserControlRoute.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Invia dati su tabella excel"
+UserControlRoute.textBox_ToName.ToolTip: "Alternate Name" => "Nome Alternativo"
+UserControlRoute.textBox_FromName.ToolTip: "Alternate name" => "Nome Alternativo"
+UserControlRoute.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Scegli la metrica da usare quando cerco per la rotta"
+UserControlRoute.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Usa il registro sullo storico di viaggio come destino per la rotta"
+UserControlRoute.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "Usai l registro sullo storico di viaggio com partenza per la rotta "
+UserControlRoute.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "Usa il sistema di destino come destino della rotta"
+UserControlRoute.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Apri questo destino di rotta su EDSM"
+UserControlRoute.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Apri questa partenza di rotta su EDSM"
+UserControlRoute.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Usa il destino come partenza per la rotta"
+UserControlRoute.cmd3DMap.ToolTip: "Show route on 3D Map" => "Mostra la rotta sulla mappa 3D"
+UserControlRoute.textBox_From.ToolTip: "Select system to start the route" => "Seleziona sistema come partenza per la rotta"
+UserControlRoute.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Fornisci il tuo raggio di salto, o cerca per salti lunghi"
+UserControlRoute.textBox_To.ToolTip: "Select the system to end in" => "Seleziona il siostema d'arrivo"
+UserControlRoute.textBox_Distance.ToolTip: "Distance between start and end" => "Distanza tra partenza e arrivo"
+UserControlRoute.textBox_ToZ.ToolTip: "Z Co-ord" => "Z Co-ord"
+UserControlRoute.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Y (Verticale) Co-ord"
+UserControlRoute.textBox_ToX.ToolTip: "X Co-Ord" => "X Co-Ord"
+UserControlRoute.textBox_FromZ.ToolTip: "Z Co-ord" => "Z Co-ord"
+UserControlRoute.button_Route.ToolTip: "Compute the route" => "Calcola la rotta"
+UserControlRoute.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Y (Verticale) Co-ord"
+UserControlRoute.textBox_FromX.ToolTip: "X Co-ord" => "X Co-ord"
 
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
@@ -833,81 +833,81 @@ UserControlScanGrid.colBriefing: "Briefing" @
 
 //////////////////////////////////////////////////////////////// Settings
 
-UserControlSettings.groupBoxCustomHistoryLoad: "History Options" => "<Opzioni dello Storico>"
-UserControlSettings.checkBoxShowUIEvents: "Show Elite UI Events in history" => "<Mostra eventi Elite UI nello storico>"
-UserControlSettings.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "<Numera i registri dei più vecchi>"
-UserControlSettings.checkBoxUTC: "Display Game time instead of local time" => "<Visualizza l'ora del Gioco invece dell'ora locale>"
-UserControlSettings.labelHistorySel: "Only Read Essential Entries" => "<Leggi solo registri essenziali>"
-UserControlSettings.groupBoxCustomLanguage: "Language" => "<Lingua>"
-UserControlSettings.groupBoxCustomEDSM: "EDSM/EDDB Control" => "<EDSM/EDDB>"
-UserControlSettings.buttonExtEDSMConfigureArea: "Galaxy Select" => "<Selezione Galassia>"
-UserControlSettings.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "<Abilita scarico di dati stellari>"
-UserControlSettings.groupBoxCustomScreenShots: "Screenshots" => "<Immagini della Schermata>"
-UserControlSettings.checkBoxCustomCopyToClipboard: "Copy to clipboard" => "<Copia sulla memoria>"
-UserControlSettings.checkBoxCustomMarkHiRes: "Mark HiRes files" => "<Marca immagini in alta risoluzione>"
-UserControlSettings.checkBoxCustomRemoveOriginals: "Remove Originals" => "<Rimuovi Originali>"
-UserControlSettings.buttonExtScreenshot: "Configure" => "<Imposta>"
-UserControlSettings.checkBoxCustomEnableScreenshots: "Enable screenshot conversion" => "<Abilita conversione delle schermate di gioco>"
-UserControlSettings.groupBoxPopOuts: "Window Options" => "<Opzioni della finestra>"
-UserControlSettings.checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "<Minimizza nell'area di notifica>"
-UserControlSettings.checkBoxUseNotifyIcon: "Show notification area icon" => "<Mostra l'icona di notifica>"
-UserControlSettings.buttonReloadSaved: "Open Saved Setup" => "<Apri le impostazione salvate>"
-UserControlSettings.buttonSaveSetup: "Save Current Setup" => "<Salve le impostazioni attuali>"
-UserControlSettings.labelTKey: "Key to activate transparent windows" => "<Tasto per attivare le finestre trasparenti>"
-UserControlSettings.checkBoxAutoSave: "Save Pop Outs on Exit" => "<Salva le finestre all'uscita>"
-UserControlSettings.checkBoxAutoLoad: "Load Pop Outs at Start" => "<Apri le finestre all'avvio>"
-UserControlSettings.groupBoxTheme: "Theme" => "<Tema>"
-UserControlSettings.checkBoxKeepOnTop: "Keep on Top" => "<Mantieni in cima>"
-UserControlSettings.button_edittheme: "Edit Theme" => "<Modifica il Tema>"
-UserControlSettings.buttonSaveTheme: "Save Theme" => "<Salva il Tema>"
-UserControlSettings.groupBox3dmap: "3D Map Settings" => "<Imposta Mappa 3D>"
-UserControlSettings.labelMapCol: "Default Map Color" => "<Color della Mappa predefinito>"
-UserControlSettings.labelZoom: "Default Zoom" => "<Zoom predefinito>"
-UserControlSettings.radioButtonHistorySelection: "History Grid Selection" => "<Selezione dello storico>"
-UserControlSettings.radioButtonCentreHome: "Home System" => "<Sistema Preferito>"
-UserControlSettings.labelOpenOn: "Open Centred On" => "<Apri centrata su>"
-UserControlSettings.labelHome: "Home System" => "<Sistema Predefinito>"
-UserControlSettings.groupBoxCommanders: "Commanders" => "<Comandanti>"
-UserControlSettings.buttonEditCommander: "Edit" => "<Modifica>"
-UserControlSettings.ColumnCommander: "Commander" => "<Comandante>"
-UserControlSettings.EdsmName: "EDSM Name" => "<Nome su EDSM>"
-UserControlSettings.JournalDirCol: "Journal Dir" => "<Cartella del Giornale>"
-UserControlSettings.NotesCol: "Notes" => "<Note>"
-UserControlSettings.btnDeleteCommander: "Delete" => "<Elimina>"
-UserControlSettings.buttonAddCommander: "Add" => "<Aggiungi>"
+UserControlSettings.groupBoxCustomHistoryLoad: "History Options" => "Opzioni dello Storico"
+UserControlSettings.checkBoxShowUIEvents: "Show Elite UI Events in history" => "Mostra eventi Elite UI nello storico"
+UserControlSettings.checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Numera i registri dei più vecchi"
+UserControlSettings.checkBoxUTC: "Display Game time instead of local time" => "Visualizza l'ora del Gioco invece dell'ora locale"
+UserControlSettings.labelHistorySel: "Only Read Essential Entries" => "Leggi solo registri essenziali"
+UserControlSettings.groupBoxCustomLanguage: "Language" => "Lingua"
+UserControlSettings.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB"
+UserControlSettings.buttonExtEDSMConfigureArea: "Galaxy Select" => "Selezione Galassia"
+UserControlSettings.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Abilita scarico di dati stellari"
+UserControlSettings.groupBoxCustomScreenShots: "Screenshots" => "Immagini della Schermata"
+UserControlSettings.checkBoxCustomCopyToClipboard: "Copy to clipboard" => "Copia sulla memoria"
+UserControlSettings.checkBoxCustomMarkHiRes: "Mark HiRes files" => "Marca immagini in alta risoluzione"
+UserControlSettings.checkBoxCustomRemoveOriginals: "Remove Originals" => "Rimuovi Originali"
+UserControlSettings.buttonExtScreenshot: "Configure" => "Imposta"
+UserControlSettings.checkBoxCustomEnableScreenshots: "Enable screenshot conversion" => "Abilita conversione delle schermate di gioco"
+UserControlSettings.groupBoxPopOuts: "Window Options" => "Opzioni della finestra"
+UserControlSettings.checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Minimizza nell'area di notifica"
+UserControlSettings.checkBoxUseNotifyIcon: "Show notification area icon" => "Mostra l'icona di notifica"
+UserControlSettings.buttonReloadSaved: "Open Saved Setup" => "Apri le impostazione salvate"
+UserControlSettings.buttonSaveSetup: "Save Current Setup" => "Salve le impostazioni attuali"
+UserControlSettings.labelTKey: "Key to activate transparent windows" => "Tasto per attivare le finestre trasparenti"
+UserControlSettings.checkBoxAutoSave: "Save Pop Outs on Exit" => "Salva le finestre all'uscita"
+UserControlSettings.checkBoxAutoLoad: "Load Pop Outs at Start" => "Apri le finestre all'avvio"
+UserControlSettings.groupBoxTheme: "Theme" => "Tema"
+UserControlSettings.checkBoxKeepOnTop: "Keep on Top" => "Mantieni in cima"
+UserControlSettings.button_edittheme: "Edit Theme" => "Modifica il Tema"
+UserControlSettings.buttonSaveTheme: "Save Theme" => "Salva il Tema"
+UserControlSettings.groupBox3dmap: "3D Map Settings" => "Imposta Mappa 3D"
+UserControlSettings.labelMapCol: "Default Map Color" => "Color della Mappa predefinito"
+UserControlSettings.labelZoom: "Default Zoom" => "Zoom predefinito"
+UserControlSettings.radioButtonHistorySelection: "History Grid Selection" => "Selezione dello storico"
+UserControlSettings.radioButtonCentreHome: "Home System" => "Sistema Preferito"
+UserControlSettings.labelOpenOn: "Open Centred On" => "Apri centrata su"
+UserControlSettings.labelHome: "Home System" => "Sistema Predefinito"
+UserControlSettings.groupBoxCommanders: "Commanders" => "Comandanti"
+UserControlSettings.buttonEditCommander: "Edit" => "Modifica"
+UserControlSettings.ColumnCommander: "Commander" => "Comandante"
+UserControlSettings.EdsmName: "EDSM Name" => "Nome su EDSM"
+UserControlSettings.JournalDirCol: "Journal Dir" => "Cartella del Giornale"
+UserControlSettings.NotesCol: "Notes" => "Note"
+UserControlSettings.btnDeleteCommander: "Delete" => "Elimina"
+UserControlSettings.buttonAddCommander: "Add" => "Aggiungi"
 
-UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "<Seleziona tutti i registri, o carica solamente gli essenziali usando un'età da adesso>"
-UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "<Mostra eventi UI (come le Musiche) nello storico>"
-UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "<Numera registri usando il più vecchio come primo, e l'ultimo come più alto>"
-UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "<Mostra l'ora del Gioco, e non l'ora locale>"
-UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "<Scegli quali aree della Galassia avere sul banco di dati>"
-UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "<Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB>"
-UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "<Copia schermate sulla memoria automaticamente>"
-UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "<Marca immagini in alta risoluzione nel nome del documento>"
-UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "<Dopo la conversione, elimina l'originale>"
-UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "<Imposta ulteriori opzioni di schermata>"
-UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "<Abilita/disabilita conversione schermate>"
-UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "<Minimizza la finestra principale sull'area di notifica.>"
-UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "<Seleziona il tasto da premere per almeno 500ms\r\nper mostrare il corpo della finestra, quando\r\nin modo di trasparenza totale>"
-UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "<Mostra un'icona nell'area di notifica.>"
-UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "<Carica adesso le impostazioni salvate>"
-UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "<Salva adesso le impostazioni attuali>"
-UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "<Salva le impostazioni all'uscita>"
-UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "<Mostra automaticamente le finestre>"
-UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "<La finestra principale e tutte le altra sempre in cima>"
-UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" => "<Segli il tema da usare>"
-UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "<Modifica il tema e cambia il colore dei testi>"
-UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "<Salva il tema sul disco>"
-UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "<Seleziona il livello di zoom predefinito>"
-UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "<Usa il sistema sullo storico di viaggio come località d'apertura>"
-UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "<Usa il sistema predefinito come località d'apertura>"
-UserControlSettings.textBoxHomeSystem.ToolTip: "Pick a home system" => "<Segli un sistema predefinito"
-UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "<Nuovo registro nello storico di viaggio usa questo colore>"
-UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" => "<Modifica comandante selezionato>"
-UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" => "<Elimina comandante selezionato>"
-UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" => "<Aggiungi nuovo comandante>"
-UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "<Avviso di fonte {0}>"
-UserControlSettings.Information: "Applies at next restart of ED Discovery" => "<Applica la prossimo avvio di EDDiscovery>"
+UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "Seleziona tutti i registri, o carica solamente gli essenziali usando un'età da adesso"
+UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "Mostra eventi UI (come le Musiche) nello storico"
+UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "Numera registri usando il più vecchio come primo, e l'ultimo come più alto"
+UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "Mostra l'ora del Gioco, e non l'ora locale"
+UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Scegli quali aree della Galassia avere sul banco di dati"
+UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Imposta per abilitare lo scarico dei dati stellari da EDSM e informazioni di sistema da EDDB"
+UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "Copia schermate sulla memoria automaticamente"
+UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "Marca immagini in alta risoluzione nel nome del documento"
+UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Dopo la conversione, elimina l'originale"
+UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Imposta ulteriori opzioni di schermata"
+UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Abilita/disabilita conversione schermate"
+UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Minimizza la finestra principale sull'area di notifica."
+UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Seleziona il tasto da premere per almeno 500ms\r\nper mostrare il corpo della finestra, quando\r\nin modo di trasparenza totale"
+UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "Mostra un'icona nell'area di notifica."
+UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "Carica adesso le impostazioni salvate"
+UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "Salva adesso le impostazioni attuali"
+UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "Salva le impostazioni all'uscita"
+UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "Mostra automaticamente le finestre"
+UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "La finestra principale e tutte le altra sempre in cima"
+UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" => "Segli il tema da usare"
+UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Modifica il tema e cambia il colore dei testi"
+UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "Salva il tema sul disco"
+UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Seleziona il livello di zoom predefinito"
+UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "Usa il sistema sullo storico di viaggio come località d'apertura"
+UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "Usa il sistema predefinito come località d'apertura"
+UserControlSettings.textBoxHomeSystem.ToolTip: "Pick a home system" => "Segli un sistema predefinito"
+UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Nuovo registro nello storico di viaggio usa questo colore"
+UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" => "Modifica comandante selezionato"
+UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" => "Elimina comandante selezionato"
+UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" => "Aggiungi nuovo comandante"
+UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Avviso di fonte {0}"
+UserControlSettings.Information: "Applies at next restart of ED Discovery" => "Applica la prossimo avvio di EDDiscovery"
 UserControlSettings.checkBoxCustomResize: "Redraw the screen during resizing" @
 UserControlSettings.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
 
@@ -1210,55 +1210,55 @@ UserControlSynthesis.buttonClear.ToolTip: "Set all wanted values to zero" @
 
 //////////////////////////////////////////////////////////////// Sysinfo
 
-UserControlSysInfo.labelSysName: "System" => "<Sistema>"
-UserControlSysInfo.labelOpen: "Open" => "<Apri>"
-UserControlSysInfo.buttonEDSM: "EDSM" => "<EDSM>"
-UserControlSysInfo.labelVisits: "Visits" => "<Visite>"
-UserControlSysInfo.labelBodyName: "Body" => "<Corpo>"
-UserControlSysInfo.labelPosition: "Pos" => "<Pos>"
-UserControlSysInfo.labelHomeDist: "Home" => "<Casa>"
-UserControlSysInfo.labelSolDist: "Sol" => "<Sole>"
-UserControlSysInfo.labelState: "State" => "<Stato>"
-UserControlSysInfo.labelAllegiance: "Allegiance" => "<Alleanza>"
-UserControlSysInfo.labelGov: "Gov" => "<Gov>"
-UserControlSysInfo.labelEconomy: "Economy" => "<Economia>"
-UserControlSysInfo.labelMissions: "Missions" => "<Missioni>"
-UserControlSysInfo.labelNote: "Note" => "<Note>"
-UserControlSysInfo.labelFuel: "Fuel" => "<Serbatoio>"
-UserControlSysInfo.labelData: "Data" => "<Data>"
-UserControlSysInfo.labelMaterials: "Materials" => "<Materiali>"
-UserControlSysInfo.labelShip: "Ship" => "<Nave>"
-UserControlSysInfo.labelCredits: "Credits" => "<Crediti>"
-UserControlSysInfo.labelCargo: "Cargo" => "<Carico>"
-UserControlSysInfo.labelTravel: "Travel" => "<Viaggio>"
-UserControlSysInfo.labelGamemode: "Mode" => "<Modo>"
-UserControlSysInfo.labelTarget: "Target" => "<Destino>"
-UserControlSysInfo.buttonEDSMTarget: "EDSM" => "<EDSM>"
-UserControlSysInfo.toolStripSystem: "Display System Name" => "<Mostra nome del Sistema>"
-UserControlSysInfo.toolStripEDSM: "Display EDSM Buttons" => "<Mostra pulsante di EDSM>"
-UserControlSysInfo.toolStripEDSMDownLine: "EDSM buttons on separate line" => "<Pulsante di EDSM su un'altra linea>"
-UserControlSysInfo.toolStripVisits: "Display Visits" => "<Mostra Visite>"
-UserControlSysInfo.toolStripBody: "Display Body Name" => "<Mostra Nopme del Corpo>"
-UserControlSysInfo.toolStripPosition: "Display Position" => "<Mostra Posizione>"
-UserControlSysInfo.toolStripDistanceFrom: "Display Distance From" => "<Mostra Distanza Da>"
-UserControlSysInfo.toolStripSystemState: "Display System State" => "<Mostra Stato del Sistema>"
-UserControlSysInfo.toolStripNotes: "Display Notes" => "<Mostra Note>"
-UserControlSysInfo.toolStripTarget: "Display Target" => "<Mostra Destino>"
-UserControlSysInfo.toolStripShip: "Display Ship Information" => "<Mostra Informazioni sulla Nave>"
-UserControlSysInfo.toolStripFuel: "Display Fuel Level" => "<Mostra Livello di Serbatoio>"
-UserControlSysInfo.toolStripCargo: "Display Cargo Count" => "<Mostra Conteggio di Carico>"
-UserControlSysInfo.toolStripDataCount: "Display Data Count" => "<Mostra Conteggio dei Dati>"
-UserControlSysInfo.toolStripMaterialCounts: "Display Material Count" => "<Mostra Conteggio dei Materiali>"
-UserControlSysInfo.toolStripCredits: "Display Credits" => "<Mostra Crediti>"
-UserControlSysInfo.toolStripGameMode: "Display Game Mode" => "<Mostra Modo di Gioco>"
-UserControlSysInfo.toolStripTravel: "Display Travel Trip Statistics" => "<Mostra Statistiche di Viaggio>"
-UserControlSysInfo.toolStripMissionList: "Display Mission List" => "<Mostra Lista delle Missioni>"
-UserControlSysInfo.toolStripSkinny: "When transparent, use skinny look" => "<Quando trasparente, usa tema ridotto>"
-UserControlSysInfo.toolStripReset: "Reset" => "<Reimposta>"
-UserControlSysInfo.toolStripRemoveAll: "Remove All" => "<Rimuovi tutto>"
-UserControlSysInfo.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "<Mantieni premuto il tasto Ctrl per trascinare e riposizionare, 8 colonne disponibili>"
-UserControlSysInfo.textBoxTarget.ToolTip: "Sets the target" => "<Seleziona il Destino>"
-UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "<Distanza al Destino>"
+UserControlSysInfo.labelSysName: "System" => "Sistema"
+UserControlSysInfo.labelOpen: "Open" => "Apri"
+UserControlSysInfo.buttonEDSM: "EDSM" => "EDSM"
+UserControlSysInfo.labelVisits: "Visits" => "Visite"
+UserControlSysInfo.labelBodyName: "Body" => "Corpo"
+UserControlSysInfo.labelPosition: "Pos" => "Pos"
+UserControlSysInfo.labelHomeDist: "Home" => "Casa"
+UserControlSysInfo.labelSolDist: "Sol" => "Sole"
+UserControlSysInfo.labelState: "State" => "Stato"
+UserControlSysInfo.labelAllegiance: "Allegiance" => "Alleanza"
+UserControlSysInfo.labelGov: "Gov" => "Gov"
+UserControlSysInfo.labelEconomy: "Economy" => "Economia"
+UserControlSysInfo.labelMissions: "Missions" => "Missioni"
+UserControlSysInfo.labelNote: "Note" => "Note"
+UserControlSysInfo.labelFuel: "Fuel" => "Serbatoio"
+UserControlSysInfo.labelData: "Data" => "Data"
+UserControlSysInfo.labelMaterials: "Materials" => "Materiali"
+UserControlSysInfo.labelShip: "Ship" => "Nave"
+UserControlSysInfo.labelCredits: "Credits" => "Crediti"
+UserControlSysInfo.labelCargo: "Cargo" => "Carico"
+UserControlSysInfo.labelTravel: "Travel" => "Viaggio"
+UserControlSysInfo.labelGamemode: "Mode" => "Modo"
+UserControlSysInfo.labelTarget: "Target" => "Destino"
+UserControlSysInfo.buttonEDSMTarget: "EDSM" => "EDSM"
+UserControlSysInfo.toolStripSystem: "Display System Name" => "Mostra nome del Sistema"
+UserControlSysInfo.toolStripEDSM: "Display EDSM Buttons" => "Mostra pulsante di EDSM"
+UserControlSysInfo.toolStripEDSMDownLine: "EDSM buttons on separate line" => "Pulsante di EDSM su un'altra linea"
+UserControlSysInfo.toolStripVisits: "Display Visits" => "Mostra Visite"
+UserControlSysInfo.toolStripBody: "Display Body Name" => "Mostra Nopme del Corpo"
+UserControlSysInfo.toolStripPosition: "Display Position" => "Mostra Posizione"
+UserControlSysInfo.toolStripDistanceFrom: "Display Distance From" => "Mostra Distanza Da"
+UserControlSysInfo.toolStripSystemState: "Display System State" => "Mostra Stato del Sistema"
+UserControlSysInfo.toolStripNotes: "Display Notes" => "Mostra Note"
+UserControlSysInfo.toolStripTarget: "Display Target" => "Mostra Destino"
+UserControlSysInfo.toolStripShip: "Display Ship Information" => "Mostra Informazioni sulla Nave"
+UserControlSysInfo.toolStripFuel: "Display Fuel Level" => "Mostra Livello di Serbatoio"
+UserControlSysInfo.toolStripCargo: "Display Cargo Count" => "Mostra Conteggio di Carico"
+UserControlSysInfo.toolStripDataCount: "Display Data Count" => "Mostra Conteggio dei Dati"
+UserControlSysInfo.toolStripMaterialCounts: "Display Material Count" => "Mostra Conteggio dei Materiali"
+UserControlSysInfo.toolStripCredits: "Display Credits" => "Mostra Crediti"
+UserControlSysInfo.toolStripGameMode: "Display Game Mode" => "Mostra Modo di Gioco"
+UserControlSysInfo.toolStripTravel: "Display Travel Trip Statistics" => "Mostra Statistiche di Viaggio"
+UserControlSysInfo.toolStripMissionList: "Display Mission List" => "Mostra Lista delle Missioni"
+UserControlSysInfo.toolStripSkinny: "When transparent, use skinny look" => "Quando trasparente, usa tema ridotto"
+UserControlSysInfo.toolStripReset: "Reset" => "Reimposta"
+UserControlSysInfo.toolStripRemoveAll: "Remove All" => "Rimuovi tutto"
+UserControlSysInfo.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantieni premuto il tasto Ctrl per trascinare e riposizionare, 8 colonne disponibili"
+UserControlSysInfo.textBoxTarget.ToolTip: "Sets the target" => "Seleziona il Destino"
+UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "Distanza al Destino"
 
 .NoMissions: "No Missions" @
 .NA: "N/A" @
@@ -1268,41 +1268,41 @@ UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "<Distanza
 
 //////////////////////////////////////////////////////////////// travel grid
 
-UserControlTravelGrid.ColumnTime: "Time" => "<Ora>"
-UserControlTravelGrid.Icon: "Event" => "<Evento>"
-UserControlTravelGrid.ColumnSystem: "Description" => "<Descrizione>"
-UserControlTravelGrid.ColumnDistance: "Information" => "<Informazioni>"
-UserControlTravelGrid.ColumnNote: "Note" => "<Note>"
-UserControlTravelGrid.checkBoxMoveToTop: "Cursor to Top" => "<Cursore all'inizio>"
-UserControlTravelGrid.buttonField: "Field Filter" => "<Filtro di Campi>"
-UserControlTravelGrid.buttonFilter: "Event Filter" => "<Filtro d'Eventi>"
-UserControlTravelGrid.labelSearch: "Search" => "<Cerca>"
-UserControlTravelGrid.labelTime: "Time" => "<Ora>"
-UserControlTravelGrid.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "<Rimuovi l'ordinamento delle colonne>"
-UserControlTravelGrid.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "<Salti fino al registro>"
-UserControlTravelGrid.setNoteToolStripMenuItem: "Set Note" => "<Imposta Nore>"
-UserControlTravelGrid.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "<Crea/Modifica Bookmark>"
-UserControlTravelGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "<Imposta Inizio/Fine per il calcolo di viaggio>"
-UserControlTravelGrid.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "<Salta al prossimo marchio Inizio/Fine>"
-UserControlTravelGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "<Vai all'inizio sulla Mappa 3D>"
-UserControlTravelGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "<Visualizza su EDSM>"
-UserControlTravelGrid.starMapColourToolStripMenuItem: "Star Map Colour..." => "<Colore della Mappa Stellare...>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem: "Add to ..." => "<Aggiungi a...>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "<Sistemi sul Pannello di Trilaterazione>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "<Ricercati dul Pannelo di Trilaterazione>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "<Entrambi>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "<Pannelo di Spedizione>"
-UserControlTravelGrid.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "<Manda i registri ad un'altro comandante>"
-UserControlTravelGrid.hideSystemToolStripMenuItem: "Hide Entries" => "<Nascondi i Registri>"
-UserControlTravelGrid.selectCorrectSystemToolStripMenuItem: "Assign new system" => "<Assegna nuovo Sistema>"
-UserControlTravelGrid.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "<Rimuovi Registro del Gironale>"
-UserControlTravelGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "<Invia registri di scan no sincronizzati a EDDN>"
-UserControlTravelGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "<Avvia Azioni su questo evento>"
-UserControlTravelGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "<Copia registro del Giornale su memoria>"
-UserControlTravelGrid.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "<Scrivi classe d'evente sul Regitro (Debug)>"
-UserControlTravelGrid.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "<Avvia azioni attraverso le selezione per verificare (Debug) il sistema di pronuncia>"
-UserControlTravelGrid.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "<Avvia la selezione su Inara (Debug)>"
-UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "<Avvia il registro attraverso il Profilo di Sistema (Debug)>"
+UserControlTravelGrid.ColumnTime: "Time" => "Ora"
+UserControlTravelGrid.Icon: "Event" => "Evento"
+UserControlTravelGrid.ColumnSystem: "Description" => "Descrizione"
+UserControlTravelGrid.ColumnDistance: "Information" => "Informazioni"
+UserControlTravelGrid.ColumnNote: "Note" => "Note"
+UserControlTravelGrid.checkBoxMoveToTop: "Cursor to Top" => "Cursore all'inizio"
+UserControlTravelGrid.buttonField: "Field Filter" => "Filtro di Campi"
+UserControlTravelGrid.buttonFilter: "Event Filter" => "Filtro d'Eventi"
+UserControlTravelGrid.labelSearch: "Search" => "Cerca"
+UserControlTravelGrid.labelTime: "Time" => "Ora"
+UserControlTravelGrid.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Rimuovi l'ordinamento delle colonne"
+UserControlTravelGrid.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Salti fino al registro"
+UserControlTravelGrid.setNoteToolStripMenuItem: "Set Note" => "Imposta Nore"
+UserControlTravelGrid.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Crea/Modifica Bookmark"
+UserControlTravelGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Imposta Inizio/Fine per il calcolo di viaggio"
+UserControlTravelGrid.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Salta al prossimo marchio Inizio/Fine"
+UserControlTravelGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Vai all'inizio sulla Mappa 3D"
+UserControlTravelGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Visualizza su EDSM"
+UserControlTravelGrid.starMapColourToolStripMenuItem: "Star Map Colour..." => "Colore della Mappa Stellare..."
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem: "Add to ..." => "Aggiungi a..."
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "Sistemi sul Pannello di Trilaterazione"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "Ricercati dul Pannelo di Trilaterazione"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "Entrambi"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "Pannelo di Spedizione"
+UserControlTravelGrid.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "Manda i registri ad un'altro comandante"
+UserControlTravelGrid.hideSystemToolStripMenuItem: "Hide Entries" => "Nascondi i Registri"
+UserControlTravelGrid.selectCorrectSystemToolStripMenuItem: "Assign new system" => "Assegna nuovo Sistema"
+UserControlTravelGrid.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "Rimuovi Registro del Gironale"
+UserControlTravelGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "Invia registri di scan no sincronizzati a EDDN"
+UserControlTravelGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Avvia Azioni su questo evento"
+UserControlTravelGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Copia registro del Giornale su memoria"
+UserControlTravelGrid.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Scrivi classe d'evente sul Regitro (Debug)"
+UserControlTravelGrid.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Avvia azioni attraverso le selezione per verificare (Debug) il sistema di pronuncia"
+UserControlTravelGrid.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Avvia la selezione su Inara (Debug)"
+UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Avvia il registro attraverso il Profilo di Sistema (Debug)"
 
 
 .TT1: " showing {0} original {1}" @
@@ -1329,7 +1329,7 @@ UserControlTrilateration.ColumnCalculated: "Calculated" @
 UserControlTrilateration.ColumnStatus: "Status" @
 UserControlTrilateration.Source: "Source" @
 UserControlTrilateration.dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" @
-UserControlTrilateration.toolStrip: "<Press Start New>" @
+UserControlTrilateration.toolStrip: "Press Start New" @
 UserControlTrilateration.removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" @
 UserControlTrilateration.viewOnEDSMToolStripMenuItem1: "View on EDSM" @
 UserControlTrilateration.deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" @
@@ -1344,7 +1344,7 @@ UserControlTrilateration.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnus
 UserControlTrilateration.toolStripButtonRemoveAll: "toolStripButton1" @
 UserControlTrilateration.toolStripButtonMap: "3d map" @
 UserControlTrilateration.toolStripLabelSystem: "From System:" @
-UserControlTrilateration.toolStripTextBoxSystem: "<Press Start New>" @
+UserControlTrilateration.toolStripTextBoxSystem: "Press Start New" @
 UserControlTrilateration.toolStripLabel1: "Visited without coordinates:" @
 UserControlTrilateration.toolStripAddFromHistory: "Add 20 oldest" @
 UserControlTrilateration.toolStripAddRecentHistory: "Add 20 newest" @
@@ -1418,18 +1418,18 @@ ScreenShotConfigureForm.labelSaveAs: "Save as" @
 
 //////////////////////////////////////////////////////////////// Bookmark form
 
-BookmarkForm: "Create New Bookmark" => "<Create New Bookmark>"
-BookmarkForm.buttonEDSM: "EDSM" => "<EDSM>"
-BookmarkForm.labelName: "Name" => "<Name>"
-BookmarkForm.checkBoxTarget: "Make Target" => "<Make Target>"
-BookmarkForm.labelCo: "Co-ordinates" => "<Co-ordinates>"
-BookmarkForm.buttonDelete: "Delete" => "<Delete>"
-BookmarkForm.buttonCancel: "Cancel" => "<Cancel>"
-BookmarkForm.buttonOK: "OK" => "<OK>"
-BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "<Bookmark Notes>"
-BookmarkForm.labelTravelNote: "Travel History Note" => "<Travel History Note>"
-BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "<(Edit on Travel Screen)>"
-BookmarkForm.labelTimeMade: "Time Made" => "<Time Made>"
+BookmarkForm: "Create New Bookmark" => "Create New Bookmark"
+BookmarkForm.buttonEDSM: "EDSM" => "EDSM"
+BookmarkForm.labelName: "Name" => "Name"
+BookmarkForm.checkBoxTarget: "Make Target" => "Make Target"
+BookmarkForm.labelCo: "Co-ordinates" => "Co-ordinates"
+BookmarkForm.buttonDelete: "Delete" => "Delete"
+BookmarkForm.buttonCancel: "Cancel" => "Cancel"
+BookmarkForm.buttonOK: "OK" => "OK"
+BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Bookmark Notes"
+BookmarkForm.labelTravelNote: "Travel History Note" => "Travel History Note"
+BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Edit on Travel Screen)"
+BookmarkForm.labelTimeMade: "Time Made" => "Time Made"
 BookmarkForm.UpdateBookmark: "Update Bookmark" @
 BookmarkForm.Update: "Update" @
 .SB: "New System Bookmark" @
@@ -1446,14 +1446,14 @@ BookmarkForm.Update: "Update" @
 
 ////////////////////////////////////////////////////////////////// surface bookmarks
 
-SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "<Bookmark di Superficie nel Sistema>"
-SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "<Avvia alla bussola>"
-SurfaceBookmarksForm.BodyName: "Planetary Body" => "<Corpo Planetario>"
-SurfaceBookmarksForm.SurfaceName: "Name" => "<Nome>"
-SurfaceBookmarksForm.SurfaceDesc: "Description" => "<Descrizione>"
-SurfaceBookmarksForm.Latitude: "Latitude" => "<Latitudine>"
-SurfaceBookmarksForm.Longitude: "Longitude" => "<Longitudine>"
-SurfaceBookmarksForm.Valid: "Saveable" => "<Salvabile>"
+SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Bookmark di Superficie nel Sistema"
+SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "Avvia alla bussola"
+SurfaceBookmarksForm.BodyName: "Planetary Body" => "Corpo Planetario"
+SurfaceBookmarksForm.SurfaceName: "Name" => "Nome"
+SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descrizione"
+SurfaceBookmarksForm.Latitude: "Latitude" => "Latitudine"
+SurfaceBookmarksForm.Longitude: "Longitude" => "Longitudine"
+SurfaceBookmarksForm.Valid: "Saveable" => "Salvabile"
 SurfaceBookmarksForm.deleteToolStripMenuItem: "Delete Row" @
 SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
 
@@ -1479,23 +1479,23 @@ FindSystemsUserControl.labelFilter: "Star Name" @
 
 //////////////////////////////////////////////////////////////// Conditions
 
-ConditionFilterForm: "Journal: Filter out fields" => "<Giornale: Filtra i Campi>"
-ConditionFilterForm.panelOK.buttonCancel: "Cancel" => "<Cancella>"
-ConditionFilterForm.panelOK.buttonOK: "OK" => "<OK>"
+ConditionFilterForm: "Journal: Filter out fields" => "Giornale: Filtra i Campi"
+ConditionFilterForm.panelOK.buttonCancel: "Cancel" => "Cancella"
+ConditionFilterForm.panelOK.buttonOK: "OK" => "OK"
 
 /////////////////////////////////////////////////////////////// Travel History Filter
 
-TravelHistoryFilter.Hours: "{0} hours" => "<{0} ore>"
-TravelHistoryFilter.Days: "{0} days" => "<{0} giorni>"
-TravelHistoryFilter.1Week: "One Week" => "<Una settimana>"
-TravelHistoryFilter.Weeks: "{0} weeks" => "<{0} settimane>"
-TravelHistoryFilter.Month: "Month" => "<Mesi>"
-TravelHistoryFilter.Quarter: "Quarter" => "<Quadrimestre>"
-TravelHistoryFilter.HYear: "Half year" => "<Semestre>"
-TravelHistoryFilter.Year: "Year" => "<Anno>"
-TravelHistoryFilter.LastN: "Last {0} entries" => "<Ultimi {0} registri>"
-TravelHistoryFilter.LDock: "Last dock" => "<Ultimo attracco>"
-TravelHistoryFilter.StartEnd: "Start/End Flag" => "<Inizio/Fine>"
+TravelHistoryFilter.Hours: "{0} hours" => "{0} ore"
+TravelHistoryFilter.Days: "{0} days" => "{0} giorni"
+TravelHistoryFilter.1Week: "One Week" => "Una settimana"
+TravelHistoryFilter.Weeks: "{0} weeks" => "{0} settimane"
+TravelHistoryFilter.Month: "Month" => "Mesi"
+TravelHistoryFilter.Quarter: "Quarter" => "Quadrimestre"
+TravelHistoryFilter.HYear: "Half year" => "Semestre"
+TravelHistoryFilter.Year: "Year" => "Anno"
+TravelHistoryFilter.LastN: "Last {0} entries" => "Ultimi {0} registri"
+TravelHistoryFilter.LDock: "Last dock" => "Ultimo attracco"
+TravelHistoryFilter.StartEnd: "Start/End Flag" => "Inizio/Fine"
 
 //////////////////////////////////////////////////////////////// Add on manager
 
@@ -2003,15 +2003,15 @@ JournalEntry.each: "each:; cr;N0" @
 JournalEntry.System: "System:" @
 JournalEntry.Cost: "Cost:; cr;N0" @
 ///////////////////////////////////////////////////// JournalCapShipBond
-JournalEntry.from: "< from " @
-JournalEntry.dueto: "< , due to " @
+JournalEntry.from: " from " @
+JournalEntry.dueto: " , due to " @
 ///////////////////////////////////////////////////// JournalCargo
 JournalEntry.NoCargo: "No Cargo" @
 JournalEntry.Cargo: "Cargo, {0} items" @
 JournalEntry.items: "; items" @
 ///////////////////////////////////////////////////// JournalCargoDepot
 JournalEntry.Collected: "Collected:" @
-JournalEntry.of: "< of " @
+JournalEntry.of: " of " @
 JournalEntry.Total: "Total:" @
 JournalEntry.Progress: "Progress:;%;N1" @
 JournalEntry.Delivered: "Delivered:" @
@@ -2024,7 +2024,7 @@ JournalEntry.Stolen: ";Stolen" @
 JournalCommitCrime.Fine: " Fine {0:N0}" @
 JournalCommitCrime.Bounty: " Bounty {0:N0}" @
 JournalEntry.0: "{0} on {1}" @
-JournalEntry.onfaction: "< on faction " @
+JournalEntry.onfaction: " on faction " @
 JournalEntry.Against: "Against " @
 JournalEntry.Bounty: "Bounty:; cr;N0" @
 ///////////////////////////////////////////////////// JournalCommunityGoal
@@ -2044,22 +2044,22 @@ CommunityGoal.Bonus: "Bonus:" @
 CommunityGoal.TopTierName: "Top Tier Name" @
 CommunityGoal.TT: "TT. Bonus" @
 ///////////////////////////////////////////////////// JournalCommunityGoalDiscard
-JournalEntry.CGS: "< at ; Star System" @
+JournalEntry.CGS: " at ; Star System" @
 ///////////////////////////////////////////////////// JournalCommunityGoalReward
 JournalEntry.Reward: "Reward:; cr;N0" @
 ///////////////////////////////////////////////////// JournalCrewAssign
-JournalEntry.torole: "< to role ;" @
+JournalEntry.torole: " to role ;" @
 ///////////////////////////////////////////////////// JournalCrewFire
 JournalEntry.fired: "; fired" @
 ///////////////////////////////////////////////////// JournalCrewHire
 JournalEntry.Hired: "Hired:;" @
-JournalEntry.offaction: "< of faction " @
+JournalEntry.offaction: " of faction " @
 JournalEntry.Rank: "Rank:" @
 ///////////////////////////////////////////////////// JournalCrewMemberRoleChange
 JournalEntry.Crew: "Crew:" @
 JournalEntry.Role: "Role:" @
 ///////////////////////////////////////////////////// JournalDatalinkVoucher
-JournalEntry.fromfaction: "< from faction " @
+JournalEntry.fromfaction: " from faction " @
 ///////////////////////////////////////////////////// JournalDied
 JournalEntry.Died: "{0} in ship type {1} rank {2}" @
 JournalEntry.Killedby: "Killed by " @
@@ -2067,20 +2067,20 @@ JournalEntry.Killedby: "Killed by " @
 JournalEntry.Dscan: "New bodies discovered:" @
 ///////////////////////////////////////////////////// JournalDocked
 JournalDocked.At: "At {0}" @
-JournalEntry.insystem: "< in system " @
+JournalEntry.insystem: " in system " @
 JournalEntry.Wanted: ";(Wanted)" @
-JournalEntry.instate: "< in state " @
+JournalEntry.instate: " in state " @
 JournalEntry.Allegiance: "Allegiance:" @
 JournalEntry.Economy: "Economy:" @
 JournalEntry.Government: "Government:" @
 JournalEntry.Stationservices: "Station services:" @
 JournalEntry.Economies: "Economies:" @
 ///////////////////////////////////////////////////// JournalDockingGranted
-JournalEntry.onpad: "< on pad " @
+JournalEntry.onpad: " on pad " @
 ///////////////////////////////////////////////////// JournalCommodityPricesBase
 JournalCommodityPricesBase.PON: "Prices on ; items" @
-JournalCommodityPricesBase.CPBat: "< at " @
-JournalCommodityPricesBase.CPBin: "< in " @
+JournalCommodityPricesBase.CPBat: " at " @
+JournalCommodityPricesBase.CPBin: " in " @
 JournalCommodityPricesBase.Itemstobuy: "Items to buy:" @
 JournalCommodityPricesBase.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
 JournalCommodityPricesBase.CPBBuy: "{0}: {1}  " @
@@ -2108,7 +2108,7 @@ JournalEntry.By: "By:" @
 ///////////////////////////////////////////////////// JournalEngineerProgress
 JournalEngineerProgress.Progress: "Progress:" @
 ///////////////////////////////////////////////////// JournalEscapeInterdiction
-JournalEntry.NPC: "< (NPC);(Player)" @
+JournalEntry.NPC: " (NPC);(Player)" @
 ///////////////////////////////////////////////////// JournalFetchRemoteModule
 JournalEntry.Intoship: "Into ship:" @
 JournalEntry.TransferTime: "Transfer Time:" @
@@ -2125,7 +2125,7 @@ JournalFSDJump.Jumpto: "Jump to {0}" @
 JournalFSDJump.Fuel: " Fuel " @
 JournalFSDJump.left: " left " @
 JournalLocOrJump.Faction: "Faction:" @
-JournalLocOrJump.Wanted: "<;(Wanted) " @
+JournalLocOrJump.Wanted: ";(Wanted) " @
 JournalLocOrJump.State: "State:" @
 JournalLocOrJump.Allegiance: "Allegiance:" @
 JournalLocOrJump.Economy: "Economy:" @
@@ -2138,7 +2138,7 @@ JournalLocOrJump.RecoveringState: "Recovering State:" @
 JournalFuelScoop.Total: "Total:;t;0.0" @
 ///////////////////////////////////////////////////// JournalInterdicted
 JournalEntry.Submitted: ";Submitted" @
-JournalEntry.to: "< to " @
+JournalEntry.to: " to " @
 JournalEntry.Power: "Power:" @
 ///////////////////////////////////////////////////// JournalInterdiction
 JournalEntry.Failedtointerdict: "Failed to interdict;Interdicted" @
@@ -2171,14 +2171,14 @@ JournalLocation.AtStat: "At {0}" @
 JournalLocation.LND: "Landed on {0}" @
 JournalLocation.AtStar: "At {0}" @
 JournalLocOrJump.Type: "Type " @
-JournalLocOrJump.insystem: "< in system " @
+JournalLocOrJump.insystem: " in system " @
 JournalLocOrJump.Security: "Security:" @
 JournalLocOrJump.Inspacenear: "In space near " @
-JournalLocOrJump.oftype: "< of type " @
+JournalLocOrJump.oftype: " of type " @
 ///////////////////////////////////////////////////// JournalMarketBuy
-JournalEntry.buyprice: "< buy price ; cr;N0" @
+JournalEntry.buyprice: " buy price ; cr;N0" @
 ///////////////////////////////////////////////////// JournalMarketSell
-JournalEntry.sellprice: "< sell price ; cr;N0" @
+JournalEntry.sellprice: " sell price ; cr;N0" @
 JournalEntry.Profit: "Profit:; cr;N0" @
 JournalEntry.Legal: "Legal;Illegal" @
 JournalEntry.NotStolen: "Not Stolen;Stolen" @
@@ -2187,7 +2187,7 @@ JournalEntry.Market: "Market;BlackMarket" @
 JournalEntry.Totalmodules: "Total modules:" @
 JournalEntry.Hot: ";(Hot)" @
 ///////////////////////////////////////////////////// JournalMaterialCollected
-JournalEntry.MatC: "< ; items" @
+JournalEntry.MatC: " ; items" @
 ///////////////////////////////////////////////////// JournalMaterialDiscovered
 JournalMaterialDiscovered.DN: ", Discovery {0}" @
 ///////////////////////////////////////////////////// JournalMaterials
@@ -2214,10 +2214,10 @@ JournalMissionRedirected.To: "To:" @
 JournalEntry.Active: "Active:" @
 JournalEntry.Failed: "Failed:" @
 JournalEntry.Completed: "Completed:" @
-MissionItem.Passenger: "<;(Passenger)" @
+MissionItem.Passenger: ";(Passenger)" @
 MissionItem.Expires: "Expires:" @
 ///////////////////////////////////////////////////// JournalModuleBuy
-JournalEntry.into: "< into " @
+JournalEntry.into: " into " @
 JournalEntry.Price: "Price:; cr;N0" @
 JournalEntry.Stored: "Stored:" @
 ///////////////////////////////////////////////////// JournalModuleInfo
@@ -2305,8 +2305,8 @@ JournalScan.MSM: "Mass:;SM;0.00" @
 JournalScan.Age: "Age:;my;0.0" @
 JournalScan.RS: "Radius:;SR;0.00" @
 JournalScan.MEM: "Mass:;EM;0.00" @
-JournalScan.Landable: "<;, Landable" @
-JournalScan.Terraformable: "<;, Terraformable" @
+JournalScan.Landable: ";, Landable" @
+JournalScan.Terraformable: ";, Terraformable" @
 JournalScan.Gravity: "Gravity:;G;0.0" @
 JournalScan.RK: "Radius:;km;0" @
 JournalScan.NoAtmosphere: ", No Atmosphere" @
@@ -2349,7 +2349,7 @@ JournalScan.PlanetaryComposition: "Planetary Composition:\n" @
 JournalEntry.Category: "Category:" @
 ///////////////////////////////////////////////////// JournalScreenshot
 JournalScreenshot.At: "At " @
-JournalScreenshot.in: "< in " @
+JournalScreenshot.in: " in " @
 JournalScreenshot.File: "File:" @
 JournalScreenshot.Width: "Width:" @
 JournalScreenshot.Height: "Height:" @
@@ -2375,10 +2375,10 @@ JournalSetUserShipName.On: "On:" @
 ///////////////////////////////////////////////////// JournalShieldState
 JournalEntry.ShieldsDown: "Shields Down;Shields Up" @
 ///////////////////////////////////////////////////// JournalShipTargeted
-JournalEntry.in: "< in " @
+JournalEntry.in: " in " @
 JournalEntry.Shield: "Shield ;;N1" @
 JournalShipTargeted.Hull: "Hull ;;N1" @
-JournalShipTargeted.at: "< at ;;N1" @
+JournalShipTargeted.at: " at ;;N1" @
 JournalEntry.LostTarget: "Lost Target" @
 ///////////////////////////////////////////////////// JournalShipyard
 JournalEntry.Ships: "Ships" @
@@ -2386,7 +2386,7 @@ JournalEntry.Ships: "Ships" @
 JournalShipyardSell.At: "At:" @
 ///////////////////////////////////////////////////// JournalShipyardSwap
 JournalShipyardSwap.Swap: "Swap " @
-JournalShipyardSwap.fora: "< for a " @
+JournalShipyardSwap.fora: " for a " @
 ///////////////////////////////////////////////////// JournalShipyardTransfer
 JournalShipyardTransfer.Of: "Of " @
 JournalEntry.Distance: "Distance:; ly;0.0" @
@@ -2483,7 +2483,7 @@ CQCClass.KDRatio: "KD Ratio:;;N" @
 CQCClass.Kills: "Kills:;;N0" @
 CQCClass.Win: "Win/Loss:;;N" @
 ///////////////////////////////////////////////////// JournalStoredModules
-JournalEntry.at: "< at " @
+JournalEntry.at: " at " @
 JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
 JournalEntry.Time: "Time:" @
 JournalEntry.Value: "Value:; cr;N0" @
@@ -2492,7 +2492,7 @@ JournalStoredShips.Atstarport: "At starport:" @
 JournalStoredShips.Otherlocations: "Other locations:" @
 JournalStoredShips.SSP: "; cr;N0" @
 JournalStoredShips.Remote: "Remote:" @
-JournalStoredShips.intransit: "<; in transit" @
+JournalStoredShips.intransit: "; in transit" @
 ///////////////////////////////////////////////////// JournalSupercruiseExit
 JournalSupercruiseExit.At: "At " @
 ///////////////////////////////////////////////////// JournalUnknown
