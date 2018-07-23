@@ -3,6 +3,22 @@
 //                : Release mode : repeat in program english exactly.  This means that you don't want to translate this section, or have not got to it yet
 // The english part after the colon is a guide for what you should be replacing.  Its not actually used in the program. It could be blank for instance and EDD would
 // work ok.
+// an example line is German would be
+//  Warning: "Warning" => "Warnung"
+// or you can leave the english out as its really is only as an example
+//  Warning: "" => "Warnung"
+// You don't need to translate every bit at once, you can do it as you see fit, and try it between goes.
+// beware of the format strings such as
+//  .CAPIF: "Companion API failed: {0}" @
+// you would do:
+//  .CAPIF: "" => "Translation make sure you put {0} somewhere"
+// also format strings like:
+//  JournalEntry.Fuel: "Fuel:; tons;0.0" @
+// needs to keep the field builder format string defintion using semicolons - the format is Prefixtext;postfixtext;Formatspecifier
+//  JournalEntry.Fuel: "" => "Fuel translated:; tonage translated;0.0"
+
+
+
 
 //////////////////////////////////////////////////////////////// GENERIC UCs
 
