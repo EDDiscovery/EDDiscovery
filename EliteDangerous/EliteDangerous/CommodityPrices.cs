@@ -109,7 +109,10 @@ namespace EliteDangerousCore
             {
                 id = jo["id"].Int();
                 fdname = JournalFieldNaming.FixCommodityName(jo["Name"].Str());
-                locName = jo["Name_Localised"].Str().Alt(fdname);
+                locName = jo["Name_Localised"].Str();
+                if (locName.IsEmpty())
+                    locName = fdname.SplitCapsWordFull();
+
                 loccategory = jo["Category_Localised"].Str();
                 category = jo["Category"].Str();
 

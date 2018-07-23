@@ -486,7 +486,7 @@ namespace EDDiscovery.UserControls
 
                             foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
-                                string usedin = Recipes.UsedInSynthesis(mat.Key);
+                                string usedin = Recipes.UsedInSythesisByFDName(mat.Key);
                                 if (usedin.Contains("FSD-Basic"))
                                     basic++;
                                 if (usedin.Contains("FSD-Standard"))

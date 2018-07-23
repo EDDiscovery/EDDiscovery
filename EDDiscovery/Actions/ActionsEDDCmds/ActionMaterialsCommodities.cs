@@ -91,11 +91,11 @@ namespace EDDiscovery.Actions
                     for ( int i = 0; i < list.Count; i++ )
                     {
                         string postfix = (i + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
-                        ap[prefix + "Name" + postfix] = list[i].name;
-                        ap[prefix + "Category" + postfix] = list[i].category;
-                        ap[prefix + "fdname" + postfix] = list[i].fdname;
-                        ap[prefix + "type" + postfix] = list[i].type;
-                        ap[prefix + "shortname" + postfix] = list[i].shortname;
+                        ap[prefix + "Name" + postfix] = list[i].Details.Name;
+                        ap[prefix + "Category" + postfix] = list[i].Details.Category;
+                        ap[prefix + "fdname" + postfix] = list[i].Details.FDName;
+                        ap[prefix + "type" + postfix] = list[i].Details.Type;
+                        ap[prefix + "shortname" + postfix] = list[i].Details.Shortname;
                     }
                 }
                 else

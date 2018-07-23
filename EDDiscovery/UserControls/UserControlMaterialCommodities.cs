@@ -132,12 +132,12 @@ namespace EDDiscovery.UserControls
 
                     if (materials)
                     {
-                        rowobj = new[] { m.name, m.shortname, m.category, m.type + " (" + (MaterialCommodityData.MaterialLimit(m.type)??0).ToString() + ")" ,
-                            m.count.ToString() };
+                        rowobj = new[] { m.Details.Name, m.Details.Shortname, m.Details.TranslatedCategory, m.Details.TranslatedType + " (" + (m.Details.MaterialLimit()??0).ToString() + ")" ,
+                            m.Count.ToString() };
                     }
                     else
                     {
-                        rowobj = new[] { m.name, m.type, m.count.ToString(), m.price.ToString("0.#") };
+                        rowobj = new[] { m.Details.Name, m.Details.TranslatedType, m.Count.ToString(), m.Price.ToString("0.#") };
                     }
 
                     int idx = dataGridViewMC.Rows.Add(rowobj);

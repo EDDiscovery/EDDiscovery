@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
             public void Normalise()
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
-                FriendlyName = JournalFieldNaming.RMat(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
             }
         }
 
@@ -105,15 +105,15 @@ namespace EliteDangerousCore.JournalEvents
 
             if ( Raw != null )
                 foreach (Material m in Raw)
-                    mc.Set(MaterialCommodities.MaterialRawCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialRawCategory, m.Name, m.Count, 0, conn);
 
             if ( Manufactured != null )
                 foreach (Material m in Manufactured)
-                    mc.Set(MaterialCommodities.MaterialManufacturedCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialManufacturedCategory, m.Name, m.Count, 0, conn);
 
             if ( Encoded != null )
                 foreach (Material m in Encoded)
-                    mc.Set(MaterialCommodities.MaterialEncodedCategory, m.Name, m.Count, 0, conn);
+                    mc.Set(MaterialCommodityData.MaterialEncodedCategory, m.Name, m.Count, 0, conn);
         }
     }
 }

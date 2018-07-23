@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
-                    mc.Set(MaterialCommodities.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
             }
         }
 
@@ -58,7 +58,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), JournalFieldNaming.RMat(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
                 }
             }
 
@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
                     if (comma)
                         info += ", ";
                     comma = true;
-                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), JournalFieldNaming.RMat(m.Name), "", m.Count);
+                    info += BaseUtils.FieldBuilder.Build("Name:".Txb(this), MaterialCommodityData.GetNameByFDName(m.Name), "", m.Count);
                 }
             }
             detailed = "";

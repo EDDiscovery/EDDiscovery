@@ -25,13 +25,13 @@ namespace EliteDangerousCore.JournalEvents
         {
             Category = JournalFieldNaming.NormaliseMaterialCategory(evt["Category"].Str());
             Name = JournalFieldNaming.FDNameTranslation(evt["Name"].Str());     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyName = JournalFieldNaming.RMat(Name);
+            FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
             Count = evt["Count"].Int();
         }
 
         public string Category { get; set; }
         public string FriendlyName { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; }    // FDName
         public int Count { get; set; }
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)

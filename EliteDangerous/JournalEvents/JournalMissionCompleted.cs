@@ -29,7 +29,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyCommodity = JournalFieldNaming.RMat(Commodity);
+            FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
             CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
@@ -48,7 +48,8 @@ namespace EliteDangerousCore.JournalEvents
             Donation = evt["Donation"].LongNull();
             MissionId = evt["MissionID"].Int();
 
-            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",");       // multi missions get this strange list
+            DestinationSystem = evt["DestinationSystem"].Str().Replace("$MISSIONUTIL_MULTIPLE_INNER_SEPARATOR;", ",")
+                                                              .Replace("$MISSIONUTIL_MULTIPLE_FINAL_SEPARATOR;", ",");       // multi missions get this strange list;
             DestinationStation = evt["DestinationStation"].Str();
 
             PermitsAwarded = evt["PermitsAwarded"]?.ToObjectProtected<string[]>();
@@ -108,20 +109,20 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Commodity != null && Count != null)
             {
-                mc.Change(MaterialCommodities.CommodityCategory, Commodity, -(int)Count, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -(int)Count, 0, conn);
             }
 
             if (CommodityReward != null)
             {
                 foreach (CommodityRewards c in CommodityReward)
-                    mc.Change(MaterialCommodities.CommodityCategory, c.Name, c.Count, 0, conn);
+                    mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0, conn);
             }
 
             if (MaterialsReward != null)
             {
                 foreach( MaterialRewards m in MaterialsReward )                 // 7/3/2018 not yet fully proven.. changed in 3.02
                 {
-                    string c = m.Category.Alt(MaterialCommodities.MaterialRawCategory);     // older ones did not have this tag..
+                    string c = m.Category.Alt(MaterialCommodityData.MaterialRawCategory);     // older ones did not have this tag..
                     mc.Change(c, m.Name, m.Count, 0, conn);
                 }
             }
@@ -236,7 +237,7 @@ namespace EliteDangerousCore.JournalEvents
             public void Normalise()
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
-                FriendlyName = JournalFieldNaming.RMat(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
                 Name_Localised = JournalFieldNaming.CheckLocalisation(Name_Localised??"",FriendlyName);
 
                 if (Category != null)
@@ -257,7 +258,7 @@ namespace EliteDangerousCore.JournalEvents
             public void Normalise()
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
-                FriendlyName = JournalFieldNaming.RMat(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
                 Name_Localised = Name_Localised.Alt(FriendlyName);
             }
         }

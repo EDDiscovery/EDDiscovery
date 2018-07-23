@@ -224,9 +224,9 @@ namespace EDDiscovery.UserControls
                         string ret = "";
                         foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                         {
-                            MaterialCommodityData mc = MaterialCommodityData.GetCachedMaterial(mat.Key);
-                            if (mc != null && MaterialCommodityData.IsJumponium(mc.name))
-                                ret = ret.AppendPrePad(mc.name, ", ");
+                            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(mat.Key);
+                            if (mc != null && mc.IsJumponium)
+                                ret = ret.AppendPrePad(mc.Name, ", ");
                         }
 
                         if (ret.Length > 0)

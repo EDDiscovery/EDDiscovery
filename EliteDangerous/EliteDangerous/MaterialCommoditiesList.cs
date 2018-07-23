@@ -22,43 +22,28 @@ using System.Text;
 
 namespace EliteDangerousCore
 {
-    [System.Diagnostics.DebuggerDisplay("Mat {name} count {count} left {scratchpad}")]
+    [System.Diagnostics.DebuggerDisplay("Mat {Name} count {Count} left {scratchpad}")]
     public class MaterialCommodities               // in memory version of it
     {
-        public int count { get; set; }
-        public double price { get; set; }
+        public int Count { get; set; }
+        public double Price { get; set; }
         public MaterialCommodityData Details { get; set; }
+
+        public int scratchpad { get; set; }        // for synthesis dialog..
 
         public MaterialCommodities(MaterialCommodityData c)
         {
-            count = scratchpad = 0;
-            price = 0;
+            Count = scratchpad = 0;
+            Price = 0;
             this.Details = c;
         }
 
         public MaterialCommodities(MaterialCommodities c)
         {
-            count = c.count;        // clone these
-            price = c.price;
+            Count = c.Count;        // clone these
+            Price = c.Price;
             this.Details = c.Details;       // can copy this, its fixed
         }
-
-        public string category { get { return Details.category; } }
-        public string name { get { return Details.name; } }
-        public string fdname { get { return Details.fdname; } }
-        public string type { get { return Details.type; } }
-        public string shortname { get { return Details.shortname; } }
-        public Color colour { get { return Details.colour; } }
-        public bool rarity { get { return Details.rarity; } }
-
-        #region Static properties and methods linking to MaterialCommodity
-        public static string CommodityCategory { get { return MaterialCommodityData.CommodityCategory; } }
-        public static string MaterialRawCategory { get { return MaterialCommodityData.MaterialRawCategory; } }
-        public static string MaterialEncodedCategory { get { return MaterialCommodityData.MaterialEncodedCategory; } }
-        public static string MaterialManufacturedCategory { get { return MaterialCommodityData.MaterialManufacturedCategory; } }
-        #endregion
-
-        public int scratchpad { get; set; }        // for synthesis dialog..
     }
 
 
@@ -75,7 +60,7 @@ namespace EliteDangerousCore
 
         public bool ContainsRares() // function on purpose
         {
-            return list.FindIndex(x => x.Details.IsRareCommodity && x.count > 0) != -1;
+            return list.FindIndex(x => x.Details.IsRareCommodity && x.Count > 0) != -1;
         }
 
         public MaterialCommoditiesList Clone(bool clearzeromaterials, bool clearzerocommodities)       // returns a new copy of this class.. all items a copy
@@ -84,9 +69,9 @@ namespace EliteDangerousCore
 
             list.ForEach(item =>
             {
-                bool commodity = item.category.Equals(MaterialCommodities.CommodityCategory);
+                bool commodity = item.Details.IsCommodity;
                 // if items, or commodity and not clear zero, or material and not clear zero, add
-                if (item.count > 0 || (commodity && !clearzerocommodities) || (!commodity && !clearzeromaterials))
+                if (item.Count > 0 || (commodity && !clearzerocommodities) || (!commodity && !clearzeromaterials))
                     mcl.list.Add(item);
             });
 
@@ -95,18 +80,18 @@ namespace EliteDangerousCore
 
         public List<MaterialCommodities> List { get { return list; } }
 
-        public MaterialCommodities Find(string name) { return list.Find(x => x.name.Equals(name, StringComparison.InvariantCultureIgnoreCase)); }
-        public MaterialCommodities FindFD(string fdname) { return list.Find(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)); }
+        public MaterialCommodities Find(MaterialCommodityData other) { return list.Find(x => x.Details.FDName.Equals(other.FDName, StringComparison.InvariantCultureIgnoreCase)); }
+        public MaterialCommodities FindFDName(string fdname) { return list.Find(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase)); }
 
         public List<MaterialCommodities> Sort(bool commodity)
         {
             List<MaterialCommodities> ret = new List<MaterialCommodities>();
 
             if (commodity)
-                ret = list.Where(x => x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.type)
-                           .ThenBy(x => x.name).ToList();
+                ret = list.Where(x => x.Details.IsCommodity).OrderBy(x => x.Details.Type)
+                           .ThenBy(x => x.Details.Name).ToList();
             else
-                ret = list.Where(x => !x.category.Equals(MaterialCommodities.CommodityCategory)).OrderBy(x => x.name).ToList();
+                ret = list.Where(x => !x.Details.IsCommodity).OrderBy(x => x.Details.Name).ToList();
 
             return ret;
         }
@@ -116,16 +101,16 @@ namespace EliteDangerousCore
             int total = 0;
             foreach (MaterialCommodities c in list)
             {
-                if ( Array.IndexOf<string>(cats, c.category) != -1 )
-                    total += c.count;
+                if ( Array.IndexOf<string>(cats, c.Details.Category) != -1 )
+                    total += c.Count;
             }
 
             return total;
         }
 
-        public int DataCount { get { return Count(new string[] { MaterialCommodities.MaterialEncodedCategory }); } }
-        public int MaterialsCount { get { return Count(new string[] { MaterialCommodities.MaterialRawCategory, MaterialCommodities.MaterialManufacturedCategory }); } }
-        public int CargoCount { get { return Count(new string[] { MaterialCommodities.CommodityCategory }); } }
+        public int DataCount { get { return Count(new string[] { MaterialCommodityData.MaterialEncodedCategory }); } }
+        public int MaterialsCount { get { return Count(new string[] { MaterialCommodityData.MaterialRawCategory, MaterialCommodityData.MaterialManufacturedCategory }); } }
+        public int CargoCount { get { return Count(new string[] { MaterialCommodityData.CommodityCategory }); } }
 
         public int DataHash() { return list.GetHashCode(); }
 
@@ -134,7 +119,7 @@ namespace EliteDangerousCore
             System.Diagnostics.Debug.Write(list.GetHashCode() + " ");
             foreach ( MaterialCommodities m in list )
             {
-                System.Diagnostics.Debug.Write( "{" + m.GetHashCode() + " " + m.category + " " + m.fdname + " " + m.count + "}");
+                System.Diagnostics.Debug.Write( "{" + m.GetHashCode() + " " + m.Details.Category + " " + m.Details.FDName + " " + m.Count + "}");
             }
             System.Diagnostics.Debug.WriteLine("");
         }
@@ -143,7 +128,7 @@ namespace EliteDangerousCore
 
         private MaterialCommodities GetNewCopyOf(string cat, string fdname, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
         {
-            int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
+            int index = list.FindIndex(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.Details.Category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
 
             if (index >= 0)
             {
@@ -167,25 +152,25 @@ namespace EliteDangerousCore
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
        
-            double costprev = mc.count * mc.price;
+            double costprev = mc.Count * mc.Price;
             double costnew = num * price;
-            mc.count = Math.Max(mc.count + num, 0);
+            mc.Count = Math.Max(mc.Count + num, 0);
 
-            if (mc.count > 0 && num > 0)      // if bought (defensive with mc.count)
-                mc.price = (costprev + costnew) / mc.count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
+            if (mc.Count > 0 && num > 0)      // if bought (defensive with mc.count)
+                mc.Price = (costprev + costnew) / mc.Count;       // price is now a combination of the current cost and the new cost. in case we buy in tranches
 
             //log.WriteLine("MC Change:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
 
         public void Craft(string fdname, int num)
         {
-            int index = list.FindIndex(x => x.fdname.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
+            int index = list.FindIndex(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
 
             if (index >= 0)
             {
                 MaterialCommodities mc = new MaterialCommodities(list[index]);      // new clone of
                 list[index] = mc;       // replace ours with new one
-                mc.count = Math.Max(mc.count - num, 0);
+                mc.Count = Math.Max(mc.Count - num, 0);
 
                 //log.WriteLine("MC Craft:" + fdname + " " + num + " " + mc.count);
             }
@@ -193,16 +178,16 @@ namespace EliteDangerousCore
 
         public void Died()
         {
-            list.RemoveAll(x => x.category.Equals(MaterialCommodities.CommodityCategory));      // empty the list of all commodities
+            list.RemoveAll(x => x.Details.IsCommodity);      // empty the list of all commodities
         }
 
         public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn)
         {
             MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn);
 
-            mc.count = num;
+            mc.Count = num;
             if (price > 0)
-                mc.price = price;
+                mc.Price = price;
 
             //log.WriteLine("MC Set:" + cat + " " + fdname + " " + num + " " + mc.count);
         }
@@ -213,10 +198,10 @@ namespace EliteDangerousCore
             for (int i = 0; i < list.Count; i++)
             {
                 MaterialCommodities mc = list[i];
-                if (commodity == (mc.category == MaterialCommodities.CommodityCategory))
+                if (commodity == mc.Details.IsCommodity)
                 {
                     list[i] = new MaterialCommodities(list[i]);     // new clone of it we can change..
-                    list[i].count = 0;  // and clear it
+                    list[i].Count = 0;  // and clear it
                     //log.Write(mc.fdname + ",");
                 }
             }
