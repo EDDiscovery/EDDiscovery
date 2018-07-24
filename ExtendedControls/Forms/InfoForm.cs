@@ -112,7 +112,15 @@ namespace ExtendedControls
             if (s.Length == 0)
                 s = textBoxInfo.Text;
             //System.Diagnostics.Debug.WriteLine("Sel " + s);
-            Clipboard.SetText(s);
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(s))
+                    Clipboard.SetText(s, TextDataFormat.Text);
+            }
+            catch
+            {
+                MessageBox.Show(this, "Copying text to clipboard failed".Tx(), "Clipboard error".Tx());
+            }
         }
     }
 }

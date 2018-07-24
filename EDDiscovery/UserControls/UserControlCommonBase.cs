@@ -87,6 +87,19 @@ namespace EDDiscovery.UserControls
                 ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
         }
 
+        public void SetClipboardText(string s)
+        {
+            try
+            {
+                if (!String.IsNullOrWhiteSpace(s))
+                    Clipboard.SetText(s, TextDataFormat.Text);
+            }
+            catch
+            {
+                discoveryform.LogLineHighlight("Copying text to clipboard failed".Tx());
+            }
+        }
+
         public bool IsTransparent
         {
             get

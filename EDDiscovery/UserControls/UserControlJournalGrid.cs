@@ -547,7 +547,7 @@ namespace EDDiscovery.UserControls
                 string json = jo?.ToString();
                 if (json != null)
                 {
-                    Clipboard.SetText(json);
+                    SetClipboardText(json);
                 }
             }
         }
