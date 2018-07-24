@@ -2489,21 +2489,21 @@ CQCClass.Kills: "Kills:;;N0" @
 CQCClass.Win: "Win/Loss:;;N" @
 ///////////////////////////////////////////////////// JournalStoredModules
 JournalEntry.at: "< at " @
-JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
-JournalEntry.Time: "Time:" @
-JournalEntry.Value: "Value:; cr;N0" @
+JournalEntry.TransferCost: "Transfer Cost:; cr;N0" => "Transferkosten:; cr;N0"
+JournalEntry.Time: "Time:" => "Zeit"
+JournalEntry.Value: "Value:; cr;N0" => "Wert:; cr;N0"
 ///////////////////////////////////////////////////// JournalStoredShips
-JournalStoredShips.Atstarport: "At starport:" @
-JournalStoredShips.Otherlocations: "Other locations:" @
-JournalStoredShips.SSP: "; cr;N0" @
+JournalStoredShips.Atstarport: "At starport:" => "In Station:"
+JournalStoredShips.Otherlocations: "Other locations:" => "Anderer Ort"
+JournalStoredShips.SSP: "; cr;N0" => "; cr;N0"
 JournalStoredShips.Remote: "Remote:" @
-JournalStoredShips.intransit: "<; in transit" @
+JournalStoredShips.intransit: "<; in transit" => "<; unterwegs"
 ///////////////////////////////////////////////////// JournalSupercruiseExit
-JournalSupercruiseExit.At: "At " @
+JournalSupercruiseExit.At: "At " => "bei "
 ///////////////////////////////////////////////////// JournalUnknown
-JournalUnknown.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
+JournalUnknown.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " => "Unbekanntes Journalereignis, Bitte dem EDDiscovery Team melden"
 ///////////////////////////////////////////////////// JournalUSSDrop
-JournalEntry.Threat: "Threat:" @
+JournalEntry.Threat: "Threat:" => "Bedrohung:"
 
 ////////////////////////////////////////////////////
 //////////////////////////////////////////////////// Materials/Commods
