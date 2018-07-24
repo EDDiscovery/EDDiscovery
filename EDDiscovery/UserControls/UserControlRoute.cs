@@ -671,8 +671,7 @@ namespace EDDiscovery.UserControls
             if (cell != null)
             {
                 string s = (string)cell.Value;
-                if (s.Length > 0)
-                    Clipboard.SetText(s);
+                SetClipboardText(s);
             }
         }
 
