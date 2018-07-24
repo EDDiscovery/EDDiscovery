@@ -168,67 +168,67 @@ EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Reiter entfernen"
 EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Reiter umbenennen"
 
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." @
-.RTABL: "Name:" @
-.RTABT: "Rename Tab" @
-.RTABTT: "Enter a new name for the tab" @
+.RTABL: "Name:" => "Name"
+.RTABT: "Rename Tab" => "Reiter umbenennen"
+.RTABTT: "Enter a new name for the tab" => "Neuen Namen für den Reiter eingeben"
 .ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" @
 .DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" @
-.DLLL: "DLLs loaded: {0}" @
-.DLLF: "DLLs failed to load: {0}" @
-.PROFL: "Profile {0} Loaded" @
-.NI: "New EDDiscovery installer available: {0}" @
-.NRA: "New Release Available!" @
-.CAPINA: "Companion API is disabled in commander settings" @
-.CAPION: "Logged into Companion API" @
-.CAPIF: "Companion API failed: {0}" @
-.CAPIND: "CAPI not docked. Server API lagging!" @
+.DLLL: "DLLs loaded: {0}" => "DLLs geladen: {0}"
+.DLLF: "DLLs failed to load: {0}" => "DLLs nicht geladen: {0}"
+.PROFL: "Profile {0} Loaded" => "Profil {0} geladen"
+.NI: "New EDDiscovery installer available: {0}" => "Neue Version von EDDiscovery erhältlich: {0}"
+.NRA: "New Release Available!" => "Neue Version erhältlich!"
+.CAPINA: "Companion API is disabled in commander settings" => "Die Companion API wurde in den Einstellungen des Kommandanten ausgeschaltet"
+.CAPION: "Logged into Companion API" => "Verbunden mit Companion API"
+.CAPIF: "Companion API failed: {0}" => "Problem mit der Companion API: {0}"
+.CAPIND: "CAPI not docked. Server API lagging!"
 .CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" @
 .CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " @
 .CAPIMN: "CAPI stationname {0}, market station is {1} " @
 .CAPIEX: "Companion API get failed: " @
-.Arrived: "Arrived at system {0} Visit No. {1}" @
+.Arrived: "Arrived at system {0} Visit No. {1}" => "In System {0} angekommen, {1}. Besuch"
 .PE1: "Profile reports errors in triggers:" @
-.EDDN: "Sent {0} event to EDDN ({1})" @
+.EDDN: "Sent {0} event to EDDN ({1})" => "{0} Ereignisse an EDDN gesendet ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " @
-.Closing: "Closing, please wait!" @
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" @
-.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" @
-.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" @
+.Closing: "Closing, please wait!" => "Schliessen, bitte warten!"
+.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Sterndatendownload ist ausgeschaltet, bitte in den Einstellungen einschalten"
+.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Synchronisation mit der Datenbank läuft oder ist anstehend, bitte warten"
+.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Dies kann eine ganze Weile dauern und sehr viel Bandbreite verwenden\r\nBitte Ausführung bestätigen"
 .SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." @
 .ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" @
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" @
-.NoRel: "No new release found" @
+.NoRel: "No new release found" => "Keine neue Programmversion gefunden"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" @
-.FSDRem: "Removed {0} FSD entries" @
+.FSDRem: "Removed {0} FSD entries" => "{0} FSD Einträge gelöscht"
 .VSLNF: "Could not find VisitedStarsCache.dat file, choose file" @
-.VSLEXP: "File {0} created.\r\n{1}" @
-.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" @
+.VSLEXP: "File {0} created.\r\n{1}" => "Datei {0} erstellt.\r\n{1}"
+.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Elite neu starten, um diese Datei in die Galaxienkarte einzulesen"
 .VSLFileErr: "Error writing {0} export visited stars" @
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" @
 .RH: "Refresh History." @
 .NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" @
 .EDSMSyncE: "EDSM Sync failed: {0}" @
-.EP: "Edit Profiles" @
-.PL: "Profile {0} Loaded" @
+.EP: "Edit Profiles" => "Profile anpassen"
+.PL: "Profile {0} Loaded" => "Profil {0} geladen"
 
 ///////////////////////////////////////////////////// EDDiscoveryController
 
-EDDiscoveryController.CD: "Closing down, please wait.." @
-.EDSM: "Get galactic mapping from EDSM." @
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." @
-.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" @
-.RTH: "Reading travel history" @
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." @
-.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" @
-.EDSMU: "EDSM update complete with {0} systems" @
-.EDDBU: "EDDB update complete with {0} systems" @
-.SYST: "Loading completed, total of {0:N0} systems stored" @
+EDDiscoveryController.CD: "Closing down, please wait.." => "Schliessen, bitte warten.."
+.EDSM: "Get galactic mapping from EDSM." => "Karte der Galaxis von EDSM holen."
+.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Kommentare, Lesezeichen und Karte der Galaxis geladen"
+.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery und EDMarketConnector sollten nicht beide zu EDDN synchronisieren. Stop EDMC oder lösche den 'an EDDN senden' Haken im Einstellungsreiter"
+.RTH: "Reading travel history" => "Reisehistorie einlesen"
+.SyncEDSM: "Please continue running ED Discovery until refresh is complete." =>"Bitte ED Discovery nicht beenden, bevor die Aktualisierung abgeschlossen ist"
+.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Synchronisation zu EDSM und EDDB ist ausgeschaltet. Bitte in den Einstellungen einschalten"
+.EDSMU: "EDSM update complete with {0} systems" => "EDSM Update hat {0} Systeme geladen"
+.EDDBU: "EDDB update complete with {0} systems" => "EDDB Update hat {0} Systeme geladen"
+.SYST: "Loading completed, total of {0:N0} systems stored" => "Laden beendet, {0:N0} Systeme gespeichert"
 .Refresh: "Refresh due to updating EDSM or EDDB data" @
 .PLF: "Processing log file {0}" @
-.RD: "Refresh Displays" @
+.RD: "Refresh Displays" => "Anzeigen aktualisiert"
 .HRC: "History refresh complete." @
-.Maps: "Checking for new EDDiscovery maps" @
-.EXPD: "Checking for new Expedition data" @
+.Maps: "Checking for new EDDiscovery maps" => "Suche nach neuen EDDiscovery Karten"
+.EXPD: "Checking for new Expedition data" => "Suche nach neuen Expeditionsdaten"
 
 
 //////////////////////////////////////////////////////////////// Bookmarks
@@ -2541,8 +2541,8 @@ MaterialCommodityData.iron: "Iron" => "Eisen"
 MaterialCommodityData.nickel: "Nickel" => "Nickel"
 MMaterialCommodityData.phosphorus: "Phosphorus" => "Phosphor"
 MMaterialCommodityData.sulphur: "Sulphur" => "Schwefel"
-MaterialCommodityData.lead: "Lead" @
-MaterialCommodityData.rhenium: "Rhenium" @
+MaterialCommodityData.lead: "Lead" => "Blei"
+MaterialCommodityData.rhenium: "Rhenium" => "Rhenium"
 MaterialCommodityData.chromium: "Chromium" => "Chrom"
 aterialCommodityData.germanium: "Germanium" => "Germanium"
 MaterialCommodityData.manganese: "Manganese" => "Mangan"
@@ -2554,7 +2554,7 @@ MaterialCommodityData.niobium: "Niobium" => "Niobium"
 MaterialCommodityData.tungsten: "Tungsten" => "Wolfram"
 MaterialCommodityData.molybdenum: "Molybdenum" => "Molibdän"
 MaterialCommodityData.mercury: "Mercury" => "Quecksilber"
-MaterialCommodityData.boron: "Boron" @
+MaterialCommodityData.boron: "Boron" => "Bor"
 MaterialCommodityData.cadmium: "Cadmium" => "Kadmium"
 MaterialCommodityData.tin: "Tin" => "Zinn"
 MaterialCommodityData.selenium: "Selenium" => "Selen"
@@ -2564,41 +2564,41 @@ MaterialCommodityData.tellurium: "Tellurium" => "Tellur"
 MaterialCommodityData.ruthenium: "Ruthenium" => "Ruthenium"
 MaterialCommodityData.polonium: "Polonium" => "Polonium"
 MaterialCommodityData.antimony: "Antimony" => "Antimon"
-MaterialCommodityData.bulkscandata: "Anomalous Bulk Scan Data" @
-MaterialCommodityData.disruptedwakeechoes: "Atypical Disrupted Wake Echoes" @
-MaterialCommodityData.shieldcyclerecordings: "Distorted Shield Cycle Recordings" @
-MaterialCommodityData.scrambledemissiondata: "Exceptional Scrambled Emission Data" @
-MaterialCommodityData.legacyfirmware: "Specialised Legacy Firmware" @
-MaterialCommodityData.encryptedfiles: "Unusual Encrypted Files" @
-MaterialCommodityData.fsdtelemetry: "Anomalous FSD Telemetry" @
-MaterialCommodityData.shieldsoakanalysis: "Inconsistent Shield Soak Analysis" @
-MaterialCommodityData.archivedemissiondata: "Irregular Emission Data" @
-MaterialCommodityData.consumerfirmware: "Modified Consumer Firmware" @
-MaterialCommodityData.encryptioncodes: "Tagged Encryption Codes" @
-MaterialCommodityData.scanarchives: "Unidentified Scan Archives" @
-MaterialCommodityData.ancientculturaldata: "Pattern Beta Obelisk Data" @
-MaterialCommodityData.ancienthistoricaldata: "Pattern Gamma Obelisk Data" @
-MaterialCommodityData.scandatabanks: "Classified Scan Databanks" @
-MaterialCommodityData.industrialfirmware: "Cracked Industrial Firmware" @
-MaterialCommodityData.symmetrickeys: "Open Symmetric Keys" @
-MaterialCommodityData.wakesolutions: "Strange Wake Solutions" @
-MaterialCommodityData.emissiondata: "Unexpected Emission Data" @
-MaterialCommodityData.shielddensityreports: "Untypical Shield Scans" @
-MaterialCommodityData.compactemissionsdata: "Abnormal Compact Emissions Data" @
-MaterialCommodityData.ancientbiologicaldata: "Pattern Alpha Obelisk Data" @
-MaterialCommodityData.shieldpatternanalysis: "Aberrant Shield Pattern Analysis" @
-MaterialCommodityData.encryptionarchives: "Atypical Encryption Archives" @
-MaterialCommodityData.decodedemissiondata: "Decoded Emission Data" @
-MaterialCommodityData.encodedscandata: "Divergent Scan Data" @
-MaterialCommodityData.hyperspacetrajectories: "Eccentric Hyperspace Trajectories" @
-MaterialCommodityData.securityfirmware: "Security Firmware Patch" @
-MaterialCommodityData.ancientlanguagedata: "Pattern Delta Obelisk Data" @
-MaterialCommodityData.classifiedscandata: "Classified Scan Fragment" @
-MaterialCommodityData.embeddedfirmware: "Modified Embedded Firmware" @
-MaterialCommodityData.adaptiveencryptors: "Adaptive Encryptors Capture" @
-MaterialCommodityData.dataminedwake: "Datamined Wake Exceptions" @
-MaterialCommodityData.shieldfrequencydata: "Peculiar Shield Frequency Data" @
-MaterialCommodityData.ancienttechnologicaldata: "Pattern Epsilon Obelisk Data" @
+MaterialCommodityData.bulkscandata: "Anomalous Bulk Scan Data" => "Anormale Massen-Scan-Daten"
+MaterialCommodityData.disruptedwakeechoes: "Atypical Disrupted Wake Echoes" => "Atypische FSA-Stör-Aufzeichnungen"
+MaterialCommodityData.shieldcyclerecordings: "Distorted Shield Cycle Recordings" => "Gestörte Schildzyklus-Aufzeichnungen"
+MaterialCommodityData.scrambledemissiondata: "Exceptional Scrambled Emission Data" => "Außergewöhnliche verschlüsselte Emissionsdaten"
+MaterialCommodityData.legacyfirmware: "Specialised Legacy Firmware" => "Spezial-Legacy-Firmware"
+MaterialCommodityData.encryptedfiles: "Unusual Encrypted Files" => "Ungewöhnliche verschlüsselte Files"
+MaterialCommodityData.fsdtelemetry: "Anomalous FSD Telemetry" => "Anormale FSA-Telemetrie"
+MaterialCommodityData.shieldsoakanalysis: "Inconsistent Shield Soak Analysis" => "Inkonsistente Schildleistungsanalysen"
+MaterialCommodityData.archivedemissiondata: "Irregular Emission Data" => "Irreguläre Emissionsdaten"
+MaterialCommodityData.consumerfirmware: "Modified Consumer Firmware" => "Modifizierte Consumer-Firmware"
+MaterialCommodityData.encryptioncodes: "Tagged Encryption Codes" => "Getaggte Verschlüsselungscodes"
+MaterialCommodityData.scanarchives: "Unidentified Scan Archives" => "Unidentifizierte Scan-Archive"
+MaterialCommodityData.ancientculturaldata: "Pattern Beta Obelisk Data" => "Beta-Muster-Obeliskendaten"
+MaterialCommodityData.ancienthistoricaldata: "Pattern Gamma Obelisk Data" => "Gamma-Muster-Obeliskendaten"
+MaterialCommodityData.scandatabanks: "Classified Scan Databanks" => "Scan-Datenbanken unter Verschluss"
+MaterialCommodityData.industrialfirmware: "Cracked Industrial Firmware" => "Gecrackte Industrie-Firmware"
+MaterialCommodityData.symmetrickeys: "Open Symmetric Keys" => "Offene symmetrische Schlüssel"
+MaterialCommodityData.wakesolutions: "Strange Wake Solutions" => "Seltsame FSA-Zielorte"
+MaterialCommodityData.emissiondata: "Unexpected Emission Data" => "Unerwartete Emissionsdaten"
+MaterialCommodityData.shielddensityreports: "Untypical Shield Scans" => "Untypische Schildscans"
+MaterialCommodityData.compactemissionsdata: "Abnormal Compact Emissions Data" => "Anormale kompakte Emissionsdaten"
+MaterialCommodityData.ancientbiologicaldata: "Pattern Alpha Obelisk Data" => "Alpha-Muster-Obeliskendaten"
+MaterialCommodityData.shieldpatternanalysis: "Aberrant Shield Pattern Analysis" => "Abweichende Schildeinsatz-Analysen"
+MaterialCommodityData.encryptionarchives: "Atypical Encryption Archives" => "Atypische Verschlüsselungsarchive"
+MaterialCommodityData.decodedemissiondata: "Decoded Emission Data" => "Entschlüsselte Emissionsdaten"
+MaterialCommodityData.encodedscandata: "Divergent Scan Data" => "Divergente Scandaten"
+MaterialCommodityData.hyperspacetrajectories: "Eccentric Hyperspace Trajectories" => "Exzentrische Hyperraum-Routen"
+MaterialCommodityData.securityfirmware: "Security Firmware Patch" => "Sicherheits-Firmware-Patch"
+MaterialCommodityData.ancientlanguagedata: "Pattern Delta Obelisk Data" => "Delta-Muster-Obeliskendaten"
+MaterialCommodityData.classifiedscandata: "Classified Scan Fragment" => "Geheimes Scan-Fragment"
+MaterialCommodityData.embeddedfirmware: "Modified Embedded Firmware" => "Modifizierte integrierte Firmware"
+MaterialCommodityData.adaptiveencryptors: "Adaptive Encryptors Capture" => "Adaptive Verschlüsselungserfassung"
+MaterialCommodityData.dataminedwake: "Datamined Wake Exceptions" => "FSA-Daten-Cache-Ausnahmen"
+MaterialCommodityData.shieldfrequencydata: "Peculiar Shield Frequency Data" => "Verdächtige Schildfrequenz-Daten"
+MaterialCommodityData.ancienttechnologicaldata: "Pattern Epsilon Obelisk Data" => "Epsilon-Muster-Obeliskendaten"
 MaterialCommodityData.basicconductors: "Basic Conductors" => "Einfache Leiter"
 MaterialCommodityData.chemicalstorageunits: "Chemical Storage Units" => "Lagerungseinheiten für Chemiestoffe"
 MaterialCommodityData.compactcomposites: "Compact Composites" => "Kompaktkomposite"
@@ -2629,108 +2629,108 @@ MaterialCommodityData.mechanicalcomponents: "Mechanical Components" => "Mechanis
 MaterialCommodityData.phasealloys: "Phase Alloys" => "Phasenlegierungen"
 MaterialCommodityData.precipitatedalloys: "Precipitated Alloys" => "Gehärtete Legierungen"
 MaterialCommodityData.shieldingsensors: "Shielding Sensors" => "Schildsensoren"
-MaterialCommodityData.guardian_powercell: "Guardian Power Cell" @
-MaterialCommodityData.guardian_powerconduit: "Guardian Power Conduit" @
-MaterialCommodityData.guardian_techcomponent: "Guardian Technology Component" @
-MaterialCommodityData.guardian_sentinel_weaponparts: "Guardian Sentinel Weapon Parts" @
-MaterialCommodityData.guardian_sentinel_wreckagecomponents: "Guardian Sentinel Wreckage Components" @
-MaterialCommodityData.guardian_weaponblueprint: "Guardian Weapon Blueprint Segment" @
-MaterialCommodityData.guardian_moduleblueprint: "Guardian Module Blueprint Segment" @
-MaterialCommodityData.tg_biomechanicalconduits: "Bio-Mechanical Conduits" @
-MaterialCommodityData.tg_propulsionelement: "Propulsion Elements" @
-MaterialCommodityData.tg_weaponparts: "Weapon Parts" @
-MaterialCommodityData.tg_wreckagecomponents: "Wreckage Components" @
-MaterialCommodityData.tg_shipflightdata: "Ship Flight Data" @
-MaterialCommodityData.tg_shipsystemsdata: "Ship Systems Data" @
-MaterialCommodityData.chemicalmanipulators: "Chemical Manipulators" @
-MaterialCommodityData.compoundshielding: "Compound Shielding" @
+MaterialCommodityData.guardian_powercell: "Guardian Power Cell" => "Guardian-Energiezelle"
+MaterialCommodityData.guardian_powerconduit: "Guardian Power Conduit" => "Guardian-Energieleiter"
+MaterialCommodityData.guardian_techcomponent: "Guardian Technology Component" => "Guardian-Technologiekomponenten"
+MaterialCommodityData.guardian_sentinel_weaponparts: "Guardian Sentinel Weapon Parts" => "Guardian-Wache-Waffenteile"
+MaterialCommodityData.guardian_sentinel_wreckagecomponents: "Guardian Sentinel Wreckage Components" => "Guardian-Wache-Wrackteilkomponenten"
+MaterialCommodityData.guardian_weaponblueprint: "Guardian Weapon Blueprint Segment" => "Guardian-Waffenbauplansegment"
+MaterialCommodityData.guardian_moduleblueprint: "Guardian Module Blueprint Segment" => "Guardian-Modulbauplansegment"
+MaterialCommodityData.tg_biomechanicalconduits: "Bio-Mechanical Conduits" => "Biomechanische Leiter"
+MaterialCommodityData.tg_propulsionelement: "Propulsion Elements" => "Schubantriebelemente"
+MaterialCommodityData.tg_weaponparts: "Weapon Parts" => "Waffenteile"
+MaterialCommodityData.tg_wreckagecomponents: "Wreckage Components" => "Wrackteilkomponenten"
+MaterialCommodityData.tg_shipflightdata: "Ship Flight Data" => "Schiffsflugdaten"
+MaterialCommodityData.tg_shipsystemsdata: "Ship Systems Data" => "Schiffssysteme-Daten"
+MaterialCommodityData.chemicalmanipulators: "Chemical Manipulators" => "Chemische Manipulatoren"
+MaterialCommodityData.compoundshielding: "Compound Shielding" => "Verbundschilde"
 MaterialCommodityData.conductivepolymers: "Conductive Polymers" => "Leitfähige Polymere"
 MaterialCommodityData.configurablecomponents: "Configurable Components" => "Konfigurierbare Komponenten"
-MaterialCommodityData.heatvanes: "Heat Vanes" @
+MaterialCommodityData.heatvanes: "Heat Vanes" => "Wärmeleitbleche"
 MaterialCommodityData.polymercapacitors: "Polymer Capacitors" => "Polymerkondensatoren"
-MaterialCommodityData.protolightalloys: "Proto Light Alloys" @
+MaterialCommodityData.protolightalloys: "Proto Light Alloys" => "Leichte Legierungen (Proto)"
 MaterialCommodityData.refinedfocuscrystals: "Refined Focus Crystals" => "Raffinierte Laserkristalle"
-MaterialCommodityData.fedproprietarycomposites: "Proprietary Composites" @
+MaterialCommodityData.fedproprietarycomposites: "Proprietary Composites" => "Kompositwerkstoffe"
 MaterialCommodityData.thermicalloys: "Thermic Alloys" => "Thermische Legierungen"
-MaterialCommodityData.fedcorecomposites: "Core Dynamics Composites" @
-MaterialCommodityData.biotechconductors: "Biotech Conductors" @
-MaterialCommodityData.exquisitefocuscrystals: "Exquisite Focus Crystals" @
-MaterialCommodityData.imperialshielding: "Imperial Shielding" @
-MaterialCommodityData.improvisedcomponents: "Improvised Components" @
-MaterialCommodityData.militarygradealloys: "Military Grade Alloys" @
-MaterialCommodityData.militarysupercapacitors: "Military Supercapacitors" @
-MaterialCommodityData.pharmaceuticalisolators: "Pharmaceutical Isolators" @
-MaterialCommodityData.protoheatradiators: "Proto Heat Radiators" @
-MaterialCommodityData.protoradiolicalloys: "Proto Radiolic Alloys" @
+MaterialCommodityData.fedcorecomposites: "Core Dynamics Composites" => "Core Dynamics Kompositwerkstoffe"
+MaterialCommodityData.biotechconductors: "Biotech Conductors" => "Biotech-Leiter"
+MaterialCommodityData.exquisitefocuscrystals: "Exquisite Focus Crystals" => "Erlesene Laserkristalle"
+MaterialCommodityData.imperialshielding: "Imperial Shielding" => "Imperiale Schilde"
+MaterialCommodityData.improvisedcomponents: "Improvised Components" => "Behelfskomponenten"
+aterialCommodityData.militarygradealloys: "Military Grade Alloys" => "Militärqualitätslegierungen"
+MaterialCommodityData.militarysupercapacitors: "Military Supercapacitors" => "Militärische Superkondensatoren"
+MaterialCommodityData.pharmaceuticalisolators: "Pharmaceutical Isolators" => "Pharmazeutische Isolatoren"
+MaterialCommodityData.protoheatradiators: "Proto Heat Radiators" => "Proto-Wärmestrahler"
+MaterialCommodityData.protoradiolicalloys: "Proto Radiolic Alloys" => "Radiologische Legierungen (Proto)"
 MaterialCommodityData.unknownartifact: "Thargoid Sensor" @
 MaterialCommodityData.unknownartifact2: "Thargoid Probe" @
 MaterialCommodityData.unknownartifact3: "Thargoid Link" @
 MaterialCommodityData.unknownresin: "Thargoid Resin" @
 MaterialCommodityData.unknownbiologicalmatter: "Thargoid Biological Matter" @
 MaterialCommodityData.unknowntechnologysamples: "Thargoid Technology Samples" @
-MaterialCommodityData.unknowncarapace: "Thargoid Carapace" @
-MaterialCommodityData.unknownenergycell: "Thargoid Energy Cell" @
-MaterialCommodityData.unknownorganiccircuitry: "Thargoid Organic Circuitry" @
-MaterialCommodityData.unknowntechnologycomponents: "Thargoid Technological Components" @
-MaterialCommodityData.unknownenergysource: "Sensor Fragment" @
-MaterialCommodityData.tg_compositiondata: "Thargoid Material Composition Data" @
-MaterialCommodityData.tg_structuraldata: "Thargoid Structural Data" @
-MaterialCommodityData.tg_residuedata: "Thargoid Residue Data" @
-MaterialCommodityData.unknownshipsignature: "Thargoid Ship Signature" @
-MaterialCommodityData.unknownwakedata: "Thargoid Wake Data" @
-MaterialCommodityData.explosives: "Explosives" @
-MaterialCommodityData.hydrogenfuel: "Hydrogen Fuel" @
+MaterialCommodityData.unknowncarapace: "Thargoid Carapace" => "Thargoiden-Krustenschale"
+MaterialCommodityData.unknownenergycell: "Thargoid Energy Cell" => "Thargoiden-Energiezelle"
+MaterialCommodityData.unknownorganiccircuitry: "Thargoid Organic Circuitry" => "Organischer Schaltkreis der Thargoiden"
+MaterialCommodityData.unknowntechnologycomponents: "Thargoid Technological Components" => "Technologiekomponenten der Thargoiden"
+MaterialCommodityData.unknownenergysource: "Sensor Fragment" => "Sensorenfragment"
+MaterialCommodityData.tg_compositiondata: "Thargoid Material Composition Data" => "Materialzusammensetzungsdaten der Thargoiden"
+MaterialCommodityData.tg_structuraldata: "Thargoid Structural Data" => "Thargoiden-Strukturdaten"
+MaterialCommodityData.tg_residuedata: "Thargoid Residue Data" => "Thargoiden-Rückstandsdaten"
+MaterialCommodityData.unknownshipsignature: "Thargoid Ship Signature" => "Thargoiden-Schiffssignatur"
+MaterialCommodityData.unknownwakedata: "Thargoid Wake Data" => "Thargoiden-Sogwolkendaten"
+MaterialCommodityData.explosives: "Explosives" => "Sprengstoffe"
+MaterialCommodityData.hydrogenfuel: "Hydrogen Fuel" => "Wasserstoff-Treibstoff"
 MaterialCommodityData.hydrogenperoxide: "Hydrogen Peroxide" @
 MaterialCommodityData.liquidoxygen: "Liquid Oxygen" @
-MaterialCommodityData.mineraloil: "Mineral Oil" @
+MaterialCommodityData.mineraloil: "Mineral Oil" => "Mineralöl"
 MaterialCommodityData.nerveagents: "Nerve Agents" @
-MaterialCommodityData.pesticides: "Pesticides" @
+MaterialCommodityData.pesticides: "Pesticides" => "Pestizide"
 MaterialCommodityData.surfacestabilisers: "Surface Stabilisers" @
 MaterialCommodityData.syntheticreagents: "Synthetic Reagents" @
-MaterialCommodityData.water: "Water" @
+MaterialCommodityData.water: "Water" => "Wasser"
 MaterialCommodityData.clothing: "Clothing" @
 MaterialCommodityData.consumertechnology: "Consumer Technology" @
 MaterialCommodityData.domesticappliances: "Domestic Appliances" @
 MaterialCommodityData.evacuationshelter: "Evacuation Shelter" @
 MaterialCommodityData.survivalequipment: "Survival Equipment" @
-MaterialCommodityData.algae: "Algae" @
-MaterialCommodityData.animalmeat: "Animal Meat" @
-MaterialCommodityData.coffee: "Coffee" @
-MaterialCommodityData.fish: "Fish" @
-MaterialCommodityData.foodcartridges: "Food Cartridges" @
-MaterialCommodityData.fruitandvegetables: "Fruit and Vegetables" @
-MaterialCommodityData.grain: "Grain" @
-MaterialCommodityData.syntheticmeat: "Synthetic Meat" @
-MaterialCommodityData.tea: "Tea" @
+MaterialCommodityData.algae: "Algae" => "Algen"
+MaterialCommodityData.animalmeat: "Animal Meat" => "Tierfleisch"
+MaterialCommodityData.coffee: "Coffee" => "Kaffee"
+MaterialCommodityData.fish: "Fish" => "Fisch"
+MaterialCommodityData.foodcartridges: "Food Cartridges" => "Nahrungskartuschen"
+aterialCommodityData.fruitandvegetables: "Fruit and Vegetables" => "Obst und Gemüse"
+MaterialCommodityData.grain: "Grain" => "Getreide"
+MaterialCommodityData.syntheticmeat: "Synthetic Meat" => "Künstliches Fleisch"
+MaterialCommodityData.tea: "Tea" => "Tee"
 MaterialCommodityData.ceramiccomposites: "Ceramic Composites" @
 MaterialCommodityData.insulatingmembrane: "Insulating Membrane" @
-MaterialCommodityData.polymers: "Polymers" @
-MaterialCommodityData.semiconductors: "Semiconductors" @
-MaterialCommodityData.superconductors: "Superconductors" @
+MaterialCommodityData.polymers: "Polymers" => "Polymere"
+MaterialCommodityData.semiconductors: "Semiconductors" => "Halbleiter"
+MaterialCommodityData.superconductors: "Superconductors" => "Supraleiter"
 MaterialCommodityData.metaalloys: "Meta-Alloys" @
 MaterialCommodityData.coolinghoses: "Micro-Weave Cooling Hoses" @
 MaterialCommodityData.neofabricinsulation: "Neofabric Insulation" @
 MaterialCommodityData.cmmcomposite: "CMM Composite" @
-MaterialCommodityData.beer: "Beer" @
+MaterialCommodityData.beer: "Beer" => "Bier"
 MaterialCommodityData.bootlegliquor: "Bootleg Liquor" @
-MaterialCommodityData.liquor: "Liquor" @
-MaterialCommodityData.tobacco: "Tobacco" @
-MaterialCommodityData.wine: "Wine" @
+MaterialCommodityData.liquor: "Liquor" => "Spirituosen"
+MaterialCommodityData.tobacco: "Tobacco" => "Tabak"
+MaterialCommodityData.wine: "Wine" => "Wein"
 MaterialCommodityData.atmosphericextractors: "Atmospheric Processors" @
-MaterialCommodityData.marinesupplies: "Marine Equipment" @
-MaterialCommodityData.heliostaticfurnaces: "Microbial Furnaces" @
+MaterialCommodityData.marinesupplies: "Marine Equipment" => "Maritimausstattung"
+MaterialCommodityData.heliostaticfurnaces: "Microbial Furnaces" => "Mikrobielle Öfen"
 MaterialCommodityData.skimercomponents: "Skimmer Components" @
 MaterialCommodityData.buildingfabricators: "Building Fabricators" @
-MaterialCommodityData.cropharvesters: "Crop Harvesters" @
+MaterialCommodityData.cropharvesters: "Crop Harvesters" => "Erntemaschinen"
 MaterialCommodityData.emergencypowercells: "Emergency Power Cells" @
 MaterialCommodityData.exhaustmanifold: "Exhaust Manifold" @
 MaterialCommodityData.geologicalequipment: "Geological Equipment" @
 MaterialCommodityData.hnshockmount: "HN Shock Mount" @
-MaterialCommodityData.mineralextractors: "Mineral Extractors" @
+MaterialCommodityData.mineralextractors: "Mineral Extractors" => "Mineralextraktoren"
 MaterialCommodityData.modularterminals: "Modular Terminals" @
-MaterialCommodityData.powergenerators: "Power Generators" @
+MaterialCommodityData.powergenerators: "Power Generators" => "Stromerzeuger"
 MaterialCommodityData.thermalcoolingunits: "Thermal Cooling Units" @
-MaterialCommodityData.waterpurifiers: "Water Purifiers" @
+MaterialCommodityData.waterpurifiers: "Water Purifiers" => "Wasserreiniger"
 MaterialCommodityData.heatsinkinterlink: "Heatsink Interlink" @
 MaterialCommodityData.powergridassembly: "Energy Grid Assembly" @
 MaterialCommodityData.radiationbaffle: "Radiation Baffle" @
@@ -2741,52 +2741,52 @@ MaterialCommodityData.powertransferconduits: "Power Transfer Bus" @
 MaterialCommodityData.powerconverter: "Power Converter" @
 MaterialCommodityData.iondistributor: "Ion Distributor" @
 MaterialCommodityData.advancedmedicines: "Advanced Medicines" @
-MaterialCommodityData.basicmedicines: "Basic Medicines" @
+MaterialCommodityData.basicmedicines: "Basic Medicines" => "Allgemeine Medikamente"
 MaterialCommodityData.combatstabilisers: "Combat Stabilisers" @
-MaterialCommodityData.performanceenhancers: "Performance Enhancers" @
+MaterialCommodityData.performanceenhancers: "Performance Enhancers" => "Leistungssteigerer"
 MaterialCommodityData.progenitorcells: "Progenitor Cells" @
-MaterialCommodityData.agriculturalmedicines: "Agri-Medicines" @
-MaterialCommodityData.aluminium: "Aluminium" @
-MaterialCommodityData.beryllium: "Beryllium" @
+MaterialCommodityData.agriculturalmedicines: "Agri-Medicines" => "Agrar-Medikamente"
+MaterialCommodityData.aluminium: "Aluminium" => "Aluminium"
+MaterialCommodityData.beryllium: "Beryllium" => "Beryllium"
 MaterialCommodityData.bismuth: "Bismuth" @
-MaterialCommodityData.cobalt: "Cobalt" @
-MaterialCommodityData.copper: "Copper" @
-MaterialCommodityData.gallium: "Gallium" @
-MaterialCommodityData.gold: "Gold" @
+MaterialCommodityData.cobalt: "Cobalt" => "Cobalt"
+MaterialCommodityData.copper: "Copper" => "Kupfer"
+MaterialCommodityData.gallium: "Gallium" => "Gallium"
+MaterialCommodityData.gold: "Gold" => "Gold"
 MaterialCommodityData.hafnium178: "Hafnium 178" @
-MaterialCommodityData.indium: "Indium" @
+MaterialCommodityData.indium: "Indium" => "Indium"
 MaterialCommodityData.lanthanum: "Lanthanum" @
-MaterialCommodityData.lithium: "Lithium" @
+MaterialCommodityData.lithium: "Lithium" => "Lithium"
 MaterialCommodityData.osmium: "Osmium" @
-MaterialCommodityData.palladium: "Palladium" @
-MaterialCommodityData.platinum: "Platinum" @
+MaterialCommodityData.palladium: "Palladium" => "Palladium"
+MaterialCommodityData.platinum: "Platinum" => "Platin"
 MaterialCommodityData.praseodymium: "Praseodymium" @
 MaterialCommodityData.samarium: "Samarium" @
-MaterialCommodityData.silver: "Silver" @
-MaterialCommodityData.tantalum: "Tantalum" @
+MaterialCommodityData.silver: "Silver" => "Silber"
+MaterialCommodityData.tantalum: "Tantalum" => "Tantal"
 MaterialCommodityData.thallium: "Thallium" @
 MaterialCommodityData.thorium: "Thorium" @
-MaterialCommodityData.titanium: "Titanium" @
-MaterialCommodityData.uranium: "Uranium" @
+MaterialCommodityData.titanium: "Titanium" => "Titan"
+MaterialCommodityData.uranium: "Uranium" => "Uran"
 MaterialCommodityData.platinumaloy: "Platinum Alloy" @
-MaterialCommodityData.bauxite: "Bauxite" @
-MaterialCommodityData.bertrandite: "Bertrandite" @
+MaterialCommodityData.bauxite: "Bauxite" => "Bauxit"
+MaterialCommodityData.bertrandite: "Bertrandite" => "Bertrandit"
 MaterialCommodityData.bromellite: "Bromellite" @
-MaterialCommodityData.coltan: "Coltan" @
+MaterialCommodityData.coltan: "Coltan" => "Coltan"
 MaterialCommodityData.cryolite: "Cryolite" @
-MaterialCommodityData.gallite: "Gallite" @
+MaterialCommodityData.gallite: "Gallite" => "Gallit"
 MaterialCommodityData.goslarite: "Goslarite" @
 MaterialCommodityData.methaneclathrate: "Methane Clathrate" @
-MaterialCommodityData.indite: "Indite" @
+MaterialCommodityData.indite: "Indite" => "Indit"
 MaterialCommodityData.jadeite: "Jadeite" @
-MaterialCommodityData.lepidolite: "Lepidolite" @
+MaterialCommodityData.lepidolite: "Lepidolite" => "Lepidolith"
 MaterialCommodityData.lithiumhydroxide: "Lithium Hydroxide" @
 MaterialCommodityData.moissanite: "Moissanite" @
 MaterialCommodityData.painite: "Painite" @
 MaterialCommodityData.pyrophyllite: "Pyrophyllite" @
-MaterialCommodityData.rutile: "Rutile" @
+MaterialCommodityData.rutile: "Rutile" => "Rutil"
 MaterialCommodityData.taaffeite: "Taaffeite" @
-MaterialCommodityData.uraninite: "Uraninite" @
+MaterialCommodityData.uraninite: "Uraninite" => "Uraninit"
 MaterialCommodityData.methanolmonohydratecrystals: "Methanol Monohydrate Crystals" @
 MaterialCommodityData.lowtemperaturediamond: "Low Temperature Diamonds" @
 MaterialCommodityData.trinketsoffortune: "Trinkets of Hidden Fortune" @
@@ -2842,31 +2842,31 @@ MaterialCommodityData.ancientcasket: "Ancient Casket" @
 MaterialCommodityData.ancienttablet: "Ancient Tablet" @
 MaterialCommodityData.ancienturn: "Ancient Urn" @
 MaterialCommodityData.ancienttotem: "Ancient Totem" @
-MaterialCommodityData.basicnarcotics: "Narcotics" @
+MaterialCommodityData.basicnarcotics: "Narcotics" => "Drogen"
 MaterialCommodityData.imperialslaves: "Imperial Slaves" @
 MaterialCommodityData.slaves: "Slaves" @
-MaterialCommodityData.advancedcatalysers: "Advanced Catalysers" @
-MaterialCommodityData.animalmonitors: "Animal Monitors" @
-MaterialCommodityData.aquaponicsystems: "Aquaponic Systems" @
+MaterialCommodityData.advancedcatalysers: "Advanced Catalysers" => "Fortschr. Katalysatoren"
+MaterialCommodityData.animalmonitors: "Animal Monitors" => "Tierüberwachung"
+MaterialCommodityData.aquaponicsystems: "Aquaponic Systems" => "Aquaponiksysteme"
 MaterialCommodityData.bioreducinglichen: "Bioreducing Lichen" @
-MaterialCommodityData.computercomponents: "Computer Components" @
-MaterialCommodityData.autofabricators: "Auto-Fabricators" @
+MaterialCommodityData.computercomponents: "Computer Components" => "Computerteile"
+MaterialCommodityData.autofabricators: "Auto-Fabricators" => "Fabrikatoren"
 MaterialCommodityData.microcontrollers: "Micro Controllers" @
 MaterialCommodityData.medicaldiagnosticequipment: "Medical Diagnostic Equipment" @
 MaterialCommodityData.nanobreakers: "Nanobreakers" @
 MaterialCommodityData.resonatingseparators: "Resonating Separators" @
-MaterialCommodityData.robotics: "Robotics" @
+MaterialCommodityData.robotics: "Robotics" => "Roboter"
 MaterialCommodityData.structuralregulators: "Structural Regulators" @
 MaterialCommodityData.telemetrysuite: "Telemetry Suite" @
-MaterialCommodityData.hazardousenvironmentsuits: "H.E. Suits" @
+MaterialCommodityData.hazardousenvironmentsuits: "H.E. Suits" => "Schutzanzüge"
 MaterialCommodityData.diagnosticsensor: "Hardware Diagnostic Sensor" @
 MaterialCommodityData.mutomimager: "Muon Imager" @
-MaterialCommodityData.terrainenrichmentsystems: "Land Enrichment Systems" @
+MaterialCommodityData.terrainenrichmentsystems: "Land Enrichment Systems" => "Landanreicherungssysteme"
 MaterialCommodityData.conductivefabrics: "Conductive Fabrics" @
-MaterialCommodityData.leather: "Leather" @
+MaterialCommodityData.leather: "Leather" => "Leder"
 MaterialCommodityData.militarygradefabrics: "Military Grade Fabrics" @
-MaterialCommodityData.naturalfabrics: "Natural Fabrics" @
-MaterialCommodityData.syntheticfabrics: "Synthetic Fabrics" @
+MaterialCommodityData.naturalfabrics: "Natural Fabrics" => "Naturfasern"
+MaterialCommodityData.syntheticfabrics: "Synthetic Fabrics" => "Chemiefasern"
 MaterialCommodityData.biowaste: "Biowaste" @
 MaterialCommodityData.chemicalwaste: "Chemical Waste" @
 MaterialCommodityData.scrap: "Scrap" @
