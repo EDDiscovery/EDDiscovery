@@ -181,54 +181,54 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
 .CAPINA: "Companion API is disabled in commander settings" => "La API Companion é disabilitata nel setup del comandante"
 .CAPION: "Logged into Companion API" => "Login nella API Companion effettuato"
 .CAPIF: "Companion API failed: {0}" => "Login nella API Companion non effettuato: {0}"
-.CAPIND: "CAPI not docked. Server API lagging!" @
-.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" @
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " @
-.CAPIMN: "CAPI stationname {0}, market station is {1} " @
-.CAPIEX: "Companion API get failed: " @
-.Arrived: "Arrived at system {0} Visit No. {1}" @
-.PE1: "Profile reports errors in triggers:" @
-.EDDN: "Sent {0} event to EDDN ({1})" @
-.EDDNEX: "EDDN: Send commodities prices failed: " @
-.Closing: "Closing, please wait!" @
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" @
-.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" @
-.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" @
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." @
-.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" @
-.ResetCMDR: "Confirm you wish to reset all history entries to the current commander" @
-.NoRel: "No new release found" @
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" @
-.FSDRem: "Removed {0} FSD entries" @
-.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" @
-.VSLEXP: "File {0} created.\r\n{1}" @
-.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" @
-.VSLFileErr: "Error writing {0} export visited stars" @
-.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" @
-.RH: "Refresh History." @
-.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" @
-.EDSMSyncE: "EDSM Sync failed: {0}" @
-.EP: "Edit Profiles" @
-.PL: "Profile {0} Loaded" @
+.CAPIND: "CAPI not docked. Server API lagging!" => "CAPI non effettuato. Server API con ritardo!"
+.CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "CAPI profileSystemRequired é {0}, il sistema del profilo é {1}"
+.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI prfileStationRequired é {0}, la stazione del profilo é {1}"
+.CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, il mercato della stazione é {1}"
+.CAPIEX: "Companion API get failed: " => "API Companion continua a fallire: "
+.Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
+.PE1: "Profile reports errors in triggers:" => "Errori nel profilo riportati dal trigger:"
+.EDDN: "Sent {0} event to EDDN ({1})" => "Inviati {0} eventi a EDDN ({1})"
+.EDDNEX: "EDDN: Send commodities prices failed: " => EDDN: Invio prezzi di merci fallito: "
+.Closing: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
+.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
+.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
+.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione può necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
+.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Per entrare nel modo sicuro, esci dal programma, premi shift\r\ne clicca sull'icona del programma. Cosí facendo si aprirá il pannelo di dialogo del modo sicuro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dati in altre cartelle o dischi."
+.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "Confermi che vuoi reimpostare i registri di EDSM\r\na tutti registri attuali dei comandanti,\r\ne pulire tutte le note assegnate ai registri EDSM IDs per tutti i comandanti?\r\n\r\nQuesto non cambierá il tuo storico di viaggio, ma al prossimo rinnovo,\r\nproverà a reassegnare i sistemi EDSM al tuo storico e nore.\r\nUsare solo se credi che gli assegnamenti di EDSM ai tuoi registri é decisamente sbagliato, o le note stanno mancando\r\n\r\nPuoi tranquillamente asseganre manualmente un registro EDSM premendo con il pulsante destro\r\nsullo storico di viaggio e scegliendo questa opzione" 
+.ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
+.NoRel: "No new release found" => "Nessuna nuova versione trovata"
+.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
+.FSDRem: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
+.VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Impossibile trovare il file VisitedStarsCache.dat"
+.VSLEXP: "File {0} created.\r\n{1}" => "Creati {0} file.\r\n{1}"
+.VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Riavviare Elite Dangerous per far si che questo file sia letto dalla mappa della galassia"
+.VSLFileErr: "Error writing {0} export visited stars" => "Errore scrivendo {0} esporto dei sistemi visitati"
+.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara é disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
+.RH: "Refresh History." => "Rinfrescare lo Storico"
+.NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
+.EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronizzazione EDSM fallita {0}"
+.EP: "Edit Profiles" => "Modificare Profili"
+.PL: "Profile {0} Loaded" => "PRofilo {0} Caricato"
 
 ///////////////////////////////////////////////////// EDDiscoveryController
 
-EDDiscoveryController.CD: "Closing down, please wait.." @
-.EDSM: "Get galactic mapping from EDSM." @
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." @
-.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" @
-.RTH: "Reading travel history" @
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." @
-.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" @
-.EDSMU: "EDSM update complete with {0} systems" @
-.EDDBU: "EDDB update complete with {0} systems" @
-.SYST: "Loading completed, total of {0:N0} systems stored" @
-.Refresh: "Refresh due to updating EDSM or EDDB data" @
-.PLF: "Processing log file {0}" @
-.RD: "Refresh Displays" @
-.HRC: "History refresh complete." @
-.Maps: "Checking for new EDDiscovery maps" @
-.EXPD: "Checking for new Expedition data" @
+EDDiscoveryController.CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
+.EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
+.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, segnalibri e dati di mappa galattici."
+.EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery e EDMarketConnector non dovrebbero sincronizzare entrambi a EDDN. Ferma EDMC o disabilita 'invia a EDDN' nel setup!"  
+.RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
+.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
+.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
+.EDSMU: "EDSM update complete with {0} systems" => "Attualizzazione EDSM completata com {0} sistemi"
+.EDDBU: "EDDB update complete with {0} systems" => "Attualizzazione EDDB completata com {0} sistemi"
+.SYST: "Loading completed, total of {0:N0} systems stored" => Caricamento completato, totale di {0:N0} sistemi immagazzinati"
+.Refresh: "Refresh due to updating EDSM or EDDB data" => "Ricaricamento in corso dovuto all'attualizzazione dei dati di EDSM o EDDB"
+.PLF: "Processing log file {0}" => "Processando il file di registro {0}"
+.RD: "Refresh Displays" => "Ricaricando la Schermata"
+.HRC: "History refresh complete." => "Ricaricamento dello storico completato"
+.Maps: "Checking for new EDDiscovery maps" => "Verificando per nuove mappe EDDiscovery"
+.EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
 
 
 //////////////////////////////////////////////////////////////// Bookmarks
