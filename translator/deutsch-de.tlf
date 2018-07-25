@@ -11,7 +11,7 @@ Today: "Today" => "Heute"
 24h: "24h" => "24 Stunden"
 7days: "7 Days" => "7 Tage"
 All: "All" => "Alle"
-OK: "OK" @
+OK: "OK" => "OK"
 Cancel: "Cancel" => "Abbrechen"
 Delete: "Delete" => "Löschen"
 Campaign: "Campaign" => "Kampagne"
@@ -25,15 +25,15 @@ None: "None" => "Nichts"
 on: "on" => "An"
 Off: "Off" => "Aus"
 Unknown: "Unknown" => "Unbekannt"
-Information: "Information" @
+Information: "Information" => "Information"
 NoPos: "No Pos" => "Keine Position"
 
 //////////////////////////////////////////////////////////////// POP OUT AREA
 
 PopOutInfo.Log.Description: "Program log" => "Programmlog"
-PopOutInfo.Log.Title: "Log" @
+PopOutInfo.Log.Title: "Log" => "Log"
 PopOutInfo.Journal.Description: "Journal grid view" => "Journal (Tabellenansicht)"
-PopOutInfo.Journal.Title: "Journal" @
+PopOutInfo.Journal.Title: "Journal" => "Journal"
 PopOutInfo.TravelGrid.Description: "History grid view" => "Historie (Tabellenansicht)"
 PopOutInfo.TravelGrid.Title: "Travel History" => "Reisetagebuch"
 PopOutInfo.StarList.Description: "Visited star list" => "Liste der besuchten Sternsysteme"
@@ -63,7 +63,7 @@ PopOutInfo.Engineering.Title: "Engineering" => "Entwicklung"
 PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Einkaufsliste (kombiniert Synthese und Entwicklung)"
 PopOutInfo.ShoppingList.Title: "Shopping List" => "Einkaufsliste"
 PopOutInfo.Scan.Description: "Scan data on system" => "Vorhande Scandaten für das Sternsystem"
-PopOutInfo.Scan.Title: "Scan" @
+PopOutInfo.Scan.Title: "Scan" => "Scan"
 PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Vorhande Scandaten für das Sternsystem (Tabellenform)"
 PopOutInfo.ScanGrid.Title: "Scan Grid" => "Scantabelle"
 PopOutInfo.StarDistance.Description: "List of nearest stars" => "Liste der nächstgelegenen Sternsysteme"
@@ -85,7 +85,7 @@ PopOutInfo.CombatPanel.Title: "Combat" => "Gefecht"
 PopOutInfo.Route.Description: "Route Finder from stored star data" => "Routensuche aus gespeicherten Sterndaten"
 PopOutInfo.Route.Title: "Route Finder" => "Route suchen"
 PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "Expeditionsplaner, eine Expeditionsroute festlegen"
-PopOutInfo.Expedition.Title: "Expedition" @
+PopOutInfo.Expedition.Title: "Expedition" => "Expedition"
 PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Erkundungsplaner, Liste zu erkundender Sterne erstellen"
 PopOutInfo.Exploration.Title: "Exploration" => "Erkundung"
 PopOutInfo.SystemInformation.Description: "System Information" => "Systeminformation"
@@ -107,7 +107,7 @@ PopOutInfo.ScreenShot.Title: "Screen Shot" => "Screenshot"
 PopOutInfo.Grid.Description: "Grid (allows other panels to be placed in the it)" => "Gitter (erlaubt das Einfügen anderer Anzeigen)"
 PopOutInfo.Grid.Title: "Grid" => "Gitter"
 PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Splitter (erlaubt das Einfügen anderer Anzeigen)"
-PopOutInfo.SplitterControl.Title: "Splitter" @
+PopOutInfo.SplitterControl.Title: "Splitter" => "Splitter"
 PopOutInfo.PanelSelector.Description: "" => ""
 PopOutInfo.PanelSelector.Title: "+" => "+"
 
@@ -143,8 +143,8 @@ EDDiscoveryForm.addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStr
 EDDiscoveryForm.helpToolStripMenuItem: "&Help" => "&Hilfe"
 EDDiscoveryForm.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&Über"
 EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryHomepageToolStripMenuItem: "&View Help" => "&Hilfe anzeigen"
-EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
-EDDiscoveryForm.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" @
+EDDiscoveryForm.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "&Discord - EDD Community Chat"
+EDDiscoveryForm.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "&Frontier Forum Eintrag"
 EDDiscoveryForm.helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Projektseite (GitHub)"
 EDDiscoveryForm.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Ein Problem / eine Idee melden"
 EDDiscoveryForm.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Wie man in Safe Mode startet um verschiedene Parameter zurückzusetzen"
@@ -161,7 +161,7 @@ EDDiscoveryForm.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Erweiterunge
 EDDiscoveryForm.buttonExtRefresh.ToolTip: "Refresh the history" => "Historie aktualisieren"
 EDDiscoveryForm.buttonExt2dmap.ToolTip: "Open the 2D Map" => "2D-Karte öffnen"
 EDDiscoveryForm.buttonExt3dmap.ToolTip: "Open the 3D Map" => "3D-Karte öffnen"
-EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" @
+EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" => "DEBUG Aktionssystem neu laden"
 
 EDDiscoveryForm.addTabToolStripMenuItem: "Insert Tab with panel.." => "Reiter in Fenster... einfügen"
 EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Reiter entfernen"
@@ -181,11 +181,11 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Reiter umbenennen"
 .CAPINA: "Companion API is disabled in commander settings" => "Die Companion API wurde in den Einstellungen des Kommandanten ausgeschaltet"
 .CAPION: "Logged into Companion API" => "Verbunden mit Companion API"
 .CAPIF: "Companion API failed: {0}" => "Problem mit der Companion API: {0}"
-.CAPIND: "CAPI not docked. Server API lagging!"
+.CAPIND: "CAPI not docked. Server API lagging!" => "CAOU nicht angebunden. Server API liefert verzögert!"
 .CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" @
 .CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " @
 .CAPIMN: "CAPI stationname {0}, market station is {1} " @
-.CAPIEX: "Companion API get failed: " @
+.CAPIEX: "Companion API get failed: " => "Zugriff auf die Companion API fehlgeschlagen"
 .Arrived: "Arrived at system {0} Visit No. {1}" => "In System {0} angekommen, {1}. Besuch"
 .PE1: "Profile reports errors in triggers:" @
 .EDDN: "Sent {0} event to EDDN ({1})" => "{0} Ereignisse an EDDN gesendet ({1})"
@@ -224,9 +224,9 @@ EDDiscoveryController.CD: "Closing down, please wait.." => "Schliessen, bitte wa
 .EDDBU: "EDDB update complete with {0} systems" => "EDDB Update hat {0} Systeme geladen"
 .SYST: "Loading completed, total of {0:N0} systems stored" => "Laden beendet, {0:N0} Systeme gespeichert"
 .Refresh: "Refresh due to updating EDSM or EDDB data" @
-.PLF: "Processing log file {0}" @
+.PLF: "Processing log file {0}" => "Logdatei {0} wird verarbeitet"
 .RD: "Refresh Displays" => "Anzeigen aktualisiert"
-.HRC: "History refresh complete." @
+.HRC: "History refresh complete." => "Aktualisierung der Historie beendet."
 .Maps: "Checking for new EDDiscovery maps" => "Suche nach neuen EDDiscovery Karten"
 .EXPD: "Checking for new Expedition data" => "Suche nach neuen Expeditionsdaten"
 
@@ -247,11 +247,11 @@ UserControlBookmarks.buttonNew.ToolTip: "New Bookmark" => "Neues Lesezeichen"
 UserControlBookmarks.buttonEdit.ToolTip: "Edit Selected Bookmark" => "Ausgewähltes Lesezeichen bearbeiten"
 UserControlBookmarks.textBoxFilter.ToolTip: "Search for Bookmark" => "Nach Lesezeichen suchen"
 
-.CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" @
-.CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" @
-.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
+.CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "Möchten Sie wirklich {0} Lesezeichen löschen?\r\nOK oder Abbrechen"
+.CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "Mächten Sie wirklich das Lezeichen für {0} löschen\r\nOK oder Abbrechen"
+.SysU: "System could not be found - has not been synched or EDSM is unavailable" => "System kann nicht gefunden werden - nicht synchronisiert oder EDSM nicht verfügbar"
 
-/////////////////////////////////////////////////////////////// COmbat
+/////////////////////////////////////////////////////////////// Combat
 
 UserControlCombatPanel.Time: "Time" => "Zeit"
 UserControlCombatPanel.Event: "Event" => "Ereignis"
@@ -279,40 +279,40 @@ UserControlCombatPanel.checkBoxCustomGridOn.ToolTip: "Show grid when in transpar
 UserControlCombatPanel.comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Kampagne zur Anzeige auswählen"
 UserControlCombatPanel.buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Benutzerdefinierte Kampagne bearbeiten"
 
-.Kills: "Kills:" @
-.Faction: "Faction:" @
-.Crimes: "Crimes:" @
+.Kills: "Kills:" => "Abschüsse:"
+.Faction: "Faction:" => "Fraktion:"
+.Crimes: "Crimes:" => "Verbrechen:"
 .Bal: "Bal:" @
 .NewCampaign: "New Campaign" @
-.SinceLastDock: "Since Last Dock" @
-.Name: "Name:" @
+.SinceLastDock: "Since Last Dock" => "Seit dem letzten Andocken"
+.Name: "Name:" => "Name:"
 .C1: "Give name to campaign" @
 .C2: "Optional faction to target" @
-.Start: "Start:" @
-.C3: "Select Start time" @
-.End: "End:" @
-.C4: "Select Start time" @
-.C5: "Press to Accept" @
-.C6: "Press to Cancel" @
-.C7: "Press to Delete" @
+.Start: "Start:" => "Start:"
+.C3: "Select Start time" => "Startzeit auswählen"
+.End: "End:" => "Ziel:"
+.C4: "Select Start time" => "Startzeit auswählen"
+.C5: "Press to Accept" => "Zustimmen"
+.C6: "Press to Cancel" => "Abbrechen"
+.C7: "Press to Delete" => "Löschen"
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" @
-.Condel: "Confirm deletion of {0}" @
-.NC: "Name changed - can't delete" @
+.Condel: "Confirm deletion of {0}" => "Löschung von {0} bestätigen"
+.NC: "Name changed - can't delete" => "Name geändert - kann nicht gelöscht werden"
 
 //////////////////////////////////////////////////////////////// Compass
 
-UserControlCompass.labelBookmark: "System Bookmarks" @
-UserControlCompass.checkBoxHideTransparent: "Hide In Transparent" @
-UserControlCompass.labelTargetLat: "Target" @
+UserControlCompass.labelBookmark: "System Bookmarks" => "System-Lesezeichen"
+UserControlCompass.checkBoxHideTransparent: "Hide In Transparent" => "Im Transparentmodus nicht anzeigen"
+UserControlCompass.labelTargetLat: "Target" => "Ziel"
 
 //////////////////////////////////////////////////////////////// EDSM
 
-UserControlEDSM.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
-UserControlEDSM.viewOnEDSMToolStripMenuItem: "View on EDSM" @
+UserControlEDSM.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Zu Stern auf 3D-Karte gehen"
+UserControlEDSM.viewOnEDSMToolStripMenuItem: "View on EDSM" => "In EDSM anzeigen"
 
-UserControlEDSM.ColumnStar: "Star" => "Star"
-UserControlEDSM.ColumnCentreDistance: "Centre Distance" => "Centre Distance"
-UserControlEDSM.ColumnCurrentDistance: "Current Distance" => "Current Distance"
+UserControlEDSM.ColumnStar: "Star" => "Stern"
+UserControlEDSM.ColumnCentreDistance: "Centre Distance" => "Zentrumsentfernung"
+UserControlEDSM.ColumnCurrentDistance: "Current Distance" => "Momentane Entfernung"
 UserControlEDSM.ColumnPosition: "Position" => "Position"
 UserControlEDSM.ColumnID: "ID" => "ID"
 
@@ -375,15 +375,15 @@ UserControlExpedition.setTargetToolStripMenuItem: "Set Target" => "Ziel setzen"
 UserControlExpedition.editBookmarkToolStripMenuItem: "Edit bookmark" => "Lesezeichen bearbeiten"
 UserControlExpedition.ctxMenuItemUndelete: "&Undelete" => "&Wiederherstellen"
 
-.NoRoute: "No route set up. Please add at least two systems." @
-.Delete: "Are you sure you want to delete this route?" @
-.SelRoute: "Select a route file" @
-.FileE: "There was an error reading file" @
-.Nonames: "The imported file contains no known system names" @
-UserControlExpedition.Createroute: "Please create a route on a route panel" @
-UserControlExpedition.NoRouteExport: "There is no route to export " @
-.Export: "Export route" @
-.UnknownS: "Unknown system, system is without co-ordinates" @
+.NoRoute: "No route set up. Please add at least two systems." => "Keine Route geplant. Bitte mindestens zwei Sternsysteme hinzufügen"
+.Delete: "Are you sure you want to delete this route?" => "Möchten Sie diese Route wirklich löschen?"
+.SelRoute: "Select a route file" => "Routendatei auswählen"
+.FileE: "There was an error reading file" => "Fehler beim Einlesen der Datei"
+.Nonames: "The imported file contains no known system names" => "Die eingelesene Datei enthält keine bekannten Systeme"
+UserControlExpedition.Createroute: "Please create a route on a route panel" => "Bitte erstellen Sie eine Route auf dem Routen-Reiter/Fenster"
+UserControlExpedition.NoRouteExport: "There is no route to export " => "Keine Route zum Exportieren vorhanden"
+.Export: "Export route" => "Route exportieren"
+.UnknownS: "Unknown system, system is without co-ordinates" => "Unbekanntes System, System hat keine Koordinaten"
 .Unsaved: "There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" @
 .Specify: "Please specify a name for the route." @
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
@@ -2662,7 +2662,7 @@ MaterialCommodityData.militarysupercapacitors: "Military Supercapacitors" => "Mi
 MaterialCommodityData.pharmaceuticalisolators: "Pharmaceutical Isolators" => "Pharmazeutische Isolatoren"
 MaterialCommodityData.protoheatradiators: "Proto Heat Radiators" => "Proto-Wärmestrahler"
 MaterialCommodityData.protoradiolicalloys: "Proto Radiolic Alloys" => "Radiologische Legierungen (Proto)"
-MaterialCommodityData.unknownartifact: "Thargoid Sensor" @
+MaterialCommodityData.unknownartifact: "Thargoid Sensor" => "Thargoidensensor"
 MaterialCommodityData.unknownartifact2: "Thargoid Probe" @
 MaterialCommodityData.unknownartifact3: "Thargoid Link" @
 MaterialCommodityData.unknownresin: "Thargoid Resin" @
@@ -2688,9 +2688,9 @@ MaterialCommodityData.pesticides: "Pesticides" => "Pestizide"
 MaterialCommodityData.surfacestabilisers: "Surface Stabilisers" @
 MaterialCommodityData.syntheticreagents: "Synthetic Reagents" @
 MaterialCommodityData.water: "Water" => "Wasser"
-MaterialCommodityData.clothing: "Clothing" @
-MaterialCommodityData.consumertechnology: "Consumer Technology" @
-MaterialCommodityData.domesticappliances: "Domestic Appliances" @
+MaterialCommodityData.clothing: "Clothing" => "Kleidung"
+MaterialCommodityData.consumertechnology: "Consumer Technology" => "Unterhaltungselektronik"
+MaterialCommodityData.domesticappliances: "Domestic Appliances" => "Haushaltsgeräte"
 MaterialCommodityData.evacuationshelter: "Evacuation Shelter" @
 MaterialCommodityData.survivalequipment: "Survival Equipment" @
 MaterialCommodityData.algae: "Algae" => "Algen"
@@ -2716,7 +2716,7 @@ MaterialCommodityData.bootlegliquor: "Bootleg Liquor" @
 MaterialCommodityData.liquor: "Liquor" => "Spirituosen"
 MaterialCommodityData.tobacco: "Tobacco" => "Tabak"
 MaterialCommodityData.wine: "Wine" => "Wein"
-MaterialCommodityData.atmosphericextractors: "Atmospheric Processors" @
+MaterialCommodityData.atmosphericextractors: "Atmospheric Processors" => "Atmosphärenprozessoren"
 MaterialCommodityData.marinesupplies: "Marine Equipment" => "Maritimausstattung"
 MaterialCommodityData.heliostaticfurnaces: "Microbial Furnaces" => "Mikrobielle Öfen"
 MaterialCommodityData.skimercomponents: "Skimmer Components" @
@@ -2742,9 +2742,9 @@ MaterialCommodityData.powerconverter: "Power Converter" @
 MaterialCommodityData.iondistributor: "Ion Distributor" @
 MaterialCommodityData.advancedmedicines: "Advanced Medicines" @
 MaterialCommodityData.basicmedicines: "Basic Medicines" => "Allgemeine Medikamente"
-MaterialCommodityData.combatstabilisers: "Combat Stabilisers" @
+MaterialCommodityData.combatstabilisers: "Combat Stabilisers" => "Kampfstabilisatoren"
 MaterialCommodityData.performanceenhancers: "Performance Enhancers" => "Leistungssteigerer"
-MaterialCommodityData.progenitorcells: "Progenitor Cells" @
+MaterialCommodityData.progenitorcells: "Progenitor Cells" => "Vorläuferzellen"
 MaterialCommodityData.agriculturalmedicines: "Agri-Medicines" => "Agrar-Medikamente"
 MaterialCommodityData.aluminium: "Aluminium" => "Aluminium"
 MaterialCommodityData.beryllium: "Beryllium" => "Beryllium"
@@ -2753,11 +2753,11 @@ MaterialCommodityData.cobalt: "Cobalt" => "Cobalt"
 MaterialCommodityData.copper: "Copper" => "Kupfer"
 MaterialCommodityData.gallium: "Gallium" => "Gallium"
 MaterialCommodityData.gold: "Gold" => "Gold"
-MaterialCommodityData.hafnium178: "Hafnium 178" @
+MaterialCommodityData.hafnium178: "Hafnium 178" => "Hafnium 178"
 MaterialCommodityData.indium: "Indium" => "Indium"
 MaterialCommodityData.lanthanum: "Lanthanum" @
 MaterialCommodityData.lithium: "Lithium" => "Lithium"
-MaterialCommodityData.osmium: "Osmium" @
+MaterialCommodityData.osmium: "Osmium" => "Osmium"
 MaterialCommodityData.palladium: "Palladium" => "Palladium"
 MaterialCommodityData.platinum: "Platinum" => "Platin"
 MaterialCommodityData.praseodymium: "Praseodymium" @
@@ -2782,14 +2782,14 @@ MaterialCommodityData.jadeite: "Jadeite" @
 MaterialCommodityData.lepidolite: "Lepidolite" => "Lepidolith"
 MaterialCommodityData.lithiumhydroxide: "Lithium Hydroxide" @
 MaterialCommodityData.moissanite: "Moissanite" @
-MaterialCommodityData.painite: "Painite" @
+MaterialCommodityData.painite: "Painite" => "Painit"
 MaterialCommodityData.pyrophyllite: "Pyrophyllite" @
 MaterialCommodityData.rutile: "Rutile" => "Rutil"
 MaterialCommodityData.taaffeite: "Taaffeite" @
 MaterialCommodityData.uraninite: "Uraninite" => "Uraninit"
 MaterialCommodityData.methanolmonohydratecrystals: "Methanol Monohydrate Crystals" @
 MaterialCommodityData.lowtemperaturediamond: "Low Temperature Diamonds" @
-MaterialCommodityData.trinketsoffortune: "Trinkets of Hidden Fortune" @
+MaterialCommodityData.trinketsoffortune: "Trinkets of Hidden Fortune" => "Schmuckstücke von unschätzbarem Wert"
 MaterialCommodityData.genebank: "Gene Bank" @
 MaterialCommodityData.timecapsule: "Time Capsule" @
 MaterialCommodityData.damagedescapepod: "Damaged Escape Pod" @
@@ -2798,11 +2798,11 @@ MaterialCommodityData.thargoidtissuesampletype1: "Thargoid Cyclops Tissue Sample
 MaterialCommodityData.thargoidtissuesampletype2: "Thargoid Basilisk Tissue Sample" @
 MaterialCommodityData.thargoidtissuesampletype3: "Thargoid Medusa Tissue Sample" @
 MaterialCommodityData.thargoidscouttissuesample: "Thargoid Scout Tissue Sample" @
-MaterialCommodityData.wreckagecomponents: "Wreckage Components" @
+MaterialCommodityData.wreckagecomponents: "Wreckage Components" => "Wrackteilkomponenten"
 MaterialCommodityData.antiquejewellery: "Antique Jewellery" @
-MaterialCommodityData.airelics: "Ai Relics" @
+MaterialCommodityData.airelics: "AI Relics" => "KI-Relikte"
 MaterialCommodityData.antimattercontainmentunit: "Antimatter Containment Unit" @
-MaterialCommodityData.antiquities: "Antiquities" @
+MaterialCommodityData.antiquities: "Antiquities" => "Antiquitäten"
 MaterialCommodityData.assaultplans: "Assault Plans" @
 MaterialCommodityData.datacore: "Data Core" @
 MaterialCommodityData.diplomaticbag: "Diplomatic Bag" @
@@ -2810,14 +2810,14 @@ MaterialCommodityData.encryptedcorrespondence: "Encrypted Correspondence" @
 MaterialCommodityData.fossilremnants: "Fossil Remnants" @
 MaterialCommodityData.geologicalsamples: "Geological Samples" @
 MaterialCommodityData.hostage: "Hostage" @
-MaterialCommodityData.militaryintelligence: "Military Intelligence" @
+MaterialCommodityData.militaryintelligence: "Military Intelligence" => "Militärische Geheimdokumente"
 MaterialCommodityData.mysteriousidol: "Mysterious Idol" @
 MaterialCommodityData.occupiedcryopod: "Occupied Escape Pod" @
 MaterialCommodityData.personaleffects: "Personal Effects" @
 MaterialCommodityData.politicalprisoner: "Political Prisoner" @
 MaterialCommodityData.preciousgems: "Precious Gems" @
 MaterialCommodityData.prohibitedresearchmaterials: "Prohibited Research Materials" @
-MaterialCommodityData.sap8corecontainer: "Sap 8 Core Container" @
+MaterialCommodityData.sap8corecontainer: "SAP 8 Core Container" => "Container mit SAP 8-Kern"
 MaterialCommodityData.scientificresearch: "Scientific Research" @
 MaterialCommodityData.scientificsamples: "Scientific Samples" @
 MaterialCommodityData.spacepioneerrelics: "Space Pioneer Relics" @
@@ -2825,17 +2825,17 @@ MaterialCommodityData.tacticaldata: "Tactical Data" @
 MaterialCommodityData.unstabledatacore: "Unstable Data Core" @
 MaterialCommodityData.largeexplorationdatacash: "Large Survey Data Cache" @
 MaterialCommodityData.smallexplorationdatacash: "Small Survey Data Cache" @
-MaterialCommodityData.usscargoancientartefact: "Ancient Artefact" @
-MaterialCommodityData.usscargoblackbox: "Black Box" @
+aterialCommodityData.usscargoancientartefact: "Ancient Artefact" => "Uraltes Artefakt"
+MaterialCommodityData.usscargoblackbox: "Black Box" => "Black Box"
 MaterialCommodityData.comercialsamples: "Commercial Samples" @
-MaterialCommodityData.encripteddatastorage: "Encrypted Data Storage" @
-MaterialCommodityData.usscargoexperimentalchemicals: "Experimental Chemicals" @
-MaterialCommodityData.usscargomilitaryplans: "Military Plans" @
-MaterialCommodityData.usscargoprototypetech: "Prototype Tech" @
-MaterialCommodityData.usscargorareartwork: "Rare Artwork" @
-MaterialCommodityData.usscargorebeltransmissions: "Rebel Transmissions" @
-MaterialCommodityData.usscargotechnicalblueprints: "Technical Blueprints" @
-MaterialCommodityData.usscargotradedata: "Trade Data" @
+MaterialCommodityData.encripteddatastorage: "Encrypted Data Storage" => "Verschlüsselter Datenträger"
+MaterialCommodityData.usscargoexperimentalchemicals: "Experimental Chemicals" => "Experimentelle Chemikalien"
+MaterialCommodityData.usscargomilitaryplans: "Military Plans" => "Militärpläne"
+MaterialCommodityData.usscargoprototypetech: "Prototype Tech" => "Prototyp-Technologien"
+MaterialCommodityData.usscargorareartwork: "Rare Artwork" => "Seltene Kunstgegenstände"
+MaterialCommodityData.usscargorebeltransmissions: "Rebel Transmissions" => "Rebellenübertragungen"
+MaterialCommodityData.usscargotechnicalblueprints: "Technical Blueprints" => "Technische Baupläne"
+MaterialCommodityData.usscargotradedata: "Trade Data" => "Handelsdaten"
 MaterialCommodityData.ancientrelic: "Ancient Relic" @
 MaterialCommodityData.ancientorb: "Ancient Orb" @
 MaterialCommodityData.ancientcasket: "Ancient Casket" @
@@ -2843,18 +2843,18 @@ MaterialCommodityData.ancienttablet: "Ancient Tablet" @
 MaterialCommodityData.ancienturn: "Ancient Urn" @
 MaterialCommodityData.ancienttotem: "Ancient Totem" @
 MaterialCommodityData.basicnarcotics: "Narcotics" => "Drogen"
-MaterialCommodityData.imperialslaves: "Imperial Slaves" @
-MaterialCommodityData.slaves: "Slaves" @
+MaterialCommodityData.imperialslaves: "Imperial Slaves" => "Imperiale Sklaven"
+MaterialCommodityData.slaves: "Slaves" => "Sklaven"
 MaterialCommodityData.advancedcatalysers: "Advanced Catalysers" => "Fortschr. Katalysatoren"
 MaterialCommodityData.animalmonitors: "Animal Monitors" => "Tierüberwachung"
 MaterialCommodityData.aquaponicsystems: "Aquaponic Systems" => "Aquaponiksysteme"
-MaterialCommodityData.bioreducinglichen: "Bioreducing Lichen" @
+MaterialCommodityData.bioreducinglichen: "Bioreducing Lichen" => "Bioreduzierende Flechten"
 MaterialCommodityData.computercomponents: "Computer Components" => "Computerteile"
 MaterialCommodityData.autofabricators: "Auto-Fabricators" => "Fabrikatoren"
 MaterialCommodityData.microcontrollers: "Micro Controllers" @
 MaterialCommodityData.medicaldiagnosticequipment: "Medical Diagnostic Equipment" @
 MaterialCommodityData.nanobreakers: "Nanobreakers" @
-MaterialCommodityData.resonatingseparators: "Resonating Separators" @
+MaterialCommodityData.resonatingseparators: "Resonating Separators" => "Resonanzabgrenzer"
 MaterialCommodityData.robotics: "Robotics" => "Roboter"
 MaterialCommodityData.structuralregulators: "Structural Regulators" @
 MaterialCommodityData.telemetrysuite: "Telemetry Suite" @
@@ -2867,141 +2867,141 @@ MaterialCommodityData.leather: "Leather" => "Leder"
 MaterialCommodityData.militarygradefabrics: "Military Grade Fabrics" @
 MaterialCommodityData.naturalfabrics: "Natural Fabrics" => "Naturfasern"
 MaterialCommodityData.syntheticfabrics: "Synthetic Fabrics" => "Chemiefasern"
-MaterialCommodityData.biowaste: "Biowaste" @
-MaterialCommodityData.chemicalwaste: "Chemical Waste" @
-MaterialCommodityData.scrap: "Scrap" @
-MaterialCommodityData.toxicwaste: "Toxic Waste" @
-MaterialCommodityData.battleweapons: "Battle Weapons" @
+MaterialCommodityData.biowaste: "Biowaste" => "Biomüll"
+MaterialCommodityData.chemicalwaste: "Chemical Waste" => "Chemiemüll"
+MaterialCommodityData.scrap: "Scrap" => "Schrott"
+MaterialCommodityData.toxicwaste: "Toxic Waste" => "Giftmüll"
+MaterialCommodityData.battleweapons: "Battle Weapons" => "Kriegswaffen"
 MaterialCommodityData.landmines: "Landmines" @
-MaterialCommodityData.personalweapons: "Personal Weapons" @
-MaterialCommodityData.reactivearmour: "Reactive Armour" @
-MaterialCommodityData.nonlethalweapons: "Non-Lethal Weapons" @
-MaterialCommodityData.thehuttonmug: "The Hutton Mug" @
-MaterialCommodityData.eraninpearlwhisky: "Eranin Pearl Whisky" @
-MaterialCommodityData.lavianbrandy: "Lavian Brandy" @
-MaterialCommodityData.hip10175bushmeat: "HIP 10175 Bush Meat" @
-MaterialCommodityData.albinoquechuamammoth: "Albino Quechua Mammoth Meat" @
-MaterialCommodityData.utgaroarmillenialeggs: "Utgaroar Millennial Eggs" @
-MaterialCommodityData.witchhaulkobebeef: "Witchhaul Kobe Beef" @
-MaterialCommodityData.karsukilocusts: "Karsuki Locusts" @
-MaterialCommodityData.giantirukamasnails: "Giant Irukama Snails" @
-MaterialCommodityData.baltahsinevacuumkrill: "Baltah'sine Vacuum Krill" @
-MaterialCommodityData.cetirabbits: "Ceti Rabbits" @
-MaterialCommodityData.kachiriginleaches: "Kachirigin Filter Leeches" @
-MaterialCommodityData.lyraeweed: "Lyrae Weed" @
-MaterialCommodityData.onionhead: "Onionhead" @
-MaterialCommodityData.tarachtorspice: "Tarach Spice" @
-MaterialCommodityData.wolf1301fesh: "Wolf Fesh" @
-MaterialCommodityData.borasetanipathogenetics: "Borasetani Pathogenetics" @
-MaterialCommodityData.hip118311swarm: "HIP 118311 Swarm" @
-MaterialCommodityData.konggaale: "Kongga Ale" @
-MaterialCommodityData.wuthielokufroth: "Wuthielo Ku Froth" @
-MaterialCommodityData.alacarakmoskinart: "Alacarakmo Skin Art" @
-MaterialCommodityData.eleuthermals: "Eleu Thermals" @
-MaterialCommodityData.eshuumbrellas: "Eshu Umbrellas" @
-MaterialCommodityData.karetiicouture: "Karetii Couture" @
-MaterialCommodityData.njangarisaddles: "Njangari Saddles" @
-MaterialCommodityData.anynacoffee: "Any Na Coffee" @
-MaterialCommodityData.cd75catcoffee: "CD-75 Kitten Brand Coffee" @
-MaterialCommodityData.gomanyauponcoffee: "Goman Yaupon Coffee" @
-MaterialCommodityData.volkhabbeedrones: "Volkhab Bee Drones" @
-MaterialCommodityData.kinagoinstruments: "Kinago Violins" @
-MaterialCommodityData.ngunamodernantiques: "Nguna Modern Antiques" @
-MaterialCommodityData.rajukrustoves: "Rajukru Multi-Stoves" @
-MaterialCommodityData.tiolcewaste2pasteunits: "Tiolce Waste2Paste Units" @
-MaterialCommodityData.chieridanimarinepaste: "Chi Eridani Marine Paste" @
-MaterialCommodityData.esusekucaviar: "Esuseku Caviar" @
-MaterialCommodityData.livehecateseaworms: "Live Hecate Sea Worms" @
-MaterialCommodityData.helvetitjpearls: "Helvetitj Pearls" @
-MaterialCommodityData.hip41181squid: "HIP Proto-Squid" @
-MaterialCommodityData.coquimspongiformvictuals: "Coquim Spongiform Victuals" @
-MaterialCommodityData.aerialedenapple: "Eden Apples Of Aerial" @
-MaterialCommodityData.neritusberries: "Neritus Berries" @
-MaterialCommodityData.ochoengchillies: "Ochoeng Chillies" @
-MaterialCommodityData.deuringastruffles: "Deuringas Truffles" @
-MaterialCommodityData.hr7221wheat: "HR 7221 Wheat" @
-MaterialCommodityData.jarouarice: "Jaroua Rice" @
-MaterialCommodityData.belalansrayleather: "Belalans Ray Leather" @
-MaterialCommodityData.damnacarapaces: "Damna Carapaces" @
-MaterialCommodityData.rapabaosnakeskins: "Rapa Bao Snake Skins" @
-MaterialCommodityData.vanayequirhinofur: "Vanayequi Ceratomorpha Fur" @
-MaterialCommodityData.bastsnakegin: "Bast Snake Gin" @
-MaterialCommodityData.thrutiscream: "Thrutis Cream" @
-MaterialCommodityData.wulpahyperboresystems: "Wulpa Hyperbore Systems" @
-MaterialCommodityData.aganipperush: "Aganippe Rush" @
-MaterialCommodityData.terramaterbloodbores: "Terra Mater Blood Bores" @
-MaterialCommodityData.holvaduellingblades: "Holva Duelling Blades" @
-MaterialCommodityData.kamorinhistoricweapons: "Kamorin Historic Weapons" @
-MaterialCommodityData.gilyasignatureweapons: "Gilya Signature Weapons" @
-MaterialCommodityData.deltaphoenicispalms: "Delta Phoenicis Palms" @
-MaterialCommodityData.toxandjivirocide: "Toxandji Virocide" @
-MaterialCommodityData.xihecompanions: "Xihe Biomorphic Companions" @
-MaterialCommodityData.sanumameat: "Sanuma Decorative Meat" @
-MaterialCommodityData.ethgrezeteabuds: "Ethgreze Tea Buds" @
-MaterialCommodityData.ceremonialheiketea: "Ceremonial Heike Tea" @
-MaterialCommodityData.tanmarktranquiltea: "Tanmark Tranquil Tea" @
-MaterialCommodityData.azcancriformula42: "AZ Cancri Formula 42" @
-MaterialCommodityData.sothiscrystallinegold: "Sothis Crystalline Gold" @
-MaterialCommodityData.kamitracigars: "Kamitra Cigars" @
-MaterialCommodityData.rusanioldsmokey: "Rusani Old Smokey" @
-MaterialCommodityData.yasokondileaf: "Yaso Kondi Leaf" @
-MaterialCommodityData.chateaudeaegaeon: "Chateau De Aegaeon" @
-MaterialCommodityData.watersofshintara: "The Waters Of Shintara" @
-MaterialCommodityData.ophiuchiexinoartefacts: "Ophiuch Exino Artefacts" @
-MaterialCommodityData.bakedgreebles: "Baked Greebles" @
-MaterialCommodityData.cetiaepyornisegg: "Aepyornis Egg" @
-MaterialCommodityData.saxonwine: "Saxon Wine" @
-MaterialCommodityData.centaurimegagin: "Centauri Mega Gin" @
-MaterialCommodityData.anduligafireworks: "Anduliga Fire Works" @
-MaterialCommodityData.bankiamphibiousleather: "Banki Amphibious Leather" @
-MaterialCommodityData.cherbonesbloodcrystals: "Cherbones Blood Crystals" @
-MaterialCommodityData.motronaexperiencejelly: "Motrona Experience Jelly" @
-MaterialCommodityData.geawendancedust: "Geawen Dance Dust" @
-MaterialCommodityData.gerasiangueuzebeer: "Gerasian Gueuze Beer" @
-MaterialCommodityData.haidneblackbrew: "Haiden Black Brew" @
-MaterialCommodityData.havasupaidreamcatcher: "Havasupai Dream Catcher" @
-MaterialCommodityData.burnhambiledistillate: "Burnham Bile Distillate" @
-MaterialCommodityData.hiporganophosphates: "Hip Organophosphates" @
-MaterialCommodityData.jaradharrepuzzlebox: "Jaradharre Puzzle Box" @
-MaterialCommodityData.korrokungpellets: "Koro Kung Pellets" @
-MaterialCommodityData.lftvoidextractcoffee: "Void Extract Coffee" @
-MaterialCommodityData.honestypills: "Honesty Pills" @
-MaterialCommodityData.noneuclidianexotanks: "Non Euclidian Exotanks" @
-MaterialCommodityData.ltthypersweet: "LTT Hyper Sweet" @
-MaterialCommodityData.mechucoshightea: "Mechucos High Tea" @
-MaterialCommodityData.medbstarlube: "Medb Starlube" @
-MaterialCommodityData.mokojingbeastfeast: "Mokojing Beast Feast" @
-MaterialCommodityData.mukusubiichitinos: "Mukusubii Chitin-os" @
-MaterialCommodityData.mulachigiantfungus: "Mulachi Giant Fungus" @
-MaterialCommodityData.ngadandarifireopals: "Ngadandari Fire Opals" @
-MaterialCommodityData.tiegfriessynthsilk: "Tiegfries Synth Silk" @
-MaterialCommodityData.uzumokulowgwings: "Uzumoku Low-G Wings" @
-MaterialCommodityData.vherculisbodyrub: "V Herculis Body Rub" @
-MaterialCommodityData.wheemetewheatcakes: "Wheemete Wheat Cakes" @
-MaterialCommodityData.vegaslimweed: "Vega Slimweed" @
-MaterialCommodityData.altairianskin: "Altairian Skin" @
-MaterialCommodityData.pavoniseargrubs: "Pavonis Ear Grubs" @
-MaterialCommodityData.jotunmookah: "Jotun Mookah" @
-MaterialCommodityData.giantverrix: "Giant Verrix" @
-MaterialCommodityData.indibourbon: "Indi Bourbon" @
-MaterialCommodityData.aroucaconventualsweets: "Arouca Conventual Sweets" @
-MaterialCommodityData.taurichimes: "Tauri Chimes" @
-MaterialCommodityData.zeesszeantglue: "Zeessze Ant Grub Glue" @
-MaterialCommodityData.pantaaprayersticks: "Pantaa Prayer Sticks" @
-MaterialCommodityData.fujintea: "Fujin Tea" @
-MaterialCommodityData.chameleoncloth: "Chameleon Cloth" @
-MaterialCommodityData.orrerianviciousbrew: "Orrerian Vicious Brew" @
-MaterialCommodityData.uszaiantreegrub: "Uszaian Tree Grub" @
-MaterialCommodityData.momusbogspaniel: "Momus Bog Spaniel" @
-MaterialCommodityData.disomacorn: "Diso Ma Corn" @
-MaterialCommodityData.leestianeviljuice: "Leestian Evil Juice" @
-MaterialCommodityData.bluemilk: "Azure Milk" @
-MaterialCommodityData.alieneggs: "Leathery Eggs" @
-MaterialCommodityData.alyabodilysoap: "Alya Body Soap" @
-MaterialCommodityData.vidavantianlace: "Vidavantian Lace" @
-MaterialCommodityData.transgeniconionhead: "Lucan Onionhead" @
-MaterialCommodityData.jaquesquinentianstill: "Jaques Quinentian Still" @
-MaterialCommodityData.soontillrelics: "Soontill Relics" @
+MaterialCommodityData.personalweapons: "Personal Weapons" => "Persönliche Waffen"
+MaterialCommodityData.reactivearmour: "Reactive Armour" => "Reaktivrüstung"
+MaterialCommodityData.nonlethalweapons: "Non-Lethal Weapons" => "Nichttödliche Waffen"
+MaterialCommodityData.thehuttonmug: "The Hutton Mug" => "Hutton-Becher"
+MaterialCommodityData.eraninpearlwhisky: "Eranin Pearl Whisky" => "Eranin Pearl Whisky"
+MaterialCommodityData.lavianbrandy: "Lavian Brandy" => "Lave-Brandy"
+MaterialCommodityData.hip10175bushmeat: "HIP 10175 Bush Meat" => "Wildfleisch von HIP 10175"
+MaterialCommodityData.albinoquechuamammoth: "Albino Quechua Mammoth Meat" => "Albinomammut-Fleisch"
+MaterialCommodityData.utgaroarmillenialeggs: "Utgaroar Millennial Eggs" => "Utgaroar-Milleniumeier"
+MaterialCommodityData.witchhaulkobebeef: "Witchhaul Kobe Beef" => "Witchhaul Kobe-Rindfleisch"
+MaterialCommodityData.karsukilocusts: "Karsuki Locusts" => "Karsuki-Heuschrecke"
+MaterialCommodityData.giantirukamasnails: "Giant Irukama Snails" => "Irukama-Riesenschnecken"
+MaterialCommodityData.baltahsinevacuumkrill: "Baltah'sine Vacuum Krill" => "Vakuumkrill von Baltah'sine"
+MaterialCommodityData.cetirabbits: "Ceti Rabbits" => "Ceti-Kaninchen"
+MaterialCommodityData.kachiriginleaches: "Kachirigin Filter Leeches" => "Kachirigin-Filter-Egel"
+MaterialCommodityData.lyraeweed: "Lyrae Weed" => "Lyrae Weed"
+MaterialCommodityData.onionhead: "Onionhead" => "Onionhead"
+MaterialCommodityData.tarachtorspice: "Tarach Spice" => "Tarach Spice"
+MaterialCommodityData.wolf1301fesh: "Wolf Fesh" => "Wolf Fesh"
+MaterialCommodityData.borasetanipathogenetics: "Borasetani Pathogenetics" => "Borasetani-Pathogenetika"
+MaterialCommodityData.hip118311swarm: "HIP 118311 Swarm" => "HIP 118311 Swarm"
+MaterialCommodityData.konggaale: "Kongga Ale" => "Kongga Ale"
+MaterialCommodityData.wuthielokufroth: "Wuthielo Ku Froth" => "Wuthielo Ku Froth"
+MaterialCommodityData.alacarakmoskinart: "Alacarakmo Skin Art" => "Alacarakmo-Hautinlays"
+MaterialCommodityData.eleuthermals: "Eleu Thermals" => "Eleu-Thermotextilien"
+MaterialCommodityData.eshuumbrellas: "Eshu Umbrellas" => "Eshu-Regenschirme"
+MaterialCommodityData.karetiicouture: "Karetii Couture" => "Karetii Couture"
+MaterialCommodityData.njangarisaddles: "Njangari Saddles" => "Njangari-Sättel"
+MaterialCommodityData.anynacoffee: "Any Na Coffee" => "Any Na Coffee"
+MaterialCommodityData.cd75catcoffee: "CD-75 Kitten Brand Coffee" => "CD-75 Kitten Brand Coffee"
+MaterialCommodityData.gomanyauponcoffee: "Goman Yaupon Coffee" => "Goman Yaupon Coffee"
+MaterialCommodityData.volkhabbeedrones: "Volkhab Bee Drones" => "Volkhab-Bienendrohnen"
+MaterialCommodityData.kinagoinstruments: "Kinago Violins" => "Kinago-Geigen"
+MaterialCommodityData.ngunamodernantiques: "Nguna Modern Antiques" => "Nguna Moderne Antiquitäten"
+MaterialCommodityData.rajukrustoves: "Rajukru Multi-Stoves" => "Rajukru-Universalöfen"
+MaterialCommodityData.tiolcewaste2pasteunits: "Tiolce Waste2Paste Units" => "Müll-zu-Paste-Einheiten"
+MaterialCommodityData.chieridanimarinepaste: "Chi Eridani Marine Paste" => "Chi-Eridani-Meerespaste"
+MaterialCommodityData.esusekucaviar: "Esuseku Caviar" => "Esuseku-Kaviar"
+MaterialCommodityData.livehecateseaworms: "Live Hecate Sea Worms" => "Live-Hecate-Seewürmer"
+MaterialCommodityData.helvetitjpearls: "Helvetitj Pearls" => "Helvetitj-Perlen"
+MaterialCommodityData.hip41181squid: "HIP Proto-Squid" => "HIP-Proto-Kalmar"
+MaterialCommodityData.coquimspongiformvictuals: "Coquim Spongiform Victuals" => "Coquim Schwammkost"
+MaterialCommodityData.aerialedenapple: "Eden Apples Of Aerial" => "Eden-Luftäpfel"
+MaterialCommodityData.neritusberries: "Neritus Berries" => "Neritus-Beeren"
+MaterialCommodityData.ochoengchillies: "Ochoeng Chillies" => "Ochoeng-Chili"
+MaterialCommodityData.deuringastruffles: "Deuringas Truffles" => "Deuringas-Trüffel"
+MaterialCommodityData.hr7221wheat: "HR 7221 Wheat" => "\"HR 7221\"-Weizen"
+MaterialCommodityData.jarouarice: "Jaroua Rice" => "Jaroua-Reis"
+MaterialCommodityData.belalansrayleather: "Belalans Ray Leather" => "Belalans-Rochenleder"
+MaterialCommodityData.damnacarapaces: "Damna Carapaces" => "Damna-Schildpanzer"
+MaterialCommodityData.rapabaosnakeskins: "Rapa Bao Snake Skins" => "Rapa-Bao-Schlangenhäute"
+MaterialCommodityData.vanayequirhinofur: "Vanayequi Ceratomorpha Fur" => "Vanayequi-Ceratomorpha-Fell"
+MaterialCommodityData.bastsnakegin: "Bast Snake Gin" => "Bast Snake Gin"
+MaterialCommodityData.thrutiscream: "Thrutis Cream" => "Thrutis Cream"
+MaterialCommodityData.wulpahyperboresystems: "Wulpa Hyperbore Systems" => "Wulpa-Superbohrer-Systeme"
+MaterialCommodityData.aganipperush: "Aganippe Rush" => "Aganippe-Hirnhetzer"
+MaterialCommodityData.terramaterbloodbores: "Terra Mater Blood Bores" => "Terra-Mater-Berserker"
+MaterialCommodityData.holvaduellingblades: "Holva Duelling Blades" => "Holva-Duellschwerter"
+MaterialCommodityData.kamorinhistoricweapons: "Kamorin Historic Weapons" => "Histor. Kamorin-Waffen"
+MaterialCommodityData.gilyasignatureweapons: "Gilya Signature Weapons" => "Gilya-Signaturwaffen"
+MaterialCommodityData.deltaphoenicispalms: "Delta Phoenicis Palms" => "Delta-Phönix-Palmen"
+MaterialCommodityData.toxandjivirocide: "Toxandji Virocide" => "Toxandji Virocide"
+MaterialCommodityData.xihecompanions: "Xihe Biomorphic Companions" => "Xihe Biomorphic Companions"
+MaterialCommodityData.sanumameat: "Sanuma Decorative Meat" => "Sanuma-Dekorfleisch"
+MaterialCommodityData.ethgrezeteabuds: "Ethgreze Tea Buds" => "Ethgreze-Teeknospen"
+MaterialCommodityData.ceremonialheiketea: "Ceremonial Heike Tea" => "Heike-Zeremonientee"
+MaterialCommodityData.tanmarktranquiltea: "Tanmark Tranquil Tea" => "Tanmark-Besänftigungstee"
+MaterialCommodityData.azcancriformula42: "AZ Cancri Formula 42" => "AZ Cancri Formel 42"
+MaterialCommodityData.sothiscrystallinegold: "Sothis Crystalline Gold" => "Sothis-Kristallingold"
+MaterialCommodityData.kamitracigars: "Kamitra Cigars" => "Kamitra-Zigarren"
+MaterialCommodityData.rusanioldsmokey: "Rusani Old Smokey" => "Rusani Old Smokey"
+MaterialCommodityData.yasokondileaf: "Yaso Kondi Leaf" => "Yaso-Kondi-Blätter"
+MaterialCommodityData.chateaudeaegaeon: "Chateau De Aegaeon" => "Chateau De Aegaeon"
+MaterialCommodityData.watersofshintara: "The Waters Of Shintara" => "Shinrarta-Wasser"
+MaterialCommodityData.ophiuchiexinoartefacts: "Ophiuch Exino Artefacts" => "Ophiuch-Exino-Artefakte"
+MaterialCommodityData.bakedgreebles: "Baked Greebles" => "Gebackene Greebles"
+MaterialCommodityData.cetiaepyornisegg: "Aepyornis Egg" => "Aepyornis-Eier"
+MaterialCommodityData.saxonwine: "Saxon Wine" => "Sachsenwein"
+MaterialCommodityData.centaurimegagin: "Centauri Mega Gin" => "Centauri Mega Gin"
+MaterialCommodityData.anduligafireworks: "Anduliga Fire Works" => "Anduliga-Feuerwerk"
+MaterialCommodityData.bankiamphibiousleather: "Banki Amphibious Leather" => "Banki-Amphibienleder"
+MaterialCommodityData.cherbonesbloodcrystals: "Cherbones Blood Crystals" => "Cherbones-Blutkristalle"
+MaterialCommodityData.motronaexperiencejelly: "Motrona Experience Jelly" => "Motrona-Erfahrungsgel"
+MaterialCommodityData.geawendancedust: "Geawen Dance Dust" => "Geawen-Tanzstaub"
+MaterialCommodityData.gerasiangueuzebeer: "Gerasian Gueuze Beer" => "Gersianisches Gueuze-Bier"
+MaterialCommodityData.haidneblackbrew: "Haiden Black Brew" => "Haiden-Schwarzbier"
+MaterialCommodityData.havasupaidreamcatcher: "Havasupai Dream Catcher" => "Havasupai-Traumfänger"
+MaterialCommodityData.burnhambiledistillate: "Burnham Bile Distillate" => "Burnham-Körpersaftdestillat"
+MaterialCommodityData.hiporganophosphates: "Hip Organophosphates" => "HIP-Organophosphate"
+MaterialCommodityData.jaradharrepuzzlebox: "Jaradharre Puzzle Box" => "Jaradharre Puzzle-Box"
+MaterialCommodityData.korrokungpellets: "Koro Kung Pellets" => "Koro-Kung-Pellets"
+MaterialCommodityData.lftvoidextractcoffee: "Void Extract Coffee" => "Weltraumvakuum-Kaffee"
+MaterialCommodityData.honestypills: "Honesty Pills" => "Ehrlichkeitspillen"
+MaterialCommodityData.noneuclidianexotanks: "Non Euclidian Exotanks" => "Nichteuklidische Exotanks"
+MaterialCommodityData.ltthypersweet: "LTT Hyper Sweet" => "LTT-Hypersüße"
+MaterialCommodityData.mechucoshightea: "Mechucos High Tea" => "Mechucos-High-Tee"
+MaterialCommodityData.medbstarlube: "Medb Starlube" => "Medb-Sternschmiere"
+MaterialCommodityData.mokojingbeastfeast: "Mokojing Beast Feast" => "Mokojing Monstermüsli"
+MaterialCommodityData.mukusubiichitinos: "Mukusubii Chitin-os" => "Mukusubii Chitin-os"
+MaterialCommodityData.mulachigiantfungus: "Mulachi Giant Fungus" => "Mulachi-Riesenpilz"
+MaterialCommodityData.ngadandarifireopals: "Ngadandari Fire Opals" => "Ngadandari-Feueropale"
+MaterialCommodityData.tiegfriessynthsilk: "Tiegfries Synth Silk" => "Tiegfries-Synthetikseide"
+MaterialCommodityData.uzumokulowgwings: "Uzumoku Low-G Wings" => "Uzumoku Leichtkraftflügel"
+MaterialCommodityData.vherculisbodyrub: "V Herculis Body Rub" => "V Herculis Körperschrubber"
+MaterialCommodityData.wheemetewheatcakes: "Wheemete Wheat Cakes" => "Wheemete Weizenküchlein"
+MaterialCommodityData.vegaslimweed: "Vega Slimweed" => "Vega-Schlankkraut"
+MaterialCommodityData.altairianskin: "Altairian Skin" => "Altair-Haut"
+MaterialCommodityData.pavoniseargrubs: "Pavonis Ear Grubs" => "Pavonis-Ohrenlarven"
+MaterialCommodityData.jotunmookah: "Jotun Mookah" => "Jotun Mookah"
+MaterialCommodityData.giantverrix: "Giant Verrix" => "Riesen-Verrix"
+MaterialCommodityData.indibourbon: "Indi Bourbon" => "Indi Bourbon"
+MaterialCommodityData.aroucaconventualsweets: "Arouca Conventual Sweets" => "Arouca-Klosterbonbons"
+MaterialCommodityData.taurichimes: "Tauri Chimes" => "Tauri-Glockenspiel"
+MaterialCommodityData.zeesszeantglue: "Zeessze Ant Grub Glue" => "Zeessze-Ameisenkleber"
+MaterialCommodityData.pantaaprayersticks: "Pantaa Prayer Sticks" => "Pantaa-Weihrauchstöcke"
+MaterialCommodityData.fujintea: "Fujin Tea" => "Fujin-Tee"
+MaterialCommodityData.chameleoncloth: "Chameleon Cloth" => "Chamäleon-Kleidung"
+MaterialCommodityData.orrerianviciousbrew: "Orrerian Vicious Brew" => "Orrerianisches Immerwach"
+MaterialCommodityData.uszaiantreegrub: "Uszaian Tree Grub" => "Uszaian-Baumlarven"
+MaterialCommodityData.momusbogspaniel: "Momus Bog Spaniel" => "Momus-Sumpfspaniel"
+MaterialCommodityData.disomacorn: "Diso Ma Corn" => "Diso-Ma-Mais"
+MaterialCommodityData.leestianeviljuice: "Leestian Evil Juice" => "Leesti-Teufelssaft"
+MaterialCommodityData.bluemilk: "Azure Milk" => "Azurmilch"
+MaterialCommodityData.alieneggs: "Leathery Eggs" => "Ledrige Eier"
+MaterialCommodityData.alyabodilysoap: "Alya Body Soap" => "Alya-Körperseife"
+MaterialCommodityData.vidavantianlace: "Vidavantian Lace" => "Vidava-Spitze"
+MaterialCommodityData.transgeniconionhead: "Lucan Onionhead" => "Lucan Onionhead"
+MaterialCommodityData.jaquesquinentianstill: "Jaques Quinentian Still" => "Jaques Quinent-Destille"
+MaterialCommodityData.soontillrelics: "Soontill Relics" => "Soontill-Relikte"
 MaterialCommodityData.onionheada: "Onionhead Alpha Strain" @
 MaterialCommodityData.onionheadb: "Onionhead Beta Strain" @
 MaterialCommodityData.galactictravelguide: "Galactic Travel Guide" @
@@ -3011,45 +3011,45 @@ MaterialCommodityData.buckyballbeermats: "Buckyball Beer Mats" @
 MaterialCommodityData.masterchefs: "Master Chefs" @
 MaterialCommodityData.personalgifts: "Personal Gifts" @
 MaterialCommodityData.crystallinespheres: "Crystalline Spheres" @
-MaterialCommodityData.advert1: "Ultra-Compact Processor Prototypes" @
+MaterialCommodityData.advert1: "Ultra-Compact Processor Prototypes" => "Ultrakompakte Prozessorprototypen"
 MaterialCommodityData.harmasilversearum: "Harma Silver Sea Rum" @
 MaterialCommodityData.earthrelics: "Earth Relics" @
-MaterialCommodityData.aislingmediamaterials: "Aisling Media Materials" @
-MaterialCommodityData.aislingmediaresources: "Aisling Sealed Contracts" @
-MaterialCommodityData.aislingpromotionalmaterials: "Aisling Programme Materials" @
-MaterialCommodityData.alliancetradeagreements: "Alliance Trade Agreements" @
-MaterialCommodityData.alliancelegaslativecontracts: "Alliance Legislative Contracts" @
-MaterialCommodityData.alliancelegaslativerecords: "Alliance Legislative Records" @
-MaterialCommodityData.lavignycorruptiondossiers: "Lavigny Corruption Reports" @
-MaterialCommodityData.lavignyfieldsupplies: "Lavigny Field Supplies" @
-MaterialCommodityData.lavignygarisonsupplies: "Lavigny Garrison Supplies" @
-MaterialCommodityData.restrictedpackage: "Core Restricted Package" @
-MaterialCommodityData.liberalcampaignmaterials: "Liberal Propaganda" @
-MaterialCommodityData.federalaid: "Liberal Federal Aid" @
-MaterialCommodityData.federaltradecontracts: "Liberal Federal Packages" @
-MaterialCommodityData.loanedarms: "Marked Military Arms" @
-MaterialCommodityData.patreusfieldsupplies: "Patreus Field Supplies" @
-MaterialCommodityData.patreusgarisonsupplies: "Patreus Garrison Supplies" @
-MaterialCommodityData.restrictedintel: "Hudson's Restricted Intel" @
-MaterialCommodityData.republicanfieldsupplies: "Hudson's Field Supplies" @
-MaterialCommodityData.republicangarisonsupplies: "Hudson Garrison Supplies" @
-MaterialCommodityData.siriusfranchisepackage: "Sirius Franchise Package" @
-MaterialCommodityData.siriuscommercialcontracts: "Sirius Corporate Contracts" @
-MaterialCommodityData.siriusindustrialequipment: "Sirius Industrial Equipment" @
-MaterialCommodityData.torvalcommercialcontracts: "Torval Trade Agreements" @
-MaterialCommodityData.imperialprisoner: "Torval Political Prisoners" @
-MaterialCommodityData.utopianpublicity: "Utopian Publicity" @
-MaterialCommodityData.utopianfieldsupplies: "Utopian Supplies" @
-MaterialCommodityData.utopiandissident: "Utopian Dissident" @
-MaterialCommodityData.illicitconsignment: "Kumo Contraband Package" @
-MaterialCommodityData.unmarkedweapons: "Unmarked Military supplies" @
-MaterialCommodityData.onionheadsamples: "Onionhead Samples" @
-MaterialCommodityData.counterculturesupport: "Revolutionary supplies" @
-MaterialCommodityData.onionheadderivatives: "Onionhead Derivatives" @
-MaterialCommodityData.outofdategoods: "Out Of Date Goods" @
+MaterialCommodityData.aislingmediamaterials: "Aisling Media Materials" => "Aislings Medienmaterialien"
+MaterialCommodityData.aislingmediaresources: "Aisling Sealed Contracts" => "Aislings abgeschlossene Verträge"
+MaterialCommodityData.aislingpromotionalmaterials: "Aisling Programme Materials" => "Aislings Programmmaterialien"
+MaterialCommodityData.alliancetradeagreements: "Alliance Trade Agreements" => "Handelsabkommen der Allianz"
+MaterialCommodityData.alliancelegaslativecontracts: "Alliance Legislative Contracts" => "Gesetzesverträge der Allianz"
+MaterialCommodityData.alliancelegaslativerecords: "Alliance Legislative Records" => "Gesetzeslisten der Allianz"
+MaterialCommodityData.lavignycorruptiondossiers: "Lavigny Corruption Reports" => "Lavignys Korruptionsberichte"
+MaterialCommodityData.lavignyfieldsupplies: "Lavigny Field Supplies" => "Lavignys Feldversorgung"
+MaterialCommodityData.lavignygarisonsupplies: "Lavigny Garrison Supplies" => "Lavignys Garnisonsversorgung"
+MaterialCommodityData.restrictedpackage: "Core Restricted Package" => "Vertrauliches Paket der Core Holding"
+MaterialCommodityData.liberalcampaignmaterials: "Liberal Propaganda" => "Liberale Propaganda"
+MaterialCommodityData.federalaid: "Liberal Federal Aid" => "Liberale Föderiertenhilfe"
+MaterialCommodityData.federaltradecontracts: "Liberal Federal Packages" => "Liberales Föderiertenpaket"
+MaterialCommodityData.loanedarms: "Marked Military Arms" => "Markierte Militärwaffen"
+MaterialCommodityData.patreusfieldsupplies: "Patreus Field Supplies" => "Patreus' Feldversorgung"
+MaterialCommodityData.patreusgarisonsupplies: "Patreus Garrison Supplies" => "Patreus' Garnisonsversorgung"
+MaterialCommodityData.restrictedintel: "Hudson's Restricted Intel" => "Hudsons Geheiminformationen"
+MaterialCommodityData.republicanfieldsupplies: "Hudson's Field Supplies" => "Hudsons Feldversorgung"
+MaterialCommodityData.republicangarisonsupplies: "Hudson Garrison Supplies" => "Hudsons Garnisonsversorgung"
+MaterialCommodityData.siriusfranchisepackage: "Sirius Franchise Package" => "Sirius Franchise-Paket"
+MaterialCommodityData.siriuscommercialcontracts: "Sirius Corporate Contracts" => "Sirius Unternehmensverträge"
+MaterialCommodityData.siriusindustrialequipment: "Sirius Industrial Equipment" => "Sirius Industrieausrüstung"
+MaterialCommodityData.torvalcommercialcontracts: "Torval Trade Agreements" => "Torvals Handelsabkommen"
+MaterialCommodityData.imperialprisoner: "Torval Political Prisoners" => "Torvals politische Gefangene"
+MaterialCommodityData.utopianpublicity: "Utopian Publicity" => "Utopia-PR-Dokumente"
+MaterialCommodityData.utopianfieldsupplies: "Utopian Supplies" => "Utopia-Versorgungsmaterialien"
+MaterialCommodityData.utopiandissident: "Utopian Dissident" => "Utopia-Dissidenten"
+MaterialCommodityData.illicitconsignment: "Kumo Contraband Package" => "Kumo-Schmuggelwarenpaket"
+MaterialCommodityData.unmarkedweapons: "Unmarked Military supplies" => "Unmarkierte Militärmaterialien"
+MaterialCommodityData.onionheadsamples: "Onionhead Samples" => "Onionhead-Proben"
+MaterialCommodityData.counterculturesupport: "Revolutionary supplies" => "Revolutionsmaterialien"
+MaterialCommodityData.onionheadderivatives: "Onionhead Derivatives" => "Onionhead-Derivantien"
+MaterialCommodityData.outofdategoods: "Out Of Date Goods" => "Abgelaufene Waren"
 MaterialCommodityData.undergroundsupport: "Grom Underground Support" @
 MaterialCommodityData.gromcounterintelligence: "Grom Counter Intelligence" @
 MaterialCommodityData.gromwartrophies: "Yuri Grom's Military Supplies" @
-MaterialCommodityData.markedslaves: "Marked Slaves" @
-MaterialCommodityData.torvaldeeds: "Torval Deeds" @
+MaterialCommodityData.markedslaves: "Marked Slaves" => "Markierte Sklaven"
+MaterialCommodityData.torvaldeeds: "Torval Deeds" => "Torvals Urkunden"
 MaterialCommodityData.drones: "Drones" @
