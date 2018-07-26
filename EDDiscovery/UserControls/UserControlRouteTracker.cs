@@ -197,7 +197,7 @@ namespace EDDiscovery.UserControls
                     if (lastsystem == null || name.CompareTo(lastsystem) != 0)
                     {
                         if (autoCopyWPToolStripMenuItem.Checked)
-                            Clipboard.SetText(name);
+                            SetClipboardText(name);
 
                         if (autoSetTargetToolStripMenuItem.Checked)
                         {

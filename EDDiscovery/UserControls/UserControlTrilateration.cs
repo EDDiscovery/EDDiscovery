@@ -272,17 +272,7 @@ namespace EDDiscovery.UserControls
 
                     System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
 
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        try
-                        {
-                            System.Windows.Forms.Clipboard.SetText(text);
-                        }
-                        catch
-                        {
-                            discoveryform.LogLineHighlight("Copying text to clipboard failed");
-                        }
-                    }
+                    SetClipboardText(text);
                 }
             }
             catch (Exception ex)
@@ -306,17 +296,7 @@ namespace EDDiscovery.UserControls
 
                     System.Diagnostics.Trace.WriteLine("Click:" + e.RowIndex.ToString() + ":" + e.ColumnIndex.ToString());
 
-                    if (!string.IsNullOrEmpty(text))
-                    {
-                        try
-                        {
-                            System.Windows.Forms.Clipboard.SetText(text);
-                        }
-                        catch
-                        {
-                            discoveryform.LogLineHighlight("Copying text to clipboard failed");
-                        }
-                    }
+                    SetClipboardText(text);
                 }
             }
             catch (Exception ex)
@@ -1000,16 +980,7 @@ namespace EDDiscovery.UserControls
             string text=null;
             if (ob != null)
                 text = (string)ob.Value;
-            if (!string.IsNullOrEmpty(text))
-                try
-                {
-                    System.Windows.Forms.Clipboard.SetText(text);
-                }
-                catch
-                {
-                    discoveryform.LogLineHighlight("Copying text to clipboard failed");
-                }
-
+            SetClipboardText(text);
         }
 
         public void AddWantedSystem(string sysName)

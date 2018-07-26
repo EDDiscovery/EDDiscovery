@@ -1121,7 +1121,7 @@ namespace EDDiscovery.UserControls
             string json = jo?.ToString(Newtonsoft.Json.Formatting.Indented);
             if (json != null)
             {
-                Clipboard.SetText(json);
+                SetClipboardText(json);
                 discoveryform.LogLine(json);
             }
         }
