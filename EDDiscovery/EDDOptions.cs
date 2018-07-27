@@ -1,4 +1,20 @@
-﻿using EliteDangerousCore.EDSM;
+﻿/*
+ * Copyright © 2018 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
+using EliteDangerousCore.EDSM;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,24 +81,23 @@ namespace EDDiscovery
         public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
-        public string TranslatorDirectory() { return SubAppDirectory("Translator"); }
+        public string TranslatorDirectory() { return translationfolder; }
+        public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
 
-        private string AppFolder { get; set; }      // internal to use.. for -appfolder option
-        private bool StoreDataInProgramDirectory { get; set; }  // internal to us, to indicate portable
+        private string AppFolder;      // internal to use.. for -appfolder option
+        private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable
+        private string translationfolder; // internal to us
 
         private void SetAppDataDirectory()
         {
-            ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
+            ProcessCommandLineOptions((optname, ca) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -appfolder
-                if (optname == "-appfolder" && optval != null)
+                if (optname == "-appfolder" && ca.More)
                 {
-                    AppFolder = optval;
-
-                    return true;    // used one
+                    AppFolder = ca.Next;
+                    System.Diagnostics.Debug.WriteLine("App Folder to " + AppFolder);
                 }
-
-                return false;
             });
 
             string appfolder = AppFolder;
@@ -148,96 +163,88 @@ namespace EDDiscovery
             UserDatabasePath = appsettings["UserDatabasePath"];
         }
 
-        private void ProcessOptionsFileOption(string basefolder)     // command line -optionsfile
+        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs> getopt)     // command line -optionsfile
         {
             //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
-            ProcessCommandLineOptions((optname, optval) =>              //FIRST pass thru command line options looking
+            ProcessCommandLineOptions((optname, ca) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -optionsfile
-                if (optname == "-optionsfile" && optval != null)
+                if (optname == "-optionsfile" && ca.More)
                 {
-                    if (!File.Exists(optval) && !Path.IsPathRooted(optval))  // if it does not exist on its own, may be relative to base folder ..
-                        optval = Path.Combine(basefolder, optval);
+                    string filepath = ca.Next;
 
-                    if (File.Exists(optval))
-                        ProcessOptionFile(optval);
+                    if (!File.Exists(filepath) && !Path.IsPathRooted(filepath))  // if it does not exist on its own, may be relative to base folder ..
+                        filepath = Path.Combine(basefolder, filepath);
 
-                    return true;    // used one
+                    if (File.Exists(filepath))
+                        ProcessOptionFile(filepath, getopt);
+                    else
+                        System.Diagnostics.Debug.WriteLine("    No Option File " + filepath);
                 }
-
-                return false;
             });
         }
 
-        private void ProcessOptionFile(string optval)       // read file and process options
+        private void ProcessOptionFile(string filepath, Action<string, BaseUtils.CommandArgs> getopt)       // read file and process options
         {
-            //System.Diagnostics.Debug.WriteLine("OptionFile " + optval);
-            foreach (string line in File.ReadAllLines(optval))
+            //System.Diagnostics.Debug.WriteLine("Read File " + filepath);
+            foreach (string line in File.ReadAllLines(filepath))
             {
-                string[] kvp = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();
-                ProcessOption("-" + kvp[0], kvp.Length == 2 ? kvp[1] : null);
+                if (!line.IsEmpty())
+                {
+                    //string[] cmds = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();    // old version..
+                    string[] cmds = BaseUtils.StringParser.ParseWordList(line, separ: ' ').ToArray();
+                    BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmds);
+                    getopt("-" + ca.Next.ToLowerInvariant(), ca);
+                }
             }
         }
 
-        private void ProcessCommandLineOptions(Func<string, string, bool> getopt)       // go thru command line..
+        private void ProcessCommandLineOptions(Action<string, BaseUtils.CommandArgs> getopt)       // go thru command line..
         {
             string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
-
-            int i = 0;
-
-            while (i < cmdlineopts.Length)
+            BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmdlineopts,1);
+            //System.Diagnostics.Debug.WriteLine("Command Line:");
+            while (ca.More)
             {
-                string optname = cmdlineopts[i].ToLowerInvariant();
-                string optval = null;
-                if (i < cmdlineopts.Length - 1)
-                {
-                    optval = cmdlineopts[i + 1];
-                }
-
-                if (getopt(optname, optval))
-                {
-                    i++;
-                }
-                i++;
+                getopt(ca.Next.ToLowerInvariant(), ca);
             }
         }
 
-        private bool ProcessOption(string optname, string optval)
+        private void ProcessOption(string optname, BaseUtils.CommandArgs ca)
         {
             optname = optname.ToLowerInvariant();
             //System.Diagnostics.Debug.WriteLine("     Option " + optname);
 
-            if (optname == "-optionsfile")
+            if (optname == "-optionsfile" || optname == "-appfolder" )
             {
-                // Skip option as it was handled in ProcessOptionsFile
-                return true;
+                ca.Remove();   // waste it
             }
             else if (optname == "-appfolder")
             {
                 if (AppDataDirectory == null) // Only override AppFolder if AppDataDirectory has not been set
                 {
-                    AppFolder = optval;
+                    AppFolder = ca.NextEmpty;
                 }
-                return true;
+            }
+            else if (optname == "-translationfolder")
+            {
+                translationfolder = ca.NextEmpty;
+                TranslatorDirectoryIncludeSearchUpDepth = ca.Int;
             }
             else if (optname == "-userdbpath")
             {
-                UserDatabasePath = optval;
-                return true;
+                UserDatabasePath = ca.NextEmpty;
             }
             else if (optname == "-systemsdbpath")
             {
-                SystemDatabasePath = optval;
-                return true;
+                SystemDatabasePath = ca.NextEmpty;
             }
             else if (optname == "-iconspath")
             {
-                IconsPath = optval;
-                return true;
+                IconsPath = ca.NextEmpty;
             }
             else if (optname == "-tracelog")
             {
-                TraceLog = optval;
-                return true;
+                TraceLog = ca.NextEmpty;
             }
             else if (optname.StartsWith("-"))
             {
@@ -272,39 +279,40 @@ namespace EDDiscovery
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     default:
-                        Console.WriteLine($"Unrecognized option -{opt}");
+                        System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
                 }
             }
             else
             {
-                Console.WriteLine($"Unexpected non-option {optname}");
+                System.Diagnostics.Debug.WriteLine($"Unrecognized non option -{optname}");
             }
-            return false;
         }
 
         public void Init()
         {
             ProcessConfigVariables();
 
-            ProcessOptionsFileOption(ExeDirectory());     // go thru the command line looking for -optionfile, use relative base dir
+            ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);     // go thru the command line looking for -optionfile, use relative base dir
 
-            string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the base folder.
+            string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the exe folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
-                ProcessOptionFile(optval);
+                ProcessOptionFile(optval, ProcessOption);
 
             SetAppDataDirectory();      // set the app directory, now we have given base dir options to override appfolder, and we have given any -optionfiles on the command line
 
-            ProcessOptionsFileOption(AppDataDirectory);     // go thru the command line looking for -optionfile relative to app folder, then read them
+            translationfolder = Path.Combine(AppDataDirectory, "Translator");
+
+            ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption);     // go thru the command line looking for -optionfile relative to app folder, then read them
 
             optval = Path.Combine(AppDataDirectory, "options.txt");      // options in the base folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
-                ProcessOptionFile(optval);
+                ProcessOptionFile(optval, ProcessOption);
 
             // db move system option file will contain user and system db overrides
             optval = Path.Combine(AppDataDirectory, "dboptions.txt");   // look for this file in the app folder
             if (File.Exists(optval))
-                ProcessOptionFile(optval);
+                ProcessOptionFile(optval, ProcessOption);
 
             ProcessCommandLineOptions(ProcessOption);       // do all of the command line except optionsfile and appfolder..
 
