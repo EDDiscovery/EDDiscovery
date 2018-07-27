@@ -74,18 +74,18 @@ namespace BaseUtils
 
         // You can call this multiple times if required for debugging purposes
 
-        public void LoadTranslation(string language, CultureInfo uicurrent, string writabletxfolder1, string txfolder2)
+        public void LoadTranslation(string language, CultureInfo uicurrent, string txfolder1, string txfolder2 , int includesearchupdepth, string logdir)
         {
 #if DEBUG
             if (logger != null)
                 logger.Dispose();
 
             logger = new LogToFile();
-            logger.SetFile(writabletxfolder1, "ids.txt", false);
+            logger.SetFile(logdir, "translator-ids.log", false);
 #endif
             translations = null;        // forget any
 
-            List<string> languagesfolder1 = Languages(writabletxfolder1,false);     // full paths
+            List<string> languagesfolder1 = Languages(txfolder1,false);     // full paths
             List<string> languagesfolder2 = Languages(txfolder2,false);
 
             // uicurrent = CultureInfo.CreateSpecificCulture("es"); // debug
@@ -110,7 +110,7 @@ namespace BaseUtils
             }
             else
             {
-                langfile = Path.Combine(writabletxfolder1, language + ".tlf");
+                langfile = Path.Combine(txfolder1, language + ".tlf");
 
                 if (!File.Exists(langfile))
                 {
@@ -124,72 +124,98 @@ namespace BaseUtils
             System.Diagnostics.Debug.WriteLine("Load Language " + langfile);
             logger?.WriteLine("Read " + langfile);
 
-            try
+            using (LineReader lr = new LineReader())
             {
-                var utc8nobom = new UTF8Encoding(false);        // give it the default UTF8 no BOM encoding, it will detect BOM or UCS-2 automatically
-
-                StreamReader sr = new StreamReader(langfile, utc8nobom);
-
-                translations = new Dictionary<string, string>();
-
-                string prefix = "";
-
-                string line = null;
-                while ((line = sr.ReadLine()) != null)
+                if (lr.Open(langfile))
                 {
-                    line = line.Trim();
-                    if (line.Length > 0 && !line.StartsWith("//"))
+                    translations = new Dictionary<string, string>();
+
+                    string prefix = "";
+
+                    string line = null;
+                    while ((line = lr.ReadLine()) != null)
                     {
-                        StringParser s = new StringParser(line);
-
-                        string id = s.NextWord(" :");
-
-                        if (id.StartsWith(".") && prefix.HasChars())
-                            id = prefix + id;
-                        else
-                            prefix = id.Word(new char[] { '.' });
-
-                        if (s.IsCharMoveOn(':'))
+                        line = line.Trim();
+                        if (line.StartsWith("Include", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            s.NextQuotedWord(replaceescape: true);  // ignore the english for ref purposes only
+                            line = line.Mid(7).Trim();
 
-                            string foreign = null;
-                            bool err = false;
+                            DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(langfile));
 
-                            if (s.IsStringMoveOn("=>"))
-                            {
-                                foreign = s.NextQuotedWord(replaceescape: true);
-                                err = foreign == null;
-                            }
-                            else if (s.IsCharMoveOn('@'))
-                                foreign = null;
-                            else
-                                err = false;
+                            string filename = null;
 
-                            if ( err == true )
-                            {
-                                logger?.WriteLine(string.Format("*** Translator ID but no translation {0}", id));
-                                System.Diagnostics.Debug.WriteLine("*** Translator ID but no translation {0}", id);
-                            }
+                            if (File.Exists(Path.Combine(di.FullName, line)))   // first we prefer files in the same folder..
+                                filename = Path.Combine(di.FullName, line);
                             else
                             {
-                                if (!translations.ContainsKey(id))
+                                di = di.GetDirectoryAbove(includesearchupdepth);        // then search the tree, first jump up search depth amount
+
+                                try
                                 {
-                                    //logger?.WriteLine(string.Format("New {0}: \"{1}\" => \"{2}\"", id, english, foreign));
-                                    translations[id] = foreign;
+                                    FileInfo[] allFiles = Directory.EnumerateFiles(di.FullName, line, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                                    if (allFiles.Length == 1)
+                                        filename = allFiles[0].FullName;
+                                }
+                                catch { }
+                            }
+
+                            if (filename == null || !lr.Open(filename))     // if no file found, or can't open..
+                                logger?.WriteLine(string.Format("*** Cannot include {0}", line));
+                            else
+                                logger?.WriteLine("Read " + filename);
+                        }
+                        else if (line.Length > 0 && !line.StartsWith("//"))
+                        {
+                            StringParser s = new StringParser(line);
+
+                            string id = s.NextWord(" :");
+
+                            if (id.StartsWith(".") && prefix.HasChars())
+                                id = prefix + id;
+                            else
+                                prefix = id.Word(new char[] { '.' });
+
+                            if (s.IsCharMoveOn(':'))
+                            {
+                                s.NextQuotedWord(replaceescape: true);  // ignore the english for ref purposes only
+
+                                string foreign = null;
+                                bool err = false;
+
+                                if (s.IsStringMoveOn("=>"))
+                                {
+                                    foreign = s.NextQuotedWord(replaceescape: true);
+                                    err = foreign == null;
+                                }
+                                else if (s.IsCharMoveOn('@'))
+                                    foreign = null;
+                                else
+                                    err = false;
+
+                                if (err == true)
+                                {
+                                    logger?.WriteLine(string.Format("*** Translator ID but no translation {0}", id));
+                                    System.Diagnostics.Debug.WriteLine("*** Translator ID but no translation {0}", id);
                                 }
                                 else
                                 {
-                                    logger?.WriteLine(string.Format("*** Translator Repeat {0}", id));
+                                    if (!translations.ContainsKey(id))
+                                    {
+                                        //logger?.WriteLine(string.Format("New {0}: \"{1}\" => \"{2}\"", id, english, foreign));
+                                        translations[id] = foreign;
+                                    }
+                                    else
+                                    {
+                                        logger?.WriteLine(string.Format("*** Translator Repeat {0}", id));
+                                    }
+
                                 }
 
                             }
-
                         }
                     }
                 }
             }
-            catch { }
         }
 
         public void AddExcludedControls(string [] s)
@@ -199,9 +225,15 @@ namespace BaseUtils
 
         static public List<string> Languages(string txfolder, bool nameonly)
         {
-            FileInfo[] allFiles = Directory.EnumerateFiles(txfolder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-
-            return nameonly ? allFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToList() : allFiles.Select(x => x.Name).ToList();
+            try
+            {
+                FileInfo[] allFiles = Directory.EnumerateFiles(txfolder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+                return nameonly ? allFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToList() : allFiles.Select(x => x.Name).ToList();
+            }
+            catch
+            {
+                return new List<string>();
+            }
         }
 
         static public string FindLanguage(List<string> lang, string isoname)    // take filename part only, see if filename text-<iso> is present

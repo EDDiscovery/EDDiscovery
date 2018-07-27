@@ -35,5 +35,17 @@ namespace BaseUtils
                 return null;
             }
         }
+
+        // if erroriftoobig = false, returns top folder if above is too big for directory depth
+        public static DirectoryInfo GetDirectoryAbove( this DirectoryInfo di, int above, bool errorifpastroot = false )        
+        {
+            while( above > 0 && di.Parent != null )
+            {
+                di = di.Parent;
+                above--;
+            }
+
+            return (errorifpastroot && above >0 ) ? null : di;
+        }
     }
 }

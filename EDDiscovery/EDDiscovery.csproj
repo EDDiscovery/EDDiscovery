@@ -844,6 +844,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Translations\deutsch-de.tlf" />
+    <None Include="Translations\example-ex.tlf" />
+    <None Include="Translations\Italiano-it.tlf" />
+    <None Include="UserControls\translation-deutsch-uc.tlp" />
+    <None Include="UserControls\translation-example-uc.tlp" />
+    <None Include="UserControls\translation-italiano-uc.tlp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\EDDIcons\Controls\Fakes\Controls.resx">

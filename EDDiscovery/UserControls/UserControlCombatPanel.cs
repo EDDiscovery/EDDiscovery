@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             string filter = SQLiteConnectionUser.GetSettingString(DbSave + "Campaign", "");
-            List<string> filtarray = BaseUtils.StringParser.ParseOptionallyQuotedStringList(filter);
+            List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
             savedfilterentries = new List<FilterEntry>();
 
