@@ -458,28 +458,28 @@ CommanderForm.Confirm: "Confirm" => "Conferma"
 
 ///////////////////////////////////////////////////////////////////////// Export Form
 
-ExportForm: "ExportForm" @
-ExportForm.checkBoxRawJournal: "Export Journals" @
-ExportForm.buttonCancel: "Cancel" @
-ExportForm.labelCVSSep: "CSV Separator" @
-ExportForm.radioButtonSemiColon: "Semicolon" @
-ExportForm.buttonExport: "Export" @
-ExportForm.radioButtonComma: "Comma" @
-ExportForm.checkBoxIncludeHeader: "Include Header" @
-ExportForm.checkBoxCustomAutoOpen: "Open in excel" @
-ExportForm.label_index: "Export" @
-.ECH: "Export current History view to {0}" @
-.JF: "Journal File" @
+ExportForm: "ExportForm" => "Esporta"
+ExportForm.checkBoxRawJournal: "Export Journals" => "Esporta Giornale"
+ExportForm.buttonCancel: "Cancel" => "Cancella"
+ExportForm.labelCVSSep: "CSV Separator" => "Separatore CVS"
+ExportForm.radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
+ExportForm.buttonExport: "Export" => "Esporta"
+ExportForm.radioButtonComma: "Comma" => "Virgola"
+ExportForm.checkBoxIncludeHeader: "Include Header" => "Includi l'intestazione"
+ExportForm.checkBoxCustomAutoOpen: "Open in excel" => "Apri in excel"
+ExportForm.label_index: "Export" => "Esporta"
+.ECH: "Export current History view to {0}" => "Esporta lo storico corrente a {0}"
+.JF: "Journal File" => "File di Giornale"
 
 /////////////////////////////////////////////////////////////// 2dMap
 
-Form2DMap.LastWeek: "Last Week" @
-Form2DMap.LastMonth: "Last Month" @
-Form2DMap.LastYear: "Last Year" @
-Form2DMap.All: "All" @
-Form2DMap.Custom: "Custom" @
-Form2DMap: "2D Map" @
-.Nomapsavailable: "No maps available" @
+Form2DMap.LastWeek: "Last Week" => "Ultima Settimana"
+Form2DMap.LastMonth: "Last Month" => "Ultimo Mese"
+Form2DMap.LastYear: "Last Year" => "Ultimo Anno"
+Form2DMap.All: "All" => "Tutto"
+Form2DMap.Custom: "Custom" => "Custom"
+Form2DMap: "2D Map" => "Mappa 2D"
+.Nomapsavailable: "No maps available" => "Nessuna mappa disponibile"
 
 /////////////////////////////////////////////////////////////// Galaxy form
 
