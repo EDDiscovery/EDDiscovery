@@ -503,10 +503,10 @@ GalaxySectorSelect.BC: "Bubble+Colonia" @
 
 /////////////////////////////////////////////////////////////// Move commander
 
-MoveToCommander: "MoveToCommander" @
-MoveToCommander.buttonExtCancel: "Cancel" @
-MoveToCommander.buttonTransfer: "Transfer" @
-MoveToCommander.label1: "Move selected history to commander." @
+MoveToCommander: "MoveToCommander" => "Sposta al Comandante"
+MoveToCommander.buttonExtCancel: "Cancel" => "Cancella"
+MoveToCommander.buttonTransfer: "Transfer" => "Trasferisci"
+MoveToCommander.label1: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
 
 
 /////////////////////////////////////////////////////////////// New release
