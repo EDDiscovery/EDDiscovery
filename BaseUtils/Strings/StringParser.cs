@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -90,7 +90,7 @@ namespace BaseUtils
                 return false;
         }
 
-        public bool IsAnyCharMoveOn(string t)
+        public bool IsAnyCharMoveOn(string t)   // any char in t is acceptable
         {
             if (pos < line.Length && t.Contains(line[pos]))
             {
@@ -100,6 +100,11 @@ namespace BaseUtils
             }
             else
                 return false;
+        }
+
+        public bool IsCharMoveOnOrEOL(char t) // if at EOL, or separ is space (space is auto removed so therefore okay) or separ (and move)
+        {
+            return IsEOL || t == ' ' || IsCharMoveOn(t);       
         }
 
         public bool SkipUntil( char[] chars)
@@ -138,15 +143,12 @@ namespace BaseUtils
             }
         }
 
-        // NextWord with a fixed space comma terminator.  Fails if not a comma separ list
+        // NextWord with a fixed space comma (or other) terminator.  Fails if not a separ list
 
-        public string NextWordComma(bool lowercase = false, bool replaceescape = false)           // comma separ
+        public string NextWordComma(bool lowercase = false, bool replaceescape = false, char separ = ',') 
         {
-            string res = NextWord(" ,", lowercase, replaceescape);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            string res = NextWord(" " + separ, lowercase, replaceescape);
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         // Take a " or ' quoted string, or a WORD defined by terminators. options to lowercase it and de-escape it
@@ -202,13 +204,10 @@ namespace BaseUtils
 
         // NextQuotedWord with a fixed space comma terminator.  Fails if not a comma separ list
 
-        public string NextQuotedWordComma(bool lowercase = false , bool replaceescape = false)           // comma separ
+        public string NextQuotedWordComma(bool lowercase = false , bool replaceescape = false, char separ = ',' )           // comma separ
         {
-            string res = NextQuotedWord(" ,", lowercase, replaceescape);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            string res = NextQuotedWord(" " + separ, lowercase, replaceescape);
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         // if quoted, take the quote string, else take the rest, space stripped.
@@ -238,26 +237,41 @@ namespace BaseUtils
 
         #region List of quoted words
 
-        // Read a quoted word list off, delimiters definable, and with an optional move on char, and the lowercard/replaceescape options
+        // Read a list of optionally quoted strings, seperated by separ char.  Stops at EOL or on error.  Check IsEOL if you care about an Error
+
+        public List<string> NextQuotedWordListSepar(bool lowercase = false, bool replaceescape = false, char separ = ',')
+        {
+            List<string> list = new List<string>();
+
+            string r;
+            while ((r = NextQuotedWordComma(lowercase, replaceescape, separ)) != null)
+            {
+                list.Add(r);
+            }
+
+            return list;
+        }
+
+        // Read a quoted word list off, supporting multiple separ chars, and with multiple other terminators, and the lowercard/replaceescape options
         // null list on error
         public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , 
-                                        string nonquoteterminators = ",", string itemterm = " ", bool termopt = false)
+                                        string separchars = ",", string otherterminators = " ", bool separoptional = false)
         {
             List<string> ret = new List<string>();
 
             do
             {
-                string v = NextQuotedWord(nonquoteterminators + itemterm,lowercase,replaceescape);
+                string v = NextQuotedWord(separchars + otherterminators,lowercase,replaceescape);
                 if (v == null)
                     return null;
 
                 ret.Add(v);
 
-                if (termopt)
+                if (separoptional)  // if this is set, we these are optional and if not present won't bork it.
                 {
-                    IsAnyCharMoveOn(nonquoteterminators);   // remove it if its there
+                    IsAnyCharMoveOn(separchars);   // remove it if its there
                 }
-                else if (!IsEOL && !IsAnyCharMoveOn(nonquoteterminators))   // either EOL, or its not a terminator
+                else if (!IsEOL && !IsAnyCharMoveOn(separchars))   // either not EOL, or its not a terminator, fail
                     return null;
 
             } while (!IsEOL);
@@ -374,13 +388,10 @@ namespace BaseUtils
             return s?.InvariantParseBoolNull();
         }
 
-        public bool? NextBoolComma(string terminators = " ")
+        public bool? NextBoolComma(string terminators = " ", char separ = ',')
         {
             bool? res = NextBool(terminators);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         public double? NextDouble(string terminators = " ")
@@ -389,13 +400,10 @@ namespace BaseUtils
             return s?.InvariantParseDoubleNull();
         }
 
-        public double? NextDoubleComma(string terminators = " ")
+        public double? NextDoubleComma(string terminators = " ", char separ = ',')
         {
             double? res = NextDouble(terminators);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         public int? NextInt(string terminators = " ")
@@ -404,13 +412,10 @@ namespace BaseUtils
             return s?.InvariantParseIntNull();
         }
 
-        public int? NextIntComma(string terminators = " ")
+        public int? NextIntComma(string terminators = " ", char separ = ',')
         {
             int? res = NextInt(terminators);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         public long? NextLong(string terminators = " ")
@@ -419,13 +424,10 @@ namespace BaseUtils
             return s?.InvariantParseLongNull();
         }
 
-        public long? NextLongComma(string terminators = " ")
+        public long? NextLongComma(string terminators = " ", char separ = ',')
         {
             long? res = NextLong(terminators);
-            if (IsEOL || IsCharMoveOn(','))
-                return res;
-            else
-                return null;
+            return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
         #endregion
@@ -489,7 +491,7 @@ namespace BaseUtils
             return (indexof != -1);
         }
 
-        // Static. Read first quoted word
+        // Static wrappers
 
         public static string FirstQuotedWord(string s, string limits, string def = "", string prefix = "", string postfix = "")
         {
@@ -502,25 +504,13 @@ namespace BaseUtils
                 return def;
         }
 
-        #endregion
-
-        #region Multi strings
-
-        public static List<string> ParseOptionallyQuotedStringList(string s, bool lowercase = false, bool replaceescape = false)
+        public static List<string> ParseWordList(string s, bool lowercase = false, bool replaceescape = false, char separ = ',')
         {
-            List<string> list = new List<string>();
             StringParser sp = new StringParser(s);
-
-            string r;
-            while( (r = sp.NextQuotedWordComma(lowercase , replaceescape)) != null )
-            {
-                list.Add(r);
-            }
-
-
-            return list;
+            return sp.NextQuotedWordListSepar(lowercase, replaceescape, separ);
         }
 
         #endregion
+
     }
 }
