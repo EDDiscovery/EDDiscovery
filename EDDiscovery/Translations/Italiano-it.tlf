@@ -511,16 +511,16 @@ MoveToCommander.label1: "Move selected history to commander." => "Muovi lo stori
 
 /////////////////////////////////////////////////////////////// New release
 
-NewReleaseForm: "EDDiscovery Release" @
-NewReleaseForm.labelName: "Name" @
-NewReleaseForm.btnClose: "&Close" @
-NewReleaseForm.buttonMsiInstaller: "&Msi Installer" @
-NewReleaseForm.labelURL: "GitHub URL" @
-NewReleaseForm.labelDownload: "Download" @
-NewReleaseForm.buttonPortablezip: "&Portable Zip" @
-NewReleaseForm.buttonUrlOpen: "&Open" @
-NewReleaseForm.buttonExeInstaller: "&Exe Installer" @
-NewReleaseForm.labelRelease: "Release info" @
+NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
+NewReleaseForm.labelName: "Name" => "Nome"
+NewReleaseForm.btnClose: "&Close" => "&Chiudi"
+NewReleaseForm.buttonMsiInstaller: "&Msi Installer" => "Installatore &Msi"
+NewReleaseForm.labelURL: "GitHub URL" => "URL GitHUB"
+NewReleaseForm.labelDownload: "Download" => "Scarica"
+NewReleaseForm.buttonPortablezip: "&Portable Zip" => "Zip &Portatile"
+NewReleaseForm.buttonUrlOpen: "&Open" => "&Apri"
+NewReleaseForm.buttonExeInstaller: "&Exe Installer" => "Installatore &EXE"
+NewReleaseForm.labelRelease: "Release info" => "Informazioni sulla Versione"
 
 
 /////////////////////////////////////////////////////////////// Profile editor
