@@ -322,14 +322,14 @@ SurfaceBookmarkUserControl.MAP: "Manually Add Planet" => "Aggiungi manualmente u
 
 ////////////////////////////////////////////////////////////////// find systems
 
-FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" @
-FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" @
-FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" @
-FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" @
-FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" @
+FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" => "Cerca nomi usando il banco dati" 
+FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Crea un cubo di sistemi usando il banco dati"
+FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Crea una sfera di sistemi usando il banco dati"
+FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Crea un cubo di sistemi usando EDSM"
+FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Crea una sfera di sistemi usando EDSM"
 FindSystemsUserControl.labelRadMax: "Max" @
-FindSystemsUserControl.labelRadMin: "Radius ly Min" @
-FindSystemsUserControl.labelFilter: "Star Name" @
+FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Raggio Min (ly)"
+FindSystemsUserControl.labelFilter: "Star Name" => "Nome del Sistema"
 
 //////////////////////////////////////////////////////////////// Conditions
 
@@ -354,31 +354,31 @@ TravelHistoryFilter.StartEnd: "Start/End Flag" => "Inizio/Fine"
 //////////////////////////////////////////////////////////////// Add on manager
 
 AddOnManagerForm.buttonMore: "+" @
-AddOnManagerForm.buttonExtGlobals: "Globals" @
+AddOnManagerForm.buttonExtGlobals: "Globals" => "Globale"
 AddOnManagerForm.buttonOK: "OK" @
 
-AddOnManagerForm.AddOnTitle: "Add-On Manager" @
-AddOnManagerForm.EditTitle: "Edit Add-Ons" @
-AddOnManagerForm.Type: "Type" @
-AddOnManagerForm.Name: "Name" @
-AddOnManagerForm.Version: "Version" @
-AddOnManagerForm.Description: "Description" @
-AddOnManagerForm.Status: "Status" @
-AddOnManagerForm.Action: "Action" @
-AddOnManagerForm.Delete: "Delete" @
-AddOnManagerForm.Enabled: "Enabled" @
-AddOnManagerForm.Newer: "Newer EDD required" @
-AddOnManagerForm.Old: "Too old for EDD" @
-AddOnManagerForm.Locallymodified: "Locally modified" @
-AddOnManagerForm.UptoDate: "Up to Date" @
-AddOnManagerForm.LocalOnly: "Local Only" @
-AddOnManagerForm.Newversion: "New version" @
-AddOnManagerForm.Install: "Install" @
-AddOnManagerForm.Update: "Update" @
-AddOnManagerForm.Edit: "Edit" @
-AddOnManagerForm.Modwarn: "Modified locally, do you wish to overwrite the changes" @
-AddOnManagerForm.Failed: "Add-on failed to update. Check files for read only status" @
-AddOnManagerForm.DeleteWarn: "Do you really want to delete {0}" @
+AddOnManagerForm.AddOnTitle: "Add-On Manager" => "Gestisci gli Add-Ons"
+AddOnManagerForm.EditTitle: "Edit Add-Ons" => "Modifica gli Add-Ons"
+AddOnManagerForm.Type: "Type" => "Tipo"
+AddOnManagerForm.Name: "Name" => "Nome"
+AddOnManagerForm.Version: "Version" => "Versione"
+AddOnManagerForm.Description: "Description" => "Descrizione"
+AddOnManagerForm.Status: "Status" => "Status"
+AddOnManagerForm.Action: "Action" => "Azione"
+AddOnManagerForm.Delete: "Delete" => "Elimina"
+AddOnManagerForm.Enabled: "Enabled" => "Abilita"
+AddOnManagerForm.Newer: "Newer EDD required" => "Nuova versione di EDD necessaria"
+AddOnManagerForm.Old: "Too old for EDD" => "Troppo vecchio per EDD"
+AddOnManagerForm.Locallymodified: "Locally modified" => "Modificato localmente"
+AddOnManagerForm.UptoDate: "Up to Date" => "Attualizzato"
+AddOnManagerForm.LocalOnly: "Local Only" => "Solo locale"
+AddOnManagerForm.Newversion: "New version" => "Nuova versione"
+AddOnManagerForm.Install: "Install" => "Installa"
+AddOnManagerForm.Update: "Update" => "Attualizza"
+AddOnManagerForm.Edit: "Edit" => "Modifica"
+AddOnManagerForm.Modwarn: "Modified locally, do you wish to overwrite the changes" => "Modificato localmente, sei sicuro di voler scrivere sui cambiamenti"
+AddOnManagerForm.Failed: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
+AddOnManagerForm.DeleteWarn: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
 
 ////////////////////////////////////////////////////////////// Assign system form Little used
 
@@ -395,66 +395,66 @@ AssignTravelLogSystemForm.label5: "System Coordinates" @
 
 ///////////////////////////////////////////////////////////// Commander form
 
-CommanderForm: "CommanderForm" @
-CommanderForm.groupBoxCustomInara: "Inara Information (optional)" @
-CommanderForm.checkBoxCustomInara: "Sync to Inara" @
-CommanderForm.labelINARAN: "Inara Name:" @
-CommanderForm.labelInaraAPI: "Inara API Key:" @
-CommanderForm.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" @
-CommanderForm.checkBoxEGOSync: "Sync to EGO" @
-CommanderForm.labelEGON: "EGO Name:" @
-CommanderForm.labelEGOAPI: "EGO API Key:" @
-CommanderForm.groupBoxCustomCAPI: "Frontier Companion API (optional)" @
-CommanderForm.checkBoxCAPIEnable: "Enable Login" @
-CommanderForm.labelCAPIPassword: "Login Password:" @
-CommanderForm.groupBoxCustomEDDN: "EDDN" @
-CommanderForm.checkBoxCustomEDDNTo: "Send Event Information to EDDN" @
-CommanderForm.groupBoxCustomEDSM: "EDSM Information (optional)" @
-CommanderForm.checkBoxCustomEDSMFrom: "Sync From EDSM" @
-CommanderForm.checkBoxCustomEDSMTo: "Sync to EDSM" @
-CommanderForm.labelEDSMN: "EDSM Name:" @
-CommanderForm.labelEDSMAPI: "EDSM API Key:" @
-CommanderForm.groupBoxCustomJournal: "Journal Related Information" @
-CommanderForm.buttonExtBrowse: "Browse" @
-CommanderForm.labelCN: "Commander Name:" @
-CommanderForm.labelJL: "Journal Location:" @
-CommanderForm.buttonCancel: "Cancel" @
-CommanderForm.buttonOK: "OK" @
-CommanderForm.label_index: "Commander Configure" @
+CommanderForm: "CommanderForm" => Scheda del Comandante"
+CommanderForm.groupBoxCustomInara: "Inara Information (optional)" => "Informazioni di Inara (opzionale)"
+CommanderForm.checkBoxCustomInara: "Sync to Inara" => "Sincronizza con Inara"
+CommanderForm.labelINARAN: "Inara Name:" => "Nome su Inara:"
+CommanderForm.labelInaraAPI: "Inara API Key:" => "Chiave API di Inara:"
+CommanderForm.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Informazioni di Elite Galaxy Online (EGO)"
+CommanderForm.checkBoxEGOSync: "Sync to EGO" => "Sincronizza con EGO"
+CommanderForm.labelEGON: "EGO Name:" => "Nome su EGO:"
+CommanderForm.labelEGOAPI: "EGO API Key:" => "Chiave API di EGO:"
+CommanderForm.groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Companion API di Frontier"
+CommanderForm.checkBoxCAPIEnable: "Enable Login" => "Abilita connessione"
+CommanderForm.labelCAPIPassword: "Login Password:" => "Password:"
+CommanderForm.groupBoxCustomEDDN: "EDDN" => "EDDN"
+CommanderForm.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Invia informazione sugli eventi a EDDN"
+CommanderForm.groupBoxCustomEDSM: "EDSM Information (optional)" => Informazioni di EDSM (opzionale)"
+CommanderForm.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Sincronizza da EDSM"
+CommanderForm.checkBoxCustomEDSMTo: "Sync to EDSM" => "Sincronizza con EDSM"
+CommanderForm.labelEDSMN: "EDSM Name:" => "Nome su EDSM:"
+CommanderForm.labelEDSMAPI: "EDSM API Key:" => "Chiave API di EDSM:"
+CommanderForm.groupBoxCustomJournal: "Journal Related Information" => "Informazioni relazionate al Giornale"
+CommanderForm.buttonExtBrowse: "Browse" => "Sfoglia"
+CommanderForm.labelCN: "Commander Name:" => "Nome del Comandante"
+CommanderForm.labelJL: "Journal Location:" => "Localizzazione del Giornale"
+CommanderForm.buttonCancel: "Cancel" => "Cancella"
+CommanderForm.buttonOK: "OK" => "OK"
+CommanderForm.label_index: "Commander Configure" => "Imposta il comandante"
 
-CommanderForm.checkBoxCustomInara.ToolTip: "Sync with Inara" @
-CommanderForm.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" @
-CommanderForm.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" @
-CommanderForm.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" @
-CommanderForm.textBoxEGOName.ToolTip: "Give the user name for this commander on EGO" @
-CommanderForm.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGet an EGO API key from https://www.elitegalaxyonline.com in the account menu" @
-CommanderForm.buttonExtCAPI.ToolTip: "Perform operation indicated" @
-CommanderForm.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" @
-CommanderForm.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" @
-CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" @
-CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" @
-CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" @
-CommanderForm.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" @
-CommanderForm.buttonExtBrowse.ToolTip: "Browse to the the journal folder" @
-CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" @
-CommanderForm.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" @
+CommanderForm.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Sincronizza con Inara"
+CommanderForm.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Imposta il nome di usuario per questo comandante su Inara"
+CommanderForm.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "Inserisci la chiave API di Inara\nOttieni una chiave API su https://inara.cz"
+CommanderForm.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" => "Invia i dati dello scanner a EGO"
+CommanderForm.textBoxEGOName.ToolTip: "Give the user name for this commander on EGO" => "Imposta il nome di usuario per questo comandante su EGO"
+CommanderForm.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGet an EGO API key from https://www.elitegalaxyonline.com in the account menu" => "Inserisci la chiave API di EGO\nOttieni una chiave API da https://www.elitegalaxyonline.com nel menu di utente"
+CommanderForm.buttonExtCAPI.ToolTip: "Perform operation indicated" => "Realizza le operazioni indicate"
+CommanderForm.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" => "Inserisci la tua password Frontier"
+CommanderForm.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => Invia per inviare le informazioni del giornale a EDDN. EDDN alimenta ulteriori progetti (EDDB, EDSM, Inara, etc...) con dati sul comandante. Tutti i dati sono anonimi!"
+CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Ricevi tutti i dati su salti FSD da EDSM che sono sul lora banco dati ma non in EDDiscovery"
+CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Invia il tuo storico di viaggio e di navi a EDSM"
+CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Inserisci il nome come questo comandante è conosciuto su EDSM"
+CommanderForm.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Inserisci la chiave API di EDSM\nOttieni una chiave API su https://www.edsm.net, dal menu utente"
+CommanderForm.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Sfoglia la localizzazione del giornale"
+CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Inserisci la localizzazione del giornale. In genere, è sufficiente lasciare questo campo in bianco per usare la localizzazione normale usata da Frontier"
+CommanderForm.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Inserire il nome del comandante come è su Elite Dangerous"
 
-.Login: "Login" @
-.NoCredentials: "No Credentials" @
-.LoginID: "Login ID:" @
-.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" @
-.CC: "Confirmed Credentials" @
-.Clear: "Clear" @
-.RC: "Require Confirmation" @
-.CFC: "Confirm Code:" @
-CommanderForm.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" @
-.LIF: "Login Failed: \r\n{0}" @
-.FL: "Failed to login to Frontier Companion API:\r\n{0}" @
-.CD: "Confirm you wish to delete the credentials stored for this commander" @
-.CF: "Confirm Failed:\r\n{0}" @
-.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" @
-CommanderForm.Confirm: "Confirm" @
-.LF: "Select folder where Journal*.log files are stored by Frontier in" @
+.Login: "Login" => "Utente"
+.NoCredentials: "No Credentials" => "Nessuna credenziale"
+.LoginID: "Login ID:" => "ID di utente:"
+.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "Inserire il tuo ID Frontier, che è l'email che hai usato per registrarti con Frontier. Non funziona con il metodo di Steam"
+.CC: "Confirmed Credentials" => "Confrerma le Credenziali"
+.Clear: "Clear" => "Pulisci"
+.RC: "Require Confirmation" => "Richede confermazione"
+.CFC: "Confirm Code:" => "Codice della confermazione:"
+CommanderForm.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" => "Inserisci il codice di confermazione che hai appena ricevuto via email da Frontier"
+.LIF: "Login Failed: \r\n{0}" => "Connessione fallita: \r\n{0}"
+.FL: "Failed to login to Frontier Companion API:\r\n{0}" => "Impossibile accedere all'API Companion di Frontier"
+.CD: "Confirm you wish to delete the credentials stored for this commander" => "Conferma che vuoi cancellare le credenziali salvate per questo comandante"
+.CF: "Confirm Failed:\r\n{0}" => "Conferma non riuscita:\r\n{0}"
+.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "Il testo che hai inserito nel campo di login o di password non funziona, vuoi abbandonare l'impostazione delle credenziali CAPI?"
+CommanderForm.Confirm: "Confirm" => "Conferma"
+.LF: "Select folder where Journal*.log files are stored by Frontier in" => "Seleziona dove sono gli archivi di Journal*.log creati da Frontier"
 
 ///////////////////////////////////////////////////////////////////////// Export Form
 
