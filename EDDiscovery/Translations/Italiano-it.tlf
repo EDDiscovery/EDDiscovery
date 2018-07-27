@@ -78,7 +78,7 @@ PopOutInfo.EDSM.Description: "EDSM Star finder" => "Ricerca di Sistemi via EDSM"
 PopOutInfo.EDSM.Title: "EDSM Star Finder" => "Ricerca Sistemi EDSM"
 PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
 PopOutInfo.Trilateration.Title: "Trilateration" => "Trilaterazione"
-PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestire bookmarks di Pianeti e Sistemi"
+PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestire favoriti di Pianeti e Sistemi"
 PopOutInfo.BookmarkManager.Title: "Bookmarks" => "Bookmarks"
 PopOutInfo.CombatPanel.Description: "Display combat statistics" => "Visualizza statistiche di combattimento"
 PopOutInfo.CombatPanel.Title: "Combat" => "Combattimento"
@@ -215,7 +215,7 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
 
 EDDiscoveryController.CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
 .EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, segnalibri e dati di mappa galattici."
+.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
 .EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery e EDMarketConnector non dovrebbero sincronizzare entrambi a EDDN. Ferma EDMC o disabilita 'invia a EDDN' nel setup!"  
 .RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
@@ -272,35 +272,35 @@ ScreenShotConfigureForm.labelSaveAs: "Save as" @
 
 //////////////////////////////////////////////////////////////// Bookmark form
 
-BookmarkForm: "Create New Bookmark" => "Create New Bookmark"
+BookmarkForm: "Create New Bookmark" => "Crea un nuobo Favorito"
 BookmarkForm.buttonEDSM: "EDSM" => "EDSM"
-BookmarkForm.labelName: "Name" => "Name"
-BookmarkForm.checkBoxTarget: "Make Target" => "Make Target"
-BookmarkForm.labelCo: "Co-ordinates" => "Co-ordinates"
-BookmarkForm.buttonDelete: "Delete" => "Delete"
-BookmarkForm.buttonCancel: "Cancel" => "Cancel"
+BookmarkForm.labelName: "Name" => "Nome"
+BookmarkForm.checkBoxTarget: "Make Target" => "Imposta come destino"
+BookmarkForm.labelCo: "Co-ordinates" => "Coordinate"
+BookmarkForm.buttonDelete: "Delete" => "Elimina"
+BookmarkForm.buttonCancel: "Cancel" => "Cancella"
 BookmarkForm.buttonOK: "OK" => "OK"
-BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Bookmark Notes"
-BookmarkForm.labelTravelNote: "Travel History Note" => "Travel History Note"
-BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Edit on Travel Screen)"
+BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
+BookmarkForm.labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
+BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica nella schermo di viaggio)"
 BookmarkForm.labelTimeMade: "Time Made" => "Time Made"
-BookmarkForm.UpdateBookmark: "Update Bookmark" @
-BookmarkForm.Update: "Update" @
-.SB: "New System Bookmark" @
-.UB: "Update Bookmark" @
-.RB: "Create Region Bookmark" @
-.RN: "Enter a region name..." @
-.SI: "System Information" @
-.NSB: "New System Bookmark" @
-.ESN: "Enter a system name..." @
-.GMO: "Galactic Mapping Object" @
-.Description: "Description" @
+BookmarkForm.UpdateBookmark: "Update Bookmark" => "Attualizza Favorito"
+BookmarkForm.Update: "Update" => "Attualizza"
+.SB: "New System Bookmark" => "Nuovo Favorito di Sistema"
+.UB: "Update Bookmark" => "Attualizza Favorito"
+.RB: "Create Region Bookmark" => "Crea una Regione Favoriti"
+.RN: "Enter a region name..." => "Nomina la regione..."
+.SI: "System Information" => Informazione di Sistema"
+.NSB: "New System Bookmark" => Nuovo Favorito di Sistema"
+.ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
+.GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
+.Description: "Description" => "Descrizione"
 
 
 
 ////////////////////////////////////////////////////////////////// surface bookmarks
 
-SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Bookmark di Superficie nel Sistema"
+SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Favorito di Superficie nel Sistema"
 SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "Avvia alla bussola"
 SurfaceBookmarksForm.BodyName: "Planetary Body" => "Corpo Planetario"
 SurfaceBookmarksForm.SurfaceName: "Name" => "Nome"
@@ -308,17 +308,17 @@ SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descrizione"
 SurfaceBookmarksForm.Latitude: "Latitude" => "Latitudine"
 SurfaceBookmarksForm.Longitude: "Longitude" => "Longitudine"
 SurfaceBookmarksForm.Valid: "Saveable" => "Salvabile"
-SurfaceBookmarksForm.deleteToolStripMenuItem: "Delete Row" @
-SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+SurfaceBookmarksForm.deleteToolStripMenuItem: "Delete Row" => "Elimina riga"
+SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
 
 ////////////////////////////////////////////////////////////////// SurfaceBookmarkUserControl
 
-SurfaceBookmarkUserControl.Enter: "Enter a name" @
-SurfaceBookmarkUserControl.PL: "Planet:" @
-SurfaceBookmarkUserControl.EPN: "Enter planet name" @
-SurfaceBookmarkUserControl.PresstoAccept: "Press to Accept" @
-SurfaceBookmarkUserControl.PresstoCancel: "Press to Cancel" @
-SurfaceBookmarkUserControl.MAP: "Manually Add Planet" @
+SurfaceBookmarkUserControl.Enter: "Enter a name" => "Inserisci un nome"
+SurfaceBookmarkUserControl.PL: "Planet:" => "Pianeta"
+SurfaceBookmarkUserControl.EPN: "Enter planet name" => "Inserisci il nome del pianeta"
+SurfaceBookmarkUserControl.PresstoAccept: "Press to Accept" => "Premi per accettar"
+SurfaceBookmarkUserControl.PresstoCancel: "Press to Cancel" => "Premi per cancellare"
+SurfaceBookmarkUserControl.MAP: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
 
 ////////////////////////////////////////////////////////////////// find systems
 
