@@ -88,10 +88,13 @@ namespace EliteDangerousCore.Inara
             {
                 var si = last.ShipInformation;
 
-                eventstosend.Add(InaraClass.setCommanderShip(si.ShipFD, si.ID, last.EventTimeUTC,
-                                                            si.ShipUserName, si.ShipUserIdent, true, si.Hot,
-                                                            si.HullValue, si.ModulesValue, si.Rebuy, last.System.Name,
-                                                            last.IsDocked ? last.WhereAmI : null, last.IsDocked ? last.MarketID : null));
+                if (si != null)
+                {
+                    eventstosend.Add(InaraClass.setCommanderShip(si.ShipFD, si.ID, last.EventTimeUTC,
+                                                                si.ShipUserName, si.ShipUserIdent, true, si.Hot,
+                                                                si.HullValue, si.ModulesValue, si.Rebuy, last.System.Name,
+                                                                last.IsDocked ? last.WhereAmI : null, last.IsDocked ? last.MarketID : null));
+                }
 
                 eventstosend.Add(InaraClass.setCommanderCredits(last.Credits, last.EventTimeUTC));
 

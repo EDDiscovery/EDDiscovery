@@ -151,7 +151,10 @@ namespace EDDiscovery
 
             msg.Invoke("Modulating Shields");
 
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory());
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
+                    EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory(),
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
+
             BaseUtils.Translator.Instance.AddExcludedControls(new string[]
             { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",     // Controls not for translation..
                 "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker" , "NumericUpDownCustom" });
@@ -884,7 +887,9 @@ namespace EDDiscovery
 
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory());
+            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
+                    EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory(),
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();

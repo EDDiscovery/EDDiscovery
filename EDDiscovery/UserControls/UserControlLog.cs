@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             if (s.Length == 0)
                 s = richTextBox_History.Text;
             //System.Diagnostics.Debug.WriteLine("Sel " + s);
-            Clipboard.SetText(s);
+            SetClipboardText(s);
         }
     }
 }

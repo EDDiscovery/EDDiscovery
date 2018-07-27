@@ -377,7 +377,7 @@ namespace Conditions
         {
             BaseUtils.StringParser l = new BaseUtils.StringParser(paras[0].Value);
             string splitchars = (paras.Count >= 2) ? paras[1].Value : ",";
-            List<string> ll = l.NextQuotedWordList(nonquoteterminators: splitchars);
+            List<string> ll = l.NextQuotedWordList(separchars: splitchars);
             output = ll != null ? ll.Count.ToStringInvariant() : "0";
             return true;
         }
@@ -391,7 +391,7 @@ namespace Conditions
 
             output = "";
 
-            List<string> ll = l.NextQuotedWordList(nonquoteterminators: splitchars);
+            List<string> ll = l.NextQuotedWordList(separchars: splitchars);
             if (ll != null && count >= 0 && count < ll.Count)
                 output = ll[count];
             return true;
