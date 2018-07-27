@@ -525,20 +525,20 @@ NewReleaseForm.labelRelease: "Release info" => "Informazioni sulla Versione"
 
 /////////////////////////////////////////////////////////////// Profile editor
 
-ProfileEditor: "ProfileEditor" @
+ProfileEditor: "ProfileEditor" => "Editor di Profilo"
 ProfileEditor.buttonMore: "+" => "+"
-ProfileEditor.label_index: "Profile Editor" @
-ProfileEditor.buttonExtGlobals: "Globals" @
-ProfileEditor.buttonExtCancel: "Cancel" @
+ProfileEditor.label_index: "Profile Editor" => "Editor di Profilo"
+ProfileEditor.buttonExtGlobals: "Globals" => "Globale"
+ProfileEditor.buttonExtCancel: "Cancel" => "Cancella"
 ProfileEditor.buttonOK: "OK" @
 
-.Custom: "Custom" @
-.Trigger: "Trigger" @
-.Back: "Back" @
-.Startup: "Startup" @
-.TrigEdit: "Edit Profile {0} Trigger" @
-.BackEdit: "Edit Profile {0} Back Trigger" @
-.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" @
+.Custom: "Custom" => "Custom"
+.Trigger: "Trigger" => "Causa"
+.Back: "Back" => "Indietro"
+.Startup: "Startup" => "Inizio"
+.TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
+.BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
+.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farà si che tutte le informazioni si pergano di forma irriversibile!"
 
 /////////////////////////////////////////////////////////////// 3dmap step
 
