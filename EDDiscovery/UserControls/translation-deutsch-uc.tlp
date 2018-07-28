@@ -297,7 +297,7 @@ UserControlMarketData.checkBoxAutoSwap: "AutoSwap" => "Automatischer Austausch"
 UserControlMarketData.checkBoxBuyOnly: "Buy Only" => "Nur Kaufen"
 UserControlMarketData.labelVs: "Vs" => "vs"
 UserControlMarketData.labelLocation: "No Data" => "Keine Daten"
-UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparision to the previous market data.\r\nUseful when doing A->B->A trading" @
+UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparison to the previous market data.\r\nUseful when doing A->B->A trading" @
 UserControlMarketData.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Nur kaufbare Artikel anzeigen"
 UserControlMarketData.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Klicken um einen Datensatz für den Marktvergleich auszuwählen"
 UserControlMarketData.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Klicken um zwischen Cursor-Verfolgung und einen bestimmten Marktdatensatz umzuschalten"
@@ -379,11 +379,11 @@ UserControlModules.Slot: "Slot" => "Einbaustelle"
 .System: "System" => "System"
 .TxTime: "Tx Time" => "Transaktionsdauer"
 .Cost: "Cost" => "Kosten"
-.FSDAvgJump: "FSD Avg Jump" => "FSD Durchschnittssprung"
+.FSDAvgJump: "FSD Avg Jump" => "FSA Durchschnittssprung"
 .HT: "Half tank, no cargo" => "Tank halb voll, keine Ladung"
-.FSDMaxRange: "FSD Max Range" => "FSD Maximalsprung"
+.FSDMaxRange: "FSD Max Range" => "FSA Maximalsprung"
 .FT: "Full Tank, no cargo" => "Tank voll, keine Ladung"
-.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "Maximale Treibstoffkosten pro FSD Sprung"
+.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "Maximale Treibstoffkosten pro FSA Sprung"
 .HullValue: "Hull Value" => "Rumpfwert"
 .ModulesValue: "Modules Value" => "Modulwert"
 .TotalCost: "Total Cost" => "Gesamtkosten"
@@ -546,7 +546,7 @@ UserControlRouteTracker.autoSetTargetToolStripMenuItem: "Auto set target" => "Zi
 .NoCo: "No systems in route have known co-ords" @
 .J1: "jump" @
 .JS: "jumps" @
-.NoFSD: " No Ship FSD Information" @
+.NoFSD: " No Ship FSD Information" => "Keine Information über Sschiff-FSA"
 .FL: "From Last WP " @
 .TF: "To First WP " @
 .LF: ", Left {0:N1}ly" @
@@ -714,7 +714,7 @@ UserControlShipYards.comboBoxYards.ToolTip: "Select ship to view" => "Schiff zur
 //////////////////////////////////////////////////////////////// Shoppinglist
 
 UserControlShoppingList.buttonTechBroker: "Tech Broker Unlocks" @
-UserControlShoppingList.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Maximale Anzahl FSD Injektionen anzeigen"
+UserControlShoppingList.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Maximale Anzahl FSA Injektionen anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "Materialien auf Himmelskörper nach Landung anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "Nicht mehr anzeigen, wenn Lager voll"
 UserControlShoppingList.showAvailableMaterialsInListWhenLandedToolStripMenuItem: "Include Material %age on Landed Body in Shopping List" @
@@ -725,7 +725,7 @@ UserControlShoppingList.useHistoricMaterialCountsToolStripMenuItem: "Use Histori
 .NM: "Needed Mats" => "Gesuchte Materialien"
 .FS: "Filling Shopping List would exceed capacity for:" @
 .NoMat: "No materials currently required." @
-.FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" @
+.FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Max FSA Injektionen\r\n   {0} Basis\r\n   {1} Standard\r\n   {2} Premium" 
 .MO: "Materials on {0}" @
 
 //////////////////////////////////////////////////////////////// Spanel
@@ -742,7 +742,7 @@ UserControlSpanel.showNotesToolStripMenuItem: "Show Notes" @
 UserControlSpanel.showXYZToolStripMenuItem: "Show XYZ" @
 UserControlSpanel.showTargetToolStripMenuItem: "Show Target Distance per Star" @
 UserControlSpanel.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
-UserControlSpanel.showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" @
+UserControlSpanel.showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Distanzen/Koordinaten nur bei FSA Sprüngen anzeigen"
 UserControlSpanel.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
 UserControlSpanel.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." @
 UserControlSpanel.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" @
@@ -828,12 +828,12 @@ UserControlStarList.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
 .WW: "{0} is a water world" @
 .TP: "{0} is a terraformable planet" @
 .AW: "{0} is an ammonia world" @
-.BFSD: " Basic" @
-.SFSD: " Standard" @
-.PFSD: " Premium" @
+.BFSD: " Basic" => " Basis"
+.SFSD: " Standard" => " Standard"
+.PFSD: " Premium" => " Premium"
 .LE: "{0} has {1} level elements." @
 .OB: "{0} Other bodies" @
-.FSD: "This system has materials for FSD boost: " @
+.FSD: "This system has materials for FSD boost: " => "Dieses System hat Materialien für FSA Injektionen: "
 .NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
 
 //////////////////////////////////////////////////////////////// Stats
@@ -1089,7 +1089,7 @@ UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry 
 .SETSTARTTC: "Set Start marker for travel calculations" @
 .SETSTSTOP: "Set Start/Stop point for travel calculations" @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
-.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
+.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "Ort oder FSDJump Eintrag, der zu diesem Journaleintrag gehört, kann nicht gefunden werden"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
 
 //////////////////////////////////////////////////////////////// trilat
@@ -1142,10 +1142,10 @@ UserControlTrippanel.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start But
 UserControlTrippanel.showTargetToolStripMenuItem: "Show Target" @
 UserControlTrippanel.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" @
 UserControlTrippanel.showFuelLevelToolStripMenuItem: "Show Fuel Level" @
-UserControlTrippanel.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" @
-UserControlTrippanel.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" @
-UserControlTrippanel.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" @
-UserControlTrippanel.showFSDRangeToolStripMenuItem: "Show FSD Range" @
+UserControlTrippanel.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" => "Momentane FSA Reichweite anzeigen"
+UserControlTrippanel.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" => "Durchschnittliche FSA Reichweite anzeigen"
+UserControlTrippanel.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" => "Maximale FSA Reichweite anzeigen"
+UserControlTrippanel.showFSDRangeToolStripMenuItem: "Show FSD Range" => "FSA Reichweite anzeigen"
 
 UserControlTrippanel.jump: "jump" @
 UserControlTrippanel.jumps: "jumps" @
