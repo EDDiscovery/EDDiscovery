@@ -647,38 +647,38 @@ UserControlSettings.NotesCol: "Notes" => "Systemkommentare"
 UserControlSettings.btnDeleteCommander: "Delete" => "Löschen"
 UserControlSettings.buttonAddCommander: "Add" => "Hinzufügen"
 
-UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" @
-UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" @
-UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" @
-UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" @
-UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
-UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
-UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" @
-UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" @
-UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" @
-UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
-UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
-UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." @
+UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "Entweder alle Einträge laden oder nur die wichtigsten Einträge die älter als ein bestimmtes Datum sind"
+UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "Ereignisse der Benutzeroberfläche (z.B. Musik) in der Historie anzeigen. Die Anzahl dieser Ereignisse kann sehr gross sein"
+UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "Nummer des ältesten Eintrags ist 1, der neueste Eintrag hat die höchste Nummer"
+UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "Spielzeit (UTC) anstatt lokale Zeit anzeigen"
+UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Einstellen, welche Teile der Galaxis in der Datenbank gespeichert werden sollen"
+UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "Klicken, um das Herunterladen von Sternen von EDSM und Systeminformationen von EDDB zu erlauben. Ab dem nächsten Start gültig."
+UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "Das Bild automatisch in die Zwischenablage kopieren"
+UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "Hochauflösende Bilder im Dateinamen kennzeichen"
+UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "Originale nach der Konvertierung löschen"
+UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Weitere Bildschirmphoto-Einstellungen anpassen"
+UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Umwandlung von Bildschirmphotos ein-/ausschalten"
+UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Hauptfenster in den Infobereich minimieren"
 UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" @
-UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." @
-UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" @
-UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" @
-UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" @
+UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "EDDiscovery als Symbol im Infobereich anzeigen"
+UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "Gespeicherte Fensterzusammenstellung laden"
+UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "Momentane Fensterzusammenstellung speichern"
+UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "Fensterzusammenstellung beim Verlassen speichern"
 UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" @
 UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
-UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" @
-UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" @
+UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" => "Design auswählen"
+UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Design und Farbe der Texte anpassen"
 UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "Design auf Festplatte speichern"
-UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
-UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
-UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "Vergrösserungsstufe der Karte wählen. 1 ist normal"
+UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "Historieneintrag als Anzeigeort wählen"
+UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "Heimatsystem als Anzeigeort wählen"
 UserControlSettings.textBoxHomeSystem.ToolTip: "Pick a home system" => "Ein Heimatsystem wählen"
-UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
-UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" @
-UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" @
-UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" @
-UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
-UserControlSettings.Information: "Applies at next restart of ED Discovery" @
+UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "Neue Reiseeinträge bekommen auf der Karte diese Farbe"
+UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" => "Ausgewählten Kommandanten anpassen"
+UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" => "Ausgewählten Kommandanten löschen"
+UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" => "Neuen Kommandanten hinzufügen"
+UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die Schriftart, die von diesem Design verwendet wird, ist auf Ihrem System nicht vorhanden.\r\nDie benötigte Schriftart ist \"{0}\".\r\nBitte diese Schriftart installieren um das Design vollständig verwenden zu können.\r\n Die Schriftart 'Euro Caps' ist kostenlos auf www.edassets.org verfügbar.\r\n\r\nMöchten Sie dieses Design mit einer Ersatzschriftart laden?"
+UserControlSettings.Information: "Applies at next restart of ED Discovery" => "Ab einem Neustart von ED Discovery verfügbar"
 UserControlSettings.checkBoxCustomResize: "Redraw the screen during resizing" => "Fenster nach Grössenänderung neu aufbauen"
 UserControlSettings.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Klicken, um EDD das Neuzeichnen der Fenster während der Grössenänderung des Hauptfensters zu erlauben. Nur ausschalten, wenn zu langsam"
 
@@ -693,8 +693,8 @@ UserControlSettings.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw 
 .AddT: "Cannot create Commander" => "Kommandant kann nicht angelegt werden"
 .Language: "Applies at next restart of ED Discovery" => "Wird nach dem Neustart von ED Discovery gültig"
 .RemoveSectors: "Remove Sectors" => "Sektoren entfernen"
-UserControlSettings.GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
-UserControlSettings.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
+UserControlSettings.GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "{0} Sektor(en) wird/werden entfernt.\r\n\r\nDies kann eine Weile dauern (bis zu 30 Minuten, abhänging von Laufwerkstyp und Anzahl der Sektoren).\r\nSie können EDD während dieser Zeit weiter benutzen,\r\nallerdings werden die Antwortzeiten verlängert sein. Beenden Sie EDD nicht bevor dieses Fenster anzeigt,\r\ndass der Prozess beeandet ist\r\n\r\n"
+UserControlSettings.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Beendet, Sie können dieses Fenster jetzt schlissen.\r\nWenn Sie die 3D-Karte bereits offen haben, werden diese Änderungen nicht sichbar, bis Sie EDD das nächste Mal starten\r\n"
 
 //////////////////////////////////////////////////////////////// Shipyards
 
