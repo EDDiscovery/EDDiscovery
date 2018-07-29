@@ -124,6 +124,7 @@ namespace EliteDangerousCore
         private string group = "";                  // group..
         private long? marketId = null;
         private bool? wanted = null;
+        private bool bodyapproached = false;
 
         #endregion
 
@@ -286,8 +287,12 @@ namespace EliteDangerousCore
                 he.landed = !(je as JournalLiftoff).PlayerControlled;
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseEntry)
             {
-                he.whereami = (je as JournalSupercruiseEntry).StarSystem;
-                he.bodytype = "Star";
+                if (!he.bodyapproached)
+                {
+                    he.whereami = (je as JournalSupercruiseEntry).StarSystem;
+                    he.bodytype = "Star";
+                }
+
                 he.hyperspace = true;
             }
             else if (je.EventTypeID == JournalTypeEnum.SupercruiseExit)
@@ -299,10 +304,13 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.ApproachBody)
             {
                 he.bodytype = "Planet";     // don't record new whereami, as we don't want to lose it yet.
+                he.bodyapproached = true;
             }
             else if (je.EventTypeID == JournalTypeEnum.LeaveBody)
             {
+                he.whereami = (je as JournalLeaveBody).StarSystem;
                 he.bodytype = "Star";
+                he.bodyapproached = false;
             }
             else if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
@@ -311,6 +319,7 @@ namespace EliteDangerousCore
                 he.bodytype = "Star";
                 he.hyperspace = true;
                 he.wanted = ju.Wanted;
+                he.bodyapproached = false;
             }
             else if (je.EventTypeID == JournalTypeEnum.StartJump)
             {
@@ -330,6 +339,7 @@ namespace EliteDangerousCore
                 {
                     he.shiptype = (je as JournalLoadGame).Ship;
                     he.shipid = (je as JournalLoadGame).ShipId;
+                    he.bodyapproached = false;
                 }
             }
             else if (je.EventTypeID == JournalTypeEnum.ShipyardBuy)         // BUY does not have ship id, but the new entry will that is written later - journals 8.34
