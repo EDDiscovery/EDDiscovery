@@ -297,7 +297,7 @@ UserControlMarketData.checkBoxAutoSwap: "AutoSwap" => "Automatischer Austausch"
 UserControlMarketData.checkBoxBuyOnly: "Buy Only" => "Nur Kaufen"
 UserControlMarketData.labelVs: "Vs" => "vs"
 UserControlMarketData.labelLocation: "No Data" => "Keine Daten"
-UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparison to the previous market data.\r\nUseful when doing A->B->A trading" @
+UserControlMarketData.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparison to the previous market data.\r\nUseful when doing A->B->A trading" => "Nach Ankunft in einer Station, mit der verglichen werden soll (rechts)\r\nersetze den Vergleich mit den vorherigen Marktdaten.\r\nNützlich wenn man A->B->A handelt"
 UserControlMarketData.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Nur kaufbare Artikel anzeigen"
 UserControlMarketData.comboBoxCustomTo.ToolTip: "Click to select a comparision market data set" => "Klicken um einen Datensatz für den Marktvergleich auszuwählen"
 UserControlMarketData.comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Klicken um zwischen Cursor-Verfolgung und einen bestimmten Marktdatensatz umzuschalten"
@@ -540,63 +540,63 @@ UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem: "Show Deviation
 UserControlRouteTracker.autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Wegpunkt automatisch kopieren"
 UserControlRouteTracker.autoSetTargetToolStripMenuItem: "Auto set target" => "Ziel automatisch setzen"
 
-.NoRoute: "Please set a route, by right clicking" @
-.NoWay: "Route contains no waypoints" @
-.Unk: "Unknown location" @
-.NoCo: "No systems in route have known co-ords" @
-.J1: "jump" @
-.JS: "jumps" @
-.NoFSD: " No Ship FSD Information" => "Keine Information über Sschiff-FSA"
-.FL: "From Last WP " @
-.TF: "To First WP " @
-.LF: ", Left {0:N1}ly" @
-.ToWP: "To WP {0} " @
-.Dev: ", Dev {0:N1}ly" @
-.Selectroute: "Select route" @
-.PresstoCancel: "Press to Cancel" @
-.Enterroute: "Enter route" @
+.NoRoute: "Please set a route, by right clicking" => "Route durch rechtsklicken setzen"
+.NoWay: "Route contains no waypoints" => "Route enthält keine Wegpunkte"
+.Unk: "Unknown location" => "Unbekannter Ort"
+.NoCo: "No systems in route have known co-ords" => "Kein System auf der Route hat bekannte Koordinaten"
+.J1: "jump" => "Sprung"
+.JS: "jumps" => "Sprünge"
+.NoFSD: " No Ship FSD Information" => "Keine Information über Schiff-FSA"
+.FL: "From Last WP " => "Vom letzten Wegpunkt"
+.TF: "To First WP " => "Zum ersten Wegpunkt"
+.LF: ", Left {0:N1}ly" => ", Rest {0:N1}Lj"
+.ToWP: "To WP {0} " => "Zum Wegpunkt {0} "
+.Dev: ", Dev {0:N1}ly" => ", Abweichung {0:N1}Lj"
+.Selectroute: "Select route" => "Route auswählen"
+.PresstoCancel: "Press to Cancel" => "Abbrechen"
+.Enterroute: "Enter route" => "Route eingeben"
 
 //////////////////////////////////////////////////////////////// Scan
 
-UserControlScan.toolStripMenuItemToolbar: "Show/Hide Toolbar" @
-UserControlScan.ToolTip: "Right click on panel to show/hide the toolbar" @
-UserControlScan.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" @
-UserControlScan.chkShowOverlays.ToolTip: "Show/Hide body status icons" @
-UserControlScan.checkBoxTiny.ToolTip: "Image size teeny tiny" @
-UserControlScan.checkBoxMaterials.ToolTip: "Show/Hide Materials" @
-UserControlScan.checkBoxMaterialsRare.ToolTip: "Show rare materials only" @
-UserControlScan.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" @
-UserControlScan.checkBoxMoons.ToolTip: "Show/Hide Moons" @
-UserControlScan.checkBoxLarge.ToolTip: "Image size large" @
-UserControlScan.checkBoxSmall.ToolTip: "Image size small" @
-UserControlScan.checkBoxMedium.ToolTip: "Image size medium" @
-UserControlScan.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-UserControlScan.lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" @
+UserControlScan.toolStripMenuItemToolbar: "Show/Hide Toolbar" => "Werkzeugliste anzeigen/ausblenden"
+UserControlScan.ToolTip: "Right click on panel to show/hide the toolbar" => "Auf Feld rechtsklicken um die Werkzeugleiste anzuzeigen/auszublenden"
+UserControlScan.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" => "Materialen, die die Speicherkapazität überschritten haben, anzeigen/ausblenden"
+UserControlScan.chkShowOverlays.ToolTip: "Show/Hide body status icons" => "Statussymbol für die Himmelskörper anzeigen/ausblenden"
+UserControlScan.checkBoxTiny.ToolTip: "Image size teeny tiny" => "Winzige Bildgrösse"
+UserControlScan.checkBoxMaterials.ToolTip: "Show/Hide Materials" => "Materialien anzeigen/ausblenden"
+UserControlScan.checkBoxMaterialsRare.ToolTip: "Show rare materials only" => "Nur seltene Materialien anzeigen"
+UserControlScan.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Himmelskörperdaten von EDSM anzeigen/ausblenden"
+UserControlScan.checkBoxMoons.ToolTip: "Show/Hide Moons" => "Monde anzeigen/ausblenden"
+UserControlScan.checkBoxLarge.ToolTip: "Image size large" => "Grosse Bildgrösse"
+UserControlScan.checkBoxSmall.ToolTip: "Image size small" => "Kleine Bildgrösse"
+UserControlScan.checkBoxMedium.ToolTip: "Image size medium" => "Mittlere Bildgrösse"
+UserControlScan.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Daten in der Tabelle an Excel senden"
+UserControlScan.lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Auf Feld rechtsklicken um die Werkzeugleiste anzuzeigen/auszublenden"
 
-.AV: "Approx value: {0:N0}" @
-.NSD: "No scan data available" @
-.BC: "Barycentre of {0}" @
+.AV: "Approx value: {0:N0}" => "Ungefährer Wert: {0:N0}"
+.NSD: "No scan data available" => "Keine Scandaten vorhanden"
+.BC: "Barycentre of {0}" => "Schwerpunkt von {0}"
 
 //////////////////////////////////////////////////////////////// ScanGrid
 
-UserControlScanGrid.colName: "Name" @
-UserControlScanGrid.colClass: "Class" @
-UserControlScanGrid.Distance: "Distance" @
-UserControlScanGrid.colBriefing: "Briefing" @
+UserControlScanGrid.colName: "Name" => "Name"
+UserControlScanGrid.colClass: "Class" => "Klasse"
+UserControlScanGrid.Distance: "Distance" => "Entfernung"
+UserControlScanGrid.colBriefing: "Briefing" => "Einweisung"
 
-.Moon: "Moon" @
-.MainStar: "Main Star" @
-.Mass: "Mass" @
-.HabitableZone: "Habitable Zone" @
-.Landable: "Landable" @
-.Terraformable: "Terraformable" @
-.Volcanism: "Volcanism" @
-.Rings: "Has {0} rings: " @
-.Ring: "Has 1 ring: " @
-.BC: "This body contains: " @
-.Value: "Value" @
-.SS: "Scan Summary for {0}. {1}" @
-.AV: "Approx total scan value: {0:N0}" @
+.Moon: "Moon" => "Mond"
+.MainStar: "Main Star" => "Hauptstern"
+.Mass: "Mass" => "Masse"
+.HabitableZone: "Habitable Zone" => "Habitable Zone"
+.Landable: "Landable" => "landbar"
+.Terraformable: "Terraformable" => "Terraformable"
+.Volcanism: "Volcanism" => "Vulkanismus"
+.Rings: "Has {0} rings: " => "Hat {0} Ringe"
+.Ring: "Has 1 ring: " => "Hat einen Ring"
+.BC: "This body contains: " => "Dieser Himmelskörper hat: "
+.Value: "Value" => "Wert"
+.SS: "Scan Summary for {0}. {1}" => "Scan-Ergebnis für {0}. {1}"
+.AV: "Approx total scan value: {0:N0}" => "Ungefährer Gesamtscanwert: {0:N0}"
 
 
 //////////////////////////////////////////////////////////////// Screenshot
@@ -613,7 +613,7 @@ UserControlSettings.groupBoxCustomLanguage: "Language" => "Sprache"
 UserControlSettings.groupBoxCustomEDSM: "EDSM/EDDB Control" => "EDSM/EDDB Kontrolle"
 UserControlSettings.buttonExtEDSMConfigureArea: "Galaxy Select" => "Galaxie-Auswahl"
 UserControlSettings.checkBoxCustomEDSMEDDBDownload: "Enable Star Data Download" => "Sterndatendownload erlauben"
-UserControlSettings.groupBoxCustomScreenShots: "Screenshots" @
+UserControlSettings.groupBoxCustomScreenShots: "Screenshots" => "Bildschirmphotos"
 UserControlSettings.checkBoxCustomCopyToClipboard: "Copy to clipboard" => "In die Zwischenablage kopieren"
 UserControlSettings.checkBoxCustomMarkHiRes: "Mark HiRes files" => "Hochauflösende Bilder kennzeichnen"
 UserControlSettings.checkBoxCustomRemoveOriginals: "Remove Originals" => "Originaldateien entfernen"
@@ -634,7 +634,7 @@ UserControlSettings.buttonSaveTheme: "Save Theme" => "Design speichern"
 UserControlSettings.groupBox3dmap: "3D Map Settings" => "3D-Karteneinstellungen"
 UserControlSettings.labelMapCol: "Default Map Color" => "Standardkartenfarbe"
 UserControlSettings.labelZoom: "Default Zoom" => "Standardzoom"
-UserControlSettings.radioButtonHistorySelection: "History Grid Selection" @
+UserControlSettings.radioButtonHistorySelection: "History Grid Selection" => "Auswahl Historienliste"
 UserControlSettings.radioButtonCentreHome: "Home System" => "Heimatsystem"
 UserControlSettings.labelOpenOn: "Open Centred On" => "Zentriert auf ... öffnen"
 UserControlSettings.labelHome: "Home System" => "Heimatsystem"
@@ -647,42 +647,42 @@ UserControlSettings.NotesCol: "Notes" => "Systemkommentare"
 UserControlSettings.btnDeleteCommander: "Delete" => "Löschen"
 UserControlSettings.buttonAddCommander: "Add" => "Hinzufügen"
 
-UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "<Select either load all records, or load only essential items of records older than a set time before now>"
-UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "<Show the UI events (such as Music) in the history. The quantity of them can be very large>"
-UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "<Number oldest entry 1, latest entry highest>"
-UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" => "<Display game time (UTC) instead of your local time>"
-UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "<Configure what parts of the galaxy is stored in the databases>"
-UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." => "<Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start.>"
-UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" => "<Auto copy the image to the clipboard>"
-UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" => "<For Hi-Res files, mark them in the file name>"
-UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" => "<After conversion, remove originals>"
-UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "<Configure further screenshot options>"
-UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "<Screen shot conversion on/off>"
-UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "<Minimize the main window to the system notification area (system tray) icon.>"
-UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "<Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards>"
-UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "<Show a system notification area (system tray) icon for EDDiscovery.>"
-UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "<Open now the saved setup of pop outs>"
-UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "<Save now the current pop out state>"
-UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "<Save pop out state on exit>"
-UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "<Auto show pop outs>"
-UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "<This window, and its children, top>"
-UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" => "<Select the theme to use>"
-UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "<Edit theme and change colours fonts>"
-UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "<Save theme to disk>"
-UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" => "<Set the zoom level of the map. 1 is normal>"
-UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" => "<Select history entry as opening location>"
-UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" => "<Select home system as opening location>"
-UserControlSettings.textBoxHomeSystem.ToolTip: "Pick a home system" => "<Pick a home system>"
-UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" => "<New travel entries get this colour on the map>"
-UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" => "<Edit selected commander>"
-UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" => "<Delete selected commander>"
-UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" => "<Add a new commander>"
-UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "<Font Warning {0}>"
-UserControlSettings.Information: "Applies at next restart of ED Discovery" => "<Applies at next restart of ED Discovery>"
-UserControlSettings.checkBoxCustomResize: "Redraw the screen during resizing" @
-UserControlSettings.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" @
+UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" @
+UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" @
+UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" @
+UserControlSettings.checkBoxUTC.ToolTip: "Display game time (UTC) instead of your local time" @
+UserControlSettings.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" @
+UserControlSettings.checkBoxCustomEDSMEDDBDownload.ToolTip: "Click to enable downloading of stars from EDSM and system information from EDDB.  Will apply at next start." @
+UserControlSettings.checkBoxCustomCopyToClipboard.ToolTip: "Auto copy the image to the clipboard" @
+UserControlSettings.checkBoxCustomMarkHiRes.ToolTip: "For Hi-Res files, mark them in the file name" @
+UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, remove originals" @
+UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" @
+UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" @
+UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." @
+UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" @
+UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." @
+UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" @
+UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" @
+UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" @
+UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" @
+UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
+UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" @
+UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" @
+UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "Design auf Festplatte speichern"
+UserControlSettings.textBoxDefaultZoom.ToolTip: "Set the zoom level of the map. 1 is normal" @
+UserControlSettings.radioButtonHistorySelection.ToolTip: "Select history entry as opening location" @
+UserControlSettings.radioButtonCentreHome.ToolTip: "Select home system as opening location" @
+UserControlSettings.textBoxHomeSystem.ToolTip: "Pick a home system" => "Ein Heimatsystem wählen"
+UserControlSettings.panel_defaultmapcolor.ToolTip: "New travel entries get this colour on the map" @
+UserControlSettings.buttonEditCommander.ToolTip: "Edit selected commander" @
+UserControlSettings.btnDeleteCommander.ToolTip: "Delete selected commander" @
+UserControlSettings.buttonAddCommander.ToolTip: "Add a new commander" @
+UserControlSettings.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+UserControlSettings.Information: "Applies at next restart of ED Discovery" @
+UserControlSettings.checkBoxCustomResize: "Redraw the screen during resizing" => "Fenster nach Grössenänderung neu aufbauen"
+UserControlSettings.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Klicken, um EDD das Neuzeichnen der Fenster während der Grössenänderung des Hauptfensters zu erlauben. Nur ausschalten, wenn zu langsam"
 
-.DLA: "Disabled-Load All" @
+.DLA: "Disabled-Load All" => "Alles Laden ausgeschaltet"
 .7daysold: ">7 days old" => ">7 Tage alt"
 .30daysold: ">30 days old" => ">30 Tage alt"
 .60daysold: ">60 days old" => ">60 Tage alt"
@@ -702,18 +702,18 @@ UserControlShipYards.labelYard: "Unknown" => "Unbekannt"
 UserControlShipYards.labelYardSel: "Sel" => "Auswahl"
 UserControlShipYards.comboBoxYards.ToolTip: "Select ship to view" => "Schiff zur Anzeige auswählen"
 
-.TravelHistoryEntry: "Travel History Entry" @
-.Date: "Date" @
-.Yard: "Yard" @
-.Distance: "Distance" @
-.Price: "Price" @
-.Ship: "Ship" @
-.Manufacturer: "Manufacturer" @
-.MS: "Mass/Speed" @
+.TravelHistoryEntry: "Travel History Entry" => "Reisehistorieeintrag"
+.Date: "Date" => "Datum"
+.Yard: "Yard" => "Werft"
+.Distance: "Distance" => "Entfernung"
+.Price: "Price" => "Preis"
+.Ship: "Ship" => "Schiff"
+.Manufacturer: "Manufacturer" => "Hersteller"
+.MS: "Mass/Speed" => "Masse/Geschwindigkeit"
 
 //////////////////////////////////////////////////////////////// Shoppinglist
 
-UserControlShoppingList.buttonTechBroker: "Tech Broker Unlocks" @
+UserControlShoppingList.buttonTechBroker: "Tech Broker Unlocks" => "Freischalten der Technologie-Händler"
 UserControlShoppingList.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Maximale Anzahl FSA Injektionen anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "Materialien auf Himmelskörper nach Landung anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "Nicht mehr anzeigen, wenn Lager voll"
@@ -723,53 +723,53 @@ UserControlShoppingList.useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use E
 UserControlShoppingList.useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" @
 
 .NM: "Needed Mats" => "Gesuchte Materialien"
-.FS: "Filling Shopping List would exceed capacity for:" @
-.NoMat: "No materials currently required." @
+.FS: "Filling Shopping List would exceed capacity for:" => "Das Erfüllen der Einkaufsliste würde die Ladekapazität übersteigen für:"
+.NoMat: "No materials currently required." => "Momentan wird kein Material benötigt"
 .FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Max FSA Injektionen\r\n   {0} Basis\r\n   {1} Standard\r\n   {2} Premium" 
-.MO: "Materials on {0}" @
+.MO: "Materials on {0}" => "Materialien auf {0}"
 
 //////////////////////////////////////////////////////////////// Spanel
 
-UserControlSpanel.showSystemInformationToolStripMenuItem: "Show System Information" @
-UserControlSpanel.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" @
-UserControlSpanel.toolStripMenuItemTargetLine: "Show Target Line" @
-UserControlSpanel.EDSMButtonToolStripMenuItem: "EDSM Button" @
-UserControlSpanel.toolStripMenuItemTime: "Show Time" @
-UserControlSpanel.iconToolStripMenuItem: "Show Event Icon" @
-UserControlSpanel.showDescriptionToolStripMenuItem: "Show Description" @
-UserControlSpanel.showInformationToolStripMenuItem: "Show Information" @
-UserControlSpanel.showNotesToolStripMenuItem: "Show Notes" @
-UserControlSpanel.showXYZToolStripMenuItem: "Show XYZ" @
-UserControlSpanel.showTargetToolStripMenuItem: "Show Target Distance per Star" @
-UserControlSpanel.blackBoxAroundTextToolStripMenuItem: "Show black box around text" @
+UserControlSpanel.showSystemInformationToolStripMenuItem: "Show System Information" => "Systeminformationen anzeigen"
+UserControlSpanel.showHabitationMinimumAndMaximumDistanceToolStripMenuItem: "Show Habitation Minimum and Maximum Distance" => "Maximale und Minimale Entfernung für Bewohnbarkeit anzeigen"
+UserControlSpanel.toolStripMenuItemTargetLine: "Show Target Line" => "Ziellinie anzeigen"
+UserControlSpanel.EDSMButtonToolStripMenuItem: "EDSM Button" => "EDSM Knopf"
+UserControlSpanel.toolStripMenuItemTime: "Show Time" => "Zeit anzeigen"
+UserControlSpanel.iconToolStripMenuItem: "Show Event Icon" => "Ereignissymbol anzeigen"
+UserControlSpanel.showDescriptionToolStripMenuItem: "Show Description" => "Beschreibung anzeigen"
+UserControlSpanel.showInformationToolStripMenuItem: "Show Information" => "Information anzeigen"
+UserControlSpanel.showNotesToolStripMenuItem: "Show Notes" => "Kommentare anzeigen"
+UserControlSpanel.showXYZToolStripMenuItem: "Show XYZ" => "XYZ anzeigen"
+UserControlSpanel.showTargetToolStripMenuItem: "Show Target Distance per Star" => "Zielentfernung pro Stern anzeigen"
+UserControlSpanel.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Schwarzen Rahmen um Text anzeigen"
 UserControlSpanel.showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Distanzen/Koordinaten nur bei FSA Sprüngen anzeigen"
-UserControlSpanel.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" @
-UserControlSpanel.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." @
-UserControlSpanel.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" @
-UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" @
-UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" @
-UserControlSpanel.OrdertoolStripMenuItem: "Column Order.." @
-UserControlSpanel.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" @
-UserControlSpanel.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" @
-UserControlSpanel.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" @
-UserControlSpanel.configureEventFilterToolStripMenuItem: "Configure Event Filter.." @
-UserControlSpanel.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" @
-UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" @
-UserControlSpanel.showInPositionToolStripMenuItem: "Set Scan Position.." @
-UserControlSpanel.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" @
-UserControlSpanel.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" @
-UserControlSpanel.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" @
-UserControlSpanel.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" @
-UserControlSpanel.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
+UserControlSpanel.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Text in leere Spalten fliessen lassen"
+UserControlSpanel.dontShowInformationWhenToolStripMenuItem: "Don't show information when.." => "Information nicht anzeigen, falls.."
+UserControlSpanel.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" => ".. angedockt oder gelandet"
+UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" => ".. im Galaxienfenster"
+UserControlSpanel.dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" => ".. im Systemkartenfenster" 
+UserControlSpanel.OrdertoolStripMenuItem: "Column Order.." => "Spaltenreihenfolge.."
+UserControlSpanel.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Standard"
+UserControlSpanel.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Kommentare nach XYZ"
+UserControlSpanel.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance,XYZ,Notes" => "Zielentfernung, XYZ, Kommentare"
+UserControlSpanel.configureEventFilterToolStripMenuItem: "Configure Event Filter.." => "Ereignisfilter definieren.."
+UserControlSpanel.configureFieldFilterToolStripMenuItem: "Configure Field Filter.." => "Feldfilter definieren.."
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem: "Configure Scan Display.." => "Scan-Anzeige definieren"
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do Not Show" => "Nicht anzeigen"
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Für 15s anzeigen"
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Für 30s anzeigen"
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Für 60s anzeigen"
+UserControlSpanel.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Bis zum nächsten Scan anzeigen"
+UserControlSpanel.showInPositionToolStripMenuItem: "Set Scan Position.." => "Scan-Position festlegen.."
+UserControlSpanel.showInPositionToolStripMenuItem.scanRightMenuItem: "To right" => "Nach rechts"
+UserControlSpanel.showInPositionToolStripMenuItem.scanLeftMenuItem: "To left" => "Nach links"
+UserControlSpanel.showInPositionToolStripMenuItem.scanAboveMenuItem: "Above" => "Oberhalb"
+UserControlSpanel.showInPositionToolStripMenuItem.scanBelowMenuItem: "Below" => "Unterhalb"
+UserControlSpanel.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" => "Darüber"
 
-.Target: "Target" @
-.TVE: "View system on EDSM" @
-.SPF: "Summary Panel: Filter out fields" @
+.Target: "Target" => "Ziel"
+.TVE: "View system on EDSM" => "System auf EDSM anzeigen"
+.SPF: "Summary Panel: Filter out fields" => "Zusammenfassung: Felder herausfiltern"
 
 //////////////////////////////////////////////////////////////// Stardistance
 
@@ -781,7 +781,7 @@ UserControlStarDistance.labelExtMin: "Min" => "Min"
 UserControlStarDistance.labelExtMax: "Max" => "Max"
 UserControlStarDistance.addToTrilaterationToolStripMenuItem1: "Add to Trilateration" => "Zu Trilateration hinzufügen"
 UserControlStarDistance.viewOnEDSMToolStripMenuItem1: "View on EDSM" => "Auf EDSM anzeigen"
-UserControlStarDistance.checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" @
+UserControlStarDistance.checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" => "Würfel anstatt Kugel für die Entfernungen benutzen"
 UserControlStarDistance.textMinRadius.ToolTip: "Minimum star distance in ly" => "Minimale Sternentfernung in Lj"
 UserControlStarDistance.textMaxRadius.ToolTip: "Maximum star distance in ly" => "Maximale Sternentfernung in Lj"
 
@@ -809,32 +809,32 @@ UserControlStarList.textBoxFilter.ToolTip: "Enter text to search in any fields f
 UserControlStarList.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
 UserControlStarList.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
 
-.FV: "First visit {0}" @
-.CS: "{0} Star(s)" @
-.SMBH: "{0} is a super massive black hole" @
-.BH: "{0} is a black hole" @
-.NS: "{0} is a neutron star" @
-.WD: "{0} is a {1} white dwarf star" @
-.WR: "{0} is a {1} wolf-rayet star" @
-.OTHER: "{0} is a {1}" @
-.RP: "{0} is a rogue planet" @
-.ELM: "{0} is an earth like moon" @
-.TWM: "{0} is a terraformable water moon" @
-.WM: "{0} is a water moon" @
-.TM: "{0} is a terraformable moon" @
-.AM: "{0} is an ammonia moon" @
-.ELP: "{0} is an earth like planet" @
-.TWW: "{0} is a terraformable water world" @
-.WW: "{0} is a water world" @
-.TP: "{0} is a terraformable planet" @
-.AW: "{0} is an ammonia world" @
+.FV: "First visit {0}" => "Erster Besuch {0}"
+.CS: "{0} Star(s)" => "{0} Stern(e)"
+.SMBH: "{0} is a super massive black hole" => "{0} ist ein supermassives schwarzes Loch"
+.BH: "{0} is a black hole" => "{0} ist ein schwarzes Loch"
+.NS: "{0} is a neutron star" => "{0} ist ein Neutronenstern"
+.WD: "{0} is a {1} white dwarf star" => "{0} ist ein {1} weisser Zwergstern"
+.WR: "{0} is a {1} wolf-rayet star" => "{0} ist ein {1} Wolf-Rayet-Stern"
+.OTHER: "{0} is a {1}" => "{0} ist ein {1}"
+.RP: "{0} is a rogue planet" => "{0} ist ein Waisenplanet"
+.ELM: "{0} is an earth like moon" => "{0} ist ein erdähnlicher Mond"
+.TWM: "{0} is a terraformable water moon" => "{0} ist ein terraformbarer Wassermond"
+.WM: "{0} is a water moon" => "{0} ist ein Wassermond"
+.TM: "{0} is a terraformable moon" => "{0} ist ein terraformbarer Mond"
+.AM: "{0} is an ammonia moon" => "{0} ist ein Ammoniakmond"
+.ELP: "{0} is an earth like planet" => "{0} ist ein erdähnlicher Planet"
+.TWW: "{0} is a terraformable water world" => "{0} ist ein terraformbarer Wasserplanet"
+.WW: "{0} is a water world" => "{0} ist ein Wasserplanet"
+.TP: "{0} is a terraformable planet" => "{0} ist ein terraformbarer Planet"
+.AW: "{0} is an ammonia world" => "{0} ist ein Ammoniakplanet"
 .BFSD: " Basic" => " Basis"
 .SFSD: " Standard" => " Standard"
 .PFSD: " Premium" => " Premium"
-.LE: "{0} has {1} level elements." @
-.OB: "{0} Other bodies" @
+.LE: "{0} has {1} level elements." => "{0} hat Stufe {1} Elemente."
+.OB: "{0} Other bodies" => "{0} andere Himmelskörper"
 .FSD: "This system has materials for FSD boost: " => "Dieses System hat Materialien für FSA Injektionen: "
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "System konnte nicht gefunden werden - nicht synchronisert oder EDSM ist nicht erreichbar"
 
 //////////////////////////////////////////////////////////////// Stats
 
@@ -1039,41 +1039,41 @@ UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "Entfernun
 
 //////////////////////////////////////////////////////////////// travel grid
 
-UserControlTravelGrid.ColumnTime: "Time" => "<Time>"
-UserControlTravelGrid.Icon: "Event" => "<Event>"
-UserControlTravelGrid.ColumnSystem: "Description" => "<Description>"
-UserControlTravelGrid.ColumnDistance: "Information" => "<Information>"
-UserControlTravelGrid.ColumnNote: "Note" => "<Note>"
-UserControlTravelGrid.checkBoxMoveToTop: "Cursor to Top" => "<Cursor to Top>"
-UserControlTravelGrid.buttonField: "Field Filter" => "<Field Filter>"
-UserControlTravelGrid.buttonFilter: "Event Filter" => "<Event Filter>"
-UserControlTravelGrid.labelSearch: "Search" => "<Search>"
-UserControlTravelGrid.labelTime: "Time" => "<Time>"
-UserControlTravelGrid.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "<Remove Sorting of Columns>"
-UserControlTravelGrid.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "<Jump to Entry>"
-UserControlTravelGrid.setNoteToolStripMenuItem: "Set Note" => "<Set Note>"
-UserControlTravelGrid.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "<Create/Edit Bookmark>"
-UserControlTravelGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "<Set Start/Stop point for travel calculations>"
-UserControlTravelGrid.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "<Jump to next Start/Stop marker>"
-UserControlTravelGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "<Go to star on 3D Map>"
-UserControlTravelGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "<View on EDSM>"
-UserControlTravelGrid.starMapColourToolStripMenuItem: "Star Map Colour..." => "<Star Map Colour...>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem: "Add to ..." => "<Add to ...>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "<System on Trilateration Panel>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "<Wanted Systems on Trilateration Panel>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "<Both of the above>"
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "<Expedition Panel>"
-UserControlTravelGrid.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "<Move Entries to another Commander>"
-UserControlTravelGrid.hideSystemToolStripMenuItem: "Hide Entries" => "<Hide Entries>"
-UserControlTravelGrid.selectCorrectSystemToolStripMenuItem: "Assign new system" => "<Assign new system>"
-UserControlTravelGrid.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "<Remove Journal Entry>"
-UserControlTravelGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "<Send unsynced scan to EDDN>"
-UserControlTravelGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "<Run Actions on this entry>"
-UserControlTravelGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "<Copy journal entry to clipboard/Log>"
-UserControlTravelGrid.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "<Write event class info to Log (Debug)>"
-UserControlTravelGrid.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "<Run actions across selection for speech debugging (Debug)>"
-UserControlTravelGrid.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "<Run selection through Inara System (Debug)>"
-UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "<Run entry through Profile System (Debug)>"
+UserControlTravelGrid.ColumnTime: "Time" => "Zeit"
+UserControlTravelGrid.Icon: "Event" => "Ereignis"
+UserControlTravelGrid.ColumnSystem: "Description" => "Beschreibung"
+UserControlTravelGrid.ColumnDistance: "Information" => "Information"
+UserControlTravelGrid.ColumnNote: "Note" => "Kommentar"
+UserControlTravelGrid.checkBoxMoveToTop: "Cursor to Top" => "Zeiger an den Anfang"
+UserControlTravelGrid.buttonField: "Field Filter" => "Feldfilter"
+UserControlTravelGrid.buttonFilter: "Event Filter" => "Ereignisfilter"
+UserControlTravelGrid.labelSearch: "Search" => "Suchen"
+UserControlTravelGrid.labelTime: "Time" => "Zeit"
+UserControlTravelGrid.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Spaltensortierung entfernen"
+UserControlTravelGrid.gotoEntryNumberToolStripMenuItem: "Jump to Entry" => "Zu Eintrag springen"
+UserControlTravelGrid.setNoteToolStripMenuItem: "Set Note" => "Kommentar eingeben"
+UserControlTravelGrid.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Lesezeichen erzeugen/bearbeiten"
+UserControlTravelGrid.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Start/Ziel für nächste Reiseberechnung definieren"
+UserControlTravelGrid.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Zur nächsten Start-/Zielmarkierung springen"
+UserControlTravelGrid.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Stern auf 3D-Karte anzeigen"
+UserControlTravelGrid.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Auf EDSM anzeigen"
+UserControlTravelGrid.starMapColourToolStripMenuItem: "Star Map Colour..." => "Sternfarbe für Karte..."
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem: "Add to ..." => "Hinzufügen zu ..."
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "System auf Trilaterationsfenster"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "Gesuchte Systeme im Trilaterationsfenster"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "zu beiden"
+UserControlTravelGrid.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "Expeditionsfenster"
+UserControlTravelGrid.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "Einträge zu einem anderen Kommandanten verschieben"
+UserControlTravelGrid.hideSystemToolStripMenuItem: "Hide Entries" => "Einträge verstecken"
+UserControlTravelGrid.selectCorrectSystemToolStripMenuItem: "Assign new system" => "Neues System zuweisen"
+UserControlTravelGrid.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "Journaleintrag entfernen"
+UserControlTravelGrid.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "Unsynchronisierte Scans an EDDN schicken"
+UserControlTravelGrid.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Aktion auf diesem Eintrag ausführen"
+UserControlTravelGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Journaleintrag zu Zwischenablage/Log kopieren"
+UserControlTravelGrid.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Ereignisklasseninformation ins Log schreiben (Debug)"
+UserControlTravelGrid.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Aktionen über Auswahl für Sprachdebugging ausführen (Debug)"
+UserControlTravelGrid.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Ereignis durch Inarasystem schicken (Debug)"
+UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Eintrag durch Profilsystem schicken (Debug)"
 
 
 .TT1: " showing {0} original {1}" @
@@ -1094,61 +1094,61 @@ UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry 
 
 //////////////////////////////////////////////////////////////// trilat
 
-UserControlTrilateration.ColumnSystem: "System" @
-UserControlTrilateration.ColumnDistance: "Distance" @
-UserControlTrilateration.ColumnCalculated: "Calculated" @
-UserControlTrilateration.ColumnStatus: "Status" @
-UserControlTrilateration.Source: "Source" @
-UserControlTrilateration.dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" @
-UserControlTrilateration.toolStrip: "<Press Start New>" @
-UserControlTrilateration.removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" @
-UserControlTrilateration.viewOnEDSMToolStripMenuItem1: "View on EDSM" @
-UserControlTrilateration.deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" @
-UserControlTrilateration.addAllLocalSystemsToolStripMenuItem: "Add all local systems" @
-UserControlTrilateration.addAllEDSMSystemsToolStripMenuItem: "Add all EDSM systems" @
-UserControlTrilateration.addToWantedSystemsToolStripMenuItem: "Add to wanted systems" @
-UserControlTrilateration.viewOnEDSMToolStripMenuItem: "View on EDSM" @
-UserControlTrilateration.pasteToolStripMenuItem: "Paste" @
-UserControlTrilateration.toolStripButtonSubmitDistances: "&Submit Distances" @
-UserControlTrilateration.toolStripButtonNew: "Start &new" @
-UserControlTrilateration.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" @
-UserControlTrilateration.toolStripButtonRemoveAll: "toolStripButton1" @
-UserControlTrilateration.toolStripButtonMap: "3d map" @
-UserControlTrilateration.toolStripLabelSystem: "From System:" @
-UserControlTrilateration.toolStripTextBoxSystem: "<Press Start New>" @
-UserControlTrilateration.toolStripLabel1: "Visited without coordinates:" @
-UserControlTrilateration.toolStripAddFromHistory: "Add 20 oldest" @
-UserControlTrilateration.toolStripAddRecentHistory: "Add 20 newest" @
+UserControlTrilateration.ColumnSystem: "System" => "System"
+UserControlTrilateration.ColumnDistance: "Distance" => "Entfernung"
+UserControlTrilateration.ColumnCalculated: "Calculated" => "Berechnet"
+UserControlTrilateration.ColumnStatus: "Status" => "Status"
+UserControlTrilateration.Source: "Source" => "Quelle"
+UserControlTrilateration.dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Gesuchtes System"
+UserControlTrilateration.toolStrip: "Press Start New" => "'Neustart' drücken"
+UserControlTrilateration.removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Aus gesuchten Systemen entfernen"
+UserControlTrilateration.viewOnEDSMToolStripMenuItem1: "View on EDSM" => "Auf EDSM anzeigen"
+UserControlTrilateration.deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Alle Einträge mit bekannten Positionen löschen"
+UserControlTrilateration.addAllLocalSystemsToolStripMenuItem: "Add all local systems" => "Alle lokalen Systeme hinzufügen
+UserControlTrilateration.addAllEDSMSystemsToolStripMenuItem: "Add all EDSM systems" => "Alle EDSM Systeme hinzufügen"
+UserControlTrilateration.addToWantedSystemsToolStripMenuItem: "Add to wanted systems" => "Zu gesuchten Systemen hinzufügen"
+UserControlTrilateration.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Auf EDSM anzeigen"
+UserControlTrilateration.pasteToolStripMenuItem: "Paste" => "Einfügen"
+UserControlTrilateration.toolStripButtonSubmitDistances: "&Submit Distances" => "&Distanzen übertragen"
+UserControlTrilateration.toolStripButtonNew: "Start &new" => "&Neustart"
+UserControlTrilateration.toolStripButtonRemoveUnused: "toolStripButtonRemoveUnused" => "Unbenutzte Einträge entfernen"
+UserControlTrilateration.toolStripButtonRemoveAll: "toolStripButton1" => "Alle Einträge entfernen"
+UserControlTrilateration.toolStripButtonMap: "3d map" => "3D-Karte"
+UserControlTrilateration.toolStripLabelSystem: "From System:" => "Von System:"
+UserControlTrilateration.toolStripTextBoxSystem: "Press Start New" => "'Neustart' drücken"
+UserControlTrilateration.toolStripLabel1: "Visited without coordinates:" => "Besucht ohne Koordinaten:"
+UserControlTrilateration.toolStripAddFromHistory: "Add 20 oldest" => "20 älteste Systeme hinzufügen"
+UserControlTrilateration.toolStripAddRecentHistory: "Add 20 newest" => "20 neueste Systeme hinzufügen"
 
-.ToolStripText: "Press Start New" @
-.DUP: "Duplicate system entry is not allowed" @
-.TP: "Trilateration Panel" @
-.CHK: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" @
-.UPD: "Update 'From' system to current position ({0}) and submit entered distances?" @
-.Sub: "Submitting system to EDSM, please wait..." @
-.NOTREM: "{0} is pushed from EDSM and cannot be removed" @
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" @
-.Cmdr: "Please enter commander name before submitting the system!" @
-.Horray: "EDSM submission succeeded, trilateration successful." @
-.Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." @
-.Dead: "EDSM submission failed." @
-.Co: "Only systems with coordinates or already known to EDSM can be added" @
-.PU: "Position unknown" @
-.PF: "Position found" @
+.ToolStripText: "Press Start New" => "'Neustart' drücken"
+.DUP: "Duplicate system entry is not allowed" => "Doppelte Systemeingabe ist nicht erlaubt"
+.TP: "Trilateration Panel" => "Trilaterionsfenster"
+.CHK: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" => "Sie sind dabei, Distanzen von {0} zu übermitteln.\r\nIhre momentane Position ist jedoch {1}.\r\nDistanzen ohne Änderung des 'Von'-Systems übertragen?"
+.UPD: "Update 'From' system to current position ({0}) and submit entered distances?" => "'Von'-System auf momentane Position setzen ({0}) und eingetragene Distanzen übermitteln?"
+.Sub: "Submitting system to EDSM, please wait..." => "Systeme werden an EDSM übertragen, bitte warten..."
+.NOTREM: "{0} is pushed from EDSM and cannot be removed" => "{0} wurde von EDSM gesendet und kann nicht entfernt werden"
+.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" => "System nicht gefunden - nicht synchronisert oder EDSM ist nicht erreichbar"
+.Cmdr: "Please enter commander name before submitting the system!" => "Vor dem Systemtransfer bitte Namen den Kommandanten angeben!"
+.Horray: "EDSM submission succeeded, trilateration successful." => "EDSM-Transfer erfolgreich, Trilateration erfolgreich."
+.Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "EDSM-Transfer erfolgreich, aber Trilateration fehlgeschlagen. Bitte mehr Entfernungen angeben."
+.Dead: "EDSM submission failed." => "EDSM-Transfer fehlgeschlagen."
+.Co: "Only systems with coordinates or already known to EDSM can be added" => "Nur Systeme, die Koordinaten haben oder EDSM bereits bekannt sind, können hinzugefügt werden"
+.PU: "Position unknown" => "Position unbekannt"
+.PF: "Position found" => "Position gefunden"
 
 //////////////////////////////////////////////////////////////// trippanel
 
-UserControlTrippanel.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" @
-UserControlTrippanel.showTargetToolStripMenuItem: "Show Target" @
-UserControlTrippanel.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" @
-UserControlTrippanel.showFuelLevelToolStripMenuItem: "Show Fuel Level" @
+UserControlTrippanel.showEDSMStartButtonsToolStripMenuItem: "Show EDSM/Start Buttons" => "EDSM-/Startknopf anzeigen"
+UserControlTrippanel.showTargetToolStripMenuItem: "Show Target" => "Ziel anzeigen"
+UserControlTrippanel.showTravelledDistanceToolStripMenuItem: "Show Travelled Distance" => "Zurückgelegte Distanz anzeigen"
+UserControlTrippanel.showFuelLevelToolStripMenuItem: "Show Fuel Level" => "Treibstoffstand anzeigen"
 UserControlTrippanel.showCurrentFSDRangeToolStripMenuItem: "Show Current FSD Range" => "Momentane FSA Reichweite anzeigen"
 UserControlTrippanel.showAvgFSDRangeToolStripMenuItem: "Show Avg FSD Range" => "Durchschnittliche FSA Reichweite anzeigen"
 UserControlTrippanel.showMaxFSDRangeToolStripMenuItem: "Show Max FSD Range" => "Maximale FSA Reichweite anzeigen"
 UserControlTrippanel.showFSDRangeToolStripMenuItem: "Show FSD Range" => "FSA Reichweite anzeigen"
 
-UserControlTrippanel.jump: "jump" @
-UserControlTrippanel.jumps: "jumps" @
-UserControlTrippanel.NoT: " -> Target not set" @
-UserControlTrippanel.FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
-UserControlTrippanel.UKN: "System {0} unknown to EDSM" @
+UserControlTrippanel.jump: "jump" => "Sprung"
+UserControlTrippanel.jumps: "jumps" => "Sprünge"
+UserControlTrippanel.NoT: " -> Target not set" => " -> Ziel nicht definiert"
+UserControlTrippanel.FDEDSM: "Shows if EDSM indicates you're its first discoverer" => "Anzeigen, ob EDSM angibt, dass Sie der erste Entdecker sind"
+UserControlTrippanel.UKN: "System {0} unknown to EDSM" => "System {0} ist EDSM nicht bekannt"
