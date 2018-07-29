@@ -126,6 +126,8 @@ namespace EliteDangerousCore
         private bool? wanted = null;
         private bool bodyapproached = false;
 
+        private static System.Collections.Generic.Dictionary<long, HistoryEntry> station_prevloc = new System.Collections.Generic.Dictionary<long, HistoryEntry>();
+
         #endregion
 
         #region Constructors
@@ -275,9 +277,23 @@ namespace EliteDangerousCore
                 he.whereami = jl.StationName;
                 he.bodytype = "Station";
                 he.marketId = jl.MarketID;
+                he.bodyapproached = false;
+
+                if (prev?.bodyapproached == true && jl.MarketID != null)
+                {
+                    station_prevloc[jl.MarketID.Value] = prev;
+                }
             }
             else if (je.EventTypeID == JournalTypeEnum.Undocked)
             {
+                if (he.marketId != null && station_prevloc.ContainsKey(he.marketId.Value))
+                {
+                    var ploc = station_prevloc[he.marketId.Value];
+                    he.whereami = ploc.whereami;
+                    he.bodyapproached = ploc.bodyapproached;
+                    he.bodytype = ploc.bodytype;
+                }
+
                 he.docked = false;
                 he.marketId = null;
             }
@@ -304,6 +320,10 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.ApproachBody)
             {
                 he.bodytype = "Planet";     // don't record new whereami, as we don't want to lose it yet.
+                if (he.docked != true)
+                {
+                    he.whereami = (je as JournalApproachBody).Body;
+                }
                 he.bodyapproached = true;
             }
             else if (je.EventTypeID == JournalTypeEnum.LeaveBody)
