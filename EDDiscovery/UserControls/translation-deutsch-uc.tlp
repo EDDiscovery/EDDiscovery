@@ -659,13 +659,13 @@ UserControlSettings.checkBoxCustomRemoveOriginals.ToolTip: "After conversion, re
 UserControlSettings.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Weitere Bildschirmphoto-Einstellungen anpassen"
 UserControlSettings.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Umwandlung von Bildschirmphotos ein-/ausschalten"
 UserControlSettings.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Hauptfenster in den Infobereich minimieren"
-UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" @
+UserControlSettings.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode is Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Auswahl der Taste, die mindestens 500ms gedrückt werden muss\r\num die Form eines transparenten Fensters zu zeigen, falls\r\nder Transparenzmodus des Fensters entweder Tc (Klicks gehen durch\r\nKontrollen noch aktiv) oder Tf (Kontrollen inaktiv) ist\r\nNicht alle Tasten sind auf alles Tastaturen aktiv"
 UserControlSettings.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "EDDiscovery als Symbol im Infobereich anzeigen"
 UserControlSettings.buttonReloadSaved.ToolTip: "Open now the saved setup of pop outs" => "Gespeicherte Fensterzusammenstellung laden"
 UserControlSettings.buttonSaveSetup.ToolTip: "Save now the current pop out state" => "Momentane Fensterzusammenstellung speichern"
 UserControlSettings.checkBoxAutoSave.ToolTip: "Save pop out state on exit" => "Fensterzusammenstellung beim Verlassen speichern"
-UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" @
-UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" @
+UserControlSettings.checkBoxAutoLoad.ToolTip: "Auto show pop outs" => "Satellitenfenster automatisch anzeigen"
+UserControlSettings.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Dieses Fenster und seine Kinder, oben"
 UserControlSettings.comboBoxTheme.ToolTip: "Select the theme to use" => "Design auswählen"
 UserControlSettings.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Design und Farbe der Texte anpassen"
 UserControlSettings.buttonSaveTheme.ToolTip: "Save theme to disk" => "Design auf Festplatte speichern"
@@ -717,10 +717,10 @@ UserControlShoppingList.buttonTechBroker: "Tech Broker Unlocks" => "Freischalten
 UserControlShoppingList.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Maximale Anzahl FSA Injektionen anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "Materialien auf Himmelskörper nach Landung anzeigen"
 UserControlShoppingList.showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "Nicht mehr anzeigen, wenn Lager voll"
-UserControlShoppingList.showAvailableMaterialsInListWhenLandedToolStripMenuItem: "Include Material %age on Landed Body in Shopping List" @
-UserControlShoppingList.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem: "Show System Availability in Shopping List in flight" @
-UserControlShoppingList.useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" @
-UserControlShoppingList.useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" @
+UserControlShoppingList.showAvailableMaterialsInListWhenLandedToolStripMenuItem: "Include Material %age on Landed Body in Shopping List" => "Nach der Landung Materialprozente auf der Einkaufliste anzeigen"
+UserControlShoppingList.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem: "Show System Availability in Shopping List in flight" => "Systemverfügbarkeit während des Fluges auf der Einkausliste anzeigen"
+UserControlShoppingList.useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "EDSM Daten für die Systemverfügbarkeit verwenden"
+UserControlShoppingList.useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "Historische Materialmenge anzeigen"
 
 .NM: "Needed Mats" => "Gesuchte Materialien"
 .FS: "Filling Shopping List would exceed capacity for:" => "Das Erfüllen der Einkaufsliste würde die Ladekapazität übersteigen für:"
@@ -801,13 +801,13 @@ UserControlStarList.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of 
 UserControlStarList.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Zu Stern auf der 3D-Karte wechseln"
 UserControlStarList.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Auf EDSM anzeigen"
 UserControlStarList.setNoteToolStripMenuItem: "Set Note" => "Kommentar einfügen"
-UserControlStarList.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
-UserControlStarList.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+UserControlStarList.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "Auswählen, ob der Zeiger zum obersten Eintrag springen soll, wenn ein neuer Eintrag empfangen wird"
+UserControlStarList.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Daten in der Tabelle an Excel senden"
 UserControlStarList.checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "Präsenz von Jumponium-Materialien anzeigen/nicht anzeigen"
-UserControlStarList.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" @
-UserControlStarList.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-UserControlStarList.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." @
-UserControlStarList.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+UserControlStarList.checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Spezielle Himmelskörperklassen anzeigen/nicht anzeigen"
+UserControlStarList.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Text eingeben, der in allen Feldern gesucht werden soll"
+UserControlStarList.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Körperdaten von EDSM anzeigen/nicht anzeigen. Aufgrund von Serverbeschränkungen muss auf ein System geklickt werden, um die Daten von EDSM abzurufen."
+UserControlStarList.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Einträge nach Alter auswählen"
 
 .FV: "First visit {0}" => "Erster Besuch {0}"
 .CS: "{0} Star(s)" => "{0} Stern(e)"
@@ -838,146 +838,146 @@ UserControlStarList.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
 
 //////////////////////////////////////////////////////////////// Stats
 
-UserControlStats.tabControlCustomStats.tabPageGeneral: "General" @
-UserControlStats.tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" @
-UserControlStats.tabControlCustomStats.tabPageGeneral.ItemName: "Item" @
-UserControlStats.tabControlCustomStats.tabPageGeneral.Information: "Information" @
-UserControlStats.tabControlCustomStats.tabPageTravel: "Travel" @
-UserControlStats.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" @
-UserControlStats.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" @
-UserControlStats.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" @
-UserControlStats.tabControlCustomStats.tabPageScan: "Scan" @
-UserControlStats.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" @
-UserControlStats.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
-UserControlStats.tabControlCustomStats.tabPageGameStats: "In Game" @
+UserControlStats.tabControlCustomStats.tabPageGeneral: "General" => "Allgemein"
+UserControlStats.tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" => "Meistbesucht"
+UserControlStats.tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "Element"
+UserControlStats.tabControlCustomStats.tabPageGeneral.Information: "Information" => "Information"
+UserControlStats.tabControlCustomStats.tabPageTravel: "Travel" => "Reise"
+UserControlStats.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" => "Element"
+UserControlStats.tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" => "Information"
+UserControlStats.tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Zeit"
+UserControlStats.tabControlCustomStats.tabPageScan: "Scan" => "Scan"
+UserControlStats.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" => "Spalte1"
+UserControlStats.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" => "Zeit"
+UserControlStats.tabControlCustomStats.tabPageGameStats: "In Game" => "Im Spiel"
 
 
-UserControlStats.Visits: "Visits" @
-UserControlStats.JumpsBeforeSystem: "Jumps Before System" @
-UserControlStats.TotalNoofjumps: "Total No of jumps: " @
-UserControlStats.JumpHistory: "Jump History" @
-UserControlStats.24hc: "24 Hours: " @
-UserControlStats.OneWeek: ", One Week: " @
-UserControlStats.30Days: ", 30 Days: " @
-UserControlStats.OneYear: ", One Year: " @
-UserControlStats.FirstDiscoveries: "First Discoveries" @
-UserControlStats.MostNorth: "Most North" @
-UserControlStats.MostSouth: "Most South" @
-UserControlStats.MostEast: "Most East" @
-UserControlStats.MostWest: "Most West" @
-UserControlStats.MostHighest: "Most Highest" @
-UserControlStats.MostLowest: "Most Lowest" @
-UserControlStats.MostVisited: "Most Visited" @
-UserControlStats.24Hours: "24 Hours" @
-UserControlStats.Week: "Week" @
-UserControlStats.Month: "Month" @
-UserControlStats.Lastdock: "Last dock" @
-UserControlStats.Jumps: "Jumps" @
-UserControlStats.TraveledLy: "Traveled Ly" @
-UserControlStats.PremiumBoost: "Premium Boost" @
-UserControlStats.StandardBoost: "Standard Boost" @
-UserControlStats.BasicBoost: "Basic Boost" @
-UserControlStats.JetConeBoost: "Jet Cone Boost" @
-UserControlStats.Landed: "Landed" @
-UserControlStats.HeatWarning: "Heat Warning" @
-UserControlStats.Heatdamage: "Heat damage" @
-UserControlStats.FuelScooped: "Fuel Scooped" @
-UserControlStats.ScoopedTons: "Scooped Tons" @
-UserControlStats.Scans: "Scans" @
-UserControlStats.Scanvalue: "Scan value" @
-UserControlStats.Docked: "Docked" @
-UserControlStats.BodyType: "Body Type" @
-UserControlStats.Trip: "Trip" @
-UserControlStats.all: "all" @
-UserControlStats.CurrentAssets: "Current Assets" @
-UserControlStats.SpentonShips: "Spent on Ships" @
-UserControlStats.SpentonOutfitting: "Spent on Outfitting" @
-UserControlStats.SpentonRepairs: "Spent on Repairs" @
-UserControlStats.SpentonFuel: "Spent on Fuel" @
-UserControlStats.SpentonMunitions: "Spent on Munitions" @
-UserControlStats.InsuranceClaims: "Insurance Claims" @
-UserControlStats.TotalClaimCosts: "Total Claim Costs" @
-UserControlStats.BountiesClaimed: "Bounties Claimed" @
-UserControlStats.ProfitfromBountyHunting: "Profit from Bounty Hunting" @
-UserControlStats.CombatBonds: "Combat Bonds" @
-UserControlStats.ProfitfromCombatBonds: "Profit from Combat Bonds" @
-UserControlStats.Assassinations: "Assassinations" @
-UserControlStats.ProfitfromAssassination: "Profit from Assassination" @
-UserControlStats.HighestSingleReward: "Highest Single Reward" @
-UserControlStats.SkimmersKilled: "Skimmers Killed" @
-UserControlStats.Notoriety: "Notoriety" @
-UserControlStats.NumberofFines: "Number of Fines" @
-UserControlStats.LifetimeFinesValue: "Lifetime Fines Value" @
-UserControlStats.BountiesReceived: "Bounties Received" @
-UserControlStats.LifetimeBountyValue: "Lifetime Bounty Value" @
-UserControlStats.HighestBountyIssued: "Highest Bounty Issued" @
-UserControlStats.BlackMarketNetwork: "Black Market Network" @
-UserControlStats.BlackMarketProfits: "Black Market Profits" @
-UserControlStats.CommoditiesSmuggled: "Commodities Smuggled" @
-UserControlStats.AverageProfit: "Average Profit" @
-UserControlStats.HighestSingleTransaction: "Highest Single Transaction" @
-UserControlStats.MarketNetwork: "Market Network" @
-UserControlStats.MarketProfits: "Market Profits" @
-UserControlStats.CommoditiesTraded: "Commodities Traded" @
-UserControlStats.MiningProfits: "Mining Profits" @
-UserControlStats.MaterialsRefined: "Materials Refined" @
-UserControlStats.MaterialsCollected: "Materials Collected" @
-UserControlStats.SystemsVisited: "Systems Visited" @
-UserControlStats.ExplorationProfits: "Exploration Profits" @
-UserControlStats.Level2Scans: "Level 2 Scans" @
-UserControlStats.Level3Scans: "Level 3 Scans" @
-UserControlStats.HighestPayout: "Highest Payout" @
-UserControlStats.TotalHyperspaceDistance: "Total Hyperspace Distance" @
-UserControlStats.TotalHyperspaceJumps: "Total Hyperspace Jumps" @
-UserControlStats.FarthestFromStart: "Farthest From Start" @
-UserControlStats.TimePlayed: "Time Played" @
-UserControlStats.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" @
-UserControlStats.TotalVIPsDelivered: "Total VIPs Delivered" @
-UserControlStats.Delivered: "Delivered" @
-UserControlStats.Ejected: "Ejected" @
-UserControlStats.TotalItemsRescued: "Total Items Rescued" @
-UserControlStats.TotalProfit: "Total Profit" @
-UserControlStats.TotalRescueTransactions: "Total Rescue Transactions" @
-UserControlStats.EngineersUsed: "Engineers Used" @
-UserControlStats.TotalRecipesGenerated: "Total Recipes Generated" @
-UserControlStats.Grade1RecipesGenerated: "Grade 1 Recipes Generated" @
-UserControlStats.Grade2RecipesGenerated: "Grade 2 Recipes Generated" @
-UserControlStats.Grade3RecipesGenerated: "Grade 3 Recipes Generated" @
-UserControlStats.Grade4RecipesGenerated: "Grade 4 Recipes Generated" @
-UserControlStats.Grade5RecipesGenerated: "Grade 5 Recipes Generated" @
-UserControlStats.TotalWages: "Total Wages" @
-UserControlStats.TotalHired: "Total Hired" @
-UserControlStats.TotalFired: "Total Fired" @
-UserControlStats.DiedinLineofDuty: "Died in Line of Duty" @
-UserControlStats.TotalTime: "Total Time" @
-UserControlStats.FighterTime: "Fighter Time" @
-UserControlStats.GunnerTime: "Gunner Time" @
-UserControlStats.CreditsMade: "Credits Made" @
-UserControlStats.FinesAccrued: "Fines Accrued" @
-UserControlStats.TradesCompleted: "Trades Completed" @
-UserControlStats.MaterialsTraded: "Materials Traded" @
-UserControlStats.TME: "{0} days {1} hours {1} minutes" @
+UserControlStats.Visits: "Visits" => "Besuche"
+UserControlStats.JumpsBeforeSystem: "Jumps Before System" => "Sprünge vor diesem System"
+UserControlStats.TotalNoofjumps: "Total No of jumps: " => "Gesamtzahl der Sprünge"
+UserControlStats.JumpHistory: "Jump History" => "Sprung-Historie"
+UserControlStats.24hc: "24 Hours: " => "24 Stunden: "
+UserControlStats.OneWeek: ", One Week: " => ", eine Woche: "
+UserControlStats.30Days: ", 30 Days: " => ", 30 Tage: "
+UserControlStats.OneYear: ", One Year: " => ", ein Jahr: "
+UserControlStats.FirstDiscoveries: "First Discoveries" => "Erstentdeckungen"
+UserControlStats.MostNorth: "Most North" => "Nördlichster Punkt"
+UserControlStats.MostSouth: "Most South" => "Südlichster Punkt"
+UserControlStats.MostEast: "Most East" => "Östlichster Punkt"
+UserControlStats.MostWest: "Most West" => "Westlichster Punkt"
+UserControlStats.MostHighest: "Most Highest" => "Höchster Punkt"
+UserControlStats.MostLowest: "Most Lowest" => "Tiefster Punkt"
+UserControlStats.MostVisited: "Most Visited" => "Meistbesuchtes System"
+UserControlStats.24Hours: "24 Hours" => "24 Stunden"
+UserControlStats.Week: "Week" => "Woche"
+UserControlStats.Month: "Month" => "Monat"
+UserControlStats.Lastdock: "Last dock" => "Letztes Andocken"
+UserControlStats.Jumps: "Jumps" => "Sprünge"
+UserControlStats.TraveledLy: "Traveled Ly" => "Lj gereist"
+UserControlStats.PremiumBoost: "Premium Boost" => "Premium-Schub"
+UserControlStats.StandardBoost: "Standard Boost" => "Standard-Schub"
+UserControlStats.BasicBoost: "Basic Boost" => "Basis-Schub"
+UserControlStats.JetConeBoost: "Jet Cone Boost" => "Strahlungskegel-Schub"
+UserControlStats.Landed: "Landed" => "Gelandet"
+UserControlStats.HeatWarning: "Heat Warning" => "Hitzewarnung"
+UserControlStats.Heatdamage: "Heat damage" => "Hitzeschaden"
+UserControlStats.FuelScooped: "Fuel Scooped" => "Treibstoff aufgenommen"
+UserControlStats.ScoopedTons: "Scooped Tons" => "Aufgenommene Tonnen"
+UserControlStats.Scans: "Scans" => "Scans"
+UserControlStats.Scanvalue: "Scan value" => "Scanwert"
+UserControlStats.Docked: "Docked" => "Angedockt"
+UserControlStats.BodyType: "Body Type" => "Körperart"
+UserControlStats.Trip: "Trip" => "Reise"
+UserControlStats.all: "all" => "alle"
+UserControlStats.CurrentAssets: "Current Assets" => "Momentaner Besitz"
+UserControlStats.SpentonShips: "Spent on Ships" => "Investition in Schiffe"
+UserControlStats.SpentonOutfitting: "Spent on Outfitting" => "Investition in Ausrüstung"
+UserControlStats.SpentonRepairs: "Spent on Repairs" => "Reparaturkosten"
+UserControlStats.SpentonFuel: "Spent on Fuel" => "Treibstoffkosten"
+UserControlStats.SpentonMunitions: "Spent on Munitions" => "Munitionskosten"
+UserControlStats.InsuranceClaims: "Insurance Claims" => "Versicherungsanspüche"
+UserControlStats.TotalClaimCosts: "Total Claim Costs" => "Gesamt Ansprüche"
+UserControlStats.BountiesClaimed: "Bounties Claimed" => "Kopfgeld kassiert"
+UserControlStats.ProfitfromBountyHunting: "Profit from Bounty Hunting" => "Profit durch Kopfgeldjagd"
+UserControlStats.CombatBonds: "Combat Bonds" => "Kampfbelohnung"
+UserControlStats.ProfitfromCombatBonds: "Profit from Combat Bonds" => "Profit durch Kampfbelohnungen"
+UserControlStats.Assassinations: "Assassinations" => "Attentate"
+UserControlStats.ProfitfromAssassination: "Profit from Assassination" => "Profit durch Attentate"
+UserControlStats.HighestSingleReward: "Highest Single Reward" => "Höchste einzelne Belohnung"
+UserControlStats.SkimmersKilled: "Skimmers Killed" => "Skimmer getötet"
+UserControlStats.Notoriety: "Notoriety" => "Berüchtigkeit"
+UserControlStats.NumberofFines: "Number of Fines" => "Anzahl der Geldstrafen"
+UserControlStats.LifetimeFinesValue: "Lifetime Fines Value" => "Gesamtwert aller Strafen"
+UserControlStats.BountiesReceived: "Bounties Received" => "Kopfgeld erhalten"
+UserControlStats.LifetimeBountyValue: "Lifetime Bounty Value" => "Gesamtwert allen Kopfgeldes"
+UserControlStats.HighestBountyIssued: "Highest Bounty Issued" => "Höchstes Kopfgeld ausgezahlt"
+UserControlStats.BlackMarketNetwork: "Black Market Network" => "Schwarzmarkt-Netzwerk"
+UserControlStats.BlackMarketProfits: "Black Market Profits" => "Schwarzmarkt-Gewinne"
+UserControlStats.CommoditiesSmuggled: "Commodities Smuggled" => "Geschmuggelte Güter"
+UserControlStats.AverageProfit: "Average Profit" => "Durchschnittsgewinn"
+UserControlStats.HighestSingleTransaction: "Highest Single Transaction" => "Höchste einzelne Transaktion"
+UserControlStats.MarketNetwork: "Market Network" => "Markt-Netzwerk"
+UserControlStats.MarketProfits: "Market Profits" => "Marktgewinn"
+UserControlStats.CommoditiesTraded: "Commodities Traded" => "Güter gehandelt"
+UserControlStats.MiningProfits: "Mining Profits" => "Abbau-Gewinne"
+UserControlStats.MaterialsRefined: "Materials Refined" => "Materialien raffiniert"
+UserControlStats.MaterialsCollected: "Materials Collected" => "Materialien gesammelt"
+UserControlStats.SystemsVisited: "Systems Visited" => "Systeme besucht"
+UserControlStats.ExplorationProfits: "Exploration Profits" => "Erforschungs-Gewinne"
+UserControlStats.Level2Scans: "Level 2 Scans" => "Stufe-2-Scans"
+UserControlStats.Level3Scans: "Level 3 Scans" => "Stufe-3-Scans"
+UserControlStats.HighestPayout: "Highest Payout" => "Höchste Auszahlung"
+UserControlStats.TotalHyperspaceDistance: "Total Hyperspace Distance" => "Gesamte Hyperraumdistanz"
+UserControlStats.TotalHyperspaceJumps: "Total Hyperspace Jumps" => "Anzahl Hyperraumsprünge"
+UserControlStats.FarthestFromStart: "Farthest From Start" => "Grösste Entfernung vom Start"
+UserControlStats.TimePlayed: "Time Played" => "Spielzeit"
+UserControlStats.TotalBulkPassengersDelivered: "Total Bulk Passengers Delivered" => "Gesamtzahl von Passagieren abgeliefert"
+UserControlStats.TotalVIPsDelivered: "Total VIPs Delivered" => "Gesamtzahl von VIPs abgeliefert"
+UserControlStats.Delivered: "Delivered" => "abgeliefert"
+UserControlStats.Ejected: "Ejected" => "abgeworfen"
+UserControlStats.TotalItemsRescued: "Total Items Rescued" => "Gesamtzahl geretteter Objekte"
+UserControlStats.TotalProfit: "Total Profit" => "Gesamtgewinn"
+UserControlStats.TotalRescueTransactions: "Total Rescue Transactions" => "Gesamtzahl Rettungstransaktionen"
+UserControlStats.EngineersUsed: "Engineers Used" => "Ingenieure verwendet"
+UserControlStats.TotalRecipesGenerated: "Total Recipes Generated" => "Gesamtzahl erzeugter Baupläne"
+UserControlStats.Grade1RecipesGenerated: "Grade 1 Recipes Generated" => "Stufe 1 Rezepte erzeugt"
+UserControlStats.Grade2RecipesGenerated: "Grade 2 Recipes Generated" => "Stufe 2 Rezepte erzeugt"
+UserControlStats.Grade3RecipesGenerated: "Grade 3 Recipes Generated" => "Stufe 3 Rezepte erzeugt"
+UserControlStats.Grade4RecipesGenerated: "Grade 4 Recipes Generated" => "Stufe 4 Rezepte erzeugt"
+UserControlStats.Grade5RecipesGenerated: "Grade 5 Recipes Generated" => "Stufe 5 Rezepte erzeugt"
+UserControlStats.TotalWages: "Total Wages" => "Gesamtlöhne"
+UserControlStats.TotalHired: "Total Hired" => "Angestellt"
+UserControlStats.TotalFired: "Total Fired" => "Entlassen"
+UserControlStats.DiedinLineofDuty: "Died in Line of Duty" => "Im Dienst verstorben"
+UserControlStats.TotalTime: "Total Time" => "Gesamtzeit"
+UserControlStats.FighterTime: "Fighter Time" => "Kampfjet-Zeit"
+UserControlStats.GunnerTime: "Gunner Time" => "Zeit als Schütze"
+UserControlStats.CreditsMade: "Credits Made" => "Credits erarbeitet"
+UserControlStats.FinesAccrued: "Fines Accrued" => "Strafen angehäuft"
+UserControlStats.TradesCompleted: "Trades Completed" => "Handel abgeschlossen"
+UserControlStats.MaterialsTraded: "Materials Traded" => "Materialien gehandelt"
+UserControlStats.TME: "{0} days {1} hours {1} minutes" => "{0} Tage {1} Stunden {2} Minuten"
 
 ///////////////////////////////////////////////////////////////// Synthesis
 
-UserControlSynthesis.UpgradeCol: "Upgrade/Mat" @
-UserControlSynthesis.Level: "Level" @
-UserControlSynthesis.MaxCol: "Max" @
-UserControlSynthesis.WantedCol: "Wanted" @
-UserControlSynthesis.Available: "Avail." @
-UserControlSynthesis.Notes: "Notes" @
-UserControlSynthesis.Recipe: "Recipe" @
-UserControlSynthesis.chkHistoric: "Use Cursor Position" @
-UserControlSynthesis.buttonMaterialFilter: "Filter By Material" @
-UserControlSynthesis.buttonFilterLevel: "Filter By Level" @
-UserControlSynthesis.buttonRecipeFilter: "Filter By Synthesis" @
-UserControlSynthesis.buttonClear: "Clear Wanted" @
-UserControlSynthesis.ToolTip: "Left click and drag on grid to reorder" @
-UserControlSynthesis.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." @
-UserControlSynthesis.buttonMaterialFilter.ToolTip: "Filter the table by the material type" @
-UserControlSynthesis.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" @
-UserControlSynthesis.buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" @
-UserControlSynthesis.buttonClear.ToolTip: "Set all wanted values to zero" @
+UserControlSynthesis.UpgradeCol: "Upgrade/Mat" => "Aufrüstung/Material"
+UserControlSynthesis.Level: "Level" => "Stufe"
+UserControlSynthesis.MaxCol: "Max" => "Max"
+UserControlSynthesis.WantedCol: "Wanted" => "Gesucht"
+UserControlSynthesis.Available: "Avail." => "Vorh."
+UserControlSynthesis.Notes: "Notes" => "Kommentare"
+UserControlSynthesis.Recipe: "Recipe" => "Rezept"
+UserControlSynthesis.chkHistoric: "Use Cursor Position" => "Zeigerposition benutzen"
+UserControlSynthesis.buttonMaterialFilter: "Filter By Material" => "Nach Material filtern"
+UserControlSynthesis.buttonFilterLevel: "Filter By Level" => "Nach Stufe filtern"
+UserControlSynthesis.buttonRecipeFilter: "Filter By Synthesis" => "Nach Synthese filtern"
+UserControlSynthesis.buttonClear: "Clear Wanted" => "Gesucht löschen"
+UserControlSynthesis.ToolTip: "Left click and drag on grid to reorder" => "Auf dem Gitter linksklicken und ziehen um umzusortieren"
+UserControlSynthesis.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Wenn angeklickt, Material an der Zeigerposition zur Abschätzung verwenden, sonst das letzte Material verwenden."
+UserControlSynthesis.buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Tabelle nach Materialart filtern"
+UserControlSynthesis.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "Tabelle nach Synthesestufe filtern"
+UserControlSynthesis.buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Tabelle nach Syntheseart filtern"
+UserControlSynthesis.buttonClear.ToolTip: "Set all wanted values to zero" => "Alle Gesucht-Werte auf 0 setzen"
 
 //////////////////////////////////////////////////////////////// Sysinfo
 
@@ -990,7 +990,7 @@ UserControlSysInfo.labelPosition: "Pos" => "Pos"
 UserControlSysInfo.labelHomeDist: "Home" => "Heimat"
 UserControlSysInfo.labelSolDist: "Sol" => "Sonne"
 UserControlSysInfo.labelState: "State" => "Zustand"
-UserControlSysInfo.labelAllegiance: "Allegiance" @
+UserControlSysInfo.labelAllegiance: "Allegiance" => "Gefolgschaft"
 UserControlSysInfo.labelGov: "Gov" => "Regierung"
 UserControlSysInfo.labelEconomy: "Economy" => "Wirtschaft"
 UserControlSysInfo.labelMissions: "Missions" => "Missionen"
@@ -1027,7 +1027,7 @@ UserControlSysInfo.toolStripMissionList: "Display Mission List" => "Missionslist
 UserControlSysInfo.toolStripSkinny: "When transparent, use skinny look" => "Wenn durchsichtig, dünnes Design verwenden"
 UserControlSysInfo.toolStripReset: "Reset" => "Zurücksetzen"
 UserControlSysInfo.toolStripRemoveAll: "Remove All" => "Alles entfernen"
-UserControlSysInfo.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" @
+UserControlSysInfo.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Strg-Taste halten, dann linksklicken und ziehen um ein Element zu verschieben, 8 Spalten sind vorhanden"
 UserControlSysInfo.textBoxTarget.ToolTip: "Sets the target" => "Das Ziel setzen"
 UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "Entfernung zum Ziel"
 
@@ -1035,7 +1035,7 @@ UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "Entfernun
 .NA: "N/A" => "Nicht vorhanden"
 .SysUnk: "System unknown to EDSM" => "System ist EDSM nicht bekannt"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Position ist {0:0.00},{1:0.00},{2:0.00}"
-.Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
+.Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "Auf 3D-Karte rechtsklicken, um ein Lesezeichen oder eine Regionenmarke zu erstellen oder auf einen Kommentar klicken und dann 'Ziel setzen' auswählen oder hier Eintragen und 'Eingabe' drücken" 
 
 //////////////////////////////////////////////////////////////// travel grid
 
@@ -1076,21 +1076,21 @@ UserControlTravelGrid.runSelectionThroughInaraSystemToolStripMenuItem: "Run sele
 UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Eintrag durch Profilsystem schicken (Debug)"
 
 
-.TT1: " showing {0} original {1}" @
-.TTFilt1: "Filtered {0}" @
-.TTSelAge: "Select the entries by age, " @
-.TTFilt2: "Filtered {0}" @
-.TTEvent: "Filter out entries based on event type, " @
-.TTFilt3: "Total filtered out {0}" @
-.TTTotal: "Filter out entries matching the field selection, " @
-.CSTART: "Clear Start marker" @
-.CSTOP: "Clear Stop marker" @
-.SETSTOPTC: "Set Stop marker for travel calculations" @
-.SETSTARTTC: "Set Start marker for travel calculations" @
-.SETSTSTOP: "Set Start/Stop point for travel calculations" @
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
+.TT1: " showing {0} original {1}" => " Anzeige {0} Ursprünglich {1}"
+.TTFilt1: "Filtered {0}" => "Gefiltert {0}"
+.TTSelAge: "Select the entries by age, " => "Einträge bei Alter auswählen, "
+.TTFilt2: "Filtered {0}" => "Gefiltert {0}"
+.TTEvent: "Filter out entries based on event type, " => "Einträge nach Ereignisart filtern, "
+.TTFilt3: "Total filtered out {0}" => "Gesamt ausgefiltert {0}"
+.TTTotal: "Filter out entries matching the field selection, " => "Einträge, die zur Feldauswahl passen, ausfiltern, "
+.CSTART: "Clear Start marker" => "Startmarkierung löschen"
+.CSTOP: "Clear Stop marker" => "Stopmarkierung löschen"
+.SETSTOPTC: "Set Stop marker for travel calculations" => "Stop-Markierung für Reiseberechnung setzen"
+.SETSTARTTC: "Set Start marker for travel calculations" => "Start-Markierung für Reiseberechnung setzen"
+.SETSTSTOP: "Set Start/Stop point for travel calculations" => "Start-/Stopmarkierung für Reiseberechnung setzen"
+.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "System kann nicht gefunden werden - nicht synchronisiert oder EDSM ist nicht erreichbar"
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "Ort oder FSDJump Eintrag, der zu diesem Journaleintrag gehört, kann nicht gefunden werden"
-.Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
+.Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Bestätigen, dass Sie diesen Eintrag löschen wollen\r\nDer Eintrag kann wieder auftauchen, wenn die Logs neu eingelesen werden"
 
 //////////////////////////////////////////////////////////////// trilat
 
