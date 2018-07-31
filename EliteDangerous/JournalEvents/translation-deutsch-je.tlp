@@ -11,7 +11,7 @@ JournalTypeEnum.BuyAmmo: "Buy Ammo" => "Munitionskauf"
 JournalTypeEnum.BuyDrones: "Buy Drones" => "Drohnenkauf"
 JournalTypeEnum.BuyExplorationData: "Buy Exploration Data" => "Kauf von Erkundungsdaten"
 JournalTypeEnum.BuyTradeData: "Buy Trade Data" => "Kauf von Handelsdaten"
-JournalTypeEnum.CapShipBond: "Cap Ship Bond" @
+JournalTypeEnum.CapShipBond: "Cap Ship Bond" => "Schiffsverplichtung (Cap)"
 JournalTypeEnum.Cargo: "Cargo" => "Ladung"
 JournalTypeEnum.CargoDepot: "Cargo Depot" => "Lager"
 JournalTypeEnum.ChangeCrewRole: "Change Crew Role" => "Wechsel der Besatzungsrolle"
@@ -43,7 +43,7 @@ JournalTypeEnum.EndCrewSession: "End Crew Session" => "Mannschaftssitzung beende
 JournalTypeEnum.EngineerApply: "Engineer Apply" => "Ingenieurantrag"
 JournalTypeEnum.EngineerContribution: "Engineer Contribution" => "Ingenieursbeitrag"
 JournalTypeEnum.EngineerCraft: "Engineer Craft" => "Schiff verbessern"
-JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" @
+JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" => "umwandlung Ingenieur-Historie"
 JournalTypeEnum.EngineerProgress: "Engineer Progress" => "Rangaufstieg Ingenieur"
 JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" => "Interruption entgangen"
 JournalTypeEnum.FactionKillBond: "Faction Kill Bond" => "Fraktions-Mord-Verpflichtung"
@@ -102,15 +102,15 @@ JournalTypeEnum.PayFines: "Pay Fines" => "Strafe bezahlen"
 JournalTypeEnum.PayBounties: "Pay Bounties" => "Kopfgeld bezahlen"
 JournalTypeEnum.PayLegacyFines: "Pay Legacy Fines" => "Abgelaufene Strafe bezahlen"
 JournalTypeEnum.Powerplay: "Powerplay" => "Machtspiel"
-JournalTypeEnum.PowerplayCollect: "Powerplay Collect" @
-JournalTypeEnum.PowerplayDefect: "Powerplay Defect" @
-JournalTypeEnum.PowerplayDeliver: "Powerplay Deliver" @
-JournalTypeEnum.PowerplayFastTrack: "Powerplay Fast Track" @
+JournalTypeEnum.PowerplayCollect: "Powerplay Collect" => "Machtspiel einsammeln"
+JournalTypeEnum.PowerplayDefect: "Powerplay Defect" => "Machtspiel überlaufen"
+JournalTypeEnum.PowerplayDeliver: "Powerplay Deliver" => "Machtspiel liefern"
+JournalTypeEnum.PowerplayFastTrack: "Powerplay Fast Track" => "Machtspiel beschleunigen"
 JournalTypeEnum.PowerplayJoin: "Powerplay Join" => "Machtspiel beitreten"
 JournalTypeEnum.PowerplayLeave: "Powerplay Leave" => "Machtspiel verlassen"
 JournalTypeEnum.PowerplaySalary: "Powerplay Salary" => "Machtspiel-Lohn"
 JournalTypeEnum.PowerplayVote: "Powerplay Vote" => "Machtspiel-Abstimmung"
-JournalTypeEnum.PowerplayVoucher: "Powerplay Voucher" @
+JournalTypeEnum.PowerplayVoucher: "Powerplay Voucher" => "Machtspiel Voucher"
 JournalTypeEnum.Progress: "Progress" => "Fortschritt"
 JournalTypeEnum.Promotion: "Promotion" => "Beförderung"
 JournalTypeEnum.PVPKill: "PVP Kill" => "PVP-Abschuss"
@@ -135,7 +135,7 @@ JournalTypeEnum.SearchAndRescue: "Search And Rescue" => "Suchen und Bergen"
 JournalTypeEnum.SelfDestruct: "Self Destruct" => "Selbstzerstörung"
 JournalTypeEnum.SellDrones: "Sell Drones" => "Verkauf (Drohnen)"
 JournalTypeEnum.SellExplorationData: "Sell Exploration Data" => "Verkauf (Erforschungsdaten)"
-JournalTypeEnum.SellShipOnRebuy: "Sell Ship On Rebuy" @
+JournalTypeEnum.SellShipOnRebuy: "Sell Ship On Rebuy" => "Beim Neukauf Schiff verkaufen"
 JournalTypeEnum.SendText: "Send Text" => "Nachricht schicken"
 JournalTypeEnum.SetUserShipName: "Set User Ship Name" => "Schiffsnamen setzen"
 JournalTypeEnum.ShieldState: "Shield State" => "Schildzustand"
@@ -176,10 +176,10 @@ JournalTypeEnum.CrewLaunchFighter: "Crew Launch Fighter" => "Mannschafts-Kampfje
 JournalTypeEnum.CrewMemberJoins: "Crew Member Joins" => "Besatzungsmitgliedsbeitritt"
 JournalTypeEnum.CrewMemberQuits: "Crew Member Quits" => "Besatzungsmitgliedsaustritt"
 JournalTypeEnum.CrewMemberRoleChange: "Crew Member Role Change" => "Rollenänderung eines Besatzungsmitglieds"
-JournalTypeEnum.EDDItemSet: "EDD Item Set" @
+JournalTypeEnum.EDDItemSet: "EDD Item Set" => "EDD Item Satz"
 JournalTypeEnum.EDDCommodityPrices: "EDD Commodity Prices" => "EDD Handelspreise"
-JournalTypeEnum.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
-JournalTypeEnum.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
+JournalTypeEnum.EngineerContribution_Unknown: "Engineer Contribution_Unknown" => "Unbekannter Ingenieursbeitrag"
+JournalTypeEnum.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" => "Ingenieur Materialbeitrag Ware"
 JournalTypeEnum.RestockVehicle_SRV: "Restock Vehicle_SRV" => "SRV beladen"
 JournalTypeEnum.RestockVehicle_Fighter: "Restock Vehicle_Fighter" => "Kampfjets geladen"
 JournalTypeEnum.ShieldState_ShieldsUp: "Shield State_Shields Up" => "Schilde hochgefahren"
@@ -335,8 +335,8 @@ JournalLocOrJump.Economy: "Economy:" => "Wirtschaft:"
 JournalLocOrJump.Population: "Population:" => "Bewohner:"
 JournalLocOrJump.Government: "Government:" => "Regierung:"
 JournalLocOrJump.Inf: "Inf:;%" => "Inf:;%"
-JournalLocOrJump.PendingState: "Pending State:" @
-JournalLocOrJump.RecoveringState: "Recovering State:" @
+JournalLocOrJump.PendingState: "Pending State:" => "Hängiger Zustand:"
+JournalLocOrJump.RecoveringState: "Recovering State:" => "Erholungszustand:"
 ///////////////////////////////////////////////////// JournalFuelScoop
 JournalFuelScoop.Total: "Total:;t;0.0" => "Gesamt:;t;0.0"
 ///////////////////////////////////////////////////// JournalInterdicted
@@ -379,175 +379,175 @@ JournalLocOrJump.Security: "Security:" => "Sicherheit:"
 JournalLocOrJump.Inspacenear: "In space near " => "Im Weltraum nahe "
 JournalLocOrJump.oftype: "< of type " => "< der Art "
 ///////////////////////////////////////////////////// JournalMarketBuy
-JournalEntry.buyprice: "< buy price ; cr;N0" @
+JournalEntry.buyprice: "< buy price ; cr;N0" => "< Kaufpreis ; Cr;N0"
 ///////////////////////////////////////////////////// JournalMarketSell
-JournalEntry.sellprice: "< sell price ; cr;N0" @
-JournalEntry.Profit: "Profit:; cr;N0" @
-JournalEntry.Legal: "Legal;Illegal" @
-JournalEntry.NotStolen: "Not Stolen;Stolen" @
-JournalEntry.Market: "Market;BlackMarket" @
+JournalEntry.sellprice: "< sell price ; cr;N0" => "< Verkaufspreis ; Cr;N0"
+JournalEntry.Profit: "Profit:; cr;N0" => "Gewinn:; CR;N0"
+JournalEntry.Legal: "Legal;Illegal" => "Legal;Illegal"
+JournalEntry.NotStolen: "Not Stolen;Stolen" => "Nicht gestohlen;gestohlen"
+JournalEntry.Market: "Market;BlackMarket" => "Markt;Schwarzmarkt"
 ///////////////////////////////////////////////////// JournalMassModuleStore
-JournalEntry.Totalmodules: "Total modules:" @
-JournalEntry.Hot: ";(Hot)" @
+JournalEntry.Totalmodules: "Total modules:" => "Gesamt Module:"
+JournalEntry.Hot: ";(Hot)" => ";(Heiss)"
 ///////////////////////////////////////////////////// JournalMaterialCollected
-JournalEntry.MatC: "< ; items" @
+JournalEntry.MatC: "< ; items" => "< ; Gegenstände"
 ///////////////////////////////////////////////////// JournalMaterialDiscovered
-JournalMaterialDiscovered.DN: ", Discovery {0}" @
+JournalMaterialDiscovered.DN: ", Discovery {0}" => ", Entdeckung {0}"
 ///////////////////////////////////////////////////// JournalMaterials
-JournalMaterials.Raw: "Raw:" @
-JournalMaterials.Manufactured: "Manufactured:" @
-JournalMaterials.Encoded: "Encoded:" @
+JournalMaterials.Raw: "Raw:" => "Roh:"
+JournalMaterials.Manufactured: "Manufactured:" => "Hergestellt:"
+JournalMaterials.Encoded: "Encoded:" => "Codiert:"
 ///////////////////////////////////////////////////// JournalMaterialTrade
-JournalEntry.Sold: "Sold:" @
-JournalEntry.Received: "Received:" @
+JournalEntry.Sold: "Sold:" => "Verkauft:"
+JournalEntry.Received: "Received:" => "Erhalten:"
 ///////////////////////////////////////////////////// JournalMissionAbandoned
-JournalEntry.Fine: "Fine:" @
+JournalEntry.Fine: "Fine:" => "Strafe:"
 ///////////////////////////////////////////////////// JournalMissionCompleted
-JournalEntry.Donation: "Donation:" @
-JournalEntry.Station: "Station:" @
-JournalEntry.Commodity: "Commodity:" @
-JournalEntry.TargetFaction: "Target Faction:" @
-JournalEntry.Permits: "Permits:" @
-JournalEntry.Rewards: "Rewards:" @
+JournalEntry.Donation: "Donation:" => "Spende:"
+JournalEntry.Station: "Station:" => "Station:"
+JournalEntry.Commodity: "Commodity:" => "Ware:"
+JournalEntry.TargetFaction: "Target Faction:" => "Zielfraktion:"
+JournalEntry.Permits: "Permits:" => "Passierscheine:"
+JournalEntry.Rewards: "Rewards:" => "Belohnungen:"
 ///////////////////////////////////////////////////// JournalMissionRedirected
-JournalEntry.Missionname: "Mission name:" @
-JournalMissionRedirected.From: "From:" @
-JournalMissionRedirected.To: "To:" @
+JournalEntry.Missionname: "Mission name:" => "Missionsname:"
+JournalMissionRedirected.From: "From:" => "Von:"
+JournalMissionRedirected.To: "To:" => "Nach:"
 ///////////////////////////////////////////////////// JournalMissions
-JournalEntry.Active: "Active:" @
-JournalEntry.Failed: "Failed:" @
-JournalEntry.Completed: "Completed:" @
-MissionItem.Passenger: "<;(Passenger)" @
-MissionItem.Expires: "Expires:" @
+JournalEntry.Active: "Active:" => "Aktiv:"
+JournalEntry.Failed: "Failed:" => "Gescheitert:"
+JournalEntry.Completed: "Completed:" => "Abgeschlossen:"
+MissionItem.Passenger: "<;(Passenger)" => "<;(Passagiere)"
+MissionItem.Expires: "Expires:" => "Läuft ab:"
 ///////////////////////////////////////////////////// JournalModuleBuy
-JournalEntry.into: "< into " @
-JournalEntry.Price: "Price:; cr;N0" @
-JournalEntry.Stored: "Stored:" @
+JournalEntry.into: "< into " => "< zu "
+JournalEntry.Price: "Price:; cr;N0" => "Preis:; CR;N0"
+JournalEntry.Stored: "Stored:" => "Gelagert:"
 ///////////////////////////////////////////////////// JournalModuleInfo
-JournalEntry .Modules: "Modules:" @
+JournalEntry .Modules: "Modules:" => "Module:"
 ///////////////////////////////////////////////////// JournalModuleSellRemote
-JournalEntry.Item: "Item:" @
+JournalEntry.Item: "Item:" => "Gegenstände:"
 ///////////////////////////////////////////////////// JournalModuleStore
-JournalEntry.on: " on " @
-JournalEntry.Replacedby: "Replaced by:" @
-JournalEntry.Modifications: "Modifications:" @
+JournalEntry.on: " on " => " auf "
+JournalEntry.Replacedby: "Replaced by:" => "Ersetzt durch:"
+JournalEntry.Modifications: "Modifications:" => "Modifikationen:"
 ///////////////////////////////////////////////////// JournalModuleSwap
-JournalEntry.Slot: "Slot:" @
-JournalEntry.Swappedwith: ", Swapped with " @
+JournalEntry.Slot: "Slot:" => "Aufhängung:"
+JournalEntry.Swappedwith: ", Swapped with " => ", getauscht mit "
 ///////////////////////////////////////////////////// JournalMusic
-JournalEntry.MusicTrack: "Music Track:" @
+JournalEntry.MusicTrack: "Music Track:" => "¨Lied:"
 ///////////////////////////////////////////////////// JournalNavBeaconScan
-JournalEntry.Bodies: "Bodies:" @
+JournalEntry.Bodies: "Bodies:" => "Himmelskörper:"
 ///////////////////////////////////////////////////// JournalNewCommander
-JournalEntry.StartingPackage: "Starting Package:" @
+JournalEntry.StartingPackage: "Starting Package:" => "Starterpaket:"
 ///////////////////////////////////////////////////// JournalNpcCrewPaidWage
-JournalEntry.Wagesfor: "Wages for " @
+JournalEntry.Wagesfor: "Wages for " => "Löhne für "
 ///////////////////////////////////////////////////// JournalOutfitting
-JournalEntry.itemsavailable: " items available" @
+JournalEntry.itemsavailable: " items available" => " Gegenstände vorhanden"
 ///////////////////////////////////////////////////// JournalPassengers
-JournalEntry.NoPassengers: "No Passengers" @
+JournalEntry.NoPassengers: "No Passengers" => "Keine Passagiere"
 ///////////////////////////////////////////////////// JournalPayBounties
-JournalEntry.Brokertook: ", Broker took {0:N0}%" @
+JournalEntry.Brokertook: ", Broker took {0:N0}%" => ", Händler nahm {0:N0}%"
 ///////////////////////////////////////////////////// JournalPowerplay
-JournalEntry.Merits: "Merits:" @
-JournalEntry.Votes: "Votes:" @
-JournalEntry.Pledged: "Pledged:" @
+JournalEntry.Merits: "Merits:" => "Verdienste:"
+JournalEntry.Votes: "Votes:" => "Stimmen:"
+JournalEntry.Pledged: "Pledged:" => "Verpflichtet:"
 ///////////////////////////////////////////////////// JournalPowerplayDefect
-JournalEntry.FromPower: "From Power:" @
-JournalEntry.ToPower: "To Power:" @
+JournalEntry.FromPower: "From Power:" => "Von Macht:"
+JournalEntry.ToPower: "To Power:" => "Zu Macht:"
 ///////////////////////////////////////////////////// JournalPowerplaySalary
-JournalEntry.Amount: "Amount:; cr;N0" @
+JournalEntry.Amount: "Amount:; cr;N0" => "Menge:; Cr;N0"
 ///////////////////////////////////////////////////// JournalPowerplayVoucher
-JournalEntry.Systems: ", Systems:" @
+JournalEntry.Systems: ", Systems:" => ", Systeme:"
 ///////////////////////////////////////////////////// JournalProgress
-JournalProgress.Combat: "Combat:;%" @
-JournalProgress.Trade: "Trade:;%" @
-JournalProgress.Exploration: "Exploration:;%" @
-JournalProgress.Federation: "Federation:;%" @
-JournalProgress.Empire: "Empire:;%" @
-JournalProgress.CQC: "CQC:;%" @
+JournalProgress.Combat: "Combat:;%" => "Kampf:;%"
+JournalProgress.Trade: "Trade:;%" => "Handel:;%"
+JournalProgress.Exploration: "Exploration:;%" => "Erforschung:;%"
+JournalProgress.Federation: "Federation:;%" => "Föderation:;%"
+JournalProgress.Empire: "Empire:;%" => "Imperium:;%"
+JournalProgress.CQC: "CQC:;%" => "Nahkampf:;%"
 ///////////////////////////////////////////////////// JournalPromotion
-JournalPromotion.Combat: "Combat:" @
-JournalPromotion.Trade: "Trade:" @
-JournalPromotion.Exploration: "Exploration:" @
-JournalPromotion.Empire: "Empire:" @
-JournalPromotion.Federation: "Federation:" @
-JournalPromotion.CQC: "CQC:" @
+JournalPromotion.Combat: "Combat:" => "Kampf:"
+JournalPromotion.Trade: "Trade:" => "Handel"
+JournalPromotion.Exploration: "Exploration:" => "Erforschung:"
+JournalPromotion.Empire: "Empire:" => "Imperium:"
+JournalPromotion.Federation: "Federation:" => "Föderation:"
+JournalPromotion.CQC: "CQC:" => "Nahkampf:"
 ///////////////////////////////////////////////////// JournalReceiveText
-JournalReceiveText.From: "From:" @
-JournalReceiveText.Msg: "Msg:" @
-JournalReceiveText.Channel: "Channel:" @
+JournalReceiveText.From: "From:" => "Von:"
+JournalReceiveText.Msg: "Msg:" => "Nachricht:"
+JournalReceiveText.Channel: "Channel:" => "Kanal:"
 ///////////////////////////////////////////////////// JournalRefuelAll
-JournalEntry.Fuel: "Fuel:; tons;0.0" @
+JournalEntry.Fuel: "Fuel:; tons;0.0" => "Treibstoff:; Tonnen;0.0"
 ///////////////////////////////////////////////////// JournalRepairDrone
-JournalRepairDrone.Hull: "Hull:" @
-JournalEntry.Cockpit: "Cockpit:" @
-JournalEntry.Corrosion: "Corrosion:" @
+JournalRepairDrone.Hull: "Hull:" => "Aussenhaut:"
+JournalEntry.Cockpit: "Cockpit:" => "Cockpit:"
+JournalEntry.Corrosion: "Corrosion:" => "Rost:"
 ///////////////////////////////////////////////////// JournalReputation
-JournalReputation.Federation: "Federation:;;0.#" @
-JournalReputation.Empire: "Empire:;;0.#" @
-JournalReputation.Independent: "Independent:;;0.#" @
-JournalReputation.Alliance: "Alliance:;;0.#" @
+JournalReputation.Federation: "Federation:;;0.#" => "Föderation:;;0.#"
+JournalReputation.Empire: "Empire:;;0.#" => "Imperium:;;0.#"
+JournalReputation.Independent: "Independent:;;0.#" => "Unabhängig:;;0.#"
+JournalReputation.Alliance: "Alliance:;;0.#" => "Allianz:;;0.#"
 ///////////////////////////////////////////////////// JournalResurrect
-JournalEntry.Option: "Option:" @
-JournalEntry.Bankrupt: ";Bankrupt" @
+JournalEntry.Option: "Option:" => "Optionen:"
+JournalEntry.Bankrupt: ";Bankrupt" => ";Bankrott"
 ///////////////////////////////////////////////////// JournalScan
-StarPlanetRing.Mass: "  Mass: {0:N4}{1}\n" @
-StarPlanetRing.InnerRadius: "  Inner Radius: {0:0.00}ls\n" @
-StarPlanetRing.OuterRadius: "  Outer Radius: {0:0.00}ls\n" @
-StarPlanetRing.IK: "  Inner Radius: {0}km\n" @
-StarPlanetRing.OK: "  Outer Radius: {0}km\n" @
-StarPlanetRing.Moons: " Moons" @
-StarPlanetRing.Icy: "Icy" @
-StarPlanetRing.Rocky: "Rocky" @
-StarPlanetRing.MetalRich: "Metal Rich" @
-StarPlanetRing.Metallic: "Metallic" @
-StarPlanetRing.RockyIce: "Rocky Ice" @
-JournalScan.Scanof: "Scan of {0}" @
-JournalScan.MSM: "Mass:;SM;0.00" @
-JournalScan.Age: "Age:;my;0.0" @
-JournalScan.RS: "Radius:;SR;0.00" @
-JournalScan.MEM: "Mass:;EM;0.00" @
-JournalScan.Landable: "<;, Landable" @
-JournalScan.Terraformable: "<;, Terraformable" @
-JournalScan.Gravity: "Gravity:;G;0.0" @
-JournalScan.RK: "Radius:;km;0" @
-JournalScan.NoAtmosphere: ", No Atmosphere" @
-JournalScan.LandC: ", Landable" @
-JournalScan.AMY: "Age: {0} my\n" @
-JournalScan.SolarMasses: "Solar Masses: {0:0.00}\n" @
-JournalScan.EarthMasses: "Earth Masses: {0:0.0000}\n" @
-JournalScan.SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
-JournalScan.BodyRadius: "Body Radius: {0:0.00}km\n" @
-JournalScan.SurfaceTemp: "Surface Temp: {0}K\n" @
-JournalScan.Luminosity: "Luminosity: {0}\n" @
-JournalScan.GV: "Gravity: {0:0.0}g\n" @
-JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" @
-JournalScan.SPP: "Surface Pressure: {0} Pa\n" @
-JournalScan.Volcanism: "Volcanism: {0}\n" @
-JournalScan.NoVolcanism: "No Volcanism" @
-JournalScan.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" @
-JournalScan.OrbitalPeriod: "Orbital Period: {0} days\n" @
-JournalScan.SMA: "Semi Major Axis: {0:0.00}AU\n" @
-JournalScan.SMK: "Semi Major Axis: {0}km\n" @
-JournalScan.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" @
-JournalScan.OrbitalInclination: "Orbital Inclination: {0:0.000}°\n" @
-JournalScan.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}\n" @
-JournalScan.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}°\n" @
-JournalScan.Axialtilt: "Axial tilt: {0:0.00}°\n" @
-JournalScan.RotationPeriod: "Rotation Period: {0} days\n" @
-JournalScan.Tidallylocked: "Tidally locked\n" @
-JournalScan.Candidateforterraforming: "Candidate for terraforming\n" @
-JournalScan.Belt: "Belt{0}" @
-JournalScan.Moons: " Moons" @
-JournalScan.Ring: "Ring{0}" @
-JournalScan.EV: "\nEstimated value: {0:N0}" @
-JournalScan.DB: "\n\nDiscovered by {0} on {1}" @
-JournalScan.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
-JournalScan.Othersstarsnotconsidered: " (Others stars not considered)\n" @
-JournalScan.Materials: "Materials:\n" @
-JournalScan.AtmosphericComposition: "Atmospheric Composition:\n" @
-JournalScan.PlanetaryComposition: "Planetary Composition:\n" @
+StarPlanetRing.Mass: "  Mass: {0:N4}{1}\n" => " Masse: {0;N4}{1}\n"
+StarPlanetRing.InnerRadius: "  Inner Radius: {0:0.00}ls\n" => " Innerer Radius: {0:0.00}Ls\n"
+StarPlanetRing.OuterRadius: "  Outer Radius: {0:0.00}ls\n" => " Äusserer Radius: {0:0.00}Ls\n"
+StarPlanetRing.IK: "  Inner Radius: {0}km\n" => " Innerer Radius: {0}Km\n"
+StarPlanetRing.OK: "  Outer Radius: {0}km\n" => " Äusserer Radius: {0}Km\n"
+StarPlanetRing.Moons: " Moons" => " Monde"
+StarPlanetRing.Icy: "Icy" =>"Eisig"
+StarPlanetRing.Rocky: "Rocky" => "Steinig"
+StarPlanetRing.MetalRich: "Metal Rich" => "Metallreich"
+StarPlanetRing.Metallic: "Metallic" => "Metallisch"
+StarPlanetRing.RockyIce: "Rocky Ice" => "Eis-Steinig"
+JournalScan.Scanof: "Scan of {0}" => "Scan von {0}"
+JournalScan.MSM: "Mass:;SM;0.00" => "Masse:;SM;0.00"
+JournalScan.Age: "Age:;my;0.0" => "Alter:;MJ;0.0"
+JournalScan.RS: "Radius:;SR;0.00" => "Radius:;SR;0.00"
+JournalScan.MEM: "Mass:;EM;0.00" => "Masse:;EM;0.00"
+JournalScan.Landable: "<;, Landable" => "<;, Landbar"
+JournalScan.Terraformable: "<;, Terraformable" => "<;, Terraformbar"
+JournalScan.Gravity: "Gravity:;G;0.0" => "Gravitation:;G;0.0"
+JournalScan.RK: "Radius:;km;0" => "Radius:;Km;0"
+JournalScan.NoAtmosphere: ", No Atmosphere" => ", Keine Atmosphäre"
+JournalScan.LandC: ", Landable" => ", Landbar"
+JournalScan.AMY: "Age: {0} my\n" => "Alter: {0} MJ\n"
+JournalScan.SolarMasses: "Solar Masses: {0:0.00}\n" => "Sternmassen: {0:0.00}\n"
+JournalScan.EarthMasses: "Earth Masses: {0:0.0000}\n" => "Erdmassen: {0:0.0000}\n"
+JournalScan.SolarRadius: "Solar Radius: {0:0.00} Sols\n" => "Sternenradius: {0:0.00} Sols\n"
+JournalScan.BodyRadius: "Body Radius: {0:0.00}km\n" => "Körperradius: {0:0.00}Km\n"
+JournalScan.SurfaceTemp: "Surface Temp: {0}K\n" => "Oberflächentemperatur: {0}K\n"
+JournalScan.Luminosity: "Luminosity: {0}\n" => "Leuchtkraft: {0}\n"
+JournalScan.GV: "Gravity: {0:0.0}g\n" => "Gravitation: {0;0.0}g\n"
+JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" => "Oberflächendruck: {0} Atmosphären\n"
+JournalScan.SPP: "Surface Pressure: {0} Pa\n" => "Oberflächendruck: {0} Pa\n"
+JournalScan.Volcanism: "Volcanism: {0}\n" => "Vulkanismus: {0}\n"
+JournalScan.NoVolcanism: "No Volcanism" => "Kein Vulkanismus"
+JournalScan.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" => "Entfernung vom Ankunftspunkt {0:N1}Ls\n"
+JournalScan.OrbitalPeriod: "Orbital Period: {0} days\n" => "Umlaufperiode: {0} Tage\n"
+JournalScan.SMA: "Semi Major Axis: {0:0.00}AU\n" => "Grosse Halbachse: {0:0.00}AU\n"
+JournalScan.SMK: "Semi Major Axis: {0}km\n" => "Grosse Halbachse: {0}Km\n"
+JournalScan.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" => "Exzentrizität der Umlaufbahn: {0:0.000}\n"
+JournalScan.OrbitalInclination: "Orbital Inclination: {0:0.000}°\n" => "Bahnneigung der Umlaufbahn: {0:0.000}°\n"
+JournalScan.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}\n" => "Argument der Periapsis: {0:0.000}\n"
+JournalScan.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}°\n" => "Absolute Helligkeit: {0:0.00}°\n"
+JournalScan.Axialtilt: "Axial tilt: {0:0.00}°\n" => "Achsneigung: {0:0.00}°\n"
+JournalScan.RotationPeriod: "Rotation Period: {0} days\n" => "Rotationsperiode: {0} Tage\n"
+JournalScan.Tidallylocked: "Tidally locked\n" => "Gebundene Rotation\n"
+JournalScan.Candidateforterraforming: "Candidate for terraforming\n" => "Kandidat für Terraformung\n"
+JournalScan.Belt: "Belt{0}" => "Gürtel{0}"
+JournalScan.Moons: " Moons" => " Monde"
+JournalScan.Ring: "Ring{0}" => "Ring{0}"
+JournalScan.EV: "\nEstimated value: {0:N0}" => "\nGeschätzter Wert: {0:N0}"
+JournalScan.DB: "\n\nDiscovered by {0} on {1}" => "\n\nEntdeckt von {0} am {1}"
+JournalScan.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Bewohnbare Zone ungefähr {0} ({1}-{2} AU)\n"
+JournalScan.Othersstarsnotconsidered: " (Others stars not considered)\n" => " (Andere Sterne nicht berücksichtigt)\n"
+JournalScan.Materials: "Materials:\n" => "Materialien:\n"
+JournalScan.AtmosphericComposition: "Atmospheric Composition:\n" => "Atmosphärische Zusammensetzung:\n"
+JournalScan.PlanetaryComposition: "Planetary Composition:\n" => "Planentare Zusammensetzung:\n"
 ///////////////////////////////////////////////////// JournalScientificResearch
 JournalEntry.Category: "Category:" @
 ///////////////////////////////////////////////////// JournalScreenshot
