@@ -63,7 +63,7 @@ namespace EliteDangerousCore.EDSM
 
         public bool ParseData()
         {
-            galacticMapObjects = new List<GalacticMapObject>();
+            var gmobjects = new List<GalacticMapObject>();
 
             try
             {
@@ -85,8 +85,10 @@ namespace EliteDangerousCore.EDSM
                         }
 
                         galobject.galMapType = ty;
-                        galacticMapObjects.Add(galobject);
+                        gmobjects.Add(galobject);
                     }
+
+                    galacticMapObjects = gmobjects;
 
                     return true;
                 }
