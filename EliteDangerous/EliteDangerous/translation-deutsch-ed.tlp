@@ -1,29 +1,29 @@
 ﻿///////////////////////////////////////////////////// Bodies
-Bodies.HMS: "Luminous Hot Main Sequence {0} star" @
-Bodies.BMS: "Luminous Blue Main Sequence {0} star" @
-Bodies.BWMS: "Bluish-White Main Sequence {0} star" @
-Bodies.WMS: "White Main Sequence {0} star" @
-Bodies.YMS: "Yellow Main Sequence {0} star" @
-Bodies.OMS: "Orange Main Sequence {0} star" @
-Bodies.RMS: "Red Main Sequence {0} star" @
-Bodies.DRNS: "Dark Red Non Main Sequence {0} star" @
-Bodies.MD: "Methane Dwarf star" @
-Bodies.BD: "Brown Dwarf star" @
-Bodies.WR: "Wolf-Rayet {0} star" @
-Bodies.C: "Carbon {0} star" @
-Bodies.IZ: "Intermediate low Zirconium Monoxide Type star" @
-Bodies.CGZ: "Cool Giant Zirconium Monoxide rich Type star" @
-Bodies.WD: "White Dwarf {0} star" @
-Bodies.NS: "Neutron Star" @
-Bodies.BH: "Black Hole" @
-Bodies.EX: "Exotic" @
-Bodies.SMBH: "Super Massive Black Hole" @
-Bodies.BSG: "Blue White Super Giant" @
-Bodies.WSG: "F White Super Giant" @
-Bodies.MSR: "M Red Super Giant" @
-Bodies.MOG: "M Red Giant" @
-Bodies.KOG: "K Orange Giant" @
-Bodies.RP: "Rogue Planet" @
+Bodies.HMS: "Luminous Hot Main Sequence {0} star" => "Leuchtstarker heisser Hauptreihenstern {0}"
+Bodies.BMS: "Luminous Blue Main Sequence {0} star" => "Leuchtstarker blauer Hauptreihenstern {0}"
+Bodies.BWMS: "Bluish-White Main Sequence {0} star" => "Blauweisser Hauptreihenstern {0}"
+Bodies.WMS: "White Main Sequence {0} star" => "Weisser Hauptreihenstern {0}"
+Bodies.YMS: "Yellow Main Sequence {0} star" => "Gelber Hauptreihenstern {0}"
+Bodies.OMS: "Orange Main Sequence {0} star"  => "Oranger Hauptreihenstern {0}"
+Bodies.RMS: "Red Main Sequence {0} star" => "Roter Hauptreihenstern {0}"
+Bodies.DRNS: "Dark Red Non Main Sequence {0} star" => "Dunkelroter Nicht-Hauptreihenstern {0}"
+Bodies.MD: "Methane Dwarf star" => "Methan-Zwergstern"
+Bodies.BD: "Brown Dwarf star" => "Brauner Zwergstern"
+Bodies.WR: "Wolf-Rayet {0} star" => "Wolf-Rayet {0} Stern"
+Bodies.C: "Carbon {0} star" => "Kohlenstoffstern {0}"
+Bodies.IZ: "Intermediate low Zirconium Monoxide Type star" =>  "Stern mittlerer Masse mit niedrigem Zirkoniummonoxidanteil"
+Bodies.CGZ: "Cool Giant Zirconium Monoxide rich Type star" => "Kalter Risenstern mit hohem Zirkoniummonoxidanteil"
+Bodies.WD: "White Dwarf {0} star" => "Weisser Zwergstern {0}"
+Bodies.NS: "Neutron Star" => "Neutronenstern"
+Bodies.BH: "Black Hole" => "Schwarzes Loch"
+Bodies.EX: "Exotic" => "Exotisch"
+Bodies.SMBH: "Super Massive Black Hole" => "Supermassives schwarzes Loch"
+Bodies.BSG: "Blue White Super Giant" => "Blauweisser Superriese"
+Bodies.WSG: "F White Super Giant" => "F Weisser Superriese"
+Bodies.MSR: "M Red Super Giant" => "M Roter Superriese"
+Bodies.MOG: "M Red Giant" => "M Roter Riese"
+Bodies.KOG: "K Orange Giant" => "K Orangener Riese"
+Bodies.RP: "Rogue Planet" => "Waisenplanet"
 
 ////////////////////////////////////////////////////
 //////////////////////////////////////////////////// Material Commds

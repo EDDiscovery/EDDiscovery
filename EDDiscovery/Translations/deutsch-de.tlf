@@ -1,4 +1,4 @@
-﻿+// ID is case sensitive.
+﻿// ID is case sensitive.
 // @ at end means : Debug mode : repeat english with '' around to show translation - this is for development.
 //                : Release mode : repeat in program english exactly.  This means that you don't want to translate this section, or have not got to it yet
 // The english part after the colon is a guide for what you should be replacing.  Its not actually used in the program. It could be blank for instance and EDD would
@@ -36,8 +36,8 @@ PopOutInfo.Journal.Description: "Journal grid view" => "Journal (Tabellenansicht
 PopOutInfo.Journal.Title: "Journal" => "Journal"
 PopOutInfo.TravelGrid.Description: "History grid view" => "Historie (Tabellenansicht)"
 PopOutInfo.TravelGrid.Title: "Travel History" => "Reisetagebuch"
-PopOutInfo.StarList.Description: "Visited star list" => "Liste der besuchten Sternsysteme"
-PopOutInfo.StarList.Title: "Star List" => "Liste der Sternsysteme"
+PopOutInfo.StarList.Description: "Visited star list" => "Liste der besuchten Systeme"
+PopOutInfo.StarList.Title: "Star List" => "Liste der Systeme"
 PopOutInfo.Materials.Description: "Materials count" => "Anzahl der Materialien"
 PopOutInfo.Materials.Title: "Materials" => "Materialien"
 PopOutInfo.Commodities.Description: "Commodity count" => "Liste der Handelswaren"
@@ -62,19 +62,19 @@ PopOutInfo.Engineering.Description: "Engineering planner" => "Entwicklungsplanun
 PopOutInfo.Engineering.Title: "Engineering" => "Entwicklung"
 PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Einkaufsliste (kombiniert Synthese und Entwicklung)"
 PopOutInfo.ShoppingList.Title: "Shopping List" => "Einkaufsliste"
-PopOutInfo.Scan.Description: "Scan data on system" => "Vorhande Scandaten für das Sternsystem"
+PopOutInfo.Scan.Description: "Scan data on system" => "Vorhandene Scandaten für das System"
 PopOutInfo.Scan.Title: "Scan" => "Scan"
-PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Vorhande Scandaten für das Sternsystem (Tabellenform)"
+PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Vorhandene Scandaten für das System (Tabellenform)"
 PopOutInfo.ScanGrid.Title: "Scan Grid" => "Scantabelle"
-PopOutInfo.StarDistance.Description: "List of nearest stars" => "Liste der nächstgelegenen Sternsysteme"
-PopOutInfo.StarDistance.Title: "Nearest Stars" => "Nächstgelegene Sternsysteme"
-PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Geschätzter Scanwert der Körper des Sternsystems"
+PopOutInfo.StarDistance.Description: "List of nearest stars" => "Liste der nächstgelegenen Systeme"
+PopOutInfo.StarDistance.Title: "Nearest Stars" => "Nächstgelegene Systeme"
+PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Geschätzter Scanwert der Körper des Systems"
 PopOutInfo.EstimatedValues.Title: "Estimated Values" => "Geschätzter Wert"
-PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "3D-Karte der Sternsysteme in einem definierten Umkreis"
+PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "3D-Karte der Systeme in einem definierten Umkreis"
 PopOutInfo.LocalMap.Title: "Local Map" => "Lokale Karte"
-PopOutInfo.Plot.Description: "2D Plot of systems in range" => "2D-Karte der Sternsysteme in einem definierten Umkreis"
+PopOutInfo.Plot.Description: "2D Plot of systems in range" => "2D-Karte der Systeme in einem definierten Umkreis"
 PopOutInfo.Plot.Title: "2D Plot" => "2D-Grafik"
-PopOutInfo.EDSM.Description: "EDSM Star finder" => "Suche des Sternsystems in EDSM"
+PopOutInfo.EDSM.Description: "EDSM Star finder" => "Suche des Systems in EDSM"
 PopOutInfo.EDSM.Title: "EDSM Star Finder" => "EDSM Systemsuche"
 PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilateration von Sternen mit unbekannter Position"
 PopOutInfo.Trilateration.Title: "Trilateration" => "Trilateration"
@@ -129,12 +129,12 @@ EDDiscoveryForm.adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolSt
 EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Logdaten vor Version 2.1 einlesen"
 EDDiscoveryForm.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Neulesen der Logs erzwingen"
 EDDiscoveryForm.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Alle Journale neu einlesen"
-EDDiscoveryForm.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Doppelte FSD Sprungeinträge löschen"
+EDDiscoveryForm.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Doppelte FSA Sprungeinträge löschen"
 EDDiscoveryForm.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Unsynchronisierte EDDN Ereignisse senden"
 EDDiscoveryForm.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "Unsynchronisierte EGO Scans senden"
 EDDiscoveryForm.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Historische Daten an Inara senden (Schiffe, gespeicherte Module)"
 EDDiscoveryForm.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Löschen der EDSM ID für alle Einträge des aktuellen Kommandanten"
-EDDiscoveryForm.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "Export der besuchten Sternsysteme am Elite Dangerous"
+EDDiscoveryForm.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "Export der besuchten Systeme am Elite Dangerous"
 EDDiscoveryForm.addOnsToolStripMenuItem: "&Add-Ons" => "&Erweiterungen"
 EDDiscoveryForm.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Erweiterungen verwalten"
 EDDiscoveryForm.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Anpassen der Aktionsdaten der Erweiterungen"
@@ -167,12 +167,12 @@ EDDiscoveryForm.addTabToolStripMenuItem: "Insert Tab with panel.." => "Reiter in
 EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Reiter entfernen"
 EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Reiter umbenennen"
 
-.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." @
+.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Reiteraufbau fehlgeschlagen: Hauptreiter oder TG konnte nicht geladen werden.\r\nDies ist ein Fehlerzustand - bitte problem an EDD Team auf Discord oder Github melden.\r\nUm zu versuchen, den Fehler zu umgehen, die Shift-Taste festhalten und dann das Program neu starten.\r\nAuf Reiter zurücksetzen klicken, dann Programm starten, dies umgeht möglicherweise den Fehler."
 .RTABL: "Name:" => "Name"
 .RTABT: "Rename Tab" => "Reiter umbenennen"
 .RTABTT: "Enter a new name for the tab" => "Neuen Namen für den Reiter eingeben"
-.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" @
-.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" @
+.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Dem gespeicherten Stil fehlen Farben oder andere Informationen\r\nFehlende Farben oder andere Informationen manuell im Stil-Editor in den Erinatellungen korrigieren"
+.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" => "Die folgenden Programmerweiterungs-DLLs wurden gefunden\r\nMöchten Sie diese verweden?\r\n{0} \r\nFalls diese nicht verwendet werden sollen, bitte entfernen Sie entweder die DLLs aus dem DLL-Verzeichnis im ED Applikationsverzeichnis\r\noder deinstallieren sie das Aktions-Paket, welches die DLL verwendet\r\noder halten Sie die Shift-Taste beim Starten gedrückt und verwenden Sie die 'alle Erweiterungs DLLs entfernen' Auswahl"
 .DLLL: "DLLs loaded: {0}" => "DLLs geladen: {0}"
 .DLLF: "DLLs failed to load: {0}" => "DLLs nicht geladen: {0}"
 .PROFL: "Profile {0} Loaded" => "Profil {0} geladen"
@@ -194,12 +194,12 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Reiter umbenennen"
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Sterndatendownload ist ausgeschaltet, bitte in den Einstellungen einschalten"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Synchronisation mit der Datenbank läuft oder ist anstehend, bitte warten"
 .EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Dies kann eine ganze Weile dauern und sehr viel Bandbreite verwenden\r\nBitte Ausführung bestätigen"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." @
+.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Um im sicheren Modus zu starten, Programm beenden, Shift-Taste drücken\r\nund doppelklicken Sie auf das EDD Programm-Symbol. Sie erhalten dann den Sicherer-Modus-Dialohg angeziegt.\r\nHier können Sie verschiedene Parameter zurücksetzen und die Datenbank an eine andere Stelle verschieben."
 .ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" @
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Bitte bestätigen, dass alle Einträge für den momentanen Kommandaten zurückgesetzt werden sollen"
 .NoRel: "No new release found" => "Keine neue Programmversion gefunden"
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bitte bestätigen, dass alle doppelten FSD-Einträge für den momentanen Kommandanten gelöscht werden sollen"
-.FSDRem: "Removed {0} FSD entries" => "{0} FSD Einträge gelöscht"
+.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Bitte bestätigen, dass alle doppelten FSA-Einträge für den momentanen Kommandanten gelöscht werden sollen"
+.FSDRem: "Removed {0} FSD entries" => "{0} FSA Einträge gelöscht"
 .VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Datei VisitedStarsCache.dat nicht gefunden, bitte Datei auswählen"
 .VSLEXP: "File {0} created.\r\n{1}" => "Datei {0} erstellt.\r\n{1}"
 .VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Elite neu starten, um diese Datei in die Galaxienkarte einzulesen"
@@ -431,7 +431,7 @@ CommanderForm.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGe
 CommanderForm.buttonExtCAPI.ToolTip: "Perform operation indicated" @
 CommanderForm.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" @
 CommanderForm.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" @
-CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" @
+CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Erhält alle FSA-Sprünge von EDSM die in dieser Datenbank aber nicht in EDDiscovery sind"
 CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" @
 CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" @
 CommanderForm.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" @
