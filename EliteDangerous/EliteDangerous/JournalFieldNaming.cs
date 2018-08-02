@@ -27,7 +27,6 @@ namespace EliteDangerousCore
             if (fdname.Length >= 8 && fdname.StartsWith("$") && fdname.EndsWith("_name;", System.StringComparison.InvariantCultureIgnoreCase))
                 fdname = fdname.Substring(1, fdname.Length - 7); // 1 for '$' plus 6 for '_name;'
 
-            fdname = fdname.Replace('\u0131', 'i'); // Fix dotless i reported on EDCD
             return fdname;
         }
 
