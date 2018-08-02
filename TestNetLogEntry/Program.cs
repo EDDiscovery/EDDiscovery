@@ -135,7 +135,7 @@ namespace NetLogEntry
 
                 while( args.More )
                 {
-                    string a = args.Next.ToLower();
+                    string a = args.Next.ToLowerInvariant();
                     if (a == "combine")
                         combine = true;
                     if (a == "showrepeats" )
