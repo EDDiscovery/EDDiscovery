@@ -19,7 +19,7 @@ namespace DialogTest
 
             string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
 
-            string selection = cmdlineopts.Length>1 ? cmdlineopts[1].ToLower() : "default";
+            string selection = cmdlineopts.Length>1 ? cmdlineopts[1].ToLowerInvariant() : "default";
 
             Form sel;
 

@@ -218,9 +218,9 @@ namespace NetLogEntry
                     string size = rw["P"].Trim();
                     double powerdraw = rw["AA"].InvariantParseDouble(0);
 
-                    if (ShipModuleData.modules.ContainsKey(fdname.ToLower()))
+                    if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
                     {
-                        ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLower()];
+                        ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
 
                         if (Math.Abs(minfo.Power - powerdraw) > 0.05)
                             Console.WriteLine("Weapon " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
@@ -245,9 +245,9 @@ namespace NetLogEntry
 
                     if (ukdesc.IndexOf("(Information)", StringComparison.InvariantCultureIgnoreCase) == -1 && !fdname.Contains("_free"))
                     {
-                        if (ShipModuleData.modules.ContainsKey(fdname.ToLower()))
+                        if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
                         {
-                            ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLower()];
+                            ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
 
                             if (Math.Abs(minfo.Power - powerdraw) > 0.05)
                                 Console.WriteLine("Module " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
@@ -376,11 +376,11 @@ namespace NetLogEntry
                     string runame = rw["N"].Trim();
                     string prname = rw["P"].Trim();
 
-                    de += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
-                    fr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
-                    es += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
-                    ru += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
-                    pr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                    de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                    fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                    es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                    ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                    pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
                 }
                 foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
                 {
@@ -392,11 +392,11 @@ namespace NetLogEntry
                     string runame = rw["L"].Trim();
                     string prname = rw["N"].Trim();
 
-                    de += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
-                    fr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
-                    es += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
-                    ru += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
-                    pr += "MaterialCommodityData." + fdname.ToLower() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                    de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                    fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                    es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                    ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                    pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
                 }
 
                 File.WriteAllText(Path.Combine(rootpath, "mat-de.part.txt"), de, Encoding.UTF8);

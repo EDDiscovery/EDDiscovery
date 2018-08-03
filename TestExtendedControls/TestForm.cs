@@ -35,7 +35,7 @@ namespace DialogTest
             return Regex.Replace(Humanize(Underscore(word)), @"\b([a-z])",
                                  delegate (Match match)
                                  {
-                                     return match.Captures[0].Value.ToUpper();
+                                     return match.Captures[0].Value.ToUpperInvariant();
                                  });
         }
 
@@ -46,7 +46,7 @@ namespace DialogTest
 
         public static string Capitalize(string word)
         {
-            return word.Substring(0, 1).ToUpper() + word.Substring(1).ToLower();
+            return word.Substring(0, 1).ToUpperInvariant() + word.Substring(1).ToLowerInvariant();
         }
 
 

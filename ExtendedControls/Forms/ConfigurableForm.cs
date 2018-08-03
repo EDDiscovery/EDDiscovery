@@ -484,7 +484,7 @@ namespace ExtendedControls
                     if (DateTime.TryParse(ent.text, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeLocal, out t))     // assume local, so no conversion
                         dt.Value = t;
 
-                    switch (ent.customdateformat.ToLower())
+                    switch (ent.customdateformat.ToLowerInvariant())
                     {
                         case "short":
                             dt.Format = DateTimePickerFormat.Short;
