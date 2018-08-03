@@ -47,7 +47,7 @@ namespace ActionLanguage
                 StringParser p = new StringParser(res);
 
                 string cmd;
-                while ((cmd = p.NextWord(" ", true)) != null)
+                while ((cmd = p.NextWordLCInvariant(" ")) != null)
                 {
                     if (cmd.Equals("dumpvars"))
                     {

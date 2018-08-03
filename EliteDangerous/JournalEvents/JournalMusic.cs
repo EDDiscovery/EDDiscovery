@@ -51,12 +51,12 @@ namespace EliteDangerousCore.JournalEvents
             if (str == null)
                 return EDMusicTrackEnum.None;
 
-            var searchstr = str.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
+            var searchstr = str.Replace("_", "").Replace(" ", "").Replace("-", "").ToLowerInvariant();
 
 
             foreach (EDMusicTrackEnum atm in Enum.GetValues(typeof(EDMusicTrackEnum)))
             {
-                string str2 = atm.ToString().Replace("_", "").ToLower();
+                string str2 = atm.ToString().Replace("_", "").ToLowerInvariant();
 
                 if (searchstr.Equals(str2))
                     return atm;

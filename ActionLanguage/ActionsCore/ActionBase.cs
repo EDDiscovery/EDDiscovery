@@ -43,7 +43,7 @@ namespace ActionLanguage
 
         public static void AddCommand(string s, Type t, ActionType a)
         {
-            CommandList[s.ToLower()] = new CommandEntry(s, t, a);       // = so you can override them
+            CommandList[s.ToLowerInvariant()] = new CommandEntry(s, t, a);       // = so you can override them
         }
 
         private string actionname;
@@ -98,7 +98,7 @@ namespace ActionLanguage
 
         public static ActionBase CreateAction( string name, string user = null , string comment = null, int lu = 0 , int ws = 0 )       
         {
-            string nname = name.ToLower();
+            string nname = name.ToLowerInvariant();
 
             if ( CommandList.ContainsKey(nname))
             {
