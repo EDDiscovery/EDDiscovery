@@ -216,7 +216,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
+            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLowerInvariant();
 
             if (StarStr2EnumLookup.ContainsKey(searchstr))
                 return StarStr2EnumLookup[searchstr];
@@ -240,7 +240,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
+            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLowerInvariant();
 
             if (PlanetStr2EnumLookup.ContainsKey(searchstr))
                 return PlanetStr2EnumLookup[searchstr];
@@ -266,7 +266,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            var searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("atmosphere", "");
+            var searchstr = v.ToLowerInvariant().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("atmosphere", "");
 
             if (searchstr.Contains("rich"))
             {
@@ -305,7 +305,7 @@ namespace EliteDangerousCore
             if (v == null)
                 return EDVolcanism.Unknown;
 
-            string searchstr = v.ToLower().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("volcanism", "");
+            string searchstr = v.ToLowerInvariant().Replace("_", "").Replace(" ", "").Replace("-", "").Replace("volcanism", "");
 
             if (VolcanismStr2EnumLookup == null)
             {
@@ -349,7 +349,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLower();
+            var searchstr = star.Replace("_", "").Replace(" ", "").Replace("-", "").ToLowerInvariant();
 
             if (ReserveStr2EnumLookup.ContainsKey(searchstr))
                 return ReserveStr2EnumLookup[searchstr];

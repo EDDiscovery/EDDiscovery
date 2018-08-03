@@ -79,7 +79,7 @@ namespace EDDiscovery.Actions
                 {
                     Forms.UserControlForm ucf = poc.GetByWindowsRefName(cmdname);
 
-                    string nextcmd = sp.NextWord(" ",true);
+                    string nextcmd = sp.NextWordLCInvariant(" ");
 
                     if (nextcmd == null)
                     {

@@ -267,7 +267,7 @@ namespace ExtendedControls
             if (name == null)
                 return "Missing name";
 
-            string type = sp.NextWordComma(lowercase: true);
+            string type = sp.NextWordCommaLCInvariant();
 
             Type ctype = null;
 

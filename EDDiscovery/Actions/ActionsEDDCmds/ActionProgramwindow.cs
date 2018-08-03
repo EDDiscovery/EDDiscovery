@@ -46,7 +46,7 @@ namespace EDDiscovery.Actions
             {
                 BaseUtils.StringParser sp = new BaseUtils.StringParser(res);
 
-                string nextcmd = sp.NextWord(" ",true);
+                string nextcmd = sp.NextWordLCInvariant(" ");
 
                 if (nextcmd == null)
                 {
@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
                 }
                 else if (nextcmd.Equals("tab"))
                 {
-                    string tabname = sp.NextWord(" ", true);
+                    string tabname = sp.NextWordLCInvariant(" ");
                     if (!(ap.actioncontroller as ActionController).DiscoveryForm.SelectTabPage(tabname))
                         ap.ReportError("Tab page name " + tabname + " not found");
                 }

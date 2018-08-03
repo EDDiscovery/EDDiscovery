@@ -1383,7 +1383,7 @@ namespace EDDiscovery
         {
             ToolStripMenuItem parent;
 
-            menu = menu.ToLower(CultureInfo.InvariantCulture);
+            menu = menu.ToLowerInvariant();
             if (menu.Equals("add-ons"))
                 parent = addOnsToolStripMenuItem;
             else if (menu.Equals("help"))

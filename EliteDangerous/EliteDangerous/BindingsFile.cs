@@ -323,7 +323,7 @@ namespace EliteDangerousCore
                 if (dv.Name.Equals(GuidExtract(productguid, true), StringComparison.InvariantCultureIgnoreCase))
                     return dv;
 
-                int total = dv.Name.SplitCapsWord().ToLower().ApproxMatch(name.ToLower(), 4);
+                int total = dv.Name.SplitCapsWord().ToLowerInvariant().ApproxMatch(name.ToLowerInvariant(), 4);
                 if (total > besttotal)
                 {
                     besttotal = total;

@@ -65,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
         public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
         public bool? nTidalLock { get; set; }                       // direct
         public string TerraformState { get; set; }                  // direct, can be empty or a string
-        public bool Terraformable { get { return TerraformState != null && TerraformState.ToLower().Equals("terraformable"); } }
+        public bool Terraformable { get { return TerraformState != null && TerraformState.ToLowerInvariant().Equals("terraformable"); } }
         public string Atmosphere { get; set; }                      // direct from journal, if not there or blank, tries AtmosphereType (Earthlikes)
         public EDAtmosphereType AtmosphereID { get; }               // Atmosphere -> ID (Ammonia, Carbon etc)
         public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
@@ -239,7 +239,7 @@ namespace EliteDangerousCore.JournalEvents
                 PlanetTypeID = Bodies.PlanetStr2Enum(PlanetClass);
                 // Fix naming to standard and fix case..
                 PlanetClass = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                        ToTitleCase(PlanetClass.ToLower()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
+                                        ToTitleCase(PlanetClass.ToLowerInvariant()).Replace("Ii ", "II ").Replace("Iv ", "IV ").Replace("Iii ", "III ");
             }
             else
             {
@@ -376,7 +376,7 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     scanText.AppendFormat("{0}", PlanetClass);
 
-                    if (!PlanetClass.ToLower().Contains("gas"))
+                    if (!PlanetClass.ToLowerInvariant().Contains("gas"))
                     {
                         scanText.AppendFormat((Atmosphere == null || Atmosphere == String.Empty) ? ", No Atmosphere".Tx(this) : (", " + Atmosphere));
                     }
@@ -423,7 +423,7 @@ namespace EliteDangerousCore.JournalEvents
             if (nSurfaceGravity.HasValue)
                 scanText.AppendFormat("Gravity: {0:0.0}g\n".Tx(this,"GV"), nSurfaceGravity.Value / oneGee_m_s2);
 
-            if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLower().Contains("gas"))
+            if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLowerInvariant().Contains("gas"))
             {
                 if (nSurfacePressure.Value > 1000)
                 {
@@ -437,7 +437,7 @@ namespace EliteDangerousCore.JournalEvents
 
             if (Volcanism != null)
                 scanText.AppendFormat("Volcanism: {0}\n".Tx(this), Volcanism == String.Empty ? "No Volcanism".Tx(this) : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.
-                                                                                            ToTitleCase(Volcanism.ToLower()));
+                                                                                            ToTitleCase(Volcanism.ToLowerInvariant()));
 
             if (DistanceFromArrivalLS > 0)
                 scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".Tx(this), DistanceFromArrivalLS);
@@ -597,7 +597,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("{0} ({1}) {2} {3}% {4}\n", mc.Name, mc.Shortname, mc.TranslatedType, percent.ToString("N1"), matinfo);
             }
             else
-                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fdname.ToLower()),
+                scanText.AppendFormat("{0} {1}%\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(fdname.ToLowerInvariant()),
                                                             percent.ToString("N1"));
 
             return scanText.ToNullSafeString();
@@ -707,10 +707,10 @@ namespace EliteDangerousCore.JournalEvents
             if (Materials == null)
                 return 0.0;
 
-            if (!Materials.ContainsKey(v.ToLower()))
+            if (!Materials.ContainsKey(v.ToLowerInvariant()))
                 return 0.0;
 
-            return Materials[v.ToLower()];
+            return Materials[v.ToLowerInvariant()];
         }
 
         public double? GetAtmosphereComponent(string c)
@@ -1029,7 +1029,7 @@ namespace EliteDangerousCore.JournalEvents
                         return 933; // 0.04
 
                     case EDPlanet.Rocky_body:
-                        if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
+                        if (TerraformState != null && TerraformState.ToLowerInvariant().Equals("terraformable"))
                         {
                             //low = 36000;
                             //high = 36500;
@@ -1046,7 +1046,7 @@ namespace EliteDangerousCore.JournalEvents
                         //high = 14562; // (4.03 EM)
                         return 12449; // 0.51 EM
                     case EDPlanet.High_metal_content_body:
-                        if (TerraformState != null && TerraformState.ToLower().Equals("terraformable"))
+                        if (TerraformState != null && TerraformState.ToLowerInvariant().Equals("terraformable"))
                         {
                             //low = 36000;
                             //high = 54000;

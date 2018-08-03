@@ -565,7 +565,7 @@ public static class ObjectExtensionsStrings
                         }
 
                         if ( !done )
-                            sb.Append(char.ToUpper(c));
+                            sb.Append(char.ToUpperInvariant(c));
                     }
                 }
                 else
@@ -688,16 +688,10 @@ public static class ObjectExtensionsStrings
         return normal;
     }
 
-    public static string FDName(this string normal)
-    {
-        string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
-        return n.ToLower();
-    }
-
     public static bool EqualsAlphaNumOnlyNoCase(this string left, string right)
     {
-        left = left.Replace("_", "").Replace(" ", "").ToLower();        // remove _, spaces and lower
-        right = right.Replace("_", "").Replace(" ", "").ToLower();
+        left = left.Replace("_", "").Replace(" ", "").ToLowerInvariant();        // remove _, spaces and lower
+        right = right.Replace("_", "").Replace(" ", "").ToLowerInvariant();
         return left.Equals(right);
     }
 

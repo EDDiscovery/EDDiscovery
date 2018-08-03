@@ -50,7 +50,7 @@ namespace EDDiscovery.Actions
                 StringParser sp = new StringParser(res);
                 string prefix = "EC_";
 
-                string cmdname = sp.NextWord(" ", true);
+                string cmdname = sp.NextWordLCInvariant(" ");
 
                 if (cmdname != null && cmdname.Equals("prefix") )
                 {
@@ -62,7 +62,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    cmdname = sp.NextWord(" " , true);
+                    cmdname = sp.NextWordLCInvariant(" ");
                 }
 
                 int jidindex = -1;
@@ -101,7 +101,7 @@ namespace EDDiscovery.Actions
                         return true;
                     }
 
-                    cmdname = sp.NextWord(" ", true);
+                    cmdname = sp.NextWordLCInvariant(" ");
                 }
 
                 if (cmdname == null)

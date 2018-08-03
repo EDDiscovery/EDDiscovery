@@ -60,7 +60,7 @@ public static class ObjectExtensionsDates
 
         System.Globalization.DateTimeStyles dts = System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal;
 
-        string[] t = formatoptions?.ToLower().Split(';');
+        string[] t = formatoptions?.ToLowerInvariant().Split(';');
 
         if (t != null && Array.IndexOf(t, "local") != -1)
         {
@@ -77,7 +77,7 @@ public static class ObjectExtensionsDates
     //format options are semicoloned.
     public static string ToStringFormatted(this DateTime res, string formatoptions)
     {
-        string[] t = formatoptions.ToLower().Split(';');
+        string[] t = formatoptions.ToLowerInvariant().Split(';');
 
         string culture = System.Globalization.CultureInfo.CurrentCulture.Name;
 
