@@ -188,7 +188,7 @@ namespace BaseUtils
             else
             {
                 // Calculate sha
-                string sha = SHA.CalcSha1(destFile).ToLower();
+                string sha = SHA.CalcSha1(destFile).ToLowerInvariant();
 
                 if (sha.Equals(file.sha))
                     return false;
