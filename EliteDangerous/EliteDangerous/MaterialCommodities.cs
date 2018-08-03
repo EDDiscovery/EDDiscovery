@@ -81,13 +81,13 @@ namespace EliteDangerousCore
 
         public static MaterialCommodityData GetByFDName(string fdname)
         {
-            fdname = fdname.ToLower();
+            fdname = fdname.ToLowerInvariant();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
         public static string GetNameByFDName(string fdname) // if we have it, give name, else give alt.  Also see RMat in journal field naming
         {
-            fdname = fdname.ToLower();
+            fdname = fdname.ToLowerInvariant();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname].Name : fdname.SplitCapsWordFull();
         }
 
@@ -132,19 +132,19 @@ namespace EliteDangerousCore
 
         private void SetCache()
         {
-            cachelist[this.FDName.ToLower()] = this;
+            cachelist[this.FDName.ToLowerInvariant()] = this;
         }
 
         public static MaterialCommodityData EnsurePresent(string cat, string fdname)  // By FDNAME
         {
-            if (!cachelist.ContainsKey(fdname.ToLower()))
+            if (!cachelist.ContainsKey(fdname.ToLowerInvariant()))
             {
                 MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, false);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname);
             }
 
-            return cachelist[fdname.ToLower()];
+            return cachelist[fdname.ToLowerInvariant()];
         }
 
 
@@ -775,7 +775,7 @@ namespace EliteDangerousCore
 
         static public string FDNameTranslation(string old)
         {
-            old = old.ToLower();
+            old = old.ToLowerInvariant();
             if (fdnamemangling.ContainsKey(old))
             {
                 //System.Diagnostics.Debug.WriteLine("Sub " + old);

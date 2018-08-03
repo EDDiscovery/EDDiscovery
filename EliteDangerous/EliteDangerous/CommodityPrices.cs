@@ -71,10 +71,10 @@ namespace EliteDangerousCore
             try
             {
                 id = jo["id"].Int();
-                fdname = jo["name"].Str().ToLower();
+                fdname = jo["name"].Str().ToLowerInvariant();
                 locName = jo["locName"].Str();
                 loccategory = category = jo["categoryname"].Str();
-                category = "$MARKET_category_" + category.ToLower().Replace(" ","_").Replace("narcotics","drugs");
+                category = "$MARKET_category_" + category.ToLowerInvariant().Replace(" ","_").Replace("narcotics","drugs");
                // System.Diagnostics.Debug.WriteLine("CAPI field fd:'{0}' loc:'{1}' of type '{2}' '{3}'", fdname, locName, category , loccategory);
                 locName = locName.Alt(fdname.SplitCapsWord());      // use locname, if not there, make best loc name possible
 
