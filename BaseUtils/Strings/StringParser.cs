@@ -121,7 +121,7 @@ namespace BaseUtils
 
         // WORD defined by terminators. options to lowercase it and de-escape it
 
-        public string NextWord(string terminators = " ", bool lowercase = false, bool replacescape = false)
+        public string NextWord(string terminators = " ", System.Globalization.CultureInfo lowercase = null, bool replacescape = false)
         {
             if (pos >= line.Length)     // null if there is nothing..
                 return null;
@@ -136,24 +136,34 @@ namespace BaseUtils
 
                 SkipSpace();
 
-                if (lowercase)
-                    ret = ret.ToLower();
+                if (lowercase!=null)
+                    ret = ret.ToLower(lowercase);
 
                 return (replacescape) ? ret.ReplaceEscapeControlChars() : ret;
             }
         }
 
+        public string NextWordLCInvariant(string terminators = " ", bool replaceescape = false)
+        {
+            return NextWord(terminators, lowercase: System.Globalization.CultureInfo.InvariantCulture, replacescape:replaceescape);
+        }
+
         // NextWord with a fixed space comma (or other) terminator.  Fails if not a separ list
 
-        public string NextWordComma(bool lowercase = false, bool replaceescape = false, char separ = ',') 
+        public string NextWordComma(System.Globalization.CultureInfo lowercase = null, bool replaceescape = false, char separ = ',')
         {
             string res = NextWord(" " + separ, lowercase, replaceescape);
             return IsCharMoveOnOrEOL(separ) ? res : null;
         }
 
+        public string NextWordCommaLCInvariant(bool replaceescape = false, char separ = ',')    // nicer quicker way to specify
+        {
+            return NextWordComma(System.Globalization.CultureInfo.InvariantCulture, replaceescape, separ);
+        }
+
         // Take a " or ' quoted string, or a WORD defined by terminators. options to lowercase it and de-escape it
 
-        public string NextQuotedWord(string nonquoteterminators = " ", bool lowercase = false, bool replaceescape = false)
+        public string NextQuotedWord(string nonquoteterminators = " ", System.Globalization.CultureInfo lowercase = null, bool replaceescape = false)
         {
             if (pos < line.Length)
             {
@@ -188,8 +198,8 @@ namespace BaseUtils
                             pos = nextquote + 1;
                             SkipSpace();
 
-                            if (lowercase)
-                                ret = ret.ToLower();
+                            if (lowercase != null)
+                                ret = ret.ToLower(lowercase);
 
                             return (replaceescape) ? ret.ReplaceEscapeControlChars() : ret;
                         }
@@ -204,7 +214,7 @@ namespace BaseUtils
 
         // NextQuotedWord with a fixed space comma terminator.  Fails if not a comma separ list
 
-        public string NextQuotedWordComma(bool lowercase = false , bool replaceescape = false, char separ = ',' )           // comma separ
+        public string NextQuotedWordComma(System.Globalization.CultureInfo lowercase = null, bool replaceescape = false, char separ = ',' )           // comma separ
         {
             string res = NextQuotedWord(" " + separ, lowercase, replaceescape);
             return IsCharMoveOnOrEOL(separ) ? res : null;
@@ -212,7 +222,7 @@ namespace BaseUtils
 
         // if quoted, take the quote string, else take the rest, space stripped.
 
-        public string NextQuotedWordOrLine(bool lowercase = false, bool replaceescape = false)
+        public string NextQuotedWordOrLine(System.Globalization.CultureInfo lowercase = null, bool replaceescape = false)
         {
             if (pos < line.Length)
             {
@@ -223,8 +233,8 @@ namespace BaseUtils
                     string ret = line.Substring(pos).Trim();
                     pos = line.Length;
 
-                    if (lowercase)
-                        ret = ret.ToLower();
+                    if (lowercase != null)
+                        ret = ret.ToLower(lowercase);
 
                     return (replaceescape) ? ret.ReplaceEscapeControlChars() : ret;
                   }
@@ -239,7 +249,7 @@ namespace BaseUtils
 
         // Read a list of optionally quoted strings, seperated by separ char.  Stops at EOL or on error.  Check IsEOL if you care about an Error
 
-        public List<string> NextQuotedWordListSepar(bool lowercase = false, bool replaceescape = false, char separ = ',')
+        public List<string> NextQuotedWordListSepar(System.Globalization.CultureInfo lowercase = null, bool replaceescape = false, char separ = ',')
         {
             List<string> list = new List<string>();
 
@@ -254,7 +264,7 @@ namespace BaseUtils
 
         // Read a quoted word list off, supporting multiple separ chars, and with multiple other terminators, and the lowercard/replaceescape options
         // null list on error
-        public List<string> NextQuotedWordList(bool lowercase = false , bool replaceescape = false , 
+        public List<string> NextQuotedWordList(System.Globalization.CultureInfo lowercase = null, bool replaceescape = false , 
                                         string separchars = ",", string otherterminators = " ", bool separoptional = false)
         {
             List<string> ret = new List<string>();
@@ -324,7 +334,7 @@ namespace BaseUtils
         #region optional Brackets quoted word... word or "word" or ( ("group of words" txt "words" txt ) ) just like a c# expression
 
         // returns a tuple list, bool = true if string, false if text 
-        public List<Tuple<string,bool>> NextOptionallyBracketedQuotedWords(bool lowercase = false, bool replacescape = false)       // null in error
+        public List<Tuple<string,bool>> NextOptionallyBracketedQuotedWords(System.Globalization.CultureInfo lowercase = null, bool replacescape = false)       // null in error
         {
             if (pos < line.Length)
             {
@@ -504,7 +514,7 @@ namespace BaseUtils
                 return def;
         }
 
-        public static List<string> ParseWordList(string s, bool lowercase = false, bool replaceescape = false, char separ = ',')
+        public static List<string> ParseWordList(string s, System.Globalization.CultureInfo lowercase = null, bool replaceescape = false, char separ = ',')
         {
             StringParser sp = new StringParser(s);
             return sp.NextQuotedWordListSepar(lowercase, replaceescape, separ);
