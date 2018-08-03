@@ -107,7 +107,7 @@ namespace BaseUtils
 
             static public int CellNameToIndex(string s)
             {
-                s = s.ToLower();
+                s = s.ToLowerInvariant();
                 int col = int.MaxValue;
                 if (s.Length >= 1)      // later, cope with An, Bn etc.
                     col = s[0] - 'a';
