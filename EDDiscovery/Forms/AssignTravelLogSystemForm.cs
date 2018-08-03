@@ -209,7 +209,7 @@ namespace EDDiscovery.Forms
 
         private void btnFindSystem_Click(object sender, EventArgs e)
         {
-            string name = tbManualSystemName.Text.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+            string name = tbManualSystemName.Text.ToLowerInvariant();
             List<ISystem> systems = SystemClassDB.GetSystemsByName(name);
 
             if (systems.Count != 0)

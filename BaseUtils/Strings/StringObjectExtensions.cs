@@ -565,7 +565,7 @@ public static class ObjectExtensionsStrings
                         }
 
                         if ( !done )
-                            sb.Append(char.ToUpper(c));
+                            sb.Append(char.ToUpperInvariant(c));
                     }
                 }
                 else
