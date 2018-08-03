@@ -193,7 +193,7 @@ namespace ActionLanguage
                             line = line.Trim();
                             if (line.StartsWith("ENABLED", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                line = line.Substring(7).Trim().ToLower();
+                                line = line.Substring(7).Trim().ToLowerInvariant();
                                 if (line == "true")
                                     enabled = true;
                                 else if (line == "false")

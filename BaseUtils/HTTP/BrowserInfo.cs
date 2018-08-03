@@ -55,7 +55,7 @@ namespace BaseUtils
                 // Trim parameters.
                 try
                 {
-                    path = pathKey.GetValue(null).ToString().ToLower().Replace("\"", "");
+                    path = pathKey.GetValue(null).ToString().ToLowerInvariant().Replace("\"", "");
                     if (!path.EndsWith(exeSuffix))
                     {
                         path = path.Substring(0, path.LastIndexOf(exeSuffix, StringComparison.Ordinal) + exeSuffix.Length);

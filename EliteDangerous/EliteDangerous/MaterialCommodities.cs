@@ -220,12 +220,18 @@ namespace EliteDangerousCore
             return true;
         }
 
+        public static string FDNameCnv(string normal)
+        {
+            string n = new string(normal.ToCharArray().Where(c => !Char.IsWhiteSpace(c)).ToArray());
+            return n.ToLowerInvariant();
+        }
+
         private static bool AddEntry(string catname, Color colour, string aliasname, string typeofit, string shortname, string fdName, bool comrare = false)
         {
             System.Diagnostics.Debug.Assert(!shortname.HasChars() || cachelist.Values.ToList().Find(x => x.Shortname.Equals(shortname, StringComparison.InvariantCultureIgnoreCase)) == null, "ShortName repeat " + aliasname + " " + shortname);
             System.Diagnostics.Debug.Assert(cachelist.ContainsKey(fdName) == false, "Repeated entry " + fdName);
 
-            string fdn = (fdName.Length > 0) ? fdName.ToLower() : aliasname.FDName();       // always lower case fdname
+            string fdn = (fdName.Length > 0) ? fdName.ToLowerInvariant() : FDNameCnv(aliasname);       // always lower case fdname
 
             MaterialCommodityData mc = new MaterialCommodityData(catname, aliasname, fdn, typeofit, shortname, colour, comrare);
             mc.SetCache();
