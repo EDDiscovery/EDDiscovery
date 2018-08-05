@@ -113,12 +113,12 @@ PopOutInfo.PanelSelector.Title: "+" => "+"
 
 //////////////////////////////////////////////////////////////// DISCOVERY FORM
 
-EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "&Strumenti"
-EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configuração"
-EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
-EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizza mappa &3D"
-EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
-EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
+EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "In&strumentos"
+EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "ConfiguraÃ§Ã£o"
+EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualiza mapa &2D"
+EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualiza mapa &3D"
+EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Janelas"
+EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tudo na taskbar"
 EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
 EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "E&sci"
 EDDiscoveryForm.adminToolStripMenuItem: "A&dmin" => "&Gestione"
