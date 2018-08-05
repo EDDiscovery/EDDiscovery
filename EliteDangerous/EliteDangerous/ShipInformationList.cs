@@ -39,7 +39,7 @@ namespace EliteDangerousCore
         public ShipInformation CurrentShip { get { return (HaveCurrentShip) ? Ships[currentid] : null; } }
 
         // IDs have been repeated, need more than just that
-        private string Key(string fdname, int i) { return fdname.ToLower() + ":" + i.ToStringInvariant(); }
+        private string Key(string fdname, int i) { return fdname.ToLowerInvariant() + ":" + i.ToStringInvariant(); }
 
         public ShipInformation GetShipByShortName(string sn)
         {

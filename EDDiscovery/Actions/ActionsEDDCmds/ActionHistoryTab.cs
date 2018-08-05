@@ -58,7 +58,7 @@ namespace EDDiscovery.Actions
 
                     if (ts != null)
                     {
-                        string nextcmd = sp.NextWord(" ", true);
+                        string nextcmd = sp.NextWordLCInvariant(" ");
 
                         if (nextcmd == null)
                         {

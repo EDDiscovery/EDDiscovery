@@ -167,7 +167,7 @@ namespace ActionLanguage
             if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
-                string cmdname = sp.NextWord(", ", true);
+                string cmdname = sp.NextWordLCInvariant(", ");
 
                 if (cmdname.Equals("folder"))
                 {
@@ -483,7 +483,7 @@ namespace ActionLanguage
 
                     ExtendedControls.ConfigurableForm f = infile ? ap.actionfile.dialogs[handle] : (inlocal ? ap.dialogs[handle] : null);
 
-                    string cmd = sp.NextWord(lowercase: true);
+                    string cmd = sp.NextWordLCInvariant();
 
                     if (cmd == null)
                     {

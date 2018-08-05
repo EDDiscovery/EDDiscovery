@@ -46,7 +46,7 @@ namespace EliteDangerousCore
 
         public Dictionary<ShipPropID, ShipInfo> GetShipProperties(string fdshipname)        // get properties of a ship, case insensitive, may be null
         {
-            fdshipname = fdshipname.ToLower();
+            fdshipname = fdshipname.ToLowerInvariant();
             return ships.ContainsKey(fdshipname) ? ships[fdshipname] : (noncorolisships.ContainsKey(fdshipname) ? noncorolisships[fdshipname] : null);
         }
 
@@ -58,7 +58,7 @@ namespace EliteDangerousCore
 
         public ShipModule GetItemProperties(string fdid)        // given an item name, return its ShipModule properties (id, mass, names). Always returns one
         {
-            string lowername = fdid.ToLower();
+            string lowername = fdid.ToLowerInvariant();
 
             ShipModule m = null;
 
@@ -131,7 +131,7 @@ namespace EliteDangerousCore
 
         static public bool IsVanity(string ifd)
         {
-            ifd = ifd.ToLower();
+            ifd = ifd.ToLowerInvariant();
             string[] vlist = new[] { "bobble", "decal", "enginecustomisation", "nameplate", "paintjob",
                                     "shipkit", "weaponcustomisation", "voicepack" , "lights" };
             return Array.Find(vlist, x => ifd.Contains(x)) != null;
@@ -144,7 +144,7 @@ namespace EliteDangerousCore
 
         static public bool IsFighter(string ifd)
         {
-            ifd = ifd.ToLower();
+            ifd = ifd.ToLowerInvariant();
             return ifd.Equals("federation_fighter") || ifd.Equals("empire_fighter") || ifd.Equals("independent_fighter");
         }
 
