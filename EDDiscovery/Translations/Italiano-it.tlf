@@ -566,14 +566,14 @@ RecordStep.label_index: "Record Step" @
 
 /////////////////////////////////////////////////////////////// Set Note
 
-SetNoteForm: "Set Note" @
-SetNoteForm.labelTTimestamp: "Timestamp:" @
-SetNoteForm.buttonCancel: "Cancel" @
-SetNoteForm.buttonSave: "Save" @
-SetNoteForm.labelTSystem: "System:" @
-SetNoteForm.labelTSummary: "Summary:" @
-SetNoteForm.labelTDetails: "Details:" @
-SetNoteForm.label_index: "Set Note" @
+SetNoteForm: "Set Note" => "Imposta Nota"
+SetNoteForm.labelTTimestamp: "Timestamp:" => "Data e ora"
+SetNoteForm.buttonCancel: "Cancel" => "Cancella"
+SetNoteForm.buttonSave: "Save" => "Salva"
+SetNoteForm.labelTSystem: "System:" => "Sistema"
+SetNoteForm.labelTSummary: "Summary:" => "Sommario"
+SetNoteForm.labelTDetails: "Details:" => "Dettagli"
+SetNoteForm.label_index: "Set Note" => "Imposta Nota"
 
 ////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// Misc forms
@@ -581,23 +581,23 @@ SetNoteForm.label_index: "Set Note" @
 
 /////////////////////////////////////////////////////////////// MessageBox
 
-MessageBoxTheme.Warning: "Warning" @
-.Ignore: "Ignore" @
-.Retry: "Retry" @
-.Abort: "Abort" @
-.Cancel: "Cancel" @
-.OK: "OK" @
-.No: "No" @
-.Yes: "Yes" @
+MessageBoxTheme.Warning: "Warning" => "Attenzione"
+.Ignore: "Ignore" => "Ignora"
+.Retry: "Retry" => "Riprova"
+.Abort: "Abort" => "Aborta"
+.Cancel: "Cancel" => "Cancella"
+.OK: "OK" => "OK"
+.No: "No" => "No"
+.Yes: "Yes" => "Si"
 
 ///////////////////////////////////////////////////// DataGridViewDialogs
 
-DataGridViewDialogs.Jumpto: "Jump to:" @
-.EN: "Enter number to jump to or near to" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.VNV: "Value is not valid" @
-.Title: "Jump to Entry" @
+DataGridViewDialogs.Jumpto: "Jump to:" => "Va a"
+.EN: "Enter number to jump to or near to" => "Inserisci il numero di salti a o vicino a"
+.PresstoAccept: "Press to Accept" => "Premi per Accettare"
+.PresstoCancel: "Press to Cancel" => "Premi per Cancellare"
+.VNV: "Value is not valid" => "Il Valore non è valido"
+.Title: "Jump to Entry" => "Salti al registro"
 
 //////////////////////////////////////////////////// InfoForm
 
@@ -605,26 +605,26 @@ InfoForm.OK : "OK" @
 
 //////////////////////////////////////////////////// Keyform
 
-KeyForm.PK: "Press Key" @
-KeyForm: "Define Key Sequence" @
-KeyForm.radioButtonUp: "Up" @
-KeyForm.radioButtonDown: "Down" @
-KeyForm.radioButtonPress: "Press" @
-KeyForm.checkBoxShift: "Shift" @
-KeyForm.checkBoxCtrl: "Ctrl" @
-KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "Press Key" @
-KeyForm.labelNextDelay: "Current Delay" @
-KeyForm.labelSelKeys: "Select Key" @
-KeyForm.labelDelay: "Start Delay(ms)" @
-KeyForm.labelSendTo: "Send To" @
-KeyForm.buttonReset: "Reset" @
-KeyForm.labelKeys: "Keys" @
-KeyForm.buttonDelete: "Delete" @
-KeyForm.buttonNext: "Next" @
-KeyForm.buttonTest: "Test" @
-KeyForm.buttonCancel: "Cancel" @
-KeyForm.buttonOK: "OK" @
+KeyForm.PK: "Press Key" => "Premi Tasto"
+KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
+KeyForm.radioButtonUp: "Up" => "Su"
+KeyForm.radioButtonDown: "Down" => "Giù"
+KeyForm.radioButtonPress: "Press" => "Premi"
+KeyForm.checkBoxShift: "Shift" => "Shift"
+KeyForm.checkBoxCtrl: "Ctrl" => "Ctrl"
+KeyForm.checkBoxAlt: "Alt" => "Alt"
+KeyForm.checkBoxKey: "Press Key" => "Premi Tasto"
+KeyForm.labelNextDelay: "Current Delay" => "Ritardo corrente"
+KeyForm.labelSelKeys: "Select Key" => "Seleziona Tasto"
+KeyForm.labelDelay: "Start Delay(ms)" => "Ritardo Iniziale"
+KeyForm.labelSendTo: "Send To" => "Invia a"
+KeyForm.buttonReset: "Reset" => "Resetta"
+KeyForm.labelKeys: "Keys" => "Tasti"
+KeyForm.buttonDelete: "Delete" => "Elimina"
+KeyForm.buttonNext: "Next" => "Prossimo"
+KeyForm.buttonTest: "Test" => "Testa"
+KeyForm.buttonCancel: "Cancel" => "Cancella"
+KeyForm.buttonOK: "OK" => "OK"
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// Journals
