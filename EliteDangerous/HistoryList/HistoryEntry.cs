@@ -42,10 +42,6 @@ namespace EliteDangerousCore
         public string Group { get; private set; } = "";                   // group..
         public bool? Wanted { get; private set; } = null;
         public string StarSystem { get; private set; }
-        public long? SystemAddress { get; private set; }
-        public float StarPosX { get; private set; } = Single.NaN;
-        public float StarPosY { get; private set; } = Single.NaN;
-        public float StarPosZ { get; private set; } = Single.NaN;
         public bool NoLocation { get; private set; } = true;
         public bool BodyApproached { get; private set; } = false;
 
