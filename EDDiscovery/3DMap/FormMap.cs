@@ -34,6 +34,7 @@ using System.Linq;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using OpenTKUtils;
 
 namespace EDDiscovery
 {
@@ -47,17 +48,17 @@ namespace EDDiscovery
 
         const int HELP_VERSION = 5;         // increment this to force help onto the screen of users first time.
 
-        private List<IData3DSet> _datasets_finegridlines;
-        private List<IData3DSet> _datasets_coarsegridlines;
-        private List<IData3DSet> _datasets_gridlinecoords;
-        private List<IData3DSet> _datasets_maps;
-        private List<IData3DSet> _datasets_selectedsystems;
-        private List<IData3DSet> _datasets_systems;
-        private List<IData3DSet> _datasets_routetri;
-        private List<IData3DSet> _datasets_bookedmarkedsystems;
-        private List<IData3DSet> _datasets_notedsystems;
-        private List<IData3DSet> _datasets_galmapobjects;
-        private List<IData3DSet> _datasets_galmapregions;
+        private List<IData3DCollection> _datasets_finegridlines;
+        private List<IData3DCollection> _datasets_coarsegridlines;
+        private List<IData3DCollection> _datasets_gridlinecoords;
+        private List<IData3DCollection> _datasets_maps;
+        private List<IData3DCollection> _datasets_selectedsystems;
+        private List<IData3DCollection> _datasets_systems;
+        private List<IData3DCollection> _datasets_routetri;
+        private List<IData3DCollection> _datasets_bookedmarkedsystems;
+        private List<IData3DCollection> _datasets_notedsystems;
+        private List<IData3DCollection> _datasets_galmapobjects;
+        private List<IData3DCollection> _datasets_galmapregions;
 
         StarGrids _stargrids;                   // holds stars
         StarNamesList _starnameslist;           // holds named stars
@@ -785,9 +786,9 @@ namespace EDDiscovery
         private void DrawStars()
         {
             // Take references on objects that could be replaced by the background (?)
-            List<IData3DSet> _datasets_galmapobjects = this._datasets_galmapobjects;
-            List<IData3DSet> _datasets_notedsystems = this._datasets_notedsystems;
-            List<IData3DSet> _datasets_bookmarkedsystems = this._datasets_bookedmarkedsystems;
+            List<IData3DCollection> _datasets_galmapobjects = this._datasets_galmapobjects;
+            List<IData3DCollection> _datasets_notedsystems = this._datasets_notedsystems;
+            List<IData3DCollection> _datasets_bookmarkedsystems = this._datasets_bookedmarkedsystems;
 
             if (_datasets_maps == null)                     // happens during debug.. paint before form load
                 return;                                     //  needs to be in order of background to foreground objects
@@ -1004,23 +1005,23 @@ namespace EDDiscovery
             Debug.Assert(mapnotedbkmark != null && maptarget != null);
             Debug.Assert(mapstar != null && mapregion != null);
 
-            List<IData3DSet> oldbookmarks = _datasets_bookedmarkedsystems;
+            List<IData3DCollection> oldbookmarks = _datasets_bookedmarkedsystems;
             DatasetBuilder builder1 = new DatasetBuilder();
             _datasets_bookedmarkedsystems = builder1.AddStarBookmarks(mapstar, mapregion, maptarget, mapsurface, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation);
             DeleteDataset(ref oldbookmarks);
 
-            List<IData3DSet> oldnotedsystems = _datasets_notedsystems;
+            List<IData3DCollection> oldnotedsystems = _datasets_notedsystems;
             DatasetBuilder builder2 = new DatasetBuilder();
             _datasets_notedsystems = builder2.AddNotedBookmarks(mapnotedbkmark, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _systemlist);
             DeleteDataset(ref oldnotedsystems);
 
             DatasetBuilder builder3 = new DatasetBuilder();
-            List<IData3DSet> oldgalmaps = _datasets_galmapobjects;
+            List<IData3DCollection> oldgalmaps = _datasets_galmapobjects;
             _datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), _lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
-            List<IData3DSet> oldgalreg = _datasets_galmapregions;
+            List<IData3DCollection> oldgalreg = _datasets_galmapregions;
             _datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, _toolstripToggleRegionColouringButton.Checked);
             DeleteDataset(ref oldgalreg);
 
@@ -1028,7 +1029,7 @@ namespace EDDiscovery
                 GenerateDataSetsSelectedSystems();          // as GMO marker is scaled and positioned so may need moving
         }
 
-        private void DeleteDataset(ref List<IData3DSet> _datasets)
+        private void DeleteDataset(ref List<IData3DCollection> _datasets)
         {
             if (_datasets != null)
             {

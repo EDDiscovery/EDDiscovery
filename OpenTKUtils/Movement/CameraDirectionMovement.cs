@@ -14,12 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace EDDiscovery
+namespace OpenTKUtils
 {
     public class CameraDirectionMovementTracker       // keeps track of previous and works out how to present bitmaps
     {

@@ -26,6 +26,7 @@ using System.Text;
 using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using OpenTKUtils;
 
 namespace EDDiscovery
 {
