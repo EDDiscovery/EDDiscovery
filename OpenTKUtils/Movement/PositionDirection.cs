@@ -15,15 +15,11 @@
  */
 using OpenTK;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
-namespace EDDiscovery._3DMap
+namespace OpenTKUtils
 {
-    class PositionDirection
+    public class PositionDirection
     {
         public Vector3 Position { get { Vector3 norm = new Vector3(_viewtargetpos); norm.Y = -norm.Y; return norm; } } // REAL world position of eye.  With no internal invert of Y.  Same as star positions
 
