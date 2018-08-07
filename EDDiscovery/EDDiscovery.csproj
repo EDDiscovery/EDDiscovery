@@ -192,17 +192,11 @@
     <Compile Include="Forms\Form2DMap.Designer.cs">
       <DependentUpon>Form2DMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="3DMap\CameraDirectionMovement.cs" />
-    <Compile Include="3DMap\PositionDirection.cs" />
     <Compile Include="3DMap\MapRecorder.cs" />
-    <Compile Include="3DMap\Polygon.cs" />
-    <Compile Include="3DMap\Data3DSetClass.cs" />
     <Compile Include="3DMap\DatasetBuilder.cs" />
     <Compile Include="3DMap\MapManager.cs" />
-    <Compile Include="3DMap\KeyboardActions.cs" />
     <Compile Include="3DMap\StarGrid.cs" />
     <Compile Include="3DMap\StarNamesList.cs" />
-    <Compile Include="3DMap\Zoom.cs" />
     <Compile Include="Actions\ActionEventList.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionKeyED.cs" />
@@ -925,6 +919,10 @@
     <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenTKUtils\OpenTKUtils.csproj">
+      <Project>{4cfa37d5-4182-4cae-afc3-7563a13b44ee}</Project>
+      <Name>OpenTKUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
