@@ -6,90 +6,90 @@
 
 //////////////////////////////////////////////////////////////// GENERIC UCs
 
-Warning: "Warning" => "Atenção"
-Today: "Today" => "Hoje"
+Warning: "Warning" => "Attenzione"
+Today: "Today" => "Oggi"
 24h: "24h" @
-7days: "7 Days" => "7 dias"
-All: "All" => "Tudo"
+7days: "7 Days" => "7 giorni"
+All: "All" => "Tutto"
 OK: "OK" @
-Cancel: "Cancel" => "Cancela"
+Cancel: "Cancel" => "Cancella"
 Delete: "Delete" => "Elimina"
-Campaign: "Campaign" => "Campanha"
-NoScan: "No Scan" => "Nenhuma Escanerização"
-Systemnotknown: "System not known" => "Sistema desconhecido"
-Travel: "Travel" => "Viajem"
-GameTime: "Game Time" => "Horário do Jogo"
-Time: "Time" => "Horário"
-NoData: "No Data" => "Nenhum Dado"
-None: "None" => "Nada"
+Campaign: "Campaign" => "Campagna"
+NoScan: "No Scan" => "Nessuna Scansione"
+Systemnotknown: "System not known" => "Sistema sconosciuto"
+Travel: "Travel" => "Viaggio"
+GameTime: "Game Time" => "Orario del Gioco"
+Time: "Time" => "Orario"
+NoData: "No Data" => "Nienti Dati"
+None: "None" => "Niente"
 on: "on" @
 Off: "Off" @
-Unknown: "Unknown" => "Desconhecido"
-Information: "Information" => "Informação"
-NoPos: "No Pos" => "Nenhuma Posição"
+Unknown: "Unknown" => "Sconosciuto"
+Information: "Information" => "Informazione"
+NoPos: "No Pos" => "Nessuna Posizione"
 
 //////////////////////////////////////////////////////////////// POP OUT AREA
 
-PopOutInfo.Log.Description: "Program log" => "Registro do Programa"
+PopOutInfo.Log.Description: "Program log" => "Registro del Programma"
 PopOutInfo.Log.Title: "Log" => "Registro"
-PopOutInfo.Journal.Description: "Journal grid view" => "Tabela do Jornal"
-PopOutInfo.Journal.Title: "Journal" => "Jornal"
-PopOutInfo.TravelGrid.Description: "History grid view" => "Tabela do Histórico"
-PopOutInfo.TravelGrid.Title: "Travel History" => "Histórico de Hiajem"
-PopOutInfo.StarList.Description: "Visited star list" => "Lista dos Sistemas visitados"
-PopOutInfo.StarList.Title: "Star List" => "Lista dos Sistemas"
-PopOutInfo.Materials.Description: "Materials count" => "Listas dos Materiais"
+PopOutInfo.Journal.Description: "Journal grid view" => "Tabella del Giornale"
+PopOutInfo.Journal.Title: "Journal" => "Giornale"
+PopOutInfo.TravelGrid.Description: "History grid view" => "Tabella dello Storico"
+PopOutInfo.TravelGrid.Title: "Travel History" => "Storico di Viaggio"
+PopOutInfo.StarList.Description: "Visited star list" => "List dei Sistemi visitati"
+PopOutInfo.StarList.Title: "Star List" => "List dei Sistemi"
+PopOutInfo.Materials.Description: "Materials count" => "Liste dei Materiali"
 PopOutInfo.Materials.Title: "Materials" => "Materiali"
-PopOutInfo.Commodities.Description: "Commodity count" => "Lista das Mercadorias"
-PopOutInfo.Commodities.Title: "Commodities" => "Mercadorias"
-PopOutInfo.Ledger.Description: "Ledger of cash related entries" => "Recibos relacionadas ao histórico"
-PopOutInfo.Ledger.Title: "Ledger" => "Recibos"
-PopOutInfo.Missions.Description: "Mission list" => "Missões"
-PopOutInfo.Missions.Title: "Missions" => "Missões"
-PopOutInfo.Modules.Description: "Ships and their loadouts plus stored modules" => "Espaçonaves, Equipamentos e Modulos"
-PopOutInfo.Modules.Title: "Ships/Loadout" => "Espaçonaves/Equipamentos"
-PopOutInfo.Statistics.Description: "Statistics Information" => "Estatisticas"
-PopOutInfo.Statistics.Title: "Statistics" => "Estatisticas"
-PopOutInfo.MarketData.Description: "Market data view, giving commodity price information where available" => "Dados de Mercado, mostrando os preços das mercadorias quando disponíveis"
-PopOutInfo.MarketData.Title: "Market Data" => "Dados de Mercado"
-PopOutInfo.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Informações sui cantieri dallo histórico di visitação"
+PopOutInfo.Commodities.Description: "Commodity count" => "List deelle Merci"
+PopOutInfo.Commodities.Title: "Commodities" => "Merci"
+PopOutInfo.Ledger.Description: "Ledger of cash related entries" => "Ricevute d'incasso relazionate allo storico"
+PopOutInfo.Ledger.Title: "Ledger" => "Ricevute"
+PopOutInfo.Missions.Description: "Mission list" => "Missioni"
+PopOutInfo.Missions.Title: "Missions" => "Missioni"
+PopOutInfo.Modules.Description: "Ships and their loadouts plus stored modules" => "Navi, Impianti e Moduli"
+PopOutInfo.Modules.Title: "Ships/Loadout" => "Navi/Impianti"
+PopOutInfo.Statistics.Description: "Statistics Information" => "Statistiche"
+PopOutInfo.Statistics.Title: "Statistics" => "Statistiche"
+PopOutInfo.MarketData.Description: "Market data view, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
+PopOutInfo.MarketData.Title: "Market Data" => "Dati di Mercato"
+PopOutInfo.ShipYardPanel.Description: "Information on ship yards from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
 PopOutInfo.ShipYardPanel.Title: "Ship Yards" => "Cantieri"
-PopOutInfo.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Informações sobre equipamentos e modulos do histórico de visitação"
-PopOutInfo.OutfittingPanel.Title: "Outfitting" => "Equipamentos/Modulos"
-PopOutInfo.Synthesis.Description: "Synthesis planner" => "Plano de Sintesi"
+PopOutInfo.OutfittingPanel.Description: "Information on outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
+PopOutInfo.OutfittingPanel.Title: "Outfitting" => "Impianti/Moduli"
+PopOutInfo.Synthesis.Description: "Synthesis planner" => "Pianifica di Sintesi"
 PopOutInfo.Synthesis.Title: "Synthesis" => "Sintesi"
-PopOutInfo.Engineering.Description: "Engineering planner" => "Plano de Engenheria"
-PopOutInfo.Engineering.Title: "Engineering" => "Engenheria"
-PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Lista de Pesquisa combinando plano de Sintesi e de Engenheria"
-PopOutInfo.ShoppingList.Title: "Shopping List" => "Lista de Pesquisa"
-PopOutInfo.Scan.Description: "Scan data on system" => "Registros de escanerização, en diagramma"
-PopOutInfo.Scan.Title: "Scan" => "Escanerizações"
-PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Registros das Escanerizações por sistema, em tabela"
-PopOutInfo.ScanGrid.Title: "Scan Grid" => "Tabela de Escanerizações"
-PopOutInfo.StarDistance.Description: "List of nearest stars" => "Lista dos Sistemas proximos"
-PopOutInfo.StarDistance.Title: "Nearest Stars" => "Sistemas proximos"
-PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Estima do valor dos dados de Escanerização"
-PopOutInfo.EstimatedValues.Title: "Estimated Values" => "Valores Estimados"
-PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "Mapa 3D dos Sistemas dentro do raio definido"
-PopOutInfo.LocalMap.Title: "Local Map" => "Mapa Local"
-PopOutInfo.Plot.Description: "2D Plot of systems in range" => "Gráfico 2D dos Sistemas dentro do raio definido"
-PopOutInfo.Plot.Title: "2D Plot" => "Gráfico 2D"
-PopOutInfo.EDSM.Description: "EDSM Star finder" => "Pesquisa dos Sistemas via EDSM"
-PopOutInfo.EDSM.Title: "EDSM Star Finder" => "Pesquisa Sistemas EDSM"
-PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilateração dos sistemas com posição desconhecida"
-PopOutInfo.Trilateration.Title: "Trilateration" => "Trilateração"
-PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestão favoritos de Planetas e Sistemas"
-PopOutInfo.BookmarkManager.Title: "Bookmarks" => "Favoritos"
-PopOutInfo.CombatPanel.Description: "Display combat statistics" => "Visualiza estatisticas de combate"
-PopOutInfo.CombatPanel.Title: "Combat" => "Combate"
-PopOutInfo.Route.Description: "Route Finder from stored star data" => "Preparação di Itinerário usando os dados da banco dados"
+PopOutInfo.Engineering.Description: "Engineering planner" => "Pianifica di Ingegneria"
+PopOutInfo.Engineering.Title: "Engineering" => "Ingegneria"
+PopOutInfo.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Lista di Ricerca combinando pianifica di Sintesi e di Ingegneria"
+PopOutInfo.ShoppingList.Title: "Shopping List" => "Lista di Ricerca"
+PopOutInfo.Scan.Description: "Scan data on system" => "Registri di Scansioni per sistema, in diagramma"
+PopOutInfo.Scan.Title: "Scan" => "Scansioni"
+PopOutInfo.ScanGrid.Description: "Scan data on system in a grid" => "Registri di Scansioni per sistema, in tabella"
+PopOutInfo.ScanGrid.Title: "Scan Grid" => "Tabella di Scansioni"
+PopOutInfo.StarDistance.Description: "List of nearest stars" => "Lista dei Sistemi prossimi"
+PopOutInfo.StarDistance.Title: "Nearest Stars" => "Sistemi prossimi"
+PopOutInfo.EstimatedValues.Description: "Estimated scan values of bodies in system" => "Stima del valore dei dati di Scansione"
+PopOutInfo.EstimatedValues.Title: "Estimated Values" => "Valori Stimati"
+PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "Mappa 3D dei Sistemi dentro i raggi definiti"
+PopOutInfo.LocalMap.Title: "Local Map" => "Mappa Locale"
+PopOutInfo.Plot.Description: "2D Plot of systems in range" => "Grafico 2D dei sistemi dentro i raggi definiti"
+PopOutInfo.Plot.Title: "2D Plot" => "Grafico 2D"
+PopOutInfo.EDSM.Description: "EDSM Star finder" => "Ricerca di Sistemi via EDSM"
+PopOutInfo.EDSM.Title: "EDSM Star Finder" => "Ricerca Sistemi EDSM"
+PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
+PopOutInfo.Trilateration.Title: "Trilateration" => "Trilaterazione"
+PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "Gestire favoriti di Pianeti e Sistemi"
+PopOutInfo.BookmarkManager.Title: "Bookmarks" => "Bookmarks"
+PopOutInfo.CombatPanel.Description: "Display combat statistics" => "Visualizza statistiche di combattimento"
+PopOutInfo.CombatPanel.Title: "Combat" => "Combattimento"
+PopOutInfo.Route.Description: "Route Finder from stored star data" => "Preparazione di Itinerario usando i dati nella banca dati"
 PopOutInfo.Route.Title: "Route Finder" => "Itinerario"
-PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedição, prepara un itinerario di spedição"
+PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
 PopOutInfo.Expedition.Title: "Expedition" => "Spedizioni"
-PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Pianifica di Esploração, prepara una lista di sistemi da esplorare"
-PopOutInfo.Exploration.Title: "Exploration" => "Esploração"
-PopOutInfo.SystemInformation.Description: "System Information" => "Informações sul Sistema"
-PopOutInfo.SystemInformation.Title: "System Information" => "Informações sul Sistema"
+PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Pianifica di Esplorazione, prepara una lista di sistemi da esplorare"
+PopOutInfo.Exploration.Title: "Exploration" => "Esplorazione"
+PopOutInfo.SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
+PopOutInfo.SystemInformation.Title: "System Information" => "Informazioni sul Sistema"
 PopOutInfo.Spanel.Description: "Summary panel overlay" => "Sommario"
 PopOutInfo.Spanel.Title: "Summary Panel" => "Sommario"
 PopOutInfo.Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
@@ -98,7 +98,7 @@ PopOutInfo.NotePanel.Description: "System notes overlay" => "Annotazioni sul Sis
 PopOutInfo.NotePanel.Title: "Notes" => "Annotazioni"
 PopOutInfo.RouteTracker.Description: "Route tracker overlay" => "Tracciatore di Itinerario"
 PopOutInfo.RouteTracker.Title: "Route Tracker" => "Tracciatore di Itinerario"
-PopOutInfo.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direção da seguire per raggiungere le cordinate impostate"
+PopOutInfo.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
 PopOutInfo.Compass.Title: "Compass" => "Bussola Planetaria"
 PopOutInfo.Settings.Description: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
 PopOutInfo.Settings.Title: "Settings" => "Configurazioni"
@@ -106,7 +106,7 @@ PopOutInfo.ScreenShot.Description: "Screen shot view" => "Salva Schermata"
 PopOutInfo.ScreenShot.Title: "Screen Shot" => "Screenshot"
 PopOutInfo.Grid.Description: "Grid (allows other panels to be placed in the it)" => "Griglia (possibilita inserie e posizionare altri pannelli al suo interno)"
 PopOutInfo.Grid.Title: "Grid" => "Griglia"
-PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Splitter (permette di creare ogni tipo di configuração con pannelli al suo interno)"
+PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Splitter (permette di creare ogni tipo di configurazione con pannelli al suo interno)"
 PopOutInfo.SplitterControl.Title: "Splitter" => "Splitter"
 PopOutInfo.PanelSelector.Description: "" => ""
 PopOutInfo.PanelSelector.Title: "+" => "+"
@@ -114,7 +114,7 @@ PopOutInfo.PanelSelector.Title: "+" => "+"
 //////////////////////////////////////////////////////////////// DISCOVERY FORM
 
 EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "&Strumenti"
-EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configuração"
+EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
 EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
 EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "Visualizza mappa &3D"
 EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
@@ -132,7 +132,7 @@ EDDiscoveryForm.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "
 EDDiscoveryForm.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Cancella entrate FSD duplicate"
 EDDiscoveryForm.adminToolStripMenuItem.sendUnsuncedEDDNEventsToolStripMenuItem: "Send unsynced EDDN events" => "Invia eventi EDDN non sincronizzati"
 EDDiscoveryForm.adminToolStripMenuItem.sendUnsyncedEGOScansToolStripMenuItem: "Send unsynced EGO scans" => "Invia scansioni EGO non sincronizzate"
-EDDiscoveryForm.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dados storici (navi anteriori, moduli in magazzino)"
+EDDiscoveryForm.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
 EDDiscoveryForm.adminToolStripMenuItem.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem: "Clear EDSM ID assigned to all records for current commander" => "Pulischi l'ID EDSM assegnato a atutti i registri del comandante corrente"
 EDDiscoveryForm.adminToolStripMenuItem.exportVistedStarsListToEliteDangerousToolStripMenuItem: "Export Visted Stars List to Elite Dangerous" => "Invia la lista dei Sistemi Visitati a Elite Dangerous"
 EDDiscoveryForm.addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
@@ -152,13 +152,13 @@ EDDiscoveryForm.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Che
 
 EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" @
 
-EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configuração"
+EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
 EDDiscoveryForm.comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
 EDDiscoveryForm.buttonExtEDSMSync.ToolTip: "Synchronize with EDSM, To and From" => "Sincronizza con EDSM, in ambe le direzioni"
 EDDiscoveryForm.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Premi per aprire un pannello popout"
 EDDiscoveryForm.buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Modifica i Componenti"
 EDDiscoveryForm.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Gestisci i Componenti"
-EDDiscoveryForm.buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo histórico"
+EDDiscoveryForm.buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo storico"
 EDDiscoveryForm.buttonExt2dmap.ToolTip: "Open the 2D Map" => "Apri la mappa 2D"
 EDDiscoveryForm.buttonExt3dmap.ToolTip: "Open the 3D Map" => "Apri la mappa 3D"
 EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" => "DEBUG reload action system"
@@ -167,12 +167,12 @@ EDDiscoveryForm.addTabToolStripMenuItem: "Insert Tab with panel.." => "Inserisci
 EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Rimuovi scheda"
 EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
 
-.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non puï¿½ essere caricato.\r\nQuesta ï¿½ una condição anomala. Entra in contatto con gli sviluppatori!"
+.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non puï¿½ essere caricato.\r\nQuesta ï¿½ una condizione anomala. Entra in contatto con gli sviluppatori!"
 .RTABL: "Name:" => "Nome:" 
 .RTABT: "Rename Tab" => "Rimuovi Scheda"
 .RTABTT: "Enter a new name for the tab" => "Rinomina la scheda"
-.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Il tema selezionato non ha informação su certi colori o altri settagi importanti. Per favore, correggere il tema."
-.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opção Rimuovi le Estensioni DLL"
+.ThemeW: "The theme stored has missing colors or other missing information\r\nCorrect the missing colors or other information manually using the Theme Editor in Settings" => "Il tema selezionato non ha informazione su certi colori o altri settagi importanti. Per favore, correggere il tema."
+.DLLW: "The following application extension DLLs have been found\r\nDo you wish to allow these to be used?\r\n{0} \r\nIf you do not, either remove the DLLs from the DLL folder in ED Appdata\r\nor deinstall the action pack which introduced the DLL\r\nor hold down shift when launching and use the Remove all Extensions DLL option" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
 .DLLL: "DLLs loaded: {0}" => "DLLs caricate: {0}"
 .DLLF: "DLLs failed to load: {0}" => "Impossibile caricare DLLs: {0}"
 .PROFL: "Profile {0} Loaded" => "Profilo {0} caricato"
@@ -183,52 +183,52 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
 .CAPIF: "Companion API failed: {0}" => "Login nella API Companion non effettuato: {0}"
 .CAPIND: "CAPI not docked. Server API lagging!" => "CAPI non effettuato. Server API con ritardo!"
 .CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "CAPI profileSystemRequired ï¿½ {0}, il sistema del profilo ï¿½ {1}"
-.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI prfileStationRequired ï¿½ {0}, la stação del profilo ï¿½ {1}"
-.CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, il mercato della stação ï¿½ {1}"
+.CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI prfileStationRequired ï¿½ {0}, la stazione del profilo ï¿½ {1}"
+.CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, il mercato della stazione ï¿½ {1}"
 .CAPIEX: "Companion API get failed: " => "API Companion continua a fallire: "
 .Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
 .PE1: "Profile reports errors in triggers:" => "Errori nel profilo riportati dal trigger:"
 .EDDN: "Sent {0} event to EDDN ({1})" => "Inviati {0} eventi a EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => EDDN: Invio prezzi di merci fallito: "
 .Closing: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dados stellari disabilitato. Abilitarlo nel setup principale"
-.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzação al banco dados in corso, si prega di aspettare"
-.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operação puï¿½ necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
-.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Per entrare nel modo sicuro, esci dal programma, premi shift\r\ne clicca sull'icona del programma. Cosï¿½ facendo si aprirï¿½ il pannelo di dialogo del modo sicuro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dados in altre cartelle o dischi."
-.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "Confermi che vuoi reimpostare i registri di EDSM\r\na tutti registri attuali dei comandanti,\r\ne pulire tutte le note assegnate ai registri EDSM IDs per tutti i comandanti?\r\n\r\nQuesto non cambierï¿½ il tuo histórico di viaggio, ma al prossimo rinnovo,\r\nproverï¿½ a reassegnare i sistemi EDSM al tuo storico e nore.\r\nUsare solo se credi che gli assegnamenti di EDSM ai tuoi registri ï¿½ decisamente sbagliato, o le note stanno mancando\r\n\r\nPuoi tranquillamente asseganre manualmente un registro EDSM premendo con il pulsante destro\r\nsullo storico di viaggio e scegliendo questa opção" 
+.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
+.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
+.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione puï¿½ necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
+.SafeMode: "To start in safe mode, exit the program, hold down the shift key\r\nand double click on the EDD program icon.  You will then be in the safe mode dialog.\r\nYou can reset various parameters and move the data bases to other locations." => "Per entrare nel modo sicuro, esci dal programma, premi shift\r\ne clicca sull'icona del programma. Cosï¿½ facendo si aprirï¿½ il pannelo di dialogo del modo sicuro.\r\nLi puoi reimpostare vari parametri e muovere i banchi dati in altre cartelle o dischi."
+.ResetEDSMID: "Confirm you wish to reset the assigned EDSM ID\r\nto all the current commander history entries,\r\nand clear all the assigned EDSM IDs in all your notes for all commanders\r\n\r\nThis will not change your history, but when you next refresh,\r\nit will try and reassign EDSM systems to your history and notes.\r\nUse only if you think that the assignment of EDSM systems to entries is grossly wrong,or notes are going missing\r\n\r\nYou can manually change one EDSM assigned system by right clicking\r\non the travel history and selecting the option" => "Confermi che vuoi reimpostare i registri di EDSM\r\na tutti registri attuali dei comandanti,\r\ne pulire tutte le note assegnate ai registri EDSM IDs per tutti i comandanti?\r\n\r\nQuesto non cambierï¿½ il tuo storico di viaggio, ma al prossimo rinnovo,\r\nproverï¿½ a reassegnare i sistemi EDSM al tuo storico e nore.\r\nUsare solo se credi che gli assegnamenti di EDSM ai tuoi registri ï¿½ decisamente sbagliato, o le note stanno mancando\r\n\r\nPuoi tranquillamente asseganre manualmente un registro EDSM premendo con il pulsante destro\r\nsullo storico di viaggio e scegliendo questa opzione" 
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
-.NoRel: "No new release found" => "Nenhuma nuova versione trovata"
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimoção dei registri FSD duplicati al comandante corrente"
+.NoRel: "No new release found" => "Nessuna nuova versione trovata"
+.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
 .FSDRem: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
 .VSLNF: "Could not find VisitedStarsCache.dat file, choose file" => "Impossibile trovare il file VisitedStarsCache.dat"
 .VSLEXP: "File {0} created.\r\n{1}" => "Creati {0} file.\r\n{1}"
 .VSLRestart: "Restart Elite Dangerous to have this file read into the galaxy map" => "Riavviare Elite Dangerous per far si che questo file sia letto dalla mappa della galassia"
 .VSLFileErr: "Error writing {0} export visited stars" => "Errore scrivendo {0} esporto dei sistemi visitati"
-.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello histórico a Inara ï¿½ disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
-.RH: "Refresh History." => "Rinfrescare lo Histórico"
+.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara ï¿½ disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
+.RH: "Refresh History." => "Rinfrescare lo Storico"
 .NoEDSMAPI: "Please ensure a commander is selected and it has a EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
-.EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronizzação EDSM fallita {0}"
+.EDSMSyncE: "EDSM Sync failed: {0}" => "Sincronizzazione EDSM fallita {0}"
 .EP: "Edit Profiles" => "Modificare Profili"
 .PL: "Profile {0} Loaded" => "PRofilo {0} Caricato"
 
 ///////////////////////////////////////////////////// EDDiscoveryController
 
 EDDiscoveryController.CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
-.EDSM: "Get galactic mapping from EDSM." => "Richiedendo dados galattici da EDSM."
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dados di mappa galattici."
+.EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
+.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
 .EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery e EDMarketConnector non dovrebbero sincronizzare entrambi a EDDN. Ferma EDMC o disabilita 'invia a EDDN' nel setup!"  
-.RTH: "Reading travel history" => "Leggiendo lo histórico di viaggio"
+.RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
-.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Sincronizzação a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
-.EDSMU: "EDSM update complete with {0} systems" => "Attualizzação EDSM completata com {0} sistemi"
-.EDDBU: "EDDB update complete with {0} systems" => "Attualizzação EDDB completata com {0} sistemi"
+.SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
+.EDSMU: "EDSM update complete with {0} systems" => "Attualizzazione EDSM completata com {0} sistemi"
+.EDDBU: "EDDB update complete with {0} systems" => "Attualizzazione EDDB completata com {0} sistemi"
 .SYST: "Loading completed, total of {0:N0} systems stored" => Caricamento completato, totale di {0:N0} sistemi immagazzinati"
-.Refresh: "Refresh due to updadosng EDSM or EDDB data" => "Ricaricamento in corso dovuto all'attualizzação dei dati di EDSM o EDDB"
+.Refresh: "Refresh due to updating EDSM or EDDB data" => "Ricaricamento in corso dovuto all'attualizzazione dei dati di EDSM o EDDB"
 .PLF: "Processing log file {0}" => "Processando il file di registro {0}"
 .RD: "Refresh Displays" => "Ricaricando la Schermata"
-.HRC: "History refresh complete." => "Ricaricamento dello histórico completato"
+.HRC: "History refresh complete." => "Ricaricamento dello storico completato"
 .Maps: "Checking for new EDDiscovery maps" => "Verificando per nuove mappe EDDiscovery"
-.EXPD: "Checking for new Expedition data" => "Verificando per nuovi dados di Esploração"
+.EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////// UC
@@ -281,7 +281,7 @@ BookmarkForm.buttonDelete: "Delete" => "Elimina"
 BookmarkForm.buttonCancel: "Cancel" => "Cancella"
 BookmarkForm.buttonOK: "OK" => "OK"
 BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
-BookmarkForm.labelTravelNote: "Travel History Note" => "Nota dello Histórico di Viaggio"
+BookmarkForm.labelTravelNote: "Travel History Note" => "Nota dello Storico di Viaggio"
 BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica nella schermo di viaggio)"
 BookmarkForm.labelTimeMade: "Time Made" => "Time Made"
 BookmarkForm.UpdateBookmark: "Update Bookmark" => "Attualizza Favorito"
@@ -290,11 +290,11 @@ BookmarkForm.Update: "Update" => "Attualizza"
 .UB: "Update Bookmark" => "Attualizza Favorito"
 .RB: "Create Region Bookmark" => "Crea una Regione Favoriti"
 .RN: "Enter a region name..." => "Nomina la regione..."
-.SI: "System Information" => Informação di Sistema"
+.SI: "System Information" => Informazione di Sistema"
 .NSB: "New System Bookmark" => Nuovo Favorito di Sistema"
 .ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
 .GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
-.Description: "Description" => "Descrição"
+.Description: "Description" => "Descrizione"
 
 
 
@@ -304,7 +304,7 @@ SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Favorito di
 SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "Avvia alla bussola"
 SurfaceBookmarksForm.BodyName: "Planetary Body" => "Corpo Planetario"
 SurfaceBookmarksForm.SurfaceName: "Name" => "Nome"
-SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descrição"
+SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descrizione"
 SurfaceBookmarksForm.Latitude: "Latitude" => "Latitudine"
 SurfaceBookmarksForm.Longitude: "Longitude" => "Longitudine"
 SurfaceBookmarksForm.Valid: "Saveable" => "Salvabile"
@@ -322,9 +322,9 @@ SurfaceBookmarkUserControl.MAP: "Manually Add Planet" => "Aggiungi manualmente u
 
 ////////////////////////////////////////////////////////////////// find systems
 
-FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" => "Cerca nomi usando il banco dados" 
-FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Crea un cubo di sistemi usando il banco dados"
-FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Crea una sfera di sistemi usando il banco dados"
+FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" => "Cerca nomi usando il banco dati" 
+FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Crea un cubo di sistemi usando il banco dati"
+FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Crea una sfera di sistemi usando il banco dati"
 FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Crea un cubo di sistemi usando EDSM"
 FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Crea una sfera di sistemi usando EDSM"
 FindSystemsUserControl.labelRadMax: "Max" @
@@ -362,9 +362,9 @@ AddOnManagerForm.EditTitle: "Edit Add-Ons" => "Modifica gli Add-Ons"
 AddOnManagerForm.Type: "Type" => "Tipo"
 AddOnManagerForm.Name: "Name" => "Nome"
 AddOnManagerForm.Version: "Version" => "Versione"
-AddOnManagerForm.Description: "Description" => "Descrição"
+AddOnManagerForm.Description: "Description" => "Descrizione"
 AddOnManagerForm.Status: "Status" => "Status"
-AddOnManagerForm.Action: "Action" => "Ação"
+AddOnManagerForm.Action: "Action" => "Azione"
 AddOnManagerForm.Delete: "Delete" => "Elimina"
 AddOnManagerForm.Enabled: "Enabled" => "Abilita"
 AddOnManagerForm.Newer: "Newer EDD required" => "Nuova versione di EDD necessaria"
@@ -377,7 +377,7 @@ AddOnManagerForm.Install: "Install" => "Installa"
 AddOnManagerForm.Update: "Update" => "Attualizza"
 AddOnManagerForm.Edit: "Edit" => "Modifica"
 AddOnManagerForm.Modwarn: "Modified locally, do you wish to overwrite the changes" => "Modificato localmente, sei sicuro di voler scrivere sui cambiamenti"
-AddOnManagerForm.Failed: "Add-on failed to update. Check files for read only status" => "Attualizzação dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
+AddOnManagerForm.Failed: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
 AddOnManagerForm.DeleteWarn: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
 
 ////////////////////////////////////////////////////////////// Assign system form Little used
@@ -396,11 +396,11 @@ AssignTravelLogSystemForm.label5: "System Coordinates" @
 ///////////////////////////////////////////////////////////// Commander form
 
 CommanderForm: "CommanderForm" => Scheda del Comandante"
-CommanderForm.groupBoxCustomInara: "Inara Information (optional)" => "Informações di Inara (opzionale)"
+CommanderForm.groupBoxCustomInara: "Inara Information (optional)" => "Informazioni di Inara (opzionale)"
 CommanderForm.checkBoxCustomInara: "Sync to Inara" => "Sincronizza con Inara"
 CommanderForm.labelINARAN: "Inara Name:" => "Nome su Inara:"
 CommanderForm.labelInaraAPI: "Inara API Key:" => "Chiave API di Inara:"
-CommanderForm.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Informações di Elite Galaxy Online (EGO)"
+CommanderForm.groupBoxCustomEGO: "Elite Galaxy Online Information (optional)" => "Informazioni di Elite Galaxy Online (EGO)"
 CommanderForm.checkBoxEGOSync: "Sync to EGO" => "Sincronizza con EGO"
 CommanderForm.labelEGON: "EGO Name:" => "Nome su EGO:"
 CommanderForm.labelEGOAPI: "EGO API Key:" => "Chiave API di EGO:"
@@ -408,16 +408,16 @@ CommanderForm.groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Compan
 CommanderForm.checkBoxCAPIEnable: "Enable Login" => "Abilita connessione"
 CommanderForm.labelCAPIPassword: "Login Password:" => "Password:"
 CommanderForm.groupBoxCustomEDDN: "EDDN" => "EDDN"
-CommanderForm.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Invia informação sugli eventi a EDDN"
-CommanderForm.groupBoxCustomEDSM: "EDSM Information (optional)" => Informações di EDSM (opzionale)"
+CommanderForm.checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Invia informazione sugli eventi a EDDN"
+CommanderForm.groupBoxCustomEDSM: "EDSM Information (optional)" => Informazioni di EDSM (opzionale)"
 CommanderForm.checkBoxCustomEDSMFrom: "Sync From EDSM" => "Sincronizza da EDSM"
 CommanderForm.checkBoxCustomEDSMTo: "Sync to EDSM" => "Sincronizza con EDSM"
 CommanderForm.labelEDSMN: "EDSM Name:" => "Nome su EDSM:"
 CommanderForm.labelEDSMAPI: "EDSM API Key:" => "Chiave API di EDSM:"
-CommanderForm.groupBoxCustomJournal: "Journal Related Information" => "Informações relazionate al Giornale"
+CommanderForm.groupBoxCustomJournal: "Journal Related Information" => "Informazioni relazionate al Giornale"
 CommanderForm.buttonExtBrowse: "Browse" => "Sfoglia"
 CommanderForm.labelCN: "Commander Name:" => "Nome del Comandante"
-CommanderForm.labelJL: "Journal Location:" => "Localizzação del Giornale"
+CommanderForm.labelJL: "Journal Location:" => "Localizzazione del Giornale"
 CommanderForm.buttonCancel: "Cancel" => "Cancella"
 CommanderForm.buttonOK: "OK" => "OK"
 CommanderForm.label_index: "Commander Configure" => "Imposta il comandante"
@@ -425,34 +425,34 @@ CommanderForm.label_index: "Commander Configure" => "Imposta il comandante"
 CommanderForm.checkBoxCustomInara.ToolTip: "Sync with Inara" => "Sincronizza con Inara"
 CommanderForm.textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Imposta il nome di usuario per questo comandante su Inara"
 CommanderForm.textBoxBorderInaraAPIKey.ToolTip: "Enter the API key from the Inara Website\nGet an Inara API key from https://inara.cz" => "Inserisci la chiave API di Inara\nOttieni una chiave API su https://inara.cz"
-CommanderForm.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" => "Invia i dados dello scanner a EGO"
+CommanderForm.checkBoxEGOSync.ToolTip: "Send your scan data to EGO" => "Invia i dati dello scanner a EGO"
 CommanderForm.textBoxEGOName.ToolTip: "Give the user name for this commander on EGO" => "Imposta il nome di usuario per questo comandante su EGO"
 CommanderForm.textBoxEGOAPI.ToolTip: "Enter the API key from the EGO Website\nGet an EGO API key from https://www.elitegalaxyonline.com in the account menu" => "Inserisci la chiave API di EGO\nOttieni una chiave API da https://www.elitegalaxyonline.com nel menu di utente"
 CommanderForm.buttonExtCAPI.ToolTip: "Perform operation indicated" => "Realizza le operazioni indicate"
 CommanderForm.textBoxBorderCompanionPassword.ToolTip: "Enter your Frontier Password" => "Inserisci la tua password Frontier"
-CommanderForm.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => Invia per inviare le informazioni del giornale a EDDN. EDDN alimenta ulteriori progetti (EDDB, EDSM, Inara, etc...) con dados sul comandante. Tutti i dati sono anonimi!"
-CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Ricevi tutti i dados su salti FSD da EDSM che sono sul lora banco dati ma non in EDDiscovery"
-CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Invia il tuo histórico di viaggio e di navi a EDSM"
-CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Inserisci il nome come questo comandante è conosciuto su EDSM"
+CommanderForm.checkBoxCustomEDDNTo.ToolTip: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" => Invia per inviare le informazioni del giornale a EDDN. EDDN alimenta ulteriori progetti (EDDB, EDSM, Inara, etc...) con dati sul comandante. Tutti i dati sono anonimi!"
+CommanderForm.checkBoxCustomEDSMFrom.ToolTip: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" => "Ricevi tutti i dati su salti FSD da EDSM che sono sul lora banco dati ma non in EDDiscovery"
+CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to EDSM" => "Invia il tuo storico di viaggio e di navi a EDSM"
+CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Inserisci il nome come questo comandante Ã¨ conosciuto su EDSM"
 CommanderForm.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Inserisci la chiave API di EDSM\nOttieni una chiave API su https://www.edsm.net, dal menu utente"
-CommanderForm.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Sfoglia la localizzação del giornale"
-CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Inserisci la localizzação del giornale. In genere, è sufficiente lasciare questo campo in bianco per usare la localizzação normale usata da Frontier"
-CommanderForm.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Inserire il nome del comandante come è su Elite Dangerous"
+CommanderForm.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Sfoglia la localizzazione del giornale"
+CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Inserisci la localizzazione del giornale. In genere, è sufficiente lasciare questo campo in bianco per usare la localizzazione normale usata da Frontier"
+CommanderForm.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Inserire il nome del comandante come Ã¨ su Elite Dangerous"
 
 .Login: "Login" => "Utente"
-.NoCredentials: "No Credentials" => "Nenhuma credenziale"
+.NoCredentials: "No Credentials" => "Nessuna credenziale"
 .LoginID: "Login ID:" => "ID di utente:"
-.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "Inserire il tuo ID Frontier, che è l'email che hai usato per registrarti con Frontier. Non funziona con il metodo di Steam"
+.TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "Inserire il tuo ID Frontier, che Ã¨ l'email che hai usato per registrarti con Frontier. Non funziona con il metodo di Steam"
 .CC: "Confirmed Credentials" => "Confrerma le Credenziali"
 .Clear: "Clear" => "Pulisci"
-.RC: "Require Confirmation" => "Richede confermação"
-.CFC: "Confirm Code:" => "Codice della confermação:"
-CommanderForm.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" => "Inserisci il codice di confermação che hai appena ricevuto via email da Frontier"
+.RC: "Require Confirmation" => "Richede confermazione"
+.CFC: "Confirm Code:" => "Codice della confermazione:"
+CommanderForm.ConfirmCode: "Enter the confirmation code you just received via email from Frontier" => "Inserisci il codice di confermazione che hai appena ricevuto via email da Frontier"
 .LIF: "Login Failed: \r\n{0}" => "Connessione fallita: \r\n{0}"
 .FL: "Failed to login to Frontier Companion API:\r\n{0}" => "Impossibile accedere all'API Companion di Frontier"
 .CD: "Confirm you wish to delete the credentials stored for this commander" => "Conferma che vuoi cancellare le credenziali salvate per questo comandante"
 .CF: "Confirm Failed:\r\n{0}" => "Conferma non riuscita:\r\n{0}"
-.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "Il testo che hai inserito nel campo di login o di password non funziona, vuoi abbandonare l'impostação delle credenziali CAPI?"
+.Abandon: "You have entered text in the CAPI login or password fields, do you want to abandon CAPI credential check?" => "Il testo che hai inserito nel campo di login o di password non funziona, vuoi abbandonare l'impostazione delle credenziali CAPI?"
 CommanderForm.Confirm: "Confirm" => "Conferma"
 .LF: "Select folder where Journal*.log files are stored by Frontier in" => "Seleziona dove sono gli archivi di Journal*.log creati da Frontier"
 
@@ -465,10 +465,10 @@ ExportForm.labelCVSSep: "CSV Separator" => "Separatore CVS"
 ExportForm.radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
 ExportForm.buttonExport: "Export" => "Esporta"
 ExportForm.radioButtonComma: "Comma" => "Virgola"
-ExportForm.checkBoxIncludeHeader: "Include Header" => "Includi l'intestação"
+ExportForm.checkBoxIncludeHeader: "Include Header" => "Includi l'intestazione"
 ExportForm.checkBoxCustomAutoOpen: "Open in excel" => "Apri in excel"
 ExportForm.label_index: "Export" => "Esporta"
-.ECH: "Export current History view to {0}" => "Esporta lo histórico corrente a {0}"
+.ECH: "Export current History view to {0}" => "Esporta lo storico corrente a {0}"
 .JF: "Journal File" => "File di Giornale"
 
 /////////////////////////////////////////////////////////////// 2dMap
@@ -479,7 +479,7 @@ Form2DMap.LastYear: "Last Year" => "Ultimo Anno"
 Form2DMap.All: "All" => "Tutto"
 Form2DMap.Custom: "Custom" => "Custom"
 Form2DMap: "2D Map" => "Mappa 2D"
-.Nomapsavailable: "No maps available" => "Nenhuma mappa disponibile"
+.Nomapsavailable: "No maps available" => "Nessuna mappa disponibile"
 
 /////////////////////////////////////////////////////////////// Galaxy form
 
@@ -506,7 +506,7 @@ GalaxySectorSelect.BC: "Bubble+Colonia" @
 MoveToCommander: "MoveToCommander" => "Sposta al Comandante"
 MoveToCommander.buttonExtCancel: "Cancel" => "Cancella"
 MoveToCommander.buttonTransfer: "Transfer" => "Trasferisci"
-MoveToCommander.label1: "Move selected history to commander." => "Muovi lo histórico selezionato al comandante."
+MoveToCommander.label1: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
 
 
 /////////////////////////////////////////////////////////////// New release
@@ -520,7 +520,7 @@ NewReleaseForm.labelDownload: "Download" => "Scarica"
 NewReleaseForm.buttonPortablezip: "&Portable Zip" => "Zip &Portatile"
 NewReleaseForm.buttonUrlOpen: "&Open" => "&Apri"
 NewReleaseForm.buttonExeInstaller: "&Exe Installer" => "Installatore &EXE"
-NewReleaseForm.labelRelease: "Release info" => "Informações sulla Versione"
+NewReleaseForm.labelRelease: "Release info" => "Informazioni sulla Versione"
 
 
 /////////////////////////////////////////////////////////////// Profile editor
@@ -536,8 +536,8 @@ ProfileEditor.buttonOK: "OK" @
 .Trigger: "Trigger" => "Causa"
 .Back: "Back" => "Indietro"
 .Startup: "Startup" => "Inizio"
-.TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'ação del profilo {0}"
-.BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'ação di ritorno del profilo {0}"
+.TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
+.BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farÃ  si che tutte le informazioni si pergano di forma irriversibile!"
 
 /////////////////////////////////////////////////////////////// 3dmap step
@@ -566,14 +566,14 @@ RecordStep.label_index: "Record Step" @
 
 /////////////////////////////////////////////////////////////// Set Note
 
-SetNoteForm: "Set Note" @
-SetNoteForm.labelTTimestamp: "Timestamp:" @
-SetNoteForm.buttonCancel: "Cancel" @
-SetNoteForm.buttonSave: "Save" @
-SetNoteForm.labelTSystem: "System:" @
-SetNoteForm.labelTSummary: "Summary:" @
-SetNoteForm.labelTDetails: "Details:" @
-SetNoteForm.label_index: "Set Note" @
+SetNoteForm: "Set Note" => "Imposta Nota"
+SetNoteForm.labelTTimestamp: "Timestamp:" => "Data e ora"
+SetNoteForm.buttonCancel: "Cancel" => "Cancella"
+SetNoteForm.buttonSave: "Save" => "Salva"
+SetNoteForm.labelTSystem: "System:" => "Sistema"
+SetNoteForm.labelTSummary: "Summary:" => "Sommario"
+SetNoteForm.labelTDetails: "Details:" => "Dettagli"
+SetNoteForm.label_index: "Set Note" => "Imposta Nota"
 
 ////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// Misc forms
@@ -581,23 +581,23 @@ SetNoteForm.label_index: "Set Note" @
 
 /////////////////////////////////////////////////////////////// MessageBox
 
-MessageBoxTheme.Warning: "Warning" @
-.Ignore: "Ignore" @
-.Retry: "Retry" @
-.Abort: "Abort" @
-.Cancel: "Cancel" @
-.OK: "OK" @
-.No: "No" @
-.Yes: "Yes" @
+MessageBoxTheme.Warning: "Warning" => "Attenzione"
+.Ignore: "Ignore" => "Ignora"
+.Retry: "Retry" => "Riprova"
+.Abort: "Abort" => "Aborta"
+.Cancel: "Cancel" => "Cancella"
+.OK: "OK" => "OK"
+.No: "No" => "No"
+.Yes: "Yes" => "Si"
 
 ///////////////////////////////////////////////////// DataGridViewDialogs
 
-DataGridViewDialogs.Jumpto: "Jump to:" @
-.EN: "Enter number to jump to or near to" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.VNV: "Value is not valid" @
-.Title: "Jump to Entry" @
+DataGridViewDialogs.Jumpto: "Jump to:" => "Va a"
+.EN: "Enter number to jump to or near to" => "Inserisci il numero di salti a o vicino a"
+.PresstoAccept: "Press to Accept" => "Premi per Accettare"
+.PresstoCancel: "Press to Cancel" => "Premi per Cancellare"
+.VNV: "Value is not valid" => "Il Valore non Ã¨ valido"
+.Title: "Jump to Entry" => "Salti al registro"
 
 //////////////////////////////////////////////////// InfoForm
 
@@ -605,26 +605,26 @@ InfoForm.OK : "OK" @
 
 //////////////////////////////////////////////////// Keyform
 
-KeyForm.PK: "Press Key" @
-KeyForm: "Define Key Sequence" @
-KeyForm.radioButtonUp: "Up" @
-KeyForm.radioButtonDown: "Down" @
-KeyForm.radioButtonPress: "Press" @
-KeyForm.checkBoxShift: "Shift" @
-KeyForm.checkBoxCtrl: "Ctrl" @
-KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "Press Key" @
-KeyForm.labelNextDelay: "Current Delay" @
-KeyForm.labelSelKeys: "Select Key" @
-KeyForm.labelDelay: "Start Delay(ms)" @
-KeyForm.labelSendTo: "Send To" @
-KeyForm.buttonReset: "Reset" @
-KeyForm.labelKeys: "Keys" @
-KeyForm.buttonDelete: "Delete" @
-KeyForm.buttonNext: "Next" @
-KeyForm.buttonTest: "Test" @
-KeyForm.buttonCancel: "Cancel" @
-KeyForm.buttonOK: "OK" @
+KeyForm.PK: "Press Key" => "Premi Tasto"
+KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
+KeyForm.radioButtonUp: "Up" => "Su"
+KeyForm.radioButtonDown: "Down" => "GiÃ¹"
+KeyForm.radioButtonPress: "Press" => "Premi"
+KeyForm.checkBoxShift: "Shift" => "Shift"
+KeyForm.checkBoxCtrl: "Ctrl" => "Ctrl"
+KeyForm.checkBoxAlt: "Alt" => "Alt"
+KeyForm.checkBoxKey: "Press Key" => "Premi Tasto"
+KeyForm.labelNextDelay: "Current Delay" => "Ritardo corrente"
+KeyForm.labelSelKeys: "Select Key" => "Seleziona Tasto"
+KeyForm.labelDelay: "Start Delay(ms)" => "Ritardo Iniziale"
+KeyForm.labelSendTo: "Send To" => "Invia a"
+KeyForm.buttonReset: "Reset" => "Resetta"
+KeyForm.labelKeys: "Keys" => "Tasti"
+KeyForm.buttonDelete: "Delete" => "Elimina"
+KeyForm.buttonNext: "Next" => "Prossimo"
+KeyForm.buttonTest: "Test" => "Testa"
+KeyForm.buttonCancel: "Cancel" => "Cancella"
+KeyForm.buttonOK: "OK" => "OK"
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// Journals
