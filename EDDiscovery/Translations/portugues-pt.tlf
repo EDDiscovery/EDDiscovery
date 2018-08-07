@@ -272,89 +272,89 @@ ScreenShotConfigureForm.labelSaveAs: "Save as" @
 
 //////////////////////////////////////////////////////////////// Bookmark form
 
-BookmarkForm: "Create New Bookmark" => "Crea un nuobo Favorito"
+BookmarkForm: "Create New Bookmark" => "Cria um novo Favorito"
 BookmarkForm.buttonEDSM: "EDSM" => "EDSM"
 BookmarkForm.labelName: "Name" => "Nome"
-BookmarkForm.checkBoxTarget: "Make Target" => "Imposta come destino"
-BookmarkForm.labelCo: "Co-ordinates" => "Coordinate"
+BookmarkForm.checkBoxTarget: "Make Target" => "Imposta como destino"
+BookmarkForm.labelCo: "Co-ordinates" => "Coordenadas"
 BookmarkForm.buttonDelete: "Delete" => "Elimina"
-BookmarkForm.buttonCancel: "Cancel" => "Cancella"
+BookmarkForm.buttonCancel: "Cancel" => "Cancela"
 BookmarkForm.buttonOK: "OK" => "OK"
-BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Note del Favorito"
-BookmarkForm.labelTravelNote: "Travel History Note" => "Nota dello Hist�rico di Viaggio"
-BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica nella schermo di viaggio)"
+BookmarkForm.labelBookmarkNotes: "Bookmark Notes" => "Nota do Favorito"
+BookmarkForm.labelTravelNote: "Travel History Note" => "Nota do Histórico de Viajem"
+BookmarkForm.labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Modifica no painel de viajem)"
 BookmarkForm.labelTimeMade: "Time Made" => "Time Made"
-BookmarkForm.UpdateBookmark: "Update Bookmark" => "Attualizza Favorito"
-BookmarkForm.Update: "Update" => "Attualizza"
-.SB: "New System Bookmark" => "Nuovo Favorito di Sistema"
-.UB: "Update Bookmark" => "Attualizza Favorito"
-.RB: "Create Region Bookmark" => "Crea una Regione Favoriti"
-.RN: "Enter a region name..." => "Nomina la regione..."
-.SI: "System Information" => Informa��o di Sistema"
-.NSB: "New System Bookmark" => Nuovo Favorito di Sistema"
-.ESN: "Enter a system name..." => "Inserisci un nome di sistema..."
-.GMO: "Galactic Mapping Object" => "Oggetto di Mappa Galattico"
-.Description: "Description" => "Descri��o"
+BookmarkForm.UpdateBookmark: "Update Bookmark" => "Atualiza Favorito"
+BookmarkForm.Update: "Update" => "Atualiza"
+.SB: "New System Bookmark" => "Novo Favorito de Sistema"
+.UB: "Update Bookmark" => "Atualiza Favorito"
+.RB: "Create Region Bookmark" => "Cria uma Região Favorita"
+.RN: "Enter a region name..." => "De um nome à região..."
+.SI: "System Information" => Informação de Sistema"
+.NSB: "New System Bookmark" => Novo Favorito de Sistema"
+.ESN: "Enter a system name..." => "Insere um nome de sistema..."
+.GMO: "Galactic Mapping Object" => "Objeto de Mapa Galáctico"
+.Description: "Description" => "Descrição"
 
 
 
 ////////////////////////////////////////////////////////////////// surface bookmarks
 
-SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Favorito di Superficie nel Sistema"
-SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "Avvia alla bussola"
-SurfaceBookmarksForm.BodyName: "Planetary Body" => "Corpo Planetario"
+SurfaceBookmarksForm.labelSurface: "Surface Bookmarks In System" => "Favorito de Superficie no Sistema"
+SurfaceBookmarksForm.sendToCompassToolStripMenuItem: "Send to compass" => "Invia à bússola"
+SurfaceBookmarksForm.BodyName: "Planetary Body" => "Corpo Planetário"
 SurfaceBookmarksForm.SurfaceName: "Name" => "Nome"
-SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descri��o"
-SurfaceBookmarksForm.Latitude: "Latitude" => "Latitudine"
-SurfaceBookmarksForm.Longitude: "Longitude" => "Longitudine"
-SurfaceBookmarksForm.Valid: "Saveable" => "Salvabile"
-SurfaceBookmarksForm.deleteToolStripMenuItem: "Delete Row" => "Elimina riga"
-SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
+SurfaceBookmarksForm.SurfaceDesc: "Description" => "Descrição"
+SurfaceBookmarksForm.Latitude: "Latitude" => "Latitude"
+SurfaceBookmarksForm.Longitude: "Longitude" => "Longitude"
+SurfaceBookmarksForm.Valid: "Saveable" => "Salvavel"
+SurfaceBookmarksForm.deleteToolStripMenuItem: "Delete Row" => "Elimina linha"
+SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Adiciona manualmente um planeta"
 
 ////////////////////////////////////////////////////////////////// SurfaceBookmarkUserControl
 
-SurfaceBookmarkUserControl.Enter: "Enter a name" => "Inserisci un nome"
-SurfaceBookmarkUserControl.PL: "Planet:" => "Pianeta"
-SurfaceBookmarkUserControl.EPN: "Enter planet name" => "Inserisci il nome del pianeta"
-SurfaceBookmarkUserControl.PresstoAccept: "Press to Accept" => "Premi per accettar"
-SurfaceBookmarkUserControl.PresstoCancel: "Press to Cancel" => "Premi per cancellare"
-SurfaceBookmarkUserControl.MAP: "Manually Add Planet" => "Aggiungi manualmente un pianeta"
+SurfaceBookmarkUserControl.Enter: "Enter a name" => "Insira um nome"
+SurfaceBookmarkUserControl.PL: "Planet:" => "Planeta"
+SurfaceBookmarkUserControl.EPN: "Enter planet name" => "Insira o nome do pianeta"
+SurfaceBookmarkUserControl.PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
+SurfaceBookmarkUserControl.PresstoCancel: "Press to Cancel" => "Pressiona para cancelar"
+SurfaceBookmarkUserControl.MAP: "Manually Add Planet" => "Adiciona manualmente um planeta"
 
 ////////////////////////////////////////////////////////////////// find systems
 
-FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" => "Cerca nomi usando il banco dados" 
-FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Crea un cubo di sistemi usando il banco dados"
-FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Crea una sfera di sistemi usando il banco dados"
-FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Crea un cubo di sistemi usando EDSM"
-FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Crea una sfera di sistemi usando EDSM"
+FindSystemsUserControl.buttonExtDBLookup: "From DB Find Names" => "Procura nomes usando o banco dados" 
+FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Cubo de sistemas usando o banco dados"
+FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Esfera de sistemas usando o banco dados"
+FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Cubo de sistemas usando EDSM"
+FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Esfera de sistemas usando EDSM"
 FindSystemsUserControl.labelRadMax: "Max" @
-FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Raggio Min (ly)"
-FindSystemsUserControl.labelFilter: "Star Name" => "Nome del Sistema"
+FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Ráio Min (ly)"
+FindSystemsUserControl.labelFilter: "Star Name" => "Nome do Sistema"
 
 //////////////////////////////////////////////////////////////// Conditions
 
-ConditionFilterForm: "Journal: Filter out fields" => "Giornale: Filtra i Campi"
+ConditionFilterForm: "Journal: Filter out fields" => "Jornal: Filtra os Campos"
 ConditionFilterForm.panelOK.buttonCancel: "Cancel" => "Cancella"
 ConditionFilterForm.panelOK.buttonOK: "OK" => "OK"
 
 /////////////////////////////////////////////////////////////// Travel History Filter
 
-TravelHistoryFilter.Hours: "{0} hours" => "{0} ore"
-TravelHistoryFilter.Days: "{0} days" => "{0} giorni"
-TravelHistoryFilter.1Week: "One Week" => "Una settimana"
-TravelHistoryFilter.Weeks: "{0} weeks" => "{0} settimane"
-TravelHistoryFilter.Month: "Month" => "Mesi"
+TravelHistoryFilter.Hours: "{0} hours" => "{0} horas"
+TravelHistoryFilter.Days: "{0} days" => "{0} dias"
+TravelHistoryFilter.1Week: "One Week" => "Una semana"
+TravelHistoryFilter.Weeks: "{0} weeks" => "{0} semanas"
+TravelHistoryFilter.Month: "Month" => "Meses"
 TravelHistoryFilter.Quarter: "Quarter" => "Quadrimestre"
 TravelHistoryFilter.HYear: "Half year" => "Semestre"
-TravelHistoryFilter.Year: "Year" => "Anno"
-TravelHistoryFilter.LastN: "Last {0} entries" => "Ultimi {0} registri"
-TravelHistoryFilter.LDock: "Last dock" => "Ultimo attracco"
-TravelHistoryFilter.StartEnd: "Start/End Flag" => "Inizio/Fine"
+TravelHistoryFilter.Year: "Year" => "Ano"
+TravelHistoryFilter.LastN: "Last {0} entries" => "Ultimos {0} registros"
+TravelHistoryFilter.LDock: "Last dock" => "Ultima doca"
+TravelHistoryFilter.StartEnd: "Start/End Flag" => "Início/Fim"
 
 //////////////////////////////////////////////////////////////// Add on manager
 
 AddOnManagerForm.buttonMore: "+" @
-AddOnManagerForm.buttonExtGlobals: "Globals" => "Globale"
+AddOnManagerForm.buttonExtGlobals: "Globals" => "Global"
 AddOnManagerForm.buttonOK: "OK" @
 
 AddOnManagerForm.AddOnTitle: "Add-On Manager" => "Gestisci gli Add-Ons"
