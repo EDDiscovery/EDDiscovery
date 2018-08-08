@@ -60,10 +60,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon = new ExtendedControls.CheckBoxCustom();
             this.comboBoxClickThruKey = new ExtendedControls.ComboBoxCustom();
             this.checkBoxUseNotifyIcon = new ExtendedControls.CheckBoxCustom();
-            this.buttonReloadSaved = new ExtendedControls.ButtonExt();
-            this.buttonSaveSetup = new ExtendedControls.ButtonExt();
-            this.checkBoxAutoSave = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxAutoLoad = new ExtendedControls.CheckBoxCustom();
             this.checkBoxKeepOnTop = new ExtendedControls.CheckBoxCustom();
             this.comboBoxTheme = new ExtendedControls.ComboBoxCustom();
             this.button_edittheme = new ExtendedControls.ButtonExt();
@@ -76,6 +72,7 @@ namespace EDDiscovery.UserControls
             this.buttonEditCommander = new ExtendedControls.ButtonExt();
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomResize = new ExtendedControls.CheckBoxCustom();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -86,7 +83,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
             this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
             this.groupBoxPopOuts = new ExtendedControls.GroupBoxCustom();
-            this.checkBoxCustomResize = new ExtendedControls.CheckBoxCustom();
             this.labelTKey = new System.Windows.Forms.Label();
             this.groupBoxTheme = new ExtendedControls.GroupBoxCustom();
             this.groupBox3dmap = new ExtendedControls.GroupBoxCustom();
@@ -323,7 +319,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxMinimizeToNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 133);
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 74);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
             this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
@@ -347,7 +343,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.DropDownWidth = 150;
             this.comboBoxClickThruKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxClickThruKey.ItemHeight = 13;
-            this.comboBoxClickThruKey.Location = new System.Drawing.Point(218, 76);
+            this.comboBoxClickThruKey.Location = new System.Drawing.Point(218, 17);
             this.comboBoxClickThruKey.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxClickThruKey.Name = "comboBoxClickThruKey";
             this.comboBoxClickThruKey.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -370,7 +366,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxUseNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(10, 110);
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(10, 51);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
             this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
@@ -381,66 +377,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
             this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
             // 
-            // buttonReloadSaved
-            // 
-            this.buttonReloadSaved.Location = new System.Drawing.Point(218, 16);
-            this.buttonReloadSaved.Name = "buttonReloadSaved";
-            this.buttonReloadSaved.Size = new System.Drawing.Size(126, 23);
-            this.buttonReloadSaved.TabIndex = 3;
-            this.buttonReloadSaved.Text = "Open Saved Setup";
-            this.toolTip.SetToolTip(this.buttonReloadSaved, "Open now the saved setup of pop outs");
-            this.buttonReloadSaved.UseVisualStyleBackColor = true;
-            this.buttonReloadSaved.Click += new System.EventHandler(this.buttonReloadSaved_Click);
-            // 
-            // buttonSaveSetup
-            // 
-            this.buttonSaveSetup.Location = new System.Drawing.Point(218, 46);
-            this.buttonSaveSetup.Name = "buttonSaveSetup";
-            this.buttonSaveSetup.Size = new System.Drawing.Size(126, 23);
-            this.buttonSaveSetup.TabIndex = 2;
-            this.buttonSaveSetup.Text = "Save Current Setup";
-            this.toolTip.SetToolTip(this.buttonSaveSetup, "Save now the current pop out state");
-            this.buttonSaveSetup.UseVisualStyleBackColor = true;
-            this.buttonSaveSetup.Click += new System.EventHandler(this.buttonSaveSetup_Click);
-            // 
-            // checkBoxAutoSave
-            // 
-            this.checkBoxAutoSave.AutoSize = true;
-            this.checkBoxAutoSave.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxAutoSave.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxAutoSave.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxAutoSave.FontNerfReduction = 0.5F;
-            this.checkBoxAutoSave.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxAutoSave.Location = new System.Drawing.Point(10, 42);
-            this.checkBoxAutoSave.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxAutoSave.Name = "checkBoxAutoSave";
-            this.checkBoxAutoSave.Size = new System.Drawing.Size(133, 17);
-            this.checkBoxAutoSave.TabIndex = 1;
-            this.checkBoxAutoSave.Text = "Save Pop Outs on Exit";
-            this.checkBoxAutoSave.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxAutoSave, "Save pop out state on exit");
-            this.checkBoxAutoSave.UseVisualStyleBackColor = true;
-            this.checkBoxAutoSave.CheckedChanged += new System.EventHandler(this.checkBoxAutoSave_CheckedChanged);
-            // 
-            // checkBoxAutoLoad
-            // 
-            this.checkBoxAutoLoad.AutoSize = true;
-            this.checkBoxAutoLoad.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxAutoLoad.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxAutoLoad.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxAutoLoad.FontNerfReduction = 0.5F;
-            this.checkBoxAutoLoad.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxAutoLoad.Location = new System.Drawing.Point(10, 20);
-            this.checkBoxAutoLoad.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxAutoLoad.Name = "checkBoxAutoLoad";
-            this.checkBoxAutoLoad.Size = new System.Drawing.Size(134, 17);
-            this.checkBoxAutoLoad.TabIndex = 0;
-            this.checkBoxAutoLoad.Text = "Load Pop Outs at Start";
-            this.checkBoxAutoLoad.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxAutoLoad, "Auto show pop outs");
-            this.checkBoxAutoLoad.UseVisualStyleBackColor = true;
-            this.checkBoxAutoLoad.CheckedChanged += new System.EventHandler(this.checkBoxAutoLoad_CheckedChanged);
-            // 
             // checkBoxKeepOnTop
             // 
             this.checkBoxKeepOnTop.AutoSize = true;
@@ -449,7 +385,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
             this.checkBoxKeepOnTop.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(218, 113);
+            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(10, 120);
             this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
             this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
@@ -657,6 +593,26 @@ namespace EDDiscovery.UserControls
             this.buttonAddCommander.UseVisualStyleBackColor = true;
             this.buttonAddCommander.Click += new System.EventHandler(this.buttonAddCommander_Click);
             // 
+            // checkBoxCustomResize
+            // 
+            this.checkBoxCustomResize.AutoSize = true;
+            this.checkBoxCustomResize.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomResize.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomResize.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomResize.FontNerfReduction = 0.5F;
+            this.checkBoxCustomResize.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 97);
+            this.checkBoxCustomResize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomResize.Name = "checkBoxCustomResize";
+            this.checkBoxCustomResize.Size = new System.Drawing.Size(186, 17);
+            this.checkBoxCustomResize.TabIndex = 6;
+            this.checkBoxCustomResize.Text = "Redraw the screen during resizing";
+            this.checkBoxCustomResize.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCustomResize, "Check to allow EDD to redraw the screen during main window resize. Only disable i" +
+        "f its too slow");
+            this.checkBoxCustomResize.UseVisualStyleBackColor = true;
+            this.checkBoxCustomResize.CheckedChanged += new System.EventHandler(this.checkBoxCustomResize_CheckedChanged);
+            // 
             // dataGridViewCommanders
             // 
             this.dataGridViewCommanders.AllowUserToAddRows = false;
@@ -798,11 +754,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
             this.groupBoxPopOuts.Controls.Add(this.comboBoxClickThruKey);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
-            this.groupBoxPopOuts.Controls.Add(this.buttonReloadSaved);
-            this.groupBoxPopOuts.Controls.Add(this.buttonSaveSetup);
             this.groupBoxPopOuts.Controls.Add(this.labelTKey);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoSave);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxAutoLoad);
             this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
             this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 290);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
@@ -813,30 +765,10 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.TextPadding = 0;
             this.groupBoxPopOuts.TextStartPosition = -1;
             // 
-            // checkBoxCustomResize
-            // 
-            this.checkBoxCustomResize.AutoSize = true;
-            this.checkBoxCustomResize.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomResize.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCustomResize.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomResize.FontNerfReduction = 0.5F;
-            this.checkBoxCustomResize.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 156);
-            this.checkBoxCustomResize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCustomResize.Name = "checkBoxCustomResize";
-            this.checkBoxCustomResize.Size = new System.Drawing.Size(186, 17);
-            this.checkBoxCustomResize.TabIndex = 6;
-            this.checkBoxCustomResize.Text = "Redraw the screen during resizing";
-            this.checkBoxCustomResize.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxCustomResize, "Check to allow EDD to redraw the screen during main window resize. Only disable i" +
-        "f its too slow");
-            this.checkBoxCustomResize.UseVisualStyleBackColor = true;
-            this.checkBoxCustomResize.CheckedChanged += new System.EventHandler(this.checkBoxCustomResize_CheckedChanged);
-            // 
             // labelTKey
             // 
             this.labelTKey.AutoSize = true;
-            this.labelTKey.Location = new System.Drawing.Point(7, 80);
+            this.labelTKey.Location = new System.Drawing.Point(7, 21);
             this.labelTKey.Name = "labelTKey";
             this.labelTKey.Size = new System.Drawing.Size(178, 13);
             this.labelTKey.TabIndex = 5;
@@ -1087,10 +1019,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private ExtendedControls.GroupBoxCustom groupBoxPopOuts;
-        private ExtendedControls.ButtonExt buttonReloadSaved;
-        private ExtendedControls.ButtonExt buttonSaveSetup;
-        private ExtendedControls.CheckBoxCustom checkBoxAutoSave;
-        private ExtendedControls.CheckBoxCustom checkBoxAutoLoad;
         private ExtendedControls.CheckBoxCustom checkBoxMinimizeToNotifyIcon;
         private ExtendedControls.CheckBoxCustom checkBoxUseNotifyIcon;
         private ExtendedControls.ButtonExt buttonEditCommander;

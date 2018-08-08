@@ -164,7 +164,7 @@ namespace ActionLanguage
 
                     fileencoding = sr.CurrentEncoding;
 
-                    System.Diagnostics.Trace.WriteLine("File " + filename + " is in " + fileencoding.BodyName + "   is utc8nobom? " + Equals(utc8nobom, fileencoding));
+                    //System.Diagnostics.Trace.WriteLine("File " + filename + " is in " + fileencoding.BodyName + "   is utc8nobom? " + Equals(utc8nobom, fileencoding));
 
                     if (firstline == "{")
                     {

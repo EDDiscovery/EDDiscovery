@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxJournalWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load start");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " JG " + displaynumber + " Load start");
 
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.CurrentCell = dataGridViewJournal.Rows[rowno].Cells[pos.Item2];       // its the current cell which needs to be set, moves the row marker as well            currentGridRow = (rowno!=-1) ? 
                 }
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JG " + displaynumber + " Load Finish");
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " JG " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {

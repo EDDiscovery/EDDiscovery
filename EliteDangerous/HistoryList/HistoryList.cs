@@ -872,7 +872,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Files read " );
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Files read " );
 
             reportProgress(-1, "Reading Database");
 
@@ -888,7 +888,7 @@ namespace EliteDangerousCore
             else
                 jlist = JournalEntry.GetAll(CurrentCommander).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database read " + jlist.Count);
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database read " + jlist.Count);
 
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
