@@ -24,41 +24,57 @@ namespace BaseUtils
     public static class AppTicks
     {
         static System.Diagnostics.Stopwatch stopwatch;
-        static long prevtick;
+        static Dictionary<string, long> laptimes;       // holds lap counters, defined by string IDs
+
+        private static void CreateStopWatch()
+        {
+            stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
+            laptimes = new Dictionary<string, long>();
+        }
 
         public static long TickCount        // current tick, with stopwatch creation
         {
             get
             {
                 if (stopwatch == null)
-                {
-                    stopwatch = new System.Diagnostics.Stopwatch();
-                    stopwatch.Start();
-                }
+                    CreateStopWatch();
 
                 return stopwatch.ElapsedMilliseconds;
             }
         }
 
-        public static string TickCountContinuous     // delta without last point reset
+        public static string TickCountLap(string id, bool reset = false)        // lap time to last recorded tick of this id
         {
-            get
+            long tc = TickCount;
+            string s;
+
+            if (reset || !laptimes.ContainsKey(id))     // if reset, or not present
             {
-                long tc = TickCount;
-                return string.Format("{0} +{1}", tc, tc - prevtick);
+                s = string.Format("{0} {1}", tc, id);
             }
+            else
+            {
+                s = string.Format("{0} {1}+{2}", tc, id, tc - laptimes[id]);
+            }
+
+            laptimes[id] = tc;
+            return s;
         }
 
-        public static string TickCount100       // strange name but keep for now.. reset last point
+        public static string TickCountLap(Object id, bool reset = false)        // lap time to last recorded tick of this object used as an identifier
         {
-            get
-            {
-                long tc = TickCount;
-                string s = string.Format("{0} +{1}", tc, tc - prevtick);
-                prevtick = tc;
-                return s;
-            }
+            return TickCountLap(id.GetType().Name, reset);
         }
 
+        public static string TickCountLap(Type id, bool reset = false)        // lap time to last recorded tick of this type used as an identifier
+        {
+            return TickCountLap(id.Name, reset);
+        }
+
+        public static string TickCountLap()        // default Program lap
+        {
+            return TickCountLap("Program");
+        }
     }
 }

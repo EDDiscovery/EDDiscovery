@@ -135,7 +135,7 @@ namespace EDDiscovery
 
             SQLiteConnectionUser.EarlyReadRegister();
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Init config finished");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Init config finished");
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
@@ -378,10 +378,10 @@ namespace EDDiscovery
 
         private static void InitializeDatabases()
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Initializing database");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
             SQLiteConnectionUser.Initialize();
             SQLiteConnectionSystem.Initialize();
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Database initialization complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");
         }
 
         #endregion
@@ -548,7 +548,7 @@ namespace EDDiscovery
 
             SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress(-1, "");
 
             if (!EDDOptions.Instance.NoSystemsLoad)
@@ -576,7 +576,7 @@ namespace EDDiscovery
                     SQLiteConnectionSystem.PutSettingString("EDSMGalMapLast", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
                 }
 
-                Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Check systems complete");
+                Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
             }
 
             galacticMapping.ParseData();                            // at this point, gal map data has been uploaded - get it into memory
@@ -633,7 +633,7 @@ namespace EDDiscovery
         {
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform EDSM/EDDB sync");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
             try
             {
                 bool[] grids = new bool[GridId.MaxGridID];
@@ -722,7 +722,7 @@ namespace EDDiscovery
 
             resyncEDSMEDDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
-            Debug.WriteLine(BaseUtils.AppTicks.TickCount100 + " Perform sync completed");
+            Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
         }
 
         #endregion
@@ -788,7 +788,7 @@ namespace EDDiscovery
             {
                 refreshWorkerArgs = args;
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history for Cmdr " + args.CurrentCommander + " " + EDCommander.Current.Name);
 
                 hist = HistoryList.LoadHistory(journalmonitor, 
                     () => PendingClose, 
@@ -796,7 +796,7 @@ namespace EDDiscovery
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
                     EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load history complete with " + hist.Count + " records");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");
             }
             catch (Exception ex)
             {
@@ -818,7 +818,7 @@ namespace EDDiscovery
 
             if (!PendingClose)
             {
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history worker completed");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh history worker completed");
 
                 if (hist != null)
                 {
@@ -828,18 +828,18 @@ namespace EDDiscovery
 
                     EdsmLogFetcher.StopCheck();
 
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays");
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh Displays");
 
                     OnHistoryChange?.Invoke(history);
 
-                    Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh Displays Completed");
+                    Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh Displays Completed");
                 }
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " JM On");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " JM On");
 
                 journalmonitor.StartMonitor();
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Call Refresh Complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Call Refresh Complete");
 
                 OnRefreshComplete?.Invoke();                            // History is completed
 
@@ -853,7 +853,7 @@ namespace EDDiscovery
 
                 ReportRefreshProgress(-1, "");
 
-                Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh history complete");
+                Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh history complete");
             }
         }
 
