@@ -43,7 +43,7 @@ namespace EliteDangerousCore.JournalEvents
             Government = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment", "Government" });
             Government_Localised = JournalFieldNaming.CheckLocalisation(JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationGovernment_Localised", "Government_Localised" }),Government);
 
-            Wanted = evt["Wanted"].BoolNull();
+            Wanted = evt["Wanted"].Bool();
 
             StationServices = evt["StationServices"]?.ToObjectProtected<string[]>();
 
@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Government { get; set; }
         public string Government_Localised { get; set; }
         public string[] StationServices { get; set; }
-        public bool? Wanted { get; set; }
+        public bool Wanted { get; set; }
 
         public bool IsTrainingEvent { get; private set; }
 
