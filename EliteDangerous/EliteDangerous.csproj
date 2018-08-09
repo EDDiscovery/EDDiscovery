@@ -144,6 +144,7 @@
     <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryEntry.cs" />
+    <Compile Include="HistoryList\HistoryEntryStatus.cs" />
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="Inara\Inara.cs" />
     <Compile Include="Inara\InaraSync.cs" />
