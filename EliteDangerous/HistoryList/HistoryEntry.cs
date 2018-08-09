@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2018 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -24,237 +24,6 @@ using System.Data.Common;
 
 namespace EliteDangerousCore
 {
-    public class HistoryEntryStatus
-    {
-        public string BodyName { get; private set; }
-        public int? BodyID { get; private set; }
-        public string BodyType { get; private set; }
-        public string StationName { get; private set; }
-        public string StationType { get; private set; }
-        public long? MarketId { get; private set; }
-        public bool? IsDocked { get; private set; }                       // are we docked.  Null if don't know, else true/false
-        public bool? IsLanded { get; private set; }                       // are we landed on the planet surface.  Null if don't know, else true/false
-        public bool? Hyperspace { get; private set; }                     // are we in hyperspace..
-        public int ShipID { get; private set; } = -1;
-        public string ShipType { get; private set; } = "Unknown";         // and the ship
-        public string OnCrewWithCaptain { get; private set; } = null;     // if not null, your in another multiplayer ship
-        public string GameMode { get; private set; } = "Unknown";         // game mode, from LoadGame event
-        public string Group { get; private set; } = "";                   // group..
-        public bool? Wanted { get; private set; } = null;
-        public string StarSystem { get; private set; }
-        public bool NoLocation { get; private set; } = true;
-        public bool BodyApproached { get; private set; } = false;
-
-        private HistoryEntryStatus()
-        {
-        }
-
-        public HistoryEntryStatus(HistoryEntryStatus prevstatus)
-        {
-            this.BodyName = prevstatus.BodyName;
-            this.BodyID = prevstatus.BodyID;
-            this.BodyType = prevstatus.BodyType;
-            this.StationName = prevstatus.StationName;
-            this.StationType = prevstatus.StationType;
-            this.MarketId = prevstatus.MarketId;
-            this.IsDocked = prevstatus.IsDocked;
-            this.IsLanded = prevstatus.IsLanded;
-            this.Hyperspace = prevstatus.Hyperspace;
-            this.ShipID = prevstatus.ShipID;
-            this.ShipType = prevstatus.ShipType;
-            this.OnCrewWithCaptain = prevstatus.OnCrewWithCaptain;
-            this.GameMode = prevstatus.GameMode;
-            this.Group = prevstatus.Group;
-            this.Wanted = prevstatus.Wanted;
-            this.StarSystem = prevstatus.StarSystem;
-            this.NoLocation = prevstatus.NoLocation;
-            this.BodyApproached = prevstatus.BodyApproached;
-        }
-
-        public static HistoryEntryStatus Update(HistoryEntryStatus prev, JournalEntry je)
-        {
-            if (prev == null)
-            {
-                prev = new HistoryEntryStatus();
-            }
-
-            switch (je.EventTypeID)
-            {
-                case JournalTypeEnum.Location:
-                    JournalLocation jloc = je as JournalLocation;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsDocked = jloc.Docked,
-                        MarketId = jloc.MarketID,
-                        IsLanded = prev.NoLocation ? prev.IsLanded : jloc.Latitude.HasValue,
-                        NoLocation = false,
-                        BodyID = jloc.BodyID,
-                        BodyType = jloc.BodyType,
-                        BodyName = jloc.Body,
-                        Hyperspace = false,
-                        Wanted = jloc.Wanted,
-                        StationName = jloc.StationName,
-                        StationType = jloc.StationType,
-                        StarSystem = jloc.StarSystem,
-                        BodyApproached = false,
-                    };
-                case JournalTypeEnum.FSDJump:
-                    JournalFSDJump jfsd = (je as JournalFSDJump);
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsDocked = false,
-                        MarketId = null,
-                        IsLanded = false,
-                        NoLocation = false,
-                        BodyID = -1,
-                        BodyType = "Star",
-                        BodyName = jfsd.StarSystem,
-                        Hyperspace = true,
-                        Wanted = jfsd.Wanted,
-                        StationName = null,
-                        StationType = null,
-                        StarSystem = jfsd.StarSystem,
-                        BodyApproached = false,
-                    };
-                case JournalTypeEnum.LoadGame:
-                    JournalLoadGame jlg = je as JournalLoadGame;
-                    bool isbuggy = jlg.Ship.Contains("buggy", StringComparison.InvariantCultureIgnoreCase);        // load game with buggy, can't tell what ship we get back into, so ignore
-                    string shiptype = isbuggy ? prev.ShipType : (je as JournalLoadGame).Ship;
-                    int shipid = isbuggy ? prev.ShipID : (je as JournalLoadGame).ShipId;
-
-                    return new HistoryEntryStatus(prev)
-                    {
-                        OnCrewWithCaptain = null,    // can't be in a crew at this point
-                        GameMode = jlg.GameMode,      // set game mode
-                        Group = jlg.Group,            // and group, may be empty
-                        IsLanded = jlg.StartLanded || isbuggy,
-                        Hyperspace = false,
-                        ShipType = shiptype,
-                        ShipID = shipid,
-                        NoLocation = true,
-                        BodyApproached = false,
-                    };
-                case JournalTypeEnum.Docked:
-                    JournalDocked jdocked = (JournalDocked)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsDocked = true,
-                        MarketId = jdocked.MarketID,
-                        IsLanded = false,
-                        Hyperspace = false,
-                        Wanted = jdocked.Wanted,
-                        StationName = jdocked.StationName,
-                        StationType = jdocked.StationType,
-                    };
-                case JournalTypeEnum.Undocked:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsDocked = false,
-                        MarketId = null,
-                        IsLanded = false,
-                        Hyperspace = false,
-                        StationName = null,
-                        StationType = null,
-                    };
-                case JournalTypeEnum.Touchdown:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsLanded = true
-                    };
-                case JournalTypeEnum.Liftoff:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsLanded = ((JournalLiftoff)je).PlayerControlled != true
-                    };
-                case JournalTypeEnum.SupercruiseExit:
-                    JournalSupercruiseExit jsexit = (JournalSupercruiseExit)je;
-                    bool isstation = jsexit.BodyType == "Station";
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsLanded = false,
-                        IsDocked = false,
-                        BodyName = isstation && prev.BodyApproached ? prev.BodyName : jsexit.Body,
-                        BodyType = isstation && prev.BodyApproached ? prev.BodyType : jsexit.BodyType,
-                        BodyID = isstation && prev.BodyApproached ? prev.BodyID : jsexit.BodyID,
-                        Hyperspace = false,
-                    };
-                case JournalTypeEnum.SupercruiseEntry:
-                    JournalSupercruiseEntry jsentry = (JournalSupercruiseEntry)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        IsLanded = false,
-                        IsDocked = false,
-                        Hyperspace = true,
-                        BodyName = prev.BodyType == "Station" ? prev.StarSystem : prev.BodyType,
-                        BodyType = prev.BodyType == "Station" ? "Star" : prev.BodyType,
-                        BodyID = prev.BodyType == "Station" ? -1 : prev.BodyID,
-                    };
-                case JournalTypeEnum.ApproachBody:
-                    JournalApproachBody jappbody = (JournalApproachBody)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        BodyApproached = true,
-                        BodyType = jappbody.BodyType,
-                        BodyName = jappbody.Body,
-                        BodyID = jappbody.BodyID,
-                    };
-                case JournalTypeEnum.LeaveBody:
-                    JournalLeaveBody jlbody = (JournalLeaveBody)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        BodyApproached = false,
-                        BodyType = "Star",
-                        BodyName = prev.StarSystem,
-                        BodyID = -1,
-                    };
-                case JournalTypeEnum.StartJump:
-                    if (prev.Hyperspace != true)
-                    {
-                        return new HistoryEntryStatus(prev)
-                        {
-                            Hyperspace = true    // some of these are just to make sure, as FSDJump will also set it
-                        };
-                    }
-                    else
-                    {
-                        return prev;
-                    }
-                case JournalTypeEnum.ShipyardBuy:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        ShipID = -1,
-                        ShipType = ((JournalShipyardBuy)je).ShipType  // BUY does not have ship id, but the new entry will that is written later - journals 8.34
-                    };
-                case JournalTypeEnum.ShipyardNew:
-                    JournalShipyardNew jsnew = (JournalShipyardNew)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        ShipID = jsnew.ShipId,
-                        ShipType = jsnew.ShipType
-                    };
-                case JournalTypeEnum.ShipyardSwap:
-                    JournalShipyardSwap jsswap = (JournalShipyardSwap)je;
-                    return new HistoryEntryStatus(prev)
-                    {
-                        ShipID = jsswap.ShipId,
-                        ShipType = jsswap.ShipType
-                    };
-                case JournalTypeEnum.JoinACrew:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        OnCrewWithCaptain = ((JournalJoinACrew)je).Captain
-                    };
-                case JournalTypeEnum.QuitACrew:
-                    return new HistoryEntryStatus(prev)
-                    {
-                        OnCrewWithCaptain = null
-                    };
-                default:
-                    return prev;
-            }
-        }
-    }
-
     [DebuggerDisplay("Event {EntryType} {System.Name} ({System.X,nq},{System.Y,nq},{System.Z,nq}) {EventTimeUTC} Inx:{Indexno} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {
@@ -301,20 +70,35 @@ namespace EliteDangerousCore
         public int Travelledjumps { get { return travelled_jumps; } }
         public string TravelledJumpsAndMisses { get { return travelled_jumps.ToStringInvariant() + ((travelled_missingjump > 0) ? (" (" + travelled_missingjump.ToStringInvariant() + ")") : ""); } }
 
-        public bool IsLanded { get { return EntryStatus?.IsLanded == true; } }
-        public bool IsDocked { get { return EntryStatus?.IsDocked == true; } }
-        public bool IsInHyperSpace { get { return EntryStatus?.Hyperspace == true; } }
-        public string WhereAmI { get { return EntryStatus?.StationName ?? EntryStatus?.BodyName ?? "Unknown"; } }
-        public string BodyType { get { return EntryStatus?.BodyType; } }
-        public string ShipType { get { return EntryStatus?.ShipType ?? "Unknown"; } }         // NOT FD - translated name
-        public int ShipId { get { return EntryStatus?.ShipID ?? -1; } }
-        public bool MultiPlayer { get { return EntryStatus?.OnCrewWithCaptain != null; } }
-        public string GameMode { get { return EntryStatus?.GameMode ?? ""; } }
-        public string Group { get { return EntryStatus?.Group; } }
+        public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
+        public bool IsDocked { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Docked; } }
+        public bool IsInHyperSpace { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Hyperspace; } }
+        public string WhereAmI { get { return EntryStatus.StationName ?? EntryStatus.BodyName ?? "Unknown"; } }
+        public string BodyType { get { return EntryStatus.BodyType ?? "Unknown"; } }
+        public string ShipType { get { return EntryStatus.ShipType ?? "Unknown"; } }         // NOT FD - translated name
+        public int ShipId { get { return EntryStatus.ShipID; } }
+        public bool MultiPlayer { get { return EntryStatus.OnCrewWithCaptain != null; } }
+        public string GameMode { get { return EntryStatus.GameMode ?? ""; } }
+        public string Group { get { return EntryStatus.Group ?? ""; } }
         public string GameModeGroup { get { return GameMode + (String.IsNullOrEmpty(Group) ? "" : (":" + Group)); } }
-        public bool? Wanted { get { return EntryStatus?.Wanted; } }
-        public long? MarketID { get { return EntryStatus?.MarketId; } }
+        public bool Wanted { get { return EntryStatus.Wanted; } }
+        public long? MarketID { get { return EntryStatus.MarketId; } }
 
+        public string DebugStatus { get {      // Use as a replacement for note in travel grid to debug
+                return
+                     WhereAmI
+                     + ", " +  (EntryStatus.BodyType ?? "Null")
+                     + "," + (EntryStatus.BodyName ?? "Null")
+                     + " SN:" + (EntryStatus.StationName ?? "Null") 
+                     + " ST:" + (EntryStatus.StationType ?? "Null")
+                     + " T:" + EntryStatus.TravelState
+                     + " S:" + EntryStatus.ShipID + "," + EntryStatus.ShipType
+                     + " GM:" + EntryStatus.GameMode
+                     + " W:" + EntryStatus.Wanted
+                     + " BA:" + EntryStatus.BodyApproached 
+                     ;
+            } }
+  
         public long Credits { get; set; }       // set up by Historylist during ledger accumulation
 
         public bool ContainsRares() // function due to debugger and cost of working out
@@ -331,18 +115,18 @@ namespace EliteDangerousCore
 
         public SystemNoteClass snc;     // system note class found attached to this entry. May be null
 
-        public HistoryEntryStatus EntryStatus { get; private set; }
+        private HistoryEntryStatus EntryStatus { get;  set; }
         private double travelled_distance;  // start/stop distance and time computation
         private TimeSpan travelled_seconds;
-        bool travelling;
+        private bool travelling;
 
-        int travelled_missingjump;
-        int travelled_jumps;
+        private int travelled_missingjump;
+        private int travelled_jumps;
 
-        MaterialCommoditiesList materialscommodities;
-        ShipInformation shipmodules;
-        ModulesInStore storedmodules;
-        MissionList missionlist;                    // mission state at this point..
+        private MaterialCommoditiesList materialscommodities;
+        private ShipInformation shipmodules;
+        private ModulesInStore storedmodules;
+        private MissionList missionlist;                    // mission state at this point..
 
         #endregion
 
@@ -448,7 +232,7 @@ namespace EliteDangerousCore
                 Indexno = indexno,
                 journalEntry = je,
                 System = isys,
-                EntryStatus = HistoryEntryStatus.Update(prev?.EntryStatus, je)
+                EntryStatus = HistoryEntryStatus.Update(prev?.EntryStatus, je, isys.Name)
             };
 
             if (prev != null )

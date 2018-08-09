@@ -45,7 +45,7 @@ namespace EliteDangerousCore.JournalEvents
         public long? Population { get; set; }
         public string PowerplayState { get; set; }
         public string[] PowerplayPowers { get; set; }
-        public bool? Wanted { get; set; }
+        public bool Wanted { get; set; }
 
         public FactionInformation[] Factions { get; set; }
 
@@ -126,7 +126,7 @@ namespace EliteDangerousCore.JournalEvents
             Security = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity", "Security" });
             Security_Localised = JournalFieldNaming.CheckLocalisation(JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemSecurity_Localised", "Security_Localised" }),Security);
 
-            Wanted = evt["Wanted"].BoolNull();
+            Wanted = evt["Wanted"].Bool();      // if absence, your not wanted, by definition of frontier in journal (only present if wanted, see docked)
 
             PowerplayState = evt["PowerplayState"].Str();            // NO evidence
             PowerplayPowers = evt["Powers"]?.ToObjectProtected<string[]>();
