@@ -195,7 +195,7 @@ namespace EDDiscovery
                 SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
                 SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
                 SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                SQLiteConnectionUser.DeleteKey("ProfileNumber");                    // back to base profile
+                SQLiteConnectionUser.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
