@@ -119,7 +119,7 @@ namespace EDDiscovery.Forms
             g.chkbox = new ExtendedControls.CheckBoxCustom();
             g.chkbox.Location = new Point(640, textheightmargin);
             g.chkbox.Size = new Size(150, 24);
-            g.chkbox.Text = "Startup".Tx(this);
+            g.chkbox.Text = "Default".Tx(this);
             g.chkbox.Tag = g;
             g.chkbox.Checked = poweron;
             g.chkbox.Click += Chkbox_Click;
