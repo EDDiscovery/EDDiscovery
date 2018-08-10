@@ -216,7 +216,7 @@ public static class KeyObjectExtensions
     public static List<Keys> KeyList(bool inclshifts = false)  // base keys, repeates removed, mouse removed, modifiers removed, with optional inclusion if shift keys
     {
         Keys[] alwaysremove = new Keys[] { Keys.None, Keys.LButton, Keys.RButton, Keys.MButton, Keys.XButton1, Keys.XButton2,
-                                    Keys.Shift, Keys.Control, Keys.Alt , Keys.Modifiers , Keys.KeyCode,
+                                    Keys.Shift, Keys.Control, Keys.Alt , Keys.Modifiers , Keys.KeyCode, Keys.PrintScreen,
                                     };
 
         Keys[] shiftremove = new Keys[] {
