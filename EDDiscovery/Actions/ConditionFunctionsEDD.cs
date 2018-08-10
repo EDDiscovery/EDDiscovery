@@ -110,12 +110,23 @@ namespace EDDiscovery.Actions
 
         protected bool Star(out string output)
         {
-            // Find IX-T123b and replace with I X - T 123 b
-            paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value, @"([A-Za-z0-9]+)\-([A-Za-z0-9]+)", delegate (System.Text.RegularExpressions.Match match)
-            {
-                string r = System.Text.RegularExpressions.Regex.Replace(match.Value, @"([A-Za-z\-])", " $1 ");  // space out alphas and dash
-                return r.Replace("  ", " ");   // remove double spaces.. quickest way for now
-            });
+            paras[0].Value = paras[0].Value.Replace(" ", "  ");     // ensure we have enough spaces for regex
+
+            paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value,           // find space char space|EOL
+                                     @"(\s+)[A-Za-z0-9](\s|$)",
+                                     delegate (System.Text.RegularExpressions.Match match)
+                                     {
+                                         return ", " + match.Value.Trim();
+                                     });
+
+            paras[0].Value = System.Text.RegularExpressions.Regex.Replace(paras[0].Value, @"(\s*)([A-Za-z0-9]+)\-([A-Za-z0-9]+)",
+                                    delegate (System.Text.RegularExpressions.Match match)
+                                    {
+                                        string r = System.Text.RegularExpressions.Regex.Replace(match.Value, @"([A-Za-z\-])", " $1 ");  // space out alphas and dash
+                                        return ", " + r.Trim();
+                                    });
+
+            paras[0].Value = paras[0].Value.Replace("  ", " ");
 
             return ReplaceVarCommon(out output, true);
         }

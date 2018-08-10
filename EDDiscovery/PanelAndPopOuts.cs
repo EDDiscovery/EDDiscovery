@@ -250,6 +250,11 @@ namespace EDDiscovery
         public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
         public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
+        private static string PopOutSaveID(PanelInformation.PanelIDs p)
+        {
+            return EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString();
+        }
+
         public void ShowAllPopOutsInTaskBar()
         {
             usercontrolsforms.ShowAllInTaskBar();
@@ -260,7 +265,12 @@ namespace EDDiscovery
             usercontrolsforms.MakeAllOpaque();
         }
 
-        internal void SaveCurrentPopouts()
+        public void CloseAllPopouts()
+        {
+            usercontrolsforms.CloseAll();
+        }
+
+        public void SaveCurrentPopouts()
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
@@ -268,23 +278,26 @@ namespace EDDiscovery
                 if (pi != null) // paranoia
                 {
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
-                    //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
-                    SQLiteConnectionUser.PutSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
+                    if ( numopened>0) System.Diagnostics.Debug.WriteLine($"Save Popout {p} {numopened}");
+                    SQLiteConnectionUser.PutSettingInt(PopOutSaveID(p), numopened);
                 }
             }
         }
 
-        internal void LoadSavedPopouts()
+        public void LoadSavedPopouts()
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                int numtoopen = SQLiteConnectionUser.GetSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), 0);
+                int numtoopen = SQLiteConnectionUser.GetSettingInt(PopOutSaveID(p), 0);
+
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
 
                 if (pi != null && numtoopen > 0) // paranoia on first..
                 {
+                    System.Diagnostics.Debug.WriteLine($"Load Popout {p} {numtoopen}");
+
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     if (numopened < numtoopen)
                     {
@@ -294,6 +307,7 @@ namespace EDDiscovery
                 }
             }
         }
+
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {

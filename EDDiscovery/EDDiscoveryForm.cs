@@ -147,7 +147,7 @@ namespace EDDiscovery
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ED init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");
 
             msg.Invoke("Modulating Shields");
 
@@ -172,7 +172,7 @@ namespace EDDiscovery
 
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Load popouts, themes, init controls");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
             msg.Invoke("Repairing Canopy");
@@ -184,7 +184,7 @@ namespace EDDiscovery
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
             // open all the major tabs except the built in ones
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Creating major tabs Now");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");
             MaterialCommodityData.SetUpInitialTable();
 
 
@@ -195,7 +195,7 @@ namespace EDDiscovery
                 SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
                 SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
                 SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                SQLiteConnectionUser.DeleteKey("ProfileNumber");                    // back to base profile
+                SQLiteConnectionUser.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
@@ -237,12 +237,12 @@ namespace EDDiscovery
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Map manager");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Map manager");
             Map = new EDDiscovery._3DMap.MapManager(this);
 
             this.TopMost = EDDConfig.KeepOnTop;
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Audio");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Audio");
 
             msg.Invoke("Activating Sensors");
 
@@ -250,7 +250,7 @@ namespace EDDiscovery
 
             actioncontroller.ReLoad();          // load system up here
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Theming");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Theming");
 
             ApplyTheme();
 
@@ -286,7 +286,7 @@ namespace EDDiscovery
                 });
             };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Finish ED Init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
             labelInfoBoxTop.Text = "";
 
@@ -306,7 +306,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF Load");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF Load");
 
             Controller.PostInit_Loaded();
 
@@ -317,13 +317,13 @@ namespace EDDiscovery
                 buttonReloadActions.Visible = true;
             }
             
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF load complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF load complete");
         }
 
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EDF shown");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
             Controller.PostInit_Shown();
 
             if (!themeok)
@@ -332,7 +332,7 @@ namespace EDDiscovery
                 "Correct the missing colors or other information manually using the Theme Editor in Settings").Tx(this,"ThemeW"));
             }
 
-            if (EDDConfig.AutoLoadPopOuts && EDDOptions.Instance.NoWindowReposition == false)
+            if (EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
 
             actioncontroller.onStartup();
@@ -599,7 +599,7 @@ namespace EDDiscovery
 
         private void Controller_RefreshComplete()
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete");
 
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
@@ -656,7 +656,7 @@ namespace EDDiscovery
 
             DLLManager.Refresh(EDCommander.Current.Name, DLL.EDDDLLCallerHE.CreateFromHistoryEntry(history.GetLast));
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Refresh complete finished");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete finished");
         }
 
 
@@ -868,8 +868,7 @@ namespace EDDiscovery
 
             tabControlMain.CloseTabList();      // close and save tab list
 
-            if (EDDConfig.AutoSavePopOuts)      // must do after settings have saved state
-                PopOuts.SaveCurrentPopouts();
+            PopOuts.SaveCurrentPopouts();
 
             notifyIcon1.Visible = false;
 
@@ -1587,11 +1586,15 @@ namespace EDDiscovery
         {
             if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
             {
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** CHANGE To profile " + id);
                 if (checksavecur)
                 {
                     tabControlMain.CloseTabList();
                     PopOuts.SaveCurrentPopouts();
                 }
+
+                PopOuts.CloseAllPopouts();
+
 
                 comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
                 comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
@@ -1600,6 +1603,8 @@ namespace EDDiscovery
                 EDDProfiles.Instance.ChangeToId(id);
 
                 UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+
+
                 tabControlMain.TabPages.Clear();
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
                 tabControlMain.LoadTabs();
@@ -1607,6 +1612,7 @@ namespace EDDiscovery
 
                 PopOuts.LoadSavedPopouts();
 
+                System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** Finished Profile " + id);
                 LogLine(string.Format("Profile {0} Loaded".Tx(this,"PL"), EDDProfiles.Instance.Current.Name ));
             }
         }
@@ -1660,15 +1666,6 @@ namespace EDDiscovery
             popoutdropdown.Show(this);
         }
 
-        internal void SaveCurrentPopOuts()
-        {
-            PopOuts.SaveCurrentPopouts();
-        }
-
-        internal void LoadSavedPopouts()
-        {
-            PopOuts.LoadSavedPopouts();
-        }
 
         #endregion
 

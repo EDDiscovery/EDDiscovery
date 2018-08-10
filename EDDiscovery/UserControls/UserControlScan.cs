@@ -47,6 +47,8 @@ namespace EDDiscovery.UserControls
         HistoryEntry last_he = null;
         Point last_maxdisplayarea;
 
+        bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
+
         #region Init
         public UserControlScan()
         {
@@ -95,6 +97,7 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            closing = true;
         }
 		
 		#endregion
@@ -115,7 +118,7 @@ namespace EDDiscovery.UserControls
             PositionInfo();
             //System.Diagnostics.Debug.WriteLine("Resize panel stars {0} {1}", DisplayRectangle, panelStars.Size);
 
-            if (last_he != null)
+            if (!closing && last_he != null)
             {
                 int newspace = panelStars.Width - panelStars.ScrollBarWidth;
 
@@ -168,7 +171,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Scn " + displaynumber + " Load start");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " Scn " + displaynumber + " Load start");
 
             StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
 
@@ -176,7 +179,7 @@ namespace EDDiscovery.UserControls
 
             if (last_sn != null)     // 
             {
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " Scn " + displaynumber + " Begin Display");
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " Scn " + displaynumber + " Begin Display");
 
                 BuildSystemInfo(last_sn);
 
@@ -288,7 +291,7 @@ namespace EDDiscovery.UserControls
 
             imagebox.Render();      // replaces image..
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " ScN " + displaynumber + " Load Finish");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " ScN " + displaynumber + " Load Finish");
 
         }
 
