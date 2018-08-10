@@ -108,8 +108,10 @@ namespace EDDiscovery.Forms
             if (!bk.isRegion)
             {
                 ISystem s = SystemClassDB.GetSystem(bk.StarName);
-                if ( s != null )    // paranoia
+                if (s != null)    // paranoia
                     InitialisePos(s);
+                else
+                    InitialisePos(bk.x, bk.y, bk.z);
 
                 SystemNoteClass sn = SystemNoteClass.GetNoteOnSystem(bk.StarName);
                 note = (sn != null) ? sn.Note : "";
