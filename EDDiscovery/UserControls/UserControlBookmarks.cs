@@ -115,7 +115,11 @@ namespace EDDiscovery.UserControls
             if (currentedit != null)
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
-                string newNote = currentedit.Cells[2].Value.ToString();
+                string newNote = "";
+                if (null != currentedit.Cells[2].Value)
+                {
+                    newNote = currentedit.Cells[2].Value.ToString();
+                }
                 //System.Diagnostics.Debug.WriteLine("Checking for save " + currentedit.Index);
 
                 if (!newNote.Equals(bk.Note) || userControlSurfaceBookmarks.Edited)     // notes or planet marks changed
