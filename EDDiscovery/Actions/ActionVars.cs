@@ -51,6 +51,8 @@ namespace EDDiscovery.Actions
                 vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
+                vars[prefix + "Credits"] = he.Credits.ToString(ct);
+
                 vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToString("0.0");
                 vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
                 vars[prefix + "IsTravelling"] = he.isTravelling ? "1" : "0";
