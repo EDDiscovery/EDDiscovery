@@ -80,7 +80,7 @@ namespace EliteDangerousCore.DB
                 {
                     if (txnlock._isLongRunning)
                     {
-                        Trace.WriteLine($"The following command is taking a long time to execute:\n{txnlock._commandText}");
+                        Trace.WriteLine($"{Environment.TickCount % 10000} The following command is taking a long time to execute:\n{txnlock._commandText}");
                     }
                     if (txnlock._owningThread == Thread.CurrentThread)
                     {
@@ -90,11 +90,11 @@ namespace EliteDangerousCore.DB
                 }
                 else
                 {
-                    Trace.WriteLine($"The transaction lock has been held for a long time.");
+                    Trace.WriteLine($"{Environment.TickCount % 10000} The transaction lock has been held for a long time.");
 
                     if (txnlock._commandText != null)
                     {
-                        Trace.WriteLine($"Last command to execute:\n{txnlock._commandText}");
+                        Trace.WriteLine($"{Environment.TickCount % 10000} Last command to execute:\n{txnlock._commandText}");
                     }
                 }
             }
@@ -133,15 +133,20 @@ namespace EliteDangerousCore.DB
                     try
                     {
                         Interlocked.Increment(ref _readsWaiting);
+                        bool warned = false;
                         while (!_lock.TryEnterReadLock(1000))
                         {
                             SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
                             if (lockowner != null)
                             {
-                                Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
+                                warned = true;
+                                Trace.WriteLine($"{Environment.TickCount % 10000} Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
                                 DebugLongRunningOperation(lockowner);
                             }
                         }
+
+                        if (warned)
+                            Trace.WriteLine($"{Environment.TickCount % 10000} Thread {Thread.CurrentThread.Name} Released for read");
 
                         _isReader = true;
                     }
@@ -171,15 +176,21 @@ namespace EliteDangerousCore.DB
                 {
                     if (!_lock.IsUpgradeableReadLockHeld)
                     {
+                        bool warned = false;
+
                         while (!_lock.TryEnterUpgradeableReadLock(1000))
                         {
                             SQLiteTxnLockED<TConn> lockowner = _writeLockOwner;
                             if (lockowner != null)
                             {
-                                Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
+                                warned = true;
+                                Trace.WriteLine($"{Environment.TickCount % 10000} Thread {Thread.CurrentThread.Name} waiting for thread {lockowner._owningThread.Name} to finish writer");
                                 DebugLongRunningOperation(lockowner);
                             }
                         }
+
+                        if (warned)
+                            Trace.WriteLine($"{Environment.TickCount % 10000} Thread {Thread.CurrentThread.Name} Released for write");
 
                         _isWriter = true;
                         _writeLockOwner = this;
@@ -187,7 +198,7 @@ namespace EliteDangerousCore.DB
 
                     while (!_lock.TryEnterWriteLock(1000))
                     {
-                        Trace.WriteLine($"Thread {Thread.CurrentThread.Name} waiting for readers to finish");
+                        Trace.WriteLine($"{Environment.TickCount % 10000}Thread {Thread.CurrentThread.Name} waiting for readers to finish");
                     }
                 }
                 catch

@@ -70,8 +70,6 @@ namespace EDDiscovery.UserControls
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
-            checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
-            checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
             checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
@@ -463,26 +461,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region window options
-
-        private void checkBoxAutoLoad_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
-        }
-
-        private void checkBoxAutoSave_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
-        }
-
-        private void buttonSaveSetup_Click(object sender, EventArgs e)
-        {
-            discoveryform.SaveCurrentPopOuts();
-        }
-
-        private void buttonReloadSaved_Click(object sender, EventArgs e)
-        {
-            discoveryform.LoadSavedPopouts();
-        }
 
         private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
         {

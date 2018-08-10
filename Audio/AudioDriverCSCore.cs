@@ -58,7 +58,7 @@ namespace AudioExtensions
                     return false;
             }
 
-            DirectSoundOut dso = new DirectSoundOut(100, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
+            DirectSoundOut dso = new DirectSoundOut(200, System.Threading.ThreadPriority.Highest);    // seems good quality at 200 ms latency
 
             if (dso == null)    // if no DSO, fail..
                 return false;

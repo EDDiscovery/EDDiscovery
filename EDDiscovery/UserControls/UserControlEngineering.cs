@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
 
             List<Tuple<Recipes.Recipe, int>> wantedList = null;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Begin Display");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " EN " + displaynumber + " Begin Display");
 
             if (last_he != null)
             {
@@ -326,7 +326,7 @@ namespace EDDiscovery.UserControls
             if (OnDisplayComplete != null)
                 OnDisplayComplete(wantedList);
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " EN " + displaynumber + " Load Finished");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " EN " + displaynumber + " Load Finished");
         }
 
         #endregion
