@@ -15,11 +15,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using EDDiscovery.Forms;
@@ -52,8 +49,7 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
-            comboBoxCustomLanguage.Items = BaseUtils.Translator.Languages(EDDOptions.Instance.TranslatorDirectory(), true);
-            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.Languages(EDDOptions.ExeDirectory(), true));
+            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames( EDDOptions.Instance.TranslatorFolders() ));
 
             comboBoxCustomLanguage.Items.Add("Auto");
             comboBoxCustomLanguage.Items.Add("None");
