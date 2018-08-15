@@ -152,7 +152,7 @@ namespace EDDiscovery
             msg.Invoke("Modulating Shields");
 
             BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
-                    EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory(),
+                    EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
 
             BaseUtils.Translator.Instance.AddExcludedControls(new string[]
@@ -887,7 +887,7 @@ namespace EDDiscovery
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
-                    EDDOptions.Instance.TranslatorDirectory(), EDDOptions.ExeDirectory(),
+                    EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
             actioncontroller.ReLoad();
             actioncontroller.CheckWarn();
