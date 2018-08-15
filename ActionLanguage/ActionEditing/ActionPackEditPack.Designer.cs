@@ -1,6 +1,6 @@
 ﻿namespace ActionLanguage
 {
-    partial class ActionPackEditorForm 
+    partial class ActionPackEditPack 
     {
         /// <summary>
         /// Required designer variable.
