@@ -97,7 +97,7 @@ namespace EliteDangerousCore
 
                     if (scandata == null)
                         scandata = value;
-                    else if (!value.IsEDSMBody) // Always overwrtite if its a journalscan.
+                    else if ((!value.IsEDSMBody && value.ScanType != "Basic") || scandata.ScanType == "Basic") // Always overwrtite if its a journalscan (except basic scans)
                         scandata = value;
                 }
             }
