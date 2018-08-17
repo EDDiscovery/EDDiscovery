@@ -34,6 +34,8 @@ namespace EliteDangerousCore
         public bool InProgress { get { return (State == StateTypes.InProgress); } }
         public bool InProgressDateTime(DateTime compare) { return InProgress && DateTime.Compare(compare, Mission.Expiry)<0; }
 
+        public int Id { get { return Mission.MissionId; } }                         // id of entry
+
         public string OriginatingSystem { get { return sys.Name; } }
         public string OriginatingStation { get { return body; } }
         private ISystem sys;                                      // where it was found
@@ -43,7 +45,6 @@ namespace EliteDangerousCore
         {
             return (Redirected != null) ? ("->" + Redirected.NewDestinationSystem.AppendPrePad(Redirected.NewDestinationStation, ":")) : Mission.DestinationSystem.AppendPrePad(Mission.DestinationStation, ":");
         }
-
 
         public string Info()            // looking at state
         {
@@ -110,7 +111,7 @@ namespace EliteDangerousCore
         public MissionState(MissionState other, StateTypes type, DateTime? endtime)           // changed to another state..
         {
             Mission = other.Mission;
-            Redirected = other.Redirected;
+            Redirected = other.Redirected;          // no completed, since we can't be
             State = type;
             MissionEndTime = (endtime != null) ? endtime.Value : other.MissionEndTime;
             sys = other.sys;
@@ -166,9 +167,18 @@ namespace EliteDangerousCore
                     affected.Add(m.Value);
             }
 
-            foreach( var m in affected)
+            foreach (var m in affected)
                 Missions[Key(m.Mission)] = new MissionState(Missions[Key(m.Mission)], MissionState.StateTypes.Died, diedtimeutc); // copy previous mission info, set died, now!
         }
+
+        public void Resurrect(List<string> keys)
+        {
+            foreach( string k in keys)
+            {
+                Missions[k] = new MissionState(Missions[k], MissionState.StateTypes.InProgress,null); // copy previous mission info, set died, now!
+            }
+        }
+
 
         public List<MissionState> GetAllCombatMissionsLatestFirst() { return (from x in Missions.Values where x.Mission.TargetType.Length > 0 && x.Mission.ExpiryValid orderby x.Mission.EventTimeUTC descending select x).ToList(); }
 
@@ -179,8 +189,9 @@ namespace EliteDangerousCore
         public static string Key(JournalMissionFailed m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionCompleted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionAccepted m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
-        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }  
+        public static string Key(JournalMissionRedirected m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
         public static string Key(JournalMissionAbandoned m) { return m.MissionId.ToStringInvariant() + ":" + m.Name; }
+        public static string Key(int id, string name) { return id.ToStringInvariant() + ":" + name; }
     }
 
     [System.Diagnostics.DebuggerDisplay("Total {current.Missions.Count}")]
@@ -246,6 +257,33 @@ namespace EliteDangerousCore
             }
             else
                 System.Diagnostics.Debug.WriteLine("Missions: Unknown " + MissionList.Key(m));
+        }
+
+        public void Missions( JournalMissions m )
+        {
+            List<string> toresurrect = new List<string>();
+
+            foreach( var mi in m.ActiveMissions )
+            {
+                string kn = MissionList.Key(mi.MissionID, mi.Name);
+
+                if (missionlist.Missions.ContainsKey(kn))
+                {
+                    MissionState ms = missionlist.Missions[kn];
+
+                    if ( ms.State == MissionState.StateTypes.Died)  // if marked died... 
+                    {
+                        System.Diagnostics.Debug.WriteLine("Missions in active list but marked died" + kn);
+                        toresurrect.Add(kn);
+                    }
+                }
+            }
+
+            if ( toresurrect.Count>0)       // if any..
+            {
+                missionlist = new MissionList(missionlist);     // shallow copy
+                missionlist.Resurrect(toresurrect);
+            }
         }
 
         public void Died(DateTime diedtime)

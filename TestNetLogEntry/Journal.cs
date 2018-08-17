@@ -58,7 +58,7 @@ namespace NetLogEntry
                     int id = args.Int;
                     lineout = "{ " + TimeStamp() + F("event", "CommitCrime") + F("CrimeType", "collidedAtSpeedInNoFireZone") + F("Faction", f) + FF("Fine", id) + " }";
                 }
-                else if (eventtype.Equals("missionaccepted"))
+                else if (eventtype.Equals("missionaccepted") && args.Left == 3)
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -69,7 +69,7 @@ namespace NetLogEntry
                             + F("DestinationSystem", "Quapa") + F("DestinationStation", "Grabe Dock") + F("Target", "mamsey") + F("Expiry", DateTime.UtcNow.AddDays(1)) +
                             F("Influence", "Med") + F("Reputation", "Med") + FF("MissionID", id) + "}";
                 }
-                else if (eventtype.Equals("missioncompleted"))
+                else if (eventtype.Equals("missioncompleted") && args.Left == 3)
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -79,7 +79,7 @@ namespace NetLogEntry
                         F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf) +
                          F("MissionID", id) + F("Reward", "82272") + " \"CommodityReward\":[ { \"Name\": \"CoolingHoses\", \"Count\": 4 } ] }";
                 }
-                else if (eventtype.Equals("missionredirected"))
+                else if (eventtype.Equals("missionredirected") && args.Left == 3)
                 {
                     string sysn = args.Next;
                     string stationn = args.Next;
@@ -87,6 +87,27 @@ namespace NetLogEntry
                     lineout = "{ " + TimeStamp() + F("event", "MissionRedirected") + F("MissionID", id) + F("MissionName", "Mission_Assassinate_Legal_Corporate") +
                         F("NewDestinationStation", stationn) + F("OldDestinationStation", "Cuffey Orbital") +
                         F("NewDestinationSystem", sysn) + FF("OldDestinationSystem", "Vequess") + " }";
+                }
+                else if (eventtype.Equals("missions") && args.Left == 1)
+                {
+                    int id = args.Int;
+                    BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
+
+                    qj.Object().UTC("timestamp").V("event", "Missions");
+
+                    qj.Array("Active").Object();
+                    FMission(qj, id, "Mission_Assassinate_Legal_Corporate", false, 20000);
+                    qj.Close(2);
+
+                    qj.Array("Failed").Object();
+                    FMission(qj, id+1000, "Mission_Assassinate_Legal_Corporate", false, 20000);
+                    qj.Close(2);
+
+                    qj.Array("Completed").Object();
+                    FMission(qj, id+2000, "Mission_Assassinate_Legal_Corporate", false, 20000);
+                    qj.Close(2);
+
+                    lineout = qj.Get();
                 }
                 else if (eventtype.Equals("bounty"))
                 {
@@ -206,7 +227,7 @@ namespace NetLogEntry
                     lineout = CargoDepot(args);
                 else
                 {
-                    Console.WriteLine("** Unrecognised journal event type");
+                    Console.WriteLine("** Unrecognised journal event type or not enough parameters for entry");
                     break;
                 }
 
@@ -433,8 +454,13 @@ namespace NetLogEntry
             return mline + " }";
         }
 
+        public static void FMission(QuickJSONFormatter q , int id, string name, bool pas, int time)
+        {
+            q.V("MissionID", id).V("Name",name).V("PassengerMission",pas).V("Expires",time);
+        }
 
-        #region Helpers for journal writing
+
+        #region DEPRECIATED Helpers for journal writing - USE QuickJSONFormatter!
 
         public static string TimeStamp()
         {
