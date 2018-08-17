@@ -152,7 +152,7 @@
     <value>https://github.com/EDDiscovery/EDDiscovery/wiki</value>
   </data>
   <data name="URLCoriolis" xml:space="preserve">
-    <value>https://coriolis.edcd.io/import?</value>
+    <value>https://coriolis.io/import?</value>
   </data>
   <data name="GNE" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\GNE.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
