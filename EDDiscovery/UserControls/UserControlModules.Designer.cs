@@ -230,6 +230,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDShipyard.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
             this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
             this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
             // 
@@ -291,6 +292,10 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
+            // 
+            // toolTip
+            // 
+            this.toolTip.ShowAlways = true;
             // 
             // UserControlModules
             // 
