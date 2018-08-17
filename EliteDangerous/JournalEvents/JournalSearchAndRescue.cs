@@ -19,27 +19,34 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
-    public class JournalSearchAndRescue : JournalEntry
+    public class JournalSearchAndRescue : JournalEntry, IMaterialCommodityJournalEntry
     {
         public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
         {
-            Name = evt["Name"].Str();
-            Name = JournalFieldNaming.FDNameTranslation(Name); // some premangling
-            FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
+            FDName = evt["Name"].Str();
+            FDName = JournalFieldNaming.FDNameTranslation(FDName); // some premangling
+            FriendlyName = MaterialCommodityData.GetNameByFDName(FDName);
+            Name_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Name_Localised"].Str(), FriendlyName);         // always ensure we have one
             Count = evt["Count"].Int();
             Reward = evt["Reward"].Long();
             MarketID = evt["MarketID"].LongNull();
         }
 
-        public string Name { get; set; }            // Hyperspace, Supercruise
+        public string FDName { get; set; }            // Hyperspace, Supercruise
+        public string Name_Localised { get; set; }            // Hyperspace, Supercruise
         public string FriendlyName { get; set; }            // Hyperspace, Supercruise
         public int Count { get; set; }
         public long Reward { get; set; }
         public long? MarketID { get; set; }
 
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0, conn);
+        }
+
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("",FriendlyName , "Num:".Txb(this), Count, "Reward:".Tx(this), Reward);
+            info = BaseUtils.FieldBuilder.Build("",Name_Localised , "Num:".Txb(this), Count, "Reward:".Tx(this), Reward);
             detailed = "";
         }
     }

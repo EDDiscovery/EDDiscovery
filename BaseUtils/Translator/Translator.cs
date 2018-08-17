@@ -70,6 +70,8 @@ namespace BaseUtils
         {
         }
 
+        public bool Translating { get { return translations != null; } }
+
         // You can call this multiple times if required for debugging purposes
 
         public void LoadTranslation(string language, CultureInfo uicurrent, string[] txfolders, int includesearchupdepth, string logdir)

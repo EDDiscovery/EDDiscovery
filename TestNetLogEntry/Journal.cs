@@ -24,7 +24,7 @@ namespace NetLogEntry
             {
                 CommandArgs args = new CommandArgs(argsentry);
 
-                string eventtype = args.Next.ToLower(); 
+                string eventtype = args.Next.ToLower();
 
                 Random rnd = new Random();
 
@@ -100,14 +100,25 @@ namespace NetLogEntry
                     qj.Close(2);
 
                     qj.Array("Failed").Object();
-                    FMission(qj, id+1000, "Mission_Assassinate_Legal_Corporate", false, 20000);
+                    FMission(qj, id + 1000, "Mission_Assassinate_Legal_Corporate", false, 20000);
                     qj.Close(2);
 
                     qj.Array("Completed").Object();
-                    FMission(qj, id+2000, "Mission_Assassinate_Legal_Corporate", false, 20000);
+                    FMission(qj, id + 2000, "Mission_Assassinate_Legal_Corporate", false, 20000);
                     qj.Close(2);
 
                     lineout = qj.Get();
+                }
+                else if (eventtype.Equals("marketbuy") && args.Left == 3)
+                {
+                    string name = args.Next;
+                    int count = args.Int;
+                    int price = args.Int;
+
+                    BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
+
+                    lineout = qj.Object().UTC("timestamp").V("event", "MarketBuy").V("MarketID", 29029292)
+                                .V("Type", name).V("Type_Localised", name + "loc").V("Count", count).V("BuyPrice", price).V("TotalCost", price * count).Get();
                 }
                 else if (eventtype.Equals("bounty"))
                 {
@@ -173,10 +184,15 @@ namespace NetLogEntry
                 else if (eventtype.Equals("sellshiponrebuy"))
                     lineout = "{ " + TimeStamp() + F("event", "SellShipOnRebuy") + "\"ShipType\":\"Dolphin\", \"System\":\"Shinrarta Dezhra\", \"SellShipId\":4, \"ShipPrice\":4110183 }";
 
-                else if (eventtype.Equals("searchandrescue"))
-                    lineout = "{ " + TimeStamp() + F("event", "SearchAndRescue") + "\"Name\":\"Fred\", \"Count\":50, \"Reward\":4110183 }";
+                else if (eventtype.Equals("searchandrescue") && args.Left == 2)
+                {
+                    string name = args.Next;
+                    int count = args.Int;
+                    BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
+                    lineout = qj.Object().UTC("timestamp").V("event", "SearchAndRescue").V("MarketID", 29029292)
+                                .V("Name", name).V("Name_Localised", name + "loc").V("Count", count).V("Reward", 10234).Get();
 
-
+                }
                 else if (eventtype.Equals("repairdrone"))
                     lineout = "{ " + TimeStamp() + F("event", "RepairDrone") + "\"HullRepaired\": 0.23, \"CockpitRepaired\": 0.1,  \"CorrosionRepaired\": 0.5 }";
 
@@ -550,16 +566,19 @@ namespace NetLogEntry
             "         JetConeBoost\n" +
             "Missions MissionAccepted/MissionCompleted faction victimfaction id\n" +
             "         MissionRedirected newsystem newstation id\n" +
+            "         Missions activeid\n" +
             "         Bounty faction reward\n" +
             "         CommitCrime faction amount\n" +
             "         Interdiction name success isplayer combatrank faction power\n" +
             "         FactionKillBond faction victimfaction reward\n" +
             "         CapShipBond faction victimfaction reward\n" +
+            "Commds   marketbuy fdname count price\n"+
             "Scans    ScanPlanet name\n" +
             "         ScanStar, ScanEarth\n" +
             "         NavBeaconScan\n" +
             "Ships    SellShipOnRebuy\n" +
-            "Others   SearchANdRescue, MiningRefined\n" +
+            "Others   SearchAndRescue fdname count\n" +
+            "         MiningRefined\n" +
             "         RepairDrone, CommunityGoal\n" +
             "         MusicNormal, MusicGalMap, MusicSysMap\n" +
             "         Friends name\n" +

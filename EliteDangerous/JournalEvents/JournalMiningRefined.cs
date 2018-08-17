@@ -26,7 +26,7 @@ namespace EliteDangerousCore.JournalEvents
             Type = JournalFieldNaming.FixCommodityName(evt["Type"].Str());          // instances of $.._name, translate to FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
-            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),FriendlyType);
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(),FriendlyType);
         }
 
         public string Type { get; set; }                                        // FIXED fdname always.. vital it stays this way
