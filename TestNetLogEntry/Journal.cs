@@ -24,39 +24,41 @@ namespace NetLogEntry
             {
                 CommandArgs args = new CommandArgs(argsentry);
 
-                string writetype = args.Next; // min 3
+                string eventtype = args.Next.ToLower(); 
 
                 Random rnd = new Random();
 
                 string lineout = null;      //quick writer
 
-                if (writetype.Equals("FSD", StringComparison.InvariantCultureIgnoreCase))
+                if (eventtype.Equals("fsd"))
                     lineout = FSDJump(args, repeatcount);
-                else if (writetype.Equals("FSDTravel", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("fsdtravel"))
                     lineout = FSDTravel(args);
-                else if (writetype.Equals("LOC", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("loc"))
                     lineout = Loc(args);
-                else if (writetype.Equals("Interdiction", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("interdiction"))
                     lineout = Interdiction(args);
-                else if (writetype.Equals("Docked", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("docked"))
+                {
                     lineout = "{ " + TimeStamp() + "\"event\":\"Docked\", " +
                         "\"StationName\":\"Jameson Memorial\", " +
                         "\"StationType\":\"Orbis\", \"StarSystem\":\"Shinrarta Dezhra\", \"Faction\":\"The Pilots Federation\", \"Allegiance\":\"Independent\", \"Economy\":\"$economy_HighTech;\", \"Economy_Localised\":\"High tech\", \"Government\":\"$government_Democracy;\", \"Government_Localised\":\"Democracy\", \"Security\":\"$SYSTEM_SECURITY_high;\", \"Security_Localised\":\"High Security\" }";
-                else if (writetype.Equals("Undocked", StringComparison.InvariantCultureIgnoreCase))
+                }
+                else if (eventtype.Equals("undocked"))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Undocked\", " + "\"StationName\":\"Jameson Memorial\",\"StationType\":\"Orbis\" }";
-                else if (writetype.Equals("Liftoff", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("liftoff"))
                     lineout = "{ " + TimeStamp() + "\"event\":\"Liftoff\", " + "\"Latitude\":7.141173, \"Longitude\":95.256424 }";
-                else if (writetype.Equals("Touchdown", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("touchdown"))
                 {
                     lineout = "{ " + TimeStamp() + F("event", "Touchdown") + F("Latitude", 7.141173) + F("Longitude", 95.256424) + FF("PlayerControlled", true) + " }";
                 }
-                else if (writetype.Equals("CommitCrime", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("commitcrime"))
                 {
                     string f = args.Next;
                     int id = args.Int;
                     lineout = "{ " + TimeStamp() + F("event", "CommitCrime") + F("CrimeType", "collidedAtSpeedInNoFireZone") + F("Faction", f) + FF("Fine", id) + " }";
                 }
-                else if (writetype.Equals("MissionAccepted", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("missionaccepted"))
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -67,7 +69,7 @@ namespace NetLogEntry
                             + F("DestinationSystem", "Quapa") + F("DestinationStation", "Grabe Dock") + F("Target", "mamsey") + F("Expiry", DateTime.UtcNow.AddDays(1)) +
                             F("Influence", "Med") + F("Reputation", "Med") + FF("MissionID", id) + "}";
                 }
-                else if (writetype.Equals("MissionCompleted", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("missioncompleted"))
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -77,7 +79,7 @@ namespace NetLogEntry
                         F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf) +
                          F("MissionID", id) + F("Reward", "82272") + " \"CommodityReward\":[ { \"Name\": \"CoolingHoses\", \"Count\": 4 } ] }";
                 }
-                else if (writetype.Equals("MissionRedirected", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("missionredirected"))
                 {
                     string sysn = args.Next;
                     string stationn = args.Next;
@@ -86,7 +88,7 @@ namespace NetLogEntry
                         F("NewDestinationStation", stationn) + F("OldDestinationStation", "Cuffey Orbital") +
                         F("NewDestinationSystem", sysn) + FF("OldDestinationSystem", "Vequess") + " }";
                 }
-                else if (writetype.Equals("Bounty", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("bounty"))
                 {
                     string f = args.Next;
                     int rw = args.Int;
@@ -94,7 +96,7 @@ namespace NetLogEntry
                     lineout = "{ " + TimeStamp() + F("event", "Bounty") + F("VictimFaction", f) + F("VictimFaction_Localised", f + "_Loc") +
                         F("TotalReward", rw, true) + "}";
                 }
-                else if (writetype.Equals("FactionKillBond", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("factionkillbond"))
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -104,7 +106,7 @@ namespace NetLogEntry
                         F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
                         F("Reward", rw, true) + "}";
                 }
-                else if (writetype.Equals("CapShipBond", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("capshipbond"))
                 {
                     string f = args.Next;
                     string vf = args.Next;
@@ -114,95 +116,97 @@ namespace NetLogEntry
                         F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
                         F("Reward", rw, true) + "}";
                 }
-                else if (writetype.Equals("Resurrect", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("resurrect"))
                 {
                     int ct = args.Int;
 
                     lineout = "{ " + TimeStamp() + F("event", "Resurrect") + F("Option", "Help me") + F("Cost", ct) + FF("Bankrupt", false) + "}";
                 }
-                else if (writetype.Equals("Died", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("died"))
                 {
                     lineout = "{ " + TimeStamp() + F("event", "Died") + F("KillerName", "Evil Jim McDuff") + F("KillerName_Localised", "Evil Jim McDuff The great") + F("KillerShip", "X-Wing") + FF("KillerRank", "Invincible") + "}";
                 }
-                else if (writetype.Equals("MiningRefined", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("miningrefined"))
                     lineout = "{ " + TimeStamp() + F("event", "MiningRefined") + FF("Type", "Gold") + " }";
-                else if (writetype.Equals("EngineerCraft", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("engineercraft"))
                     lineout = "{ " + TimeStamp() + F("event", "EngineerCraft") + F("Engineer", "Robert") + F("Blueprint", "FSD_LongRange")
                         + F("Level", "5") + "\"Ingredients\":{ \"magneticemittercoil\":1, \"arsenic\":1, \"chemicalmanipulators\":1, \"dataminedwake\":1 } }";
-                else if (writetype.Equals("NavBeaconScan", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("navbeaconscan"))
                     lineout = "{ " + TimeStamp() + F("event", "NavBeaconScan") + FF("NumBodies", "3") + " }";
-                else if (writetype.Equals("ScanPlanet", StringComparison.InvariantCultureIgnoreCase) && args.Left >= 1)
+                else if (eventtype.Equals("scanplanet") && args.Left >= 1)
                 {
                     lineout = "{ " + TimeStamp() + F("event", "Scan") + "\"BodyName\":\"" + args.Next + "x" + repeatcount + "\", \"DistanceFromArrivalLS\":639.245483, \"TidalLock\":true, \"TerraformState\":\"\", \"PlanetClass\":\"Metal rich body\", \"Atmosphere\":\"\", \"AtmosphereType\":\"None\", \"Volcanism\":\"rocky magma volcanism\", \"MassEM\":0.010663, \"Radius\":1163226.500000, \"SurfaceGravity\":3.140944, \"SurfaceTemperature\":1068.794067, \"SurfacePressure\":0.000000, \"Landable\":true, \"Materials\":[ { \"Name\":\"iron\", \"Percent\":36.824127 }, { \"Name\":\"nickel\", \"Percent\":27.852226 }, { \"Name\":\"chromium\", \"Percent\":16.561033 }, { \"Name\":\"zinc\", \"Percent\":10.007420 }, { \"Name\":\"selenium\", \"Percent\":2.584032 }, { \"Name\":\"tin\", \"Percent\":2.449526 }, { \"Name\":\"molybdenum\", \"Percent\":2.404594 }, { \"Name\":\"technetium\", \"Percent\":1.317050 } ], \"SemiMajorAxis\":1532780800.000000, \"Eccentricity\":0.000842, \"OrbitalInclination\":-1.609496, \"Periapsis\":179.381393, \"OrbitalPeriod\":162753.062500, \"RotationPeriod\":162754.531250, \"AxialTilt\":0.033219 }";
                 }
-                else if (writetype.Equals("ScanStar", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("scanstar"))
                 {
                     lineout = "{ " + TimeStamp() + F("event", "Scan") + "\"BodyName\":\"Merope A" + repeatcount + "\", \"DistanceFromArrivalLS\":0.000000, \"StarType\":\"B\", \"StellarMass\":8.597656, \"Radius\":2854249728.000000, \"AbsoluteMagnitude\":1.023468, \"Age_MY\":182, \"SurfaceTemperature\":23810.000000, \"Luminosity\":\"IV\", \"SemiMajorAxis\":12404761034752.000000, \"Eccentricity\":0.160601, \"OrbitalInclination\":18.126791, \"Periapsis\":49.512009, \"OrbitalPeriod\":54231617536.000000, \"RotationPeriod\":110414.359375, \"AxialTilt\":0.000000 }";
                 }
-                else if (writetype.Equals("ScanEarth", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("scanearth"))
                 {
                     int rn = rnd.Next(10);
                     lineout = "{ " + TimeStamp() + F("event", "Scan") + "\"BodyName\":\"Merope " + rn + "\", \"DistanceFromArrivalLS\":901.789856, \"TidalLock\":false, \"TerraformState\":\"Terraformed\", \"PlanetClass\":\"Earthlike body\", \"Atmosphere\":\"\", \"AtmosphereType\":\"EarthLike\", \"AtmosphereComposition\":[ { \"Name\":\"Nitrogen\", \"Percent\":92.386833 }, { \"Name\":\"Oxygen\", \"Percent\":7.265749 }, { \"Name\":\"Water\", \"Percent\":0.312345 } ], \"Volcanism\":\"\", \"MassEM\":0.840000, \"Radius\":5821451.000000, \"SurfaceGravity\":9.879300, \"SurfaceTemperature\":316.457062, \"SurfacePressure\":209183.453125, \"Landable\":false, \"SemiMajorAxis\":264788426752.000000, \"Eccentricity\":0.021031, \"OrbitalInclination\":13.604733, \"Periapsis\":73.138206, \"OrbitalPeriod\":62498732.000000, \"RotationPeriod\":58967.023438, \"AxialTilt\":-0.175809 }";
                 }
-                else if (writetype.Equals("AFMURepairs", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("afmurepairs"))
                     lineout = "{ " + TimeStamp() + F("event", "AfmuRepairs") + "\"Module\":\"$modularcargobaydoor_name;\", \"Module_Localised\":\"Cargo Hatch\", \"FullyRepaired\":true, \"Health\":1.000000 }";
 
-                else if (writetype.Equals("SellShipOnRebuy", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("sellshiponrebuy"))
                     lineout = "{ " + TimeStamp() + F("event", "SellShipOnRebuy") + "\"ShipType\":\"Dolphin\", \"System\":\"Shinrarta Dezhra\", \"SellShipId\":4, \"ShipPrice\":4110183 }";
 
-                else if (writetype.Equals("SearchAndRescue", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("searchandrescue"))
                     lineout = "{ " + TimeStamp() + F("event", "SearchAndRescue") + "\"Name\":\"Fred\", \"Count\":50, \"Reward\":4110183 }";
 
 
-                else if (writetype.Equals("RepairDrone", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("repairdrone"))
                     lineout = "{ " + TimeStamp() + F("event", "RepairDrone") + "\"HullRepaired\": 0.23, \"CockpitRepaired\": 0.1,  \"CorrosionRepaired\": 0.5 }";
 
-                else if (writetype.Equals("CommunityGoal", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("communitygoal"))
                     lineout = "{ " + TimeStamp() + F("event", "CommunityGoal") + "\"CurrentGoals\":[ { \"CGID\":726, \"Title\":\"Alliance Research Initiative - Trade\", \"SystemName\":\"Kaushpoos\", \"MarketName\":\"Neville Horizons\", \"Expiry\":\"2017-08-17T14:58:14Z\", \"IsComplete\":false, \"CurrentTotal\":10062, \"PlayerContribution\":562, \"NumContributors\":101, \"TopRankSize\":10, \"PlayerInTopRank\":false, \"TierReached\":\"Tier 1\", \"PlayerPercentileBand\":50, \"Bonus\":200000 } ] }";
 
-                else if (writetype.Equals("MusicNormal", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("musicnormal"))
                     lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "NoTrack") + " }";
-                else if (writetype.Equals("MusicSysMap", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("musicsysmap"))
                     lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "SystemMap") + " }";
-                else if (writetype.Equals("MusicGalMap", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("musicgalmap"))
                     lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "GalaxyMap") + " }";
-                else if (writetype.Equals("Friends", StringComparison.InvariantCultureIgnoreCase) && args.Left >= 1)
+                else if (eventtype.Equals("friends") && args.Left >= 1)
                     lineout = "{ " + TimeStamp() + F("event", "Friends") + F("Status", "Online") + FF("Name", args.Next) + " }";
-                else if (writetype.Equals("FuelScoop", StringComparison.InvariantCultureIgnoreCase) && args.Left >= 2)
+                else if (eventtype.Equals("fuelscoop") && args.Left >= 2)
                 {
                     string scoop = args.Next;
                     string total = args.Next;
                     lineout = "{ " + TimeStamp() + F("event", "FuelScoop") + F("Scooped", scoop) + FF("Total", total) + " }";
                 }
-                else if (writetype.Equals("JetConeBoost", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("jetconeboost"))
                     lineout = "{ " + TimeStamp() + F("event", "JetConeBoost") + FF("BoostValue", "1.5") + " }";
-                else if (writetype.Equals("FighterDestroyed", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("fighterdestroyed"))
                     lineout = "{ " + TimeStamp() + FF("event", "FighterDestroyed") + " }";
-                else if (writetype.Equals("FighterRebuilt", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("fighterrebuilt"))
                     lineout = "{ " + TimeStamp() + F("event", "FighterRebuilt") + FF("Loadout", "Fred") + " }";
-                else if (writetype.Equals("NpcCrewPaidWage", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("npccrewpaidwage"))
                     lineout = "{ " + TimeStamp() + F("event", "NpcCrewPaidWage") + F("NpcCrewId", 1921) + FF("Amount", 10292) + " }";
-                else if (writetype.Equals("NpcCrewRank", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("npccrewrank"))
                     lineout = "{ " + TimeStamp() + F("event", "NpcCrewRank") + F("NpcCrewId", 1921) + FF("RankCombat", 4) + " }";
-                else if (writetype.Equals("LaunchDrone", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("launchdrone"))
                     lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
-                else if (writetype.Equals("Market", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("market"))
                     lineout = Market(Path.GetDirectoryName(filename), args.Next);
-                else if (writetype.Equals("ModuleInfo", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("moduleinfo"))
                     lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next);
-                else if (writetype.Equals("Outfitting", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("outfitting"))
                     lineout = Outfitting(Path.GetDirectoryName(filename), args.Next);
-                else if (writetype.Equals("Shipyard", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("shipyard"))
                     lineout = Shipyard(Path.GetDirectoryName(filename), args.Next);
-                else if (writetype.Equals("PowerPlay", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("powerplay"))
                     lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank", 10) + F("Merits", 10) + F("Votes", 2) + FF("TimePledged", 433024) + " }";
-                else if (writetype.Equals("UnderAttack", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("underattack"))
                     lineout = "{ " + TimeStamp() + F("event", "UnderAttack") + FF("Target", "Fighter") + " }";
-                else if (writetype.Equals("CargoDepot", StringComparison.InvariantCultureIgnoreCase))
+                else if (eventtype.Equals("promotion") && args.Left==2)
+                    lineout = "{ " + TimeStamp() + F("event", "Promotion") + FF(args.Next, args.Int) + " }";
+                else if (eventtype.Equals("cargodepot"))
                     lineout = CargoDepot(args);
                 else
                 {
-                    Console.WriteLine("** Unrecognised journal type");
+                    Console.WriteLine("** Unrecognised journal event type");
                     break;
                 }
 
@@ -506,6 +510,44 @@ namespace NetLogEntry
 
         #endregion
 
+        #region Help!
+
+        public static string Help()
+        {
+            return
+            "JournalPath CMDRname Options..\n" +
+            "Travel   FSD name x y z (x y z is position as double)\n" +
+            "         FSDTravel name x y z destx desty destz percentint \n" +
+            "         Loc name x y z\n" +
+            "         Docked, Undocked, Touchdown, Liftoff\n" +
+            "         FuelScoop amount total\n" +
+            "         JetConeBoost\n" +
+            "Missions MissionAccepted/MissionCompleted faction victimfaction id\n" +
+            "         MissionRedirected newsystem newstation id\n" +
+            "         Bounty faction reward\n" +
+            "         CommitCrime faction amount\n" +
+            "         Interdiction name success isplayer combatrank faction power\n" +
+            "         FactionKillBond faction victimfaction reward\n" +
+            "         CapShipBond faction victimfaction reward\n" +
+            "Scans    ScanPlanet name\n" +
+            "         ScanStar, ScanEarth\n" +
+            "         NavBeaconScan\n" +
+            "Ships    SellShipOnRebuy\n" +
+            "Others   SearchANdRescue, MiningRefined\n" +
+            "         RepairDrone, CommunityGoal\n" +
+            "         MusicNormal, MusicGalMap, MusicSysMap\n" +
+            "         Friends name\n" +
+            "         Died\n" +
+            "         Resurrect cost\n" +
+            "         PowerPlay, UnderAttack\n" +
+            "         CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
+            "         FighterDestroyed, FigherRebuilt, NpcCrewRank, NpcCrewPaidWage, LaunchDrone\n" +
+            "         Market, ModuleInfo, Outfitting, Shipyard (use NOFILE after to say don't write the file)\n" +
+            "         Promotion Combat/Trade/Explore/CQC/Federation/Empire Ranknumber\n"
+            ;
+        }
+
+        #endregion
 
     }
 
