@@ -44,6 +44,9 @@ namespace ExtendedControls
         public string DistanceFormat { get { return distanceformat; } set { distanceformat = value; ; } } // as "text {0:0.##} text". DOES NOT INVALIDATE.
         public void DistanceDisable(string msg) { distance = double.NaN; distancemessage = msg; Invalidate(); }
 
+        // optional glideslope
+        public double GlideSlope { get { return glideslope; } set { glideslope = value; Invalidate(); } }   // NaN to disable, default
+
         // optional message during Disable
         public string DisableMessage { get { return disablemessage; } set { disablemessage = value; Invalidate(); } } // below bar
 
@@ -84,6 +87,7 @@ namespace ExtendedControls
         private string distanceformat = "{0:0.##}";
         private string distancemessage = string.Empty;
         private string disablemessage = string.Empty;
+        private double glideslope = double.NaN;
         private Color stencilcolor = Color.Red;
         private int stencilmajortickat = 20;
         private int stencilminortickat = 5;
@@ -412,6 +416,7 @@ namespace ExtendedControls
                         }
 
                         string distancetext = (double.IsNaN(distance) ? "" : string.Format(distanceformat, distance)) + distancemessage;
+                        string glideslopetext = double.IsNaN(glideslope) ? "" : " (glideslope " + glideslope.ToString("0") + "°) ";
 
                         if (!double.IsNaN(bug))
                         {
@@ -479,7 +484,7 @@ namespace ExtendedControls
                                         }
 
                                         pe.Graphics.SmoothingMode = textsmoothingmode;
-                                        pe.Graphics.DrawString(distancetext, this.Font, textb, r, fmt);
+                                        pe.Graphics.DrawString(distancetext + glideslopetext, this.Font, textb, r, fmt);
                                         fmt.Dispose();
                                     }
                                 }
