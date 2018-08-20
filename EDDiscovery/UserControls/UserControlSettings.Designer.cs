@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
             this.btnDeleteCommander = new ExtendedControls.ButtonExt();
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.checkBoxCustomResize = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxPanelSortOrder = new ExtendedControls.CheckBoxCustom();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -613,6 +614,26 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomResize.UseVisualStyleBackColor = true;
             this.checkBoxCustomResize.CheckedChanged += new System.EventHandler(this.checkBoxCustomResize_CheckedChanged);
             // 
+            // checkBoxPanelSortOrder
+            // 
+            this.checkBoxPanelSortOrder.AutoSize = true;
+            this.checkBoxPanelSortOrder.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxPanelSortOrder.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxPanelSortOrder.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxPanelSortOrder.FontNerfReduction = 0.5F;
+            this.checkBoxPanelSortOrder.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxPanelSortOrder.Location = new System.Drawing.Point(10, 143);
+            this.checkBoxPanelSortOrder.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxPanelSortOrder.Name = "checkBoxPanelSortOrder";
+            this.checkBoxPanelSortOrder.Size = new System.Drawing.Size(188, 17);
+            this.checkBoxPanelSortOrder.TabIndex = 5;
+            this.checkBoxPanelSortOrder.Text = "Panel List Sorted Alphanumerically";
+            this.checkBoxPanelSortOrder.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxPanelSortOrder, "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires R" +
+        "estart");
+            this.checkBoxPanelSortOrder.UseVisualStyleBackColor = true;
+            this.checkBoxPanelSortOrder.CheckedChanged += new System.EventHandler(this.checkBoxPanelSortOrder_CheckedChanged);
+            // 
             // dataGridViewCommanders
             // 
             this.dataGridViewCommanders.AllowUserToAddRows = false;
@@ -749,6 +770,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.BackColorScaling = 0.5F;
             this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxPopOuts.BorderColorScaling = 0.5F;
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxPanelSortOrder);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxKeepOnTop);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
             this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
@@ -1044,5 +1066,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.GroupBoxCustom groupBoxCustomLanguage;
         private ExtendedControls.ComboBoxCustom comboBoxCustomLanguage;
         private ExtendedControls.CheckBoxCustom checkBoxCustomResize;
+        private ExtendedControls.CheckBoxCustom checkBoxPanelSortOrder;
     }
 }

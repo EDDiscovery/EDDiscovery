@@ -592,6 +592,7 @@ namespace ExtendedControls
             {
                 ListControlCustom ctrl = (ListControlCustom)myControl;
                 ctrl.ForeColor = currentsettings.colors[Settings.CI.button_text];
+                ctrl.ItemSeperatorColor = currentsettings.colors[Settings.CI.button_border];
 
                 if (currentsettings.buttonstyle.Equals(ButtonStyles[0]))
                 {
@@ -926,6 +927,7 @@ namespace ExtendedControls
                 ts.DropDownScrollBarButtonColor = currentsettings.colors[Settings.CI.textbox_scrollbutton];
                 ts.DropDownScrollBarColor = currentsettings.colors[Settings.CI.textbox_sliderback];
                 ts.DropDownMouseOverBackgroundColor = currentsettings.colors[Settings.CI.button_back].Multiply(mouseoverscaling);
+                ts.DropDownItemSeperatorColor = currentsettings.colors[Settings.CI.button_border];
                 ts.EmptyColor = currentsettings.colors[Settings.CI.button_back];
             }
             else if ( myControl is CompositeButton )

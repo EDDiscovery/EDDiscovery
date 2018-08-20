@@ -32,6 +32,7 @@ namespace ExtendedControls
         public StripModeType StripMode { get; set; } = StripModeType.StripTop;
         public Image EmptyPanelIcon { get; set; } = Properties.Resources.Stop;
         public Image[] ImageList;     // images
+        public int[] ListSelectionItemSeparators;   // any separators for ListSelection
         public string[] TextList;       // text associated - tooltips or text on list selection
         public object[] TagList;      // tags for them..
         public bool ShowPopOut { get; set; }= true; // Pop out icon show
@@ -50,6 +51,7 @@ namespace ExtendedControls
         public Color DropDownScrollBarColor { get; set; } = Color.LightGray;
         public Color DropDownScrollBarButtonColor { get; set; } = Color.LightGray;
         public Color DropDownMouseOverBackgroundColor { get; set; } = Color.Red;
+        public Color DropDownItemSeperatorColor { get; set; } = Color.Purple;
 
         // Selected
         public int SelectedIndex { get { return si; } set { ChangePanel(value); } }
@@ -468,9 +470,11 @@ namespace ExtendedControls
             dropdown.ScrollBarColor = this.DropDownScrollBarColor;
             dropdown.ScrollBarButtonColor = this.DropDownScrollBarButtonColor;
             dropdown.MouseOverBackgroundColor = this.DropDownMouseOverBackgroundColor;
+            dropdown.ItemSeperatorColor = this.DropDownItemSeperatorColor;
 
             dropdown.ItemHeight = ImageList[0].Size.Height+2;
             dropdown.Items = TextList.ToList();
+            dropdown.ItemSeperators = ListSelectionItemSeparators;
             dropdown.ImageItems = ImageList.ToList();
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.Activated += (s,ea) => 

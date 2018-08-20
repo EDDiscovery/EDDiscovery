@@ -43,6 +43,8 @@ namespace ExtendedControls
         public List<Image> ImageItems { get { return imageitems; } set { imageitems = value; } }
         public int ItemHeight { get { return itemheight; } set { itemheight = value; lbsys.ItemHeight = value; } }
 
+        public int[] ItemSeperators { get; set; } = null;     // set to array giving index of each separator
+
         // in non standard styles
 
         public bool FitToItemsHeight { get; set; } = true;                    // if set, move the border to integer of item height.
@@ -53,6 +55,7 @@ namespace ExtendedControls
         public Color ScrollBarColor { get; set; } = Color.LightGray;    // not system
         public Color ScrollBarButtonColor { get; set; } = Color.LightGray;    // not system
         public Color MouseOverBackgroundColor { get; set; } = Color.Silver;
+        public Color ItemSeperatorColor { get; set; } = Color.Red;
 
         // All modes
 
@@ -246,6 +249,14 @@ namespace ExtendedControls
 
                             e.Graphics.DrawString(s, this.Font, textb, textarea, f);
 
+                            if (ItemSeperators != null && Array.IndexOf(ItemSeperators, offset) >= 0)
+                            {
+                                using (Pen p = new Pen(ItemSeperatorColor))
+                                {
+                                    e.Graphics.DrawLine(p, new Point(textarea.Left, textarea.Top), new Point(textarea.Right, textarea.Top));
+                                }
+                            }
+
                             totalarea.Y += itemheight;
                             textarea.Y = imagearea.Y = totalarea.Y;
                         }
@@ -257,6 +268,7 @@ namespace ExtendedControls
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.Default;
             }
         }
+
 
         private void Lbsys_DrawItem(object sender, DrawItemEventArgs e) // for system draw with ICON
         {
@@ -277,8 +289,18 @@ namespace ExtendedControls
                         e.Graphics.DrawImage(imageitems[e.Index], bitmaparea);
                 }
 
-                e.Graphics.DrawString(items[e.Index],
-                    e.Font, textb, textarea, StringFormat.GenericDefault);
+                using (StringFormat f = new StringFormat() { Alignment = StringAlignment.Near, LineAlignment = StringAlignment.Center, FormatFlags = StringFormatFlags.NoWrap })
+                {
+                    e.Graphics.DrawString(items[e.Index], e.Font, textb, textarea, f);
+                }
+
+                if (ItemSeperators != null && Array.IndexOf(ItemSeperators, e.Index) >= 0)
+                {
+                    using (Pen p = new Pen(ItemSeperatorColor))
+                    {
+                        e.Graphics.DrawLine(p, new Point(textarea.Left, textarea.Top), new Point(textarea.Right, textarea.Top));
+                    }
+                }
             }
             e.DrawFocusRectangle();
         }
