@@ -138,6 +138,12 @@ namespace EDDiscovery.UserControls
         {
             MissionList ml = last_he?.MissionList;
 
+            DataGridViewColumn sortcolprev = dataGridViewPrevious.SortedColumn != null ? dataGridViewPrevious.SortedColumn : dataGridViewPrevious.Columns[1];
+            SortOrder sortorderprev = dataGridViewPrevious.SortOrder;
+
+            DataGridViewColumn sortcolcur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortedColumn : dataGridViewCurrent.Columns[1];
+            SortOrder sortordercur = dataGridViewCurrent.SortOrder;
+
             dataGridViewCurrent.Rows.Clear();
             dataGridViewPrevious.Rows.Clear();
 
@@ -224,6 +230,13 @@ namespace EDDiscovery.UserControls
 
                 labelValue.Visible = (value != 0);
                 labelValue.Text = "Value: ".Tx(this,"ValueC") + value.ToStringInvariant() + " C:" + completed.ToStringInvariant() + " A:" + abandonded.ToStringInvariant() + " F:" + failed.ToStringInvariant();
+
+                //System.Diagnostics.Debug.WriteLine("Prev " + sortorderprev + " " + sortcolprev.Index);
+                dataGridViewPrevious.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewPrevious.Columns[sortcolprev.Index].HeaderCell.SortGlyphDirection = sortorderprev;
+
+                dataGridViewCurrent.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewCurrent.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;
             }
         }
 
