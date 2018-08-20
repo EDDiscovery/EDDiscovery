@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         double? latitude = null;
         double? longitude = null;
         double? heading = null;
+        double? altitude = null;
         double? bodyRadius = null;
         bool autoHideTargetCoords = false;
         HistoryEntry last_he;
@@ -157,6 +158,7 @@ namespace EDDiscovery.UserControls
                         JournalScreenshot js = he.journalEntry as JournalScreenshot;
                         latitude = js.nLatitude;
                         longitude = js.nLongitude;
+                        altitude = js.nAltitude;
                         break;
                     case JournalTypeEnum.Touchdown:
                         JournalTouchdown jt = he.journalEntry as JournalTouchdown;
@@ -164,12 +166,14 @@ namespace EDDiscovery.UserControls
                         {
                             latitude = jt.Latitude;
                             longitude = jt.Longitude;
+                            altitude = 0;
                         }
                         break;
                     case JournalTypeEnum.Location:
                         JournalLocation jl = he.journalEntry as JournalLocation;
                         latitude = jl.Latitude;
                         longitude = jl.Longitude;
+                        altitude = null;
                         break;
                     case JournalTypeEnum.Liftoff:
                         JournalLiftoff jlo = he.journalEntry as JournalLiftoff;
@@ -177,11 +181,13 @@ namespace EDDiscovery.UserControls
                         {
                             latitude = jlo.Latitude;
                             longitude = jlo.Longitude;
+                            altitude = 0;
                         }
                         break;
                     case JournalTypeEnum.LeaveBody:
                         latitude = null;
                         longitude = null;
+                        altitude = null;
                         break;
                     case JournalTypeEnum.FSDJump:       // to allow us to do PopulateBookmark..
                         break;
@@ -204,10 +210,11 @@ namespace EDDiscovery.UserControls
                 {
                     latitude = up.Location.Latitude;
                     longitude = up.Location.Longitude;
+                    altitude = up.Location.Altitude;
                     heading = up.Heading;
                 }
                 else
-                    latitude = longitude = heading = null;
+                    latitude = longitude = heading = altitude = null;
             }
 
             DisplayCompass();
@@ -219,6 +226,7 @@ namespace EDDiscovery.UserControls
             double? targetlong = numberBoxTargetLongitude.Value;
 
             double? targetDistance = CalculateDistance(targetlat, targetlong);
+            double? targetSlope = CalculateGlideslope(targetDistance);
 
             if ( targetDistance.HasValue)
             {
@@ -234,6 +242,15 @@ namespace EDDiscovery.UserControls
                     targetDistance = targetDistance.Value / 1000000;
                     compassControl.DistanceFormat = "{0:0.#}Mm";
                 }
+            }
+
+            if (targetSlope.HasValue)
+            {
+                compassControl.GlideSlope = targetSlope.Value;
+            }
+            else
+            {
+                compassControl.GlideSlope = double.NaN;
             }
 
             double? targetBearing = CalculateBearing(targetlat, targetlong);
@@ -282,6 +299,30 @@ namespace EDDiscovery.UserControls
             double c = 2 * Atan2(Sqrt(a), Sqrt(1 - a));
 
             return bodyRadius.Value * c;
+        }
+
+        private double? CalculateGlideslope(double? distance)
+        {
+            if (!(distance.HasValue && altitude.HasValue && bodyRadius.HasValue))
+                return null;
+
+            if (altitude.Value < 10000 || distance.Value < 10000) // Don't return a slope if less than 10km out or below 10km
+                return null;
+
+            double theta = distance.Value / bodyRadius.Value;
+            double rad = 1 + altitude.Value / bodyRadius.Value;
+            double dist2 = 1 + rad * rad - 2 * rad * Cos(theta);
+
+            // a = radius, b = distance, c = altitude + radius
+            // c^2 = a^2 + b^2 - 2.a.b.cos(C) -> cos(C) = (a^2 + b^2 - c^2) / (2.a.b)
+            double sintgtslope = (1 + dist2 - rad * rad) / (2 * Sqrt(dist2));
+
+            if (sintgtslope > -0.2588)  // Don't return a slope if it would be > -15deg at the target
+                return null;
+
+            // a = altitude + radius, b = distance, c = radius
+            double slope = -Asin((rad * rad + dist2 - 1) / (2 * rad * Sqrt(dist2))) * 180 / PI;
+            return slope;
         }
 
         private void PopulateBookmarkCombo()
