@@ -139,7 +139,7 @@ namespace EliteDangerousCore
         {
             if (!cachelist.ContainsKey(fdname.ToLowerInvariant()))
             {
-                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "", "", Color.Green, false);
+                MaterialCommodityData mcdb = new MaterialCommodityData(cat, fdname.SplitCapsWordFull(), fdname, "Unknown", "", Color.Green, false);
                 mcdb.SetCache();
                 System.Diagnostics.Debug.WriteLine("Material not present: " + cat + "," + fdname);
             }

@@ -646,7 +646,9 @@ UserControlSettings.JournalDirCol: "Journal Dir" => "<Journal Dir>"
 UserControlSettings.NotesCol: "Notes" => "<Notes>"
 UserControlSettings.btnDeleteCommander: "Delete" => "<Delete>"
 UserControlSettings.buttonAddCommander: "Add" => "<Add>"
+UserControlSettings.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" @
 
+UserControlSettings.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" @
 UserControlSettings.comboBoxCustomHistoryLoadTime.ToolTip: "Select either load all records, or load only essential items of records older than a set time before now" => "<Select either load all records, or load only essential items of records older than a set time before now>"
 UserControlSettings.checkBoxShowUIEvents.ToolTip: "Show the UI events (such as Music) in the history. The quantity of them can be very large" => "<Show the UI events (such as Music) in the history. The quantity of them can be very large>"
 UserControlSettings.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "<Number oldest entry 1, latest entry highest>"
