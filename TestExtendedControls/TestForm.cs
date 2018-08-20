@@ -116,6 +116,11 @@ namespace DialogTest
             listControlCustom1.Items.Add("eight");
             listControlCustom1.Items.Add("nine");
             listControlCustom1.FlatStyle = FlatStyle.Popup;
+            listControlCustom1.ItemSeperators = new int[] { 1, 4 };
+
+            listControlCustom2.Items = listControlCustom1.Items;
+            listControlCustom2.FlatStyle = FlatStyle.System;
+            listControlCustom2.ItemSeperators = new int[] { 1, 4 };
 
             richTextBoxScroll1.ScrollBarFlatStyle = FlatStyle.Popup;
             richTextBoxScroll1.HideScrollBar = true;

@@ -70,6 +70,8 @@ namespace EDDiscovery.UserControls
         const int FixedPanelOffset = 1000;        // panel IDs, 1000+ are fixed windows, 0-999 are embedded in tab strips
         const int NoTabPanelSelected = -1;        // -1 is no tab selected
 
+        private bool TabListSortAlpha;            // constant across run of splitter, even if user changes the alpha sort later
+
         public UserControlContainerSplitter()
         {
             InitializeComponent();
@@ -82,6 +84,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()     
         {
+            TabListSortAlpha = EDDConfig.Instance.SortPanelsByName;     // held constant, because we store in each tab splitter the implicit order, can't change it half way thru
+
             string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels
 
             string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, defaultview);
@@ -138,7 +142,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha);
 
             string state = ControlHelpersStaticFunc.SplitterTreeState(panelPlayfield.Controls[0] as SplitContainer, "",
                 (c) =>          // S is either a TabStrip, or a direct UCCB. See the 
@@ -195,9 +199,11 @@ namespace EDDiscovery.UserControls
             else                        // positive ones are tab strip with the panel id selected, if valid..
             {
                 ExtendedControls.TabStrip tabstrip = new ExtendedControls.TabStrip();
-                tabstrip.ImageList = PanelInformation.GetPanelImages();
-                tabstrip.TextList = PanelInformation.GetPanelDescriptions();
-                tabstrip.TagList = PanelInformation.GetPanelIDs().Cast<Object>().ToArray();
+                tabstrip.ImageList = PanelInformation.GetUserSelectablePanelImages(TabListSortAlpha);
+                tabstrip.TextList = PanelInformation.GetUserSelectablePanelDescriptions(TabListSortAlpha);
+                tabstrip.TagList = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha).Cast<Object>().ToArray();
+                tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha);
+
                 tabstrip.Dock = DockStyle.Fill;
                 tabstrip.DropDownWidth = 500;
                 tabstrip.DropDownHeight = 500;
@@ -248,13 +254,13 @@ namespace EDDiscovery.UserControls
 
                 discoveryform.theme.ApplyToControls(tabstrip, applytothis: true);
 
-                PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+                PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha); // sort order v.important.. we need the right index, dep
 
-                panelid = Array.FindIndex(pids, x => x == (PanelInformation.PanelIDs)panelid);      // find ID in array..  -1 if not valid ID, it copes with -1
+                int indexofentry = Array.FindIndex(pids, x => x == (PanelInformation.PanelIDs)panelid);      // find ID in array..  -1 if not valid ID, it copes with -1
 
-                if (panelid >= 0)       // if we have a panel, open it
+                if (indexofentry >= 0)       // if we have a panel, open it
                 {
-                    tabstrip.Create(panelid);       // create but not post create yet...
+                    tabstrip.Create(indexofentry);       // create but not post create yet...
                 }
 
                 return tabstrip;

@@ -70,6 +70,7 @@ namespace EDDiscovery
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
         private string language = "Auto";
         private bool drawduringresize = true;
+        private bool sortpanelsalpha = false;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -287,6 +288,19 @@ namespace EDDiscovery
             }
         }
 
+        public bool SortPanelsByName
+        {
+            get
+            {
+                return sortpanelsalpha;
+            }
+            set
+            {
+                sortpanelsalpha = value;
+                SQLiteConnectionUser.PutSettingBool("PanelsSortedByName", value); 
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -311,7 +325,7 @@ namespace EDDiscovery
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = SQLiteConnectionUser.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = SQLiteConnectionUser.GetSettingBool("DrawDuringResizeWindow", true);
-
+                sortpanelsalpha = SQLiteConnectionUser.GetSettingBool("PanelsSortedByName", false);
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }
             catch (Exception ex)

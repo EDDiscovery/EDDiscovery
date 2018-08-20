@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
             }
 
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
 
             for (int i = 0; i < pids.Length; i++)
             {

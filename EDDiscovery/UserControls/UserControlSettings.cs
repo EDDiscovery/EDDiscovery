@@ -64,6 +64,7 @@ namespace EDDiscovery.UserControls
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
             checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
@@ -502,6 +503,11 @@ namespace EDDiscovery.UserControls
             checkBoxKeepOnTop.Checked = (sender as Form).TopMost;
         }
 
+        private void checkBoxPanelSortOrder_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.SortPanelsByName = checkBoxPanelSortOrder.Checked;
+        }
+
         #endregion
 
         #region EDDB EDSM
@@ -578,6 +584,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 

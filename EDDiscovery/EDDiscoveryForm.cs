@@ -214,7 +214,7 @@ namespace EDDiscovery
                 Application.Exit();
             }
 
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();      // only user panels
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
 
             BaseUtils.Translator.Instance.Translate(contextMenuStripTabs, this);        // need to translate BEFORE we add in extra items
 
@@ -1646,9 +1646,10 @@ namespace EDDiscovery
             popoutdropdown.StartPosition = FormStartPosition.Manual;
             popoutdropdown.Location = location;
             popoutdropdown.ItemHeight = 26;
-            popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
-            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+            popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
+            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Shown += (s, ea) =>
             {
