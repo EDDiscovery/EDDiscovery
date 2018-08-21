@@ -11,7 +11,7 @@ Today: "Today" => "Oggi"
 24h: "24h" @
 7days: "7 Days" => "7 giorni"
 All: "All" => "Tutto"
-OK: "OK" @
+OK: "OK" => "OK"
 Cancel: "Cancel" => "Cancella"
 Delete: "Delete" => "Elimina"
 Campaign: "Campaign" => "Campagna"
@@ -22,8 +22,8 @@ GameTime: "Game Time" => "Orario del Gioco"
 Time: "Time" => "Orario"
 NoData: "No Data" => "Nienti Dati"
 None: "None" => "Niente"
-on: "on" @
-Off: "Off" @
+on: "on" => "on"
+Off: "Off" => "Off"
 Unknown: "Unknown" => "Sconosciuto"
 Information: "Information" => "Informazione"
 NoPos: "No Pos" => "Nessuna Posizione"
@@ -243,18 +243,18 @@ Include translation-italiano-uc.tlp
 
 //////////////////////////////////////////////////////////////// Screenshot
 
-ScreenshotDirectoryWatcher.Scan: "Scanning for {0} screenshots in {1}" @
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" @
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " @
+ScreenshotDirectoryWatcher.Scan: "Scanning for {0} screenshots in {1}" => "Scansionando per {0} schermate in {1}"
+.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "La cartella specificata per la conversione non esuste, verificare il Setup"
+.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Errore nell'esecuzione della conversione dell'immagine, verificare il setup della cartella di uscita."
 
 ScreenShotImageConverter.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" @
-.CNV: "Converted {0} to {1}" @
-.ERRF: "Unable to open screenshot '{0}': {1}" @
+.CNV: "Converted {0} to {1}" => "Convertito {0} a {1}"
+.ERRF: "Unable to open screenshot '{0}': {1}" => "Impossibile aorire la schermata"
 
-ScreenShotConfigureForm: "Screen Shot Configure" @
-ScreenShotConfigureForm.buttonExtCancel: "Cancel" @
-ScreenShotConfigureForm.buttonExtOK: "OK" @
-ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings" @
+ScreenShotConfigureForm: "Screen Shot Configure" => "Configurare Screenshot"
+ScreenShotConfigureForm.buttonExtCancel: "Cancel" => "Cancella"
+ScreenShotConfigureForm.buttonExtOK: "OK" => "OK"
+ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings"
 ScreenShotConfigureForm.labelHeight: "Height" @
 ScreenShotConfigureForm.labelWidth: "Width" @
 ScreenShotConfigureForm.labelLeft: "Left" @
@@ -436,7 +436,7 @@ CommanderForm.checkBoxCustomEDSMTo.ToolTip: "Send your travel and ship data to E
 CommanderForm.textBoxBorderEDSMName.ToolTip: "Give the name this commander is known as in EDSM" => "Inserisci il nome come questo comandante è conosciuto su EDSM"
 CommanderForm.textBoxBorderEDSMAPI.ToolTip: "Enter the API key from the EDSM Website\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" => "Inserisci la chiave API di EDSM\nOttieni una chiave API su https://www.edsm.net, dal menu utente"
 CommanderForm.buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Sfoglia la localizzazione del giornale"
-CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Inserisci la localizzazione del giornale. In genere, � sufficiente lasciare questo campo in bianco per usare la localizzazione normale usata da Frontier"
+CommanderForm.textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Inserisci la localizzazione del giornale. In genere, � sufficiente lasciare questo campo in bianco per usare la localizzazione normale usata da Frontier"
 CommanderForm.textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Inserire il nome del comandante come è su Elite Dangerous"
 
 .Login: "Login" => "Utente"
