@@ -8,7 +8,7 @@
 
 Warning: "Warning" => "Attenzione"
 Today: "Today" => "Oggi"
-24h: "24h" @
+24h: "24h" => "24h"
 7days: "7 Days" => "7 giorni"
 All: "All" => "Tutto"
 OK: "OK" => "OK"
@@ -150,7 +150,7 @@ EDDiscoveryForm.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Repor
 EDDiscoveryForm.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Come avviare il programma in Modo di Sicurezza per ridefinire vari parametri"
 EDDiscoveryForm.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
 
-EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" @
+EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
 
 EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
 EDDiscoveryForm.comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
@@ -247,27 +247,27 @@ ScreenshotDirectoryWatcher.Scan: "Scanning for {0} screenshots in {1}" => "Scans
 .NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "La cartella specificata per la conversione non esuste, verificare il Setup"
 .Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Errore nell'esecuzione della conversione dell'immagine, verificare il setup della cartella di uscita."
 
-ScreenShotImageConverter.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" @
+ScreenShotImageConverter.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" => "Non é possibile convertire {0} nella stessa certella giá che é dove sono presenti\r\nSchegli una cartella diversa per l'uscita della conversione"
 .CNV: "Converted {0} to {1}" => "Convertito {0} a {1}"
-.ERRF: "Unable to open screenshot '{0}': {1}" => "Impossibile aorire la schermata"
+.ERRF: "Unable to open screenshot '{0}': {1}" => "Impossibile aprire la schermata"
 
 ScreenShotConfigureForm: "Screen Shot Configure" => "Configurare Screenshot"
 ScreenShotConfigureForm.buttonExtCancel: "Cancel" => "Cancella"
 ScreenShotConfigureForm.buttonExtOK: "OK" => "OK"
-ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings"
-ScreenShotConfigureForm.labelHeight: "Height" @
-ScreenShotConfigureForm.labelWidth: "Width" @
-ScreenShotConfigureForm.labelLeft: "Left" @
-ScreenShotConfigureForm.labelTop: "Top" @
-ScreenShotConfigureForm.checkBoxCropImage: "Crop Image" @
-ScreenShotConfigureForm.labelFolder: "ED/Steam Screenshot folder" @
-ScreenShotConfigureForm.buttonChangeScreenshotsFolder: "Browse" @
-ScreenShotConfigureForm.labelSubfolder: "In Sub folder" @
-ScreenShotConfigureForm.labelFileNameFormat: "In Filename format" @
-ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" @
-ScreenShotConfigureForm.buttonEDChangeOutputFolder: "Browse" @
-ScreenShotConfigureForm.labelScanFor: "Scan for" @
-ScreenShotConfigureForm.labelSaveAs: "Save as" @
+ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings" => "Settaggio di Taglio"
+ScreenShotConfigureForm.labelHeight: "Height" => "Altezza"
+ScreenShotConfigureForm.labelWidth: "Width" => "Larghezza"
+ScreenShotConfigureForm.labelLeft: "Left" => "Sinistra"
+ScreenShotConfigureForm.labelTop: "Top" => "Alto"
+ScreenShotConfigureForm.checkBoxCropImage: "Crop Image" => "Taglia immagine"
+ScreenShotConfigureForm.labelFolder: "ED/Steam Screenshot folder" => "Cartella di schermate ED/Steam"
+ScreenShotConfigureForm.buttonChangeScreenshotsFolder: "Browse" => "Sfoglia"
+ScreenShotConfigureForm.labelSubfolder: "In Sub folder" => "In Sotto-Cartelle"
+ScreenShotConfigureForm.labelFileNameFormat: "In Filename format" => "Nel formato del nome"
+ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" => "Salva immagini convertite"
+ScreenShotConfigureForm.buttonEDChangeOutputFolder: "Browse" => "Sfoglia"
+ScreenShotConfigureForm.labelScanFor: "Scan for" => "Scansiona per"
+ScreenShotConfigureForm.labelSaveAs: "Save as" => "Salva come"
 
 
 //////////////////////////////////////////////////////////////// Bookmark form
@@ -327,7 +327,7 @@ FindSystemsUserControl.buttonExtDBCube: "From DB Cube Systems" => "Crea un cubo 
 FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Crea una sfera di sistemi usando il banco dati"
 FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Crea un cubo di sistemi usando EDSM"
 FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Crea una sfera di sistemi usando EDSM"
-FindSystemsUserControl.labelRadMax: "Max" @
+FindSystemsUserControl.labelRadMax: "Max" => "Max"
 FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Raggio Min (ly)"
 FindSystemsUserControl.labelFilter: "Star Name" => "Nome del Sistema"
 
@@ -353,9 +353,9 @@ TravelHistoryFilter.StartEnd: "Start/End Flag" => "Inizio/Fine"
 
 //////////////////////////////////////////////////////////////// Add on manager
 
-AddOnManagerForm.buttonMore: "+" @
+AddOnManagerForm.buttonMore: "+" => "+"
 AddOnManagerForm.buttonExtGlobals: "Globals" => "Globale"
-AddOnManagerForm.buttonOK: "OK" @
+AddOnManagerForm.buttonOK: "OK" => "OK"
 
 AddOnManagerForm.AddOnTitle: "Add-On Manager" => "Gestisci gli Add-Ons"
 AddOnManagerForm.EditTitle: "Edit Add-Ons" => "Modifica gli Add-Ons"
@@ -382,16 +382,16 @@ AddOnManagerForm.DeleteWarn: "Do you really want to delete {0}" => "Sei sicuro d
 
 ////////////////////////////////////////////////////////////// Assign system form Little used
 
-AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
-AssignTravelLogSystemForm.label1: "Travel Log System Name:" @
-AssignTravelLogSystemForm.label2: "Date Visited:" @
-AssignTravelLogSystemForm.label6: "EDSM Link:" @
-AssignTravelLogSystemForm.label3: "New system name:" @
-AssignTravelLogSystemForm.btnFindSystem: "Find" @
-AssignTravelLogSystemForm.btnCancel: "Cancel" @
-AssignTravelLogSystemForm.label4: "Travel Log Coordinates:" @
-AssignTravelLogSystemForm.btnOK: "OK" @
-AssignTravelLogSystemForm.label5: "System Coordinates" @
+AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Registro di Viaggio"
+AssignTravelLogSystemForm.label1: "Travel Log System Name:" => "Nome del Sistema nel registro di viaggio"
+AssignTravelLogSystemForm.label2: "Date Visited:" => "Data della visita"
+AssignTravelLogSystemForm.label6: "EDSM Link:" => "Link EDSM"
+AssignTravelLogSystemForm.label3: "New system name:" => "Nome del nuovo sistema:"
+AssignTravelLogSystemForm.btnFindSystem: "Find" => "Cerca"
+AssignTravelLogSystemForm.btnCancel: "Cancel" => "Cancella"
+AssignTravelLogSystemForm.label4: "Travel Log Coordinates:" => "Coordinate del registro di viaggio"
+AssignTravelLogSystemForm.btnOK: "OK" => "OK"
+AssignTravelLogSystemForm.label5: "System Coordinates" => "Coordinate del Sistema"
 
 ///////////////////////////////////////////////////////////// Commander form
 
@@ -483,23 +483,23 @@ Form2DMap: "2D Map" => "Mappa 2D"
 
 /////////////////////////////////////////////////////////////// Galaxy form
 
-GalaxySectorSelect: "GalaxySectorSelect" @
-GalaxySectorSelect.buttonExtCancel: "Cancel" @
-GalaxySectorSelect.buttonExtSet: "Set" @
-GalaxySectorSelect.labelSectorName: "Sector" @
+GalaxySectorSelect: "GalaxySectorSelect" => "Seleziona Settori Galattici"
+GalaxySectorSelect.buttonExtCancel: "Cancel" => "Cancella"
+GalaxySectorSelect.buttonExtSet: "Set" => "Imposta"
+GalaxySectorSelect.labelSectorName: "Sector" => "Settore"
 
-GalaxySectorSelect.Custom: "Custom" @
-GalaxySectorSelect.Reset: "Reset" @
-GalaxySectorSelect.All: "All" @
-GalaxySectorSelect.None: "None" @
-GalaxySectorSelect.Bubble: "Bubble" @
-GalaxySectorSelect.ExtendedBubble: "Extended Bubble" @
-GalaxySectorSelect.BC: "Bubble+Colonia" @
+GalaxySectorSelect.Custom: "Custom" => "Custom"
+GalaxySectorSelect.Reset: "Reset" => "Resetta"
+GalaxySectorSelect.All: "All" => "Tutti"
+GalaxySectorSelect.None: "None" => "Nome"
+GalaxySectorSelect.Bubble: "Bubble" => "Bolla"
+GalaxySectorSelect.ExtendedBubble: "Extended Bubble" => "Bolla Estesa"
+GalaxySectorSelect.BC: "Bubble+Colonia" => "Bolla piú Colonia"
 
-.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" @
-.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" @
-.Warning: "Warning" @
-.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
+.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Hai aggiunto nuovi settori!\r\nQuesta operazione richiede un nuovo scarico COMPLETO di tutti i dati EDSM\r\nSei sicuro di voler continuare?"
+.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
+.Warning: "Warning" => "Attenzione"
+.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
 
 /////////////////////////////////////////////////////////////// Move commander
 
@@ -530,7 +530,7 @@ ProfileEditor.buttonMore: "+" => "+"
 ProfileEditor.label_index: "Profile Editor" => "Editor di Profilo"
 ProfileEditor.buttonExtGlobals: "Globals" => "Globale"
 ProfileEditor.buttonExtCancel: "Cancel" => "Cancella"
-ProfileEditor.buttonOK: "OK" @
+ProfileEditor.buttonOK: "OK" => "OK"
 
 .Custom: "Custom" => "Custom"
 .Trigger: "Trigger" => "Causa"
@@ -542,26 +542,26 @@ ProfileEditor.buttonOK: "OK" @
 
 /////////////////////////////////////////////////////////////// 3dmap step
 
-RecordStep: "RecordStep" @
-RecordStep.labelGoto: "Go to" @
-RecordStep.labelPAt: "Pointing At" @
-RecordStep.checkBoxWaitForSlew: "Wait for slew" @
-RecordStep.checkBoxChangeZoom: "Change Zoom" @
-RecordStep.labelZoom: "Zoom" @
-RecordStep.labelWait: "Wait for this time before action" @
-RecordStep.checkBoxPan: "Change Dir" @
-RecordStep.labelZoomTime: "Time to take to Zoom" @
-RecordStep.checkBoxPos: "Go To" @
-RecordStep.labelMsgTime: "Message on screen time" @
-RecordStep.checkBoxDisplayMessageWhenComplete: "Display Message with complete" @
-RecordStep.labelTimeChange: "Time to take to change pos" @
-RecordStep.checkBoxWaitComplete: "Wait for actions to complete" @
-RecordStep.labelTimeDir: "Time to take to change direction" @
-RecordStep.labelTMEInfo: "0=default time" @
-RecordStep.buttonCancel: "Cancel" @
-RecordStep.labelMsg: "Message to display" @
-RecordStep.buttonOK: "OK" @
-RecordStep.label_index: "Record Step" @
+RecordStep: "RecordStep" => "Passo di Registro"
+RecordStep.labelGoto: "Go to" => "Vai a"
+RecordStep.labelPAt: "Pointing At" => "Puntando su"
+RecordStep.checkBoxWaitForSlew: "Wait for slew" => "Aspetta per"
+RecordStep.checkBoxChangeZoom: "Change Zoom" => "Cambia Zoom"
+RecordStep.labelZoom: "Zoom" => "Zoom"
+RecordStep.labelWait: "Wait for this time before action" => "Aspetta per questo tempo prima dell'azione"
+RecordStep.checkBoxPan: "Change Dir" => "Cambia cartella"
+RecordStep.labelZoomTime: "Time to take to Zoom" => "Tempo per effettuare lo zoom"
+RecordStep.checkBoxPos: "Go To" => "Vai a"
+RecordStep.labelMsgTime: "Message on screen time" => "Messagio sullo schermo di tempo"
+RecordStep.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => "Mostra messaggio con completamento"
+RecordStep.labelTimeChange: "Time to take to change pos" => "Tempo per effettuare lo spostamento"
+RecordStep.checkBoxWaitComplete: "Wait for actions to complete" => "Aspetta per il completamento delle azioni"
+RecordStep.labelTimeDir: "Time to take to change direction" => "Tempo per cambiare direzione"
+RecordStep.labelTMEInfo: "0=default time" => "0=tempo default"
+RecordStep.buttonCancel: "Cancel" => "Cancella"
+RecordStep.labelMsg: "Message to display" => "Messaggio da mostrare"
+RecordStep.buttonOK: "OK" => "OK"
+RecordStep.label_index: "Record Step" => "Passo di Registro"
 
 
 /////////////////////////////////////////////////////////////// Set Note
@@ -601,7 +601,7 @@ DataGridViewDialogs.Jumpto: "Jump to:" => "Va a"
 
 //////////////////////////////////////////////////// InfoForm
 
-InfoForm.OK : "OK" @
+InfoForm.OK : "OK" => "OK"
 
 //////////////////////////////////////////////////// Keyform
 
