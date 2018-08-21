@@ -54,7 +54,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());        // instances of $_name, fix to fdname
             FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
-            CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
+            CommodityLocalised = JournalFieldNaming.CheckLocalisationTranslation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
             Expiry = evt["Expiry"].DateTimeUTC();

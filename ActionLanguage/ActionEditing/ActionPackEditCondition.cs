@@ -36,6 +36,7 @@ namespace ActionLanguage
         private ExtendedControls.TextBoxBorder textBoxCondition;
         private ExtendedControls.ButtonExt buttonKeys;
         private Label labelAlwaysTrue;
+        private Label labelAlwaysFalse;
         private Condition cd;
         bool overrideshowfull = false;
 
@@ -68,9 +69,15 @@ namespace ActionLanguage
             labelAlwaysTrue.Size = textBoxCondition.Size;
             labelAlwaysTrue.Text = "Always Action/True";
 
+            labelAlwaysFalse = new Label();
+            labelAlwaysFalse.Location = new Point(panelxmargin, panelymargin + 4);
+            labelAlwaysFalse.Size = textBoxCondition.Size;
+            labelAlwaysFalse.Text = "Never Action/False";
+
             SuspendLayout();
             panelConditionType.Controls.Add(textBoxCondition);
             panelConditionType.Controls.Add(labelAlwaysTrue);
+            panelConditionType.Controls.Add(labelAlwaysFalse);
             panelConditionType.Controls.Add(buttonKeys);
             Controls.Add(panelConditionType);
             SelectRepresentation();
@@ -90,12 +97,13 @@ namespace ActionLanguage
             if ( c == ConditionClass.Key )
                 panelConditionType.Items.AddRange(new string[] { "Full Condition" , "Key" });
             else
-                panelConditionType.Items.AddRange(new string[] { "Always Action/True", "Full Condition" });
+                panelConditionType.Items.AddRange(new string[] { "Always Action/True", "Never Action/False", "Full Condition" });
 
             if (overrideshowfull)
                 c = ConditionClass.Full;
 
             labelAlwaysTrue.Visible = (c == ConditionClass.AlwaysTrue);
+            labelAlwaysFalse.Visible = (c == ConditionClass.AlwaysFalse);
             textBoxCondition.Visible = (c == ConditionClass.Full);
             buttonKeys.Visible = (c == ConditionClass.Key);
             textBoxCondition.Text = cd.ToString();
@@ -106,12 +114,18 @@ namespace ActionLanguage
         {
             overrideshowfull = false;
             string sel = panelConditionType.SelectedItem;
-            if (sel.Contains("Always"))    // always true
+            if (sel.Contains("True"))    // always true
             {
                 cd.SetAlwaysTrue();
             }
-            else if (sel.Contains("Full"))    // always true
-                overrideshowfull = true;    // full
+            else if (sel.Contains("False"))    // always true
+            {
+                cd.SetAlwaysFalse();
+            }
+            else if (sel.Contains("Full"))    // Full
+            {
+                overrideshowfull = true;    
+            }
             else
             {
                 if (Classify(cd) != ConditionClass.Key)
@@ -163,12 +177,14 @@ namespace ActionLanguage
             base.Dispose();
         }
 
-        enum ConditionClass { Full, Key, AlwaysTrue };
+        enum ConditionClass { Full, Key, AlwaysTrue , AlwaysFalse };
 
         private ConditionClass Classify(Condition c)
         {
             if (c.IsAlwaysTrue())
                 return ConditionClass.AlwaysTrue;
+            else if (c.IsAlwaysFalse())
+                return ConditionClass.AlwaysFalse;
             else if (c.fields.Count == 1)
             {
                 if (c.fields[0].itemname == "KeyPress" && (c.fields[0].matchtype == ConditionEntry.MatchType.Equals || c.fields[0].matchtype == ConditionEntry.MatchType.IsOneOf))

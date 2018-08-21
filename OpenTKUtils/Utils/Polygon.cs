@@ -14,13 +14,10 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using OpenTK;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 
-namespace EDDiscovery._3DMap
+namespace OpenTKUtils
 {
     
     static public class PolygonTriangulator

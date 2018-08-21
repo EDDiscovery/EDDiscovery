@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
 
             var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load start");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " TG " + displaynumber + " Load start");
 
             List<HistoryEntry> result = filter.Filter(hl);
             fdropdown = hl.Count() - result.Count();
@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
                 else
                     rowno = -1;
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " TG " + displaynumber + " Load Finish");
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " TG " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {

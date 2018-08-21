@@ -175,10 +175,10 @@ namespace BaseUtils
             if (LogPath == null || !Directory.Exists(LogPath))
                 return;
 
-            if (str1 != null && str1.ToUpper().Contains("PASSWORD"))
+            if (str1 != null && str1.ToLowerInvariant().Contains("password"))
                 str1 = "** This string contains a password so not logging it.**";
 
-            if (str2 != null && str2.ToUpper().Contains("PASSWORD"))
+            if (str2 != null && str2.ToLowerInvariant().Contains("password"))
                 str2 = "** This string contains a password so not logging it.**";
 
             try

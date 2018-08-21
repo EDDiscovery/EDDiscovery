@@ -27,12 +27,13 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using System.IO;
+using OpenTKUtils;
 
 namespace EDDiscovery._3DMap
 {
     public class DatasetBuilder
     {
-        private List<IData3DSet> _datasets;
+        private List<IData3DCollection> _datasets;
         private static Dictionary<string, TexturedQuadData> _cachedTextures = new Dictionary<string, TexturedQuadData>();
         private static Dictionary<string, Bitmap> _cachedBitmaps = new Dictionary<string, Bitmap>();
 
@@ -50,17 +51,17 @@ namespace EDDiscovery._3DMap
 
         public DatasetBuilder()
         {
-            _datasets = new List<IData3DSet>();
+            _datasets = new List<IData3DCollection>();
         }
 
 
         #region MAPS
 
-       public List<IData3DSet> AddMapImages(BaseUtils.Map2d [] list)
+       public List<IData3DCollection> AddMapImages(BaseUtils.Map2d [] list)
         {
             if (list.Length > 0 )
             {
-                var datasetMapImg = Data3DSetClass<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
+                var datasetMapImg = Data3DCollection<TexturedQuadData>.Create("mapimage", Color.White, 1.0f);
 
                 for( int i = 0; i < list.Length; i++)
                 {
@@ -94,9 +95,9 @@ namespace EDDiscovery._3DMap
 
         #region Bookmarks
 
-        public List<IData3DSet> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, Bitmap mapsurface, float widthly, float heightly, Vector3 rotation )
+        public List<IData3DCollection> AddStarBookmarks(Bitmap mapstar, Bitmap mapregion, Bitmap maptarget, Bitmap mapsurface, float widthly, float heightly, Vector3 rotation )
         {
-            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
+            var datasetbks = Data3DCollection<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
 
             long bookmarktarget = TargetClass.GetTargetBookmark();
 
@@ -114,9 +115,9 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<HistoryEntry> syslists)
+        public List<IData3DCollection> AddNotedBookmarks(Bitmap map, Bitmap maptarget, float widthly, float heightly, Vector3 rotation, List<HistoryEntry> syslists)
         {
-            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
+            var datasetbks = Data3DCollection<TexturedQuadData>.Create("bkmrs", Color.White, 1f);
 
             long bookmarknoted = TargetClass.GetTargetNotedSystem();
 
@@ -149,12 +150,12 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public void UpdateBookmarks(ref List<IData3DSet> _datasets, float widthly, float heightly, Vector3 rotation)
+        public void UpdateBookmarks(ref List<IData3DCollection> _datasets, float widthly, float heightly, Vector3 rotation)
         {
             if (_datasets == null)
                 return;
 
-            foreach (IData3DSet dataset in _datasets)
+            foreach (IData3DCollection dataset in _datasets)
             {
                 TexturedQuadDataCollection tqdc = dataset as TexturedQuadDataCollection;
 
@@ -187,11 +188,11 @@ namespace EDDiscovery._3DMap
         float gmoselonly = 0.75F;
         float gmoseltarget = 1.75F;
 
-        public List<IData3DSet> AddGalMapRegionsToDataset(GalacticMapping galmap, bool colourregions)
+        public List<IData3DCollection> AddGalMapRegionsToDataset(GalacticMapping galmap, bool colourregions)
         {
             var polydataset = new PolygonCollection("regpolys", Color.White, 1f, OpenTK.Graphics.OpenGL.PrimitiveType.Triangles);      // ORDER AND NUMBER v.Important
             var outlinedataset = new PolygonCollection("reglines", Color.White, 1f , OpenTK.Graphics.OpenGL.PrimitiveType.LineLoop);   // DrawStars picks them out in a particular order
-            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("regtext", Color.White, 1f);
+            var datasetbks = Data3DCollection<TexturedQuadData>.Create("regtext", Color.White, 1f);
 
             if (galmap != null && galmap.Loaded)
             {
@@ -281,9 +282,9 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddGalMapObjectsToDataset(GalacticMapping galmap, Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
+        public List<IData3DCollection> AddGalMapObjectsToDataset(GalacticMapping galmap, Bitmap target, float widthly, float heightly, Vector3 rotation, bool namethem , Color textc)
         {
-            var datasetbks = Data3DSetClass<TexturedQuadData>.Create("galobj", Color.White, 1f);
+            var datasetbks = Data3DCollection<TexturedQuadData>.Create("galobj", Color.White, 1f);
 
             if (galmap != null && galmap.Loaded)
             {
@@ -475,12 +476,12 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public void UpdateGalObjects(ref List<IData3DSet> _datasets, float widthly, float heightly , Vector3 rotation )
+        public void UpdateGalObjects(ref List<IData3DCollection> _datasets, float widthly, float heightly , Vector3 rotation )
         {
             if (_datasets == null)
                 return;
 
-            foreach ( IData3DSet dataset in _datasets )
+            foreach ( IData3DCollection dataset in _datasets )
             {
                 if (dataset is TexturedQuadDataCollection)
                 {
@@ -510,7 +511,7 @@ namespace EDDiscovery._3DMap
 
         #region Grids
 
-        public List<IData3DSet> AddGridCoords()
+        public List<IData3DCollection> AddGridCoords()
         {
             string fontname = "MS Sans Serif";
             {
@@ -524,8 +525,8 @@ namespace EDDiscovery._3DMap
                     bitmapwidth = (int)sz.Width + 4;
                     bitmapheight = (int)sz.Height + 4;
                 }
-                var datasetMapImgLOD1 = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD1", Color.White, 1.0f);
-                var datasetMapImgLOD2 = Data3DSetClass<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb(128, Color.White), 1.0f);
+                var datasetMapImgLOD1 = Data3DCollection<TexturedQuadData>.Create("text bitmap LOD1", Color.White, 1.0f);
+                var datasetMapImgLOD2 = Data3DCollection<TexturedQuadData>.Create("text bitmap LOD2", Color.FromArgb(128, Color.White), 1.0f);
 
                 int textheightly = 50;
                 int textwidthly = textheightly * bitmapwidth / bitmapheight;
@@ -599,10 +600,10 @@ namespace EDDiscovery._3DMap
             return text_bmp;
         }
 
-        public List<IData3DSet> AddFineGridLines()
+        public List<IData3DCollection> AddFineGridLines()
         {
             int smallUnitSize = gridunitSize / 10;
-            var smalldatasetGrid = Data3DSetClass<LineData>.Create("gridFine", FineGridLines, 0.6f);
+            var smalldatasetGrid = Data3DCollection<LineData>.Create("gridFine", FineGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += smallUnitSize)
             {
@@ -618,9 +619,9 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> AddCoarseGridLines()
+        public List<IData3DCollection> AddCoarseGridLines()
         {
-            var datasetGridLOD1 = Data3DSetClass<LineData>.Create("gridNormal", CoarseGridLines, 0.6f);
+            var datasetGridLOD1 = Data3DCollection<LineData>.Create("gridNormal", CoarseGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize)
             {
@@ -634,7 +635,7 @@ namespace EDDiscovery._3DMap
 
             _datasets.Add(datasetGridLOD1);
 
-            var datasetGridLOD2 = Data3DSetClass<LineData>.Create("gridCoarse", CoarseGridLines, 0.6f);
+            var datasetGridLOD2 = Data3DCollection<LineData>.Create("gridCoarse", CoarseGridLines, 0.6f);
 
             for (float x = MinGridPos.X; x <= MaxGridPos.X; x += gridunitSize * 10)
             {
@@ -650,9 +651,9 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public void UpdateGridZoom(ref List<IData3DSet> _datasets, float zoom)
+        public void UpdateGridZoom(ref List<IData3DCollection> _datasets, float zoom)
         {
-            IData3DSet grid = _datasets.SingleOrDefault(s => s.Name == "gridNormal");
+            IData3DCollection grid = _datasets.SingleOrDefault(s => s.Name == "gridNormal");
 
             if ( grid != null )
             {
@@ -664,9 +665,9 @@ namespace EDDiscovery._3DMap
             }
         }
 
-        public void UpdateGridCoordZoom(ref List<IData3DSet> _datasets, float zoom)
+        public void UpdateGridCoordZoom(ref List<IData3DCollection> _datasets, float zoom)
         {
-            IData3DSet gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
+            IData3DCollection gridLOD2 = _datasets.SingleOrDefault(s => s.Name == "text bitmap LOD2");
 
             if (gridLOD2 != null)
             {
@@ -686,7 +687,7 @@ namespace EDDiscovery._3DMap
 
         // DotColour = transparent, use the map colour associated with each entry.  Else use this colour for all
 
-        public List<IData3DSet> BuildSystems(bool DrawLines, bool DrawDots, Color DotColour, List<HistoryEntry> syslists)
+        public List<IData3DCollection> BuildSystems(bool DrawLines, bool DrawDots, Color DotColour, List<HistoryEntry> syslists)
         {
             // we use the expanded capability of Line and Point to holds colours for each element instead of the previous sorting system
             // This means less submissions to GL.
@@ -695,7 +696,7 @@ namespace EDDiscovery._3DMap
             {
                 if (DrawLines)
                 {
-                    var datasetl = Data3DSetClass<LineData>.Create("visitedstarslines", Color.Transparent, 2.0f);
+                    var datasetl = Data3DCollection<LineData>.Create("visitedstarslines", Color.Transparent, 2.0f);
 
                     Vector3d? lastpos = null;
 
@@ -731,7 +732,7 @@ namespace EDDiscovery._3DMap
 
                 if ( DrawDots )
                 {
-                    var datasetp = Data3DSetClass<PointData>.Create("visitedstarsdots", DotColour, 2.0f);
+                    var datasetp = Data3DCollection<PointData>.Create("visitedstarsdots", DotColour, 2.0f);
 
                     Color drawcolour = Color.Green;
 
@@ -757,11 +758,11 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public List<IData3DSet> BuildRouteTri(List<ISystem> PlannedRoute)
+        public List<IData3DCollection> BuildRouteTri(List<ISystem> PlannedRoute)
         {
             if (PlannedRoute != null && PlannedRoute.Any())
             {
-                var routeLines = Data3DSetClass<LineData>.Create("PlannedRoute", PlannedRouteColor, 25.0f);
+                var routeLines = Data3DCollection<LineData>.Create("PlannedRoute", PlannedRouteColor, 25.0f);
                 ISystem prevSystem = PlannedRoute.First();
                 foreach (ISystem point in PlannedRoute.Skip(1))
                 {
@@ -777,20 +778,20 @@ namespace EDDiscovery._3DMap
 
         #region Systems
 
-        public List<IData3DSet> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
+        public List<IData3DCollection> BuildSelected(ISystem centersystem, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation )
         {
             Bitmap selmark  = SelectedMarker;
 
             if (centersystem != null)
             {
-                var dataset = Data3DSetClass<PointData>.Create("Center", CentredSystem, 5.0f);
+                var dataset = Data3DCollection<PointData>.Create("Center", CentredSystem, 5.0f);
                 dataset.Add(new PointData(centersystem.X, centersystem.Y, centersystem.Z));
                 _datasets.Add(dataset);
             }
 
             if (selectedsystem != null)
             {
-                var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selstar", Color.White, 1f);
+                var datasetbks = Data3DCollection<TexturedQuadData>.Create("selstar", Color.White, 1f);
 
                 TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, new PointData(selectedsystem.X,selectedsystem.Y,selectedsystem.Z), rotation, widthly, heightly/2, 0, heightly/4+heightly/16);
                 newtexture.Tag = 0;
@@ -802,7 +803,7 @@ namespace EDDiscovery._3DMap
             {
                 if (selectedgmo.points.Count > 0)               // paranoia
                 {
-                    var datasetbks = Data3DSetClass<TexturedQuadData>.Create("selgmo", Color.White, 1f);
+                    var datasetbks = Data3DCollection<TexturedQuadData>.Create("selgmo", Color.White, 1f);
                     long gmotarget = TargetClass.GetTargetGMO();
                     float hoff = (gmotarget == selectedgmo.id) ? (heightly * gmoseltarget) : (heightly * gmoselonly);
                     TexturedQuadData newtexture = TexturedQuadData.FromBitmap(selmark, selectedgmo.points[0].Convert(), rotation, widthly, heightly / 2, 0, hoff);
@@ -815,12 +816,12 @@ namespace EDDiscovery._3DMap
             return _datasets;
         }
 
-        public void UpdateSelected(ref List<IData3DSet> _datasets, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation)
+        public void UpdateSelected(ref List<IData3DCollection> _datasets, ISystem selectedsystem, GalacticMapObject selectedgmo, float widthly, float heightly, Vector3 rotation)
         {
             if (_datasets == null)
                 return;
 
-            foreach (IData3DSet dataset in _datasets)
+            foreach (IData3DCollection dataset in _datasets)
             {
                 if (dataset is TexturedQuadDataCollection)
                 {

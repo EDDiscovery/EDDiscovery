@@ -61,8 +61,6 @@ namespace EDDiscovery
         private bool displayUTC = false;
         private bool clearMaterials = false;
         private bool clearCommodities = false;
-        private bool autoLoadPopouts = false;
-        private bool autoSavePopouts = false;
         private bool showuievents = false;
         private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string defaultwavedevice = "Default";
@@ -72,6 +70,7 @@ namespace EDDiscovery
         private int fullhistoryloaddaylimit = 0;     //0 means not in use
         private string language = "Auto";
         private bool drawduringresize = true;
+        private bool sortpanelsalpha = false;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -169,32 +168,6 @@ namespace EDDiscovery
             {
                 clearCommodities = value;
                 SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
-            }
-        }
-
-        public bool AutoLoadPopOuts
-        {
-            get
-            {
-                return autoLoadPopouts;
-            }
-            set
-            {
-                autoLoadPopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoLoadPopouts", value);
-            }
-        }
-
-        public bool AutoSavePopOuts
-        {
-            get
-            {
-                return autoSavePopouts;
-            }
-            set
-            {
-                autoSavePopouts = value;
-                SQLiteConnectionUser.PutSettingBool("AutoSavePopouts", value);
             }
         }
 
@@ -315,6 +288,19 @@ namespace EDDiscovery
             }
         }
 
+        public bool SortPanelsByName
+        {
+            get
+            {
+                return sortpanelsalpha;
+            }
+            set
+            {
+                sortpanelsalpha = value;
+                SQLiteConnectionUser.PutSettingBool("PanelsSortedByName", value); 
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -330,8 +316,6 @@ namespace EDDiscovery
                 displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
                 clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
                 clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
-                autoLoadPopouts = SQLiteConnectionUser.GetSettingBool("AutoLoadPopouts", false, conn);
-                autoSavePopouts = SQLiteConnectionUser.GetSettingBool("AutoSavePopouts", false, conn);
                 defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
@@ -341,7 +325,7 @@ namespace EDDiscovery
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = SQLiteConnectionUser.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = SQLiteConnectionUser.GetSettingBool("DrawDuringResizeWindow", true);
-
+                sortpanelsalpha = SQLiteConnectionUser.GetSettingBool("PanelsSortedByName", false);
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }
             catch (Exception ex)

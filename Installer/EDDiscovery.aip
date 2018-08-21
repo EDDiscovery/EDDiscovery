@@ -69,6 +69,7 @@
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{11EF4895-473E-435D-A749-C1CCC6462BF8}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="OpenTK.GLControl.dll" ComponentId="{027B3AD2-A990-44DE-A920-B19144770C02}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.GLControl.dll"/>
     <ROW Component="OpenTK.dll" ComponentId="{C4594C03-283B-485A-B97C-6E3B4D128D73}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTK.dll"/>
+    <ROW Component="OpenTKUtils.dll" ComponentId="{0075D31D-F709-40F8-A64B-3581DA32DF26}" Directory_="APPDIR" Attributes="0" KeyPath="OpenTKUtils.dll"/>
     <ROW Component="OxyPlot.WindowsForms.dll" ComponentId="{652CFC2E-06FE-4A01-B93F-4311D5A52409}" Directory_="APPDIR" Attributes="0" KeyPath="OxyPlot.WindowsForms.dll"/>
     <ROW Component="OxyPlot.dll" ComponentId="{C0B75D95-0C05-4AC1-8E4A-1D240FC88E80}" Directory_="APPDIR" Attributes="0" KeyPath="OxyPlot.dll"/>
     <ROW Component="ProductInformation" ComponentId="{2052CDE1-E8AB-4307-885D-DB1B4C223C03}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
@@ -85,7 +86,7 @@
     <ROW Feature="AI32BitFiles" Title="32-bit" Description="32-bit Executables and Libraries" Display="5" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage Newtonsoft.Json.dll OpenTK.GLControl.dll OpenTK.dll SQLite.Interop.dll System.Data.SQLite.dll msvcp100.dll msvcr100.dll"/>
     <ROW Feature="AI64BitFiles" Title="64-bit" Description="64-bit Executables and Libraries" Display="3" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage SQLite.Interop.dll_1"/>
     <ROW Feature="AIOtherFiles" Title="Common" Description="Shared Resource and Regular Files" Display="7" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage InstallLanguage fround.js"/>
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage ActionLanguage.dll Actions Audio.dll CSCore.dll Conditions.dll DirectInput.dll EDDiscovery EDDiscovery.Icons.dll EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF EliteDangerous.dll ExtendedControls.dll General.dll InstallLanguage M67.json OxyPlot.WindowsForms.dll OxyPlot.dll ProductInformation SharpDX.DirectInput.dll SharpDX.dll"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AI_ExePath AI_InstallLanguage ActionLanguage.dll Actions Audio.dll CSCore.dll Conditions.dll DirectInput.dll EDDiscovery EDDiscovery.Icons.dll EDDiscovery.exe EDDiscovery.exe.config EUROCAPS.TTF EliteDangerous.dll ExtendedControls.dll General.dll InstallLanguage M67.json OpenTKUtils.dll OxyPlot.WindowsForms.dll OxyPlot.dll ProductInformation SharpDX.DirectInput.dll SharpDX.dll"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
@@ -114,7 +115,8 @@
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Newtonsoft.Json.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
     <ROW File="OpenTK.GLControl.dll" Component_="OpenTK.GLControl.dll" FileName="OPENTK~1.DLL|OpenTK.GLControl.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTK.GLControl.dll" SelfReg="false" NextFile="Installer.txt"/>
     <ROW File="OpenTK.dll" Component_="OpenTK.dll" FileName="OpenTK.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTK.dll" SelfReg="false" NextFile="Newtonsoft.Json.dll"/>
-    <ROW File="OxyPlot.WindowsForms.dll" Component_="OxyPlot.WindowsForms.dll" FileName="OXYPLO~1.DLL|OxyPlot.WindowsForms.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OxyPlot.WindowsForms.dll" SelfReg="false"/>
+    <ROW File="OpenTKUtils.dll" Component_="OpenTKUtils.dll" FileName="OPENTK~2.DLL|OpenTKUtils.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTKUtils.dll" SelfReg="false"/>
+    <ROW File="OxyPlot.WindowsForms.dll" Component_="OxyPlot.WindowsForms.dll" FileName="OXYPLO~1.DLL|OxyPlot.WindowsForms.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OxyPlot.WindowsForms.dll" SelfReg="false" NextFile="OpenTKUtils.dll"/>
     <ROW File="OxyPlot.dll" Component_="OxyPlot.dll" FileName="OxyPlot.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OxyPlot.dll" SelfReg="false" NextFile="OxyPlot.WindowsForms.dll"/>
     <ROW File="Pleiades.json" Component_="M67.json" FileName="PLEIAD~1.JSO|Pleiades.json" Attributes="0" SourcePath="ExtraFiles\Pleiades.json" SelfReg="false" NextFile="CSCore.dll"/>
     <ROW File="SQLite.Interop.dll" Component_="SQLite.Interop.dll" FileName="SQLITE~1.DLL|SQLite.Interop.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\SQLite.Interop.dll" SelfReg="false" NextFile="SQLite.Interop.dll_1"/>

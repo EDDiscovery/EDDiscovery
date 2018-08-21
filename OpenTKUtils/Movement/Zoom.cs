@@ -14,14 +14,11 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 
-namespace EDDiscovery._3DMap
+namespace OpenTKUtils
 {
-    class ZoomFov
+    public class ZoomFov
     {
         public float Zoom { get { return _zoom; } }
         public float Fov { get { return _cameraFov; } }

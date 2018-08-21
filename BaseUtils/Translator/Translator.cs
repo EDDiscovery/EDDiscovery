@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 public static class TranslatorExtensions
@@ -72,9 +70,11 @@ namespace BaseUtils
         {
         }
 
+        public bool Translating { get { return translations != null; } }
+
         // You can call this multiple times if required for debugging purposes
 
-        public void LoadTranslation(string language, CultureInfo uicurrent, string txfolder1, string txfolder2 , int includesearchupdepth, string logdir)
+        public void LoadTranslation(string language, CultureInfo uicurrent, string[] txfolders, int includesearchupdepth, string logdir)
         {
 #if DEBUG
             if (logger != null)
@@ -85,48 +85,33 @@ namespace BaseUtils
 #endif
             translations = null;        // forget any
 
-            List<string> languagesfolder1 = Languages(txfolder1,false);     // full paths
-            List<string> languagesfolder2 = Languages(txfolder2,false);
+            List<Tuple<string, string>> languages = EnumerateLanguages(txfolders);
 
-            // uicurrent = CultureInfo.CreateSpecificCulture("es"); // debug
+           //  uicurrent = CultureInfo.CreateSpecificCulture("it"); // debug
 
-            string langfile = null;
+            Tuple<string,string> langsel = null;
 
             if (language == "Auto")
             {
-                langfile = FindLanguage(languagesfolder1, uicurrent.Name);
+                langsel = FindISOLanguage(languages, uicurrent.Name);
 
-                if (langfile == null)
-                    langfile = FindLanguage(languagesfolder2, uicurrent.Name);
-
-                if (language == null)
-                    langfile = FindLanguage(languagesfolder1, uicurrent.TwoLetterISOLanguageName);
-
-                if (language == null)
-                    langfile = FindLanguage(languagesfolder2, uicurrent.TwoLetterISOLanguageName);
-
-                if (langfile == null)
-                    return;
+                if (langsel == null)
+                    langsel = FindISOLanguage(languages, uicurrent.TwoLetterISOLanguageName);
             }
             else
             {
-                langfile = Path.Combine(txfolder1, language + ".tlf");
-
-                if (!File.Exists(langfile))
-                {
-                    langfile = Path.Combine(txfolder2, language + ".tlf");
-
-                    if (!File.Exists(langfile))
-                        return;
-                }
+                langsel = languages.Find(x => Path.GetFileNameWithoutExtension(x.Item2).Equals(language));
             }
 
-            System.Diagnostics.Debug.WriteLine("Load Language " + langfile);
-            logger?.WriteLine("Read " + langfile);
+            if (langsel == null)
+                return;
+
+            System.Diagnostics.Debug.WriteLine("Load Language " + langsel.Item2);
+            logger?.WriteLine("Read " + langsel.Item2 + " from " + langsel.Item1);
 
             using (LineReader lr = new LineReader())
             {
-                if (lr.Open(langfile))
+                if (lr.Open(Path.Combine(langsel.Item1,langsel.Item2)))
                 {
                     translations = new Dictionary<string, string>();
 
@@ -140,7 +125,7 @@ namespace BaseUtils
                         {
                             line = line.Mid(7).Trim();
 
-                            DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(langfile));
+                            DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(langsel.Item1));
 
                             string filename = null;
 
@@ -223,26 +208,41 @@ namespace BaseUtils
             ExcludedControls.AddRange(s);
         }
 
-        static public List<string> Languages(string txfolder, bool nameonly)
+        static public List<Tuple<string, string>> EnumerateLanguages(string[] txfolders)        // return folder, language file, without repeats
         {
-            try
+            List<Tuple<string, string>> languages = new List<Tuple<string, string>>();
+
+            foreach (string folder in txfolders)
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(txfolder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-                return nameonly ? allFiles.Select(x => Path.GetFileNameWithoutExtension(x.Name)).ToList() : allFiles.Select(x => x.Name).ToList();
+                try
+                {
+                    FileInfo[] allFiles = Directory.EnumerateFiles(folder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
+
+                    foreach( FileInfo f in allFiles)
+                    {
+                        if (languages.Find(x => x.Item2.Equals(f.Name)) == null)        // if not already found this language, add
+                            languages.Add(new Tuple<string, string>(folder, f.Name));   // folder and name
+                    }
+                }
+                catch { }
             }
-            catch
-            {
-                return new List<string>();
-            }
+
+            return languages;
         }
 
-        static public string FindLanguage(List<string> lang, string isoname)    // take filename part only, see if filename text-<iso> is present
+        static public List<string> EnumerateLanguageNames(string[] txfolders)
+        {
+            List<Tuple<string, string>> languages = BaseUtils.Translator.EnumerateLanguages(txfolders);
+            return (from x in languages select Path.GetFileNameWithoutExtension(x.Item2)).ToList();
+        }
+
+        static public Tuple<string,string> FindISOLanguage(List<Tuple<string,string>> lang, string isoname)    // take filename part only, see if filename text-<iso> is present
         {
             return lang.Find(x =>
             {
-                string filename = Path.GetFileNameWithoutExtension(x);
-                int dash = x.IndexOf('-');
-                return dash != -1 && x.Substring(dash + 1).Equals(isoname);
+                string filename = Path.GetFileNameWithoutExtension(x.Item2);
+                int dash = filename.IndexOf('-');
+                return dash != -1 && filename.Substring(dash + 1).Equals(isoname);
             });
         }
 

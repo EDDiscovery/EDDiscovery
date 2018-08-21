@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             Commodity = JournalFieldNaming.FixCommodityName(evt["Commodity"].Str());             // evidence of $_name problem, fix to fdname
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
-            CommodityLocalised = JournalFieldNaming.CheckLocalisation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
+            CommodityLocalised = JournalFieldNaming.CheckLocalisationTranslation(evt["Commodity_Localised"].Str(),FriendlyCommodity);
 
             Count = evt["Count"].IntNull();
 
@@ -238,7 +238,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 Name = JournalFieldNaming.FDNameTranslation(Name);
                 FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
-                Name_Localised = JournalFieldNaming.CheckLocalisation(Name_Localised??"",FriendlyName);
+                Name_Localised = JournalFieldNaming.CheckLocalisationTranslation(Name_Localised??"",FriendlyName);
 
                 if (Category != null)
                 {

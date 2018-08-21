@@ -30,7 +30,9 @@ namespace EDDiscovery
     {
         public enum PanelIDs        // id's.. used in tab controls, and in button pop outs button
         {
-            Log,                    // BEWARE
+            GroupMarker = -1,
+
+            Log = 0,                // BEWARE
             StarDistance,           // BEWARE       Current user selection is saved as an index, so re-ordering these is not allowed
             Materials,              // BEWARE
             Commodities,            // 
@@ -73,18 +75,18 @@ namespace EDDiscovery
             // ****** ADD More here DO NOT REORDER *****
         };
 
-        // This is the order they are presented to the user..   you can shuffle them to your hearts content
-        // description = empty means not user selectable
+        // This is the order they are presented to the user if not using alpha sort..   you can shuffle them to your hearts content
+        // description = empty means not user selectable.  Single text string expresses a group.
 
-        static private List<PanelInfo> PanelList = new List<PanelInfo>()
+        static private List<PanelInfo> paneldefinition = new List<PanelInfo>()
         {
-            // history
+            { new PanelInfo( "History") },
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
-            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Star List", "StarList", "Visited star list", transparent: false) },
+            { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list", transparent: false) },
 
-            // about what your stats
+            { new PanelInfo( "Current State") },
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
@@ -92,123 +94,187 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
 
-            // about where you've been
+            { new PanelInfo( "Shipyard Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data view, giving commodity price information where available" ) },
-            { new PanelInfo( PanelIDs.ShipYardPanel, typeof(UserControlShipYards), "Ship Yards", "ShipYards", "Information on ship yards from places you have visited") },
-            { new PanelInfo( PanelIDs.OutfittingPanel, typeof(UserControlOutfitting), "Outfitting", "Outfitting", "Information on outfitting items in ship yards from places you have visited") },
+            { new PanelInfo( PanelIDs.ShipYardPanel, typeof(UserControlShipYards), "Ship Yards", "ShipYards", "Ship yards information from places you have visited") },
+            { new PanelInfo( PanelIDs.OutfittingPanel, typeof(UserControlOutfitting), "Outfitting", "Outfitting", "Outfitting items in ship yards from places you have visited") },
 
-            // Engineering/synth
+            { new PanelInfo( "Engineering/Synthesis") },
             { new PanelInfo( PanelIDs.Synthesis, typeof(UserControlSynthesis), "Synthesis", "Synthesis", "Synthesis planner") },
             { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", "Engineering planner") },
             { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", "Shopping list planner combining synthesis and engineering") },
 
-            // Scans and stars
+            { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","List of nearest stars") },
-            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated scan values of bodies in system", transparent: false) },
-            { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Local Map", "LocalMap", "3D Map of systems in range", transparent: false) },
-            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "2D Plot", "Plot", "2D Plot of systems in range", transparent: false) },
+            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Scan value estimates of bodies in system", transparent: false) },
+            { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
+            { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM Star Finder", "EDSMStarFinder", "EDSM Star finder") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
-            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Manage System and planetary bookmarks", transparent:false)},
+            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "System and planetary bookmarks", transparent:false)},
 
-            // Combat
-            { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Display combat statistics", transparent:false)},
+            { new PanelInfo( "Combat") },
+            { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Combat statistics", transparent:false)},
 
-            // Routeplanning
+            { new PanelInfo( "Routes and Expeditions") },
             { new PanelInfo( PanelIDs.Route, typeof(UserControlRoute), "Route Finder", "RouteFinder", "Route Finder from stored star data") },
             { new PanelInfo( PanelIDs.Expedition, typeof(UserControlExpedition), "Expedition", "Expedition", "Expedition Planner, make up a expedition route") },
             { new PanelInfo( PanelIDs.Exploration, typeof(UserControlExploration), "Exploration", "Exploration", "Exploration Planner, make a list of the stars to explore") },
 
-            // Info panels
+            { new PanelInfo( "Overlay Panels") },
             { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information" , transparent:false ) },
             { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay" , transparent: false ) },
             { new PanelInfo( PanelIDs.Trippanel, typeof(UserControlTrippanel), "Trip Computer", "Trippanel", "Trip computer overlay" , transparent: false) },
-            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "System notes overlay" , transparent: false) },
+            { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" , transparent: false) },
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
-            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Ground compass overlay to show bearing to planetary coordinates", transparent:true) },
+            { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates", transparent:true) },
 
-            // settings
+            { new PanelInfo( "Settings") },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
 
-            // Screenshots
+            { new PanelInfo( "Screenshots") },
             { new PanelInfo( PanelIDs.ScreenShot, typeof(UserControlScreenshot), "Screen Shot", "ScreenShot", "Screen shot view") },
 
-            // Multi panels
+            { new PanelInfo( "Multi Panels") },
             { new PanelInfo( PanelIDs.Grid, typeof(UserControlContainerGrid), "Grid", "TheGrid", "Grid (allows other panels to be placed in the it)" , transparent:false) },
             { new PanelInfo( PanelIDs.SplitterControl, typeof(UserControlContainerSplitter), "Splitter", "TheSplitter", "Splitter (allows other panels to be placed in the it)" , transparent:false) },
 
-            // Specials changable user panels
+            { new PanelInfo( "Non User Panels") },
             { new PanelInfo( PanelIDs.PanelSelector, typeof(UserControlPanelSelector), "+", "Selector", "") },       // no description, not presented to user
         };
+
+        static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
+        static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
+        static private int[] userselectablepanelseperatorlistgroup;    // filled by Init - the seperator group index into userselectablepanellist
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new IconGroup<PanelIDs>("Panels");
 
         public static void Init()
         {
-            PanelTypeIcons = new IconGroup<PanelIDs>("Panels");
-            foreach (PanelInfo i in PanelList)
+            int offset = 0;
+            List<int> separs = new List<int>();
+
+            foreach (PanelInfo i in paneldefinition)
             {
-                i.Description = BaseUtils.Translator.Instance.Translate(i.Description, "PopOutInfo." + i.PopoutID + ".Description");
-                i.WindowTitle = BaseUtils.Translator.Instance.Translate(i.WindowTitle, "PopOutInfo." + i.PopoutID + ".Title");
+                if (i.PopoutID == PanelIDs.GroupMarker)     // if group, work separs
+                {
+                    if ( offset>0)
+                        separs.Add(offset);
+
+                    i.WindowTitle = BaseUtils.Translator.Instance.Translate(i.WindowTitle, "PopOutInfo.Group." + i.WindowTitle.FirstAlphaNumericText());
+                }
+                else if ( i.Description.Length > 0 )        // if selectable, translate and update index
+                {
+                    i.WindowTitle = BaseUtils.Translator.Instance.Translate(i.WindowTitle, "PopOutInfo." + i.PopoutID + ".Title");
+                    i.Description = BaseUtils.Translator.Instance.Translate(i.Description, "PopOutInfo." + i.PopoutID + ".Description");
+                    offset++;
+                }
             }
+
+            userselectablepanelseperatorlistgroup = separs.ToArray();      
+            displayablepanels = (from x in paneldefinition where x.PopoutID != PanelIDs.GroupMarker select x).ToList(); //remove groups..
+            userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
+
+            PanelTypeIcons = new IconGroup<PanelIDs>("Panels");
         }
 
-        public class PanelInfo
+        [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]
+        public class PanelInfo      // can hold user selectable, group or non user selectable panels
         {
-            public PanelIDs PopoutID;
+            public PanelIDs PopoutID;       
             public Type PopoutType;
             public string WindowTitle;
             public string WindowRefName;
             public Image TabIcon { get { return PanelTypeIcons[PopoutID]; } }
-            public string Description;
+            public string Description;          // must be non zero length to be user selectable
             public bool SupportsTransparency;
             public bool DefaultTransparent;
 
-            public PanelInfo(PanelIDs p, Type t, string prefix, string rf, string tooltip, bool? transparent = null)
+            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, bool? transparent = null)
             {
                 PopoutID = p;
                 PopoutType = t;
-                WindowTitle = prefix;
-                WindowRefName = rf;
-                Description = tooltip;
+                WindowTitle = wintitle;
+                WindowRefName = refname;
+                Description = description;
                 SupportsTransparency = transparent != null;
                 DefaultTransparent = transparent ?? false;
             }
 
-            public bool IsUserSelectable { get { return Description.Length > 0; } }
+            public PanelInfo(string s)
+            {
+                PopoutID = PanelIDs.GroupMarker;
+                WindowTitle = s;
+                Description = string.Empty;
+            }
         }
 
-        static public string[] GetPanelDescriptions()       // only user selected
+        static public PanelInfo[] GetUserSelectablePanelInfo(bool sortbyname)       // only user selected
         {
-            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.Description).ToArray();
+            if (sortbyname)
+                return (from x in userselectablepanellist orderby x.Description select x).ToArray();
+            else
+                return userselectablepanellist.ToArray();
         }
 
-        static public Image[] GetPanelImages()                // only user selected
+        static public string[] GetUserSelectablePanelDescriptions(bool sortbyname)       // only user selected
         {
-            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.TabIcon).ToArray();
+            if (sortbyname)
+                return (from x in userselectablepanellist orderby x.Description select x.Description).ToArray();
+            else
+                return userselectablepanellist.Select(x => x.Description).ToArray();
         }
 
-        static public PanelIDs[] GetPanelIDs()                // only user selected
+        static public Image[] GetUserSelectablePanelImages(bool sortbyname )                // only user selected
         {
-            return (from PanelInfo x in PanelList where x.IsUserSelectable select x.PopoutID).ToArray();
+            if (sortbyname)
+                return (from x in userselectablepanellist orderby x.Description select x.TabIcon).ToArray();
+            else
+                return userselectablepanellist.Select(x => x.TabIcon).ToArray();
+        }
+
+        static public PanelIDs[] GetUserSelectablePanelIDs(bool sortbyname)                // only user selected
+        {
+            if (sortbyname)
+                return (from x in userselectablepanellist orderby x.Description select x.PopoutID).ToArray();
+            else
+                return userselectablepanellist.Select(x => x.PopoutID).ToArray();
+        }
+
+        static public int[] GetUserSelectableSeperatorIndex(bool sortbyname)                // only user selected
+        {
+            if (sortbyname)
+            {
+                PanelInfo[] pilist = GetUserSelectablePanelInfo(true);
+                List<int> separs = new List<int>();
+                for(int o = 1; o < pilist.Length; o++)
+                {
+                    if (pilist[o - 1].Description[0] != pilist[o].Description[0])
+                        separs.Add(o);
+                }
+
+                return separs.ToArray();
+            }
+            else
+                return userselectablepanelseperatorlistgroup;
         }
 
         static public PanelIDs? GetPanelIDByWindowsRefName(string name) // null if not found
         {
-            return PanelList.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
+            return displayablepanels.Find(x=>x.WindowRefName.Equals(name, StringComparison.InvariantCultureIgnoreCase))?.PopoutID;
         }
 
         static public PanelInfo GetPanelInfoByPanelID(PanelIDs p)    // null if p is invalid
         {
-            int i = PanelList.FindIndex(x => x.PopoutID == p);
-            return i>=0 ? PanelList[i] : null;
+            int i = displayablepanels.FindIndex(x => x.PopoutID == p);
+            return i>=0 ? displayablepanels[i] : null;
         }
 
         static public PanelInfo GetPanelInfoByType(Type t)  // null if not found
         {
-            return PanelList.Find(x => x.PopoutType == t);
+            return displayablepanels.Find(x => x.PopoutType == t);
         }
 
         public static UserControlCommonBase Create(PanelIDs p)  // can fail if P is crap
@@ -220,18 +286,13 @@ namespace EDDiscovery
         public static System.Windows.Forms.ToolStripMenuItem MakeToolStripMenuItem(PanelIDs p, System.EventHandler h)
         {
             PanelInformation.PanelInfo pi = GetPanelInfoByPanelID(p);
-            if (pi.IsUserSelectable)
-            {
-                System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();
-                mi.Text = pi.Description;
-                mi.Size = new System.Drawing.Size(250, 22);
-                mi.Tag = pi.PopoutID;
-                mi.Image = pi.TabIcon;
-                mi.Click += h;
-                return mi;
-            }
-            else
-                return null;
+            System.Windows.Forms.ToolStripMenuItem mi = new System.Windows.Forms.ToolStripMenuItem();
+            mi.Text = pi.Description;
+            mi.Size = new System.Drawing.Size(250, 22);
+            mi.Tag = pi.PopoutID;
+            mi.Image = pi.TabIcon;
+            mi.Click += h;
+            return mi;
         }
     }
 
@@ -250,6 +311,11 @@ namespace EDDiscovery
         public Forms.UserControlForm GetByWindowsRefName(string name) { return usercontrolsforms.GetByWindowsRefName(name); }
         public Forms.UserControlForm this[int i] { get { return usercontrolsforms[i]; } }
 
+        private static string PopOutSaveID(PanelInformation.PanelIDs p)
+        {
+            return EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString();
+        }
+
         public void ShowAllPopOutsInTaskBar()
         {
             usercontrolsforms.ShowAllInTaskBar();
@@ -260,7 +326,12 @@ namespace EDDiscovery
             usercontrolsforms.MakeAllOpaque();
         }
 
-        internal void SaveCurrentPopouts()
+        public void CloseAllPopouts()
+        {
+            usercontrolsforms.CloseAll();
+        }
+
+        public void SaveCurrentPopouts()
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
@@ -268,23 +339,26 @@ namespace EDDiscovery
                 if (pi != null) // paranoia
                 {
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
-                    //System.Diagnostics.Debug.WriteLine("Saved panel type " + paneltype.Name + " " + p.ToString() + " " + numopened);
-                    SQLiteConnectionUser.PutSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), numopened);
+                    if ( numopened>0) System.Diagnostics.Debug.WriteLine($"Save Popout {p} {numopened}");
+                    SQLiteConnectionUser.PutSettingInt(PopOutSaveID(p), numopened);
                 }
             }
         }
 
-        internal void LoadSavedPopouts()
+        public void LoadSavedPopouts()
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                int numtoopen = SQLiteConnectionUser.GetSettingInt(EDDProfiles.Instance.UserControlsPrefix + "SavedPanelInformation.PopOuts:" + p.ToString(), 0);
+                int numtoopen = SQLiteConnectionUser.GetSettingInt(PopOutSaveID(p), 0);
+
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 
                 //System.Diagnostics.Debug.WriteLine("Load panel type " + paneltype.Name + " " + p.ToString() + " " + numtoopen);
 
                 if (pi != null && numtoopen > 0) // paranoia on first..
                 {
+                    System.Diagnostics.Debug.WriteLine($"Load Popout {p} {numtoopen}");
+
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     if (numopened < numtoopen)
                     {
@@ -294,6 +368,7 @@ namespace EDDiscovery
                 }
             }
         }
+
 
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
         {

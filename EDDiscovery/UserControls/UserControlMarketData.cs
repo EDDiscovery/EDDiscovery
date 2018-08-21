@@ -127,7 +127,7 @@ namespace EDDiscovery.UserControls
         {
             //Stopwatch swp = new Stopwatch(); swp.Start();
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MK " + displaynumber + " Begin Display");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " MK " + displaynumber + " Begin Display");
 
             DataGridViewColumn sortcol = dataGridViewMarketData.SortedColumn != null ? dataGridViewMarketData.SortedColumn : dataGridViewMarketData.Columns[0];
             SortOrder sortorder = dataGridViewMarketData.SortOrder;
@@ -245,7 +245,7 @@ namespace EDDiscovery.UserControls
                 string r = "Recorded at " + ((EDDiscoveryForm.EDDConfig.DisplayUTC) ? left.EventTimeUTC.ToString() : left.EventTimeLocal.ToString());
                 toolTip.SetToolTip(labelLocation, r);
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MK " + displaynumber + " Load Finished");
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " MK " + displaynumber + " Load Finished");
             }
 
             dataGridViewMarketData.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);

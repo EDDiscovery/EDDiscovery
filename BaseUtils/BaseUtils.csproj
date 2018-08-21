@@ -64,6 +64,7 @@
     <Compile Include="HTTP\HttpCom.cs" />
     <Compile Include="HTTP\HttpUriEncode.cs" />
     <Compile Include="HTTP\ResponseData.cs" />
+    <Compile Include="JSON\QuickJSONFormatter.cs" />
     <Compile Include="Keys\EnhancedSendKeys.cs" />
     <Compile Include="Misc\CommandArgs.cs" />
     <Compile Include="DebugTraceAndLogs\ExceptionForm.cs">

@@ -147,7 +147,7 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://coriolis.edcd.io/import?.
+        ///   Looks up a localized string similar to https://coriolis.io/import?.
         /// </summary>
         internal static string URLCoriolis {
             get {

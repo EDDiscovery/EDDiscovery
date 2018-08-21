@@ -287,6 +287,25 @@ namespace EliteDangerousCore.Inara
                         break;
                     }
 
+                case JournalTypeEnum.Promotion:     // promotion
+                    {
+                        var promotion = he.journalEntry as JournalPromotion;
+                        if (promotion.Combat != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("combat", (int)promotion.Combat, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+                        if (promotion.Trade != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("trade", (int)promotion.Trade, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+                        if (promotion.Explore != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("explore", (int)promotion.Explore, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+                        if (promotion.Empire != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("empire", (int)promotion.Empire, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+                        if (promotion.Federation != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("federation", (int)promotion.Federation, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+                        if (promotion.CQC != null)
+                            eventstosend.Add(InaraClass.setCommanderRankPilot("cqc", (int)promotion.CQC, 0, promotion.EventTimeUTC));     // by definition, since your promoted, progress = 0
+
+                        break;
+                    }
+
                 case JournalTypeEnum.Reputation: // VERIFIED 16/5/18
                     {
                         var reputation = he.journalEntry as JournalReputation;

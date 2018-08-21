@@ -93,6 +93,17 @@ namespace Conditions
             return false;
         }
 
+        public bool IsAlwaysFalse()
+        {
+            foreach (ConditionEntry c in fields)
+            {
+                if (c.matchtype != ConditionEntry.MatchType.AlwaysFalse)
+                    return false;
+            }
+
+            return true;
+        }
+
         public bool Is(string itemname, ConditionEntry.MatchType mt)        // one condition, of this type
         {
             return fields.Count == 1 && fields[0].itemname == itemname && fields[0].matchtype == mt;
@@ -104,10 +115,23 @@ namespace Conditions
             fields.Add(new ConditionEntry("Condition", ConditionEntry.MatchType.AlwaysTrue, ""));
         }
 
+        public void SetAlwaysFalse()
+        {
+            fields = new List<ConditionEntry>();
+            fields.Add(new ConditionEntry("Condition", ConditionEntry.MatchType.AlwaysFalse, ""));
+        }
+
         static public Condition AlwaysTrue()
         {
             Condition cd = new Condition();
             cd.SetAlwaysTrue();
+            return cd;
+        }
+
+        static public Condition AlwaysFalse()
+        {
+            Condition cd = new Condition();
+            cd.SetAlwaysFalse();
             return cd;
         }
 

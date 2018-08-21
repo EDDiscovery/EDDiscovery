@@ -26,8 +26,8 @@ namespace EliteDangerousCore.JournalEvents
             MarketID = evt["MarketID"].LongNull();
             Type = evt["Type"].Str();                           // FDNAME
             Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
-            FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
-            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(),FriendlyType);         // always ensure we have one
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type); // goes thru the translator..
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(),FriendlyType);         // always ensure we have one
             Count = evt["Count"].Int();
             SellPrice = evt["SellPrice"].Long();
             TotalSale = evt["TotalSale"].Long();

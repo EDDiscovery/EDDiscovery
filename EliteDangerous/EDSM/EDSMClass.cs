@@ -837,10 +837,12 @@ namespace EliteDangerousCore.EDSM
                 mats2 = new Dictionary<string, double>();
 
                 foreach (string key in mats.Keys)
+                {
                     if (mats[key] == null)
-                        mats2[key.ToLower()] = 0.0;
+                        mats2[key.ToLowerInvariant()] = 0.0;
                     else
-                        mats2[key.ToLower()] = mats[key].Value;
+                        mats2[key.ToLowerInvariant()] = mats[key].Value;
+                }
 
                 jout["Materials"] = JObject.FromObject(mats2);
             }
@@ -887,7 +889,7 @@ namespace EliteDangerousCore.EDSM
 
         private static string EDSMPlanet2JournalName(string inname)
         {
-            return EDSM2PlanetNames.ContainsKey(inname.ToLower()) ? EDSM2PlanetNames[inname.ToLower()] : inname;
+            return EDSM2PlanetNames.ContainsKey(inname.ToLowerInvariant()) ? EDSM2PlanetNames[inname.ToLowerInvariant()] : inname;
         }
 
         private static string EDSMStar2JournalName(string startype)

@@ -77,11 +77,11 @@
     <Compile Include="ActionsCore\ActionEvent.cs" />
     <Compile Include="ActionsCore\ActionFile.cs" />
     <Compile Include="ActionsCore\ActionFileList.cs" />
-    <Compile Include="ActionEditing\ActionPackEditorForm.cs">
+    <Compile Include="ActionEditing\ActionPackEditPack.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ActionEditing\ActionPackEditorForm.Designer.cs">
-      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    <Compile Include="ActionEditing\ActionPackEditPack.Designer.cs">
+      <DependentUpon>ActionPackEditPack.cs</DependentUpon>
     </Compile>
     <Compile Include="ActionsCore\ActionProgram.cs" />
     <Compile Include="ActionEditing\ActionProgramEditForm.cs">
@@ -96,8 +96,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ActionEditing\ActionPackEditorForm.resx">
-      <DependentUpon>ActionPackEditorForm.cs</DependentUpon>
+    <EmbeddedResource Include="ActionEditing\ActionPackEditPack.resx">
+      <DependentUpon>ActionPackEditPack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ActionEditing\ActionProgramEditForm.resx">
       <DependentUpon>ActionProgramEditForm.cs</DependentUpon>
