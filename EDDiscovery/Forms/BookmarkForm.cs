@@ -69,6 +69,7 @@ namespace EDDiscovery.Forms
         public void NotedSystem(string name, string note, bool istarget)          // from target, a system with notes
         {
             this.Text = "System Information".Tx(this,"SI");
+            ISystem s = SystemClassDB.GetSystem(name);
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
             checkBoxTarget.Checked = istarget;
@@ -78,7 +79,7 @@ namespace EDDiscovery.Forms
             HideSurfaceBookmarks();
 
             var edsm = new EDSMClass();
-            edsmurl = edsm.GetUrlToEDSMSystem(name);
+            edsmurl = edsm.GetUrlToEDSMSystem(s?.Name ?? name, s?.EDSMID);
         }
 
 
@@ -104,12 +105,16 @@ namespace EDDiscovery.Forms
         {
             string note = "";
             string name;
+            long? edsmid = null;
 
             if (!bk.isRegion)
             {
                 ISystem s = SystemClassDB.GetSystem(bk.StarName);
                 if (s != null)    // paranoia
+                {
                     InitialisePos(s);
+                    edsmid = s.EDSMID;
+                }
                 else
                     InitialisePos(bk.x, bk.y, bk.z);
 
@@ -144,7 +149,7 @@ namespace EDDiscovery.Forms
             else
             {
                 var edsm = new EDSMClass();
-                edsmurl = edsm.GetUrlToEDSMSystem(name);
+                edsmurl = edsm.GetUrlToEDSMSystem(name, edsmid);
                 SurfaceBookmarks.Init(bk.StarName, bk.PlanetaryMarks);
             }
 
