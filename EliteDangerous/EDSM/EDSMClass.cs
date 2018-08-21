@@ -611,7 +611,7 @@ namespace EliteDangerousCore.EDSM
             string sysID;
             string encodedSys = HttpUtility.UrlEncode(sysName);
 
-            if (id_edsm != null)
+            if (id_edsm != null && id_edsm > 0)
             {
                 sysID = id_edsm.ToString();
             }
