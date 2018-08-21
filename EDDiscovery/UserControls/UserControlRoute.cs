@@ -328,15 +328,14 @@ namespace EDDiscovery.UserControls
                         {
                             GalacticMapSystem gms = (GalacticMapSystem)ds1;
                             textBox_From.Text = gms.GalMapObject.name;
-                            textBox_FromName.Text = gms.Name;
                         }
                         else
                         {
                             textBox_From.Text = ds1.Name;
-                            textBox_FromName.Text = ds1.Name;
                         }
                     }
 
+                    textBox_FromName.Text = ds1.Name;
                     textBox_FromX.Text = ds1.X.ToString("0.00");
                     textBox_FromY.Text = ds1.Y.ToString("0.00");
                     textBox_FromZ.Text = ds1.Z.ToString("0.00");
@@ -490,15 +489,14 @@ namespace EDDiscovery.UserControls
                         {
                             GalacticMapSystem gms = (GalacticMapSystem)ds1;
                             textBox_To.Text = gms.GalMapObject.name;
-                            textBox_ToName.Text = gms.Name;
                         }
                         else
                         {
                             textBox_To.Text = ds1.Name;
-                            textBox_ToName.Text = ds1.Name;
                         }
                     }
 
+                    textBox_ToName.Text = ds1.Name;
                     textBox_ToX.Text = ds1.X.ToString("0.00");
                     textBox_ToY.Text = ds1.Y.ToString("0.00");
                     textBox_ToZ.Text = ds1.Z.ToString("0.00");
