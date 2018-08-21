@@ -439,8 +439,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonFromEDSM_Click(object sender, EventArgs e)
         {
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
+            string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
+            long? edsmid = ds1?.EDSMID;
+
             EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(textBox_From.Text, null);
+            string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
@@ -600,8 +604,12 @@ namespace EDDiscovery.UserControls
 
         private void buttonToEDSM_Click(object sender, EventArgs e)
         {
+            ISystem ds1 = discoveryform.history.FindSystem(SystemNameOnly(textBox_To.Text), discoveryform.galacticMapping);
+            string sysname = ds1?.Name ?? SystemNameOnly(textBox_To.Text);
+            long? edsmid = ds1?.EDSMID;
+
             EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(textBox_To.Text, null);
+            string url = edsm.GetUrlToEDSMSystem(sysname, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
