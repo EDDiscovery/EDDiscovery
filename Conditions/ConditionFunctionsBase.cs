@@ -82,6 +82,7 @@ namespace Conditions
                 functions.Add("join", new FuncEntry(Join, 3, 20, FuncEntry.PT.MESE));
                 functions.Add("jsonparse", new FuncEntry(Jsonparse, FuncEntry.PT.MESE, FuncEntry.PT.M));
                 functions.Add("length", new FuncEntry(Length, FuncEntry.PT.MESE));
+                functions.Add("lowerinvariant", new FuncEntry(LowerInvariant, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("lower", new FuncEntry(Lower, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("phrase", new FuncEntry(Phrase, FuncEntry.PT.MESE));
 
@@ -96,6 +97,7 @@ namespace Conditions
                 functions.Add("splitcaps", new FuncEntry(SplitCaps, FuncEntry.PT.MESE));
                 functions.Add("substring", new FuncEntry(SubString, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.ImeSE));
                 functions.Add("trim", new FuncEntry(Trim, FuncEntry.PT.MESE));
+                functions.Add("upperinvariant", new FuncEntry(UpperInvariant, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("upper", new FuncEntry(Upper, 1, 20, FuncEntry.PT.MESE));
                 functions.Add("wordof", new FuncEntry(WordOf, 2, FuncEntry.PT.MESE, FuncEntry.PT.ImeSE, FuncEntry.PT.MESE));
                 functions.Add("wordlistcount", new FuncEntry(WordListCount, 1, FuncEntry.PT.MESE, FuncEntry.PT.MESE));
@@ -300,7 +302,17 @@ namespace Conditions
             return true;
         }
 
+        protected bool LowerInvariant(out string output)
+        {
+            return Lower(out output, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
         protected bool Lower(out string output)
+        {
+            return Lower(out output, System.Globalization.CultureInfo.CurrentCulture);
+        }
+
+        protected bool Lower(out string output, System.Globalization.CultureInfo ci)
         {
             string value = paras[0].Value;
             string delim = (paras.Count > 1) ? paras[1].Value : "";
@@ -308,19 +320,29 @@ namespace Conditions
             for (int i = 2; i < paras.Count; i++)
                 value += delim + paras[i].Value;
 
-            output = value.ToLower();
+            output = value.ToLower(ci);
             return true;
+        }
+
+        protected bool UpperInvariant(out string output)
+        {
+            return Upper(out output, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         protected bool Upper(out string output)
         {
+            return Upper(out output, System.Globalization.CultureInfo.CurrentCulture);
+        }
+
+        protected bool Upper(out string output, System.Globalization.CultureInfo ci)
+        {
             string value = paras[0].Value;
             string delim = (paras.Count > 1) ? paras[1].Value : "";
 
             for (int i = 2; i < paras.Count; i++)
                 value += delim + paras[i].Value;
 
-            output = value.ToUpper();
+            output = value.ToUpper(ci);
             return true;
         }
 
@@ -573,7 +595,7 @@ namespace Conditions
 
         protected bool Icao(out string output)
         {
-            string str = paras[0].Value.ToLower();
+            string str = paras[0].Value.ToLowerInvariant();
             output = "";
             foreach( char c in str )
             {

@@ -306,8 +306,11 @@ JournalEntry .Material: "Material:" @
 JournalEntry .Quantity: "Quantity:" @
 JournalEntry .TotalQuantity: "TotalQuantity:" @
 ///////////////////////////////////////////////////// JournalEngineerCraftBase
-JournalEntry.InSlot: "In Slot:" @
-JournalEntry.By: "By:" @
+JournalEngineerCraftBase.InSlot: "In Slot:" @
+JournalEngineerCraftBase.By: "By:" @
+JournalEngineerCraftBase.Blueprint: "Blueprint:" @
+JournalEngineerCraftBase.Level: "Level:" @
+
 ///////////////////////////////////////////////////// JournalEngineerProgress
 JournalEngineerProgress.Progress: "Progress:" @
 ///////////////////////////////////////////////////// JournalEscapeInterdiction

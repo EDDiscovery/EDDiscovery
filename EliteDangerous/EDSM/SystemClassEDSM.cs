@@ -163,7 +163,7 @@ namespace EliteDangerousCore.EDSM
                                 Name = (string)reader["name"]
                             };
 
-                            string searchname = sys.Name.ToLower();
+                            string searchname = sys.Name.ToLowerInvariant();
 
                             if (System.DBNull.Value == reader["x"])
                             {

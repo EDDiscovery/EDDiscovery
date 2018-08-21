@@ -20,7 +20,7 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Missions)]
-    public class JournalMissions : JournalEntry
+    public class JournalMissions : JournalEntry, IMissions
     {
         public JournalMissions(JObject evt) : base(evt, JournalTypeEnum.Missions)
         {
@@ -61,6 +61,12 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        {
+            mlist.Missions(this);       // check vs our mission list
+        }
+
+
         public void Normalise(MissionItem[] array)
         {
             if (array != null)
@@ -70,23 +76,22 @@ namespace EliteDangerousCore.JournalEvents
 
         public class MissionItem
         {
-            public long id;
+            public int MissionID;
             public string Name;
             public bool PassengerMission;
             public int Expires;
 
-            string FriendlyName;
             DateTime ExpiryTimeUTC;
 
             public void Normalise(DateTime utcnow)
             {
                 ExpiryTimeUTC = utcnow.AddSeconds(Expires);
-                FriendlyName = JournalFieldNaming.GetBetterMissionName(Name);
+                Name = JournalFieldNaming.GetBetterMissionName(Name);       // Names are normalised, per MissionAccepted
             }
 
             public string Format()
             {
-                return BaseUtils.FieldBuilder.Build("", FriendlyName, "<;(Passenger)".Tx(this), PassengerMission, " " + "Expires:".Tx(this), ExpiryTimeUTC.ToLocalTime());
+                return BaseUtils.FieldBuilder.Build("", Name, "<;(Passenger)".Tx(this), PassengerMission, " " + "Expires:".Tx(this), ExpiryTimeUTC.ToLocalTime());
             }
         }
     }

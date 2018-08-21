@@ -336,7 +336,15 @@ public static class ObjectExtensionsNumbersBool
 
         try
         {
-            output += v.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
+            System.Globalization.CultureInfo cl = System.Globalization.CultureInfo.InvariantCulture;
+
+            if (fmt.StartsWith("CurC", StringComparison.InvariantCultureIgnoreCase))
+            {
+                cl = System.Globalization.CultureInfo.CurrentUICulture;
+                fmt = fmt.Substring(4);
+            }
+
+            output += v.ToString(fmt, cl);
             return true;
         }
         catch
@@ -365,10 +373,20 @@ public static class ObjectExtensionsNumbersBool
         {
             if (fmt == "O")
                 output += Convert.ToString(v, 8);
-            else if ( fmt == "B")
+            else if (fmt == "B")
                 output += Convert.ToString(v, 2);
             else
-                output += v.ToString(fmt, System.Globalization.CultureInfo.InvariantCulture);
+            {
+                System.Globalization.CultureInfo cl = System.Globalization.CultureInfo.InvariantCulture;
+
+                if (fmt.StartsWith("CurC", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    cl = System.Globalization.CultureInfo.CurrentUICulture;
+                    fmt = fmt.Substring(4);
+                }
+
+                output += v.ToString(fmt, cl);
+            }
             return true;
         }
         catch

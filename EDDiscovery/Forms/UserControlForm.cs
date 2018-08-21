@@ -480,15 +480,15 @@ namespace EDDiscovery.Forms
             return null;
         }
 
-        public UserControlForm NewForm()
+        public UserControlForm NewForm()                // a new form is needed
         {
             UserControlForm tcf = new UserControlForm();
             tabforms.Add(tcf);
-            tcf.FormClosed += FormClosed;
+            tcf.FormClosed += FormClosedCallback;
             return tcf;
         }
 
-        private void FormClosed(Object sender, FormClosedEventArgs e)
+        private void FormClosedCallback(Object sender, FormClosedEventArgs e)       // called when form closes.. by user or by us.  Remove from list
         {
             UserControlForm tcf = (UserControlForm)sender;
             tabforms.Remove(tcf);
@@ -529,7 +529,8 @@ namespace EDDiscovery.Forms
         {
             foreach (UserControlForm ucf in tabforms)
             {
-                if (ucf.IsLoaded) ucf.SetShowInTaskBar(true);
+                if (ucf.IsLoaded)
+                    ucf.SetShowInTaskBar(true);
             }
         }
 
@@ -542,6 +543,16 @@ namespace EDDiscovery.Forms
                     ucf.SetTransparency(UserControlForm.TransparencyMode.Off);
                     ucf.SetShowTitleInTransparency(true);
                 }
+            }
+        }
+
+        public void CloseAll()
+        {
+            List<UserControlForm> list = new List<UserControlForm>(tabforms);       // so, closing it ends up calling back to FormCloseCallBack
+                                                                                    // and it changes tabforms. So we need a copy to safely do this
+            foreach (UserControlForm ucf in list)
+            {
+                ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this
             }
         }
 

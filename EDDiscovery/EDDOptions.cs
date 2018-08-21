@@ -84,6 +84,7 @@ namespace EDDiscovery
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
+        public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
 
         private string AppFolder;      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable

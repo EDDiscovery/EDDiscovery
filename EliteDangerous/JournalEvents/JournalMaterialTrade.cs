@@ -53,7 +53,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 Material = JournalFieldNaming.FDNameTranslation(Material);
                 FriendlyMaterial = MaterialCommodityData.GetNameByFDName(Material);
-                Material_Localised = JournalFieldNaming.CheckLocalisation(Material_Localised??"",FriendlyMaterial);       // ensure.
+                Material_Localised = JournalFieldNaming.CheckLocalisationTranslation(Material_Localised??"",FriendlyMaterial);       // ensure.
 
                 if (Category != null)       // some entries do not have this
                 {

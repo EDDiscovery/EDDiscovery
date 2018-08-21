@@ -135,7 +135,7 @@ namespace NetLogEntry
 
                 while( args.More )
                 {
-                    string a = args.Next.ToLower();
+                    string a = args.Next.ToLowerInvariant();
                     if (a == "combine")
                         combine = true;
                     if (a == "showrepeats" )
@@ -154,34 +154,7 @@ namespace NetLogEntry
         static void Help()
         {
             Console.WriteLine("[-keyrepeat]|[-repeat ms]\n" +
-                              "JournalPath CMDRname Options..\n" +
-                              "Travel   FSD name x y z (x y z is position as double)\n" +
-                              "         FSDTravel name x y z destx desty destz percentint \n" +
-                              "         Loc name x y z\n" +
-                              "         Docked, Undocked, Touchdown, Liftoff\n" +
-                              "         FuelScoop amount total\n" +
-                              "         JetConeBoost\n" +
-                              "Missions MissionAccepted/MissionCompleted faction victimfaction id\n" +
-                              "         MissionRedirected newsystem newstation id\n" +
-                              "         Bounty faction reward\n" +
-                              "         CommitCrime faction amount\n" +
-                              "         Interdiction name success isplayer combatrank faction power\n" +
-                              "         FactionKillBond faction victimfaction reward\n" +
-                              "         CapShipBond faction victimfaction reward\n" +
-                              "Scans    ScanPlanet name\n" +
-                              "         ScanStar ScanEarth\n" +
-                              "         NavBeaconScan\n" +
-                              "Ships    SellShipOnRebuy\n" +
-                              "Others   SearchANdRescue MiningRefined\n" +
-                              "         RepairDrone CommunityGoal\n" +
-                              "         MusicNormal MusicGalMap MusicSysMap\n" +
-                              "         Friends Name\n" +
-                              "         Died\n" +
-                              "         Resurrect cost\n" +
-                              "         PowerPlay UnderAttack\n" +
-                              "         CargoDepot missionid updatetype(Collect,Deliver,WingUpdate) count total\n" +
-                              "         FighterDestroyed FigherRebuilt NpcCrewRank NpcCrewPaidWage LaunchDrone\n" +
-                              "         Market ModuleInfo Outfitting Shipyard (use NOFILE after to say don't write the file)\n" +
+                             Journal.Help() +
                               "EDDBSTARS <filename> or EDDBPLANETS or EDDBSTARNAMES for the eddb dump\n" +
                               "Phoneme <filename> <fileout> for EDDI phoneme tx\n" +
                               "Voicerecon <filename>\n" +

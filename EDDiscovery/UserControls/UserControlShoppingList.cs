@@ -284,7 +284,7 @@ namespace EDDiscovery.UserControls
                         int max = md.MaterialLimit().Value;
                         if(!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {
-                            wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLower(System.Globalization.CultureInfo.InvariantCulture)),
+                            wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLowerInvariant()),
                                                                             mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
                         }
                     }

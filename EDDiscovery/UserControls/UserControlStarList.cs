@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
                 sortcol = -1;
             }
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load start");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " SL " + displaynumber + " Load start");
 
             rowsbyjournalid.Clear();
             systemsentered.Clear();
@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
                 else
                     rowno = -1;
 
-                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " SL " + displaynumber + " Load Finish");
+                System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " SL " + displaynumber + " Load Finish");
 
                 if (sortcol >= 0)
                 {

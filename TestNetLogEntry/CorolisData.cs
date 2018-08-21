@@ -85,7 +85,7 @@ namespace NetLogEntry
                 returnstring += "      static Dictionary<ShipPropID, ShipInfo> " + name + " = new Dictionary<ShipPropID, ShipInfo>" + Environment.NewLine +
                                      "        {" + Environment.NewLine;
 
-                dictofdict += "            { \"" + fdshipname.ToLower() + "\"," + name + "}," + Environment.NewLine;
+                dictofdict += "            { \"" + fdshipname.ToLowerInvariant() + "\"," + name + "}," + Environment.NewLine;
 
                 JToken prop = second["properties"];
 
@@ -105,7 +105,7 @@ namespace NetLogEntry
                     string fdname = fdshipname + "_Armour_" + names[index];
                     string nicename = (string)prop["name"] + " " + fullnames[index] + " Armour";
 
-                    modulestring += "            { \"" + fdname.ToLower() + "\", new ShipModule(" + edid + "," + mass + ",0,\"" + infostr + "\",\""+ nicename + "\",\"Armour\")}," + Environment.NewLine;
+                    modulestring += "            { \"" + fdname.ToLowerInvariant() + "\", new ShipModule(" + edid + "," + mass + ",0,\"" + infostr + "\",\""+ nicename + "\",\"Armour\")}," + Environment.NewLine;
                     index++;
                 }
 
@@ -340,7 +340,7 @@ namespace NetLogEntry
                 Tuple<string, string> modtype = MOD_PREFIX_TO_TYPE.Find(x => modtypename.IndexOf(x.Item1, StringComparison.InvariantCultureIgnoreCase) >= 0);
                 modtypename = modtype?.Item2 ?? modtypename;
 
-                sym = sym.ToLower();
+                sym = sym.ToLowerInvariant();
                 if (names.Contains(sym))
                     returnstring += "**** is repeated";
 

@@ -62,7 +62,7 @@ namespace EDDiscovery.Actions
 
                 if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
                 {
-                    string cmdname = exp[0].ToLower();
+                    string cmdname = exp[0].ToLowerInvariant();
                     string nextword = exp.Count >= 2 ? exp[1] : null;
                     string thirdword = exp.Count >= 3 ? exp[2] : null;
                     string fourthword = exp.Count >= 4 ? exp[3] : null;

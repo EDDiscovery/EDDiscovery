@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             if (mcl == null)
                 return;
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Begin Display");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " MC " + displaynumber + " Begin Display");
 
             List<MaterialCommodities> mc = mcl.Sort(!materials);
 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
                 labelNoItems.Visible = true;
             }
 
-            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount100 + " MC " + displaynumber + " Load Finished");
+            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this) + " MC " + displaynumber + " Load Finished");
         }
 
         #endregion

@@ -15,11 +15,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using EDDiscovery.Forms;
@@ -52,8 +49,7 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
-            comboBoxCustomLanguage.Items = BaseUtils.Translator.Languages(EDDOptions.Instance.TranslatorDirectory(), true);
-            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.Languages(EDDOptions.ExeDirectory(), true));
+            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames( EDDOptions.Instance.TranslatorFolders() ));
 
             comboBoxCustomLanguage.Items.Add("Auto");
             comboBoxCustomLanguage.Items.Add("None");
@@ -68,10 +64,9 @@ namespace EDDiscovery.UserControls
             checkBoxOrderRowsInverted.Checked = EDDiscoveryForm.EDDConfig.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.MinimizeToNotifyIcon;
             checkBoxKeepOnTop.Checked = EDDiscoveryForm.EDDConfig.KeepOnTop;
+            checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
-            checkBoxAutoLoad.Checked = EDDiscoveryForm.EDDConfig.AutoLoadPopOuts;
-            checkBoxAutoSave.Checked = EDDiscoveryForm.EDDConfig.AutoSavePopOuts;
             checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
@@ -464,26 +459,6 @@ namespace EDDiscovery.UserControls
 
         #region window options
 
-        private void checkBoxAutoLoad_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.AutoLoadPopOuts = checkBoxAutoLoad.Checked;
-        }
-
-        private void checkBoxAutoSave_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDiscoveryForm.EDDConfig.AutoSavePopOuts = checkBoxAutoSave.Checked;
-        }
-
-        private void buttonSaveSetup_Click(object sender, EventArgs e)
-        {
-            discoveryform.SaveCurrentPopOuts();
-        }
-
-        private void buttonReloadSaved_Click(object sender, EventArgs e)
-        {
-            discoveryform.LoadSavedPopouts();
-        }
-
         private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
         {
             ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
@@ -526,6 +501,11 @@ namespace EDDiscovery.UserControls
         private void ParentForm_TopMostChanged(object sender, EventArgs e)
         {
             checkBoxKeepOnTop.Checked = (sender as Form).TopMost;
+        }
+
+        private void checkBoxPanelSortOrder_CheckedChanged(object sender, EventArgs e)
+        {
+            EDDConfig.Instance.SortPanelsByName = checkBoxPanelSortOrder.Checked;
         }
 
         #endregion
@@ -604,6 +584,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 

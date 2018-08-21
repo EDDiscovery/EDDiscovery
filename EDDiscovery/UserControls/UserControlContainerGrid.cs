@@ -295,9 +295,10 @@ namespace EDDiscovery.UserControls
             popoutdropdown = new ExtendedControls.DropDownCustom("", true);
 
             popoutdropdown.ItemHeight = 26;
-            popoutdropdown.Items = PanelInformation.GetPanelDescriptions().ToList();
-            popoutdropdown.ImageItems = PanelInformation.GetPanelImages().ToList();
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetPanelIDs();
+            popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
+            popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
+            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
+            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.Activated += (s, ea) =>
             {

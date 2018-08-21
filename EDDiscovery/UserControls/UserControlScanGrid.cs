@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls
 
             bool samesys = last_he != null && he != null && he.System.Name == last_he.System.Name;
 
-            System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
+            //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
 
             if (he == null)     //  no he, no display
             {
