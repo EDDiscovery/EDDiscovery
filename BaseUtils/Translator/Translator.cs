@@ -217,9 +217,14 @@ namespace BaseUtils
                 try
                 {
                     FileInfo[] allFiles = Directory.EnumerateFiles(folder, "*.tlf", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
-
-                    foreach( FileInfo f in allFiles)
+                    System.Diagnostics.Debug.WriteLine("TX Check folder " + folder);
+                    foreach ( FileInfo f in allFiles)
                     {
+#if !DEBUG
+                        if ( f.Name.Contains("example-ex"))
+                            continue;
+#endif
+
                         if (languages.Find(x => x.Item2.Equals(f.Name)) == null)        // if not already found this language, add
                             languages.Add(new Tuple<string, string>(folder, f.Name));   // folder and name
                     }
