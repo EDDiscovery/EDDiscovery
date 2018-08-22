@@ -500,7 +500,7 @@ namespace EDDiscovery.UserControls
 
         #region Default
 
-        public static void CheckPrimarySplitterControlSettings()
+        public static void CheckPrimarySplitterControlSettings(string defaultname )
         {
             string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
 
@@ -508,12 +508,10 @@ namespace EDDiscovery.UserControls
 
             if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
             {
-                string typeprefix = EDDOptions.Instance.TabsReset ? "?????" : "TravelControl";      // if we have a tab reset, look up a nonsense name, to give default
-
-                int enum_bottom = SQLiteDBClass.GetSettingInt(typeprefix + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
-                int enum_bottomright = SQLiteDBClass.GetSettingInt(typeprefix + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
-                int enum_middleright = SQLiteDBClass.GetSettingInt(typeprefix + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
-                int enum_topright = SQLiteDBClass.GetSettingInt(typeprefix + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
+                int enum_bottom = SQLiteDBClass.GetSettingInt(defaultname + "BottomTab", (int)(PanelInformation.PanelIDs.Scan));
+                int enum_bottomright = SQLiteDBClass.GetSettingInt(defaultname + "BottomRightTab", (int)(PanelInformation.PanelIDs.Log));
+                int enum_middleright = SQLiteDBClass.GetSettingInt(defaultname + "MiddleRightTab", (int)(PanelInformation.PanelIDs.StarDistance));
+                int enum_topright = SQLiteDBClass.GetSettingInt(defaultname + "TopRightTab", (int)(PanelInformation.PanelIDs.SystemInformation));
 
                 string ctrl = "V(0.75, H(0.6, U'0,1006',U'1," + enum_bottom.ToStringInvariant() + "')," +
                                 "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
