@@ -383,8 +383,23 @@ namespace EDDiscovery.UserControls
 
         private void buttonEDSMTarget_Click(object sender, EventArgs e)
         {
+            string name;
+            long? edsmid = null;
+            double x, y, z;
+
+            if (TargetClass.GetTargetPosition(out name, out x, out y, out z))
+            {
+                ISystem sc = this.discoveryform.history.FindSystem(TargetClass.GetNameWithoutPrefix(name), discoveryform.galacticMapping);
+
+                if (sc != null)
+                {
+                    name = sc.Name;
+                    edsmid = sc.EDSMID;
+                }
+            }
+
             EDSMClass edsm = new EDSMClass();
-            string url = edsm.GetUrlToEDSMSystem(textBoxTarget.Text, null);
+            string url = edsm.GetUrlToEDSMSystem(name, edsmid);
 
             if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                 Process.Start(url);
