@@ -200,7 +200,7 @@ namespace EDDiscovery
 
             //Make sure the primary splitter is set up.. and rational
 
-            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
+            UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(EDDOptions.Instance.TabsReset ? "?????" : "TravelControl"); // Double check, use TravelControlBottom etc as the old lookup name if its nonsence
 
             tabControlMain.MinimumTabWidth = 32;
             tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
@@ -1602,8 +1602,7 @@ namespace EDDiscovery
 
                 EDDProfiles.Instance.ChangeToId(id);
 
-                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings();
-
+                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings("??????????"); // use a nonsense name to make sure we just get the default set if we don't have a valid save
 
                 tabControlMain.TabPages.Clear();
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
