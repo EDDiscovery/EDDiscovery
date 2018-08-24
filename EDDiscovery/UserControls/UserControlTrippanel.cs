@@ -279,7 +279,7 @@ namespace EDDiscovery.UserControls
                 {
                     EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.Name);
+                    string url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
 
                     if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
                         System.Diagnostics.Process.Start(url);
