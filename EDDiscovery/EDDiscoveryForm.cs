@@ -151,6 +151,9 @@ namespace EDDiscovery
 
             msg.Invoke("Modulating Shields");
 
+            if (EDDOptions.Instance.ResetLanguage)
+                EDDConfig.Instance.Language = "None";
+
             BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);

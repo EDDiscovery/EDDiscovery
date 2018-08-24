@@ -38,7 +38,7 @@ namespace EDDiscovery
         {
             if (typeof(SafeModeForm).IsAssignableFrom(MainForm?.GetType()))
             {
-                ((SafeModeForm)MainForm).Run += ((p, theme, tabs) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs)); });
+                ((SafeModeForm)MainForm).Run += ((p, theme, tabs, lang) => { GoForAutoSequenceStart(new EDDFormLaunchArgs(p, theme , tabs, lang)); });
             }
             else
             {
@@ -139,6 +139,7 @@ namespace EDDiscovery
                 EDDOptions.Instance.NoWindowReposition |= launchArg.PositionReset;
                 EDDOptions.Instance.NoTheme |= launchArg.ThemeReset;
                 EDDOptions.Instance.TabsReset |= launchArg.TabsReset;
+                EDDOptions.Instance.ResetLanguage |= launchArg.ResetLang;
 
                 EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
 
@@ -160,19 +161,21 @@ namespace EDDiscovery
             public bool PositionReset { get; private set; }
             public bool ThemeReset { get; private set; }
             public bool TabsReset { get; private set; }
+            public bool ResetLang { get; private set; }
 
-            public EDDFormLaunchArgs() : this(false, false, false) { }
+            public EDDFormLaunchArgs() : this(false, false, false, false) { }
 
-            public EDDFormLaunchArgs(bool positionReset, bool themeReset, bool tabsreset)
+            public EDDFormLaunchArgs(bool positionReset, bool themeReset, bool tabsreset , bool resetlang)
             {
                 PositionReset = positionReset;
                 ThemeReset = themeReset;
                 TabsReset = tabsreset;
+                ResetLang = resetlang;
             }
 
             public EDDFormLaunchArgs Clone()
             {
-                return new EDDFormLaunchArgs(PositionReset, ThemeReset, TabsReset);
+                return new EDDFormLaunchArgs(PositionReset, ThemeReset, TabsReset, ResetLang);
             }
         }
 

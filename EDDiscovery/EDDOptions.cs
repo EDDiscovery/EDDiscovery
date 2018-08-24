@@ -61,6 +61,7 @@ namespace EDDiscovery
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
         public bool CheckReleaseInDebug { get; private set; }
+        public bool ResetLanguage { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -279,6 +280,7 @@ namespace EDDiscovery
                     case "nosound": NoSound = true; break;
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
+                    case "resetlanguage": ResetLanguage = true; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;

@@ -13,10 +13,11 @@ namespace EDDiscovery.Forms
 {
     public partial class SafeModeForm : Form
     {
-        public Action<bool, bool, bool> Run;
+        public Action<bool, bool, bool,bool> Run;
         bool theme = false;
         bool pos = false;
         bool resettabs = false;
+        bool resetlang = false;
 
         public SafeModeForm()
         {
@@ -25,7 +26,7 @@ namespace EDDiscovery.Forms
 
         private void Run_Click(object sender, EventArgs e)
         {
-            Run(pos,theme,resettabs);
+            Run(pos,theme,resettabs,resetlang);
         }
 
         private void buttonResetTheme_Click(object sender, EventArgs e)
@@ -178,6 +179,12 @@ namespace EDDiscovery.Forms
                 }
             }
 
+        }
+
+        private void buttonLang_Click(object sender, EventArgs e)
+        {
+            resetlang = true;
+            buttonLang.Enabled = false;
         }
     }
 }

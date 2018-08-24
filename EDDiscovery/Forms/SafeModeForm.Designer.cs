@@ -37,11 +37,12 @@
             this.buttonResetTabs = new System.Windows.Forms.Button();
             this.buttonRemoveDLLs = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.buttonLang = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonDbs
             // 
-            this.buttonDbs.Location = new System.Drawing.Point(89, 181);
+            this.buttonDbs.Location = new System.Drawing.Point(89, 210);
             this.buttonDbs.Name = "buttonDbs";
             this.buttonDbs.Size = new System.Drawing.Size(193, 23);
             this.buttonDbs.TabIndex = 0;
@@ -51,7 +52,7 @@
             // 
             // buttonNormal
             // 
-            this.buttonNormal.Location = new System.Drawing.Point(89, 262);
+            this.buttonNormal.Location = new System.Drawing.Point(89, 291);
             this.buttonNormal.Name = "buttonNormal";
             this.buttonNormal.Size = new System.Drawing.Size(193, 23);
             this.buttonNormal.TabIndex = 0;
@@ -82,7 +83,7 @@
             // 
             // buttonCancel
             // 
-            this.buttonCancel.Location = new System.Drawing.Point(89, 292);
+            this.buttonCancel.Location = new System.Drawing.Point(89, 321);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(193, 23);
             this.buttonCancel.TabIndex = 0;
@@ -93,7 +94,7 @@
             // 
             // buttonDeleteSystemDB
             // 
-            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 210);
+            this.buttonDeleteSystemDB.Location = new System.Drawing.Point(89, 239);
             this.buttonDeleteSystemDB.Name = "buttonDeleteSystemDB";
             this.buttonDeleteSystemDB.Size = new System.Drawing.Size(193, 23);
             this.buttonDeleteSystemDB.TabIndex = 0;
@@ -131,15 +132,26 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // buttonLang
+            // 
+            this.buttonLang.Location = new System.Drawing.Point(89, 159);
+            this.buttonLang.Name = "buttonLang";
+            this.buttonLang.Size = new System.Drawing.Size(193, 23);
+            this.buttonLang.TabIndex = 0;
+            this.buttonLang.Text = "Reset Language to English";
+            this.buttonLang.UseVisualStyleBackColor = true;
+            this.buttonLang.Click += new System.EventHandler(this.buttonLang_Click);
+            // 
             // SafeModeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(370, 333);
+            this.ClientSize = new System.Drawing.Size(370, 360);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonNormal);
             this.Controls.Add(this.buttonDeleteSystemDB);
             this.Controls.Add(this.buttonDbs);
+            this.Controls.Add(this.buttonLang);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.buttonRemoveDLLs);
             this.Controls.Add(this.buttonResetTabs);
@@ -163,5 +175,6 @@
         private System.Windows.Forms.Button buttonResetTabs;
         private System.Windows.Forms.Button buttonRemoveDLLs;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonLang;
     }
 }
