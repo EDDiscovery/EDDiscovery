@@ -17,13 +17,13 @@ using System.Threading.Tasks;
 // output the tech broker tab to techbroker.csv
 // run it.
 // will verify materials in MaterialCommododities vs the sheet
-// will verify any replacement lists of fdname 
+// will verify any replacement lists of fdname
 // will verify commodities in MaterialCommododities vs the sheet
 // will check weapon data vs the shipmoduledata file
 // will check modules vs the shipmoduledata file
 // will read tech broker info and write out a new tech broker lines - import this manually into MaterialRecipes.cs
 // will read the recipes cvs and print out the recipe lines for MaterialRecipes.cs. This is cross checked vs the englist at the bottom of the file
-//      You need to keep this englist up to date manually with Inara and other sources for engineer names...  If one is found missing, you need to 
+//      You need to keep this englist up to date manually with Inara and other sources for engineer names...  If one is found missing, you need to
 //      update the list at the bottom.
 
 // Keep rare list at the bottom up to date manually with Inara and other sources
@@ -469,7 +469,7 @@ namespace NetLogEntry
                     new EngineerList( "Beam Laser", "Light Weight Mount", 3, "Broo Tarquin,The Dweller"),
                     new EngineerList( "Beam Laser", "Light Weight Mount", 4, "Broo Tarquin"),
                     new EngineerList( "Beam Laser", "Light Weight Mount", 5, "Broo Tarquin"),   //OK
-    
+
                     new EngineerList( "Beam Laser", "Long-Range Weapon", 1, "Broo Tarquin,The Dweller"),
                     new EngineerList( "Beam Laser", "Long-Range Weapon", 2, "Broo Tarquin,The Dweller"),
                     new EngineerList( "Beam Laser", "Long-Range Weapon", 3, "Broo Tarquin,The Dweller"),
@@ -655,19 +655,19 @@ namespace NetLogEntry
                     new EngineerList( "ECM", "Shielded", 4, "Ram Tah"),
                     new EngineerList( "ECM", "Shielded", 5, "Ram Tah"),    //OK
 
-                    new EngineerList( "Engine", "Dirty Drive Tuning", 1, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Dirty Drive Tuning", 2, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Dirty Drive Tuning", 3, "Felicty Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Dirty Drive Tuning", 1, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Dirty Drive Tuning", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Dirty Drive Tuning", 3, "Felicity Farseer,Professor Palin"),
                     new EngineerList( "Engine", "Dirty Drive Tuning", 4, "Professor Palin"),
                     new EngineerList( "Engine", "Dirty Drive Tuning", 5, "Professor Palin"),
-                    new EngineerList( "Engine", "Drive Strengthening", 1, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Drive Strengthening", 2, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Drive Strengthening", 3, "Felicty Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Drive Strengthening", 1, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Drive Strengthening", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Drive Strengthening", 3, "Felicity Farseer,Professor Palin"),
                     new EngineerList( "Engine", "Drive Strengthening", 4, "Professor Palin"),
                     new EngineerList( "Engine", "Drive Strengthening", 5, "Professor Palin"),
-                    new EngineerList( "Engine", "Clean Drive Tuning", 1, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Clean Drive Tuning", 2, "Elvira Martuuk,Felicty Farseer,Professor Palin"),
-                    new EngineerList( "Engine", "Clean Drive Tuning", 3, "Felicty Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Clean Drive Tuning", 1, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Clean Drive Tuning", 2, "Elvira Martuuk,Felicity Farseer,Professor Palin"),
+                    new EngineerList( "Engine", "Clean Drive Tuning", 3, "Felicity Farseer,Professor Palin"),
                     new EngineerList( "Engine", "Clean Drive Tuning", 4, "Professor Palin"),
                     new EngineerList( "Engine", "Clean Drive Tuning", 5, "Professor Palin"),        //OK
 

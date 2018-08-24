@@ -5,12 +5,12 @@
  * file except in compliance with the License. You may obtain a copy of the License at
  *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
+ *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
@@ -343,7 +343,7 @@ namespace EliteDangerousCore
 
             #region AUTOMATICALLY PRODUCED DATA
 
-            // DATA FROM Frontiers excel spreadsheet 
+            // DATA FROM Frontiers excel spreadsheet
             // DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this
 
         new EngineeringRecipe("Shielded", "1WSE", "AFM", "1", "Bill Turner,Lori Jameson" ),
@@ -562,19 +562,19 @@ namespace EliteDangerousCore
         new EngineeringRecipe("Shielded", "1C,1SHE,1HDC", "ECM", "3", "Ram Tah" ),
         new EngineeringRecipe("Shielded", "1V,1SS,1FPC", "ECM", "4", "Ram Tah" ),
         new EngineeringRecipe("Shielded", "1W,1CoS,1FCC", "ECM", "5", "Ram Tah" ),
-        new EngineeringRecipe("Dirty Drive Tuning", "1SLF", "Engine", "1", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Dirty Drive Tuning", "1SLF,1ME", "Engine", "2", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Dirty Drive Tuning", "1SLF,1Cr,1MC", "Engine", "3", "Felicty Farseer,Professor Palin" ),
+        new EngineeringRecipe("Dirty Drive Tuning", "1SLF", "Engine", "1", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Dirty Drive Tuning", "1SLF,1ME", "Engine", "2", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Dirty Drive Tuning", "1SLF,1Cr,1MC", "Engine", "3", "Felicity Farseer,Professor Palin" ),
         new EngineeringRecipe("Dirty Drive Tuning", "1MCF,1Se,1CCom", "Engine", "4", "Professor Palin" ),
         new EngineeringRecipe("Dirty Drive Tuning", "1CIF,1Cd,1PI", "Engine", "5", "Professor Palin" ),
-        new EngineeringRecipe("Drive Strengthening", "1C", "Engine", "1", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Drive Strengthening", "1HCW,1V", "Engine", "2", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Drive Strengthening", "1HCW,1V,1SS", "Engine", "3", "Felicty Farseer,Professor Palin" ),
+        new EngineeringRecipe("Drive Strengthening", "1C", "Engine", "1", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Drive Strengthening", "1HCW,1V", "Engine", "2", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Drive Strengthening", "1HCW,1V,1SS", "Engine", "3", "Felicity Farseer,Professor Palin" ),
         new EngineeringRecipe("Drive Strengthening", "1HDP,1HDC,1CoS", "Engine", "4", "Professor Palin" ),
         new EngineeringRecipe("Drive Strengthening", "1HE,1FPC,1IS", "Engine", "5", "Professor Palin" ),
-        new EngineeringRecipe("Clean Drive Tuning", "1S", "Engine", "1", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Clean Drive Tuning", "1SLF,1CCo", "Engine", "2", "Elvira Martuuk,Felicty Farseer,Professor Palin" ),
-        new EngineeringRecipe("Clean Drive Tuning", "1SLF,1CCo,1UED", "Engine", "3", "Felicty Farseer,Professor Palin" ),
+        new EngineeringRecipe("Clean Drive Tuning", "1S", "Engine", "1", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Clean Drive Tuning", "1SLF,1CCo", "Engine", "2", "Elvira Martuuk,Felicity Farseer,Professor Palin" ),
+        new EngineeringRecipe("Clean Drive Tuning", "1SLF,1CCo,1UED", "Engine", "3", "Felicity Farseer,Professor Palin" ),
         new EngineeringRecipe("Clean Drive Tuning", "1MCF,1CCe,1DED", "Engine", "4", "Professor Palin" ),
         new EngineeringRecipe("Clean Drive Tuning", "1CCe,1Sn,1CED", "Engine", "5", "Professor Palin" ),
         new EngineeringRecipe("Double Shot", "1C", "Frag Cannon", "1", "Tod McQuinn,Zacariah Nemo" ),
