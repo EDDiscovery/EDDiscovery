@@ -323,6 +323,11 @@ namespace EliteDangerousCore
             return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
+        public int GetFSDJumps(int forShip)
+        {
+            return (from s in historylist where s.IsFSDJump && s.ShipId == forShip select s).Count();
+        }
+
         public int GetNrScans(DateTime start, DateTime to)
         {
             return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
@@ -360,9 +365,7 @@ namespace EliteDangerousCore
                         select s).Count();
             }
         }
-
-
-
+                
         public int GetPlayerControlledTouchDown(DateTime start, DateTime to)
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Touchdown && s.EventTimeLocal >= start && s.EventTimeLocal < to select s)
@@ -399,10 +402,41 @@ namespace EliteDangerousCore
             return (from s in list select s.JumpDist).Sum();
         }
 
+        public double GetTraveledLy(int forShip)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.ShipId == forShip select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+
+            return (from s in list select s.JumpDist).Sum();
+        }
+
 
         public List<JournalScan> GetScanList(DateTime start, DateTime to)
         {
             return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+        }
+
+        public int GetTonnesBought(int forShip)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketBuy && s.ShipId == forShip select s.journalEntry as JournalMarketBuy).ToList();
+
+            return (from s in list select s.Count).Sum();
+        }
+
+        public int GetTonnesSold(int forShip)
+        {
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketSell && s.ShipId == forShip select s.journalEntry as JournalMarketSell).ToList();
+
+            return (from s in list select s.Count).Sum();
+        }
+
+        public int GetDeathCount(int forShip)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Died && s.ShipId == forShip select s).Count();
+        }
+
+        public int GetBodiesScanned(int forShip)
+        {
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.ShipId == forShip select s).Count();
         }
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
