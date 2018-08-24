@@ -75,6 +75,7 @@ namespace BaseUtils
                     System.Diagnostics.Debug.Assert(i + 2 <= values.Length,"Field Builder missing parameter");
 
                     string[] fieldnames = ((string)first).Split(';');
+
                     object value = values[i + 1];
                     i += 2;
 
@@ -89,9 +90,14 @@ namespace BaseUtils
                     {
                         if (value is bool)
                         {
-                            string s = ((bool)value) ? fieldnames[1] : fieldnames[0];
-                            sb.AppendPrePad(s, (overrideprefix.Length > 0) ? overrideprefix : pad);
-                            overrideprefix = string.Empty;
+                            if (fieldnames.Length != 2)
+                                sb.AppendPrePad("!!REPORT ERROR IN FORMAT STRING " + first + "!!", (overrideprefix.Length > 0) ? overrideprefix : pad);
+                            else
+                            {
+                                string s = ((bool)value) ? fieldnames[1] : fieldnames[0];
+                                sb.AppendPrePad(s, (overrideprefix.Length > 0) ? overrideprefix : pad);
+                                overrideprefix = string.Empty;
+                            }
                         }
                         else
                         {
@@ -169,6 +175,7 @@ namespace BaseUtils
                 else
                 {
                     System.Diagnostics.Debug.Assert(false);
+                    return "!!REPORT ERROR IN FORMAT STRING!!";
                 }
             }
 
