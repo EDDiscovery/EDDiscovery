@@ -353,7 +353,7 @@ JournalEntry.Captain: "Captain:" => "Kapitän:"
 JournalEntry.CrewMember: "Crew Member:" => "Besatzungsmitglied"
 ///////////////////////////////////////////////////// JournalLaunchFighter
 JournalEntry.Loadout: "Loadout:" => "Ausrüstung/Bewaffnung:"
-JournalEntry.NPCControlled: ", NPC Controlled;" => ", NPC-kontrolliert"
+JournalEntry.NPCControlled: ", NPC Controlled;" => ", NPC-kontrolliert;"
 ///////////////////////////////////////////////////// JournalLoadGame
 JournalEntry.Ship: "Ship:" => "Schiff:"
 JournalEntry.Ident: "Ident:" => "Identifikation:"

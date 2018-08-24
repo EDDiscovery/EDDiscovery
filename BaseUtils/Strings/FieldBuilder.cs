@@ -91,7 +91,10 @@ namespace BaseUtils
                         if (value is bool)
                         {
                             if (fieldnames.Length != 2)
+                            {
                                 sb.AppendPrePad("!!REPORT ERROR IN FORMAT STRING " + first + "!!", (overrideprefix.Length > 0) ? overrideprefix : pad);
+                                System.Diagnostics.Debug.WriteLine("*************** FIELD BUILDER ERROR" + first);
+                            }
                             else
                             {
                                 string s = ((bool)value) ? fieldnames[1] : fieldnames[0];
