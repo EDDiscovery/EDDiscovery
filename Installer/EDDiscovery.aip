@@ -18,10 +18,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/EDDiscovery/EDDiscovery/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="EDDiscovery"/>
-    <ROW Property="ProductCode" Value="1033:{920BDE23-7D6F-48C7-934C-29FA23CB144F} 1053:{C636705A-C86A-499F-8630-165129775B53} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{851CBD99-8C88-4332-813D-77A3545F87B8} 1053:{506036DE-3E77-4AAD-BC1B-3FB0EAEACDEE} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="EDDiscovery"/>
-    <ROW Property="ProductVersion" Value="10.1.3" Type="32"/>
+    <ROW Property="ProductVersion" Value="10.2.0" Type="32"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND;UPGRADE_1;AI_SETUPEXEPATH;SETUPEXEDIR"/>
     <ROW Property="UpgradeCode" Value="{27EA2F84-C7C5-41E2-9C59-CC42CCDC9FEF}"/>
     <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Debug:Windows 9x/ME" ValueLocId="-"/>
@@ -115,7 +115,7 @@
     <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\Newtonsoft.Json.dll" SelfReg="false" NextFile="OpenTK.GLControl.dll"/>
     <ROW File="OpenTK.GLControl.dll" Component_="OpenTK.GLControl.dll" FileName="OPENTK~1.DLL|OpenTK.GLControl.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTK.GLControl.dll" SelfReg="false" NextFile="Installer.txt"/>
     <ROW File="OpenTK.dll" Component_="OpenTK.dll" FileName="OpenTK.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTK.dll" SelfReg="false" NextFile="Newtonsoft.Json.dll"/>
-    <ROW File="OpenTKUtils.dll" Component_="OpenTKUtils.dll" FileName="OPENTK~2.DLL|OpenTKUtils.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTKUtils.dll" SelfReg="false"/>
+    <ROW File="OpenTKUtils.dll" Component_="OpenTKUtils.dll" FileName="OPENTK~2.DLL|OpenTKUtils.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OpenTKUtils.dll" SelfReg="false" NextFile="translationdeutschje.tlp"/>
     <ROW File="OxyPlot.WindowsForms.dll" Component_="OxyPlot.WindowsForms.dll" FileName="OXYPLO~1.DLL|OxyPlot.WindowsForms.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OxyPlot.WindowsForms.dll" SelfReg="false" NextFile="OpenTKUtils.dll"/>
     <ROW File="OxyPlot.dll" Component_="OxyPlot.dll" FileName="OxyPlot.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\OxyPlot.dll" SelfReg="false" NextFile="OxyPlot.WindowsForms.dll"/>
     <ROW File="Pleiades.json" Component_="M67.json" FileName="PLEIAD~1.JSO|Pleiades.json" Attributes="0" SourcePath="ExtraFiles\Pleiades.json" SelfReg="false" NextFile="CSCore.dll"/>
@@ -125,8 +125,20 @@
     <ROW File="SharpDX.dll" Component_="SharpDX.dll" FileName="SharpDX.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\SharpDX.dll" SelfReg="false" NextFile="ActionLanguage.dll"/>
     <ROW File="System.Data.SQLite.dll" Component_="System.Data.SQLite.dll" FileName="SYSTEM~1.DLL|System.Data.SQLite.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.dll" SelfReg="false" NextFile="System.Data.SQLite.xml"/>
     <ROW File="System.Data.SQLite.xml" Component_="fround.js" FileName="SYSTEM~1.XML|System.Data.SQLite.xml" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\System.Data.SQLite.xml" SelfReg="false" NextFile="msvcp100.dll"/>
+    <ROW File="deutschde.tlf" Component_="EDDiscovery.exe.config" FileName="DEUTSC~1.TLF|deutsch-de.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\deutsch-de.tlf" SelfReg="false" NextFile="exampleex.tlf"/>
+    <ROW File="exampleex.tlf" Component_="EDDiscovery.exe.config" FileName="EXAMPL~1.TLF|example-ex.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\example-ex.tlf" SelfReg="false" NextFile="italianoit.tlf"/>
+    <ROW File="italianoit.tlf" Component_="EDDiscovery.exe.config" FileName="ITALIA~1.TLF|italiano-it.tlf" Attributes="0" SourcePath="..\EDDiscovery\Translations\italiano-it.tlf" SelfReg="false" NextFile="translationdeutschuc.tlp"/>
     <ROW File="msvcp100.dll" Component_="msvcp100.dll" FileName="msvcp100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcp100.dll" SelfReg="false" NextFile="msvcr100.dll"/>
     <ROW File="msvcr100.dll" Component_="msvcr100.dll" FileName="msvcr100.dll" Attributes="0" SourcePath="..\EDDiscovery\bin\Release\x86\Microsoft.VC100.CRT\msvcr100.dll" SelfReg="false" NextFile="SQLite.Interop.dll"/>
+    <ROW File="translationdeutsched.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~4.TLP|translation-deutsch-ed.tlp" Attributes="0" SourcePath="..\EliteDangerous\EliteDangerous\translation-deutsch-ed.tlp" SelfReg="false" NextFile="translationexampleed.tlp"/>
+    <ROW File="translationdeutschje.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~1.TLP|translation-deutsch-je.tlp" Attributes="0" SourcePath="..\EliteDangerous\JournalEvents\translation-deutsch-je.tlp" SelfReg="false" NextFile="translationexampleje.tlp"/>
+    <ROW File="translationdeutschuc.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~7.TLP|translation-deutsch-uc.tlp" Attributes="0" SourcePath="..\EDDiscovery\UserControls\translation-deutsch-uc.tlp" SelfReg="false" NextFile="translationexampleuc.tlp"/>
+    <ROW File="translationexampleed.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~5.TLP|translation-example-ed.tlp" Attributes="0" SourcePath="..\EliteDangerous\EliteDangerous\translation-example-ed.tlp" SelfReg="false" NextFile="translationitalianoed.tlp"/>
+    <ROW File="translationexampleje.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~2.TLP|translation-example-je.tlp" Attributes="0" SourcePath="..\EliteDangerous\JournalEvents\translation-example-je.tlp" SelfReg="false" NextFile="translationitalianoje.tlp"/>
+    <ROW File="translationexampleuc.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~8.TLP|translation-example-uc.tlp" Attributes="0" SourcePath="..\EDDiscovery\UserControls\translation-example-uc.tlp" SelfReg="false" NextFile="translationitalianouc.tlp"/>
+    <ROW File="translationitalianoed.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~6.TLP|translation-italiano-ed.tlp" Attributes="0" SourcePath="..\EliteDangerous\EliteDangerous\translation-italiano-ed.tlp" SelfReg="false" NextFile="deutschde.tlf"/>
+    <ROW File="translationitalianoje.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~3.TLP|translation-italiano-je.tlp" Attributes="0" SourcePath="..\EliteDangerous\JournalEvents\translation-italiano-je.tlp" SelfReg="false" NextFile="translationdeutsched.tlp"/>
+    <ROW File="translationitalianouc.tlp" Component_="EDDiscovery.exe.config" FileName="TRANSL~9.TLP|translation-italiano-uc.tlp" Attributes="0" SourcePath="..\EDDiscovery\UserControls\translation-italiano-uc.tlp" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
     <ROW BuildKey="AnyCPU_Debug" BuildName="AnyCPU_Debug" BuildOrder="1" BuildType="0" PackageFolder="AnyCPU_DebugSetupFiles" PackageFileName="EDDiscovery" Languages="sv;en" InstallationType="4" CabsLocation="1" PackageType="1" FilesInsideExe="true" ExtractionFolder="[AppDataFolder][|Manufacturer]\[|ProductName] [|ProductVersion]\install" ExtUI="true" LangsDialog="true" UseLargeSchema="true" Unicode="true" ExeName="EDDiscovery_[|ProductVersion]" MsiPackageType="AI_ALL"/>
