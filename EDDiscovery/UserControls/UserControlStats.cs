@@ -960,7 +960,7 @@ namespace EDDiscovery.UserControls
             Col8.HeaderText = "Goods Sold".Tx(this);
 
             var Col9 = new DataGridViewTextBoxColumn();
-            Col9.HeaderText = "Deaths".Tx(this);
+            Col9.HeaderText = "Destroyed".Tx(this);
 
             dataGridViewByShip.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9 });
 
@@ -968,7 +968,7 @@ namespace EDDiscovery.UserControls
 
             foreach(var si in hl.shipinformationlist.Ships.Values.Where(val => val.SubVehicle == ShipInformation.SubVehicleType.None))
             {
-                // Filtering for SubVehicle == None doesn't reliably remove SRVs from the list.
+                // Filtering for SubVehicle == None doesn't reliably remove all SRVs from the list.
                 // I have not tested with SLFs as I've never owned one...
                 if (si.ShipType.IndexOf("SRV") == -1)
                 {
