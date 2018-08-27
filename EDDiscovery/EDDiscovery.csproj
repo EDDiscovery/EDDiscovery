@@ -961,7 +961,7 @@
     </Task>
   </UsingTask>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
+  <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
     <PostBuildEvent>xcopy /Y /S ..\..\x86\Microsoft.VC100.CRT x86\Microsoft.VC100.CRT\
 </PostBuildEvent>
   </PropertyGroup>
