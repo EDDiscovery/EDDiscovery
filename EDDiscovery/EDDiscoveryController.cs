@@ -546,6 +546,7 @@ namespace EDDiscovery
         {
             StarScan.LoadBodyDesignationMap();
 
+            SQLiteConnectionSystem.RenameOrCreateSystemsTables();
             SQLiteConnectionSystem.CreateSystemsTableIndexes();     // just make sure they are there..
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
