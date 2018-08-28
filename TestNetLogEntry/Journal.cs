@@ -24,7 +24,7 @@ namespace NetLogEntry
             {
                 CommandArgs args = new CommandArgs(argsentry);
 
-                string eventtype = args.Next.ToLower();
+                string eventtype = args.Next().ToLower();
 
                 Random rnd = new Random();
 
@@ -54,15 +54,15 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("commitcrime"))
                 {
-                    string f = args.Next;
-                    int id = args.Int;
+                    string f = args.Next();
+                    int id = args.Int();
                     lineout = "{ " + TimeStamp() + F("event", "CommitCrime") + F("CrimeType", "collidedAtSpeedInNoFireZone") + F("Faction", f) + FF("Fine", id) + " }";
                 }
                 else if (eventtype.Equals("missionaccepted") && args.Left == 3)
                 {
-                    string f = args.Next;
-                    string vf = args.Next;
-                    int id = args.Int;
+                    string f = args.Next();
+                    string vf = args.Next();
+                    int id = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "MissionAccepted") + F("Faction", f) +
                             F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf)
@@ -71,9 +71,9 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("missioncompleted") && args.Left == 3)
                 {
-                    string f = args.Next;
-                    string vf = args.Next;
-                    int id = args.Int;
+                    string f = args.Next();
+                    string vf = args.Next();
+                    int id = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "MissionCompleted") + F("Faction", f) +
                         F("Name", "Mission_Assassinate_Legal_Corporate") + F("TargetType", "$MissionUtil_FactionTag_PirateLord;") + F("TargetType_Localised", "Pirate lord") + F("TargetFaction", vf) +
@@ -81,16 +81,16 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("missionredirected") && args.Left == 3)
                 {
-                    string sysn = args.Next;
-                    string stationn = args.Next;
-                    int id = args.Int;
+                    string sysn = args.Next();
+                    string stationn = args.Next();
+                    int id = args.Int();
                     lineout = "{ " + TimeStamp() + F("event", "MissionRedirected") + F("MissionID", id) + F("MissionName", "Mission_Assassinate_Legal_Corporate") +
                         F("NewDestinationStation", stationn) + F("OldDestinationStation", "Cuffey Orbital") +
                         F("NewDestinationSystem", sysn) + FF("OldDestinationSystem", "Vequess") + " }";
                 }
                 else if (eventtype.Equals("missions") && args.Left == 1)
                 {
-                    int id = args.Int;
+                    int id = args.Int();
                     BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
 
                     qj.Object().UTC("timestamp").V("event", "Missions");
@@ -111,9 +111,9 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("marketbuy") && args.Left == 3)
                 {
-                    string name = args.Next;
-                    int count = args.Int;
-                    int price = args.Int;
+                    string name = args.Next();
+                    int count = args.Int();
+                    int price = args.Int();
 
                     BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
 
@@ -122,17 +122,17 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("bounty"))
                 {
-                    string f = args.Next;
-                    int rw = args.Int;
+                    string f = args.Next();
+                    int rw = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "Bounty") + F("VictimFaction", f) + F("VictimFaction_Localised", f + "_Loc") +
                         F("TotalReward", rw, true) + "}";
                 }
                 else if (eventtype.Equals("factionkillbond"))
                 {
-                    string f = args.Next;
-                    string vf = args.Next;
-                    int rw = args.Int;
+                    string f = args.Next();
+                    string vf = args.Next();
+                    int rw = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "FactionKillBond") + F("VictimFaction", vf) + F("VictimFaction_Localised", vf + "_Loc") +
                         F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
@@ -140,9 +140,9 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("capshipbond"))
                 {
-                    string f = args.Next;
-                    string vf = args.Next;
-                    int rw = args.Int;
+                    string f = args.Next();
+                    string vf = args.Next();
+                    int rw = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "CapShipBond") + F("VictimFaction", vf) + F("VictimFaction_Localised", vf + "_Loc") +
                         F("AwardingFaction", f) + F("AwardingFaction_Localised", f + "_Loc") +
@@ -150,7 +150,7 @@ namespace NetLogEntry
                 }
                 else if (eventtype.Equals("resurrect"))
                 {
-                    int ct = args.Int;
+                    int ct = args.Int();
 
                     lineout = "{ " + TimeStamp() + F("event", "Resurrect") + F("Option", "Help me") + F("Cost", ct) + FF("Bankrupt", false) + "}";
                 }
@@ -167,7 +167,7 @@ namespace NetLogEntry
                     lineout = "{ " + TimeStamp() + F("event", "NavBeaconScan") + FF("NumBodies", "3") + " }";
                 else if (eventtype.Equals("scanplanet") && args.Left >= 1)
                 {
-                    lineout = "{ " + TimeStamp() + F("event", "Scan") + "\"BodyName\":\"" + args.Next + "x" + repeatcount + "\", \"DistanceFromArrivalLS\":639.245483, \"TidalLock\":true, \"TerraformState\":\"\", \"PlanetClass\":\"Metal rich body\", \"Atmosphere\":\"\", \"AtmosphereType\":\"None\", \"Volcanism\":\"rocky magma volcanism\", \"MassEM\":0.010663, \"Radius\":1163226.500000, \"SurfaceGravity\":3.140944, \"SurfaceTemperature\":1068.794067, \"SurfacePressure\":0.000000, \"Landable\":true, \"Materials\":[ { \"Name\":\"iron\", \"Percent\":36.824127 }, { \"Name\":\"nickel\", \"Percent\":27.852226 }, { \"Name\":\"chromium\", \"Percent\":16.561033 }, { \"Name\":\"zinc\", \"Percent\":10.007420 }, { \"Name\":\"selenium\", \"Percent\":2.584032 }, { \"Name\":\"tin\", \"Percent\":2.449526 }, { \"Name\":\"molybdenum\", \"Percent\":2.404594 }, { \"Name\":\"technetium\", \"Percent\":1.317050 } ], \"SemiMajorAxis\":1532780800.000000, \"Eccentricity\":0.000842, \"OrbitalInclination\":-1.609496, \"Periapsis\":179.381393, \"OrbitalPeriod\":162753.062500, \"RotationPeriod\":162754.531250, \"AxialTilt\":0.033219 }";
+                    lineout = "{ " + TimeStamp() + F("event", "Scan") + "\"BodyName\":\"" + args.Next() + "x" + repeatcount + "\", \"DistanceFromArrivalLS\":639.245483, \"TidalLock\":true, \"TerraformState\":\"\", \"PlanetClass\":\"Metal rich body\", \"Atmosphere\":\"\", \"AtmosphereType\":\"None\", \"Volcanism\":\"rocky magma volcanism\", \"MassEM\":0.010663, \"Radius\":1163226.500000, \"SurfaceGravity\":3.140944, \"SurfaceTemperature\":1068.794067, \"SurfacePressure\":0.000000, \"Landable\":true, \"Materials\":[ { \"Name\":\"iron\", \"Percent\":36.824127 }, { \"Name\":\"nickel\", \"Percent\":27.852226 }, { \"Name\":\"chromium\", \"Percent\":16.561033 }, { \"Name\":\"zinc\", \"Percent\":10.007420 }, { \"Name\":\"selenium\", \"Percent\":2.584032 }, { \"Name\":\"tin\", \"Percent\":2.449526 }, { \"Name\":\"molybdenum\", \"Percent\":2.404594 }, { \"Name\":\"technetium\", \"Percent\":1.317050 } ], \"SemiMajorAxis\":1532780800.000000, \"Eccentricity\":0.000842, \"OrbitalInclination\":-1.609496, \"Periapsis\":179.381393, \"OrbitalPeriod\":162753.062500, \"RotationPeriod\":162754.531250, \"AxialTilt\":0.033219 }";
                 }
                 else if (eventtype.Equals("scanstar"))
                 {
@@ -186,8 +186,8 @@ namespace NetLogEntry
 
                 else if (eventtype.Equals("searchandrescue") && args.Left == 2)
                 {
-                    string name = args.Next;
-                    int count = args.Int;
+                    string name = args.Next();
+                    int count = args.Int();
                     BaseUtils.QuickJSONFormatter qj = new QuickJSONFormatter();
                     lineout = qj.Object().UTC("timestamp").V("event", "SearchAndRescue").V("MarketID", 29029292)
                                 .V("Name", name).V("Name_Localised", name + "loc").V("Count", count).V("Reward", 10234).Get();
@@ -206,11 +206,11 @@ namespace NetLogEntry
                 else if (eventtype.Equals("musicgalmap"))
                     lineout = "{ " + TimeStamp() + F("event", "Music") + FF("MusicTrack", "GalaxyMap") + " }";
                 else if (eventtype.Equals("friends") && args.Left >= 1)
-                    lineout = "{ " + TimeStamp() + F("event", "Friends") + F("Status", "Online") + FF("Name", args.Next) + " }";
+                    lineout = "{ " + TimeStamp() + F("event", "Friends") + F("Status", "Online") + FF("Name", args.Next()) + " }";
                 else if (eventtype.Equals("fuelscoop") && args.Left >= 2)
                 {
-                    string scoop = args.Next;
-                    string total = args.Next;
+                    string scoop = args.Next();
+                    string total = args.Next();
                     lineout = "{ " + TimeStamp() + F("event", "FuelScoop") + F("Scooped", scoop) + FF("Total", total) + " }";
                 }
                 else if (eventtype.Equals("jetconeboost"))
@@ -226,19 +226,19 @@ namespace NetLogEntry
                 else if (eventtype.Equals("launchdrone"))
                     lineout = "{ " + TimeStamp() + F("event", "LaunchDrone") + FF("Type", "FuelTransfer") + " }";
                 else if (eventtype.Equals("market"))
-                    lineout = Market(Path.GetDirectoryName(filename), args.Next);
+                    lineout = Market(Path.GetDirectoryName(filename), args.Next());
                 else if (eventtype.Equals("moduleinfo"))
-                    lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next);
+                    lineout = ModuleInfo(Path.GetDirectoryName(filename), args.Next());
                 else if (eventtype.Equals("outfitting"))
-                    lineout = Outfitting(Path.GetDirectoryName(filename), args.Next);
+                    lineout = Outfitting(Path.GetDirectoryName(filename), args.Next());
                 else if (eventtype.Equals("shipyard"))
-                    lineout = Shipyard(Path.GetDirectoryName(filename), args.Next);
+                    lineout = Shipyard(Path.GetDirectoryName(filename), args.Next());
                 else if (eventtype.Equals("powerplay"))
                     lineout = "{ " + TimeStamp() + F("event", "PowerPlay") + F("Power", "Fred") + F("Rank", 10) + F("Merits", 10) + F("Votes", 2) + FF("TimePledged", 433024) + " }";
                 else if (eventtype.Equals("underattack"))
                     lineout = "{ " + TimeStamp() + F("event", "UnderAttack") + FF("Target", "Fighter") + " }";
                 else if (eventtype.Equals("promotion") && args.Left==2)
-                    lineout = "{ " + TimeStamp() + F("event", "Promotion") + FF(args.Next, args.Int) + " }";
+                    lineout = "{ " + TimeStamp() + F("event", "Promotion") + FF(args.Next(), args.Int()) + " }";
                 else if (eventtype.Equals("cargodepot"))
                     lineout = CargoDepot(args);
                 else
@@ -303,9 +303,9 @@ namespace NetLogEntry
             }
 
             double x = double.NaN, y = 0, z = 0;
-            string starnameroot = args.Next;
+            string starnameroot = args.Next();
 
-            if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z))
+            if (!double.TryParse(args.Next(), out x) || !double.TryParse(args.Next(), out y) || !double.TryParse(args.Next(), out z))
             {
                 Console.WriteLine("X,y,Z must be numbers");
                 return null;
@@ -344,9 +344,9 @@ namespace NetLogEntry
             }
 
             double x = double.NaN, y = 0, z = 0;
-            string starnameroot = args.Next;
+            string starnameroot = args.Next();
 
-            if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z))
+            if (!double.TryParse(args.Next(), out x) || !double.TryParse(args.Next(), out y) || !double.TryParse(args.Next(), out z))
             {
                 Console.WriteLine("** X,Y,Z must be numbers");
                 return null;
@@ -373,11 +373,11 @@ namespace NetLogEntry
 
             double x = double.NaN, y = 0, z = 0, dx = 0, dy = 0, dz = 0;
             double percent = 0;
-            string starnameroot = args.Next;
+            string starnameroot = args.Next();
 
-            if (!double.TryParse(args.Next, out x) || !double.TryParse(args.Next, out y) || !double.TryParse(args.Next, out z) ||
-                !double.TryParse(args.Next, out dx) || !double.TryParse(args.Next, out dy) || !double.TryParse(args.Next, out dz) ||
-                !double.TryParse(args.Next, out percent))
+            if (!double.TryParse(args.Next(), out x) || !double.TryParse(args.Next(), out y) || !double.TryParse(args.Next(), out z) ||
+                !double.TryParse(args.Next(), out dx) || !double.TryParse(args.Next(), out dy) || !double.TryParse(args.Next(), out dz) ||
+                !double.TryParse(args.Next(), out percent))
             {
                 Console.WriteLine("** X,Y,Z,dx,dy,dz,percent must be numbers");
                 return null;
@@ -425,11 +425,11 @@ namespace NetLogEntry
         {
             try
             {
-                int missid = int.Parse(args.Next);
-                string type = args.Next;
-                int countcol = int.Parse(args.Next);
-                int countdel = int.Parse(args.Next);
-                int total = int.Parse(args.Next);
+                int missid = int.Parse(args.Next());
+                string type = args.Next();
+                int countcol = int.Parse(args.Next());
+                int countdel = int.Parse(args.Next());
+                int total = int.Parse(args.Next());
 
                 return "{ " + TimeStamp() + F("event", "CargoDepot") + F("MissionID", missid) + F("UpdateType", type) +
                                 F("StartMarketID", 12) + F("EndMarketID", 13) +

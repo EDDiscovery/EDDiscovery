@@ -67,10 +67,10 @@ namespace NetLogEntry
             double headstep = 1;
             int steptime = 100;
 
-            if (!double.TryParse(args.Next, out latitude) || !double.TryParse(args.Next, out longitude) ||
-                !double.TryParse(args.Next, out latstep) || !double.TryParse(args.Next, out longstep) ||
-                !double.TryParse(args.Next, out heading) || !double.TryParse(args.Next, out headstep) ||
-                !int.TryParse(args.Next, out steptime))
+            if (!double.TryParse(args.Next(), out latitude) || !double.TryParse(args.Next(), out longitude) ||
+                !double.TryParse(args.Next(), out latstep) || !double.TryParse(args.Next(), out longstep) ||
+                !double.TryParse(args.Next(), out heading) || !double.TryParse(args.Next(), out headstep) ||
+                !int.TryParse(args.Next(), out steptime))
             {
                 Console.WriteLine("** More/Wrong parameters: statusjson lat long latstep lonstep heading headstep steptimems");
                 return;
@@ -106,7 +106,7 @@ namespace NetLogEntry
             long flags = 0;
 
             string v;
-            while ((v = args.Next) != null)
+            while ((v = args.Next()) != null)
             {
                 if (Enum.TryParse<StatusFlagsShip>(v, true, out StatusFlagsShip s))
                 {

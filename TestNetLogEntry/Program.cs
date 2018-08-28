@@ -27,7 +27,7 @@ namespace NetLogEntry
                     else if (opt.Equals("-repeat", StringComparison.InvariantCultureIgnoreCase) && args.Left >= 1)
                     {
                         args.Remove();
-                        if (!int.TryParse(args.Next, out repeatdelay))
+                        if (!int.TryParse(args.Next(), out repeatdelay))
                         {
                             Console.WriteLine("Bad repeat delay\n");
                             return;
@@ -40,7 +40,7 @@ namespace NetLogEntry
                     break;
             }
 
-            string arg1 = args.Next;
+            string arg1 = args.Next();
 
             if (arg1 == null)
             {
@@ -68,32 +68,32 @@ namespace NetLogEntry
 
             if (arg1.Equals("EDDBSTARS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDB.EDDBLog(args.Next, "\"Star\"", "\"spectral_class\"", "Star class ");
+                EDDB.EDDBLog(args.Next(), "\"Star\"", "\"spectral_class\"", "Star class ");
             }
             else if (arg1.Equals("EDDBPLANETS", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDB.EDDBLog(args.Next, "\"Planet\"", "\"type_name\"", "Planet class");
+                EDDB.EDDBLog(args.Next(), "\"Planet\"", "\"type_name\"", "Planet class");
             }
             else if (arg1.Equals("EDDBSTARNAMES", StringComparison.InvariantCultureIgnoreCase))
             {
-                EDDB.EDDBLog(args.Next, "\"Star\"", "\"name\"", "Star Name");
+                EDDB.EDDBLog(args.Next(), "\"Star\"", "\"name\"", "Star Name");
             }
             else if (arg1.Equals("voicerecon", StringComparison.InvariantCultureIgnoreCase))
             {
-                BindingsFile.Bindings(args.Next);
+                BindingsFile.Bindings(args.Next());
             }
             else if (arg1.Equals("devicemappings", StringComparison.InvariantCultureIgnoreCase))
             {
-                BindingsFile.DeviceMappings(args.Next);
+                BindingsFile.DeviceMappings(args.Next());
             }
             else if (arg1.Equals("Phoneme", StringComparison.InvariantCultureIgnoreCase))
             {
                 if (args.Left >= 1)
-                    Speech.Phoneme(args.Next, args.Next);
+                    Speech.Phoneme(args.Next(), args.Next());
             }
             else if (arg1.Equals("Corolisships", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next(), "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -101,7 +101,7 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolisship", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next(), SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
                 string ret = CorolisData.ProcessShips(allFiles);
@@ -109,33 +109,33 @@ namespace NetLogEntry
             }
             else if (arg1.Equals("Corolismodules", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next, "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(args.Next(), "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolismodule", StringComparison.InvariantCultureIgnoreCase))
             {
-                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
+                FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next(), SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
                 string ret = CorolisData.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("FrontierData", StringComparison.InvariantCultureIgnoreCase))
             {
-                string ret = FrontierData.Process(args.Next);
+                string ret = FrontierData.Process(args.Next());
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("scantranslate", StringComparison.InvariantCultureIgnoreCase))
             {
-                string path = args.Next;
+                string path = args.Next();
                 FileInfo[] allFiles = Directory.EnumerateFiles(".", path, SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
                 bool combine = false;
                 bool showrepeat = false;
 
                 while( args.More )
                 {
-                    string a = args.Next.ToLowerInvariant();
+                    string a = args.Next().ToLowerInvariant();
                     if (a == "combine")
                         combine = true;
                     if (a == "showrepeats" )
@@ -147,7 +147,7 @@ namespace NetLogEntry
             }
             else
             {
-                Journal.JournalEntry(arg1, args.Next, args, repeatdelay);
+                Journal.JournalEntry(arg1, args.Next(), args, repeatdelay);
             }
         }
 

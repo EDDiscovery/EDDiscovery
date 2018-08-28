@@ -97,7 +97,7 @@ namespace EDDiscovery
             {                                                           //JUST for -appfolder
                 if (optname == "-appfolder" && ca.More)
                 {
-                    AppFolder = ca.Next;
+                    AppFolder = ca.Next();
                     System.Diagnostics.Debug.WriteLine("App Folder to " + AppFolder);
                 }
             });
@@ -172,7 +172,7 @@ namespace EDDiscovery
             {                                                           //JUST for -optionsfile
                 if (optname == "-optionsfile" && ca.More)
                 {
-                    string filepath = ca.Next;
+                    string filepath = ca.Next();
 
                     if (!File.Exists(filepath) && !Path.IsPathRooted(filepath))  // if it does not exist on its own, may be relative to base folder ..
                         filepath = Path.Combine(basefolder, filepath);
@@ -195,7 +195,7 @@ namespace EDDiscovery
                     //string[] cmds = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();    // old version..
                     string[] cmds = BaseUtils.StringParser.ParseWordList(line, separ: ' ').ToArray();
                     BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmds);
-                    getopt("-" + ca.Next.ToLowerInvariant(), ca);
+                    getopt("-" + ca.Next().ToLowerInvariant(), ca);
                 }
             }
         }
@@ -207,7 +207,7 @@ namespace EDDiscovery
             //System.Diagnostics.Debug.WriteLine("Command Line:");
             while (ca.More)
             {
-                getopt(ca.Next.ToLowerInvariant(), ca);
+                getopt(ca.Next().ToLowerInvariant(), ca);
             }
         }
 
@@ -224,29 +224,29 @@ namespace EDDiscovery
             {
                 if (AppDataDirectory == null) // Only override AppFolder if AppDataDirectory has not been set
                 {
-                    AppFolder = ca.NextEmpty;
+                    AppFolder = ca.NextEmpty();
                 }
             }
             else if (optname == "-translationfolder")
             {
-                translationfolder = ca.NextEmpty;
-                TranslatorDirectoryIncludeSearchUpDepth = ca.Int;
+                translationfolder = ca.NextEmpty();
+                TranslatorDirectoryIncludeSearchUpDepth = ca.Int();
             }
             else if (optname == "-userdbpath")
             {
-                UserDatabasePath = ca.NextEmpty;
+                UserDatabasePath = ca.NextEmpty();
             }
             else if (optname == "-systemsdbpath")
             {
-                SystemDatabasePath = ca.NextEmpty;
+                SystemDatabasePath = ca.NextEmpty();
             }
             else if (optname == "-iconspath")
             {
-                IconsPath = ca.NextEmpty;
+                IconsPath = ca.NextEmpty();
             }
             else if (optname == "-tracelog")
             {
-                TraceLog = ca.NextEmpty;
+                TraceLog = ca.NextEmpty();
             }
             else if (optname.StartsWith("-"))
             {
