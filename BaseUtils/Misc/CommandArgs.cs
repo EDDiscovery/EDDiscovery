@@ -38,6 +38,7 @@ namespace BaseUtils
         public string Next() { return (pos < args.Length) ? args[pos++] : null; }
         public string NextEmpty() { return (pos < args.Length) ? args[pos++] : ""; }
         public int Int() { return (pos < args.Length) ? args[pos++].InvariantParseInt(0) : 0; }
+        public string Rest(string sep = " ") { return string.Join(sep, args, pos, args.Length - pos); }
 
         public string this[int v] { get { int left = args.Length - pos; return (v < left) ? args[pos + v] : null; } }
         public bool More { get { return args.Length > pos; } }
