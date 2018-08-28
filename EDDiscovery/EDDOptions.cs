@@ -220,13 +220,6 @@ namespace EDDiscovery
             {
                 ca.Remove();   // waste it
             }
-            else if (optname == "-appfolder")
-            {
-                if (AppDataDirectory == null) // Only override AppFolder if AppDataDirectory has not been set
-                {
-                    AppFolder = ca.NextEmpty();
-                }
-            }
             else if (optname == "-translationfolder")
             {
                 translationfolder = ca.NextEmpty();
@@ -300,7 +293,17 @@ namespace EDDiscovery
 
             string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the exe folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
+            {
+                ProcessOptionFile(optval, (optname, ca) =>              //FIRST pass thru options.txt options looking
+                {                                                           //JUST for -appfolder
+                    if (optname == "-appfolder" && ca.More)
+                    {
+                        AppFolder = ca.Rest();
+                        System.Diagnostics.Debug.WriteLine("App Folder to " + AppFolder);
+                    }
+                });
                 ProcessOptionFile(optval, ProcessOption);
+            }
 
             SetAppDataDirectory();      // set the app directory, now we have given base dir options to override appfolder, and we have given any -optionfiles on the command line
 
