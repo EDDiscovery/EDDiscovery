@@ -311,6 +311,68 @@ namespace EliteDangerousCore.DB
             }
         }
 
+        public static void RenameOrCreateSystemsTables()
+        {
+            using (var schemalock = new SchemaLock())
+            {
+                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+                {
+                    HashSet<string> tables = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+                    using (var cmd = conn.CreateCommand("SELECT name FROM sqlite_master WHERE AND type = 'table'"))
+                    {
+                        using (var rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                tables.Add(rdr.GetString(0));
+                            }
+                        }
+                    }
+
+                    if (!tables.Contains("EdsmSystems"))
+                    {
+                        if (tables.Contains("EdsmSystems_temp"))
+                        {
+                            conn.ExecuteQuery("ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                        }
+                        else
+                        {
+                            conn.ExecuteQuery(
+                                "CREATE TABLE EdsmSystems (" +
+                                    "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                                    "EdsmId INTEGER NOT NULL, " +
+                                    "EddbId INTEGER, " +
+                                    "X INTEGER NOT NULL, " +
+                                    "Y INTEGER NOT NULL, " +
+                                    "Z INTEGER NOT NULL, " +
+                                    "CreateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                                    "UpdateTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                                    "VersionTimestamp INTEGER NOT NULL, " + // Seconds since 2015-01-01 00:00:00 UTC
+                                    "GridId INTEGER NOT NULL DEFAULT -1, " +
+                                    "RandomId INTEGER NOT NULL DEFAULT -1)");
+                        }
+                    }
+
+                    if (!tables.Contains("SystemNames"))
+                    {
+                        if (tables.Contains("SystemNames_temp"))
+                        {
+                            conn.ExecuteQuery("ALTER TABLE SystemNames_temp RENAME TO SystemNames");
+                        }
+                        else
+                        {
+                            conn.ExecuteQuery(
+                                "CREATE TABLE SystemNames (" +
+                                    "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                                    "Name TEXT NOT NULL COLLATE NOCASE, " +
+                                    "EdsmId INTEGER NOT NULL )");
+                        }
+                    }
+                }
+            }
+        }
+
         public static void CreateSystemsTableIndexes()
         {
             using (var schemalock = new SchemaLock())
@@ -379,15 +441,11 @@ namespace EliteDangerousCore.DB
                 using (var conn = new SQLiteConnectionSystem())
                 {
                     DropSystemsTableIndexes();
-                    using (var txn = conn.BeginTransaction())
-                    {
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
-                        ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
-                        ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
-                        txn.Commit();
-                    }
+                    ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
+                    ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
+                    ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
+                    ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                    ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
                     ExecuteQuery(conn, "VACUUM");
                     CreateSystemsTableIndexesNoLock();
                 }
