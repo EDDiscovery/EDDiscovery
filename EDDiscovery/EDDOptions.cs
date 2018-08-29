@@ -93,7 +93,7 @@ namespace EDDiscovery
 
         private void SetAppDataDirectory()
         {
-            ProcessCommandLineOptions((optname, ca) =>              //FIRST pass thru command line options looking
+            ProcessCommandLineOptions((optname, ca, toeol) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -appfolder
                 if (optname == "-appfolder" && ca.More)
                 {
@@ -165,10 +165,10 @@ namespace EDDiscovery
             UserDatabasePath = appsettings["UserDatabasePath"];
         }
 
-        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs> getopt)     // command line -optionsfile
+        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs, bool> getopt)     // command line -optionsfile
         {
             //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
-            ProcessCommandLineOptions((optname, ca) =>              //FIRST pass thru command line options looking
+            ProcessCommandLineOptions((optname, ca, toeol) =>              //FIRST pass thru command line options looking
             {                                                           //JUST for -optionsfile
                 if (optname == "-optionsfile" && ca.More)
                 {
@@ -185,7 +185,7 @@ namespace EDDiscovery
             });
         }
 
-        private void ProcessOptionFile(string filepath, Action<string, BaseUtils.CommandArgs> getopt)       // read file and process options
+        private void ProcessOptionFile(string filepath, Action<string, BaseUtils.CommandArgs, bool> getopt)       // read file and process options
         {
             //System.Diagnostics.Debug.WriteLine("Read File " + filepath);
             foreach (string line in File.ReadAllLines(filepath))
@@ -195,23 +195,23 @@ namespace EDDiscovery
                     //string[] cmds = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();    // old version..
                     string[] cmds = BaseUtils.StringParser.ParseWordList(line, separ: ' ').ToArray();
                     BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmds);
-                    getopt("-" + ca.Next().ToLowerInvariant(), ca);
+                    getopt("-" + ca.Next().ToLowerInvariant(), ca, true);
                 }
             }
         }
 
-        private void ProcessCommandLineOptions(Action<string, BaseUtils.CommandArgs> getopt)       // go thru command line..
+        private void ProcessCommandLineOptions(Action<string, BaseUtils.CommandArgs, bool> getopt)       // go thru command line..
         {
             string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
             BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmdlineopts,1);
             //System.Diagnostics.Debug.WriteLine("Command Line:");
             while (ca.More)
             {
-                getopt(ca.Next().ToLowerInvariant(), ca);
+                getopt(ca.Next().ToLowerInvariant(), ca, false);
             }
         }
 
-        private void ProcessOption(string optname, BaseUtils.CommandArgs ca)
+        private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool toeol)
         {
             optname = optname.ToLowerInvariant();
             //System.Diagnostics.Debug.WriteLine("     Option " + optname);
@@ -227,19 +227,19 @@ namespace EDDiscovery
             }
             else if (optname == "-userdbpath")
             {
-                UserDatabasePath = ca.NextEmpty();
+                UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-systemsdbpath")
             {
-                SystemDatabasePath = ca.NextEmpty();
+                SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-iconspath")
             {
-                IconsPath = ca.NextEmpty();
+                IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname == "-tracelog")
             {
-                TraceLog = ca.NextEmpty();
+                TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
             }
             else if (optname.StartsWith("-"))
             {
@@ -281,7 +281,7 @@ namespace EDDiscovery
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"Unrecognized non option -{optname}");
+                System.Diagnostics.Debug.WriteLine($"Unrecognized non option {optname}");
             }
         }
 
@@ -294,7 +294,7 @@ namespace EDDiscovery
             string optval = Path.Combine(ExeDirectory(), "options.txt");      // options in the exe folder.
             if (File.Exists(optval))   // try options.txt in the base folder..
             {
-                ProcessOptionFile(optval, (optname, ca) =>              //FIRST pass thru options.txt options looking
+                ProcessOptionFile(optval, (optname, ca, toeol) =>              //FIRST pass thru options.txt options looking
                 {                                                           //JUST for -appfolder
                     if (optname == "-appfolder" && ca.More)
                     {
