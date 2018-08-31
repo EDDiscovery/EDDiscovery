@@ -129,6 +129,10 @@ namespace EDDiscovery.UserControls
             {
                 StatsGame(he, hl);
             }
+            if (tabControlCustomStats.SelectedIndex == 4)
+            {
+                StatsByShip(he, hl);
+            }
         }
 
         #endregion
@@ -919,6 +923,68 @@ namespace EDDiscovery.UserControls
             else
                 result = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
             return result;
+        }
+
+        #endregion
+
+        #region STATS_BY_SHIP
+
+        void StatsByShip(HistoryEntry he, HistoryList hl)
+        {
+            dataGridViewByShip.Rows.Clear();
+            dataGridViewByShip.Columns.Clear();
+
+            var Col1 = new DataGridViewTextBoxColumn();
+            Col1.HeaderText = "Type";
+            Col1.Tag = "AlphaSort";
+
+            var Col2 = new DataGridViewTextBoxColumn();
+            Col2.HeaderText = "Name".Tx(this);
+
+            var Col3 = new DataGridViewTextBoxColumn();
+            Col3.HeaderText = "Ident".Tx(this);
+
+            var Col4 = new DataGridViewTextBoxColumn();
+            Col4.HeaderText = "Jumps".Tx(this);
+
+            var Col5 = new DataGridViewTextBoxColumn();
+            Col5.HeaderText = "Travelled Ly".Tx(this);
+
+            var Col6 = new DataGridViewTextBoxColumn();
+            Col6.HeaderText = "Bodies Scanned".Tx(this);
+
+            var Col7 = new DataGridViewTextBoxColumn();
+            Col7.HeaderText = "Goods Bought".Tx(this);
+
+            var Col8 = new DataGridViewTextBoxColumn();
+            Col8.HeaderText = "Goods Sold".Tx(this);
+
+            var Col9 = new DataGridViewTextBoxColumn();
+            Col9.HeaderText = "Destroyed".Tx(this);
+
+            dataGridViewByShip.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7, Col8, Col9 });
+
+            string[] strarr = new string[8];
+
+            foreach(var si in hl.shipinformationlist.Ships.Values.Where(val => val.SubVehicle == ShipInformation.SubVehicleType.None))
+            {
+                // Filtering for SubVehicle == None doesn't reliably remove all SRVs from the list.
+                // I have not tested with SLFs as I've never owned one...
+                if (si.ShipType.IndexOf("SRV") == -1)
+                {
+                    strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.ShipUserName ?? "-");
+                    strarr[1] = (si.ShipUserIdent ?? "-").ToUpper();
+                    strarr[2] = hl.GetFSDJumps(si.ID).ToString();
+                    strarr[3] = hl.GetTraveledLy(si.ID).ToString("N0");
+                    strarr[4] = hl.GetBodiesScanned(si.ID).ToString();
+                    strarr[5] = hl.GetTonnesBought(si.ID).ToString("N0");
+                    strarr[6] = hl.GetTonnesSold(si.ID).ToString("N0");
+                    strarr[7] = hl.GetDeathCount(si.ID).ToString();
+                    StatToDGV(dataGridViewByShip, si.ShipType ?? "Unknown".Tx(this), strarr);
+                }
+            }
+
+            
         }
 
         #endregion

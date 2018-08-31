@@ -61,10 +61,14 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageScan = new System.Windows.Forms.TabPage();
             this.dataGridViewScan = new System.Windows.Forms.DataGridView();
+            this.ScanNotUsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
             this.treeViewStats = new ExtendedControls.Controls.TreeViewCustom();
-            this.ScanNotUsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPageByShip = new System.Windows.Forms.TabPage();
+            this.dataGridViewByShip = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStats)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mostVisited)).BeginInit();
             this.panelData.SuspendLayout();
@@ -75,6 +79,8 @@ namespace EDDiscovery.UserControls
             this.tabPageScan.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).BeginInit();
             this.tabPageGameStats.SuspendLayout();
+            this.tabPageByShip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridViewStats
@@ -173,6 +179,7 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.Controls.Add(this.tabPageTravel);
             this.tabControlCustomStats.Controls.Add(this.tabPageScan);
             this.tabControlCustomStats.Controls.Add(this.tabPageGameStats);
+            this.tabControlCustomStats.Controls.Add(this.tabPageByShip);
             this.tabControlCustomStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlCustomStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlCustomStats.Location = new System.Drawing.Point(0, 0);
@@ -287,6 +294,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.TabIndex = 4;
             this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
             // 
+            // ScanNotUsed
+            // 
+            this.ScanNotUsed.HeaderText = "Column1";
+            this.ScanNotUsed.Name = "ScanNotUsed";
+            // 
             // userControlStatsTimeScan
             // 
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
@@ -336,10 +348,48 @@ namespace EDDiscovery.UserControls
             this.treeViewStats.TreeViewBackColor = System.Drawing.SystemColors.Control;
             this.treeViewStats.TreeViewForeColor = System.Drawing.SystemColors.ControlText;
             // 
-            // ScanNotUsed
+            // tabPageByShip
             // 
-            this.ScanNotUsed.HeaderText = "Column1";
-            this.ScanNotUsed.Name = "ScanNotUsed";
+            this.tabPageByShip.Controls.Add(this.dataGridViewByShip);
+            this.tabPageByShip.Location = new System.Drawing.Point(4, 22);
+            this.tabPageByShip.Name = "tabPageByShip";
+            this.tabPageByShip.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageByShip.Size = new System.Drawing.Size(790, 726);
+            this.tabPageByShip.TabIndex = 6;
+            this.tabPageByShip.Text = "By Ship";
+            this.tabPageByShip.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewByShip
+            // 
+            this.dataGridViewByShip.AllowUserToAddRows = false;
+            this.dataGridViewByShip.AllowUserToDeleteRows = false;
+            this.dataGridViewByShip.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewByShip.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewByShip.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4});
+            this.dataGridViewByShip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewByShip.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewByShip.Name = "dataGridViewByShip";
+            this.dataGridViewByShip.RowHeadersVisible = false;
+            this.dataGridViewByShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewByShip.Size = new System.Drawing.Size(784, 720);
+            this.dataGridViewByShip.TabIndex = 3;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.HeaderText = "Item";
+            this.dataGridViewTextBoxColumn3.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.FillWeight = 400F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "Information";
+            this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
             // 
             // UserControlStats
             // 
@@ -358,6 +408,8 @@ namespace EDDiscovery.UserControls
             this.tabPageScan.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).EndInit();
             this.tabPageGameStats.ResumeLayout(false);
+            this.tabPageByShip.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewByShip)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -383,5 +435,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.TabPage tabPageGameStats;
         private ExtendedControls.Controls.TreeViewCustom treeViewStats;
         private System.Windows.Forms.DataGridViewTextBoxColumn ScanNotUsed;
+        private System.Windows.Forms.TabPage tabPageByShip;
+        private System.Windows.Forms.DataGridView dataGridViewByShip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
     }
 }
