@@ -8,10 +8,10 @@
 
 Warning: "Warning" => "Atenção"
 Today: "Today" => "Hoje"
-24h: "24h" @
+24h: "24h" => "24h"
 7days: "7 Days" => "7 dias"
 All: "All" => "Tudo"
-OK: "OK" @
+OK: "OK" => "OK"
 Cancel: "Cancel" => "Cancela"
 Delete: "Delete" => "Elimina"
 Campaign: "Campaign" => "Campanha"
@@ -22,8 +22,8 @@ GameTime: "Game Time" => "Horário do Jogo"
 Time: "Time" => "Horário"
 NoData: "No Data" => "Nenhum Dado"
 None: "None" => "Nada"
-on: "on" @
-Off: "Off" @
+on: "on" => "On"
+Off: "Off" => "Off"
 Unknown: "Unknown" => "Desconhecido"
 Information: "Information" => "Informação"
 NoPos: "No Pos" => "Nenhuma Posição"
@@ -85,17 +85,17 @@ PopOutInfo.CombatPanel.Title: "Combat" => "Combate"
 PopOutInfo.Route.Description: "Route Finder from stored star data" => "Preparação di Itinerário usando os dados da banco dados"
 PopOutInfo.Route.Title: "Route Finder" => "Itinerário"
 PopOutInfo.Expedition.Description: "Expedition Planner, make up a expedition route" => "Plano de Espedição, prepara um itinerário di espedição"
-PopOutInfo.Expedition.Title: "Expedition" => "Espedição" 
-PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Plano de exploração, crea uma lista de sistemas a ser explorados"
-PopOutInfo.Exploration.Title: "Exploration" => "Esploração"
+PopOutInfo.Expedition.Title: "Expedition" => "Expedição" 
+PopOutInfo.Exploration.Description: "Exploration Planner, make a list of the stars to explore" => "Plano de exploração, cria uma lista de sistemas a ser explorados"
+PopOutInfo.Exploration.Title: "Exploration" => "Exploração"
 PopOutInfo.SystemInformation.Description: "System Information" => "Informações sobre o Sistema"
 PopOutInfo.SystemInformation.Title: "System Information" => "Informações sobre o Sistema"
 PopOutInfo.Spanel.Description: "Summary panel overlay" => "Somário"
 PopOutInfo.Spanel.Title: "Summary Panel" => "Somário"
 PopOutInfo.Trippanel.Description: "Trip computer overlay" => "Computador de Viajem"
 PopOutInfo.Trippanel.Title: "Trip Computer" => "Computador de Viajem"
-PopOutInfo.NotePanel.Description: "System notes overlay" => "Annotações sobre o Sistema"
-PopOutInfo.NotePanel.Title: "Notes" => "Annotações"
+PopOutInfo.NotePanel.Description: "System notes overlay" => "Anotações sobre o Sistema"
+PopOutInfo.NotePanel.Title: "Notes" => "Anotações"
 PopOutInfo.RouteTracker.Description: "Route tracker overlay" => "Traçador de Itinerário"
 PopOutInfo.RouteTracker.Title: "Route Tracker" => "Traçador de Itinerário"
 PopOutInfo.Compass.Description: "Ground compass overlay to show bearing to planetary coordinates" => "Bussola planetária; mostra a direção a seguir para chegar às coordenadas desejadas"
@@ -164,7 +164,7 @@ EDDiscoveryForm.buttonExt3dmap.ToolTip: "Open the 3D Map" => "Abri o mapa 3D"
 EDDiscoveryForm.buttonReloadActions.ToolTip: "DEBUG reload action system" => "DEBUG reinicia action system"
 
 EDDiscoveryForm.addTabToolStripMenuItem: "Insert Tab with panel.." => "Insere um painel como aba"
-EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Removi aba"
+EDDiscoveryForm.removeTabToolStripMenuItem: "Remove Tab" => "Remove aba"
 EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Renomina aba"
 
 .TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemas na configuração: aba principal o grupo de abas não pode ser iniciada.\r\nEsta é uma condição peculiar. Entra em contato com os desenvolvedores!"
@@ -234,7 +234,7 @@ EDDiscoveryController.CD: "Closing down, please wait.." => "Fechando, por favor 
 /////////////////////////////////////////////////////////////////////////////// UC
 ///////////////////////////////////////////////////////////////////////////////
 
-Include translation-italiano-uc.tlp
+Include translation-portugues-uc.tlp
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////  Small forms
@@ -243,31 +243,31 @@ Include translation-italiano-uc.tlp
 
 //////////////////////////////////////////////////////////////// Screenshot
 
-ScreenshotDirectoryWatcher.Scan: "Scanning for {0} screenshots in {1}" @
-.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" @
-.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " @
+ScreenshotDirectoryWatcher.Scan: "Scanning for {0} screenshots in {1}" => "Escaneando por {0} screenshots in {1}"
+.NOF: "Folder specified for image conversion does not exist, check settings in the Screenshots tab" => "Pasta especificada para conversão inexistente, verificar ajuste nos Screenshots"
+.Excp: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " => "Erro na execução da conversão das imagens, tenta outroi screenshot, ou verifica as impostações"
 
-ScreenShotImageConverter.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" @
-.CNV: "Converted {0} to {1}" @
-.ERRF: "Unable to open screenshot '{0}': {1}" @
+ScreenShotImageConverter.FolderErr: "Cannot convert {0} into the same folder as they are stored into\r\nPick a different conversion folder or a different output format" => "Impossível converter {0} na mesma pasta\r\nEscolher outra pastapara a conversão ou outro formato"
+.CNV: "Converted {0} to {1}" => "Convertido {0} to {1}"
+.ERRF: "Unable to open screenshot '{0}': {1}" => "Impossível abrir o screenshot '{0}' to {1}"
 
-ScreenShotConfigureForm: "Screen Shot Configure" @
-ScreenShotConfigureForm.buttonExtCancel: "Cancel" @
-ScreenShotConfigureForm.buttonExtOK: "OK" @
-ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings" @
-ScreenShotConfigureForm.labelHeight: "Height" @
-ScreenShotConfigureForm.labelWidth: "Width" @
-ScreenShotConfigureForm.labelLeft: "Left" @
-ScreenShotConfigureForm.labelTop: "Top" @
-ScreenShotConfigureForm.checkBoxCropImage: "Crop Image" @
-ScreenShotConfigureForm.labelFolder: "ED/Steam Screenshot folder" @
-ScreenShotConfigureForm.buttonChangeScreenshotsFolder: "Browse" @
-ScreenShotConfigureForm.labelSubfolder: "In Sub folder" @
-ScreenShotConfigureForm.labelFileNameFormat: "In Filename format" @
-ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" @
-ScreenShotConfigureForm.buttonEDChangeOutputFolder: "Browse" @
-ScreenShotConfigureForm.labelScanFor: "Scan for" @
-ScreenShotConfigureForm.labelSaveAs: "Save as" @
+ScreenShotConfigureForm: "Screen Shot Configure" => "Impostar SCreen Shot"
+ScreenShotConfigureForm.buttonExtCancel: "Cancel" => "Cancela"
+ScreenShotConfigureForm.buttonExtOK: "OK" => "OK"
+ScreenShotConfigureForm.groupBoxCropSettings: "Crop Settings" => "Ajustes de recorte"
+ScreenShotConfigureForm.labelHeight: "Height" => "Altura"
+ScreenShotConfigureForm.labelWidth: "Width" => "Largura"
+ScreenShotConfigureForm.labelLeft: "Left" => "Canto esquerdo"
+ScreenShotConfigureForm.labelTop: "Top" => "Canto superior"
+ScreenShotConfigureForm.checkBoxCropImage: "Crop Image" => "Recorta imagem"
+ScreenShotConfigureForm.labelFolder: "ED/Steam Screenshot folder" => "Pasta screenshot ED/Steam"
+ScreenShotConfigureForm.buttonChangeScreenshotsFolder: "Browse" => "Navega"
+ScreenShotConfigureForm.labelSubfolder: "In Sub folder" => "Em sub pastas"
+ScreenShotConfigureForm.labelFileNameFormat: "In Filename format" => "No formato do nome"
+ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" => "Armazena imagens convertidas"
+ScreenShotConfigureForm.buttonEDChangeOutputFolder: "Browse" => "Navega"
+ScreenShotConfigureForm.labelScanFor: "Scan for" => "Escaneia para"
+ScreenShotConfigureForm.labelSaveAs: "Save as" => "Salva como"
 
 
 //////////////////////////////////////////////////////////////// Bookmark form
@@ -353,9 +353,9 @@ TravelHistoryFilter.StartEnd: "Start/End Flag" => "Início/Fim"
 
 //////////////////////////////////////////////////////////////// Add on manager
 
-AddOnManagerForm.buttonMore: "+" @
+AddOnManagerForm.buttonMore: "+" => "+"
 AddOnManagerForm.buttonExtGlobals: "Globals" => "Global"
-AddOnManagerForm.buttonOK: "OK" @
+AddOnManagerForm.buttonOK: "OK" => "OK"
 
 AddOnManagerForm.AddOnTitle: "Add-On Manager" => "Gerir os Add-Ons"
 AddOnManagerForm.EditTitle: "Edit Add-Ons" => "Modifica os Add-Ons"
@@ -382,16 +382,16 @@ AddOnManagerForm.DeleteWarn: "Do you really want to delete {0}" => "Está certo 
 
 ////////////////////////////////////////////////////////////// Assign system form Little used
 
-AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
-AssignTravelLogSystemForm.label1: "Travel Log System Name:" @
-AssignTravelLogSystemForm.label2: "Date Visited:" @
-AssignTravelLogSystemForm.label6: "EDSM Link:" @
-AssignTravelLogSystemForm.label3: "New system name:" @
-AssignTravelLogSystemForm.btnFindSystem: "Find" @
-AssignTravelLogSystemForm.btnCancel: "Cancel" @
-AssignTravelLogSystemForm.label4: "Travel Log Coordinates:" @
-AssignTravelLogSystemForm.btnOK: "OK" @
-AssignTravelLogSystemForm.label5: "System Coordinates" @
+AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Impostar Registro de Viagem"
+AssignTravelLogSystemForm.label1: "Travel Log System Name:" => "Nome do Sistema noi Registro de Viajem"
+AssignTravelLogSystemForm.label2: "Date Visited:" => "Data da Visita"
+AssignTravelLogSystemForm.label6: "EDSM Link:" => "Link EDSM"
+AssignTravelLogSystemForm.label3: "New system name:" => "Nome do novo sistema:"
+AssignTravelLogSystemForm.btnFindSystem: "Find" => "Procura"
+AssignTravelLogSystemForm.btnCancel: "Cancel" => "Cancela"
+AssignTravelLogSystemForm.label4: "Travel Log Coordinates:" => "Coordenadas do Registro de Viajem"
+AssignTravelLogSystemForm.btnOK: "OK" => "OK"
+AssignTravelLogSystemForm.label5: "System Coordinates" => "Coordanadas do Sistema"
 
 ///////////////////////////////////////////////////////////// Commander form
 
@@ -483,27 +483,27 @@ Form2DMap: "2D Map" => "Mapa 2D"
 
 /////////////////////////////////////////////////////////////// Galaxy form
 
-GalaxySectorSelect: "GalaxySectorSelect" @
-GalaxySectorSelect.buttonExtCancel: "Cancel" @
-GalaxySectorSelect.buttonExtSet: "Set" @
-GalaxySectorSelect.labelSectorName: "Sector" @
+GalaxySectorSelect: "GalaxySectorSelect" => "Seletor de Setores Galácticos"
+GalaxySectorSelect.buttonExtCancel: "Cancel" => "Cancela"
+GalaxySectorSelect.buttonExtSet: "Set" => "Imposta"
+GalaxySectorSelect.labelSectorName: "Sector" => "Setores"
 
-GalaxySectorSelect.Custom: "Custom" @
-GalaxySectorSelect.Reset: "Reset" @
-GalaxySectorSelect.All: "All" @
-GalaxySectorSelect.None: "None" @
-GalaxySectorSelect.Bubble: "Bubble" @
-GalaxySectorSelect.ExtendedBubble: "Extended Bubble" @
-GalaxySectorSelect.BC: "Bubble+Colonia" @
+GalaxySectorSelect.Custom: "Custom" => "Personalizado"
+GalaxySectorSelect.Reset: "Reset" => "Reseta"
+GalaxySectorSelect.All: "All" => "Tudo"
+GalaxySectorSelect.None: "None" "Nada"
+GalaxySectorSelect.Bubble: "Bubble" => "Bolha"
+GalaxySectorSelect.ExtendedBubble: "Extended Bubble" => "Bolha Extendida"
+GalaxySectorSelect.BC: "Bubble+Colonia" => "Bolha+Colonia"
 
-.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" @
-.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" @
-.Warning: "Warning" @
-.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
+.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Você inclui novos setores!\r\nIsto requer baixar novamente por completo todos os dados EDSM\r\nConfirma?"
+.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronização de todos os dados desabilitados nos ajustes.\r\nRehabilitar para atualizar dados galácticos"
+.Warning: "Warning" => "Attenção"
+.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Você removeu setores!\r\nIsto requer a limpeza de todos os registros, coisa que necessita de tempo. Confirma?"
 
 /////////////////////////////////////////////////////////////// Move commander
 
-MoveToCommander: "MoveToCommander" => "Move ao Comandante"
+MoveToCommander: "MoveToCommander" => "Move para p Comandante"
 MoveToCommander.buttonExtCancel: "Cancel" => "Cancela"
 MoveToCommander.buttonTransfer: "Transfer" => "Transfere"
 MoveToCommander.label1: "Move selected history to commander." => "Move o histórico selecionado ao comandante."
@@ -542,38 +542,38 @@ ProfileEditor.buttonOK: "OK" @
 
 /////////////////////////////////////////////////////////////// 3dmap step
 
-RecordStep: "RecordStep" @
-RecordStep.labelGoto: "Go to" @
-RecordStep.labelPAt: "Pointing At" @
-RecordStep.checkBoxWaitForSlew: "Wait for slew" @
-RecordStep.checkBoxChangeZoom: "Change Zoom" @
-RecordStep.labelZoom: "Zoom" @
-RecordStep.labelWait: "Wait for this time before action" @
-RecordStep.checkBoxPan: "Change Dir" @
-RecordStep.labelZoomTime: "Time to take to Zoom" @
-RecordStep.checkBoxPos: "Go To" @
-RecordStep.labelMsgTime: "Message on screen time" @
-RecordStep.checkBoxDisplayMessageWhenComplete: "Display Message with complete" @
-RecordStep.labelTimeChange: "Time to take to change pos" @
-RecordStep.checkBoxWaitComplete: "Wait for actions to complete" @
-RecordStep.labelTimeDir: "Time to take to change direction" @
-RecordStep.labelTMEInfo: "0=default time" @
-RecordStep.buttonCancel: "Cancel" @
-RecordStep.labelMsg: "Message to display" @
-RecordStep.buttonOK: "OK" @
-RecordStep.label_index: "Record Step" @
+RecordStep: "RecordStep" => "Grava Passo"
+RecordStep.labelGoto: "Go to" => "Vai a"
+RecordStep.labelPAt: "Pointing At" => "Punta a"
+RecordStep.checkBoxWaitForSlew: "Wait for slew" => "Espera"
+RecordStep.checkBoxChangeZoom: "Change Zoom" => "Muda zoom"
+RecordStep.labelZoom: "Zoom" => "Zoom"
+RecordStep.labelWait: "Wait for this time before action" => "Espera este tempo antes da ação"
+RecordStep.checkBoxPan: "Change Dir" => "Muda pasta"
+RecordStep.labelZoomTime: "Time to take to Zoom" => "Tempo a esperar para o zoom"
+RecordStep.checkBoxPos: "Go To" => "Vai a"
+RecordStep.labelMsgTime: "Message on screen time" => "Mensagem no painel de tempo"
+RecordStep.checkBoxDisplayMessageWhenComplete: "Display Message with complete" => "Mostra mensagem com completação"
+RecordStep.labelTimeChange: "Time to take to change pos" => "Tempo a esperar para mudar de posição"
+RecordStep.checkBoxWaitComplete: "Wait for actions to complete" => "Espera a ação completar"
+RecordStep.labelTimeDir: "Time to take to change direction" => "Tempo necessário para mudar de direção"
+RecordStep.labelTMEInfo: "0=default time" => "0=tempo default"
+RecordStep.buttonCancel: "Cancel" => "Cancela"
+RecordStep.labelMsg: "Message to display" => "Mensagem a mostrar"
+RecordStep.buttonOK: "OK" => "OK"
+RecordStep.label_index: "Record Step" => "Grave Passo"
 
 
 /////////////////////////////////////////////////////////////// Set Note
 
-SetNoteForm: "Set Note" @
-SetNoteForm.labelTTimestamp: "Timestamp:" @
-SetNoteForm.buttonCancel: "Cancel" @
-SetNoteForm.buttonSave: "Save" @
-SetNoteForm.labelTSystem: "System:" @
-SetNoteForm.labelTSummary: "Summary:" @
-SetNoteForm.labelTDetails: "Details:" @
-SetNoteForm.label_index: "Set Note" @
+SetNoteForm: "Set Note" => "Imposta Nota"
+SetNoteForm.labelTTimestamp: "Timestamp:" => "Timestamp"
+SetNoteForm.buttonCancel: "Cancel" => "Cancela"
+SetNoteForm.buttonSave: "Save" => "Salva"
+SetNoteForm.labelTSystem: "System:" => "Sistema:"
+SetNoteForm.labelTSummary: "Summary:" => "Somário"
+SetNoteForm.labelTDetails: "Details:" => "Detalhes"
+SetNoteForm.label_index: "Set Note" => "Imposta Nota"
 
 ////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////// Misc forms
@@ -581,59 +581,59 @@ SetNoteForm.label_index: "Set Note" @
 
 /////////////////////////////////////////////////////////////// MessageBox
 
-MessageBoxTheme.Warning: "Warning" @
-.Ignore: "Ignore" @
-.Retry: "Retry" @
-.Abort: "Abort" @
-.Cancel: "Cancel" @
-.OK: "OK" @
-.No: "No" @
-.Yes: "Yes" @
+MessageBoxTheme.Warning: "Warning" => "Atenção"
+.Ignore: "Ignore" => "Ignora"
+.Retry: "Retry" => "Retenta"
+.Abort: "Abort" => "Aborta"
+.Cancel: "Cancel" => "Cancela"
+.OK: "OK" => "OK"
+.No: "No" => "Não"
+.Yes: "Yes" => "Sim"
 
 ///////////////////////////////////////////////////// DataGridViewDialogs
 
-DataGridViewDialogs.Jumpto: "Jump to:" @
-.EN: "Enter number to jump to or near to" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.VNV: "Value is not valid" @
-.Title: "Jump to Entry" @
+DataGridViewDialogs.Jumpto: "Jump to:" => "Salta a"
+.EN: "Enter number to jump to or near to" => "Informa o numero de saltos para à tua posição ou perto dela"
+.PresstoAccept: "Press to Accept" => "Pressiona para aceitar"
+.PresstoCancel: "Press to Cancel" => "Pressiona para Cancelar"
+.VNV: "Value is not valid" => "O valor não é válido"
+.Title: "Jump to Entry" => "Saltos para o registro"
 
 //////////////////////////////////////////////////// InfoForm
 
-InfoForm.OK : "OK" @
+InfoForm.OK : "OK" => "OK"
 
 //////////////////////////////////////////////////// Keyform
 
-KeyForm.PK: "Press Key" @
-KeyForm: "Define Key Sequence" @
-KeyForm.radioButtonUp: "Up" @
-KeyForm.radioButtonDown: "Down" @
-KeyForm.radioButtonPress: "Press" @
-KeyForm.checkBoxShift: "Shift" @
-KeyForm.checkBoxCtrl: "Ctrl" @
-KeyForm.checkBoxAlt: "Alt" @
-KeyForm.checkBoxKey: "Press Key" @
-KeyForm.labelNextDelay: "Current Delay" @
-KeyForm.labelSelKeys: "Select Key" @
-KeyForm.labelDelay: "Start Delay(ms)" @
-KeyForm.labelSendTo: "Send To" @
-KeyForm.buttonReset: "Reset" @
-KeyForm.labelKeys: "Keys" @
-KeyForm.buttonDelete: "Delete" @
-KeyForm.buttonNext: "Next" @
-KeyForm.buttonTest: "Test" @
-KeyForm.buttonCancel: "Cancel" @
-KeyForm.buttonOK: "OK" @
+KeyForm.PK: "Press Key" => "Pressiona Tecla"
+KeyForm: "Define Key Sequence" => "Defina uma sequência de teclas"
+KeyForm.radioButtonUp: "Up" => "Alto"
+KeyForm.radioButtonDown: "Down" "Baixo"
+KeyForm.radioButtonPress: "Press" "Pressiona"
+KeyForm.checkBoxShift: "Shift" => "Shift"
+KeyForm.checkBoxCtrl: "Ctrl" => "Ctrl"
+KeyForm.checkBoxAlt: "Alt" => "Alt"
+KeyForm.checkBoxKey: "Press Key" => "Pressiona tecla"
+KeyForm.labelNextDelay: "Current Delay" => "Retardo corrente"
+KeyForm.labelSelKeys: "Select Key" => "Seleciona tecla"
+KeyForm.labelDelay: "Start Delay(ms)" => "Inicía retardo(ms)"
+KeyForm.labelSendTo: "Send To" => "Invia a"
+KeyForm.buttonReset: "Reset" => "Reseta"
+KeyForm.labelKeys: "Keys" => "Teclas"
+KeyForm.buttonDelete: "Delete" => "Deleta"
+KeyForm.buttonNext: "Next" => "Próximo"
+KeyForm.buttonTest: "Test" => "Testa" 
+KeyForm.buttonCancel: "Cancel" => "Cancela"
+KeyForm.buttonOK: "OK" => "OK"
 
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// Journals
 ///////////////////////////////////////////////////////////////////////////
 
-Include translation-italiano-je.tlp
+Include translation-portugues-je.tlp
 
 ////////////////////////////////////////////////////
 //////////////////////////////////////////////////// Elite Dangerous stuff
 ////////////////////////////////////////////////////
 
-Include translation-italiano-ed.tlp
+Include translation-portugues-ed.tlp
