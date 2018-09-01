@@ -59,85 +59,17 @@ namespace NetLogEntry
         {
             EliteDangerousCore.MaterialCommodityData.SetUpInitialTable();
 
-            string recipies = Path.Combine(rootpath, "recipes.csv");
-            CVSFile filerecipes = new CVSFile();
-            if (!filerecipes.Read(recipies))
-            {
-                return "ERROR no recipies csv";
-            }
 
-            string materials = Path.Combine(rootpath, "mats.csv");
-            CVSFile filemats = new CVSFile();
-            if (!filemats.Read(materials))
-            {
-                return "ERROR no mats csv";
-            }
+            //            CVSFile fileshipdata = new CVSFile();
+            //          if (!fileshipdata.Read(Path.Combine(rootpath, "ships.csv")))
+            //        {
+            //          return "ERROR no ships csv";
+            //    }
 
-            CVSFile filecommods = new CVSFile();
-            if (!filecommods.Read(Path.Combine(rootpath, "commods.csv")))
-            {
-                return "ERROR no commodity csv";
-            }
+            string ret = "";
+            string de = "", fr = "", es = "", ru = "", pr = "";
 
-            CVSFile filemodules = new CVSFile();
-            if (!filemodules.Read(Path.Combine(rootpath, "modules.csv")))
-            {
-                return "ERROR no modules csv";
-            }
-
-            CVSFile fileshipdata = new CVSFile();
-            if (!fileshipdata.Read(Path.Combine(rootpath, "ships.csv")))
-            {
-                return "ERROR no ships csv";
-            }
-
-            CVSFile fileweapons = new CVSFile();
-            if (!fileweapons.Read(Path.Combine(rootpath, "weapons.csv")))
-            {
-                return "ERROR no weapons csv";
-            }
-
-            CVSFile filetechbroker = new CVSFile();
-            if (!filetechbroker.Read(Path.Combine(rootpath, "techbroker.csv")))
-            {
-                return "ERROR no techbroker csv";
-            }
-
-            // Check materials vs the excel sheet
-
-            {
-                MaterialCommodityData[] ourmats = MaterialCommodityData.GetMaterials();
-
-                foreach (MaterialCommodityData m in ourmats)
-                {
-                    if (filemats.FindInColumn(5, m.Name, StringComparison.InvariantCultureIgnoreCase, true) == -1)
-                        Console.WriteLine("Error " + m.Name + " not found in frontier data");
-                    if (filemats.FindInColumn(1, m.FDName, StringComparison.InvariantCultureIgnoreCase) == -1)
-                        Console.WriteLine("Error " + m.FDName + " not found in frontier data");
-                }
-
-                foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
-                {
-                    string fdname = rw[1];
-                    string rarity = rw[2];
-                    string category = rw[3];
-                    string ukname = rw[5];
-
-                    MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
-
-                    if (cached == null)
-                    {
-                        Console.WriteLine("Error " + fdname + " not found in cache");
-                    }
-                    else if (cached.Category != category)
-                    {
-                        Console.WriteLine("Error " + fdname + " type " + category + " disagrees with " + cached.Type);
-                    }
-
-                }
-            }
-
-            // check replacement lists
+            // check out replacement lists
 
             {
                 List<MaterialCommodityData> ourcommods = MaterialCommodityData.GetAll().ToList();
@@ -155,250 +87,310 @@ namespace NetLogEntry
             // check commodities
 
             {
-                List<MaterialCommodityData> ourcommods = MaterialCommodityData.GetCommodities().ToList();
-
-                foreach (MaterialCommodityData m in ourcommods)     // check our list vs the excel
+                CVSFile filecommods = new CVSFile();
+                if (filecommods.Read(Path.Combine(rootpath, "commods.csv")))
                 {
-                    int n = filecommods.FindInColumn(3, m.Name, StringComparison.InvariantCultureIgnoreCase, true);
-                    int f = filecommods.FindInColumn(2, m.FDName, StringComparison.InvariantCultureIgnoreCase);
+                    List<MaterialCommodityData> ourcommods = MaterialCommodityData.GetCommodities().ToList();
 
-                    bool isinararare = InaraRares.Contains(m.Name);
-
-                    if (n == -1)    // no name in excel
+                    foreach (MaterialCommodityData m in ourcommods)     // check our list vs the excel
                     {
-                        if (f != -1)
-                            Console.WriteLine("Error " + m.Name + " not found but ID is " + filecommods.Rows[f][2]);
-                        else
-                            Console.WriteLine("Error " + m.Name + " not found in frontier data");
-                    }
+                        int n = filecommods.FindInColumn(3, m.Name, StringComparison.InvariantCultureIgnoreCase, true);
+                        int f = filecommods.FindInColumn(2, m.FDName, StringComparison.InvariantCultureIgnoreCase);
 
-                    if (f == -1)    // no id in excel
-                    {
-                        if (n != -1)
+                        bool isinararare = InaraRares.Contains(m.Name);
+
+                        if (n == -1)    // no name in excel
                         {
-                            CVSFile.Row rw = filecommods[n];
-                            Console.WriteLine("! AddCommodity(\"" + rw[3] + "\", \"" + rw[1] + "\", \"" + rw[2] + "\");");
+                            if (f != -1)
+                                Console.WriteLine("Error " + m.Name + " not found but ID is " + filecommods.Rows[f][2]);
+                            else
+                                Console.WriteLine("Error " + m.Name + " not found in frontier data");
                         }
-                        else
-                            Console.WriteLine("Error FDNAME " + m.FDName + " not found in frontier data");
+
+                        if (f == -1)    // no id in excel
+                        {
+                            if (n != -1)
+                            {
+                                CVSFile.Row rw = filecommods[n];
+                                Console.WriteLine("! AddCommodity(\"" + rw[3] + "\", \"" + rw[1] + "\", \"" + rw[2] + "\");");
+                            }
+                            else
+                                Console.WriteLine("Error FDNAME " + m.FDName + " not found in frontier data");
+                        }
+
+                        if (m.Rarity != isinararare)
+                            Console.WriteLine("Rarity flag incorrect for " + m.FDName);
                     }
 
-                    if (m.Rarity != isinararare)
-                        Console.WriteLine("Rarity flag incorrect for " + m.FDName);
-                }
-
-                foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
-                {
-                    string type = rw[1].Trim();
-                    string fdname = rw[2].Trim();
-                    string ukname = rw[3].Trim();
-
-                    bool isinararare = InaraRares.Contains(ukname);
-
-                    MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
-
-                    if (cached == null || cached.Type != type)
+                    foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
                     {
-                        Console.WriteLine("AddCommodity" + (isinararare ? "Rare" : "") + "(\"" + ukname + "\", \"" + type + "\", \"" + fdname + "\");");
+                        string type = rw[1].Trim();
+                        string fdname = rw[2].Trim();
+                        string ukname = rw[3].Trim();
+
+                        bool isinararare = InaraRares.Contains(ukname);
+
+                        MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
+
+                        if (cached == null || cached.Type != type)
+                        {
+                            Console.WriteLine("AddCommodity" + (isinararare ? "Rare" : "") + "(\"" + ukname + "\", \"" + type + "\", \"" + fdname + "\");");
+                        }
+
                     }
 
-                }
+                    foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
+                    {
+                        string fdname = rw["C"].Trim();
+                        string ukname = rw["D"].Trim();
+                        string dename = rw["F"].Trim();
+                        string frname = rw["H"].Trim();
+                        string esname = rw["J"].Trim();
+                        string runame = rw["L"].Trim();
+                        string prname = rw["N"].Trim();
 
+                        de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                        fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                        es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                        ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                        pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                    }
+                }
             }
 
             // Check weapons as much as we can..
 
             {
-                foreach (CVSFile.Row rw in fileweapons.RowsExcludingHeaderRow)
+                CVSFile fileweapons = new CVSFile();
+                if (fileweapons.Read(Path.Combine(rootpath, "weapons.csv")))
                 {
-                    string fdname = rw[0].Trim();
-                    string ukname = rw[1].Trim();
-                    string type = rw["N"].Trim();
-                    string mount = rw["O"].Trim();
-                    string size = rw["P"].Trim();
-                    double powerdraw = rw["AA"].InvariantParseDouble(0);
-
-                    if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
+                    foreach (CVSFile.Row rw in fileweapons.RowsExcludingHeaderRow)
                     {
-                        ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                        string fdname = rw[0].Trim();
+                        string ukname = rw[1].Trim();
+                        string type = rw["N"].Trim();
+                        string mount = rw["O"].Trim();
+                        string size = rw["P"].Trim();
+                        double powerdraw = rw["AA"].InvariantParseDouble(0);
 
-                        if (Math.Abs(minfo.Power - powerdraw) > 0.05)
-                            Console.WriteLine("Weapon " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Missing Weapon " + fdname);
+                        if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
+                        {
+                            ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+
+                            if (Math.Abs(minfo.Power - powerdraw) > 0.05)
+                                Console.WriteLine("Weapon " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Missing Weapon " + fdname);
+                        }
                     }
                 }
             }
 
             // Check modules
             {
-                foreach (CVSFile.Row rw in filemodules.RowsExcludingHeaderRow)
+                CVSFile filemodules = new CVSFile();
+                if (filemodules.Read(Path.Combine(rootpath, "modules.csv")))
                 {
-                    string fdname = rw[0].Trim();
-                    string ukname = rw[1].Trim();
-                    string ukdesc = rw[2].Trim();
-                    string size = rw["N"].Trim();
-                    double mass = rw["P"].InvariantParseDouble(0);
-                    double powerdraw = rw["Q"].InvariantParseDouble(0);
-
-                    if (ukdesc.IndexOf("(Information)", StringComparison.InvariantCultureIgnoreCase) == -1 && !fdname.Contains("_free"))
+                    foreach (CVSFile.Row rw in filemodules.RowsExcludingHeaderRow)
                     {
-                        if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
-                        {
-                            ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                        string fdname = rw[0].Trim();
+                        string ukname = rw[1].Trim();
+                        string ukdesc = rw[2].Trim();
+                        string size = rw["N"].Trim();
+                        double mass = rw["P"].InvariantParseDouble(0);
+                        double powerdraw = rw["Q"].InvariantParseDouble(0);
 
-                            if (Math.Abs(minfo.Power - powerdraw) > 0.05)
-                                Console.WriteLine("Module " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
-                            if (Math.Abs(minfo.Mass - mass) > 0.05)
-                                Console.WriteLine("Module " + fdname + " incorrect mass " + minfo.Mass + " vs " + mass);
+                        if (ukdesc.IndexOf("(Information)", StringComparison.InvariantCultureIgnoreCase) == -1 && !fdname.Contains("_free"))
+                        {
+                            if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
+                            {
+                                ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+
+                                if (Math.Abs(minfo.Power - powerdraw) > 0.05)
+                                    Console.WriteLine("Module " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
+                                if (Math.Abs(minfo.Mass - mass) > 0.05)
+                                    Console.WriteLine("Module " + fdname + " incorrect mass " + minfo.Mass + " vs " + mass);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Missing Module " + fdname);
+                            }
                         }
                         else
                         {
-                            Console.WriteLine("Missing Module " + fdname);
+                            // Console.WriteLine("Rejected Module " + fdname + " "+ ukdesc);
                         }
-                    }
-                    else
-                    {
-                        // Console.WriteLine("Rejected Module " + fdname + " "+ ukdesc);
                     }
                 }
             }
 
             // tech broker
             {
-                foreach (CVSFile.Row rw in filetechbroker.RowsExcludingHeaderRow)
+                CVSFile filetechbroker = new CVSFile();
+
+                if (filetechbroker.Read(Path.Combine(rootpath, "techbroker.csv")))
                 {
-                    string fdname = rw[0].Trim();
-                    string type = rw["C"].Trim();
-                    string size = rw["D"].Trim();
-                    string mount = rw["E"].Trim();
-
-                    string nicename = fdname.Replace("hpt_", "").Replace("int_", "").SplitCapsWordFull();
-
-                    string[] ing = new string[5];
-                    int[] count = new int[5];
-                    MaterialCommodityData[] mat = new MaterialCommodityData[5];
-
-                    int i = 0;
-                    for (; i < 5; i++)
+                    foreach (CVSFile.Row rw in filetechbroker.RowsExcludingHeaderRow)
                     {
-                        ing[i] = rw["F", i * 2].Trim();
-                        count[i] = rw["G", i * 2].InvariantParseInt(0);
-                        mat[i] = MaterialCommodityData.GetByFDName(ing[i]);
-                        if (mat[i] == null)
+                        string fdname = rw[0].Trim();
+                        string type = rw["C"].Trim();
+                        string size = rw["D"].Trim();
+                        string mount = rw["E"].Trim();
+
+                        string nicename = fdname.Replace("hpt_", "").Replace("int_", "").SplitCapsWordFull();
+
+                        string[] ing = new string[5];
+                        int[] count = new int[5];
+                        MaterialCommodityData[] mat = new MaterialCommodityData[5];
+
+                        int i = 0;
+                        for (; i < 5; i++)
                         {
+                            ing[i] = rw["F", i * 2].Trim();
+                            count[i] = rw["G", i * 2].InvariantParseInt(0);
+                            mat[i] = MaterialCommodityData.GetByFDName(ing[i]);
+                            if (mat[i] == null)
+                            {
+                                Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
+                                break;
+                            }
+                            else if (!mat[i].Shortname.HasChars())
+                            {
+                                Console.WriteLine("Material DB entry does not have a shortname - update first " + ing[i]);
+                                break;
+                            }
+                        }
+
+                        if (i == 5)
+                        {
+                            Console.WriteLine("new TechBrokerUnlockRecipe(\"" + nicename + "\",\"" +
+                                count[0].ToStringInvariant() + mat[0].Shortname + "," +
+                                count[1].ToStringInvariant() + mat[1].Shortname + "," +
+                                count[2].ToStringInvariant() + mat[2].Shortname + "," +
+                                count[3].ToStringInvariant() + mat[3].Shortname + "," +
+                                count[4].ToStringInvariant() + mat[4].Shortname + "\"),");
+
+                        }
+                        else
                             Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
-                            break;
-                        }
-                        else if (!mat[i].Shortname.HasChars())
-                        {
-                            Console.WriteLine("Material DB entry does not have a shortname - update first " + ing[i]);
-                            break;
-                        }
                     }
+                }
+            }
 
-                    if (i == 5)
+            // check materials, and later recipes
+
+            {
+                string materials = Path.Combine(rootpath, "mats.csv");
+                CVSFile filemats = new CVSFile();
+
+                if (filemats.Read(materials))
+                { 
+                    MaterialCommodityData[] ourmats = MaterialCommodityData.GetMaterials();
+
+                    foreach (MaterialCommodityData m in ourmats)
                     {
-                        Console.WriteLine("new TechBrokerUnlockRecipe(\"" + nicename + "\",\"" +
-                            count[0].ToStringInvariant() + mat[0].Shortname + "," +
-                            count[1].ToStringInvariant() + mat[1].Shortname + "," +
-                            count[2].ToStringInvariant() + mat[2].Shortname + "," +
-                            count[3].ToStringInvariant() + mat[3].Shortname + "," +
-                            count[4].ToStringInvariant() + mat[4].Shortname + "\"),");
-
+                        if (filemats.FindInColumn(5, m.Name, StringComparison.InvariantCultureIgnoreCase, true) == -1)
+                            Console.WriteLine("Error " + m.Name + " not found in frontier data");
+                        if (filemats.FindInColumn(1, m.FDName, StringComparison.InvariantCultureIgnoreCase) == -1)
+                            Console.WriteLine("Error " + m.FDName + " not found in frontier data");
                     }
-                    else
-                        Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
+
+                    foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
+                    {
+                        string fdname = rw[1];
+                        string rarity = rw[2];
+                        string category = rw[3];
+                        string ukname = rw[5];
+
+                        MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
+
+                        if (cached == null)
+                        {
+                            Console.WriteLine("Error " + fdname + " not found in cache");
+                        }
+                        else if (cached.Category != category)
+                        {
+                            Console.WriteLine("Error " + fdname + " type " + category + " disagrees with " + cached.Type);
+                        }
+                    }
+
+                    foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
+                    {
+                        string fdname = rw["B"].Trim();
+                        string ukname = rw["F"].Trim();
+                        string dename = rw["H"].Trim();
+                        string frname = rw["J"].Trim();
+                        string esname = rw["L"].Trim();
+                        string runame = rw["N"].Trim();
+                        string prname = rw["P"].Trim();
+
+                        de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
+                        fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
+                        es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
+                        ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
+                        pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
+                    }
+
+                    ret += "// DATA FROM Frontiers excel spreadsheet" + Environment.NewLine;
+                    ret += "// DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this" + Environment.NewLine;
+                    ret += "" + Environment.NewLine;
+
+                    CVSFile filerecipes = new CVSFile();
+                    string recipies = Path.Combine(rootpath, "recipes.csv");
+
+                    if (filerecipes.Read(recipies))
+                    {
+                        foreach (CVSFile.Row line in filerecipes.Rows)
+                        {
+                            string fdname = line["A"];
+                            string ukname = line["C"];
+                            string descr = line["D"];
+                            int? level = line.GetInt("P");
+                            long? matid1 = line.GetInt("Q");
+                            long? matid1count = line.GetInt("R");
+                            long? matid2 = line.GetInt("S");
+                            long? matid2count = line.GetInt("T");
+                            long? matid3 = line.GetInt("U");
+                            long? matid3count = line.GetInt("V");
+
+                            if (ukname.StartsWith("Misc "))
+                                ukname = ukname.Substring(5);
+
+                            if (level != null)
+                            {
+                                fdname = fdname.Substring(0, fdname.LastIndexOf('_'));      //examples, AFM_Shielded, Armour_Heavy Duty
+                                string fdfront = fdname.Substring(0, fdname.IndexOf('_'));
+                                string fdback = fdname.Substring(fdname.IndexOf('_') + 1).Replace(" ", "");
+
+                                string ing = MatName(matid1, matid1count, filemats);
+                                ing = ing.AppendPrePad(MatName(matid2, matid2count, filemats), ",");
+                                ing = ing.AppendPrePad(MatName(matid3, matid3count, filemats), ",");
+
+                                string cat = fdname.Word(new char[] { '_' }, 1).SplitCapsWordFull();
+                                if (cat == "FS Dinterdictor")
+                                    cat = "FSD Interdictor";
+
+                                string engnames = "Not Known";
+
+                                EngineerList en = Array.Find(ourenglist, x => x.cat == cat && x.ukname == ukname && x.level == level);
+                                if (en != null)
+                                    engnames = en.engnames;
+                                else
+                                    Console.WriteLine("No matching internal data for " + fdname + ":" + fdfront);
+
+                                string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
+                                ret += classline + Environment.NewLine;
+                            }
+                        }
+                    }
                 }
+
             }
 
-            // Calculate recipes
-
-            string ret = "// DATA FROM Frontiers excel spreadsheet" + Environment.NewLine;
-            ret += "// DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this" + Environment.NewLine;
-            ret += "" + Environment.NewLine;
-            string ret2 = "";
-
-            foreach (CVSFile.Row line in filerecipes.Rows)
+            if (de.Length > 0)
             {
-                string fdname = line["A"];
-                string ukname = line["C"];
-                string descr = line["D"];
-                int? level = line.GetInt("P");
-                long? matid1 = line.GetInt("Q");
-                long? matid1count = line.GetInt("R");
-                long? matid2 = line.GetInt("S");
-                long? matid2count = line.GetInt("T");
-                long? matid3 = line.GetInt("U");
-                long? matid3count = line.GetInt("V");
-
-                if (ukname.StartsWith("Misc "))
-                    ukname = ukname.Substring(5);
-
-                if (level != null)
-                {
-                    fdname = fdname.Substring(0, fdname.LastIndexOf('_'));      //examples, AFM_Shielded, Armour_Heavy Duty
-                    string fdfront = fdname.Substring(0, fdname.IndexOf('_'));
-                    string fdback = fdname.Substring(fdname.IndexOf('_') + 1).Replace(" ", "");
-
-                    string ing = MatName(matid1, matid1count, filemats);
-                    ing = ing.AppendPrePad(MatName(matid2, matid2count, filemats), ",");
-                    ing = ing.AppendPrePad(MatName(matid3, matid3count, filemats), ",");
-
-                    string cat = fdname.Word(new char[] { '_' }, 1).SplitCapsWordFull();
-                    if (cat == "FS Dinterdictor")
-                        cat = "FSD Interdictor";
-
-                    string engnames = "Not Known";
-
-                    EngineerList en = Array.Find(ourenglist, x => x.cat == cat && x.ukname == ukname && x.level == level);
-                    if (en != null)
-                        engnames = en.engnames;
-                    else
-                        Console.WriteLine("No matching internal data for " + fdname + ":" + fdfront);
-
-                    string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
-                    ret += classline + Environment.NewLine;
-                }
-            }
-
-            {
-                string de = "", fr = "", es = "", ru = "", pr = "";
-                foreach (CVSFile.Row rw in filemats.RowsExcludingHeaderRow)
-                {
-                    string fdname = rw["B"].Trim();
-                    string ukname = rw["F"].Trim();
-                    string dename = rw["H"].Trim();
-                    string frname = rw["J"].Trim();
-                    string esname = rw["L"].Trim();
-                    string runame = rw["N"].Trim();
-                    string prname = rw["P"].Trim();
-
-                    de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
-                    fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
-                    es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
-                    ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
-                    pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
-                }
-                foreach (CVSFile.Row rw in filecommods.RowsExcludingHeaderRow)
-                {
-                    string fdname = rw["C"].Trim();
-                    string ukname = rw["D"].Trim();
-                    string dename = rw["F"].Trim();
-                    string frname = rw["H"].Trim();
-                    string esname = rw["J"].Trim();
-                    string runame = rw["L"].Trim();
-                    string prname = rw["N"].Trim();
-
-                    de += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + dename.AlwaysQuoteString() + Environment.NewLine;
-                    fr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + frname.AlwaysQuoteString() + Environment.NewLine;
-                    es += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + esname.AlwaysQuoteString() + Environment.NewLine;
-                    ru += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + runame.AlwaysQuoteString() + Environment.NewLine;
-                    pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
-                }
-
                 File.WriteAllText(Path.Combine(rootpath, "mat-de.part.txt"), de, Encoding.UTF8);
                 File.WriteAllText(Path.Combine(rootpath, "mat-fr.part.txt"), fr, Encoding.UTF8);
                 File.WriteAllText(Path.Combine(rootpath, "mat-es.part.txt"), es, Encoding.UTF8);
@@ -406,7 +398,7 @@ namespace NetLogEntry
                 File.WriteAllText(Path.Combine(rootpath, "mat-pr.part.txt"), pr, Encoding.UTF8);
             }
 
-            return ret + ret2;
+            return ret;
         }
 
         class EngineerList
