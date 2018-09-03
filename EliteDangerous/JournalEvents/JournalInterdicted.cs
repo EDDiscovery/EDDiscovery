@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Interdictor { get; set; }
         public string Interdictor_Localised { get; set; }
         public bool IsPlayer { get; set; }
-        public CombatRank CombatRank { get; set; }
+        public CombatRank CombatRank { get; set; } = CombatRank.Unknown;
         public string Faction { get; set; }
         public string Power { get; set; }
 
