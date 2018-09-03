@@ -24,6 +24,7 @@ namespace EliteDangerousCore
 {
     public enum CombatRank
     {
+        Unknown = -1,
         Harmless = 0,
         MostlyHarmless,
         Novice,
@@ -37,6 +38,7 @@ namespace EliteDangerousCore
 
     public enum TradeRank
     {
+        Unknown = -1,
         Penniless = 0,
         MostlyPenniless,
         Peddler,
@@ -50,6 +52,7 @@ namespace EliteDangerousCore
 
     public enum ExplorationRank
     {
+        Unknown = -1,
         Aimless = 0,
         MostlyAimless,
         Scout,
@@ -63,6 +66,7 @@ namespace EliteDangerousCore
 
     public enum FederationRank
     {
+        Unknown = -1,
         None = 0,
         Recruit,
         Cadet,
@@ -82,6 +86,7 @@ namespace EliteDangerousCore
 
     public enum EmpireRank
     {
+        Unknown = -1,
         None = 0,
         Outsider,
         Serf,
@@ -101,6 +106,7 @@ namespace EliteDangerousCore
 
     public enum CQCRank
     {
+        Unknown = -1,
         Helpless = 0,
         MostlyHelpless,
         Amateur,

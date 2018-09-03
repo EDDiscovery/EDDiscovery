@@ -35,9 +35,8 @@ namespace EliteDangerousCore.JournalEvents
             Interdicted = evt["Interdicted"].Str();
             Interdicted_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdicted_Localised"].Str(),Interdicted);
             IsPlayer = evt["IsPlayer"].Bool();
-            CombatRank = CombatRank.Harmless;
             if (!evt["CombatRank"].Empty())
-                CombatRank = (CombatRank)(evt["CombatRank"].IntNull());
+                CombatRank = (CombatRank)(evt["CombatRank"].Int());
             Faction = evt["Faction"].Str();
             Power = evt["Power"].Str();
         }
@@ -45,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Interdicted { get; set; }
         public string Interdicted_Localised { get; set; }
         public bool IsPlayer { get; set; }
-        public CombatRank CombatRank { get; set; }
+        public CombatRank CombatRank { get; set; } = CombatRank.Unknown;
         public string Faction { get; set; }
         public string Power { get; set; }
 
