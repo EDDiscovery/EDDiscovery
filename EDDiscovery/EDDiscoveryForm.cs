@@ -223,11 +223,17 @@ namespace EDDiscovery
 
             foreach (PanelInformation.PanelIDs pid in pids)
             {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid, 
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid,
                     (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
 
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
+
+                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pid,
+                    (s, e) => PopOuts.PopOut((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag)));
+
+                if ( tsmi2 != null)
+                    popOutPanelToolStripMenuItem.DropDownItems.Add(tsmi2);
             }
 
             removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
