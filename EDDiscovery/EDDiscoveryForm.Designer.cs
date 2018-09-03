@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,6 +116,7 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelMenuTop = new System.Windows.Forms.Panel();
+            this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.notifyIconContextMenuStrip.SuspendLayout();
@@ -803,7 +804,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare2;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -814,9 +815,10 @@ namespace EDDiscovery
             this.contextMenuStripTabs.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addTabToolStripMenuItem,
             this.removeTabToolStripMenuItem,
-            this.renameTabToolStripMenuItem});
+            this.renameTabToolStripMenuItem,
+            this.popOutPanelToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 70);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 114);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -851,6 +853,12 @@ namespace EDDiscovery
             this.panelMenuTop.TabIndex = 1;
             this.panelMenuTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.panelMenuTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
+            // 
+            // popOutPanelToolStripMenuItem
+            // 
+            this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
+            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
             // 
             // EDDiscoveryForm
             // 
@@ -959,5 +967,6 @@ namespace EDDiscovery
         private System.Windows.Forms.Panel panelMenuTop;
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
         private ExtendedControls.ComboBoxCustom comboBoxCustomProfiles;
+        private System.Windows.Forms.ToolStripMenuItem popOutPanelToolStripMenuItem;
     }
 }
