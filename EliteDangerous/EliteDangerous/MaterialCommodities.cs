@@ -358,6 +358,9 @@ namespace EliteDangerousCore
             AddEnc("Guardian Weapon Blueprint Segment", MaterialFreqRare, "GWBS", "guardian_weaponblueprint");
             AddEnc("Guardian Module Blueprint Segment", MaterialFreqRare, "GMBS", "guardian_moduleblueprint");
 
+            // new to 3.2 frontier data
+            AddEnc("Guardian Vessel Blueprint Segment", MaterialFreqVeryRare, "GMVB", "guardian_vesselblueprint");
+
             AddManu("Bio-Mechanical Conduits", MaterialFreqStandard, "BMC", "TG_BioMechanicalConduits");
             AddManu("Propulsion Elements", MaterialFreqStandard, "PE", "TG_PropulsionElement");
             AddManu("Weapon Parts", MaterialFreqStandard, "WP", "TG_WeaponParts");
@@ -388,12 +391,13 @@ namespace EliteDangerousCore
             AddManu("Proto Heat Radiators", MaterialFreqVeryRare, "PHR");
             AddManu("Proto Radiolic Alloys", MaterialFreqVeryRare, "PRA");
 
-            AddCommodity("Thargoid Sensor", "Salvage", "UnknownArtifact");
-            AddCommodity("Thargoid Probe", "Salvage", "UnknownArtifact2");
-            AddCommodity("Thargoid Link", "Salvage", "UnknownArtifact3");
-            AddCommodity("Thargoid Resin", "Salvage", "UnknownResin");
-            AddCommodity("Thargoid Biological Matter", "Salvage", "UnknownBiologicalMatter");
-            AddCommodity("Thargoid Technology Samples", "Salvage", "UnknownTechnologySamples");
+            string sv = "Salvage";
+            AddCommodity("Thargoid Sensor", sv, "UnknownArtifact");
+            AddCommodity("Thargoid Probe", sv, "UnknownArtifact2");
+            AddCommodity("Thargoid Link", sv, "UnknownArtifact3");
+            AddCommodity("Thargoid Resin", sv, "UnknownResin");
+            AddCommodity("Thargoid Biological Matter", sv, "UnknownBiologicalMatter");
+            AddCommodity("Thargoid Technology Samples", sv, "UnknownTechnologySamples");
 
             AddManu("Thargoid Carapace", MaterialFreqCommon, "UKCP", "unknowncarapace");
             AddManu("Thargoid Energy Cell", MaterialFreqStandard, "UKEC", "unknownenergycell");
@@ -428,10 +432,10 @@ namespace EliteDangerousCore
 
             string m = "Machinery";
 
-            AddCommodity("Atmospheric Processors", "Machinery", "AtmosphericExtractors");
-            AddCommodity("Marine Equipment", "Machinery", "MarineSupplies");
-            AddCommodity("Microbial Furnaces", "Machinery", "HeliostaticFurnaces");
-            AddCommodity("Skimmer Components", "Machinery", "SkimerComponents");
+            AddCommodity("Atmospheric Processors", m, "AtmosphericExtractors");
+            AddCommodity("Marine Equipment", m, "MarineSupplies");
+            AddCommodity("Microbial Furnaces", m, "HeliostaticFurnaces");
+            AddCommodity("Skimmer Components", m, "SkimerComponents");
 
             AddCommodityList("Building Fabricators;Crop Harvesters;Emergency Power Cells;Exhaust Manifold;Geological Equipment", m);
             AddCommoditySN("HN Shock Mount", m, "HNSM", "");
@@ -447,6 +451,7 @@ namespace EliteDangerousCore
             AddCommoditySN("Power Converter", m, "PC", "");
             AddCommoditySN("Ion Distributor", m, "ID", "");
 
+
             string md = "Medicines";
             AddCommodityList("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
             AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
@@ -460,36 +465,37 @@ namespace EliteDangerousCore
             AddCommodity("Methanol Monohydrate Crystals", mi, "methanolmonohydratecrystals");
             AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
 
-            string sv = "Salvage";
-            AddCommodity("Trinkets of Hidden Fortune", "Salvage", "TrinketsOfFortune");
-            AddCommodity("Gene Bank", "Salvage", "GeneBank");
-            AddCommodity("Time Capsule", "Salvage", "TimeCapsule");
-            AddCommodity("Damaged Escape Pod", "Salvage", "DamagedEscapePod");
-            AddCommodity("Thargoid Heart", "Salvage", "ThargoidHeart");
-            AddCommodity("Thargoid Cyclops Tissue Sample", "Salvage", "ThargoidTissueSampleType1");
-            AddCommodity("Thargoid Basilisk Tissue Sample", "Salvage", "ThargoidTissueSampleType2");
-            AddCommodity("Thargoid Medusa Tissue Sample", "Salvage", "ThargoidTissueSampleType3");
-            AddCommodity("Thargoid Scout Tissue Sample", "Salvage", "ThargoidScoutTissueSample");
-            AddCommodity("Wreckage Components", "Salvage", "WreckageComponents");
-            AddCommodity("Antique Jewellery", "Salvage", "AntiqueJewellery");
+            AddCommodity("Trinkets of Hidden Fortune", sv, "TrinketsOfFortune");
+            AddCommodity("Gene Bank", sv, "GeneBank");
+            AddCommodity("Time Capsule", sv, "TimeCapsule");
+            AddCommodity("Damaged Escape Pod", sv, "DamagedEscapePod");
+            AddCommodity("Thargoid Heart", sv, "ThargoidHeart");
+            AddCommodity("Thargoid Cyclops Tissue Sample", sv, "ThargoidTissueSampleType1");
+            AddCommodity("Thargoid Basilisk Tissue Sample", sv, "ThargoidTissueSampleType2");
+            AddCommodity("Thargoid Medusa Tissue Sample", sv, "ThargoidTissueSampleType3");
+            AddCommodity("Thargoid Scout Tissue Sample", sv, "ThargoidScoutTissueSample");
+            AddCommodity("Wreckage Components", sv, "WreckageComponents");
+            AddCommodity("Antique Jewellery", sv, "AntiqueJewellery");
+            AddCommodity("Thargoid Hydra Tissue Sample", sv, "ThargoidTissueSampleType4");
+            AddCommodity("Ancient Key", sv, "AncientKey");
 
             AddCommodityList("Ai Relics;Antimatter Containment Unit;Antiquities;Assault Plans;Data Core;Diplomatic Bag;Encrypted Correspondence;Fossil Remnants", sv);
             AddCommodityList("Geological Samples;Hostage;Military Intelligence;Mysterious Idol;Occupied CryoPod;Personal Effects;Political Prisoner;Precious Gems;Prohibited Research Materials", sv);
             AddCommodityList("Sap 8 Core Container;Scientific Research;Scientific Samples;Space Pioneer Relics;Tactical Data;Unstable Data Core", sv);
             AddCommodity("Large Survey Data Cache", sv, "largeexplorationdatacash");
             AddCommodity("Small Survey Data Cache", sv, "smallexplorationdatacash");
-            AddCommodity("Ancient Artefact", "Salvage", "USSCargoAncientArtefact");
-            AddCommodity("Black Box", "Salvage", "USSCargoBlackBox");
-            AddCommodity("Commercial Samples", "Salvage", "ComercialSamples");
-            AddCommodity("Encrypted Data Storage", "Salvage", "EncriptedDataStorage");
-            AddCommodity("Experimental Chemicals", "Salvage", "USSCargoExperimentalChemicals");
-            AddCommodity("Military Plans", "Salvage", "USSCargoMilitaryPlans");
-            AddCommodity("Occupied Escape Pod", "Salvage", "OccupiedCryoPod");
-            AddCommodity("Prototype Tech", "Salvage", "USSCargoPrototypeTech");
-            AddCommodity("Rare Artwork", "Salvage", "USSCargoRareArtwork");
-            AddCommodity("Rebel Transmissions", "Salvage", "USSCargoRebelTransmissions");
-            AddCommodity("Technical Blueprints", "Salvage", "USSCargoTechnicalBlueprints");
-            AddCommodity("Trade Data", "Salvage", "USSCargoTradeData");
+            AddCommodity("Ancient Artefact", sv, "USSCargoAncientArtefact");
+            AddCommodity("Black Box", sv, "USSCargoBlackBox");
+            AddCommodity("Commercial Samples", sv, "ComercialSamples");
+            AddCommodity("Encrypted Data Storage", sv, "EncriptedDataStorage");
+            AddCommodity("Experimental Chemicals", sv, "USSCargoExperimentalChemicals");
+            AddCommodity("Military Plans", sv, "USSCargoMilitaryPlans");
+            AddCommodity("Occupied Escape Pod", sv, "OccupiedCryoPod");
+            AddCommodity("Prototype Tech", sv, "USSCargoPrototypeTech");
+            AddCommodity("Rare Artwork", sv, "USSCargoRareArtwork");
+            AddCommodity("Rebel Transmissions", sv, "USSCargoRebelTransmissions");
+            AddCommodity("Technical Blueprints", sv, "USSCargoTechnicalBlueprints");
+            AddCommodity("Trade Data", sv, "USSCargoTradeData");
             AddCommodity("Ancient Relic", sv, "AncientRelic");
             AddCommodity("Ancient Orb", sv, "AncientOrb");
             AddCommodity("Ancient Casket", sv, "AncientCasket");
@@ -653,7 +659,7 @@ namespace EliteDangerousCore
             AddCommodityRare("Soontill Relics", "Consumer Items", "SoontillRelics");
             AddCommodityRare("Onionhead Alpha Strain", "Narcotics", "OnionHeadA");
             AddCommodityRare("Onionhead Beta Strain", "Narcotics", "OnionHeadB");
-            AddCommodityRare("Galactic Travel Guide", "Salvage", "GalacticTravelGuide");
+            AddCommodityRare("Galactic Travel Guide", sv, "GalacticTravelGuide");
             AddCommodityRare("Crom Silver Fesh", "Narcotics", "AnimalEffigies");
             AddCommodityRare("Shan's Charis Orchid", "Consumer Items", "ShansCharisOrchid");
             AddCommodityRare("Buckyball Beer Mats", "Consumer Items", "BuckyballBeerMats");
@@ -662,7 +668,7 @@ namespace EliteDangerousCore
             AddCommodityRare("Crystalline Spheres", "Consumer Items", "CrystallineSpheres");
             AddCommodityRare("Ultra-Compact Processor Prototypes", "Consumer Items", "Advert1");
             AddCommodityRare("Harma Silver Sea Rum", "Narcotics", "HarmaSilverSeaRum");
-            AddCommodityRare("Earth Relics", "Salvage", "EarthRelics");
+            AddCommodityRare("Earth Relics", sv, "EarthRelics");
 
             #endregion
 

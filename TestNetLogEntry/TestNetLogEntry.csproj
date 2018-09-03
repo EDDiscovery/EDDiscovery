@@ -75,7 +75,8 @@
     <Compile Include="..\EliteDangerous\EliteDangerous\ShipModuleData.cs">
       <Link>ShipModuleData.cs</Link>
     </Compile>
-    <Compile Include="CorolisData.cs" />
+    <Compile Include="CorolisShips.cs" />
+    <Compile Include="CorolisModules.cs" />
     <Compile Include="EDDB.cs" />
     <Compile Include="FrontierData.cs" />
     <Compile Include="Journal.cs" />

@@ -177,7 +177,7 @@ namespace BaseUtils
             }
         }
 
-        public bool Read(string file)
+        public bool Read(string file, FileShare fs = FileShare.None )
         {
             Rows = new List<Row>();
 
@@ -186,7 +186,7 @@ namespace BaseUtils
 
             try
             {
-                using (Stream s = File.OpenRead(file))
+                using (Stream s = File.Open(file,FileMode.Open,FileAccess.Read,fs))
                 {
                     using (StreamReader sr = new StreamReader(s))
                     {

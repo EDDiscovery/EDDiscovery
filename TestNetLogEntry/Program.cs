@@ -96,7 +96,7 @@ namespace NetLogEntry
                 FileInfo[] allFiles = Directory.EnumerateFiles(args.Next(), "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
-                string ret = CorolisData.ProcessShips(allFiles);
+                string ret = CorolisShips.ProcessShips(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolisship", StringComparison.InvariantCultureIgnoreCase))
@@ -104,27 +104,26 @@ namespace NetLogEntry
                 FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next(), SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
 
-                string ret = CorolisData.ProcessShips(allFiles);
+                string ret = CorolisShips.ProcessShips(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolismodules", StringComparison.InvariantCultureIgnoreCase))
             {
                 FileInfo[] allFiles = Directory.EnumerateFiles(args.Next(), "*.json", SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
-                string ret = CorolisData.ProcessModules(allFiles);
+                string ret = CorolisModules.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("Corolismodule", StringComparison.InvariantCultureIgnoreCase))
             {
                 FileInfo[] allFiles = Directory.EnumerateFiles(".", args.Next(), SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.FullName).ToArray();
 
-                string ret = CorolisData.ProcessModules(allFiles);
+                string ret = CorolisModules.ProcessModules(allFiles);
                 Console.WriteLine(ret);
             }
             else if (arg1.Equals("FrontierData", StringComparison.InvariantCultureIgnoreCase))
             {
-                string ret = FrontierData.Process(args.Next());
-                Console.WriteLine(ret);
+                FrontierData.Process(args.Next());
             }
             else if (arg1.Equals("scantranslate", StringComparison.InvariantCultureIgnoreCase))
             {

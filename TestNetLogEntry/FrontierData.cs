@@ -8,13 +8,28 @@ using System.Text;
 using System.Threading.Tasks;
 
 // take the frontier data excel they send us
-// output the mats tab to mats.csv
-// output the commdods tab to commods.csv
-// output the recipes tab to recipes.csv
-// output the weapons tab to weapons.csv
-// output the shipdata tab to ships.csv
-// output the module tab to modules.csv
-// output the tech broker tab to techbroker.csv
+// run this VB script (replace the folder etc and see if it needs 3.0 changed in the replace statement)
+//Sub SaveAsCSV()
+//Dim WS As Excel.Worksheet
+//Dim SaveToDirectory As String
+//Dim name As String
+//Dim CurrentWorkbook As String
+//Dim CurrentFormat As Long
+
+//CurrentWorkbook = ThisWorkbook.FullName
+//CurrentFormat = ThisWorkbook.FileFormat
+//' Store current details for the workbook
+//SaveToDirectory = "C:\code\docs\"
+
+//For Each WS In ThisWorkbook.Worksheets
+//    Sheets(WS.name).Copy
+//    name = Replace(WS.name, "3.0", "")
+//    ActiveWorkbook.SaveAs Filename:=SaveToDirectory & name & ".csv", FileFormat:=xlCSV
+//    ActiveWorkbook.Close savechanges:=False
+//    ThisWorkbook.Activate
+//Next
+//End Sub
+
 // run it.
 // will verify materials in MaterialCommododities vs the sheet
 // will verify any replacement lists of fdname
@@ -28,7 +43,7 @@ using System.Threading.Tasks;
 
 // Keep rare list at the bottom up to date manually with Inara and other sources
 
-// it will print out any missing/mismatched data - some if to be expected.
+// it will print out any missing/mismatched data - some if to be expected.  Decide as you go.  Note legal drugs are not called correctly in frontier data
 
 
 namespace NetLogEntry
@@ -55,7 +70,7 @@ namespace NetLogEntry
             return "";
         }
 
-        static public string Process(string rootpath)            // overall index of items
+        static public void Process(string rootpath)            // overall index of items
         {
             EliteDangerousCore.MaterialCommodityData.SetUpInitialTable();
 
@@ -66,7 +81,6 @@ namespace NetLogEntry
             //          return "ERROR no ships csv";
             //    }
 
-            string ret = "";
             string de = "", fr = "", es = "", ru = "", pr = "";
 
             // check out replacement lists
@@ -88,14 +102,14 @@ namespace NetLogEntry
 
             {
                 CVSFile filecommods = new CVSFile();
-                if (filecommods.Read(Path.Combine(rootpath, "commods.csv")))
+                if (filecommods.Read(Path.Combine(rootpath, "Commodities.csv")))
                 {
                     List<MaterialCommodityData> ourcommods = MaterialCommodityData.GetCommodities().ToList();
 
                     foreach (MaterialCommodityData m in ourcommods)     // check our list vs the excel
                     {
-                        int n = filecommods.FindInColumn(3, m.Name, StringComparison.InvariantCultureIgnoreCase, true);
-                        int f = filecommods.FindInColumn(2, m.FDName, StringComparison.InvariantCultureIgnoreCase);
+                        int n = filecommods.FindInColumn(3, m.Name, StringComparison.InvariantCultureIgnoreCase, true);     // find name..
+                        int f = filecommods.FindInColumn(2, m.FDName, StringComparison.InvariantCultureIgnoreCase);         // find fdname
 
                         bool isinararare = InaraRares.Contains(m.Name);
 
@@ -106,16 +120,12 @@ namespace NetLogEntry
                             else
                                 Console.WriteLine("Error " + m.Name + " not found in frontier data");
                         }
-
-                        if (f == -1)    // no id in excel
-                        {
-                            if (n != -1)
+                        else
+                        {            // name found,
+                            if ( f == - 1 )
                             {
-                                CVSFile.Row rw = filecommods[n];
-                                Console.WriteLine("! AddCommodity(\"" + rw[3] + "\", \"" + rw[1] + "\", \"" + rw[2] + "\");");
+                                Console.WriteLine("Error FDNAME " + m.FDName + " not found in frontier data but Name is");
                             }
-                            else
-                                Console.WriteLine("Error FDNAME " + m.FDName + " not found in frontier data");
                         }
 
                         if (m.Rarity != isinararare)
@@ -132,9 +142,16 @@ namespace NetLogEntry
 
                         MaterialCommodityData cached = MaterialCommodityData.GetByFDName(fdname);
 
-                        if (cached == null || cached.Type != type)
+                        if (cached == null)
                         {
-                            Console.WriteLine("AddCommodity" + (isinararare ? "Rare" : "") + "(\"" + ukname + "\", \"" + type + "\", \"" + fdname + "\");");
+                            Console.WriteLine("+ AddCommodity" + (isinararare ? "Rare" : "") + "(\"" + ukname + "\", \"" + type + "\", \"" + fdname + "\");");
+                        }
+                        else if( cached.Type != type)
+                        {
+                            // excel has tobacco as are narcotic, but its a legal drug!!
+                            // this will produce errors until fixed
+
+                            Console.WriteLine("Error " + fdname + " type " + type + " disagrees with " + cached.Type);
                         }
 
                     }
@@ -156,13 +173,15 @@ namespace NetLogEntry
                         pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
                     }
                 }
+                else
+                    Console.WriteLine("No Commodity CSV");
             }
 
             // Check weapons as much as we can..
 
             {
                 CVSFile fileweapons = new CVSFile();
-                if (fileweapons.Read(Path.Combine(rootpath, "weapons.csv")))
+                if (fileweapons.Read(Path.Combine(rootpath, "Weapon Values.csv")))
                 {
                     foreach (CVSFile.Row rw in fileweapons.RowsExcludingHeaderRow)
                     {
@@ -173,10 +192,15 @@ namespace NetLogEntry
                         string size = rw["P"].Trim();
                         double powerdraw = rw["AA"].InvariantParseDouble(0);
 
-                        if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
-                        {
-                            ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                        ShipModuleData.ShipModule minfo = null;
 
+                        if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
+                            minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                        else if (ShipModuleData.noncorolismodules.ContainsKey(fdname.ToLowerInvariant()))
+                            minfo = ShipModuleData.noncorolismodules[fdname.ToLowerInvariant()];
+
+                        if ( minfo != null)
+                        {
                             if (Math.Abs(minfo.Power - powerdraw) > 0.05)
                                 Console.WriteLine("Weapon " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
                         }
@@ -186,12 +210,15 @@ namespace NetLogEntry
                         }
                     }
                 }
+                else
+                    Console.WriteLine("No Weapons CSV");
+
             }
 
             // Check modules
             {
                 CVSFile filemodules = new CVSFile();
-                if (filemodules.Read(Path.Combine(rootpath, "modules.csv")))
+                if (filemodules.Read(Path.Combine(rootpath, "ModuleData.csv")))
                 {
                     foreach (CVSFile.Row rw in filemodules.RowsExcludingHeaderRow)
                     {
@@ -204,10 +231,15 @@ namespace NetLogEntry
 
                         if (ukdesc.IndexOf("(Information)", StringComparison.InvariantCultureIgnoreCase) == -1 && !fdname.Contains("_free"))
                         {
-                            if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
-                            {
-                                ShipModuleData.ShipModule minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                            ShipModuleData.ShipModule minfo = null;
 
+                            if (ShipModuleData.modules.ContainsKey(fdname.ToLowerInvariant()))
+                                minfo = ShipModuleData.modules[fdname.ToLowerInvariant()];
+                            else if (ShipModuleData.noncorolismodules.ContainsKey(fdname.ToLowerInvariant()))
+                                minfo = ShipModuleData.noncorolismodules[fdname.ToLowerInvariant()];
+
+                            if (minfo != null )
+                            {
                                 if (Math.Abs(minfo.Power - powerdraw) > 0.05)
                                     Console.WriteLine("Module " + fdname + " incorrect power draw " + minfo.Power + " vs " + powerdraw);
                                 if (Math.Abs(minfo.Mass - mass) > 0.05)
@@ -224,14 +256,18 @@ namespace NetLogEntry
                         }
                     }
                 }
+                else
+                    Console.WriteLine("No Module Data CSV");
             }
 
             // tech broker
             {
                 CVSFile filetechbroker = new CVSFile();
 
-                if (filetechbroker.Read(Path.Combine(rootpath, "techbroker.csv")))
+                if (filetechbroker.Read(Path.Combine(rootpath, "Tech Broker .csv")))
                 {
+                    string ret = "";
+
                     foreach (CVSFile.Row rw in filetechbroker.RowsExcludingHeaderRow)
                     {
                         string fdname = rw[0].Trim();
@@ -241,51 +277,58 @@ namespace NetLogEntry
 
                         string nicename = fdname.Replace("hpt_", "").Replace("int_", "").SplitCapsWordFull();
 
-                        string[] ing = new string[5];
-                        int[] count = new int[5];
-                        MaterialCommodityData[] mat = new MaterialCommodityData[5];
+                        int[] count = new int[10];
+                        MaterialCommodityData[] mat = new MaterialCommodityData[10];
+                        int ic = 0;
 
-                        int i = 0;
-                        for (; i < 5; i++)
+                        while (true)
                         {
-                            ing[i] = rw["F", i * 2].Trim();
-                            count[i] = rw["G", i * 2].InvariantParseInt(0);
-                            mat[i] = MaterialCommodityData.GetByFDName(ing[i]);
-                            if (mat[i] == null)
+                            string ingfd = rw["F", ic * 2];
+
+                            if (ingfd.HasChars())
                             {
-                                Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
-                                break;
+                                ingfd = ingfd.Trim();
+                                count[ic] = rw["G", ic * 2].InvariantParseInt(0);
+
+                                mat[ic] = MaterialCommodityData.GetByFDName(ingfd);
+                                if (mat[ic] == null)
+                                {
+                                    Console.WriteLine("Material DB does not have " + ingfd);
+                                    break;
+                                }
+                                else if (!mat[ic].Shortname.HasChars())
+                                {
+                                    Console.WriteLine("Material DB entry " + ingfd + " does not have a shortname");
+                                    break;
+                                }
+
+                                ic++;
                             }
-                            else if (!mat[i].Shortname.HasChars())
-                            {
-                                Console.WriteLine("Material DB entry does not have a shortname - update first " + ing[i]);
+                            else
                                 break;
-                            }
                         }
 
-                        if (i == 5)
-                        {
-                            Console.WriteLine("new TechBrokerUnlockRecipe(\"" + nicename + "\",\"" +
-                                count[0].ToStringInvariant() + mat[0].Shortname + "," +
-                                count[1].ToStringInvariant() + mat[1].Shortname + "," +
-                                count[2].ToStringInvariant() + mat[2].Shortname + "," +
-                                count[3].ToStringInvariant() + mat[3].Shortname + "," +
-                                count[4].ToStringInvariant() + mat[4].Shortname + "\"),");
+                        string ilist = "";
+                        for (int i = 0; i < ic; i++)
+                            ilist = ilist.AppendPrePad(count[i].ToStringInvariant() + mat[i].Shortname, ",");
 
-                        }
-                        else
-                            Console.WriteLine("Material DB is not up to date with materials for techbroker - update first " + fdname);
+                        ret += "new TechBrokerUnlockRecipe(\"" + nicename + "\",\"" + ilist + "\")," + Environment.NewLine;
                     }
+
+                    File.WriteAllText(Path.Combine(rootpath, "TechBroker.cs"), ret, Encoding.UTF8);
                 }
+                else
+                    Console.WriteLine("No Tech Broker CSV");
+
             }
 
             // check materials, and later recipes
 
             {
-                string materials = Path.Combine(rootpath, "mats.csv");
+                string materials = Path.Combine(rootpath, "Materials.csv");
                 CVSFile filemats = new CVSFile();
 
-                if (filemats.Read(materials))
+                if (filemats.Read(materials, FileShare.ReadWrite))
                 { 
                     MaterialCommodityData[] ourmats = MaterialCommodityData.GetMaterials();
 
@@ -333,15 +376,16 @@ namespace NetLogEntry
                         pr += "MaterialCommodityData." + fdname.ToLowerInvariant() + ": " + ukname.AlwaysQuoteString() + " => " + prname.AlwaysQuoteString() + Environment.NewLine;
                     }
 
-                    ret += "// DATA FROM Frontiers excel spreadsheet" + Environment.NewLine;
-                    ret += "// DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this" + Environment.NewLine;
-                    ret += "" + Environment.NewLine;
-
                     CVSFile filerecipes = new CVSFile();
-                    string recipies = Path.Combine(rootpath, "recipes.csv");
+                    string recipies = Path.Combine(rootpath, "RecipeData.csv");
 
-                    if (filerecipes.Read(recipies))
+                    if (filerecipes.Read(recipies, FileShare.ReadWrite))
                     {
+                        string ret = "";
+                        ret += "// DATA FROM Frontiers excel spreadsheet" + Environment.NewLine;
+                        ret += "// DO NOT UPDATE MANUALLY - use the netlogentry frontierdata scanner to do this" + Environment.NewLine;
+                        ret += "" + Environment.NewLine;
+
                         foreach (CVSFile.Row line in filerecipes.Rows)
                         {
                             string fdname = line["A"];
@@ -383,9 +427,17 @@ namespace NetLogEntry
                                 string classline = "        new EngineeringRecipe(\"" + ukname + "\", \"" + ing + "\", \"" + cat + "\", \"" + level.Value.ToString() + "\", \"" + engnames + "\" ),";
                                 ret += classline + Environment.NewLine;
                             }
+
                         }
+
+                        File.WriteAllText(Path.Combine(rootpath, "recipes.cs"), ret, Encoding.UTF8);
                     }
+                    else
+                        Console.WriteLine("No Recipe CSV");
+
                 }
+                else
+                    Console.WriteLine("No Materials CSV");
 
             }
 
@@ -397,8 +449,6 @@ namespace NetLogEntry
                 File.WriteAllText(Path.Combine(rootpath, "mat-ru.part.txt"), ru, Encoding.UTF8);
                 File.WriteAllText(Path.Combine(rootpath, "mat-pr.part.txt"), pr, Encoding.UTF8);
             }
-
-            return ret;
         }
 
         class EngineerList
