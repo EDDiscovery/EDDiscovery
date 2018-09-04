@@ -273,7 +273,6 @@ namespace EliteDangerousCore
             { "int_dronecontrol_recon_size3_class1", new ShipModule(128841592, 5, "Drone Controller Recon Class 3 Rating E" , "Limpet Controller" ) },
             { "int_dronecontrol_recon_size5_class1", new ShipModule(128841593, 8, "Drone Controller Recon Class 5 Rating E" , "Limpet Controller" ) },
             { "int_dronecontrol_recon_size7_class1", new ShipModule(128841594, 16, "Drone Controller Recon Class 7 Rating E" , "Limpet Controller" ) },
-            { "int_dronecontrol_unkvesselresearch", new ShipModule(-1,0, "Drone Controller Unknown Research Vessel", "Limpet Controller" ) },
             { "int_dronecontrol_decontamination_size3_class1", new ShipModule(-1,0, "Drone Controller Decontamination Size 3 Class 1", "Limpet Controller" ) },
 
             // SRV
