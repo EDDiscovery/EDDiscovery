@@ -243,7 +243,6 @@ namespace EDDiscovery
             string title = name != null ? name : (PanelInformation.GetPanelInfoByPanelID(ptype).WindowTitle + postfix);
 
             uccb.Name = title;              // for debugging use
-            uccb.Init(eddiscovery, dn);    // start the uccb up
 
             TabPage page = new TabPage(title);
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
@@ -252,6 +251,9 @@ namespace EDDiscovery
             page.Controls.Add(uccb);
 
             TabPages.Insert(posindex, page);
+
+            //Init control after it is added to the form
+            uccb.Init(eddiscovery, dn);    // start the uccb up
 
             if (dotheme)                // only user created ones need themeing
                 EDDTheme.Instance.ApplyToControls(page, applytothis: true);
