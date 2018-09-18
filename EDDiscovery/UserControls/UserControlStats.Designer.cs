@@ -375,6 +375,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewByShip.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewByShip.Size = new System.Drawing.Size(784, 720);
             this.dataGridViewByShip.TabIndex = 3;
+            this.dataGridViewByShip.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewByShip_SortCompare);
             // 
             // dataGridViewTextBoxColumn3
             // 

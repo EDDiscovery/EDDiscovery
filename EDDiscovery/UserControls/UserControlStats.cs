@@ -555,7 +555,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column.Tag == null)     // tag null means numeric sort.
+            if (e.Column.Tag == null)     // tag null means date sort
                 e.SortDataGridViewColumnDate();
         }
 
@@ -931,6 +931,9 @@ namespace EDDiscovery.UserControls
 
         void StatsByShip(HistoryEntry he, HistoryList hl)
         {
+            int sortcol = dataGridViewByShip.SortedColumn?.Index ?? 0;
+            SortOrder sortorder = dataGridViewByShip.SortOrder;
+
             dataGridViewByShip.Rows.Clear();
             dataGridViewByShip.Columns.Clear();
 
@@ -940,9 +943,11 @@ namespace EDDiscovery.UserControls
 
             var Col2 = new DataGridViewTextBoxColumn();
             Col2.HeaderText = "Name".Tx(this);
+            Col2.Tag = "AlphaSort";
 
             var Col3 = new DataGridViewTextBoxColumn();
             Col3.HeaderText = "Ident".Tx(this);
+            Col3.Tag = "AlphaSort";
 
             var Col4 = new DataGridViewTextBoxColumn();
             Col4.HeaderText = "Jumps".Tx(this);
@@ -984,7 +989,17 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            
+            if (sortcol < dataGridViewByShip.Columns.Count)
+            {
+                dataGridViewByShip.Sort(dataGridViewByShip.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridViewByShip.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+            }
+        }
+
+        private void dataGridViewByShip_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column.Tag == null)     // tag null means numeric sort.
+                e.SortDataGridViewColumnNumeric();
         }
 
         #endregion
