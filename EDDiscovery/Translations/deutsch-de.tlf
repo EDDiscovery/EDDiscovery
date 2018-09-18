@@ -114,7 +114,7 @@ PopOutInfo.PanelSelector.Title: "+" => "+"
 //////////////////////////////////////////////////////////////// DISCOVERY FORM
 
 EDDiscoveryForm.toolsToolStripMenuItem: "&Tools" => "&Werkzeuge"
-EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Einstellungem"
+EDDiscoveryForm.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Einstellungen"
 EDDiscoveryForm.toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "&2D Karte anzeigen"
 EDDiscoveryForm.toolsToolStripMenuItem.show3DMapsToolStripMenuItem: "Show &3D maps" => "&3D Karte anzeigen"
 EDDiscoveryForm.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Fenster"

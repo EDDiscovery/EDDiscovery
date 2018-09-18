@@ -37,6 +37,21 @@ namespace EliteDangerousCore
 
         static public string NormaliseMaterialCategory(string cat)
         {
+            switch (cat.ToLowerInvariant())
+            {
+                case "raw":
+                case "encoded":
+                case "manufactured":
+                    return cat;
+                case "$microresource_category_encoded;":
+                    return "Encoded";
+                case "$microresource_category_elements;":
+                    return "Raw";
+                case "$microresource_category_manufactured;":
+                    return "Manufactured";
+            }
+
+            // Fallback decoding
             if (cat.Contains("$"))
             {
                 int i = cat.LastIndexOf('_');
