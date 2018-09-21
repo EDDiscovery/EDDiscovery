@@ -2,7 +2,7 @@ version: 8.4.1.{build}
 image: Visual Studio 2017
 configuration: Release
 install:
-  - git submodule update --init --recursive
+  - git submodule update --init
 before_build:
   - nuget restore
 build:
