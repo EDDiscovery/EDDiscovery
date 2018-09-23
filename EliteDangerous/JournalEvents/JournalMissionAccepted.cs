@@ -122,6 +122,8 @@ namespace EliteDangerousCore.JournalEvents
             "Mission_Delivery_War"
         };
 
+        private static DateTime ED32Date = new DateTime(2018, 8, 28, 10, 0, 0);
+
         public string MissionBasicInfo()          // other stuff for the mission panel which it does not already cover
         {
             DateTime exp = Expiry;
@@ -170,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
         {
-            if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName))
+            if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName) && EventTimeUTC < ED32Date)
             {
                 mc.Change(MaterialCommodityData.CommodityCategory, Commodity, (int)Count, 0, conn);
             }
