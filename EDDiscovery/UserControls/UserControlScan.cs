@@ -308,9 +308,12 @@ namespace EDDiscovery.UserControls
 
             foreach (var body in system.Bodies)
             {
-                if (body?.ScanData?.EstimatedValue != null)
+                if (body?.ScanData != null)
                 {
-                    value += body.ScanData.EstimatedValue;
+                    if (checkBoxEDSM.Checked || !body.ScanData.IsEDSMBody)
+                    {
+                        value += body.ScanData.EstimatedValue;
+                    }
                 }
             }
 
