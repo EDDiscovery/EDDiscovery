@@ -382,7 +382,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
     </ProjectReference>
@@ -390,7 +390,7 @@
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
     </ProjectReference>

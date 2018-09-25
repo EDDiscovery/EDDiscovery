@@ -1209,13 +1209,13 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            Conditions.ConditionFilterForm frm = new Conditions.ConditionFilterForm();
+            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
             List<string> namelist = new List<string>() { "Note" };
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false),
-                            (s) => { return BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
+                            (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {

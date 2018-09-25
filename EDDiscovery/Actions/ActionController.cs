@@ -314,7 +314,7 @@ namespace EDDiscovery.Actions
 
             if (evname.HasChars())
             {
-                List<string> classnames = BaseUtils.FieldNames.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
+                List<string> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
                 if (classnames != null)
                     fieldnames.InsertRange(0, classnames);
             }
@@ -329,7 +329,7 @@ namespace EDDiscovery.Actions
 
         private void Dmf_OnEditGlobals()                    // edit the globals
         {
-            ConditionVariablesForm avf = new ConditionVariablesForm();
+            ExtendedConditionsForms.ConditionVariablesForm avf = new ExtendedConditionsForms.ConditionVariablesForm();
             avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showone: true);
 
             if (avf.ShowDialog(discoveryform) == DialogResult.OK)
@@ -428,7 +428,7 @@ namespace EDDiscovery.Actions
             string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            SpeechConfigure cfg = new SpeechConfigure();
+            ExtendedAudioForms.SpeechConfigure cfg = new ExtendedAudioForms.SpeechConfigure();
             cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
                         "Select voice synthesizer defaults", title, this.Icon,
                         null, false, false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -453,7 +453,7 @@ namespace EDDiscovery.Actions
             string volume = Globals.GetString(ActionPlay.globalvarplayvolume, "60");
             ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
 
-            WaveConfigureDialog dlg = new WaveConfigureDialog();
+            ExtendedAudioForms.WaveConfigureDialog dlg = new ExtendedAudioForms.WaveConfigureDialog();
             dlg.Init(AudioQueueWave, true,
                         "Select Default device, volume and effects", title, this.Icon,
                         "",
