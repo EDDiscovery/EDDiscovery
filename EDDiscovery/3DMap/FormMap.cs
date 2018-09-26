@@ -771,7 +771,7 @@ namespace EDDiscovery
             GL.Enable(EnableCap.PointSmooth);                                               // Render galaxy
             GL.Hint(HintTarget.PointSmoothHint, HintMode.Nicest);
             GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             GL.PushMatrix();
             DrawStars();
