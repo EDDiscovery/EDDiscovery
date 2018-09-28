@@ -555,12 +555,6 @@
     <EmbeddedResource Include="Controls\Modules\ShowOnCoriolis.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
-      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
-      <Name>ExtendedControls</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Controls\Main\Admin\SendUnsyncedEGO.png" />
   </ItemGroup>
   <ItemGroup>
@@ -688,6 +682,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -14,18 +14,13 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using System.Reflection;
 using System.IO;
-using System.Collections;
 using System.IO.Compression;
-using ExtendedControls;
-using System.Windows.Forms;
 
 namespace EDDiscovery.Icons
 {

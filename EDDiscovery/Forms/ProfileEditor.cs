@@ -164,7 +164,7 @@ namespace EDDiscovery.Forms
         private void EditTrigger_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            ConditionFilterForm frm = new ConditionFilterForm();
+            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
             frm.InitCondition(string.Format("Edit Profile {0} Trigger".Tx(this,"TrigEdit"), g.name.Text), this.Icon, new List<string>(), g.triggercondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {
@@ -177,7 +177,7 @@ namespace EDDiscovery.Forms
         private void EditBack_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            ConditionFilterForm frm = new ConditionFilterForm();
+            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
             frm.InitCondition(string.Format("Edit Profile {0} Back Trigger".Tx(this,"BackEdit"), g.name.Text), this.Icon, new List<string>(), g.backcondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {

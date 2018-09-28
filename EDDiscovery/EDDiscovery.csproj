@@ -132,14 +132,14 @@
     <NoWin32Manifest>true</NoWin32Manifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=2.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.2.0.0\lib\net20\OpenTK.dll</HintPath>
+    <Reference Include="OpenTK, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.1.1.2349.61993\lib\NET40\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.3.0.1\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot, Version=1.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Core.1.0.0\lib\net45\OxyPlot.dll</HintPath>
@@ -888,25 +888,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ActionLanguage\ActionLanguage.csproj">
+    <ProjectReference Include="..\ActionLanguage\ActionLanguage\ActionLanguage.csproj">
       <Project>{17f82244-9fa8-4b04-85f0-9b1d0654cd26}</Project>
       <Name>ActionLanguage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Audio\Audio.csproj">
+    <ProjectReference Include="..\BaseUtilities\Audio\Audio.csproj">
       <Project>{59f99a05-ce16-4fb8-be99-f1a24f019cb8}</Project>
       <Name>Audio</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BaseUtils\BaseUtils.csproj">
+    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Conditions\Conditions.csproj">
-      <Project>{f76451e6-926d-4e03-b721-99fcd1ec4eed}</Project>
-      <Name>Conditions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DirectInput\DirectInput.csproj">
+    <ProjectReference Include="..\BaseUtilities\DirectInput\DirectInput.csproj">
       <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
       <Name>DirectInput</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtilities\OpenTKUtils\OpenTKUtils.csproj">
+      <Project>{4cfa37d5-4182-4cae-afc3-7563a13b44ee}</Project>
+      <Name>OpenTKUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
@@ -916,13 +916,13 @@
       <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
       <Name>EliteDangerous</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExtendedControls\ExtendedControls.csproj">
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenTKUtils\OpenTKUtils.csproj">
-      <Project>{4cfa37d5-4182-4cae-afc3-7563a13b44ee}</Project>
-      <Name>OpenTKUtils</Name>
+    <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj">
+      <Project>{298c11c9-b58f-415c-8458-1cae3c6cab62}</Project>
+      <Name>ExtendedForms</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
