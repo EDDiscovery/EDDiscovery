@@ -32,6 +32,7 @@ namespace EliteDangerousCore
         public TravelStateType TravelState { get; private set; } = TravelStateType.Unknown;  // travel state
         public int ShipID { get; private set; } = -1;
         public string ShipType { get; private set; } = "Unknown";         // and the ship
+        public string ShipTypeFD { get; private set; } = "unknown";
         public string OnCrewWithCaptain { get; private set; } = null;     // if not null, your in another multiplayer ship
         public string GameMode { get; private set; } = "Unknown";         // game mode, from LoadGame event
         public string Group { get; private set; } = "";                   // group..
@@ -44,20 +45,21 @@ namespace EliteDangerousCore
 
         public HistoryEntryStatus(HistoryEntryStatus prevstatus)
         {
-            this.BodyName = prevstatus.BodyName;
-            this.BodyID = prevstatus.BodyID;
-            this.BodyType = prevstatus.BodyType;
-            this.StationName = prevstatus.StationName;
-            this.StationType = prevstatus.StationType;
-            this.MarketId = prevstatus.MarketId;
-            this.TravelState = prevstatus.TravelState;
-            this.ShipID = prevstatus.ShipID;
-            this.ShipType = prevstatus.ShipType;
-            this.OnCrewWithCaptain = prevstatus.OnCrewWithCaptain;
-            this.GameMode = prevstatus.GameMode;
-            this.Group = prevstatus.Group;
-            this.Wanted = prevstatus.Wanted;
-            this.BodyApproached = prevstatus.BodyApproached;
+            BodyName = prevstatus.BodyName;
+            BodyID = prevstatus.BodyID;
+            BodyType = prevstatus.BodyType;
+            StationName = prevstatus.StationName;
+            StationType = prevstatus.StationType;
+            MarketId = prevstatus.MarketId;
+            TravelState = prevstatus.TravelState;
+            ShipID = prevstatus.ShipID;
+            ShipType = prevstatus.ShipType;
+            ShipTypeFD = prevstatus.ShipTypeFD;
+            OnCrewWithCaptain = prevstatus.OnCrewWithCaptain;
+            GameMode = prevstatus.GameMode;
+            Group = prevstatus.Group;
+            Wanted = prevstatus.Wanted;
+            BodyApproached = prevstatus.BodyApproached;
         }
 
         public static HistoryEntryStatus Update(HistoryEntryStatus prev, JournalEntry je, string curStarSystem)
@@ -101,8 +103,9 @@ namespace EliteDangerousCore
                 case JournalTypeEnum.LoadGame:
                     JournalLoadGame jlg = je as JournalLoadGame;
                     bool isbuggy = ShipModuleData.IsSRV(jlg.ShipFD);
-                    string shiptype = isbuggy ? prev.ShipType : (je as JournalLoadGame).Ship;
-                    int shipid = isbuggy ? prev.ShipID : (je as JournalLoadGame).ShipId;
+                    string shiptype = isbuggy ? prev.ShipType : jlg.Ship;
+                    string shiptypefd = isbuggy ? prev.ShipTypeFD : jlg.ShipFD;
+                    int shipid = isbuggy ? prev.ShipID : jlg.ShipId;
 
                     return new HistoryEntryStatus(prev) // Bodyapproach copy over we should be in the same state as last..
                     {
@@ -112,6 +115,7 @@ namespace EliteDangerousCore
                         TravelState = (jlg.StartLanded || isbuggy) ? TravelStateType.Landed : prev.TravelState,
                         ShipType = shiptype,
                         ShipID = shipid,
+                        ShipTypeFD = shiptypefd,
                     };
                 case JournalTypeEnum.Docked:
                     JournalDocked jdocked = (JournalDocked)je;
@@ -210,14 +214,16 @@ namespace EliteDangerousCore
                     return new HistoryEntryStatus(prev)
                     {
                         ShipID = jsnew.ShipId,
-                        ShipType = jsnew.ShipType
+                        ShipType = jsnew.ShipType,
+                        ShipTypeFD = jsnew.ShipFD,
                     };
                 case JournalTypeEnum.ShipyardSwap:
                     JournalShipyardSwap jsswap = (JournalShipyardSwap)je;
                     return new HistoryEntryStatus(prev)
                     {
                         ShipID = jsswap.ShipId,
-                        ShipType = jsswap.ShipType
+                        ShipType = jsswap.ShipType,
+                        ShipTypeFD = jsswap.ShipFD,
                     };
                 case JournalTypeEnum.JoinACrew:
                     return new HistoryEntryStatus(prev)
@@ -250,6 +256,7 @@ namespace EliteDangerousCore
                         {
                             ShipID = jloadout.ShipId,
                             ShipType = jloadout.Ship,
+                            ShipTypeFD = jloadout.ShipFD,
                         };
                     }
                     else
