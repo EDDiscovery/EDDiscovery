@@ -13,9 +13,11 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -88,6 +90,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool IsEDSMBody { get; private set; }
         public string EDSMDiscoveryCommander { get; private set; }      // may be null if not known
         public DateTime EDSMDiscoveryUTC { get; private set; }
+        public string TaggedBy { get; private set; }                    // Tagged by Commander (if Sell data has been processed by EDD only)
 
         public EDReserve ReserveLevel { get; set; }
         public string ReserveLevelStr
@@ -316,6 +319,8 @@ namespace EliteDangerousCore.JournalEvents
                 EDSMDiscoveryUTC = discovery["date"].DateTimeUTC();
             }
 
+            // EDD internally added fields
+            TaggedBy = evt["EDD_TagCmdr"].Str();
         }
 
         public override string FillSummary { get { return string.Format("Scan of {0}".Tx(this), BodyName); } }
@@ -520,7 +525,10 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), EstimatedValue);
 
             if (EDSMDiscoveryCommander != null)
-                scanText.AppendFormat("\n\nDiscovered by {0} on {1}".Tx(this,"DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
+                scanText.AppendFormat("\n\nDiscovered for EDSM by {0} on {1}".Tx(this,"DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
+
+            if (TaggedBy != null)
+                scanText.AppendFormat("\n\nFirst Discovered in game by {0}".Tx(this, "TAG"), TaggedBy);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
@@ -763,6 +771,18 @@ namespace EliteDangerousCore.JournalEvents
             }
 
             return null;
+        }
+
+        public void SetTagged(string cmdr, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
+        {
+            JObject jo = cn == null ? GetJson(Id) : GetJson(Id, cn, txnl);
+
+            if (jo != null)
+            {
+                jo["EDD_TagCmdr"] = cmdr;
+                UpdateJsonEntry(jo, cn, txnl);
+                TaggedBy = cmdr;
+            }
         }
 
         // Habitable zone calculations, formulae cribbed from JackieSilver's HabZone Calculator with permission

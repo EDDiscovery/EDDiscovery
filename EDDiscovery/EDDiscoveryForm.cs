@@ -1647,6 +1647,14 @@ namespace EDDiscovery
 
         ExtendedControls.DropDownCustom popoutdropdown;
 
+        private void updateEDDScansWithEDTagsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time" + Environment.NewLine + "Confirm you want to do this?").Tx(this, "TAGQ"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
+            {
+                Controller.RefreshHistoryAsync(settags:true);
+            }
+        }
+
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
             Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));

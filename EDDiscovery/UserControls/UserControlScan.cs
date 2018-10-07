@@ -417,11 +417,20 @@ namespace EDDiscovery.UserControls
                     {
                         starLabel += $" ({habZone})";
                     }
+                    Bitmap bmp = new Bitmap(size.Width * 2, size.Height);
+                    using (Graphics g = Graphics.FromImage(bmp))
+                    {
+                        g.DrawImage(sc.GetStarTypeImage(), size.Width / 2, 0, size.Width, size.Height);
 
-                    endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),
-                                                new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
-                                                size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);          // and the label needs to be a quarter height below it..
+                        if (chkShowOverlays.Checked && !string.IsNullOrEmpty(sc.TaggedBy))
+                        {
+                            g.DrawImage(Icons.Controls.firstdiscover, new Rectangle(0, 0, quarterheight * 3 / 2, quarterheight * 3 / 2));
+                        }
 
+                        endpoint = CreateImageLabel(pc, bmp, new Point(curpos.X + offset, curpos.Y + alignv),      // WE are basing it on a 1/4 + 1 + 1/4 grid, this is not being made bigger, move off
+                            bmp.Size, starLabel, tip, alignv + labelvoff, sc.IsEDSMBody, false);
+                    }
+                    
                     offset += size.Width / 2;       // return the middle used was this..
                 }
                 else //else not a top-level star
@@ -448,7 +457,7 @@ namespace EDDiscovery.UserControls
                             if (chkShowOverlays.Checked)
                             {
                                 bool valuable = sc.EstimatedValue > 50000;
-                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0);
+                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (string.IsNullOrEmpty(sc.TaggedBy) ? 0 : 1);
                                 int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
                                 int pos = 0;
 
@@ -461,6 +470,12 @@ namespace EDDiscovery.UserControls
                                 if (sc.HasMeaningfulVolcanism) //this renders below the terraformable icon if present
                                 {
                                     g.DrawImage(Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(0, pos, ovsize, ovsize));
+                                    pos += ovsize + 1;
+                                }
+
+                                if (!string.IsNullOrEmpty(sc.TaggedBy))
+                                {
+                                    g.DrawImage(Icons.Controls.firstdiscover, new Rectangle(0, pos, ovsize, ovsize));
                                     pos += ovsize + 1;
                                 }
 
@@ -543,7 +558,8 @@ namespace EDDiscovery.UserControls
                 indicatematerials || 
                 sc.Terraformable ||
                 sc.HasMeaningfulVolcanism ||
-                sc.EstimatedValue > 50000;
+                sc.EstimatedValue > 50000 ||
+                !string.IsNullOrEmpty(sc.TaggedBy);
         }
 
 

@@ -115,8 +115,9 @@ namespace EDDiscovery
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelMenuTop = new System.Windows.Forms.Panel();
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelMenuTop = new System.Windows.Forms.Panel();
+            this.updateEDDScansWithEDTagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.notifyIconContextMenuStrip.SuspendLayout();
@@ -135,7 +136,7 @@ namespace EDDiscovery
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(221, 24);
+            this.menuStrip.Size = new System.Drawing.Size(341, 24);
             this.menuStrip.TabIndex = 16;
             this.menuStrip.Text = "menuStrip1";
             this.menuStrip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
@@ -225,7 +226,8 @@ namespace EDDiscovery
             this.sendUnsyncedEGOScansToolStripMenuItem,
             this.sendHistoricDataToInaraToolStripMenuItem,
             this.clearEDSMIDAssignedToAllRecordsForCurrentCommanderToolStripMenuItem,
-            this.exportVistedStarsListToEliteDangerousToolStripMenuItem});
+            this.exportVistedStarsListToEliteDangerousToolStripMenuItem,
+            this.updateEDDScansWithEDTagsToolStripMenuItem});
             this.adminToolStripMenuItem.Name = "adminToolStripMenuItem";
             this.adminToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.adminToolStripMenuItem.Text = "A&dmin";
@@ -818,7 +820,7 @@ namespace EDDiscovery
             this.renameTabToolStripMenuItem,
             this.popOutPanelToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 114);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 92);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -839,6 +841,12 @@ namespace EDDiscovery
             this.renameTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.renameTabToolStripMenuItem.Text = "Rename Tab";
             // 
+            // popOutPanelToolStripMenuItem
+            // 
+            this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
+            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
+            // 
             // panelMenuTop
             // 
             this.panelMenuTop.Controls.Add(this.menuStrip);
@@ -854,11 +862,13 @@ namespace EDDiscovery
             this.panelMenuTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.panelMenuTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
-            // popOutPanelToolStripMenuItem
+            // updateEDDScansWithEDTagsToolStripMenuItem
             // 
-            this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
-            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
+            this.updateEDDScansWithEDTagsToolStripMenuItem.Name = "updateEDDScansWithEDTagsToolStripMenuItem";
+            this.updateEDDScansWithEDTagsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
+            this.updateEDDScansWithEDTagsToolStripMenuItem.Text = "Update EDD Scans with E:D Tags";
+            this.updateEDDScansWithEDTagsToolStripMenuItem.ToolTipText = "Link scan data with sold Exploration data to record in-game tags";
+            this.updateEDDScansWithEDTagsToolStripMenuItem.Click += new System.EventHandler(this.updateEDDScansWithEDTagsToolStripMenuItem_Click);
             // 
             // EDDiscoveryForm
             // 
@@ -968,5 +978,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
         private ExtendedControls.ComboBoxCustom comboBoxCustomProfiles;
         private System.Windows.Forms.ToolStripMenuItem popOutPanelToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateEDDScansWithEDTagsToolStripMenuItem;
     }
 }

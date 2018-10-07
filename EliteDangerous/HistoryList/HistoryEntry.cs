@@ -226,7 +226,7 @@ namespace EliteDangerousCore
 
                 isys = newsys;
             }
-
+            
             HistoryEntry he = new HistoryEntry
             {
                 Indexno = indexno,

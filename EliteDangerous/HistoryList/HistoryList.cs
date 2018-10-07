@@ -840,6 +840,7 @@ namespace EliteDangerousCore
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
                 he.ProcessWithUserDb(je, prev, this, conn);           // let some processes which need the user db to work
+                UpdateTags(this, je, he.Commander.Name);
 
                 cashledger.Process(je, conn);
                 he.Credits = cashledger.CashTotal;
@@ -880,7 +881,7 @@ namespace EliteDangerousCore
                 HistoryEntry jlhe;
                 starscan.AddBodyToBestSystem((IBodyNameAndID)je, Count - 1, EntryOrder, out jlhe, out jl);
             }
-
+            
             return he;
         }
 
@@ -890,7 +891,8 @@ namespace EliteDangerousCore
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
                                     bool Keepuievents = true,
-                                    int fullhistoryloaddaylimit = 0
+                                    int fullhistoryloaddaylimit = 0,
+                                    bool processDiscoveryTags = false
                                     )
         {
             HistoryList hist = new HistoryList();
@@ -960,6 +962,10 @@ namespace EliteDangerousCore
                         jlistUpdated.Add(new Tuple<JournalEntry, HistoryEntry>(je, he));
                         Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
                     }
+                    if (processDiscoveryTags)
+                    {
+                        UpdateTags(hist, he.journalEntry, he.Commander.Name);
+                    }
                 }
             }
 
@@ -1015,7 +1021,7 @@ namespace EliteDangerousCore
                     JournalEntry je = he.journalEntry;
 
                     he.ProcessWithUserDb(je, (i > 0) ? hl[i - 1] : null, this, conn);        // let the HE do what it wants to with the user db
-
+                    
                     Debug.Assert(he.MaterialCommodity != null);
 
                     // **** REMEMBER NEW Journal entry needs this too *****************
@@ -1043,6 +1049,31 @@ namespace EliteDangerousCore
                     {
                         this.starscan.AddBodyToBestSystem((IBodyNameAndID)je, i, hl);
                     }
+                }
+            }
+        }
+
+        static void UpdateTags(HistoryList hist, JournalEntry je, string cmdr)
+        {
+            if (je is JournalSellExplorationData jse)
+            {
+                if (!jse.TagsProcessed.HasValue || !jse.TagsProcessed.Value)
+                {
+                    var cn = new SQLiteConnectionUser();
+                    var trans = cn.BeginTransaction();
+
+                    foreach (string discovery in jse.Discovered)
+                    {
+                        var historyEntry = hist.Where(en => en.EntryType == JournalTypeEnum.Scan && en.journalEntry is JournalScan && ((JournalScan)en.journalEntry).BodyName == discovery).FirstOrDefault();
+                        if (historyEntry != null)
+                        {
+                            ((JournalScan)historyEntry.journalEntry).SetTagged(cmdr, cn, trans);
+                        }
+                    }
+                    jse.SetTagsProcessed(true, cn, trans);
+
+                    trans.Commit();
+                    cn.Dispose();
                 }
             }
         }

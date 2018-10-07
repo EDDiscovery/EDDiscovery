@@ -266,7 +266,7 @@ namespace EDDiscovery
 
         // indicate change commander, indicate netlogpath load (with forced refresh), indicate forced journal load
 
-        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null)
+        public bool RefreshHistoryAsync(string netlogpath = null, bool forcenetlogreload = false, bool forcejournalreload = false, int? currentcmdr = null, bool settags = false)
         {
             if (PendingClose)
             {
@@ -295,7 +295,8 @@ namespace EDDiscovery
                     NetLogPath = netlogpath,
                     ForceNetLogReload = forcenetlogreload,
                     ForceJournalReload = forcejournalreload,
-                    CurrentCommander = currentcmdr ?? history.CommanderId
+                    CurrentCommander = currentcmdr ?? history.CommanderId,
+                    SetTags = settags,
                 });
 
                 refreshRequested.Set();
@@ -736,6 +737,7 @@ namespace EDDiscovery
             public bool ForceNetLogReload;
             public bool ForceJournalReload;
             public int CurrentCommander;
+            public bool SetTags;
         }
 
         // this thread waits around until told to do a refresh then performs it.  
@@ -794,7 +796,7 @@ namespace EDDiscovery
                     () => PendingClose, 
                     (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this,"PLF") , s)), args.NetLogPath,
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
-                    EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
+                    EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit, args.SetTags);
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");
             }

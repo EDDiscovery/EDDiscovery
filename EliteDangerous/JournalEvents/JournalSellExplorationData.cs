@@ -13,8 +13,9 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using System.Data.Common;
 
 namespace EliteDangerousCore.JournalEvents
 {
@@ -30,6 +31,9 @@ namespace EliteDangerousCore.JournalEvents
             TotalEarnings = evt["TotalEarnings"].Long(0);        // may not be present - get 0. also 3.02 has a bug with incorrect value - actually fed from the FD web server so may not be version tied
             if (TotalEarnings < BaseValue+Bonus)        // so if less than the bv+bonus, it's either not there or bugged.  Fix
                 TotalEarnings = BaseValue + Bonus;
+
+            // EDD added fields
+            TagsProcessed = evt["EDD_TagsProcessed"].BoolNull();
         }
 
         public string[] Systems { get; set; }
@@ -37,6 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public long BaseValue { get; set; }
         public long Bonus { get; set; }
         public long TotalEarnings { get; set; }        // 3.0
+        public bool? TagsProcessed { get; private set; }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
@@ -60,6 +65,18 @@ namespace EliteDangerousCore.JournalEvents
                 detailed += System.Environment.NewLine + "Discovered:".Txb(this);
                 foreach (string s in Discovered)
                     detailed += s + " ";
+            }
+        }
+
+        public void SetTagsProcessed(bool value, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
+        {
+            JObject jo = cn == null ? GetJson(Id) : GetJson(Id, cn, txnl);
+
+            if (jo != null)
+            {
+                jo["EDD_TagsProcessed"] = value;
+                UpdateJsonEntry(jo, cn, txnl);
+                TagsProcessed = value;
             }
         }
     }
