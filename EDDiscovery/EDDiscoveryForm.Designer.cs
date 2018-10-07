@@ -864,6 +864,7 @@ namespace EDDiscovery
             // 
             // updateEDDScansWithEDTagsToolStripMenuItem
             // 
+            this.updateEDDScansWithEDTagsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.firstdiscover;
             this.updateEDDScansWithEDTagsToolStripMenuItem.Name = "updateEDDScansWithEDTagsToolStripMenuItem";
             this.updateEDDScansWithEDTagsToolStripMenuItem.Size = new System.Drawing.Size(396, 22);
             this.updateEDDScansWithEDTagsToolStripMenuItem.Text = "Update EDD Scans with E:D Tags";
