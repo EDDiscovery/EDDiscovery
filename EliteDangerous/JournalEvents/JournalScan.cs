@@ -527,7 +527,7 @@ namespace EliteDangerousCore.JournalEvents
             if (EDSMDiscoveryCommander != null)
                 scanText.AppendFormat("\n\nDiscovered for EDSM by {0} on {1}".Tx(this,"DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
 
-            if (TaggedBy != null)
+            if (!string.IsNullOrEmpty(TaggedBy))
                 scanText.AppendFormat("\n\nFirst Discovered in game by {0}".Tx(this, "TAG"), TaggedBy);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
