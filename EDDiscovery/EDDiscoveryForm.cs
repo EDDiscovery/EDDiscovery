@@ -934,7 +934,11 @@ namespace EDDiscovery
                 string cmdrfolder = cmdr.JournalDir;
                 if (cmdrfolder.Length < 1)
                     cmdrfolder = EDJournalClass.GetDefaultJournalDir();
-                Process.Start(cmdrfolder);
+                // test if folder exists to avoid error
+                if (Directory.Exists(cmdrfolder))
+                {
+                    Process.Start(cmdrfolder);
+                }
             }
         }
 
