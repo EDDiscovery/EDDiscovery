@@ -58,9 +58,7 @@ namespace EDDiscovery.UserControls
 
         enum UIState { Normal, SystemMap, GalMap };
         UIState uistate = UIState.Normal;
-
-
-
+		
         class Configuration         // SO many now we need to prepare for a Long
         {
             public const long showInformation = 1;
@@ -96,6 +94,7 @@ namespace EDDiscovery.UserControls
             public const long showHabInformation = 1L << 33;
             public const long showNothingWhenSysmap = 1L << 34;
             public const long showNothingWhenGalmap = 1L << 35;
+			public const long showNoTitleWhenHidden = 1L << 36;
         }
 
         long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
@@ -135,8 +134,7 @@ namespace EDDiscovery.UserControls
             showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
             dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalmap);
             dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSysmap);
-
-
+			completelyHideThePanelToolStripMenuItem.Checked = Config(Configuration.showNoTitleWhenHidden);
 
             SetSurfaceScanBehaviour(null);
             SetScanPosition(null);
@@ -252,14 +250,26 @@ namespace EDDiscovery.UserControls
                     int rowpos = scanpostextoffset.Y;
                     int rowheight = Config(Configuration.showIcon) ? 26 : 20;
 
-                    if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
+					// Check if need to hide the UI
+                    if (Config(Configuration.showNothingWhenDocked) && 
+						(hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
                     {
-                        AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
-                    }
-                    else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
+						if (!Config(Configuration.showNoTitleWhenHidden))
+						{
+							AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed",
+									   textcolour, backcolour, null);
+						}
+					}
+                    else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) 
+							  || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
                     {
-                        AddColText(0, 0, rowpos, rowheight, (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", textcolour, backcolour, null);
-                    }
+						if (!Config(Configuration.showNoTitleWhenHidden))
+						{
+							AddColText(0, 0, rowpos, rowheight,
+									   (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", 
+									   textcolour, backcolour, null);
+						}
+					}
                     else
                     {
                         string name;
@@ -869,6 +879,11 @@ namespace EDDiscovery.UserControls
             FlipConfig(Configuration.showNothingWhenSysmap, ((ToolStripMenuItem)sender).Checked, true);
         }
 
+		private void completelyHideThePanelToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showNoTitleWhenHidden, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
         private void expandTextOverEmptyColumnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showExpandOverColumns, ((ToolStripMenuItem)sender).Checked, true);
@@ -1057,7 +1072,6 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #endregion
-
-    }
+		#endregion
+	}
 }
