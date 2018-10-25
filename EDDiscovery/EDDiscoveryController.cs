@@ -151,7 +151,7 @@ namespace EDDiscovery
             msg.Invoke("Decoding Symbols");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
 
-            string path = EDDOptions.Instance.IconsPath ?? (EDDOptions.Instance.IconsAppDirectory() + "\\*.zip");
+            string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
 
             Icons.IconSet.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
         }
