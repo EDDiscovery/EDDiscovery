@@ -658,6 +658,21 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
+        private JObject GetBodiesByID64(long id64)       // protect yourself from bad JSON
+        {
+            string query = "bodies?systemId64=" + id64.ToString();
+            var response = RequestGet("api-system-v1/" + query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json == null || json.ToString() == "[]")
+                return null;
+
+            JObject msg = JObject.Parse(json);
+            return msg;
+        }
+
         private JObject GetBodies(long edsmID)          // protect yourself from bad JSON
         {
             string query = "bodies?systemId=" + edsmID.ToString();
@@ -696,7 +711,7 @@ namespace EliteDangerousCore.EDSM
                 , ret, handleException: true);
         }
 
-        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true) // get this edsmid,  optionally lookup web protected against bad json
+        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true, long? id64 = null, string sysname = null) // get this edsmid,  optionally lookup web protected against bad json
         {
             try
             {
@@ -715,7 +730,14 @@ namespace EliteDangerousCore.EDSM
 
                 //System.Diagnostics.Debug.WriteLine("EDSM Web Lookup bodies " + edsmid);
 
-                JObject jo = edsm.GetBodies(edsmid);  // Colonia 
+                JObject jo = null;
+
+                if (edsmid > 0)
+                    jo = edsm.GetBodies(edsmid);  // Colonia 
+                else if (id64 != null && id64 > 0)
+                    jo = edsm.GetBodiesByID64(id64.Value);
+                else if (sysname != null)
+                    jo = edsm.GetBodies(sysname);
 
                 if (jo != null)
                 {
