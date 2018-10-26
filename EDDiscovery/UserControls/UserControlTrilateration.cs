@@ -131,7 +131,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewClosestSystems_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridViewDistances.Rows.Count)
             {
                 var system = (ISystem)dataGridViewClosestSystems[1, e.RowIndex].Tag;
                 AddSystemToDataGridViewDistances(system);
@@ -140,6 +140,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewDistances_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
+            if (e.RowIndex < 0 || e.RowIndex >= dataGridViewDistances.Rows.Count)
+                return;
+
             try
             {
                 if (e.ColumnIndex == 0)
@@ -199,6 +202,9 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewDistances_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex < 0 || e.RowIndex >= dataGridViewDistances.Rows.Count)
+                return;
+
             if (e.ColumnIndex == 0)
             {
                 var cell = dataGridViewDistances[e.ColumnIndex, e.RowIndex];
