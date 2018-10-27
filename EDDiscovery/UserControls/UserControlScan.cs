@@ -413,9 +413,16 @@ namespace EDDiscovery.UserControls
                     var starLabel = sn.customname ?? sn.ownname;
 
                     var habZone = sc.GetHabZoneStringLs();
+					var wwpZone = sc.GetWaterWorldZoneStringLs();
+					var elpZone = sc.GetEarthLikeZoneStringLs();
+					var amwZone = sc.GetAmmoniaWorldsStringLs();
+
                     if (!string.IsNullOrEmpty(habZone))
                     {
-                        starLabel += $" ({habZone})";
+                        starLabel += $" ({habZone}) /n";
+						starLabel += $" ({wwpZone}) /n";
+						starLabel += $" ({elpZone}) /n";
+						starLabel += $" ({amwZone}) /n";
                     }
 
                     endpoint = CreateImageLabel(pc, sc.GetStarTypeImage(),

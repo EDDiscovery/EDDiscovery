@@ -49,13 +49,21 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAbsoluteMagnitude { get; set; }             // direct
         public string Luminosity { get; set; }
         public double? nAge { get; set; }                           // direct
-        public double? HabitableZoneInner { get; set; }             // calculated
+        
+		// orbital limits where is possible to find terraformable planets
+		public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
-        public double? WaterWorldsInner { get; set; }
+        
+		// orbital limits which indicate possible water worlds
+		public double? WaterWorldsInner { get; set; }
         public double? WaterWorldsOuter { get; set; }
+
+		// orbital limits for Ammonia Worlds
         public double? AmmoniaWorldsInner { get; set; }
         public double? AmmoniaWorldsOuter { get; set; }
-        public double? EarthLikeInner { get; set; }
+        
+		// orbital limits for Earth'like Planets
+		public double? EarthLikeInner { get; set; }
         public double? EarthLikeOuter { get; set; }
 
         // All orbiting bodies (Stars/Planets), not main star
@@ -234,6 +242,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 StarTypeID = Bodies.StarStr2Enum(StarType);
 
+				// orbital limits taken from 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
                 {
                     HabitableZoneInner = DistanceForBlackBodyTemperature(315);
@@ -537,6 +546,12 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
+		// goldilock orbital limits
+
+		/// <summary>
+		/// Goldilock zone (area where is possible to find planets with liquid water)
+		/// </summary>
+		/// <returns></returns>
         public string GetHabZoneStringLs()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
@@ -553,11 +568,14 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
-                StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this), GetHabZoneStringLs(),
-                                                                                  (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
-                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
+                var habZone = new StringBuilder();
+				if (HabitableZoneInner != null)
+					habZone.AppendFormat("Habitable Zone approx. {0} ({1}-{2} AU)\n".Tx(this), GetHabZoneStringLs(),
+										 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"),
+										 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
+				// momentary disabled, to prevent alignment issues
+				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+                //    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
 
                 return habZone.ToNullSafeString();
             }
@@ -565,6 +583,104 @@ namespace EliteDangerousCore.JournalEvents
                 return null;
         }
 
+		public string GetWaterWorldZoneStringLs()
+		{
+			if (IsStar && WaterWorldsInner.HasValue && WaterWorldsOuter.HasValue)
+			{
+				return $"{WaterWorldsInner:N0}-{WaterWorldsOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+		
+		public string WaterWorldsString()
+		{
+			if (IsStar && WaterWorldsInner.HasValue && WaterWorldsOuter.HasValue)
+			{
+				var wwpZone = new StringBuilder();
+				if (WaterWorldsInner != null)
+					wwpZone.AppendFormat("Possible Water Worlds between {0} ({1}-{2} AU)\n".Tx(this),
+										 GetWaterWorldZoneStringLs(),
+										 (WaterWorldsInner.Value / oneAU_LS).ToString("N2"),
+										 (WaterWorldsOuter.Value / oneAU_LS).ToString("N2"));
+				// momentary disabled, to prevent alignment issues
+				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
+
+				return wwpZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+		
+		public string GetEarthLikeZoneStringLs()
+		{
+			if (IsStar && EarthLikeInner.HasValue && EarthLikeOuter.HasValue)
+			{
+				return $"{EarthLikeInner:N0}-{EarthLikeOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string EarthLikeZoneString()
+		{
+			if (IsStar && EarthLikeInner.HasValue && EarthLikeOuter.HasValue)
+			{
+				StringBuilder elpZone = new StringBuilder();
+				if (EarthLikeInner != null)
+					elpZone.AppendFormat("Possible Earth Like between {0} ({1}-{2} AU)\n".Tx(this),
+										 GetEarthLikeZoneStringLs(),
+										 (EarthLikeInner.Value / oneAU_LS).ToString("N2"),
+										 (EarthLikeOuter.Value / oneAU_LS).ToString("N2"));
+				// momentary disabled, to prevent alignment issues
+				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
+
+				return elpZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		//
+		public string GetAmmoniaWorldsStringLs()
+		{
+			if (IsStar && AmmoniaWorldsInner.HasValue && AmmoniaWorldsOuter.HasValue)
+			{
+				return $"{AmmoniaWorldsInner:N0}-{AmmoniaWorldsOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string AmmoniaWorldsString()
+		{
+			if (IsStar && AmmoniaWorldsInner.HasValue && AmmoniaWorldsOuter.HasValue)
+			{
+				var amwZone = new StringBuilder();
+				if (AmmoniaWorldsInner != null)
+					amwZone.AppendFormat("Possible Ammonia Worlds between {0} ({1}-{2} AU)\n".Tx(this),
+										 GetAmmoniaWorldsStringLs(),
+										 (AmmoniaWorldsInner.Value / oneAU_LS).ToString("N2"),
+										 (AmmoniaWorldsOuter.Value / oneAU_LS).ToString("N2"));
+				// momentary disabled, to prevent alignment issues
+				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
+
+				return amwZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+		
+		//
         // optionally, show material counts at the historic point and current.
         public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
         {
