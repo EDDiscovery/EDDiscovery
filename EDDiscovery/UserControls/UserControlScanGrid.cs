@@ -170,19 +170,19 @@ namespace EDDiscovery.UserControls
 
 				// habitable zone for stars - do not display for black holes.
 				if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-					bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). /n", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+					bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
 				// possible water worlds zone
 				if (sn.ScanData.WaterWorldsInner != null && sn.ScanData.WaterWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-					bdDetails.AppendFormat("Water Worlds".Tx(this) + ": {0}-{1}AU ({2}). /n", (sn.ScanData.WaterWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
+					bdDetails.AppendFormat("Water Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.WaterWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
 				
 				// possible earth like zone
 				if (sn.ScanData.EarthLikeInner != null && sn.ScanData.EarthLikeOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-					bdDetails.AppendFormat("Earth Like".Tx(this) + ": {0}-{1}AU ({2}). /n", (sn.ScanData.EarthLikeInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
+					bdDetails.AppendFormat("Earth Like".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.EarthLikeInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
 				
 				// possible ammonia worlds zone
 				if (sn.ScanData.AmmoniaWorldsInner != null && sn.ScanData.AmmoniaWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-					bdDetails.AppendFormat("Ammonia Worlds".Tx(this) + ": {0}-{1}AU ({2}). /n", (sn.ScanData.AmmoniaWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmoniaWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldsStringLs());
+					bdDetails.AppendFormat("Ammonia Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.AmmoniaWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmoniaWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldsStringLs());
 
 				// tell us that a body is landable, and shows its gravity
 				var Gg = "";
