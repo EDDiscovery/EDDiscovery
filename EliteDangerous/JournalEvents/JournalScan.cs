@@ -51,6 +51,12 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAge { get; set; }                           // direct
         public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
+        public double? WaterWorldsInner { get; set; }
+        public double? WaterWorldsOuter { get; set; }
+        public double? AmmoniaWorldsInner { get; set; }
+        public double? AmmoniaWorldsOuter { get; set; }
+        public double? EarthLikeInner { get; set; }
+        public double? EarthLikeOuter { get; set; }
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
@@ -232,6 +238,12 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     HabitableZoneInner = DistanceForBlackBodyTemperature(315);
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
+                    WaterWorldsInner = DistanceForBlackBodyTemperature(307);
+                    WaterWorldsOuter = DistanceForBlackBodyTemperature(156);
+                    AmmoniaWorldsInner = DistanceForBlackBodyTemperature(193);
+                    AmmoniaWorldsOuter = DistanceForBlackBodyTemperature(117);
+                    EarthLikeInner = DistanceForBlackBodyTemperature(278);
+                    EarthLikeOuter = DistanceForBlackBodyTemperature(227);
                 }
             }
             else if (PlanetClass != null)
