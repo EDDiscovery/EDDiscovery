@@ -132,6 +132,9 @@
   <metadata name="contextMenuStripSG.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>108, 17</value>
   </metadata>
+  <data name="waterWorldsToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Thi pretty large zone indicate a range where water worlds can exists. It's larger than the goldilocks zone, as many water worlds can exists due to special atmospheric condition, beside their relative distance to host star. It overlap somewhat with the ammonia zone, on the outer side.</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>128</value>
   </metadata>

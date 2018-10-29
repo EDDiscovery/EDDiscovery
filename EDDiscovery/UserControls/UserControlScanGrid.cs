@@ -36,6 +36,16 @@ namespace EDDiscovery.UserControls
     {
         private HistoryEntry last_he = null;
         private string DbColumnSave => DBName("ScanGridPanel", "DGVCol");
+		private string DbSave => DBName("ScanGrid" );
+
+		private bool showGoldilocksZone;
+		private bool showMetalRichZone;
+		private bool showWaterWorldZone;
+		private bool showEarthLikeZone;
+		private bool showAmmoniaZone;
+		private bool showMaterials;
+		private bool showAtmosphere;
+		private bool showRings;
 
 		public UserControlScanGrid()
         {
@@ -54,6 +64,18 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+			// get settings from db
+			// habitable zones
+			goldilocksZoneToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowGoldilocks", true);
+			metalRichToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowMetalRich", true);
+			waterWorldsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowWaterWorld ", true);
+			earthLikeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowEarthLike", true);
+			ammoniaWorldsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowAmmonia", true);
+			// toggles
+			showAvailableMaterialsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowMaterials", true);
+			showAtmosphericDetailsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowAtmosphere", true);
+			showRingsInformationToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "ShowRings", true);
+			
             discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -175,19 +197,23 @@ namespace EDDiscovery.UserControls
 					bdDetails.Append("Age".Tx(this) + ": " + sn.ScanData.nAge.Value.ToString("N0") + " my. \n");
 
 				// habitable zone for stars - do not display for black holes.
-				if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (showGoldilocksZone != false && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
-				// possible water worlds zone
-				if (sn.ScanData.WaterWorldsInner != null && sn.ScanData.WaterWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-					bdDetails.AppendFormat("Water Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.WaterWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());
-				
+				// possible metal rich zone
+				if (showMetalRichZone != false && sn.ScanData.MetalRichOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+					bdDetails.AppendFormat("Metal Rich".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.MetalRichInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
+
 				// possible earth like zone
-				if (sn.ScanData.EarthLikeInner != null && sn.ScanData.EarthLikeOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (showEarthLikeZone != false && sn.ScanData.EarthLikeInner != null && sn.ScanData.EarthLikeOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Earth Like".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.EarthLikeInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
+
+				// possible water worlds zone
+				if (showWaterWorldZone != false && sn.ScanData.WaterWorldsInner != null && sn.ScanData.WaterWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+					bdDetails.AppendFormat("Water Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.WaterWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());		
 				
 				// possible ammonia worlds zone
-				if (sn.ScanData.AmmoniaWorldsInner != null && sn.ScanData.AmmoniaWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (showAmmoniaZone != false && sn.ScanData.AmmoniaWorldsInner != null && sn.ScanData.AmmoniaWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Ammonia Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.AmmoniaWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmoniaWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldsStringLs());
 
 				// tell us that a body is landable, and shows its gravity
@@ -212,7 +238,7 @@ namespace EDDiscovery.UserControls
 					bdDetails.Append("Volcanism".Tx(this) + ". ");
 
 				// have some ring?
-				if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
+				if (showRings != false && sn.ScanData.HasRings && sn.ScanData.IsStar == false)
 				{
 					if (sn.ScanData.Rings.Count() <= 1)
 					{
@@ -232,11 +258,11 @@ namespace EDDiscovery.UserControls
 				}
 
 				// print the main atmospheric composition
-				if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
+				if (showAtmosphere != false && sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
 					bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
 				// materials                        
-				if (sn.ScanData.HasMaterials)
+				if (showMaterials != false && sn.ScanData.HasMaterials)
 				{
 					var ret = "";
 					foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
@@ -309,5 +335,61 @@ namespace EDDiscovery.UserControls
 			dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
 			dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curData;
 		}
-    }
+
+		private void dataGridViewScanGrid_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right) return;
+			contextMenuStripSG.Visible = true;
+			contextMenuStripSG.Top = MousePosition.Y;
+			contextMenuStripSG.Left = MousePosition.X;
+		}
+
+		private void goldilocksZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showGoldilocksZone = goldilocksZoneToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowGoldilocks", goldilocksZoneToolStripMenuItem.Checked);
+		}
+
+		private void metalRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showMetalRichZone = metalRichToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowMetalRich", metalRichToolStripMenuItem.Checked);
+		}
+		
+		private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showWaterWorldZone = waterWorldsToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowWaterWorld", metalRichToolStripMenuItem.Checked);
+		}
+
+		private void earthLikeToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showEarthLikeZone = earthLikeToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowEarthLike", earthLikeToolStripMenuItem.Checked);
+		}
+
+		private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showAmmoniaZone = ammoniaWorldsToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowAmmonia", ammoniaWorldsToolStripMenuItem.Checked);
+		}
+
+		private void showAvailableMaterialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showMaterials = showAvailableMaterialsToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowMaterials", showAvailableMaterialsToolStripMenuItem.Checked);
+		}
+
+		private void showAtmosphericDetailsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showAtmosphere = showAtmosphericDetailsToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowAtmosphere", showAtmosphericDetailsToolStripMenuItem.Checked);
+		}
+
+		private void showRingsInformationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			showRings = showRingsInformationToolStripMenuItem.CheckState == CheckState.Checked;
+			SQLiteDBClass.PutSettingBool(DbSave + "ShowRings", showRingsInformationToolStripMenuItem.Checked);
+		}
+	}
 }

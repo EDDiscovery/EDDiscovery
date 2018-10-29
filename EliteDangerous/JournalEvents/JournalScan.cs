@@ -53,7 +53,15 @@ namespace EliteDangerousCore.JournalEvents
 		// orbital limits where is possible to find terraformable planets
 		public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
-        
+
+        // orbital limits for metal rich planets
+		public double? MetalRichInner { get; set; }
+		public double? MetalRichOuter { get; set; }
+
+		// orbital limits for Earth'like Planets
+		public double? EarthLikeInner { get; set; }
+		public double? EarthLikeOuter { get; set; }
+
 		// orbital limits which indicate possible water worlds
 		public double? WaterWorldsInner { get; set; }
         public double? WaterWorldsOuter { get; set; }
@@ -62,10 +70,6 @@ namespace EliteDangerousCore.JournalEvents
         public double? AmmoniaWorldsInner { get; set; }
         public double? AmmoniaWorldsOuter { get; set; }
         
-		// orbital limits for Earth'like Planets
-		public double? EarthLikeInner { get; set; }
-        public double? EarthLikeOuter { get; set; }
-
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
         public double? nEccentricity;                               // direct
@@ -247,11 +251,14 @@ namespace EliteDangerousCore.JournalEvents
                 {
                     HabitableZoneInner = DistanceForBlackBodyTemperature(315);
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
+
+					MetalRichInner = DistanceForBlackBodyTemperature(100000); // actually, there's no limit for the temperature a planet cna reach, if very close to the star.
+					MetalRichOuter = DistanceForBlackBodyTemperature(1103);
                     WaterWorldsInner = DistanceForBlackBodyTemperature(307);
                     WaterWorldsOuter = DistanceForBlackBodyTemperature(156);
                     AmmoniaWorldsInner = DistanceForBlackBodyTemperature(193);
                     AmmoniaWorldsOuter = DistanceForBlackBodyTemperature(117);
-                    EarthLikeInner = DistanceForBlackBodyTemperature(278);
+                    EarthLikeInner = DistanceForBlackBodyTemperature(282); // Jackie Silver states 728, but I found many earth like world which do not fit inside this limit
                     EarthLikeOuter = DistanceForBlackBodyTemperature(227);
                 }
             }
@@ -583,6 +590,35 @@ namespace EliteDangerousCore.JournalEvents
                 return null;
         }
 
+		public string GetMetalRichZoneStringLs()
+		{
+			if (IsStar && MetalRichInner.HasValue && MetalRichOuter.HasValue)
+			{
+				return $"{MetalRichInner:N0}-{MetalRichOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+		
+		public string MetalRichString()
+		{
+			if (IsStar && MetalRichInner.HasValue && MetalRichOuter.HasValue)
+			{
+				var mrpZone = new StringBuilder();
+				if (MetalRichInner != null)
+					mrpZone.AppendFormat("Possible Metal Rich Planets between {0} ({1}-{2} AU)\n".Tx(this),
+										 GetMetalRichZoneStringLs(),
+										 (MetalRichInner.Value / oneAU_LS).ToString("N2"),
+										 (MetalRichOuter.Value / oneAU_LS).ToString("N2"));
+		
+				return mrpZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
 		public string GetWaterWorldZoneStringLs()
 		{
 			if (IsStar && WaterWorldsInner.HasValue && WaterWorldsOuter.HasValue)
@@ -605,10 +641,7 @@ namespace EliteDangerousCore.JournalEvents
 										 GetWaterWorldZoneStringLs(),
 										 (WaterWorldsInner.Value / oneAU_LS).ToString("N2"),
 										 (WaterWorldsOuter.Value / oneAU_LS).ToString("N2"));
-				// momentary disabled, to prevent alignment issues
-				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
-
+		
 				return wwpZone.ToNullSafeString();
 			}
 			else
@@ -637,17 +670,13 @@ namespace EliteDangerousCore.JournalEvents
 										 GetEarthLikeZoneStringLs(),
 										 (EarthLikeInner.Value / oneAU_LS).ToString("N2"),
 										 (EarthLikeOuter.Value / oneAU_LS).ToString("N2"));
-				// momentary disabled, to prevent alignment issues
-				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
-
+				
 				return elpZone.ToNullSafeString();
 			}
 			else
 				return null;
 		}
-
-		//
+		
 		public string GetAmmoniaWorldsStringLs()
 		{
 			if (IsStar && AmmoniaWorldsInner.HasValue && AmmoniaWorldsOuter.HasValue)
@@ -670,10 +699,7 @@ namespace EliteDangerousCore.JournalEvents
 										 GetAmmoniaWorldsStringLs(),
 										 (AmmoniaWorldsInner.Value / oneAU_LS).ToString("N2"),
 										 (AmmoniaWorldsOuter.Value / oneAU_LS).ToString("N2"));
-				// momentary disabled, to prevent alignment issues
-				//if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				//    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
-
+				
 				return amwZone.ToNullSafeString();
 			}
 			else

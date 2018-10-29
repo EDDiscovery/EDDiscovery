@@ -173,6 +173,8 @@ namespace EDDiscovery.Actions
                     ap[prefix + "_mag"] = sc.nAbsoluteMagnitude.ToNANNullSafeString("0");
                     ap[prefix + "_habinner"] = sc.HabitableZoneInner.ToNANNullSafeString("0.##");
                     ap[prefix + "_habouter"] = sc.HabitableZoneOuter.ToNANNullSafeString("0.##");
+					ap[prefix + "_mrpinner"] = sc.MetalRichInner.ToNANNullSafeString("0.##");
+					ap[prefix + "_mrpouter"] = sc.MetalRichOuter.ToNANNullSafeString("0.##");
 					ap[prefix + "_wwpinner"] = sc.WaterWorldsInner.ToNANNullSafeString("0.##");
 					ap[prefix + "_wwpouter"] = sc.WaterWorldsOuter.ToNANNullSafeString("0.##");
 					ap[prefix + "_amwinner"] = sc.AmmoniaWorldsInner.ToNANNullSafeString("0.##");

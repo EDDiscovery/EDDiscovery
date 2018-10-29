@@ -44,7 +44,8 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
 			this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
 			this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
 			this.ImageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,17 +57,15 @@ namespace EDDiscovery.UserControls
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.contextMenuStripSG = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.showCircumstellarZonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.showAvailableMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.showAtmoshphericDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.goldilocksZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.metalRichToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.earthLikeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.waterWorldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.earthLikeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ammoniaWorldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.narrowHeader = new System.Windows.Forms.ToolStripMenuItem();
-			this.wideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showAvailableMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showAtmosphericDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showRingsInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataViewScrollerPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
 			this.contextMenuStripSG.SuspendLayout();
@@ -99,14 +98,14 @@ namespace EDDiscovery.UserControls
             this.colClass,
             this.Distance,
             this.colBriefing});
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle2;
 			this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
 			this.dataGridViewScangrid.Name = "dataGridViewScangrid";
@@ -119,6 +118,7 @@ namespace EDDiscovery.UserControls
 			this.dataGridViewScangrid.TabIndex = 23;
 			this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScanGrid_CellDoubleClick);
 			this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScanGrid_RowPostPaint);
+			this.dataGridViewScangrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScanGrid_MouseClick);
 			// 
 			// ImageColumn
 			// 
@@ -196,37 +196,23 @@ namespace EDDiscovery.UserControls
 			this.contextMenuStripSG.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showCircumstellarZonesToolStripMenuItem,
             this.showAvailableMaterialsToolStripMenuItem,
-            this.showAtmoshphericDetailsToolStripMenuItem});
+            this.showAtmosphericDetailsToolStripMenuItem,
+            this.showRingsInformationToolStripMenuItem});
 			this.contextMenuStripSG.Name = "contextMenuStripSG";
-			this.contextMenuStripSG.Size = new System.Drawing.Size(230, 70);
+			this.contextMenuStripSG.Size = new System.Drawing.Size(223, 92);
 			// 
 			// showCircumstellarZonesToolStripMenuItem
 			// 
 			this.showCircumstellarZonesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.goldilocksZoneToolStripMenuItem,
             this.toolStripSeparator1,
-            this.narrowHeader,
             this.metalRichToolStripMenuItem,
-            this.earthLikeToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.wideToolStripMenuItem,
             this.waterWorldsToolStripMenuItem,
+            this.earthLikeToolStripMenuItem,
             this.ammoniaWorldsToolStripMenuItem});
 			this.showCircumstellarZonesToolStripMenuItem.Name = "showCircumstellarZonesToolStripMenuItem";
-			this.showCircumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showCircumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
 			this.showCircumstellarZonesToolStripMenuItem.Text = "Show &Circumstellar Zones";
-			// 
-			// showAvailableMaterialsToolStripMenuItem
-			// 
-			this.showAvailableMaterialsToolStripMenuItem.Name = "showAvailableMaterialsToolStripMenuItem";
-			this.showAvailableMaterialsToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.showAvailableMaterialsToolStripMenuItem.Text = "Show Available &Materials";
-			// 
-			// showAtmoshphericDetailsToolStripMenuItem
-			// 
-			this.showAtmoshphericDetailsToolStripMenuItem.Name = "showAtmoshphericDetailsToolStripMenuItem";
-			this.showAtmoshphericDetailsToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
-			this.showAtmoshphericDetailsToolStripMenuItem.Text = "Show &Atmoshpheric Details";
 			// 
 			// goldilocksZoneToolStripMenuItem
 			// 
@@ -236,11 +222,15 @@ namespace EDDiscovery.UserControls
 			this.goldilocksZoneToolStripMenuItem.Name = "goldilocksZoneToolStripMenuItem";
 			this.goldilocksZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.goldilocksZoneToolStripMenuItem.Text = "&Goldilocks";
+			this.goldilocksZoneToolStripMenuItem.ToolTipText = "The “Goldilocks Zone” is the area around a star that has the conditions necessary" +
+    " for liquid water to exist on a planet. Usually, it indicate where is possible t" +
+    "o find terraformable planets, too.";
+			this.goldilocksZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.goldilocksZoneToolStripMenuItem_CheckStateChanged);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(169, 6);
 			// 
 			// metalRichToolStripMenuItem
 			// 
@@ -248,18 +238,9 @@ namespace EDDiscovery.UserControls
 			this.metalRichToolStripMenuItem.Name = "metalRichToolStripMenuItem";
 			this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.metalRichToolStripMenuItem.Text = "&Metal Rich";
-			// 
-			// earthLikeToolStripMenuItem
-			// 
-			this.earthLikeToolStripMenuItem.CheckOnClick = true;
-			this.earthLikeToolStripMenuItem.Name = "earthLikeToolStripMenuItem";
-			this.earthLikeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.earthLikeToolStripMenuItem.Text = "&Earth Like";
-			// 
-			// toolStripSeparator2
-			// 
-			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+			this.metalRichToolStripMenuItem.ToolTipText = "This narrow to medium size zone indicate where is possibleto find planets rich in" +
+    " metal resources.";
+			this.metalRichToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.metalRichToolStripMenuItem_CheckStateChanged);
 			// 
 			// waterWorldsToolStripMenuItem
 			// 
@@ -267,6 +248,17 @@ namespace EDDiscovery.UserControls
 			this.waterWorldsToolStripMenuItem.Name = "waterWorldsToolStripMenuItem";
 			this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.waterWorldsToolStripMenuItem.Text = "&Water Worlds";
+			this.waterWorldsToolStripMenuItem.ToolTipText = resources.GetString("waterWorldsToolStripMenuItem.ToolTipText");
+			this.waterWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.waterWorldsToolStripMenuItem_CheckStateChanged);
+			// 
+			// earthLikeToolStripMenuItem
+			// 
+			this.earthLikeToolStripMenuItem.CheckOnClick = true;
+			this.earthLikeToolStripMenuItem.Name = "earthLikeToolStripMenuItem";
+			this.earthLikeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.earthLikeToolStripMenuItem.Text = "&Earth Like";
+			this.earthLikeToolStripMenuItem.ToolTipText = "This very narrow zone indicate where is possible to find earth like planets.";
+			this.earthLikeToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.earthLikeToolStripMenuItem_CheckStateChanged);
 			// 
 			// ammoniaWorldsToolStripMenuItem
 			// 
@@ -274,20 +266,37 @@ namespace EDDiscovery.UserControls
 			this.ammoniaWorldsToolStripMenuItem.Name = "ammoniaWorldsToolStripMenuItem";
 			this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.ammoniaWorldsToolStripMenuItem.Text = "&Ammonia Worlds";
+			this.ammoniaWorldsToolStripMenuItem.ToolTipText = "This is a very large zone, where ammonia worlds can exists.";
+			this.ammoniaWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.ammoniaWorldsToolStripMenuItem_CheckStateChanged);
 			// 
-			// narrowHeader
+			// showAvailableMaterialsToolStripMenuItem
 			// 
-			this.narrowHeader.Enabled = false;
-			this.narrowHeader.Name = "narrowHeader";
-			this.narrowHeader.Size = new System.Drawing.Size(180, 22);
-			this.narrowHeader.Text = "Narrow";
+			this.showAvailableMaterialsToolStripMenuItem.Checked = true;
+			this.showAvailableMaterialsToolStripMenuItem.CheckOnClick = true;
+			this.showAvailableMaterialsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.showAvailableMaterialsToolStripMenuItem.Name = "showAvailableMaterialsToolStripMenuItem";
+			this.showAvailableMaterialsToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+			this.showAvailableMaterialsToolStripMenuItem.Text = "Show Available &Materials";
+			this.showAvailableMaterialsToolStripMenuItem.ToolTipText = "Show available materials for landable planets.";
+			this.showAvailableMaterialsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.showAvailableMaterialsToolStripMenuItem_CheckStateChanged);
 			// 
-			// wideToolStripMenuItem
+			// showAtmosphericDetailsToolStripMenuItem
 			// 
-			this.wideToolStripMenuItem.Enabled = false;
-			this.wideToolStripMenuItem.Name = "wideToolStripMenuItem";
-			this.wideToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.wideToolStripMenuItem.Text = "Wide";
+			this.showAtmosphericDetailsToolStripMenuItem.CheckOnClick = true;
+			this.showAtmosphericDetailsToolStripMenuItem.Name = "showAtmosphericDetailsToolStripMenuItem";
+			this.showAtmosphericDetailsToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+			this.showAtmosphericDetailsToolStripMenuItem.Text = "Show &Atmospheric Details";
+			this.showAtmosphericDetailsToolStripMenuItem.ToolTipText = "Show atmospheric details.";
+			this.showAtmosphericDetailsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.showAtmosphericDetailsToolStripMenuItem_CheckStateChanged);
+			// 
+			// showRingsInformationToolStripMenuItem
+			// 
+			this.showRingsInformationToolStripMenuItem.CheckOnClick = true;
+			this.showRingsInformationToolStripMenuItem.Name = "showRingsInformationToolStripMenuItem";
+			this.showRingsInformationToolStripMenuItem.Size = new System.Drawing.Size(222, 22);
+			this.showRingsInformationToolStripMenuItem.Text = "Show Rings Information";
+			this.showRingsInformationToolStripMenuItem.ToolTipText = "Show rings number and composition.";
+			this.showRingsInformationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.showRingsInformationToolStripMenuItem_CheckStateChanged);
 			// 
 			// UserControlScanGrid
 			// 
@@ -317,14 +326,12 @@ namespace EDDiscovery.UserControls
 		private System.Windows.Forms.ToolStripMenuItem showCircumstellarZonesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem goldilocksZoneToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripMenuItem narrowHeader;
 		private System.Windows.Forms.ToolStripMenuItem metalRichToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem earthLikeToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem wideToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem waterWorldsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem ammoniaWorldsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem showAtmoshphericDetailsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showAtmosphericDetailsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showRingsInformationToolStripMenuItem;
 	}
 }
