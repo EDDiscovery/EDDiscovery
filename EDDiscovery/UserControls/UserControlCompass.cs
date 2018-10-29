@@ -85,16 +85,16 @@ namespace EDDiscovery.UserControls
 
         public override Color ColorTransparency { get { return Color.Green; } }
 
-        public override void SetTransparency(bool on, Color curbackcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            labelExtTargetLong.TextBackColor = labelTargetLat.TextBackColor = curbackcol;
-            numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
-            labelBookmark.BackColor = curbackcol;
-            checkBoxHideTransparent.BackColor = curbackcol;
+            labelExtTargetLong.TextBackColor = labelTargetLat.TextBackColor = curCol;
+            numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curCol;
+            labelBookmark.BackColor = curCol;
+            checkBoxHideTransparent.BackColor = curCol;
             comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = on;
-            comboBoxBookmarks.BackColor = curbackcol;
-            buttonNewBookmark.BackColor = curbackcol;
-            BackColor = curbackcol;
+            comboBoxBookmarks.BackColor = curCol;
+            buttonNewBookmark.BackColor = curCol;
+            BackColor = curCol;
 
             Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             compassControl.ForeColor = fore;

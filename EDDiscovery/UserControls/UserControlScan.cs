@@ -106,10 +106,10 @@ namespace EDDiscovery.UserControls
 		#region Transparency
         Color transparencycolor = Color.Green;
         public override Color ColorTransparency { get { return transparencycolor; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
-			rollUpPanelTop.BackColor = curcol;
+            imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curCol;
+			rollUpPanelTop.BackColor = curCol;
 			rollUpPanelTop.ShowHiddenMarker = !on;
         }
 

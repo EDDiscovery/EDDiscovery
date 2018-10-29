@@ -209,18 +209,18 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
         }
 
-        public override void SetTransparency(bool on, Color curbackcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
             dataViewScrollerPanelCombat.Visible = !on || checkBoxCustomGridOn.Checked;
             panelTop.Visible = !on;
-            panelStatus.BackColor = on ? Color.Transparent : curbackcol;
+            panelStatus.BackColor = on ? Color.Transparent : curCol;
 
             Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
 
             labelCredits.Font = labelTotalKills.Font = labelTotalReward.Font = labelFactionKills.Font = labelFactionReward.Font = labelFaction.Font = labelTotalCrimes.Font = labelBalance.Font = on ? transparentfont : EDDTheme.Instance.GetFont;
             
             labelCredits.ForeColor = labelTotalKills.ForeColor = labelTotalReward.ForeColor = labelFactionKills.ForeColor = labelFactionReward.ForeColor = labelFaction.ForeColor = labelTotalCrimes.ForeColor = labelBalance.ForeColor = fore;
-            labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curbackcol;
+            labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curCol;
 
         }
         public override Color ColorTransparency { get { return Color.Green; } }

@@ -107,9 +107,9 @@ namespace EDDiscovery.UserControls
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            pictureBox.BackColor = this.BackColor = curcol;
+            pictureBox.BackColor = this.BackColor = curCol;
             Display(lastHE);
         }
 

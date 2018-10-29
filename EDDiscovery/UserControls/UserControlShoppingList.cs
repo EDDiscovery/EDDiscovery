@@ -136,11 +136,11 @@ namespace EDDiscovery.UserControls
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;
-            splitContainerVertical.Panel1.BackColor = splitContainerVertical.Panel2.BackColor = curcol;
-            splitContainerRightHorz.Panel1.BackColor = splitContainerRightHorz.Panel2.BackColor = curcol;
+            pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curCol;
+            splitContainerVertical.Panel1.BackColor = splitContainerVertical.Panel2.BackColor = curCol;
+            splitContainerRightHorz.Panel1.BackColor = splitContainerRightHorz.Panel2.BackColor = curCol;
             Display();
         }
 

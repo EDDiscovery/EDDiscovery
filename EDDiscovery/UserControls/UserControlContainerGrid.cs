@@ -381,18 +381,18 @@ namespace EDDiscovery.UserControls
         #region Transparency
 
         public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            this.BackColor = curcol;
-            panelPlayfield.BackColor = curcol;
-            rollUpPanelMenu.BackColor = curcol;
+            this.BackColor = curCol;
+            panelPlayfield.BackColor = curCol;
+            rollUpPanelMenu.BackColor = curCol;
             rollUpPanelMenu.ShowHiddenMarker = !on;
 
             foreach (UserControlContainerResizable r in uccrlist)
             {
                 r.BorderColor = on ? Color.Transparent : discoveryform.theme.GridBorderLines;
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
-                uc.SetTransparency(on, curcol);
+                uc.SetTransparency(on, curCol);
             }
         }
 

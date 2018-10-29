@@ -32,7 +32,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlSpanel : UserControlCommonBase
+    public partial class UserControlSPanel : UserControlCommonBase
     {
         private string DbSave { get { return DBName("SPanel" ); } }
         private string DbFilterSave { get { return DBName("SPanelEventFilter" ); } }
@@ -94,30 +94,33 @@ namespace EDDiscovery.UserControls
 
             public const long showSystemInformation = 1L << 32;
             public const long showHabInformation = 1L << 33;
-            public const long showNothingWhenSysmap = 1L << 34;
-            public const long showNothingWhenGalmap = 1L << 35;
+            public const long showNothingWhenSystemMap = 1L << 34;
+            public const long showNothingWhenGalaxyMap = 1L << 35;
+
+			public const long showGoldilocks = 1L << 40;
+			public const long showMetalRich = 1L << 41;
+			public const long showWaterWorld = 1L << 42;
+			public const long showEarthLike = 1L << 43;
+			public const long showAmmoniaWorld = 1L << 44;
         }
 
-        long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
+        long _config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
                                                 Configuration.showTime | Configuration.showDescription |
                                                Configuration.showInformation | Configuration.showNotes | 
                                                 Configuration.showXYZ | Configuration.showDistancePerStar |
                                                Configuration.showScan15s | Configuration.showSystemInformation |
                                                Configuration.showScanRight;
 
-        bool Config(long c) { return (config & c) != 0; }
-        bool IsSurfaceScanOn { get { return Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite); } }
+		private bool Config(long c) { return (_config & c) != 0; }
+		private bool IsSurfaceScanOn => Config(Configuration.showScan15s) || Config(Configuration.showScan30s) || Config(Configuration.showScan60s) || Config(Configuration.showScanIndefinite);
 
-        int layoutorder = 0;
+		int _layoutOrder = 0;
 
-        public UserControlSpanel()
+        public UserControlSPanel() => InitializeComponent();
+
+		public override void Init()
         {
-            InitializeComponent();
-        }
-
-        public override void Init()
-        {
-            config = (long)(SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)config)) | ((long)(SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(config >> 32))) << 32);
+            _config = (long)(SQLiteDBClass.GetSettingInt(DbSave + "Config", (int)_config)) | ((long)(SQLiteDBClass.GetSettingInt(DbSave + "ConfigH", (int)(_config >> 32))) << 32);
             toolStripMenuItemTargetLine.Checked = Config(Configuration.showTargetLine);
             toolStripMenuItemTime.Checked = Config(Configuration.showTime);
             EDSMButtonToolStripMenuItem.Checked = Config(Configuration.showEDSMButton);
@@ -133,39 +136,45 @@ namespace EDDiscovery.UserControls
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
             showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
             showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
-            dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalmap);
-            dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSysmap);
-
-
+			goldilocksToolStripMenuItem.Checked = Config(Configuration.showGoldilocks);
+			metalRichToolStripMenuItem.Checked = Config(Configuration.showMetalRich);
+			waterWorldsToolStripMenuItem.Checked = Config(Configuration.showWaterWorld);
+			earthLikeToolStripMenuItem.Checked = Config(Configuration.showEarthLike);
+			ammoniaWorldsToolStripMenuItem.Checked = Config(Configuration.showAmmoniaWorld);
+            dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalaxyMap);
+            dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSystemMap);
 
             SetSurfaceScanBehaviour(null);
             SetScanPosition(null);
-            SetLayoutOrder(SQLiteDBClass.GetSettingInt(DbSave + "Layout", layoutorder),false);  // also resets the tab order
+            SetLayoutOrder(SQLiteDBClass.GetSettingInt(DbSave + "Layout", _layoutOrder),false);  // also resets the tab order
 
             scanhide.Tick += HideScanData;
 
             dividercheck.Tick += DividerCheck;
             dividercheck.Interval = 500;
 
-            string tabs = SQLiteDBClass.GetSettingString(DbSave + "PanelTabs", "");
+            var tabs = SQLiteDBClass.GetSettingString(DbSave + "PanelTabs", "");
 
             if (tabs.HasChars())
             {
                 try
                 {
-                    List<int> tablist = tabs.Split(',').Select(int.Parse).ToList();
+                    var tablist = tabs.Split(',').Select(int.Parse).ToList();
 
-                    for (int i = 0; i < tablist.Count && i < columnpos.Count; i++)      // for what we have, and not more than pre-populated, fill
+                    for (var i = 0; i < tablist.Count && i < columnpos.Count; i++)      // for what we have, and not more than pre-populated, fill
                         columnpos[i] = tablist[i];
                 }
-                catch { }
-            }
+				catch
+				{
+					// ignored
+				}
+			}
 
             displayfont = discoveryform.theme.GetFont;
 
             pictureBox.ContextMenuStrip = contextMenuStrip;
 
-            string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
+            var filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
@@ -197,21 +206,22 @@ namespace EDDiscovery.UserControls
             scanhide.Dispose();
             dividercheck.Dispose();
 
-            SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)config);
-            SQLiteDBClass.PutSettingInt(DbSave + "ConfigH", (int)(config>>32));
-            SQLiteDBClass.PutSettingInt(DbSave + "Layout", layoutorder);
-            string s = string.Join<int>(",", columnpos);
+            SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)_config);
+            SQLiteDBClass.PutSettingInt(DbSave + "ConfigH", (int)(_config>>32));
+            SQLiteDBClass.PutSettingInt(DbSave + "Layout", _layoutOrder);
+            var s = string.Join<int>(",", columnpos);
             SQLiteDBClass.PutSettingString(DbSave + "PanelTabs", s);
         }
 
-        public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override Color ColorTransparency => Color.Green;
+
+		public override void SetTransparency(bool on, Color curCol)
         {
-            pictureBox.BackColor = this.BackColor = curcol;
+            pictureBox.BackColor = this.BackColor = curCol;
             Display(current_historylist);
         }
 
-        private void UserControlSpanel_Resize(object sender, EventArgs e)
+        private void UserControlSPanel_Resize(object sender, EventArgs e)
         {
             if ( !ResizingNow && !IsInTemporaryResize && this.Width>0)
                 Display(current_historylist);
@@ -233,115 +243,142 @@ namespace EDDiscovery.UserControls
 
             if (hl != null && hl.Count > 0)     // just for safety
             {
-                List<HistoryEntry> result = current_historylist.LastFirst;      // Standard filtering
+                var result = current_historylist.LastFirst;      // Standard filtering
 
-                int ftotal;         // event filter
-                result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out ftotal);
-                result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out ftotal); // and the field filter..
+				result = HistoryList.FilterByJournalEvent(result, SQLiteDBClass.GetSettingString(DbFilterSave, "All"), out var fTotal);
+                result = FilterHelpers.FilterHistory(result, fieldfilter , discoveryform.Globals, out fTotal); // and the field filter..
 
                 RevertToNormalSize();                                           // ensure size is back to normal..
                 scanpostextoffset = new Point(0, 0);                            // left/ top used by scan display
 
-                Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-                Color backcolour = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
+                var textColor = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                var backColor = IsTransparent ? (Config(Configuration.showBlackBoxAroundText) ? Color.Black : Color.Transparent) : this.BackColor;
 
-                bool drawnnootherstuff = DrawScanText(true, textcolour, backcolour);                    // go 1 for some of the scan positions
+                var drawnNoOtherStuff = DrawScanText(true, textColor, backColor);                    // go 1 for some of the scan positions
 
-                if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
+                if (!drawnNoOtherStuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
-                    int rowpos = scanpostextoffset.Y;
-                    int rowheight = Config(Configuration.showIcon) ? 26 : 20;
+                    var rowPosition = scanpostextoffset.Y;
+                    var rowHeight = Config(Configuration.showIcon) ? 26 : 20;
 
                     if (Config(Configuration.showNothingWhenDocked) && (hl.IsCurrentlyDocked || hl.IsCurrentlyLanded))
                     {
-                        AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textcolour, backcolour, null);
-                    }
-                    else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
-                    {
-                        AddColText(0, 0, rowpos, rowheight, (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", textcolour, backcolour, null);
+                        AddColText(0, 0, rowPosition, rowHeight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed", textColor, backColor, null);
                     }
                     else
-                    {
-                        string name;
-                        Point3D tpos;
-                        bool targetpresent = TargetClass.GetTargetPosition(out name, out tpos);
+					{
+						var currentSystem = hl.CurrentSystem;
+						if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalaxyMap)) || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSystemMap)))
+						{
+							AddColText(0, 0, rowPosition, rowHeight, (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", textColor, backColor, null);
+						}
+						else
+						{
+							var targetPresent = TargetClass.GetTargetPosition(out var name, out var tpos);
 
-                        ISystem currentsystem = hl.CurrentSystem; // may be null
+							var last = hl.GetLast;
 
-                        HistoryEntry last = hl.GetLast;
+							if (Config(Configuration.showSystemInformation) && last != null)
+							{
+								hl.ReturnSystemInfo(last, out var allegiance, out var economy, out var gov, out var faction, out var factionstate, out var security);
 
-                        if (Config(Configuration.showSystemInformation) && last != null)
-                        {
-                            string allegiance, economy, gov, faction, factionstate, security;
-                            hl.ReturnSystemInfo(last, out allegiance, out economy, out gov, out faction, out factionstate, out security);
-
-                            string str = last.System.Name + " : " + BaseUtils.FieldBuilder.Build(
-                                "", faction,
-                                "", factionstate,
-                                "", security,
-                                "", allegiance,
-                                "", economy,
-                                "", gov
-                                );
+								var str = last.System.Name + " : " + BaseUtils.FieldBuilder.Build(
+																								  "", faction,
+																								  "", factionstate,
+																								  "", security,
+																								  "", allegiance,
+																								  "", economy,
+																								  "", gov
+																								 );
 
 
-                            HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
-                            bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
+								var lastHistoryEntry = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
+								var firstDiscovery = (lastHistoryEntry != null && (lastHistoryEntry.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
 
-                            AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer");
+								AddColText(0, 0, rowPosition, rowHeight, str, textColor, backColor, null , firstDiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer");
 
-                            rowpos += rowheight;
-                        }
+								rowPosition += rowHeight;
+							}
 
-                        if (Config(Configuration.showHabInformation) && last != null)
-                        {
-                            StarScan scan = hl.starscan;
+							if (Config(Configuration.showHabInformation) && last != null)
+							{
+								var scan = hl.starscan;
 
-                            StarScan.SystemNode sn = scan.FindSystem(last.System, true);    // EDSM look up here..
+								var sn = scan.FindSystem(last.System, true);    // EDSM look up here..
 
-                            string res = null;
+								//
+								string goldilocks = null;
+								string metalRich = null;
+								string waterWorld = null;
+								string earthLike = null;
+								string ammoniaWorld = null;
+							
+								if (sn != null && sn.starnodes.Count > 0 && sn.starnodes.Values[0].ScanData != null)
+								{
+									var js = sn.starnodes.Values[0].ScanData;
+									goldilocks = js.HabZoneString().Replace("\r\n", " ");
+									metalRich = js.MetalRichString().Replace("\r\n", " ");
+									waterWorld = js.WaterWorldsString().Replace("\r\n", " ");
+									earthLike = js.EarthLikeZoneString().Replace("\r\n", " ");
+									ammoniaWorld = js.AmmoniaWorldsString().Replace("\r\n", " ");
+								}
 
-                            if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
-                            {
-                                JournalScan js = sn.starnodes.Values[0].ScanData;
-                                res = js.HabZoneString().Replace("\r\n", " ");
-                            }
+								if (goldilocks != null && goldilocksToolStripMenuItem.Checked != false)
+								{
+									AddColText(0, 0, rowPosition, rowHeight, goldilocks, textColor, backColor, null);
+									rowPosition += rowHeight;
+								}
+								if (metalRich != null && metalRichToolStripMenuItem.Checked != false)
+								{
+									AddColText(0, 0, rowPosition, rowHeight, metalRich, textColor, backColor, null);
+									rowPosition += rowHeight;
+								}
+								if (waterWorld != null && waterWorldsToolStripMenuItem.Checked != false)
+								{
+									AddColText(0, 0, rowPosition, rowHeight, waterWorld, textColor, backColor, null);
+									rowPosition += rowHeight;
+								}
+								if (earthLike != null && earthLikeToolStripMenuItem.Checked != false)
+								{
+									AddColText(0, 0, rowPosition, rowHeight, earthLike, textColor, backColor, null);
+									rowPosition += rowHeight;
+								}
+								if (ammoniaWorld != null && ammoniaWorldsToolStripMenuItem.Checked != false)
+								{
+									AddColText(0, 0, rowPosition, rowHeight, ammoniaWorld, textColor, backColor, null);
+									rowPosition += rowHeight;
+								}
+							}
 
-                            if (res != null)
-                            {
-                                AddColText(0, 0, rowpos, rowheight, res, textcolour, backcolour, null);
-                                rowpos += rowheight;
-                            }
-                        }
+							if (targetPresent && Config(Configuration.showTargetLine) && currentSystem != null)
+							{
+								var dist = (currentSystem.HasCoordinate) ? currentSystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
+								AddColText(0, 0, rowPosition, rowHeight, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textColor, backColor, null);
+								rowPosition += rowHeight;
+							}
 
-                        if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
-                        {
-                            string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
-                            AddColText(0, 0, rowpos, rowheight, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null);
-                            rowpos += rowheight;
-                        }
+							foreach (var rhe in result)
+							{
+								DrawHistoryEntry(rhe, rowPosition, rowHeight, tpos, textColor, backColor);
+								rowPosition += rowHeight;
 
-                        foreach (HistoryEntry rhe in result)
-                        {
-                            DrawHistoryEntry(rhe, rowpos, rowheight, tpos, textcolour, backcolour);
-                            rowpos += rowheight;
+								if (rowPosition > ClientRectangle.Height)                // stop when off of screen
+									break;
+							}
+						}
+					}
+				}
 
-                            if (rowpos > ClientRectangle.Height)                // stop when off of screen
-                                break;
-                        }
-                    }
-                }
-
-                DrawScanText(false, textcolour, backcolour);     // go 2
+                DrawScanText(false, textColor, backColor);     // go 2
             }
 
             pictureBox.Render();
         }
 
-        void DrawHistoryEntry(HistoryEntry he, int rowpos, int rowheight, Point3D tpos , Color textcolour , Color backcolour )
+		private void DrawHistoryEntry(HistoryEntry he, int rowpos, int rowheight, Point3D tpos , Color textcolour , Color backcolour )
         {
-            List<string> coldata = new List<string>();                      // First we accumulate the strings
-            List<int> tooltipattach = new List<int>();
+            var coldata = new List<string>();                      // First we accumulate the strings
+            var tooltipattach = new List<int>();
 
             if (Config(Configuration.showTime))
                 coldata.Add((EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
@@ -363,14 +400,14 @@ namespace EDDiscovery.UserControls
                 coldata.Add(EventDescription.Replace("\r\n", " "));
             }
 
-            if (layoutorder == 0 && Config(Configuration.showNotes))
+            if (_layoutOrder == 0 && Config(Configuration.showNotes))
             {
                 coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
             }
 
-            bool showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
+            var showdistance = !Config(Configuration.showDistancesOnFSDJumpsOnly) || he.IsFSDJump;
 
-            if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
+            if (_layoutOrder == 2 && Config(Configuration.showDistancePerStar))
                 coldata.Add(showdistance ? DistToStar(he, tpos) : "");
 
             if (Config(Configuration.showXYZ))
@@ -380,67 +417,66 @@ namespace EDDiscovery.UserControls
                 coldata.Add((he.System.HasCoordinate && showdistance) ? he.System.Z.ToString("0.00") : "");
             }
 
-            if (layoutorder > 0 && Config(Configuration.showNotes))
+            if (_layoutOrder > 0 && Config(Configuration.showNotes))
             {
                 coldata.Add((he.snc != null) ? he.snc.Note.Replace("\r\n", " ") : "");
             }
 
-            if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
+            if (_layoutOrder < 2 && Config(Configuration.showDistancePerStar))
                 coldata.Add(showdistance ? DistToStar(he, tpos) : "");
 
-            int colnum = 0;
+            var colNumber = 0;
 
             if (Config(Configuration.showEDSMButton))
             {
-                Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
-                ExtendedControls.PictureBoxHotspot.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
-                                            "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM".Tx(this,"TVE"));
+                var backText = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
+                var edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colNumber++], rowpos), new Size(45, 14), 
+                                            "EDSM", displayfont, backText, textcolour, 0.5F, true, he, "View system on EDSM".Tx(this,"TVE"));
                 edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
-                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backText, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
             }
 
-            string tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
+            var tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
 
-            for (int i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
+            for (var i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
             {
-                int nextfull = i+1;
-                for (; nextfull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextfull].Length == 0; nextfull++)
+                var nextFull = i+1;
+                for (; nextFull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextFull].Length == 0; nextFull++)
                 { }
 
                 if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
                 {
                     Image img = he.GetIcon;
-                    ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null, false);
+                    ExtendedControls.PictureBoxHotspot.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colNumber+i], rowpos, img.Width, img.Height), img, null, null, false);
                     e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
                 }
                 else
-                    AddColText(colnum + i, colnum + nextfull, rowpos, rowheight, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
+                    AddColText(colNumber + i, colNumber + nextFull, rowpos, rowheight, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
             }
         }
 
         public bool DrawScanText(bool attop, Color textcolour , Color backcolour)
         {
-            Size maxscansize = new Size(1920, 1080);            // set arbitary large.. not important for this.
+            var maxScanSize = new Size(1920, 1080);            // set arbitary large.. not important for this.
 
-            if (scantext != null)
-            {
-                if (attop)
-                {
-                    if (Config(Configuration.showScanLeft))
-                    {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        scanpostextoffset = new Point(4 + scanimg.img.Width + 4, 0);
-                        RequestTemporaryMinimumSize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanAbove))
-                    {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        scanpostextoffset = new Point(0, scanimg.img.Height + 4);
-                        RequestTemporaryResizeExpand(new Size(0, scanimg.img.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanOnTop))
-                    {
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+			if (scantext == null) return false;
+			if (attop)
+			{
+				if (Config(Configuration.showScanLeft))
+				{
+					var scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxScanSize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+					scanpostextoffset = new Point(4 + scanimg.img.Width + 4, 0);
+					RequestTemporaryMinimumSize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4));
+				}
+				else if (Config(Configuration.showScanAbove))
+				{
+					var scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxScanSize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+					scanpostextoffset = new Point(0, scanimg.img.Height + 4);
+					RequestTemporaryResizeExpand(new Size(0, scanimg.img.Height + 4));
+				}
+				else if (Config(Configuration.showScanOnTop))
+				{
+					var scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxScanSize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
 #if false
 
                         using (Graphics gr = Graphics.FromImage(scanimg.img))
@@ -452,106 +488,99 @@ namespace EDDiscovery.UserControls
                             }
                         }
 #endif
-                        RequestTemporaryResize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4 ));        // match exactly to use minimum space
-                        return true;
-                    }
-                }
-                else // bottom chance
-                {
-                    if (Config(Configuration.showScanRight))
-                    {
-                        Size s = pictureBox.DisplaySize();
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        RequestTemporaryMinimumSize(new Size(s.Width+4+scanimg.img.Width + 8, scanimg.img.Height + 4));
-                    }
-                    else if (Config(Configuration.showScanBelow))
-                    {
-                        Size s = pictureBox.DisplaySize();
-                        PictureBoxHotspot.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
-                        RequestTemporaryResizeExpand(new Size(0, scanimg.img.Height + 4));
-                    }
-                }
-            }
+					RequestTemporaryResize(new Size(scanimg.img.Width + 8, scanimg.img.Height + 4 ));        // match exactly to use minimum space
+					return true;
+				}
+			}
+			else // bottom chance
+			{
+				if (Config(Configuration.showScanRight))
+				{
+					var s = pictureBox.DisplaySize();
+					var scanImg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxScanSize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+					RequestTemporaryMinimumSize(new Size(s.Width+4+scanImg.img.Width + 8, scanImg.img.Height + 4));
+				}
+				else if (Config(Configuration.showScanBelow))
+				{
+					var s = pictureBox.DisplaySize();
+					var scanImg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxScanSize, scantext, displayfont, textcolour, backcolour, 1.0F, "SCAN");
+					RequestTemporaryResizeExpand(new Size(0, scanImg.img.Height + 4));
+				}
+			}
 
-            return false;
+			return false;
         }
 
         void AddColText(int coli, int nextcol , int rowpos, int rowh, string text, Color textcolour, Color backcolour, string tooltip, Image opt = null , string imagetooltip = null)
         {
-            if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
-            {
-                int endpos = (nextcol == 0) ? 1920 : (columnpos[nextcol] - columnpos[coli] - 4);
+			if (text.Length <= 0) return;
+			var endPosition = (nextcol == 0) ? 1920 : (columnpos[nextcol] - columnpos[coli] - 4);
 
-                int colpos = scanpostextoffset.X + columnpos[coli];
+			var colPosition = scanpostextoffset.X + columnpos[coli];
 
-                if ( opt != null )
-                {
-                    pictureBox.AddImage(new Rectangle(colpos, rowpos, 24, 24), Icons.Controls.firstdiscover, null, imagetooltip, false);
-                    colpos += 24;
-                }
+			if ( opt != null )
+			{
+				pictureBox.AddImage(new Rectangle(colPosition, rowpos, 24, 24), Icons.Controls.firstdiscover, null, imagetooltip, false);
+				colPosition += 24;
+			}
 
-                ExtendedControls.PictureBoxHotspot.ImageElement e =
-                                pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
-                                new Size(endpos, rowh),
-                                text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
+			var e =
+				pictureBox.AddTextAutoSize(new Point(colPosition, rowpos),
+										   new Size(endPosition, rowh),
+										   text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
 
-                e.Translate(0, (rowh - e.img.Height) / 2);          // align to centre of rowh..
-            }
-        }
+			e.Translate(0, (rowh - e.img.Height) / 2);          // align to centre of rowh..
+		}
 
         private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
         {
-            EliteDangerousCore.UIEvents.UIJournalMusic jm = uievent as EliteDangerousCore.UIEvents.UIJournalMusic;
+            var jm = uievent as EliteDangerousCore.UIEvents.UIJournalMusic;
 
-            if (jm != null)
-            {
-                string ev = jm.Track;
+			if (jm == null) return;
+			var ev = jm.Track;
 
-                bool refresh = false;
-                if (ev.Contains("GalaxyMap"))
-                {
-                    refresh = (uistate != UIState.GalMap);
-                    uistate = UIState.GalMap;
-                }
-                else if (ev.Contains("SystemMap"))
-                {
-                    refresh = (uistate != UIState.SystemMap);
-                    uistate = UIState.SystemMap;
-                }
-                else
-                {
-                    refresh = (uistate != UIState.Normal);
-                    uistate = UIState.Normal;
-                }
+			var refresh = false;
+			if (ev.Contains("GalaxyMap"))
+			{
+				refresh = (uistate != UIState.GalMap);
+				uistate = UIState.GalMap;
+			}
+			else if (ev.Contains("SystemMap"))
+			{
+				refresh = (uistate != UIState.SystemMap);
+				uistate = UIState.SystemMap;
+			}
+			else
+			{
+				refresh = (uistate != UIState.Normal);
+				uistate = UIState.Normal;
+			}
 
-                //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
-                if (refresh && !jm.Shown)      // if we materially changed, and we are not showing ui events, need to update here
-                    Display(current_historylist);
-            }
-        }
+			//System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
+			if (refresh && !jm.Shown)      // if we materially changed, and we are not showing ui events, need to update here
+				Display(current_historylist);
+		}
 
         private string DistToStar(HistoryEntry he, Point3D tpos)
         {
-            string res = "";
-            if (!double.IsNaN(tpos.X))
-            {
-                double dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
-                if (dist >= 0)
-                    res = dist.ToString("0.00");
-            }
+            var res = "";
+			if (double.IsNaN(tpos.X)) return res;
+			var dist = he.System.Distance(tpos.X, tpos.Y, tpos.Z);
+			if (dist >= 0)
+				res = dist.ToString("0.00");
 
-            return res;
+			return res;
         }
 
         public void NewTarget(Object sender)
         {
-            System.Diagnostics.Debug.WriteLine("spanel Refresh target display");
+            System.Diagnostics.Debug.WriteLine("SPanel Refresh target display");
             Display(current_historylist);
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..
         {
-            bool add = WouldAddEntry(he);
+            var add = WouldAddEntry(he);
 
             if (add)
                 Display(hl);
@@ -573,81 +602,79 @@ namespace EDDiscovery.UserControls
 
         private void pictureBox_ClickElement(object sender, MouseEventArgs e, ExtendedControls.PictureBoxHotspot.ImageElement i, object tag)
         {
-            if (i != null)
-            {
-                string stag = tag as string;
-                HistoryEntry he = tag as HistoryEntry;
+			if (i == null) return;
+			var stag = tag as string;
+			var he = tag as HistoryEntry;
 
-                if (stag != null)      // its SCAN for now
-                {
-                    HideScanData(null, null);
-                }
-                else if (he != null)
-                {
-                    EliteDangerousCore.EDSM.EDSMClass edsm = new EliteDangerousCore.EDSM.EDSMClass();
+			if (stag != null)      // its SCAN for now
+			{
+				HideScanData(null, null);
+			}
+			else if (he != null)
+			{
+				var edsm = new EliteDangerousCore.EDSM.EDSMClass();
 
-                    string url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
+				var url = edsm.GetUrlToEDSMSystem(he.System.Name, he.System.EDSMID);
 
-                    if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
-                        System.Diagnostics.Process.Start(url);
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
-                }
-            }
-        }
+				if (url.Length > 0)         // may pass back empty string if not known, this solves another exception
+					System.Diagnostics.Process.Start(url);
+				else
+					ExtendedControls.MessageBoxTheme.Show(FindForm(), "System " + he.System.Name + " unknown to EDSM");
+			}
+		}
 
 #endregion
 
 #region Positioning
 
-        void ResetTabList()                             // work out optimum tab spacing by what is selected
+		private void ResetTabList()                             // work out optimum tab spacing by what is selected
         {
             columnpos = new List<int>();
-            int visiblecolwidth = 4;
+            var visibleColWidth = 4;
 
-            int pos = 4;
+            var pos = 4;
             columnpos.Add(pos);
 
             if (Config(Configuration.showEDSMButton))       // mirrors UpdateRow
             {
                 columnpos.Add(pos += 60);
-                visiblecolwidth += 60;
+                visibleColWidth += 60;
             }
 
             if (Config(Configuration.showTime))
             {
                 columnpos.Add(pos += 80);
-                visiblecolwidth += 80;
+                visibleColWidth += 80;
             }
 
             if (Config(Configuration.showIcon))
             {
                 columnpos.Add(pos += 40);
-                visiblecolwidth += 40;
+                visibleColWidth += 40;
             }
 
             if (Config(Configuration.showDescription))
             {
                 columnpos.Add(pos += 200);
-                visiblecolwidth += 200;
+                visibleColWidth += 200;
             }
 
             if (Config(Configuration.showInformation))
             {
                 columnpos.Add(pos += 200);
-                visiblecolwidth += 200;
+                visibleColWidth += 200;
             }
 
-            if (layoutorder == 0 && Config(Configuration.showNotes))
+            if (_layoutOrder == 0 && Config(Configuration.showNotes))
             {
                 columnpos.Add(pos += 200);
-                visiblecolwidth += 200;
+                visibleColWidth += 200;
             }
 
-            if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
+            if (_layoutOrder == 2 && Config(Configuration.showDistancePerStar))
             {
                 columnpos.Add(pos += 60);
-                visiblecolwidth += 60;
+                visibleColWidth += 60;
             }
 
             if (Config(Configuration.showXYZ))
@@ -655,19 +682,19 @@ namespace EDDiscovery.UserControls
                 columnpos.Add(pos += 60);
                 columnpos.Add(pos += 50);
                 columnpos.Add(pos += 60);
-                visiblecolwidth += 170;
+                visibleColWidth += 170;
             }
 
-            if (layoutorder > 0 && Config(Configuration.showNotes))
+            if (_layoutOrder > 0 && Config(Configuration.showNotes))
             {
                 columnpos.Add(pos += 200);
-                visiblecolwidth += 200;
+                visibleColWidth += 200;
             }
 
-            if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
+            if (_layoutOrder < 2 && Config(Configuration.showDistancePerStar))
             {
                 columnpos.Add(pos += 60);
-                visiblecolwidth += 60;
+                visibleColWidth += 60;
             }
 
             while (columnpos.Count < 4)                                         // need a minimum of 4 columns for target info
@@ -676,12 +703,17 @@ namespace EDDiscovery.UserControls
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (dividercapture == -2 && e.Y < 24)
-                ShowDividers(true);
-            else if (dividercapture == -1 && e.Y >= 24)
-                ShowDividers(false);
-        }
+		{
+			switch (dividercapture)
+			{
+				case -2 when e.Y < 24:
+					ShowDividers(true);
+					break;
+				case -1 when e.Y >= 24:
+					ShowDividers(false);
+					break;
+			}
+		}
 
         private void ShowDividers(bool show)
         {
@@ -693,15 +725,28 @@ namespace EDDiscovery.UserControls
             {
                 dividercapture = -1;
 
-                for (int i = 1; i < columnpos.Count; i++)              // bring up the number of dividers needed
+                for (var i = 1; i < columnpos.Count; i++)              // bring up the number of dividers needed
                 {
-                    ButtonExt b = dividers[i - 1];
+                    var b = dividers[i - 1];
                     b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, 0);
                     b.ButtonColorScaling = 1.0F;
-                    if (b.FlatStyle == FlatStyle.System)            // System can't do bitmaps.. we need standard.
-                        b.FlatStyle = FlatStyle.Standard;
-                    else if ( b.FlatStyle == FlatStyle.Popup )      // if in Popup (ours) we can adjust the look further.
-                        b.FlatAppearance.BorderColor = dividers[i - 1].BackColor;
+                    switch (b.FlatStyle)
+					{
+						// System can't do bitmaps.. we need standard.
+						case FlatStyle.System:
+							b.FlatStyle = FlatStyle.Standard;
+							break;
+						// if in Popup (ours) we can adjust the look further.
+						case FlatStyle.Popup:
+							b.FlatAppearance.BorderColor = dividers[i - 1].BackColor;
+							break;
+						case FlatStyle.Flat:
+							break;
+						case FlatStyle.Standard:
+							break;
+						default:
+							return;
+					}
                     b.Visible = true;
                 }
 
@@ -724,7 +769,7 @@ namespace EDDiscovery.UserControls
 
         private void divider_MouseDown(object sender, MouseEventArgs e)
         {
-            Button b = sender as Button;
+            var b = sender as Button;
             dividercapture = int.Parse((string)b.Tag);
             b.Capture = true;
             divideroriginalxpos = e.X;
@@ -734,7 +779,7 @@ namespace EDDiscovery.UserControls
         private void divider_MouseUp(object sender, MouseEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine("Button " + dividercapture + " mouse up");
-            Button b = sender as Button;
+            var b = sender as Button;
             dividercapture = -1;
             b.Capture = false;
             Display(current_historylist);
@@ -742,25 +787,20 @@ namespace EDDiscovery.UserControls
 
         private void divider_MouseMove(object sender, MouseEventArgs e)
         {
-            if (dividercapture >= 0)
-            {
-                int colpos = dividercapture + 1;        // because divider 0 is at col pos 1
-                Button b = sender as Button;
-                int off = e.X - divideroriginalxpos;
+			if (dividercapture < 0) return;
+			var colPosition = dividercapture + 1;        // because divider 0 is at col pos 1
+			var b = sender as Button;
+			var off = e.X - divideroriginalxpos;
 
-                if (columnpos[colpos] + off - columnpos[colpos - 1] >= 20)         // ensure can't get too close to previous one
-                {
-                    for (int i = colpos; i < columnpos.Count; i++)          // shift this and ones to right..
-                    {
-                        dividers[i - 1].Location = new Point(dividers[i - 1].Location.X + off, dividers[i - 1].Location.Y);
-                        columnpos[i] += off;
-                        dividers[i - 1].Invalidate();
-                    }
-
-                }
-                //System.Diagnostics.Debug.WriteLine("Capture " + dividercapture + " at " + e.X + "," + off + "," + off + " to " + b.Location);
-            }
-        }
+			if (columnpos[colPosition] + off - columnpos[colPosition - 1] < 20) return;
+			for (var i = colPosition; i < columnpos.Count; i++)          // shift this and ones to right..
+			{
+				dividers[i - 1].Location = new Point(dividers[i - 1].Location.X + off, dividers[i - 1].Location.Y);
+				columnpos[i] += off;
+				dividers[i - 1].Invalidate();
+			}
+			//System.Diagnostics.Debug.WriteLine("Capture " + dividercapture + " at " + e.X + "," + off + "," + off + " to " + b.Location);
+		}
 
 #endregion
 
@@ -768,23 +808,19 @@ namespace EDDiscovery.UserControls
 
         public void ShowScanData(JournalScan scan)
         {
-            if ( IsSurfaceScanOn )
-            {
-                scantext = scan.DisplayString(historicmatlist: discoveryform.history.GetLast?.MaterialCommodity);
-                Display(current_historylist);
-                SetSurfaceScanBehaviour(null);  // set up timers etc.
-            }
-        }
+			if (!IsSurfaceScanOn) return;
+			scantext = scan.DisplayString(historicmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+			Display(current_historylist);
+			SetSurfaceScanBehaviour(null);  // set up timers etc.
+		}
 
         private void HideScanData(object sender, EventArgs e)
         {
-            if (scantext != null)
-            {
-                scanhide.Stop();
-                scantext = null;
-                Display(current_historylist);
-            }
-        }
+			if (scantext == null) return;
+			scanhide.Stop();
+			scantext = null;
+			Display(current_historylist);
+		}
 
         #endregion
 
@@ -859,14 +895,14 @@ namespace EDDiscovery.UserControls
         {
             FlipConfig(Configuration.showNothingWhenDocked, ((ToolStripMenuItem)sender).Checked, true);
         }
-        private void dontshowwhenInGalaxyPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dontShowWhenInGalaxyPanelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showNothingWhenGalmap, ((ToolStripMenuItem)sender).Checked, true);
+            FlipConfig(Configuration.showNothingWhenGalaxyMap, ((ToolStripMenuItem)sender).Checked, true);
         }
 
-        private void dontshowwhenInSystemPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dontShowWhenInSystemPanelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showNothingWhenSysmap, ((ToolStripMenuItem)sender).Checked, true);
+            FlipConfig(Configuration.showNothingWhenSystemMap, ((ToolStripMenuItem)sender).Checked, true);
         }
 
         private void expandTextOverEmptyColumnsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -888,8 +924,7 @@ namespace EDDiscovery.UserControls
         {
             SetLayoutOrder(2, true);
         }
-
-
+		
         private void scanNoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetSurfaceScanBehaviour(Configuration.showScanOff);
@@ -914,8 +949,7 @@ namespace EDDiscovery.UserControls
         {
             SetSurfaceScanBehaviour(Configuration.showScanIndefinite);
         }
-
-
+		
         private void scanRightMenuItem_Click(object sender, EventArgs e)
         {
             SetScanPosition(Configuration.showScanRight);
@@ -955,28 +989,26 @@ namespace EDDiscovery.UserControls
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
-            List<string> namelist = new List<string>() { "Note" };
+            var frm = new ExtendedConditionsForms.ConditionFilterForm();
+            var namelist = new List<string>() { "Note" };
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Summary Panel: Filter out fields".Tx(this,"SPF"),
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
                             JournalEntry.GetListOfEventsWithOptMethod(false) ,
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
-            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
-            {
-                fieldfilter = frm.result;
-                SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
-                Display(current_historylist);
-            }
-        }
+			if (frm.ShowDialog(this.FindForm()) != DialogResult.OK) return;
+			fieldfilter = frm.result;
+			SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
+			Display(current_historylist);
+		}
 
-        void FlipConfig(long item, bool ch , bool redisplay = false)
+		private void FlipConfig(long item, bool ch , bool redisplay = false)
         {
             if (ch)
-                config |= item;
+                _config |= item;
             else
-                config &= ~item;
+                _config &= ~item;
 
             if ((item & Configuration.showaffectsTabs)!=0)
             {
@@ -988,21 +1020,19 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist);
         }
 
-        void SetLayoutOrder(int n , bool refresh = false)
+		private void SetLayoutOrder(int n , bool refresh = false)
         {
-            layoutorder = n;
-            orderDefaultToolStripMenuItem.Checked = layoutorder == 0;
-            orderNotesAfterXYZToolStripMenuItem.Checked = layoutorder == 1;
-            orderTargetDistanceXYZNotesToolStripMenuItem.Checked = layoutorder == 2;
+            _layoutOrder = n;
+            orderDefaultToolStripMenuItem.Checked = _layoutOrder == 0;
+            orderNotesAfterXYZToolStripMenuItem.Checked = _layoutOrder == 1;
+            orderTargetDistanceXYZNotesToolStripMenuItem.Checked = _layoutOrder == 2;
 
             ResetTabList();
 
-            if (refresh)
-            {
-                ShowDividers(false);
-                Display(current_historylist);
-            }
-        }
+			if (!refresh) return;
+			ShowDividers(false);
+			Display(current_historylist);
+		}
 
         private void SetSurfaceScanBehaviour(long? itemClicked)    // pass in a 
         {
@@ -1056,8 +1086,31 @@ namespace EDDiscovery.UserControls
             }
         }
 
+		#endregion
 
-        #endregion
+		private void goldilocksToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showGoldilocks, ((ToolStripMenuItem)sender).Checked, true);
+		}
 
-    }
+		private void metalRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showMetalRich, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showWaterWorld, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void earthLikeToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showEarthLike, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showAmmoniaWorld, ((ToolStripMenuItem)sender).Checked, true);
+		}
+	}
 }

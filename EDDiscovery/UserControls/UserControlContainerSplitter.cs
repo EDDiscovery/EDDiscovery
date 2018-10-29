@@ -481,17 +481,17 @@ namespace EDDiscovery.UserControls
         #region Transparency
 
         public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        public override void SetTransparency(bool on, Color curCol)
         {
-            this.BackColor = curcol;
-            panelPlayfield.BackColor = curcol;
+            this.BackColor = curCol;
+            panelPlayfield.BackColor = curCol;
 
             (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
                 UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..
                 {
-                    uccb.SetTransparency(on, curcol);
+                    uccb.SetTransparency(on, curCol);
                 }
             });
         }
