@@ -54,8 +54,22 @@ namespace EDDiscovery.UserControls
 			this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
 			this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+			this.contextMenuStripSG = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.showCircumstellarZonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showAvailableMaterialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.showAtmoshphericDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.goldilocksZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.metalRichToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.earthLikeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.waterWorldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ammoniaWorldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.narrowHeader = new System.Windows.Forms.ToolStripMenuItem();
+			this.wideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataViewScrollerPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
+			this.contextMenuStripSG.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dataViewScrollerPanel2
@@ -177,6 +191,104 @@ namespace EDDiscovery.UserControls
 			this.vScrollBarCustom2.Value = -1;
 			this.vScrollBarCustom2.ValueLimited = -1;
 			// 
+			// contextMenuStripSG
+			// 
+			this.contextMenuStripSG.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showCircumstellarZonesToolStripMenuItem,
+            this.showAvailableMaterialsToolStripMenuItem,
+            this.showAtmoshphericDetailsToolStripMenuItem});
+			this.contextMenuStripSG.Name = "contextMenuStripSG";
+			this.contextMenuStripSG.Size = new System.Drawing.Size(230, 70);
+			// 
+			// showCircumstellarZonesToolStripMenuItem
+			// 
+			this.showCircumstellarZonesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goldilocksZoneToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.narrowHeader,
+            this.metalRichToolStripMenuItem,
+            this.earthLikeToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.wideToolStripMenuItem,
+            this.waterWorldsToolStripMenuItem,
+            this.ammoniaWorldsToolStripMenuItem});
+			this.showCircumstellarZonesToolStripMenuItem.Name = "showCircumstellarZonesToolStripMenuItem";
+			this.showCircumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showCircumstellarZonesToolStripMenuItem.Text = "Show &Circumstellar Zones";
+			// 
+			// showAvailableMaterialsToolStripMenuItem
+			// 
+			this.showAvailableMaterialsToolStripMenuItem.Name = "showAvailableMaterialsToolStripMenuItem";
+			this.showAvailableMaterialsToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showAvailableMaterialsToolStripMenuItem.Text = "Show Available &Materials";
+			// 
+			// showAtmoshphericDetailsToolStripMenuItem
+			// 
+			this.showAtmoshphericDetailsToolStripMenuItem.Name = "showAtmoshphericDetailsToolStripMenuItem";
+			this.showAtmoshphericDetailsToolStripMenuItem.Size = new System.Drawing.Size(229, 22);
+			this.showAtmoshphericDetailsToolStripMenuItem.Text = "Show &Atmoshpheric Details";
+			// 
+			// goldilocksZoneToolStripMenuItem
+			// 
+			this.goldilocksZoneToolStripMenuItem.Checked = true;
+			this.goldilocksZoneToolStripMenuItem.CheckOnClick = true;
+			this.goldilocksZoneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.goldilocksZoneToolStripMenuItem.Name = "goldilocksZoneToolStripMenuItem";
+			this.goldilocksZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.goldilocksZoneToolStripMenuItem.Text = "&Goldilocks";
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+			// 
+			// metalRichToolStripMenuItem
+			// 
+			this.metalRichToolStripMenuItem.CheckOnClick = true;
+			this.metalRichToolStripMenuItem.Name = "metalRichToolStripMenuItem";
+			this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.metalRichToolStripMenuItem.Text = "&Metal Rich";
+			// 
+			// earthLikeToolStripMenuItem
+			// 
+			this.earthLikeToolStripMenuItem.CheckOnClick = true;
+			this.earthLikeToolStripMenuItem.Name = "earthLikeToolStripMenuItem";
+			this.earthLikeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.earthLikeToolStripMenuItem.Text = "&Earth Like";
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+			// 
+			// waterWorldsToolStripMenuItem
+			// 
+			this.waterWorldsToolStripMenuItem.CheckOnClick = true;
+			this.waterWorldsToolStripMenuItem.Name = "waterWorldsToolStripMenuItem";
+			this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.waterWorldsToolStripMenuItem.Text = "&Water Worlds";
+			// 
+			// ammoniaWorldsToolStripMenuItem
+			// 
+			this.ammoniaWorldsToolStripMenuItem.CheckOnClick = true;
+			this.ammoniaWorldsToolStripMenuItem.Name = "ammoniaWorldsToolStripMenuItem";
+			this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ammoniaWorldsToolStripMenuItem.Text = "&Ammonia Worlds";
+			// 
+			// narrowHeader
+			// 
+			this.narrowHeader.Enabled = false;
+			this.narrowHeader.Name = "narrowHeader";
+			this.narrowHeader.Size = new System.Drawing.Size(180, 22);
+			this.narrowHeader.Text = "Narrow";
+			// 
+			// wideToolStripMenuItem
+			// 
+			this.wideToolStripMenuItem.Enabled = false;
+			this.wideToolStripMenuItem.Name = "wideToolStripMenuItem";
+			this.wideToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.wideToolStripMenuItem.Text = "Wide";
+			// 
 			// UserControlScanGrid
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +298,7 @@ namespace EDDiscovery.UserControls
 			this.Size = new System.Drawing.Size(572, 572);
 			this.dataViewScrollerPanel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
+			this.contextMenuStripSG.ResumeLayout(false);
 			this.ResumeLayout(false);
 
         }
@@ -200,5 +313,18 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn Distance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
-    }
+		private System.Windows.Forms.ContextMenuStrip contextMenuStripSG;
+		private System.Windows.Forms.ToolStripMenuItem showCircumstellarZonesToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem goldilocksZoneToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripMenuItem narrowHeader;
+		private System.Windows.Forms.ToolStripMenuItem metalRichToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem earthLikeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripMenuItem wideToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem waterWorldsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ammoniaWorldsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showAvailableMaterialsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showAtmoshphericDetailsToolStripMenuItem;
+	}
 }
