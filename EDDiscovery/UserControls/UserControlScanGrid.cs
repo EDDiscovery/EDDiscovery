@@ -34,31 +34,31 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlScanGrid : UserControlCommonBase
     {
-        private HistoryEntry last_he = null;
+        private HistoryEntry _lastHe = null;
         private string DbColumnSave => DBName("ScanGridPanel", "DGVCol");
 		private string DbSave => DBName("ScanGrid" );
 
-		private bool showGoldilocksZone;
-		private bool showMetalRichZone;
-		private bool showWaterWorldZone;
-		private bool showEarthLikeZone;
-		private bool showAmmoniaZone;
-		private bool showMaterials;
-		private bool showAtmosphere;
-		private bool showRings;
+		private bool _showGoldilocksZone;
+		private bool _showMetalRichZone;
+		private bool _showWaterWorldZone;
+		private bool _showEarthLikeZone;
+		private bool _showAmmoniaZone;
+		private bool _showMaterials;
+		private bool _showAtmosphere;
+		private bool _showRings;
 
 		public UserControlScanGrid()
         {
             InitializeComponent();
-            var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
+            var corner = dataGridViewScanGrid.TopLeftHeaderCell; // work around #1487
 
             // dataGridView setup - the rule is, use the designer for most properties.. only do these here since they are so buried or not available.
 
             // this allows the row to grow to accomodate the text.. with a min height of 32.
-            dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
-            this.dataGridViewScangrid.Columns["ImageColumn"].DefaultCellStyle.SelectionBackColor =
+            dataGridViewScanGrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewScanGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewScanGrid.RowTemplate.MinimumHeight = 32;
+            this.dataGridViewScanGrid.Columns["ImageColumn"].DefaultCellStyle.SelectionBackColor =
 				System.Drawing.Color.Transparent;
         }
 
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewScanGrid, DbColumnSave);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -97,7 +97,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewScanGrid, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -121,14 +121,14 @@ namespace EDDiscovery.UserControls
         {
             StarScan.SystemNode scanNode = null;
 
-            var sameSys = last_he != null && he != null && he.System.Name == last_he.System.Name;
+            var sameSys = _lastHe != null && he != null && he.System.Name == _lastHe.System.Name;
 
-            //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
+            //System.Diagnostics.Debug.WriteLine("Scan grid " + sameSys + " F:" + force);
 
             if (he == null)     //  no he, no display
             {
-                last_he = null;
-                dataGridViewScangrid.Rows.Clear();
+                _lastHe = null;
+                dataGridViewScanGrid.Rows.Clear();
                 SetControlText("No Scan".Tx());
                 return;
             }
@@ -136,10 +136,10 @@ namespace EDDiscovery.UserControls
             {
                 scanNode = discoveryform.history.starscan.FindSystem(he.System, true);        // get data with EDSM
 
-                if (scanNode == null)     // no data, clear display, clear any last_he so samesys is false next time
+                if (scanNode == null)     // no data, clear display, clear any last_he so sameSys is false next time
                 {
-                    last_he = null;
-                    dataGridViewScangrid.Rows.Clear();
+                    _lastHe = null;
+                    dataGridViewScanGrid.Rows.Clear();
                     SetControlText("No Scan".Tx());
                     return;
                 }
@@ -148,12 +148,12 @@ namespace EDDiscovery.UserControls
                     return;
             }
 
-            last_he = he;
+            _lastHe = he;
 
             // only record first row if same system 
-            var firstDisplayedScrollingRowIndex = (dataGridViewScangrid.RowCount > 0 && sameSys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+            var firstDisplayedScrollingRowIndex = (dataGridViewScanGrid.RowCount > 0 && sameSys) ? dataGridViewScanGrid.FirstDisplayedScrollingRowIndex : -1;
 
-            dataGridViewScangrid.Rows.Clear();
+            dataGridViewScanGrid.Rows.Clear();
 
             var allNodes = scanNode.Bodies.ToList();// flatten tree of scan nodes to prepare for listing
 
@@ -197,23 +197,23 @@ namespace EDDiscovery.UserControls
 					bdDetails.Append("Age".Tx(this) + ": " + sn.ScanData.nAge.Value.ToString("N0") + " my. \n");
 
 				// habitable zone for stars - do not display for black holes.
-				if (showGoldilocksZone != false && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (_showGoldilocksZone != false && sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
 
 				// possible metal rich zone
-				if (showMetalRichZone != false && sn.ScanData.MetalRichOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (_showMetalRichZone != false && sn.ScanData.MetalRichOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Metal Rich".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.MetalRichInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.MetalRichOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetMetalRichZoneStringLs());
 
 				// possible earth like zone
-				if (showEarthLikeZone != false && sn.ScanData.EarthLikeInner != null && sn.ScanData.EarthLikeOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (_showEarthLikeZone != false && sn.ScanData.EarthLikeInner != null && sn.ScanData.EarthLikeOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Earth Like".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.EarthLikeInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.EarthLikeOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetEarthLikeZoneStringLs());
 
 				// possible water worlds zone
-				if (showWaterWorldZone != false && sn.ScanData.WaterWorldsInner != null && sn.ScanData.WaterWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (_showWaterWorldZone != false && sn.ScanData.WaterWorldsInner != null && sn.ScanData.WaterWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Water Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.WaterWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.WaterWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetWaterWorldZoneStringLs());		
 				
 				// possible ammonia worlds zone
-				if (showAmmoniaZone != false && sn.ScanData.AmmoniaWorldsInner != null && sn.ScanData.AmmoniaWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
+				if (_showAmmoniaZone != false && sn.ScanData.AmmoniaWorldsInner != null && sn.ScanData.AmmoniaWorldsOuter != null && sn.ScanData.StarTypeID != EDStar.H)
 					bdDetails.AppendFormat("Ammonia Worlds".Tx(this) + ": {0}-{1}AU ({2}). \n", (sn.ScanData.AmmoniaWorldsInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.AmmoniaWorldsOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetAmmoniaWorldsStringLs());
 
 				// tell us that a body is landable, and shows its gravity
@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
 					bdDetails.Append("Volcanism".Tx(this) + ". ");
 
 				// have some ring?
-				if (showRings != false && sn.ScanData.HasRings && sn.ScanData.IsStar == false)
+				if (_showRings != false && sn.ScanData.HasRings && sn.ScanData.IsStar == false)
 				{
 					if (sn.ScanData.Rings.Count() <= 1)
 					{
@@ -258,11 +258,11 @@ namespace EDDiscovery.UserControls
 				}
 
 				// print the main atmospheric composition
-				if (showAtmosphere != false && sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
+				if (_showAtmosphere != false && sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
 					bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 
 				// materials                        
-				if (showMaterials != false && sn.ScanData.HasMaterials)
+				if (_showMaterials != false && sn.ScanData.HasMaterials)
 				{
 					var ret = "";
 					foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
@@ -294,29 +294,29 @@ namespace EDDiscovery.UserControls
 						break;
 				}
 
-				dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+				dataGridViewScanGrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
 
-				var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+				var cur = dataGridViewScanGrid.Rows[dataGridViewScanGrid.Rows.Count - 1];
 
 				cur.Tag = img;
 				cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-					sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+					sn.ScanData.DisplayString(historicmatlist: _lastHe.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
 			}
 
             // display total scan values
             SetControlText(string.Format("Scan Summary for {0}. {1}".Tx(this, "SS"), scanNode.system.Name, BuildScanValue(scanNode)));
 
-            if (firstDisplayedScrollingRowIndex >= 0 && firstDisplayedScrollingRowIndex < dataGridViewScangrid.RowCount)
-                dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstDisplayedScrollingRowIndex;
+            if (firstDisplayedScrollingRowIndex >= 0 && firstDisplayedScrollingRowIndex < dataGridViewScanGrid.RowCount)
+                dataGridViewScanGrid.FirstDisplayedScrollingRowIndex = firstDisplayedScrollingRowIndex;
         }
 
         private void dataGridViewScanGrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            var cur = dataGridViewScangrid.Rows[e.RowIndex];
+            var cur = dataGridViewScanGrid.Rows[e.RowIndex];
 			if (cur.Tag == null) return;
 			// we programatically draw the image because we have control over its pos/ size this way, which you can't do
 			// with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
-			var sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
+			var sz = dataGridViewScanGrid.RowTemplate.MinimumHeight - 2;
 			var vPos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
 			e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vPos, sz, sz));
 		}
@@ -331,9 +331,9 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScanGrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
 			if (e.ColumnIndex != 4) return;
-			var curData = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
-			dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
-			dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curData;
+			var curData = dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Value;
+			dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Tag;
+			dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Tag = curData;
 		}
 
 		private void dataGridViewScanGrid_MouseClick(object sender, MouseEventArgs e)
@@ -346,50 +346,58 @@ namespace EDDiscovery.UserControls
 
 		private void goldilocksZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showGoldilocksZone = goldilocksZoneToolStripMenuItem.CheckState == CheckState.Checked;
+			_showGoldilocksZone = goldilocksZoneToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowGoldilocks", goldilocksZoneToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void metalRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showMetalRichZone = metalRichToolStripMenuItem.CheckState == CheckState.Checked;
+			_showMetalRichZone = metalRichToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowMetalRich", metalRichToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 		
 		private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showWaterWorldZone = waterWorldsToolStripMenuItem.CheckState == CheckState.Checked;
+			_showWaterWorldZone = waterWorldsToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowWaterWorld", metalRichToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void earthLikeToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showEarthLikeZone = earthLikeToolStripMenuItem.CheckState == CheckState.Checked;
+			_showEarthLikeZone = earthLikeToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowEarthLike", earthLikeToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showAmmoniaZone = ammoniaWorldsToolStripMenuItem.CheckState == CheckState.Checked;
+			_showAmmoniaZone = ammoniaWorldsToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowAmmonia", ammoniaWorldsToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void showAvailableMaterialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showMaterials = showAvailableMaterialsToolStripMenuItem.CheckState == CheckState.Checked;
+			_showMaterials = showAvailableMaterialsToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowMaterials", showAvailableMaterialsToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void showAtmosphericDetailsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showAtmosphere = showAtmosphericDetailsToolStripMenuItem.CheckState == CheckState.Checked;
+			_showAtmosphere = showAtmosphericDetailsToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowAtmosphere", showAtmosphericDetailsToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 
 		private void showRingsInformationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			showRings = showRingsInformationToolStripMenuItem.CheckState == CheckState.Checked;
+			_showRings = showRingsInformationToolStripMenuItem.CheckState == CheckState.Checked;
 			SQLiteDBClass.PutSettingBool(DbSave + "ShowRings", showRingsInformationToolStripMenuItem.Checked);
+			DrawSystem(_lastHe, true);
 		}
 	}
 }

@@ -44,10 +44,10 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScanGrid));
 			this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-			this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
+			this.dataGridViewScanGrid = new System.Windows.Forms.DataGridView();
 			this.ImageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -67,13 +67,13 @@ namespace EDDiscovery.UserControls
 			this.showAtmosphericDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showRingsInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dataViewScrollerPanel2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScanGrid)).BeginInit();
 			this.contextMenuStripSG.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// dataViewScrollerPanel2
 			// 
-			this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
+			this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScanGrid);
 			this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
 			this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
@@ -84,41 +84,41 @@ namespace EDDiscovery.UserControls
 			this.dataViewScrollerPanel2.TabIndex = 25;
 			this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
 			// 
-			// dataGridViewScangrid
+			// dataGridViewScanGrid
 			// 
-			this.dataGridViewScangrid.AllowUserToAddRows = false;
-			this.dataGridViewScangrid.AllowUserToDeleteRows = false;
-			this.dataGridViewScangrid.AllowUserToResizeRows = false;
-			this.dataGridViewScangrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			this.dataGridViewScangrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-			this.dataGridViewScangrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			this.dataGridViewScangrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+			this.dataGridViewScanGrid.AllowUserToAddRows = false;
+			this.dataGridViewScanGrid.AllowUserToDeleteRows = false;
+			this.dataGridViewScanGrid.AllowUserToResizeRows = false;
+			this.dataGridViewScanGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+			this.dataGridViewScanGrid.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+			this.dataGridViewScanGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridViewScanGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ImageColumn,
             this.colName,
             this.colClass,
             this.Distance,
             this.colBriefing});
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewScangrid.DefaultCellStyle = dataGridViewCellStyle2;
-			this.dataGridViewScangrid.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridViewScangrid.Location = new System.Drawing.Point(0, 0);
-			this.dataGridViewScangrid.Name = "dataGridViewScangrid";
-			this.dataGridViewScangrid.ReadOnly = true;
-			this.dataGridViewScangrid.RowHeadersVisible = false;
-			this.dataGridViewScangrid.RowTemplate.Height = 36;
-			this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
-			this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-			this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 572);
-			this.dataGridViewScangrid.TabIndex = 23;
-			this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScanGrid_CellDoubleClick);
-			this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScanGrid_RowPostPaint);
-			this.dataGridViewScangrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScanGrid_MouseClick);
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewScanGrid.DefaultCellStyle = dataGridViewCellStyle1;
+			this.dataGridViewScanGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.dataGridViewScanGrid.Location = new System.Drawing.Point(0, 0);
+			this.dataGridViewScanGrid.Name = "dataGridViewScanGrid";
+			this.dataGridViewScanGrid.ReadOnly = true;
+			this.dataGridViewScanGrid.RowHeadersVisible = false;
+			this.dataGridViewScanGrid.RowTemplate.Height = 36;
+			this.dataGridViewScanGrid.RowTemplate.ReadOnly = true;
+			this.dataGridViewScanGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
+			this.dataGridViewScanGrid.Size = new System.Drawing.Size(552, 572);
+			this.dataGridViewScanGrid.TabIndex = 23;
+			this.dataGridViewScanGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScanGrid_CellDoubleClick);
+			this.dataGridViewScanGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScanGrid_RowPostPaint);
+			this.dataGridViewScanGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScanGrid_MouseClick);
 			// 
 			// ImageColumn
 			// 
@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
 			this.goldilocksZoneToolStripMenuItem.CheckOnClick = true;
 			this.goldilocksZoneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.goldilocksZoneToolStripMenuItem.Name = "goldilocksZoneToolStripMenuItem";
-			this.goldilocksZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.goldilocksZoneToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.goldilocksZoneToolStripMenuItem.Text = "&Goldilocks";
 			this.goldilocksZoneToolStripMenuItem.ToolTipText = "The “Goldilocks Zone” is the area around a star that has the conditions necessary" +
     " for liquid water to exist on a planet. Usually, it indicate where is possible t" +
@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
 			// 
 			this.metalRichToolStripMenuItem.CheckOnClick = true;
 			this.metalRichToolStripMenuItem.Name = "metalRichToolStripMenuItem";
-			this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.metalRichToolStripMenuItem.Text = "&Metal Rich";
 			this.metalRichToolStripMenuItem.ToolTipText = "This narrow to medium size zone indicate where is possibleto find planets rich in" +
     " metal resources.";
@@ -246,7 +246,7 @@ namespace EDDiscovery.UserControls
 			// 
 			this.waterWorldsToolStripMenuItem.CheckOnClick = true;
 			this.waterWorldsToolStripMenuItem.Name = "waterWorldsToolStripMenuItem";
-			this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.waterWorldsToolStripMenuItem.Text = "&Water Worlds";
 			this.waterWorldsToolStripMenuItem.ToolTipText = resources.GetString("waterWorldsToolStripMenuItem.ToolTipText");
 			this.waterWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.waterWorldsToolStripMenuItem_CheckStateChanged);
@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
 			// 
 			this.earthLikeToolStripMenuItem.CheckOnClick = true;
 			this.earthLikeToolStripMenuItem.Name = "earthLikeToolStripMenuItem";
-			this.earthLikeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.earthLikeToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.earthLikeToolStripMenuItem.Text = "&Earth Like";
 			this.earthLikeToolStripMenuItem.ToolTipText = "This very narrow zone indicate where is possible to find earth like planets.";
 			this.earthLikeToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.earthLikeToolStripMenuItem_CheckStateChanged);
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
 			// 
 			this.ammoniaWorldsToolStripMenuItem.CheckOnClick = true;
 			this.ammoniaWorldsToolStripMenuItem.Name = "ammoniaWorldsToolStripMenuItem";
-			this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
 			this.ammoniaWorldsToolStripMenuItem.Text = "&Ammonia Worlds";
 			this.ammoniaWorldsToolStripMenuItem.ToolTipText = "This is a very large zone, where ammonia worlds can exists.";
 			this.ammoniaWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.ammoniaWorldsToolStripMenuItem_CheckStateChanged);
@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
 			this.Name = "UserControlScanGrid";
 			this.Size = new System.Drawing.Size(572, 572);
 			this.dataViewScrollerPanel2.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScanGrid)).EndInit();
 			this.contextMenuStripSG.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
         #endregion
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
-        private System.Windows.Forms.DataGridView dataGridViewScangrid;
+        private System.Windows.Forms.DataGridView dataGridViewScanGrid;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.DataGridViewTextBoxColumn ImageColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
