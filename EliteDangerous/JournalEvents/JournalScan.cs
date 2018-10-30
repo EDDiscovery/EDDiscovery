@@ -549,6 +549,7 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
+		// goldilocks zone
         public string GetHabZoneStringLs()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
@@ -566,8 +567,10 @@ namespace EliteDangerousCore.JournalEvents
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
                 StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this), GetHabZoneStringLs(),
-                                                                                  (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
+                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this),
+									 GetHabZoneStringLs(), 
+									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
                 return habZone.ToNullSafeString();
             }
             else
@@ -582,6 +585,146 @@ namespace EliteDangerousCore.JournalEvents
 				habZoneAddend.Append("(Others stars not considered)\n\n".Tx(this));
 			
 			return habZoneAddend.ToNullSafeString();
+		}
+
+		// metal rich zone
+		public string GetMetalRichZoneStringLs()
+		{
+			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
+			{
+				return $"{MetalRichZoneInner:N0}-{MetalRichZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string MetalRichZoneString()
+		{
+			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetMetalRichZoneStringLs(), 
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (MetalRichZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// water world zone
+		public string GetWaterWorldZoneStringLs()
+		{
+			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
+			{
+				return $"{WaterWrldZoneInner:N0}-{WaterWrldZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string WaterWorldZoneString()
+		{
+			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetWaterWorldZoneStringLs(), 
+									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// earth like world zone
+		public string GetEarthLikeZoneStringLs()
+		{
+			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
+			{
+				return $"{EarthLikeZoneInner:N0}-{EarthLikeZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string EarthLikeZoneString()
+		{
+			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetEarthLikeZoneStringLs(), 
+									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// ammonia world zone
+		public string GetAmmoniaWorldZoneStringLs()
+		{
+			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
+			{
+				return $"{AmmonWrldZoneInner:N0}-{AmmonWrldZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string AmmoniaWorldZoneString()
+		{
+			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetAmmoniaWorldZoneStringLs(), 
+									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// icy planets zone
+		public string GetIcyPlanetsZoneStringLs()
+		{
+			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
+			{
+				return $"{IcyPlanetZoneInner:N0}-{IcyPlanetZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string IcyPlanetsZoneString()
+		{
+			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Icy Planets: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetIcyPlanetsZoneStringLs(), 
+									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (IcyPlanetZoneOuter));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
 		}
 
         // optionally, show material counts at the historic point and current.
