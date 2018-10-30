@@ -971,22 +971,17 @@ namespace EDDiscovery.UserControls
 
             string[] strarr = new string[8];
 
-            foreach(var si in hl.shipinformationlist.Ships.Values.Where(val => val.SubVehicle == ShipInformation.SubVehicleType.None))
+            foreach(var si in hl.shipinformationlist.Ships.Where(val => !ShipModuleData.IsSRVOrFighter(val.Value.ShipFD)))
             {
-                // Filtering for SubVehicle == None doesn't reliably remove all SRVs from the list.
-                // I have not tested with SLFs as I've never owned one...
-                if (si.ShipType.IndexOf("SRV") == -1)
-                {
-                    strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.ShipUserName ?? "-");
-                    strarr[1] = (si.ShipUserIdent ?? "-").ToUpper();
-                    strarr[2] = hl.GetFSDJumps(si.ID).ToString();
-                    strarr[3] = hl.GetTraveledLy(si.ID).ToString("N0");
-                    strarr[4] = hl.GetBodiesScanned(si.ID).ToString();
-                    strarr[5] = hl.GetTonnesBought(si.ID).ToString("N0");
-                    strarr[6] = hl.GetTonnesSold(si.ID).ToString("N0");
-                    strarr[7] = hl.GetDeathCount(si.ID).ToString();
-                    StatToDGV(dataGridViewByShip, si.ShipType ?? "Unknown".Tx(this), strarr);
-                }
+                strarr[0] = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(si.Value.ShipUserName ?? "-");
+                strarr[1] = (si.Value.ShipUserIdent ?? "-").ToUpper();
+                strarr[2] = hl.GetFSDJumps(si.Key).ToString();
+                strarr[3] = hl.GetTraveledLy(si.Key).ToString("N0");
+                strarr[4] = hl.GetBodiesScanned(si.Key).ToString();
+                strarr[5] = hl.GetTonnesBought(si.Key).ToString("N0");
+                strarr[6] = hl.GetTonnesSold(si.Key).ToString("N0");
+                strarr[7] = hl.GetDeathCount(si.Key).ToString();
+                StatToDGV(dataGridViewByShip, si.Value.ShipType ?? "Unknown".Tx(this), strarr);
             }
 
             if (sortcol < dataGridViewByShip.Columns.Count)

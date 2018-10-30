@@ -323,9 +323,9 @@ namespace EliteDangerousCore
             return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
-        public int GetFSDJumps(int forShip)
+        public int GetFSDJumps(string forShipKey)
         {
-            return (from s in historylist where s.IsFSDJump && s.ShipId == forShip select s).Count();
+            return (from s in historylist where s.IsFSDJump && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
         }
 
         public int GetNrScans(DateTime start, DateTime to)
@@ -402,9 +402,9 @@ namespace EliteDangerousCore
             return (from s in list select s.JumpDist).Sum();
         }
 
-        public double GetTraveledLy(int forShip)
+        public double GetTraveledLy(string forShipKey)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && s.ShipId == forShip select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.FSDJump && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s.journalEntry as JournalFSDJump).ToList<JournalFSDJump>();
 
             return (from s in list select s.JumpDist).Sum();
         }
@@ -415,28 +415,28 @@ namespace EliteDangerousCore
             return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
         }
 
-        public int GetTonnesBought(int forShip)
+        public int GetTonnesBought(string forShipKey)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketBuy && s.ShipId == forShip select s.journalEntry as JournalMarketBuy).ToList();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketBuy && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s.journalEntry as JournalMarketBuy).ToList();
 
             return (from s in list select s.Count).Sum();
         }
 
-        public int GetTonnesSold(int forShip)
+        public int GetTonnesSold(string forShipKey)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketSell && s.ShipId == forShip select s.journalEntry as JournalMarketSell).ToList();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.MarketSell && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s.journalEntry as JournalMarketSell).ToList();
 
             return (from s in list select s.Count).Sum();
         }
 
-        public int GetDeathCount(int forShip)
+        public int GetDeathCount(string forShipKey)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Died && s.ShipId == forShip select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Died && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
         }
 
-        public int GetBodiesScanned(int forShip)
+        public int GetBodiesScanned(string forShipKey)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.ShipId == forShip select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
         }
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)

@@ -145,7 +145,7 @@ namespace EliteDangerousCore
         static public bool IsFighter(string ifd)
         {
             ifd = ifd.ToLowerInvariant();
-            return ifd.Equals("federation_fighter") || ifd.Equals("empire_fighter") || ifd.Equals("independent_fighter");
+            return ifd.Equals("federation_fighter") || ifd.Equals("empire_fighter") || ifd.Equals("independent_fighter") || ifd.Contains("hybrid_fighter");
         }
 
         static public bool IsSRVOrFighter(string ifd)
