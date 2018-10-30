@@ -531,10 +531,12 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
             }
 
-            string habzonestring = HabZoneString();
-            if (habzonestring != null)
-                scanText.Append("\n" + habzonestring);
+            if (HabZoneString() != null)
+                scanText.Append("\n" + HabZoneString());
 
+			if (HabZoneOtherStarsString() != null)
+				scanText.Append(HabZoneOtherStarsString());
+			
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
@@ -573,11 +575,11 @@ namespace EliteDangerousCore.JournalEvents
         }
 
 		// string which tell us that other stars are not considered in the habitable zone calculations.
-		public string HabZoneAddendOtherStars()
+		public string HabZoneOtherStarsString()
 		{
 			StringBuilder habZoneAddend = new StringBuilder();
 			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-				habZoneAddend.AppendFormat(" (Others stars not considered)\n".Tx(this));
+				habZoneAddend.Append("(Others stars not considered)\n\n".Tx(this));
 			
 			return habZoneAddend.ToNullSafeString();
 		}
