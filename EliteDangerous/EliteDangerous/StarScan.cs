@@ -186,9 +186,9 @@ namespace EliteDangerousCore
 
             // must have an ID, and either not there or we have not checked EDSM yet in some way
 
-            if (sys.EDSMID > 0 && (sn == null || sn.EDSMCacheCheck == false || ( edsmweblookup && !sn.EDSMWebChecked) )) 
+            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0)) && (sn == null || sn.EDSMCacheCheck == false || ( edsmweblookup && !sn.EDSMWebChecked)))
             {
-                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup); // lookup, with optional web
+                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup, id64: sys.SystemAddress); // lookup, with optional web
 
                 //if ( edsmweblookup) System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
 
@@ -267,7 +267,7 @@ namespace EliteDangerousCore
         // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddBodyToBestSystem(IBodyNameAndID je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
         {
-            if (je.Body == null || je.BodyType == "Station" || je.BodyType == "PlanetaryRing" || je.BodyType == "SmallBody")
+            if (je.Body == null || je.BodyType == "Station" || je.BodyType == "StellarRing" || je.BodyType == "PlanetaryRing" || je.BodyType == "SmallBody")
             {
                 he = null;
                 jl = null;
@@ -286,6 +286,7 @@ namespace EliteDangerousCore
                     if (IsStarNameRelated(he.System.Name, je.Body, designation))       // if its part of the name, use it
                     {
                         je.BodyDesignation = designation;
+
                         return Process(je, he.System, true);
                     }
                     else if (jl != null && IsStarNameRelated(jl.StarSystem, je.Body, designation))
