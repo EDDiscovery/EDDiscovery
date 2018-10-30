@@ -403,16 +403,27 @@ namespace EliteDangerousCore.DB
 
         private static bool WindowsSqliteProviderWorks()
         {
-            try
-            {
-                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
-                System.Diagnostics.Trace.WriteLine($"SQLite version {SQLiteConnection.SQLiteVersion}");
-                return true;
-            }
-            catch
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
             {
                 return false;
             }
+
+            try
+            {
+                // This will throw an exception if the SQLite.Interop.dll can't be loaded.
+                string sqliteversion = SQLiteConnection.SQLiteVersion;
+
+                if (!String.IsNullOrEmpty(sqliteversion))
+                {
+                    System.Diagnostics.Trace.WriteLine($"SQLite Version {sqliteversion}");
+                    return true;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
         }
 
         private static bool DbFactoryWorks(DbProviderFactory factory)
