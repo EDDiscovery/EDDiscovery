@@ -328,46 +328,46 @@ namespace EDDiscovery.ScreenShots
             switch (FolderFormatIndex)
             {
                 case 1:     // system name
-                    OutputFolder += "\\" + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, SystemName.SafeFileString());
                     break;
 
                 case 2:     // "YYYY-MM-DD"
-                    OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd");
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("yyyy-MM-dd"));
                     break;
                 case 3:     // "DD-MM-YYYY"
-                    OutputFolder += "\\" + Timestamp.ToString("dd-MM-yyyy");
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("dd-MM-yyyy"));
                     break;
                 case 4:     // "MM-DD-YYYY"
-                    OutputFolder += "\\" + Timestamp.ToString("MM-dd-yyyy");
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("MM-dd-yyyy"));
                     break;
 
                 case 5:  //"YYYY-MM-DD Sysname",
-                    OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("yyyy-MM-dd") + " " + SystemName.SafeFileString());
                     break;
 
                 case 6:  //"DD-MM-YYYY Sysname",
-                    OutputFolder += "\\" + Timestamp.ToString("dd-MM-yyyy") + " " + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("dd-MM-yyyy") + " " + SystemName.SafeFileString());
                     break;
 
                 case 7: //"MM-DD-YYYY Sysname"
-                    OutputFolder += "\\" + Timestamp.ToString("MM-dd-yyyy") + " " + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("MM-dd-yyyy") + " " + SystemName.SafeFileString());
                     break;
 
                 case 8: // CMDR name
-                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString());
                     break;
 
                 case 9: // CMDR name at sysname
-                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString());
                     break;
 
                 case 10: // YYYY - MM - DD CMDR name at sysname
-                    OutputFolder += "\\" + Timestamp.ToString("yyyy-MM-dd") + " " +
-                          (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, Timestamp.ToString("yyyy-MM-dd") + " " +
+                          (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + " at " + SystemName.SafeFileString());
                     break;
 
                 case 11: // CMDR Name \ SystemName
-                    OutputFolder += "\\" + (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString() + "\\" + SystemName.SafeFileString();
+                    OutputFolder = Path.Combine(OutputFolder, (EDCommander.GetCommander(CommanderID)?.Name ?? $"CmdrId{CommanderID}").SafeFileString(), SystemName.SafeFileString());
                     break;
             }
 
