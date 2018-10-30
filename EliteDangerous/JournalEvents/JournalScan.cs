@@ -51,6 +51,16 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAge { get; set; }                           // direct
         public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
+		public double? MetalRichZoneInner { get; set; }
+		public double? MetalRichZoneOuter { get; set; }
+		public double? WaterWrldZoneInner { get; set; }
+		public double? WaterWrldZoneOuter { get; set; }
+		public double? EarthLikeZoneInner { get; set; }
+		public double? EarthLikeZoneOuter { get; set; }
+		public double? AmmonWrldZoneInner { get; set; }
+		public double? AmmonWrldZoneOuter { get; set; }
+		public double? IcyPlanetZoneInner { get; set; }
+		public string IcyPlanetZoneOuter { get; set; }
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
@@ -230,9 +240,21 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
                 {
-                    HabitableZoneInner = DistanceForBlackBodyTemperature(315);
+					// values initially calculated by Jackie Silver (https://forums.frontier.co.uk/member.php/37962-Jackie-Silver)
+
+                    HabitableZoneInner = DistanceForBlackBodyTemperature(315); // this is the goldilocks zone, where is possible to expect to find planets with liquid water. 
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
-                }
+					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(solarRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
+					MetalRichZoneOuter = DistanceForBlackBodyTemperature(1100);
+					WaterWrldZoneInner = DistanceForBlackBodyTemperature(307);
+					WaterWrldZoneOuter = DistanceForBlackBodyTemperature(156);
+					EarthLikeZoneInner = DistanceForBlackBodyTemperature(281); // I enlarged a bit the range to fit my and other CMDRs discoveries.
+					EarthLikeZoneOuter = DistanceForBlackBodyTemperature(227);
+					AmmonWrldZoneInner = DistanceForBlackBodyTemperature(193);
+					AmmonWrldZoneOuter = DistanceForBlackBodyTemperature(117);
+					IcyPlanetZoneInner = DistanceForBlackBodyTemperature(150);
+					IcyPlanetZoneOuter = "\u221E"; // practically infinite, at least until the body suffer from the gravitational bond with its host star
+				}
             }
             else if (PlanetClass != null)
             {
@@ -544,14 +566,21 @@ namespace EliteDangerousCore.JournalEvents
                 StringBuilder habZone = new StringBuilder();
                 habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this), GetHabZoneStringLs(),
                                                                                   (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
-                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
-
                 return habZone.ToNullSafeString();
             }
             else
                 return null;
         }
+
+		// string which tell us that other stars are not considered in the habitable zone calculations.
+		public string HabZoneAddendOtherStars()
+		{
+			StringBuilder habZoneAddend = new StringBuilder();
+			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+				habZoneAddend.AppendFormat(" (Others stars not considered)\n".Tx(this));
+			
+			return habZoneAddend.ToNullSafeString();
+		}
 
         // optionally, show material counts at the historic point and current.
         public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
@@ -765,7 +794,7 @@ namespace EliteDangerousCore.JournalEvents
             return null;
         }
 
-        // Habitable zone calculations, formulae cribbed from JackieSilver's HabZone Calculator with permission
+        // Habitable zone calculations, formula cribbed from JackieSilver's HabZone Calculator with permission
         private double DistanceForBlackBodyTemperature(double targetTemp)
         {
             double top = Math.Pow(nRadius.Value, 2.0) * Math.Pow(nSurfaceTemperature.Value, 4.0);
@@ -774,6 +803,11 @@ namespace EliteDangerousCore.JournalEvents
             return radius_metres / oneLS_m;
         }
 
+		private double DistanceForNoMaxTemperatureBody(double radius)
+		{
+			return radius / oneLS_m;
+		}
+		
         private int CalculateEstimatedValue()
         {
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
