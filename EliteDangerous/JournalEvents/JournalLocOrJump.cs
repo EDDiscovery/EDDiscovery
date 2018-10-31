@@ -60,6 +60,7 @@ namespace EliteDangerousCore.JournalEvents
             public string Government { get; set; }
             public double Influence { get; set; }
             public string Allegiance { get; set; }
+            public double? MyReputation { get; set; } //3.3
 
             public PowerStatesInfo[] PendingStates { get; set; }
             public PowerStatesInfo[] RecoveringStates { get; set; }

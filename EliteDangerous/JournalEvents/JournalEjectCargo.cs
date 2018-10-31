@@ -31,6 +31,7 @@ namespace EliteDangerousCore.JournalEvents
             Count = evt["Count"].Int();
             Abandoned = evt["Abandoned"].Bool();
             PowerplayOrigin = evt["PowerplayOrigin"].Str();
+            MissionID = evt["MissionID"].LongNull();
         }
 
         public string Type { get; set; }                    // FDName
@@ -40,6 +41,7 @@ namespace EliteDangerousCore.JournalEvents
         public int Count { get; set; }
         public bool Abandoned { get; set; }
         public string PowerplayOrigin { get; set; }
+        public long? MissionID { get; set; }             // if applicable
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -53,7 +55,9 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:".Txb(this), Count, ";Abandoned".Txb(this), Abandoned, "PowerPlay:".Txb(this), PowerplayOrigin);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:".Txb(this), Count,
+                            "<; (Mission Cargo)".Txb(this), MissionID != null,
+                            ";Abandoned".Txb(this), Abandoned, "PowerPlay:".Txb(this), PowerplayOrigin);
             detailed = "";
         }
     }

@@ -30,6 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             public string FriendlyName { get; set; }            // FDNAME
             public int Count { get; set; }
             public int Stolen { get; set; }
+            public long? MissionID { get; set; }             // if applicable
 
             public void Normalise()
             {
@@ -90,7 +91,7 @@ namespace EliteDangerousCore.JournalEvents
                     int? stolen = null;
                     if (c.Stolen > 0)
                         stolen = c.Stolen;
-                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen);
+                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen, "<; (Mission Cargo)".Txb(this), c.MissionID != null);
                 }
             }
         }

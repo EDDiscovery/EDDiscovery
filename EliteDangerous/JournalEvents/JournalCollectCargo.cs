@@ -28,12 +28,14 @@ namespace EliteDangerousCore.JournalEvents
             FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
             Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(),FriendlyType);         // always ensure we have one
             Stolen = evt["Stolen"].Bool();
+            MissionID = evt["MissionID"].LongNull();
         }
 
         public string Type { get; set; }                    // FDNAME..
         public string FriendlyType { get; set; }            // translated name
         public string Type_Localised { get; set; }            // always set
         public bool Stolen { get; set; }
+        public long? MissionID { get; set; }             // if applicable
 
         public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
@@ -47,7 +49,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen".Txb(this), Stolen);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen".Txb(this), Stolen, "<; (Mission Cargo)".Txb(this), MissionID!=null);
             detailed = "";
         }
     }

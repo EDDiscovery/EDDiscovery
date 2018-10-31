@@ -26,15 +26,23 @@ namespace EliteDangerousCore.JournalEvents
             Name = evt["Name"].Str();
             Name_Localised = JournalFieldNaming.CheckLocalisation(evt["Name_Localised"].Str(),Name);
             MarketID = evt["MarketID"].LongNull();
+            Latitude = evt["Latitude"].DoubleNull();
+            Longitude = evt["Longitude"].DoubleNull();
         }
 
         public string Name { get; set; }
         public string Name_Localised { get; set; }
         public long? MarketID { get; set; }
+        public double? Latitude { get; set; }    // 3.3
+        public double? Longitude { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
             info = Name_Localised;
+
+            if (Latitude != null && Longitude != null)
+                info += " " + JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude);
+
             detailed = "";
         }
 

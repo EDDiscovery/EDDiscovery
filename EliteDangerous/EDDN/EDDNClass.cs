@@ -136,6 +136,7 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message.Remove("BoostUsed");
+            message.Remove("MyReputation"); 
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
@@ -161,15 +162,7 @@ namespace EliteDangerousCore.EDDN
             message.Remove("StarPosFromEDSM");
             message.Remove("Latitude");
             message.Remove("Longitude");
-
-            /*
-            if (!journal.Docked)
-            {
-                message.Remove("Body");
-                message.Remove("BodyType");
-                message.Remove("BodyID");
-            }
-             */
+            message.Remove("MyReputation");
 
             msg["message"] = message;
             return msg;

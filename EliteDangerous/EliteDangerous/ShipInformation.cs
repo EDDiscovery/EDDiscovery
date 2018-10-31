@@ -346,7 +346,7 @@ namespace EliteDangerousCore
 
         public ShipInformation SetShipDetails(string ship, string shipfd, string name = null, string ident = null, 
                                     double fuellevel = 0, double fueltotal = 0,
-                                    long hullvalue = 0, long modulesvalue = 0, long rebuy = 0)
+                                    long hullvalue = 0, long modulesvalue = 0, long rebuy = 0, bool? hot = null)
         {
             if (ShipFD != shipfd || ship != ShipType || (name != null && name != ShipUserName) ||
                                 (ident != null && ident != ShipUserIdent) ||
@@ -354,7 +354,8 @@ namespace EliteDangerousCore
                                 (fueltotal != 0 && fueltotal != FuelCapacity) ||
                                 (hullvalue != 0 && hullvalue != HullValue) ||
                                 (modulesvalue != 0 && modulesvalue != ModulesValue) ||
-                                (rebuy != 0 && rebuy != Rebuy)
+                                (rebuy != 0 && rebuy != Rebuy) ||
+                                (hot != null && hot.Value != Hot)
                                 )
             {
                 ShipInformation sm = this.ShallowClone();
@@ -377,6 +378,8 @@ namespace EliteDangerousCore
                     sm.ModulesValue = modulesvalue;
                 if (rebuy != 0)
                     sm.Rebuy = rebuy;
+                if (hot != null)
+                    sm.Hot = hot.Value;
 
                 //System.Diagnostics.Debug.WriteLine(ship + " " + sm.FuelCapacity + " " + sm.FuelLevel);
                 return sm;

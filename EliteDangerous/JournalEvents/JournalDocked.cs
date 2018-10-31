@@ -47,6 +47,8 @@ namespace EliteDangerousCore.JournalEvents
 
             StationServices = evt["StationServices"]?.ToObjectProtected<string[]>();
 
+            ActiveFine = evt["ActiveFine"].BoolNull();
+
             // Government = None only happens in Training
             if (Government == "$government_None;")
             {
@@ -70,6 +72,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Government_Localised { get; set; }
         public string[] StationServices { get; set; }
         public bool Wanted { get; set; }
+        public bool? ActiveFine { get; set; }
 
         public bool IsTrainingEvent { get; private set; }
 
@@ -85,6 +88,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)      
         {
             info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), StationType, "< in system ".Txb(this), StarSystem, ";(Wanted)".Txb(this), Wanted, 
+                ";Active Fine".Txb(this),ActiveFine,
                 "Faction:".Txb(this), Faction,  "< in state ".Txb(this), FactionState);
 
             detailed = BaseUtils.FieldBuilder.Build("Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised);

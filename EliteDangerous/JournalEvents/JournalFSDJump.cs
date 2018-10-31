@@ -93,7 +93,8 @@ namespace EliteDangerousCore.JournalEvents
                     sb.Append(BaseUtils.FieldBuilder.Build("", i.Name, "State:".Txb(this), i.FactionState, 
                                                                     "Government:".Txb(this), i.Government, 
                                                                     "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"), 
-                                                                    "Allegiance:".Txb(this), i.Allegiance));
+                                                                    "Allegiance:".Txb(this), i.Allegiance,
+                                                                    "Reputation:;%;N1".Txb(this), i.MyReputation));
 
                     if (i.PendingStates != null)
                     {

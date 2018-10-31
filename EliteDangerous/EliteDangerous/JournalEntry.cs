@@ -86,6 +86,7 @@ namespace EliteDangerousCore
         FactionKillBond = 270,
         FetchRemoteModule = 1000,
         FSDJump = 280,
+        FSDTarget = 281,
         FuelScoop = 290,
         Fileheader = 300,
         FighterDestroyed = 303,

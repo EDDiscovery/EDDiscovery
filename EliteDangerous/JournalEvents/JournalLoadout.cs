@@ -39,6 +39,7 @@ namespace EliteDangerousCore.JournalEvents
                 HullHealth *= 100.0;        // convert to 0-100
             ModulesValue = evt["ModulesValue"].LongNull();
             Rebuy = evt["Rebuy"].LongNull();
+            Hot = evt["Hot"].BoolNull();    // 3.3
 
             ShipModules = new List<ShipModule>();
 
@@ -86,19 +87,19 @@ namespace EliteDangerousCore.JournalEvents
         public double? HullHealth { get; set; }   //3.3, 1.0-0.0, multipled by 100.0
         public long? ModulesValue { get; set; }   //3.0
         public long? Rebuy { get; set; }   //3.0
+        public bool? Hot { get; set; }   //3.3
 
         public List<ShipModule> ShipModules;
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
-            shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0);
+            shp.Loadout(ShipId, Ship, ShipFD, ShipName, ShipIdent, ShipModules, HullValue?? 0, ModulesValue ?? 0, Rebuy ?? 0, Hot);
         }
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            
-            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, 
-                "Modules:".Tx(this), ShipModules.Count , "Hull Health;%;N1", HullHealth, "Hull:; cr;N0".Txb(this), HullValue , "Modules:; cr;N0".Txb(this), ModulesValue , "Rebuy:; cr;N0".Txb(this), Rebuy);
+            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, ";Hot", Hot,
+                "Modules:".Tx(this), ShipModules.Count, "Hull Health;%;N1".Txb(this), HullHealth, "Hull:; cr;N0".Txb(this), HullValue, "Modules:; cr;N0".Txb(this), ModulesValue, "Rebuy:; cr;N0".Txb(this), Rebuy);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)

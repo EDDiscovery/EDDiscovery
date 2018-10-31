@@ -149,6 +149,7 @@
     <Compile Include="Inara\Inara.cs" />
     <Compile Include="Inara\InaraSync.cs" />
     <Compile Include="JournalEvents\JournalCargoDepot.cs" />
+    <Compile Include="JournalEvents\JournalFSDTarget.cs" />
     <Compile Include="JournalEvents\JournalMaterialTrade.cs" />
     <Compile Include="JournalEvents\JournalPayBounties.cs" />
     <Compile Include="JournalEvents\JournalPowerplay.cs" />

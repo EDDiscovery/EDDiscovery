@@ -76,7 +76,7 @@ namespace EliteDangerousCore.JournalEvents
                     foreach (FactionInformation f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState, "Government:".Txb(this), f.Government, "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance);
+                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState, "Government:".Txb(this), f.Government, "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance, "Reputation:;%;N1".Txb(this), f.MyReputation);
 
                         if (f.PendingStates != null)
                         {

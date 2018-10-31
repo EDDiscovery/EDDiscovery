@@ -21,23 +21,47 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.EngineerProgress)]
     public class JournalEngineerProgress : JournalEntry
     {
-        public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
+        public class ProgressInformation
         {
-            Engineer = evt["Engineer"].Str();
-            EngineerID = evt["EngineerID"].LongNull();
-            Rank = evt["Rank"].IntNull();
-            Progress = evt["Progress"].Str();
+            public string Engineer { get; set; }
+            public long EngineerID { get; set; }
+            public string Progress { get; set; }
         }
 
-        public string Engineer { get; set; }
+        public JournalEngineerProgress(JObject evt ) : base(evt, JournalTypeEnum.EngineerProgress)
+        {
+            Engineers = evt["Engineers"]?.ToObjectProtected<ProgressInformation[]>().OrderBy(x => x.Engineer)?.ToArray();       // 3.3 introduced this at startup
+
+            if (Engineers == null)
+            {
+                Engineer = evt["Engineer"].Str();
+                EngineerID = evt["EngineerID"].LongNull();
+                Rank = evt["Rank"].IntNull();
+                Progress = evt["Progress"].Str();
+            }
+        }
+
+        public ProgressInformation[] Engineers { get; set; }      // may be NULL if not startup or pre 3.3
+
+        public string Engineer { get; set; }            // may be empty if not progress during play
         public long? EngineerID { get; set; }
         public string Progress { get; set; }
         public int? Rank { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("", Engineer, "Rank:".Txb(this), Rank, "Progress:".Tx(this), Progress);
             detailed = "";
+            if ( Engineers != null )
+            {
+                info = BaseUtils.FieldBuilder.Build("Progress on ; Engineers".Txb(this), Engineers.Length);
+
+                foreach (var p in Engineers)
+                {
+                    detailed += BaseUtils.FieldBuilder.Build("", p.Engineer, "", p.Progress) + System.Environment.NewLine;
+                }
+            }
+            else
+                info = BaseUtils.FieldBuilder.Build("", Engineer, "Rank:".Txb(this), Rank, "Progress:".Tx(this), Progress);
         }
     }
 }
