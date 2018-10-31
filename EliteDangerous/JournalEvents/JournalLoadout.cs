@@ -34,6 +34,9 @@ namespace EliteDangerousCore.JournalEvents
             ShipName = evt["ShipName"].Str();
             ShipIdent = evt["ShipIdent"].Str();
             HullValue = evt["HullValue"].LongNull();
+            HullHealth = evt["HullHealth"].DoubleNull();
+            if (HullHealth != null)
+                HullHealth *= 100.0;        // convert to 0-100
             ModulesValue = evt["ModulesValue"].LongNull();
             Rebuy = evt["Rebuy"].LongNull();
 
@@ -80,6 +83,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipName { get; set; } // : user-defined ship name
         public string ShipIdent { get; set; } //   user-defined ship ID string
         public long? HullValue { get; set; }   //3.0
+        public double? HullHealth { get; set; }   //3.3, 1.0-0.0, multipled by 100.0
         public long? ModulesValue { get; set; }   //3.0
         public long? Rebuy { get; set; }   //3.0
 
@@ -94,7 +98,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             
             info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, 
-                "Modules:".Tx(this), ShipModules.Count , "Hull:; cr;N0".Txb(this), HullValue , "Modules:; cr;N0".Txb(this), ModulesValue , "Rebuy:; cr;N0".Txb(this), Rebuy);
+                "Modules:".Tx(this), ShipModules.Count , "Hull Health;%;N1", HullHealth, "Hull:; cr;N0".Txb(this), HullValue , "Modules:; cr;N0".Txb(this), ModulesValue , "Rebuy:; cr;N0".Txb(this), Rebuy);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)

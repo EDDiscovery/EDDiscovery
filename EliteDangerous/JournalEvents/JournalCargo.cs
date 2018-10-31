@@ -22,7 +22,7 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Cargo)]
-    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry, IAdditionalFiles
     {
         public class Cargo
         {
@@ -40,6 +40,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
         {
+            System.Diagnostics.Debug.WriteLine("Cargo at " + EventTimeUTC);
+            Rescan(evt);
+        }
+
+        void Rescan(JObject evt)
+        { 
             Inventory = evt["Inventory"]?.ToObjectProtected<Cargo[]>().OrderBy(x => x.Name)?.ToArray();
             if (Inventory != null)
             {
@@ -47,6 +53,18 @@ namespace EliteDangerousCore.JournalEvents
                     c.Normalise();
             }
         }
+
+        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Cargo.json"));  // check timestamp..
+            if (jnew != null)        // new json, rescan. returns null if cargo in the folder is not related to this entry by time.
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
 
         public Cargo[] Inventory { get; set; }      // may be NULL
 
