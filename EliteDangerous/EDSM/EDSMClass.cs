@@ -40,6 +40,7 @@ namespace EliteDangerousCore.EDSM
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
+        static private Dictionary<long, List<JournalScan>> DictEDSMBodiesByID64 = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
         {
@@ -715,10 +716,14 @@ namespace EliteDangerousCore.EDSM
         {
             try
             {
-                if (DictEDSMBodies!=null &&  DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                if (DictEDSMBodies!=null && edsmid > 0 && DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
                 {
                    // System.Diagnostics.Debug.WriteLine(".. found EDSM Lookup bodies from cache " + edsmid);
                     return DictEDSMBodies[edsmid];
+                }
+                else if (DictEDSMBodiesByID64 != null && id64 != null && id64 > 0 && DictEDSMBodiesByID64.ContainsKey(id64.Value))
+                {
+                    return DictEDSMBodiesByID64[id64.Value];
                 }
 
                 if (!edsmweblookup)      // must be set for a web lookup
@@ -758,11 +763,29 @@ namespace EliteDangerousCore.EDSM
                             Trace.WriteLine($"ETrace: {ex.StackTrace}");
                         }
                     }
-                    DictEDSMBodies[edsmid] = bodies;
+
+                    if (edsmid > 0)
+                    {
+                        DictEDSMBodies[edsmid] = bodies;
+                    }
+
+                    if (id64 != null && id64 > 0)
+                    {
+                        DictEDSMBodiesByID64[id64.Value] = bodies;
+                    }
+
                     return bodies;
                 }
 
-                DictEDSMBodies[edsmid] = null;
+                if (edsmid > 0)
+                {
+                    DictEDSMBodies[edsmid] = null;
+                }
+
+                if (id64 != null && id64 > 0)
+                {
+                    DictEDSMBodiesByID64[id64.Value] = null;
+                }
             }
             catch (Exception ex)
             {
