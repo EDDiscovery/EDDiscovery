@@ -704,7 +704,7 @@ namespace EliteDangerousCore.JournalEvents
 		{
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
 			{
-				return $"{IcyPlanetZoneInner:N0}-{IcyPlanetZoneOuter:N0}ls";
+				return $"{IcyPlanetZoneInner:N0}ls to {IcyPlanetZoneOuter:N0}";
 			}
 			else
 			{
@@ -717,10 +717,10 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Icy Planets: {0} ({1}-{2} AU)\n".Tx(this),
+				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".Tx(this),
 									 GetIcyPlanetsZoneStringLs(), 
-									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"), 
-									 (IcyPlanetZoneOuter));
+									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"),
+									 IcyPlanetZoneOuter);
 				return habZone.ToNullSafeString();
 			}
 			else
