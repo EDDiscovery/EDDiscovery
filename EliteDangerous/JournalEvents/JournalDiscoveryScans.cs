@@ -103,6 +103,7 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    
     [JournalEntryType(JournalTypeEnum.NavBeaconScan)]
     public class JournalNavBeaconScan : JournalEntry
     {
@@ -119,6 +120,41 @@ namespace EliteDangerousCore.JournalEvents
         {
             info = BaseUtils.FieldBuilder.Build("Bodies:".Txb(this), NumBodies);
             detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.SAAScanComplete)]
+    public class JournalSAAScanComplete : JournalEntry
+    {
+        public JournalSAAScanComplete(JObject evt) : base(evt, JournalTypeEnum.SAAScanComplete)
+        {
+            BodyName = evt["BodyName"].Str();
+            BodyID = evt["BodyID"].Long();
+            Discoverers = evt["Discoverers"].ToObjectProtected<string[]>();
+            Mappers = evt["Mappers"].ToObjectProtected<string[]>();
+            ProbesUsed = evt["ProbesUsed"].Int();
+            EfficiencyTarget = evt["EfficiencyTarget"].Int();
+        }
+
+        public long BodyID { get; set; }
+        public string BodyName { get; set; }
+        public string[] Discoverers { get; set; }
+        public string[] Mappers { get; set; }
+        public int ProbesUsed { get; set; }
+        public int EfficiencyTarget { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", BodyName,
+                                                "Discoverers:".Txb(this), Discoverers?.Length,
+                                                "Mappers:".Txb(this), Mappers?.Length,
+                                                "Probes:".Txb(this), ProbesUsed,
+                                                "Efficiency Target:".Txb(this), EfficiencyTarget);
+            detailed = "";
+            if (Discoverers != null)
+                detailed += "Discoverers:".Txb(this) + string.Join(",", Discoverers) + System.Environment.NewLine;
+            if (Discoverers != null)
+                detailed += "Mappers:".Txb(this) + string.Join(",", Mappers) + System.Environment.NewLine;
         }
     }
 

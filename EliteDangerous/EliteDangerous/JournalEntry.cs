@@ -177,6 +177,7 @@ namespace EliteDangerousCore
         Reputation = 748,
         RestockVehicle = 750,
         Resurrect = 760,
+        SAAScanComplete = 765,
         Scan = 770,
         Scanned = 772,
         ScientificResearch = 775,
