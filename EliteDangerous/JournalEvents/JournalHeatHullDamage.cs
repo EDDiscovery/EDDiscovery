@@ -18,60 +18,50 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    [JournalEntryType(JournalTypeEnum.Commander)]
-    public class JournalCommander : JournalEntry
+    [JournalEntryType(JournalTypeEnum.HeatDamage)]
+    public class JournalHeatDamage : JournalEntry
     {
-        public JournalCommander(JObject evt ) : base(evt, JournalTypeEnum.Commander)
+        public JournalHeatDamage(JObject evt ) : base(evt, JournalTypeEnum.HeatDamage)
         {
-            Name = evt["Name"].Str();
         }
-
-        public string Name { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name);
+            info = "";
             detailed = "";
         }
-
     }
 
-    [JournalEntryType(JournalTypeEnum.NewCommander)]
-    public class JournalNewCommander : JournalEntry
+    [JournalEntryType(JournalTypeEnum.HeatWarning)]
+    public class JournalHeatWarning : JournalEntry
     {
-        public JournalNewCommander(JObject evt) : base(evt, JournalTypeEnum.NewCommander)
+        public JournalHeatWarning(JObject evt) : base(evt, JournalTypeEnum.HeatWarning)
         {
-            Name = evt["Name"].Str();
-            Package = evt["Package"].Str();
         }
-
-        public string Name { get; set; }
-        public string Package { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".Txb(this), Package);
+            info = "";
             detailed = "";
         }
     }
 
-    [JournalEntryType(JournalTypeEnum.ClearSavedGame)]
-    public class JournalClearSavedGame : JournalEntry
+
+    [JournalEntryType(JournalTypeEnum.HullDamage)]
+    public class JournalHullDamage : JournalEntry
     {
-        public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)
+        public JournalHullDamage(JObject evt) : base(evt, JournalTypeEnum.HullDamage)
         {
-            Name = evt["Name"].Str();
+            Health = evt["Health"].Double();
 
         }
-        public string Name { get; set; }
+        public double Health { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Name;
+            info = BaseUtils.FieldBuilder.Build(";%", (int)(Health * 100));
             detailed = "";
         }
     }
-
 
 }

@@ -93,4 +93,42 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.CollectCargo)]
+    public class JournalCollectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
+    {
+        public JournalCollectCargo(JObject evt) : base(evt, JournalTypeEnum.CollectCargo)
+        {
+            Type = evt["Type"].Str();                               //FDNAME
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(), FriendlyType);         // always ensure we have one
+            Stolen = evt["Stolen"].Bool();
+            MissionID = evt["MissionID"].LongNull();
+        }
+
+        public string Type { get; set; }                    // FDNAME..
+        public string FriendlyType { get; set; }            // translated name
+        public string Type_Localised { get; set; }            // always set
+        public bool Stolen { get; set; }
+        public long? MissionID { get; set; }             // if applicable
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0, conn);
+        }
+
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, ";Stolen".Txb(this), Stolen, "<; (Mission Cargo)".Txb(this), MissionID != null);
+            detailed = "";
+        }
+    }
+
 }

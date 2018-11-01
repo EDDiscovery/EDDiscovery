@@ -18,10 +18,10 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    [JournalEntryType(JournalTypeEnum.Commander)]
-    public class JournalCommander : JournalEntry
+    [JournalEntryType(JournalTypeEnum.WingAdd)]
+    public class JournalWingAdd : JournalEntry
     {
-        public JournalCommander(JObject evt ) : base(evt, JournalTypeEnum.Commander)
+        public JournalWingAdd(JObject evt ) : base(evt, JournalTypeEnum.WingAdd)
         {
             Name = evt["Name"].Str();
         }
@@ -30,40 +30,59 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name);
+            info = Name;
             detailed = "";
         }
-
     }
 
-    [JournalEntryType(JournalTypeEnum.NewCommander)]
-    public class JournalNewCommander : JournalEntry
-    {
-        public JournalNewCommander(JObject evt) : base(evt, JournalTypeEnum.NewCommander)
-        {
-            Name = evt["Name"].Str();
-            Package = evt["Package"].Str();
-        }
 
-        public string Name { get; set; }
-        public string Package { get; set; }
+    [JournalEntryType(JournalTypeEnum.WingLeave)]
+    public class JournalWingLeave : JournalEntry
+    {
+        public JournalWingLeave(JObject evt) : base(evt, JournalTypeEnum.WingLeave)
+        {
+        }
 
         public override void FillInformation(out string info, out string detailed)
         {
+            info = "";
+            detailed = "";
+        }
 
-            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".Txb(this), Package);
+    }
+
+    [JournalEntryType(JournalTypeEnum.WingJoin)]
+    public class JournalWingJoin : JournalEntry
+    {
+        public JournalWingJoin(JObject evt) : base(evt, JournalTypeEnum.WingJoin)
+        {
+            Others = evt["Others"]?.ToObjectProtected<string[]>();
+        }
+
+        public string[] Others { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = "";
+            if (Others != null)
+                foreach (string s in Others)
+                {
+                    if (info.Length > 0)
+                        info += ", ";
+                    info += s;
+                }
             detailed = "";
         }
     }
 
-    [JournalEntryType(JournalTypeEnum.ClearSavedGame)]
-    public class JournalClearSavedGame : JournalEntry
+    [JournalEntryType(JournalTypeEnum.WingInvite)]
+    public class JournalWingInvite : JournalEntry
     {
-        public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)
+        public JournalWingInvite(JObject evt) : base(evt, JournalTypeEnum.WingInvite)
         {
             Name = evt["Name"].Str();
-
         }
+
         public string Name { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
