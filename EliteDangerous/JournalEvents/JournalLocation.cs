@@ -64,6 +64,7 @@ namespace EliteDangerousCore.JournalEvents
 
             public PowerStatesInfo[] PendingStates { get; set; }
             public PowerStatesInfo[] RecoveringStates { get; set; }
+            // removed - seems bugged for now. public PowerStatesInfo[] ActiveStates { get; set; }
         }
 
         public class PowerStatesInfo
@@ -275,7 +276,6 @@ namespace EliteDangerousCore.JournalEvents
                             detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
                             foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
                                 detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
-
                         }
 
                         if (f.RecoveringStates != null)
@@ -284,7 +284,14 @@ namespace EliteDangerousCore.JournalEvents
                             foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
                                 detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
                         }
-     
+
+                        //if (f.ActiveStates != null)       // re-do when fixed.
+                        //{
+                        //    detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this));
+                        //    foreach (JournalLocation.PowerStatesInfo state in f.ActiveStates)
+                        //        detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
+                        //}
+
                     }
             }
             else if (Latitude.HasValue && Longitude.HasValue)

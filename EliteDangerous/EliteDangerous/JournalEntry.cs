@@ -37,6 +37,7 @@ namespace EliteDangerousCore
         ApproachBody = 4,
         ApproachSettlement = 5,
         AppliedToSquadron = 6,
+        AsteroidCracked = 7,
         Bounty = 10,
         BuyAmmo = 20,
         BuyDrones = 30,

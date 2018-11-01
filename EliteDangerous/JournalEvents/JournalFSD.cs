@@ -112,6 +112,14 @@ namespace EliteDangerousCore.JournalEvents
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
                             sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
                     }
+
+                    //if (i.ActiveStates != null) - redo when fixed.
+                    //{
+                    //    sb.Append(BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this)));
+
+                    //    foreach (JournalLocation.PowerStatesInfo state in i.ActiveStates)
+                    //        sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
+                    //}
                     sb.Append(Environment.NewLine);
 
                 }
