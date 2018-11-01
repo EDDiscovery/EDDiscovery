@@ -531,8 +531,8 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
             }
 
-            if (HabZoneString() != null)
-                scanText.Append("\n" + HabZoneString());
+            if (CircumstellarZonesString() != null)
+                scanText.Append("\n" + CircumstellarZonesString());
 
 			if (HabZoneOtherStarsString() != null)
 				scanText.Append(HabZoneOtherStarsString());
@@ -562,7 +562,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public string HabZoneString()
+        public string CircumstellarZonesString()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
