@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
         private List<int> columnpos;
 
         private Font displayfont;
-
+		
         HistoryList current_historylist;
 
         private Timer dividercheck = new Timer();
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
             showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
-            showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
+            showCircumstellarZonesToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
 			showMetalRichPlanetsToolStripMenuItem.Checked = Config(Configuration.showMetalRichZone);
 			showWaterWorldsToolStripMenuItem.Checked = Config(Configuration.showWaterWrldZone);
 			showEarthLikeToolStripMenuItem.Checked = Config(Configuration.showEarthLikeZone);
@@ -330,7 +330,16 @@ namespace EDDiscovery.UserControls
                             if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
                             {
                                 JournalScan js = sn.starnodes.Values[0].ScanData;
-                                res.AppendFormat(js.HabZoneString().Replace("\r\n", " "));
+
+                                //res.AppendFormat(js.CircumstellarZonesString().Replace("\r\n", " "));
+
+								if (showCircumstellarZonesToolStripMenuItem.Checked)
+								{
+									res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+													 js.GetHabZoneStringLs(),
+													 (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
+													 (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
+								}
 
 								if (showMetalRichPlanetsToolStripMenuItem.Checked)
 								{
