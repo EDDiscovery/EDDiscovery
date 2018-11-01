@@ -117,4 +117,17 @@ namespace EliteDangerousCore
         Legend,
         Elite
     }
+
+    public enum SquadronRank       // these, as of 1/11/2018, are provisional
+    {
+        Unknown = -1,
+        Rookie = 0,
+        Agent = 1,
+        Officer = 2,
+        SeniorOfficer = 3,
+        Leader = 4,
+        SuperLeader = 5,
+        SuperDooperLeader = 6,
+        SuperDooperDooperLeader = 7,
+    }
 }
