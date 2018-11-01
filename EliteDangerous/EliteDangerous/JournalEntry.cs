@@ -94,6 +94,8 @@ namespace EliteDangerousCore
         FighterDestroyed = 303,
         FighterRebuilt = 304,
         Friends = 305,
+        FSSDiscoveryScan = 306,
+        FSSSignalDiscovered = 307,
         HeatDamage = 310,
         HeatWarning = 320,
         HullDamage = 330,

@@ -30,9 +30,75 @@ namespace EliteDangerousCore.JournalEvents
         public long SystemAddress { get; set; }
         public int Bodies { get; set; }
 
-        public override void FillInformation(out string info, out string detailed) 
+        public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("New bodies discovered:".Txb(this,"Dscan"), Bodies);
+            info = BaseUtils.FieldBuilder.Build("New bodies discovered:".Txb(this, "Dscan"), Bodies);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.FSSDiscoveryScan)]
+    public class JournalFSSDiscoveryScan : JournalEntry
+    {
+        public JournalFSSDiscoveryScan(JObject evt) : base(evt, JournalTypeEnum.FSSDiscoveryScan)
+        {
+            Progress = evt["Progress"].Double() * 100.0;
+            BodyCount = evt["BodyCount"].Int();
+            NonBodyCount = evt["NonBodyCount"].Int();
+        }
+
+        public double Progress { get; set; }
+        public int BodyCount { get; set; }
+        public int NonBodyCount { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("Progress:;%;N1".Txb(this), Progress, "Bodies:", BodyCount, "Others:".Txb(this), NonBodyCount);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.FSSSignalDiscovered)]
+    public class JournalFSSSignalDiscovered : JournalEntry
+    {
+        public JournalFSSSignalDiscovered(JObject evt) : base(evt, JournalTypeEnum.FSSSignalDiscovered)
+        {
+            SignalName = evt["SignalName"].Str();
+            SignalName_Localised = JournalFieldNaming.CheckLocalisation(evt["SignalName_Localised"].Str(), SignalName);
+
+            SpawingState = evt["SpawingState"].Str();
+            SpawingState_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawingState_Localised"].Str(), SpawingState);
+
+            SpawingFaction = evt["SpawingFaction"].Str();
+            SpawingFaction_Localised = JournalFieldNaming.CheckLocalisation(evt["SpawingFaction_Localised"].Str(), SpawingFaction);
+
+            TimeRemaining = evt["TimeRemaining"].DoubleNull();
+
+            if (TimeRemaining != null)
+            {
+                ExpiryUTC = EventTimeUTC.AddSeconds(TimeRemaining.Value);
+                ExpiryLocal = ExpiryUTC.ToLocalTime();
+            }
+        }
+
+        public string SignalName { get; set; }
+        public string SignalName_Localised { get; set; }
+        public string SpawingState { get; set; }
+        public string SpawingState_Localised { get; set; }
+        public string SpawingFaction { get; set; }
+        public string SpawingFaction_Localised { get; set; }
+        public double? TimeRemaining { get; set; }          // null if not expiring
+        public System.DateTime ExpiryUTC { get; set; }   
+        public System.DateTime ExpiryLocal { get; set; } 
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Txb(this),
+                            SpawingState_Localised, "Faction:".Txb(this), SpawingFaction_Localised);
+
+            if ( TimeRemaining != null )
+                info += ", Expires:".Txb(this) + (EliteConfigInstance.InstanceConfig.DisplayUTC ? ExpiryUTC : ExpiryLocal).ToString("g");
+
             detailed = "";
         }
     }
