@@ -567,10 +567,38 @@ namespace EliteDangerousCore.JournalEvents
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
                 StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this),
-									 GetHabZoneStringLs(), 
-									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), 
+
+				habZone.Append("Inferred Circumstellar zones:\n");
+
+				habZone.AppendFormat(" - Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetHabZoneStringLs(),
+									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
+
+				habZone.AppendFormat(" - Metal Rich planets, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetMetalRichZoneStringLs(),
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Water Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetWaterWorldZoneStringLs(),
+									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Earth Like Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetEarthLikeZoneStringLs(),
+									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Ammonia Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetAmmoniaWorldZoneStringLs(),
+									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".Tx(this),
+									 GetIcyPlanetsZoneStringLs(),
+				(IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"));
+
                 return habZone.ToNullSafeString();
             }
             else
