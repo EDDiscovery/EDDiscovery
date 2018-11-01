@@ -189,7 +189,7 @@ namespace EDDiscovery.UserControls
                     EDCommander.Update(edcommanders, false);
                 }
 
-                discoveryform.Capi.Logout();       // logout.. CAPI may have changed
+                // CAPI Descoped discoveryform.Capi.Logout();       // logout.. CAPI may have changed
                 discoveryform.RefreshHistoryAsync();           // do a resync, CAPI may have changed, anything else, make it work again
             }
         }
