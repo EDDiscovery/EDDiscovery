@@ -26,7 +26,8 @@ using System.Text;
 using System.Threading;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using OpenTKUtils;
+using OpenTKUtils.GL1;
+using OpenTKUtils.Common;
 
 namespace EDDiscovery
 {
@@ -232,7 +233,7 @@ namespace EDDiscovery
                 lylimit = Math.Max(lylimit, 1);
                 int sqlylimit = lylimit * lylimit;                 // in squared distance limit from viewpoint
 
-                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, _lastcamera.LastCameraPos);
+                StarGrid.TransFormInfo ti = new StarGrid.TransFormInfo(_resmat, _znear, _glControl.Width, _glControl.Height, sqlylimit, _lastcamera.LastPosition);
 
                 SortedDictionary<float, StarGrid.InViewInfo> inviewlist = new SortedDictionary<float, StarGrid.InViewInfo>(new DuplicateKeyComparer<float>());       // who's in view, sorted by distance
 
