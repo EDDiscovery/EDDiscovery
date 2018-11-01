@@ -148,6 +148,7 @@
     <Compile Include="HistoryList\HistoryList.cs" />
     <Compile Include="Inara\Inara.cs" />
     <Compile Include="Inara\InaraSync.cs" />
+    <Compile Include="JournalEvents\JournalCodexEntry.cs" />
     <Compile Include="JournalEvents\JournalSquadrons.cs" />
     <Compile Include="JournalEvents\JournalCargoDepot.cs" />
     <Compile Include="JournalEvents\JournalPowerplay.cs" />

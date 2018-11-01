@@ -48,6 +48,7 @@ namespace EliteDangerousCore
         ChangeCrewRole = 65,
         ClearSavedGame = 70,
         CockpitBreached = 80,
+        CodexEntry = 85,
         CollectCargo = 90,
         Commander = 95,
         CommitCrime = 100,
