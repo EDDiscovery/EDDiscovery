@@ -534,7 +534,7 @@ namespace EliteDangerousCore.JournalEvents
             if (CircumstellarZonesString() != null)
                 scanText.Append("\n" + CircumstellarZonesString());
 
-			if (HabZoneOtherStarsString() != null)
+			if (IsStar && HabZoneOtherStarsString() != null)
 				scanText.Append(HabZoneOtherStarsString());
 			
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
@@ -570,7 +570,7 @@ namespace EliteDangerousCore.JournalEvents
 
 				habZone.Append("Inferred Circumstellar zones:\n");
 
-				habZone.AppendFormat(" - Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+				habZone.AppendFormat(" - Habitable Zone, {0} ({1}-{2} AU),\n".Tx(this),
 									 GetHabZoneStringLs(),
 									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"),
 									 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
