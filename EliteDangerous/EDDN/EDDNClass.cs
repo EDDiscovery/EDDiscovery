@@ -118,6 +118,21 @@ namespace EliteDangerousCore.EDDN
             return obj;
         }
 
+        private JObject RemoveFactionReputation(JObject obj)
+        {
+            JArray factions = obj["Factions"] as JArray;
+
+            if (factions != null)
+            {
+                foreach (JObject faction in factions)
+                {
+                    faction.Remove("MyReputation");
+                }
+            }
+
+            return obj;
+        }
+
         public JObject CreateEDDNMessage(JournalFSDJump journal)
         {
             if (!journal.HasCoordinate || journal.StarPosFromEDSM)
@@ -135,12 +150,14 @@ namespace EliteDangerousCore.EDDN
 
 
             message = RemoveCommonKeys(message);
+            message = RemoveFactionReputation(message);
             message.Remove("BoostUsed");
             message.Remove("MyReputation"); 
             message.Remove("JumpDist");
             message.Remove("FuelUsed");
             message.Remove("FuelLevel");
             message.Remove("StarPosFromEDSM");
+            message.Remove("ActiveFine");
 
             msg["message"] = message;
             return msg;
@@ -159,10 +176,12 @@ namespace EliteDangerousCore.EDDN
             JObject message = journal.GetJson();
 
             message = RemoveCommonKeys(message);
+            message = RemoveFactionReputation(message);
             message.Remove("StarPosFromEDSM");
             message.Remove("Latitude");
             message.Remove("Longitude");
             message.Remove("MyReputation");
+            message.Remove("ActiveFine");
 
             msg["message"] = message;
             return msg;
@@ -183,6 +202,7 @@ namespace EliteDangerousCore.EDDN
             message = RemoveCommonKeys(message);
             message.Remove("CockpitBreach");
             message.Remove("Wanted");
+            message.Remove("ActiveFine");
 
             message["StarPos"] = new JArray(new float[] { (float)system.X, (float)system.Y, (float)system.Z });
 
