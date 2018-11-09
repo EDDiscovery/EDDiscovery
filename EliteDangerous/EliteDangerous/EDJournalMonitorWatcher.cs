@@ -38,7 +38,7 @@ namespace EliteDangerousCore
         private FileSystemWatcher m_Watcher;
         private int ticksNoActivity = 0;
         private ConcurrentQueue<string> m_netLogFileQueue;
-        private const string journalfilematch = "journal*.log";       // this picks up beta and normal logs
+        private const string journalfilematch = "Journal*.log";       // this picks up beta and normal logs
 
         public JournalMonitorWatcher(string folder)
         {
