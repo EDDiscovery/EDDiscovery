@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry);
+            KickComputation(uctg.GetCurrentHistoryEntry, true);
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
@@ -104,9 +104,9 @@ namespace EDDiscovery.UserControls
             KickComputation(he);
         }
 
-        private void KickComputation(HistoryEntry he)
+        private void KickComputation(HistoryEntry he, bool force = false)
         {
-            if (he != null)
+            if (he != null && he.System != null && (force || !he.System.Equals(last_he?.System)))
             {
                 last_he = he;
 
@@ -232,19 +232,19 @@ namespace EDDiscovery.UserControls
         private void checkBoxCube_CheckedChanged(object sender, EventArgs e)
         {
             if (this.IsHandleCreated)
-                KickComputation(last_he);
+                KickComputation(last_he, true);
         }
 
         private void textMinRadius_ValueChanged(object sender, EventArgs e)
         {
             if (this.IsHandleCreated)
-                KickComputation(last_he);
+                KickComputation(last_he, true);
         }
 
         private void textMaxRadius_ValueChanged(object sender, EventArgs e)
         {
             if (this.IsHandleCreated)
-                KickComputation(last_he);
+                KickComputation(last_he, true);
         }
     }
 }
