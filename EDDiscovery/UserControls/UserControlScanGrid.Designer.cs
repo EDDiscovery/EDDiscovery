@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
 			this.dataGridViewScanGrid = new System.Windows.Forms.DataGridView();
 			this.colImg = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -62,14 +62,18 @@ namespace EDDiscovery.UserControls
 			this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toggleDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.circumstellarZonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.atmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.massToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.radiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.circumstellarZonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.atmosphereToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.volcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.materialsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.valueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.beltsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.dataViewScrollerPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridViewScanGrid)).BeginInit();
 			this.contextMenuStripSG.SuspendLayout();
@@ -102,14 +106,14 @@ namespace EDDiscovery.UserControls
             this.colClass,
             this.colDistance,
             this.colInformation});
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.dataGridViewScanGrid.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.dataGridViewScanGrid.DefaultCellStyle = dataGridViewCellStyle4;
 			this.dataGridViewScanGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridViewScanGrid.Location = new System.Drawing.Point(0, 0);
 			this.dataGridViewScanGrid.Name = "dataGridViewScanGrid";
@@ -120,8 +124,8 @@ namespace EDDiscovery.UserControls
 			this.dataGridViewScanGrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
 			this.dataGridViewScanGrid.Size = new System.Drawing.Size(552, 572);
 			this.dataGridViewScanGrid.TabIndex = 23;
-			this.dataGridViewScanGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
-			this.dataGridViewScanGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
+			this.dataGridViewScanGrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScanGrid_CellDoubleClick);
+			this.dataGridViewScanGrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScanGrid_RowPostPaint);
 			this.dataGridViewScanGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScanGrid_MouseClick);
 			// 
 			// colImg
@@ -273,42 +277,16 @@ namespace EDDiscovery.UserControls
             this.circumstellarZonesToolStripMenuItem,
             this.toolStripSeparator1,
             this.atmosphereToolStripMenuItem,
+            this.volcanismToolStripMenuItem,
             this.materialsToolStripMenuItem,
             this.toolStripSeparator2,
+            this.beltsToolStripMenuItem,
+            this.ringsToolStripMenuItem,
+            this.toolStripSeparator3,
             this.valueToolStripMenuItem});
 			this.toggleDetailsToolStripMenuItem.Name = "toggleDetailsToolStripMenuItem";
 			this.toggleDetailsToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
 			this.toggleDetailsToolStripMenuItem.Text = "Toggle Details";
-			// 
-			// circumstellarZonesToolStripMenuItem
-			// 
-			this.circumstellarZonesToolStripMenuItem.Checked = true;
-			this.circumstellarZonesToolStripMenuItem.CheckOnClick = true;
-			this.circumstellarZonesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.circumstellarZonesToolStripMenuItem.Name = "circumstellarZonesToolStripMenuItem";
-			this.circumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-			this.circumstellarZonesToolStripMenuItem.Text = "Circumstellar Zones";
-			this.circumstellarZonesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZonesToolStripMenuItem_CheckStateChanged);
-			// 
-			// materialsToolStripMenuItem
-			// 
-			this.materialsToolStripMenuItem.Checked = true;
-			this.materialsToolStripMenuItem.CheckOnClick = true;
-			this.materialsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-			this.materialsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-			this.materialsToolStripMenuItem.Text = "Materials";
-			this.materialsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.materialsToolStripMenuItem_CheckStateChanged);
-			// 
-			// atmosphereToolStripMenuItem
-			// 
-			this.atmosphereToolStripMenuItem.Checked = true;
-			this.atmosphereToolStripMenuItem.CheckOnClick = true;
-			this.atmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.atmosphereToolStripMenuItem.Name = "atmosphereToolStripMenuItem";
-			this.atmosphereToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-			this.atmosphereToolStripMenuItem.Text = "Atmosphere";
-			this.atmosphereToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.atmosphereToolStripMenuItem_CheckStateChanged);
 			// 
 			// massToolStripMenuItem
 			// 
@@ -330,10 +308,49 @@ namespace EDDiscovery.UserControls
 			this.radiusToolStripMenuItem.Text = "Radius";
 			this.radiusToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.radiusToolStripMenuItem_CheckStateChanged);
 			// 
+			// circumstellarZonesToolStripMenuItem
+			// 
+			this.circumstellarZonesToolStripMenuItem.Checked = true;
+			this.circumstellarZonesToolStripMenuItem.CheckOnClick = true;
+			this.circumstellarZonesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.circumstellarZonesToolStripMenuItem.Name = "circumstellarZonesToolStripMenuItem";
+			this.circumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.circumstellarZonesToolStripMenuItem.Text = "Circumstellar Zones";
+			this.circumstellarZonesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZonesToolStripMenuItem_CheckStateChanged);
+			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
 			this.toolStripSeparator1.Size = new System.Drawing.Size(185, 6);
+			// 
+			// atmosphereToolStripMenuItem
+			// 
+			this.atmosphereToolStripMenuItem.Checked = true;
+			this.atmosphereToolStripMenuItem.CheckOnClick = true;
+			this.atmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.atmosphereToolStripMenuItem.Name = "atmosphereToolStripMenuItem";
+			this.atmosphereToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.atmosphereToolStripMenuItem.Text = "Atmosphere";
+			this.atmosphereToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.atmosphereToolStripMenuItem_CheckStateChanged);
+			// 
+			// volcanismToolStripMenuItem
+			// 
+			this.volcanismToolStripMenuItem.Checked = true;
+			this.volcanismToolStripMenuItem.CheckOnClick = true;
+			this.volcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.volcanismToolStripMenuItem.Name = "volcanismToolStripMenuItem";
+			this.volcanismToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.volcanismToolStripMenuItem.Text = "Volcanism";
+			// 
+			// materialsToolStripMenuItem
+			// 
+			this.materialsToolStripMenuItem.Checked = true;
+			this.materialsToolStripMenuItem.CheckOnClick = true;
+			this.materialsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
+			this.materialsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.materialsToolStripMenuItem.Text = "Materials";
+			this.materialsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.materialsToolStripMenuItem_CheckStateChanged);
 			// 
 			// toolStripSeparator2
 			// 
@@ -349,6 +366,31 @@ namespace EDDiscovery.UserControls
 			this.valueToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.valueToolStripMenuItem.Text = "Value";
 			this.valueToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.valueToolStripMenuItem_CheckStateChanged);
+			// 
+			// ringsToolStripMenuItem
+			// 
+			this.ringsToolStripMenuItem.Checked = true;
+			this.ringsToolStripMenuItem.CheckOnClick = true;
+			this.ringsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.ringsToolStripMenuItem.Name = "ringsToolStripMenuItem";
+			this.ringsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.ringsToolStripMenuItem.Text = "Rings";
+			this.ringsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.ringsToolStripMenuItem_CheckStateChanged);
+			// 
+			// beltsToolStripMenuItem
+			// 
+			this.beltsToolStripMenuItem.Checked = true;
+			this.beltsToolStripMenuItem.CheckOnClick = true;
+			this.beltsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.beltsToolStripMenuItem.Name = "beltsToolStripMenuItem";
+			this.beltsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+			this.beltsToolStripMenuItem.Text = "Belts";
+			this.beltsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.beltsToolStripMenuItem_CheckStateChanged);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(185, 6);
 			// 
 			// UserControlScanGrid
 			// 
@@ -390,5 +432,9 @@ namespace EDDiscovery.UserControls
 		private System.Windows.Forms.ToolStripMenuItem materialsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripMenuItem valueToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem volcanismToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem ringsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem beltsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}
 }
