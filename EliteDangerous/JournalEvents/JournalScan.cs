@@ -480,29 +480,33 @@ namespace EliteDangerousCore.JournalEvents
             if (HasRings)
             {
                 scanText.Append("\n");
-                if (IsStar)
-                {
-                    scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
-                    for (int i = 0; i < Rings.Length; i++)
-                    {
-                        if (Rings[i].MassMT > (oneMoon_MT / 10000))
-                        {
-                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons".Tx(this)));
-                        }
-                        else
-                        {
-                            scanText.Append("\n" + RingInformation(i));
-                        }
-                    }
-                }
-                else
-                {
-                    scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+				
+				for (var iRing = 0; iRing < Rings.Length; iRing++)
+				{
+					if (Rings[iRing].Name.EndsWith("Belt"))
+					{
+						scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+						for (iRing = 0; iRing < Rings.Length; iRing++)
+						{
+							if (Rings[iRing].MassMT > (oneMoon_MT / 10000))
+							{
+								scanText.Append("\n" + RingInformation(iRing, 1.0 / oneMoon_MT, " Moons".Tx(this)));
+							}
+							else
+							{
+								scanText.Append("\n" + RingInformation(iRing));
+							}
+						}
+					}
+					else if (Rings[iRing].Name.EndsWith("Ring"))
+					{
+						scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
 
-                    for (int i = 0; i < Rings.Length; i++)
-                        scanText.Append("\n" + RingInformation(i));
-                }
-            }
+						for (var i = 0; i < Rings.Length; i++)
+							scanText.Append("\n" + RingInformation(i));
+					}
+				}
+			}
 
             if (HasMaterials)
             {

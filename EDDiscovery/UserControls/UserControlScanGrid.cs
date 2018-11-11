@@ -205,27 +205,23 @@ namespace EDDiscovery.UserControls
 				// For stars only, retrieve the inferred circumstellar zones.
 				if (sn.ScanData.IsStar && circumstellarZonesToolStripMenuItem.Checked) 
 					GetZones(sn, bdDetails);
-
+				
 				// Tell us that a body is landable, and shows its gravity, please.
 				if (sn.ScanData.IsLandable)
 					GetLandable(sn, bdDetails);
 
-				// Tell us if there is some volcanic activity, ok?
-				if (volcanismToolStripMenuItem.Checked)
-					GetVolcanism(sn, bdDetails);
-
-				// have some belts?
-				if (beltsToolStripMenuItem.Checked)
-					GetBelts(sn, bdDetails);
-
-				// have some ring? Is so, let us know!
-				if (ringsToolStripMenuItem.Checked)
-					GetRings(sn, bdDetails);
-
 				// show main atmospheric composition
 				if (atmosphereToolStripMenuItem.Checked)
 					GetAtmosphere(sn, bdDetails);
-
+				
+				// Tell us if there is some volcanic activity, ok?
+				if (volcanismToolStripMenuItem.Checked)
+					GetVolcanism(sn, bdDetails);
+			
+				// have some ring? Is so, let us know!
+				if (ringsToolStripMenuItem.Checked)
+					GetRings(sn, bdDetails);
+				
 				// retrieve materials list
 				if (materialsToolStripMenuItem.Checked)
 					GetMaterials(sn, bdDetails);
@@ -293,7 +289,7 @@ namespace EDDiscovery.UserControls
 			// habitable zone for stars (do not display for black holes)
 			if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null &&
 				sn.ScanData.StarTypeID != EDStar.H)
-				bdDetails.AppendFormat("\n" + "Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). ",
+				bdDetails.AppendFormat("\n" + "Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}).",
 									   (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS)
 									   .ToString("N2"),
 									   (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS)
@@ -311,13 +307,7 @@ namespace EDDiscovery.UserControls
 				Gg = " (G: " + g.Value.ToString("N1") + ")";
 			}
 
-			bdDetails.Append("\n" + "Landable".Tx(this) + Gg + ".\n ");
-		}
-
-		private void GetVolcanism(StarScan.ScanNode sn, StringBuilder bdDetails)
-		{
-			if (sn.ScanData.Volcanism != null)
-				bdDetails.Append("Volcanism".Tx(this) + ". ");
+			bdDetails.Append("Landable".Tx(this) + Gg + ". ");
 		}
 
 		private static void GetAtmosphere(StarScan.ScanNode sn, StringBuilder bdDetails)
@@ -325,39 +315,41 @@ namespace EDDiscovery.UserControls
 			if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
 				bdDetails.Append(sn.ScanData.Atmosphere + ". ");
 		}
+
+		private void GetVolcanism(StarScan.ScanNode sn, StringBuilder bdDetails)
+		{
+			if (sn.ScanData.Volcanism != null)
+				bdDetails.Append("Volcanism".Tx(this) + ". ");
+		}
 		
 		private void GetRings(StarScan.ScanNode sn, StringBuilder bdDetails)
 		{
 			if (!sn.ScanData.HasRings) return;
-			
+
+			bdDetails.Append("\n");
+
 			// check for rings
-			if (sn.ScanData.Rings[0].ToString().EndsWith("Belt")) return;
-
-			bdDetails.AppendFormat("\n" + "Ring{0}".Tx(this), sn.ScanData.Rings.Count() == 1 ? ":" : "s:");
-			
-			foreach (var ring in sn.ScanData.Rings)
+			if (sn.ScanData.Rings[0].Name.EndsWith("Belt"))
 			{
-				var ringName = ring.Name;
-				bdDetails.Append("\n > " + JournalScan.StarPlanetRing.DisplayStringFromRingClass(ring.RingClass) + " ");
-				bdDetails.Append((ring.InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (ring.OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+				bdDetails.AppendFormat("Belt{0}".Tx(this), sn.ScanData.Rings.Count() == 1 ? ":" : "s:");
+
+				foreach (var belt in sn.ScanData.Rings)
+				{
+					var beltName = belt.Name;
+					bdDetails.Append("\n > " + JournalScan.StarPlanetRing.DisplayStringFromRingClass(belt.RingClass) + " ");
+					bdDetails.Append((belt.InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (belt.OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+				}
 			}
-		}
-
-		private void GetBelts(StarScan.ScanNode sn, StringBuilder bdDetails)
-		{
-			if (!sn.ScanData.HasRings) return;
-			
-			// check for belts
-			if (!sn.ScanData.Rings[0].ToString().EndsWith("Belt")) return;
-			bdDetails.AppendFormat("\n" + "Belt{0}".Tx(this), sn.ScanData.Rings.Count() == 1 ? ":" : "s:");
-
-			foreach (var belt in sn.ScanData.Rings)
+			else if (sn.ScanData.Rings[0].Name.EndsWith("Ring"))
 			{
-				var ringName = belt.Name;
-				bdDetails.Append("\n > " + JournalScan.StarPlanetRing.DisplayStringFromRingClass(belt.RingClass) +
-								 " ");
-				bdDetails.Append((belt.InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " +
-								 (belt.OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+				bdDetails.AppendFormat("Ring{0}".Tx(this), sn.ScanData.Rings.Count() == 1 ? ":" : "s:");
+
+				foreach (var ring in sn.ScanData.Rings)
+				{
+					var ringName = ring.Name;
+					bdDetails.Append("\n > " + JournalScan.StarPlanetRing.DisplayStringFromRingClass(ring.RingClass) + " ");
+					bdDetails.Append((ring.InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (ring.OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+				}
 			}
 		}
 
