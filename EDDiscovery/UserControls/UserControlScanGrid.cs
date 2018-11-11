@@ -35,25 +35,31 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
-        private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
+        private string DbColumnSave => DBName("ScanGridPanel", "DGVCol");
+		private string DbSave => DBName("ScanGrid");
 
-        public UserControlScanGrid()
+		public UserControlScanGrid()
         {
             InitializeComponent();
-            var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
-
-            // dataGridView setup - the rule is, use the designer for most properties.. only do these here since they are so buried or not available.
+            var corner = dataGridViewScanGrid.TopLeftHeaderCell; // work around #1487
 
             // this allows the row to grow to accomodate the text.. with a min height of 32.
-            dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
-            this.dataGridViewScangrid.Columns["ImageColumn"].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;
+            dataGridViewScanGrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewScanGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
+            dataGridViewScanGrid.RowTemplate.MinimumHeight = 32;
+            dataGridViewScanGrid.Columns["colImg"].DefaultCellStyle.SelectionBackColor = Color.Transparent;
         }
 
         public override void Init()
         {
             discoveryform.OnNewEntry += NewEntry;
+
+			// retrieve values from db
+			imageToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showImageColumn", true);
+			nameToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showNameColumn", true);
+			classToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showClassColumn", true);
+			distanceToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showDistanceColumn", true);
+			informationToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showInformationColumn", true);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -62,7 +68,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
-            DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVLoadColumnLayout(dataGridViewScanGrid, DbColumnSave);
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -74,7 +80,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            DGVSaveColumnLayout(dataGridViewScangrid, DbColumnSave);
+            DGVSaveColumnLayout(dataGridViewScanGrid, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
         }
@@ -105,7 +111,7 @@ namespace EDDiscovery.UserControls
             if (he == null)     //  no he, no display
             {
                 last_he = null;
-                dataGridViewScangrid.Rows.Clear();
+                dataGridViewScanGrid.Rows.Clear();
                 SetControlText("No Scan".Tx());
                 return;
             }
@@ -116,7 +122,7 @@ namespace EDDiscovery.UserControls
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
                     last_he = null;
-                    dataGridViewScangrid.Rows.Clear();
+                    dataGridViewScanGrid.Rows.Clear();
                     SetControlText("No Scan".Tx());
                     return;
                 }
@@ -128,9 +134,9 @@ namespace EDDiscovery.UserControls
             last_he = he;
 
             // only record first row if same system 
-            int firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
+            int firstdisplayedrow = (dataGridViewScanGrid.RowCount > 0 && samesys) ? dataGridViewScanGrid.FirstDisplayedScrollingRowIndex : -1;
 
-            dataGridViewScangrid.Rows.Clear();
+            dataGridViewScanGrid.Rows.Clear();
 
             List<StarScan.ScanNode> all_nodes = scannode.Bodies.ToList();// flatten tree of scan nodes to prepare for listing
 
@@ -250,9 +256,9 @@ namespace EDDiscovery.UserControls
                         img = sn.ScanData.GetPlanetClassImage(); // use the correct image in case of planets and moons
                     }
 
-                    dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
+                    dataGridViewScanGrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
 
-                    DataGridViewRow cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
+                    DataGridViewRow cur = dataGridViewScanGrid.Rows[dataGridViewScanGrid.Rows.Count - 1];
 
                     cur.Tag = img;
                     cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
@@ -263,18 +269,18 @@ namespace EDDiscovery.UserControls
             // display total scan values
             SetControlText(string.Format("Scan Summary for {0}. {1}".Tx(this, "SS"), scannode.system.Name, BuildScanValue(scannode)));
 
-            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
-                dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
+            if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScanGrid.RowCount)
+                dataGridViewScanGrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
         }
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
-            DataGridViewRow cur = dataGridViewScangrid.Rows[e.RowIndex];
+            DataGridViewRow cur = dataGridViewScanGrid.Rows[e.RowIndex];
             if (cur.Tag != null)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
-                int sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
+                int sz = dataGridViewScanGrid.RowTemplate.MinimumHeight - 2;
                 int vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
             }
@@ -299,10 +305,48 @@ namespace EDDiscovery.UserControls
         {
             if (e.ColumnIndex == 4)
             {
-                object curdata = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value;
-                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag;
-                dataGridViewScangrid.Rows[e.RowIndex].Cells[4].Tag = curdata;
+                object curdata = dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Value;
+                dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Value = dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Tag;
+                dataGridViewScanGrid.Rows[e.RowIndex].Cells[4].Tag = curdata;
             }
         }
-    }
+
+		private void imageToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showImageColumn", imageToolStripMenuItem.Checked);
+			colImg.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showImageColumn", true);
+		}
+
+		private void nameToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showNameColumn", nameToolStripMenuItem.Checked);
+			colName.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showNameColumn", true);
+		}
+
+		private void classToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showClassColumn", classToolStripMenuItem.Checked);
+			colClass.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showClassColumn", true);
+		}
+
+		private void distanceToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showDistanceColumn", distanceToolStripMenuItem.Checked);
+			colDistance.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showDistanceColumn", true);
+		}
+
+		private void informationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showInformationColumn", informationToolStripMenuItem.Checked);
+			colInformation.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showInformationColumn", true);
+		}
+
+		private void dataGridViewScanGrid_MouseClick(object sender, MouseEventArgs e)
+		{
+			contextMenuStripSG.Visible = true;
+
+			contextMenuStripSG.Top = MousePosition.Y;
+			contextMenuStripSG.Left = MousePosition.X;
+		}
+	}
 }
