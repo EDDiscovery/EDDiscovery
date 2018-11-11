@@ -380,36 +380,60 @@ namespace EDDiscovery.UserControls
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showMass", massToolStripMenuItem.Checked);
 			massToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMass", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 
 		private void radiusToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showRadius", radiusToolStripMenuItem.Checked);
 			radiusToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRadius", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 
 		private void circumstellarZonesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showZones", circumstellarZonesToolStripMenuItem.Checked);
 			circumstellarZonesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showZones", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 
 		private void atmosphereToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showAtmosphere", atmosphereToolStripMenuItem.Checked);
 			atmosphereToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAtmosphere", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 
 		private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showMaterials", massToolStripMenuItem.Checked);
 			materialsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMaterials", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 
 		private void valueToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showValue", valueToolStripMenuItem.Checked);
 			valueToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showValue", true);
+			if (last_he != null)
+			{
+				DrawSystem(last_he, true);
+			}
 		}
 	}
 }
