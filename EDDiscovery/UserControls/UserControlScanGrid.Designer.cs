@@ -282,33 +282,53 @@ namespace EDDiscovery.UserControls
 			// 
 			// circumstellarZonesToolStripMenuItem
 			// 
+			this.circumstellarZonesToolStripMenuItem.Checked = true;
+			this.circumstellarZonesToolStripMenuItem.CheckOnClick = true;
+			this.circumstellarZonesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.circumstellarZonesToolStripMenuItem.Name = "circumstellarZonesToolStripMenuItem";
 			this.circumstellarZonesToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.circumstellarZonesToolStripMenuItem.Text = "Circumstellar Zones";
+			this.circumstellarZonesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZonesToolStripMenuItem_CheckStateChanged);
 			// 
 			// materialsToolStripMenuItem
 			// 
+			this.materialsToolStripMenuItem.Checked = true;
+			this.materialsToolStripMenuItem.CheckOnClick = true;
+			this.materialsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
 			this.materialsToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.materialsToolStripMenuItem.Text = "Materials";
+			this.materialsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.materialsToolStripMenuItem_CheckStateChanged);
 			// 
 			// atmosphereToolStripMenuItem
 			// 
+			this.atmosphereToolStripMenuItem.Checked = true;
+			this.atmosphereToolStripMenuItem.CheckOnClick = true;
+			this.atmosphereToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.atmosphereToolStripMenuItem.Name = "atmosphereToolStripMenuItem";
 			this.atmosphereToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.atmosphereToolStripMenuItem.Text = "Atmosphere";
+			this.atmosphereToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.atmosphereToolStripMenuItem_CheckStateChanged);
 			// 
 			// massToolStripMenuItem
 			// 
+			this.massToolStripMenuItem.Checked = true;
+			this.massToolStripMenuItem.CheckOnClick = true;
+			this.massToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.massToolStripMenuItem.Name = "massToolStripMenuItem";
 			this.massToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.massToolStripMenuItem.Text = "Mass";
+			this.massToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.massToolStripMenuItem_CheckStateChanged);
 			// 
 			// radiusToolStripMenuItem
 			// 
+			this.radiusToolStripMenuItem.Checked = true;
+			this.radiusToolStripMenuItem.CheckOnClick = true;
+			this.radiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.radiusToolStripMenuItem.Name = "radiusToolStripMenuItem";
 			this.radiusToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.radiusToolStripMenuItem.Text = "Radius";
+			this.radiusToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.radiusToolStripMenuItem_CheckStateChanged);
 			// 
 			// toolStripSeparator1
 			// 
@@ -322,9 +342,13 @@ namespace EDDiscovery.UserControls
 			// 
 			// valueToolStripMenuItem
 			// 
+			this.valueToolStripMenuItem.Checked = true;
+			this.valueToolStripMenuItem.CheckOnClick = true;
+			this.valueToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.valueToolStripMenuItem.Name = "valueToolStripMenuItem";
 			this.valueToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
 			this.valueToolStripMenuItem.Text = "Value";
+			this.valueToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.valueToolStripMenuItem_CheckStateChanged);
 			// 
 			// UserControlScanGrid
 			// 

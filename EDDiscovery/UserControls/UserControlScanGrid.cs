@@ -60,6 +60,12 @@ namespace EDDiscovery.UserControls
 			classToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showClassColumn", true);
 			distanceToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showDistanceColumn", true);
 			informationToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showInformationColumn", true);
+			massToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMass", true);
+			radiusToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRadius", true);
+			atmosphereToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAtmosphere", true);
+			circumstellarZonesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showZones", true);
+			massToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMaterials", true);
+			valueToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showValue", true);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -170,15 +176,27 @@ namespace EDDiscovery.UserControls
                             bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
                     }
 
-                    // display stars and stellar bodies mass
-                    if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
-                        bdDetails.Append("Mass".Tx(this) + ": " + sn.ScanData.nStellarMass.Value.ToString("N2") + ", ");
+					if (massToolStripMenuItem.Checked)
+					{
+						// display stars and stellar bodies mass
+						if (sn.ScanData.IsStar && sn.ScanData.nStellarMass.HasValue)
+							bdDetails.Append("Mass".Tx(this) + ": " + sn.ScanData.nStellarMass.Value.ToString("N2") +
+											 ", ");
+					}
 
-                    // habitable zone for stars - do not display for black holes.
-                    if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null && sn.ScanData.StarTypeID != EDStar.H)
-                        bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). ", (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+					if (circumstellarZonesToolStripMenuItem.Checked)
+					{
+						// habitable zone for stars - do not display for black holes.
+						if (sn.ScanData.HabitableZoneInner != null && sn.ScanData.HabitableZoneOuter != null &&
+							sn.ScanData.StarTypeID != EDStar.H)
+							bdDetails.AppendFormat("Habitable Zone".Tx(this) + ": {0}-{1}AU ({2}). ",
+												   (sn.ScanData.HabitableZoneInner.Value / JournalScan.oneAU_LS)
+												   .ToString("N2"),
+												   (sn.ScanData.HabitableZoneOuter.Value / JournalScan.oneAU_LS)
+												   .ToString("N2"), sn.ScanData.GetHabZoneStringLs());
+					}
 
-                    // tell us that a bodie is landable, and shows its gravity
+					// tell us that a bodie is landable, and shows its gravity
                     if (sn.ScanData.IsLandable == true)
                     {
                         string Gg = "";
@@ -220,29 +238,38 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    // print the main atmospheric composition
-                    if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
-                        bdDetails.Append(sn.ScanData.Atmosphere + ". ");
+					if (atmosphereToolStripMenuItem.Checked)
+					{
+						// print the main atmospheric composition
+						if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
+							bdDetails.Append(sn.ScanData.Atmosphere + ". ");
+					}
 
-                    // materials                        
-                    if (sn.ScanData.HasMaterials)
-                    {
-                        string ret = "";
-                        foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
-                        {
-                            MaterialCommodityData mc = MaterialCommodityData.GetByFDName(mat.Key);
-                            if (mc != null && mc.IsJumponium)
-                                ret = ret.AppendPrePad(mc.Name, ", ");
-                        }
+					if (massToolStripMenuItem.Checked)
+					{
+						// materials                        
+						if (sn.ScanData.HasMaterials)
+						{
+							string ret = "";
+							foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
+							{
+								MaterialCommodityData mc = MaterialCommodityData.GetByFDName(mat.Key);
+								if (mc != null && mc.IsJumponium)
+									ret = ret.AppendPrePad(mc.Name, ", ");
+							}
 
-                        if (ret.Length > 0)
-                            bdDetails.Append("\n" + "This body contains: ".Tx(this, "BC") + ret);
-                    }
+							if (ret.Length > 0)
+								bdDetails.Append("\n" + "This body contains: ".Tx(this, "BC") + ret);
+						}
+					}
 
-                    int value = sn.ScanData.EstimatedValue;
-                    bdDetails.Append(Environment.NewLine + "Value".Tx(this) + " " + value.ToString("N0"));
+					if (valueToolStripMenuItem.Checked)
+					{
+						int value = sn.ScanData.EstimatedValue;
+						bdDetails.Append(Environment.NewLine + "Value".Tx(this) + " " + value.ToString("N0"));
+					}
 
-                    //if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
+					//if ( sn.ScanData.EDSMDiscoveryCommander != null)      // not doing this, could be an option..
                     //    bdDetails.Append("\n" + "Discovered by: " + sn.ScanData.EDSMDiscoveryCommander + " on " + sn.ScanData.EDSMDiscoveryUTC.ToStringYearFirst());
 
                     Image img = null;
@@ -311,6 +338,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
+		private void dataGridViewScanGrid_MouseClick(object sender, MouseEventArgs e)
+		{
+			contextMenuStripSG.Visible = true;
+
+			contextMenuStripSG.Top = MousePosition.Y;
+			contextMenuStripSG.Left = MousePosition.X;
+		}
+		
 		private void imageToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
 			SQLiteDBClass.PutSettingBool(DbSave + "showImageColumn", imageToolStripMenuItem.Checked);
@@ -341,12 +376,40 @@ namespace EDDiscovery.UserControls
 			colInformation.Visible = SQLiteDBClass.GetSettingBool(DbSave + "showInformationColumn", true);
 		}
 
-		private void dataGridViewScanGrid_MouseClick(object sender, MouseEventArgs e)
+		private void massToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
 		{
-			contextMenuStripSG.Visible = true;
+			SQLiteDBClass.PutSettingBool(DbSave + "showMass", massToolStripMenuItem.Checked);
+			massToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMass", true);
+		}
 
-			contextMenuStripSG.Top = MousePosition.Y;
-			contextMenuStripSG.Left = MousePosition.X;
+		private void radiusToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showRadius", radiusToolStripMenuItem.Checked);
+			radiusToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRadius", true);
+		}
+
+		private void circumstellarZonesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showZones", circumstellarZonesToolStripMenuItem.Checked);
+			circumstellarZonesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showZones", true);
+		}
+
+		private void atmosphereToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showAtmosphere", atmosphereToolStripMenuItem.Checked);
+			atmosphereToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAtmosphere", true);
+		}
+
+		private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showMaterials", massToolStripMenuItem.Checked);
+			materialsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMaterials", true);
+		}
+
+		private void valueToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+		{
+			SQLiteDBClass.PutSettingBool(DbSave + "showValue", valueToolStripMenuItem.Checked);
+			valueToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showValue", true);
 		}
 	}
 }
