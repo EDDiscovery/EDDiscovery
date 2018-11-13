@@ -50,9 +50,9 @@ namespace EliteDangerousCore.JournalEvents
             return string.Compare(Station, other.Station) == 0 && string.Compare(StarSystem, other.StarSystem) == 0 && CollectionStaticHelpers.Equals(Commodities, other.Commodities);
         }
 
-        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        public bool ReadAdditionalFiles(string directory, bool historyrefreshparse, ref JObject jo)
         {
-            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"));
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);
             if (jnew != null)        // new json, rescan
             {
                 jo = jnew;      // replace current

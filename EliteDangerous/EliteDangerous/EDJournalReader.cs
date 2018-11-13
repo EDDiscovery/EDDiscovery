@@ -48,7 +48,8 @@ namespace EliteDangerousCore
         {
         }
 
-        private JournalReaderEntry ProcessLine(string line, bool resetOnError)
+        // inhistoryrefreshparse = means reading history in batch mode
+        private JournalReaderEntry ProcessLine(string line, bool inhistoryrefreshparse, bool resetOnError)
         {
             int cmdrid = -2;        //-1 is hidden, -2 is never shown
 
@@ -153,7 +154,7 @@ namespace EliteDangerousCore
 
             if (je is IAdditionalFiles)
             {
-                if ((je as IAdditionalFiles).ReadAdditionalFiles(Path.GetDirectoryName(FileName), ref jo) == false)     // if failed
+                if ((je as IAdditionalFiles).ReadAdditionalFiles(Path.GetDirectoryName(FileName), inhistoryrefreshparse, ref jo) == false)     // if failed
                     return null;
             }
 
@@ -206,13 +207,13 @@ namespace EliteDangerousCore
         // function needs to report two things, list of JREs (may be empty) and if it read something, bool.. hence form changed
         // bool reporting we have performed any sort of action is important.. it causes the TLU pos to be updated above even if we have junked all the events or delayed them
 
-        public bool ReadJournal(out List<JournalReaderEntry> jent, bool resetOnError = false)      // True if anything was processed, even if we rejected it
+        public bool ReadJournal(out List<JournalReaderEntry> jent, bool historyrefreshparsing, bool resetOnError )      // True if anything was processed, even if we rejected it
         {
             jent = new List<JournalReaderEntry>();
 
             bool readanything = false;
 
-            while (ReadLine(out JournalReaderEntry newentry, l => ProcessLine(l, resetOnError)))
+            while (ReadLine(out JournalReaderEntry newentry, l => ProcessLine(l, historyrefreshparsing, resetOnError)))
             {
                 readanything = true;
 

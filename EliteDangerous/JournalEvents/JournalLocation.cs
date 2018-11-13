@@ -60,17 +60,24 @@ namespace EliteDangerousCore.JournalEvents
             public string Government { get; set; }
             public double Influence { get; set; }
             public string Allegiance { get; set; }
-            public double? MyReputation { get; set; } //3.3
+            public string Happiness { get; set; }   //3.3, may be null
+            public string Happiness_Localised { get; set; } //3.3, may be null
+            public double? MyReputation { get; set; } //3.3, may be null
 
             public PowerStatesInfo[] PendingStates { get; set; }
             public PowerStatesInfo[] RecoveringStates { get; set; }
-            // removed - seems bugged for now. public PowerStatesInfo[] ActiveStates { get; set; }
+            public ActiveStatesInfo[] ActiveStates { get; set; }    //3.3, may be null
         }
 
         public class PowerStatesInfo
         {
             public string State { get; set; }
             public int Trend { get; set; }
+        }
+
+        public class ActiveStatesInfo       // Howard info via discord .. just state
+        {
+            public string State { get; set; }
         }
 
         protected JournalLocOrJump(DateTime utc, ISystem sys, int synced, JournalTypeEnum jtype) : base(utc, synced, jtype)
@@ -112,6 +119,9 @@ namespace EliteDangerousCore.JournalEvents
                 int i = Array.FindIndex(Factions, x => x.Name == Faction);
                 if (i != -1)
                     FactionState = Factions[i].FactionState;        // set to State of controlling faction
+
+                foreach( var x in Factions)     // normalise localised
+                    x.Happiness_Localised = JournalFieldNaming.CheckLocalisation(x.Happiness_Localised, x.Happiness);
             }
 
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "SystemAllegiance", "Allegiance" });
@@ -227,7 +237,7 @@ namespace EliteDangerousCore.JournalEvents
             StationType = evt["StationType"].Str().SplitCapsWord();
             Body = evt["Body"].Str();
             BodyID = evt["BodyID"].IntNull();
-            BodyType = evt["BodyType"].Str();
+            BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
 
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
@@ -266,33 +276,36 @@ namespace EliteDangerousCore.JournalEvents
                 detailed = BaseUtils.FieldBuilder.Build("<;(Wanted) ".Txb(this), Wanted, "Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised, "Security:".Txb(this), Security_Localised);
 
                 if (Factions != null)
+                {
                     foreach (FactionInformation f in Factions)
                     {
                         detailed += Environment.NewLine;
-                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState, "Government:".Txb(this), f.Government, "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance, "Reputation:;%;N1".Txb(this), f.MyReputation);
+                        detailed += BaseUtils.FieldBuilder.Build("", f.Name, "State:".Txb(this), f.FactionState, "Government:".Txb(this), f.Government, 
+                            "Inf:;%".Txb(this), (int)(f.Influence * 100), "Allegiance:".Txb(this), f.Allegiance, "Happiness:".Txb(this), f.Happiness_Localised,
+                            "Reputation:;%;N1".Txb(this), f.MyReputation);
 
                         if (f.PendingStates != null)
                         {
                             detailed += BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this));
                             foreach (JournalLocation.PowerStatesInfo state in f.PendingStates)
-                                detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
+                                detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
+
+                            if (f.RecoveringStates != null)
+                            {
+                                detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
+                                foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
+                                    detailed += BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend);
+                            }
+
+                            if (f.ActiveStates != null)       // re-do when fixed.
+                            {
+                                detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this));
+                                foreach (JournalLocation.ActiveStatesInfo state in f.ActiveStates)
+                                    detailed += BaseUtils.FieldBuilder.Build(" ", state.State);
+                            }
                         }
-
-                        if (f.RecoveringStates != null)
-                        {
-                            detailed += BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this));
-                            foreach (JournalLocation.PowerStatesInfo state in f.RecoveringStates)
-                                detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
-                        }
-
-                        //if (f.ActiveStates != null)       // re-do when fixed.
-                        //{
-                        //    detailed += BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this));
-                        //    foreach (JournalLocation.PowerStatesInfo state in f.ActiveStates)
-                        //        detailed += BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend);
-                        //}
-
                     }
+                }
             }
             else if (Latitude.HasValue && Longitude.HasValue)
             {

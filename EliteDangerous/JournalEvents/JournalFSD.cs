@@ -94,6 +94,7 @@ namespace EliteDangerousCore.JournalEvents
                                                                     "Government:".Txb(this), i.Government, 
                                                                     "Inf:;%".Txb(this), (i.Influence * 100.0).ToString("0.0"), 
                                                                     "Allegiance:".Txb(this), i.Allegiance,
+                                                                    "Happiness:".Txb(this), i.Happiness_Localised,
                                                                     "Reputation:;%;N1".Txb(this), i.MyReputation));
 
                     if (i.PendingStates != null)
@@ -101,7 +102,7 @@ namespace EliteDangerousCore.JournalEvents
                         sb.Append(BaseUtils.FieldBuilder.Build(",", "Pending State:".Txb(this)));
 
                         foreach (JournalLocation.PowerStatesInfo state in i.PendingStates)
-                            sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
+                            sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend));
 
                     }
 
@@ -110,16 +111,16 @@ namespace EliteDangerousCore.JournalEvents
                         sb.Append(BaseUtils.FieldBuilder.Build(",", "Recovering State:".Txb(this)));
 
                         foreach (JournalLocation.PowerStatesInfo state in i.RecoveringStates)
-                            sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
+                            sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State, "<(;)", state.Trend));
                     }
 
-                    //if (i.ActiveStates != null) - redo when fixed.
-                    //{
-                    //    sb.Append(BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this)));
+                    if (i.ActiveStates != null) 
+                    {
+                        sb.Append(BaseUtils.FieldBuilder.Build(",", "Active State:".Txb(this)));
 
-                    //    foreach (JournalLocation.PowerStatesInfo state in i.ActiveStates)
-                    //        sb.Append(BaseUtils.FieldBuilder.Build(",", state.State, "", state.Trend));
-                    //}
+                        foreach (JournalLocation.ActiveStatesInfo state in i.ActiveStates)
+                            sb.Append(BaseUtils.FieldBuilder.Build(" ", state.State));
+                    }
                     sb.Append(Environment.NewLine);
 
                 }

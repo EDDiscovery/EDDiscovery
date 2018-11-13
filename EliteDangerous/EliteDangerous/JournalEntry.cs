@@ -1206,9 +1206,9 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        protected JObject ReadAdditionalFile( string extrafile, bool checktimestamptype = true )       // read file, return new JSON
+        protected JObject ReadAdditionalFile( string extrafile, bool waitforfile, bool checktimestamptype )       // read file, return new JSON
         {
-            for (int retries = 0; retries < 5; retries++)
+            for (int retries = 0; retries < 5 ; retries++)
             {
                 try
                 {
@@ -1231,6 +1231,9 @@ namespace EliteDangerousCore
                 }
                 catch (Exception ex)
                 {
+                    if (!waitforfile)               // if don't wait, continue with no return
+                        return null;
+
                     System.Diagnostics.Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
                     System.Threading.Thread.Sleep(500);
                 }

@@ -55,9 +55,9 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        public bool ReadAdditionalFiles(string directory, bool historyrefreshparse, ref JObject jo)
         {
-            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Cargo.json"));  // check timestamp..
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Cargo.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);  // check timestamp..
             if (jnew != null)        // new json, rescan. returns null if cargo in the folder is not related to this entry by time.
             {
                 jo = jnew;      // replace current

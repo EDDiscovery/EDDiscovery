@@ -52,10 +52,9 @@ namespace EliteDangerousCore.JournalEvents
             SystemAddress = evt["SystemAddress"].LongNull();
             Body = evt["Body"].Str();
             BodyID = evt["BodyID"].IntNull();
-            BodyType = evt["BodyType"].Str();
-            if (BodyType.Equals("Null", System.StringComparison.InvariantCultureIgnoreCase)) // obv a frontier bug
-                BodyType = "";
+            BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
         }
+
         public string StarSystem { get; set; }
         public long? SystemAddress { get; set; }
         public string Body { get; set; }
