@@ -38,6 +38,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? nRadius { get; set; }                        // direct
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
+        public bool HasBelts { get; set; }
         public int EstimatedValue { get; set; }
         public List<BodyParent> Parents { get; set; }
 
@@ -480,33 +481,41 @@ namespace EliteDangerousCore.JournalEvents
             if (HasRings)
             {
                 scanText.Append("\n");
-                if (IsStar)
+
+                for (var r = 0; r < Rings.Length; r++)
                 {
-                    scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
-                    for (int i = 0; i < Rings.Length; i++)
+                    // if it's name ends with "Belt"...
+                    if (Rings[r].Name.EndsWith("Belt"))
                     {
-                        if (Rings[i].MassMT > (oneMoon_MT / 10000))
+                        HasBelts = true;
+
+                        // ...than it's a belt!
+                        scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+
+                        for (r = 0; r < Rings.Length; r++)
                         {
-                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons".Tx(this)));
-                        }
-                        else
-                        {
-                            scanText.Append("\n" + RingInformation(i));
+                            scanText.Append("\n" + RingInformation(r));
                         }
                     }
-                }
-                else
-                {
-                    scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+                    // but, it it ends with "Ring"...
+                    else if (Rings[r].Name.EndsWith("Ring"))
+                    {
+                        // It's a ring!
+                        scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
 
-                    for (int i = 0; i < Rings.Length; i++)
-                        scanText.Append("\n" + RingInformation(i));
+                        for (r = 0; r < Rings.Length; r++)
+                        {
+
+                            scanText.Append("\n" + RingInformation(r));
+                        }
+                    }
+
                 }
             }
-
+            
             if (HasMaterials)
             {
-                scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
+                scanText.Append("\n" + DisplayMaterials(2, historicmatlist, currentmatlist) + "\n");
             }
 
             string habzonestring = HabZoneString();
