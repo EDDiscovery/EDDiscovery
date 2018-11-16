@@ -36,8 +36,11 @@ namespace EliteDangerousCore.JournalEvents
         public double? nRotationPeriod { get; set; }                // direct
         public double? nSurfaceTemperature { get; set; }            // direct
         public double? nRadius { get; set; }                        // direct
-        public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
+        
+        public bool HasRings => Rings != null && Rings.Length > 0;
+        public bool HasBelts { get; set; }
         public StarPlanetRing[] Rings { get; set; }
+        
         public int EstimatedValue { get; set; }
         public List<BodyParent> Parents { get; set; }
 
@@ -136,7 +139,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 return scanText.ToNullSafeString();
             }
-
+            
             public string RingInformationMoons(bool parentIsStar = false)
             {
                 return RingInformation(1 / oneMoon_MT, " Moons".Tx(typeof(StarPlanetRing)), parentIsStar);
@@ -163,7 +166,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
             }
         }
-
+        
         public class BodyParent
         {
             public string Type;
@@ -480,27 +483,32 @@ namespace EliteDangerousCore.JournalEvents
             if (HasRings)
             {
                 scanText.Append("\n");
-                if (IsStar)
+                for (var r = 0; r < Rings.Length; r++)
                 {
-                    scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
-                    for (int i = 0; i < Rings.Length; i++)
+                    // If it's name ends with "Belt"...
+                    if (Rings[r].Name.EndsWith("Belt"))
                     {
-                        if (Rings[i].MassMT > (oneMoon_MT / 10000))
+                        HasBelts = true;
+
+                        // ...than it's a belt!
+                        scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+
+                        for (r = 0; r < Rings.Length; r++)
                         {
-                            scanText.Append("\n" + RingInformation(i, 1.0 / oneMoon_MT, " Moons".Tx(this)));
-                        }
-                        else
-                        {
-                            scanText.Append("\n" + RingInformation(i));
+                            scanText.Append("\n" + RingInformation(r));
                         }
                     }
-                }
-                else
-                {
-                    scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+                    // But, it it ends with "Ring"...
+                    else if (Rings[r].Name.EndsWith("Ring"))
+                    {
+                        // ... than it's a ring!
+                        scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
 
-                    for (int i = 0; i < Rings.Length; i++)
-                        scanText.Append("\n" + RingInformation(i));
+                        for (r = 0; r < Rings.Length; r++)
+                        {
+                            scanText.Append("\n" + RingInformation(r));
+                        }
+                    }
                 }
             }
 
