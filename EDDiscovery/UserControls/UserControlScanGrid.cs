@@ -195,22 +195,53 @@ namespace EDDiscovery.UserControls
                         bdDetails.Append("Volcanism".Tx(this) + ". ");
 
                     // have some ring?
-                    if (sn.ScanData.HasRings && sn.ScanData.IsStar == false)
+                    if (sn.ScanData.HasBelts || sn.ScanData.HasRings)
                     {
-                        if (sn.ScanData.Rings.Count() > 1)
+                        if (sn.ScanData.Rings[0].Name.EndsWith("Belt"))
                         {
-                            bdDetails.Append(string.Format("Has {0} rings: ".Tx(this, "Rings"), sn.ScanData.Rings.Count()));
-                        }
-                        else
-                        {
-                            bdDetails.Append("Has 1 ring: ".Tx(this,"Ring"));
-                        }
+                            if (sn.ScanData.Rings.Count() > 1)
+                            {
+                                bdDetails.Append(string.Format("Has {0} belts: ".Tx(this, "Has {0} belts"),
+                                                               sn.ScanData.Rings.Count()));
+                            }
+                            else
+                            {
+                                bdDetails.Append("Has 1 belt: ".Tx(this, "Has 1 belt"));
+                            }
 
-                        for (int i = 0; i < sn.ScanData.Rings.Length; i++)
+                            foreach (var r in sn.ScanData.Rings)
+                            {
+                                var BeltName = r.Name;
+                                bdDetails.Append(JournalScan.StarPlanetRing
+                                                            .DisplayStringFromRingClass(r
+                                                                                            .RingClass) + " ");
+                                bdDetails.Append((r.InnerRad / JournalScan.oneLS_m).ToString("N2") +
+                                                 "ls to " + (r.OuterRad / JournalScan.oneLS_m)
+                                                 .ToString("N2") + "ls. ");
+                            }
+                        }
+                        else if (sn.ScanData.Rings[0].Name.EndsWith("Ring"))
                         {
-                            string RingName = sn.ScanData.Rings[i].Name;
-                            bdDetails.Append(JournalScan.StarPlanetRing.DisplayStringFromRingClass(sn.ScanData.Rings[i].RingClass) + " ");
-                            bdDetails.Append((sn.ScanData.Rings[i].InnerRad / JournalScan.oneLS_m).ToString("N2") + "ls to " + (sn.ScanData.Rings[i].OuterRad / JournalScan.oneLS_m).ToString("N2") + "ls. ");
+                            if (sn.ScanData.Rings.Count() > 1)
+                            {
+                                bdDetails.Append(string.Format("Has {0} rings: ".Tx(this, "Rings"),
+                                                               sn.ScanData.Rings.Count()));
+                            }
+                            else
+                            {
+                                bdDetails.Append("Has 1 ring: ".Tx(this, "Ring"));
+                            }
+
+                            foreach (var r in sn.ScanData.Rings)
+                            {
+                                var RingName = r.Name;
+                                bdDetails.Append(JournalScan.StarPlanetRing
+                                                            .DisplayStringFromRingClass(r
+                                                                                            .RingClass) + " ");
+                                bdDetails.Append((r.InnerRad / JournalScan.oneLS_m).ToString("N2") +
+                                                 "ls to " + (r.OuterRad / JournalScan.oneLS_m)
+                                                 .ToString("N2") + "ls. ");
+                            }
                         }
                     }
 
