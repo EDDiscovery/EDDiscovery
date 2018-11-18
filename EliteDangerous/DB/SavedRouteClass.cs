@@ -522,11 +522,14 @@ namespace EliteDangerousCore.DB
                 ISystem cursys = PosAlongRoute(percent,100);
                 System.Diagnostics.Debug.WriteLine(Environment.NewLine + "Sys {0} {1} {2} {3}", cursys.X, cursys.Y, cursys.Z, cursys.Name);
 
-                ClosestInfo closest = ClosestTo(cursys);
-
-                if (closest != null)
+                if (cursys != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} dev {5} dist to wp {6} cumul left {7}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.deviation , closest.disttowaypoint, closest.cumulativewpdist);
+                    ClosestInfo closest = ClosestTo(cursys);
+
+                    if (closest != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Next {0} {1} {2} {3}, index {4} dev {5} dist to wp {6} cumul left {7}", closest.system?.X, closest.system?.Y, closest.system?.Z, closest.system?.Name, closest.waypoint, closest.deviation, closest.disttowaypoint, closest.cumulativewpdist);
+                    }
                 }
             }
         }
