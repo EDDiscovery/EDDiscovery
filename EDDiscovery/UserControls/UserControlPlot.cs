@@ -49,6 +49,13 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             dataGridList.Visible = false;
             reportView.Visible = false;
+
+            this.plotViewTop.ActualController.UnbindMouseDown(OxyMouseButton.Left);
+            this.plotViewTop.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+            this.plotViewFront.ActualController.UnbindMouseDown(OxyMouseButton.Left);
+            this.plotViewFront.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+            this.plotViewSide.ActualController.UnbindMouseDown(OxyMouseButton.Left);
+            this.plotViewSide.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
         }
 
         const double defaultmaximumradarradius = 50;
@@ -74,7 +81,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Grid".Tx(this));
             comboBoxView.Items.Add("Report".Tx(this));
 
-            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "!!");
+            var sel = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "!!");
             if (comboBoxView.Items.Contains(sel))
                 comboBoxView.SelectedItem = sel;
             else
@@ -165,7 +172,7 @@ namespace EDDiscovery.UserControls
         {
             SetControlText(string.Format("2D Plot of systems in range from {0} ".Tx(this,"2d") , currentSystem.Name));
 
-            var pointSize = 4;
+            const int pointSize = 4;
 
             // initializing the plot
             var modelTop = new PlotModel { };
@@ -177,7 +184,7 @@ namespace EDDiscovery.UserControls
             this.plotViewSide.Model = modelSide;
 
             modelTop.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
-            modelTop.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet});
+            modelTop.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet, StartPosition = 1, EndPosition = -1 });
             modelFront.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
             modelFront.Axes.Add(new LinearAxis { Position = AxisPosition.Left, TicklineColor = OxyColors.BlueViolet });
             modelSide.Axes.Add(new LinearAxis { Position = AxisPosition.Bottom, TicklineColor = OxyColors.BlueViolet });
@@ -259,9 +266,9 @@ namespace EDDiscovery.UserControls
                         reportView.Text += string.Format((Environment.NewLine + "    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}" + Environment.NewLine).Tx(this,"D3") ,sysX , sysY , sysZ);
 
                         // Create the list, with each system's name, distances by x, y and z coordinates and number of visits
-                        object[] plotobj = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
-                        int rowindex = dataGridList.Rows.Add(plotobj);
-                        dataGridList.Rows[rowindex].Tag = tvp.Value;
+                        object[] value = { tvp.Value.Name, $"{sysX:0.00}", $"{sysY:0.00}", $"{sysZ:0.00}", $"{visits:n0}" };
+                        var i = dataGridList.Rows.Add(value);
+                        dataGridList.Rows[i].Tag = tvp.Value;
 
                         var seriesTop = inrangeSeriesTop;
                         var seriesFront = inrangeSeriesFront;
@@ -296,30 +303,31 @@ namespace EDDiscovery.UserControls
                         //
 
                         // Draw each point in the Plot                        
-                        seriesTop.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[2]), pointSize, Convert.ToDouble(plotobj[3]), plotobj[0]));
-                        seriesFront.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[1]), Convert.ToDouble(plotobj[3]), pointSize, Convert.ToDouble(plotobj[2]), plotobj[0]));
-                        seriesSide.Points.Add(new ScatterPoint(Convert.ToDouble(plotobj[2]), Convert.ToDouble(plotobj[3]), pointSize, Convert.ToDouble(plotobj[1]), plotobj[0]));
+                        seriesTop.Points.Add(new ScatterPoint(Convert.ToDouble(value[1]), Convert.ToDouble(value[2]), pointSize, Convert.ToDouble(value[3]), value[0]));
+                        seriesFront.Points.Add(new ScatterPoint(Convert.ToDouble(value[1]), Convert.ToDouble(value[3]), pointSize, Convert.ToDouble(value[2]), value[0]));
+                        seriesSide.Points.Add(new ScatterPoint(Convert.ToDouble(value[2]), Convert.ToDouble(value[3]), pointSize, Convert.ToDouble(value[1]), value[0]));
 
                         // Create a tracker which shows the name of the system and its coordinates
+                        const string trackerTop = "{Tag}\n" + "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+                        const string trackerFront = "{Tag}\n" + "X: {2:0.###}; Z: {4:0.###}; Y: {6:0.###}";
+                        const string trackerSide = "{Tag}\n" + "Y: {2:0.###}; Z: {4:0.###}; X: {6:0.###}";
 
-                        string TrackerTop = "{Tag}\n" + "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
-                        string TrackerFront = "{Tag}\n" + "X: {2:0.###}; Z: {4:0.###}; Y: {6:0.###}";
-                        string TrackerSide = "{Tag}\n" + "Y: {2:0.###}; Z: {4:0.###}; X: {6:0.###}";
-
-                        seriesTop.TrackerFormatString = TrackerTop;
-                        seriesFront.TrackerFormatString = TrackerFront;
-                        seriesSide.TrackerFormatString = TrackerSide;
+                        seriesTop.TrackerFormatString = trackerTop;
+                        seriesFront.TrackerFormatString = trackerFront;
+                        seriesSide.TrackerFormatString = trackerSide;
                     }
 
                     currentSeriesTop.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Y, pointSize, currentSystem.Z, currentSystemName));
                     currentSeriesFront.Points.Add(new ScatterPoint(currentSystem.X, currentSystem.Z, pointSize, currentSystem.Y, currentSystemName));
                     currentSeriesSide.Points.Add(new ScatterPoint(currentSystem.Y, currentSystem.Z, pointSize, currentSystem.X, currentSystemName));
 
-                    string currentTracker = "{Tag}";
+                    const string currentTrackerTop = "{Tag}\n" + "X: {2:0.###}; Y: {4:0.###}; Z: {6:0.###}";
+                    const string currentTrackerFront = "{Tag}\n" + "X: {2:0.###}; Z: {4:0.###}; Y: {6:0.###}";
+                    const string currentTrackerSide = "{Tag}\n" + "Y: {2:0.###}; Z: {4:0.###}; X: {6:0.###}";
 
-                    currentSeriesTop.TrackerFormatString = currentTracker;
-                    currentSeriesFront.TrackerFormatString = currentTracker;
-                    currentSeriesSide.TrackerFormatString = currentTracker;
+                    currentSeriesTop.TrackerFormatString = currentTrackerTop;
+                    currentSeriesFront.TrackerFormatString = currentTrackerFront;
+                    currentSeriesSide.TrackerFormatString = currentTrackerSide;
                 }
 
                 // End of the Report
