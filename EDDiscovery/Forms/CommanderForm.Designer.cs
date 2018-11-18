@@ -48,7 +48,6 @@
             this.textBoxEGOName = new ExtendedControls.TextBoxBorder();
             this.textBoxEGOAPI = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderCompanionPassword = new ExtendedControls.TextBoxBorder();
-            this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMName = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderEDSMAPI = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderJournal = new ExtendedControls.TextBoxBorder();
@@ -56,6 +55,7 @@
             this.checkBoxCustomInara = new ExtendedControls.CheckBoxCustom();
             this.textBoxBorderInaraName = new ExtendedControls.TextBoxBorder();
             this.textBoxBorderInaraAPIKey = new ExtendedControls.TextBoxBorder();
+            this.textBoxBorderCompanionLogin = new ExtendedControls.TextBoxBorder();
             this.groupBoxCustomCAPI = new ExtendedControls.GroupBoxCustom();
             this.checkBoxCAPIEnable = new ExtendedControls.CheckBoxCustom();
             this.labelCAPIState = new System.Windows.Forms.Label();
@@ -79,6 +79,7 @@
             this.labelInaraAPI = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustomCAPI.SuspendLayout();
             this.groupBoxCustomEDDN.SuspendLayout();
@@ -173,7 +174,8 @@
             // 
             // buttonExtCAPI
             // 
-            this.buttonExtCAPI.Location = new System.Drawing.Point(467, 23);
+            this.buttonExtCAPI.Enabled = false;
+            this.buttonExtCAPI.Location = new System.Drawing.Point(467, 88);
             this.buttonExtCAPI.Name = "buttonExtCAPI";
             this.buttonExtCAPI.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCAPI.TabIndex = 8;
@@ -326,6 +328,7 @@
             this.textBoxBorderCompanionPassword.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBorderCompanionPassword.ClearOnFirstChar = false;
             this.textBoxBorderCompanionPassword.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionPassword.Enabled = false;
             this.textBoxBorderCompanionPassword.InErrorCondition = false;
             this.textBoxBorderCompanionPassword.Location = new System.Drawing.Point(200, 88);
             this.textBoxBorderCompanionPassword.Multiline = false;
@@ -340,30 +343,6 @@
             this.toolTip.SetToolTip(this.textBoxBorderCompanionPassword, "Enter your Frontier Password");
             this.textBoxBorderCompanionPassword.WordWrap = true;
             this.textBoxBorderCompanionPassword.TextChanged += new System.EventHandler(this.textBoxBorderCompanionPassword_TextChanged);
-            // 
-            // textBoxBorderCompanionLogin
-            // 
-            this.textBoxBorderCompanionLogin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxBorderCompanionLogin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textBoxBorderCompanionLogin.BackErrorColor = System.Drawing.Color.Red;
-            this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
-            this.textBoxBorderCompanionLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxBorderCompanionLogin.ClearOnFirstChar = false;
-            this.textBoxBorderCompanionLogin.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxBorderCompanionLogin.InErrorCondition = false;
-            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(200, 58);
-            this.textBoxBorderCompanionLogin.Multiline = false;
-            this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
-            this.textBoxBorderCompanionLogin.ReadOnly = false;
-            this.textBoxBorderCompanionLogin.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textBoxBorderCompanionLogin.SelectionLength = 0;
-            this.textBoxBorderCompanionLogin.SelectionStart = 0;
-            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
-            this.textBoxBorderCompanionLogin.TabIndex = 5;
-            this.textBoxBorderCompanionLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.textBoxBorderCompanionLogin.WordWrap = true;
-            this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
             // 
             // textBoxBorderEDSMName
             // 
@@ -529,6 +508,31 @@
         ".cz");
             this.textBoxBorderInaraAPIKey.WordWrap = true;
             // 
+            // textBoxBorderCompanionLogin
+            // 
+            this.textBoxBorderCompanionLogin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxBorderCompanionLogin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxBorderCompanionLogin.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxBorderCompanionLogin.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBorderCompanionLogin.BorderColorScaling = 0.5F;
+            this.textBoxBorderCompanionLogin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxBorderCompanionLogin.ClearOnFirstChar = false;
+            this.textBoxBorderCompanionLogin.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxBorderCompanionLogin.Enabled = false;
+            this.textBoxBorderCompanionLogin.InErrorCondition = false;
+            this.textBoxBorderCompanionLogin.Location = new System.Drawing.Point(200, 58);
+            this.textBoxBorderCompanionLogin.Multiline = false;
+            this.textBoxBorderCompanionLogin.Name = "textBoxBorderCompanionLogin";
+            this.textBoxBorderCompanionLogin.ReadOnly = false;
+            this.textBoxBorderCompanionLogin.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxBorderCompanionLogin.SelectionLength = 0;
+            this.textBoxBorderCompanionLogin.SelectionStart = 0;
+            this.textBoxBorderCompanionLogin.Size = new System.Drawing.Size(231, 20);
+            this.textBoxBorderCompanionLogin.TabIndex = 5;
+            this.textBoxBorderCompanionLogin.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBorderCompanionLogin.WordWrap = true;
+            this.textBoxBorderCompanionLogin.TextChanged += new System.EventHandler(this.textBoxBorderCompanionLogin_TextChanged);
+            // 
             // groupBoxCustomCAPI
             // 
             this.groupBoxCustomCAPI.AlternateClientBackColor = System.Drawing.Color.Blue;
@@ -539,6 +543,7 @@
             this.groupBoxCustomCAPI.Controls.Add(this.labelCAPIState);
             this.groupBoxCustomCAPI.Controls.Add(this.buttonExtCAPI);
             this.groupBoxCustomCAPI.Controls.Add(this.textBoxBorderCompanionPassword);
+            this.groupBoxCustomCAPI.Controls.Add(this.label1);
             this.groupBoxCustomCAPI.Controls.Add(this.labelCAPIPassword);
             this.groupBoxCustomCAPI.Controls.Add(this.textBoxBorderCompanionLogin);
             this.groupBoxCustomCAPI.Controls.Add(this.labelCAPILogin);
@@ -559,6 +564,7 @@
             this.checkBoxCAPIEnable.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCAPIEnable.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCAPIEnable.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCAPIEnable.Enabled = false;
             this.checkBoxCAPIEnable.FontNerfReduction = 0.5F;
             this.checkBoxCAPIEnable.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCAPIEnable.Location = new System.Drawing.Point(467, 61);
@@ -827,6 +833,15 @@
             this.panel6.Size = new System.Drawing.Size(652, 10);
             this.panel6.TabIndex = 35;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(197, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(220, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "CAPI is not supported by EDD from ED3.3 on";
+            // 
             // CommanderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -921,5 +936,6 @@
         private System.Windows.Forms.Label labelInaraAPI;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label label1;
     }
 }

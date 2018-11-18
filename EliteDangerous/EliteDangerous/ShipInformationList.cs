@@ -73,14 +73,14 @@ namespace EliteDangerousCore
         }
 
         public void Loadout(int id, string ship, string shipfd, string name, string ident, List<ShipModule> modulelist,
-                        long HullValue, long ModulesValue, long Rebuy)
+                        long HullValue, long ModulesValue, long Rebuy, bool? Hot)
         {
             string sid = Key(shipfd, id);
 
             //System.Diagnostics.Debug.WriteLine("Loadout {0} {1} {2} {3}", id, ship, name, ident);
 
             ShipInformation sm = EnsureShip(sid);            // this either gets current ship or makes a new one.
-            Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy);     // update ship key, make a fresh one if required.
+            Ships[sid] = sm = sm.SetShipDetails(ship, shipfd, name, ident, 0, 0, HullValue, ModulesValue, Rebuy , Hot);     // update ship key, make a fresh one if required.
 
             //System.Diagnostics.Debug.WriteLine("Loadout " + sid);
 
@@ -311,7 +311,7 @@ namespace EliteDangerousCore
                 //System.Diagnostics.Debug.WriteLine(sid + " Stored info " + i.StarSystem + ":" + i.StationName + " transit" + i.InTransit);
 
                 ShipInformation sm = EnsureShip(sid);              // this either gets current ship or makes a new one.
-                sm = sm.SetShipDetails(i.ShipType, i.ShipTypeFD,i.Name);  // set up minimum stuff we know about it
+                sm = sm.SetShipDetails(i.ShipType, i.ShipTypeFD,i.Name, hot:i.Hot);  // set up minimum stuff we know about it
 
                 if ( !i.InTransit )                                 // if in transit, we don't know where it is, ignore
                     sm = sm.Store(i.StationName, i.StarSystem);         // ship is not with us, its stored, so store it.

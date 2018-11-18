@@ -50,9 +50,9 @@ namespace EliteDangerousCore.JournalEvents
             return string.Compare(Station, other.Station) == 0 && string.Compare(StarSystem, other.StarSystem) == 0 && CollectionStaticHelpers.Equals(Commodities, other.Commodities);
         }
 
-        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        public bool ReadAdditionalFiles(string directory, bool historyrefreshparse, ref JObject jo)
         {
-            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"));
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Market.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);
             if (jnew != null)        // new json, rescan
             {
                 jo = jnew;      // replace current
@@ -62,4 +62,97 @@ namespace EliteDangerousCore.JournalEvents
         }
 
     }
+
+
+    [JournalEntryType(JournalTypeEnum.MarketBuy)]
+    public class JournalMarketBuy : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
+    {
+        public JournalMarketBuy(JObject evt) : base(evt, JournalTypeEnum.MarketBuy)
+        {
+            MarketID = evt["MarketID"].LongNull();
+            Type = evt["Type"].Str();        // must be FD name
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type);           // our translation..
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(), FriendlyType);         // always ensure we have one
+            Count = evt["Count"].Int();
+            BuyPrice = evt["BuyPrice"].Long();
+            TotalCost = evt["TotalCost"].Long();
+        }
+
+        public string Type { get; set; }                // FDNAME
+        public string Type_Localised { get; set; }      // Always set
+        public string FriendlyType { get; set; }        // translated name
+        public int Count { get; set; }
+        public long BuyPrice { get; set; }
+        public long TotalCost { get; set; }
+        public long? MarketID { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice, conn);
+        }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count, -TotalCost);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< buy price ; cr;N0".Txb(this), BuyPrice, "Total Cost:; cr;N0".Txb(this), TotalCost);
+            detailed = "";
+        }
+    }
+
+
+    [JournalEntryType(JournalTypeEnum.MarketSell)]
+    public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
+    {
+        public JournalMarketSell(JObject evt) : base(evt, JournalTypeEnum.MarketSell)
+        {
+            MarketID = evt["MarketID"].LongNull();
+            Type = evt["Type"].Str();                           // FDNAME
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type); // goes thru the translator..
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(), FriendlyType);         // always ensure we have one
+            Count = evt["Count"].Int();
+            SellPrice = evt["SellPrice"].Long();
+            TotalSale = evt["TotalSale"].Long();
+            AvgPricePaid = evt["AvgPricePaid"].Long();
+            IllegalGoods = evt["IllegalGoods"].Bool();
+            StolenGoods = evt["StolenGoods"].Bool();
+            BlackMarket = evt["BlackMarket"].Bool();
+        }
+
+        public string Type { get; set; }
+        public string FriendlyType { get; set; }
+        public string Type_Localised { get; set; }      // always set
+
+        public int Count { get; set; }
+        public long SellPrice { get; set; }
+        public long TotalSale { get; set; }
+        public long AvgPricePaid { get; set; }
+        public bool IllegalGoods { get; set; }
+        public bool StolenGoods { get; set; }
+        public bool BlackMarket { get; set; }
+        public long? MarketID { get; set; }
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0, conn);
+        }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            long profit = TotalSale - (AvgPricePaid * Count);
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "", Count, "< sell price ; cr;N0".Txb(this), SellPrice, "Total Cost:; cr;N0".Txb(this), TotalSale, "Profit:; cr;N0".Txb(this), profit);
+            detailed = BaseUtils.FieldBuilder.Build("Legal;Illegal".Txb(this), IllegalGoods, "Not Stolen;Stolen".Txb(this), StolenGoods, "Market;BlackMarket".Txb(this), BlackMarket);
+        }
+    }
+
 }

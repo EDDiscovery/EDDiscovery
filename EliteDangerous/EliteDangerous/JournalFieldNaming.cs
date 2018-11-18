@@ -173,6 +173,15 @@ namespace EliteDangerousCore
             return s;
         }
 
+        static public string NormaliseBodyType(string s)            // FD slot name, anything to do.. leave in as there might be in the future
+        {
+            if (s == null)
+                return "Unknown";
+            else if (s.Equals("Null",StringComparison.InvariantCultureIgnoreCase))
+                s = "Barycentre";
+            return s;
+        }
+
         static public string NormaliseFDShipName(string inname)            // FD ship names.. tend to change case.. Fix
         {
             ShipModuleData.ShipInfo i = ShipModuleData.Instance.GetShipProperty(inname, ShipModuleData.ShipPropID.FDID);
@@ -187,7 +196,7 @@ namespace EliteDangerousCore
 
         static public string CheckLocalisation(string loc, string alt)      // instances of ! # $int in localisation strings, screen out
         {
-            bool invalid = loc.Length < 2 || loc.StartsWith("$int", StringComparison.InvariantCultureIgnoreCase) || loc.StartsWith("$hpt", StringComparison.InvariantCultureIgnoreCase);
+            bool invalid = loc == null || loc.Length < 2 || loc.StartsWith("$int", StringComparison.InvariantCultureIgnoreCase) || loc.StartsWith("$hpt", StringComparison.InvariantCultureIgnoreCase);
             return invalid ? alt.SplitCapsWordFull() : loc;
         }
 

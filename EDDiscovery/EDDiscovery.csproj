@@ -176,6 +176,7 @@
   <ItemGroup>
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
+    <Compile Include="Actions\AudioHelper.cs" />
     <Compile Include="DLL\EDDDLLHistoryEntry.cs" />
     <Compile Include="DLL\EDDDLLCaller.cs" />
     <Compile Include="DLL\EDDDLLManager.cs" />
@@ -975,6 +976,8 @@
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
       <ZipFiles Include="$(OutDir)*.pdb" />
+      <ZipFiles Include="$(OutDir)*.tlf" />
+      <ZipFiles Include="$(OutDir)*.tlp" />
       <ZipFiles Include="$(ProjectDir)App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
@@ -1038,5 +1041,14 @@
       </AssemblyAttribute>
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
+  </Target>
+  <Target Name="CopyTranslations" BeforeTargets="AfterBuild">
+    <ItemGroup>
+      <CopyFiles Include="$(MSBuildProjectDirectory)\Translations\*.tlf" />
+      <CopyFiles Include="$(MSBuildProjectDirectory)\UserControls\*.tlp" />
+      <CopyFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerous\EliteDangerous\*.tlp" />
+      <CopyFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerous\JournalEvents\*.tlp" />
+    </ItemGroup>
+    <Copy SourceFiles="@(CopyFiles)" DestinationFolder="$(OutDir)" />
   </Target>
 </Project>

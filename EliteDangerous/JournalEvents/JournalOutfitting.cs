@@ -35,9 +35,9 @@ namespace EliteDangerousCore.JournalEvents
             Horizons = evt["Horizons"].BoolNull();
         }
 
-        public bool ReadAdditionalFiles(string directory, ref JObject jo)
+        public bool ReadAdditionalFiles(string directory, bool historyrefreshparse, ref JObject jo)
         {
-            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Outfitting.json"));
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Outfitting.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);
             if (jnew != null)        // new json, rescan
             {
                 jo = jnew;      // replace current

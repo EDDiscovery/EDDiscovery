@@ -22,7 +22,7 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Cargo)]
-    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry, IAdditionalFiles
     {
         public class Cargo
         {
@@ -30,6 +30,7 @@ namespace EliteDangerousCore.JournalEvents
             public string FriendlyName { get; set; }            // FDNAME
             public int Count { get; set; }
             public int Stolen { get; set; }
+            public long? MissionID { get; set; }             // if applicable
 
             public void Normalise()
             {
@@ -40,6 +41,12 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalCargo(JObject evt) : base(evt, JournalTypeEnum.Cargo)
         {
+            //System.Diagnostics.Debug.WriteLine("Cargo at " + EventTimeUTC);
+            Rescan(evt);
+        }
+
+        void Rescan(JObject evt)
+        { 
             Inventory = evt["Inventory"]?.ToObjectProtected<Cargo[]>().OrderBy(x => x.Name)?.ToArray();
             if (Inventory != null)
             {
@@ -47,6 +54,18 @@ namespace EliteDangerousCore.JournalEvents
                     c.Normalise();
             }
         }
+
+        public bool ReadAdditionalFiles(string directory, bool historyrefreshparse, ref JObject jo)
+        {
+            JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Cargo.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);  // check timestamp..
+            if (jnew != null)        // new json, rescan. returns null if cargo in the folder is not related to this entry by time.
+            {
+                jo = jnew;      // replace current
+                Rescan(jo);
+            }
+            return jnew != null;
+        }
+
 
         public Cargo[] Inventory { get; set; }      // may be NULL
 
@@ -72,7 +91,7 @@ namespace EliteDangerousCore.JournalEvents
                     int? stolen = null;
                     if (c.Stolen > 0)
                         stolen = c.Stolen;
-                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen);
+                    detailed += BaseUtils.FieldBuilder.Build("", c.FriendlyName, "; items".Txb(this), c.Count , "(;)" , stolen, "<; (Mission Cargo)".Txb(this), c.MissionID != null);
                 }
             }
         }
@@ -89,4 +108,50 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.EjectCargo)]
+    public class JournalEjectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
+    {
+        public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
+        {
+            Type = evt["Type"].Str();       // fdname
+            Type = JournalFieldNaming.FDNameTranslation(Type);     // pre-mangle to latest names, in case we are reading old journal records
+            FriendlyType = MaterialCommodityData.GetNameByFDName(Type);
+            Type_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Type_Localised"].Str(), FriendlyType);         // always ensure we have one
+
+            Count = evt["Count"].Int();
+            Abandoned = evt["Abandoned"].Bool();
+            PowerplayOrigin = evt["PowerplayOrigin"].Str();
+            MissionID = evt["MissionID"].LongNull();
+        }
+
+        public string Type { get; set; }                    // FDName
+        public string FriendlyType { get; set; }            // translated name
+        public string Type_Localised { get; set; }            // always set
+
+        public int Count { get; set; }
+        public bool Abandoned { get; set; }
+        public string PowerplayOrigin { get; set; }
+        public long? MissionID { get; set; }             // if applicable
+
+        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0, conn);
+        }
+
+        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Type_Localised, "Count:".Txb(this), Count,
+                            "<; (Mission Cargo)".Txb(this), MissionID != null,
+                            ";Abandoned".Txb(this), Abandoned, "PowerPlay:".Txb(this), PowerplayOrigin);
+            detailed = "";
+        }
+    }
+
 }

@@ -36,6 +36,8 @@ namespace EliteDangerousCore
         AfmuRepairs = 3,
         ApproachBody = 4,
         ApproachSettlement = 5,
+        AppliedToSquadron = 6,
+        AsteroidCracked = 7,
         Bounty = 10,
         BuyAmmo = 20,
         BuyDrones = 30,
@@ -47,6 +49,7 @@ namespace EliteDangerousCore
         ChangeCrewRole = 65,
         ClearSavedGame = 70,
         CockpitBreached = 80,
+        CodexEntry = 85,
         CollectCargo = 90,
         Commander = 95,
         CommitCrime = 100,
@@ -67,6 +70,7 @@ namespace EliteDangerousCore
         DatalinkVoucher = 1020,
         Died = 140,
         DiscoveryScan = 141,
+        DisbandedSquadron = 142,
         Docked = 145,
         DockFighter = 150,
         DockingCancelled = 160,
@@ -86,23 +90,30 @@ namespace EliteDangerousCore
         FactionKillBond = 270,
         FetchRemoteModule = 1000,
         FSDJump = 280,
+        FSDTarget = 281,
         FuelScoop = 290,
         Fileheader = 300,
         FighterDestroyed = 303,
         FighterRebuilt = 304,
         Friends = 305,
+        FSSDiscoveryScan = 306,
+        FSSSignalDiscovered = 307,
         HeatDamage = 310,
         HeatWarning = 320,
         HullDamage = 330,
         Interdicted = 340,
         Interdiction = 350,
+        InvitedToSquadron = 351,
+        JoinedSquadron = 353,
         JetConeBoost = 354,
         JetConeDamage = 355,
         JoinACrew = 356,
         KickCrewMember = 357,
+        KickedFromSquadron = 358,
         LaunchDrone = 359,
         LaunchFighter = 360,
         LaunchSRV = 370,
+        LeftSquadron = 371,
         LeaveBody = 375,
         Liftoff = 380,
         LoadGame = 390,
@@ -167,6 +178,7 @@ namespace EliteDangerousCore
         Reputation = 748,
         RestockVehicle = 750,
         Resurrect = 760,
+        SAAScanComplete = 765,
         Scan = 770,
         Scanned = 772,
         ScientificResearch = 775,
@@ -178,6 +190,7 @@ namespace EliteDangerousCore
         SellShipOnRebuy = 815,
         SendText = 820,
         SetUserShipName = 825,
+        SharedBookmarkToSquadron = 826,
         ShieldState = 830,
         Shipyard = 837,
         ShipyardBuy = 840,
@@ -193,6 +206,9 @@ namespace EliteDangerousCore
         StoredModules = 886,
         StoredShips = 887,
         SupercruiseEntry = 890,
+        SquadronCreated = 891,
+        SquadronDemotion = 892,
+        SquadronPromotion = 893,
         SupercruiseExit = 900,
         Synthesis = 910,
         SystemsShutdown = 915,
@@ -206,6 +222,7 @@ namespace EliteDangerousCore
         WingInvite = 965,
         WingJoin = 970,
         WingLeave = 980,
+        WonATrophyForSquadron = 985,
 
         // EDD Entries
 
@@ -1189,9 +1206,9 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        protected JObject ReadAdditionalFile( string extrafile, bool checktimestamptype = true )       // read file, return new JSON
+        protected JObject ReadAdditionalFile( string extrafile, bool waitforfile, bool checktimestamptype )       // read file, return new JSON
         {
-            for (int retries = 0; retries < 5; retries++)
+            for (int retries = 0; retries < 5 ; retries++)
             {
                 try
                 {
@@ -1214,6 +1231,9 @@ namespace EliteDangerousCore
                 }
                 catch (Exception ex)
                 {
+                    if (!waitforfile)               // if don't wait, continue with no return
+                        return null;
+
                     System.Diagnostics.Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
                     System.Threading.Thread.Sleep(500);
                 }

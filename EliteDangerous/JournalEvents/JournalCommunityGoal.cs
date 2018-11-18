@@ -132,4 +132,75 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.CommunityGoalDiscard)]
+    public class JournalCommunityGoalDiscard : JournalEntry
+    {
+        public JournalCommunityGoalDiscard(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalDiscard)
+        {
+            CGID = evt["CGID"].Int();
+            Name = evt["Name"].Str();
+            System = evt["System"].Str();
+        }
+
+        public int CGID { get; set; }
+        public string Name { get; set; }
+        public string System { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System".Txb(this, "CGS"), System);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.CommunityGoalJoin)]
+    public class JournalCommunityGoalJoin : JournalEntry
+    {
+        public JournalCommunityGoalJoin(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalJoin)
+        {
+            CGID = evt["CGID"].Int();
+            Name = evt["Name"].Str();
+            System = evt["System"].Str();
+        }
+        public int CGID { get; set; }
+        public string Name { get; set; }
+        public string System { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+
+            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System".Txb(this, "CGS"), System);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.CommunityGoalReward)]
+    public class JournalCommunityGoalReward : JournalEntry, ILedgerJournalEntry
+    {
+        public JournalCommunityGoalReward(JObject evt) : base(evt, JournalTypeEnum.CommunityGoalReward)
+        {
+            CGID = evt["CGID"].Int();
+            Name = evt["Name"].Str();
+            System = evt["System"].Str();
+            Reward = evt["Reward"].Long();
+        }
+        public int CGID { get; set; }
+        public string Name { get; set; }
+        public string System { get; set; }
+        public long Reward { get; set; }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + System, Reward);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Name, "< at ; Star System".Txb(this, "CGS"), System, "Reward:; cr;N0".Txb(this), Reward);
+            detailed = "";
+        }
+    }
+
 }

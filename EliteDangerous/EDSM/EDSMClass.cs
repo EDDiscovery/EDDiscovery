@@ -40,6 +40,7 @@ namespace EliteDangerousCore.EDSM
         private readonly string fromSoftwareVersion;
         private readonly string fromSoftware;
         static private Dictionary<long, List<JournalScan>> DictEDSMBodies = new Dictionary<long, List<JournalScan>>();
+        static private Dictionary<long, List<JournalScan>> DictEDSMBodiesByID64 = new Dictionary<long, List<JournalScan>>();
 
         public EDSMClass()
         {
@@ -658,6 +659,21 @@ namespace EliteDangerousCore.EDSM
             return msg;
         }
 
+        private JObject GetBodiesByID64(long id64)       // protect yourself from bad JSON
+        {
+            string query = "bodies?systemId64=" + id64.ToString();
+            var response = RequestGet("api-system-v1/" + query, handleException: true);
+            if (response.Error)
+                return null;
+
+            var json = response.Body;
+            if (json == null || json.ToString() == "[]")
+                return null;
+
+            JObject msg = JObject.Parse(json);
+            return msg;
+        }
+
         private JObject GetBodies(long edsmID)          // protect yourself from bad JSON
         {
             string query = "bodies?systemId=" + edsmID.ToString();
@@ -696,14 +712,18 @@ namespace EliteDangerousCore.EDSM
                 , ret, handleException: true);
         }
 
-        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true) // get this edsmid,  optionally lookup web protected against bad json
+        public static List<JournalScan> GetBodiesList(long edsmid, bool edsmweblookup = true, long? id64 = null, string sysname = null) // get this edsmid,  optionally lookup web protected against bad json
         {
             try
             {
-                if (DictEDSMBodies!=null &&  DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
+                if (DictEDSMBodies!=null && edsmid > 0 && DictEDSMBodies.ContainsKey(edsmid))  // Cache EDSM bidies during run of EDD.
                 {
                    // System.Diagnostics.Debug.WriteLine(".. found EDSM Lookup bodies from cache " + edsmid);
                     return DictEDSMBodies[edsmid];
+                }
+                else if (DictEDSMBodiesByID64 != null && id64 != null && id64 > 0 && DictEDSMBodiesByID64.ContainsKey(id64.Value))
+                {
+                    return DictEDSMBodiesByID64[id64.Value];
                 }
 
                 if (!edsmweblookup)      // must be set for a web lookup
@@ -715,7 +735,14 @@ namespace EliteDangerousCore.EDSM
 
                 //System.Diagnostics.Debug.WriteLine("EDSM Web Lookup bodies " + edsmid);
 
-                JObject jo = edsm.GetBodies(edsmid);  // Colonia 
+                JObject jo = null;
+
+                if (edsmid > 0)
+                    jo = edsm.GetBodies(edsmid);  // Colonia 
+                else if (id64 != null && id64 > 0)
+                    jo = edsm.GetBodiesByID64(id64.Value);
+                else if (sysname != null)
+                    jo = edsm.GetBodies(sysname);
 
                 if (jo != null)
                 {
@@ -736,11 +763,29 @@ namespace EliteDangerousCore.EDSM
                             Trace.WriteLine($"ETrace: {ex.StackTrace}");
                         }
                     }
-                    DictEDSMBodies[edsmid] = bodies;
+
+                    if (edsmid > 0)
+                    {
+                        DictEDSMBodies[edsmid] = bodies;
+                    }
+
+                    if (id64 != null && id64 > 0)
+                    {
+                        DictEDSMBodiesByID64[id64.Value] = bodies;
+                    }
+
                     return bodies;
                 }
 
-                DictEDSMBodies[edsmid] = null;
+                if (edsmid > 0)
+                {
+                    DictEDSMBodies[edsmid] = null;
+                }
+
+                if (id64 != null && id64 > 0)
+                {
+                    DictEDSMBodiesByID64[id64.Value] = null;
+                }
             }
             catch (Exception ex)
             {

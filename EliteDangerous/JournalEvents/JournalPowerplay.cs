@@ -46,4 +46,208 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
     }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayCollect)]
+    public class JournalPowerplayCollect : JournalEntry
+    {
+        public JournalPowerplayCollect(JObject evt) : base(evt, JournalTypeEnum.PowerplayCollect)
+        {
+            Power = evt["Power"].Str();
+            Type = evt["Type"].Str();
+            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(), Type);
+            Count = evt["Count"].Int();
+
+        }
+        public string Power { get; set; }
+        public string Type { get; set; }
+        public string Type_Localised { get; set; }
+        public int Count { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".Txb(this), Type_Localised, "Count:".Txb(this), Count);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayDefect)]
+    public class JournalPowerplayDefect : JournalEntry
+    {
+        public JournalPowerplayDefect(JObject evt) : base(evt, JournalTypeEnum.PowerplayDefect)
+        {
+            FromPower = evt["FromPower"].Str();
+            ToPower = evt["ToPower"].Str();
+        }
+
+        public string FromPower { get; set; }
+        public string ToPower { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("From Power:".Txb(this), FromPower, "To Power:".Txb(this), ToPower);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayDeliver)]
+    public class JournalPowerplayDeliver : JournalEntry
+    {
+        public JournalPowerplayDeliver(JObject evt) : base(evt, JournalTypeEnum.PowerplayDeliver)
+        {
+            Power = evt["Power"].Str();
+            Type = evt["Type"].Str();
+            Type_Localised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(), Type);
+            Count = evt["Count"].Int();
+        }
+
+        public string Power { get; set; }
+        public string Type { get; set; }
+        public string Type_Localised { get; set; }
+        public int Count { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Power, "Type:".Txb(this), Type_Localised, "Count:".Txb(this), Count);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayFastTrack)]
+    public class JournalPowerplayFastTrack : JournalEntry, ILedgerJournalEntry
+    {
+        public JournalPowerplayFastTrack(JObject evt) : base(evt, JournalTypeEnum.PowerplayFastTrack)
+        {
+            Power = evt["Power"].Str();
+            Cost = evt["Cost"].Long();
+        }
+
+        public string Power { get; set; }
+        public long Cost { get; set; }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, -Cost);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Power, "Cost:; cr;N0".Txb(this), Cost);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayJoin)]
+    public class JournalPowerplayJoin : JournalEntry
+    {
+        public JournalPowerplayJoin(JObject evt) : base(evt, JournalTypeEnum.PowerplayJoin)
+        {
+            Power = evt["Power"].Str();
+        }
+
+        public string Power { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = Power;
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayLeave)]
+    public class JournalPowerplayLeave : JournalEntry
+    {
+        public JournalPowerplayLeave(JObject evt) : base(evt, JournalTypeEnum.PowerplayLeave)
+        {
+            Power = evt["Power"].Str();
+        }
+
+        public string Power { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = Power;
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplaySalary)]
+    public class JournalPowerplaySalary : JournalEntry, ILedgerJournalEntry
+    {
+        public JournalPowerplaySalary(JObject evt) : base(evt, JournalTypeEnum.PowerplaySalary)
+        {
+            Power = evt["Power"].Str();
+            Amount = evt["Amount"].Long();
+        }
+
+        public string Power { get; set; }
+        public long Amount { get; set; }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, Amount);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Power, "Amount:; cr;N0".Txb(this), Amount);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayVote)]
+    public class JournalPowerplayVote : JournalEntry
+    {
+        public JournalPowerplayVote(JObject evt) : base(evt, JournalTypeEnum.PowerplayVote)
+        {
+            Power = evt["Power"].Str();
+            System = evt["System"].Str();
+            Votes = evt["Votes"].Int();
+        }
+
+        public string Power { get; set; }
+        public string System { get; set; }
+        public int Votes { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Power, "System:".Txb(this), System, "Votes:".Txb(this), Votes);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.PowerplayVoucher)]
+    public class JournalPowerplayVoucher : JournalEntry
+    {
+        public JournalPowerplayVoucher(JObject evt) : base(evt, JournalTypeEnum.PowerplayVoucher)
+        {
+            Power = evt["Power"].Str();
+            Systems = evt["Systems"]?.ToObjectProtected<string[]>();
+        }
+
+        public string Power { get; set; }
+        public string[] Systems { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = Power;
+
+            if (Systems != null)
+            {
+                info += ", Systems:".Txb(this);
+
+                bool comma = false;
+                foreach (string s in Systems)
+                {
+                    if (comma)
+                        info += ", ";
+                    comma = true;
+                    info += s;
+                }
+            }
+
+            detailed = "";
+        }
+    }
+
+
 }

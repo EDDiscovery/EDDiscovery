@@ -56,7 +56,7 @@ namespace EDDiscovery
 
         public ScreenShots.ScreenShotConverter screenshotconverter;
 
-        public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
+       // public EliteDangerousCore.CompanionAPI.CompanionAPIClass Capi { get; private set; } = new EliteDangerousCore.CompanionAPI.CompanionAPIClass();
 
         public EDDiscovery._3DMap.MapManager Map { get; private set; }
 
@@ -96,7 +96,7 @@ namespace EDDiscovery
         public event Action<JournalEntry> OnNewJournalEntry { add { Controller.OnNewJournalEntry += value; } remove { Controller.OnNewJournalEntry -= value; } }
         public event Action<string, Color> OnNewLogEntry { add { Controller.OnNewLogEntry += value; } remove { Controller.OnNewLogEntry -= value; } }
         public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }
-        public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
+        //public event Action<EliteDangerousCore.CompanionAPI.CompanionAPIClass,HistoryEntry> OnNewCompanionAPIData;
         public event Action OnMapsDownloaded { add { Controller.OnMapsDownloaded += value; } remove { Controller.OnMapsDownloaded -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
 
@@ -613,50 +613,51 @@ namespace EDDiscovery
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 
-            if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
-            {
-                Capi.Logout();
+            // DESCOPE CAPI for now, MAY turn back on later
+            //if (!Capi.IsCommanderLoggedin(EDCommander.Current.Name))
+            //{
+            //    Capi.Logout();
 
-                bool isdisabled;
-                bool isconfirmed = EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name , out isdisabled) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED;
+            //    bool isdisabled;
+            //    bool isconfirmed = EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(EDCommander.Current.Name , out isdisabled) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED;
 
-                if (isconfirmed )
-                {
-                    if ( isdisabled)
-                    {
-                        LogLine("Companion API is disabled in commander settings".Tx(this,"CAPINA"));
-                    }
-                    else
-                    {
-                        try
-                        {
-                            Capi.LoginAs(EDCommander.Current.Name);
-                            LogLine("Logged into Companion API".Tx(this,"CAPION"));
-                        }
-                        catch (Exception ex)
-                        {
-                            LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this,"CAPIF"), ex.Message));
-                            if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
-                                LogLineHighlight(ex.StackTrace);
-                        }
-                    }
-                }
-            }
+            //    if (isconfirmed )
+            //    {
+            //        if ( isdisabled)
+            //        {
+            //            LogLine("Companion API is disabled in commander settings".Tx(this,"CAPINA"));
+            //        }
+            //        else
+            //        {
+            //            try
+            //            {
+            //                Capi.LoginAs(EDCommander.Current.Name);
+            //                LogLine("Logged into Companion API".Tx(this,"CAPION"));
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this,"CAPIF"), ex.Message));
+            //                if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
+            //                    LogLineHighlight(ex.StackTrace);
+            //            }
+            //        }
+            //    }
+            //}
 
-            if (Capi.LoggedIn)
-            {
-                try
-                {
-                    Capi.GetProfile();
-                    OnNewCompanionAPIData?.Invoke(Capi, null);
-                }
-                catch (Exception ex)
-                {
-                    LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this, "CAPIF"), ex.Message));
-                    if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
-                        LogLineHighlight(ex.StackTrace);
-                }
-            }
+            //if (Capi.LoggedIn)
+            //{
+            //    try
+            //    {
+            //        Capi.GetProfile();
+            //        OnNewCompanionAPIData?.Invoke(Capi, null);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        LogLineHighlight(string.Format("Companion API failed: {0}".Tx(this, "CAPIF"), ex.Message));
+            //        if (!(ex is EliteDangerousCore.CompanionAPI.CompanionAppException))
+            //            LogLineHighlight(ex.StackTrace);
+            //    }
+            //}
 
             if (EDCommander.Current.SyncToInara)
             {
@@ -676,57 +677,58 @@ namespace EDDiscovery
             // all notes committed
             SystemNoteClass.CommitDirtyNotes((snc) => { if (EDCommander.Current.SyncToEdsm && snc.FSDEntry) EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId, he.Commander); });
 
-            if ( he.EntryType == JournalTypeEnum.Docked )
-            {
-                if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
-                {
-                    // hang over from rares indenting.
-                    {
-                        System.Diagnostics.Trace.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
-                        try
-                        {
-                            Capi.GetProfile();
-                            CMarket market = Capi.GetMarket();
+            // DESCOPE CAPI
+            //if ( he.EntryType == JournalTypeEnum.Docked )
+            //{
+            //    if (Capi.IsCommanderLoggedin(EDCommander.Current.Name))
+            //    {
+            //        // hang over from rares indenting.
+            //        {
+            //            System.Diagnostics.Trace.WriteLine("Commander " + EDCommander.Current.Name + " in CAPI");
+            //            try
+            //            {
+            //                Capi.GetProfile();
+            //                CMarket market = Capi.GetMarket();
 
-                            JournalDocked dockevt = he.journalEntry as JournalDocked;
+            //                JournalDocked dockevt = he.journalEntry as JournalDocked;
 
-                            if (!Capi.Profile.Cmdr.docked)
-                            {
-                                LogLineHighlight("CAPI not docked. Server API lagging!".Tx(this,"CAPIND"));
-                            }
-                            else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
-                            {
-                                LogLineHighlight(string.Format("CAPI profileSystemRequired is {0}, profile station is {1}".Tx(this, "CAPISS"), dockevt.StarSystem,Capi.Profile.CurrentStarSystem.name));
-                            }
-                            else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
-                            {
-                                LogLineHighlight(string.Format("CAPI profileStationRequired is {0}, profile station is {1} ".Tx(this, "CAPISN"), dockevt.StationName, Capi.Profile.StarPort.name));
-                            }
-                            else if (!dockevt.StationName.Equals(market.name))
-                            {
-                                LogLineHighlight(string.Format("CAPI stationname {0}, market station is {1} ".Tx(this,"CAPIMN"), dockevt.StationName , market.name));
-                            }
-                            else
-                            {
-                                JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, market.jcommodities);
-                                if (entry != null)
-                                {
-                                    Controller.NewEntry(entry);
-                                    OnNewCompanionAPIData?.Invoke(Capi, he);
+            //                if (!Capi.Profile.Cmdr.docked)
+            //                {
+            //                    LogLineHighlight("CAPI not docked. Server API lagging!".Tx(this,"CAPIND"));
+            //                }
+            //                else if (!dockevt.StarSystem.Equals(Capi.Profile.CurrentStarSystem.name))
+            //                {
+            //                    LogLineHighlight(string.Format("CAPI profileSystemRequired is {0}, profile station is {1}".Tx(this, "CAPISS"), dockevt.StarSystem,Capi.Profile.CurrentStarSystem.name));
+            //                }
+            //                else if (!dockevt.StationName.Equals(Capi.Profile.StarPort.name))
+            //                {
+            //                    LogLineHighlight(string.Format("CAPI profileStationRequired is {0}, profile station is {1} ".Tx(this, "CAPISN"), dockevt.StationName, Capi.Profile.StarPort.name));
+            //                }
+            //                else if (!dockevt.StationName.Equals(market.name))
+            //                {
+            //                    LogLineHighlight(string.Format("CAPI stationname {0}, market station is {1} ".Tx(this,"CAPIMN"), dockevt.StationName , market.name));
+            //                }
+            //                else
+            //                {
+            //                    JournalEDDCommodityPrices entry = JournalEntry.AddEDDCommodityPrices(EDCommander.Current.Nr, he.journalEntry.EventTimeUTC.AddSeconds(1), Capi.Profile.StarPort.name, Capi.Profile.StarPort.faction, market.jcommodities);
+            //                    if (entry != null)
+            //                    {
+            //                        Controller.NewEntry(entry);
+            //                        OnNewCompanionAPIData?.Invoke(Capi, he);
 
-                                    if (EDCommander.Current.SyncToEddn)
-                                        SendPricestoEDDN(he, market);           // synchronous, but only done on docking, not worried.
+            //                        if (EDCommander.Current.SyncToEddn)
+            //                            SendPricestoEDDN(he, market);           // synchronous, but only done on docking, not worried.
 
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            LogLineHighlight("Companion API get failed: ".Tx(this,"CAPIEX") + ex.Message);
-                        }
-                    }
-                }
-            }
+            //                    }
+            //                }
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                LogLineHighlight("Companion API get failed: ".Tx(this,"CAPIEX") + ex.Message);
+            //            }
+            //        }
+            //    }
+            //}
 
             if (he.IsFSDJump)
             {
@@ -783,35 +785,36 @@ namespace EDDiscovery
             }
         }
 
-        private void SendPricestoEDDN(HistoryEntry he, CMarket market)
-        {
-            try
-            {
-                EliteDangerousCore.EDDN.EDDNClass eddn = new EliteDangerousCore.EDDN.EDDNClass();
+        // DESCOPE CAPI - why are we not doing this with Market data?
+        //private void SendPricestoEDDN(HistoryEntry he, CMarket market)
+        //{
+        //    try
+        //    {
+        //        EliteDangerousCore.EDDN.EDDNClass eddn = new EliteDangerousCore.EDDN.EDDNClass();
 
-                eddn.commanderName = he.Commander.EdsmName;
-                if (string.IsNullOrEmpty(eddn.commanderName))
-                     eddn.commanderName = Capi.Credentials.Commander;
+        //        eddn.commanderName = he.Commander.EdsmName;
+        //        //DESCOPE CAPI if (string.IsNullOrEmpty(eddn.commanderName))
+        //        //     eddn.commanderName = Capi.Credentials.Commander;
 
-                if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
-                    eddn.isBeta = true;
+        //        if (he.Commander.Name.StartsWith("[BETA]", StringComparison.InvariantCultureIgnoreCase) || he.IsBetaMessage)
+        //            eddn.isBeta = true;
 
-                JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, market.id, DateTime.UtcNow);
+        //        JObject msg = eddn.CreateEDDNCommodityMessage(market.commodities, Capi.Profile.CurrentStarSystem.name, Capi.Profile.StarPort.name, market.id, DateTime.UtcNow);
 
-                if (msg != null)
-                {
-                    LogLine(string.Format("Sent {0} event to EDDN ({1})".Tx(this,"EDDN"), he.EntryType.ToString(), he.EventSummary));
-                    if (eddn.PostMessage(msg))
-                    {
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                LogLineHighlight("EDDN: Send commodities prices failed: ".Tx(this,"EDDNEX") + ex.Message);
-            }
+        //        if (msg != null)
+        //        {
+        //            LogLine(string.Format("Sent {0} event to EDDN ({1})".Tx(this,"EDDN"), he.EntryType.ToString(), he.EventSummary));
+        //            if (eddn.PostMessage(msg))
+        //            {
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        LogLineHighlight("EDDN: Send commodities prices failed: ".Tx(this,"EDDNEX") + ex.Message);
+        //    }
 
-        }
+        //}
 
         string syncprogressstring="",refreshprogressstring="";
 
@@ -934,7 +937,11 @@ namespace EDDiscovery
                 string cmdrfolder = cmdr.JournalDir;
                 if (cmdrfolder.Length < 1)
                     cmdrfolder = EDJournalClass.GetDefaultJournalDir();
-                Process.Start(cmdrfolder);
+
+                if (Directory.Exists(cmdrfolder))
+                {
+                    Process.Start(cmdrfolder);
+                }
             }
         }
 

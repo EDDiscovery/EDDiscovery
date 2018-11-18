@@ -48,4 +48,58 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.Interdiction)]
+    public class JournalInterdiction : JournalEntry
+    {
+        public JournalInterdiction(JObject evt) : base(evt, JournalTypeEnum.Interdiction)
+        {
+            Success = evt["Success"].Bool();
+            Interdicted = evt["Interdicted"].Str();
+            Interdicted_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdicted_Localised"].Str(), Interdicted);
+            IsPlayer = evt["IsPlayer"].Bool();
+            if (!evt["CombatRank"].Empty())
+                CombatRank = (CombatRank)(evt["CombatRank"].Int());
+            Faction = evt["Faction"].Str();
+            Power = evt["Power"].Str();
+        }
+        public bool Success { get; set; }
+        public string Interdicted { get; set; }
+        public string Interdicted_Localised { get; set; }
+        public bool IsPlayer { get; set; }
+        public CombatRank CombatRank { get; set; } = CombatRank.Unknown;
+        public string Faction { get; set; }
+        public string Power { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+
+            info = BaseUtils.FieldBuilder.Build("Failed to interdict;Interdicted".Txb(this), Success, "< ", Interdicted_Localised, "< (NPC);(Player)".Txb(this), IsPlayer, "Rank:", CombatRank.ToString().SplitCapsWord(), "Faction:".Txb(this), Faction, "Power:".Txb(this), Power);
+            detailed = "";
+        }
+    }
+
+
+    [JournalEntryType(JournalTypeEnum.EscapeInterdiction)]
+    public class JournalEscapeInterdiction : JournalEntry
+    {
+        public JournalEscapeInterdiction(JObject evt) : base(evt, JournalTypeEnum.EscapeInterdiction)
+        {
+            Interdictor = evt["Interdictor"].Str();
+            Interdictor_Localised = JournalFieldNaming.CheckLocalisation(evt["Interdictor_Localised"].Str(), Interdictor);
+            IsPlayer = evt["IsPlayer"].Bool();
+        }
+
+        public string Interdictor { get; set; }
+        public string Interdictor_Localised { get; set; }
+        public bool IsPlayer { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("By:".Txb(this), Interdictor_Localised, "< (NPC);(Player)".Txb(this), IsPlayer);
+            detailed = "";
+        }
+    }
+
 }

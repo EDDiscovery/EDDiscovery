@@ -38,7 +38,7 @@ namespace EliteDangerousCore
         private FileSystemWatcher m_Watcher;
         private int ticksNoActivity = 0;
         private ConcurrentQueue<string> m_netLogFileQueue;
-        private const string journalfilematch = "journal*.log";       // this picks up beta and normal logs
+        private const string journalfilematch = "Journal*.log";       // this picks up beta and normal logs
 
         public JournalMonitorWatcher(string folder)
         {
@@ -182,7 +182,7 @@ namespace EliteDangerousCore
 
                 netlogpos = nfi.TravelLogUnit.Size;
 
-                bool readanything = nfi.ReadJournal(out List<JournalReaderEntry> ents);
+                bool readanything = nfi.ReadJournal(out List<JournalReaderEntry> ents, historyrefreshparsing:false, resetOnError: false );
 
                 //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " size " + netlogpos);
 
@@ -274,7 +274,7 @@ namespace EliteDangerousCore
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    reader.ReadJournal(out List<JournalReaderEntry> entries, true);      // this may create new commanders, and may write to the TLU db
+                    reader.ReadJournal(out List<JournalReaderEntry> entries, historyrefreshparsing:true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
 
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 

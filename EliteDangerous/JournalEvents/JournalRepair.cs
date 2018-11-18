@@ -45,4 +45,94 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.RepairAll)]
+    public class JournalRepairAll : JournalEntry, ILedgerJournalEntry
+    {
+        public JournalRepairAll(JObject evt) : base(evt, JournalTypeEnum.RepairAll)
+        {
+            Cost = evt["Cost"].Long();
+        }
+
+        public long Cost { get; set; }
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "", -Cost);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("Cost:; cr;N0".Txb(this), Cost);
+            detailed = "";
+        }
+    }
+
+
+    [JournalEntryType(JournalTypeEnum.AfmuRepairs)]
+    public class JournalAfmuRepairs : JournalEntry
+    {
+        public JournalAfmuRepairs(JObject evt) : base(evt, JournalTypeEnum.AfmuRepairs)
+        {
+            ModuleFD = JournalFieldNaming.NormaliseFDItemName(evt["Module"].Str());
+            Module = JournalFieldNaming.GetBetterItemName(ModuleFD);
+            ModuleLocalised = JournalFieldNaming.CheckLocalisation(evt["Module_Localised"].Str(), Module);
+            FullyRepaired = evt["FullyRepaired"].Bool();
+            Health = evt["Health"].Float() * 100.0F;
+        }
+
+        public string Module { get; set; }
+        public string ModuleFD { get; set; }
+        public string ModuleLocalised { get; set; }
+        public bool FullyRepaired { get; set; }
+        public float Health { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", ModuleLocalised, "Health:;%", (int)Health, ";Fully Repaired", FullyRepaired);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.RebootRepair)]
+    public class JournalRebootRepair : JournalEntry
+    {
+        public JournalRebootRepair(JObject evt) : base(evt, JournalTypeEnum.RebootRepair)
+        {
+            Slots = evt["Modules"]?.ToObjectProtected<string[]>();
+
+            if (Slots != null)
+            {
+                FriendlySlots = new string[Slots.Length];
+                for (int i = 0; i < Slots.Length; i++)
+                    FriendlySlots[i] = JournalFieldNaming.GetBetterSlotName(Slots[i]);
+            }
+        }
+
+        public string[] Slots { get; set; }
+        public string[] FriendlySlots { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = "";
+            if (FriendlySlots != null)
+                info = string.Join(",", FriendlySlots);
+            detailed = "";
+        }
+    }
+
+
+    [JournalEntryType(JournalTypeEnum.SystemsShutdown)]
+    public class JournalSystemsShutdown : JournalEntry
+    {
+        public JournalSystemsShutdown(JObject evt) : base(evt, JournalTypeEnum.SystemsShutdown) { }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = "";
+            detailed = "";
+        }
+    }
+
 }

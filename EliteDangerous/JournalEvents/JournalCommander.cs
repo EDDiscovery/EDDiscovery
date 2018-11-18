@@ -35,4 +35,43 @@ namespace EliteDangerousCore.JournalEvents
         }
 
     }
+
+    [JournalEntryType(JournalTypeEnum.NewCommander)]
+    public class JournalNewCommander : JournalEntry
+    {
+        public JournalNewCommander(JObject evt) : base(evt, JournalTypeEnum.NewCommander)
+        {
+            Name = evt["Name"].Str();
+            Package = evt["Package"].Str();
+        }
+
+        public string Name { get; set; }
+        public string Package { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+
+            info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".Txb(this), Package);
+            detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.ClearSavedGame)]
+    public class JournalClearSavedGame : JournalEntry
+    {
+        public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)
+        {
+            Name = evt["Name"].Str();
+
+        }
+        public string Name { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = Name;
+            detailed = "";
+        }
+    }
+
+
 }

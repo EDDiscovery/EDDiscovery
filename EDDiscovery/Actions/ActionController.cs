@@ -76,31 +76,13 @@ namespace EDDiscovery.Actions
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
             {
-                audiodriverwave = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultWaveDevice);
-                audiodriverspeech = new AudioExtensions.AudioDriverCSCore(EDDConfig.Instance.DefaultVoiceDevice);
+                audiodriverwave = AudioHelper.GetAudioDriver(ctrl.LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverspeech = AudioHelper.GetAudioDriver(ctrl.LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
                 ISpeechEngine speechengine;
 
-                try
-                {
-                    speechengine = new AudioExtensions.WindowsSpeechEngine();
-                }
-                catch (Exception ex)
-                {
-                    ctrl.LogLineHighlight(String.Format("Error initializing Windows speech synthesis engine: {0}\nSpeech synthesis will be unavailable".Tx(), ex.Message));
-                    speechengine = new AudioExtensions.DummySpeechEngine();
-                }
-
+                speechengine = AudioHelper.GetSpeechEngine(ctrl.LogLineHighlight);
                 speechsynth = new AudioExtensions.SpeechSynthesizer(speechengine);
-
-                try
-                {
-                    voicerecon = new AudioExtensions.VoiceRecognitionWindows();
-                }
-                catch (Exception ex)
-                {
-                    ctrl.LogLineHighlight(String.Format("Error initializing Windows speech recognition engine: {0}\nSpeech recognition will be unavailable".Tx(), ex.Message));
-                    voicerecon = new AudioExtensions.VoiceRecognitionDummy();
-                }
+                voicerecon = AudioHelper.GetVoiceRecognition(ctrl.LogLineHighlight);
             }
             else
             {

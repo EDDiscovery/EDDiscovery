@@ -27,6 +27,7 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using System.IO;
+using OpenTKUtils.GL1;
 using OpenTKUtils;
 
 namespace EDDiscovery._3DMap

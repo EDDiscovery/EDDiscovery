@@ -103,20 +103,20 @@ namespace EDDiscovery.Forms
 
         private void CheckState()
         {
-            downloadactfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\act");
+            downloadactfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp", "act");
             if (!System.IO.Directory.Exists(downloadactfolder))
                 System.IO.Directory.CreateDirectory(downloadactfolder);
 
-            downloadflightfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\flights");
+            downloadflightfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp", "flights");
             if (!System.IO.Directory.Exists(downloadflightfolder))
                 System.IO.Directory.CreateDirectory(downloadflightfolder);
 
-            downloadaddonfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\addonfiles");
+            downloadaddonfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp", "addonfiles");
             if (!System.IO.Directory.Exists(downloadaddonfolder))
                 System.IO.Directory.CreateDirectory(downloadaddonfolder);
 
 #if DEBUG
-            downloadactdebugfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp\\Debug");
+            downloadactdebugfolder = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "temp", "Debug");
             if (!System.IO.Directory.Exists(downloadactdebugfolder))
                 System.IO.Directory.CreateDirectory(downloadactdebugfolder);
 #endif
