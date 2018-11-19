@@ -150,7 +150,7 @@ EDDiscoveryForm.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Repor
 EDDiscoveryForm.helpToolStripMenuItem.howToRunInSafeModeToResetVariousParametersToolStripMenuItem: "How to Run in Safe Mode to reset various parameters" => "Jak uruchomić w Trybie Bezpiecznym, żeby zresetować różne parametry"
 EDDiscoveryForm.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Sprawdź Dostępność Aktualizacji"
 
-EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "PPM - dodaj/usuń karty, LPM - przeciągnij aby zmienić kolejność"
+EDDiscoveryForm.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Prawy przycisk myszki - dodaj/usuń karty, Lewy przycisk myszki - przeciągnij aby zmienić kolejność"
 
 EDDiscoveryForm.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Wybierz nowy profil lub edytuj ustawienia istniejącego profilu"
 EDDiscoveryForm.comboBoxCommander.ToolTip: "Select the commander to view" => "Wybierz Dowódcę"
@@ -218,7 +218,7 @@ EDDiscoveryController.CD: "Closing down, please wait.." => "Zamykanie, proszę c
 .EDSM: "Get galactic mapping from EDSM." => "Pobieranie map galaktycznych z EDSM."
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Załadowano Notatki, Zakładki i Mapy Galaktyczne."
 .EDMC: "EDDiscovery and EDMarketConnector should not both sync to EDDN. Stop EDMC or uncheck 'send to EDDN' in settings tab!" => "EDDiscovery i EDMarketConnector nie powinny w tym samym czasie synchronizować z EDDN. Wyłącz EDMC lub odznacz 'Wysyłaj do EDDN' w Ustawieniach!"
-.RTH: "Reading travel history" => "Czytanie historii podróży"
+.RTH: "Reading travel history" => "Wczytywanie historii podróży"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Proszę nie wyłączać EDDiscovery do momentu ukończenia odświeżania."
 .SyncOff: "Synchronisation to EDSM and EDDB disabled. Use Settings panel to reenable" => "Synchronizacja z EDSM i EDDB jest wyłączona. Można ją włączyć w Ustawieniach"
 .EDSMU: "EDSM update complete with {0} systems" => "Aktualizacja z EDSM ukończona - {0} układów"
