@@ -99,7 +99,7 @@ UserControlEngineering.NotesCol: "Notes" => "Notatki"
 UserControlEngineering.RecipeCol: "Recipe" => "Przepis"
 UserControlEngineering.EngineersCol: "Engineers" => "Inżynierowie"
 UserControlEngineering.chkHistoric: "Use Cursor Positon" => "Użyj Pozycji Kursora"
-UserControlEngineering.buttonClear: "Clear Wanted" => "Wyczyść Potrzebne"
+UserControlEngineering.buttonClear: "Clear Wanted" => "Wyczyść Pożąd."
 UserControlEngineering.buttonFilterMaterial: "Filter By Material" => "Filtruj wg Materiału"
 UserControlEngineering.buttonFilterUpgrade: "Filter By Upgrade" => "Filtruj wg Ulepszenia"
 UserControlEngineering.buttonFilterLevel: "Filter By Level" => "Filtruj wg Poziomu"
@@ -314,7 +314,7 @@ UserControlMaterials.Category: "Category" => "Kategoria"
 UserControlMaterials.Type: "Type" => "Typ"
 UserControlMaterials.Number: "Number" => "Numer"
 UserControlMaterials.Price: "Avg. Price" => "Śr. Cena"
-UserControlMaterials.checkBoxClear: "Remove zero items" => "Usuń przedm. o il. 0"
+UserControlMaterials.checkBoxClear: "Remove zero items" => "Usuń przedm. o ilości 0"
 UserControlMaterials.textBoxItems2.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 UserControlMaterials.textBoxItems1.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 UserControlMaterials.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Usuwa przedmioty z listy, gdy ich ilość spadnie do zera"
@@ -332,7 +332,7 @@ UserControlCommodities.Category: "Category" => "Kategoria"
 UserControlCommodities.Type: "Type" => "Typ"
 UserControlCommodities.Number: "Number" => "Numer"
 UserControlCommodities.Price: "Avg. Price" => "Śr. Cena"
-UserControlCommodities.checkBoxClear: "Remove zero items" => "Usuń przedm. o il. 0"
+UserControlCommodities.checkBoxClear: "Remove zero items" => "Usuń przedm. o ilości 0"
 UserControlCommodities.textBoxItems2.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 UserControlCommodities.textBoxItems1.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 UserControlCommodities.checkBoxClear.ToolTip: "Remove zero items the time after they go to zero" => "Usuwa przedmioty z listy, gdy ich ilość spadnie do zera"
@@ -343,260 +343,260 @@ UserControlCommodities.checkBoxClear.ToolTip: "Remove zero items the time after 
 
 //////////////////////////////////////////////////////////////// Missions
 
-UserControlMissions.cColName: "Name" => "<Name>"
-UserControlMissions.cColStartDate: "Start Date" => "<Start Date>"
-UserControlMissions.cColEndDate: "End Date" => "<End Date>"
-UserControlMissions.cColOrigin: "Origin" => "<Origin>"
-UserControlMissions.cColFromFaction: "Faction" => "<Faction>"
-UserControlMissions.cColDestSystem: "Destination" => "<Destination>"
-UserControlMissions.cColTargetFaction: "Target Faction" => "<Target Faction>"
-UserControlMissions.cColValue: "Value (cr)" => "<Value (cr)>"
-UserControlMissions.cColInfo: "Info" => "<Info>"
-UserControlMissions.PcolName: "Name" => "<Name>"
-UserControlMissions.pColStart: "Start Date" => "<Start Date>"
-UserControlMissions.pColEnd: "End Date" => "<End Date>"
-UserControlMissions.pColOrigin: "Origin" => "<Origin>"
-UserControlMissions.pColFromFaction: "Faction" => "<Faction>"
-UserControlMissions.pColDestSys: "Destination" => "<Destination>"
-UserControlMissions.pColTargetFaction: "Target Faction" => "<Target Faction>"
-UserControlMissions.pColResult: "Result (cr)" => "<Result (cr)>"
-UserControlMissions.pColInfo: "Info" => "<Info>"
-UserControlMissions.labelTo: "to" => "<to>"
-UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "<Left click and drag on grid to reorder>"
+UserControlMissions.cColName: "Name" => "Nazwa"
+UserControlMissions.cColStartDate: "Start Date" => "Data Rozpocz."
+UserControlMissions.cColEndDate: "End Date" => "Data Końca"
+UserControlMissions.cColOrigin: "Origin" => "Pochodzenie"
+UserControlMissions.cColFromFaction: "Faction" => "Frakcja"
+UserControlMissions.cColDestSystem: "Destination" => "Miejsce Docelowe"
+UserControlMissions.cColTargetFaction: "Target Faction" => "Frakcja będąca Celem"
+UserControlMissions.cColValue: "Value (cr)" => "Wartość (cr)"
+UserControlMissions.cColInfo: "Info" => "Info"
+UserControlMissions.PcolName: "Name" => "Nazwa"
+UserControlMissions.pColStart: "Start Date" => "Data Rozpocz."
+UserControlMissions.pColEnd: "End Date" => "Data Końca"
+UserControlMissions.pColOrigin: "Origin" => "Pochodzenie"
+UserControlMissions.pColFromFaction: "Faction" => "Frakcja"
+UserControlMissions.pColDestSys: "Destination" => "Miejsce Docelowe"
+UserControlMissions.pColTargetFaction: "Target Faction" => "Frakcja będąca Celem"
+UserControlMissions.pColResult: "Result (cr)" => "Wynik (cr)"
+UserControlMissions.pColInfo: "Info" => "Info"
+UserControlMissions.labelTo: "to" => "do"
+UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
-.MPlural: " Missions" @
-.MSingular: " Mission" @
-.Name: "Name" @
-.Value: "Value (cr):\n{0:N0}" @
-.ValueN: "Value (cr)" @
-.ValueC: "Value: " @
+.MPlural: " Missions" => "Misje"
+.MSingular: " Mission" => "Misja"
+.Name: "Name" => "Nazwa"
+.Value: "Value (cr):\n{0:N0}" => "Wartość (cr):\n{0:N0}"
+.ValueN: "Value (cr)" => "Wartość (cr)"
+.ValueC: "Value: " => "Wartość: "
 
 //////////////////////////////////////////////////////////////// Modules
 
-UserControlModules.Slot: "Slot" @
-.Info: "Info" @
-.Value: "Value" @
-.System: "System" @
-.TxTime: "Tx Time" @
-.Cost: "Cost" @
-.FSDAvgJump: "FSD Avg Jump" @
-.HT: "Half tank, no cargo" @
-.FSDMaxRange: "FSD Max Range" @
-.FT: "Full Tank, no cargo" @
-.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" @
-.HullValue: "Hull Value" @
-.ModulesValue: "Modules Value" @
-.TotalCost: "Total Cost" @
-.RebuyCost: "Rebuy Cost" @
-.MassHull: "Mass Hull" @
-.MassUnladen: "Mass Unladen" @
-.MassModules: "Mass Modules" @
-.Manufacturer: "Manufacturer" @
-.FuelCapacity: "Fuel Capacity" @
-.FuelLevel: "Fuel Level" @
-.FuelWarning: "Fuel Warning %" @
-.PadSize: "Pad Size" @
-.MainThrusterSpeed: "Main Thruster Speed" @
-.MainThrusterBoost: "Main Thruster Boost" @
-.InTransitto: "In Transit to " @
-.Storedat: "Stored at" @
-.CargoCapacity: "Cargo Capacity" @
-.InTransit: "In Transit" @
-.FW: "Fuel Warning:" @
-.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.NValid: "A Value is not valid" @
-.SC: "Ship Configure" @
-.MI: "Module Information" @
+UserControlModules.Slot: "Slot" => "Komora"
+.Info: "Info" => "Info"
+.Value: "Value" => "Wartość"
+.System: "System" => "Układ"
+.TxTime: "Tx Time" => Czas do dost.
+.Cost: "Cost" => "Koszt"
+.FSDAvgJump: "FSD Avg Jump" => "Śr. Skok FSD"
+.HT: "Half tank, no cargo" => "Paliwo 50%, bez ładunku"
+.FSDMaxRange: "FSD Max Range" => "Maks. Zasięg FSD"
+.FT: "Full Tank, no cargo" => "Paliwo 100%, bez ładunku"
+.FSDMaximumFuelperjump: "FSD Maximum Fuel per jump" => "Maks. paliwa na skok FSD"
+.HullValue: "Hull Value" => "Wartość Kadłuba"
+.ModulesValue: "Modules Value" => "Wartość Modułów"
+.TotalCost: "Total Cost" => "Koszt Razem"
+.RebuyCost: "Rebuy Cost" => "Koszt Ubezpieczenia"
+.MassHull: "Mass Hull" => "Masa Kadłuba"
+.MassUnladen: "Mass Unladen" => "Masa Bez Ładunku"
+.MassModules: "Mass Modules" => "Masa Modułów"
+.Manufacturer: "Manufacturer" => "Producent"
+.FuelCapacity: "Fuel Capacity" => "Poj. zbiornika paliwa"
+.FuelLevel: "Fuel Level" => "Poziom paliwa"
+.FuelWarning: "Fuel Warning %" => "Uwaga - Paliwo %"
+.PadSize: "Pad Size" => "Rozmiar Lądowiska"
+.MainThrusterSpeed: "Main Thruster Speed" => "Prędkość Gł. Silników"
+.MainThrusterBoost: "Main Thruster Boost" => "Doładowanie Gł. Silników"
+.InTransitto: "In Transit to " => "W Tranzycie Do"
+.Storedat: "Stored at" => "Przechowane w"
+.CargoCapacity: "Cargo Capacity" => "Pojemność Ładowni"
+.InTransit: "In Transit" => "W Tranzycie"
+.FW: "Fuel Warning:" => "Uwaga - Paliwo:"
+.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Wprowadź poziom ostrzeż. paliwa w % (0 - wył., 1-100%)"
+.PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
+.PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
+.NValid: "A Value is not valid" => "Wartość nie jest prawidłowa"
+.SC: "Ship Configure" => "Konfiguracja Statku"
+.MI: "Module Information" => "Informacje o Modułach"
 
 
 //////////////////////////////////////////////////////////////// Note Panel
 
-UserControlNotePanel.miGMPNotes: "Display galactic mapping notes" => "<Display galactic mapping notes>"
-UserControlNotePanel.miSystemNotes: "Display system notes" => "<Display system notes>"
+UserControlNotePanel.miGMPNotes: "Display galactic mapping notes" => "Wyświetl notatki mapowania galaktycznego"
+UserControlNotePanel.miSystemNotes: "Display system notes" => "Wyświetl notatki układu"
 
 //////////////////////////////////////////////////////////////// Outfitting
 
-UserControlOutfitting.labelYard: "Unknown" => "<Unknown>"
-UserControlOutfitting.labelYardSel: "Sel" => "<Sel>"
-UserControlOutfitting.comboBoxYards.ToolTip: "Select ship to view" => "<Select ship to view>"
+UserControlOutfitting.labelYard: "Unknown" => "Nieznane"
+UserControlOutfitting.labelYardSel: "Sel" => "Wyb."
+UserControlOutfitting.comboBoxYards.ToolTip: "Select ship to view" => "Zaznacz statek do wyświetlenia"
 
-.TravelHistoryEntry: "Travel History Entry" @
-.Date: "Date" @
-.Yard: "Yard" @
-.Item: "Item" @
-.Distance: "Distance" @
-.Price: "Price" @
-.Type: "Type" @
-.Info: "Info" @
-.Mass: "Mass" @
+.TravelHistoryEntry: "Travel History Entry" => "Wpis Historii Podróży"
+.Date: "Date" => "Data"
+.Yard: "Yard" => "Stocznia"
+.Item: "Item" => "Przedmiot"
+.Distance: "Distance" => "Odległość"
+.Price: "Price" => "Cena"
+.Type: "Type" => "Typ"
+.Info: "Info" => "Info"
+.Mass: "Mass" => "Masa"
 
 //////////////////////////////////////////////////////////////// Selector
 
-UserControlPanelSelector.NOADDONS: "NO ADD ONS!" @
-.AddOns: " Add Ons" @
-.TTA: "Click to add or remove Add Ons" @
+UserControlPanelSelector.NOADDONS: "NO ADD ONS!" => "BRAK DODATKÓW!"
+.AddOns: " Add Ons" => "Dodatki"
+.TTA: "Click to add or remove Add Ons" => "Kliknij aby dodać lub usunąć dodatki"
 .TTB: "Add ons are essential additions to your EDD experience!" @
-.PP1: "Pop out in a new window" @
-.MT1: "Open as a new menu tab" @
+.PP1: "Pop out in a new window" => "Umieść panel w nowym oknie"
+.MT1: "Open as a new menu tab" => "Dodaj jako nową kartę menu"
 
 //////////////////////////////////////////////////////////////// Plot
 
-UserControlPlot.sysName: "Name" => "<Name>"
-UserControlPlot.sysX: "X" => "<X>"
-UserControlPlot.sysY: "Y" => "<Y>"
-UserControlPlot.sysZ: "Z" => "<Z>"
-UserControlPlot.sysVisits: "Visits" => "<Visits>"
-UserControlPlot.labelExtMin: "Min" => "<Min>"
-UserControlPlot.labelExtMax: "Max" => "<Max>"
-UserControlPlot.optionsToolStripMenuItem: "Options" => "<Options>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem: "Export to..." => "<Export to...>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "<PNG>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "<PDF>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "<SVG>"
-UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "<TXT>"
+UserControlPlot.sysName: "Name" => "Nazwa"
+UserControlPlot.sysX: "X" => "X"
+UserControlPlot.sysY: "Y" => "Y"
+UserControlPlot.sysZ: "Z" => "Z"
+UserControlPlot.sysVisits: "Visits" => "Wizyty"
+UserControlPlot.labelExtMin: "Min" => "Min."
+UserControlPlot.labelExtMax: "Max" => "Maks."
+UserControlPlot.optionsToolStripMenuItem: "Options" => "Opcje"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem: "Export to..." => "Eksportuj do..."
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "PNG"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "PDF"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "SVG"
+UserControlPlot.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "TXT"
 
-UserControlPlot.comboBoxView.ToolTip: "Orientation of the Plot" => "<Orientation of the Plot>"
-UserControlPlot.textMinRadius.ToolTip: "Minimum Range" => "<Minimum Range>"
-UserControlPlot.textMaxRadius.ToolTip: "Maximum Range" => "<Maximum Range>"
+UserControlPlot.comboBoxView.ToolTip: "Orientation of the Plot" => "Orientacja Planu"
+UserControlPlot.textMinRadius.ToolTip: "Minimum Range" => "Minimalny Zakres"
+UserControlPlot.textMaxRadius.ToolTip: "Maximum Range" => "Maksymalny Zakres"
 
-.Top: "Top" @
-.Front: "Front" @
-.Side: "Side" @
-.Grid: "Grid" @
-.Report: "Report" @
-.2d: "2D Plot of systems in range from {0} " @
-.PTOP: "Plot around {0}, viewed from the top" @
-.PFRONT: "Plot around {0}, viewed from the front" @
-.PSIDE: "Plot around {0}, viewed from the side" @
-.SysAROUND: "Systems around {0}, from {1} to {2}, Ly: {3}" @
+.Top: "Top" => "Góra"
+.Front: "Front" => "Przód"
+.Side: "Side" => "Bok"
+.Grid: "Grid" => "Siatka"
+.Report: "Report" => "Raport"
+.2d: "2D Plot of systems in range from {0} " => "Plan 2D układów w zasięgu od {0}"
+.PTOP: "Plot around {0}, viewed from the top" => "Plan wokół {0}, widok z góry"
+.PFRONT: "Plot around {0}, viewed from the front" => "Plan wokół {0}, widok z przodu"
+.PSIDE: "Plot around {0}, viewed from the side" => "Plan wokół {0}, widok z boku"
+.SysAROUND: "Systems around {0}, from {1} to {2}, Ly: {3}" => "Układy wokół {0}, od {1} do {2}, LŚ: {3}"
 
-.Vs: "\r\n    Visits: {0}" @
-.Nt: "\r\n    Notes: {0}\r\n" @
-.D1: "\r\n{0} distance {1:N2} Ly" @
-.D2: "\r\n    Visits: {0}" @
-.D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" @
+.Vs: "\r\n    Visits: {0}" => "\r\n    Wizyty: {0}"
+.Nt: "\r\n    Notes: {0}\r\n" => "\r\n    Notatki: {0}\r\n"
+.D1: "\r\n{0} distance {1:N2} Ly" => "\r\n{0} odległość {1:N2} LŚ"
+.D2: "\r\n    Visits: {0}" => "Wizyty: {0}"
+.D3: "\r\n    Coordinates: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n" => "Współrzędne: X:{0:N2}, Y:{1:N2}, Z:{2:N2}\r\n"
 
 //////////////////////////////////////////////////////////////// Route
 
-UserControlRoute.SystemCol: "System" => "<System>"
-UserControlRoute.DistanceCol: "Distance" => "<Distance>"
-UserControlRoute.XCol: "X" => "<X>"
-UserControlRoute.YCol: "Y" => "<Y>"
-UserControlRoute.ZCol: "Z" => "<Z>"
-UserControlRoute.WayPointDistCol: "Dist. Waypoint" => "<Dist. Waypoint>"
-UserControlRoute.DeviationCol: "Deviation" => "<Deviation>"
-UserControlRoute.buttonExtExcel: "2" => "<2>"
-UserControlRoute.buttonExtTravelTo: "History" => "<History>"
-UserControlRoute.buttonExtTravelFrom: "History" => "<History>"
-UserControlRoute.buttonExtTargetTo: "Target" => "<Target>"
-UserControlRoute.buttonToEDSM: "EDSM" => "<EDSM>"
-UserControlRoute.buttonFromEDSM: "EDSM" => "<EDSM>"
-UserControlRoute.buttonTargetFrom: "Target" => "<Target>"
-UserControlRoute.cmd3DMap: "3D Map" => "<3D Map>"
-UserControlRoute.labelLy2: "ly" => "<ly>"
-UserControlRoute.labelLy1: "ly" => "<ly>"
-UserControlRoute.labelTo: "To" => "<To>"
-UserControlRoute.labelMaxJump: "Max jump" => "<Max jump>"
-UserControlRoute.labelDistance: "Distance" => "<Distance>"
-UserControlRoute.labelMetric: "Metric" => "<Metric>"
-UserControlRoute.button_Route: "Find route" => "<Find route>"
-UserControlRoute.labelFrom: "From" => "<From>"
-UserControlRoute.showInEDSMToolStripMenuItem: "Show in EDSM" => "<Show in EDSM>"
-UserControlRoute.copyToolStripMenuItem: "Copy" => "<Copy>"
-UserControlRoute.buttonExtExcel.ToolTip: "Send data on grid to excel" => "<Send data on grid to excel>"
-UserControlRoute.textBox_ToName.ToolTip: "Alternate Name" => "<Alternate Name>"
-UserControlRoute.textBox_FromName.ToolTip: "Alternate name" => "<Alternate name>"
-UserControlRoute.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "<Pick the metric to use when searching for a route>"
-UserControlRoute.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "<Copy the entry in the main travel grid to end route entry>"
-UserControlRoute.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "<Copy the entry in the main travel grid to start route entry>"
-UserControlRoute.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "<Copy the target system to end route entry>"
-UserControlRoute.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "<Open this end route system in EDSM>"
-UserControlRoute.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "<Open this start route system in EDSM>"
-UserControlRoute.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "<Copy the target system to start route entry>"
-UserControlRoute.cmd3DMap.ToolTip: "Show route on 3D Map" => "<Show route on 3D Map>"
-UserControlRoute.textBox_From.ToolTip: "Select system to start the route" => "<Select system to start the route>"
-UserControlRoute.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "<Give your jump range, or search range for long jumps>"
-UserControlRoute.textBox_To.ToolTip: "Select the system to end in" => "<Select the system to end in>"
-UserControlRoute.textBox_Distance.ToolTip: "Distance between start and end" => "<Distance between start and end>"
-UserControlRoute.textBox_ToZ.ToolTip: "Z Co-ord" => "<Z Co-ord>"
-UserControlRoute.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "<Y (Vertical) Co-ord>"
-UserControlRoute.textBox_ToX.ToolTip: "X Co-Ord" => "<X Co-Ord>"
-UserControlRoute.textBox_FromZ.ToolTip: "Z Co-ord" => "<Z Co-ord>"
-UserControlRoute.button_Route.ToolTip: "Compute the route" => "<Compute the route>"
-UserControlRoute.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "<Y (Vertical) Co-ord>"
-UserControlRoute.textBox_FromX.ToolTip: "X Co-ord" => "<X Co-ord>"
+UserControlRoute.SystemCol: "System" => "Układ"
+UserControlRoute.DistanceCol: "Distance" => "Odległość"
+UserControlRoute.XCol: "X" => "X"
+UserControlRoute.YCol: "Y" => "Y"
+UserControlRoute.ZCol: "Z" => "Z"
+UserControlRoute.WayPointDistCol: "Dist. Waypoint" => "Odległ. pkt. naw."
+UserControlRoute.DeviationCol: "Deviation" => "Odstępstwo"
+UserControlRoute.buttonExtExcel: "2" => "2"
+UserControlRoute.buttonExtTravelTo: "History" => "Historia"
+UserControlRoute.buttonExtTravelFrom: "History" => "Historia"
+UserControlRoute.buttonExtTargetTo: "Target" => "Cel"
+UserControlRoute.buttonToEDSM: "EDSM" => "EDSM"
+UserControlRoute.buttonFromEDSM: "EDSM" => "EDSM"
+UserControlRoute.buttonTargetFrom: "Target" => "Cel"
+UserControlRoute.cmd3DMap: "3D Map" => "Mapa 3D"
+UserControlRoute.labelLy2: "ly" => "lat świetlnych"
+UserControlRoute.labelLy1: "ly" => "lat świetlnych"
+UserControlRoute.labelTo: "To" => "Do"
+UserControlRoute.labelMaxJump: "Max jump" => "Maks. skok"
+UserControlRoute.labelDistance: "Distance" => "Odległość"
+UserControlRoute.labelMetric: "Metric" => "Miara"
+UserControlRoute.button_Route: "Find route" => "Szukaj trasy"
+UserControlRoute.labelFrom: "From" => "Z"
+UserControlRoute.showInEDSMToolStripMenuItem: "Show in EDSM" => "Pokaż w EDSM"
+UserControlRoute.copyToolStripMenuItem: "Copy" => "Kopiuj"
+UserControlRoute.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do Excel"
+UserControlRoute.textBox_ToName.ToolTip: "Alternate Name" => "Alternatywna Nazwa"
+UserControlRoute.textBox_FromName.ToolTip: "Alternate name" => "Alternatywna nazwa"
+UserControlRoute.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Wybierz miarę do użycia podczas szukania trasy"
+UserControlRoute.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Kopiuj wpis w głównej tabeli podróży do wpisu końca trasy"
+UserControlRoute.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "Kopiuj wpis w głównej tabeli podróży do wpisu początku trasy"
+UserControlRoute.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "Kopiuj układ docelowy do wpisu końca trasy"
+UserControlRoute.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Pokaż ten układ końca trasy w EDSM"
+UserControlRoute.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Pokaż ten układ początku trasy w EDSM"
+UserControlRoute.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Kopiuj układ docelowy do wpisu początku trasy"
+UserControlRoute.cmd3DMap.ToolTip: "Show route on 3D Map" => "Pokaż trasę na mapie 3D"
+UserControlRoute.textBox_From.ToolTip: "Select system to start the route" => "Wybierz układ do rozpoczęcia trasy"
+UserControlRoute.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps" => "Podaj swój zasięg skoku lub przeszukaj zakres w celu znalezienia długich skoków"
+UserControlRoute.textBox_To.ToolTip: "Select the system to end in" => "Wybierz układ w którym chcesz zakończyć"
+UserControlRoute.textBox_Distance.ToolTip: "Distance between start and end" => "Dystans między początkiem a końcem"
+UserControlRoute.textBox_ToZ.ToolTip: "Z Co-ord" => "Współrzędna Z"
+UserControlRoute.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" => "Współrzędna Y (pionowa)"
+UserControlRoute.textBox_ToX.ToolTip: "X Co-Ord" => "Współrzędna X"
+UserControlRoute.textBox_FromZ.ToolTip: "Z Co-ord" => "Współrzędna Z"
+UserControlRoute.button_Route.ToolTip: "Compute the route" => "Oblicz trasę"
+UserControlRoute.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Współrzędna Y (pionowa)"
+UserControlRoute.textBox_FromX.ToolTip: "X Co-ord" => "Współrzędna X"
 
-.Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
+.Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "To spowoduje wygenerowanie dużej liczby ({0}) skoków\r\nProszę potwierdzić"
+.NoRoute: "No route set up, retry" => "Brak ustawionej trasy, spróbuj ponownie"
 
 //////////////////////////////////////////////////////////////// RouteTracker
 
-UserControlRouteTracker.setRouteToolStripMenuItem: "Set route" @
-UserControlRouteTracker.showJumpsToolStripMenuItem: "Show Jumps To Go" @
-UserControlRouteTracker.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" @
-UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" @
-UserControlRouteTracker.autoCopyWPToolStripMenuItem: "Auto copy waypoint" @
-UserControlRouteTracker.autoSetTargetToolStripMenuItem: "Auto set target" @
+UserControlRouteTracker.setRouteToolStripMenuItem: "Set route" => "Ustaw trasę"
+UserControlRouteTracker.showJumpsToolStripMenuItem: "Show Jumps To Go" => "Pokaż Pozostałe Skoki"
+UserControlRouteTracker.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Pokaż Współrzędne Punktu Nawigacyjnego"
+UserControlRouteTracker.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Pokaż Odstępstwo od trasy"
+UserControlRouteTracker.autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Automatycznie kopiuj punkt nawigacyjny"
+UserControlRouteTracker.autoSetTargetToolStripMenuItem: "Auto set target" => "Automatycznie ustaw cel"
 
-.NoRoute: "Please set a route, by right clicking" @
-.NoWay: "Route contains no waypoints" @
-.Unk: "Unknown location" @
-.NoCo: "No systems in route have known co-ords" @
-.J1: "jump" @
-.JS: "jumps" @
-.NoFSD: " No Ship FSD Information" @
-.FL: "From Last WP " @
-.TF: "To First WP " @
+.NoRoute: "Please set a route, by right clicking" => "Proszę ustawić trasę, klikając prawym przyciskiem myszki"
+.NoWay: "Route contains no waypoints" => "Trasa nie zawiera punktów nawigacyjnych"
+.Unk: "Unknown location" => "Nieznana lokalizacja"
+.NoCo: "No systems in route have known co-ords" => "Brak układów ze znanymi współrzędnymi w trasie"
+.J1: "jump" => "skok"
+.JS: "jumps" => "skoki"
+.NoFSD: " No Ship FSD Information" => "Brak informacji o FSD statku"
+.FL: "From Last WP " => "Od Ostatniego Pkt. Naw."
+.TF: "To First WP " => "Do Pierwszego Pkt. Naw."
 .LF: ", Left {0:N1}ly" @
-.ToWP: "To WP {0} " @
-.Dev: ", Dev {0:N1}ly" @
-.Selectroute: "Select route" @
-.PresstoCancel: "Press to Cancel" @
-.Enterroute: "Enter route" @
+.ToWP: "To WP {0} " => "Do Pkt. Naw."
+.Dev: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
+.Selectroute: "Select route" => "Wybierz trasę"
+.PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
+.Enterroute: "Enter route" => "Wprowadź trasę"
 
 //////////////////////////////////////////////////////////////// Scan
 
-UserControlScan.toolStripMenuItemToolbar: "Show/Hide Toolbar" @
-UserControlScan.ToolTip: "Right click on panel to show/hide the toolbar" @
-UserControlScan.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" @
-UserControlScan.chkShowOverlays.ToolTip: "Show/Hide body status icons" @
-UserControlScan.checkBoxTiny.ToolTip: "Image size teeny tiny" @
-UserControlScan.checkBoxMaterials.ToolTip: "Show/Hide Materials" @
-UserControlScan.checkBoxMaterialsRare.ToolTip: "Show rare materials only" @
-UserControlScan.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" @
-UserControlScan.checkBoxMoons.ToolTip: "Show/Hide Moons" @
-UserControlScan.checkBoxLarge.ToolTip: "Image size large" @
-UserControlScan.checkBoxSmall.ToolTip: "Image size small" @
-UserControlScan.checkBoxMedium.ToolTip: "Image size medium" @
-UserControlScan.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-UserControlScan.lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" @
+UserControlScan.toolStripMenuItemToolbar: "Show/Hide Toolbar" => "Pokaż/Ukryj Pasek Narzędzi"
+UserControlScan.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij na panelu prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
+UserControlScan.checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" => "Pokaż/Ukryj materiały które osiągnęły maks. ilość"
+UserControlScan.chkShowOverlays.ToolTip: "Show/Hide body status icons" => "Pokaż/Ukryj ikony statusu Obiektów"
+UserControlScan.checkBoxTiny.ToolTip: "Image size teeny tiny" => "Bardzo mały rozmiar obrazów"
+UserControlScan.checkBoxMaterials.ToolTip: "Show/Hide Materials" => "Pokaż/Ukryj Materiały"
+UserControlScan.checkBoxMaterialsRare.ToolTip: "Show rare materials only" => "Pokaż tylko rzadkie materiały"
+UserControlScan.checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Pokaż/Ukryj dane Obiektów z EDSM"
+UserControlScan.checkBoxMoons.ToolTip: "Show/Hide Moons" => "Pokaż/Ukryj Księżyce"
+UserControlScan.checkBoxLarge.ToolTip: "Image size large" => "Duży rozmiar obrazów"
+UserControlScan.checkBoxSmall.ToolTip: "Image size small" => "Mały rozmiar obrazów"
+UserControlScan.checkBoxMedium.ToolTip: "Image size medium" => "Średni rozmiar obrazów"
+UserControlScan.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do Excel"
+UserControlScan.lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij na panelu prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
 
-.AV: "Approx value: {0:N0}" @
-.NSD: "No scan data available" @
-.BC: "Barycentre of {0}" @
+.AV: "Approx value: {0:N0}" => "Wartość w przybliżeniu: {0:N0}"
+.NSD: "No scan data available" => "Brak dostępnych danych skanu"
+.BC: "Barycentre of {0}" => "Barycentrum {0}"
 
 //////////////////////////////////////////////////////////////// ScanGrid
 
-UserControlScanGrid.colName: "Name" @
-UserControlScanGrid.colClass: "Class" @
-UserControlScanGrid.Distance: "Distance" @
-UserControlScanGrid.colBriefing: "Briefing" @
+UserControlScanGrid.colName: "Name" => "Nazwa"
+UserControlScanGrid.colClass: "Class" => "Klasa"
+UserControlScanGrid.Distance: "Distance" => "Odległość"
+UserControlScanGrid.colBriefing: "Briefing" => "Informacje"
 
-.Moon: "Moon" @
-.MainStar: "Main Star" @
-.Mass: "Mass" @
-.HabitableZone: "Habitable Zone" @
-.Landable: "Landable" @
-.Terraformable: "Terraformable" @
-.Volcanism: "Volcanism" @
-.Rings: "Has {0} rings: " @
-.Ring: "Has 1 ring: " @
-.BC: "This body contains: " @
-.Value: "Value" @
-.SS: "Scan Summary for {0}. {1}" @
-.AV: "Approx total scan value: {0:N0}" @
+.Moon: "Moon" => "Księżyc"
+.MainStar: "Main Star" => "Główna Gwiazda"
+.Mass: "Mass" => "Masa"
+.HabitableZone: "Habitable Zone" => "Ekosfera"
+.Landable: "Landable" => "Możliwe Lądowanie"
+.Terraformable: "Terraformable" => "Możliwe Terraformowanie"
+.Volcanism: "Volcanism" => "Aktywność Wulkaniczna"
+.Rings: "Has {0} rings: " => "Posiada {0} pierścienie: "
+.Ring: "Has 1 ring: " => "Posiada 1 pierścień: "
+.BC: "This body contains: " => "Ten Obiekt zawiera: "
+.Value: "Value" => "Wartość"
+.SS: "Scan Summary for {0}. {1}" => "Podsumowanie Skanów {0}. {1}"
+.AV: "Approx total scan value: {0:N0}" => "Przybliżona całkowita wartość skanów: {0:N0}"
 
 
 //////////////////////////////////////////////////////////////// Screenshot
