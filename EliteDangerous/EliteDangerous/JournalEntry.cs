@@ -1208,11 +1208,11 @@ namespace EliteDangerousCore
 
         protected JObject ReadAdditionalFile( string extrafile, bool waitforfile, bool checktimestamptype )       // read file, return new JSON
         {
-            for (int retries = 0; retries < 5 ; retries++)
+            for (int retries = 0; retries < 25 ; retries++)
             {
                 try
                 {
-                    string json = System.IO.File.ReadAllText(extrafile);
+                    string json = System.IO.File.ReadAllText(extrafile);        // try the current file
 
                     if (json != null)
                     {
@@ -1223,20 +1223,20 @@ namespace EliteDangerousCore
 
                         if (checktimestamptype == false || (newUTC != null && newUTC == EventTimeUTC && newtype == EventTypeStr))
                         {
-                            return joaf;
+                            return joaf;                        // good current file..
                         }
-                        else
-                            return null;            // okay, entry is not related to the file written in the folder, throw the entry away
                     }
                 }
                 catch (Exception ex)
                 {
-                    if (!waitforfile)               // if don't wait, continue with no return
-                        return null;
-
                     System.Diagnostics.Trace.WriteLine($"Unable to read extra info from {extrafile}: {ex.Message}");
-                    System.Threading.Thread.Sleep(500);
                 }
+
+                if (!waitforfile)               // if don't wait, continue with no return
+                    return null;
+
+                System.Diagnostics.Debug.WriteLine("Current file is not the right one, waiting for it to appear.." + retries);
+                System.Threading.Thread.Sleep(100);
             }
 
             return null;
