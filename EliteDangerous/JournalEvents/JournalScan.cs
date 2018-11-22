@@ -29,7 +29,7 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyDesignation { get; set; }
 
         // ALL
-        public string ScanType { get; set; }                        // 3.0 scan type  Basic, Detailed, NavBeacon, NavBeaconDetail or empty for older ones
+        public string ScanType { get; set; }                        // 3.0 scan type  Basic, Detailed, NavBeacon, NavBeaconDetail, (3.3) AutoScan, or empty for older ones
         public string BodyName { get; set; }                        // direct (meaning no translation)
         public int? BodyID { get; set; }                            // direct
         public double DistanceFromArrivalLS { get; set; }           // direct

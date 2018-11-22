@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
             Category_Localised = JournalFieldNaming.CheckLocalisation(evt["Category_Localised"].Str(), Category);
             Region = evt["Region"].Str();
             System = evt["System"].Str();
+            SystemAddress = evt["SystemAddress"].LongNull();
             IsNewEntry = evt["IsNewEntry"].BoolNull();
             NewTraitsDiscovered = evt["NewTraitsDiscovered"].BoolNull();
             Traits = evt["Traits"].ToObjectProtected<string[]>();
@@ -49,6 +50,7 @@ namespace EliteDangerousCore.JournalEvents
         public string SubCategory_Localised { get; set; }
         public string Region { get; set; }
         public string System { get; set; }
+        public long? SystemAddress { get; set; }
         public bool? IsNewEntry { get; set; }
         public bool? NewTraitsDiscovered { get; set; }
         public string [] Traits { get; set; }

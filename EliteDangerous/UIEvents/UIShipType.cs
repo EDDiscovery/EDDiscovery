@@ -31,5 +31,6 @@ namespace EliteDangerousCore.UIEvents
         public enum Shiptype { None, MainShip, Fighter, SRV };
 
         public Shiptype ShipType { get; private set; }
+
     }
 }

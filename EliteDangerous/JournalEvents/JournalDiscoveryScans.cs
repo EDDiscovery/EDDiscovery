@@ -74,6 +74,13 @@ namespace EliteDangerousCore.JournalEvents
 
             TimeRemaining = evt["TimeRemaining"].DoubleNull();
 
+            SystemAddress = evt["SystemAddress"].LongNull();
+
+            ThreatLevel = evt["USSThreat"].IntNull();
+            USSType = evt["USSType"].Str();
+            USSTypeLocalised = JournalFieldNaming.CheckLocalisation(evt["USSType_Localised"].Str(), USSType);
+            IsStation = evt["USSType"].BoolNull();
+
             if (TimeRemaining != null)
             {
                 ExpiryUTC = EventTimeUTC.AddSeconds(TimeRemaining.Value);
@@ -88,13 +95,23 @@ namespace EliteDangerousCore.JournalEvents
         public string SpawingFaction { get; set; }
         public string SpawingFaction_Localised { get; set; }
         public double? TimeRemaining { get; set; }          // null if not expiring
+        public long? SystemAddress { get; set; }
+
+        public int? ThreatLevel { get; set; }
+        public string USSType { get; set; }
+        public string USSTypeLocalised { get; set; }
+        public bool? IsStation { get; set; }
+
         public System.DateTime ExpiryUTC { get; set; }   
         public System.DateTime ExpiryLocal { get; set; } 
 
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Txb(this),
-                            SpawingState_Localised, "Faction:".Txb(this), SpawingFaction_Localised);
+                            SpawingState_Localised, "Faction:".Txb(this), SpawingFaction_Localised,
+                            "USS Type:".Txb(this), USSTypeLocalised, " Threat Level:".Txb(this), ThreatLevel, 
+                            ";Station".Txb(this), IsStation
+                            );
 
             if ( TimeRemaining != null )
                 info += ", Expires:".Txb(this) + (EliteConfigInstance.InstanceConfig.DisplayUTC ? ExpiryUTC : ExpiryLocal).ToString("g");
@@ -130,32 +147,43 @@ namespace EliteDangerousCore.JournalEvents
         {
             BodyName = evt["BodyName"].Str();
             BodyID = evt["BodyID"].Long();
-            Discoverers = evt["Discoverers"].ToObjectProtected<string[]>();
-            Mappers = evt["Mappers"].ToObjectProtected<string[]>();
             ProbesUsed = evt["ProbesUsed"].Int();
             EfficiencyTarget = evt["EfficiencyTarget"].Int();
         }
 
         public long BodyID { get; set; }
         public string BodyName { get; set; }
-        public string[] Discoverers { get; set; }
-        public string[] Mappers { get; set; }
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", BodyName,
-                                                "Discoverers:".Txb(this), Discoverers?.Length,
-                                                "Mappers:".Txb(this), Mappers?.Length,
                                                 "Probes:".Txb(this), ProbesUsed,
                                                 "Efficiency Target:".Txb(this), EfficiencyTarget);
             detailed = "";
-            if (Discoverers != null)
-                detailed += "Discoverers:".Txb(this) + string.Join(",", Discoverers) + System.Environment.NewLine;
-            if (Discoverers != null)
-                detailed += "Mappers:".Txb(this) + string.Join(",", Mappers) + System.Environment.NewLine;
         }
     }
+
+
+    [JournalEntryType(JournalTypeEnum.FSSAllBodiesFound)]
+    public class JournalFSSAllBodiesFound : JournalEntry
+    {
+        public JournalFSSAllBodiesFound(JObject evt) : base(evt, JournalTypeEnum.FSSAllBodiesFound)
+        {
+            SystemName = evt["SystemName"].Str();
+            SystemAddress = evt["SystemAddress"].Long();
+        }
+
+        public long SystemAddress { get; set; }
+        public string SystemName { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", SystemName);
+            detailed = "";
+        }
+    }
+
 
 }
