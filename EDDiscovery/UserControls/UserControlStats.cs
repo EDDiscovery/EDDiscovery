@@ -786,7 +786,7 @@ namespace EDDiscovery.UserControls
             string collapseExpand = GameStatTreeState();
             if (string.IsNullOrEmpty(collapseExpand)) collapseExpand = SQLiteDBClass.GetSettingString(DbStatsTreeStateSave, "YYYYYYYYYYYYY");
             if (collapseExpand.Length < 13) collapseExpand += new string('Y', 13);
-            JournalStatistics stats = (JournalStatistics)hl.Where(j => j.EntryType == JournalTypeEnum.Statistics).OrderByDescending(j => j.EventTimeUTC).FirstOrDefault().journalEntry;
+            JournalStatistics stats = (JournalStatistics)hl.Where(j => j.EntryType == JournalTypeEnum.Statistics).OrderByDescending(j => j.EventTimeUTC).FirstOrDefault()?.journalEntry;
             if (stats != null)
             {
                 treeViewStats.Nodes.Clear();
