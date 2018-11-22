@@ -65,7 +65,9 @@ namespace EliteDangerousCore
 
         long? prev_flags = null;        // force at least one out here by invalid values
         int prev_guifocus = -1;                 
-        int prev_firegroup = -1;                
+        int prev_firegroup = -1;
+        double prev_fuel = -1;
+        int prev_cargo = -1;
         UIEvents.UIPips.Pips prev_pips = new UIEvents.UIPips.Pips();
         UIEvents.UIPosition.Position prev_pos = new UIEvents.UIPosition.Position();     // default is MinValue
         double prev_heading = double.MaxValue;    // this forces a pos report
@@ -87,6 +89,7 @@ namespace EliteDangerousCore
             FsdCooldown = 18,
             OverHeating = 20,
             BeingInterdicted = 23,
+            HUDInAnalysisMode = 27,     // 3.3
         }
 
         private enum StatusFlagsSRV
@@ -104,6 +107,7 @@ namespace EliteDangerousCore
             LowFuel = 19,
             HasLatLong = 21,
             IsInDanger = 22,
+            NightVision = 28,             // 3.3
         }
 
         private enum StatusFlagsShipType
@@ -171,30 +175,24 @@ namespace EliteDangerousCore
                             if (prev_flags == null)
                                 prev_flags = (long)StatusFlagsShipType.ShipMask;      // set an impossible ship type to start the ball rolling
 
-                            long shiptype = curflags & (long)StatusFlagsShipType.ShipMask;
+                            UIEvents.UIShipType.Shiptype prevshiptype = ShipType(prev_flags.Value);
+                            UIEvents.UIShipType.Shiptype curtype = ShipType(curflags);
 
-                            bool refresh = prev_flags == (long)StatusFlagsShipType.ShipMask;
+                            bool refresh = prevshiptype == UIEvents.UIShipType.Shiptype.None;   // refresh if prev ship was none..
 
-                            long prevshiptype = prev_flags.Value & (long)StatusFlagsShipType.ShipMask;
-
-                            if (shiptype != prevshiptype)
+                            if ( prevshiptype != curtype )
                             {
-                                UIEvents.UIShipType.Shiptype t = shiptype == 1L<<(int)StatusFlagsShipType.InMainShip ? UIEvents.UIShipType.Shiptype.MainShip :
-                                                                 shiptype == 1L<<(int)StatusFlagsShipType.InSRV ? UIEvents.UIShipType.Shiptype.SRV :
-                                                                 shiptype == 1L<<(int)StatusFlagsShipType.InFighter ? UIEvents.UIShipType.Shiptype.Fighter :
-                                                                 UIEvents.UIShipType.Shiptype.None;
-
-                                events.Add(new UIEvents.UIShipType(t, EventTimeUTC,refresh));        // CHANGE of ship
+                                events.Add(new UIEvents.UIShipType(curtype, EventTimeUTC, refresh));        // CHANGE of ship
                                 prev_flags = ~curflags;       // force re-reporting
                                 refresh = true;
                             }
 
-                            if (shiptype == 1L<<(int)StatusFlagsShipType.InMainShip)
+                            if (curtype == UIEvents.UIShipType.Shiptype.MainShip)
                                 events.AddRange(ReportFlagState(typeof(StatusFlagsShip), curflags, prev_flags.Value, EventTimeUTC, refresh));
-                            else if (shiptype == 1L<<(int)StatusFlagsShipType.InSRV)
+                            else if (curtype == UIEvents.UIShipType.Shiptype.SRV)
                                 events.AddRange(ReportFlagState(typeof(StatusFlagsSRV), curflags, prev_flags.Value, EventTimeUTC, refresh));
 
-                            if ( shiptype != 0 )    // not none
+                            if (curtype != UIEvents.UIShipType.Shiptype.None)
                                 events.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags, prev_flags.Value, EventTimeUTC, refresh));
 
                             prev_flags = curflags;
@@ -228,6 +226,20 @@ namespace EliteDangerousCore
                         {
                             events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC, prev_firegroup == -1));
                             prev_firegroup = curfiregroup.Value;
+                        }
+
+                        double? curfuel = jo["Fuel"].DoubleNull();      // may appear/disappear and only introduced for 3.3
+                        if (curfuel != null && curfuel.Value != prev_fuel)
+                        {
+                            events.Add(new UIEvents.UIFuel(curfuel.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
+                            prev_fuel = curfuel.Value;
+                        }
+
+                        int? curcargo = jo["Cargo"].IntNull();      // may appear/disappear and only introduced for 3.3
+                        if (curcargo != null && curcargo.Value != prev_cargo)
+                        {
+                            events.Add(new UIEvents.UICargo(curcargo.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
+                            prev_cargo = curcargo.Value;
                         }
 
                         double jlat = jo["Latitude"].Double(double.MinValue);       // if not there, min value
@@ -275,12 +287,25 @@ namespace EliteDangerousCore
                 if (((delta >> v) & 1) != 0)
                 {
                     bool flag = ((curflags >> v) & 1) != 0;
-                    //System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
+                  //  System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
                     events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC, refresh));
                 }
             }
 
             return events;
         }
+
+
+        static public UIEvents.UIShipType.Shiptype ShipType(long shiptype)
+        {
+            shiptype &= (long)StatusFlagsShipType.ShipMask; // isolate flags
+
+            var x = shiptype == 1L << (int)StatusFlagsShipType.InMainShip ? UIEvents.UIShipType.Shiptype.MainShip :
+                                shiptype == 1L << (int)StatusFlagsShipType.InSRV ? UIEvents.UIShipType.Shiptype.SRV :
+                                shiptype == 1L << (int)StatusFlagsShipType.InFighter ? UIEvents.UIShipType.Shiptype.Fighter :
+                                UIEvents.UIShipType.Shiptype.None;
+            return x;
+        }
+
     }
 }

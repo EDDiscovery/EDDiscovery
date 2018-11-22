@@ -100,15 +100,6 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
-    [JournalEntryType(JournalTypeEnum.WonATrophyForSquadron)]
-    public class JournalWonATrophyForSquadron : JournalSquadronBase
-    {
-        public JournalWonATrophyForSquadron(JObject evt) : base(evt, JournalTypeEnum.WonATrophyForSquadron)
-        {
-        }
-    }
-
-
     public class JournalSquadronRankBase : JournalSquadronBase
     {
         public JournalSquadronRankBase(JObject evt, JournalTypeEnum e) : base(evt, e)
@@ -119,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Name, "Old:".Txb(this), OldRank.ToString().SplitCapsWord(), "New:".Txb(this) , NewRank.ToString().SplitCapsWord());
+            info = BaseUtils.FieldBuilder.Build("", Name, "Old:".Txb(this), OldRank.ToString().SplitCapsWord(), "New:".Txb(this), NewRank.ToString().SplitCapsWord());
             detailed = "";
         }
 
@@ -140,6 +131,14 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalSquadronPromotion : JournalSquadronRankBase
     {
         public JournalSquadronPromotion(JObject evt) : base(evt, JournalTypeEnum.SquadronPromotion)
+        {
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.WonATrophyForSquadron)]
+    public class JournalWonATrophyForSquadron : JournalSquadronBase
+    {
+        public JournalWonATrophyForSquadron(JObject evt) : base(evt, JournalTypeEnum.WonATrophyForSquadron)
         {
         }
     }

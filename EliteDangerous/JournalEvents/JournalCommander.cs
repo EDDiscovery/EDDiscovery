@@ -24,16 +24,17 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCommander(JObject evt ) : base(evt, JournalTypeEnum.Commander)
         {
             Name = evt["Name"].Str();
+            FID = evt["FID"].Str();     // 3.3 on
         }
 
         public string Name { get; set; }
+        public string FID { get; set; }
 
         public override void FillInformation(out string info, out string detailed) 
         {
             info = BaseUtils.FieldBuilder.Build("Cmdr ", Name);
             detailed = "";
         }
-
     }
 
     [JournalEntryType(JournalTypeEnum.NewCommander)]
@@ -43,14 +44,15 @@ namespace EliteDangerousCore.JournalEvents
         {
             Name = evt["Name"].Str();
             Package = evt["Package"].Str();
+            FID = evt["FID"].Str();     // 3.3 on
         }
 
         public string Name { get; set; }
         public string Package { get; set; }
+        public string FID { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-
             info = BaseUtils.FieldBuilder.Build("Cmdr ", Name, "Starting Package:".Txb(this), Package);
             detailed = "";
         }
@@ -62,9 +64,11 @@ namespace EliteDangerousCore.JournalEvents
         public JournalClearSavedGame(JObject evt) : base(evt, JournalTypeEnum.ClearSavedGame)
         {
             Name = evt["Name"].Str();
-
+            FID = evt["FID"].Str();     // 3.3 on
         }
+
         public string Name { get; set; }
+        public string FID { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -72,6 +76,4 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
     }
-
-
 }

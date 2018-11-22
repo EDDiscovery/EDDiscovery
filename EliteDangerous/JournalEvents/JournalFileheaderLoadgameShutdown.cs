@@ -91,6 +91,8 @@ namespace EliteDangerousCore.JournalEvents
             FuelCapacity = evt["FuelCapacity"].Double();
 
             Horizons = evt["Horizons"].BoolNull();
+
+            FID = evt["FID"].Str();     // 3.3 on
         }
 
         public string LoadGameCommander { get; set; }
@@ -110,10 +112,10 @@ namespace EliteDangerousCore.JournalEvents
         public double FuelCapacity { get; set; }
 
         public bool? Horizons { get; set; }
+        public string FID { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-
             info = BaseUtils.FieldBuilder.Build("Cmdr ", LoadGameCommander, "Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, "Credits:;;N0".Txb(this), Credits);
             detailed = BaseUtils.FieldBuilder.Build("Mode:".Txb(this), GameMode, "Group:".Txb(this), Group, "Not Landed;Landed".Txb(this), StartLanded, "Fuel Level:;;0.0".Txb(this), FuelLevel, "Capacity:;;0.0".Txb(this), FuelCapacity);
         }
@@ -131,7 +133,6 @@ namespace EliteDangerousCore.JournalEvents
             if (ShipFD.HasChars())        // must have a ship name - there have been load games without it.
                 shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent, FuelLevel, FuelCapacity);
         }
-
     }
 
 

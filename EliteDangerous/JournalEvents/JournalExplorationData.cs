@@ -88,4 +88,46 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+
+    [JournalEntryType(JournalTypeEnum.MultiSellExplorationData)]
+    public class JournalMultiSellExplorationData : JournalEntry, ILedgerJournalEntry
+    {
+        public JournalMultiSellExplorationData(JObject evt) : base(evt, JournalTypeEnum.MultiSellExplorationData)   // 3.3
+        {
+            Systems = evt["Discovered"]?.ToObjectProtected<Discovered[]>();
+            BaseValue = evt["BaseValue"].Long();
+            Bonus = evt["Bonus"].Long();
+            TotalEarnings = evt["TotalEarnings"].Long(0);       
+        }
+
+        public class Discovered
+        {
+            public string SystemName { get; set; }
+            public int NumBodies { get; set; }
+        }
+
+        public Discovered[] Systems { get; set; }
+        public long BaseValue { get; set; }
+        public long Bonus { get; set; }
+        public long TotalEarnings { get; set; }      
+
+        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        {
+            if (Systems != null)
+                mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
+        }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus,
+                                "Total:; cr;N0".Tx(this), TotalEarnings);
+            detailed = "";
+            if (Systems != null)
+            {
+                foreach (var s in Systems)
+                    detailed += s.SystemName + " (" + s.NumBodies.ToString() + ") ";
+            }
+        }
+    }
+
 }

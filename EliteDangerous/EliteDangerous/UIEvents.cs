@@ -56,7 +56,12 @@ namespace EliteDangerousCore
         IsInDanger ,
         BeingInterdicted ,
 
-        ShipType , 
+        HUDInAnalysisMode, //3.3
+        NightVision,             // 3.3
+        Fuel,   // 3.3
+        Cargo,  // 3.3
+    
+        ShipType ,      // don't think this is used.. remove later.
     }
 
     public abstract class UIEvent
