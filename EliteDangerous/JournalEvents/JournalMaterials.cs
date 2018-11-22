@@ -309,6 +309,11 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (KeyValuePair<string, int> k in Materials)        // may be commodities or materials
                     mc.Craft(k.Key, k.Value);        // same as this, uses up materials
             }
+
+            if (Name.Contains("Limpet", StringComparison.InvariantCultureIgnoreCase) )      // hard code limpets mean 1 more cargo of them
+            {
+                mc.Change(MaterialCommodityData.CommodityCategory, "drones", 1, 0, conn);
+            }
         }
 
         public override void FillInformation(out string info, out string detailed)
