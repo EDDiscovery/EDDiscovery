@@ -2,105 +2,105 @@
 /////////////////////////////////////////////////////////////////////////// Journals
 ///////////////////////////////////////////////////////////////////////////
 
-JournalTypeEnum.Unknown: "Unknown" @
-JournalTypeEnum.AfmuRepairs: "Afmu Repairs" @
-JournalTypeEnum.ApproachBody: "Approach Body" @
-JournalTypeEnum.ApproachSettlement: "Approach Settlement" @
-JournalTypeEnum.Bounty: "Bounty" @
-JournalTypeEnum.BuyAmmo: "Buy Ammo" @
-JournalTypeEnum.BuyDrones: "Buy Drones" @
-JournalTypeEnum.BuyExplorationData: "Buy Exploration Data" @
-JournalTypeEnum.BuyTradeData: "Buy Trade Data" @
+JournalTypeEnum.Unknown: "Unknown" => "Nieznane"
+JournalTypeEnum.AfmuRepairs: "Afmu Repairs" => "Naprawa AFMU"
+JournalTypeEnum.ApproachBody: "Approach Body" => "Podchodzenie do Obiektu"
+JournalTypeEnum.ApproachSettlement: "Approach Settlement" => "Podchodzenie do Osady"
+JournalTypeEnum.Bounty: "Bounty" => "Nagroda"
+JournalTypeEnum.BuyAmmo: "Buy Ammo" => "Zakup Amunicji"
+JournalTypeEnum.BuyDrones: "Buy Drones" => "Zakup Dronów"
+JournalTypeEnum.BuyExplorationData: "Buy Exploration Data" => "Zakup Danych Układu"
+JournalTypeEnum.BuyTradeData: "Buy Trade Data" => "Zakup Danych Rynkowych"
 JournalTypeEnum.CapShipBond: "Cap Ship Bond" @
-JournalTypeEnum.Cargo: "Cargo" @
-JournalTypeEnum.CargoDepot: "Cargo Depot" @
-JournalTypeEnum.ChangeCrewRole: "Change Crew Role" @
-JournalTypeEnum.ClearSavedGame: "Clear Saved Game" @
-JournalTypeEnum.CockpitBreached: "Cockpit Breached" @
-JournalTypeEnum.CollectCargo: "Collect Cargo" @
-JournalTypeEnum.Commander: "Commander" @
-JournalTypeEnum.CommitCrime: "Commit Crime" @
-JournalTypeEnum.CommunityGoal: "Community Goal" @
-JournalTypeEnum.CommunityGoalJoin: "Community Goal Join" @
-JournalTypeEnum.CommunityGoalReward: "Community Goal Reward" @
-JournalTypeEnum.Continued: "Continued" @
-JournalTypeEnum.CrewAssign: "Crew Assign" @
-JournalTypeEnum.CrewFire: "Crew Fire" @
-JournalTypeEnum.CrewHire: "Crew Hire" @
-JournalTypeEnum.DatalinkScan: "Datalink Scan" @
-JournalTypeEnum.Died: "Died" @
-JournalTypeEnum.DiscoveryScan: "Discovery Scan" @
-JournalTypeEnum.Docked: "Docked" @
-JournalTypeEnum.DockFighter: "Dock Fighter" @
-JournalTypeEnum.DockingCancelled: "Docking Cancelled" @
-JournalTypeEnum.DockingDenied: "Docking Denied" @
-JournalTypeEnum.DockingGranted: "Docking Granted" @
-JournalTypeEnum.DockingRequested: "Docking Requested" @
-JournalTypeEnum.DockingTimeout: "Docking Timeout" @
-JournalTypeEnum.DockSRV: "Dock SRV" @
-JournalTypeEnum.EjectCargo: "Eject Cargo" @
-JournalTypeEnum.EndCrewSession: "End Crew Session" @
+JournalTypeEnum.Cargo: "Cargo" => "Ładunek"
+JournalTypeEnum.CargoDepot: "Cargo Depot" => "Skład Ładunku"
+JournalTypeEnum.ChangeCrewRole: "Change Crew Role" => "Zmiana Roli w Załodze"
+JournalTypeEnum.ClearSavedGame: "Clear Saved Game" => "Wyczyszczenie Zapisu Gry"
+JournalTypeEnum.CockpitBreached: "Cockpit Breached" => "Uszkodzenie Kokpitu"
+JournalTypeEnum.CollectCargo: "Collect Cargo" => "Zebranie ładunku"
+JournalTypeEnum.Commander: "Commander" => "Dowódca"
+JournalTypeEnum.CommitCrime: "Commit Crime" => "Popełnienie Przestępstwa"
+JournalTypeEnum.CommunityGoal: "Community Goal" => "Cel Społeczności"
+JournalTypeEnum.CommunityGoalJoin: "Community Goal Join" => "Dołączenie do Celu Społeczności"
+JournalTypeEnum.CommunityGoalReward: "Community Goal Reward" => "Nagroda Celu Społeczności"
+JournalTypeEnum.Continued: "Continued" => "Kontynuowano"
+JournalTypeEnum.CrewAssign: "Crew Assign" => "Przypisanie Załogi"
+JournalTypeEnum.CrewFire: "Crew Fire" => "Zwolnienie Załogi"
+JournalTypeEnum.CrewHire: "Crew Hire" => "Zatrudnienie Załogi"
+JournalTypeEnum.DatalinkScan: "Datalink Scan" => "Skan Łącza Danych"
+JournalTypeEnum.Died: "Died" => "Śmierć"
+JournalTypeEnum.DiscoveryScan: "Discovery Scan" => "Skan Badawczy"
+JournalTypeEnum.Docked: "Docked" => "Zadokowano"
+JournalTypeEnum.DockFighter: "Dock Fighter" => "Zadokowano Myśliwiec"
+JournalTypeEnum.DockingCancelled: "Docking Cancelled" => "Anulowano Dokowanie"
+JournalTypeEnum.DockingDenied: "Docking Denied" => "Odmówiono Dokowania"
+JournalTypeEnum.DockingGranted: "Docking Granted" => "Zezwolono na Dokowanie"
+JournalTypeEnum.DockingRequested: "Docking Requested" => "Prośba o Dokowanie"
+JournalTypeEnum.DockingTimeout: "Docking Timeout" => "Czas na Dokowanie Upłynął"
+JournalTypeEnum.DockSRV: "Dock SRV" => "Dokowanie SRV"
+JournalTypeEnum.EjectCargo: "Eject Cargo" => "Wyrzucenie Ładunku"
+JournalTypeEnum.EndCrewSession: "End Crew Session" => "Zakończono Sesję Załogi"
 JournalTypeEnum.EngineerApply: "Engineer Apply" @
 JournalTypeEnum.EngineerContribution: "Engineer Contribution" @
-JournalTypeEnum.EngineerCraft: "Engineer Craft" @
+JournalTypeEnum.EngineerCraft: "Engineer Craft" => "Ulepszenie Inżynierskie"
 JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" @
-JournalTypeEnum.EngineerProgress: "Engineer Progress" @
-JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" @
-JournalTypeEnum.FactionKillBond: "Faction Kill Bond" @
-JournalTypeEnum.FSDJump: "FSD Jump" @
-JournalTypeEnum.FuelScoop: "Fuel Scoop" @
-JournalTypeEnum.Fileheader: "Fileheader" @
-JournalTypeEnum.FighterDestroyed: "Fighter Destroyed" @
-JournalTypeEnum.FighterRebuilt: "Fighter Rebuilt" @
-JournalTypeEnum.Friends: "Friends" @
-JournalTypeEnum.HeatDamage: "Heat Damage" @
-JournalTypeEnum.HeatWarning: "Heat Warning" @
-JournalTypeEnum.HullDamage: "Hull Damage" @
-JournalTypeEnum.Interdicted: "Interdicted" @
-JournalTypeEnum.Interdiction: "Interdiction" @
-JournalTypeEnum.JetConeBoost: "Jet Cone Boost" @
-JournalTypeEnum.JetConeDamage: "Jet Cone Damage" @
-JournalTypeEnum.JoinACrew: "Join A Crew" @
-JournalTypeEnum.KickCrewMember: "Kick Crew Member" @
-JournalTypeEnum.LaunchDrone: "Launch Drone" @
-JournalTypeEnum.LaunchFighter: "Launch Fighter" @
-JournalTypeEnum.LaunchSRV: "Launch SRV" @
-JournalTypeEnum.LeaveBody: "Leave Body" @
-JournalTypeEnum.Liftoff: "Liftoff" @
-JournalTypeEnum.LoadGame: "Load Game" @
-JournalTypeEnum.Loadout: "Loadout" @
-JournalTypeEnum.Location: "Location" @
-JournalTypeEnum.Market: "Market" @
-JournalTypeEnum.MarketBuy: "Market Buy" @
-JournalTypeEnum.MarketSell: "Market Sell" @
-JournalTypeEnum.MaterialCollected: "Material Collected" @
-JournalTypeEnum.MaterialDiscarded: "Material Discarded" @
-JournalTypeEnum.MaterialDiscovered: "Material Discovered" @
-JournalTypeEnum.MaterialTrade: "Material Trade" @
-JournalTypeEnum.Materials: "Materials" @
-JournalTypeEnum.MiningRefined: "Mining Refined" @
-JournalTypeEnum.Missions: "Missions" @
-JournalTypeEnum.MissionAbandoned: "Mission Abandoned" @
-JournalTypeEnum.MissionAccepted: "Mission Accepted" @
-JournalTypeEnum.MissionCompleted: "Mission Completed" @
-JournalTypeEnum.MissionFailed: "Mission Failed" @
-JournalTypeEnum.MissionRedirected: "Mission Redirected" @
-JournalTypeEnum.ModuleInfo: "Module Info" @
-JournalTypeEnum.ModuleBuy: "Module Buy" @
-JournalTypeEnum.ModuleRetrieve: "Module Retrieve" @
-JournalTypeEnum.ModuleSell: "Module Sell" @
-JournalTypeEnum.ModuleStore: "Module Store" @
-JournalTypeEnum.ModuleSwap: "Module Swap" @
-JournalTypeEnum.Music: "Music" @
-JournalTypeEnum.NavBeaconScan: "Nav Beacon Scan" @
-JournalTypeEnum.NewCommander: "New Commander" @
-JournalTypeEnum.NpcCrewPaidWage: "Npc Crew Paid Wage" @
-JournalTypeEnum.NpcCrewRank: "Npc Crew Rank" @
-JournalTypeEnum.Outfitting: "Outfitting" @
-JournalTypeEnum.Passengers: "Passengers" @
-JournalTypeEnum.PayFines: "Pay Fines" @
-JournalTypeEnum.PayBounties: "Pay Bounties" @
-JournalTypeEnum.PayLegacyFines: "Pay Legacy Fines" @
+JournalTypeEnum.EngineerProgress: "Engineer Progress" => "Postęp Inżyniera"
+JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" => "Uniknięcie Przechwycenia"
+JournalTypeEnum.FactionKillBond: "Faction Kill Bond" => "Obligacja Wojenna Frakcji"
+JournalTypeEnum.FSDJump: "FSD Jump" => "Skok FSD"
+JournalTypeEnum.FuelScoop: "Fuel Scoop" => "Czerpanie Paliwa"
+JournalTypeEnum.Fileheader: "Fileheader" => "Nagłówek Pliku"
+JournalTypeEnum.FighterDestroyed: "Fighter Destroyed" => "Myśliwiec Zniszczony"
+JournalTypeEnum.FighterRebuilt: "Fighter Rebuilt" => "Odbudowano Myśliwiec"
+JournalTypeEnum.Friends: "Friends" => "Znajomi"
+JournalTypeEnum.HeatDamage: "Heat Damage" => "Uszkodzenie od Przegrzania"
+JournalTypeEnum.HeatWarning: "Heat Warning" => "Ostrzeżenie o Przegrzaniu"
+JournalTypeEnum.HullDamage: "Hull Damage" => "Uszkodzenie Poszycia"
+JournalTypeEnum.Interdicted: "Interdicted" => "Przechwycenie Twojego Statku"
+JournalTypeEnum.Interdiction: "Interdiction" => "Przechwycenie Innego Statku"
+JournalTypeEnum.JetConeBoost: "Jet Cone Boost" => "Doładowanie w Stożku Gwiazdy Neutronowej"
+JournalTypeEnum.JetConeDamage: "Jet Cone Damage" => "Uszkodzenia od Gwiazdy Neutronowej"
+JournalTypeEnum.JoinACrew: "Join A Crew" => "Dołączenie do Załogi"
+JournalTypeEnum.KickCrewMember: "Kick Crew Member" => "Wyrzucenie Członka Załogi"
+JournalTypeEnum.LaunchDrone: "Launch Drone" => "Wystrzelenie Dronu"
+JournalTypeEnum.LaunchFighter: "Launch Fighter" => "Start Myśliwca"
+JournalTypeEnum.LaunchSRV: "Launch SRV" => "Uruchomienie SRV"
+JournalTypeEnum.LeaveBody: "Leave Body" => "Opuszczenie Obiektu"
+JournalTypeEnum.Liftoff: "Liftoff" => "Odlot"
+JournalTypeEnum.LoadGame: "Load Game" => "Wczytanie Gry"
+JournalTypeEnum.Loadout: "Loadout" => "Wyposażenie"
+JournalTypeEnum.Location: "Location" => "Lokalizacja"
+JournalTypeEnum.Market: "Market" => "Rynek"
+JournalTypeEnum.MarketBuy: "Market Buy" => "Kupno na Rynku"
+JournalTypeEnum.MarketSell: "Market Sell" => "Sprzedaż na Rynku"
+JournalTypeEnum.MaterialCollected: "Material Collected" => "Zebrano Materiał"
+JournalTypeEnum.MaterialDiscarded: "Material Discarded" => "Odrzucono Materiał"
+JournalTypeEnum.MaterialDiscovered: "Material Discovered" => "Odkryto Materiał"
+JournalTypeEnum.MaterialTrade: "Material Trade" => "Handel Materiałami"
+JournalTypeEnum.Materials: "Materials" => "Materiały"
+JournalTypeEnum.MiningRefined: "Mining Refined" => "Przetworzono Rudę"
+JournalTypeEnum.Missions: "Missions" => "Misje"
+JournalTypeEnum.MissionAbandoned: "Mission Abandoned" => "Porzucono Misję"
+JournalTypeEnum.MissionAccepted: "Mission Accepted" => "Przyjęto Misję"
+JournalTypeEnum.MissionCompleted: "Mission Completed" => "Ukończono Misję"
+JournalTypeEnum.MissionFailed: "Mission Failed" => "Misja Nie Powiodła Się"
+JournalTypeEnum.MissionRedirected: "Mission Redirected" => "Zmiana Celu Misji"
+JournalTypeEnum.ModuleInfo: "Module Info" => "Informacje o Modułach"
+JournalTypeEnum.ModuleBuy: "Module Buy" => "Kupno Modułu"
+JournalTypeEnum.ModuleRetrieve: "Module Retrieve" => "Odebranie Modułu z Przechowalni"
+JournalTypeEnum.ModuleSell: "Module Sell" => "Sprzedaż Modułu"
+JournalTypeEnum.ModuleStore: "Module Store" => "Przechowanie Modułu"
+JournalTypeEnum.ModuleSwap: "Module Swap" => "Zamiana Modułów"
+JournalTypeEnum.Music: "Music" => "Muzyka"
+JournalTypeEnum.NavBeaconScan: "Nav Beacon Scan" => "Skan Przekaźnika Nawigacyjnego"
+JournalTypeEnum.NewCommander: "New Commander" => "Nowy Dowódca"
+JournalTypeEnum.NpcCrewPaidWage: "Npc Crew Paid Wage" => "Wypłata Załogi NPC"
+JournalTypeEnum.NpcCrewRank: "Npc Crew Rank" => "Ranga Załogi NPC"
+JournalTypeEnum.Outfitting: "Outfitting" => "Wyposażenie"
+JournalTypeEnum.Passengers: "Passengers" => "Pasażerowie"
+JournalTypeEnum.PayFines: "Pay Fines" => "Zapłacono Karę"
+JournalTypeEnum.PayBounties: "Pay Bounties" => "Zapłacono Wyznaczoną Nagrodę"
+JournalTypeEnum.PayLegacyFines: "Pay Legacy Fines" => "Zapłacono Poprzednie Kary"
 JournalTypeEnum.Powerplay: "Powerplay" @
 JournalTypeEnum.PowerplayCollect: "Powerplay Collect" @
 JournalTypeEnum.PowerplayDefect: "Powerplay Defect" @
@@ -111,73 +111,73 @@ JournalTypeEnum.PowerplayLeave: "Powerplay Leave" @
 JournalTypeEnum.PowerplaySalary: "Powerplay Salary" @
 JournalTypeEnum.PowerplayVote: "Powerplay Vote" @
 JournalTypeEnum.PowerplayVoucher: "Powerplay Voucher" @
-JournalTypeEnum.Progress: "Progress" @
-JournalTypeEnum.Promotion: "Promotion" @
-JournalTypeEnum.PVPKill: "PVP Kill" @
-JournalTypeEnum.QuitACrew: "Quit A Crew" @
-JournalTypeEnum.Rank: "Rank" @
+JournalTypeEnum.Progress: "Progress" => "Postęp"
+JournalTypeEnum.Promotion: "Promotion" => "Awans"
+JournalTypeEnum.PVPKill: "PVP Kill" => "Zabójstwo PvP"
+JournalTypeEnum.QuitACrew: "Quit A Crew" => "Opuszczenie Załogi"
+JournalTypeEnum.Rank: "Rank" => "Ranga"
 JournalTypeEnum.RebootRepair: "Reboot Repair" @
-JournalTypeEnum.ReceiveText: "Receive Text" @
-JournalTypeEnum.RedeemVoucher: "Redeem Voucher" @
-JournalTypeEnum.RefuelAll: "Refuel All" @
-JournalTypeEnum.RefuelPartial: "Refuel Partial" @
-JournalTypeEnum.Repair: "Repair" @
-JournalTypeEnum.RepairAll: "Repair All" @
-JournalTypeEnum.RepairDrone: "Repair Drone" @
-JournalTypeEnum.Reputation: "Reputation" @
+JournalTypeEnum.ReceiveText: "Receive Text" => "Otrzymanie Wiadomości"
+JournalTypeEnum.RedeemVoucher: "Redeem Voucher" => "Odebranie Nagrody"
+JournalTypeEnum.RefuelAll: "Refuel All" => "Tankowanie do Pełna"
+JournalTypeEnum.RefuelPartial: "Refuel Partial" => "Tankowanie Częściowe"
+JournalTypeEnum.Repair: "Repair" => "Naprawa"
+JournalTypeEnum.RepairAll: "Repair All" => "Naprawa Całkowita"
+JournalTypeEnum.RepairDrone: "Repair Drone" => "Dron Naprawczy"
+JournalTypeEnum.Reputation: "Reputation" => "Reputacja"
 JournalTypeEnum.RestockVehicle: "Restock Vehicle" @
-JournalTypeEnum.Resurrect: "Resurrect" @
-JournalTypeEnum.Scan: "Scan" @
-JournalTypeEnum.Scanned: "Scanned" @
-JournalTypeEnum.ScientificResearch: "Scientific Research" @
-JournalTypeEnum.Screenshot: "Screenshot" @
-JournalTypeEnum.SearchAndRescue: "Search And Rescue" @
-JournalTypeEnum.SelfDestruct: "Self Destruct" @
-JournalTypeEnum.SellDrones: "Sell Drones" @
-JournalTypeEnum.SellExplorationData: "Sell Exploration Data" @
+JournalTypeEnum.Resurrect: "Resurrect" => "Wskrzeszenie"
+JournalTypeEnum.Scan: "Scan" => "Skan"
+JournalTypeEnum.Scanned: "Scanned" => "Skanowanie przez Inny Statek"
+JournalTypeEnum.ScientificResearch: "Scientific Research" => "Badania Naukowe"
+JournalTypeEnum.Screenshot: "Screenshot" => "Zrzut Ekranu"
+JournalTypeEnum.SearchAndRescue: "Search And Rescue" => "Poszukiwania i Ratunek"
+JournalTypeEnum.SelfDestruct: "Self Destruct" => "Autodestrukcja"
+JournalTypeEnum.SellDrones: "Sell Drones" => "Sprzedaż Dronów"
+JournalTypeEnum.SellExplorationData: "Sell Exploration Data" => "Sprzedaż Danych z Eksploracji"
 JournalTypeEnum.SellShipOnRebuy: "Sell Ship On Rebuy" @
-JournalTypeEnum.SendText: "Send Text" @
-JournalTypeEnum.SetUserShipName: "Set User Ship Name" @
-JournalTypeEnum.ShieldState: "Shield State" @
-JournalTypeEnum.Shipyard: "Shipyard" @
-JournalTypeEnum.ShipyardBuy: "Shipyard Buy" @
-JournalTypeEnum.ShipyardNew: "Shipyard New" @
-JournalTypeEnum.ShipyardSell: "Shipyard Sell" @
-JournalTypeEnum.ShipyardSwap: "Shipyard Swap" @
-JournalTypeEnum.ShipyardTransfer: "Shipyard Transfer" @
-JournalTypeEnum.ShipTargeted: "Ship Targeted" @
-JournalTypeEnum.Shutdown: "Shutdown" @
-JournalTypeEnum.SRVDestroyed: "SRV Destroyed" @
-JournalTypeEnum.StartJump: "Start Jump" @
-JournalTypeEnum.StoredModules: "Stored Modules" @
-JournalTypeEnum.StoredShips: "Stored Ships" @
-JournalTypeEnum.Statistics: "Statistics" @
+JournalTypeEnum.SendText: "Send Text" => "Wysłanie Wiadomości"
+JournalTypeEnum.SetUserShipName: "Set User Ship Name" => "Ustawienie Nazwy Statku"
+JournalTypeEnum.ShieldState: "Shield State" => "Stan Osłon"
+JournalTypeEnum.Shipyard: "Shipyard" => "Stocznia"
+JournalTypeEnum.ShipyardBuy: "Shipyard Buy" => "Kupno Statku"
+JournalTypeEnum.ShipyardNew: "Shipyard New" => "Nowy Statek"
+JournalTypeEnum.ShipyardSell: "Shipyard Sell" => "Sprzedaż Statku"
+JournalTypeEnum.ShipyardSwap: "Shipyard Swap" => "Zamiana Statku"
+JournalTypeEnum.ShipyardTransfer: "Shipyard Transfer" => "Przeniesienie Statku"
+JournalTypeEnum.ShipTargeted: "Ship Targeted" => "Namierzenie Statku"
+JournalTypeEnum.Shutdown: "Shutdown" => "Wyjście z Gry"
+JournalTypeEnum.SRVDestroyed: "SRV Destroyed" => "SRV Zniszczony"
+JournalTypeEnum.StartJump: "Start Jump" => "Rozpoczęcie Skoku"
+JournalTypeEnum.StoredModules: "Stored Modules" => "Przechowano Moduły"
+JournalTypeEnum.StoredShips: "Stored Ships" => "Przechowano Statki"
+JournalTypeEnum.Statistics: "Statistics" => "Statystyki"
 JournalTypeEnum.SupercruiseEntry: "Supercruise Entry" @
 JournalTypeEnum.SupercruiseExit: "Supercruise Exit" @
-JournalTypeEnum.Synthesis: "Synthesis" @
-JournalTypeEnum.SystemsShutdown: "Systems Shutdown" @
-JournalTypeEnum.TechnologyBroker: "Technology Broker" @
-JournalTypeEnum.Touchdown: "Touchdown" @
-JournalTypeEnum.UnderAttack: "Under Attack" @
-JournalTypeEnum.Undocked: "Undocked" @
-JournalTypeEnum.USSDrop: "USS Drop" @
-JournalTypeEnum.VehicleSwitch: "Vehicle Switch" @
+JournalTypeEnum.Synthesis: "Synthesis" => "Synteza"
+JournalTypeEnum.SystemsShutdown: "Systems Shutdown" => "Wyłączenie Systemów Statku"
+JournalTypeEnum.TechnologyBroker: "Technology Broker" => "Pośrednik Technologii"
+JournalTypeEnum.Touchdown: "Touchdown" => "Wylądowanie"
+JournalTypeEnum.UnderAttack: "Under Attack" => "Pod Ostrzałem"
+JournalTypeEnum.Undocked: "Undocked" => "Oddokowanie"
+JournalTypeEnum.USSDrop: "USS Drop" => "Podchodzenie do Źródła Sygnału"
+JournalTypeEnum.VehicleSwitch: "Vehicle Switch" => "Zamiana Pojazdów"
 JournalTypeEnum.WingAdd: "Wing Add" @
 JournalTypeEnum.WingInvite: "Wing Invite" @
 JournalTypeEnum.WingJoin: "Wing Join" @
 JournalTypeEnum.WingLeave: "Wing Leave" @
-JournalTypeEnum.ModuleSellRemote: "Module Sell Remote" @
-JournalTypeEnum.FetchRemoteModule: "Fetch Remote Module" @
-JournalTypeEnum.MassModuleStore: "Mass Module Store" @
+JournalTypeEnum.ModuleSellRemote: "Module Sell Remote" => "Zdalna Sprzedaż Modułu"
+JournalTypeEnum.FetchRemoteModule: "Fetch Remote Module" => "Przesyłka Modułu"
+JournalTypeEnum.MassModuleStore: "Mass Module Store" => "Przechowanie Wielu Modułów"
 JournalTypeEnum.DatalinkVoucher: "Datalink Voucher" @
-JournalTypeEnum.DataScanned: "Data Scanned" @
-JournalTypeEnum.CommunityGoalDiscard: "Community Goal Discard" @
-JournalTypeEnum.CrewLaunchFighter: "Crew Launch Fighter" @
-JournalTypeEnum.CrewMemberJoins: "Crew Member Joins" @
-JournalTypeEnum.CrewMemberQuits: "Crew Member Quits" @
-JournalTypeEnum.CrewMemberRoleChange: "Crew Member Role Change" @
+JournalTypeEnum.DataScanned: "Data Scanned" => "Skan Danych"
+JournalTypeEnum.CommunityGoalDiscard: "Community Goal Discard" => "Porzucenie Celu Społeczności"
+JournalTypeEnum.CrewLaunchFighter: "Crew Launch Fighter" => "Start Myśliwca Załogi"
+JournalTypeEnum.CrewMemberJoins: "Crew Member Joins" => "Dołączył Członek Załogi"
+JournalTypeEnum.CrewMemberQuits: "Crew Member Quits" => "Członek Opuścił Załogę"
+JournalTypeEnum.CrewMemberRoleChange: "Crew Member Role Change" => "Zmiana Roli Członka Załogi"
 JournalTypeEnum.EDDItemSet: "EDD Item Set" @
-JournalTypeEnum.EDDCommodityPrices: "EDD Commodity Prices" @
+JournalTypeEnum.EDDCommodityPrices: "EDD Commodity Prices" => "Ceny Towarów EDD"
 JournalTypeEnum.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
 JournalTypeEnum.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
 JournalTypeEnum.RestockVehicle_SRV: "Restock Vehicle_SRV" @
