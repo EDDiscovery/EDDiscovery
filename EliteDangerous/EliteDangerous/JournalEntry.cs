@@ -238,8 +238,6 @@ namespace EliteDangerousCore
         ShieldState_ShieldsDown = 10831,
         VehicleSwitch_Mothership = 10950,
         VehicleSwitch_Fighter = 10951,
-        EngineerContribution_Unknown = 10235,
-        EngineerContribution_MatCommod = 10236,
     }
 
     public enum SyncFlags
