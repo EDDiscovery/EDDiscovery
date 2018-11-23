@@ -682,6 +682,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Journal\DisbandedSquadron.png" />
+    <EmbeddedResource Include="Journal\AppliedToSquadron.png" />
+    <EmbeddedResource Include="Journal\InvitedToSquadron.png" />
+    <EmbeddedResource Include="Journal\JoinedSquadron.png" />
+    <EmbeddedResource Include="Journal\KickedFromSquadron.png" />
+    <EmbeddedResource Include="Journal\LeftSquadron.png" />
+    <EmbeddedResource Include="Journal\SharedBookmarkToSquadron.png" />
+    <EmbeddedResource Include="Journal\SquadronCreated.png" />
+    <EmbeddedResource Include="Journal\SquadronDemotion.png" />
+    <EmbeddedResource Include="Journal\SquadronPromotion.png" />
+    <EmbeddedResource Include="Journal\WonATrophyForSquadron.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
