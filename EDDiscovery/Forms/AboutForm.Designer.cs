@@ -85,16 +85,16 @@ namespace EDDiscovery.Forms
             this.labelDevelopersEnum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopersEnum.BackColor = System.Drawing.Color.Transparent;
-            this.labelDevelopersEnum.Location = new System.Drawing.Point(437, 57);
+            this.labelDevelopersEnum.Location = new System.Drawing.Point(603, 57);
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
-            this.labelDevelopersEnum.Size = new System.Drawing.Size(203, 159);
+            this.labelDevelopersEnum.Size = new System.Drawing.Size(203, 259);
             this.labelDevelopersEnum.TabIndex = 3;
             this.labelDevelopersEnum.Text = resources.GetString("labelDevelopersEnum.Text");
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(565, 396);
+            this.buttonOK.Location = new System.Drawing.Point(731, 496);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 6;
@@ -113,7 +113,7 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
             this.textBoxLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicense.Size = new System.Drawing.Size(419, 156);
+            this.textBoxLicense.Size = new System.Drawing.Size(585, 256);
             this.textBoxLicense.TabIndex = 1;
             this.textBoxLicense.Text = resources.GetString("textBoxLicense.Text");
             // 
@@ -130,7 +130,7 @@ namespace EDDiscovery.Forms
             this.panelLinks.Controls.Add(this.linkLabelEDDB);
             this.panelLinks.Controls.Add(this.linkLabelEliteDangerous);
             this.panelLinks.Controls.Add(this.labelLinks);
-            this.panelLinks.Location = new System.Drawing.Point(430, 219);
+            this.panelLinks.Location = new System.Drawing.Point(596, 319);
             this.panelLinks.Name = "panelLinks";
             this.panelLinks.Size = new System.Drawing.Size(210, 171);
             this.panelLinks.TabIndex = 5;
@@ -257,7 +257,7 @@ namespace EDDiscovery.Forms
             this.labelDevelopers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopers.AutoSize = true;
             this.labelDevelopers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDevelopers.Location = new System.Drawing.Point(436, 19);
+            this.labelDevelopers.Location = new System.Drawing.Point(602, 19);
             this.labelDevelopers.Name = "labelDevelopers";
             this.labelDevelopers.Size = new System.Drawing.Size(106, 24);
             this.labelDevelopers.TabIndex = 7;
@@ -271,12 +271,12 @@ namespace EDDiscovery.Forms
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.labelNoAffiliation, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.panelLogo, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 220);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 320);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(401, 200);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 200);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // labelNoAffiliation
@@ -284,7 +284,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelNoAffiliation.Location = new System.Drawing.Point(3, 170);
             this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Size = new System.Drawing.Size(395, 30);
+            this.labelNoAffiliation.Size = new System.Drawing.Size(561, 30);
             this.labelNoAffiliation.TabIndex = 12;
             this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.\r\nFree Advanced Inst" +
     "aller License for Open-Source";
@@ -297,7 +297,7 @@ namespace EDDiscovery.Forms
             this.panelLogo.Location = new System.Drawing.Point(3, 3);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
-            this.panelLogo.Size = new System.Drawing.Size(395, 164);
+            this.panelLogo.Size = new System.Drawing.Size(561, 164);
             this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.panelLogo.TabIndex = 14;
             this.panelLogo.TabStop = false;
@@ -308,7 +308,7 @@ namespace EDDiscovery.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(659, 431);
+            this.ClientSize = new System.Drawing.Size(825, 531);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.labelDevelopers);
             this.Controls.Add(this.panelLinks);
