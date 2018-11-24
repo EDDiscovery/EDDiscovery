@@ -150,7 +150,6 @@
     <Compile Include="Inara\InaraSync.cs" />
     <Compile Include="JournalEvents\JournalCodexEntry.cs" />
     <Compile Include="JournalEvents\JournalSquadrons.cs" />
-    <Compile Include="JournalEvents\JournalCargoDepot.cs" />
     <Compile Include="JournalEvents\JournalPowerplay.cs" />
     <Compile Include="JournalEvents\JournalTechnologyBroker.cs" />
     <Compile Include="JournalEvents\JournalReputation.cs" />
@@ -171,14 +170,13 @@
     <Compile Include="JournalEvents\JournalDocking.cs" />
     <Compile Include="JournalEvents\JournalEDD.cs" />
     <Compile Include="JournalEvents\JournalEngineer.cs" />
-    <Compile Include="JournalEvents\JournalFSD.cs" />
     <Compile Include="JournalEvents\JournalFileheaderLoadgameShutdown.cs" />
     <Compile Include="JournalEvents\JournalFriends.cs" />
     <Compile Include="JournalEvents\JournalHeatHullDamage.cs" />
     <Compile Include="JournalEvents\JournalInterdicted.cs" />
     <Compile Include="JournalEvents\JournalJetCone.cs" />
     <Compile Include="JournalEvents\JournalLiftoffTouchdown.cs" />
-    <Compile Include="JournalEvents\JournalLocation.cs" />
+    <Compile Include="JournalEvents\JournalFSDLocation.cs" />
     <Compile Include="JournalEvents\JournalMarket.cs" />
     <Compile Include="JournalEvents\JournalMissions.cs" />
     <Compile Include="JournalEvents\JournalShipyard.cs" />
@@ -216,7 +214,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="EliteDangerous\UIEvents.cs" />
+    <Compile Include="UIEvents\UIFuel.cs" />
+    <Compile Include="UIEvents\UINightVision.cs" />
+    <Compile Include="UIEvents\UIHUDInAnalysisMode.cs" />
     <Compile Include="UIEvents\UIFireGroup.cs" />
+    <Compile Include="UIEvents\UICargo.cs" />
     <Compile Include="UIEvents\UIPosition.cs" />
     <Compile Include="UIEvents\UIPips.cs" />
     <Compile Include="UIEvents\UIJournalMusic.cs" />

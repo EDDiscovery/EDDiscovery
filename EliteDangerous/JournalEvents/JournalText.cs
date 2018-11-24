@@ -56,7 +56,7 @@ namespace EliteDangerousCore.JournalEvents
         public string FromLocalised { get; set; }
         public string Message { get; set; }
         public string MessageLocalised { get; set; }
-        public string Channel { get; set; }
+        public string Channel { get; set; }         // wing/local/voicechat/friend/player/npc : 3.3 adds squadron/starsystem
 
         public override void FillInformation(out string info, out string detailed)
         {

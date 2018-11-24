@@ -108,7 +108,6 @@
     <EmbeddedResource Include="Journal\EjectCargo.png" />
     <EmbeddedResource Include="Journal\EndCrewSession.png" />
     <EmbeddedResource Include="Journal\EngineerApply.png" />
-    <EmbeddedResource Include="Journal\EngineerContribution.png" />
     <EmbeddedResource Include="Journal\EngineerCraft.png" />
     <EmbeddedResource Include="Journal\EngineerProgress.png" />
     <EmbeddedResource Include="Journal\EscapeInterdiction.png" />
@@ -370,8 +369,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Journal\AfmuRepair.png" />
-    <EmbeddedResource Include="Journal\EngineerContribution_MatCommod.png" />
-    <EmbeddedResource Include="Journal\EngineerContribution_Unknown.png" />
+    <EmbeddedResource Include="Journal\EngineerContribution.png" />
     <EmbeddedResource Include="Journal\FuelScope.png" />
     <EmbeddedResource Include="Journal\VehicleSwitch_Fighter.png" />
     <EmbeddedResource Include="Journal\VehicleSwitch_Mothership.png" />
@@ -682,6 +680,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Panels\GroupMarker.png" />
+    <EmbeddedResource Include="Journal\CodexEntry.png" />
+    <EmbeddedResource Include="Journal\SAAScanComplete.png" />
+    <EmbeddedResource Include="Journal\PayBounties.png" />
+    <EmbeddedResource Include="Journal\MultiSellExplorationData.png" />
+    <EmbeddedResource Include="Journal\FSSSignalDiscovered.png" />
+    <EmbeddedResource Include="Journal\FSSDiscoveryScan.png" />
+    <EmbeddedResource Include="Journal\FSSAllBodiesFound.png" />
+    <EmbeddedResource Include="Journal\FSDTarget.png" />
+    <EmbeddedResource Include="Journal\AsteroidCracked.png" />
+    <EmbeddedResource Include="Journal\DisbandedSquadron.png" />
+    <EmbeddedResource Include="Journal\AppliedToSquadron.png" />
+    <EmbeddedResource Include="Journal\InvitedToSquadron.png" />
+    <EmbeddedResource Include="Journal\JoinedSquadron.png" />
+    <EmbeddedResource Include="Journal\KickedFromSquadron.png" />
+    <EmbeddedResource Include="Journal\LeftSquadron.png" />
+    <EmbeddedResource Include="Journal\SharedBookmarkToSquadron.png" />
+    <EmbeddedResource Include="Journal\SquadronCreated.png" />
+    <EmbeddedResource Include="Journal\SquadronDemotion.png" />
+    <EmbeddedResource Include="Journal\SquadronPromotion.png" />
+    <EmbeddedResource Include="Journal\WonATrophyForSquadron.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">

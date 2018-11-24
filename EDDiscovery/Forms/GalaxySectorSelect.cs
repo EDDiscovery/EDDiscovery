@@ -54,7 +54,7 @@ namespace EDDiscovery.Forms
         public List<int> AllRemoveSectors;          // For remove, all sectors not wanted
         public List<int> Removed;                   // For remove, new sectors not wanted
 
-        List<Tuple<string, string>> defaultsel = new List<Tuple<string, string>>()
+        private static List<Tuple<string, string>> DefaultGalaxyOptions = new List<Tuple<string, string>>()
         {
             new Tuple<string,string>("Custom".Tx(typeof(GalaxySectorSelect)),""),
             new Tuple<string,string>("Reset".Tx(typeof(GalaxySectorSelect)),"Reset"),
@@ -85,7 +85,7 @@ namespace EDDiscovery.Forms
                     imageViewer.ZoomToFit();
                     imageViewer.Init(galaxy);
 
-                    comboBoxSelections.Items.AddRange((from x in defaultsel select x.Item1));
+                    comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
                     initialsel = Selection = cellset;
                     initiallist = new List<int>(imageViewer.Selection);     // copy of..
@@ -111,7 +111,7 @@ namespace EDDiscovery.Forms
         {
             string sel = Selection;
             comboBoxSelections.Enabled = false;
-            int index = defaultsel.FindIndex(x => x.Item2 == sel);
+            int index = DefaultGalaxyOptions.FindIndex(x => x.Item2 == sel);
             if (index != -1)
                 comboBoxSelections.SelectedIndex = index;
             else
@@ -124,7 +124,7 @@ namespace EDDiscovery.Forms
             if (comboBoxSelections.Enabled)
             {
                 int selitem = comboBoxSelections.SelectedIndex;
-                string sel = defaultsel[selitem].Item2;
+                string sel = DefaultGalaxyOptions[selitem].Item2;
                 if (sel == "Reset")
                     Selection = initialsel;
                 else if ( sel != "Custom")
@@ -221,7 +221,50 @@ namespace EDDiscovery.Forms
         {
             OnCaptionMouseUp((Control)sender, e);
         }
+
+        // Present a menu to ask how much data to download..
+
+        public static Tuple<string,string> SelectGalaxyMenu(Form parent)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            Type t = typeof(GalaxySectorSelect);
+
+            var list = DefaultGalaxyOptions.Where(x => x.Item1 != "Custom" && x.Item1 != "Reset").Select(x => x.Item1).ToList();
+
+            int width = 700;
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".Tx(t,"GALSELEX"), 
+                            new Point(10, 30), new Size(width-30, 60), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".Tx(t), new Point(10, 100), new Size(160, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",
+                        new Point(180, 100), new Size(width-180-20, 24),
+                        "Enter number to jump to or near to".Tx(t, "GALSELEN"), list));
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width-20-80, 140), new Size(80, 24), "Press to Accept".Tx(t)));
+
+            //f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(t)));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                {
+                    f.DialogResult = DialogResult.OK;
+                    f.Close();
+                }
+            };
+            
+            DialogResult res = f.ShowDialog(parent, parent.Icon, new Size(width, 200), new Point(-999, -999), "Select EDSM Galaxy Data".Tx(t, "GALSELTitle"));
+
+            string sel = f.Get("Entry");
+            int index = DefaultGalaxyOptions.FindIndex((x) => { return x.Item1 == sel; });
+            return DefaultGalaxyOptions[ index ];
+
+        }
+
     }
+
+    /// 
+    /// Image view grid
+    /// 
 
     public class ImageViewerWithGrid : ExtendedControls.ImageViewer
     {
@@ -422,5 +465,7 @@ namespace EDDiscovery.Forms
             rightclickcell = -1;
             base.OnMouseUp(e);
         }
+
+
     }
 }

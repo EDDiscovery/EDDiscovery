@@ -139,10 +139,10 @@ namespace EDDiscovery.UserControls
             MissionList ml = last_he?.MissionList;
 
             DataGridViewColumn sortcolprev = dataGridViewPrevious.SortedColumn != null ? dataGridViewPrevious.SortedColumn : dataGridViewPrevious.Columns[1];
-            SortOrder sortorderprev = dataGridViewPrevious.SortOrder;
+            SortOrder sortorderprev = dataGridViewPrevious.SortedColumn != null ? dataGridViewPrevious.SortOrder : SortOrder.Descending;
 
             DataGridViewColumn sortcolcur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortedColumn : dataGridViewCurrent.Columns[1];
-            SortOrder sortordercur = dataGridViewCurrent.SortOrder;
+            SortOrder sortordercur = dataGridViewCurrent.SortedColumn != null ? dataGridViewCurrent.SortOrder : SortOrder.Descending;
 
             dataGridViewCurrent.Rows.Clear();
             dataGridViewPrevious.Rows.Clear();

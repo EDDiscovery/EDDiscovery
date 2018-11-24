@@ -19,12 +19,6 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
-    //When Written: when applying an engineer’s upgrade to a module
-    //Parameters:
-    //•	Engineer: name of engineer
-    //•	Blueprint: blueprint being applied
-    //•	Level: crafting level
-    //•	Override: whether overriding special effect
     [JournalEntryType(JournalTypeEnum.EngineerApply)]
     public class JournalEngineerApply : JournalEntry
     {
@@ -58,11 +52,6 @@ namespace EliteDangerousCore.JournalEvents
             EngineerID = evt["EngineerID"].LongNull();
             Type = evt["Type"].Str();
 
-            if (Type.Equals("Commodity") || Type.Equals("Materials") || Type.Equals("Credits") || Type.Equals("Bond") || Type.Equals("Bounty"))
-                unknownType = false;
-            else
-                unknownType = true;
-
             Commodity = evt["Commodity"].Str();
             Commodity = JournalFieldNaming.FDNameTranslation(Commodity);     // pre-mangle to latest names, in case we are reading old journal records
             FriendlyCommodity = MaterialCommodityData.GetNameByFDName(Commodity);
@@ -77,7 +66,6 @@ namespace EliteDangerousCore.JournalEvents
             TotalQuantity = evt["TotalQuantity"].Int();
         }
 
-        private bool unknownType;
         public string Engineer { get; set; }
         public long? EngineerID { get; set; }
         public string Type { get; set; }
@@ -107,14 +95,9 @@ namespace EliteDangerousCore.JournalEvents
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Engineer Contribution Credits", -Quantity);
         }
 
-        protected override JournalTypeEnum IconEventType { get { return unknownType ? JournalTypeEnum.EngineerContribution_Unknown : JournalTypeEnum.EngineerContribution_MatCommod; } }
-
         public override void FillInformation(out string info, out string detailed)
         {
-            if (unknownType == true)
-                info = "Report to EDDiscovery team an unknown EngineerContribution type: " + Type;
-            else
-                info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:".Txb(this), Type, "Commodity:".Txb(this), Commodity_Localised,
+            info = BaseUtils.FieldBuilder.Build("", Engineer, "Type:".Txb(this), Type, "Commodity:".Txb(this), Commodity_Localised,
                     "Material:".Txb(this), Material_Localised, "Quantity:".Txb(this), Quantity, "TotalQuantity:".Txb(this), TotalQuantity);
             detailed = "";
         }

@@ -125,7 +125,6 @@ namespace EDDiscovery
         public EDDiscoveryForm()
         {
             RestoreFormPositionRegKey = "Form";
-
             Controller = new EDDiscoveryController(() => theme.TextBlockColor, () => theme.TextBlockHighlightColor, 
                                                         () => theme.TextBlockSuccessColor, a => BeginInvoke(a));
 
@@ -332,6 +331,13 @@ namespace EDDiscovery
         // OnShown is called every time Show is called
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
+            if (EDDConfig.Instance.EDSMGridIDs == "Not Set")        // initial state
+            {
+                var ressel = GalaxySectorSelect.SelectGalaxyMenu(this);
+                EDDConfig.Instance.EDSMEDDBDownload = ressel.Item1 != "None";
+                EDDConfig.Instance.EDSMGridIDs = ressel.Item2;
+            }
+
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " EDF shown");
             Controller.PostInit_Shown();
 
