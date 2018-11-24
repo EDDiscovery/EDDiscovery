@@ -195,7 +195,7 @@ JournalTypeEnum.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
 ///////////////////////////////////////////////////// JournalBounty
 JournalEntry.LegBounty: "{0} total {1:N0}" => "{0} razem {1:N0}"
 JournalEntry.Target: "Target:" => "Cel:"
-JournalEntry.Victimfaction: "Victim faction:" => "Poszkodowana frakcja:"
+JournalEntry.Victimfaction: "Victim faction:" => "Frakcja Celu:"
 JournalEntry.Faction: "Faction:" => "Frakcja:"
 ///////////////////////////////////////////////////// JournalBuyDrones
 JournalEntry.Type: "Type:" => "Typ:"
@@ -214,12 +214,12 @@ JournalEntry.Cargo: "Cargo, {0} items" => "Ładunek, {0} przedmiotów"
 JournalEntry.items: "; items" => "; przedmioty"
 ///////////////////////////////////////////////////// JournalCargoDepot
 JournalEntry.Collected: "Collected:" => "Zebrano:"
-JournalEntry.of: "< of " => "< z "
+JournalEntry.of: "< of " => "< szt. "
 JournalEntry.Total: "Total:" => "Razem:"
 JournalEntry.Progress: "Progress:;%;N1" => "Postęp:;%;N1"
 JournalEntry.Delivered: "Delivered:" => "Dostarczono:"
 JournalEntry.Update: "Update, Collected:" => "Aktualizacja, Zebrano:"
-JournalEntry.ToGo: "To Go:" => "Pozostało:"
+JournalEntry.ToGo: "To Go:" => "Pozost.:"
 JournalEntry.ProgressLeft: "Progress Left:;%;N1" => "Pozostały Postęp:;%;N1"
 ///////////////////////////////////////////////////// JournalCollectCargo
 JournalEntry.Stolen: ";Stolen" => ";Kradzione"
@@ -228,7 +228,7 @@ JournalCommitCrime.Fine: " Fine {0:N0}" => "Kara {0:N0}"
 JournalCommitCrime.Bounty: " Bounty {0:N0}" => "Wyzn. Nagroda {0:N0}"
 JournalEntry.0: "{0} on {1}" => "{0} w {1}"
 JournalEntry.onfaction: "< on faction " => "< we frakcji "
-JournalEntry.Against: "Against " => "Przeciwko"
+JournalEntry.Against: "Against " => "Przeciwko "
 JournalEntry.Bounty: "Bounty:; cr;N0" => "Wyzn.Nagroda:; cr;N0"
 ///////////////////////////////////////////////////// JournalCommunityGoal
 CommunityGoal.Title: "Title:" => "Nazwa:"
@@ -328,7 +328,7 @@ JournalEntry.Online: "Online:" @
 JournalEntry.Offline: "Offline:" @
 ///////////////////////////////////////////////////// JournalFSDJump
 JournalFSDJump.Jumpto: "Jump to {0}" => "Skok do {0}"
-JournalFSDJump.Fuel: " Fuel " => " Paliwo "
+JournalFSDJump.Fuel: " Fuel " => " Zużyto paliwa "
 JournalFSDJump.left: " left " => " pozostało "
 JournalLocOrJump.Faction: "Faction:" => "Frakcja:"
 JournalLocOrJump.Wanted: "<;(Wanted) " => "<;(Poszukiwany) "
@@ -411,7 +411,7 @@ JournalEntry.Station: "Station:" => "Stacja:"
 JournalEntry.Commodity: "Commodity:" => "Towar:"
 JournalEntry.TargetFaction: "Target Faction:" => "Frakcja będąca Celem:"
 JournalEntry.Permits: "Permits:" => "Przepustki:"
-JournalEntry.Rewards: "Rewards:" => "Nagrody:"
+JournalEntry.Rewards: "Rewards:" => ", Nagrody:"
 ///////////////////////////////////////////////////// JournalMissionRedirected
 JournalEntry.Missionname: "Mission name:" => "Nazwa misji:"
 JournalMissionRedirected.From: "From:" => "Z:"
