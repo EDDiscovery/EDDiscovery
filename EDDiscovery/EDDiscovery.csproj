@@ -244,6 +244,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EDDProfiles.cs" />
+    <Compile Include="Installer.cs" />
+    <Compile Include="Notifications.cs" />
     <Compile Include="Properties\ExtraVersion.cs" />
     <Compile Include="ScreenShots\ScreenShotConfigureForm.cs">
       <SubType>Form</SubType>
