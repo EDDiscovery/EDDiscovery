@@ -553,11 +553,18 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
-                // Async load of maps in another thread
-                DownloadMaps(() => PendingClose);
+                bool check = true;
+#if DEBUG
+                check = EDDOptions.Instance.CheckGithubFilesInDebug;
+#endif 
+                if (check)      // not normall in debug, due to git hub chokeing
+                {
+                    // Async load of maps in another thread
+                    DownloadMaps(() => PendingClose);
 
-                // and Expedition data
-                DownloadExpeditions(() => PendingClose);
+                    // and Expedition data
+                    DownloadExpeditions(() => PendingClose);
+                }
 
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
