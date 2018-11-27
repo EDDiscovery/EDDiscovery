@@ -93,7 +93,6 @@ namespace EDDiscovery
             return notes;
         }
 
-
         static public Task CheckForNewNotifications(Action<List<Notification>> callbackinthread)
         {
             return Task.Factory.StartNew(() =>
