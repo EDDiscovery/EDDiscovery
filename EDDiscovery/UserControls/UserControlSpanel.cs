@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
         private List<int> columnpos;
 
         private Font displayfont;
-
+		
         HistoryList current_historylist;
 
         private Timer dividercheck = new Timer();
@@ -95,7 +95,12 @@ namespace EDDiscovery.UserControls
             public const long showNothingWhenSysmap = 1L << 34;
             public const long showNothingWhenGalmap = 1L << 35;
 			public const long showNoTitleWhenHidden = 1L << 36;
-        }
+			public const long showMetalRichZone = 1L << 40;
+			public const long showWaterWrldZone = 1L << 41;
+			public const long showEarthLikeZone = 1L << 42;
+			public const long showAmmonWrldZone = 1L << 43;
+			public const long showIcyPlanetZone = 1L << 44;
+		}
 
         long config = Configuration.showTargetLine | Configuration.showEDSMButton | Configuration.showIcon | 
                                                 Configuration.showTime | Configuration.showDescription |
@@ -131,7 +136,12 @@ namespace EDDiscovery.UserControls
             expandTextOverEmptyColumnsToolStripMenuItem.Checked = Config(Configuration.showExpandOverColumns);
             showNothingWhenDockedtoolStripMenuItem.Checked = Config(Configuration.showNothingWhenDocked);
             showSystemInformationToolStripMenuItem.Checked = Config(Configuration.showSystemInformation);
-            showHabitationMinimumAndMaximumDistanceToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
+            showCircumstellarZonesToolStripMenuItem.Checked = Config(Configuration.showHabInformation);
+			showMetalRichPlanetsToolStripMenuItem.Checked = Config(Configuration.showMetalRichZone);
+			showWaterWorldsToolStripMenuItem.Checked = Config(Configuration.showWaterWrldZone);
+			showEarthLikeToolStripMenuItem.Checked = Config(Configuration.showEarthLikeZone);
+			showAmmoniaWorldsToolStripMenuItem.Checked = Config(Configuration.showAmmonWrldZone);
+			showIcyPlanetsToolStripMenuItem.Checked = Config(Configuration.showIcyPlanetZone);
             dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalmap);
             dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSysmap);
 			completelyHideThePanelToolStripMenuItem.Checked = Config(Configuration.showNoTitleWhenHidden);
@@ -249,6 +259,7 @@ namespace EDDiscovery.UserControls
                 {
                     int rowpos = scanpostextoffset.Y;
                     int rowheight = Config(Configuration.showIcon) ? 26 : 20;
+					int habrowheight = Config(Configuration.showIcon) ? 26 : 20;
 
 					// Check if need to hide the UI
                     if (Config(Configuration.showNothingWhenDocked) && 
@@ -309,18 +320,62 @@ namespace EDDiscovery.UserControls
 
                             StarScan.SystemNode sn = scan.FindSystem(last.System, true);    // EDSM look up here..
 
-                            string res = null;
+                            StringBuilder res = new StringBuilder();
+
+							void expandRowHeight()
+							{
+								habrowheight += 20;
+							}
 
                             if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
                             {
                                 JournalScan js = sn.starnodes.Values[0].ScanData;
-                                res = js.HabZoneString().Replace("\r\n", " ");
+
+                                //res.AppendFormat(js.CircumstellarZonesString().Replace("\r\n", " "));
+
+								if (showCircumstellarZonesToolStripMenuItem.Checked)
+								{
+									res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+													 js.GetHabZoneStringLs(),
+													 (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
+													 (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
+								}
+
+								if (showMetalRichPlanetsToolStripMenuItem.Checked)
+								{
+									res.AppendFormat(js.MetalRichZoneString());
+									expandRowHeight();
+								}
+
+								if (showWaterWorldsToolStripMenuItem.Checked)
+								{
+									res.AppendFormat((js.WaterWorldZoneString()));
+									expandRowHeight();
+								}
+
+								if (showEarthLikeToolStripMenuItem.Checked)
+								{
+									res.AppendFormat(js.EarthLikeZoneString());
+									expandRowHeight();
+								}
+
+								if (showAmmoniaWorldsToolStripMenuItem.Checked)
+								{
+									res.AppendFormat(js.AmmoniaWorldZoneString());
+									expandRowHeight();
+								}
+
+								if (showIcyPlanetsToolStripMenuItem.Checked)
+								{
+									res.AppendFormat(js.IcyPlanetsZoneString());
+									expandRowHeight();
+								}
                             }
 
                             if (res != null)
                             {
-                                AddColText(0, 0, rowpos, rowheight, res, textcolour, backcolour, null);
-                                rowpos += rowheight;
+                                AddColText(0, 0, rowpos, habrowheight, res.ToString(), textcolour, backcolour, null);
+                                rowpos += habrowheight;
                             }
                         }
 
@@ -810,6 +865,31 @@ namespace EDDiscovery.UserControls
             FlipConfig(Configuration.showHabInformation, ((ToolStripMenuItem)sender).Checked, true);
         }
 
+		private void showMetalRichPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showMetalRichZone, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void showWaterWorldsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showWaterWrldZone, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void showEarthLikeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showEarthLikeZone, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void showAmmoniaWorldsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showAmmonWrldZone, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
+		private void showIcyPlanetsToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			FlipConfig(Configuration.showIcyPlanetZone, ((ToolStripMenuItem)sender).Checked, true);
+		}
+
         private void toolStripMenuItemTargetLine_Click(object sender, EventArgs e)
         {
             FlipConfig(Configuration.showTargetLine, ((ToolStripMenuItem)sender).Checked, true);
@@ -929,8 +1009,7 @@ namespace EDDiscovery.UserControls
         {
             SetSurfaceScanBehaviour(Configuration.showScanIndefinite);
         }
-
-
+		
         private void scanRightMenuItem_Click(object sender, EventArgs e)
         {
             SetScanPosition(Configuration.showScanRight);
@@ -1070,8 +1149,7 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist);
             }
         }
-
-
+		
 		#endregion
 	}
 }

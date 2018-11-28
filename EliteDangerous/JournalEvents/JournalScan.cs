@@ -51,6 +51,16 @@ namespace EliteDangerousCore.JournalEvents
         public double? nAge { get; set; }                           // direct
         public double? HabitableZoneInner { get; set; }             // calculated
         public double? HabitableZoneOuter { get; set; }             // calculated
+		public double? MetalRichZoneInner { get; set; }
+		public double? MetalRichZoneOuter { get; set; }
+		public double? WaterWrldZoneInner { get; set; }
+		public double? WaterWrldZoneOuter { get; set; }
+		public double? EarthLikeZoneInner { get; set; }
+		public double? EarthLikeZoneOuter { get; set; }
+		public double? AmmonWrldZoneInner { get; set; }
+		public double? AmmonWrldZoneOuter { get; set; }
+		public double? IcyPlanetZoneInner { get; set; }
+		public string IcyPlanetZoneOuter { get; set; }
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
@@ -230,9 +240,21 @@ namespace EliteDangerousCore.JournalEvents
 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
                 {
-                    HabitableZoneInner = DistanceForBlackBodyTemperature(315);
+					// values initially calculated by Jackie Silver (https://forums.frontier.co.uk/member.php/37962-Jackie-Silver)
+
+                    HabitableZoneInner = DistanceForBlackBodyTemperature(315); // this is the goldilocks zone, where is possible to expect to find planets with liquid water. 
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
-                }
+					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(solarRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
+					MetalRichZoneOuter = DistanceForBlackBodyTemperature(1100);
+					WaterWrldZoneInner = DistanceForBlackBodyTemperature(307);
+					WaterWrldZoneOuter = DistanceForBlackBodyTemperature(156);
+					EarthLikeZoneInner = DistanceForBlackBodyTemperature(281); // I enlarged a bit the range to fit my and other CMDRs discoveries.
+					EarthLikeZoneOuter = DistanceForBlackBodyTemperature(227);
+					AmmonWrldZoneInner = DistanceForBlackBodyTemperature(193);
+					AmmonWrldZoneOuter = DistanceForBlackBodyTemperature(117);
+					IcyPlanetZoneInner = DistanceForBlackBodyTemperature(150);
+					IcyPlanetZoneOuter = "\u221E"; // practically infinite, at least until the body suffer from the gravitational bond with its host star
+				}
             }
             else if (PlanetClass != null)
             {
@@ -509,10 +531,12 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n" + DisplayMaterials(2, historicmatlist , currentmatlist) + "\n");
             }
 
-            string habzonestring = HabZoneString();
-            if (habzonestring != null)
-                scanText.Append("\n" + habzonestring);
+            if (CircumstellarZonesString() != null)
+                scanText.Append("\n" + CircumstellarZonesString());
 
+			if (IsStar && HabZoneOtherStarsString() != null)
+				scanText.Append(HabZoneOtherStarsString());
+			
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
@@ -525,6 +549,7 @@ namespace EliteDangerousCore.JournalEvents
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
         }
 
+		// goldilocks zone
         public string GetHabZoneStringLs()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
@@ -537,21 +562,198 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public string HabZoneString()
+        public string CircumstellarZonesString()
         {
             if (IsStar && HabitableZoneInner.HasValue && HabitableZoneOuter.HasValue)
             {
                 StringBuilder habZone = new StringBuilder();
-                habZone.AppendFormat("Habitable Zone Approx. {0} ({1}-{2} AU)\n".Tx(this), GetHabZoneStringLs(),
-                                                                                  (HabitableZoneInner.Value / oneAU_LS).ToString("N2"), (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
-                if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
-                    habZone.AppendFormat(" (Others stars not considered)\n".Tx(this));
+
+				habZone.Append("Inferred Circumstellar zones:\n");
+
+				habZone.AppendFormat(" - Habitable Zone, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetHabZoneStringLs(),
+									 (HabitableZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (HabitableZoneOuter.Value / oneAU_LS).ToString("N2"));
+
+				habZone.AppendFormat(" - Metal Rich planets, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetMetalRichZoneStringLs(),
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Water Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetWaterWorldZoneStringLs(),
+									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Earth Like Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetEarthLikeZoneStringLs(),
+									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Ammonia Worlds, {0} ({1}-{2} AU),\n".Tx(this),
+									 GetAmmoniaWorldZoneStringLs(),
+									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"),
+									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				
+				habZone.AppendFormat(" - Icy Planets, {0} (from {1} AU)\n\n".Tx(this),
+									 GetIcyPlanetsZoneStringLs(),
+				(IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"));
 
                 return habZone.ToNullSafeString();
             }
             else
                 return null;
         }
+
+		// string which tell us that other stars are not considered in the habitable zone calculations.
+		public string HabZoneOtherStarsString()
+		{
+			StringBuilder habZoneAddend = new StringBuilder();
+			if (nSemiMajorAxis.HasValue && nSemiMajorAxis.Value > 0)
+				habZoneAddend.Append("(Others stars not considered)\n\n".Tx(this));
+			
+			return habZoneAddend.ToNullSafeString();
+		}
+
+		// metal rich zone
+		public string GetMetalRichZoneStringLs()
+		{
+			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
+			{
+				return $"{MetalRichZoneInner:N0}-{MetalRichZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string MetalRichZoneString()
+		{
+			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetMetalRichZoneStringLs(), 
+									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (MetalRichZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// water world zone
+		public string GetWaterWorldZoneStringLs()
+		{
+			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
+			{
+				return $"{WaterWrldZoneInner:N0}-{WaterWrldZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string WaterWorldZoneString()
+		{
+			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetWaterWorldZoneStringLs(), 
+									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// earth like world zone
+		public string GetEarthLikeZoneStringLs()
+		{
+			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
+			{
+				return $"{EarthLikeZoneInner:N0}-{EarthLikeZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string EarthLikeZoneString()
+		{
+			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetEarthLikeZoneStringLs(), 
+									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// ammonia world zone
+		public string GetAmmoniaWorldZoneStringLs()
+		{
+			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
+			{
+				return $"{AmmonWrldZoneInner:N0}-{AmmonWrldZoneOuter:N0}ls";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string AmmoniaWorldZoneString()
+		{
+			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+									 GetAmmoniaWorldZoneStringLs(), 
+									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
+									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
+
+		// icy planets zone
+		public string GetIcyPlanetsZoneStringLs()
+		{
+			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
+			{
+				return $"{IcyPlanetZoneInner:N0}ls to {IcyPlanetZoneOuter:N0}";
+			}
+			else
+			{
+				return string.Empty;
+			}
+		}
+
+		public string IcyPlanetsZoneString()
+		{
+			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
+			{
+				StringBuilder habZone = new StringBuilder();
+				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".Tx(this),
+									 GetIcyPlanetsZoneStringLs(), 
+									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"),
+									 IcyPlanetZoneOuter);
+				return habZone.ToNullSafeString();
+			}
+			else
+				return null;
+		}
 
         // optionally, show material counts at the historic point and current.
         public string DisplayMaterials(int indent = 0, MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)
@@ -765,7 +967,7 @@ namespace EliteDangerousCore.JournalEvents
             return null;
         }
 
-        // Habitable zone calculations, formulae cribbed from JackieSilver's HabZone Calculator with permission
+        // Habitable zone calculations, formula cribbed from JackieSilver's HabZone Calculator with permission
         private double DistanceForBlackBodyTemperature(double targetTemp)
         {
             double top = Math.Pow(nRadius.Value, 2.0) * Math.Pow(nSurfaceTemperature.Value, 4.0);
@@ -774,6 +976,11 @@ namespace EliteDangerousCore.JournalEvents
             return radius_metres / oneLS_m;
         }
 
+		private double DistanceForNoMaxTemperatureBody(double radius)
+		{
+			return radius / oneLS_m;
+		}
+		
         private int CalculateEstimatedValue()
         {
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
