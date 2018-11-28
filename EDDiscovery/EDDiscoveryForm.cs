@@ -418,8 +418,10 @@ namespace EDDiscovery
 
                         if (p != null && DateTime.UtcNow >= n.StartUTC && DateTime.UtcNow <= n.EndUTC && 
                                 ( vmax ==null || curver <= vmax) && ( vmin == null || curver >= vmin ) &&
-                                (n.actionpackpresent == null || actioncontroller.Get(n.actionpackpresent).Length>0) &&
-                                (n.actionpacknotpresent == null || actioncontroller.Get(n.actionpacknotpresent).Length==0) 
+                                (n.actionpackpresent == null || actioncontroller.Get(n.actionpackpresent).Length > 0) &&
+                                (n.actionpackpresentenabled == null || actioncontroller.Get(n.actionpackpresentenabled, true).Length > 0) &&
+                                (n.actionpackpresentdisabled == null || actioncontroller.Get(n.actionpackpresentdisabled, false).Length > 0) &&
+                                (n.actionpacknotpresent == null || actioncontroller.Get(n.actionpacknotpresent).Length == 0)
                                 )
                         {
                             if (n.EntryType == "Popup")

@@ -39,6 +39,8 @@ namespace EDDiscovery
             public string VersionMin;
             public string VersionMax;
             public string[] actionpackpresent;  // any is present to trigger
+            public string[] actionpackpresentenabled;  // any is present and enabled to trigger
+            public string[] actionpackpresentdisabled;  // any is present and disabled
             public string[] actionpacknotpresent;  // any is not present to trigger
             public string EntryType;
             public float PointSize;
@@ -94,6 +96,12 @@ namespace EDDiscovery
 
                                 if (entry.Attribute("ActionPackNotPresent") != null)
                                     n.actionpacknotpresent = entry.Attribute("ActionPackNotPresent").Value.Split(',');
+
+                                if (entry.Attribute("ActionPackPresentEnabled") != null)
+                                    n.actionpackpresentenabled = entry.Attribute("ActionPackPresentEnabled").Value.Split(',');
+
+                                if (entry.Attribute("ActionPackPresentDisabled") != null)
+                                    n.actionpackpresentdisabled = entry.Attribute("ActionPackPresentDisabled").Value.Split(',');
 
                                 n.ParaStrings = new Dictionary<string, NotificationParas>();
 
