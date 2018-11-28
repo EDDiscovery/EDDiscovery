@@ -252,7 +252,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     HabitableZoneInner = DistanceForBlackBodyTemperature(315); // this is the goldilocks zone, where is possible to expect to find planets with liquid water. 
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
-					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(solarRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
+					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(oneSolRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
 					MetalRichZoneOuter = DistanceForBlackBodyTemperature(1100);
 					WaterWrldZoneInner = DistanceForBlackBodyTemperature(307);
 					WaterWrldZoneOuter = DistanceForBlackBodyTemperature(156);
