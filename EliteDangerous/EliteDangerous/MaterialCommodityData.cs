@@ -76,23 +76,34 @@ namespace EliteDangerousCore
             return null;
         }
 
+        #region Static interface
+
         // name key is lower case normalised
-        private static Dictionary<string, MaterialCommodityData> cachelist = new Dictionary<string, MaterialCommodityData>();
+        private static Dictionary<string, MaterialCommodityData> cachelist = null;
 
         public static MaterialCommodityData GetByFDName(string fdname)
         {
+            if (cachelist == null)
+                FillTable();
+
             fdname = fdname.ToLowerInvariant();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname] : null;
         }
 
         public static string GetNameByFDName(string fdname) // if we have it, give name, else give alt.  Also see RMat in journal field naming
         {
+            if (cachelist == null)
+                FillTable();
+
             fdname = fdname.ToLowerInvariant();
             return cachelist.ContainsKey(fdname) ? cachelist[fdname].Name : fdname.SplitCapsWordFull();
         }
 
         public static MaterialCommodityData GetByShortName(string shortname)
         {
+            if (cachelist == null)
+                FillTable();
+
             List<MaterialCommodityData> lst = cachelist.Values.ToList();
             int i = lst.FindIndex(x => x.Shortname.Equals(shortname));
             return i >= 0 ? lst[i] : null;
@@ -100,18 +111,29 @@ namespace EliteDangerousCore
 
         public static MaterialCommodityData[] GetAll()
         {
+            if (cachelist == null)
+                FillTable();
+
             return cachelist.Values.ToArray();
         }
 
         public static MaterialCommodityData[] GetMaterials()
         {
+            if (cachelist == null)
+                FillTable();
+
             return cachelist.Values.Where(x => x.Category != CommodityCategory).ToArray();
         }
 
         public static MaterialCommodityData[] GetCommodities()
         {
+            if (cachelist == null)
+                FillTable();
+
             return cachelist.Values.Where(x => x.Category == CommodityCategory).ToArray();
         }
+
+        #endregion
 
         public MaterialCommodityData()
         {
@@ -238,9 +260,11 @@ namespace EliteDangerousCore
             return true;
         }
 
-        public static void SetUpInitialTable()
+        private static void FillTable()
         {
             #region Materials  - checked by netlogentry frontierdata against their spreadsheets. Use this tool to update the tables
+
+            cachelist = new Dictionary<string, MaterialCommodityData>();
 
             AddRaw("Carbon", MaterialFreqVeryCommon, "C");
             AddRaw("Iron", MaterialFreqVeryCommon, "Fe");
@@ -417,7 +441,9 @@ namespace EliteDangerousCore
 
             AddCommodityList("Explosives;Hydrogen Fuel;Hydrogen Peroxide;Liquid Oxygen;Mineral Oil;Nerve Agents;Pesticides;Surface Stabilisers;Synthetic Reagents;Water", "Chemicals");
 
-            AddCommodityList("Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", "Consumer Items");
+            string ci = "Consumer Items";
+            AddCommodityList("Clothing;Consumer Technology;Domestic Appliances;Evacuation Shelter;Survival Equipment", ci);
+            AddCommodity("Duradrives", ci, "Duradrives");
 
             AddCommodityList("Algae;Animal Meat;Coffee;Fish;Food Cartridges;Fruit and Vegetables;Grain;Synthetic Meat;Tea", "Foods");
 
@@ -455,6 +481,7 @@ namespace EliteDangerousCore
             string md = "Medicines";
             AddCommodityList("Advanced Medicines;Basic Medicines;Combat Stabilisers;Performance Enhancers;Progenitor Cells", md);
             AddCommodity("Agri-Medicines", md, "agriculturalmedicines");
+            AddCommodity("Nanomedicines", md, "Nanomedicines");
 
             AddCommodityList("Aluminium;Beryllium;Bismuth;Cobalt;Copper;Gallium;Gold;Hafnium 178;Indium;Lanthanum;Lithium;Osmium;Palladium;Platinum;Praseodymium;Samarium;Silver;Tantalum;Thallium;Thorium;Titanium;Uranium", "Metals");
             AddCommodity("Platinum Alloy", "Metals", "PlatinumAloy");
@@ -464,6 +491,15 @@ namespace EliteDangerousCore
             AddCommodityList("Indite;Jadeite;Lepidolite;Lithium Hydroxide;Moissanite;Painite;Pyrophyllite;Rutile;Taaffeite;Uraninite", mi);
             AddCommodity("Methanol Monohydrate Crystals", mi, "methanolmonohydratecrystals");
             AddCommodity("Low Temperature Diamonds", mi, "lowtemperaturediamond");
+
+            AddCommodity("Rhodplumsite", mi, "Rhodplumsite");
+            AddCommodity("Serendibite", mi, "Serendibite");
+            AddCommodity("Monazite", mi, "Monazite");
+            AddCommodity("Musgravite", mi, "Musgravite");
+            AddCommodity("Benitoite", mi, "Benitoite");
+            AddCommodity("Grandidierite", mi, "Grandidierite");
+            AddCommodity("Alexandrite", mi, "Alexandrite");
+            AddCommodity("Opal", mi, "Opal");
 
             AddCommodity("Trinkets of Hidden Fortune", sv, "TrinketsOfFortune");
             AddCommodity("Gene Bank", sv, "GeneBank");

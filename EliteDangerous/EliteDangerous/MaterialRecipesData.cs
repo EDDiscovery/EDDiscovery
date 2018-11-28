@@ -49,7 +49,7 @@ namespace EliteDangerousCore
                     ingredients[i] = ilist[i].Substring(s.Length);
                     count[i] = int.Parse(s);
                     MaterialCommodityData mcd = MaterialCommodityData.GetByShortName(ingredients[i]);
-                    System.Diagnostics.Debug.Assert(mcd != null, "Recipe is " + name + " " + indg);
+                    System.Diagnostics.Debug.Assert(mcd != null, "Recipe is " + name + " " + indg + " i=" + i + " " + ingredients[i]);
                     ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToStringInvariant() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
@@ -1017,6 +1017,11 @@ namespace EliteDangerousCore
         new EngineeringRecipe("Wide Angle Scanner", "1ME,1Nb,1DSD", "Wake Scanner", "4", "Tiana Fortune" ),
         new EngineeringRecipe("Wide Angle Scanner", "1MC,1Sn,1CFSD", "Wake Scanner", "5", "Tiana Fortune" ),
 
+        new EngineeringRecipe("Expanded Probe Scanning Radius", "1MS", "Surface Scanner", "1", "Not Known" ),
+        new EngineeringRecipe("Expanded Probe Scanning Radius", "1MS,1Ge", "Surface Scanner", "2", "Not Known" ),
+        new EngineeringRecipe("Expanded Probe Scanning Radius", "1MS,1Ge,1PA", "Surface Scanner", "3", "Not Known" ),
+        new EngineeringRecipe("Expanded Probe Scanning Radius", "1ME,1Nb,1PLA", "Surface Scanner", "4", "Not Known" ),
+        new EngineeringRecipe("Expanded Probe Scanning Radius", "1MC,1Sn,1PRA", "Surface Scanner", "5", "Not Known" ),
 
 #endregion
         };
