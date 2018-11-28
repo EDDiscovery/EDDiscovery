@@ -38,6 +38,8 @@ namespace EDDiscovery
             public DateTime EndUTC;
             public string VersionMin;
             public string VersionMax;
+            public string[] actionpackpresent;  // any is present to trigger
+            public string[] actionpacknotpresent;  // any is not present to trigger
             public string EntryType;
             public float PointSize;
             public bool HighLight;
@@ -61,7 +63,7 @@ namespace EDDiscovery
 
                 foreach (XElement toplevel in items.Elements())
                 {
-                    System.Diagnostics.Debug.WriteLine("Item " + toplevel.Name);
+                    //System.Diagnostics.Debug.WriteLine("Item " + toplevel.Name);
 
                     if (toplevel.Name == "Notifications")
                     {
@@ -70,7 +72,7 @@ namespace EDDiscovery
                             try
                             {       // protect each notification from each other..
 
-                                System.Diagnostics.Debug.WriteLine(" Entry " + entry.Name);
+                               // System.Diagnostics.Debug.WriteLine(" Entry " + entry.Name);
 
                                 Notification n = new Notification();
                                 n.StartUTC = DateTime.Parse(entry.Attribute("StartUTC").Value, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AdjustToUniversal);
@@ -80,11 +82,18 @@ namespace EDDiscovery
 
                                 n.PointSize = entry.Attribute("PointSize") != null ? entry.Attribute("PointSize").Value.InvariantParseFloat(12) : -1;
                                 n.HighLight = entry.Attribute("Highlight") != null && entry.Attribute("Highlight").Value == "Yes";
+
                                 if (entry.Attribute("VersionMax") != null)
                                     n.VersionMax = entry.Attribute("VersionMax").Value;
 
                                 if (entry.Attribute("VersionMin") != null)
                                     n.VersionMin = entry.Attribute("VersionMin").Value;
+
+                                if (entry.Attribute("ActionPackPresent") != null)
+                                    n.actionpackpresent = entry.Attribute("ActionPackPresent").Value.Split(',');
+
+                                if (entry.Attribute("ActionPackNotPresent") != null)
+                                    n.actionpacknotpresent = entry.Attribute("ActionPackNotPresent").Value.Split(',');
 
                                 n.ParaStrings = new Dictionary<string, NotificationParas>();
 
@@ -93,7 +102,7 @@ namespace EDDiscovery
                                     string lang = body.Attribute("Lang").Value;
                                     n.ParaStrings[lang] = new NotificationParas() { Text = body.Value, Caption = body.Attribute("Caption").Value};
 
-                                    System.Diagnostics.Debug.WriteLine("    " + body.Attribute("Lang").Value + " Body " + body.Value);
+                                   // System.Diagnostics.Debug.WriteLine("    " + body.Attribute("Lang").Value + " Body " + body.Value);
                                 }
 
                                 notes.Add(n);
@@ -115,8 +124,10 @@ namespace EDDiscovery
                 bool check = true;
 #if DEBUG
                 check = EDDOptions.Instance.CheckGithubFilesInDebug;
-#endif 
-                if (check)
+#endif
+                string notificationsdir = EDDOptions.Instance.NotificationsAppDirectory();
+
+                if (check)      // if download from github first..
                 {
                     BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
 
@@ -124,31 +135,29 @@ namespace EDDiscovery
 
                     if (gitfiles != null)        // may be empty, unlikely, but
                     {
-                        string notificationsdir = EDDOptions.Instance.NotificationsAppDirectory();
-
-                        if (github.DownloadFiles(gitfiles, notificationsdir))
-                        {
-                            FileInfo[] allfiles = Directory.EnumerateFiles(notificationsdir, "*.xml", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
-
-                            List<Notification> nlist = new List<Notification>();
-
-                            foreach (FileInfo f in allfiles )       // process all files found..
-                            {
-                                var list = ReadNotificationsFile(f.FullName);
-                                nlist.AddRange(list);
-                            }
-
-                            if ( nlist.Count>0)                     // if there are any, indicate..
-                            {
-                                nlist.Sort(delegate (Notification left, Notification right)     // in order, oldest first
-                                {
-                                    return left.StartUTC.CompareTo(right.StartUTC);
-                                });
-
-                                callbackinthread?.Invoke(nlist);
-                            }
-                        }
+                        check = github.DownloadFiles(gitfiles, notificationsdir);
                     }
+                }
+
+                // always go thru what we have in that folder.. 
+                FileInfo[] allfiles = Directory.EnumerateFiles(notificationsdir, "*.xml", SearchOption.TopDirectoryOnly).Select(f => new System.IO.FileInfo(f)).OrderByDescending(p => p.LastWriteTime).ToArray();
+
+                List<Notification> nlist = new List<Notification>();
+
+                foreach (FileInfo f in allfiles )       // process all files found..
+                {
+                    var list = ReadNotificationsFile(f.FullName);
+                    nlist.AddRange(list);
+                }
+
+                if ( nlist.Count>0)                     // if there are any, indicate..
+                {
+                    nlist.Sort(delegate (Notification left, Notification right)     // in order, oldest first
+                    {
+                        return left.StartUTC.CompareTo(right.StartUTC);
+                    });
+
+                    callbackinthread?.Invoke(nlist);
                 }
             });
         }

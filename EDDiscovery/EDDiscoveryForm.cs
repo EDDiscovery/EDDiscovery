@@ -417,7 +417,10 @@ namespace EDDiscovery
                         Version vmin = n.VersionMin != null ? new Version(n.VersionMin) : null;
 
                         if (p != null && DateTime.UtcNow >= n.StartUTC && DateTime.UtcNow <= n.EndUTC && 
-                                ( vmax ==null || curver <= vmax) && ( vmin == null || curver >= vmin ))
+                                ( vmax ==null || curver <= vmax) && ( vmin == null || curver >= vmin ) &&
+                                (n.actionpackpresent == null || actioncontroller.Get(n.actionpackpresent).Length>0) &&
+                                (n.actionpacknotpresent == null || actioncontroller.Get(n.actionpacknotpresent).Length==0) 
+                                )
                         {
                             if (n.EntryType == "Popup")
                             {
