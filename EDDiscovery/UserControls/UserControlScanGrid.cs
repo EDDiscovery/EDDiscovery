@@ -185,8 +185,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        // is a non-stellar body
-                        if (sn.ScanData.IsStar == false)
+                        // is a non-stellar body                        
                             
                         // is terraformable? If so, prepend it to the body class
                         if (sn.ScanData.Terraformable == true)
