@@ -832,7 +832,7 @@ namespace EliteDangerousCore.EDSM
                     jout["StarType"] = EDSMStar2JournalName(jo["subType"].StrNull());           // pass thru null to code, it will cope with it
                     jout["Age_MY"] = jo["age"];
                     jout["StellarMass"] = jo["solarMasses"];
-                    jout["Radius"] = jo["solarRadius"].Double() * JournalScan.solarRadius_m; // solar-rad -> metres
+                    jout["Radius"] = jo["solarRadius"].Double() * JournalScan.oneSolRadius_m; // solar-rad -> metres
                 }
                 else if (jo["type"].Value<string>().Equals("Planet"))
                 {
