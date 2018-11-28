@@ -40,7 +40,6 @@ namespace EDDiscovery.Forms
             InitializeComponent();
         }
 
-
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
@@ -83,64 +82,6 @@ namespace EDDiscovery.Forms
             base.OnLoad(e);
         }
 
-        protected override void OnResize(EventArgs e)
-        {
-            if (pnlCaption.Visible)
-            {
-                if (this.WindowState == FormWindowState.Maximized && pnlMaxRestore.ImageSelected != DrawnPanel.ImageType.Restore)
-                {
-                    pnlMaxRestore.ImageSelected = DrawnPanel.ImageType.Restore;
-                }
-                else if (this.WindowState == FormWindowState.Normal && pnlMaxRestore.ImageSelected != DrawnPanel.ImageType.Maximize)
-                {
-                    pnlMaxRestore.ImageSelected = DrawnPanel.ImageType.Maximize;
-                }   
-            }
-
-            base.OnResize(e);
-
-            // Inhibit an issue where text box borders have artifacts displayed after a resize.
-            // For some reason ControlStyles.ResizeRedraw, CS_VREDRAW, and/or CS_HREDRAW don't seem to fix it.
-            if (this.FormBorderStyle == FormBorderStyle.None)
-                Invalidate(true);
-        }
-
-        protected override void OnTextChanged(EventArgs e)
-        {
-            base.OnTextChanged(e);
-
-            lblCaption.Text = this.Text;
-        }
-
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                case WM.INITMENU:       // Win32: disable the minimize system menu item.
-                    {
-                        base.WndProc(ref m);    // Base should always get first crack at this.
-
-                        if (m.WParam != IntPtr.Zero && Environment.OSVersion.Platform == PlatformID.Win32NT && IsHandleCreated)
-                        {
-                            UnsafeNativeMethods.EnableMenuItem(m.WParam, SC.MINIMIZE, MF.GRAYED);
-                        }
-                        return;
-                    }
-
-                case WM.SYSCOMMAND:     // Block the minimize system command.
-                    {
-                        if (m.WParam == (IntPtr)SC.MINIMIZE)
-                        {
-                            m.Result = IntPtr.Zero;
-                            return;
-                        }
-                        break;
-                    }
-            }
-            base.WndProc(ref m);
-        }
-
-
         private void buttonUrlOpen_Click(object sender, EventArgs e)
         {
             Process.Start(_release.HtmlURL);
@@ -176,25 +117,6 @@ namespace EDDiscovery.Forms
         private void Caption_MouseUp(object sender, MouseEventArgs e)
         {
             OnCaptionMouseUp((Control)sender, e);
-        }
-
-        private void pnlMaxRestore_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                switch (this.WindowState)
-                {
-                    case FormWindowState.Maximized:
-                        this.WindowState = FormWindowState.Normal;
-                        break;
-
-                    case FormWindowState.Normal:
-                        this.WindowState = FormWindowState.Maximized;
-                        break;
-                }
-            }
-            else if (e.Button == MouseButtons.Right)
-                Caption_MouseUp(sender, e);
         }
 
         private void pnlClose_MouseClick(object sender, MouseEventArgs e)

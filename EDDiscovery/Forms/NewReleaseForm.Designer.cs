@@ -57,7 +57,6 @@ namespace EDDiscovery.Forms
             this.btnClose = new ExtendedControls.ButtonExt();
             this.panelMain = new System.Windows.Forms.Panel();
             this.pnlCaption = new System.Windows.Forms.Panel();
-            this.pnlMaxRestore = new ExtendedControls.DrawnPanel();
             this.pnlClose = new ExtendedControls.DrawnPanel();
             this.lblCaption = new System.Windows.Forms.Label();
             this.pnlBack = new System.Windows.Forms.Panel();
@@ -260,7 +259,6 @@ namespace EDDiscovery.Forms
             // 
             // pnlCaption
             // 
-            this.pnlCaption.Controls.Add(this.pnlMaxRestore);
             this.pnlCaption.Controls.Add(this.pnlClose);
             this.pnlCaption.Controls.Add(this.lblCaption);
             this.pnlCaption.Dock = System.Windows.Forms.DockStyle.Top;
@@ -270,18 +268,6 @@ namespace EDDiscovery.Forms
             this.pnlCaption.TabIndex = 12;
             this.pnlCaption.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseDown);
             this.pnlCaption.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Caption_MouseUp);
-            // 
-            // pnlMaxRestore
-            // 
-            this.pnlMaxRestore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlMaxRestore.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Maximize;
-            this.pnlMaxRestore.Location = new System.Drawing.Point(809, 0);
-            this.pnlMaxRestore.Name = "pnlMaxRestore";
-            this.pnlMaxRestore.Selectable = false;
-            this.pnlMaxRestore.Size = new System.Drawing.Size(24, 24);
-            this.pnlMaxRestore.TabIndex = 2;
-            this.pnlMaxRestore.TabStop = false;
-            this.pnlMaxRestore.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pnlMaxRestore_MouseClick);
             // 
             // pnlClose
             // 
@@ -362,7 +348,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel pnlCaption;
         private System.Windows.Forms.Label lblCaption;
-        private ExtendedControls.DrawnPanel pnlMaxRestore;
         private ExtendedControls.DrawnPanel pnlClose;
         private System.Windows.Forms.Panel pnlBack;
     }

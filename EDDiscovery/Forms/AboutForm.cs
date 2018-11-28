@@ -26,7 +26,7 @@ using EDDiscovery.Properties;
 
 namespace EDDiscovery.Forms
 {
-    public partial class AboutForm : Form
+    public partial class AboutForm : ExtendedControls.DraggableForm
     {
         public AboutForm()
         {
@@ -42,6 +42,10 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelGitHubIssue, Resources.URLProjectFeedback);
             SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
             SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
+
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            panel_close.Visible = !winborder;
 
             panelLogo.Tag = Resources.URLProjectGithub;
         }
@@ -69,6 +73,11 @@ namespace EDDiscovery.Forms
                 Process.Start((string)ctl.Tag);
             else
                 BaseUtils.TraceLog.WriteLine($"AboutForm: Control and/or Tag is null: control {ctl?.Name ?? "(null)"}, tag {ctl?.Tag ?? "(null)"}.");   
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -47,8 +47,8 @@ namespace EDDiscovery.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelDevelopersEnum = new System.Windows.Forms.Label();
-            this.buttonOK = new System.Windows.Forms.Button();
-            this.textBoxLicense = new System.Windows.Forms.TextBox();
+            this.buttonOK = new ExtendedControls.ButtonExt();
+            this.textBoxLicense = new ExtendedControls.RichTextBoxScroll();
             this.panelLinks = new System.Windows.Forms.Panel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
             this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
@@ -65,6 +65,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLogo = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.panel_close = new ExtendedControls.DrawnPanel();
             this.panelLinks.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -85,16 +86,16 @@ namespace EDDiscovery.Forms
             this.labelDevelopersEnum.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopersEnum.BackColor = System.Drawing.Color.Transparent;
-            this.labelDevelopersEnum.Location = new System.Drawing.Point(603, 57);
+            this.labelDevelopersEnum.Location = new System.Drawing.Point(676, 57);
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
-            this.labelDevelopersEnum.Size = new System.Drawing.Size(203, 259);
+            this.labelDevelopersEnum.Size = new System.Drawing.Size(267, 383);
             this.labelDevelopersEnum.TabIndex = 3;
             this.labelDevelopersEnum.Text = resources.GetString("labelDevelopersEnum.Text");
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(731, 496);
+            this.buttonOK.Location = new System.Drawing.Point(868, 620);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 6;
@@ -107,15 +108,31 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxLicense.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxLicense.BorderColorScaling = 0.5F;
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxLicense.HideScrollBar = true;
             this.textBoxLicense.Location = new System.Drawing.Point(12, 57);
-            this.textBoxLicense.Multiline = true;
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
-            this.textBoxLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicense.Size = new System.Drawing.Size(585, 256);
+            this.textBoxLicense.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.textBoxLicense.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
+            this.textBoxLicense.ScrollBarBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxLicense.ScrollBarBorderColor = System.Drawing.Color.White;
+            this.textBoxLicense.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.textBoxLicense.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxLicense.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
+            this.textBoxLicense.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
+            this.textBoxLicense.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
+            this.textBoxLicense.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
+            this.textBoxLicense.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.textBoxLicense.ScrollBarWidth = 20;
+            this.textBoxLicense.ShowLineCount = false;
+            this.textBoxLicense.Size = new System.Drawing.Size(644, 380);
             this.textBoxLicense.TabIndex = 1;
             this.textBoxLicense.Text = resources.GetString("textBoxLicense.Text");
+            this.textBoxLicense.TextBoxBackColor = System.Drawing.SystemColors.Control;
+            this.textBoxLicense.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // panelLinks
             // 
@@ -130,9 +147,9 @@ namespace EDDiscovery.Forms
             this.panelLinks.Controls.Add(this.linkLabelEDDB);
             this.panelLinks.Controls.Add(this.linkLabelEliteDangerous);
             this.panelLinks.Controls.Add(this.labelLinks);
-            this.panelLinks.Location = new System.Drawing.Point(596, 319);
+            this.panelLinks.Location = new System.Drawing.Point(676, 443);
             this.panelLinks.Name = "panelLinks";
-            this.panelLinks.Size = new System.Drawing.Size(210, 171);
+            this.panelLinks.Size = new System.Drawing.Size(267, 171);
             this.panelLinks.TabIndex = 5;
             // 
             // linkLabelDeveloperChat
@@ -257,7 +274,7 @@ namespace EDDiscovery.Forms
             this.labelDevelopers.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelDevelopers.AutoSize = true;
             this.labelDevelopers.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDevelopers.Location = new System.Drawing.Point(602, 19);
+            this.labelDevelopers.Location = new System.Drawing.Point(672, 19);
             this.labelDevelopers.Name = "labelDevelopers";
             this.labelDevelopers.Size = new System.Drawing.Size(106, 24);
             this.labelDevelopers.TabIndex = 7;
@@ -271,20 +288,20 @@ namespace EDDiscovery.Forms
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel1.Controls.Add(this.labelNoAffiliation, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.panelLogo, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 320);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 444);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(567, 200);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(644, 200);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
             // labelNoAffiliation
             // 
             this.labelNoAffiliation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelNoAffiliation.Location = new System.Drawing.Point(3, 170);
+            this.labelNoAffiliation.Location = new System.Drawing.Point(3, 156);
             this.labelNoAffiliation.Name = "labelNoAffiliation";
-            this.labelNoAffiliation.Size = new System.Drawing.Size(561, 30);
+            this.labelNoAffiliation.Size = new System.Drawing.Size(698, 44);
             this.labelNoAffiliation.TabIndex = 12;
             this.labelNoAffiliation.Text = "EDDiscovery is not affiliated with Frontier Developments plc.\r\nFree Advanced Inst" +
     "aller License for Open-Source";
@@ -297,18 +314,31 @@ namespace EDDiscovery.Forms
             this.panelLogo.Location = new System.Drawing.Point(3, 3);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Padding = new System.Windows.Forms.Padding(1);
-            this.panelLogo.Size = new System.Drawing.Size(561, 164);
+            this.panelLogo.Size = new System.Drawing.Size(698, 150);
             this.panelLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.panelLogo.TabIndex = 14;
             this.panelLogo.TabStop = false;
             this.panelLogo.Click += new System.EventHandler(this.link_Click);
+            // 
+            // panel_close
+            // 
+            this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.Location = new System.Drawing.Point(936, 1);
+            this.panel_close.Name = "panel_close";
+            this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.Selectable = false;
+            this.panel_close.Size = new System.Drawing.Size(24, 24);
+            this.panel_close.TabIndex = 28;
+            this.panel_close.TabStop = false;
+            this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.ClientSize = new System.Drawing.Size(825, 531);
+            this.ClientSize = new System.Drawing.Size(962, 655);
+            this.Controls.Add(this.panel_close);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.labelDevelopers);
             this.Controls.Add(this.panelLinks);
@@ -336,9 +366,9 @@ namespace EDDiscovery.Forms
 
         #endregion
         private System.Windows.Forms.Label labelDevelopersEnum;
-        private System.Windows.Forms.Button buttonOK;
+        private ExtendedControls.ButtonExt buttonOK;
         internal System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.TextBox textBoxLicense;
+        private ExtendedControls.RichTextBoxScroll textBoxLicense;
         private System.Windows.Forms.Panel panelLinks;
         internal System.Windows.Forms.Label labelLinks;
         private System.Windows.Forms.LinkLabel linkLabelEliteDangerous;
@@ -355,5 +385,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label labelNoAffiliation;
         private System.Windows.Forms.PictureBox panelLogo;
         private System.Windows.Forms.ToolTip toolTip1;
+        private ExtendedControls.DrawnPanel panel_close;
     }
 }
