@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
                 int fdrow = dataGridViewSynthesis.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
-                Recipes.ResetUsed(mcl);
+                MaterialCommoditiesRecipe.ResetUsed(mcl);
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.SynthesisRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
-                    dataGridViewSynthesis.Rows[i].Cells[2].Value = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewSynthesis.Rows[i].Cells[2].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                 
                     if (recep == "All" && levels == "All" && materials == "All")
@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
                     int rno = (int)dataGridViewSynthesis.Rows[i].Tag;
                     if (dataGridViewSynthesis.Rows[i].Visible)
                     {
-                        Tuple<int, int, string, string> res = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string, string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         using (DataGridViewRow row = dataGridViewSynthesis.Rows[i])
@@ -281,8 +281,8 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    Recipes.ResetUsed(mcl);
-                    List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(wantedList, mcl);
+                    MaterialCommoditiesRecipe.ResetUsed(mcl);
+                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
                     shoppinglist.Sort(delegate (MaterialCommodities left, MaterialCommodities right) { return left.Details.Name.CompareTo(right.Details.Name); });
 
                     foreach (MaterialCommodities c in shoppinglist)        // and add new..

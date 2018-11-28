@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
             if (EngineeringWanted != null && SynthesisWanted != null && last_he != null)    // if we have all the ingredients (get it!)
             {
                 List<MaterialCommodities> mcl = last_he.MaterialCommodity.Sort(false);
-                Recipes.ResetUsed(mcl);
+                MaterialCommoditiesRecipe.ResetUsed(mcl);
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(totalWanted, mcl);
+                List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
                 JournalScan sd = null;
                 StarScan.SystemNode last_sn = null;
 
@@ -266,10 +266,10 @@ namespace EDDiscovery.UserControls
 
                 if (showMaxInjections)
                 {
-                    Recipes.ResetUsed(mcl);
-                    Tuple<int, int, string, string> basic = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
-                    Tuple<int, int, string, string> standard = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
-                    Tuple<int, int, string, string> premium = Recipes.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
+                    MaterialCommoditiesRecipe.ResetUsed(mcl);
+                    Tuple<int, int, string, string> basic = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Basic"));
+                    Tuple<int, int, string, string> standard = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Standard"));
+                    Tuple<int, int, string, string> premium = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.SynthesisRecipes.First(r => r.name == "FSD" && r.level == "Premium"));
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".Tx(this,"FSD"), basic.Item1, standard.Item1, premium.Item1));
                 }

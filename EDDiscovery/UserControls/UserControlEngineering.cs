@@ -211,7 +211,7 @@ namespace EDDiscovery.UserControls
 
                 int fdrow = dataGridViewEngineering.FirstDisplayedScrollingRowIndex;      // remember where we were displaying
 
-                Recipes.ResetUsed(mcl);
+                MaterialCommoditiesRecipe.ResetUsed(mcl);
 
                 wantedList = new List<Tuple<Recipes.Recipe, int>>();
 
@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
                 for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
-                    dataGridViewEngineering[MaxCol.Index, i].Value = Recipes.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToStringInvariant();
+                    dataGridViewEngineering[MaxCol.Index, i].Value = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno]).Item1.ToStringInvariant();
                     bool visible = true;
                     
                     if (engineers == "All" && modules == "All" && levels == "All" && upgrades == "All" && materials == "All")
@@ -279,7 +279,7 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
-                        Tuple<int, int, string,string> res = Recipes.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
+                        Tuple<int, int, string,string> res = MaterialCommoditiesRecipe.HowManyLeft(mcl, Recipes.EngineeringRecipes[rno], Wanted[rno]);
                         //System.Diagnostics.Debug.WriteLine("{0} Recipe {1} executed {2} {3} ", i, rno, Wanted[rno], res.Item2);
 
                         dataGridViewEngineering[WantedCol.Index, i].Value = Wanted[rno].ToStringInvariant();
@@ -296,8 +296,8 @@ namespace EDDiscovery.UserControls
 
                 if (!isEmbedded)
                 {
-                    Recipes.ResetUsed(mcl);
-                    List<MaterialCommodities> shoppinglist = Recipes.GetShoppingList(wantedList, mcl);
+                    MaterialCommoditiesRecipe.ResetUsed(mcl);
+                    List<MaterialCommodities> shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(wantedList, mcl);
                     dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
                     foreach (MaterialCommodities c in shoppinglist.OrderBy(mat => mat.Details.Name))      // and add new..
                     {
