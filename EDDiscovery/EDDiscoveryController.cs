@@ -552,23 +552,21 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress(-1, "");
 
+            bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
+            if (checkGithub)      // not normall in debug, due to git hub chokeing
+            {
+                // Async load of maps in another thread
+                DownloadMaps(() => PendingClose);
+
+                // and Expedition data
+                DownloadExpeditions(() => PendingClose);
+
+                // and Exploration data
+                DownloadExploration(() => PendingClose);
+            }
+
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
-                bool check = true;
-#if DEBUG
-                check = EDDOptions.Instance.CheckGithubFilesInDebug;
-#endif 
-                if (check)      // not normall in debug, due to git hub chokeing
-                {
-                    // Async load of maps in another thread
-                    DownloadMaps(() => PendingClose);
-
-                    // and Expedition data
-                    DownloadExpeditions(() => PendingClose);
-
-                    // and Exploration data
-                    DownloadExploration(() => PendingClose);
-                }
 
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need

@@ -60,7 +60,8 @@ namespace EDDiscovery
         public bool DontAskGithubForPacks { get; private set; }
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
-        public bool CheckGithubFilesInDebug { get; private set; }
+        public bool CheckRelease { get; private set; }
+        public bool CheckGithubFiles { get; private set; }
         public bool ResetLanguage { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
@@ -256,8 +257,10 @@ namespace EDDiscovery
                     case "nosystems": NoSystemsLoad = true; break;
                     case "logexceptions": LogExceptions = true; break;
                     case "nogithubpacks": DontAskGithubForPacks = true; break;
-                    case "checkrelease": CheckGithubFilesInDebug = true; break;
-                    case "checkgithub": CheckGithubFilesInDebug = true; break;
+                    case "checkrelease": CheckRelease = true; break;
+                    case "checkgithub": CheckGithubFiles = true; break;
+                    case "nocheckrelease": CheckRelease = false; break;
+                    case "nocheckgithub": CheckGithubFiles = false; break;
                     case "edsmbeta":
                         EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
                         break;
@@ -289,6 +292,11 @@ namespace EDDiscovery
 
         public void Init()
         {
+#if !DEBUG
+            CheckGithubFiles = true;
+            CheckRelease = true;
+#endif
+
             ProcessConfigVariables();
 
             ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption);     // go thru the command line looking for -optionfile, use relative base dir
