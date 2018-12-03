@@ -210,7 +210,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSeparator1,
             this.columnsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 164);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 142);
             // 
             // togglesToolStripMenuItem
             // 
@@ -371,7 +371,7 @@ namespace EDDiscovery.UserControls
             this.nameToolStripMenuItem.CheckOnClick = true;
             this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
             // 
@@ -381,7 +381,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem.CheckOnClick = true;
             this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.classToolStripMenuItem.Text = "Class";
             this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
             // 
@@ -391,7 +391,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem.CheckOnClick = true;
             this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.distanceToolStripMenuItem.Text = "Distance";
             this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
             // 
@@ -401,7 +401,7 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.CheckOnClick = true;
             this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
             // 
