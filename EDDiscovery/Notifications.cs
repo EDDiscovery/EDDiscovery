@@ -129,10 +129,7 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-                bool check = true;
-#if DEBUG
-                check = EDDOptions.Instance.CheckGithubFilesInDebug;
-#endif
+                bool check = EDDOptions.Instance.CheckGithubFiles;
                 string notificationsdir = EDDOptions.Instance.NotificationsAppDirectory();
 
                 if (check)      // if download from github first..
