@@ -924,20 +924,6 @@ namespace EDDiscovery
             Task.Factory.StartNew(() =>
             {
                 string explorationdir = EDDOptions.Instance.ExploreAppDirectory();
-                string progexploredir = System.IO.Path.Combine(EDDOptions.ExeDirectory(), "Exploration");
-
-                if (System.IO.Directory.Exists(progexploredir))
-                {
-                    foreach (string filename in System.IO.Directory.GetFiles(progexploredir, "*.json"))
-                    {
-                        string destfile = System.IO.Path.Combine(explorationdir, System.IO.Path.GetFileName(filename));
-
-                        if (!System.IO.File.Exists(destfile) || System.IO.File.GetLastWriteTimeUtc(filename) > System.IO.File.GetLastWriteTimeUtc(destfile))
-                        {
-                            System.IO.File.Copy(filename, destfile, true);
-                        }
-                    }
-                }
 
                 BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
                 var files = github.ReadDirectory("Exploration");
