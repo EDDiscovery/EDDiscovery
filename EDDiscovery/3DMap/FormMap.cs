@@ -2366,7 +2366,7 @@ namespace EDDiscovery
             }
 
             startTime = starttimes["All"]();
-            endTime = DateTime.Now.AddDays(1);
+            endTime = DateTime.MaxValue;
 
             string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)
