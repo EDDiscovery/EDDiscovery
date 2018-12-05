@@ -369,7 +369,7 @@ namespace EliteDangerousCore.JournalEvents
                         detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build(
                             "; ", m.Name,
                             "<", m.ShipType,
-                            "< at ".Txb(this), m.StarSystem,
+                            "< at ".Tx(this), m.StarSystem,
                             "Transfer Cost:; cr;N0".Txb(this), m.TransferPrice, "Time:".Txb(this), m.TransferTimeString,
                             "Value:; cr;N0".Txb(this), m.Value, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);
                     }

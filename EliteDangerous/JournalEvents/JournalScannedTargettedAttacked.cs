@@ -96,12 +96,12 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else if (ScanStage.Value == 1)
                 {
-                    info = BaseUtils.FieldBuilder.Build("", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
+                    info = BaseUtils.FieldBuilder.Build("", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised);
                 }
                 else if (ScanStage.Value == 2)
                 {
                     info = BaseUtils.FieldBuilder.Build("Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
-                        "", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
+                        "", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised);
 
                 }
                 else if (ScanStage.Value == 3)
@@ -110,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
                                     "", LegalStatus, "Bounty:; cr;N0".Txb(this), Bounty,
                                     "", SubSystem, "< at ;;N1".Tx(this), SubSystemHealth,
                                     "Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
-                                    "", PilotName_Localised, " " + "Rank:".Txb(this), PilotRank, "< in ".Txb(this), Ship_Localised);
+                                    "", PilotName_Localised, " " + "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised);
                 }
                 else
                     info = "Unknown Scan Stage type - report to EDD team";

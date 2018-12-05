@@ -557,7 +557,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
 
-            info = BaseUtils.FieldBuilder.Build("Modules:".Txb(this), ShipModules.Count);
+            info = BaseUtils.FieldBuilder.Build("Modules:".Tx(this), ShipModules.Count);
             detailed = "";
 
             foreach (ShipModule m in ShipModules)
@@ -608,7 +608,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 foreach (ModulesInStore.StoredModule m in ModuleItems)
                 {
-                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ".Txb(this), m.StarSystem,
+                    detailed = detailed.AppendPrePad(BaseUtils.FieldBuilder.Build("", m.Name, "< at ".Tx(this), m.StarSystem,
                                 "Transfer Cost:; cr;N0".Txb(this), m.TransferCost,
                                 "Time:".Txb(this), m.TransferTimeString,
                                 "Value:; cr;N0".Txb(this), m.TransferCost, ";(Hot)".Txb(this), m.Hot), System.Environment.NewLine);

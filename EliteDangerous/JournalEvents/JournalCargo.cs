@@ -92,7 +92,8 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (Cargo c in Inventory)
                     total += c.Count;
 
-                info = Vessel.Equals("Ship") ? "Ship ".Txb(this) : "SRV ".Txb(this);
+                info = Vessel.Equals("Ship") ? "Ship".Txb(this,"CargoShip") : "SRV".Txb(this,"CargoSRV");
+                info += " ";
 
                 info += string.Format( "Cargo, {0} items".Txb(this), total);
                 detailed = "";

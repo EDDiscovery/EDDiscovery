@@ -110,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
             info = BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Txb(this),
                             SpawingState_Localised, "Faction:".Txb(this), SpawingFaction_Localised,
                             "USS Type:".Txb(this), USSTypeLocalised, " Threat Level:".Txb(this), ThreatLevel, 
-                            ";Station".Txb(this), IsStation
+                            ";Station".Txb(this,"StationBool"), IsStation
                             );
 
             if ( TimeRemaining != null )
