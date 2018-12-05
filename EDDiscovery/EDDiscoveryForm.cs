@@ -62,6 +62,7 @@ namespace EDDiscovery
 
         Task checkInstallerTask = null;
         private bool themeok = true;
+        private bool in_system_sync = false;        // between start/end sync of databases
 
         BaseUtils.GitHubRelease newRelease;
 
@@ -136,8 +137,8 @@ namespace EDDiscovery
             Controller.OnRefreshStarting += Controller_RefreshStarting;
             Controller.OnReportRefreshProgress += ReportRefreshProgress;
 
-            Controller.OnSyncStarting += () => { edsmRefreshTimer.Enabled = false; };
-            Controller.OnSyncComplete += () => { edsmRefreshTimer.Enabled = true; };
+            Controller.OnSyncStarting += () => { edsmRefreshTimer.Enabled = false; in_system_sync = true; };
+            Controller.OnSyncComplete += () => { edsmRefreshTimer.Enabled = true; in_system_sync = false; };
             Controller.OnReportSyncProgress += ReportSyncProgress;
 
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
@@ -883,9 +884,15 @@ namespace EDDiscovery
             if (!Controller.ReadyForFinalClose)
             {
                 e.Cancel = true;
-                ReportRefreshProgress(-1, "Closing, please wait!".Tx(this,"Closing"));
-                actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
-                Controller.Shutdown();
+
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete".Tx(this,"CloseWarning"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+
+                if (goforit)
+                {
+                    ReportRefreshProgress(-1, "Closing, please wait!".Tx(this, "Closing"));
+                    actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
+                    Controller.Shutdown();
+                }
             }
         }
 

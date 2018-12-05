@@ -328,7 +328,6 @@ namespace EDDiscovery
 
             if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
             {
-                OnSyncStarting?.Invoke();
                 syncstate.perform_eddb_sync |= eddbsync;
                 syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
@@ -640,6 +639,8 @@ namespace EDDiscovery
 
         private void DoPerformSync()        // in Background worker
         {
+            InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
+
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
