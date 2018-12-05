@@ -112,15 +112,23 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public const double solarRadius_m = 695700000;
+        // Constants:
+
+        // stellar references
+        public const double oneSolRadius_m = 695700000;
+
+        // planetary bodies
+        public const double oneEarthRadius_m = 6371000;
+        public const double oneAtmosphere_Pa = 101325;
+        public const double oneGee_m_s2 = 9.80665;
+        public const double oneMoon_MT = 73420000000000;
+
+        // astrometric
         public const double oneLS_m = 299792458;
         public const double oneAU_m = 149597870700;
         public const double oneAU_LS = oneAU_m / oneLS_m;
         public const double oneDay_s = 86400;
-        public const double oneMoon_MT = 73420000000000;
-        public const double oneAtmosphere_Pa = 101325;
-        public const double oneGee_m_s2 = 9.80665;
-
+                
         public class StarPlanetRing
         {
             public string Name;     // may be null
@@ -244,7 +252,7 @@ namespace EliteDangerousCore.JournalEvents
 
                     HabitableZoneInner = DistanceForBlackBodyTemperature(315); // this is the goldilocks zone, where is possible to expect to find planets with liquid water. 
                     HabitableZoneOuter = DistanceForBlackBodyTemperature(223);
-					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(solarRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
+					MetalRichZoneInner = DistanceForNoMaxTemperatureBody(oneSolRadius_m); // we don't know the maximum temperature that the galaxy simulation take as possible...
 					MetalRichZoneOuter = DistanceForBlackBodyTemperature(1100);
 					WaterWrldZoneInner = DistanceForBlackBodyTemperature(307);
 					WaterWrldZoneOuter = DistanceForBlackBodyTemperature(156);
@@ -348,7 +356,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 double? r = nRadius;
                 if (r.HasValue)
-                    r = r / solarRadius_m;
+                    r = r / oneSolRadius_m;
 
                 info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".Tx(this,"MSM"), nStellarMass, 
                                                 "Age:;my;0.0".Tx(this), nAge, 
@@ -430,7 +438,7 @@ namespace EliteDangerousCore.JournalEvents
                 if (nRadius.HasValue)
                 {
                     if (IsStar)
-                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n".Tx(this), (nRadius.Value / solarRadius_m));
+                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n".Tx(this), (nRadius.Value / oneSolRadius_m));
                     else
                         scanText.AppendFormat("Body Radius: {0:0.00}km\n".Tx(this), (nRadius.Value / 1000));
                 }
