@@ -182,7 +182,7 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Zmień nazwę Karty
 .CAPINA: "Companion API is disabled in commander settings" => "Companion API jest wyłączone w ustawieniach Dowódcy"
 .CAPION: "Logged into Companion API" => "Zalogowano do Companion API"
 .CAPIF: "Companion API failed: {0}" => "Błąd Companion API: {0}"
-.CAPIND: "CAPI not docked. Server API lagging!" => "Nie połączono z CAPI. Serwer API działa z opóźnieniem!"
+.CAPIND: "CAPI not docked. Server API lagging!" => "Nie połączono z CAPI. API Serwera działa z opóźnieniem!"
 .CAPISS: "CAPI profileSystemRequired is {0}, profile station is {1}" => "CAPI profileSystemRequired to {0}, stacja profilu to {1}"
 .CAPISN: "CAPI profileStationRequired is {0}, profile station is {1} " => "CAPI profileStationRequired to {0}, stacja profilu to {1} "
 .CAPIMN: "CAPI stationname {0}, market station is {1} " => "CAPI stationname {0}, stacja rynku to {1} "
@@ -191,6 +191,7 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" => "Zmień nazwę Karty
 .PE1: "Profile reports errors in triggers:" => "Profil zgłasza błędy w aktywatorach:"
 .EDDN: "Sent {0} event to EDDN ({1})" => "Wysłano zdarzenie {0} do EDDN ({1})"
 .EDDNEX: "EDDN: Send commodities prices failed: " => "EDDN: Wysyłanie cen towarów nie powiodło się: "
+.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualizuje bazy danych EDSM i EDDB\r\nNaciśnij OK aby zamknąć teraz, Anuluj aby zaczekać na ukończenie aktualizacji"
 .Closing: "Closing, please wait!" => "Zamykanie, proszę czekać!"
 .SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Pobieranie Danych Gwiazd jest wyłączone. Można je włączyć w Ustawieniach"
 .SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Synchronizacja z bazami danych trwa lub jest zaplanowana, proszę czekać"
@@ -230,6 +231,7 @@ EDDiscoveryController.CD: "Closing down, please wait.." => "Zamykanie, proszę c
 .HRC: "History refresh complete." => "Odświeżanie Historii zakończone."
 .Maps: "Checking for new EDDiscovery maps" => "Sprawdzanie dostępności nowych map EDDiscovery"
 .EXPD: "Checking for new Expedition data" => "Sprawdzanie dostępności nowych danych Ekspedycji"
+.EXPL: "Checking for new Exploration data" => "Sprawdzanie dostępności nowych danych Eksploracji"
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////// UC
@@ -265,9 +267,9 @@ ScreenShotConfigureForm.labelFolder: "ED/Steam Screenshot folder" => "Folder Zrz
 ScreenShotConfigureForm.buttonChangeScreenshotsFolder: "Browse" => "Przeglądaj"
 ScreenShotConfigureForm.labelSubfolder: "In Sub folder" => "W podfolderze"
 ScreenShotConfigureForm.labelFileNameFormat: "In Filename format" =>  "Format nazwy pliku"
-ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" => "Zachowaj Przetworzone Obrazy"
+ScreenShotConfigureForm.labelStoreFolder: "Store Converted pictures" => "Folder Przetworzonych Obrazów"
 ScreenShotConfigureForm.buttonEDChangeOutputFolder: "Browse" => "Przeglądaj"
-ScreenShotConfigureForm.labelScanFor: "Scan for" => "Skanuj aby znaleźć"
+ScreenShotConfigureForm.labelScanFor: "Scan for" => "Szukaj plików w formacie"
 ScreenShotConfigureForm.labelSaveAs: "Save as" => "Zapisz jako"
 
 
@@ -329,7 +331,7 @@ FindSystemsUserControl.buttonExtDBSphere: "From DB Sphere Systems" => "Kula Ukł
 FindSystemsUserControl.buttonExtEDSMCube: "From EDSM Cube Systems" => "Sześcian Układów z EDSM"
 FindSystemsUserControl.buttonExtEDSMSphere: "From EDSM Sphere Systems" => "Kula Układów z EDSM"
 FindSystemsUserControl.labelRadMax: "Max" => "Maks."
-FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Min. Promień w LŚ"
+FindSystemsUserControl.labelRadMin: "Radius ly Min" => "Min.Promień LŚw"
 FindSystemsUserControl.labelFilter: "Star Name" => "Nazwa Gwiazdy"
 
 //////////////////////////////////////////////////////////////// Conditions

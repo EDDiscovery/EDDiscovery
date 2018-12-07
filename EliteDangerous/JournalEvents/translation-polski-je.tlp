@@ -206,12 +206,12 @@ JournalEntry.each: "each:; cr;N0" => "za sztukę:; cr;N0"
 JournalEntry.System: "System:" => "Układ:"
 JournalEntry.Cost: "Cost:; cr;N0" => "Koszt:; cr;N0"
 ///////////////////////////////////////////////////// JournalCapShipBond
-JournalEntry.from: "< from " @
-JournalEntry.dueto: "< , due to " @
+JournalEntry.from: "< from " => "< z "
+JournalEntry.dueto: "< , due to " => "< , z powodu "
 ///////////////////////////////////////////////////// JournalCargo
 JournalEntry.NoCargo: "No Cargo" => "Brak Ładunku"
-JournalEntry.Cargo: "Cargo, {0} items" => "Ładunek, {0} przedmiotów"
-JournalEntry.items: "; items" => "; przedmioty"
+JournalEntry.Cargo: "Cargo, {0} items" => "Ładunek, {0} przedmiot(y/ów)"
+JournalEntry.items: "; items" => "; przedmiot(y/ów)"
 ///////////////////////////////////////////////////// JournalCargoDepot
 JournalEntry.Collected: "Collected:" => "Zebrano:"
 JournalEntry.of: "< of " => "< szt. "
@@ -284,10 +284,10 @@ JournalEntry.onpad: "< on pad " => "< na lądowisku "
 JournalCommodityPricesBase.PON: "Prices on ; items" => "Ceny ; przedmiotów"
 JournalCommodityPricesBase.CPBat: "< at " => "< w "
 JournalCommodityPricesBase.CPBin: "< in " => "< w "
-JournalCommodityPricesBase.Itemstobuy: "Items to buy:" => "Przedmioty do kupienia"
-JournalCommodityPricesBase.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
-JournalCommodityPricesBase.CPBBuy: "{0}: {1}  " @
-JournalCommodityPricesBase.SO: "Sell only Items:" @
+JournalCommodityPricesBase.Itemstobuy: "Items to buy:" => "Przedmioty dostępne do kupienia"
+JournalCommodityPricesBase.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " => "{0}: sprzedaż {2} Różn. {3} {4}%  "
+JournalCommodityPricesBase.CPBBuy: "{0}: {1}  " => "{0}: {1}  "
+JournalCommodityPricesBase.SO: "Sell only Items:" => "Przedmioty Tylko do Sprzedania:"
 ///////////////////////////////////////////////////// JournalEDDItemSet
 JournalEntry.Name: "Name:" => "Nazwa:"
 ///////////////////////////////////////////////////// JournalEjectCargo
@@ -323,9 +323,9 @@ JournalEntry.Version: "Version:" => "Wersja:"
 JournalEntry.Build: "Build:" @
 JournalEntry.Part: "Part:" @
 ///////////////////////////////////////////////////// JournalFriends
-JournalEntry.NumberofStatuses: "Number of Statuses:" @
-JournalEntry.Online: "Online:" @
-JournalEntry.Offline: "Offline:" @
+JournalEntry.NumberofStatuses: "Number of Statuses:" => "Ilość Statusów:"
+JournalEntry.Online: "Online:" => "Online:"
+JournalEntry.Offline: "Offline:" => "Offline:"
 ///////////////////////////////////////////////////// JournalFSDJump
 JournalFSDJump.Jumpto: "Jump to {0}" => "Skok do {0}"
 JournalFSDJump.Fuel: " Fuel " => " Zużyto paliwa "
@@ -337,8 +337,8 @@ JournalLocOrJump.Allegiance: "Allegiance:" => "Przynależność:"
 JournalLocOrJump.Economy: "Economy:" => "Ekonomia:"
 JournalLocOrJump.Population: "Population:" => "Populacja:"
 JournalLocOrJump.Government: "Government:" => "Rząd:"
-JournalLocOrJump.Inf: "Inf:;%" @
-JournalLocOrJump.PendingState: "Pending State:" @
+JournalLocOrJump.Inf: "Inf:;%" => "Wpływ:;%"
+JournalLocOrJump.PendingState: "Pending State:" => "Przewidywany Stan:"
 JournalLocOrJump.RecoveringState: "Recovering State:" @
 ///////////////////////////////////////////////////// JournalFuelScoop
 JournalFuelScoop.Total: "Total:;t;0.0" => "Razem:;t;0.0"
@@ -359,14 +359,14 @@ JournalEntry.Loadout: "Loadout:" => "Wyposażenie:"
 JournalEntry.NPCControlled: ", NPC Controlled;" => ", Kontrola przez NPC;"
 ///////////////////////////////////////////////////// JournalLoadGame
 JournalEntry.Ship: "Ship:" => "Statek:"
-JournalEntry.Ident: "Ident:" @
+JournalEntry.Ident: "Ident:" => "Ident:"
 JournalEntry.Credits: "Credits:;;N0" => "Kredyty:;;N0"
 JournalEntry.Mode: "Mode:" => "Tryb:"
 JournalEntry.Group: "Group:" => "Grupa:"
 JournalEntry.NotLanded: "Not Landed;Landed" => "Nie Wylądowano;Wylądowano"
 JournalEntry.FuelLevel: "Fuel Level:;;0.0" => "Poziom Paliwa:;;0.0"
 JournalEntry.Capacity: "Capacity:;;0.0" => "Pojemność:;;0.0"
-JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" @
+JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" => "Różna łączna ilość pieniędzy, wyrównywanie"
 ///////////////////////////////////////////////////// JournalLoadout
 JournalLoadout.Modules: "Modules:" => "Moduły:"
 JournalEntry.Hull: "Hull:; cr;N0" => "Poszycie:; cr;N0"
@@ -393,7 +393,7 @@ JournalEntry.Market: "Market;BlackMarket" => "Rynek;Czarny Rynek"
 JournalEntry.Totalmodules: "Total modules:" => "Razem modułów:"
 JournalEntry.Hot: ";(Hot)" => ";(Ścigany)"
 ///////////////////////////////////////////////////// JournalMaterialCollected
-JournalEntry.MatC: "< ; items" => "< ; przedmioty"
+JournalEntry.MatC: "< ; items" => "< ; przedmiot(y/ów)"
 ///////////////////////////////////////////////////// JournalMaterialDiscovered
 JournalMaterialDiscovered.DN: ", Discovery {0}" => "Odkrycie {0}"
 ///////////////////////////////////////////////////// JournalMaterials
@@ -621,73 +621,73 @@ BankAccountClass.SpentonOutfitting: "Spent on Outfitting:;cr;N0" => "Wydano na W
 BankAccountClass.SpentonRepairs: "Spent on Repairs:;cr;N0" => "Wydano na Naprawy:;cr;N0"
 BankAccountClass.SpentonFuel: "Spent on Fuel:;cr;N0" => "Wydano na Paliwo:;cr;N0"
 BankAccountClass.SpendonAmmo: "Spend on Ammo:;cr;N0" => "Wydano na Amunicję:;cr;N0"
-BankAccountClass.InsuranceClaims: "Insurance Claims:;;N0" @
-BankAccountClass.SpentonInsurance: "Spent on Insurance:;cr;N0" @
-CombatClass.Bounties: "Bounties :;;N0" @
-CombatClass.BountyProfits: "Bounty Profits:;cr;N0" @
-CombatClass.CombatBonds: "Combat Bonds:;;N0" @
-CombatClass.CombatBondProfits: "Combat Bond Profits:;cr;N0" @
-CombatClass.Assassinations: "Assassinations:;;N0" @
-CombatClass.AssassinationProfits: "Assassination Profits:;cr;N0" @
-CombatClass.HighestReward: "Highest Reward:;cr;N0" @
-CombatClass.SkimmersKilled: "Skimmers Killed:;;N0" @
-CrimeClass.NotorietyIndex: "Notoriety Index:;;N0" @
-CrimeClass.Fines: "Fines:;;N0" @
-CrimeClass.TotalFines: "Total Fines:;cr;N0" @
-CrimeClass.Bounties: "Bounties:;;N0" @
-CrimeClass.TotalBounties: "Total Bounties:;cr;N0" @
-CrimeClass.HighestBounty: "Highest Bounty:;cr;N0" @
-SmugglingClass.BlackMarkets: "Black Markets:;;N0" @
-SmugglingClass.BlackMarketProfits: "Black Market Profits:;cr;N0" @
-SmugglingClass.ResourcesSmuggled: "Resources Smuggled:;;N0" @
-SmugglingClass.AverageProfit: "Average Profit:;cr;N0" @
-SmugglingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
-TradingClass.MarketsTraded: "Markets Traded:;;N0" @
-TradingClass.Profits: "Profits:;cr;N0" @
-TradingClass.No: "No. of Resources:;;N0" @
-TradingClass.AverageProfit: "Average Profit:;cr;N0" @
-TradingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
-MiningClass.Profits: "Profits:;cr;N0" @
-MiningClass.Quantity: "Quantity:;;N0" @
-MiningClass.MaterialsTypesCollected: "Materials Types Collected:;;N0" @
-ExplorationClass.SystemsVisited: "Systems Visited:;;N0" @
-ExplorationClass.Profits: "Profits:;cr;N0" @
-ExplorationClass.Level2Scans: "Level 2 Scans:;;N0" @
-ExplorationClass.Level3Scans: "Level 3 Scans:;;N0" @
-ExplorationClass.HighestPayout: "Highest Payout:;cr;N0" @
-ExplorationClass.TotalDistance: "Total Distance:;;N0" @
-ExplorationClass.NoofJumps: "No of Jumps:;;N0" @
-ExplorationClass.GreatestDistance: "Greatest Distance:;;N0" @
-ExplorationClass.TimePlayed: "Time Played:" @
-PassengerMissionsClass.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" @
-PassengerMissionsClass.VIPMissionPassengers: "VIP Mission Passengers:;;N0" @
-PassengerMissionsClass.PassengersDelivered: "Passengers Delivered:;;N0" @
-PassengerMissionsClass.PassengersEjected: "Passengers Ejected:;;N0" @
-SearchAndRescueClass.TotalItemsRescued: "Total Items Rescued:;;N0" @
-SearchAndRescueClass.Profit: "Profit:;cr;N0" @
-SearchAndRescueClass.TotalRescueTransactions: "Total Rescue Transactions:;;N0" @
-CraftingClass.EngineersUsed: "Engineers Used:;;N0" @
-CraftingClass.Blueprints: "Blueprints:;;N0" @
-CraftingClass.AtLevel1: "At Level 1:;;N0" @
-CraftingClass.AtLevel2: "At Level 2:;;N0" @
-CraftingClass.AtLevel3: "At Level 3:;;N0" @
-CraftingClass.AtLevel4: "At Level 4:;;N0" @
-CraftingClass.AtLevel5: "At Level 5:;;N0" @
-CrewClass.TotalWages: "Total Wages:;cr;N0" @
-CrewClass.Hired: "Hired:;;N0" @
-CrewClass.Fired: "Fired:;;N0" @
-CrewClass.KilledinAction: "Killed in Action:;;N0" @
-MulticrewClass.TotalTime: "Total Time:" @
-MulticrewClass.GunnerTime: "Gunner Time:;;N0" @
-MulticrewClass.FighterTime: "Fighter Time:;;N0" @
-MulticrewClass.Credits: "Credits:;cr;N0" @
-MulticrewClass.Fines: "Fines:;cr;N0" @
-MaterialTraderStatsClass.CommodityTrades: "Commodity Trades:;;N0" @
-MaterialTraderStatsClass.MaterialTraded: "Material Traded:;;N0" @
-CQCClass.TimePlayed: "Time Played:;;N0" @
-CQCClass.KDRatio: "KD Ratio:;;N" @
-CQCClass.Kills: "Kills:;;N0" @
-CQCClass.Win: "Win/Loss:;;N" @
+BankAccountClass.InsuranceClaims: "Insurance Claims:;;N0" => "Roszczenia Ubezpieczeniowe:;;N0"
+BankAccountClass.SpentonInsurance: "Spent on Insurance:;cr;N0" => "Wydano na Ubezpieczenia:;cr;N0"
+CombatClass.Bounties: "Bounties :;;N0" => "Nagrody :;;N0"
+CombatClass.BountyProfits: "Bounty Profits:;cr;N0" => "Zyski z Nagród:;cr;N0"
+CombatClass.CombatBonds: "Combat Bonds:;;N0" => "Obligacje Wojenne:;;N0"
+CombatClass.CombatBondProfits: "Combat Bond Profits:;cr;N0" => "Zyski z Obligacji Wojennych:;cr;N0"
+CombatClass.Assassinations: "Assassinations:;;N0" => "Zamachy:;;N0"
+CombatClass.AssassinationProfits: "Assassination Profits:;cr;N0" => "Zyski z Zamachów:;cr;N0"
+CombatClass.HighestReward: "Highest Reward:;cr;N0" => "Najwyższa Nagroda:;cr;N0"
+CombatClass.SkimmersKilled: "Skimmers Killed:;;N0" => "Zniszczone Drony Strażnicze:;;N0"
+CrimeClass.NotorietyIndex: "Notoriety Index:;;N0" => "Indeks Rozgłosu:;;N0"
+CrimeClass.Fines: "Fines:;;N0" => "Kary Pieniężne:;;N0"
+CrimeClass.TotalFines: "Total Fines:;cr;N0" => "Razem Kar Pieniężnych:;cr;N0"
+CrimeClass.Bounties: "Bounties:;;N0" => "Wyznaczone Nagrody:;;N0"
+CrimeClass.TotalBounties: "Total Bounties:;cr;N0" => "Razem Wyzn. Nagród:;cr;N0"
+CrimeClass.HighestBounty: "Highest Bounty:;cr;N0" => "Najwyższa Wyzn. Nagroda:;cr;N0"
+SmugglingClass.BlackMarkets: "Black Markets:;;N0" => "Czarne Rynki:;;N0"
+SmugglingClass.BlackMarketProfits: "Black Market Profits:;cr;N0" => "Zyski z Czarnego Rynku:;cr;N0"
+SmugglingClass.ResourcesSmuggled: "Resources Smuggled:;;N0" => "Przemycone Zasoby:;;N0"
+SmugglingClass.AverageProfit: "Average Profit:;cr;N0" => "Średni Zysk:;cr;N0"
+SmugglingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" => "Najwyższa Pojedyncza Transakcja:;cr;N0"
+TradingClass.MarketsTraded: "Markets Traded:;;N0" => "Rynki Na Których Handlowano:;;N0"
+TradingClass.Profits: "Profits:;cr;N0" => "Zyski:;cr;N0"
+TradingClass.No: "No. of Resources:;;N0" => "Ilość Zasobów:;;N0"
+TradingClass.AverageProfit: "Average Profit:;cr;N0" => "Średni Zysk:;cr;N0"
+TradingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" => "Najwyższa Pojedyncza Transakcja:;cr;N0"
+MiningClass.Profits: "Profits:;cr;N0" => "Zyski:;cr;N0"
+MiningClass.Quantity: "Quantity:;;N0" => "Ilość:;;N0"
+MiningClass.MaterialsTypesCollected: "Materials Types Collected:;;N0" => "Zebrane Typy Materiałów:;;N0"
+ExplorationClass.SystemsVisited: "Systems Visited:;;N0" => "Odwiedzone Układy:;;N0"
+ExplorationClass.Profits: "Profits:;cr;N0" => "Zyski:;cr;N0"
+ExplorationClass.Level2Scans: "Level 2 Scans:;;N0" => "Skany Poziomu 2:;;N0"
+ExplorationClass.Level3Scans: "Level 3 Scans:;;N0" => "Skany Poziomu 3:;;N0"
+ExplorationClass.HighestPayout: "Highest Payout:;cr;N0" => "Najwyższa Wypłata:;cr;N0"
+ExplorationClass.TotalDistance: "Total Distance:;;N0" => "Łączny Dystans:;;N0"
+ExplorationClass.NoofJumps: "No of Jumps:;;N0" => "Ilość Skoków:;;N0"
+ExplorationClass.GreatestDistance: "Greatest Distance:;;N0" => "Największy Dystans:;;N0"
+ExplorationClass.TimePlayed: "Time Played:" => "Czas Gry:"
+PassengerMissionsClass.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" => "Pasażerowie Masowi:;;N0"
+PassengerMissionsClass.VIPMissionPassengers: "VIP Mission Passengers:;;N0" => "Pasażerowie VIP:;;N0"
+PassengerMissionsClass.PassengersDelivered: "Passengers Delivered:;;N0" => "Dostarczono Pasażerów:;;N0"
+PassengerMissionsClass.PassengersEjected: "Passengers Ejected:;;N0" => "Wyrzucono Pasażerów:;;N0"
+SearchAndRescueClass.TotalItemsRescued: "Total Items Rescued:;;N0" => "Razem Odzyskanych Przedmiotów:;;N0"
+SearchAndRescueClass.Profit: "Profit:;cr;N0" => "Zysk:;cr;N0"
+SearchAndRescueClass.TotalRescueTransactions: "Total Rescue Transactions:;;N0" => "Razem Transakcji Ratunkowych:;;N0"
+CraftingClass.EngineersUsed: "Engineers Used:;;N0" => "Użyto Inżynierów:;;N0"
+CraftingClass.Blueprints: "Blueprints:;;N0" => "Schematy:;;N0"
+CraftingClass.AtLevel1: "At Level 1:;;N0" => "Na Poziomie 1:;;N0"
+CraftingClass.AtLevel2: "At Level 2:;;N0" => "Na Poziomie 2:;;N0"
+CraftingClass.AtLevel3: "At Level 3:;;N0" => "Na Poziomie 3:;;N0"
+CraftingClass.AtLevel4: "At Level 4:;;N0" => "Na Poziomie 4:;;N0"
+CraftingClass.AtLevel5: "At Level 5:;;N0" => "Na Poziomie 5:;;N0"
+CrewClass.TotalWages: "Total Wages:;cr;N0" => "Razem Wypłat Załogi:;cr;N0"
+CrewClass.Hired: "Hired:;;N0" => "Zatrudniono:;;N0"
+CrewClass.Fired: "Fired:;;N0" => "Zwolniono:;;N0"
+CrewClass.KilledinAction: "Killed in Action:;;N0" => "Zabitych w Akcji:;;N0"
+MulticrewClass.TotalTime: "Total Time:" => "Łączny Czas:"
+MulticrewClass.GunnerTime: "Gunner Time:;;N0" => "Czas jako Kanonier:;;N0"
+MulticrewClass.FighterTime: "Fighter Time:;;N0" => "Czas w Myśliwcu:;;N0"
+MulticrewClass.Credits: "Credits:;cr;N0" => "Kredyty:;cr;N0"
+MulticrewClass.Fines: "Fines:;cr;N0" => "Kary:;cr;N0"
+MaterialTraderStatsClass.CommodityTrades: "Commodity Trades:;;N0" Transakcje Handlu Towarami:;;N0
+MaterialTraderStatsClass.MaterialTraded: "Material Traded:;;N0" => "Ilość Przehandlowanych Materiałów:;;N0"
+CQCClass.TimePlayed: "Time Played:;;N0" => "Czas Gry:;;N0"
+CQCClass.KDRatio: "KD Ratio:;;N" => "Stosunek Zabójstw/Śmierci:;;N"
+CQCClass.Kills: "Kills:;;N0" => "Zabójstwa:;;N0"
+CQCClass.Win: "Win/Loss:;;N" => "Wygrane/Przegrane:;;N"
 ///////////////////////////////////////////////////// JournalStoredModules
 JournalEntry.at: "< at " => "< w "
 JournalEntry.TransferCost: "Transfer Cost:; cr;N0" => "Koszt Przesyłki:; cr;N0"
