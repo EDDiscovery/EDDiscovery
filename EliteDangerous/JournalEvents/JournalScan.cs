@@ -641,7 +641,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && MetalRichZoneInner.HasValue && MetalRichZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".Tx(this),
+				habZone.AppendFormat("Metal Rich Planets: {0} ({1}-{2} AU)\n".Tx(this,"MRP"),
 									 GetMetalRichZoneStringLs(), 
 									 (MetalRichZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (MetalRichZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -669,7 +669,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && WaterWrldZoneInner.HasValue && WaterWrldZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+				habZone.AppendFormat("Water Worlds: {0} ({1}-{2} AU)\n".Tx(this,"WWP"),
 									 GetWaterWorldZoneStringLs(), 
 									 (WaterWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (WaterWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -697,7 +697,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && EarthLikeZoneInner.HasValue && EarthLikeZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+				habZone.AppendFormat("Earth Like Worlds: {0} ({1}-{2} AU)\n".Tx(this,"ELWP"),
 									 GetEarthLikeZoneStringLs(), 
 									 (EarthLikeZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (EarthLikeZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -725,7 +725,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && AmmonWrldZoneInner.HasValue && AmmonWrldZoneOuter.HasValue)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".Tx(this),
+				habZone.AppendFormat("Ammonia Worlds: {0} ({1}-{2} AU)\n".Tx(this,"AWP"),
 									 GetAmmoniaWorldZoneStringLs(), 
 									 (AmmonWrldZoneInner.Value / oneAU_LS).ToString("N2"), 
 									 (AmmonWrldZoneOuter.Value / oneAU_LS).ToString("N2"));
@@ -753,7 +753,7 @@ namespace EliteDangerousCore.JournalEvents
 			if (IsStar && IcyPlanetZoneInner.HasValue && IcyPlanetZoneOuter != null)
 			{
 				StringBuilder habZone = new StringBuilder();
-				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".Tx(this),
+				habZone.AppendFormat("Icy Planets: {0} ({1} AU to {2})\n".Tx(this,"ICYP"),
 									 GetIcyPlanetsZoneStringLs(), 
 									 (IcyPlanetZoneInner.Value / oneAU_LS).ToString("N2"),
 									 IcyPlanetZoneOuter);

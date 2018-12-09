@@ -85,6 +85,7 @@ namespace EDDiscovery
 
         public event Action OnMapsDownloaded;                               // UI
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
+        public event Action OnExplorationDownloaded;                        // UI
 
         #endregion
 
@@ -327,7 +328,6 @@ namespace EDDiscovery
 
             if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
             {
-                OnSyncStarting?.Invoke();
                 syncstate.perform_eddb_sync |= eddbsync;
                 syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
@@ -551,20 +551,21 @@ namespace EDDiscovery
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems");
             ReportSyncProgress(-1, "");
 
+            bool checkGithub = EDDOptions.Instance.CheckGithubFiles;
+            if (checkGithub)      // not normall in debug, due to git hub chokeing
+            {
+                // Async load of maps in another thread
+                DownloadMaps(() => PendingClose);
+
+                // and Expedition data
+                DownloadExpeditions(() => PendingClose);
+
+                // and Exploration data
+                DownloadExploration(() => PendingClose);
+            }
+
             if (!EDDOptions.Instance.NoSystemsLoad)
             {
-                bool check = true;
-#if DEBUG
-                check = EDDOptions.Instance.CheckGithubFilesInDebug;
-#endif 
-                if (check)      // not normall in debug, due to git hub chokeing
-                {
-                    // Async load of maps in another thread
-                    DownloadMaps(() => PendingClose);
-
-                    // and Expedition data
-                    DownloadExpeditions(() => PendingClose);
-                }
 
                 // Former CheckSystems, reworked to accomodate new switches..
                 // Check to see what sync refreshes we need
@@ -638,6 +639,8 @@ namespace EDDiscovery
 
         private void DoPerformSync()        // in Background worker
         {
+            InvokeAsyncOnUiThread.Invoke(() => OnSyncStarting?.Invoke());       // tell listeners sync is starting
+
             resyncEDSMEDDBRequestedFlag = 1;     // sync is happening, stop any async requests..
 
             Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform EDSM/EDDB sync");
@@ -909,6 +912,29 @@ namespace EDDiscovery
                         {
                             bool changed = SavedRouteClass.UpdateDBFromExpeditionFiles(expeditiondir);
                             InvokeAsyncOnUiThread(() => { OnExpeditionsDownloaded?.Invoke(changed); });
+                        }
+                    }
+                }
+            });
+        }
+
+        public void DownloadExploration(Func<bool> cancelRequested)
+        {
+            LogLine("Checking for new Exploration data".Tx(this, "EXPL"));
+
+            Task.Factory.StartNew(() =>
+            {
+                string explorationdir = EDDOptions.Instance.ExploreAppDirectory();
+
+                BaseUtils.GitHubClass github = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload, LogLine);
+                var files = github.ReadDirectory("Exploration");
+                if (files != null)        // may be empty, unlikely, but
+                {
+                    if (github.DownloadFiles(files, explorationdir))
+                    {
+                        if (!cancelRequested())
+                        {
+                            InvokeAsyncOnUiThread(() => { OnExplorationDownloaded?.Invoke(); });
                         }
                     }
                 }

@@ -55,9 +55,9 @@ namespace EDDiscovery
             return Task.Factory.StartNew(() =>
             {
                 bool check = true;
-#if DEBUG
-                check = EDDOptions.Instance.CheckGithubFilesInDebug;
+                check = EDDOptions.Instance.CheckRelease;
 
+#if DEBUG
                 // for debugging it
                 //callbackinthread?.Invoke(new BaseUtils.GitHubRelease("Test","10.9.1.9","http", "2018-09-25T09:17:02Z", "Test","1.exe","2.msi","portable.zip"));
 #endif 

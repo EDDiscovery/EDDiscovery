@@ -355,7 +355,7 @@ namespace EDDiscovery
             SetCenterSystemLabel();
             labelClickedSystemCoords.Text = "Click a star to select/copy, double-click to center";
 
-            camera.Set(new Vector3((float)centerSystem.X, -(float)centerSystem.Y, (float)centerSystem.Z));
+            camera.Set(new Vector3(toolStripButtonPerspective.Checked ? 45 : 0, 0, 0));
 
             zoom.SetDefault();
             lastcameranorm.Update(camera.Current, position.Current, zoom.Current,1.0F); // set up here so ready for action.. below uses it.
@@ -1384,9 +1384,8 @@ namespace EDDiscovery
         
         private void toolStripButtonPerspective_Click(object sender, EventArgs e)
         {
-            if (!toolStripButtonPerspective.Checked)
-                camera.Set(new Vector3(0, 0, 0));
-
+            camera.Set(new Vector3(toolStripButtonPerspective.Checked ? 45 : 0, 0, 0));
+            
             SetModelProjectionMatrix();
 
             RequestPaint();
@@ -2367,7 +2366,7 @@ namespace EDDiscovery
             }
 
             startTime = starttimes["All"]();
-            endTime = DateTime.Now.AddDays(1);
+            endTime = DateTime.MaxValue;
 
             string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)

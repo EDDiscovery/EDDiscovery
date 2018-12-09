@@ -1,0 +1,707 @@
+﻿///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////// Journals
+///////////////////////////////////////////////////////////////////////////
+
+JournalTypeEnum.Unknown: "Unknown" => "Nieznane"
+JournalTypeEnum.AfmuRepairs: "Afmu Repairs" => "Naprawa AFMU"
+JournalTypeEnum.ApproachBody: "Approach Body" => "Podchodzenie do Obiektu"
+JournalTypeEnum.ApproachSettlement: "Approach Settlement" => "Podchodzenie do Osady"
+JournalTypeEnum.Bounty: "Bounty" => "Nagroda"
+JournalTypeEnum.BuyAmmo: "Buy Ammo" => "Zakup Amunicji"
+JournalTypeEnum.BuyDrones: "Buy Drones" => "Zakup Dronów"
+JournalTypeEnum.BuyExplorationData: "Buy Exploration Data" => "Zakup Danych Układu"
+JournalTypeEnum.BuyTradeData: "Buy Trade Data" => "Zakup Danych Rynkowych"
+JournalTypeEnum.CapShipBond: "Cap Ship Bond" @
+JournalTypeEnum.Cargo: "Cargo" => "Ładunek"
+JournalTypeEnum.CargoDepot: "Cargo Depot" => "Skład Ładunku"
+JournalTypeEnum.ChangeCrewRole: "Change Crew Role" => "Zmiana Roli w Załodze"
+JournalTypeEnum.ClearSavedGame: "Clear Saved Game" => "Wyczyszczenie Zapisu Gry"
+JournalTypeEnum.CockpitBreached: "Cockpit Breached" => "Uszkodzenie Kokpitu"
+JournalTypeEnum.CollectCargo: "Collect Cargo" => "Zebranie ładunku"
+JournalTypeEnum.Commander: "Commander" => "Dowódca"
+JournalTypeEnum.CommitCrime: "Commit Crime" => "Popełnienie Przestępstwa"
+JournalTypeEnum.CommunityGoal: "Community Goal" => "Cel Społeczności"
+JournalTypeEnum.CommunityGoalJoin: "Community Goal Join" => "Dołączenie do Celu Społeczności"
+JournalTypeEnum.CommunityGoalReward: "Community Goal Reward" => "Nagroda Celu Społeczności"
+JournalTypeEnum.Continued: "Continued" => "Kontynuowano"
+JournalTypeEnum.CrewAssign: "Crew Assign" => "Przypisanie Załogi"
+JournalTypeEnum.CrewFire: "Crew Fire" => "Zwolnienie Załogi"
+JournalTypeEnum.CrewHire: "Crew Hire" => "Zatrudnienie Załogi"
+JournalTypeEnum.DatalinkScan: "Datalink Scan" => "Skan Łącza Danych"
+JournalTypeEnum.Died: "Died" => "Śmierć"
+JournalTypeEnum.DiscoveryScan: "Discovery Scan" => "Skan Badawczy"
+JournalTypeEnum.Docked: "Docked" => "Zadokowano"
+JournalTypeEnum.DockFighter: "Dock Fighter" => "Zadokowano Myśliwiec"
+JournalTypeEnum.DockingCancelled: "Docking Cancelled" => "Anulowano Dokowanie"
+JournalTypeEnum.DockingDenied: "Docking Denied" => "Odmówiono Dokowania"
+JournalTypeEnum.DockingGranted: "Docking Granted" => "Zezwolono na Dokowanie"
+JournalTypeEnum.DockingRequested: "Docking Requested" => "Prośba o Dokowanie"
+JournalTypeEnum.DockingTimeout: "Docking Timeout" => "Czas na Dokowanie Upłynął"
+JournalTypeEnum.DockSRV: "Dock SRV" => "Dokowanie SRV"
+JournalTypeEnum.EjectCargo: "Eject Cargo" => "Wyrzucenie Ładunku"
+JournalTypeEnum.EndCrewSession: "End Crew Session" => "Zakończono Sesję Załogi"
+JournalTypeEnum.EngineerApply: "Engineer Apply" @
+JournalTypeEnum.EngineerContribution: "Engineer Contribution" => "Datek dla Inżyniera"
+JournalTypeEnum.EngineerCraft: "Engineer Craft" => "Ulepszenie Inżynierskie"
+JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" @
+JournalTypeEnum.EngineerProgress: "Engineer Progress" => "Postęp Inżyniera"
+JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" => "Uniknięcie Przechwycenia"
+JournalTypeEnum.FactionKillBond: "Faction Kill Bond" => "Obligacja Wojenna Frakcji"
+JournalTypeEnum.FSDJump: "FSD Jump" => "Skok FSD"
+JournalTypeEnum.FuelScoop: "Fuel Scoop" => "Czerpanie Paliwa"
+JournalTypeEnum.Fileheader: "Fileheader" => "Nagłówek Pliku"
+JournalTypeEnum.FighterDestroyed: "Fighter Destroyed" => "Myśliwiec Zniszczony"
+JournalTypeEnum.FighterRebuilt: "Fighter Rebuilt" => "Odbudowano Myśliwiec"
+JournalTypeEnum.Friends: "Friends" => "Znajomi"
+JournalTypeEnum.HeatDamage: "Heat Damage" => "Uszkodzenie od Przegrzania"
+JournalTypeEnum.HeatWarning: "Heat Warning" => "Ostrzeżenie o Przegrzaniu"
+JournalTypeEnum.HullDamage: "Hull Damage" => "Uszkodzenie Poszycia"
+JournalTypeEnum.Interdicted: "Interdicted" => "Przechwycenie Twojego Statku"
+JournalTypeEnum.Interdiction: "Interdiction" => "Przechwycenie Innego Statku"
+JournalTypeEnum.JetConeBoost: "Jet Cone Boost" => "Doładowanie Pulsarowe"
+JournalTypeEnum.JetConeDamage: "Jet Cone Damage" => "Uszkodzenia od Gwiazdy Neutronowej"
+JournalTypeEnum.JoinACrew: "Join A Crew" => "Dołączenie do Załogi"
+JournalTypeEnum.KickCrewMember: "Kick Crew Member" => "Wyrzucenie Członka Załogi"
+JournalTypeEnum.LaunchDrone: "Launch Drone" => "Wystrzelenie Dronu"
+JournalTypeEnum.LaunchFighter: "Launch Fighter" => "Start Myśliwca"
+JournalTypeEnum.LaunchSRV: "Launch SRV" => "Uruchomienie SRV"
+JournalTypeEnum.LeaveBody: "Leave Body" => "Opuszczenie Obiektu"
+JournalTypeEnum.Liftoff: "Liftoff" => "Odlot"
+JournalTypeEnum.LoadGame: "Load Game" => "Wczytanie Gry"
+JournalTypeEnum.Loadout: "Loadout" => "Wyposażenie"
+JournalTypeEnum.Location: "Location" => "Lokalizacja"
+JournalTypeEnum.Market: "Market" => "Rynek"
+JournalTypeEnum.MarketBuy: "Market Buy" => "Kupno na Rynku"
+JournalTypeEnum.MarketSell: "Market Sell" => "Sprzedaż na Rynku"
+JournalTypeEnum.MaterialCollected: "Material Collected" => "Zebrano Materiał"
+JournalTypeEnum.MaterialDiscarded: "Material Discarded" => "Odrzucono Materiał"
+JournalTypeEnum.MaterialDiscovered: "Material Discovered" => "Odkryto Materiał"
+JournalTypeEnum.MaterialTrade: "Material Trade" => "Handel Materiałami"
+JournalTypeEnum.Materials: "Materials" => "Materiały"
+JournalTypeEnum.MiningRefined: "Mining Refined" => "Przetworzono Rudę"
+JournalTypeEnum.Missions: "Missions" => "Misje"
+JournalTypeEnum.MissionAbandoned: "Mission Abandoned" => "Porzucono Misję"
+JournalTypeEnum.MissionAccepted: "Mission Accepted" => "Przyjęto Misję"
+JournalTypeEnum.MissionCompleted: "Mission Completed" => "Ukończono Misję"
+JournalTypeEnum.MissionFailed: "Mission Failed" => "Misja Nie Powiodła Się"
+JournalTypeEnum.MissionRedirected: "Mission Redirected" => "Zmiana Celu Misji"
+JournalTypeEnum.ModuleInfo: "Module Info" => "Informacje o Modułach"
+JournalTypeEnum.ModuleBuy: "Module Buy" => "Kupno Modułu"
+JournalTypeEnum.ModuleRetrieve: "Module Retrieve" => "Odebranie Modułu z Przechowalni"
+JournalTypeEnum.ModuleSell: "Module Sell" => "Sprzedaż Modułu"
+JournalTypeEnum.ModuleStore: "Module Store" => "Przechowanie Modułu"
+JournalTypeEnum.ModuleSwap: "Module Swap" => "Zamiana Modułów"
+JournalTypeEnum.Music: "Music" => "Muzyka"
+JournalTypeEnum.NavBeaconScan: "Nav Beacon Scan" => "Skan Przekaźnika Nawigacyjnego"
+JournalTypeEnum.NewCommander: "New Commander" => "Nowy Dowódca"
+JournalTypeEnum.NpcCrewPaidWage: "Npc Crew Paid Wage" => "Wypłata Załogi NPC"
+JournalTypeEnum.NpcCrewRank: "Npc Crew Rank" => "Ranga Załogi NPC"
+JournalTypeEnum.Outfitting: "Outfitting" => "Wyposażenie"
+JournalTypeEnum.Passengers: "Passengers" => "Pasażerowie"
+JournalTypeEnum.PayFines: "Pay Fines" => "Zapłacono Karę"
+JournalTypeEnum.PayBounties: "Pay Bounties" => "Zapłacono Wyznaczoną Nagrodę"
+JournalTypeEnum.PayLegacyFines: "Pay Legacy Fines" => "Zapłacono Poprzednie Kary"
+JournalTypeEnum.Powerplay: "Powerplay" @
+JournalTypeEnum.PowerplayCollect: "Powerplay Collect" @
+JournalTypeEnum.PowerplayDefect: "Powerplay Defect" @
+JournalTypeEnum.PowerplayDeliver: "Powerplay Deliver" @
+JournalTypeEnum.PowerplayFastTrack: "Powerplay Fast Track" @
+JournalTypeEnum.PowerplayJoin: "Powerplay Join" @
+JournalTypeEnum.PowerplayLeave: "Powerplay Leave" @
+JournalTypeEnum.PowerplaySalary: "Powerplay Salary" @
+JournalTypeEnum.PowerplayVote: "Powerplay Vote" @
+JournalTypeEnum.PowerplayVoucher: "Powerplay Voucher" @
+JournalTypeEnum.Progress: "Progress" => "Postęp"
+JournalTypeEnum.Promotion: "Promotion" => "Awans"
+JournalTypeEnum.PVPKill: "PVP Kill" => "Zabójstwo PvP"
+JournalTypeEnum.QuitACrew: "Quit A Crew" => "Opuszczenie Załogi"
+JournalTypeEnum.Rank: "Rank" => "Ranga"
+JournalTypeEnum.RebootRepair: "Reboot Repair" @
+JournalTypeEnum.ReceiveText: "Receive Text" => "Otrzymano Wiadomość"
+JournalTypeEnum.RedeemVoucher: "Redeem Voucher" => "Odebranie Nagrody"
+JournalTypeEnum.RefuelAll: "Refuel All" => "Tankowanie do Pełna"
+JournalTypeEnum.RefuelPartial: "Refuel Partial" => "Tankowanie Częściowe"
+JournalTypeEnum.Repair: "Repair" => "Naprawa"
+JournalTypeEnum.RepairAll: "Repair All" => "Naprawa Całkowita"
+JournalTypeEnum.RepairDrone: "Repair Drone" => "Dron Naprawczy"
+JournalTypeEnum.Reputation: "Reputation" => "Reputacja"
+JournalTypeEnum.RestockVehicle: "Restock Vehicle" => "Uzupełnienie Pojazdów"
+JournalTypeEnum.Resurrect: "Resurrect" => "Wskrzeszenie"
+JournalTypeEnum.Scan: "Scan" => "Skan"
+JournalTypeEnum.Scanned: "Scanned" => "Skanowanie przez Inny Statek"
+JournalTypeEnum.ScientificResearch: "Scientific Research" => "Badania Naukowe"
+JournalTypeEnum.Screenshot: "Screenshot" => "Zrzut Ekranu"
+JournalTypeEnum.SearchAndRescue: "Search And Rescue" => "Poszukiwania i Ratunek"
+JournalTypeEnum.SelfDestruct: "Self Destruct" => "Autodestrukcja"
+JournalTypeEnum.SellDrones: "Sell Drones" => "Sprzedaż Dronów"
+JournalTypeEnum.SellExplorationData: "Sell Exploration Data" => "Sprzedaż Danych z Eksploracji"
+JournalTypeEnum.SellShipOnRebuy: "Sell Ship On Rebuy" @
+JournalTypeEnum.SendText: "Send Text" => "Wysłanie Wiadomości"
+JournalTypeEnum.SetUserShipName: "Set User Ship Name" => "Zmiana Nazwy Statku"
+JournalTypeEnum.ShieldState: "Shield State" => "Stan Osłon"
+JournalTypeEnum.Shipyard: "Shipyard" => "Stocznia"
+JournalTypeEnum.ShipyardBuy: "Shipyard Buy" => "Kupno Statku"
+JournalTypeEnum.ShipyardNew: "Shipyard New" => "Nowy Statek"
+JournalTypeEnum.ShipyardSell: "Shipyard Sell" => "Sprzedaż Statku"
+JournalTypeEnum.ShipyardSwap: "Shipyard Swap" => "Zamiana Statku"
+JournalTypeEnum.ShipyardTransfer: "Shipyard Transfer" => "Przeniesienie Statku"
+JournalTypeEnum.ShipTargeted: "Ship Targeted" => "Namierzenie Statku"
+JournalTypeEnum.Shutdown: "Shutdown" => "Wyjście z Gry"
+JournalTypeEnum.SRVDestroyed: "SRV Destroyed" => "SRV Zniszczony"
+JournalTypeEnum.StartJump: "Start Jump" => "Rozpoczęcie Skoku"
+JournalTypeEnum.StoredModules: "Stored Modules" => "Przechowywane Moduły"
+JournalTypeEnum.StoredShips: "Stored Ships" => "Przechowywane Statki"
+JournalTypeEnum.Statistics: "Statistics" => "Statystyki"
+JournalTypeEnum.SupercruiseEntry: "Supercruise Entry" => "Wejście w Supercruise"
+JournalTypeEnum.SupercruiseExit: "Supercruise Exit" => "Wyjście z Supercruise"
+JournalTypeEnum.Synthesis: "Synthesis" => "Synteza"
+JournalTypeEnum.SystemsShutdown: "Systems Shutdown" => "Wyłączenie Systemów Statku"
+JournalTypeEnum.TechnologyBroker: "Technology Broker" => "Pośrednik Technologii"
+JournalTypeEnum.Touchdown: "Touchdown" => "Wylądowanie"
+JournalTypeEnum.UnderAttack: "Under Attack" => "Pod Ostrzałem"
+JournalTypeEnum.Undocked: "Undocked" => "Oddokowanie"
+JournalTypeEnum.USSDrop: "USS Drop" => "Podchodzenie do Źródła Sygnału"
+JournalTypeEnum.VehicleSwitch: "Vehicle Switch" => "Zamiana Pojazdów"
+JournalTypeEnum.WingAdd: "Wing Add" @
+JournalTypeEnum.WingInvite: "Wing Invite" @
+JournalTypeEnum.WingJoin: "Wing Join" @
+JournalTypeEnum.WingLeave: "Wing Leave" @
+JournalTypeEnum.ModuleSellRemote: "Module Sell Remote" => "Zdalna Sprzedaż Modułu"
+JournalTypeEnum.FetchRemoteModule: "Fetch Remote Module" => "Przesyłka Modułu"
+JournalTypeEnum.MassModuleStore: "Mass Module Store" => "Przechowanie Wielu Modułów"
+JournalTypeEnum.DatalinkVoucher: "Datalink Voucher" => "Otrzymano Bon Łącza Danych"
+JournalTypeEnum.DataScanned: "Data Scanned" => "Skan Danych"
+JournalTypeEnum.CommunityGoalDiscard: "Community Goal Discard" => "Porzucenie Celu Społeczności"
+JournalTypeEnum.CrewLaunchFighter: "Crew Launch Fighter" => "Start Myśliwca Załogi"
+JournalTypeEnum.CrewMemberJoins: "Crew Member Joins" => "Dołączył Członek Załogi"
+JournalTypeEnum.CrewMemberQuits: "Crew Member Quits" => "Członek Opuścił Załogę"
+JournalTypeEnum.CrewMemberRoleChange: "Crew Member Role Change" => "Zmiana Roli Członka Załogi"
+JournalTypeEnum.EDDItemSet: "EDD Item Set" @
+JournalTypeEnum.EDDCommodityPrices: "EDD Commodity Prices" => "Ceny Towarów EDD"
+JournalTypeEnum.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
+JournalTypeEnum.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
+JournalTypeEnum.RestockVehicle_SRV: "Restock Vehicle_SRV" @
+JournalTypeEnum.RestockVehicle_Fighter: "Restock Vehicle_Fighter" @
+JournalTypeEnum.ShieldState_ShieldsUp: "Shield State_Shields Up" @
+JournalTypeEnum.ShieldState_ShieldsDown: "Shield State_Shields Down" @
+JournalTypeEnum.VehicleSwitch_Mothership: "Vehicle Switch_Mothership" @
+JournalTypeEnum.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
+
+
+////////////////////////////////////////////////////
+///////////////////////////////////////////////////// Journals.  Note there are a lot of format strings, in both the {n} format and in FieldBuilder format
+///////////////////////////////////////////////////// Field builder uses the format "prefixtext;postfix text;Format".  Keep the semicolons right!
+
+///////////////////////////////////////////////////// JournalBounty
+JournalEntry.LegBounty: "{0} total {1:N0}" => "{0} razem {1:N0}"
+JournalEntry.Target: "Target:" => "Cel:"
+JournalEntry.Victimfaction: "Victim faction:" => "Frakcja Celu:"
+JournalEntry.Faction: "Faction:" => "Frakcja:"
+///////////////////////////////////////////////////// JournalBuyDrones
+JournalEntry.Type: "Type:" => "Typ:"
+JournalEntry.Count: "Count:" => "Ilość"
+JournalEntry.TotalCost: "Total Cost:; cr;N0" => "Łączny Koszt:; cr;N0"
+JournalEntry.each: "each:; cr;N0" => "za sztukę:; cr;N0"
+///////////////////////////////////////////////////// JournalBuyExplorationData
+JournalEntry.System: "System:" => "Układ:"
+JournalEntry.Cost: "Cost:; cr;N0" => "Koszt:; cr;N0"
+///////////////////////////////////////////////////// JournalCapShipBond
+JournalEntry.from: "< from " @
+JournalEntry.dueto: "< , due to " @
+///////////////////////////////////////////////////// JournalCargo
+JournalEntry.NoCargo: "No Cargo" => "Brak Ładunku"
+JournalEntry.Cargo: "Cargo, {0} items" => "Ładunek, {0} przedmiotów"
+JournalEntry.items: "; items" => "; przedmioty"
+///////////////////////////////////////////////////// JournalCargoDepot
+JournalEntry.Collected: "Collected:" => "Zebrano:"
+JournalEntry.of: "< of " => "< szt. "
+JournalEntry.Total: "Total:" => "Razem:"
+JournalEntry.Progress: "Progress:;%;N1" => "Postęp:;%;N1"
+JournalEntry.Delivered: "Delivered:" => "Dostarczono:"
+JournalEntry.Update: "Update, Collected:" => "Aktualizacja, Zebrano:"
+JournalEntry.ToGo: "To Go:" => "Pozost.:"
+JournalEntry.ProgressLeft: "Progress Left:;%;N1" => "Pozostały Postęp:;%;N1"
+///////////////////////////////////////////////////// JournalCollectCargo
+JournalEntry.Stolen: ";Stolen" => ";Kradzione"
+///////////////////////////////////////////////////// JournalCommitCrime
+JournalCommitCrime.Fine: " Fine {0:N0}" => "Kara {0:N0}"
+JournalCommitCrime.Bounty: " Bounty {0:N0}" => "Wyzn. Nagroda {0:N0}"
+JournalEntry.0: "{0} on {1}" => "{0} w {1}"
+JournalEntry.onfaction: "< on faction " => "< we frakcji "
+JournalEntry.Against: "Against " => "Przeciwko "
+JournalEntry.Bounty: "Bounty:; cr;N0" => "Wyzn.Nagroda:; cr;N0"
+///////////////////////////////////////////////////// JournalCommunityGoal
+CommunityGoal.Title: "Title:" => "Nazwa:"
+CommunityGoal.System: "System:" => "Układ:"
+CommunityGoal.At: "At:" => "W:"
+CommunityGoal.Expires: "Expires:" => "Wygasa:"
+CommunityGoal.NotComplete: "Not Complete;Complete" => "Nieukończone;Ukończone"
+CommunityGoal.CurrentTotal: "Current Total:" => "Obecnie Razem:"
+CommunityGoal.Contribution: "Contribution:" => "Wkład:"
+CommunityGoal.NumContributors: "Num Contributors:" => "Ilość Wkładców:"
+CommunityGoal.Player: "Player % Band:" => "Zakres % Gracza:"
+CommunityGoal.TopRank: "Top Rank:" => "Najwyższa Ranga:"
+CommunityGoal.NotInTopRank: "Not In Top Rank;In Top Rank" @
+CommunityGoal.TierReached: "Tier Reached:" => "Osiągnięty Poziom:"
+CommunityGoal.Bonus: "Bonus:" => "Bonus:"
+CommunityGoal.TopTierName: "Top Tier Name" => "Nazwa Najw. Poziomu:"
+CommunityGoal.TT: "TT. Bonus" => "Bonus"
+///////////////////////////////////////////////////// JournalCommunityGoalDiscard
+JournalEntry.CGS: "< at ; Star System" => "< w układzie ;"
+///////////////////////////////////////////////////// JournalCommunityGoalReward
+JournalEntry.Reward: "Reward:; cr;N0" => "Nagroda:; cr;N0"
+///////////////////////////////////////////////////// JournalCrewAssign
+JournalEntry.torole: "< to role ;" => "< do roli ;"
+///////////////////////////////////////////////////// JournalCrewFire
+JournalEntry.fired: "; fired" => "zwolniono ;"
+///////////////////////////////////////////////////// JournalCrewHire
+JournalEntry.Hired: "Hired:;" => "Zatrudniono:;"
+JournalEntry.offaction: "< of faction " => "< z frakcji "
+JournalEntry.Rank: "Rank:" => "Ranga:"
+///////////////////////////////////////////////////// JournalCrewMemberRoleChange
+JournalEntry.Crew: "Crew:" => "Załoga:"
+JournalEntry.Role: "Role:" => "Rola:"
+///////////////////////////////////////////////////// JournalDatalinkVoucher
+JournalEntry.fromfaction: "< from faction " => "< z frakcji "
+///////////////////////////////////////////////////// JournalDied
+JournalEntry.Died: "{0} in ship type {1} rank {2}" => "{0} w statku typu {1} ranga {2}"
+JournalEntry.Killedby: "Killed by " => "Zabójstwo przez "
+///////////////////////////////////////////////////// JournalDiscoveryScan
+JournalEntry.Dscan: "New bodies discovered:" => "Odkryto nowe Obiekty:"
+///////////////////////////////////////////////////// JournalDocked
+JournalDocked.At: "At {0}" => "W {0}"
+JournalEntry.insystem: "< in system " => "< w układzie "
+JournalEntry.Wanted: ";(Wanted)" => ";(Poszukiwany)"
+JournalEntry.instate: "< in state " => "< w stanie "
+JournalEntry.Allegiance: "Allegiance:" => "Przynależność:"
+JournalEntry.Economy: "Economy:" => "Ekonomia:"
+JournalEntry.Government: "Government:" => "Rząd:"
+JournalEntry.Stationservices: "Station services:" => "Usługi na stacji:"
+JournalEntry.Economies: "Economies:" => "Ekonomie:"
+///////////////////////////////////////////////////// JournalDockingGranted
+JournalEntry.onpad: "< on pad " => "< na lądowisku "
+///////////////////////////////////////////////////// JournalCommodityPricesBase
+JournalCommodityPricesBase.PON: "Prices on ; items" => "Ceny ; przedmiotów"
+JournalCommodityPricesBase.CPBat: "< at " => "< w "
+JournalCommodityPricesBase.CPBin: "< in " => "< w "
+JournalCommodityPricesBase.Itemstobuy: "Items to buy:" => "Przedmioty do kupienia"
+JournalCommodityPricesBase.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
+JournalCommodityPricesBase.CPBBuy: "{0}: {1}  " @
+JournalCommodityPricesBase.SO: "Sell only Items:" @
+///////////////////////////////////////////////////// JournalEDDItemSet
+JournalEntry.Name: "Name:" => "Nazwa:"
+///////////////////////////////////////////////////// JournalEjectCargo
+JournalEntry.Abandoned: ";Abandoned" => ";Porzucone"
+JournalEntry.PowerPlay: "PowerPlay:" @
+///////////////////////////////////////////////////// JournalEndCrewSession
+JournalEntry.DuetoCrime: "; Due to Crime" => "; Z powodu Przestępstwa"
+///////////////////////////////////////////////////// JournalEngineerApply
+JournalEntry.Blueprint: "Blueprint:" => "Schemat:"
+JournalEntry.Level: "Level:" => "Poziom:"
+JournalEntry.Override: "Override:" @
+///////////////////////////////////////////////////// JournalEngineerContribution
+JournalEntry .Type: "Type:" => "Typ:"
+JournalEntry .Commodity: "Commodity:" => "Towar:"
+JournalEntry .Material: "Material:" => "Materiał:"
+JournalEntry .Quantity: "Quantity:" => "Ilość:"
+JournalEntry .TotalQuantity: "TotalQuantity:" => "Ilość Razem:"
+///////////////////////////////////////////////////// JournalEngineerCraftBase
+JournalEngineerCraftBase.InSlot: "In Slot:" => "W Przegrodzie:"
+JournalEngineerCraftBase.By: "By:" => "Przez:"
+JournalEngineerCraftBase.Blueprint: "Blueprint:" => "Schemat:"
+JournalEngineerCraftBase.Level: "Level:" => "Poziom:"
+
+///////////////////////////////////////////////////// JournalEngineerProgress
+JournalEngineerProgress.Progress: "Progress:" => "Postęp:"
+///////////////////////////////////////////////////// JournalEscapeInterdiction
+JournalEntry.NPC: "< (NPC);(Player)" => "< (NPC);(Gracz)"
+///////////////////////////////////////////////////// JournalFetchRemoteModule
+JournalEntry.Intoship: "Into ship:" => "Do statku:"
+JournalEntry.TransferTime: "Transfer Time:" => "Czas Przesyłu:"
+///////////////////////////////////////////////////// JournalFileheader
+JournalEntry.Version: "Version:" => "Wersja:"
+JournalEntry.Build: "Build:" @
+JournalEntry.Part: "Part:" @
+///////////////////////////////////////////////////// JournalFriends
+JournalEntry.NumberofStatuses: "Number of Statuses:" @
+JournalEntry.Online: "Online:" @
+JournalEntry.Offline: "Offline:" @
+///////////////////////////////////////////////////// JournalFSDJump
+JournalFSDJump.Jumpto: "Jump to {0}" => "Skok do {0}"
+JournalFSDJump.Fuel: " Fuel " => " Zużyto paliwa "
+JournalFSDJump.left: " left " => " pozostało "
+JournalLocOrJump.Faction: "Faction:" => "Frakcja:"
+JournalLocOrJump.Wanted: "<;(Wanted) " => "<;(Poszukiwany) "
+JournalLocOrJump.State: "State:" => "Stan:"
+JournalLocOrJump.Allegiance: "Allegiance:" => "Przynależność:"
+JournalLocOrJump.Economy: "Economy:" => "Ekonomia:"
+JournalLocOrJump.Population: "Population:" => "Populacja:"
+JournalLocOrJump.Government: "Government:" => "Rząd:"
+JournalLocOrJump.Inf: "Inf:;%" @
+JournalLocOrJump.PendingState: "Pending State:" @
+JournalLocOrJump.RecoveringState: "Recovering State:" @
+///////////////////////////////////////////////////// JournalFuelScoop
+JournalFuelScoop.Total: "Total:;t;0.0" => "Razem:;t;0.0"
+///////////////////////////////////////////////////// JournalInterdicted
+JournalEntry.Submitted: ";Submitted" => "Poddanie się"
+JournalEntry.to: "< to " => "< do "
+JournalEntry.Power: "Power:" @
+///////////////////////////////////////////////////// JournalInterdiction
+JournalEntry.Failedtointerdict: "Failed to interdict;Interdicted" => "Przechwycenie nieudane;Przechwycono"
+///////////////////////////////////////////////////// JournalJetConeBoost
+JournalEntry.Boost: "Boost:;;0.0" => "Doładowanie:;;0.0"
+///////////////////////////////////////////////////// JournalJoinACrew
+JournalEntry.Captain: "Captain:" => "Kapitan:"
+///////////////////////////////////////////////////// JournalKickCrewMember
+JournalEntry.CrewMember: "Crew Member:" => "Członek Załogi:"
+///////////////////////////////////////////////////// JournalLaunchFighter
+JournalEntry.Loadout: "Loadout:" => "Wyposażenie:"
+JournalEntry.NPCControlled: ", NPC Controlled;" => ", Kontrola przez NPC;"
+///////////////////////////////////////////////////// JournalLoadGame
+JournalEntry.Ship: "Ship:" => "Statek:"
+JournalEntry.Ident: "Ident:" @
+JournalEntry.Credits: "Credits:;;N0" => "Kredyty:;;N0"
+JournalEntry.Mode: "Mode:" => "Tryb:"
+JournalEntry.Group: "Group:" => "Grupa:"
+JournalEntry.NotLanded: "Not Landed;Landed" => "Nie Wylądowano;Wylądowano"
+JournalEntry.FuelLevel: "Fuel Level:;;0.0" => "Poziom Paliwa:;;0.0"
+JournalEntry.Capacity: "Capacity:;;0.0" => "Pojemność:;;0.0"
+JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" @
+///////////////////////////////////////////////////// JournalLoadout
+JournalLoadout.Modules: "Modules:" => "Moduły:"
+JournalEntry.Hull: "Hull:; cr;N0" => "Poszycie:; cr;N0"
+JournalEntry.Modules: "Modules:; cr;N0" => "Moduły:; cr;N0"
+JournalEntry.Rebuy: "Rebuy:; cr;N0" => "Ubezpieczenie:; cr;N0"
+///////////////////////////////////////////////////// JournalLocation
+JournalLocation.AtStat: "At {0}" => "W {0}"
+JournalLocation.LND: "Landed on {0}" => "Wylądowano na {0}"
+JournalLocation.AtStar: "At {0}" => "W {0}"
+JournalLocOrJump.Type: "Type " => "Typ "
+JournalLocOrJump.insystem: "< in system " => "< w układzie "
+JournalLocOrJump.Security: "Security:" => "Strzeżony:"
+JournalLocOrJump.Inspacenear: "In space near " => "W przestrzeni w pobliżu "
+JournalLocOrJump.oftype: "< of type " => "< typu "
+///////////////////////////////////////////////////// JournalMarketBuy
+JournalEntry.buyprice: "< buy price ; cr;N0" => "< cena kupna ; cr;N0"
+///////////////////////////////////////////////////// JournalMarketSell
+JournalEntry.sellprice: "< sell price ; cr;N0" => "< cena sprzedaży ; cr;N0"
+JournalEntry.Profit: "Profit:; cr;N0" => "Zysk:; cr;N0"
+JournalEntry.Legal: "Legal;Illegal" => "Legalne;Nielegalne"
+JournalEntry.NotStolen: "Not Stolen;Stolen" => "Nie Kradzione;Kradzione"
+JournalEntry.Market: "Market;BlackMarket" => "Rynek;Czarny Rynek"
+///////////////////////////////////////////////////// JournalMassModuleStore
+JournalEntry.Totalmodules: "Total modules:" => "Razem modułów:"
+JournalEntry.Hot: ";(Hot)" => ";(Ścigany)"
+///////////////////////////////////////////////////// JournalMaterialCollected
+JournalEntry.MatC: "< ; items" => "< ; przedmioty"
+///////////////////////////////////////////////////// JournalMaterialDiscovered
+JournalMaterialDiscovered.DN: ", Discovery {0}" => "Odkrycie {0}"
+///////////////////////////////////////////////////// JournalMaterials
+JournalMaterials.Raw: "Raw:" => "Surowe:"
+JournalMaterials.Manufactured: "Manufactured:" => "Sprzętowe:"
+JournalMaterials.Encoded: "Encoded:" => "Kodowane:"
+///////////////////////////////////////////////////// JournalMaterialTrade
+JournalEntry.Sold: "Sold:" => "Sprzedano:"
+JournalEntry.Received: "Received:" => "Otrzymano:"
+///////////////////////////////////////////////////// JournalMissionAbandoned
+JournalEntry.Fine: "Fine:" => "Kara:"
+///////////////////////////////////////////////////// JournalMissionCompleted
+JournalEntry.Donation: "Donation:" => "Darowizna:"
+JournalEntry.Station: "Station:" => "Stacja:"
+JournalEntry.Commodity: "Commodity:" => "Towar:"
+JournalEntry.TargetFaction: "Target Faction:" => "Frakcja będąca Celem:"
+JournalEntry.Permits: "Permits:" => "Przepustki:"
+JournalEntry.Rewards: "Rewards:" => ", Nagrody:"
+///////////////////////////////////////////////////// JournalMissionRedirected
+JournalEntry.Missionname: "Mission name:" => "Nazwa misji:"
+JournalMissionRedirected.From: "From:" => "Z:"
+JournalMissionRedirected.To: "To:" => "Do:"
+///////////////////////////////////////////////////// JournalMissions
+JournalEntry.Active: "Active:" => "Aktywne:"
+JournalEntry.Failed: "Failed:" => "Niepowodzenia:"
+JournalEntry.Completed: "Completed:" => "Ukończone:"
+MissionItem.Passenger: "<;(Passenger)" => "<;(Pasażer)"
+MissionItem.Expires: "Expires:" => "Wygasa:"
+///////////////////////////////////////////////////// JournalModuleBuy
+JournalEntry.into: "< into " => "< do "
+JournalEntry.Price: "Price:; cr;N0" => "Cena:; cr;N0"
+JournalEntry.Stored: "Stored:" => "Przechowano:"
+///////////////////////////////////////////////////// JournalModuleInfo
+JournalEntry .Modules: "Modules:" => "Moduły:"
+///////////////////////////////////////////////////// JournalModuleSellRemote
+JournalEntry.Item: "Item:" => "Przedmiot:"
+///////////////////////////////////////////////////// JournalModuleStore
+JournalEntry.on: " on " => " na "
+JournalEntry.Replacedby: "Replaced by:" => "Zamieniono na:"
+JournalEntry.Modifications: "Modifications:" => "Modyfikacje:"
+///////////////////////////////////////////////////// JournalModuleSwap
+JournalEntry.Slot: "Slot:" => "Przegroda:"
+JournalEntry.Swappedwith: ", Swapped with " => ", zamieniono z "
+///////////////////////////////////////////////////// JournalMusic
+JournalEntry.MusicTrack: "Music Track:" => "Utwór Muzyczny:"
+///////////////////////////////////////////////////// JournalNavBeaconScan
+JournalEntry.Bodies: "Bodies:" => "Obiekty:"
+///////////////////////////////////////////////////// JournalNewCommander
+JournalEntry.StartingPackage: "Starting Package:" => "Pakiet Startowy:"
+///////////////////////////////////////////////////// JournalNpcCrewPaidWage
+JournalEntry.Wagesfor: "Wages for " => "Wypłata dla "
+///////////////////////////////////////////////////// JournalOutfitting
+JournalEntry.itemsavailable: " items available" => " dostępnych przedmiotów"
+///////////////////////////////////////////////////// JournalPassengers
+JournalEntry.NoPassengers: "No Passengers" => "Brak Pasażerów"
+///////////////////////////////////////////////////// JournalPayBounties
+JournalEntry.Brokertook: ", Broker took {0:N0}%" => ", Pośrednik otrzymał {0:N0}%"
+///////////////////////////////////////////////////// JournalPowerplay
+JournalEntry.Merits: "Merits:" @
+JournalEntry.Votes: "Votes:" @
+JournalEntry.Pledged: "Pledged:" @
+///////////////////////////////////////////////////// JournalPowerplayDefect
+JournalEntry.FromPower: "From Power:" @
+JournalEntry.ToPower: "To Power:" @
+///////////////////////////////////////////////////// JournalPowerplaySalary
+JournalEntry.Amount: "Amount:; cr;N0" @
+///////////////////////////////////////////////////// JournalPowerplayVoucher
+JournalEntry.Systems: ", Systems:" @
+///////////////////////////////////////////////////// JournalProgress
+JournalProgress.Combat: "Combat:;%" => "Walka:;%"
+JournalProgress.Trade: "Trade:;%" => "Handel:;%"
+JournalProgress.Exploration: "Exploration:;%" => "Eksploracja:;%"
+JournalProgress.Federation: "Federation:;%" => "Federacja:;%"
+JournalProgress.Empire: "Empire:;%" => "Imperium:;%"
+JournalProgress.CQC: "CQC:;%" => "CQC:;%"
+///////////////////////////////////////////////////// JournalPromotion
+JournalPromotion.Combat: "Combat:" => "Walka:"
+JournalPromotion.Trade: "Trade:" => "Handel:"
+JournalPromotion.Exploration: "Exploration:" => "Eksploracja:"
+JournalPromotion.Empire: "Empire:" => "Imperium:"
+JournalPromotion.Federation: "Federation:" => "Federacja:"
+JournalPromotion.CQC: "CQC:" => "CQC:"
+///////////////////////////////////////////////////// JournalReceiveText
+JournalReceiveText.From: "From:" => "Od:"
+JournalReceiveText.Msg: "Msg:" => "Treść:"
+JournalReceiveText.Channel: "Channel:" => "Kanał:"
+///////////////////////////////////////////////////// JournalRefuelAll
+JournalEntry.Fuel: "Fuel:; tons;0.0" => "Paliwo:; ton;0.0"
+///////////////////////////////////////////////////// JournalRepairDrone
+JournalRepairDrone.Hull: "Hull:" => "Poszycie:"
+JournalEntry.Cockpit: "Cockpit:" => "Kokpit:"
+JournalEntry.Corrosion: "Corrosion:" => "Korozja:"
+///////////////////////////////////////////////////// JournalReputation
+JournalReputation.Federation: "Federation:;;0.#" => "Federacja:;;0.#"
+JournalReputation.Empire: "Empire:;;0.#" => "Imperium:;;0.#"
+JournalReputation.Independent: "Independent:;;0.#" => "Niezależne:;;0.#"
+JournalReputation.Alliance: "Alliance:;;0.#" => "Sojusz:;;0.#"
+///////////////////////////////////////////////////// JournalResurrect
+JournalEntry.Option: "Option:" => "Opcja:"
+JournalEntry.Bankrupt: ";Bankrupt" => ";Zbankrutowanie"
+///////////////////////////////////////////////////// JournalScan
+StarPlanetRing.Mass: "  Mass: {0:N4}{1}\n" => "  Masa: {0:N4}{1}\n"
+StarPlanetRing.InnerRadius: "  Inner Radius: {0:0.00}ls\n" => "  Wew.Promień: {0:0.00}s.ś.\n"
+StarPlanetRing.OuterRadius: "  Outer Radius: {0:0.00}ls\n" => "  Zew.Promień: {0:0.00}s.ś.\n"
+StarPlanetRing.IK: "  Inner Radius: {0}km\n" => "  Wew.Promień: {0}km\n"
+StarPlanetRing.OK: "  Outer Radius: {0}km\n" => "  Zew.Promień: {0}km\n"
+StarPlanetRing.Moons: " Moons" => " Księżyce"
+StarPlanetRing.Icy: "Icy" => "Lodowe"
+StarPlanetRing.Rocky: "Rocky" => "Skaliste"
+StarPlanetRing.MetalRich: "Metal Rich" => "Bogate w Metale"
+StarPlanetRing.Metallic: "Metallic" => "Metaliczne"
+StarPlanetRing.RockyIce: "Rocky Ice" => "Skalisto-Lodowe"
+JournalScan.Scanof: "Scan of {0}" => "Skan {0}"
+JournalScan.MSM: "Mass:;SM;0.00" => "Masa:;MS;0.00"
+JournalScan.Age: "Age:;my;0.0" => "Wiek:;mln.lat;0.0"
+JournalScan.RS: "Radius:;SR;0.00" => "Promień:;PS;0.00"
+JournalScan.MEM: "Mass:;EM;0.00" => "Masa:;MZ;0.00"
+JournalScan.Landable: "<;, Landable" => "<;, Możliwe Lądowanie"
+JournalScan.Terraformable: "<;, Terraformable" => "<;, Możliwe Terraformowanie"
+JournalScan.Gravity: "Gravity:;G;0.0" => "Grawitacja:;G;0.0"
+JournalScan.RK: "Radius:;km;0" => "Promień:;km;0"
+JournalScan.NoAtmosphere: ", No Atmosphere" => ", Brak Atmosfery"
+JournalScan.LandC: ", Landable" => ", Możliwe Lądowanie"
+JournalScan.AMY: "Age: {0} my\n" => "Wiek: {0} mln.lat\n"
+JournalScan.SolarMasses: "Solar Masses: {0:0.00}\n" => "Mas Słońca: {0:0.00}\n"
+JournalScan.EarthMasses: "Earth Masses: {0:0.0000}\n" => "Mas Ziemi: {0:0.0000}\n"
+JournalScan.SolarRadius: "Solar Radius: {0:0.00} Sols\n" => "Promień Słońca: {0:0.00}x Sol\n"
+JournalScan.BodyRadius: "Body Radius: {0:0.00}km\n" => "Promień Obiektu: {0:0.00}km\n"
+JournalScan.SurfaceTemp: "Surface Temp: {0}K\n" => "Temp. Powierzchni: {0}K\n"
+JournalScan.Luminosity: "Luminosity: {0}\n" => "Jasność: {0}\n"
+JournalScan.GV: "Gravity: {0:0.0}g\n" => "Gravitacja: {0:0.0}g\n"
+JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" => "Ciśnienie na Powierzchni: {0} atm"
+JournalScan.SPP: "Surface Pressure: {0} Pa\n" => "Ciśnienie na Powierzchni: {0} Pa\n"
+JournalScan.Volcanism: "Volcanism: {0}\n" => "Aktywność Wulkaniczna: {0}\n"
+JournalScan.NoVolcanism: "No Volcanism" => "Brak Aktywności Wulkanicznej"
+JournalScan.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" => "Odległość od Punktu Wlotu {0:N1}s.ś.\n"
+JournalScan.OrbitalPeriod: "Orbital Period: {0} days\n" => "Okres Orbitalny: {0} dni\n"
+JournalScan.SMA: "Semi Major Axis: {0:0.00}AU\n" => "Półoś Wielka: {0:0.00}AU\n"
+JournalScan.SMK: "Semi Major Axis: {0}km\n" => "Półoś Wielka: {0}km\n"
+JournalScan.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" => "Mimośród Orbity: {0:0.000}\n"
+JournalScan.OrbitalInclination: "Orbital Inclination: {0:0.000}�\n" => "Inklinacja Orbity: {0:0.000}°\n"
+JournalScan.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}�\n" => "Argument Perycentrum: {0:0.000}°\n"
+JournalScan.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}\n" => "Absolutna Wielkość Gwiazdowa: {0:0.00}\n"
+JournalScan.Axialtilt: "Axial tilt: {0:0.00}�\n" => "Nachylenie Osiowe: {0:0.00}°\n"
+JournalScan.RotationPeriod: "Rotation Period: {0} days\n" => "Okres Obrotu: {0} dni\n"
+JournalScan.Tidallylocked: "Tidally locked\n" => "Obrót Synchroniczny\n"
+JournalScan.Candidateforterraforming: "Candidate for terraforming\n" => "Kandydat na Terraformowanie\n"
+JournalScan.Belt: "Belt{0}" => "Pas {0}"
+JournalScan.Moons: " Moons" => " Księżyce"
+JournalScan.Ring: "Ring{0}" => "Pierścień {0}"
+JournalScan.EV: "\nEstimated value: {0:N0}" => "\nSzacowana wartość: {0:N0}"
+JournalScan.DB: "\n\nDiscovered by {0} on {1}" => "\n\nOdkryte przez {0} dnia {1}"
+JournalScan.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Ekosfera ok. {0} ({1}-{2} AU)\n"
+JournalScan.Othersstarsnotconsidered: " (Others stars not considered)\n" => " (Nie licząc innych gwiazd)\n"
+JournalScan.Materials: "Materials:\n" => "Materiały: \n"
+JournalScan.AtmosphericComposition: "Atmospheric Composition:\n" => "Skład Atmosfery:\n"
+JournalScan.PlanetaryComposition: "Planetary Composition:\n" => "Skład Planety:\n"
+///////////////////////////////////////////////////// JournalScientificResearch
+JournalEntry.Category: "Category:" => "Kategoria:"
+///////////////////////////////////////////////////// JournalScreenshot
+JournalScreenshot.At: "At " => "W "
+JournalScreenshot.in: "< in " => "< w "
+JournalScreenshot.File: "File:" => "Plik:"
+JournalScreenshot.Width: "Width:" => "Szer.:"
+JournalScreenshot.Height: "Height:" => "Wys.:"
+JournalEntry.Latitude: "Latitude:" => "Szer.Geogr.:"
+JournalEntry.Longitude: "Longitude:" => "Wys.Geogr.:"
+///////////////////////////////////////////////////// JournalSearchAndRescue
+JournalEntry.Num: "Num:" => "Ilość:"
+JournalSearchAndRescue.Reward: "Reward:" => "Nagroda:"
+///////////////////////////////////////////////////// JournalSelfDestruct
+JournalEntry.Boom: "Boom!" => "Bum!"
+///////////////////////////////////////////////////// JournalSellDrones
+JournalEntry.Drones: "Drones" => "Drony"
+///////////////////////////////////////////////////// JournalSellExplorationData
+JournalEntry.Bonus: "Bonus:; cr;N0" => "Bonus:; cr;N0"
+JournalSellExplorationData.Total: "Total:; cr;N0" => "Razem:; cr;N0"
+JournalEntry.Scanned: "Scanned:" => "Przeskanowano:"
+JournalEntry.Discovered: "Discovered:" => "Odkryto:"
+///////////////////////////////////////////////////// JournalSendText
+JournalSendText.To: "To:" => "Do:"
+JournalSendText.Msg: "Msg:" => "Treść:"
+///////////////////////////////////////////////////// JournalSetUserShipName
+JournalSetUserShipName.On: "On:" => "Na:"
+///////////////////////////////////////////////////// JournalShieldState
+JournalEntry.ShieldsDown: "Shields Down;Shields Up" => "Osłona Wyłączona;Osłona Włączona"
+///////////////////////////////////////////////////// JournalShipTargeted
+JournalEntry.in: "< in " => "< w "
+JournalEntry.Shield: "Shield ;;N1" => "Osłona ;;N1"
+JournalShipTargeted.Hull: "Hull ;;N1" => "Poszycie ;;N1"
+JournalShipTargeted.at: "< at ;;N1" => "< w ;;N1"
+JournalEntry.LostTarget: "Lost Target" => "Stracono Cel"
+///////////////////////////////////////////////////// JournalShipyard
+JournalEntry.Ships: "Ships" => "Statki"
+///////////////////////////////////////////////////// JournalShipyardSell
+JournalShipyardSell.At: "At:" => "W:"
+///////////////////////////////////////////////////// JournalShipyardSwap
+JournalShipyardSwap.Swap: "Swap " => "Zamiana "
+JournalShipyardSwap.fora: "< for a " => "< na "
+///////////////////////////////////////////////////// JournalShipyardTransfer
+JournalShipyardTransfer.Of: "Of " => "Transfer "
+JournalEntry.Distance: "Distance:; ly;0.0" => "Odległość:; lat świetlnych;0.0"
+///////////////////////////////////////////////////// JournalStartJump
+JournalStartJump.ChargingFSD: "Charging FSD" => "Ładowanie FSD"
+///////////////////////////////////////////////////// JournalStatistics
+JournalEntry.Wealth: "Wealth:;cr;N" => "Majątek:;cr;N"
+JournalEntry.NotorietyIndex: "Notoriety Index:;;N0" => "Indeks Rozgłosu:;;N0"
+JournalStatistics.BankAccount: "Bank Account" => "Konto Bankowe"
+JournalStatistics.Combat: "Combat" => "Walka"
+JournalStatistics.Crime: "Crime" => "Przestępstwo"
+JournalStatistics.Smuggling: "Smuggling" => "Przemyt"
+JournalStatistics.Trading: "Trading" => "Handel"
+JournalStatistics.Mining: "Mining" => "Wydobycie"
+JournalStatistics.Exploration: "Exploration" => "Eksploracja"
+JournalStatistics.Passengers: "Passengers" => "Pasażerowie"
+JournalStatistics.SearchandRescue: "Search and Rescue" => "Poszukiwania i Ratunek"
+JournalStatistics.Engineers: "Engineers" => "Inżynierowie"
+JournalStatistics.Crew: "Crew" => "Załoga"
+JournalStatistics.Multicrew: "Multicrew" @
+JournalStatistics.MaterialsandCommodityTrading: "Materials and Commodity Trading" => "Handel Materiałami i Towarami"
+JournalStatistics.CQC: "CQC" => "CQC"
+BankAccountClass.Wealth: "Wealth:;cr;N0" => "Majątek:;cr;N0"
+BankAccountClass.SpentonShips: "Spent on Ships:;cr;N0" => "Wydano na Statki:;cr;N0"
+BankAccountClass.SpentonOutfitting: "Spent on Outfitting:;cr;N0" => "Wydano na Wyposażenie:;cr;N0"
+BankAccountClass.SpentonRepairs: "Spent on Repairs:;cr;N0" => "Wydano na Naprawy:;cr;N0"
+BankAccountClass.SpentonFuel: "Spent on Fuel:;cr;N0" => "Wydano na Paliwo:;cr;N0"
+BankAccountClass.SpendonAmmo: "Spend on Ammo:;cr;N0" => "Wydano na Amunicję:;cr;N0"
+BankAccountClass.InsuranceClaims: "Insurance Claims:;;N0" @
+BankAccountClass.SpentonInsurance: "Spent on Insurance:;cr;N0" @
+CombatClass.Bounties: "Bounties :;;N0" @
+CombatClass.BountyProfits: "Bounty Profits:;cr;N0" @
+CombatClass.CombatBonds: "Combat Bonds:;;N0" @
+CombatClass.CombatBondProfits: "Combat Bond Profits:;cr;N0" @
+CombatClass.Assassinations: "Assassinations:;;N0" @
+CombatClass.AssassinationProfits: "Assassination Profits:;cr;N0" @
+CombatClass.HighestReward: "Highest Reward:;cr;N0" @
+CombatClass.SkimmersKilled: "Skimmers Killed:;;N0" @
+CrimeClass.NotorietyIndex: "Notoriety Index:;;N0" @
+CrimeClass.Fines: "Fines:;;N0" @
+CrimeClass.TotalFines: "Total Fines:;cr;N0" @
+CrimeClass.Bounties: "Bounties:;;N0" @
+CrimeClass.TotalBounties: "Total Bounties:;cr;N0" @
+CrimeClass.HighestBounty: "Highest Bounty:;cr;N0" @
+SmugglingClass.BlackMarkets: "Black Markets:;;N0" @
+SmugglingClass.BlackMarketProfits: "Black Market Profits:;cr;N0" @
+SmugglingClass.ResourcesSmuggled: "Resources Smuggled:;;N0" @
+SmugglingClass.AverageProfit: "Average Profit:;cr;N0" @
+SmugglingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
+TradingClass.MarketsTraded: "Markets Traded:;;N0" @
+TradingClass.Profits: "Profits:;cr;N0" @
+TradingClass.No: "No. of Resources:;;N0" @
+TradingClass.AverageProfit: "Average Profit:;cr;N0" @
+TradingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
+MiningClass.Profits: "Profits:;cr;N0" @
+MiningClass.Quantity: "Quantity:;;N0" @
+MiningClass.MaterialsTypesCollected: "Materials Types Collected:;;N0" @
+ExplorationClass.SystemsVisited: "Systems Visited:;;N0" @
+ExplorationClass.Profits: "Profits:;cr;N0" @
+ExplorationClass.Level2Scans: "Level 2 Scans:;;N0" @
+ExplorationClass.Level3Scans: "Level 3 Scans:;;N0" @
+ExplorationClass.HighestPayout: "Highest Payout:;cr;N0" @
+ExplorationClass.TotalDistance: "Total Distance:;;N0" @
+ExplorationClass.NoofJumps: "No of Jumps:;;N0" @
+ExplorationClass.GreatestDistance: "Greatest Distance:;;N0" @
+ExplorationClass.TimePlayed: "Time Played:" @
+PassengerMissionsClass.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" @
+PassengerMissionsClass.VIPMissionPassengers: "VIP Mission Passengers:;;N0" @
+PassengerMissionsClass.PassengersDelivered: "Passengers Delivered:;;N0" @
+PassengerMissionsClass.PassengersEjected: "Passengers Ejected:;;N0" @
+SearchAndRescueClass.TotalItemsRescued: "Total Items Rescued:;;N0" @
+SearchAndRescueClass.Profit: "Profit:;cr;N0" @
+SearchAndRescueClass.TotalRescueTransactions: "Total Rescue Transactions:;;N0" @
+CraftingClass.EngineersUsed: "Engineers Used:;;N0" @
+CraftingClass.Blueprints: "Blueprints:;;N0" @
+CraftingClass.AtLevel1: "At Level 1:;;N0" @
+CraftingClass.AtLevel2: "At Level 2:;;N0" @
+CraftingClass.AtLevel3: "At Level 3:;;N0" @
+CraftingClass.AtLevel4: "At Level 4:;;N0" @
+CraftingClass.AtLevel5: "At Level 5:;;N0" @
+CrewClass.TotalWages: "Total Wages:;cr;N0" @
+CrewClass.Hired: "Hired:;;N0" @
+CrewClass.Fired: "Fired:;;N0" @
+CrewClass.KilledinAction: "Killed in Action:;;N0" @
+MulticrewClass.TotalTime: "Total Time:" @
+MulticrewClass.GunnerTime: "Gunner Time:;;N0" @
+MulticrewClass.FighterTime: "Fighter Time:;;N0" @
+MulticrewClass.Credits: "Credits:;cr;N0" @
+MulticrewClass.Fines: "Fines:;cr;N0" @
+MaterialTraderStatsClass.CommodityTrades: "Commodity Trades:;;N0" @
+MaterialTraderStatsClass.MaterialTraded: "Material Traded:;;N0" @
+CQCClass.TimePlayed: "Time Played:;;N0" @
+CQCClass.KDRatio: "KD Ratio:;;N" @
+CQCClass.Kills: "Kills:;;N0" @
+CQCClass.Win: "Win/Loss:;;N" @
+///////////////////////////////////////////////////// JournalStoredModules
+JournalEntry.at: "< at " => "< w "
+JournalEntry.TransferCost: "Transfer Cost:; cr;N0" => "Koszt Przesyłki:; cr;N0"
+JournalEntry.Time: "Time:" => "Czas:"
+JournalEntry.Value: "Value:; cr;N0" => "Wartość:; cr;N0"
+///////////////////////////////////////////////////// JournalStoredShips
+JournalStoredShips.Atstarport: "At starport:" => "W porcie gwiezdnym:"
+JournalStoredShips.Otherlocations: "Other locations:" => "Inne Lokacje:"
+JournalStoredShips.SSP: "; cr;N0" => "; cr;N0"
+JournalStoredShips.Remote: "Remote:" => "Zdalne:"
+JournalStoredShips.intransit: "<; in transit" => "<; w tranzycie"
+///////////////////////////////////////////////////// JournalSupercruiseExit
+JournalSupercruiseExit.At: "At " => "W "
+///////////////////////////////////////////////////// JournalUnknown
+JournalUnknown.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " => "Nieobsługiwane zdarzenie Dziennika, Proszę zgłosić zespołowi EDDiscovery. "
+///////////////////////////////////////////////////// JournalUSSDrop
+JournalEntry.Threat: "Threat:" => "Zagrożenie:"

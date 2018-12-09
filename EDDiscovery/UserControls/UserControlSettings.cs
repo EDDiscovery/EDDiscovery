@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
             comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames( EDDOptions.Instance.TranslatorFolders() ));
 
             comboBoxCustomLanguage.Items.Add("Auto");
-            comboBoxCustomLanguage.Items.Add("None");
+            comboBoxCustomLanguage.Items.Add("Default (English)");
             if (comboBoxCustomLanguage.Items.Contains(EDDConfig.Instance.Language))
                 comboBoxCustomLanguage.SelectedItem = EDDConfig.Instance.Language;
             else

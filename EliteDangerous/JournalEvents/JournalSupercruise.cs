@@ -64,7 +64,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("At ".Tx(this, "At"), Body, "< in ".Txb(this), StarSystem, "Type:".Txb(this), BodyType);
+            info = BaseUtils.FieldBuilder.Build("At ".Tx(this, "At"), Body, "< in ".Tx(this), StarSystem, "Type:".Txb(this), BodyType);
             detailed = "";
         }
     }

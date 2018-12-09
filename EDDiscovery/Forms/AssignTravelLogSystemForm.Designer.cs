@@ -446,7 +446,7 @@ namespace EDDiscovery.Forms
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "AssignTravelLogSystemForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "AssignTravelLogSystemForm";
+            this.Text = "Assign System";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
