@@ -252,10 +252,17 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.PlanetClass != null)
                             bdClass.Append(sn.ScanData.PlanetClass);
 
+                        // tell us the distance from the arrivals in both AU and LS
+                        if (sn.level <= 1 && sn.type == StarScan.ScanNodeType.body)
+                            bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
+
                         // ...or a moon?
                         if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                         {
                             bdClass.Append(" ").Append("Moon".Tx(this));
+
+                            // moon distances from center body are measured from in SemiMajorAxis
+                            bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                         }
 
                         // Details
@@ -335,7 +342,7 @@ namespace EDDiscovery.UserControls
                             }
                         }
                     }
-                    
+
                     // for all bodies:
 
                     // give estimated value
