@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSeparator1,
             this.columnsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 142);
             // 
             // circumstellarZoneToolStripMenuItem
             // 
@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldsToolStripMenuItem,
             this.icyBodiesToolStripMenuItem});
             this.circumstellarZoneToolStripMenuItem.Name = "circumstellarZoneToolStripMenuItem";
-            this.circumstellarZoneToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.circumstellarZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.circumstellarZoneToolStripMenuItem.Text = "Circumstellar Zones";
             this.circumstellarZoneToolStripMenuItem.ToolTipText = "Toggle visibility for all circumstellar zones";
             this.circumstellarZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZoneToolStripMenuItem_CheckStateChanged);
@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
             this.habitableZoneToolStripMenuItem.CheckOnClick = true;
             this.habitableZoneToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.habitableZoneToolStripMenuItem.Name = "habitableZoneToolStripMenuItem";
-            this.habitableZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.habitableZoneToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.habitableZoneToolStripMenuItem.Text = "Habitable Zone";
             this.habitableZoneToolStripMenuItem.ToolTipText = "Toggle habitable zone visibility";
             this.habitableZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.habitableZoneToolStripMenuItem_CheckStateChanged);
@@ -249,7 +249,7 @@ namespace EDDiscovery.UserControls
             this.metalRichToolStripMenuItem.CheckOnClick = true;
             this.metalRichToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.metalRichToolStripMenuItem.Name = "metalRichToolStripMenuItem";
-            this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.metalRichToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.metalRichToolStripMenuItem.Text = "Metal Rich";
             this.metalRichToolStripMenuItem.ToolTipText = "Toggle metal rich planets visibility";
             this.metalRichToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.metallicRichToolStripMenuItem_CheckStateChanged);
@@ -260,7 +260,7 @@ namespace EDDiscovery.UserControls
             this.waterWorldsToolStripMenuItem.CheckOnClick = true;
             this.waterWorldsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.waterWorldsToolStripMenuItem.Name = "waterWorldsToolStripMenuItem";
-            this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.waterWorldsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.waterWorldsToolStripMenuItem.Text = "Water Worlds";
             this.waterWorldsToolStripMenuItem.ToolTipText = "Toggle water worlds visibility visibility";
             this.waterWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.waterWorldsToolStripMenuItem_CheckStateChanged);
@@ -271,7 +271,7 @@ namespace EDDiscovery.UserControls
             this.earthLikePlanetsToolStripMenuItem.CheckOnClick = true;
             this.earthLikePlanetsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.earthLikePlanetsToolStripMenuItem.Name = "earthLikePlanetsToolStripMenuItem";
-            this.earthLikePlanetsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.earthLikePlanetsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.earthLikePlanetsToolStripMenuItem.Text = "Earth Like Planets";
             this.earthLikePlanetsToolStripMenuItem.ToolTipText = "Toggle earth like planets visibility";
             this.earthLikePlanetsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.earthLikePlanetsToolStripMenuItem_CheckStateChanged);
@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldsToolStripMenuItem.CheckOnClick = true;
             this.ammoniaWorldsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ammoniaWorldsToolStripMenuItem.Name = "ammoniaWorldsToolStripMenuItem";
-            this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ammoniaWorldsToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.ammoniaWorldsToolStripMenuItem.Text = "Ammonia Worlds";
             this.ammoniaWorldsToolStripMenuItem.ToolTipText = "Toggle ammonia worlds visibility";
             this.ammoniaWorldsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.ammoniaWorldsToolStripMenuItem_CheckStateChanged);
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
             this.icyBodiesToolStripMenuItem.CheckOnClick = true;
             this.icyBodiesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.icyBodiesToolStripMenuItem.Name = "icyBodiesToolStripMenuItem";
-            this.icyBodiesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.icyBodiesToolStripMenuItem.Size = new System.Drawing.Size(167, 22);
             this.icyBodiesToolStripMenuItem.Text = "Icy Bodies";
             this.icyBodiesToolStripMenuItem.ToolTipText = "Toggle ice bodies zone visibility";
             this.icyBodiesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.icyBodiesToolStripMenuItem_CheckStateChanged);
@@ -307,7 +307,7 @@ namespace EDDiscovery.UserControls
             this.beltsToolStripMenuItem,
             this.ringsToolStripMenuItem});
             this.structuresToolStripMenuItem.Name = "structuresToolStripMenuItem";
-            this.structuresToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.structuresToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.structuresToolStripMenuItem.Text = "Structures";
             this.structuresToolStripMenuItem.ToolTipText = "Toggle belts and rings visibility";
             this.structuresToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.structuresToolStripMenuItem_CheckStateChanged);
@@ -340,7 +340,7 @@ namespace EDDiscovery.UserControls
             this.materialsToolStripMenuItem.CheckOnClick = true;
             this.materialsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.materialsToolStripMenuItem.Name = "materialsToolStripMenuItem";
-            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.materialsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.materialsToolStripMenuItem.Text = "Materials";
             this.materialsToolStripMenuItem.ToolTipText = "Toggle visibility of materials available in the surface ofa landable body";
             this.materialsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.materialsToolStripMenuItem_CheckStateChanged);
@@ -351,7 +351,7 @@ namespace EDDiscovery.UserControls
             this.valuesToolStripMenuItem.CheckOnClick = true;
             this.valuesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.valuesToolStripMenuItem.Name = "valuesToolStripMenuItem";
-            this.valuesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.valuesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.valuesToolStripMenuItem.Text = "Values";
             this.valuesToolStripMenuItem.ToolTipText = "Toggle display of estimated value";
             this.valuesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.valuesToolStripMenuItem_CheckStateChanged);
@@ -359,7 +359,7 @@ namespace EDDiscovery.UserControls
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // columnsToolStripMenuItem
             // 
@@ -369,7 +369,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem,
             this.informationToolStripMenuItem});
             this.columnsToolStripMenuItem.Name = "columnsToolStripMenuItem";
-            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.columnsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.columnsToolStripMenuItem.Text = "Columns";
             this.columnsToolStripMenuItem.ToolTipText = "Toggle columns visibility";
             // 
@@ -379,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.nameToolStripMenuItem.CheckOnClick = true;
             this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.ToolTipText = "Toggle body name column visibility";
             this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem.CheckOnClick = true;
             this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.classToolStripMenuItem.Text = "Class";
             this.classToolStripMenuItem.ToolTipText = "Toggle body class column visibility";
             this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
@@ -401,7 +401,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem.CheckOnClick = true;
             this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.distanceToolStripMenuItem.Text = "Distance";
             this.distanceToolStripMenuItem.ToolTipText = "Toggle relative body distance column visibility";
             this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
@@ -412,7 +412,7 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.CheckOnClick = true;
             this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
