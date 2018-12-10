@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
             return string.Format("Estimated total scan value: {0:N0}".Tx(this, "AV"), value);
         }
 
-        private void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        void dataGridViewScangrid_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == 4)
             {
@@ -410,91 +410,121 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridViewScangrid_MouseClick(object sender, MouseEventArgs e)
+        void dataGridViewScangrid_MouseClick(object sender, MouseEventArgs e)
         {
             contextMenuStrip1.Visible |= e.Button == MouseButtons.Right;
             contextMenuStrip1.Top = MousePosition.Y;
             contextMenuStrip1.Left = MousePosition.X;
         }
 
-        private void habitableZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        /*
+         * private void Form1_Load (object sender, EventArgs e)
+{
+      string s = "Hello!";
+        button.Click += (sender2, e2) => show_msg(sender2, e2, s);
+    }
+
+    private void show_msg(object sender, EventArgs e, string s)
+    {
+        MessageBox.Show(s);
+    }
+    */
+    
+        
+        void circumstellarZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showStellarZones = circumstellarZoneToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
-        private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            showMaterials = materialsToolStripMenuItem.Checked;
-        }
-
-        private void valuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            showValues = valuesToolStripMenuItem.Checked;
-        }
-
-        private void structuresToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            showStructures = structuresToolStripMenuItem.Checked;
-        }
-
-        private void beltsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            showBelts = beltsToolStripMenuItem.Checked;
-        }
-
-        private void ringsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
-        {
-            showRings = ringsToolStripMenuItem.Checked;
-        }
-
-        private void habitableZoneToolStripMenuItem_CheckStateChanged_1(object sender, EventArgs e)
+        private void habitableZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showHabitable = habitableZoneToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void metallicRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showMetalRich = metalRichToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showWaterWorlds = waterWorldsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void earthLikePlanetsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showEarthLike = earthLikePlanetsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showAmmonia = ammoniaWorldsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void icyBodiesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showIcyBodies = icyBodiesToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
-                
+
+        private void structuresToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showStructures = structuresToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
+        }
+
+        private void beltsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showBelts = beltsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
+        }
+
+        private void ringsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showRings = ringsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
+        }
+
+        private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showMaterials = materialsToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
+        }
+
+        private void valuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showValues = valuesToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
+        }
+        
         private void nameToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colName.Visible = nameToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void classToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colClass.Visible = classToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void distanceToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colDistance.Visible = distanceToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
 
         private void informationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colBriefing.Visible = informationToolStripMenuItem.Checked;
+            DrawSystem(last_he, true);
         }
     }
 }

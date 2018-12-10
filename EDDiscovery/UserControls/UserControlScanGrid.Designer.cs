@@ -47,6 +47,11 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
+            this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -68,11 +73,6 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -126,6 +126,51 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             this.dataGridViewScangrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScangrid_MouseClick);
+            // 
+            // colImage
+            // 
+            this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colImage.HeaderText = "";
+            this.colImage.MinimumWidth = 36;
+            this.colImage.Name = "colImage";
+            this.colImage.ReadOnly = true;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.Width = 36;
+            // 
+            // colName
+            // 
+            this.colName.FillWeight = 37.56873F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 20;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            this.colName.ToolTipText = "Body name";
+            // 
+            // colClass
+            // 
+            this.colClass.FillWeight = 46.96092F;
+            this.colClass.HeaderText = "Class";
+            this.colClass.MinimumWidth = 20;
+            this.colClass.Name = "colClass";
+            this.colClass.ReadOnly = true;
+            this.colClass.ToolTipText = "Body class";
+            // 
+            // colDistance
+            // 
+            this.colDistance.FillWeight = 23.39628F;
+            this.colDistance.HeaderText = "Distance";
+            this.colDistance.Name = "colDistance";
+            this.colDistance.ReadOnly = true;
+            this.colDistance.ToolTipText = "Body relative distance";
+            // 
+            // colBriefing
+            // 
+            this.colBriefing.FillWeight = 93.92184F;
+            this.colBriefing.HeaderText = "Information";
+            this.colBriefing.MinimumWidth = 20;
+            this.colBriefing.Name = "colBriefing";
+            this.colBriefing.ReadOnly = true;
+            this.colBriefing.ToolTipText = "Body detailed information";
             // 
             // vScrollBarCustom2
             // 
@@ -185,7 +230,7 @@ namespace EDDiscovery.UserControls
             this.circumstellarZoneToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.circumstellarZoneToolStripMenuItem.Text = "Circumstellar Zones";
             this.circumstellarZoneToolStripMenuItem.ToolTipText = "Toggle visibility for all circumstellar zones";
-            this.circumstellarZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.habitableZoneToolStripMenuItem_CheckStateChanged);
+            this.circumstellarZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.circumstellarZoneToolStripMenuItem_CheckStateChanged);
             // 
             // habitableZoneToolStripMenuItem
             // 
@@ -196,7 +241,7 @@ namespace EDDiscovery.UserControls
             this.habitableZoneToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.habitableZoneToolStripMenuItem.Text = "Habitable Zone";
             this.habitableZoneToolStripMenuItem.ToolTipText = "Toggle habitable zone visibility";
-            this.habitableZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.habitableZoneToolStripMenuItem_CheckStateChanged_1);
+            this.habitableZoneToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.habitableZoneToolStripMenuItem_CheckStateChanged);
             // 
             // metalRichToolStripMenuItem
             // 
@@ -273,7 +318,7 @@ namespace EDDiscovery.UserControls
             this.beltsToolStripMenuItem.CheckOnClick = true;
             this.beltsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.beltsToolStripMenuItem.Name = "beltsToolStripMenuItem";
-            this.beltsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.beltsToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.beltsToolStripMenuItem.Text = "Belts";
             this.beltsToolStripMenuItem.ToolTipText = "Toggle belts visibility";
             this.beltsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.beltsToolStripMenuItem_CheckStateChanged);
@@ -284,7 +329,7 @@ namespace EDDiscovery.UserControls
             this.ringsToolStripMenuItem.CheckOnClick = true;
             this.ringsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ringsToolStripMenuItem.Name = "ringsToolStripMenuItem";
-            this.ringsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ringsToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.ringsToolStripMenuItem.Text = "Rings";
             this.ringsToolStripMenuItem.ToolTipText = "Toggle rings visibility";
             this.ringsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.ringsToolStripMenuItem_CheckStateChanged);
@@ -334,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.nameToolStripMenuItem.CheckOnClick = true;
             this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.ToolTipText = "Toggle body name column visibility";
             this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
@@ -345,7 +390,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem.CheckOnClick = true;
             this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.classToolStripMenuItem.Text = "Class";
             this.classToolStripMenuItem.ToolTipText = "Toggle body class column visibility";
             this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
@@ -356,7 +401,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem.CheckOnClick = true;
             this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.distanceToolStripMenuItem.Text = "Distance";
             this.distanceToolStripMenuItem.ToolTipText = "Toggle relative body distance column visibility";
             this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
@@ -367,55 +412,10 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.CheckOnClick = true;
             this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
-            // 
-            // colImage
-            // 
-            this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colImage.HeaderText = "";
-            this.colImage.MinimumWidth = 36;
-            this.colImage.Name = "colImage";
-            this.colImage.ReadOnly = true;
-            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colImage.Width = 36;
-            // 
-            // colName
-            // 
-            this.colName.FillWeight = 37.56873F;
-            this.colName.HeaderText = "Name";
-            this.colName.MinimumWidth = 20;
-            this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            this.colName.ToolTipText = "Body name";
-            // 
-            // colClass
-            // 
-            this.colClass.FillWeight = 46.96092F;
-            this.colClass.HeaderText = "Class";
-            this.colClass.MinimumWidth = 20;
-            this.colClass.Name = "colClass";
-            this.colClass.ReadOnly = true;
-            this.colClass.ToolTipText = "Body class";
-            // 
-            // colDistance
-            // 
-            this.colDistance.FillWeight = 23.39628F;
-            this.colDistance.HeaderText = "Distance";
-            this.colDistance.Name = "colDistance";
-            this.colDistance.ReadOnly = true;
-            this.colDistance.ToolTipText = "Body relative distance";
-            // 
-            // colBriefing
-            // 
-            this.colBriefing.FillWeight = 93.92184F;
-            this.colBriefing.HeaderText = "Information";
-            this.colBriefing.MinimumWidth = 20;
-            this.colBriefing.Name = "colBriefing";
-            this.colBriefing.ReadOnly = true;
-            this.colBriefing.ToolTipText = "Body detailed information";
             // 
             // UserControlScanGrid
             // 
