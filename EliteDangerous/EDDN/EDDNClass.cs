@@ -127,6 +127,8 @@ namespace EliteDangerousCore.EDDN
                 foreach (JObject faction in factions)
                 {
                     faction.Remove("MyReputation");
+                    faction.Remove("PlayerFaction");
+                    faction.Remove("HappiestSystem");
                 }
             }
 
