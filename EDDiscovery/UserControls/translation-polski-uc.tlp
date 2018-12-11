@@ -253,8 +253,8 @@ UserControlLedger.toolStripMenuItemGotoItem: "Go to entry on grid" => "Przejdź 
 
 //////////////////////////////////////////////////////////////// Local map
 
-UserControlLocalMap.labelExtMin: "Min" => "Min."
-UserControlLocalMap.labelExtMax: "Max" => "Maks."
+UserControlLocalMap.labelExtMin: "Min" => "Min"
+UserControlLocalMap.labelExtMax: "Max" => "Max"
 UserControlLocalMap.toolStripMenuZoom: "Zoom" => "Zbliżenie"
 UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom1: "1:1" => "1:1"
 UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" => "1.25:1"
@@ -906,7 +906,7 @@ UserControlStats.ProfitfromCombatBonds: "Profit from Combat Bonds" => "Zysk z Ob
 UserControlStats.Assassinations: "Assassinations" => "Zamachy"
 UserControlStats.ProfitfromAssassination: "Profit from Assassination" => "Zyski z Zamachów"
 UserControlStats.HighestSingleReward: "Highest Single Reward" => "Największa Pojedyncza Nagroda"
-UserControlStats.SkimmersKilled: "Skimmers Killed" => "Zniszczone Drony Bojowe"
+UserControlStats.SkimmersKilled: "Skimmers Killed" => "Zniszczone Drony Strażnicze"
 UserControlStats.Notoriety: "Notoriety" => "Rozgłos"
 UserControlStats.NumberofFines: "Number of Fines" => "Liczba Kar Pieniężnych"
 UserControlStats.LifetimeFinesValue: "Lifetime Fines Value" => "Całkowita Wartość Kar Pieniężnych"
@@ -1151,6 +1151,6 @@ UserControlTrippanel.showFSDRangeToolStripMenuItem: "Show FSD Range" => "Pokaż 
 
 UserControlTrippanel.jump: "jump" => "skok"
 UserControlTrippanel.jumps: "jumps" => "skoków"
-UserControlTrippanel.NoT: " -> Target not set" => "Cel Nieustawiony"
+UserControlTrippanel.NoT: " -> Target not set" => " -> Cel Nieustawiony"
 UserControlTrippanel.FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Wyświetla, czy EDSM wskazuje że jesteś pierwszym odkrywcą układu"
 UserControlTrippanel.UKN: "System {0} unknown to EDSM" => "Układ {0} nieznany w EDSM"
