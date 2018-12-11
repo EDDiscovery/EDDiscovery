@@ -283,15 +283,15 @@ namespace EliteDangerousCore.JournalEvents
 
         public class CrewClass
         {
-            public long NpcCrewTotalWages { get; set; }
-            public int NpcCrewHired { get; set; }
-            public int NpcCrewFired { get; set; }
-            public int NpcCrewDied { get; set; }
+            public long TotalWages { get; set; }
+            public int Hired { get; set; }
+            public int Fired { get; set; }
+            public int Died { get; set; }
             public string Format(string frontline = "    ")
             {
                 return frontline + BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine + frontline,
-                    "Total Wages:;cr;N0".Tx(this), NpcCrewTotalWages, "Hired:;;N0".Tx(this), NpcCrewHired, 
-                    "Fired:;;N0".Tx(this), NpcCrewFired, "Killed in Action:;;N0".Tx(this), NpcCrewDied);
+                    "Total Wages:;cr;N0".Tx(this), TotalWages, "Hired:;;N0".Tx(this), Hired, 
+                    "Fired:;;N0".Tx(this), Fired, "Killed in Action:;;N0".Tx(this), Died);
             }
         }
 
