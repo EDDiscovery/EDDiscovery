@@ -879,10 +879,10 @@ namespace EDDiscovery.UserControls
                 if (collapseExpand.Substring(9,1) == "Y") craft.Expand();
 
                 TreeNode crew = treeViewStats.Nodes.Add("Crew"); 
-                AddChildNode(crew, "Total Wages".Tx(this), stats.Crew?.NpcCrewTotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
-                AddChildNode(crew, "Total Hired".Tx(this), stats.Crew?.NpcCrewHired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddChildNode(crew, "Total Fired".Tx(this), stats.Crew?.NpcCrewHired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddChildNode(crew, "Died in Line of Duty".Tx(this), stats.Crew?.NpcCrewDied.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Total Wages".Tx(this), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
+                AddChildNode(crew, "Total Hired".Tx(this), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Total Fired".Tx(this), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Died in Line of Duty".Tx(this), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(10,1) == "Y") crew.Expand();
 
                 TreeNode multicrew = treeViewStats.Nodes.Add("Multi-crew");
