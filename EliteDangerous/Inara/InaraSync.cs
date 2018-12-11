@@ -326,7 +326,8 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.EngineerProgress:      //VERIFIED 16/5/18
                     {
                         var je = he.journalEntry as JournalEngineerProgress;
-                        eventstosend.Add(InaraClass.setCommanderRankEngineer(je.Engineer, je.Progress, je.Rank.HasValue ? je.Rank.Value : 1, he.EventTimeUTC));
+                        foreach( var x in je.Engineers )
+                            eventstosend.Add(InaraClass.setCommanderRankEngineer(x.Engineer, x.Progress, x.Rank.HasValue ? x.Rank.Value : 1, he.EventTimeUTC));
                         break;
                     }
 

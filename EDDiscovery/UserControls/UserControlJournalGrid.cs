@@ -473,7 +473,7 @@ namespace EDDiscovery.UserControls
                 info.Info( (EDDiscoveryForm.EDDConfig.DisplayUTC ? leftclicksystem.EventTimeUTC : leftclicksystem.EventTimeLocal) + ": " + leftclicksystem.EventSummary,
                     FindForm().Icon, infodetailed);
                 info.Size = new Size(1200, 800);
-                info.ShowDialog(FindForm());
+                info.Show(FindForm());
             }
         }
 
