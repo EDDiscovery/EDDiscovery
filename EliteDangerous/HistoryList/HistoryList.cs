@@ -1057,6 +1057,8 @@ namespace EliteDangerousCore
         {
             if (je.EventTypeID == JournalTypeEnum.Friends)
                 return 2000;
+            else if (je.EventTypeID == JournalTypeEnum.FSSSignalDiscovered)
+                return 2000;
             else if (je.EventTypeID == JournalTypeEnum.FuelScoop)
                 return 10000;
             else
@@ -1083,6 +1085,13 @@ namespace EliteDangerousCore
                     EliteDangerousCore.JournalEvents.JournalFriends jf = je as EliteDangerousCore.JournalEvents.JournalFriends;
                     jfprev.AddFriend(jf);
                     //System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                    return true;
+                }
+                else if (je.EventTypeID == JournalTypeEnum.FSSSignalDiscovered && prev.EventTypeID == JournalTypeEnum.FSSSignalDiscovered) // merge friends
+                {
+                    var jdprev = prev as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
+                    var jd = je as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
+                    jdprev.Add(jd);
                     return true;
                 }
             }
