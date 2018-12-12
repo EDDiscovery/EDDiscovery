@@ -116,9 +116,14 @@ namespace EliteDangerousCore.Inara
 
                         datalist.Add(ro["eventData"] as JObject);       // may be null!  if no data is returned by Inara.. Only a few data requestes exists
 
-                        if ( i >= events.Count )            // inara is giving more event responses than what we asked for!
+                        if (i >= events.Count)            // inara is giving more event responses than what we asked for!
                             ret += "Too many responses to events requested" + Environment.NewLine;
-                        else if (eventstate >= 300 || eventstate < 200 )         // 2xx good
+                        else if (eventstate == 204 && ro["eventStatusText"].Str("").Contains("in-game name"))       // add/del friends can 
+                        {
+                            string cmdr = events[i]["eventData"]["commanderName"].Str("Unknown");
+                            ret += "Inara reports commander " + cmdr + " is not known to it" + Environment.NewLine;
+                        }
+                        else if (eventstate >= 300 || eventstate < 200)         // 2xx good
                             ret += "Error to request " + (events[i])["eventName"].Str() + " " + events[i].ToString() + " with " + ro["eventStatusText"].Str() + Environment.NewLine;
                     }
                 }
