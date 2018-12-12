@@ -76,6 +76,7 @@ namespace EDDiscovery.UserControls
             this.statusStripGlobalSystemInformation = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressJumponium = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusGS = new System.Windows.Forms.ToolStripStatusLabel();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -425,11 +426,12 @@ namespace EDDiscovery.UserControls
             // 
             this.statusStripGlobalSystemInformation.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusValue,
-            this.toolStripProgressJumponium});
+            this.toolStripProgressJumponium,
+            this.toolStripStatusGS});
             this.statusStripGlobalSystemInformation.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.statusStripGlobalSystemInformation.Location = new System.Drawing.Point(0, 550);
             this.statusStripGlobalSystemInformation.Name = "statusStripGlobalSystemInformation";
-            this.statusStripGlobalSystemInformation.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
+            this.statusStripGlobalSystemInformation.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.statusStripGlobalSystemInformation.ShowItemToolTips = true;
             this.statusStripGlobalSystemInformation.Size = new System.Drawing.Size(572, 22);
             this.statusStripGlobalSystemInformation.SizingGrip = false;
@@ -454,6 +456,20 @@ namespace EDDiscovery.UserControls
             this.toolStripProgressJumponium.Size = new System.Drawing.Size(100, 16);
             this.toolStripProgressJumponium.Step = 1;
             this.toolStripProgressJumponium.ToolTipText = "Jumponium materials found in system";
+            this.toolStripProgressJumponium.Visible = false;
+            // 
+            // toolStripStatusGS
+            // 
+            this.toolStripStatusGS.BackgroundImage = global::EDDiscovery.Properties.Resources.green_back;
+            this.toolStripStatusGS.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusGS.ForeColor = System.Drawing.Color.White;
+            this.toolStripStatusGS.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
+            this.toolStripStatusGS.Name = "toolStripStatusGS";
+            this.toolStripStatusGS.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripStatusGS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.toolStripStatusGS.Size = new System.Drawing.Size(142, 17);
+            this.toolStripStatusGS.Text = "GREEN SYSTEM";
+            this.toolStripStatusGS.Visible = false;
             // 
             // UserControlScanGrid
             // 
@@ -505,5 +521,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.StatusStrip statusStripGlobalSystemInformation;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusValue;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressJumponium;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGS;
     }
 }

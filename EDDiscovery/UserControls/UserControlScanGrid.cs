@@ -163,6 +163,9 @@ namespace EDDiscovery.UserControls
         /// <param name="force">Boolean</param>
         private void DrawSystem(HistoryEntry he, bool force)
         {
+            // reset isGreenSystem tag
+            isGreenSystem = false;
+
             // reset indicator for jumponium materials
             hasArsenic = false;
             hasCadmium = false;
@@ -175,7 +178,8 @@ namespace EDDiscovery.UserControls
 
             // reset the progress bar value
             toolStripProgressJumponium.Value = 0;
-
+            toolStripProgressJumponium.Visible = false;
+            toolStripStatusGS.Visible = false;
 
             StarScan.SystemNode scannode = null;
 
@@ -364,6 +368,8 @@ namespace EDDiscovery.UserControls
                         // materials                        
                         if (sn.ScanData.HasMaterials)
                         {
+                            toolStripProgressJumponium.Visible = true;
+
                             var ret = "";
                             foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
@@ -433,10 +439,15 @@ namespace EDDiscovery.UserControls
 
             // check if it's a green system
             isGreenSystem |= (hasArsenic && hasCadmium && hasCarbon && hasGermanium && hasNiobium && hasPopolonium && hasVanadium && hasYttrium);
+            
             if (isGreenSystem)
             {
                 toolStripProgressJumponium.ToolTipText = "This is a green system, as it has all existing jumponium materials available!";
-
+                toolStripStatusGS.Visible = true;
+            }
+            else if (!isGreenSystem)
+            {
+                toolStripProgressJumponium.ToolTipText = toolStripProgressJumponium.Value + " jumponium materials found in system.";
             }
 
             // set a meaningful title for the controller            
@@ -499,9 +510,7 @@ namespace EDDiscovery.UserControls
             {
                 toolStripProgressJumponium.Value += 1;
                 hasYttrium = ret.Contains("Yttrium");
-            }
-
-            toolStripProgressJumponium.ToolTipText = toolStripProgressJumponium.Value.ToString() + " jumponium materials found in system.";
+            }                        
         }
 
         private string BuildScanValue(StarScan.SystemNode system)
