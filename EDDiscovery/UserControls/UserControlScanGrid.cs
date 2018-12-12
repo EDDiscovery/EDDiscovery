@@ -48,7 +48,16 @@ namespace EDDiscovery.UserControls
         private bool showRings = true;
         private bool showMaterials = true;
         private bool showValues = true;
-        
+        private bool isGreenSystem;
+        private bool hasArsenic;
+        private bool hasCadmium;
+        private bool hasCarbon;
+        private bool hasGermanium;
+        private bool hasNiobium;
+        private bool hasPopolonium;
+        private bool hasVanadium;
+        private bool hasYttrium;
+
         private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
         private string DbSave { get { return DBName("ScanGridPanel"); } }
 
@@ -63,7 +72,7 @@ namespace EDDiscovery.UserControls
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
-            this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;
+            this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;                        
         }
 
         #region Setup
@@ -154,6 +163,24 @@ namespace EDDiscovery.UserControls
         /// <param name="force">Boolean</param>
         private void DrawSystem(HistoryEntry he, bool force)
         {
+            // reset isGreenSystem tag
+            isGreenSystem = false;
+
+            // reset indicator for jumponium materials
+            hasArsenic = false;
+            hasCadmium = false;
+            hasCarbon = false;
+            hasGermanium = false;
+            hasNiobium = false;
+            hasPopolonium = false;
+            hasVanadium = false;
+            hasYttrium = false;
+
+            // reset the progress bar value
+            toolStripProgressJumponium.Value = 0;
+            toolStripProgressJumponium.Visible = false;
+            toolStripStatusGS.Visible = false;
+
             StarScan.SystemNode scannode = null;
 
             var samesys = last_he != null && he != null && he.System.Name == last_he.System.Name;
@@ -191,6 +218,12 @@ namespace EDDiscovery.UserControls
             dataGridViewScangrid.Rows.Clear();
 
             var all_nodes = scannode.Bodies.ToList(); // flatten tree of scan nodes to prepare for listing
+                                   
+            var _stars = 0;
+            var _planets = 0;
+            var _terrestrial = 0;
+            var _gasgiants = 0;
+            var _moons = 0;
 
             foreach (StarScan.ScanNode sn in all_nodes)
             {
@@ -206,6 +239,7 @@ namespace EDDiscovery.UserControls
                     if (sn.ScanData.IsStar)
                     {
                         // is a star, so populate its information field with relevant data
+                        _stars++;
 
                         // star class
                         if (sn.ScanData.StarTypeText != null)
@@ -264,19 +298,20 @@ namespace EDDiscovery.UserControls
                                 bdDetails.AppendFormat(Environment.NewLine + "Habitable Zone".Tx(this) + ": {0}AU-{1} ({2}). ", (sn.ScanData.IcyPlanetZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"), (sn.ScanData.IcyPlanetZoneOuter), sn.ScanData.GetIcyPlanetsZoneStringLs());
                             }
                         }
-
                     }
                     else
                     {
                         // is a non-stellar body                        
                             
                         // is terraformable? If so, prepend it to the body class
-                        if (sn.ScanData.Terraformable == true)
+                        if (sn.ScanData.Terraformable)
                             bdClass.Append("Terraformable".Tx(this)).Append(", ");
 
                         // is a planet?...
                         if (sn.ScanData.PlanetClass != null)
                             bdClass.Append(sn.ScanData.PlanetClass);
+
+                        _planets++;
 
                         // tell us the distance from the arrivals in both AU and LS
                         if (sn.level <= 1 && sn.type == StarScan.ScanNodeType.body)
@@ -285,11 +320,18 @@ namespace EDDiscovery.UserControls
                         // ...or a moon?
                         if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                         {
+                            _moons++;
+
                             bdClass.Append(" ").Append("Moon".Tx(this));
 
                             // moon distances from center body are measured from in SemiMajorAxis
                             bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                         }
+
+                        if (sn.ScanData.PlanetClass.Contains("Giant"))
+                            _gasgiants++;
+                        else
+                            _terrestrial++;
 
                         // Details
                         
@@ -316,7 +358,7 @@ namespace EDDiscovery.UserControls
                                 Gg = " (G: " + g.Value.ToString("N1") + ")";
                             }
 
-                            bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");                         
+                            bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
                         }
                                                 
                         // tell us that there is some volcanic activity
@@ -324,18 +366,22 @@ namespace EDDiscovery.UserControls
                             bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
 
                         // materials                        
-                        if (showMaterials && sn.ScanData.HasMaterials)
+                        if (sn.ScanData.HasMaterials)
                         {
+                            toolStripProgressJumponium.Visible = true;
+
                             var ret = "";
                             foreach (KeyValuePair<string, double> mat in sn.ScanData.Materials)
                             {
                                 var mc = MaterialCommodityData.GetByFDName(mat.Key);
                                 if (mc?.IsJumponium == true)
-                                    ret = ret.AppendPrePad(mc.Name, ", ");
+                                    ret = ret.AppendPrePad(mc.Name, ", ");                                                                
                             }
 
-                            if (ret.Length > 0)
+                            if (ret.Length > 0 && showMaterials)
                                 bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
+
+                            ReportJumponium(ret);
                         }
                     }
 
@@ -370,14 +416,14 @@ namespace EDDiscovery.UserControls
                     }
 
                     // for all bodies:
-
+                    
                     // give estimated value
                     var value = sn.ScanData.EstimatedValue;
                     if (showValues)
                     {
                         bdDetails.Append(Environment.NewLine).Append("Value".Tx(this)).Append(" ").Append(value.ToString("N0"));
                     }
-
+                                        
                     // pick an image
                     var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
 
@@ -391,28 +437,80 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            // calculate the estimated total scan values
-            SetControlText(string.Format("Scan Summary for {0}. {1}".Tx(this, "SS"), scannode.system.Name, BuildScanValue(scannode)));
+            // check if it's a green system
+            isGreenSystem |= (hasArsenic && hasCadmium && hasCarbon && hasGermanium && hasNiobium && hasPopolonium && hasVanadium && hasYttrium);
+            
+            if (isGreenSystem)
+            {
+                toolStripProgressJumponium.ToolTipText = "This is a green system, as it has all existing jumponium materials available!";
+                toolStripStatusGS.Visible = true;
+            }
+            else if (!isGreenSystem)
+            {
+                toolStripProgressJumponium.ToolTipText = toolStripProgressJumponium.Value + " jumponium materials found in system.";
+            }
 
+            // set a meaningful title for the controller            
+            SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".Tx(this), scannode.system.Name, _stars, _planets, _terrestrial, _gasgiants, _moons));
             if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                 dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
+
+            toolStripStatusValue.Text = BuildScanValue(scannode);
         }
 
         #endregion
 
-        #region Tools
-
-        private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        #region global_functions
+                
+        private void ReportJumponium(string ret)
         {
-            var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            if (cur.Tag != null)
+            if (!hasArsenic && ret.Contains("Arsenic"))
             {
-                // we programatically draw the image because we have control over its pos/ size this way, which you can't do
-                // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
-                var sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
-                var vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
-                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
+                toolStripProgressJumponium.Value += 1;
+                hasArsenic = ret.Contains("Arsenic");
             }
+
+            if (!hasCadmium && ret.Contains("Cadmium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasCadmium = ret.Contains("Cadmium");
+            }
+
+            if (!hasCarbon && ret.Contains("Carbon"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasCarbon = ret.Contains("Carbon");
+            }
+
+            if (!hasGermanium && ret.Contains("Germanium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasGermanium = ret.Contains("Germanium");
+            }
+
+            if (hasNiobium && ret.Contains("Niobium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasNiobium = ret.Contains("Niobium");
+            }
+
+            if (!hasPopolonium && ret.Contains("Polonium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasPopolonium = ret.Contains("Polonium");
+            }
+
+            if (!hasVanadium && ret.Contains("Vanadium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasVanadium = ret.Contains("Vanadium");
+            }
+
+            if (!hasYttrium && ret.Contains("Yttrium"))
+            {
+                toolStripProgressJumponium.Value += 1;
+                hasYttrium = ret.Contains("Yttrium");
+            }                        
         }
 
         private string BuildScanValue(StarScan.SystemNode system)
@@ -431,6 +529,19 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            var cur = dataGridViewScangrid.Rows[e.RowIndex];
+            if (cur.Tag != null)
+            {
+                // we programatically draw the image because we have control over its pos/ size this way, which you can't do
+                // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
+                var sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
+                var vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
+                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
+            }
+        }
 
         #region ContextMenuInteraction
 
