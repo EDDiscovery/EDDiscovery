@@ -1252,7 +1252,7 @@ namespace EDDiscovery.UserControls
                 string json = jo?.ToString();
                 discoveryform.LogLine(json);
 
-                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass();
+                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current,current_historylist.GetCommanderFID());
                 string str = inara.ToJSONString(list);
                 discoveryform.LogLine(str);
                 System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);

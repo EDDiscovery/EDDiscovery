@@ -31,6 +31,7 @@ namespace EliteDangerousCore.Inara
             public JToken eventinfo;
             public Action<string> logger;
             public EDCommander cmdr;
+            public string cmdrfid;
             public bool verbose;
         }
 
@@ -48,7 +49,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = RefreshList(history);
             if (events.Count > 0)
-                Submit(events,logger, cmdr, true);
+                Submit(events,logger, cmdr, history.GetCommanderFID(), true);
             return true;
         }
 
@@ -56,7 +57,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = HistoricList(history);
             if (events.Count > 0)
-                Submit(events, logger, cmdr, true);
+                Submit(events, logger, cmdr, history.GetCommanderFID(), true);
             return true;
         }
 
@@ -64,7 +65,7 @@ namespace EliteDangerousCore.Inara
         {
             List<JToken> events = NewEntryList(history,he);
             if (events.Count > 0)
-                Submit(events,logger, he.Commander, false);
+                Submit(events,logger, he.Commander, history.GetCommanderFID(), false);
             return true;
         }
 
@@ -489,7 +490,7 @@ namespace EliteDangerousCore.Inara
                 case JournalTypeEnum.CommunityGoal://VERIFIED 16/5/18
                     {
                         var je = he.journalEntry as JournalCommunityGoal;
-                        foreach( var c in je.CommunityGoals)
+                        foreach (var c in je.CommunityGoals)
                         {
                             eventstosend.Add(InaraClass.setCommunityGoal(c, he.EventTimeUTC));
                             eventstosend.Add(InaraClass.setCommandersCommunityGoalProgress(c, he.EventTimeUTC));
@@ -498,7 +499,34 @@ namespace EliteDangerousCore.Inara
                         break;
                     }
 
+                case JournalTypeEnum.Friends:
+                    {
+                        var je = he.journalEntry as JournalFriends;
+                        if ( je.StatusList != null )
+                        {
+                            for( int i = 0; i < je.StatusList.Count; i++ )
+                            {
+                                string s = je.StatusList[i].ToLower();
+                                if (s == "online" || s == "added")
+                                    eventstosend.Add(InaraClass.addCommanderFriend(je.NameList[i], he.EventTimeUTC));
+                                else if (s == "lost")
+                                    eventstosend.Add(InaraClass.delCommanderFriend(je.NameList[i], he.EventTimeUTC));
+                            }
+                        }
+                        else
+                        {
+                            string s = je.Status.ToLower();
+                            if (s == "online" || s == "added")
+                                eventstosend.Add(InaraClass.addCommanderFriend(je.Name, he.EventTimeUTC));
+                            else if (s == "lost")
+                                eventstosend.Add(InaraClass.delCommanderFriend(je.Name, he.EventTimeUTC));
+                        }
+
+                        break;
+                    }
+
             }
+
 
             if ( Math.Abs(CmdrCredits-he.Credits) > 500000 )
             {
@@ -515,10 +543,10 @@ namespace EliteDangerousCore.Inara
 
 #region Thread
 
-        public static void Submit(List<JToken> list, Action<string> logger, EDCommander cmdrn, bool verbose)
+        public static void Submit(List<JToken> list, Action<string> logger, EDCommander cmdrn, string cmdrfidp, bool verbose)
         {
             foreach (var x in list)
-                eventqueue.Enqueue(new InaraQueueEntry() { eventinfo = x, cmdr = cmdrn , logger = logger, verbose = verbose});
+                eventqueue.Enqueue(new InaraQueueEntry() { eventinfo = x, cmdr = cmdrn , cmdrfid = cmdrfidp, logger = logger, verbose = verbose});
 
             queuedevents.Set();
 
@@ -562,11 +590,11 @@ namespace EliteDangerousCore.Inara
                             verbose |= nextheq.verbose;
                         }
 
-                        InaraClass inara = new InaraClass(firstheq.cmdr);
+                        InaraClass inara = new InaraClass(firstheq.cmdr,firstheq.cmdrfid);
                         string errs = inara.Send(tosend);
                         if ( errs != null)
                         {
-                            //System.Diagnostics.Debug.WriteLine("Inara reports error" + errs);
+                            System.Diagnostics.Debug.WriteLine("Inara reports error" + errs);
                             firstheq?.logger("INARA Send Error: " + errs);
                         }
                         else if ( verbose )

@@ -29,6 +29,7 @@ namespace EliteDangerousCore.Inara
         public bool ValidCredentials { get { return !string.IsNullOrEmpty(commanderName) && !string.IsNullOrEmpty(apiKey); } }
 
         private string commanderName;
+        private string commanderFrontierID;
         private string apiKey;
 
         private readonly string fromSoftwareVersion;
@@ -37,7 +38,7 @@ namespace EliteDangerousCore.Inara
 
         private string InaraAPI = "inapi/v1/";      // Action end point
 
-        public InaraClass()
+        private InaraClass()
         {
             fromSoftware = "EDDiscovery";
             var assemblyFullName = Assembly.GetEntryAssembly().FullName;
@@ -51,11 +52,12 @@ namespace EliteDangerousCore.Inara
             MimeType = "application/json";      // sets Content-type
         }
 
-        public InaraClass(EDCommander cmdr) : this()
+        public InaraClass(EDCommander cmdr, string cmdrfid) : this()
         {
             if (cmdr != null)
             {
                 apiKey = cmdr.InaraAPIKey;
+                commanderFrontierID = cmdrfid;
                 commanderName = string.IsNullOrEmpty(cmdr.InaraName) ? cmdr.Name : cmdr.InaraName;
             }
         }
@@ -678,6 +680,24 @@ namespace EliteDangerousCore.Inara
 
         }
 
+        static public JToken addCommanderFriend(string commanderName, DateTime dt, string gamePlatform = "pc")
+        {
+            JObject eventData = new JObject();
+            eventData["commanderName"] = commanderName;
+            eventData["gamePlatform"] = gamePlatform;
+            return Event("addCommanderFriend", dt, eventData);
+        }
+
+        static public JToken delCommanderFriend(string commanderName, DateTime dt, string gamePlatform = "pc")
+        {
+            JObject eventData = new JObject();
+            eventData["commanderName"] = commanderName;
+            eventData["gamePlatform"] = gamePlatform;
+            return Event("delCommanderFriend", dt, eventData);
+        }
+
+
+
         #endregion
 
         #region Helpers for Format
@@ -708,6 +728,8 @@ namespace EliteDangerousCore.Inara
             jo["isDeveloped"] = false;
             jo["APIkey"] = apiKey;
             jo["commanderName"] = commanderName;
+            if (commanderFrontierID != null)
+                jo["commanderFrontierID"] = commanderFrontierID;
             return jo;
         }
 

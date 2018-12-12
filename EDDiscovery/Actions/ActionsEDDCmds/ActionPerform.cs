@@ -188,6 +188,74 @@ namespace EDDiscovery.Actions
                     {
                         ap["BindingValues"] = (ap.actioncontroller as ActionController).FrontierBindings.ListValues();
                     }
+                    else if (cmdname.Equals("actionfile"))
+                    {
+                        ActionFile f = (ap.actioncontroller as ActionController).Get(nextword);
+                        if ( f != null )
+                        {
+                            int i = 0;
+                            foreach( var x in f.actioneventlist.Enumerable )
+                            {
+                                ap["Events[" + i++ + "]"] = x.ToString(true);   // list hooked events
+                                ap["Events_" + x.eventname] = x.ToString(true);   // list hooked events
+                            }
+
+                            i = 0;
+                            foreach (string jname in Enum.GetNames(typeof(EliteDangerousCore.JournalTypeEnum)))
+                            {
+                                List<Condition> cl = f.actioneventlist.GetConditionListByEventName(jname);
+
+                                if (cl != null)
+                                {
+                                    int v = 0;
+                                    foreach (var c in cl)
+                                    {
+                                        ap["JEvents[" + i++ + "]"] = c.ToString(true);
+                                        ap["JEvents_" + c.eventname + "_" + v++] = c.ToString(true);
+                                    }
+                                }
+                                else
+                                {
+                                    ap["JEvents[" + i++ + "]"] = jname + ", None";
+                                    ap["JEvents_" + jname] = "None";
+                                }
+                            }
+
+                            i = 0;
+                            foreach (string iname in Enum.GetNames(typeof(EliteDangerousCore.UITypeEnum)))
+                            {
+                                List<Condition> cl = f.actioneventlist.GetConditionListByEventName("UI" + iname);
+
+                                if (cl != null)
+                                {
+                                    int v = 0;
+                                    foreach (var c in cl)
+                                    {
+                                        ap["UIEvents[" + i++ + "]"] = c.ToString(true);
+                                        ap["UIEvents_" + c.eventname + "_" + v++] = c.ToString(true);
+                                    }
+                                }
+                                else
+                                {
+                                    ap["UIEvents[" + i++ + "]"] = iname + ", None";
+                                    ap["UIEvents_" + iname] = "None";
+                                }
+                            }
+
+                            i = 0;
+                            foreach (var x in f.installationvariables.NameEnumuerable)
+                                ap["Install[" + i++ + "]"] = x + "," + f.installationvariables[x];   // list hooked events
+
+                            i = 0;
+                            foreach (var x in f.filevariables.NameEnumuerable)
+                                ap["FileVar[" + i++ + "]"] = x + "," + f.filevariables[x];   // list hooked events
+
+                            ap["Enabled"] = f.enabled.ToStringIntValue();
+
+                        }
+                        else
+                            ap.ReportError("Action file " + nextword + " is not loaded");
+                    }
                     else if (cmdname.Equals("datadownload"))
                     {
                         string gitfolder = nextword;

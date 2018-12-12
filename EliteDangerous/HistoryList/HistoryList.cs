@@ -444,6 +444,12 @@ namespace EliteDangerousCore
             return (from s in historylist where s.IsFSDJump && s.EventTimeLocal < utc select s).Count();
         }
 
+        public string GetCommanderFID()     // may be null
+        {
+            var cmdr = historylist.FindLast(x => x.EntryType == JournalTypeEnum.Commander);
+            return (cmdr?.journalEntry as JournalCommander)?.FID;
+        }
+
         public delegate bool FurthestFund(HistoryEntry he, ref double lastv);
         public HistoryEntry GetConditionally(double lastv, FurthestFund f)              // give a comparision function, find entry
         {
