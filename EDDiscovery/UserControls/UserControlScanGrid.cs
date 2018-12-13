@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
         {
             StarScan.SystemNode scannode = null;
 
-            var samesys = last_he != null && he != null && he.System.Name == last_he.System.Name;
+            var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
             //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
 
