@@ -122,6 +122,7 @@ namespace EliteDangerousCore.EDDN
 
                     if (Exit)
                     {
+                        running = 0;
                         return;
                     }
 
@@ -135,10 +136,11 @@ namespace EliteDangerousCore.EDDN
 
                 if (Exit)
                 {
-                    running = 0;
-                    return;
+                    break;
                 }
             }
+
+            running = 0;
         }
 
         static public bool? SendToEDDN(HistoryEntry he)
