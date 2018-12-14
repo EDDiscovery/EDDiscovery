@@ -97,15 +97,20 @@ namespace EliteDangerousCore.EDDN
                         {
                             System.Diagnostics.Debug.WriteLine("EDDN: Ignoring entry due to age");
                         }
-                        else if (EDDNSync.SendToEDDN(he))
-                        {
-                            // removed - too verbose 
-                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
-                            eventcount++;
-                        }
                         else
                         {
-                            logger?.Invoke($"Failed to Send {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            bool? res = EDDNSync.SendToEDDN(he);
+
+                            if (res != null)    // if attempted to send
+                            {
+                                if (res.Value == true)
+                                {
+                                    logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                                    eventcount++;
+                                }
+                                else
+                                    logger?.Invoke($"Failed sending {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -136,7 +141,7 @@ namespace EliteDangerousCore.EDDN
             }
         }
 
-        static public bool SendToEDDN(HistoryEntry he)
+        static public bool? SendToEDDN(HistoryEntry he)
         {
             EDDNClass eddn = new EDDNClass();
 
@@ -161,7 +166,6 @@ namespace EliteDangerousCore.EDDN
             }
 
             JObject msg = null;
-            JObject msg2 = null;
 
             if (je.EventTypeID == JournalTypeEnum.FSDJump)
             {
@@ -181,18 +185,15 @@ namespace EliteDangerousCore.EDDN
             }
             else if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {
-                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalOutfitting, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNOutfittingMessage(je as JournalOutfitting, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Shipyard)
             {
-                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(je as JournalShipyard, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNShipyardMessage(je as JournalShipyard, he.System);
             }
             else if (je.EventTypeID == JournalTypeEnum.Market)
             {
                 JournalMarket jm = je as JournalMarket;
-                //Removed - not in EDDN spec to send this msg2 = eddn.CreateEDDNJournalMessage(jm, he.System.X, he.System.Y, he.System.Z, he.System.SystemAddress);
                 msg = eddn.CreateEDDNCommodityMessage(jm.Commodities, jm.StarSystem, jm.Station, jm.MarketID, DateTime.UtcNow);      // if its devoid of data, null returned
             }
 
@@ -200,17 +201,14 @@ namespace EliteDangerousCore.EDDN
             {
                 if (eddn.PostMessage(msg))
                 {
-                    if (msg2 != null)
-                    {
-                        eddn.PostMessage(msg2);
-                    }
-
                     he.SetEddnSync();
                     return true;
                 }
+                else
+                    return false;
             }
-
-            return false;
+            else
+                return null;
         }
 
     }

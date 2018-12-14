@@ -595,7 +595,7 @@ namespace EliteDangerousCore.Inara
                         if ( errs != null)
                         {
                             System.Diagnostics.Debug.WriteLine("Inara reports error" + errs);
-                            firstheq?.logger("INARA Send Error: " + errs);
+                            firstheq?.logger("INARA Reports: " + errs);
                         }
                         else if ( verbose )
                             firstheq?.logger("Sent " + tosend.Count + " events to INARA" );
