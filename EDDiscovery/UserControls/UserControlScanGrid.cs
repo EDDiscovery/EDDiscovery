@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
-            //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
+//System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
 
             if (he == null)     //  no he, no display
             {
@@ -320,7 +320,8 @@ namespace EDDiscovery.UserControls
                         // ...or a moon?
                         if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                         {
-                            _moons++;
+                            if (sn.ScanData.PlanetClass != null)
+                                _moons++;
 
                             bdClass.Append(" ").Append("Moon".Tx(this));
 
@@ -328,7 +329,7 @@ namespace EDDiscovery.UserControls
                             bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                         }
 
-                        if (sn.ScanData.PlanetClass.Contains("Giant"))
+                        if (sn.ScanData.PlanetClass != null && sn.ScanData.PlanetClass.Contains("Giant"))
                             _gasgiants++;
                         else
                             _terrestrial++;
