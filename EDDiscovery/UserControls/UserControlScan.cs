@@ -849,7 +849,7 @@ namespace EDDiscovery.UserControls
             };
 
             f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"),null,null);
-            f.GetControl<ExtendedControls.AutoCompleteTextBox>("Sys").SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            f.GetControl<ExtendedControls.AutoCompleteTextBox>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
             DialogResult res = f.ShowDialog(this.FindForm());
 
             if ( res == DialogResult.OK )
