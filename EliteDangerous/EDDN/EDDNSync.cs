@@ -126,6 +126,7 @@ namespace EliteDangerousCore.EDDN
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.StackTrace);
                 logger?.Invoke("EDDN sync Exception " + ex.Message);
             }
             finally
