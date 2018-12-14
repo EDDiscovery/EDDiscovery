@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Transparent;                        
         }
 
-        #region Setup
+        #region Init
 
         public override void Init()
         {
@@ -149,19 +149,11 @@ namespace EDDiscovery.UserControls
         /// <param name="hl">HistoryList</param>
         private void Display(HistoryEntry he, HistoryList hl)
         {
+            ResetDefaults();
             DrawSystem(he, false);
         }
 
-        #endregion
-
-        #region PopulateGrid
-
-        /// <summary>
-        /// Draw the system bodies
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="force">Boolean</param>
-        private void DrawSystem(HistoryEntry he, bool force)
+        private void ResetDefaults()
         {
             // reset isGreenSystem tag
             isGreenSystem = false;
@@ -180,12 +172,24 @@ namespace EDDiscovery.UserControls
             toolStripProgressJumponium.Value = 0;
             toolStripProgressJumponium.Visible = false;
             toolStripStatusGS.Visible = false;
+        }
 
+        #endregion
+
+        #region PopulateGrid
+
+        /// <summary>
+        /// Draw the system bodies
+        /// </summary>
+        /// <param name="he">HistoryEntry</param>
+        /// <param name="force">Boolean</param>
+        private void DrawSystem(HistoryEntry he, bool force)
+        {
             StarScan.SystemNode scannode = null;
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
-//System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
+            //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
 
             if (he == null)     //  no he, no display
             {
