@@ -140,6 +140,9 @@ namespace EliteDangerousCore.JournalEvents
                 info = BaseUtils.FieldBuilder.Build("Detected ; signals".Tx(this), Signals.Count);
 
                 foreach (var s in Signals)
+                    info += ", " + s.SignalName_Localised;
+
+                foreach (var s in Signals)
                     detailed = detailed.AppendPrePad(s.ToString(),System.Environment.NewLine);
             }
             else

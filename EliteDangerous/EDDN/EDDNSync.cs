@@ -26,7 +26,7 @@ namespace EliteDangerousCore.EDDN
     public static class EDDNSync
     {
         private static Thread ThreadEDDNSync;
-        private static int _running = 0;
+        private static int running = 0;
         private static bool Exit = false;
         private static ConcurrentQueue<HistoryEntry> hlscanunsyncedlist = new ConcurrentQueue<HistoryEntry>();
         private static AutoResetEvent hlscanevent = new AutoResetEvent(false);
@@ -56,7 +56,7 @@ namespace EliteDangerousCore.EDDN
             hlscanevent.Set();
 
             // Start the sync thread if it's not already running
-            if (Interlocked.CompareExchange(ref _running, 1, 0) == 0)
+            if (Interlocked.CompareExchange(ref running, 1, 0) == 0)
             {
                 Exit = false;
                 ThreadEDDNSync = new System.Threading.Thread(new System.Threading.ThreadStart(SyncThread));
@@ -76,19 +76,18 @@ namespace EliteDangerousCore.EDDN
 
         private static void SyncThread()
         {
-            try
+            running = 1;
+            //mainForm.LogLine("Starting EDDN sync thread");
+
+            while (hlscanunsyncedlist.Count != 0)
             {
-                _running = 1;
-                //mainForm.LogLine("Starting EDDN sync thread");
+                HistoryEntry he = null;
 
-                while (hlscanunsyncedlist.Count != 0)
+                int eventcount = 0;
+
+                while (hlscanunsyncedlist.TryDequeue(out he))
                 {
-                    List<HistoryEntry> hl = new List<HistoryEntry>();
-                    HistoryEntry he = null;
-
-                    int eventcount = 0;
-
-                    while (hlscanunsyncedlist.TryDequeue(out he))
+                    try
                     {
                         hlscanevent.Reset();
 
@@ -100,40 +99,41 @@ namespace EliteDangerousCore.EDDN
                         }
                         else if (EDDNSync.SendToEDDN(he))
                         {
-                            // removed - too verbose logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
+                            // removed - too verbose 
+                            logger?.Invoke($"Sent {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                             eventcount++;
                         }
-
-                        if (Exit)
+                        else
                         {
-                            return;
+                            logger?.Invoke($"Failed to Send {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                         }
-
-                        Thread.Sleep(1000);   // Throttling to 1 per second to not kill EDDN network
                     }
-
-                    SentEvents?.Invoke(eventcount);     // tell the system..
-
-                    if (hlscanunsyncedlist.IsEmpty)     // if nothing there..
-                        hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EDDN event to come in
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
+                        System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.StackTrace);
+                        logger?.Invoke("EDDN sync Exception " + ex.Message + Environment.NewLine + ex.StackTrace);
+                    }
 
                     if (Exit)
                     {
                         return;
                     }
+
+                    Thread.Sleep(1000);   // Throttling to 1 per second to not kill EDDN network
+                }
+
+                SentEvents?.Invoke(eventcount);     // tell the system..
+
+                if (hlscanunsyncedlist.IsEmpty)     // if nothing there..
+                    hlscanevent.WaitOne(60000);     // Wait up to 60 seconds for another EDDN event to come in
+
+                if (Exit)
+                {
+                    running = 0;
+                    return;
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.Message);
-                System.Diagnostics.Trace.WriteLine("Exception ex:" + ex.StackTrace);
-                logger?.Invoke("EDDN sync Exception " + ex.Message);
-            }
-            finally
-            {
-                _running = 0;
-            }
-
         }
 
         static public bool SendToEDDN(HistoryEntry he)
