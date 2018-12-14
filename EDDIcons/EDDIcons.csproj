@@ -680,6 +680,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Controls\ScanGrid\Belt.png" />
+    <EmbeddedResource Include="Controls\ScanGrid\Ring.png" />
     <EmbeddedResource Include="Panels\GroupMarker.png" />
     <EmbeddedResource Include="Journal\CodexEntry.png" />
     <EmbeddedResource Include="Journal\SAAScanComplete.png" />
