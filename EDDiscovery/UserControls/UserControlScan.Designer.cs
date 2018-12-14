@@ -65,6 +65,8 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelTop = new ExtendedControls.RollUpPanel();
+            this.showSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cancelShowSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelStars.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -91,9 +93,11 @@ namespace EDDiscovery.UserControls
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemToolbar});
+            this.toolStripMenuItemToolbar,
+            this.showSystemToolStripMenuItem,
+            this.cancelShowSystemToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(177, 26);
+            this.contextMenuStrip.Size = new System.Drawing.Size(184, 92);
             // 
             // toolStripMenuItemToolbar
             // 
@@ -508,6 +512,20 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.UnrolledHeight = 32;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
+            // showSystemToolStripMenuItem
+            // 
+            this.showSystemToolStripMenuItem.Name = "showSystemToolStripMenuItem";
+            this.showSystemToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.showSystemToolStripMenuItem.Text = "Show System";
+            this.showSystemToolStripMenuItem.Click += new System.EventHandler(this.showSystemToolStripMenuItem_Click);
+            // 
+            // cancelShowSystemToolStripMenuItem
+            // 
+            this.cancelShowSystemToolStripMenuItem.Name = "cancelShowSystemToolStripMenuItem";
+            this.cancelShowSystemToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.cancelShowSystemToolStripMenuItem.Text = "Cancel Show System";
+            this.cancelShowSystemToolStripMenuItem.Click += new System.EventHandler(this.cancelShowSystemToolStripMenuItem_Click);
+            // 
             // UserControlScan
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -549,5 +567,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelControls;
         private ExtendedControls.RollUpPanel rollUpPanelTop;
         private ExtendedControls.CheckBoxCustom checkBoxCustomHideFullMats;
+        private System.Windows.Forms.ToolStripMenuItem showSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cancelShowSystemToolStripMenuItem;
     }
 }
