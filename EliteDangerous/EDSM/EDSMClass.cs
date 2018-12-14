@@ -744,7 +744,7 @@ namespace EliteDangerousCore.EDSM
                 else if (sysname != null)
                     jo = edsm.GetBodies(sysname);
 
-                if (jo != null)
+                if (jo != null && jo["bodies"] != null )
                 {
                     foreach (JObject edsmbody in jo["bodies"])
                     {

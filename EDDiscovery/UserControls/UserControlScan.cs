@@ -45,6 +45,12 @@ namespace EDDiscovery.UserControls
         private string DbSave { get { return DBName("ScanPanel" ); } }
 
         HistoryEntry last_he = null;
+
+        bool override_system = false;
+
+        ISystem showing_system;                         // set from last_he or manually..
+        MaterialCommoditiesList showing_matcomds;
+
         Point last_maxdisplayarea;
 
         bool closing = false;           // set when closing, to prevent a resize, which you can get, causing a big redraw
@@ -124,7 +130,7 @@ namespace EDDiscovery.UserControls
 
                 if (newspace < last_maxdisplayarea.X || newspace > last_maxdisplayarea.X + starsize.Width * 2)
                 {
-                    DrawSystem();
+                    DrawSystem(last_he);
                 }
             }
         }
@@ -139,7 +145,7 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
             {
                 last_he = he;
-                DrawSystem();
+                DrawSystem(last_he);
             }
         }
 
@@ -153,18 +159,28 @@ namespace EDDiscovery.UserControls
             if (he != null && (last_he == null || he.System != last_he.System))
             {
                 last_he = he;
-                DrawSystem();
+                DrawSystem(last_he);
             }
         }
 
-        void DrawSystem()   // draw last_sn, last_he
+        void DrawSystem(HistoryEntry he)
+        {
+            if (override_system)        // no change, last_he continues to track cursor for restore..
+                return;
+
+            showing_matcomds = he?.MaterialCommodity;
+            showing_system = he?.System;
+            DrawSystem();
+        }
+
+        void DrawSystem()   // draw showing_system (may be null), showing_matcomds (may be null)
         {
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
             lblSystemInfo.Text = "";
 
-            if (last_he == null)
+            if (showing_system == null)
             {
                 SetControlText("No System");
                 imagebox.Render();
@@ -173,7 +189,7 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap(this,true) + " Scn " + displaynumber + " Load start");
 
-            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(last_he.System, checkBoxEDSM.Checked);
+            StarScan.SystemNode last_sn = discoveryform.history.starscan.FindSystem(showing_system, checkBoxEDSM.Checked, byname: override_system);
 
             SetControlText((last_sn == null) ? "No Scan".Tx() : last_sn.system.Name);
 
@@ -406,7 +422,7 @@ namespace EDDiscovery.UserControls
 
             if (sc != null && (!sc.IsEDSMBody || checkBoxEDSM.Checked))     // if got one, and its our scan, or we are showing EDSM
             {
-                tip = sc.DisplayString(historicmatlist:last_he.MaterialCommodity , currentmatlist:discoveryform.history.GetLast?.MaterialCommodity);
+                tip = sc.DisplayString(historicmatlist:showing_matcomds, currentmatlist:discoveryform.history.GetLast?.MaterialCommodity);
 
                 if (sc.IsStar && toplevel)
                 {
@@ -555,11 +571,11 @@ namespace EDDiscovery.UserControls
 
             bool noncommon = checkBoxMaterialsRare.Checked;
 
-            string matclicktext = sn.DisplayMaterials(2, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
+            string matclicktext = sn.DisplayMaterials(2, showing_matcomds, discoveryform.history.GetLast?.MaterialCommodity);
 
             foreach (KeyValuePair<string, double> sd in sn.Materials)
             {
-                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, last_he.MaterialCommodity, discoveryform.history.GetLast?.MaterialCommodity);
+                string tooltip = sn.DisplayMaterial(sd.Key, sd.Value, showing_matcomds, discoveryform.history.GetLast?.MaterialCommodity);
 
                 Color fillc = Color.Yellow;
                 string abv = sd.Key.Substring(0, 1);
@@ -574,7 +590,7 @@ namespace EDDiscovery.UserControls
                     if (checkBoxCustomHideFullMats.Checked)                 // check full
                     {
                         int? limit = mc.MaterialLimit();
-                        MaterialCommodities matnow = last_he.MaterialCommodity.Find(mc);
+                        MaterialCommodities matnow = showing_matcomds.Find(mc);
 
                         // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
                             
@@ -807,6 +823,48 @@ namespace EDDiscovery.UserControls
             rtbNodeInfo.Visible = true;
             rtbNodeInfo.Show();
             PositionInfo();
+        }
+
+        private void showSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            int width = 700;
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(160, 24), null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.AutoCompleteTextBox), "", new Point(180, 40), new Size(width-180-20, 24), null));
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24),""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK" || controlname == "Cancel")
+                {
+                    f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"),null,null);
+            f.GetControl<ExtendedControls.AutoCompleteTextBox>("Sys").SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            DialogResult res = f.ShowDialog(this.FindForm());
+
+            if ( res == DialogResult.OK )
+            {
+                string sname = f.Get("Sys");
+                if (sname.HasChars())
+                {
+                    showing_matcomds = null;
+                    showing_system = new EliteDangerousCore.SystemClass(sname);
+                    override_system = true;
+                    DrawSystem();
+                }
+            }
+        }
+
+        private void cancelShowSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            override_system = false;
+            DrawSystem(last_he);
         }
 
         void HideInfo()

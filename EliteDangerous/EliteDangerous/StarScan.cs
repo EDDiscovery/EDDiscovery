@@ -176,7 +176,7 @@ namespace EliteDangerousCore
             return (sn != null && sn.EDSMWebChecked);
         }
 
-        public SystemNode FindSystem(ISystem sys, bool edsmweblookup)    // Find the system. Optionally do a EDSM web lookup
+        public SystemNode FindSystem(ISystem sys, bool edsmweblookup, bool byname = false)    // Find the system. Optionally do a EDSM web lookup
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);  // foreground only
 
@@ -184,11 +184,9 @@ namespace EliteDangerousCore
 
             // System.Diagnostics.Debug.WriteLine("Scan Lookup " + sys.Name + " found " + (sn != null) + " web? " + edsmweblookup + " edsm lookup " + (sn?.EDSMAdded ?? false));
 
-            // must have an ID, and either not there or we have not checked EDSM yet in some way
-
-            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0)) && (sn == null || sn.EDSMCacheCheck == false || ( edsmweblookup && !sn.EDSMWebChecked)))
+            if ((sys.EDSMID > 0 || (sys.SystemAddress != null && sys.SystemAddress > 0) || (byname && sys.Name.HasChars())) && (sn == null || sn.EDSMCacheCheck == false || ( edsmweblookup && !sn.EDSMWebChecked)))
             {
-                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup, id64: sys.SystemAddress); // lookup, with optional web
+                List<JournalScan> jl = EliteDangerousCore.EDSM.EDSMClass.GetBodiesList(sys.EDSMID, edsmweblookup: edsmweblookup, id64: sys.SystemAddress, sysname:sys.Name); // lookup, with optional web
 
                 //if ( edsmweblookup) System.Diagnostics.Debug.WriteLine("Lookup bodies " + sys.Name + " " + sys.EDSMID + " result " + (jl?.Count ?? -1));
 
