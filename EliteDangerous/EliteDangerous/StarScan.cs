@@ -65,7 +65,7 @@ namespace EliteDangerousCore
             }
         };
 
-        public enum ScanNodeType { star, barycentre, body, belt, beltcluster };
+        public enum ScanNodeType { star, barycentre, body, belt, beltcluster, ring };
 
         public class ScanNode
         {
@@ -316,9 +316,10 @@ namespace EliteDangerousCore
 
             ScanNodeType starscannodetype = ScanNodeType.star;          // presuming.. 
             bool isbeltcluster = false;
+            bool isring = false;
 
             // Extract elements from name
-            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype);
+            List<string> elements = ExtractElements(sc, sys, out isbeltcluster, out starscannodetype, out isring);
 
             // Bail out if no elements extracted
             if (elements.Count == 0)
@@ -337,7 +338,7 @@ namespace EliteDangerousCore
             string customname = GetCustomName(sc, sys);
 
             // Process elements
-            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster);
+            ScanNode node = ProcessElements(sc, sys, sn, customname, elements, starscannodetype, isbeltcluster, isring);
 
             if (node.BodyID != null)
             {
@@ -501,10 +502,11 @@ namespace EliteDangerousCore
             return sn;
         }
 
-        private List<string> ExtractElements(JournalScan sc, ISystem sys, out bool isbeltcluster, out ScanNodeType starscannodetype)
+        private List<string> ExtractElements(JournalScan sc, ISystem sys, out bool isbeltcluster, out ScanNodeType starscannodetype, out bool isring)
         {
             starscannodetype = ScanNodeType.star;
             isbeltcluster = false;
+            isring = false;
             List<string> elements;
             string rest = sc.IsStarNameRelatedReturnRest(sys.Name);
 
@@ -533,6 +535,14 @@ namespace EliteDangerousCore
                     {
                         elements = new List<string> { elements[0], elements[1] + " " + elements[2], elements[3] + " " + elements[4] };
                         isbeltcluster = true;
+                    }
+                    else if (elements.Count >= 3 && 
+                             elements[elements.Count - 1].Equals("ring", StringComparison.InvariantCultureIgnoreCase) &&
+                             elements[elements.Count - 2].Length == 1 &&
+                             char.IsLetter(elements[elements.Count - 2][0]))
+                    {
+                        elements = elements.Take(elements.Count - 2).Concat(new string[] { elements[elements.Count - 2] + " " + elements[elements.Count - 1] }).ToList();
+                        isring = true;
                     }
 
                     if (char.IsDigit(elements[0][0]))       // if digits, planet number, no star designator
@@ -661,7 +671,7 @@ namespace EliteDangerousCore
             return customname;
         }
 
-        private ScanNode ProcessElements(JournalScan sc, ISystem sys, SystemNode sn, string customname, List<string> elements, ScanNodeType starscannodetype, bool isbeltcluster)
+        private ScanNode ProcessElements(JournalScan sc, ISystem sys, SystemNode sn, string customname, List<string> elements, ScanNodeType starscannodetype, bool isbeltcluster, bool isring = false)
         {
             SortedList<string, ScanNode> cnodes = sn.starnodes;
             ScanNode node = null;
@@ -684,6 +694,8 @@ namespace EliteDangerousCore
                     sublvtype = starscannodetype;
                 else if (isbeltcluster)
                     sublvtype = lvl == 1 ? ScanNodeType.belt : ScanNodeType.beltcluster;
+                else if (isring && lvl == elements.Count - 1)
+                    sublvtype = ScanNodeType.ring;
                 else
                     sublvtype = ScanNodeType.body;
 
