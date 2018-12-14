@@ -424,7 +424,11 @@ namespace EDDiscovery.UserControls
             {
                 tip = sc.DisplayString(historicmatlist:showing_matcomds, currentmatlist:discoveryform.history.GetLast?.MaterialCommodity);
 
-                if (sc.IsStar && toplevel)
+                if ( sn.type == StarScan.ScanNodeType.ring)
+                {
+
+                }
+                else  if (sc.IsStar && toplevel)
                 {
                     var starLabel = sn.customname ?? sn.ownname;
 
