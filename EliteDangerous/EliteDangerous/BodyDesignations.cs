@@ -1974,6 +1974,15 @@ namespace EliteDangerousCore
             { "Lambda Aquarii", new Dictionary<string, string> {
                 { "Taylor Dale", "Lambda Aquarii 8" },
             } },
+            { "Trapezium Sector AF-Z c1", new Dictionary<string, string> {
+                { "Mike Meister", "Trapezium Sector AF-Z c1 A 10" },
+            } },
+            { "HIP 63835", new Dictionary<string, string> {
+                { "Josie Rosa", "HIP 63835 CD 8" },
+            } },
+            { "4 Arietis", new Dictionary<string, string> {
+                { "Ziva", "4 Arietis 3 a" },
+            } },
         };
 
         public struct DesigMap
