@@ -264,7 +264,12 @@ namespace EliteDangerousCore
             { "9 Aurigae", new Dictionary<string, string> {
                 { "9 Aurigae B", "9 Aurigae A" },
                 { "9 Aurigae", "9 Aurigae B" },
-            } }
+            } },
+            { "IGR J17497-2821", new Dictionary<string, string>
+            {
+                { "IGR J17497-2821 X", "IGR J17497-2821 B" },
+            } },
+
         };
 
         public static Dictionary<string, Dictionary<string, string>> Planets = new Dictionary<string, Dictionary<string, string>>
@@ -281,6 +286,10 @@ namespace EliteDangerousCore
                 { "Asellus 1", "Asellus Primus A 1" },
                 { "Asellus 2", "Asellus Primus A 2" },
                 { "Asellus 3", "Asellus Primus A 3" },
+                { "A Ring", "Asellus Primus A 3 A Ring" },
+                { "B Ring", "Asellus Primus A 3 B Ring" },
+                { "C Ring", "Asellus Primus A 3 C Ring" },
+                { "D Ring", "Asellus Primus A 3 D Ring" },
                 { "Asellus 3a", "Asellus Primus A 3 a" },
                 { "Asellus 3b", "Asellus Primus A 3 b" },
                 { "Asellus 3c", "Asellus Primus A 3 c" },
@@ -758,6 +767,7 @@ namespace EliteDangerousCore
                 { "Cho", "Carthage 1 a" },
                 { "Belus", "Carthage 2" },
                 { "Archerbas", "Carthage 3" },
+                { "Archerbas r1", "Carthage 3 A Ring" },
             } },
             { "CD-54 471", new Dictionary<string, string> {
                 { "Brigsteer", "CD-54 471 1" },
@@ -838,6 +848,7 @@ namespace EliteDangerousCore
             } },
             { "Dahan", new Dictionary<string, string> {
                 { "Hathor", "Dahan 2" },
+                { "Hathor r1", "Dahan 2 A Ring" },
                 { "Coltan", "Dahan 2 a" },
                 { "Zhang's Claim", "Dahan 2 b" },
                 { "Smithy's Claim", "Dahan 2 c" },
@@ -1189,6 +1200,7 @@ namespace EliteDangerousCore
             } },
             { "LHS 3006", new Dictionary<string, string> {
                 { "Vulcan", "LHS 3006 1" },
+                { "Vulcan Ring", "LHS 3006 1 A Ring" },
             } },
             { "LHS 3262", new Dictionary<string, string> {
                 { "Ashanti", "LHS 3262 1" },
@@ -1240,6 +1252,7 @@ namespace EliteDangerousCore
             } },
             { "LP 98-132", new Dictionary<string, string> {
                 { "Anahit", "LP 98-132 1" },
+                { "Anahit Ring", "LP 98-132 1 A Ring" },
             } },
             { "LTT 1345", new Dictionary<string, string> {
                 { "Pod", "LTT 1345 1" },
@@ -1574,6 +1587,7 @@ namespace EliteDangerousCore
                 { "Moon", "Sol 3 a" },
                 { "Mars", "Sol 4" },
                 { "Jupiter", "Sol 5" },
+                { "Jupiter Halo Ring", "Sol 5 A Ring" },
                 { "Io", "Sol 5 a" },
                 { "Europa", "Sol 5 b" },
                 { "Ganymede", "Sol 5 c" },
@@ -1833,6 +1847,7 @@ namespace EliteDangerousCore
             } },
             { "Anapos", new Dictionary<string, string> {
                 { "Jackson", "Anapos 1" },
+                { "Emilia", "Anapos 5" },
             } },
             { "BD-01 2075", new Dictionary<string, string> {
                 { "KT-Lin", "BD-01 2075 1 a" },
@@ -1949,6 +1964,15 @@ namespace EliteDangerousCore
             } },
             { "Praea Euq WD-T c3-36", new Dictionary<string, string> {
                 { "Miola", "Praea Euq WD-T c3-36 B 9 a" }
+            } },
+            { "Sapill", new Dictionary<string, string> {
+                { "LAWMAN", "Sapill A 3 a" },
+            } },
+            { "Dubbuennel", new Dictionary<string, string> {
+                { "Garibaldi", "Dubbuennel 5" },
+            } },
+            { "Lambda Aquarii", new Dictionary<string, string> {
+                { "Taylor Dale", "Lambda Aquarii 8" },
             } },
         };
 
