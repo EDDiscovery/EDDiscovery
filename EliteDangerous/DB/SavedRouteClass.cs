@@ -397,7 +397,7 @@ namespace EliteDangerousCore.DB
                     //System.Diagnostics.Debug.WriteLine("From " + knownsystems[i - 1].ToString() + " to " + knownsystems[i].ToString() + " Percent " + interceptpercent + " Distance " + dist);
 
                     // allow a little margin in the intercept point for randomness, must be min dist, and not stupidly far.
-                    if (interceptpercent >= -0.01 && interceptpercent < 1.01 && dist < mininterceptdist && dist < distbetween)
+                    if (interceptpercent >= -0.01 && interceptpercent < 1.01 && dist <= mininterceptdist && dist < distbetween)
                     {
                         interceptendpoint = i;
                         mininterceptdist = dist;
