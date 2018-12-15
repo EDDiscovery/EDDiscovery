@@ -46,13 +46,13 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.circumstellarZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,58 +73,28 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStripGlobalSystemInformation = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusValue = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripProgressJumponium = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusGS = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStripSummary = new ExtendedControls.StatusStripCustom();
+            this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusGreen = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.statusStripGlobalSystemInformation.SuspendLayout();
+            this.statusStripSummary.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel2
             // 
-            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewScangrid);
+            this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 550);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 549);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom2
-            // 
-            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
-            this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 18);
-            this.vScrollBarCustom2.Maximum = -1;
-            this.vScrollBarCustom2.Minimum = 0;
-            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 532);
-            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom2.SmallChange = 1;
-            this.vScrollBarCustom2.TabIndex = 24;
-            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
-            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -1;
-            this.vScrollBarCustom2.ValueLimited = -1;
             // 
             // dataGridViewScangrid
             // 
@@ -156,7 +126,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 550);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 549);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
@@ -206,6 +176,36 @@ namespace EDDiscovery.UserControls
             this.colBriefing.Name = "colBriefing";
             this.colBriefing.ReadOnly = true;
             this.colBriefing.ToolTipText = "Body detailed information";
+            // 
+            // vScrollBarCustom2
+            // 
+            this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom2.HideScrollBar = true;
+            this.vScrollBarCustom2.LargeChange = 0;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 18);
+            this.vScrollBarCustom2.Maximum = -1;
+            this.vScrollBarCustom2.Minimum = 0;
+            this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.Name = "vScrollBarCustom2";
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 531);
+            this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SmallChange = 1;
+            this.vScrollBarCustom2.TabIndex = 24;
+            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
+            this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom2.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom2.Value = -1;
+            this.vScrollBarCustom2.ValueLimited = -1;
             // 
             // contextMenuStrip1
             // 
@@ -422,68 +422,59 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);
             // 
-            // statusStripGlobalSystemInformation
+            // statusStripSummary
             // 
-            this.statusStripGlobalSystemInformation.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusValue,
-            this.toolStripProgressJumponium,
-            this.toolStripStatusGS});
-            this.statusStripGlobalSystemInformation.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStripGlobalSystemInformation.Location = new System.Drawing.Point(0, 550);
-            this.statusStripGlobalSystemInformation.Name = "statusStripGlobalSystemInformation";
-            this.statusStripGlobalSystemInformation.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStripGlobalSystemInformation.ShowItemToolTips = true;
-            this.statusStripGlobalSystemInformation.Size = new System.Drawing.Size(572, 22);
-            this.statusStripGlobalSystemInformation.SizingGrip = false;
-            this.statusStripGlobalSystemInformation.TabIndex = 26;
-            this.statusStripGlobalSystemInformation.Text = "statusStrip1";
+            this.statusStripSummary.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusTotalValue,
+            this.toolStripStatusGreen,
+            this.toolStripProgressBar});
+            this.statusStripSummary.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+            this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
+            this.statusStripSummary.Name = "statusStripSummary";
+            this.statusStripSummary.Size = new System.Drawing.Size(572, 23);
+            this.statusStripSummary.SizingGrip = false;
+            this.statusStripSummary.TabIndex = 27;
             // 
-            // toolStripStatusValue
+            // toolStripStatusTotalValue
             // 
-            this.toolStripStatusValue.Name = "toolStripStatusValue";
-            this.toolStripStatusValue.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripStatusValue.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusValue.Size = new System.Drawing.Size(104, 17);
-            this.toolStripStatusValue.Text = "System Scan Value";
+            this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
+            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
+            this.toolStripStatusTotalValue.Text = "Estimated scans value";
             // 
-            // toolStripProgressJumponium
+            // toolStripStatusGreen
             // 
-            this.toolStripProgressJumponium.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripProgressJumponium.ForeColor = System.Drawing.Color.Gold;
-            this.toolStripProgressJumponium.Maximum = 8;
-            this.toolStripProgressJumponium.Name = "toolStripProgressJumponium";
-            this.toolStripProgressJumponium.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripProgressJumponium.Size = new System.Drawing.Size(100, 16);
-            this.toolStripProgressJumponium.Step = 1;
-            this.toolStripProgressJumponium.ToolTipText = "Jumponium materials found in system";
-            this.toolStripProgressJumponium.Visible = false;
+            this.toolStripStatusGreen.BackColor = System.Drawing.Color.Green;
+            this.toolStripStatusGreen.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.toolStripStatusGreen.ForeColor = System.Drawing.Color.White;
+            this.toolStripStatusGreen.Margin = new System.Windows.Forms.Padding(20, 3, 0, 3);
+            this.toolStripStatusGreen.Name = "toolStripStatusGreen";
+            this.toolStripStatusGreen.Padding = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.toolStripStatusGreen.Size = new System.Drawing.Size(116, 17);
+            this.toolStripStatusGreen.Text = "GREEN SYSTEM";
+            this.toolStripStatusGreen.Visible = false;
             // 
-            // toolStripStatusGS
+            // toolStripProgressBar
             // 
-            this.toolStripStatusGS.BackgroundImage = global::EDDiscovery.Properties.Resources.green_back;
-            this.toolStripStatusGS.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.toolStripStatusGS.ForeColor = System.Drawing.Color.White;
-            this.toolStripStatusGS.Margin = new System.Windows.Forms.Padding(20, 3, 0, 2);
-            this.toolStripStatusGS.Name = "toolStripStatusGS";
-            this.toolStripStatusGS.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
-            this.toolStripStatusGS.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.toolStripStatusGS.Size = new System.Drawing.Size(142, 17);
-            this.toolStripStatusGS.Text = "GREEN SYSTEM";
-            this.toolStripStatusGS.Visible = false;
+            this.toolStripProgressBar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripProgressBar.Maximum = 8;
+            this.toolStripProgressBar.Name = "toolStripProgressBar";
+            this.toolStripProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
+            this.toolStripProgressBar.Size = new System.Drawing.Size(100, 17);
+            this.toolStripProgressBar.Visible = false;
             // 
             // UserControlScanGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
-            this.Controls.Add(this.statusStripGlobalSystemInformation);
+            this.Controls.Add(this.statusStripSummary);
             this.Name = "UserControlScanGrid";
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.statusStripGlobalSystemInformation.ResumeLayout(false);
-            this.statusStripGlobalSystemInformation.PerformLayout();
+            this.statusStripSummary.ResumeLayout(false);
+            this.statusStripSummary.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -518,9 +509,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
-        private System.Windows.Forms.StatusStrip statusStripGlobalSystemInformation;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusValue;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressJumponium;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGS;
+        private ExtendedControls.StatusStripCustom statusStripSummary;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGreen;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }

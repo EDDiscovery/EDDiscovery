@@ -185,6 +185,10 @@ namespace EDDiscovery.Icons
         public static Image Scan_SizeSmall { get { return IconSet.GetIcon("Controls.Scan.SizeSmall"); } }
         public static Image Scan_SizeTiny { get { return IconSet.GetIcon("Controls.Scan.SizeTiny"); } }
         #endregion
+        #region EDDiscovery.UserControls.UserControlScanGrid
+        public static Image ScanGrid_Belt { get { return IconSet.GetIcon("Controls.ScanGrid.Belt"); } }
+        public static Image ScanGrid_Ring { get { return IconSet.GetIcon("Controls.ScanGrid.Ring"); } }
+        #endregion
         #region EDDiscovery.UserControls.UserControlSPanel
         public static Image SPanel_ResizeColumn { get { return IconSet.GetIcon("Controls.SPanel.ResizeColumn"); } }
         #endregion
