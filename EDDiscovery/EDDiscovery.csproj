@@ -780,6 +780,7 @@
     </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Resources\3dmaphelp.txt" />
+    <None Include="Resources\EDD License.rtf" />
     <None Include="Resources\ImportHelp.txt" />
     <None Include="Resources\edlogo_3mo_icon.ico" />
     <None Include="Resources\GNE.ico" />

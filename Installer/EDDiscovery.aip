@@ -185,7 +185,7 @@
     <ROW Feature_="AI32BitFiles" Level="1" Condition="VersionNT64"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
-    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="ScrollableText" X="55" Y="110" Width="372" Height="180" Attributes="3" Property="EulaRead" Text="EDD License.rtf" Order="800" TextLocId="-" MsiKey="LicenseAgreementDlg#AgreementText"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="ScrollableText" X="55" Y="110" Width="372" Height="180" Attributes="3" Property="EulaRead" Text="..\EDDiscovery\Resources\EDD License.rtf" Order="800" TextLocId="-" MsiKey="LicenseAgreementDlg#AgreementText"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
     <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL" Ordering="1"/>

@@ -130,7 +130,6 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.ShowLineCount = false;
             this.textBoxLicense.Size = new System.Drawing.Size(644, 380);
             this.textBoxLicense.TabIndex = 1;
-            this.textBoxLicense.Text = resources.GetString("textBoxLicense.Text");
             this.textBoxLicense.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.textBoxLicense.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 

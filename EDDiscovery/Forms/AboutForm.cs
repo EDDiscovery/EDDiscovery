@@ -43,6 +43,11 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
             SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
 
+            var x = Properties.Resources.EDD_License;
+            textBoxLicense.Rtf = x;
+            textBoxLicense.ScrollBarLineTweak = -15;     // RTF ends up formatting it with non regular spacing.. add on 15 lines so you can see the bottom. fudge
+
+            System.Diagnostics.Debug.WriteLine("Theme AF");
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
             bool winborder = theme.ApplyToFormStandardFontSize(this);
             panel_close.Visible = !winborder;
