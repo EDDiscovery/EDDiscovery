@@ -13,6 +13,7 @@
  *
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using System;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
@@ -45,6 +46,8 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.SellExplorationData)]
     public class JournalSellExplorationData : JournalEntry, ILedgerJournalEntry
     {
+        private static DateTime TotalEarningsCorrectDate = new DateTime(2018, 5, 1, 0, 0, 0, DateTimeKind.Utc);
+
         public JournalSellExplorationData(JObject evt) : base(evt, JournalTypeEnum.SellExplorationData)
         {
             Systems = evt["Systems"]?.ToObjectProtected<string[]>();
@@ -52,7 +55,7 @@ namespace EliteDangerousCore.JournalEvents
             BaseValue = evt["BaseValue"].Long();
             Bonus = evt["Bonus"].Long();
             TotalEarnings = evt["TotalEarnings"].Long(0);        // may not be present - get 0. also 3.02 has a bug with incorrect value - actually fed from the FD web server so may not be version tied
-            if (TotalEarnings < BaseValue + Bonus)        // so if less than the bv+bonus, it's either not there or bugged.  Fix
+            if (TotalEarnings < BaseValue + Bonus && EventTimeUTC < TotalEarningsCorrectDate)        // so if less than the bv+bonus, it's either not there or bugged.  Fix
                 TotalEarnings = BaseValue + Bonus;
         }
 
