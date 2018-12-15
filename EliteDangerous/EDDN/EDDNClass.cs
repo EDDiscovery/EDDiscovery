@@ -104,6 +104,272 @@ namespace EliteDangerousCore.EDDN
                 return "https://eddn.edcd.io/schemas/shipyard/2";
         }
 
+        private static readonly JObject AllowedFieldsCommon = new JObject
+        {
+            ["timestamp"] = true,
+            ["event"] = true,
+            ["StarSystem"] = true,
+            ["SystemAddress"] = true,
+            ["StarPos"] = "[]",
+        };
+
+        private static readonly JObject AllowedFieldsLocJump = new JObject(AllowedFieldsCommon)
+        {
+            ["SystemAllegiance"] = true,
+            ["SystemEconomy"] = true,
+            ["SystemSecondEconomy"] = true,
+            ["SystemFaction"] = true,
+            ["SystemGovernment"] = true,
+            ["SystemSecurity"] = true,
+            ["Population"] = true,
+            ["FactionState"] = true,
+            ["PowerplayState"] = true,
+            ["Powers"] = "[]",
+            ["Factions"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["Allegiance"] = true,
+                    ["Government"] = true,
+                    ["FactionState"] = true,
+                    ["Happiness"] = true,
+                    ["HomeSystem"] = true,
+                    ["Influence"] = true,
+                    ["ActiveStates"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["State"] = true
+                        }
+                    },
+                    ["PendingStates"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["State"] = true,
+                            ["Trend"] = true
+                        }
+                    },
+                    ["RecoveringStates"] = new JArray
+                    {
+                        new JObject
+                        {
+                            ["State"] = true,
+                            ["Trend"] = true
+                        }
+                    },
+                }
+            },
+        };
+
+        private static readonly JObject AllowedFieldsFSDJump = new JObject(AllowedFieldsLocJump)
+        {
+        };
+
+        private static readonly JObject AllowedFieldsLocation = new JObject(AllowedFieldsLocJump)
+        {
+            ["Body"] = true,
+            ["BodyID"] = true,
+            ["BodyType"] = true,
+            ["Docked"] = true,
+            ["MarketID"] = true,
+            ["StationName"] = true,
+            ["StationType"] = true,
+        };
+
+        private static readonly JObject AllowedFieldsDocked = new JObject(AllowedFieldsCommon)
+        {
+            ["Body"] = true,
+            ["BodyID"] = true,
+            ["BodyType"] = true,
+            ["MarketID"] = true,
+            ["StationName"] = true,
+            ["StationType"] = true,
+            ["DistFromStarLS"] = true,
+            ["StationFaction"] = true,
+            ["StationAllegiance"] = true,
+            ["StationGovernment"] = true,
+            ["FactionState"] = true,
+            ["StationEconomy"] = true,
+            ["StationServices"] = "[]",
+            ["StationState"] = true,
+            ["StationEconomies"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["Proportion"] = true
+                }
+            },
+        };
+
+        private static readonly JObject AllowedFieldsScan = new JObject(AllowedFieldsCommon)
+        {
+            // Common
+            ["BodyName"] = true,
+            ["BodyID"] = true,
+            ["ScanType"] = true,
+            ["DistanceFromArrivalLS"] = true,
+            ["Parents"] = new JArray
+            {
+                new JObject
+                {
+                    ["Null"] = true,
+                    ["Star"] = true,
+                    ["Planet"] = true,
+                    ["Ring"] = true
+                }
+            },
+            // Star / Planet
+            ["RotationPeriod"] = true,
+            ["OrbitalPeriod"] = true,
+            ["SemiMajorAxis"] = true,
+            ["Eccentricity"] = true,
+            ["OrbitalInclination"] = true,
+            ["Periapsis"] = true,
+            ["AxialTilt"] = true,
+            ["Radius"] = true,
+            ["TidalLock"] = true,
+            // Star
+            ["StarType"] = true,
+            ["Age_MY"] = true,
+            ["StellarMass"] = true,
+            ["AbsoluteMagnitude"] = true,
+            ["Luminosity"] = true,
+            // Planet
+            ["PlanetClass"] = true,
+            ["TerraformState"] = true,
+            ["Atmosphere"] = true,
+            ["AtmosphereType"] = true,
+            ["Volcanism"] = true,
+            ["MassEM"] = true,
+            ["SurfaceGravity"] = true,
+            ["SurfaceTemperature"] = true,
+            ["SurfacePressure"] = true,
+            ["Landable"] = true,
+            // Rings
+            ["ReserveLevel"] = true,
+            ["Rings"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["RingClass"] = true,
+                    ["MassMT"] = true,
+                    ["InnerRad"] = true,
+                    ["OuterRad"] = true
+                }
+            },
+            // Materials
+            ["Materials"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["Percent"] = true
+                }
+            },
+            ["Composition"] = new JObject
+            {
+                ["Rock"] = true,
+                ["Metal"] = true,
+                ["Ice"] = true
+            },
+            ["AtmosphereComposition"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["Percent"] = true
+                }
+            }
+        };
+
+        private static JObject FilterJournalEvent(JObject message, JObject allowedFields, string path = "")
+        {
+            JObject ret = new JObject();
+
+            foreach (var kvp in message)
+            {
+                string mpath = $"{path}.{kvp.Key}";
+
+                if (allowedFields.ContainsKey(kvp.Key))
+                {
+                    JToken allowedField = allowedFields[kvp.Key];
+
+                    if (kvp.Value is JValue && allowedField.BoolNull() == true)
+                    {
+                        ret[kvp.Key] = kvp.Value;
+                    }
+                    else if (kvp.Value is JArray && allowedField is JArray && ((JArray)allowedField).Count == 1 && allowedField[0] is JObject)
+                    {
+                        JObject allowed = (JObject)allowedField[0];
+                        JArray vals = new JArray();
+
+                        foreach (JObject val in kvp.Value)
+                        {
+                            vals.Add(FilterJournalEvent(val, allowed, $"{mpath}[]"));
+                        }
+
+                        ret[kvp.Key] = vals;
+                    }
+                    else if (kvp.Value is JArray && allowedField.StrNull() == "[]")
+                    {
+                        JArray vals = new JArray();
+
+                        foreach (JToken val in kvp.Value)
+                        {
+                            if (val is JValue)
+                            {
+                                vals.Add(val);
+                            }
+                            else
+                            {
+                                Trace.WriteLine($"Array value {mpath}[] is not a value: {val?.ToString()}");
+                            }
+                        }
+
+                        ret[kvp.Key] = vals;
+                    }
+                    else if (kvp.Value is JObject && allowedField is JObject)
+                    {
+                        JObject allowed = (JObject)allowedField;
+                        JObject val = (JObject)kvp.Value;
+
+                        ret[kvp.Key] = FilterJournalEvent(val, allowed, mpath);
+                    }
+                    else if (kvp.Value is JObject && kvp.Key == "Materials")
+                    {
+                        JObject vals = new JObject();
+
+                        foreach (var mkvp in (JObject)kvp.Value)
+                        {
+                            if (mkvp.Value is JValue)
+                            {
+                                vals[mkvp.Key] = mkvp.Value;
+                            }
+                            else
+                            {
+                                Trace.WriteLine($"Material value {mpath}.{mkvp.Key} is not a value: {mkvp.Value?.ToString()}");
+                            }
+                        }
+
+                        ret[kvp.Key] = vals;
+                    }
+                    else
+                    {
+                        Trace.WriteLine($"Object value {mpath} is not of expected type: {kvp.Value?.ToString()}");
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine($"Object value {mpath} not in allowed list: {kvp.Value?.ToString()}");
+                }
+            }
+
+            return ret;
+        }
 
         private JObject RemoveCommonKeys(JObject obj)
         {
@@ -129,10 +395,28 @@ namespace EliteDangerousCore.EDDN
                     faction.Remove("MyReputation");
                     faction.Remove("PlayerFaction");
                     faction.Remove("HappiestSystem");
+                    RemoveCommonKeys(faction);
                 }
             }
 
             return obj;
+        }
+
+        private JObject RemoveStationEconomyKeys(JObject jo)
+        {
+            JArray economies = jo["StationEconomies"] as JArray;
+
+            if (economies != null)
+            {
+                foreach (JObject economy in economies)
+                {
+                    RemoveCommonKeys(economy);
+                }
+            }
+
+            jo["StationEconomies"] = economies;
+
+            return jo;
         }
 
         public JObject CreateEDDNMessage(JournalFSDJump journal)
@@ -161,6 +445,8 @@ namespace EliteDangerousCore.EDDN
             message.Remove("StarPosFromEDSM");
             message.Remove("ActiveFine");
 
+            message = FilterJournalEvent(message, AllowedFieldsFSDJump);
+
             msg["message"] = message;
             return msg;
         }
@@ -185,6 +471,8 @@ namespace EliteDangerousCore.EDDN
             message.Remove("MyReputation");
             message.Remove("ActiveFine");
 
+            message = FilterJournalEvent(message, AllowedFieldsLocation);
+
             msg["message"] = message;
             return msg;
         }
@@ -202,6 +490,7 @@ namespace EliteDangerousCore.EDDN
             JObject message = journal.GetJson();
 
             message = RemoveCommonKeys(message);
+            message = RemoveStationEconomyKeys(message);
             message.Remove("CockpitBreach");
             message.Remove("Wanted");
             message.Remove("ActiveFine");
@@ -210,6 +499,8 @@ namespace EliteDangerousCore.EDDN
 
             if (system.SystemAddress != null && message["SystemAddress"] == null)
                 message["SystemAddress"] = system.SystemAddress;
+
+            message = FilterJournalEvent(message, AllowedFieldsDocked);
 
             msg["message"] = message;
             return msg;
@@ -368,6 +659,9 @@ namespace EliteDangerousCore.EDDN
 
 
             message = RemoveCommonKeys(message);
+
+            message = FilterJournalEvent(message, AllowedFieldsScan);
+
             msg["message"] = message;
             return msg;
         }
