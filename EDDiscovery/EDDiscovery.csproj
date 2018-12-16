@@ -256,31 +256,115 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\Combat\UserControlCombatPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Combat\UserControlCombatPanel.Designer.cs">
+      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlLedger.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlLedger.Designer.cs">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlMaterialCommodities.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlMaterialCommodities.Designer.cs">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlMissions.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlMissions.Designer.cs">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlModules.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlModules.Designer.cs">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlStats.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlStats.Designer.cs">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineering.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineering.Designer.cs">
+      <DependentUpon>UserControlEngineering.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlShoppingList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlShoppingList.Designer.cs">
+      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlSynthesis.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EngineeringSynthesis\UserControlSynthesis.Designer.cs">
+      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerGrid.Designer.cs">
+      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerResizable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerResizable.designer.cs">
+      <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerSplitter.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerSplitter.Designer.cs">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlPanelSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\GridsSplitters\UserControlPanelSelector.designer.cs">
+      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Helpers\FindSystemsUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\FindSystemsUserControl.Designer.cs">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\History\UserControlJournalGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlJournalGrid.Designer.cs">
+      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlLog.Designer.cs">
+      <DependentUpon>UserControlLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlStarList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlStarList.Designer.cs">
+      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlTravelGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\History\UserControlTravelGrid.Designer.cs">
+      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\IHistoryCursor.cs" />
-    <Compile Include="UserControls\UserControlBookmarks.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlBookmarks.Designer.cs">
-      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlContainerSplitter.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlContainerSplitter.Designer.cs">
-      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlContainerGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlContainerGrid.Designer.cs">
-      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -381,102 +465,147 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControls\UserControlCombatPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlCombatPanel.Designer.cs">
-      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlOutfitting.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlOutfitting.Designer.cs">
-      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlShipYards.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlShipYards.Designer.cs">
-      <DependentUpon>UserControlShipYards.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlPanelSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlPanelSelector.Designer.cs">
-      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlPlot.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlPlot.Designer.cs">
-      <DependentUpon>UserControlPlot.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlScanGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlScanGrid.Designer.cs">
-      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlSettings.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlSettings.Designer.cs">
-      <DependentUpon>UserControlSettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Helpers\TravelHistoryFilter.cs" />
-    <Compile Include="UserControls\UserControlContainerResizable.cs">
+    <Compile Include="UserControls\Overlays\UserControlCompass.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlContainerResizable.Designer.cs">
-      <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlEstimatedValues.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlEstimatedValues.Designer.cs">
-      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlExpedition.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlExpedition.Designer.cs">
-      <DependentUpon>UserControlExpedition.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlExploration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlExploration.Designer.cs">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlEDSM.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlEDSM.Designer.cs">
-      <DependentUpon>UserControlEDSM.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlRoute.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlRoute.Designer.cs">
-      <DependentUpon>UserControlRoute.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlCompass.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlCompass.Designer.cs">
+    <Compile Include="UserControls\Overlays\UserControlCompass.Designer.cs">
       <DependentUpon>UserControlCompass.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlShoppingList.cs">
+    <Compile Include="UserControls\Overlays\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlShoppingList.Designer.cs">
-      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    <Compile Include="UserControls\Overlays\UserControlNotePanel.Designer.cs">
+      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlLocalMap.cs">
+    <Compile Include="UserControls\Overlays\UserControlRouteTracker.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UserControlLocalMap.Designer.cs">
+    <Compile Include="UserControls\Overlays\UserControlRouteTracker.Designer.cs">
+      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSpanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSpanel.Designer.cs">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSysInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSysInfo.Designer.cs">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlTrippanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlTrippanel.Designer.cs">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.Designer.cs">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExploration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExploration.Designer.cs">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.Designer.cs">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlBookmarks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlBookmarks.Designer.cs">
+      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEDSM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEDSM.Designer.cs">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEstimatedValues.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEstimatedValues.Designer.cs">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlLocalMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlLocalMap.Designer.cs">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlPlot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlPlot.Designer.cs">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlScan.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
+      <DependentUpon>UserControlScan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlScanGrid.Designer.cs">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlStarDistance.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlStarDistance.Designer.cs">
+      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlTrilateration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlTrilateration.designer.cs">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Screenshots\UserControlScreenshot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Screenshots\UserControlScreenshot.Designer.cs">
+      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\UserControlSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Settings\UserControlSettings.Designer.cs">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlMarketData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlMarketData.Designer.cs">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlOutfitting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlOutfitting.Designer.cs">
+      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlShipYards.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\StationData\UserControlShipYards.Designer.cs">
+      <DependentUpon>UserControlShipYards.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\UserControlCommonBase.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\SurfaceBookmarksUC.cs">
       <SubType>UserControl</SubType>
@@ -484,140 +613,11 @@
     <Compile Include="Forms\SurfaceBookmarksUC.Designer.cs">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\UserControlSysInfo.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlSysInfo.Designer.cs">
-      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMarketData.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMarketData.Designer.cs">
-      <DependentUpon>UserControlMarketData.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMissions.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMissions.Designer.cs">
-      <DependentUpon>UserControlMissions.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlEngineering.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlEngineering.Designer.cs">
-      <DependentUpon>UserControlEngineering.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlSynthesis.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlSynthesis.Designer.cs">
-      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlModules.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlModules.Designer.cs">
-      <DependentUpon>UserControlModules.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlNotePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlNotePanel.Designer.cs">
-      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlRouteTracker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlRouteTracker.Designer.cs">
-      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlScan.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlScan.Designer.cs">
-      <DependentUpon>UserControlScan.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlSpanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlSpanel.Designer.cs">
-      <DependentUpon>UserControlSpanel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlStats.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlStats.Designer.cs">
-      <DependentUpon>UserControlStats.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlScreenshot.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlScreenshot.Designer.cs">
-      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlCommonBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlJournalGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlJournalGrid.Designer.cs">
-      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlLog.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlLog.Designer.cs">
-      <DependentUpon>UserControlLog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlLedger.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlLedger.Designer.cs">
-      <DependentUpon>UserControlLedger.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlMaterialCommodities.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlMaterialCommodities.Designer.cs">
-      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlStarDistance.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlStarDistance.Designer.cs">
-      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlStarList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlStarList.Designer.cs">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlTravelGrid.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlTravelGrid.Designer.cs">
-      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlTrilateration.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlTrilateration.designer.cs">
-      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\UserControlTrippanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\UserControlTrippanel.Designer.cs">
-      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
@@ -649,131 +649,128 @@
     <EmbeddedResource Include="ScreenShots\ScreenShotConfigureForm.resx">
       <DependentUpon>ScreenShotConfigureForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Combat\UserControlCombatPanel.resx">
+      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlLedger.resx">
+      <DependentUpon>UserControlLedger.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlMaterialCommodities.resx">
+      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlMissions.resx">
+      <DependentUpon>UserControlMissions.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlModules.resx">
+      <DependentUpon>UserControlModules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlStats.resx">
+      <DependentUpon>UserControlStats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineering.resx">
+      <DependentUpon>UserControlEngineering.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlShoppingList.resx">
+      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlSynthesis.resx">
+      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerGrid.resx">
+      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerResizable.resx">
+      <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlContainerSplitter.resx">
+      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\GridsSplitters\UserControlPanelSelector.resx">
+      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\FindSystemsUserControl.resx">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlBookmarks.resx">
-      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlContainerSplitter.resx">
-      <DependentUpon>UserControlContainerSplitter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlContainerGrid.resx">
-      <DependentUpon>UserControlContainerGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlContainerResizable.resx">
-      <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlCombatPanel.resx">
-      <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlOutfitting.resx">
-      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlShipYards.resx">
-      <DependentUpon>UserControlShipYards.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlPanelSelector.resx">
-      <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlPlot.resx">
-      <DependentUpon>UserControlPlot.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlScanGrid.resx">
-      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlEstimatedValues.resx">
-      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlExpedition.resx">
-      <DependentUpon>UserControlExpedition.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlExploration.resx">
-      <DependentUpon>UserControlExploration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlEDSM.resx">
-      <DependentUpon>UserControlEDSM.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlJournalGrid.resx">
+    <EmbeddedResource Include="UserControls\History\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlRoute.resx">
-      <DependentUpon>UserControlRoute.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\History\UserControlTravelGrid.resx">
+      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlCompass.resx">
+    <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
       <DependentUpon>UserControlCompass.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlShoppingList.resx">
-      <DependentUpon>UserControlShoppingList.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlNotePanel.resx">
+      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlLocalMap.resx">
+    <EmbeddedResource Include="UserControls\Overlays\UserControlRouteTracker.resx">
+      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSpanel.resx">
+      <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
+      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlTrippanel.resx">
+      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExpedition.resx">
+      <DependentUpon>UserControlExpedition.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExploration.resx">
+      <DependentUpon>UserControlExploration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
+      <DependentUpon>UserControlRoute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlBookmarks.resx">
+      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlEstimatedValues.resx">
+      <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlLocalMap.resx">
       <DependentUpon>UserControlLocalMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlPlot.resx">
+      <DependentUpon>UserControlPlot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
+      <DependentUpon>UserControlScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">
+      <DependentUpon>UserControlScanGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlStarDistance.resx">
+      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlTrilateration.resx">
+      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Screenshots\UserControlScreenshot.resx">
+      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Settings\UserControlSettings.resx">
+      <DependentUpon>UserControlSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlMarketData.resx">
+      <DependentUpon>UserControlMarketData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlOutfitting.resx">
+      <DependentUpon>UserControlOutfitting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\StationData\UserControlShipYards.resx">
+      <DependentUpon>UserControlShipYards.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SurfaceBookmarksUC.resx">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlSysInfo.resx">
-      <DependentUpon>UserControlSysInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlMarketData.resx">
-      <DependentUpon>UserControlMarketData.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlMissions.resx">
-      <DependentUpon>UserControlMissions.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlEngineering.resx">
-      <DependentUpon>UserControlEngineering.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlSynthesis.resx">
-      <DependentUpon>UserControlSynthesis.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlModules.resx">
-      <DependentUpon>UserControlModules.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlLog.resx">
-      <DependentUpon>UserControlLog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlLedger.resx">
-      <DependentUpon>UserControlLedger.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlMaterialCommodities.resx">
-      <DependentUpon>UserControlMaterialCommodities.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlNotePanel.resx">
-      <DependentUpon>UserControlNotePanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlRouteTracker.resx">
-      <DependentUpon>UserControlRouteTracker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlScan.resx">
-      <DependentUpon>UserControlScan.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlScreenshot.resx">
-      <DependentUpon>UserControlScreenshot.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlSpanel.resx">
-      <DependentUpon>UserControlSpanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStarDistance.resx">
-      <DependentUpon>UserControlStarDistance.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStats.resx">
-      <DependentUpon>UserControlStats.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlStarList.resx">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlTravelGrid.resx">
-      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlTrilateration.resx">
-      <DependentUpon>UserControlTrilateration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlTrippanel.resx">
-      <DependentUpon>UserControlTrippanel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.Portable.config">
       <SubType>Designer</SubType>
@@ -825,9 +822,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\UserControlSettings.resx">
-      <DependentUpon>UserControlSettings.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="EDDiscovery_TemporaryKey.pfx" />
     <None Include="packages.config">
@@ -1047,5 +1041,4 @@
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
-
 </Project>
