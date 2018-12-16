@@ -44,7 +44,7 @@ JournalTypeEnum.EngineerApply: "Engineer Apply" @
 JournalTypeEnum.EngineerContribution: "Engineer Contribution" => "Datek dla Inżyniera"
 JournalTypeEnum.EngineerCraft: "Engineer Craft" => "Ulepszenie Inżynierskie"
 JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" @
-JournalTypeEnum.EngineerProgress: "Engineer Progress" => "Postęp Inżyniera"
+JournalTypeEnum.EngineerProgress: "Engineer Progress" => "Postęp Inżynierów"
 JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" => "Uniknięcie Przechwycenia"
 JournalTypeEnum.FactionKillBond: "Faction Kill Bond" => "Obligacja Wojenna Frakcji"
 JournalTypeEnum.FSDJump: "FSD Jump" => "Skok FSD"
@@ -356,14 +356,14 @@ JournalEntry.Captain: "Captain:" => "Kapitan:"
 JournalEntry.CrewMember: "Crew Member:" => "Członek Załogi:"
 ///////////////////////////////////////////////////// JournalLaunchFighter
 JournalEntry.Loadout: "Loadout:" => "Wyposażenie:"
-JournalEntry.NPCControlled: ", NPC Controlled;" => ", Kontrola przez NPC;"
+JournalEntry.NPCControlled: ", NPC Controlled;" => ", Kontrolowane przez NPC;"
 ///////////////////////////////////////////////////// JournalLoadGame
 JournalEntry.Ship: "Ship:" => "Statek:"
 JournalEntry.Ident: "Ident:" => "Ident:"
 JournalEntry.Credits: "Credits:;;N0" => "Kredyty:;;N0"
 JournalEntry.Mode: "Mode:" => "Tryb:"
 JournalEntry.Group: "Group:" => "Grupa:"
-JournalEntry.NotLanded: "Not Landed;Landed" => "Nie Wylądowano;Wylądowano"
+JournalEntry.NotLanded: "Not Landed;Landed" => "Nie na Powierzchni;Na Powierzchni"
 JournalEntry.FuelLevel: "Fuel Level:;;0.0" => "Poziom Paliwa:;;0.0"
 JournalEntry.Capacity: "Capacity:;;0.0" => "Pojemność:;;0.0"
 JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" => "Różna łączna ilość pieniędzy, wyrównywanie"
@@ -395,7 +395,7 @@ JournalEntry.Hot: ";(Hot)" => ";(Ścigany)"
 ///////////////////////////////////////////////////// JournalMaterialCollected
 JournalEntry.MatC: "< ; items" => "< ; przedmiot(y/ów)"
 ///////////////////////////////////////////////////// JournalMaterialDiscovered
-JournalMaterialDiscovered.DN: ", Discovery {0}" => "Odkrycie {0}"
+JournalMaterialDiscovered.DN: ", Discovery {0}" => ", Odkrycie {0}"
 ///////////////////////////////////////////////////// JournalMaterials
 JournalMaterials.Raw: "Raw:" => "Surowe:"
 JournalMaterials.Manufactured: "Manufactured:" => "Sprzętowe:"
@@ -411,7 +411,7 @@ JournalEntry.Station: "Station:" => "Stacja:"
 JournalEntry.Commodity: "Commodity:" => "Towar:"
 JournalEntry.TargetFaction: "Target Faction:" => "Frakcja będąca Celem:"
 JournalEntry.Permits: "Permits:" => "Przepustki:"
-JournalEntry.Rewards: "Rewards:" => ", Nagrody:"
+JournalEntry.Rewards: "Rewards:" => "\nNagrody:"
 ///////////////////////////////////////////////////// JournalMissionRedirected
 JournalEntry.Missionname: "Mission name:" => "Nazwa misji:"
 JournalMissionRedirected.From: "From:" => "Z:"
@@ -432,11 +432,11 @@ JournalEntry .Modules: "Modules:" => "Moduły:"
 JournalEntry.Item: "Item:" => "Przedmiot:"
 ///////////////////////////////////////////////////// JournalModuleStore
 JournalEntry.on: " on " => " na "
-JournalEntry.Replacedby: "Replaced by:" => "Zamieniono na:"
+JournalEntry.Replacedby: "Replaced by:" => "Wymieniono na:"
 JournalEntry.Modifications: "Modifications:" => "Modyfikacje:"
 ///////////////////////////////////////////////////// JournalModuleSwap
 JournalEntry.Slot: "Slot:" => "Przegroda:"
-JournalEntry.Swappedwith: ", Swapped with " => ", zamieniono z "
+JournalEntry.Swappedwith: ", Swapped with " => ", Zamieniono z "
 ///////////////////////////////////////////////////// JournalMusic
 JournalEntry.MusicTrack: "Music Track:" => "Utwór Muzyczny:"
 ///////////////////////////////////////////////////// JournalNavBeaconScan
@@ -459,9 +459,9 @@ JournalEntry.Pledged: "Pledged:" @
 JournalEntry.FromPower: "From Power:" @
 JournalEntry.ToPower: "To Power:" @
 ///////////////////////////////////////////////////// JournalPowerplaySalary
-JournalEntry.Amount: "Amount:; cr;N0" @
+JournalEntry.Amount: "Amount:; cr;N0" => "Kwota:; cr;N0"
 ///////////////////////////////////////////////////// JournalPowerplayVoucher
-JournalEntry.Systems: ", Systems:" @
+JournalEntry.Systems: ", Systems:" => ", Układy:"
 ///////////////////////////////////////////////////// JournalProgress
 JournalProgress.Combat: "Combat:;%" => "Walka:;%"
 JournalProgress.Trade: "Trade:;%" => "Handel:;%"
@@ -501,11 +501,11 @@ StarPlanetRing.OuterRadius: "  Outer Radius: {0:0.00}ls\n" => "  Zew.Promień: {
 StarPlanetRing.IK: "  Inner Radius: {0}km\n" => "  Wew.Promień: {0}km\n"
 StarPlanetRing.OK: "  Outer Radius: {0}km\n" => "  Zew.Promień: {0}km\n"
 StarPlanetRing.Moons: " Moons" => " Księżyce"
-StarPlanetRing.Icy: "Icy" => "Lodowe"
-StarPlanetRing.Rocky: "Rocky" => "Skaliste"
-StarPlanetRing.MetalRich: "Metal Rich" => "Bogate w Metale"
-StarPlanetRing.Metallic: "Metallic" => "Metaliczne"
-StarPlanetRing.RockyIce: "Rocky Ice" => "Skalisto-Lodowe"
+StarPlanetRing.Icy: "Icy" => "Lodowy"
+StarPlanetRing.Rocky: "Rocky" => "Skalisty"
+StarPlanetRing.MetalRich: "Metal Rich" => "Bogaty w Metale"
+StarPlanetRing.Metallic: "Metallic" => "Metaliczny"
+StarPlanetRing.RockyIce: "Rocky Ice" => "Skalisto-Lodowy"
 JournalScan.Scanof: "Scan of {0}" => "Skan {0}"
 JournalScan.MSM: "Mass:;SM;0.00" => "Masa:;MS;0.00"
 JournalScan.Age: "Age:;my;0.0" => "Wiek:;mln.lat;0.0"
@@ -525,7 +525,7 @@ JournalScan.BodyRadius: "Body Radius: {0:0.00}km\n" => "Promień Obiektu: {0:0.0
 JournalScan.SurfaceTemp: "Surface Temp: {0}K\n" => "Temp. Powierzchni: {0}K\n"
 JournalScan.Luminosity: "Luminosity: {0}\n" => "Jasność: {0}\n"
 JournalScan.GV: "Gravity: {0:0.0}g\n" => "Gravitacja: {0:0.0}g\n"
-JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" => "Ciśnienie na Powierzchni: {0} atm"
+JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" => "Ciśnienie na Powierzchni: {0} atm\n"
 JournalScan.SPP: "Surface Pressure: {0} Pa\n" => "Ciśnienie na Powierzchni: {0} Pa\n"
 JournalScan.Volcanism: "Volcanism: {0}\n" => "Aktywność Wulkaniczna: {0}\n"
 JournalScan.NoVolcanism: "No Volcanism" => "Brak Aktywności Wulkanicznej"
@@ -541,9 +541,9 @@ JournalScan.Axialtilt: "Axial tilt: {0:0.00}�\n" => "Nachylenie Osiowe: {0:0.0
 JournalScan.RotationPeriod: "Rotation Period: {0} days\n" => "Okres Obrotu: {0} dni\n"
 JournalScan.Tidallylocked: "Tidally locked\n" => "Obrót Synchroniczny\n"
 JournalScan.Candidateforterraforming: "Candidate for terraforming\n" => "Kandydat na Terraformowanie\n"
-JournalScan.Belt: "Belt{0}" => "Pas {0}"
+JournalScan.Belt: "Belt{0}" => "Pasy Asteroid {0}"
 JournalScan.Moons: " Moons" => " Księżyce"
-JournalScan.Ring: "Ring{0}" => "Pierścień {0}"
+JournalScan.Ring: "Ring{0}" => "Pierścienie {0}"
 JournalScan.EV: "\nEstimated value: {0:N0}" => "\nSzacowana wartość: {0:N0}"
 JournalScan.DB: "\n\nDiscovered by {0} on {1}" => "\n\nOdkryte przez {0} dnia {1}"
 JournalScan.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Ekosfera ok. {0} ({1}-{2} AU)\n"
@@ -587,7 +587,7 @@ JournalShipTargeted.Hull: "Hull ;;N1" => "Poszycie ;;N1"
 JournalShipTargeted.at: "< at ;;N1" => "< w ;;N1"
 JournalEntry.LostTarget: "Lost Target" => "Stracono Cel"
 ///////////////////////////////////////////////////// JournalShipyard
-JournalEntry.Ships: "Ships" => "Statki"
+JournalEntry.Ships: "Ships" => "Statki/ów"
 ///////////////////////////////////////////////////// JournalShipyardSell
 JournalShipyardSell.At: "At:" => "W:"
 ///////////////////////////////////////////////////// JournalShipyardSwap
