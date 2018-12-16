@@ -57,7 +57,6 @@ namespace EDDiscovery.UserControls
         private bool hasPopolonium;
         private bool hasVanadium;
         private bool hasYttrium;
-        private bool isStructure;
 
         private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
         private string DbSave { get { return DBName("ScanGridPanel"); } }
