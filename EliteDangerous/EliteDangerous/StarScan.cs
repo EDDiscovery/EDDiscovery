@@ -44,6 +44,7 @@ namespace EliteDangerousCore
             public SortedList<int, ScanNode> NodesByID = new SortedList<int, ScanNode>();
             public int MaxTopLevelBodyID = 0;
             public int MinPlanetBodyID = 512;
+            public int? TotalBodies;
 
             public IEnumerable<ScanNode> Bodies
             {
@@ -76,6 +77,7 @@ namespace EliteDangerousCore
             public SortedList<string, ScanNode> children;         // kids
             public int level;                       // level within SystemNode
             public int? BodyID;
+            public bool IsMapped;
 
             public bool IsTopLevelNode;
 
@@ -302,6 +304,52 @@ namespace EliteDangerousCore
             return Process(je, hl[startindex].System, true);         // no relationship, add..
         }
 
+        // used by historylist during full history processing in background
+        public bool AddScanToBestSystem(JournalSAAScanComplete je, int startindex, List<HistoryEntry> hl)
+        {
+            HistoryEntry he;
+            JournalLocOrJump jl;
+            return AddScanToBestSystem(je, startindex, hl, out he, out jl);
+        }
+
+        // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
+        public bool AddScanToBestSystem(JournalSAAScanComplete je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
+        {
+            for (int j = startindex; j >= 0; j--)
+            {
+                he = hl[j];
+
+                if (he.IsLocOrJump)
+                {
+                    jl = (JournalLocOrJump)he.journalEntry;
+                    string designation = GetBodyDesignation(je, he.System.Name);
+
+                    if (IsStarNameRelated(he.System.Name, designation))       // if its part of the name, use it
+                    {
+                        je.BodyDesignation = designation;
+                        return Process(je, he.System, true);
+                    }
+                    else if (jl != null && IsStarNameRelated(jl.StarSystem, designation))
+                    {
+                        // Ignore scans where the system name has changed
+                        return false;
+                    }
+                }
+            }
+
+            jl = null;
+            he = null;
+
+            je.BodyDesignation = GetBodyDesignation(je, hl[startindex].System.Name);
+            return Process(je, hl[startindex].System, true);         // no relationship, add..
+        }
+
+        public void SetFSSDiscoveryScan(JournalFSSDiscoveryScan je, ISystem sys)
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+            sn.TotalBodies = je.BodyCount;
+        }
+
         private bool Process(JournalScan sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
         {
             SystemNode sn = GetOrCreateSystemNode(sys);
@@ -440,6 +488,53 @@ namespace EliteDangerousCore
             }
 
             return true;
+        }
+
+        private bool Process(JournalSAAScanComplete sc, ISystem sys, bool reprocessPrimary = false)  // background or foreground.. FALSE if you can't process it
+        {
+            SystemNode sn = GetOrCreateSystemNode(sys);
+            ScanNode relatedScan = null;
+
+            if (sn.NodesByID.ContainsKey((int)sc.BodyID))
+            {
+                relatedScan = sn.NodesByID[(int)sc.BodyID];
+                if (relatedScan.ScanData != null && relatedScan.ScanData.BodyDesignation != null)
+                {
+                    sc.BodyDesignation = relatedScan.ScanData.BodyDesignation;
+                }
+            }
+            else if (sc.BodyDesignation != null && sc.BodyDesignation != sc.BodyName)
+            {
+                foreach (var body in sn.Bodies)
+                {
+                    if (body.fullname == sc.BodyDesignation)
+                    {
+                        relatedScan = body;
+                        break;
+                    }
+                }
+            }
+
+            if (relatedScan == null)
+            {
+                foreach (var body in sn.Bodies)
+                {
+                    if ((body.fullname == sc.BodyName || body.customname == sc.BodyName) &&
+                        (body.fullname != sys.Name || body.level != 0))
+                    {
+                        relatedScan = body;
+                        break;
+                    }
+                }
+            }
+
+            if (relatedScan != null)
+            {
+                relatedScan.IsMapped = true;
+                return true; // We already have the scan
+            }
+
+            return false;
         }
 
         private void ReProcess(SystemNode sysnode)
@@ -1055,6 +1150,32 @@ namespace EliteDangerousCore
             if (desigmap.ContainsKey(system) && desigmap[system].ContainsKey(bodyname))
             {
                 return desigmap[system][bodyname];
+            }
+
+            if (bodyname.Equals(system, StringComparison.InvariantCultureIgnoreCase) || bodyname.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return bodyname;
+            }
+
+            return bodyname;
+        }
+
+        private string GetBodyDesignation(JournalSAAScanComplete je, string system)
+        {
+            if (je.BodyName == null || system == null)
+                return null;
+
+            string bodyname = je.BodyName;
+            int bodyid = (int)je.BodyID;
+
+            if (bodyIdDesignationMap.ContainsKey(system) && bodyIdDesignationMap[system].ContainsKey(bodyid) && bodyIdDesignationMap[system][bodyid].NameEquals(bodyname))
+            {
+                return bodyIdDesignationMap[system][bodyid].Designation;
+            }
+
+            if (planetDesignationMap.ContainsKey(system) && planetDesignationMap[system].ContainsKey(bodyname))
+            {
+                return planetDesignationMap[system][bodyname];
             }
 
             if (bodyname.Equals(system, StringComparison.InvariantCultureIgnoreCase) || bodyname.StartsWith(system + " ", StringComparison.InvariantCultureIgnoreCase))

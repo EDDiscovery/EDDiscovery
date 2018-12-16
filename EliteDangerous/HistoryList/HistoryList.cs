@@ -880,6 +880,14 @@ namespace EliteDangerousCore
                     }
                 }
             }
+            else if (je is JournalSAAScanComplete)
+            {
+                starscan.AddScanToBestSystem((JournalSAAScanComplete)je, Count - 1, EntryOrder);
+            }
+            else if (je is JournalFSSDiscoveryScan && he.System != null)
+            {
+                starscan.SetFSSDiscoveryScan((JournalFSSDiscoveryScan)je, he.System);
+            }
             else if (je is IBodyNameAndID)
             {
                 JournalLocOrJump jl;
@@ -1044,6 +1052,14 @@ namespace EliteDangerousCore
                         {
                             System.Diagnostics.Debug.WriteLine("******** Cannot add scan to system " + (je as JournalScan).BodyName + " in " + he.System.Name);
                         }
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.SAAScanComplete)
+                    {
+                        this.starscan.AddScanToBestSystem((JournalSAAScanComplete)je, i, hl);
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.FSSDiscoveryScan && he.System != null)
+                    {
+                        this.starscan.SetFSSDiscoveryScan((JournalFSSDiscoveryScan)je, he.System);
                     }
                     else if (je is IBodyNameAndID)
                     {
