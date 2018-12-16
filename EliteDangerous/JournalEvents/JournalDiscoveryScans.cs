@@ -187,6 +187,7 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyName { get; set; }
         public int ProbesUsed { get; set; }
         public int EfficiencyTarget { get; set; }
+        public string BodyDesignation { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
