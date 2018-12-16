@@ -158,8 +158,6 @@ namespace EDDiscovery.UserControls
             // reset isGreenSystem tag
             isGreenSystem = false;
 
-            // reset is Structure
-            isStructure = false;
 
             // reset indicator for jumponium materials
             hasArsenic = false;
@@ -245,8 +243,6 @@ namespace EDDiscovery.UserControls
                 }
                 else if (sn.type == StarScan.ScanNodeType.beltcluster)
                 {
-                    isStructure = true;
-
                     if (showStructures)
                     {
                         if (showBelts)
