@@ -115,12 +115,15 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Location = new System.Drawing.Point(12, 57);
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
+            this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxLicense.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.textBoxLicense.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.textBoxLicense.ScrollBarBackColor = System.Drawing.SystemColors.Control;
             this.textBoxLicense.ScrollBarBorderColor = System.Drawing.Color.White;
             this.textBoxLicense.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxLicense.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxLicense.ScrollBarLineTweak = 0;
             this.textBoxLicense.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.textBoxLicense.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.textBoxLicense.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
