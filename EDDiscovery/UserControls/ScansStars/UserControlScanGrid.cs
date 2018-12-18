@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (sn.type == StarScan.ScanNodeType.beltcluster)
                 {
-                    if (showStructures)
+                    if (showStructures && sn.ScanData?.BodyName != null)
                     {
                         if (showBelts)
                         {
