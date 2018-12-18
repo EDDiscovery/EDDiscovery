@@ -772,6 +772,9 @@ namespace EliteDangerousCore.EDSM
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine("SysClassEDSM.2 Exception " + e.ToString());
+                    ReportProgress(-1, "EDSM request failed");
+                    LogLine("Processing EDSM systems download failed, will try next time program is run");
+                    return updates;
                 }
 
                 updates += updated;
