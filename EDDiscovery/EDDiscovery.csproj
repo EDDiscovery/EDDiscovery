@@ -556,6 +556,12 @@
     <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplay.Designer.cs">
+      <DependentUpon>ScanDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -741,6 +747,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\ScanDisplay.resx">
+      <DependentUpon>ScanDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">
       <DependentUpon>UserControlScanGrid.cs</DependentUpon>

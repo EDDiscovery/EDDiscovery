@@ -44,12 +44,10 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelStars = new ExtendedControls.PanelVScroll();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemToolbar = new System.Windows.Forms.ToolStripMenuItem();
-            this.rtbNodeInfo = new ExtendedControls.RichTextBoxScroll();
-            this.imagebox = new ExtendedControls.PictureBoxHotspot();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.showSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cancelShowSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblSystemInfo = new System.Windows.Forms.Label();
             this.panelControls = new System.Windows.Forms.Panel();
             this.checkBoxCustomHideFullMats = new ExtendedControls.CheckBoxCustom();
@@ -65,30 +63,11 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelTop = new ExtendedControls.RollUpPanel();
-            this.showSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cancelShowSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelStars.SuspendLayout();
+            this.panelStars = new EDDiscovery.UserControls.ScanDisplay();
             this.contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
             this.panelControls.SuspendLayout();
             this.rollUpPanelTop.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panelStars
-            // 
-            this.panelStars.ContextMenuStrip = this.contextMenuStrip;
-            this.panelStars.Controls.Add(this.rtbNodeInfo);
-            this.panelStars.Controls.Add(this.imagebox);
-            this.panelStars.Controls.Add(this.vScrollBarCustom);
-            this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelStars.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.panelStars.Location = new System.Drawing.Point(0, 32);
-            this.panelStars.Name = "panelStars";
-            this.panelStars.ScrollBarWidth = 20;
-            this.panelStars.Size = new System.Drawing.Size(748, 650);
-            this.panelStars.TabIndex = 1;
-            this.panelStars.VerticalScrollBarDockRight = true;
-            this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
             // 
             // contextMenuStrip
             // 
@@ -97,77 +76,28 @@ namespace EDDiscovery.UserControls
             this.showSystemToolStripMenuItem,
             this.cancelShowSystemToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(184, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(184, 70);
             // 
             // toolStripMenuItemToolbar
             // 
             this.toolStripMenuItemToolbar.Name = "toolStripMenuItemToolbar";
-            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(176, 22);
+            this.toolStripMenuItemToolbar.Size = new System.Drawing.Size(183, 22);
             this.toolStripMenuItemToolbar.Text = "Show/Hide Toolbar";
             this.toolStripMenuItemToolbar.Click += new System.EventHandler(this.toolStripMenuItemToolbar_Click);
             // 
-            // rtbNodeInfo
+            // showSystemToolStripMenuItem
             // 
-            this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.rtbNodeInfo.BorderColorScaling = 0.5F;
-            this.rtbNodeInfo.HideScrollBar = true;
-            this.rtbNodeInfo.Location = new System.Drawing.Point(472, 6);
-            this.rtbNodeInfo.Name = "rtbNodeInfo";
-            this.rtbNodeInfo.ReadOnly = false;
-            this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.rtbNodeInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.rtbNodeInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.rtbNodeInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.rtbNodeInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rtbNodeInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.rtbNodeInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.rtbNodeInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.rtbNodeInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.rtbNodeInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.rtbNodeInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.rtbNodeInfo.ScrollBarWidth = 20;
-            this.rtbNodeInfo.ShowLineCount = false;
-            this.rtbNodeInfo.Size = new System.Drawing.Size(200, 100);
-            this.rtbNodeInfo.TabIndex = 3;
-            this.rtbNodeInfo.TextBoxBackColor = System.Drawing.SystemColors.Control;
-            this.rtbNodeInfo.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            this.showSystemToolStripMenuItem.Name = "showSystemToolStripMenuItem";
+            this.showSystemToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.showSystemToolStripMenuItem.Text = "Show System";
+            this.showSystemToolStripMenuItem.Click += new System.EventHandler(this.showSystemToolStripMenuItem_Click);
             // 
-            // imagebox
+            // cancelShowSystemToolStripMenuItem
             // 
-            this.imagebox.Location = new System.Drawing.Point(0, 0);
-            this.imagebox.Name = "imagebox";
-            this.imagebox.Size = new System.Drawing.Size(466, 554);
-            this.imagebox.TabIndex = 4;
-            this.imagebox.TabStop = false;
-            // 
-            // vScrollBarCustom
-            // 
-            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom.HideScrollBar = true;
-            this.vScrollBarCustom.LargeChange = 20;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(728, 0);
-            this.vScrollBarCustom.Maximum = -72;
-            this.vScrollBarCustom.Minimum = 0;
-            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 650);
-            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom.SmallChange = 1;
-            this.vScrollBarCustom.TabIndex = 2;
-            this.vScrollBarCustom.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -72;
-            this.vScrollBarCustom.ValueLimited = -72;
+            this.cancelShowSystemToolStripMenuItem.Name = "cancelShowSystemToolStripMenuItem";
+            this.cancelShowSystemToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.cancelShowSystemToolStripMenuItem.Text = "Cancel Show System";
+            this.cancelShowSystemToolStripMenuItem.Click += new System.EventHandler(this.cancelShowSystemToolStripMenuItem_Click);
             // 
             // lblSystemInfo
             // 
@@ -512,19 +442,19 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.UnrolledHeight = 32;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
-            // showSystemToolStripMenuItem
+            // panelStars
             // 
-            this.showSystemToolStripMenuItem.Name = "showSystemToolStripMenuItem";
-            this.showSystemToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.showSystemToolStripMenuItem.Text = "Show System";
-            this.showSystemToolStripMenuItem.Click += new System.EventHandler(this.showSystemToolStripMenuItem_Click);
-            // 
-            // cancelShowSystemToolStripMenuItem
-            // 
-            this.cancelShowSystemToolStripMenuItem.Name = "cancelShowSystemToolStripMenuItem";
-            this.cancelShowSystemToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.cancelShowSystemToolStripMenuItem.Text = "Cancel Show System";
-            this.cancelShowSystemToolStripMenuItem.Click += new System.EventHandler(this.cancelShowSystemToolStripMenuItem_Click);
+            this.panelStars.CheckEDSM = false;
+            this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelStars.HideFullMaterials = false;
+            this.panelStars.Location = new System.Drawing.Point(0, 32);
+            this.panelStars.Name = "panelStars";
+            this.panelStars.ShowMaterials = false;
+            this.panelStars.ShowMaterialsRare = false;
+            this.panelStars.ShowMoons = false;
+            this.panelStars.ShowOverlays = false;
+            this.panelStars.Size = new System.Drawing.Size(748, 650);
+            this.panelStars.TabIndex = 5;
             // 
             // UserControlScan
             // 
@@ -535,9 +465,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlScan";
             this.Size = new System.Drawing.Size(748, 682);
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
-            this.panelStars.ResumeLayout(false);
             this.contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
             this.panelControls.ResumeLayout(false);
             this.rollUpPanelTop.ResumeLayout(false);
             this.rollUpPanelTop.PerformLayout();
@@ -546,10 +474,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.PanelVScroll panelStars;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
-        private ExtendedControls.RichTextBoxScroll rtbNodeInfo;
         private ExtendedControls.CheckBoxCustom checkBoxMaterials;
         private ExtendedControls.CheckBoxCustom checkBoxMoons;
         private ExtendedControls.CheckBoxCustom checkBoxSmall;
@@ -559,7 +484,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxMaterialsRare;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemToolbar;
-        private ExtendedControls.PictureBoxHotspot imagebox;
         private ExtendedControls.CheckBoxCustom checkBoxEDSM;
         private ExtendedControls.ButtonExt buttonExtExcel;
         private System.Windows.Forms.Label lblSystemInfo;
@@ -569,5 +493,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxCustomHideFullMats;
         private System.Windows.Forms.ToolStripMenuItem showSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cancelShowSystemToolStripMenuItem;
+        private ScanDisplay panelStars;
     }
 }
