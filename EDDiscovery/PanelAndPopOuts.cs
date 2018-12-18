@@ -56,7 +56,7 @@ namespace EDDiscovery
             Grid,
             StarList,
             EstimatedValues,
-            EDSM,                   // 24
+            Search,                 // 24 (was EDSM)
             ShoppingList,
             Route,
             Expedition,             // 27
@@ -111,7 +111,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Scan value estimates of bodies in system", transparent: false) },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
-            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM Star Finder", "EDSMStarFinder", "EDSM Star finder") },
+            { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "System and planetary bookmarks", transparent:false)},
 

@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlEDSM
+    partial class UserControlSearchStars       
     {
         /// <summary> 
         /// Required designer variable.
@@ -202,14 +202,15 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Name = "findSystemsUserControl";
             this.findSystemsUserControl.Size = new System.Drawing.Size(804, 126);
             this.findSystemsUserControl.TabIndex = 32;
+            this.findSystemsUserControl.Load += new System.EventHandler(this.findSystemsUserControl_Load);
             // 
-            // UserControlEDSM
+            // UserControlSearchStars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
             this.Controls.Add(this.findSystemsUserControl);
-            this.Name = "UserControlEDSM";
+            this.Name = "UserControlSearchStars";
             this.Size = new System.Drawing.Size(804, 716);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).EndInit();

@@ -30,13 +30,15 @@ using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlEDSM : UserControlCommonBase
+    // Search UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the Search UCCB
+
+    public partial class UserControlSearchStars : UserControlCommonBase
     {
-        private string DbColumnSave { get { return DBName("UCEDSM" ,  "DGVCol"); } }
+        private string DbColumnSave { get { return DBName("UCSearchStars", "DGVCol"); } }
 
         #region Init
 
-        public UserControlEDSM()
+        public UserControlSearchStars()
         {
             InitializeComponent();
             var corner = dataGridViewEDSM.TopLeftHeaderCell; // work around #1487
@@ -49,7 +51,7 @@ namespace EDDiscovery.UserControls
             dataGridViewEDSM.RowTemplate.Height = 26;
             dataGridViewEDSM.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            findSystemsUserControl.Init(displaynumber, true,discoveryform);
+            findSystemsUserControl.Init(displaynumber, true, discoveryform);
             findSystemsUserControl.Excel += RunExcel;
             findSystemsUserControl.ReturnSystems += StarsFound;
 
@@ -63,10 +65,6 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewEDSM, DbColumnSave);
         }
 
-        public override void InitialDisplay()
-        {
-        }
-
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEDSM, DbColumnSave);
@@ -74,7 +72,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
 
         private void StarsFound(List<Tuple<ISystem, double>> systems)       // systems may be null
         {
@@ -241,5 +238,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void findSystemsUserControl_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
