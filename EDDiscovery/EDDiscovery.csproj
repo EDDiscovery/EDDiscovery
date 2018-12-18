@@ -319,7 +319,7 @@
     <Compile Include="UserControls\GridsSplitters\UserControlContainerResizable.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\GridsSplitters\UserControlContainerResizable.designer.cs">
+    <Compile Include="UserControls\GridsSplitters\UserControlContainerResizable.Designer.cs">
       <DependentUpon>UserControlContainerResizable.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\GridsSplitters\UserControlContainerSplitter.cs">
@@ -331,7 +331,7 @@
     <Compile Include="UserControls\GridsSplitters\UserControlPanelSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\GridsSplitters\UserControlPanelSelector.designer.cs">
+    <Compile Include="UserControls\GridsSplitters\UserControlPanelSelector.Designer.cs">
       <DependentUpon>UserControlPanelSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\FindSystemsUserControl.cs">
