@@ -1,0 +1,219 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
+
+namespace EDDiscovery.UserControls.Search
+{
+    public class DataGridViewStarResults : DataGridView
+    {
+        EDDiscoveryForm discoveryform;
+
+        public DataGridViewStarResults()
+        {
+            ContextMenuStrip cms = new ContextMenuStrip();
+            ContextMenuStrip = cms;
+
+            cms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            new System.Windows.Forms.ToolStripMenuItem(),
+            new System.Windows.Forms.ToolStripMenuItem(),
+            new System.Windows.Forms.ToolStripMenuItem()
+            });
+            
+            cms.Name = "historyContextMenu";
+            cms.Size = new System.Drawing.Size(187, 70);
+
+            cms.Items[0].Size = new System.Drawing.Size(186, 22);
+            cms.Items[0].Text = "Go to star on 3D Map";
+            cms.Items[0].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
+            cms.Items[1].Size = new System.Drawing.Size(186, 22);
+            cms.Items[1].Text = "View on EDSM";
+            cms.Items[1].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
+            cms.Items[2].Size = new System.Drawing.Size(186, 22);
+            cms.Items[2].Text = "View Scan of system";
+            cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
+
+            CellDoubleClick += cellDoubleClick;
+            MouseDown += mouseDown;
+        }
+
+        public void Init(EDDiscoveryForm frm)
+        {
+            discoveryform = frm;
+        }
+
+        ISystem rightclicksystem = null;
+        int rightclickrow = -1;
+
+        private void mouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+            {
+                rightclicksystem = null;
+                rightclickrow = -1;
+            }
+
+            if (SelectedCells.Count < 2 || SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
+            {
+                DataGridView.HitTestInfo hti = HitTest(e.X, e.Y);
+                if (hti.Type == DataGridViewHitTestType.Cell)
+                {
+                    ClearSelection();                // select row under cursor.
+                    Rows[hti.RowIndex].Selected = true;
+
+                    if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
+                    {
+                        rightclickrow = hti.RowIndex;
+                        rightclicksystem = (ISystem)Rows[hti.RowIndex].Tag;
+                    }
+                }
+            }
+        }
+
+        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+                EDSMClass edsm = new EDSMClass();
+                long? id_edsm = rightclicksystem.EDSMID;
+
+                if (id_edsm == 0)
+                {
+                    id_edsm = null;
+                }
+
+                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
+
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+            {
+                this.Cursor = Cursors.WaitCursor;
+
+                if (!discoveryform.Map.Is3DMapsRunning)            // if not running, click the 3dmap button
+                    discoveryform.Open3DMap(null);
+
+                this.Cursor = Cursors.Default;
+
+                if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
+                {
+                    if (discoveryform.Map.MoveToSystem(rightclicksystem))
+                        discoveryform.Map.Show();
+                }
+            }
+        }
+
+        private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+                ShowScanPopOut(rightclicksystem);
+        }
+
+        private void cellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+                ShowScanPopOut((ISystem)Rows[e.RowIndex].Tag);
+        }
+
+        void ShowScanPopOut(ISystem sys)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            int width = Math.Max(250, this.FindForm().Width * 4 / 5);
+
+            ScanDisplay sd = new ScanDisplay();
+            sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = sd.CheckEDSM = true;
+            sd.SetSize(48);
+            sd.Size = new Size(width - 20, 1024);
+            sd.DrawSystem(sys, null, discoveryform.history);
+
+            int height = Math.Min(800, Math.Max(400,sd.DisplayAreaUsed.Y)) + 100;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                    f.Close();
+            };
+
+            f.Init(this.FindForm().Icon, new Size(width, height), new Point(-999, -999), "System ".Tx(this, "Sys") + ": " + sys.Name, null, null);
+
+            sd.DrawSystem(sys, null, discoveryform.history);
+
+            f.Show(this.FindForm());
+        }
+
+        public void Excel()
+        {
+            if (Rows.Count == 0)
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                if (frm.SelectedIndex == 0)
+                {
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < Rows.Count)
+                        {
+                            return BaseUtils.CSVWriteGrid.LineStatus.OK;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+
+                    string[] colh = new string[] { Columns[0].HeaderText, Columns[1].HeaderText, Columns[2].HeaderText, "X", "Y", "Z", "ID" };
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
+                    };
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        DataGridViewRow rw = Rows[r];
+                        ISystem sys = rw.Tag as ISystem;
+                        return new Object[]
+                        {
+                            rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, sys.X.ToString("0.#"), sys.Y.ToString("0.#"), sys.Z.ToString("0.#"),sys.EDSMID
+                        };
+                    };
+
+                    if (grd.WriteCSV(frm.Path))
+                    {
+                        if (frm.AutoOpen)
+                            System.Diagnostics.Process.Start(frm.Path);
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+        }
+
+
+
+    }
+}

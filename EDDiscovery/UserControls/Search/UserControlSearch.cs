@@ -68,8 +68,6 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Closing();
             };
-
-
         }
 
         public override void InitialDisplay()

@@ -44,90 +44,80 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.dataGridViewEDSM = new System.Windows.Forms.DataGridView();
+            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCentreDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.findSystemsUserControl = new EDDiscovery.UserControls.FindSystemsUserControl();
-            this.viewScanOfSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataViewScrollerPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).BeginInit();
-            this.contextMenu.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel1
             // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewEDSM);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 152);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(804, 564);
-            this.dataViewScrollerPanel1.TabIndex = 7;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 152);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 564);
+            this.dataViewScrollerPanel.TabIndex = 7;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom1
             // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = false;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(784, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 543);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 7;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = false;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 21);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 543);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 7;
+            this.vScrollBarCustom.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridViewEDSM
             // 
-            this.dataGridViewEDSM.AllowUserToAddRows = false;
-            this.dataGridViewEDSM.AllowUserToDeleteRows = false;
-            this.dataGridViewEDSM.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewEDSM.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewEDSM.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridView.AllowUserToAddRows = false;
+            this.dataGridView.AllowUserToDeleteRows = false;
+            this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnStar,
             this.ColumnCentreDistance,
             this.ColumnCurrentDistance,
-            this.ColumnPosition,
-            this.ColumnID});
-            this.dataGridViewEDSM.ContextMenuStrip = this.contextMenu;
-            this.dataGridViewEDSM.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewEDSM.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewEDSM.Name = "dataGridViewEDSM";
-            this.dataGridViewEDSM.RowHeadersVisible = false;
-            this.dataGridViewEDSM.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEDSM.Size = new System.Drawing.Size(784, 564);
-            this.dataGridViewEDSM.TabIndex = 0;
-            this.dataGridViewEDSM.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEDSM_CellDoubleClick);
-            this.dataGridViewEDSM.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEDSM_SortCompare);
-            this.dataGridViewEDSM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEDSM_MouseDown);
+            this.ColumnPosition});
+            this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView.Name = "dataGridViewEDSM";
+            this.dataGridView.RowHeadersVisible = false;
+            this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridView.Size = new System.Drawing.Size(784, 564);
+            this.dataGridView.TabIndex = 0;
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEDSM_SortCompare);
             // 
             // ColumnStar
             // 
@@ -160,37 +150,6 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition.Name = "ColumnPosition";
             this.ColumnPosition.ReadOnly = true;
             // 
-            // ColumnID
-            // 
-            this.ColumnID.FillWeight = 25F;
-            this.ColumnID.HeaderText = "ID";
-            this.ColumnID.MinimumWidth = 50;
-            this.ColumnID.Name = "ColumnID";
-            this.ColumnID.ReadOnly = true;
-            // 
-            // contextMenu
-            // 
-            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mapGotoStartoolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem,
-            this.viewScanOfSystemToolStripMenuItem});
-            this.contextMenu.Name = "historyContextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(187, 70);
-            // 
-            // mapGotoStartoolStripMenuItem
-            // 
-            this.mapGotoStartoolStripMenuItem.Name = "mapGotoStartoolStripMenuItem";
-            this.mapGotoStartoolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.mapGotoStartoolStripMenuItem.Text = "Go to star on 3D Map";
-            this.mapGotoStartoolStripMenuItem.Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
-            // 
-            // viewOnEDSMToolStripMenuItem
-            // 
-            this.viewOnEDSMToolStripMenuItem.Name = "viewOnEDSMToolStripMenuItem";
-            this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
-            this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
-            // 
             // toolTip
             // 
             this.toolTip.AutoPopDelay = 120000;
@@ -205,45 +164,31 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Name = "findSystemsUserControl";
             this.findSystemsUserControl.Size = new System.Drawing.Size(804, 152);
             this.findSystemsUserControl.TabIndex = 32;
-            this.findSystemsUserControl.Load += new System.EventHandler(this.findSystemsUserControl_Load);
-            // 
-            // viewScanOfSystemToolStripMenuItem
-            // 
-            this.viewScanOfSystemToolStripMenuItem.Name = "viewScanOfSystemToolStripMenuItem";
-            this.viewScanOfSystemToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.viewScanOfSystemToolStripMenuItem.Text = "View Scan of system";
-            this.viewScanOfSystemToolStripMenuItem.Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
             // 
             // UserControlSearchStars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel1);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.findSystemsUserControl);
             this.Name = "UserControlSearchStars";
             this.Size = new System.Drawing.Size(804, 716);
-            this.dataViewScrollerPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).EndInit();
-            this.contextMenu.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private System.Windows.Forms.DataGridView dataGridViewEDSM;
-        private System.Windows.Forms.ContextMenuStrip contextMenu;
-        private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
+        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
+        private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
         private System.Windows.Forms.ToolTip toolTip;
         private FindSystemsUserControl findSystemsUserControl;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCentreDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnID;
-        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
     }
 }

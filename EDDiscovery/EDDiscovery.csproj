@@ -526,6 +526,9 @@
     <Compile Include="UserControls\ScansStars\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Helpers\dataGridViewStarResults.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\Search\UserControlSearchStars.cs">
       <SubType>UserControl</SubType>
     </Compile>
