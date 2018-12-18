@@ -31,6 +31,7 @@ using EliteDangerousCore;
 namespace EDDiscovery.UserControls
 {
     // Search UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the Search UCCB
+    // Make sure DB saving has unique names.. they all share the same displayno.
 
     public partial class UserControlSearchStars : UserControlCommonBase
     {
@@ -51,7 +52,7 @@ namespace EDDiscovery.UserControls
             dataGridViewEDSM.RowTemplate.Height = 26;
             dataGridViewEDSM.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            findSystemsUserControl.Init(displaynumber, true, discoveryform);
+            findSystemsUserControl.Init(displaynumber, "SearchFindSys", true, discoveryform);
             findSystemsUserControl.Excel += RunExcel;
             findSystemsUserControl.ReturnSystems += StarsFound;
 
@@ -171,6 +172,48 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (rightclicksystem != null)
+                ShowScanPopOut(rightclicksystem);
+        }
+
+        private void dataGridViewEDSM_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if ( e.RowIndex>=0)
+                ShowScanPopOut((ISystem)dataGridViewEDSM.Rows[e.RowIndex].Tag);
+        }
+
+        void ShowScanPopOut(ISystem sys)
+        {
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            int width = 800, height = 800;
+
+            ScanDisplay sd = new ScanDisplay();
+            sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = sd.CheckEDSM = true;
+            sd.SetSize(48);
+            sd.Size = new Size(width - 20, 1024);
+            sd.DrawSystem(sys, null, discoveryform.history);
+
+            height = Math.Min(800, sd.DisplayAreaUsed.Y) + 100;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK")
+                    f.Close();
+            };
+
+            f.Init(this.FindForm().Icon, new Size(width, height), new Point(-999, -999), "System ".Tx(this, "Sys") + ": " + sys.Name, null, null);
+
+            sd.DrawSystem(sys, null, discoveryform.history);
+
+            f.Show(this.FindForm());
+        }
+
+
         private void dataGridViewEDSM_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 1 || e.Column.Index == 2 || e.Column.Index == 4)
@@ -242,5 +285,6 @@ namespace EDDiscovery.UserControls
         {
 
         }
+
     }
 }

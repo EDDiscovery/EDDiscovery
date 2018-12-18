@@ -32,22 +32,24 @@ namespace EDDiscovery.UserControls
         public Action Excel;                                            // excel pressed
 
         int displaynumber = 0;
+        string ucdbname;
         EDDiscoveryForm discoveryform;
 
-        private string DbStar { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem","Star"); } }
-        private string DbRadiusMax { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "RadiusMax"); } }
-        private string DbRadiusMin { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "RadiusMin"); } }
-        private string DbX { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "X"); } }
-        private string DbY { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "Y"); } }
-        private string DbZ { get { return UserControlCommonBase.DBName(displaynumber, "UCFindSystem", "Z"); } }
+        private string DbStar { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Star"); } }
+        private string DbRadiusMax { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "RadiusMax"); } }
+        private string DbRadiusMin { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "RadiusMin"); } }
+        private string DbX { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "X"); } }
+        private string DbY { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Y"); } }
+        private string DbZ { get { return UserControlCommonBase.DBName(displaynumber, ucdbname, "Z"); } }
 
         public FindSystemsUserControl()
         {
             InitializeComponent();
         }
 
-        public void Init( int dn , bool showexcel , EDDiscoveryForm disc)
+        public void Init( int dn , string ucn, bool showexcel , EDDiscoveryForm disc)
         {
+            ucdbname = ucn;
             displaynumber = dn;
             discoveryform = disc;
             numberBoxMinRadius.Value = SQLiteConnectionUser.GetSettingDouble(DbRadiusMin, 0);
@@ -184,6 +186,20 @@ namespace EDDiscovery.UserControls
             DBLookup(true);
         }
 
+        private void buttonExtDBVisited_Click(object sender, EventArgs e)
+        {
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+
+            if (sys != null)
+            {
+                var list = HistoryList.FindSystemsWithinLy(discoveryform.history.EntryOrder, sys, numberBoxMinRadius.Value, numberBoxMaxRadius.Value, true);
+
+                ReturnSystems((from x in list select new Tuple<ISystem, double>(x.System, x.System.Distance(sys))).ToList());
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
         private void DBLookup(bool spherical )
         {
             ISystem sys = textBoxSystemName.Text.Length > 0 ? discoveryform.history.FindSystem(textBoxSystemName.Text, discoveryform.galacticMapping) : new SystemClass("Unknown", numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
@@ -202,7 +218,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in distlist select new Tuple<ISystem, double>(x.Value, x.Value.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system " + textBoxSystemName.Text, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx(this) + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
@@ -268,5 +284,6 @@ namespace EDDiscovery.UserControls
             buttonExtEDSMSphere.Enabled = buttonExtEDSMCube.Enabled = validradius && textBoxSystemName.Text.Length > 0;
             buttonExtDBCube.Enabled = buttonExtDBSphere.Enabled = validradius && (textBoxSystemName.Text.Length > 0 || (numberBoxDoubleX.IsValid && numberBoxDoubleY.IsValid && numberBoxDoubleZ.IsValid));
         }
+
     }
 }

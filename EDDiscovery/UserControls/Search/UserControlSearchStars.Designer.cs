@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.findSystemsUserControl = new EDDiscovery.UserControls.FindSystemsUserControl();
+            this.viewScanOfSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEDSM)).BeginInit();
             this.contextMenu.SuspendLayout();
@@ -68,10 +69,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewEDSM);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 126);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 152);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
             this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(804, 590);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(804, 564);
             this.dataViewScrollerPanel1.TabIndex = 7;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -92,7 +93,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 569);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 543);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
@@ -122,8 +123,9 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEDSM.Name = "dataGridViewEDSM";
             this.dataGridViewEDSM.RowHeadersVisible = false;
             this.dataGridViewEDSM.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEDSM.Size = new System.Drawing.Size(784, 590);
+            this.dataGridViewEDSM.Size = new System.Drawing.Size(784, 564);
             this.dataGridViewEDSM.TabIndex = 0;
+            this.dataGridViewEDSM.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewEDSM_CellDoubleClick);
             this.dataGridViewEDSM.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEDSM_SortCompare);
             this.dataGridViewEDSM.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewEDSM_MouseDown);
             // 
@@ -170,9 +172,10 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mapGotoStartoolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem});
+            this.viewOnEDSMToolStripMenuItem,
+            this.viewScanOfSystemToolStripMenuItem});
             this.contextMenu.Name = "historyContextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(187, 48);
+            this.contextMenu.Size = new System.Drawing.Size(187, 70);
             // 
             // mapGotoStartoolStripMenuItem
             // 
@@ -200,9 +203,16 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.findSystemsUserControl.Location = new System.Drawing.Point(0, 0);
             this.findSystemsUserControl.Name = "findSystemsUserControl";
-            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 126);
+            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 152);
             this.findSystemsUserControl.TabIndex = 32;
             this.findSystemsUserControl.Load += new System.EventHandler(this.findSystemsUserControl_Load);
+            // 
+            // viewScanOfSystemToolStripMenuItem
+            // 
+            this.viewScanOfSystemToolStripMenuItem.Name = "viewScanOfSystemToolStripMenuItem";
+            this.viewScanOfSystemToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewScanOfSystemToolStripMenuItem.Text = "View Scan of system";
+            this.viewScanOfSystemToolStripMenuItem.Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
             // 
             // UserControlSearchStars
             // 
@@ -234,5 +244,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnID;
+        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
     }
 }

@@ -526,16 +526,16 @@
     <Compile Include="UserControls\ScansStars\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlSearchStars.cs">
+    <Compile Include="UserControls\Search\UserControlSearchStars.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlSearchStars.Designer.cs">
+    <Compile Include="UserControls\Search\UserControlSearchStars.Designer.cs">
       <DependentUpon>UserControlSearchStars.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlSearch.cs">
+    <Compile Include="UserControls\Search\UserControlSearch.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlSearch.Designer.cs">
+    <Compile Include="UserControls\Search\UserControlSearch.Designer.cs">
       <DependentUpon>UserControlSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlEstimatedValues.cs">
@@ -739,10 +739,10 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlSearchStars.resx">
+    <EmbeddedResource Include="UserControls\Search\UserControlSearchStars.resx">
       <DependentUpon>UserControlSearchStars.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlSearch.resx">
+    <EmbeddedResource Include="UserControls\Search\UserControlSearch.resx">
       <DependentUpon>UserControlSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEstimatedValues.resx">

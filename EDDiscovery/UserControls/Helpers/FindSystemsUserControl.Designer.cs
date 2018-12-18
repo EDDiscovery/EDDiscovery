@@ -46,6 +46,7 @@
             this.labelX = new System.Windows.Forms.Label();
             this.labelY = new System.Windows.Forms.Label();
             this.labelZ = new System.Windows.Forms.Label();
+            this.buttonExtDBVisited = new ExtendedControls.ButtonExt();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -338,12 +339,23 @@
             this.labelZ.TabIndex = 35;
             this.labelZ.Text = "Z";
             // 
+            // buttonExtDBVisited
+            // 
+            this.buttonExtDBVisited.Location = new System.Drawing.Point(168, 117);
+            this.buttonExtDBVisited.Name = "buttonExtDBVisited";
+            this.buttonExtDBVisited.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtDBVisited.TabIndex = 38;
+            this.buttonExtDBVisited.Text = "From Visited Systems";
+            this.buttonExtDBVisited.UseVisualStyleBackColor = true;
+            this.buttonExtDBVisited.Click += new System.EventHandler(this.buttonExtDBVisited_Click);
+            // 
             // FindSystemsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.buttonExtDBLookup);
             this.Controls.Add(this.buttonExtDBCube);
+            this.Controls.Add(this.buttonExtDBVisited);
             this.Controls.Add(this.buttonExtDBSphere);
             this.Controls.Add(this.buttonExtEDSMCube);
             this.Controls.Add(this.buttonExtEDSMSphere);
@@ -387,5 +399,6 @@
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.Label labelY;
         private System.Windows.Forms.Label labelZ;
+        private ExtendedControls.ButtonExt buttonExtDBVisited;
     }
 }
