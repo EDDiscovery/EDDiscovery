@@ -659,6 +659,7 @@ namespace EliteDangerousCore.EDDN
                     return null;
                 }
 
+                msg["IsUnknownBody"] = true;
                 msg["$schemaRef"] = GetEDDNJournalSchemaRef(true);
             }
 
