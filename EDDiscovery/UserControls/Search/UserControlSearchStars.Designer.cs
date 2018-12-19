@@ -57,20 +57,20 @@ namespace EDDiscovery.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataViewScrollerPanel1
+            // dataViewScrollerPanel
             // 
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 152);
-            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 124);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 564);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 592);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // vScrollBarCustom1
+            // vScrollBarCustom
             // 
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
@@ -86,8 +86,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 543);
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 571);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
             // 
-            // dataGridViewEDSM
+            // dataGridView
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
@@ -112,10 +112,10 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition});
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView.Name = "dataGridViewEDSM";
+            this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView.Size = new System.Drawing.Size(784, 564);
+            this.dataGridView.Size = new System.Drawing.Size(784, 592);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEDSM_SortCompare);
             // 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.findSystemsUserControl.Location = new System.Drawing.Point(0, 0);
             this.findSystemsUserControl.Name = "findSystemsUserControl";
-            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 152);
+            this.findSystemsUserControl.Size = new System.Drawing.Size(804, 124);
             this.findSystemsUserControl.TabIndex = 32;
             // 
             // UserControlSearchStars
