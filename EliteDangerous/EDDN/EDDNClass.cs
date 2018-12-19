@@ -730,17 +730,22 @@ namespace EliteDangerousCore.EDDN
             }
             catch (System.Net.WebException ex)
             {
-                System.Net.HttpWebResponse response = ex.Response as System.Net.HttpWebResponse;
+                System.Net.WebResponse response = ex.Response;
+                System.Net.HttpWebResponse httpResponse = response as System.Net.HttpWebResponse;
                 string responsetext = null;
-                using (var responsestream = response.GetResponseStream())
+
+                if (response != null)
                 {
-                    using (var reader = new System.IO.StreamReader(responsestream))
+                    using (var responsestream = response.GetResponseStream())
                     {
-                        responsetext = reader.ReadToEnd();
+                        using (var reader = new System.IO.StreamReader(responsestream))
+                        {
+                            responsetext = reader.ReadToEnd();
+                        }
                     }
                 }
 
-                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {response?.StatusCode.ToString() ?? ex.Status.ToString()}\nResponse: {responsetext}\nEDDN Message: {msg.ToString()}");
+                System.Diagnostics.Trace.WriteLine($"EDDN message post failed - status: {httpResponse?.StatusCode.ToString() ?? ex.Status.ToString()}\nResponse: {responsetext}\nEDDN Message: {msg.ToString()}");
                 return false;
             }
         }
