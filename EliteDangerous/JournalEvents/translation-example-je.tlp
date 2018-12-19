@@ -188,6 +188,29 @@ JournalTypeEnum.VehicleSwitch_Mothership: "Vehicle Switch_Mothership" @
 JournalTypeEnum.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
 
 
+// NEW 10.3
+
+JournalTypeEnum.AppliedToSquadron: "Applied To Squadron" @
+JournalTypeEnum.AsteroidCracked: "Asteroid Cracked" @
+JournalTypeEnum.CodexEntry: "Codex Entry" @
+JournalTypeEnum.DisbandedSquadron: "Disbanded Squadron" @
+JournalTypeEnum.FSDTarget: "FSD Target" @
+JournalTypeEnum.FSSAllBodiesFound: "FSS All Bodies Found" @
+JournalTypeEnum.FSSDiscoveryScan: "FSS Discovery Scan" @
+JournalTypeEnum.FSSSignalDiscovered: "FSS Signal Discovered" @
+JournalTypeEnum.InvitedToSquadron: "Invited To Squadron" @
+JournalTypeEnum.JoinedSquadron: "Joined Squadron" @
+JournalTypeEnum.KickedFromSquadron: "Kicked From Squadron" @
+JournalTypeEnum.LeftSquadron: "Left Squadron" @
+JournalTypeEnum.MultiSellExplorationData: "Multi Sell Exploration Data" @
+JournalTypeEnum.SAAScanComplete: "SAA Scan Complete" @
+JournalTypeEnum.SharedBookmarkToSquadron: "Shared Bookmark To Squadron" @
+JournalTypeEnum.SquadronCreated: "Squadron Created" @
+JournalTypeEnum.SquadronDemotion: "Squadron Demotion" @
+JournalTypeEnum.SquadronPromotion: "Squadron Promotion" @
+JournalTypeEnum.WonATrophyForSquadron: "Won A Trophy For Squadron" @
+
+
 ////////////////////////////////////////////////////
 ///////////////////////////////////////////////////// Journals.  Note there are a lot of format strings, in both the {n} format and in FieldBuilder format
 ///////////////////////////////////////////////////// Field builder uses the format "prefixtext;postfix text;Format".  Keep the semicolons right!
@@ -198,7 +221,6 @@ JournalEntry.Target: "Target:" @
 JournalEntry.Victimfaction: "Victim faction:" @
 JournalEntry.Faction: "Faction:" @
 ///////////////////////////////////////////////////// JournalBuyDrones
-JournalEntry.Type: "Type:" @
 JournalEntry.Count: "Count:" @
 JournalEntry.TotalCost: "Total Cost:; cr;N0" @
 JournalEntry.each: "each:; cr;N0" @
@@ -278,6 +300,10 @@ JournalEntry.Economy: "Economy:" @
 JournalEntry.Government: "Government:" @
 JournalEntry.Stationservices: "Station services:" @
 JournalEntry.Economies: "Economies:" @
+
+//NEW 10.3!
+JournalEntry.ActiveFine: ";Active Fine" @
+
 ///////////////////////////////////////////////////// JournalDockingGranted
 JournalEntry.onpad: "< on pad " @
 ///////////////////////////////////////////////////// JournalCommodityPricesBase
@@ -300,11 +326,11 @@ JournalEntry.Blueprint: "Blueprint:" @
 JournalEntry.Level: "Level:" @
 JournalEntry.Override: "Override:" @
 ///////////////////////////////////////////////////// JournalEngineerContribution
-JournalEntry .Type: "Type:" @
-JournalEntry .Commodity: "Commodity:" @
-JournalEntry .Material: "Material:" @
-JournalEntry .Quantity: "Quantity:" @
-JournalEntry .TotalQuantity: "TotalQuantity:" @
+JournalEntry.Type: "Type:" @
+JournalEntry.Commodity: "Commodity:" @
+JournalEntry.Material: "Material:" @
+JournalEntry.Quantity: "Quantity:" @
+JournalEntry.TotalQuantity: "TotalQuantity:" @
 ///////////////////////////////////////////////////// JournalEngineerCraftBase
 JournalEngineerCraftBase.InSlot: "In Slot:" @
 JournalEngineerCraftBase.By: "By:" @
@@ -408,7 +434,6 @@ JournalEntry.Fine: "Fine:" @
 ///////////////////////////////////////////////////// JournalMissionCompleted
 JournalEntry.Donation: "Donation:" @
 JournalEntry.Station: "Station:" @
-JournalEntry.Commodity: "Commodity:" @
 JournalEntry.TargetFaction: "Target Faction:" @
 JournalEntry.Permits: "Permits:" @
 JournalEntry.Rewards: "Rewards:" @
@@ -427,7 +452,8 @@ JournalEntry.into: "< into " @
 JournalEntry.Price: "Price:; cr;N0" @
 JournalEntry.Stored: "Stored:" @
 ///////////////////////////////////////////////////// JournalModuleInfo
-JournalEntry .Modules: "Modules:" @
+//NEW 10.3
+JournalModuleInfo.Modules: "Modules:" @
 ///////////////////////////////////////////////////// JournalModuleSellRemote
 JournalEntry.Item: "Item:" @
 ///////////////////////////////////////////////////// JournalModuleStore
@@ -551,6 +577,14 @@ JournalScan.Othersstarsnotconsidered: " (Others stars not considered)\n" @
 JournalScan.Materials: "Materials:\n" @
 JournalScan.AtmosphericComposition: "Atmospheric Composition:\n" @
 JournalScan.PlanetaryComposition: "Planetary Composition:\n" @
+
+// NEW 10.3
+JournalScan.MRP: "Metal Rich Planets: {0} ({1}-{2} AU)\n" @
+JournalScan.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" @
+JournalScan.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" @
+JournalScan.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" @
+JournalScan.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" @
+
 ///////////////////////////////////////////////////// JournalScientificResearch
 JournalEntry.Category: "Category:" @
 ///////////////////////////////////////////////////// JournalScreenshot
@@ -693,6 +727,10 @@ JournalEntry.at: "< at " @
 JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
 JournalEntry.Time: "Time:" @
 JournalEntry.Value: "Value:; cr;N0" @
+
+//NEW 10.3
+JournalSupercruiseExit.in: "< in " @
+
 ///////////////////////////////////////////////////// JournalStoredShips
 JournalStoredShips.Atstarport: "At starport:" @
 JournalStoredShips.Otherlocations: "Other locations:" @

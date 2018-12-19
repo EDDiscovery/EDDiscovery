@@ -70,22 +70,39 @@ UserControlCombatPanel.buttonExtEditCampaign.ToolTip: "Edit user defined campaig
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
 
+//New 10.3
+
+
 //////////////////////////////////////////////////////////////// Compass
 
 UserControlCompass.labelBookmark: "System Bookmarks" @
 UserControlCompass.checkBoxHideTransparent: "Hide In Transparent" @
 UserControlCompass.labelTargetLat: "Target" @
 
-//////////////////////////////////////////////////////////////// EDSM
 
-UserControlEDSM.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
-UserControlEDSM.viewOnEDSMToolStripMenuItem: "View on EDSM" @
+//////////////////////////////////////////////////////////////// Search
 
-UserControlEDSM.ColumnStar: "Star" => "<Star>"
-UserControlEDSM.ColumnCentreDistance: "Centre Distance" => "<Centre Distance>"
-UserControlEDSM.ColumnCurrentDistance: "Current Distance" => "<Current Distance>"
-UserControlEDSM.ColumnPosition: "Position" => "<Position>"
-UserControlEDSM.ColumnID: "ID" => "<ID>"
+// NEW  10.3  - Remove UserControlEDSM, subsitute:
+
+UserControlSearch.MaterialsCommodities: "Materials Commodities" @
+UserControlSearch.Stars: "Stars" @
+
+UserControlSearchMaterialsCommodities.ColumnStar: "Star" @
+UserControlSearchMaterialsCommodities.ColumnLocation: "Location" @
+UserControlSearchMaterialsCommodities.ColumnCurrentDistance: "Current Distance" @
+UserControlSearchMaterialsCommodities.ColumnPosition: "Position" @
+UserControlSearchMaterialsCommodities.buttonExtFind: "Find" @
+UserControlSearchMaterialsCommodities.label2: "Item 2" @
+UserControlSearchMaterialsCommodities.label1: "Item 1" @
+
+UserControlSearchMaterialsCommodities.RareCommodity: ", Rare Commodity" @
+UserControlSearchMaterialsCommodities.AND: "AND" @
+UserControlSearchMaterialsCommodities.OR: "OR" @
+
+// subpanel of
+DataGridViewStarResults.3d: "Go to star on 3D Map" @
+DataGridViewStarResults.EDSM: "View on EDSM" @
+DataGridViewStarResults.Data: "View Data On Entry" @
 
 //////////////////////////////////////////////////////////////// Engineering
 
@@ -772,6 +789,17 @@ UserControlSpanel.showInPositionToolStripMenuItem.scanOnTopMenuItem: "On top" @
 .Target: "Target" @
 .TVE: "View system on EDSM" @
 .SPF: "Summary Panel: Filter out fields" @
+
+// NEW 10.3!
+
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" @
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
+UserControlSpanel.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
+UserControlSpanel.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
+UserControlSpanel.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
 
 //////////////////////////////////////////////////////////////// Stardistance
 

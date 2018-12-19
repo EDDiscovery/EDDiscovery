@@ -573,3 +573,19 @@ MaterialCommodityData.gromwartrophies: "Yuri Grom's Military Supplies" @
 MaterialCommodityData.markedslaves: "Marked Slaves" @
 MaterialCommodityData.torvaldeeds: "Torval Deeds" @
 MaterialCommodityData.drones: "Drones" @
+
+//NEW 10.3
+MaterialCommodityData.guardian_vesselblueprint: "Guardian Vessel Blueprint Segment" @
+MaterialCommodityData.duradrives: "Duradrives" @
+MaterialCommodityData.nanomedicines: "Nanomedicines" @
+MaterialCommodityData.rhodplumsite: "Rhodplumsite" @
+MaterialCommodityData.serendibite: "Serendibite" @
+MaterialCommodityData.monazite: "Monazite" @
+MaterialCommodityData.musgravite: "Musgravite" @
+MaterialCommodityData.benitoite: "Benitoite" @
+MaterialCommodityData.grandidierite: "Grandidierite" @
+MaterialCommodityData.alexandrite: "Alexandrite" @
+MaterialCommodityData.opal: "Opal" @
+MaterialCommodityData.thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
+MaterialCommodityData.ancientkey: "Ancient Key" @
+

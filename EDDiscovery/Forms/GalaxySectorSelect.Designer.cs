@@ -131,9 +131,9 @@
             this.labelZ.AutoSize = true;
             this.labelZ.Location = new System.Drawing.Point(340, 9);
             this.labelZ.Name = "labelZ";
-            this.labelZ.Size = new System.Drawing.Size(10, 13);
+            this.labelZ.Size = new System.Drawing.Size(43, 13);
             this.labelZ.TabIndex = 1;
-            this.labelZ.Text = "-";
+            this.labelZ.Text = "<code>";
             // 
             // labelZName
             // 
@@ -149,9 +149,9 @@
             this.labelX.AutoSize = true;
             this.labelX.Location = new System.Drawing.Point(260, 9);
             this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(10, 13);
+            this.labelX.Size = new System.Drawing.Size(43, 13);
             this.labelX.TabIndex = 1;
-            this.labelX.Text = "-";
+            this.labelX.Text = "<code>";
             // 
             // labelXName
             // 
@@ -167,9 +167,9 @@
             this.labelID.AutoSize = true;
             this.labelID.Location = new System.Drawing.Point(450, 9);
             this.labelID.Name = "labelID";
-            this.labelID.Size = new System.Drawing.Size(10, 13);
+            this.labelID.Size = new System.Drawing.Size(43, 13);
             this.labelID.TabIndex = 1;
-            this.labelID.Text = "-";
+            this.labelID.Text = "<code>";
             // 
             // labelSectorName
             // 

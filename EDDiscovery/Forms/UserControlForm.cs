@@ -110,6 +110,8 @@ namespace EDDiscovery.Forms
             UpdateControls();
 
             Invalidate();
+
+            BaseUtils.Translator.Instance.Translate(toolTip1,this);
         }
 
         public void SetControlText(string text)

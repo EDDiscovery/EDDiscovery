@@ -90,8 +90,6 @@ PopOutInfo.LocalMap.Description: "3D Map of systems in range" => "<3D Map of sys
 PopOutInfo.LocalMap.Title: "Local Map" => "<Local Map>"
 PopOutInfo.Plot.Description: "2D Plot of systems in range" => "<2D Plot of systems in range>"
 PopOutInfo.Plot.Title: "2D Plot" => "<2D Plot>"
-PopOutInfo.EDSM.Description: "EDSM Star finder" => "<EDSM Star finder>"
-PopOutInfo.EDSM.Title: "EDSM Star Finder" => "<EDSM Star Finder>"
 PopOutInfo.Trilateration.Description: "Trilateration of stars with unknown positions" => "<Trilateration of stars with unknown positions>"
 PopOutInfo.Trilateration.Title: "Trilateration" => "<Trilateration>"
 PopOutInfo.BookmarkManager.Description: "Manage System and planetary bookmarks" => "<Manage System and planetary bookmarks>"
@@ -126,6 +124,13 @@ PopOutInfo.SplitterControl.Description: "Splitter (allows other panels to be pla
 PopOutInfo.SplitterControl.Title: "Splitter" => "<Splitter>"
 PopOutInfo.PanelSelector.Description: "" => ""
 PopOutInfo.PanelSelector.Title: "+" => "+"
+
+// NEW 10.3
+PopOutInfo.Search.Title: "Search" @
+PopOutInfo.Search.Description: "Search" @
+//REMOVED PopOutInfo.EDSM.Description: "EDSM Star finder" => "<EDSM Star finder>"
+//REMOVED PopOutInfo.EDSM.Title: "EDSM Star Finder" => "<EDSM Star Finder>"
+
 
 //////////////////////////////////////////////////////////////// DISCOVERY FORM
 
@@ -226,6 +231,11 @@ EDDiscoveryForm.renameTabToolStripMenuItem: "Rename Tab" @
 .EDSMSyncE: "EDSM Sync failed: {0}" @
 .EP: "Edit Profiles" @
 .PL: "Profile {0} Loaded" @
+
+//NEW 10.3
+EDDiscoveryForm.popOutPanelToolStripMenuItem: "Pop Out Panel.." @
+EDDiscoveryForm.CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" @
+
 
 ///////////////////////////////////////////////////// EDDiscoveryController
 
@@ -329,12 +339,25 @@ SurfaceBookmarksForm.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
 
 ////////////////////////////////////////////////////////////////// SurfaceBookmarkUserControl
 
+// NEW 10.3 Check All
+
 SurfaceBookmarkUserControl.Enter: "Enter a name" @
 SurfaceBookmarkUserControl.PL: "Planet:" @
 SurfaceBookmarkUserControl.EPN: "Enter planet name" @
 SurfaceBookmarkUserControl.PresstoAccept: "Press to Accept" @
 SurfaceBookmarkUserControl.PresstoCancel: "Press to Cancel" @
 SurfaceBookmarkUserControl.MAP: "Manually Add Planet" @
+SurfaceBookmarkUserControl.BodyName: "Planetary Body" @
+SurfaceBookmarkUserControl.SurfaceName: "Name" @
+SurfaceBookmarkUserControl.SurfaceDesc: "Description" @
+SurfaceBookmarkUserControl.Latitude: "Latitude" @
+SurfaceBookmarkUserControl.Longitude: "Longitude" @
+SurfaceBookmarkUserControl.Valid: "Saveable" @
+SurfaceBookmarkUserControl.labelSurface: "Surface Bookmarks In System" @
+SurfaceBookmarkUserControl.sendToCompassToolStripMenuItem: "Send to compass" @
+SurfaceBookmarkUserControl.deleteToolStripMenuItem: "Delete Row" @
+SurfaceBookmarkUserControl.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+
 
 ////////////////////////////////////////////////////////////////// find systems
 
@@ -497,6 +520,11 @@ Form2DMap.Custom: "Custom" @
 Form2DMap: "2D Map" @
 .Nomapsavailable: "No maps available" @
 
+// 10.3 NEW
+
+Form2DMap.toolStripButtonStars: "Stars" @ 
+Form2DMap.toolStripButtonSave: "Save" @ 
+
 /////////////////////////////////////////////////////////////// Galaxy form
 
 GalaxySectorSelect: "GalaxySectorSelect" @
@@ -516,6 +544,16 @@ GalaxySectorSelect.BC: "Bubble+Colonia" @
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" @
 .Warning: "Warning" @
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" @
+
+// 10.3 NEW
+
+GalaxySectorSelect.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
+GalaxySectorSelect.Select: "Select:" @
+GalaxySectorSelect.GALSELEN: "Enter number to jump to or near to" @
+GalaxySectorSelect.PresstoAccept: "Press to Accept" @
+GalaxySectorSelect.PresstoCancel: "Press to Cancel" @
+GalaxySectorSelect.GALSELTitle: "Select EDSM Galaxy Data" @
+
 
 /////////////////////////////////////////////////////////////// Move commander
 
@@ -555,6 +593,10 @@ ProfileEditor.buttonOK: "OK" @
 .TrigEdit: "Edit Profile {0} Trigger" @
 .BackEdit: "Edit Profile {0} Back Trigger" @
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" @
+
+// NEW 10.3
+ProfileEditor.Default: "Default" @
+
 
 /////////////////////////////////////////////////////////////// 3dmap step
 
@@ -641,6 +683,19 @@ KeyForm.buttonNext: "Next" @
 KeyForm.buttonTest: "Test" @
 KeyForm.buttonCancel: "Cancel" @
 KeyForm.buttonOK: "OK" @
+
+///////////////////////////////////////////////////// UserControlForm
+
+//NEW 10.3
+
+UserControlForm.label_index: "N/A" @
+UserControlForm.labelControlText: "N/A" @
+UserControlForm.panel_minimize.ToolTip: "Minimise" @
+UserControlForm.panel_ontop.ToolTip: "Toggle window on top of others" @
+UserControlForm.panel_close.ToolTip: "Close" @
+UserControlForm.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" @
+UserControlForm.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" @
+UserControlForm.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
 
 /////////////////////////////////////////////////////
 ///////////////////////////////////////////////////// Journals.  
