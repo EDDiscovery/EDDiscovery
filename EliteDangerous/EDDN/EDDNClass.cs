@@ -71,9 +71,9 @@ namespace EliteDangerousCore.EDDN
             else return false;
         }
 
-        private string GetEDDNJournalSchemaRef()
+        private string GetEDDNJournalSchemaRef(bool test = false)
         {
-            if (isBeta || commanderName.StartsWith("[BETA]"))
+            if (isBeta || commanderName.StartsWith("[BETA]") || test)
                 return "https://eddn.edcd.io/schemas/journal/1/test";
             else
                 return "https://eddn.edcd.io/schemas/journal/1";
@@ -654,7 +654,13 @@ namespace EliteDangerousCore.EDDN
 
             if (!bodydesig.StartsWith(system.Name, StringComparison.InvariantCultureIgnoreCase))  // For now test if its a different name ( a few exception for like sol system with named planets)  To catch a rare out of sync bug in historylist.
             {
-                return null;
+                if (journal.BodyDesignation != null || System.Text.RegularExpressions.Regex.IsMatch(journal.BodyName, " [A-Z][A-Z]-[A-Z] [a-h][0-9]", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+                {
+                    return null;
+                }
+
+                msg["IsUnknownBody"] = true;
+                msg["$schemaRef"] = GetEDDNJournalSchemaRef(true);
             }
 
 
