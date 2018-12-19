@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
                     Commodities.Add(com);
                 }
 
-                CCommodities.Sort(Commodities);
+                Commodities.Sort((l, r) => l.locName.CompareTo(r.locName));
             }
         }
     }
@@ -58,15 +58,19 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public List<CCommodities> Commodities { get; protected set; }   // never null
 
-        public override void FillInformation(out string info, out string detailed) 
+        public override void FillInformation(out string info, out string detailed)
         {
-            
+            FillInformation(out info, out detailed, Commodities.Count > 60 ? 2 : 1);
+        }
+
+        public void FillInformation(out string info, out string detailed, int maxcol)
+        {
+
             info = BaseUtils.FieldBuilder.Build("Prices on ; items".Tx(typeof(JournalCommodityPricesBase),"PON"), Commodities.Count, 
                                                 "< at ".Tx(typeof(JournalCommodityPricesBase), "CPBat"), Station , 
                                                 "< in ".Tx(typeof(JournalCommodityPricesBase), "CPBin"), StarSystem);
 
             int col = 0;
-            int maxcol = Commodities.Count > 60 ? 2 : 1;
             detailed = "Items to buy:".Tx(typeof(JournalCommodityPricesBase)) + System.Environment.NewLine;
             foreach (CCommodities c in Commodities)
             {

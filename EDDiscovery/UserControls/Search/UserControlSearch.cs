@@ -44,8 +44,8 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials};
-            tabStrip.TextList = new string[] { "Stars", "Materials" };
-            tabStrip.TagList = new Type[] { typeof(UserControlSearchStars), typeof(UserControlSearchStars)};
+            tabStrip.TextList = new string[] { "Stars".Tx(this), "Materials Commodities".Tx(this) };
+            tabStrip.TagList = new Type[] { typeof(UserControlSearchStars), typeof(UserControlSearchMaterialsCommodities)};
 
             tabStrip.OnCreateTab += (tab, si) =>
             {

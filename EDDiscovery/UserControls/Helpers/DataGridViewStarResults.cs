@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls.Search
 {
@@ -32,16 +33,21 @@ namespace EDDiscovery.UserControls.Search
 
             cms.Items[0].Size = new System.Drawing.Size(186, 22);
             cms.Items[0].Text = "Go to star on 3D Map";
+            cms.Items[0].Name = "3d";
             cms.Items[0].Click += new System.EventHandler(this.mapGotoStartoolStripMenuItem_Click);
             cms.Items[1].Size = new System.Drawing.Size(186, 22);
             cms.Items[1].Text = "View on EDSM";
+            cms.Items[1].Name = "EDSM";
             cms.Items[1].Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem_Click);
             cms.Items[2].Size = new System.Drawing.Size(186, 22);
-            cms.Items[2].Text = "View Scan of system";
+            cms.Items[2].Text = "View Data On Entry";
+            cms.Items[2].Name = "Data";
             cms.Items[2].Click += new System.EventHandler(this.viewScanOfSystemToolStripMenuItem_Click);
 
             CellDoubleClick += cellDoubleClick;
             MouseDown += mouseDown;
+
+            BaseUtils.Translator.Instance.Translate(cms, this);
         }
 
         public void Init(EDDiscoveryForm frm)
@@ -49,14 +55,14 @@ namespace EDDiscovery.UserControls.Search
             discoveryform = frm;
         }
 
-        ISystem rightclicksystem = null;
+        Object rightclicktag = null;
         int rightclickrow = -1;
 
         private void mouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
             {
-                rightclicksystem = null;
+                rightclicktag = null;
                 rightclickrow = -1;
             }
 
@@ -71,26 +77,34 @@ namespace EDDiscovery.UserControls.Search
                     if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
                     {
                         rightclickrow = hti.RowIndex;
-                        rightclicksystem = (ISystem)Rows[hti.RowIndex].Tag;
+                        rightclicktag = Rows[hti.RowIndex].Tag;
                     }
                 }
             }
         }
 
+        private ISystem SysFrom(Object t)   // given tag, find the isystem
+        {
+            if (t is HistoryEntry)
+                return ((HistoryEntry)t).System;
+            else
+                return (ISystem)t;
+        }
+
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
+            if (rightclicktag != null)
             {
                 this.Cursor = Cursors.WaitCursor;
                 EDSMClass edsm = new EDSMClass();
-                long? id_edsm = rightclicksystem.EDSMID;
+                long? id_edsm = SysFrom(rightclicktag).EDSMID;
 
                 if (id_edsm == 0)
                 {
                     id_edsm = null;
                 }
 
-                if (!edsm.ShowSystemInEDSM(rightclicksystem.Name, id_edsm))
+                if (!edsm.ShowSystemInEDSM(SysFrom(rightclicktag).Name, id_edsm))
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable");
 
                 this.Cursor = Cursors.Default;
@@ -99,7 +113,7 @@ namespace EDDiscovery.UserControls.Search
 
         private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
+            if (rightclicktag != null)
             {
                 this.Cursor = Cursors.WaitCursor;
 
@@ -110,7 +124,7 @@ namespace EDDiscovery.UserControls.Search
 
                 if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
                 {
-                    if (discoveryform.Map.MoveToSystem(rightclicksystem))
+                    if (discoveryform.Map.MoveToSystem(SysFrom(rightclicktag)))
                         discoveryform.Map.Show();
                 }
             }
@@ -118,41 +132,63 @@ namespace EDDiscovery.UserControls.Search
 
         private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclicksystem != null)
-                ShowScanPopOut(rightclicksystem);
+            ShowScanPopOut(rightclicktag);
         }
 
         private void cellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
-                ShowScanPopOut((ISystem)Rows[e.RowIndex].Tag);
+                ShowScanPopOut(Rows[e.RowIndex].Tag);
         }
 
-        void ShowScanPopOut(ISystem sys)
+        void ShowScanPopOut(Object tag)     // tag can be a Isystem or an He.. output depends on it.
         {
+            if (tag == null)
+                return;
+
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
             int width = Math.Max(250, this.FindForm().Width * 4 / 5);
+            int height = 800;
 
-            ScanDisplay sd = new ScanDisplay();
-            sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = sd.CheckEDSM = true;
-            sd.SetSize(48);
-            sd.Size = new Size(width - 20, 1024);
-            sd.DrawSystem(sys, null, discoveryform.history);
+            HistoryEntry he = tag as HistoryEntry;
+            ISystem sys = SysFrom(tag);
+            ScanDisplay sd = null;
+            string title = "System".Tx(this, "Sys") + ": " + sys.Name;
 
-            int height = Math.Min(800, Math.Max(400,sd.DisplayAreaUsed.Y)) + 100;
+            if (he != null && he.EntryType == JournalTypeEnum.Market)  // station data..
+            {
+                JournalMarket jm = he.journalEntry as JournalMarket;
+                jm.FillInformation(out string info, out string detailed,1);
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.RichTextBoxScroll), detailed, new Point(0, 40), new Size(width - 20, height - 85), null));
+
+                title += ", " +"Station".Tx(this) + ": " + jm.Station;
+            }
+            else
+            {       // default is the scan display output
+                sd = new ScanDisplay();
+                sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = sd.CheckEDSM = true;
+                sd.SetSize(48);
+                sd.Size = new Size(width - 20, 1024);
+                sd.DrawSystem(sys, null, discoveryform.history);
+
+                height = Math.Min(800, Math.Max(400, sd.DisplayAreaUsed.Y)) + 100;
+
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
+            }
+
             f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
 
-            f.Trigger += (dialogname, controlname, tag) =>
+            f.Trigger += (dialogname, controlname, ttag) =>
             {
                 if (controlname == "OK")
                     f.Close();
             };
 
-            f.Init(this.FindForm().Icon, new Size(width, height), new Point(-999, -999), "System ".Tx(this, "Sys") + ": " + sys.Name, null, null);
+            f.Init(this.FindForm().Icon, new Size(width, height), new Point(-999, -999), title, null, null);
 
-            sd.DrawSystem(sys, null, discoveryform.history);
+            if ( sd != null )
+                sd.DrawSystem(sys, null, discoveryform.history);
 
             f.Show(this.FindForm());
         }
@@ -195,7 +231,7 @@ namespace EDDiscovery.UserControls.Search
                     grd.GetLine += delegate (int r)
                     {
                         DataGridViewRow rw = Rows[r];
-                        ISystem sys = rw.Tag as ISystem;
+                        ISystem sys = SysFrom(rw.Tag);
                         return new Object[]
                         {
                             rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, sys.X.ToString("0.#"), sys.Y.ToString("0.#"), sys.Z.ToString("0.#"),sys.EDSMID
