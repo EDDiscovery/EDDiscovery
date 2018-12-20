@@ -18,8 +18,6 @@ namespace EliteDangerousCore.EDSM
         private Thread ThreadEDSMFetchLogs;
         private ManualResetEvent ExitRequested = new ManualResetEvent(false);
         private Action<string> LogLine;
-        private DateTime EDSMRequestBackoffTime = DateTime.UtcNow;
-        private TimeSpan BackoffInterval = TimeSpan.FromSeconds(60);
 
         public DateTime FirstEventTime { get; private set; }
         public DateTime LastEventTime { get; private set; }
@@ -78,11 +76,7 @@ namespace EliteDangerousCore.EDSM
             bool jupdate = false;
             DateTime lastCommentFetch = DateTime.MinValue;
 
-            int waittime = 10000; // Max 1 request every 10 seconds, with a backoff if the rate limit is hit
-            if (EDSMRequestBackoffTime > DateTime.UtcNow)
-            {
-                waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
-            }
+            int waittime = 1000; // initial waittime, will be reestimated later
 
             while (!ExitRequested.WaitOne(waittime))
             {
@@ -100,7 +94,7 @@ namespace EliteDangerousCore.EDSM
                 int res = -1;       //return code
                 BaseUtils.ResponseData response = default(BaseUtils.ResponseData);
 
-                if (edsm.ValidCredentials && Commander.SyncFromEdsm && DateTime.UtcNow > EDSMRequestBackoffTime)
+                if (edsm.ValidCredentials && Commander.SyncFromEdsm )       // this triggers in if commander details change
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {
@@ -121,27 +115,21 @@ namespace EliteDangerousCore.EDSM
 
                 if (res == 429) // Rate Limit Exceeded
                 {
-                    Trace.WriteLine($"EDSM Log request rate limit hit - backing off for {BackoffInterval.TotalSeconds}s");
-                    EDSMRequestBackoffTime = DateTime.UtcNow + BackoffInterval;
-                    BackoffInterval = BackoffInterval + TimeSpan.FromSeconds(60);
+                    Trace.WriteLine($"EDSM Log request rate limit hit - backing off");
                 }
                 else if (logstarttime > LastEventTime && logendtime < FirstEventTime)
                 {
-                    Trace.WriteLine($"Bad start and/or end times returned by EDSM - backing off for {BackoffInterval.TotalSeconds}s");
-                    EDSMRequestBackoffTime = DateTime.UtcNow + BackoffInterval;
-                    BackoffInterval = BackoffInterval + TimeSpan.FromSeconds(60);
+                    Trace.WriteLine($"Bad start and/or end times returned by EDSM - backing off");
                 }
-                else if (res == 100 && edsmlogs != null )
+                else if (res == 100 )       // okay return..
                 {
-                    if (edsmlogs.Count > 0)     // if anything to process..
+                    if (edsmlogs != null && edsmlogs.Count > 0)     // if anything to process..
                     {
                         //Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
 
-                        BackoffInterval = TimeSpan.FromSeconds(60);
-
-                        if (logendtime > DateTime.UtcNow)
+                        if (logendtime > DateTime.UtcNow)               // make sure logendtime sane
                             logendtime = DateTime.UtcNow;
-                        if (logstarttime < DateTime.MinValue.AddDays(1))
+                        if (logstarttime < DateTime.MinValue.AddDays(1))    // and starttime
                             logstarttime = DateTime.MinValue.AddDays(1);
 
                         // Get all of the local entries now that we have the entries from EDSM
@@ -196,7 +184,7 @@ namespace EliteDangerousCore.EDSM
                             {                   // it is a duplicate, check if the first discovery flag is set right
                                 JournalFSDJump existingfsd = hlfsdlist[index].journalEntry as JournalFSDJump;
 
-                                if ( existingfsd != null && existingfsd.EDSMFirstDiscover != jfsd.EDSMFirstDiscover)    // if we have a FSD one, and first discover is different
+                                if (existingfsd != null && existingfsd.EDSMFirstDiscover != jfsd.EDSMFirstDiscover)    // if we have a FSD one, and first discover is different
                                 {
                                     existingfsd.UpdateFirstDiscover(jfsd.EDSMFirstDiscover);
 
@@ -223,8 +211,8 @@ namespace EliteDangerousCore.EDSM
                                 foreach (JournalFSDJump jfsd in toadd)
                                 {
                                     System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
-                                    jfsd.SetTLUCommander( tlu.id, jfsd.CommanderId);        // update its TLU id to the TLU made above
-                                    jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);
+                                    jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
+                                    jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);     // add it to the db with the JSON created
                                 }
                             }
 
@@ -238,30 +226,26 @@ namespace EliteDangerousCore.EDSM
                         }
                     }
 
-                    if (logstarttime < FirstEventTime)
+                    if (logstarttime < FirstEventTime)      // move time on.. we got a 100, thats it for this period
                         FirstEventTime = logstarttime;
 
-                    if (logendtime > LastEventTime)
+                    if (logendtime > LastEventTime)     
                         LastEventTime = logendtime;
-
-                    int ratelimitlimit;
-                    int ratelimitremain;
-                    int ratelimitreset;
 
                     if (response.Headers != null &&
                         response.Headers["X-Rate-Limit-Limit"] != null &&
                         response.Headers["X-Rate-Limit-Remaining"] != null &&
                         response.Headers["X-Rate-Limit-Reset"] != null &&
-                        Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
-                        Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
-                        Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) )
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out int ratelimitlimit) &&
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out int ratelimitremain) &&
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out int ratelimitreset) )
                     {
-                        if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
-                            waittime = ratelimitreset * 1000;
+                        if (ratelimitremain < ratelimitlimit * 2 / 4)       // lets keep at least X remaining for other purposes later..
+                            waittime = 1000 * ratelimitreset / (ratelimitlimit - ratelimitremain);    // slow down to its pace now.. example 878/(360-272) = 10 seconds per quota
                         else
-                            waittime = 10000;                               // keep it at 10 seconds so we don't overwhelm for log fetching.
+                            waittime = 1000;        // 1 second so we don't thrash
 
-                        System.Diagnostics.Debug.WriteLine("EDSM Log Delay Parameters {0} {1} {2} => {3}s", ratelimitlimit, ratelimitremain, ratelimitreset, delay);
+                        System.Diagnostics.Debug.WriteLine("EDSM Log Delay Parameters {0} {1} {2} => {3}ms", ratelimitlimit, ratelimitremain, ratelimitreset, waittime);
                     }
                 }
             }

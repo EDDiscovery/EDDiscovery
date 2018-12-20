@@ -818,7 +818,7 @@ namespace EliteDangerousCore.EDSM
                     Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) )
                 {
                     if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
-                        delay = ratelimitreset;
+                        delay = ratelimitreset / (ratelimitlimit - ratelimitremain);    // slow down to its pace now.. example 878/(360-272) = 10 seconds per quota
                     else
                         delay = 0;
 
