@@ -804,21 +804,27 @@ namespace EliteDangerousCore.EDSM
 
                 SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
-                int delay = 10;
+                int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;
                 int ratelimitremain;
                 int ratelimitreset;
 
                 if (response.Headers != null &&
+                    response.Headers["X-Rate-Limit-Limit"] != null &&
+                    response.Headers["X-Rate-Limit-Remaining"] != null &&
+                    response.Headers["X-Rate-Limit-Reset"] != null &&
                     Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
                     Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
-                    Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) &&
-                    ratelimitlimit >= 10)
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) )
                 {
-                    delay = ratelimitreset + (int)((long)ratelimitremain * ratelimitreset * 10 / ratelimitlimit);
+                    if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
+                        delay = ratelimitreset;
+                    else
+                        delay = 0;
+
+                    System.Diagnostics.Debug.WriteLine("EDSM Delay Parameters {0} {1} {2} => {3}s", ratelimitlimit, ratelimitremain, ratelimitreset, delay);
                 }
 
-                // Delay 10 seconds between requests
                 for (int sec = 0; sec < delay; sec++)
                 {
                     if (!PendingClose())

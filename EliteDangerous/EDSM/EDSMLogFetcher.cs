@@ -249,12 +249,19 @@ namespace EliteDangerousCore.EDSM
                     int ratelimitreset;
 
                     if (response.Headers != null &&
+                        response.Headers["X-Rate-Limit-Limit"] != null &&
+                        response.Headers["X-Rate-Limit-Remaining"] != null &&
+                        response.Headers["X-Rate-Limit-Reset"] != null &&
                         Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
                         Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
-                        Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) &&
-                        ratelimitlimit >= 10)
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) )
                     {
-                        waittime = ratelimitreset + (int)((long)ratelimitremain * ratelimitreset * 10000 / ratelimitlimit);
+                        if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
+                            waittime = ratelimitreset * 1000;
+                        else
+                            waittime = 10000;                               // keep it at 10 seconds so we don't overwhelm for log fetching.
+
+                        System.Diagnostics.Debug.WriteLine("EDSM Log Delay Parameters {0} {1} {2} => {3}s", ratelimitlimit, ratelimitremain, ratelimitreset, delay);
                     }
                 }
             }
