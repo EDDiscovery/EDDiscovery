@@ -400,11 +400,12 @@ namespace EliteDangerousCore.EDSM
 
         // Protected against bad JSON
 
-        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime)
+        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime, out BaseUtils.ResponseData response)
         {
             log = new List<JournalFSDJump>();
             logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
+            response = new BaseUtils.ResponseData { Error = true, StatusCode = HttpStatusCode.Unauthorized };
 
             if (!ValidCredentials)
                 return 0;
@@ -417,7 +418,7 @@ namespace EliteDangerousCore.EDSM
             if (endtimeutc != null)
                 query += "&endDateTime=" + HttpUtility.UrlEncode(endtimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            response = RequestGet("api-logs-v1/" + query, handleException: true);
 
             if (response.Error)
             {

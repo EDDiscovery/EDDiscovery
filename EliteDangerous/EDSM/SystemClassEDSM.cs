@@ -716,7 +716,7 @@ namespace EliteDangerousCore.EDSM
                 ReportProgress(-1, "Requesting systems from EDSM");
                 System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
 
-                string json;
+                string json = null;
                 BaseUtils.ResponseData response;
                 try
                 {
@@ -804,8 +804,22 @@ namespace EliteDangerousCore.EDSM
 
                 SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
+                int delay = 10;
+                int ratelimitlimit;
+                int ratelimitremain;
+                int ratelimitreset;
+
+                if (response.Headers != null &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) &&
+                    ratelimitlimit >= 10)
+                {
+                    delay = ratelimitreset + (int)((long)ratelimitremain * ratelimitreset * 10 / ratelimitlimit);
+                }
+
                 // Delay 10 seconds between requests
-                for (int sec = 0; sec < 10; sec++)
+                for (int sec = 0; sec < delay; sec++)
                 {
                     if (!PendingClose())
                     {
