@@ -52,7 +52,8 @@ namespace EDDiscovery.Forms
             this.labelMessage.Name = "labelMessage";
             this.labelMessage.Size = new System.Drawing.Size(366, 47);
             this.labelMessage.TabIndex = 0;
-            this.labelMessage.Text = "0";
+            this.labelMessage.Text = "<code>";
+            this.labelMessage.TextBackColor = System.Drawing.Color.Transparent;
             // 
             // TimedMessage
             // 
@@ -65,7 +66,7 @@ namespace EDDiscovery.Forms
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "TimedMessage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Form1";
+            this.Text = "<code>";
             this.ResumeLayout(false);
 
         }

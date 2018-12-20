@@ -54,7 +54,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Progress:;%;N1".Txb(this), Progress, "Bodies:", BodyCount, "Others:".Txb(this), NonBodyCount);
+            info = BaseUtils.FieldBuilder.Build("Progress:;%;N1".Tx(this), Progress, "Bodies:", BodyCount, "Others:".Tx(this), NonBodyCount);
             detailed = "";
         }
     }
@@ -62,7 +62,7 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FSSSignalDiscovered)]
     public class JournalFSSSignalDiscovered : JournalEntry
     {
-        public class Signal
+        public class FSSSignal
         {
             public string SignalName { get; set; }
             public string SignalName_Localised { get; set; }
@@ -81,7 +81,7 @@ namespace EliteDangerousCore.JournalEvents
             public System.DateTime ExpiryUTC { get; set; }
             public System.DateTime ExpiryLocal { get; set; }
 
-            public Signal(JObject evt , System.DateTime EventTimeUTC)
+            public FSSSignal(JObject evt , System.DateTime EventTimeUTC)
             {
                 SignalName = evt["SignalName"].Str();
                 SignalName_Localised = JournalFieldNaming.CheckLocalisation(evt["SignalName_Localised"].Str(), SignalName);
@@ -110,18 +110,18 @@ namespace EliteDangerousCore.JournalEvents
 
             public override string ToString()
             {
-                return BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Txb(this),
-                            SpawingState_Localised, "Faction:".Txb(this), SpawingFaction_Localised,
-                            "USS Type:".Txb(this), USSTypeLocalised, " Threat Level:".Txb(this), ThreatLevel,
-                            ";Station".Txb(this, "StationBool"), IsStation
+                return BaseUtils.FieldBuilder.Build("", SignalName_Localised, "State:".Tx(this),
+                            SpawingState_Localised, "Faction:".Tx(this), SpawingFaction_Localised,
+                            "USS Type:".Tx(this), USSTypeLocalised, " Threat Level:".Tx(this), ThreatLevel,
+                            ";Station".Tx(this, "StationBool"), IsStation
                             );
             }
         }
 
         public JournalFSSSignalDiscovered(JObject evt) : base(evt, JournalTypeEnum.FSSSignalDiscovered)
         {
-            Signals = new List<Signal>();
-            Signals.Add(new Signal(evt, EventTimeUTC));
+            Signals = new List<FSSSignal>();
+            Signals.Add(new FSSSignal(evt, EventTimeUTC));
         }
 
         public void Add(JournalFSSSignalDiscovered next )
@@ -129,7 +129,7 @@ namespace EliteDangerousCore.JournalEvents
             Signals.Add(next.Signals[0]);
         }
 
-        public List<Signal> Signals;
+        public List<FSSSignal> Signals;
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -192,8 +192,8 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("", BodyName,
-                                                "Probes:".Txb(this), ProbesUsed,
-                                                "Efficiency Target:".Txb(this), EfficiencyTarget);
+                                                "Probes:".Tx(this), ProbesUsed,
+                                                "Efficiency Target:".Tx(this), EfficiencyTarget);
             detailed = "";
         }
     }

@@ -115,8 +115,8 @@ namespace EDDiscovery
             this.addTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelMenuTop = new System.Windows.Forms.Panel();
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelMenuTop = new System.Windows.Forms.Panel();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.notifyIconContextMenuStrip.SuspendLayout();
@@ -476,9 +476,9 @@ namespace EDDiscovery
             this.labelInfoBoxTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfoBoxTop.Location = new System.Drawing.Point(382, 4);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
-            this.labelInfoBoxTop.Size = new System.Drawing.Size(83, 13);
+            this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
             this.labelInfoBoxTop.TabIndex = 0;
-            this.labelInfoBoxTop.Text = "Information Text";
+            this.labelInfoBoxTop.Text = "<code>";
             this.labelInfoBoxTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelInfoBoxTop_MouseDown);
             this.labelInfoBoxTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
@@ -487,9 +487,9 @@ namespace EDDiscovery
             this.label_version.AutoSize = true;
             this.label_version.Location = new System.Drawing.Point(296, 4);
             this.label_version.Name = "label_version";
-            this.label_version.Size = new System.Drawing.Size(71, 13);
+            this.label_version.Size = new System.Drawing.Size(43, 13);
             this.label_version.TabIndex = 21;
-            this.label_version.Text = "Version Label";
+            this.label_version.Text = "<code>";
             this.label_version.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.label_version.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
@@ -818,7 +818,7 @@ namespace EDDiscovery
             this.renameTabToolStripMenuItem,
             this.popOutPanelToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 114);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 92);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -839,6 +839,12 @@ namespace EDDiscovery
             this.renameTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.renameTabToolStripMenuItem.Text = "Rename Tab";
             // 
+            // popOutPanelToolStripMenuItem
+            // 
+            this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
+            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
+            // 
             // panelMenuTop
             // 
             this.panelMenuTop.Controls.Add(this.menuStrip);
@@ -853,12 +859,6 @@ namespace EDDiscovery
             this.panelMenuTop.TabIndex = 1;
             this.panelMenuTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.panelMenuTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
-            // 
-            // popOutPanelToolStripMenuItem
-            // 
-            this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
-            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
             // 
             // EDDiscoveryForm
             // 

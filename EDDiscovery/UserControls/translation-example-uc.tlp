@@ -70,7 +70,13 @@ UserControlCombatPanel.buttonExtEditCampaign.ToolTip: "Edit user defined campaig
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
 
-//New 10.3
+
+//////////////////////////////////////////////////////////////// Container Grid
+
+// NEW 10.3
+UserControlContainerGrid.buttonExtTile.ToolTip: "Tile the grid panels" @
+UserControlContainerGrid.buttonExtDelete.ToolTip: "Remove selected panel" @
+UserControlContainerGrid.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" @
 
 
 //////////////////////////////////////////////////////////////// Compass
@@ -103,6 +109,8 @@ UserControlSearchMaterialsCommodities.OR: "OR" @
 DataGridViewStarResults.3d: "Go to star on 3D Map" @
 DataGridViewStarResults.EDSM: "View on EDSM" @
 DataGridViewStarResults.Data: "View Data On Entry" @
+DataGridViewStarResults.Sys: "System" @
+DataGridViewStarResults.Station: "Station" @
 
 //////////////////////////////////////////////////////////////// Engineering
 
@@ -130,6 +138,10 @@ UserControlEngineering.buttonFilterUpgrade.ToolTip: "Filter the table by upgrade
 UserControlEngineering.buttonFilterLevel.ToolTip: "Filter the table by level" => "<Filter the table by level>"
 UserControlEngineering.buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "<Filter the table by engineer>"
 UserControlEngineering.buttonFilterModule.ToolTip: "Filter the table by module type" => "<Filter the table by module type>"
+
+//NEW 10.3
+UserControlEngineering.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+UserControlEngineering.chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use" @ // Translation present, english differs from When clicked on, use the materials at the cursor to estimate, when off always use vs When clicked on, use the materials at the cursor to estimate, when off always use the latest materials.
 
 /////////////////////////////////////////////////////////////// Estimated Values
 
@@ -248,6 +260,14 @@ UserControlJournalGrid.copyJournalEntryToClipboardToolStripMenuItem: "Copy journ
 .TTTotal: "Filter out entries matching the field selection, " @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 
+// NEW 10.3
+UserControlJournalGrid.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
+UserControlJournalGrid.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+UserControlJournalGrid.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
+UserControlJournalGrid.buttonFilter.ToolTip: "Filter out entries based on event type" @
+UserControlJournalGrid.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" @
+
+
 //////////////////////////////////////////////////////////////// Ledger
 
 UserControlLedger.labelNoItems: "No Items Found" => "<No Items Found>"
@@ -289,7 +309,9 @@ UserControlLocalMap.toolStripMenuZoom.toolStripMenuZoom10: "10:1" => "<10:1>"
 UserControlLocalMap.toolStripMenuZoomCenterMap: "Center Map" => "<Center Map>"
 UserControlLocalMap.toolStripMenuReset: "Reset" => "<Reset>"
 UserControlLocalMap.aboutToolStripAbout: "About" => "<About>"
-UserControlLocalMap.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "<Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button>"
+
+// NEW 10.3
+UserControlLocalMap.panelTop.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "<Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button>"
 
 .3dmap: "3D Map of closest systems from {0}" @
 
@@ -321,6 +343,9 @@ UserControlMarketData.comboBoxCustomFrom.ToolTip: "Click to select between track
 
 .Conly: "Cargo only, no market data on this item" @
 .LEntry: "Travel History Entry Last" @
+
+// NEW 10.3
+UserControlMarketData.panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" @
 
 //////////////////////////////////////////////////////////////// Material Commodities
 
@@ -379,7 +404,9 @@ UserControlMissions.pColTargetFaction: "Target Faction" => "<Target Faction>"
 UserControlMissions.pColResult: "Result (cr)" => "<Result (cr)>"
 UserControlMissions.pColInfo: "Info" => "<Info>"
 UserControlMissions.labelTo: "to" => "<to>"
-UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "<Left click and drag on grid to reorder>"
+
+//NEW 10.3 FIXED
+UserControlMissions.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "<Left click and drag on grid to reorder>"
 
 .MPlural: " Missions" @
 .MSingular: " Mission" @
@@ -427,6 +454,13 @@ UserControlModules.Slot: "Slot" @
 .SC: "Ship Configure" @
 .MI: "Module Information" @
 
+// NEW 10.3
+UserControlModules.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
+UserControlModules.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
+UserControlModules.buttonExtCoriolis.ToolTip: "Send to Corolis" @
+UserControlModules.comboBoxShips.ToolTip: "Select ship to view" @
+UserControlModules.labelVehicle: "Unknown" @
+UserControlModules.labelShip: "Ship" @
 
 //////////////////////////////////////////////////////////////// Note Panel
 
@@ -573,6 +607,7 @@ UserControlRouteTracker.autoSetTargetToolStripMenuItem: "Auto set target" @
 .PresstoCancel: "Press to Cancel" @
 .Enterroute: "Enter route" @
 
+
 //////////////////////////////////////////////////////////////// Scan
 
 UserControlScan.toolStripMenuItemToolbar: "Show/Hide Toolbar" @
@@ -594,6 +629,13 @@ UserControlScan.lblSystemInfo.ToolTip: "Right click on panel to show/hide the to
 .NSD: "No scan data available" @
 .BC: "Barycentre of {0}" @
 
+// NEW 10.3
+
+UserControlScan.showSystemToolStripMenuItem: "Show System" @
+UserControlScan.cancelShowSystemToolStripMenuItem: "Cancel Show System" @
+UserControlScan.panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
+UserControlScan.rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
+
 //////////////////////////////////////////////////////////////// ScanGrid
 
 UserControlScanGrid.colName: "Name" @
@@ -614,6 +656,37 @@ UserControlScanGrid.colBriefing: "Briefing" @
 .Value: "Value" @
 .SS: "Scan Summary for {0}. {1}" @
 .AV: "Approx total scan value: {0:N0}" @
+
+// NEW 10.3
+
+UserControlScanGrid.Radius: "Radius" @
+UserControlScanGrid.Temperature: "Temperature" @
+UserControlScanGrid.MetalRichbodies: "Metal Rich bodies" @
+UserControlScanGrid.Waterworlds: "Water worlds" @
+UserControlScanGrid.Earthlikesplanets: "Earth likes planets" @
+UserControlScanGrid.Ammoniaworlds: "Ammonia worlds" @
+UserControlScanGrid.Volcanicactivity: "Volcanic activity" @
+UserControlScanGrid.Belt: "Belt: " @
+UserControlScanGrid.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
+UserControlScanGrid.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" @
+UserControlScanGrid.structuresToolStripMenuItem: "Structures" @
+UserControlScanGrid.structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" @
+UserControlScanGrid.structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" @
+UserControlScanGrid.materialsToolStripMenuItem: "Materials" @
+UserControlScanGrid.valuesToolStripMenuItem: "Values" @
+UserControlScanGrid.columnsToolStripMenuItem: "Columns" @
+UserControlScanGrid.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" @
+UserControlScanGrid.columnsToolStripMenuItem.classToolStripMenuItem: "Class" @
+UserControlScanGrid.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" @
+UserControlScanGrid.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
+UserControlScanGrid.toolStripStatusTotalValue: "Estimated scans value" @
+UserControlScanGrid.toolStripStatusGreen: "GREEN SYSTEM" @
 
 
 //////////////////////////////////////////////////////////////// Screenshot
@@ -881,7 +954,6 @@ UserControlStats.tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" @
 UserControlStats.tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 UserControlStats.tabControlCustomStats.tabPageGameStats: "In Game" @
 
-
 UserControlStats.Visits: "Visits" @
 UserControlStats.JumpsBeforeSystem: "Jumps Before System" @
 UserControlStats.TotalNoofjumps: "Total No of jumps: " @
@@ -988,6 +1060,20 @@ UserControlStats.TradesCompleted: "Trades Completed" @
 UserControlStats.MaterialsTraded: "Materials Traded" @
 UserControlStats.TME: "{0} days {1} hours {1} minutes" @
 
+//NEW 10.3
+UserControlStats.Name: "Name" @
+UserControlStats.Ident: "Ident" @
+UserControlStats.TravelledLy: "Travelled Ly" @
+UserControlStats.BodiesScanned: "Bodies Scanned" @
+UserControlStats.GoodsBought: "Goods Bought" @
+UserControlStats.GoodsSold: "Goods Sold" @
+UserControlStats.Destroyed: "Destroyed" @
+UserControlStats.Unknown: "Unknown" @
+UserControlStats.tabControlCustomStats.tabPageByShip: "By Ship" @
+UserControlStats.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
+UserControlStats.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
+
+
 ///////////////////////////////////////////////////////////////// Synthesis
 
 UserControlSynthesis.UpgradeCol: "Upgrade/Mat" @
@@ -1008,6 +1094,7 @@ UserControlSynthesis.buttonMaterialFilter.ToolTip: "Filter the table by the mate
 UserControlSynthesis.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" @
 UserControlSynthesis.buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" @
 UserControlSynthesis.buttonClear.ToolTip: "Set all wanted values to zero" @
+UserControlSynthesis.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
 
 //////////////////////////////////////////////////////////////// Sysinfo
 
@@ -1067,6 +1154,30 @@ UserControlSysInfo.textBoxTargetDist.ToolTip: "Distance to target" => "<Distance
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" @
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
 
+//////////////////////////////////////////////////////////////// Splitter
+
+// NEW 10.3
+
+UserControlContainerSplitter.sizeRatioToolStripMenuItem: "Set Size Ratio" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem13: "1:3" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem12: "1:2" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem23: "2:3" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem11: "1:1" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem32: "3:2" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem21: "2:1" @
+UserControlContainerSplitter.sizeRatioToolStripMenuItem.toolStripMenuItem31: "3:1" @
+
+UserControlContainerSplitter.ChangetoHorizontalSplit: "Change to Horizontal Split" @
+UserControlContainerSplitter.ChangetoVerticalSplit: "Change to Vertical Split" @
+UserControlContainerSplitter.SplitLeftPanel: "Split Left Panel" @
+UserControlContainerSplitter.SplitTopPanel: "Split Top Panel" @
+UserControlContainerSplitter.SplitRightPanel: "Split Right Panel" @
+UserControlContainerSplitter.SplitBottomPanel: "Split Bottom Panel" @
+UserControlContainerSplitter.MergeLeftPanel: "Merge Left Panel" @
+UserControlContainerSplitter.MergeTopPanel: "Merge Top Panel" @
+UserControlContainerSplitter.MergeRightPanel: "Merge Right Panel" @
+UserControlContainerSplitter.MergeBottomPanel: "Merge Bottom Panel" @
+
 //////////////////////////////////////////////////////////////// travel grid
 
 UserControlTravelGrid.ColumnTime: "Time" => "<Time>"
@@ -1121,6 +1232,15 @@ UserControlTravelGrid.runEntryThroughProfileSystemToolStripMenuItem: "Run entry 
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
+
+//NEW 10.3
+UserControlTravelGrid.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
+UserControlTravelGrid.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+UserControlTravelGrid.buttonField.ToolTip: "Filter out entries matching the field selection" @
+UserControlTravelGrid.buttonFilter.ToolTip: "Filter out entries based on event type" @
+UserControlTravelGrid.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
+UserControlTravelGrid.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+
 
 //////////////////////////////////////////////////////////////// trilat
 
@@ -1182,3 +1302,10 @@ UserControlTrippanel.jumps: "jumps" @
 UserControlTrippanel.NoT: " -> Target not set" @
 UserControlTrippanel.FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 UserControlTrippanel.UKN: "System {0} unknown to EDSM" @
+
+//////////////////////////////////////////////////////////////// Helpers
+
+ScanDisplay.AV: "Approx value: {0:N0}" @
+ScanDisplay.NSD: "No scan data available" @
+ScanDisplay.BC: "Barycentre of {0}" @
+

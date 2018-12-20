@@ -234,6 +234,9 @@ JournalEntry.dueto: "< , due to " @
 JournalEntry.NoCargo: "No Cargo" @
 JournalEntry.Cargo: "Cargo, {0} items" @
 JournalEntry.items: "; items" @
+JournalCargo.CargoShip: "Ship" @
+JournalCargo.CargoSRV: "SRV" @
+7
 ///////////////////////////////////////////////////// JournalCargoDepot
 JournalEntry.Collected: "Collected:" @
 JournalEntry.of: "< of " @
@@ -243,6 +246,14 @@ JournalEntry.Delivered: "Delivered:" @
 JournalEntry.Update: "Update, Collected:" @
 JournalEntry.ToGo: "To Go:" @
 JournalEntry.ProgressLeft: "Progress Left:;%;N1" @
+///////////////////////////////////////////////////// JournalCodex
+// NEW 10.3
+JournalFSSDiscoveryScan.Others: "Others:" @
+JournalCodexEntry.At: "At " @
+JournalCodexEntry.in: "in " @
+JournalCodexEntry.NewEntry: ";New Entry" @
+JournalCodexEntry.Traits: ";Traits" @
+
 ///////////////////////////////////////////////////// JournalCollectCargo
 JournalEntry.Stolen: ";Stolen" @
 ///////////////////////////////////////////////////// JournalCommitCrime
@@ -290,6 +301,18 @@ JournalEntry.Died: "{0} in ship type {1} rank {2}" @
 JournalEntry.Killedby: "Killed by " @
 ///////////////////////////////////////////////////// JournalDiscoveryScan
 JournalEntry.Dscan: "New bodies discovered:" @
+// New 10.3
+FSSSignal.State: "State:" @
+FSSSignal.Faction: "Faction:" @
+FSSSignal.USSType: "USS Type:" @
+FSSSignal.ThreatLevel: " Threat Level:" @
+FSSSignal.StationBool: ";Station" @
+JournalFSSDiscoveryScan.Progress: "Progress:;%;N1" @
+
+///////////////////////////////////////////////////// FSS Signal discovered
+// New 10.3
+JournalFSSSignalDiscovered.Detected: "Detected ; signals" @
+
 ///////////////////////////////////////////////////// JournalDocked
 JournalDocked.At: "At {0}" @
 JournalEntry.insystem: "< in system " @
@@ -339,6 +362,8 @@ JournalEngineerCraftBase.Level: "Level:" @
 
 ///////////////////////////////////////////////////// JournalEngineerProgress
 JournalEngineerProgress.Progress: "Progress:" @
+JournalEngineerProgress.Progresson: "Progress on ; Engineers" @
+
 ///////////////////////////////////////////////////// JournalEscapeInterdiction
 JournalEntry.NPC: "< (NPC);(Player)" @
 ///////////////////////////////////////////////////// JournalFetchRemoteModule
@@ -407,6 +432,15 @@ JournalLocOrJump.insystem: "< in system " @
 JournalLocOrJump.Security: "Security:" @
 JournalLocOrJump.Inspacenear: "In space near " @
 JournalLocOrJump.oftype: "< of type " @
+
+//NEW 10.3
+JournalLocOrJump.Happiness: "Happiness:" @
+JournalLocOrJump.Reputation: "Reputation:;%;N1" @
+JournalLocOrJump.SquadronSystem: ";Squadron System" @
+JournalLocOrJump.HappiestSystem: ";Happiest System" @
+JournalLocOrJump.HomeSystem: ";Home System" @
+JournalLocOrJump.ActiveState: "Active State:" @
+
 ///////////////////////////////////////////////////// JournalMarketBuy
 JournalEntry.buyprice: "< buy price ; cr;N0" @
 ///////////////////////////////////////////////////// JournalMarketSell
@@ -465,6 +499,11 @@ JournalEntry.Slot: "Slot:" @
 JournalEntry.Swappedwith: ", Swapped with " @
 ///////////////////////////////////////////////////// JournalMusic
 JournalEntry.MusicTrack: "Music Track:" @
+
+///////////////////////////////////////////////////// JournalMultiSellExplorationData in JournalExplorationData.cs
+//NEW 10.3
+JournalMultiSellExplorationData.Total: "Total:; cr;N0" @
+
 ///////////////////////////////////////////////////// JournalNavBeaconScan
 JournalEntry.Bodies: "Bodies:" @
 ///////////////////////////////////////////////////// JournalNewCommander
@@ -584,6 +623,19 @@ JournalScan.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" @
 JournalScan.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" @
 JournalScan.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" @
 JournalScan.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" @
+JournalScan.HabitableZone: " - Habitable Zone, {0} ({1}-{2} AU),\n" @
+JournalScan.MetalRichplanets: " - Metal Rich planets, {0} ({1}-{2} AU),\n" @
+JournalScan.WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" @
+JournalScan.EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
+JournalScan.AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
+JournalScan.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
+
+///////////////////////////////////////////////////// JournalSAAScanComplete
+
+//New 10.3
+JournalSAAScanComplete.Probes: "Probes:" @
+JournalSAAScanComplete.EfficiencyTarget: "Efficiency Target:" @
+
 
 ///////////////////////////////////////////////////// JournalScientificResearch
 JournalEntry.Category: "Category:" @
@@ -620,6 +672,9 @@ JournalEntry.Shield: "Shield ;;N1" @
 JournalShipTargeted.Hull: "Hull ;;N1" @
 JournalShipTargeted.at: "< at ;;N1" @
 JournalEntry.LostTarget: "Lost Target" @
+
+//NEW 10.3
+JournalShipTargeted.in: "< in " @
 ///////////////////////////////////////////////////// JournalShipyard
 JournalEntry.Ships: "Ships" @
 ///////////////////////////////////////////////////// JournalShipyardSell
@@ -630,6 +685,11 @@ JournalShipyardSwap.fora: "< for a " @
 ///////////////////////////////////////////////////// JournalShipyardTransfer
 JournalShipyardTransfer.Of: "Of " @
 JournalEntry.Distance: "Distance:; ly;0.0" @
+
+///////////////////////////////////////////////////// JournalSquadron
+JournalSquadronBase.Old: "Old:" @
+JournalSquadronBase.New: "New:" @
+
 ///////////////////////////////////////////////////// JournalStartJump
 JournalStartJump.ChargingFSD: "Charging FSD" @
 ///////////////////////////////////////////////////// JournalStatistics
@@ -723,7 +783,8 @@ CQCClass.KDRatio: "KD Ratio:;;N" @
 CQCClass.Kills: "Kills:;;N0" @
 CQCClass.Win: "Win/Loss:;;N" @
 ///////////////////////////////////////////////////// JournalStoredModules
-JournalEntry.at: "< at " @
+
+JournalStoredModules.at: "< at " @
 JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
 JournalEntry.Time: "Time:" @
 JournalEntry.Value: "Value:; cr;N0" @
@@ -737,9 +798,21 @@ JournalStoredShips.Otherlocations: "Other locations:" @
 JournalStoredShips.SSP: "; cr;N0" @
 JournalStoredShips.Remote: "Remote:" @
 JournalStoredShips.intransit: "<; in transit" @
+
+//NEW 10.3
+JournalStoredShips.at: "< at " @
+
 ///////////////////////////////////////////////////// JournalSupercruiseExit
 JournalSupercruiseExit.At: "At " @
 ///////////////////////////////////////////////////// JournalUnknown
 JournalUnknown.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
 ///////////////////////////////////////////////////// JournalUSSDrop
 JournalEntry.Threat: "Threat:" @
+
+
+///////////////////////////////////////////////////// Common
+// NEW 10.3
+JournalEntry.By: "By:" @
+JournalEntry.HullHealth: "Hull Health;%;N1" @
+JournalEntry.MissionCargo: "<; (Mission Cargo)" @
+JournalEntry.InSlot: "In Slot:" @

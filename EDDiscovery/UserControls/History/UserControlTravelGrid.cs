@@ -134,6 +134,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public override void LoadLayout()

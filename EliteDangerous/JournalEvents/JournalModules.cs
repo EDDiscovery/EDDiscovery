@@ -96,7 +96,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, ";Hot", Hot,
+            info = BaseUtils.FieldBuilder.Build("Ship:".Txb(this), Ship, "Name:".Txb(this), ShipName, "Ident:".Txb(this), ShipIdent, ";(Hot)".Txb(this), Hot,
                 "Modules:".Tx(this), ShipModules.Count, "Hull Health;%;N1".Txb(this), HullHealth, "Hull:; cr;N0".Txb(this), HullValue, "Modules:; cr;N0".Txb(this), ModulesValue, "Rebuy:; cr;N0".Txb(this), Rebuy);
             detailed = "";
 

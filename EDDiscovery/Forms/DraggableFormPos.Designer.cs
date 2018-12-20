@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Name = "DraggableFormPos";
-            this.Text = "DraggableFormPos";
+            this.Text = "<code>";
             this.ResumeLayout(false);
 
         }
