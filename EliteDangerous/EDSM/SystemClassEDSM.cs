@@ -716,10 +716,11 @@ namespace EliteDangerousCore.EDSM
                 ReportProgress(-1, "Requesting systems from EDSM");
                 System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
 
-                string json = null;
+                string json;
+                BaseUtils.ResponseData response;
                 try
                 {
-                    json = edsm.RequestSystems(lastrecordtime, enddate, timeout: 20000);
+                    response = edsm.RequestSystemsData(lastrecordtime, enddate, timeout: 20000);
                 }
                 catch (WebException ex)
                 {
@@ -742,6 +743,28 @@ namespace EliteDangerousCore.EDSM
                     LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
                     return updates;
                 }
+
+                if (response.Error)
+                {
+                    if ((int)response.StatusCode == 429)
+                    {
+                        LogLine($"EDSM rate limit hit - waiting 2 minutes");
+                        for (int sec = 0; sec < 120; sec++)
+                        {
+                            if (!PendingClose())
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        LogLine($"Download of EDSM systems from the server failed ({response.StatusCode.ToString()}), will try next time program is run");
+                        return updates;
+                    }
+                }
+
+                json = response.Body;
 
                 if (json == null)
                 {
@@ -780,6 +803,15 @@ namespace EliteDangerousCore.EDSM
                 updates += updated;
 
                 SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+
+                // Delay 10 seconds between requests
+                for (int sec = 0; sec < 10; sec++)
+                {
+                    if (!PendingClose())
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
             }
 
             return updates;

@@ -78,7 +78,7 @@ namespace EliteDangerousCore.EDSM
             bool jupdate = false;
             DateTime lastCommentFetch = DateTime.MinValue;
 
-            int waittime = 2000; // Max 1 request every 2 seconds, with a backoff if the rate limit is hit
+            int waittime = 10000; // Max 1 request every 10 seconds, with a backoff if the rate limit is hit
             if (EDSMRequestBackoffTime > DateTime.UtcNow)
             {
                 waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
