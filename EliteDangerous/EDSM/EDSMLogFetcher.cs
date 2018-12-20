@@ -78,7 +78,7 @@ namespace EliteDangerousCore.EDSM
             bool jupdate = false;
             DateTime lastCommentFetch = DateTime.MinValue;
 
-            int waittime = 2000; // Max 1 request every 2 seconds, with a backoff if the rate limit is hit
+            int waittime = 10000; // Max 1 request every 10 seconds, with a backoff if the rate limit is hit
             if (EDSMRequestBackoffTime > DateTime.UtcNow)
             {
                 waittime = (int)Math.Min(EDSMMaxLogAgeMinutes * 60000, Math.Min(BackoffInterval.TotalSeconds * 1000, EDSMRequestBackoffTime.Subtract(DateTime.UtcNow).TotalSeconds * 1000));
@@ -98,18 +98,19 @@ namespace EliteDangerousCore.EDSM
                 DateTime logendtime = DateTime.MinValue;
                 List<JournalFSDJump> edsmlogs = null;
                 int res = -1;       //return code
+                BaseUtils.ResponseData response = default(BaseUtils.ResponseData);
 
                 if (edsm.ValidCredentials && Commander.SyncFromEdsm && DateTime.UtcNow > EDSMRequestBackoffTime)
                 {
                     if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
                     {
                         System.Diagnostics.Debug.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
-                        res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime);
+                        res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime, out response);
                     }
                     else if (FirstEventTime > GammaStart)
                     {
                         System.Diagnostics.Debug.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
-                        res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime);
+                        res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime, out response);
                     }
                 }
 
@@ -242,6 +243,19 @@ namespace EliteDangerousCore.EDSM
 
                     if (logendtime > LastEventTime)
                         LastEventTime = logendtime;
+
+                    int ratelimitlimit;
+                    int ratelimitremain;
+                    int ratelimitreset;
+
+                    if (response.Headers != null &&
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
+                        Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) &&
+                        ratelimitlimit >= 10)
+                    {
+                        waittime = ratelimitreset + (int)((long)ratelimitremain * ratelimitreset * 10000 / ratelimitlimit);
+                    }
                 }
             }
         }

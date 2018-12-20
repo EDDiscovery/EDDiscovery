@@ -236,7 +236,7 @@ namespace EliteDangerousCore.EDSM
 
         #region For System DB update
 
-        public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)      // protect yourself against JSON errors!
+        public BaseUtils.ResponseData RequestSystemsData(DateTime startdate, DateTime enddate, int timeout = 5000)      // protect yourself against JSON errors!
         {
             DateTime gammadate = new DateTime(2015, 5, 10, 0, 0, 0, DateTimeKind.Utc);
             if (startdate < gammadate)
@@ -248,7 +248,12 @@ namespace EliteDangerousCore.EDSM
                 "?startdatetime=" + HttpUtility.UrlEncode(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
-            var response = RequestGet(query, handleException: true, timeout: timeout);
+            return RequestGet(query, handleException: true, timeout: timeout);
+        }
+
+        public string RequestSystems(DateTime startdate, DateTime enddate, int timeout = 5000)
+        {
+            var response = RequestSystemsData(startdate, enddate, timeout);
             if (response.Error)
                 return null;
 
@@ -395,11 +400,12 @@ namespace EliteDangerousCore.EDSM
 
         // Protected against bad JSON
 
-        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime)
+        public int GetLogs(DateTime? starttimeutc, DateTime? endtimeutc, out List<JournalFSDJump> log, out DateTime logstarttime, out DateTime logendtime, out BaseUtils.ResponseData response)
         {
             log = new List<JournalFSDJump>();
             logstarttime = DateTime.MaxValue;
             logendtime = DateTime.MinValue;
+            response = new BaseUtils.ResponseData { Error = true, StatusCode = HttpStatusCode.Unauthorized };
 
             if (!ValidCredentials)
                 return 0;
@@ -412,10 +418,15 @@ namespace EliteDangerousCore.EDSM
             if (endtimeutc != null)
                 query += "&endDateTime=" + HttpUtility.UrlEncode(endtimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
-            var response = RequestGet("api-logs-v1/" + query, handleException: true);
+            response = RequestGet("api-logs-v1/" + query, handleException: true);
 
             if (response.Error)
-                return 0;
+            {
+                if ((int)response.StatusCode == 429)
+                    return 429;
+                else
+                    return 0;
+            }
 
             var json = response.Body;
 
