@@ -55,7 +55,7 @@
     <ROW Component="EDDiscovery.Icons.dll" ComponentId="{2D375945-42F5-4BE0-BC52-1C4F31C022E2}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.Icons.dll"/>
     <ROW Component="EDDiscovery.exe" ComponentId="{497BEB88-C9A8-4385-AE78-7EF3CD72795C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe"/>
     <ROW Component="EDDiscovery.exe.config" ComponentId="{674E78B1-0FF5-4922-8568-CDB41C0CC83C}" Directory_="APPDIR" Attributes="0" KeyPath="EDDiscovery.exe.config" Type="0"/>
-    <ROW Component="EUROCAPS.TTF" ComponentId="{6BDDE9AC-722A-44A4-8A95-9D3D98C24D62}" Directory_="FontsFolder" Attributes="0" Type="0"/>
+    <ROW Component="EUROCAPS.TTF" ComponentId="{6BDDE9AC-722A-44A4-8A95-9D3D98C24D62}" Directory_="APPDIR" Attributes="0" KeyPath="EUROCAPS.TTF" Type="0"/>
     <ROW Component="EliteDangerous.dll" ComponentId="{29FDF6F6-BE47-47D1-8946-444524A36532}" Directory_="APPDIR" Attributes="0" KeyPath="EliteDangerous.dll"/>
     <ROW Component="ExtendedControls.dll" ComponentId="{726FCAAF-0CAC-4414-8652-A647AF38EB5D}" Directory_="APPDIR" Attributes="0" KeyPath="ExtendedControls.dll"/>
     <ROW Component="ExtendedForms.dll" ComponentId="{E25DD885-296B-4361-8B8D-EEBA82F72C94}" Directory_="APPDIR" Attributes="0" KeyPath="ExtendedForms.dll"/>
