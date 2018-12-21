@@ -59,6 +59,7 @@
             this.groupBoxCustomCAPI = new ExtendedControls.GroupBoxCustom();
             this.checkBoxCAPIEnable = new ExtendedControls.CheckBoxCustom();
             this.labelCAPIState = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.labelCAPIPassword = new System.Windows.Forms.Label();
             this.labelCAPILogin = new System.Windows.Forms.Label();
             this.groupBoxCustomEDDN = new ExtendedControls.GroupBoxCustom();
@@ -79,7 +80,6 @@
             this.labelInaraAPI = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.panel6 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
             this.panelTop.SuspendLayout();
             this.groupBoxCustomCAPI.SuspendLayout();
             this.groupBoxCustomEDDN.SuspendLayout();
@@ -586,6 +586,15 @@
             this.labelCAPIState.TabIndex = 9;
             this.labelCAPIState.Text = "<code>";
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(197, 23);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(228, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "CAPI is disabled for this release - be back soon";
+            // 
             // labelCAPIPassword
             // 
             this.labelCAPIPassword.AutoSize = true;
@@ -832,15 +841,6 @@
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(652, 10);
             this.panel6.TabIndex = 35;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(197, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(220, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "CAPI is not supported by EDD from ED3.3 on";
             // 
             // CommanderForm
             // 

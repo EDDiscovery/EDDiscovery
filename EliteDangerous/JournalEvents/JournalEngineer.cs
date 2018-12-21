@@ -185,6 +185,9 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
                     detailed += BaseUtils.FieldBuilder.Build("", MaterialCommodityData.GetNameByFDName(k.Key), "", k.Value) + "; ";
             }
+
+            if (Engineering != null)
+                detailed = detailed.AppendPrePad( Engineering.ToString() , System.Environment.NewLine);
         }
     }
 

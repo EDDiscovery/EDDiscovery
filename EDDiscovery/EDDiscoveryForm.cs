@@ -1007,6 +1007,11 @@ namespace EDDiscovery
             }
         }
 
+        private void fetchLogsAgainToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.EdsmLogFetcher.ResetFetch();
+        }
+
         private void gitHubToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start(Properties.Resources.URLProjectGithub);

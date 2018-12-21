@@ -717,9 +717,10 @@ namespace EliteDangerousCore.EDSM
                 System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {lastrecordtime.ToUniversalTime().ToString()} to {enddate.ToUniversalTime().ToString()}");
 
                 string json = null;
+                BaseUtils.ResponseData response;
                 try
                 {
-                    json = edsm.RequestSystems(lastrecordtime, enddate, timeout: 20000);
+                    response = edsm.RequestSystemsData(lastrecordtime, enddate, timeout: 20000);
                 }
                 catch (WebException ex)
                 {
@@ -742,6 +743,28 @@ namespace EliteDangerousCore.EDSM
                     LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
                     return updates;
                 }
+
+                if (response.Error)
+                {
+                    if ((int)response.StatusCode == 429)
+                    {
+                        LogLine($"EDSM rate limit hit - waiting 2 minutes");
+                        for (int sec = 0; sec < 120; sec++)
+                        {
+                            if (!PendingClose())
+                            {
+                                System.Threading.Thread.Sleep(1000);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        LogLine($"Download of EDSM systems from the server failed ({response.StatusCode.ToString()}), will try next time program is run");
+                        return updates;
+                    }
+                }
+
+                json = response.Body;
 
                 if (json == null)
                 {
@@ -780,6 +803,35 @@ namespace EliteDangerousCore.EDSM
                 updates += updated;
 
                 SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+
+                int delay = 10;     // Anthor's normal delay 
+                int ratelimitlimit;
+                int ratelimitremain;
+                int ratelimitreset;
+
+                if (response.Headers != null &&
+                    response.Headers["X-Rate-Limit-Limit"] != null &&
+                    response.Headers["X-Rate-Limit-Remaining"] != null &&
+                    response.Headers["X-Rate-Limit-Reset"] != null &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
+                    Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset) )
+                {
+                    if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
+                        delay = ratelimitreset / (ratelimitlimit - ratelimitremain);    // slow down to its pace now.. example 878/(360-272) = 10 seconds per quota
+                    else
+                        delay = 0;
+
+                    System.Diagnostics.Debug.WriteLine("EDSM Delay Parameters {0} {1} {2} => {3}s", ratelimitlimit, ratelimitremain, ratelimitreset, delay);
+                }
+
+                for (int sec = 0; sec < delay; sec++)
+                {
+                    if (!PendingClose())
+                    {
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
             }
 
             return updates;
