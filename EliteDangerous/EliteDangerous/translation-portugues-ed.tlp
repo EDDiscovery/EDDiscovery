@@ -1,0 +1,588 @@
+﻿
+SECTION Bodies
+
+.HMS: "Luminous Hot Main Sequence {0} star" @
+.BMS: "Luminous Blue Main Sequence {0} star" @
+.BWMS: "Bluish-White Main Sequence {0} star" @
+.WMS: "White Main Sequence {0} star" @
+.YMS: "Yellow Main Sequence {0} star" @
+.OMS: "Orange Main Sequence {0} star" @
+.RMS: "Red Main Sequence {0} star" @
+.DRNS: "Dark Red Non Main Sequence {0} star" @
+.MD: "Methane Dwarf star" @
+.BD: "Brown Dwarf star" @
+.WR: "Wolf-Rayet {0} star" @
+.C: "Carbon {0} star" @
+.IZ: "Intermediate low Zirconium Monoxide Type star" @
+.CGZ: "Cool Giant Zirconium Monoxide rich Type star" @
+.WD: "White Dwarf {0} star" @
+.NS: "Neutron Star" @
+.BH: "Black Hole" @
+.EX: "Exotic" @
+.SMBH: "Super Massive Black Hole" @
+.BSG: "Blue White Super Giant" @
+.WSG: "F White Super Giant" @
+.MSR: "M Red Super Giant" @
+.MOG: "M Red Giant" @
+.KOG: "K Orange Giant" @
+.RP: "Rogue Planet" @
+
+SECTION MaterialCommodityData
+
+.Raw: "Raw" @
+.VeryCommon: "Very Common" @
+.Common: "Common" @
+.Standard: "Standard" @
+.Rare: "Rare" @
+.Encoded: "Encoded" @
+.VeryRare: "Very Rare" @
+.Manufactured: "Manufactured" @
+.Commodity: "Commodity" @
+.Salvage: "Salvage" @
+.Chemicals: "Chemicals" @
+.ConsumerItems: "Consumer Items" @
+.Foods: "Foods" @
+.IndustrialMaterials: "Industrial Materials" @
+.LegalDrugs: "Legal Drugs" @
+.Machinery: "Machinery" @
+.Medicines: "Medicines" @
+.Metals: "Metals" @
+.Minerals: "Minerals" @
+.Narcotics: "Narcotics" @
+.Slaves: "Slaves" @
+.Technology: "Technology" @
+.Textiles: "Textiles" @
+.Waste: "Waste" @
+.Weapons: "Weapons" @
+.PowerPlay: "PowerPlay" @
+.Drones: "Drones" @
+.carbon: "Carbon" @
+.iron: "Iron" @
+.nickel: "Nickel" @
+.phosphorus: "Phosphorus" @
+.sulphur: "Sulphur" @
+.lead: "Lead" @
+.rhenium: "Rhenium" @
+.chromium: "Chromium" @
+.germanium: "Germanium" @
+.manganese: "Manganese" @
+.vanadium: "Vanadium" @
+.zinc: "Zinc" @
+.zirconium: "Zirconium" @
+.arsenic: "Arsenic" @
+.niobium: "Niobium" @
+.tungsten: "Tungsten" @
+.molybdenum: "Molybdenum" @
+.mercury: "Mercury" @
+.boron: "Boron" @
+.cadmium: "Cadmium" @
+.tin: "Tin" @
+.selenium: "Selenium" @
+.yttrium: "Yttrium" @
+.technetium: "Technetium" @
+.tellurium: "Tellurium" @
+.ruthenium: "Ruthenium" @
+.polonium: "Polonium" @
+.antimony: "Antimony" @
+.bulkscandata: "Anomalous Bulk Scan Data" @
+.disruptedwakeechoes: "Atypical Disrupted Wake Echoes" @
+.shieldcyclerecordings: "Distorted Shield Cycle Recordings" @
+.scrambledemissiondata: "Exceptional Scrambled Emission Data" @
+.legacyfirmware: "Specialised Legacy Firmware" @
+.encryptedfiles: "Unusual Encrypted Files" @
+.fsdtelemetry: "Anomalous FSD Telemetry" @
+.shieldsoakanalysis: "Inconsistent Shield Soak Analysis" @
+.archivedemissiondata: "Irregular Emission Data" @
+.consumerfirmware: "Modified Consumer Firmware" @
+.encryptioncodes: "Tagged Encryption Codes" @
+.scanarchives: "Unidentified Scan Archives" @
+.ancientculturaldata: "Pattern Beta Obelisk Data" @
+.ancienthistoricaldata: "Pattern Gamma Obelisk Data" @
+.scandatabanks: "Classified Scan Databanks" @
+.industrialfirmware: "Cracked Industrial Firmware" @
+.symmetrickeys: "Open Symmetric Keys" @
+.wakesolutions: "Strange Wake Solutions" @
+.emissiondata: "Unexpected Emission Data" @
+.shielddensityreports: "Untypical Shield Scans" @
+.compactemissionsdata: "Abnormal Compact Emissions Data" @
+.ancientbiologicaldata: "Pattern Alpha Obelisk Data" @
+.shieldpatternanalysis: "Aberrant Shield Pattern Analysis" @
+.encryptionarchives: "Atypical Encryption Archives" @
+.decodedemissiondata: "Decoded Emission Data" @
+.encodedscandata: "Divergent Scan Data" @
+.hyperspacetrajectories: "Eccentric Hyperspace Trajectories" @
+.securityfirmware: "Security Firmware Patch" @
+.ancientlanguagedata: "Pattern Delta Obelisk Data" @
+.classifiedscandata: "Classified Scan Fragment" @
+.embeddedfirmware: "Modified Embedded Firmware" @
+.adaptiveencryptors: "Adaptive Encryptors Capture" @
+.dataminedwake: "Datamined Wake Exceptions" @
+.shieldfrequencydata: "Peculiar Shield Frequency Data" @
+.ancienttechnologicaldata: "Pattern Epsilon Obelisk Data" @
+.basicconductors: "Basic Conductors" @
+.chemicalstorageunits: "Chemical Storage Units" @
+.compactcomposites: "Compact Composites" @
+.crystalshards: "Crystal Shards" @
+.gridresistors: "Grid Resistors" @
+.heatconductionwiring: "Heat Conduction Wiring" @
+.mechanicalscrap: "Mechanical Scrap" @
+.salvagedalloys: "Salvaged Alloys" @
+.wornshieldemitters: "Worn Shield Emitters" @
+.temperedalloys: "Tempered Alloys" @
+.chemicalprocessors: "Chemical Processors" @
+.conductivecomponents: "Conductive Components" @
+.filamentcomposites: "Filament Composites" @
+.uncutfocuscrystals: "Flawed Focus Crystals" @
+.galvanisingalloys: "Galvanising Alloys" @
+.heatdispersionplate: "Heat Dispersion Plate" @
+.heatresistantceramics: "Heat Resistant Ceramics" @
+.hybridcapacitors: "Hybrid Capacitors" @
+.mechanicalequipment: "Mechanical Equipment" @
+.shieldemitters: "Shield Emitters" @
+.chemicaldistillery: "Chemical Distillery" @
+.conductiveceramics: "Conductive Ceramics" @
+.electrochemicalarrays: "Electrochemical Arrays" @
+.focuscrystals: "Focus Crystals" @
+.heatexchangers: "Heat Exchangers" @
+.highdensitycomposites: "High Density Composites" @
+.mechanicalcomponents: "Mechanical Components" @
+.phasealloys: "Phase Alloys" @
+.precipitatedalloys: "Precipitated Alloys" @
+.shieldingsensors: "Shielding Sensors" @
+.guardian_powercell: "Guardian Power Cell" @
+.guardian_powerconduit: "Guardian Power Conduit" @
+.guardian_techcomponent: "Guardian Technology Component" @
+.guardian_sentinel_weaponparts: "Guardian Sentinel Weapon Parts" @
+.guardian_sentinel_wreckagecomponents: "Guardian Sentinel Wreckage Components" @
+.guardian_weaponblueprint: "Guardian Weapon Blueprint Segment" @
+.guardian_moduleblueprint: "Guardian Module Blueprint Segment" @
+.tg_biomechanicalconduits: "Bio-Mechanical Conduits" @
+.tg_propulsionelement: "Propulsion Elements" @
+.tg_weaponparts: "Weapon Parts" @
+.tg_wreckagecomponents: "Wreckage Components" @
+.tg_shipflightdata: "Ship Flight Data" @
+.tg_shipsystemsdata: "Ship Systems Data" @
+.chemicalmanipulators: "Chemical Manipulators" @
+.compoundshielding: "Compound Shielding" @
+.conductivepolymers: "Conductive Polymers" @
+.configurablecomponents: "Configurable Components" @
+.heatvanes: "Heat Vanes" @
+.polymercapacitors: "Polymer Capacitors" @
+.protolightalloys: "Proto Light Alloys" @
+.refinedfocuscrystals: "Refined Focus Crystals" @
+.fedproprietarycomposites: "Proprietary Composites" @
+.thermicalloys: "Thermic Alloys" @
+.fedcorecomposites: "Core Dynamics Composites" @
+.biotechconductors: "Biotech Conductors" @
+.exquisitefocuscrystals: "Exquisite Focus Crystals" @
+.imperialshielding: "Imperial Shielding" @
+.improvisedcomponents: "Improvised Components" @
+.militarygradealloys: "Military Grade Alloys" @
+.militarysupercapacitors: "Military Supercapacitors" @
+.pharmaceuticalisolators: "Pharmaceutical Isolators" @
+.protoheatradiators: "Proto Heat Radiators" @
+.protoradiolicalloys: "Proto Radiolic Alloys" @
+.unknownartifact: "Thargoid Sensor" @
+.unknownartifact2: "Thargoid Probe" @
+.unknownartifact3: "Thargoid Link" @
+.unknownresin: "Thargoid Resin" @
+.unknownbiologicalmatter: "Thargoid Biological Matter" @
+.unknowntechnologysamples: "Thargoid Technology Samples" @
+.unknowncarapace: "Thargoid Carapace" @
+.unknownenergycell: "Thargoid Energy Cell" @
+.unknownorganiccircuitry: "Thargoid Organic Circuitry" @
+.unknowntechnologycomponents: "Thargoid Technological Components" @
+.unknownenergysource: "Sensor Fragment" @
+.tg_compositiondata: "Thargoid Material Composition Data" @
+.tg_structuraldata: "Thargoid Structural Data" @
+.tg_residuedata: "Thargoid Residue Data" @
+.unknownshipsignature: "Thargoid Ship Signature" @
+.unknownwakedata: "Thargoid Wake Data" @
+.explosives: "Explosives" @
+.hydrogenfuel: "Hydrogen Fuel" @
+.hydrogenperoxide: "Hydrogen Peroxide" @
+.liquidoxygen: "Liquid Oxygen" @
+.mineraloil: "Mineral Oil" @
+.nerveagents: "Nerve Agents" @
+.pesticides: "Pesticides" @
+.surfacestabilisers: "Surface Stabilisers" @
+.syntheticreagents: "Synthetic Reagents" @
+.water: "Water" @
+.clothing: "Clothing" @
+.consumertechnology: "Consumer Technology" @
+.domesticappliances: "Domestic Appliances" @
+.evacuationshelter: "Evacuation Shelter" @
+.survivalequipment: "Survival Equipment" @
+.algae: "Algae" @
+.animalmeat: "Animal Meat" @
+.coffee: "Coffee" @
+.fish: "Fish" @
+.foodcartridges: "Food Cartridges" @
+.fruitandvegetables: "Fruit and Vegetables" @
+.grain: "Grain" @
+.syntheticmeat: "Synthetic Meat" @
+.tea: "Tea" @
+.ceramiccomposites: "Ceramic Composites" @
+.insulatingmembrane: "Insulating Membrane" @
+.polymers: "Polymers" @
+.semiconductors: "Semiconductors" @
+.superconductors: "Superconductors" @
+.metaalloys: "Meta-Alloys" @
+.coolinghoses: "Micro-Weave Cooling Hoses" @
+.neofabricinsulation: "Neofabric Insulation" @
+.cmmcomposite: "CMM Composite" @
+.beer: "Beer" @
+.bootlegliquor: "Bootleg Liquor" @
+.liquor: "Liquor" @
+.tobacco: "Tobacco" @
+.wine: "Wine" @
+.atmosphericextractors: "Atmospheric Processors" @
+.marinesupplies: "Marine Equipment" @
+.heliostaticfurnaces: "Microbial Furnaces" @
+.skimercomponents: "Skimmer Components" @
+.buildingfabricators: "Building Fabricators" @
+.cropharvesters: "Crop Harvesters" @
+.emergencypowercells: "Emergency Power Cells" @
+.exhaustmanifold: "Exhaust Manifold" @
+.geologicalequipment: "Geological Equipment" @
+.hnshockmount: "HN Shock Mount" @
+.mineralextractors: "Mineral Extractors" @
+.modularterminals: "Modular Terminals" @
+.powergenerators: "Power Generators" @
+.thermalcoolingunits: "Thermal Cooling Units" @
+.waterpurifiers: "Water Purifiers" @
+.heatsinkinterlink: "Heatsink Interlink" @
+.powergridassembly: "Energy Grid Assembly" @
+.radiationbaffle: "Radiation Baffle" @
+.magneticemittercoil: "Magnetic Emitter Coil" @
+.articulationmotors: "Articulation Motors" @
+.reinforcedmountingplate: "Reinforced Mounting Plate" @
+.powertransferconduits: "Power Transfer Bus" @
+.powerconverter: "Power Converter" @
+.iondistributor: "Ion Distributor" @
+.advancedmedicines: "Advanced Medicines" @
+.basicmedicines: "Basic Medicines" @
+.combatstabilisers: "Combat Stabilisers" @
+.performanceenhancers: "Performance Enhancers" @
+.progenitorcells: "Progenitor Cells" @
+.agriculturalmedicines: "Agri-Medicines" @
+.aluminium: "Aluminium" @
+.beryllium: "Beryllium" @
+.bismuth: "Bismuth" @
+.cobalt: "Cobalt" @
+.copper: "Copper" @
+.gallium: "Gallium" @
+.gold: "Gold" @
+.hafnium178: "Hafnium 178" @
+.indium: "Indium" @
+.lanthanum: "Lanthanum" @
+.lithium: "Lithium" @
+.osmium: "Osmium" @
+.palladium: "Palladium" @
+.platinum: "Platinum" @
+.praseodymium: "Praseodymium" @
+.samarium: "Samarium" @
+.silver: "Silver" @
+.tantalum: "Tantalum" @
+.thallium: "Thallium" @
+.thorium: "Thorium" @
+.titanium: "Titanium" @
+.uranium: "Uranium" @
+.platinumaloy: "Platinum Alloy" @
+.bauxite: "Bauxite" @
+.bertrandite: "Bertrandite" @
+.bromellite: "Bromellite" @
+.coltan: "Coltan" @
+.cryolite: "Cryolite" @
+.gallite: "Gallite" @
+.goslarite: "Goslarite" @
+.methaneclathrate: "Methane Clathrate" @
+.indite: "Indite" @
+.jadeite: "Jadeite" @
+.lepidolite: "Lepidolite" @
+.lithiumhydroxide: "Lithium Hydroxide" @
+.moissanite: "Moissanite" @
+.painite: "Painite" @
+.pyrophyllite: "Pyrophyllite" @
+.rutile: "Rutile" @
+.taaffeite: "Taaffeite" @
+.uraninite: "Uraninite" @
+.methanolmonohydratecrystals: "Methanol Monohydrate Crystals" @
+.lowtemperaturediamond: "Low Temperature Diamonds" @
+.trinketsoffortune: "Trinkets of Hidden Fortune" @
+.genebank: "Gene Bank" @
+.timecapsule: "Time Capsule" @
+.damagedescapepod: "Damaged Escape Pod" @
+.thargoidheart: "Thargoid Heart" @
+.thargoidtissuesampletype1: "Thargoid Cyclops Tissue Sample" @
+.thargoidtissuesampletype2: "Thargoid Basilisk Tissue Sample" @
+.thargoidtissuesampletype3: "Thargoid Medusa Tissue Sample" @
+.thargoidscouttissuesample: "Thargoid Scout Tissue Sample" @
+.wreckagecomponents: "Wreckage Components" @
+.antiquejewellery: "Antique Jewellery" @
+.airelics: "Ai Relics" @
+.antimattercontainmentunit: "Antimatter Containment Unit" @
+.antiquities: "Antiquities" @
+.assaultplans: "Assault Plans" @
+.datacore: "Data Core" @
+.diplomaticbag: "Diplomatic Bag" @
+.encryptedcorrespondence: "Encrypted Correspondence" @
+.fossilremnants: "Fossil Remnants" @
+.geologicalsamples: "Geological Samples" @
+.hostage: "Hostage" @
+.militaryintelligence: "Military Intelligence" @
+.mysteriousidol: "Mysterious Idol" @
+.occupiedcryopod: "Occupied Escape Pod" @
+.personaleffects: "Personal Effects" @
+.politicalprisoner: "Political Prisoner" @
+.preciousgems: "Precious Gems" @
+.prohibitedresearchmaterials: "Prohibited Research Materials" @
+.sap8corecontainer: "Sap 8 Core Container" @
+.scientificresearch: "Scientific Research" @
+.scientificsamples: "Scientific Samples" @
+.spacepioneerrelics: "Space Pioneer Relics" @
+.tacticaldata: "Tactical Data" @
+.unstabledatacore: "Unstable Data Core" @
+.largeexplorationdatacash: "Large Survey Data Cache" @
+.smallexplorationdatacash: "Small Survey Data Cache" @
+.usscargoancientartefact: "Ancient Artefact" @
+.usscargoblackbox: "Black Box" @
+.comercialsamples: "Commercial Samples" @
+.encripteddatastorage: "Encrypted Data Storage" @
+.usscargoexperimentalchemicals: "Experimental Chemicals" @
+.usscargomilitaryplans: "Military Plans" @
+.usscargoprototypetech: "Prototype Tech" @
+.usscargorareartwork: "Rare Artwork" @
+.usscargorebeltransmissions: "Rebel Transmissions" @
+.usscargotechnicalblueprints: "Technical Blueprints" @
+.usscargotradedata: "Trade Data" @
+.ancientrelic: "Ancient Relic" @
+.ancientorb: "Ancient Orb" @
+.ancientcasket: "Ancient Casket" @
+.ancienttablet: "Ancient Tablet" @
+.ancienturn: "Ancient Urn" @
+.ancienttotem: "Ancient Totem" @
+.basicnarcotics: "Narcotics" @
+.imperialslaves: "Imperial Slaves" @
+.slaves: "Slaves" @
+.advancedcatalysers: "Advanced Catalysers" @
+.animalmonitors: "Animal Monitors" @
+.aquaponicsystems: "Aquaponic Systems" @
+.bioreducinglichen: "Bioreducing Lichen" @
+.computercomponents: "Computer Components" @
+.autofabricators: "Auto-Fabricators" @
+.microcontrollers: "Micro Controllers" @
+.medicaldiagnosticequipment: "Medical Diagnostic Equipment" @
+.nanobreakers: "Nanobreakers" @
+.resonatingseparators: "Resonating Separators" @
+.robotics: "Robotics" @
+.structuralregulators: "Structural Regulators" @
+.telemetrysuite: "Telemetry Suite" @
+.hazardousenvironmentsuits: "H.E. Suits" @
+.diagnosticsensor: "Hardware Diagnostic Sensor" @
+.mutomimager: "Muon Imager" @
+.terrainenrichmentsystems: "Land Enrichment Systems" @
+.conductivefabrics: "Conductive Fabrics" @
+.leather: "Leather" @
+.militarygradefabrics: "Military Grade Fabrics" @
+.naturalfabrics: "Natural Fabrics" @
+.syntheticfabrics: "Synthetic Fabrics" @
+.biowaste: "Biowaste" @
+.chemicalwaste: "Chemical Waste" @
+.scrap: "Scrap" @
+.toxicwaste: "Toxic Waste" @
+.battleweapons: "Battle Weapons" @
+.landmines: "Landmines" @
+.personalweapons: "Personal Weapons" @
+.reactivearmour: "Reactive Armour" @
+.nonlethalweapons: "Non-Lethal Weapons" @
+.thehuttonmug: "The Hutton Mug" @
+.eraninpearlwhisky: "Eranin Pearl Whisky" @
+.lavianbrandy: "Lavian Brandy" @
+.hip10175bushmeat: "HIP 10175 Bush Meat" @
+.albinoquechuamammoth: "Albino Quechua Mammoth Meat" @
+.utgaroarmillenialeggs: "Utgaroar Millennial Eggs" @
+.witchhaulkobebeef: "Witchhaul Kobe Beef" @
+.karsukilocusts: "Karsuki Locusts" @
+.giantirukamasnails: "Giant Irukama Snails" @
+.baltahsinevacuumkrill: "Baltah'sine Vacuum Krill" @
+.cetirabbits: "Ceti Rabbits" @
+.kachiriginleaches: "Kachirigin Filter Leeches" @
+.lyraeweed: "Lyrae Weed" @
+.onionhead: "Onionhead" @
+.tarachtorspice: "Tarach Spice" @
+.wolf1301fesh: "Wolf Fesh" @
+.borasetanipathogenetics: "Borasetani Pathogenetics" @
+.hip118311swarm: "HIP 118311 Swarm" @
+.konggaale: "Kongga Ale" @
+.wuthielokufroth: "Wuthielo Ku Froth" @
+.alacarakmoskinart: "Alacarakmo Skin Art" @
+.eleuthermals: "Eleu Thermals" @
+.eshuumbrellas: "Eshu Umbrellas" @
+.karetiicouture: "Karetii Couture" @
+.njangarisaddles: "Njangari Saddles" @
+.anynacoffee: "Any Na Coffee" @
+.cd75catcoffee: "CD-75 Kitten Brand Coffee" @
+.gomanyauponcoffee: "Goman Yaupon Coffee" @
+.volkhabbeedrones: "Volkhab Bee Drones" @
+.kinagoinstruments: "Kinago Violins" @
+.ngunamodernantiques: "Nguna Modern Antiques" @
+.rajukrustoves: "Rajukru Multi-Stoves" @
+.tiolcewaste2pasteunits: "Tiolce Waste2Paste Units" @
+.chieridanimarinepaste: "Chi Eridani Marine Paste" @
+.esusekucaviar: "Esuseku Caviar" @
+.livehecateseaworms: "Live Hecate Sea Worms" @
+.helvetitjpearls: "Helvetitj Pearls" @
+.hip41181squid: "HIP Proto-Squid" @
+.coquimspongiformvictuals: "Coquim Spongiform Victuals" @
+.aerialedenapple: "Eden Apples Of Aerial" @
+.neritusberries: "Neritus Berries" @
+.ochoengchillies: "Ochoeng Chillies" @
+.deuringastruffles: "Deuringas Truffles" @
+.hr7221wheat: "HR 7221 Wheat" @
+.jarouarice: "Jaroua Rice" @
+.belalansrayleather: "Belalans Ray Leather" @
+.damnacarapaces: "Damna Carapaces" @
+.rapabaosnakeskins: "Rapa Bao Snake Skins" @
+.vanayequirhinofur: "Vanayequi Ceratomorpha Fur" @
+.bastsnakegin: "Bast Snake Gin" @
+.thrutiscream: "Thrutis Cream" @
+.wulpahyperboresystems: "Wulpa Hyperbore Systems" @
+.aganipperush: "Aganippe Rush" @
+.terramaterbloodbores: "Terra Mater Blood Bores" @
+.holvaduellingblades: "Holva Duelling Blades" @
+.kamorinhistoricweapons: "Kamorin Historic Weapons" @
+.gilyasignatureweapons: "Gilya Signature Weapons" @
+.deltaphoenicispalms: "Delta Phoenicis Palms" @
+.toxandjivirocide: "Toxandji Virocide" @
+.xihecompanions: "Xihe Biomorphic Companions" @
+.sanumameat: "Sanuma Decorative Meat" @
+.ethgrezeteabuds: "Ethgreze Tea Buds" @
+.ceremonialheiketea: "Ceremonial Heike Tea" @
+.tanmarktranquiltea: "Tanmark Tranquil Tea" @
+.azcancriformula42: "AZ Cancri Formula 42" @
+.sothiscrystallinegold: "Sothis Crystalline Gold" @
+.kamitracigars: "Kamitra Cigars" @
+.rusanioldsmokey: "Rusani Old Smokey" @
+.yasokondileaf: "Yaso Kondi Leaf" @
+.chateaudeaegaeon: "Chateau De Aegaeon" @
+.watersofshintara: "The Waters Of Shintara" @
+.ophiuchiexinoartefacts: "Ophiuch Exino Artefacts" @
+.bakedgreebles: "Baked Greebles" @
+.cetiaepyornisegg: "Aepyornis Egg" @
+.saxonwine: "Saxon Wine" @
+.centaurimegagin: "Centauri Mega Gin" @
+.anduligafireworks: "Anduliga Fire Works" @
+.bankiamphibiousleather: "Banki Amphibious Leather" @
+.cherbonesbloodcrystals: "Cherbones Blood Crystals" @
+.motronaexperiencejelly: "Motrona Experience Jelly" @
+.geawendancedust: "Geawen Dance Dust" @
+.gerasiangueuzebeer: "Gerasian Gueuze Beer" @
+.haidneblackbrew: "Haiden Black Brew" @
+.havasupaidreamcatcher: "Havasupai Dream Catcher" @
+.burnhambiledistillate: "Burnham Bile Distillate" @
+.hiporganophosphates: "Hip Organophosphates" @
+.jaradharrepuzzlebox: "Jaradharre Puzzle Box" @
+.korrokungpellets: "Koro Kung Pellets" @
+.lftvoidextractcoffee: "Void Extract Coffee" @
+.honestypills: "Honesty Pills" @
+.noneuclidianexotanks: "Non Euclidian Exotanks" @
+.ltthypersweet: "LTT Hyper Sweet" @
+.mechucoshightea: "Mechucos High Tea" @
+.medbstarlube: "Medb Starlube" @
+.mokojingbeastfeast: "Mokojing Beast Feast" @
+.mukusubiichitinos: "Mukusubii Chitin-os" @
+.mulachigiantfungus: "Mulachi Giant Fungus" @
+.ngadandarifireopals: "Ngadandari Fire Opals" @
+.tiegfriessynthsilk: "Tiegfries Synth Silk" @
+.uzumokulowgwings: "Uzumoku Low-G Wings" @
+.vherculisbodyrub: "V Herculis Body Rub" @
+.wheemetewheatcakes: "Wheemete Wheat Cakes" @
+.vegaslimweed: "Vega Slimweed" @
+.altairianskin: "Altairian Skin" @
+.pavoniseargrubs: "Pavonis Ear Grubs" @
+.jotunmookah: "Jotun Mookah" @
+.giantverrix: "Giant Verrix" @
+.indibourbon: "Indi Bourbon" @
+.aroucaconventualsweets: "Arouca Conventual Sweets" @
+.taurichimes: "Tauri Chimes" @
+.zeesszeantglue: "Zeessze Ant Grub Glue" @
+.pantaaprayersticks: "Pantaa Prayer Sticks" @
+.fujintea: "Fujin Tea" @
+.chameleoncloth: "Chameleon Cloth" @
+.orrerianviciousbrew: "Orrerian Vicious Brew" @
+.uszaiantreegrub: "Uszaian Tree Grub" @
+.momusbogspaniel: "Momus Bog Spaniel" @
+.disomacorn: "Diso Ma Corn" @
+.leestianeviljuice: "Leestian Evil Juice" @
+.bluemilk: "Azure Milk" @
+.alieneggs: "Leathery Eggs" @
+.alyabodilysoap: "Alya Body Soap" @
+.vidavantianlace: "Vidavantian Lace" @
+.transgeniconionhead: "Lucan Onionhead" @
+.jaquesquinentianstill: "Jaques Quinentian Still" @
+.soontillrelics: "Soontill Relics" @
+.onionheada: "Onionhead Alpha Strain" @
+.onionheadb: "Onionhead Beta Strain" @
+.galactictravelguide: "Galactic Travel Guide" @
+.animaleffigies: "Crom Silver Fesh" @
+.shanscharisorchid: "Shan's Charis Orchid" @
+.buckyballbeermats: "Buckyball Beer Mats" @
+.masterchefs: "Master Chefs" @
+.personalgifts: "Personal Gifts" @
+.crystallinespheres: "Crystalline Spheres" @
+.advert1: "Ultra-Compact Processor Prototypes" @
+.harmasilversearum: "Harma Silver Sea Rum" @
+.earthrelics: "Earth Relics" @
+.aislingmediamaterials: "Aisling Media Materials" @
+.aislingmediaresources: "Aisling Sealed Contracts" @
+.aislingpromotionalmaterials: "Aisling Programme Materials" @
+.alliancetradeagreements: "Alliance Trade Agreements" @
+.alliancelegaslativecontracts: "Alliance Legislative Contracts" @
+.alliancelegaslativerecords: "Alliance Legislative Records" @
+.lavignycorruptiondossiers: "Lavigny Corruption Reports" @
+.lavignyfieldsupplies: "Lavigny Field Supplies" @
+.lavignygarisonsupplies: "Lavigny Garrison Supplies" @
+.restrictedpackage: "Core Restricted Package" @
+.liberalcampaignmaterials: "Liberal Propaganda" @
+.federalaid: "Liberal Federal Aid" @
+.federaltradecontracts: "Liberal Federal Packages" @
+.loanedarms: "Marked Military Arms" @
+.patreusfieldsupplies: "Patreus Field Supplies" @
+.patreusgarisonsupplies: "Patreus Garrison Supplies" @
+.restrictedintel: "Hudson's Restricted Intel" @
+.republicanfieldsupplies: "Hudson's Field Supplies" @
+.republicangarisonsupplies: "Hudson Garrison Supplies" @
+.siriusfranchisepackage: "Sirius Franchise Package" @
+.siriuscommercialcontracts: "Sirius Corporate Contracts" @
+.siriusindustrialequipment: "Sirius Industrial Equipment" @
+.torvalcommercialcontracts: "Torval Trade Agreements" @
+.imperialprisoner: "Torval Political Prisoners" @
+.utopianpublicity: "Utopian Publicity" @
+.utopianfieldsupplies: "Utopian Supplies" @
+.utopiandissident: "Utopian Dissident" @
+.illicitconsignment: "Kumo Contraband Package" @
+.unmarkedweapons: "Unmarked Military supplies" @
+.onionheadsamples: "Onionhead Samples" @
+.counterculturesupport: "Revolutionary supplies" @
+.onionheadderivatives: "Onionhead Derivatives" @
+.outofdategoods: "Out Of Date Goods" @
+.undergroundsupport: "Grom Underground Support" @
+.gromcounterintelligence: "Grom Counter Intelligence" @
+.gromwartrophies: "Yuri Grom's Military Supplies" @
+.markedslaves: "Marked Slaves" @
+.torvaldeeds: "Torval Deeds" @
+.drones: "Drones" @
+.guardian_vesselblueprint: "Guardian Vessel Blueprint Segment" @
+.duradrives: "Duradrives" @
+.nanomedicines: "Nanomedicines" @
+.rhodplumsite: "Rhodplumsite" @
+.serendibite: "Serendibite" @
+.monazite: "Monazite" @
+.musgravite: "Musgravite" @
+.benitoite: "Benitoite" @
+.grandidierite: "Grandidierite" @
+.alexandrite: "Alexandrite" @
+.opal: "Opal" @
+.thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
+.ancientkey: "Ancient Key" @
