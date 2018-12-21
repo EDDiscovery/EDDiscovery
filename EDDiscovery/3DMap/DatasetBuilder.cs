@@ -183,7 +183,7 @@ namespace EDDiscovery._3DMap
 
         #region GMOs
 
-        static Font gmostarfont = new Font("MS Sans Serif", 20F);       // font size really determines the nicenest of the image, not its size on screen..
+        static Font gmostarfont = BaseUtils.FontLoader.GetFont("MS Sans Serif", 20F);       // font size really determines the nicenest of the image, not its size on screen..
         float gmonameoff = -0.75F;      // bitmap is from +0.5 to -0.5.  
         float gmotargetoff = 1F;
         float gmoselonly = 0.75F;
@@ -516,7 +516,7 @@ namespace EDDiscovery._3DMap
         {
             string fontname = "MS Sans Serif";
             {
-                Font fnt = new Font(fontname, 20F);
+                Font fnt = BaseUtils.FontLoader.GetFont(fontname, 20F);
 
                 int bitmapwidth, bitmapheight;
                 Bitmap text_bmp = new Bitmap(300, 30);
