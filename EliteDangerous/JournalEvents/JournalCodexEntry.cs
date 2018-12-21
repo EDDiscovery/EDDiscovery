@@ -38,7 +38,8 @@ namespace EliteDangerousCore.JournalEvents
             SystemAddress = evt["SystemAddress"].LongNull();
             IsNewEntry = evt["IsNewEntry"].BoolNull();
             NewTraitsDiscovered = evt["NewTraitsDiscovered"].BoolNull();
-            Traits = evt["Traits"].ToObjectProtected<string[]>();
+            if ( evt["Traits"] != null )
+                Traits = evt["Traits"].ToObjectProtected<string[]>();
         }
 
         public long EntryID { get; set; }

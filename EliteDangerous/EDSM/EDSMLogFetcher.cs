@@ -13,14 +13,11 @@ namespace EliteDangerousCore.EDSM
     public class EDSMLogFetcher
     {
         private static DateTime GammaStart = new DateTime(2014, 11, 22, 4, 0, 0, DateTimeKind.Utc);
-        private static int EDSMMaxLogAgeMinutes = 15; // Fetch new logs every 15 minutes
+        private static int EDSMMaxLogAgeMinutes = 15;
 
         private Thread ThreadEDSMFetchLogs;
         private ManualResetEvent ExitRequested = new ManualResetEvent(false);
         private Action<string> LogLine;
-
-        public DateTime FirstEventTime { get; private set; }
-        public DateTime LastEventTime { get; private set; }
 
         public delegate void EDSMDownloadedSystems();
         public event EDSMDownloadedSystems OnDownloadedSystems;
@@ -42,8 +39,8 @@ namespace EliteDangerousCore.EDSM
             if ( !object.ReferenceEquals(Commander,cmdr) )
             {
                 Trace.WriteLine($"EDSM Fetch logs restart time");
-                LastEventTime = DateTime.UtcNow;
-                FirstEventTime = LastEventTime;
+                //LastEventTime = DateTime.UtcNow;
+                //FirstEventTime = LastEventTime;
             }
 
             Commander = cmdr;
@@ -70,167 +67,83 @@ namespace EliteDangerousCore.EDSM
             }
         }
 
+        public void ResetFetch()
+        {
+            KeyName(out string latestdatekeyname, out string oldestdatekeyname);
+            SQLiteConnectionUser.DeleteKey(latestdatekeyname);
+            SQLiteConnectionUser.DeleteKey(oldestdatekeyname);
+        }
+
         private void FetcherThreadProc()
         {
             Trace.WriteLine($"EDSM Thread logs start");
-            bool jupdate = false;
             DateTime lastCommentFetch = DateTime.MinValue;
 
             int waittime = 1000; // initial waittime, will be reestimated later
 
+            DateTime curtime = DateTime.UtcNow;
+
+            KeyName(out string latestdatekeyname, out string oldestdatekeyname);
+
             while (!ExitRequested.WaitOne(waittime))
             {
-                EDSMClass edsm = new EDSMClass(Commander); 
-
-                if (edsm.ValidCredentials && DateTime.UtcNow > lastCommentFetch.AddHours(1))
-                {
-                    edsm.GetComments(l => Trace.WriteLine(l));
-                    lastCommentFetch = DateTime.UtcNow;
-                }
-
-                DateTime logstarttime = DateTime.MinValue;      // return what we got..
-                DateTime logendtime = DateTime.MinValue;
-                List<JournalFSDJump> edsmlogs = null;
-                int res = -1;       //return code
-                BaseUtils.ResponseData response = default(BaseUtils.ResponseData);
-
-                if (edsm.ValidCredentials && Commander.SyncFromEdsm )       // this triggers in if commander details change
-                {
-                    if (DateTime.UtcNow.Subtract(LastEventTime).TotalMinutes >= EDSMMaxLogAgeMinutes)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Retrieving EDSM logs starting {LastEventTime}");
-                        res = edsm.GetLogs(LastEventTime, null, out edsmlogs, out logstarttime, out logendtime, out response);
-                    }
-                    else if (FirstEventTime > GammaStart)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"Retrieving EDSM logs ending {FirstEventTime}");
-                        res = edsm.GetLogs(null, FirstEventTime, out edsmlogs, out logstarttime, out logendtime, out response);
-                    }
-                }
-
                 if (ExitRequested.WaitOne(0))
                 {
                     return;
                 }
 
-                if (res == 429) // Rate Limit Exceeded
+                EDSMClass edsm = new EDSMClass(Commander);
+
+                // logic checked 21/12/2018 RJP
+
+                if (edsm.ValidCredentials && Commander.SyncFromEdsm)
                 {
-                    Trace.WriteLine($"EDSM Log request rate limit hit - backing off");
-                }
-                else if (logstarttime > LastEventTime && logendtime < FirstEventTime)
-                {
-                    Trace.WriteLine($"Bad start and/or end times returned by EDSM - backing off");
-                }
-                else if (res == 100 )       // okay return..
-                {
-                    if (edsmlogs != null && edsmlogs.Count > 0)     // if anything to process..
+                    if (DateTime.UtcNow > lastCommentFetch.AddHours(1))
                     {
-                        //Trace.WriteLine($"Retrieving EDSM logs count {edsmlogs.Count}");
-
-                        if (logendtime > DateTime.UtcNow)               // make sure logendtime sane
-                            logendtime = DateTime.UtcNow;
-                        if (logstarttime < DateTime.MinValue.AddDays(1))    // and starttime
-                            logstarttime = DateTime.MinValue.AddDays(1);
-
-                        // Get all of the local entries now that we have the entries from EDSM
-                        // Moved here to avoid the race that could have been causing duplicate entries
-
-                        // EDSM only returns FSD entries, so only look for them.  Tested 27/4/2018 after the HE optimisations
-
-                        List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).
-                            OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).
-                            Select(je => HistoryEntry.FromJournalEntry(je, null, out jupdate)).ToList();    // using HE just because of the FillEDSM func
-
-                        HistoryList hl = new HistoryList(hlfsdlist);        // just so we can access the FillEDSM func
-
-                        List<JournalFSDJump> toadd = new List<JournalFSDJump>();
-
-                        int previdx = -1;
-                        foreach (JournalFSDJump jfsd in edsmlogs)      // find out list of ones not present
-                        {
-                            int index = hlfsdlist.FindIndex(x => x.System.Name.Equals(jfsd.StarSystem, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == jfsd.EventTimeUTC.Ticks);
-
-                            if (index < 0)
-                            {
-                                // Look for any entries where DST may have thrown off the time
-                                foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.Name.Equals(jfsd.StarSystem, StringComparison.InvariantCultureIgnoreCase)))
-                                {
-                                    if (vi.i > previdx)
-                                    {
-                                        double hdiff = vi.v.EventTimeUTC.Subtract(jfsd.EventTimeUTC).TotalHours;
-                                        if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
-                                        {
-                                            if (vi.v.System.EDSMID <= 0)        // if we don't have a valid EDMSID..
-                                            {
-                                                vi.v.System.EDSMID = 0;
-                                                hl.FillEDSM(vi.v);
-                                            }
-
-                                            if (vi.v.System.EDSMID <= 0 || vi.v.System.EDSMID == jfsd.EdsmID)
-                                            {
-                                                index = vi.i;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (index < 0)      // its not a duplicate, add to db
-                            {
-                                toadd.Add(jfsd);
-                            }
-                            else
-                            {                   // it is a duplicate, check if the first discovery flag is set right
-                                JournalFSDJump existingfsd = hlfsdlist[index].journalEntry as JournalFSDJump;
-
-                                if (existingfsd != null && existingfsd.EDSMFirstDiscover != jfsd.EDSMFirstDiscover)    // if we have a FSD one, and first discover is different
-                                {
-                                    existingfsd.UpdateFirstDiscover(jfsd.EDSMFirstDiscover);
-
-                                }
-
-                                previdx = index;
-                            }
-                        }
-
-                        if (toadd.Count > 0)  // if we have any, we can add 
-                        {
-                            Trace.WriteLine($"Adding EDSM logs count {toadd.Count}");
-
-                            TravelLogUnit tlu = new TravelLogUnit();    // need a tlu for it
-                            tlu.type = 2;  // EDSM
-                            tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                            tlu.Size = 0;
-                            tlu.Path = "EDSM";
-                            tlu.CommanderId = EDCommander.CurrentCmdrID;
-                            tlu.Add();  // Add to Database
-
-                            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-                            {
-                                foreach (JournalFSDJump jfsd in toadd)
-                                {
-                                    System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
-                                    jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
-                                    jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);     // add it to the db with the JSON created
-                                }
-                            }
-
-                            LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
-
-                            if (logendtime > LastEventTime || logstarttime <= GammaStart)
-                            {
-                                if (OnDownloadedSystems != null)
-                                    OnDownloadedSystems();
-                            }
-                        }
+                        edsm.GetComments(l => Trace.WriteLine(l));
+                        lastCommentFetch = DateTime.UtcNow;
                     }
 
-                    if (logstarttime < FirstEventTime)      // move time on.. we got a 100, thats it for this period
-                        FirstEventTime = logstarttime;
+                    DateTime latestentry = SQLiteConnectionUser.GetSettingDate(latestdatekeyname, GammaStart); // lastest entry
+                    DateTime oldestentry = SQLiteConnectionUser.GetSettingDate(oldestdatekeyname, DateTime.UtcNow); // oldest entry
 
-                    if (logendtime > LastEventTime)     
-                        LastEventTime = logendtime;
+                    DateTime logstarttime = DateTime.MinValue;      // return what we got..
+                    DateTime logendtime = DateTime.MinValue;
+                    List<JournalFSDJump> edsmlogs = null;
+                    BaseUtils.ResponseData response = default(BaseUtils.ResponseData);
+                    int res = -1;
+
+                    if (DateTime.UtcNow.Subtract(latestentry).TotalMinutes >= EDSMMaxLogAgeMinutes )    // is latest entry old?
+                    {
+                        DateTime askfor = DateTime.UtcNow;
+                        System.Diagnostics.Debug.WriteLine("Fetch latest since Curtime > lastestentry + gap " + askfor.ToStringZulu());
+                        res = edsm.GetLogs(null, askfor, out edsmlogs, out logstarttime, out logendtime, out response);
+                        //res = 100;  logstarttime = askfor.AddDays(-7); logendtime = askfor; // debug it
+                    }
+                    else if ( oldestentry > GammaStart )    // if oldest entry younger than gamma?
+                    {
+                        System.Diagnostics.Debug.WriteLine("Go back in time to gamma ");
+                        res = edsm.GetLogs(null, oldestentry, out edsmlogs, out logstarttime, out logendtime, out response);
+                        //res = 100; logstarttime = oldestentry.AddDays(-7); logendtime = oldestentry; // debug it
+                    }
+
+                    if ( res == 100 )   // hunky dory - note if Anthor faults, we just retry again and again
+                    {
+                        System.Diagnostics.Debug.WriteLine("Data stored from " + oldestentry.ToStringZulu() + " -> " + latestentry.ToStringZulu());
+                        System.Diagnostics.Debug.WriteLine("Process logs from " + logstarttime.ToStringZulu() + " => " + logendtime.ToStringZulu());
+                        if (edsmlogs != null && edsmlogs.Count > 0)     // if anything to process..
+                            Process(edsmlogs, logstarttime, logendtime);
+
+                        if (logendtime > latestentry)
+                            SQLiteConnectionUser.PutSettingDate(latestdatekeyname, logendtime);
+
+                        if (logstarttime < oldestentry)
+                            SQLiteConnectionUser.PutSettingDate(oldestdatekeyname, logstarttime);
+                    }
+                    else if ( res != -1 )
+                    {
+                        System.Diagnostics.Debug.WriteLine("EDSM Log request rejected with " + res);
+                    }
 
                     if (response.Headers != null &&
                         response.Headers["X-Rate-Limit-Limit"] != null &&
@@ -249,6 +162,104 @@ namespace EliteDangerousCore.EDSM
                     }
                 }
             }
+        }
+
+        void Process(List<JournalFSDJump> edsmlogs, DateTime logstarttime, DateTime logendtime)
+        {
+            // Get all of the local entries now that we have the entries from EDSM
+            // Moved here to avoid the race that could have been causing duplicate entries
+            // EDSM only returns FSD entries, so only look for them.  Tested 27/4/2018 after the HE optimisations
+
+            List<HistoryEntry> hlfsdlist = JournalEntry.GetAll(Commander.Nr, logstarttime.AddDays(-1), logendtime.AddDays(1)).
+                OfType<JournalLocOrJump>().OrderBy(je => je.EventTimeUTC).
+                Select(je => HistoryEntry.FromJournalEntry(je, null, out bool jupdate)).ToList();    // using HE just because of the FillEDSM func
+
+            HistoryList hl = new HistoryList(hlfsdlist);        // just so we can access the FillEDSM func
+
+            List<JournalFSDJump> toadd = new List<JournalFSDJump>();
+
+            int previdx = -1;
+            foreach (JournalFSDJump jfsd in edsmlogs)      // find out list of ones not present
+            {
+                int index = hlfsdlist.FindIndex(x => x.System.Name.Equals(jfsd.StarSystem, StringComparison.InvariantCultureIgnoreCase) && x.EventTimeUTC.Ticks == jfsd.EventTimeUTC.Ticks);
+
+                if (index < 0)
+                {
+                    // Look for any entries where DST may have thrown off the time
+                    foreach (var vi in hlfsdlist.Select((v, i) => new { v = v, i = i }).Where(vi => vi.v.System.Name.Equals(jfsd.StarSystem, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        if (vi.i > previdx)
+                        {
+                            double hdiff = vi.v.EventTimeUTC.Subtract(jfsd.EventTimeUTC).TotalHours;
+                            if (hdiff >= -2 && hdiff <= 2 && hdiff == Math.Floor(hdiff))
+                            {
+                                if (vi.v.System.EDSMID <= 0)        // if we don't have a valid EDMSID..
+                                {
+                                    vi.v.System.EDSMID = 0;
+                                    hl.FillEDSM(vi.v);
+                                }
+
+                                if (vi.v.System.EDSMID <= 0 || vi.v.System.EDSMID == jfsd.EdsmID)
+                                {
+                                    index = vi.i;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (index < 0)      // its not a duplicate, add to db
+                {
+                    toadd.Add(jfsd);
+                }
+                else
+                {                   // it is a duplicate, check if the first discovery flag is set right
+                    JournalFSDJump existingfsd = hlfsdlist[index].journalEntry as JournalFSDJump;
+
+                    if (existingfsd != null && existingfsd.EDSMFirstDiscover != jfsd.EDSMFirstDiscover)    // if we have a FSD one, and first discover is different
+                    {
+                        existingfsd.UpdateFirstDiscover(jfsd.EDSMFirstDiscover);
+
+                    }
+
+                    previdx = index;
+                }
+            }
+
+            if (toadd.Count > 0)  // if we have any, we can add 
+            {
+                System.Diagnostics.Debug.WriteLine($"Adding EDSM logs count {toadd.Count}");
+
+                TravelLogUnit tlu = new TravelLogUnit();    // need a tlu for it
+                tlu.type = 2;  // EDSM
+                tlu.Name = "EDSM-" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                tlu.Size = 0;
+                tlu.Path = "EDSM";
+                tlu.CommanderId = EDCommander.CurrentCmdrID;
+                tlu.Add();  // Add to Database
+
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                {
+                    foreach (JournalFSDJump jfsd in toadd)
+                    {
+                        System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
+                        jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
+                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);     // add it to the db with the JSON created
+                    }
+                }
+
+                LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
+
+                OnDownloadedSystems?.Invoke();
+            }
+        }
+
+        private void KeyName(out string latest, out string oldest)
+        {
+            string keyname = "EDSMLogFetcher" + CommanderId;
+            latest = keyname + "LatestDate";
+            oldest = keyname + "OldestDate";
         }
     }
 }

@@ -339,6 +339,23 @@ namespace EliteDangerousCore.DB
             return RegisterPut(cn => cn.PutSettingStringCN(key, strvalue), conn);
         }
 
+        static public DateTime GetSettingDate(string key, DateTime defaultvalue, TConn conn = null)
+        {
+            string s = RegisterGet(key, "--", r => r.ValueString, cn => cn.GetSettingStringCN(key, "--"), conn);
+
+            if (!DateTime.TryParse(s, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal, out DateTime date))
+            {
+                date = defaultvalue;
+            }
+
+            return date;
+        }
+
+        static public bool PutSettingDate(string key, DateTime value, TConn conn = null)        // public IF
+        {
+            return RegisterPut(cn => cn.PutSettingStringCN(key, value.ToStringZulu()), conn);
+        }
+
         protected void GetRegister(Dictionary<string, RegisterEntry> regs)
         {
             using (DbCommand cmd = CreateCommand("SELECT Id, ValueInt, ValueDouble, ValueBlob, ValueString FROM register"))
