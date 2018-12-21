@@ -869,7 +869,6 @@
     <None Include="Translations\deutsch-de.tlf" />
     <None Include="Translations\example-ex.tlf" />
     <None Include="Translations\Italiano-it.tlf" />
-    <None Include="Translations\portugues-pt.tlf" />
     <None Include="UserControls\translation-deutsch-uc.tlp" />
     <None Include="UserControls\translation-example-uc.tlp" />
     <None Include="UserControls\translation-italiano-uc.tlp" />
