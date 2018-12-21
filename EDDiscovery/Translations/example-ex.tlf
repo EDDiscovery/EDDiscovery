@@ -205,6 +205,8 @@ SECTION EDDiscoveryForm
 .notifyIconMenu_Exit: "E&xit" @
 .buttonExt2dmap: "2D" @
 .buttonExt3dmap: "3D" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
 
 SECTION EDDiscoveryController
 
