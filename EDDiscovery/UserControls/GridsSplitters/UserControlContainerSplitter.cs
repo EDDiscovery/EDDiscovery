@@ -103,6 +103,8 @@ namespace EDDiscovery.UserControls
             //panelPlayfield.Controls[0].DumpTree(0);
 
             ResumeLayout();
+
+            BaseUtils.Translator.Instance.Translate(contextMenuStripSplitter, this);
         }
 
 
@@ -376,11 +378,11 @@ namespace EDDiscovery.UserControls
             {
                 currentsplitter = sender as SplitContainer;
                 bool v = currentsplitter.Orientation == Orientation.Vertical;
-                toolStripOrientation.Text = v ? "Change to Horizontal Split" : "Change to Vertical Split";
-                toolStripSplitPanel1.Text = v ? "Split Left Panel" : "Split Top Panel";
-                toolStripSplitPanel2.Text = v ? "Split Right Panel" : "Split Bottom Panel";
-                toolStripMergePanel1.Text = v ? "Merge Left Panel" : "Merge Top Panel";
-                toolStripMergePanel2.Text = v ? "Merge Right Panel" : "Merge Bottom Panel";
+                toolStripOrientation.Text = v ? "Change to Horizontal Split".Tx(this) : "Change to Vertical Split".Tx(this);
+                toolStripSplitPanel1.Text = v ? "Split Left Panel".Tx(this) : "Split Top Panel".Tx(this);
+                toolStripSplitPanel2.Text = v ? "Split Right Panel".Tx(this) : "Split Bottom Panel".Tx(this);
+                toolStripMergePanel1.Text = v ? "Merge Left Panel".Tx(this) : "Merge Top Panel".Tx(this);
+                toolStripMergePanel2.Text = v ? "Merge Right Panel".Tx(this) : "Merge Bottom Panel".Tx(this);
                 
                 toolStripSplitPanel1.Enabled = !(currentsplitter.Panel1.Controls[0] is SplitContainer);
                 toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);

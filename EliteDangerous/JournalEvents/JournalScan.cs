@@ -93,7 +93,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
-        public Dictionary<string, double> Materials { get; set; }
+        public Dictionary<string, double> Materials { get; set; }       // fdname and name is the same for materials on planets.  name is lower case
+        public bool HasMaterial(string name) { return Materials != null && Materials.ContainsKey(name.ToLowerInvariant()); } 
 
         public bool IsEDSMBody { get; private set; }
         public string EDSMDiscoveryCommander { get; private set; }      // may be null if not known
@@ -282,14 +283,14 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (mats.Type == JTokenType.Object)
                 {
-                    Materials = mats?.ToObjectProtected<Dictionary<string, double>>();
+                    Materials = mats?.ToObjectProtected<Dictionary<string, double>>();  // name in fd logs is lower case
                 }
                 else
                 {
                     Materials = new Dictionary<string, double>();
-                    foreach (JObject jo in mats)
+                    foreach (JObject jo in mats)                                        // name in fd logs is lower case
                     {
-                        Materials[(string)jo["Name"]] = jo["Percent"].Double();
+                        Materials[jo["Name"].Str().ToLowerInvariant()] = jo["Percent"].Double();
                     }
                 }
             }

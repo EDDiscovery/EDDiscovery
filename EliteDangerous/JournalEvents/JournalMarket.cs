@@ -42,8 +42,13 @@ namespace EliteDangerousCore.JournalEvents
                     CCommodities com = new CCommodities(commodity, true);
                     Commodities.Add(com);
                 }
+
+                Commodities.Sort((l, r) => l.locName.CompareTo(r.locName));
             }
         }
+
+        public bool HasCommodity(string fdname) { return Commodities.FindIndex(x => x.fdname.Equals(fdname, System.StringComparison.InvariantCultureIgnoreCase)) >= 0; }
+        public bool HasCommodityToBuy(string fdname) { return Commodities.FindIndex(x => x.fdname.Equals(fdname, System.StringComparison.InvariantCultureIgnoreCase) && x.stock>0) >= 0; }
 
         public bool Equals(JournalMarket other)
         {

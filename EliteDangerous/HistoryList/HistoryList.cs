@@ -490,6 +490,18 @@ namespace EliteDangerousCore
             }
         }
 
+        public static IEnumerable<ISystem> FindSystemsWithinLy(List<HistoryEntry> he, ISystem centre, double minrad, double maxrad, bool spherical )
+        {
+            IEnumerable<ISystem> list;
+
+            if ( spherical )
+                list = (from x in he where x.System.HasCoordinate && x.System.Distance(centre, minrad, maxrad) select x.System );
+            else
+                list = (from x in he where x.System.HasCoordinate && x.System.Cuboid(centre, minrad, maxrad) select x.System);
+
+            return list.GroupBy(x => x.Name).Select(group => group.First());
+        }
+
         #endregion
 
         #region EDSM

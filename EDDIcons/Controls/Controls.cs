@@ -245,5 +245,10 @@ namespace EDDiscovery.Icons
         public static Image Bookmarks_New { get { return IconSet.GetIcon("Controls.Bookmarks.New"); } }
         public static Image Bookmarks_Delete { get { return IconSet.GetIcon("Controls.Bookmarks.Delete"); } }
         #endregion
+        #region EDDiscovery.UserControls.Search
+        public static Image SearchStars { get { return IconSet.GetIcon("Controls.Search.SearchStars"); } }
+        public static Image SearchMaterials { get { return IconSet.GetIcon("Controls.Search.SearchMaterials"); } }
+        #endregion
+
     }
 }

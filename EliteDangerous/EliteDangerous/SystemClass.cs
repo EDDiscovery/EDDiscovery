@@ -60,6 +60,17 @@ namespace EliteDangerousCore
                 return -1;
         }
 
+        public bool Distance(ISystemBase s2, double min, double max)
+        {
+            if (s2 != null && HasCoordinate && s2.HasCoordinate)
+            {
+                double distsq = (X - s2.X) * (X - s2.X) + (Y - s2.Y) * (Y - s2.Y) + (Z - s2.Z) * (Z - s2.Z);
+                return distsq >= min*min && distsq <= max*max;
+            }
+            else
+                return false;
+        }
+
         public double Distance(double ox, double oy, double oz)
         {
             if (HasCoordinate)
@@ -68,6 +79,18 @@ namespace EliteDangerousCore
                 return -1;
         }
 
+        public bool Cuboid(ISystemBase s2, double min, double max)
+        {
+            if (s2 != null && HasCoordinate && s2.HasCoordinate)
+            {
+                double xd = Math.Abs(X - s2.X);
+                double yd = Math.Abs(Y - s2.Y);
+                double zd = Math.Abs(Z - s2.Z);
+                return xd >= min && xd <= max && yd >= min && yd <= max && zd >= min && zd <= max;
+            }
+            else
+                return false;
+        }
     }
 
     [DebuggerDisplay("System {Name} ({X,nq},{Y,nq},{Z,nq})")]

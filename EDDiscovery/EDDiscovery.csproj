@@ -526,11 +526,26 @@
     <Compile Include="UserControls\ScansStars\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlEDSM.cs">
+    <Compile Include="UserControls\Helpers\DataGridViewStarResults.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearchMaterialsCommodities.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlEDSM.Designer.cs">
-      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    <Compile Include="UserControls\Search\UserControlSearchMaterialsCommodities.Designer.cs">
+      <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearchStars.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearchStars.Designer.cs">
+      <DependentUpon>UserControlSearchStars.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearch.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearch.Designer.cs">
+      <DependentUpon>UserControlSearch.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlEstimatedValues.cs">
       <SubType>UserControl</SubType>
@@ -555,6 +570,12 @@
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Helpers\ScanDisplay.Designer.cs">
+      <DependentUpon>ScanDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
@@ -727,8 +748,14 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
-      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Search\UserControlSearchMaterialsCommodities.resx">
+      <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\UserControlSearchStars.resx">
+      <DependentUpon>UserControlSearchStars.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\UserControlSearch.resx">
+      <DependentUpon>UserControlSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlEstimatedValues.resx">
       <DependentUpon>UserControlEstimatedValues.cs</DependentUpon>
@@ -741,6 +768,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Helpers\ScanDisplay.resx">
+      <DependentUpon>ScanDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">
       <DependentUpon>UserControlScanGrid.cs</DependentUpon>

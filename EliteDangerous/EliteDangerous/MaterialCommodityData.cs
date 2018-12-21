@@ -133,6 +133,14 @@ namespace EliteDangerousCore
             return cachelist.Values.Where(x => x.Category == CommodityCategory).ToArray();
         }
 
+        public static MaterialCommodityData[] GetCommoditiesRaw()
+        {
+            if (cachelist == null)
+                FillTable();
+
+            return cachelist.Values.Where(x => x.Category == CommodityCategory || x.Category == MaterialRawCategory).ToArray();
+        }
+
         #endregion
 
         public MaterialCommodityData()

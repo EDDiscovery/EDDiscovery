@@ -80,27 +80,27 @@
             this.labelTimestamp.AutoSize = true;
             this.labelTimestamp.Location = new System.Drawing.Point(150, 10);
             this.labelTimestamp.Name = "labelTimestamp";
-            this.labelTimestamp.Size = new System.Drawing.Size(58, 13);
+            this.labelTimestamp.Size = new System.Drawing.Size(43, 13);
             this.labelTimestamp.TabIndex = 7;
-            this.labelTimestamp.Text = "Timestamp";
+            this.labelTimestamp.Text = "<code>";
             // 
             // labelSystem
             // 
             this.labelSystem.AutoSize = true;
             this.labelSystem.Location = new System.Drawing.Point(150, 34);
             this.labelSystem.Name = "labelSystem";
-            this.labelSystem.Size = new System.Drawing.Size(52, 13);
+            this.labelSystem.Size = new System.Drawing.Size(43, 13);
             this.labelSystem.TabIndex = 8;
-            this.labelSystem.Text = "SysName";
+            this.labelSystem.Text = "<code>";
             // 
             // labelSummary
             // 
             this.labelSummary.AutoSize = true;
             this.labelSummary.Location = new System.Drawing.Point(150, 58);
             this.labelSummary.Name = "labelSummary";
-            this.labelSummary.Size = new System.Drawing.Size(50, 13);
+            this.labelSummary.Size = new System.Drawing.Size(43, 13);
             this.labelSummary.TabIndex = 9;
-            this.labelSummary.Text = "Summary";
+            this.labelSummary.Text = "<code>";
             // 
             // labelTDetails
             // 
@@ -117,7 +117,7 @@
             this.labelDetails.Name = "labelDetails";
             this.labelDetails.Size = new System.Drawing.Size(366, 91);
             this.labelDetails.TabIndex = 11;
-            this.labelDetails.Text = "Details\r\n1\r\n2\r\n3";
+            this.labelDetails.Text = "<code>";
             // 
             // panelBack
             // 
@@ -169,12 +169,15 @@
             this.textBoxNote.Location = new System.Drawing.Point(6, 184);
             this.textBoxNote.Name = "textBoxNote";
             this.textBoxNote.ReadOnly = false;
+            this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.textBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.textBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
             this.textBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
             this.textBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.textBoxNote.ScrollBarLineTweak = 0;
             this.textBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.textBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.textBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;

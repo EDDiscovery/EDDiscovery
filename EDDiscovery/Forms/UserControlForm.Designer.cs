@@ -64,9 +64,10 @@ namespace EDDiscovery.Forms
             this.label_index.AutoSize = true;
             this.label_index.Location = new System.Drawing.Point(2, 2);
             this.label_index.Name = "label_index";
-            this.label_index.Size = new System.Drawing.Size(27, 13);
+            this.label_index.Size = new System.Drawing.Size(43, 13);
             this.label_index.TabIndex = 23;
-            this.label_index.Text = "N/A";
+            this.label_index.Text = "<code>";
+            this.label_index.TextBackColor = System.Drawing.Color.Transparent;
             this.label_index.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             // 
             // labelControlText
@@ -74,9 +75,10 @@ namespace EDDiscovery.Forms
             this.labelControlText.AutoSize = true;
             this.labelControlText.Location = new System.Drawing.Point(110, 2);
             this.labelControlText.Name = "labelControlText";
-            this.labelControlText.Size = new System.Drawing.Size(27, 13);
+            this.labelControlText.Size = new System.Drawing.Size(43, 13);
             this.labelControlText.TabIndex = 23;
-            this.labelControlText.Text = "N/A";
+            this.labelControlText.Text = "<code>";
+            this.labelControlText.TextBackColor = System.Drawing.Color.Transparent;
             this.labelControlText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.labelControlText_MouseDown);
             // 
             // toolTip1
@@ -193,7 +195,7 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.statusStripBottom);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlForm";
-            this.Text = "UserControlForm";
+            this.Text = "<code>";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserControlForm_FormClosing);
             this.Shown += new System.EventHandler(this.UserControlForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControlForm_Layout);

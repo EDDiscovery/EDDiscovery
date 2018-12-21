@@ -253,7 +253,7 @@ namespace EliteDangerousCore.JournalEvents
                 info = enginfo;
             else
             {
-                info = BaseUtils.FieldBuilder.Build("Progress on ; Engineers".Txb(this), Engineers.Length);
+                info = BaseUtils.FieldBuilder.Build("Progress on ; Engineers".Tx(this), Engineers.Length);
                 detailed = enginfo;
             }
         }

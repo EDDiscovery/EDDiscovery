@@ -31,21 +31,21 @@
             this.labelRadMin = new System.Windows.Forms.Label();
             this.labelFilter = new System.Windows.Forms.Label();
             this.labelRadMax = new System.Windows.Forms.Label();
-            this.buttonExtDBLookup = new ExtendedControls.ButtonExt();
-            this.buttonExtEDSMSphere = new ExtendedControls.ButtonExt();
+            this.buttonExtNames = new ExtendedControls.ButtonExt();
+            this.buttonExtEDSM = new ExtendedControls.ButtonExt();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.numberBoxMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.numberBoxMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textBoxSystemName = new ExtendedControls.AutoCompleteTextBox();
-            this.buttonExtDBSphere = new ExtendedControls.ButtonExt();
-            this.buttonExtDBCube = new ExtendedControls.ButtonExt();
-            this.buttonExtEDSMCube = new ExtendedControls.ButtonExt();
+            this.buttonExtDB = new ExtendedControls.ButtonExt();
             this.numberBoxDoubleX = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleY = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleZ = new ExtendedControls.NumberBoxDouble();
             this.labelX = new System.Windows.Forms.Label();
             this.labelY = new System.Windows.Forms.Label();
             this.labelZ = new System.Windows.Forms.Label();
+            this.buttonExtVisited = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomCube = new ExtendedControls.CheckBoxCustom();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -75,25 +75,25 @@
             this.labelRadMax.TabIndex = 34;
             this.labelRadMax.Text = "Max";
             // 
-            // buttonExtDBLookup
+            // buttonExtNames
             // 
-            this.buttonExtDBLookup.Location = new System.Drawing.Point(288, 3);
-            this.buttonExtDBLookup.Name = "buttonExtDBLookup";
-            this.buttonExtDBLookup.Size = new System.Drawing.Size(176, 23);
-            this.buttonExtDBLookup.TabIndex = 37;
-            this.buttonExtDBLookup.Text = "From DB Find Names";
-            this.buttonExtDBLookup.UseVisualStyleBackColor = true;
-            this.buttonExtDBLookup.Click += new System.EventHandler(this.buttonExtDBLookup_Click);
+            this.buttonExtNames.Location = new System.Drawing.Point(288, 3);
+            this.buttonExtNames.Name = "buttonExtNames";
+            this.buttonExtNames.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtNames.TabIndex = 37;
+            this.buttonExtNames.Text = "From DB Find Names";
+            this.buttonExtNames.UseVisualStyleBackColor = true;
+            this.buttonExtNames.Click += new System.EventHandler(this.buttonExtNamesClick);
             // 
-            // buttonExtEDSMSphere
+            // buttonExtEDSM
             // 
-            this.buttonExtEDSMSphere.Location = new System.Drawing.Point(168, 62);
-            this.buttonExtEDSMSphere.Name = "buttonExtEDSMSphere";
-            this.buttonExtEDSMSphere.Size = new System.Drawing.Size(176, 23);
-            this.buttonExtEDSMSphere.TabIndex = 38;
-            this.buttonExtEDSMSphere.Text = "From EDSM Sphere Systems";
-            this.buttonExtEDSMSphere.UseVisualStyleBackColor = true;
-            this.buttonExtEDSMSphere.Click += new System.EventHandler(this.buttonExtEDSMSphere_Click);
+            this.buttonExtEDSM.Location = new System.Drawing.Point(168, 62);
+            this.buttonExtEDSM.Name = "buttonExtEDSM";
+            this.buttonExtEDSM.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtEDSM.TabIndex = 38;
+            this.buttonExtEDSM.Text = "From EDSM";
+            this.buttonExtEDSM.UseVisualStyleBackColor = true;
+            this.buttonExtEDSM.Click += new System.EventHandler(this.buttonExtEDSMClick);
             // 
             // buttonExtExcel
             // 
@@ -194,35 +194,15 @@
             this.textBoxSystemName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSystemName.WordWrap = true;
             // 
-            // buttonExtDBSphere
+            // buttonExtDB
             // 
-            this.buttonExtDBSphere.Location = new System.Drawing.Point(168, 88);
-            this.buttonExtDBSphere.Name = "buttonExtDBSphere";
-            this.buttonExtDBSphere.Size = new System.Drawing.Size(176, 23);
-            this.buttonExtDBSphere.TabIndex = 38;
-            this.buttonExtDBSphere.Text = "From DB Sphere Systems";
-            this.buttonExtDBSphere.UseVisualStyleBackColor = true;
-            this.buttonExtDBSphere.Click += new System.EventHandler(this.buttonExtDBSphere_Click);
-            // 
-            // buttonExtDBCube
-            // 
-            this.buttonExtDBCube.Location = new System.Drawing.Point(350, 88);
-            this.buttonExtDBCube.Name = "buttonExtDBCube";
-            this.buttonExtDBCube.Size = new System.Drawing.Size(176, 23);
-            this.buttonExtDBCube.TabIndex = 38;
-            this.buttonExtDBCube.Text = "From DB Cube Systems";
-            this.buttonExtDBCube.UseVisualStyleBackColor = true;
-            this.buttonExtDBCube.Click += new System.EventHandler(this.buttonExtDBCube_Click);
-            // 
-            // buttonExtEDSMCube
-            // 
-            this.buttonExtEDSMCube.Location = new System.Drawing.Point(350, 62);
-            this.buttonExtEDSMCube.Name = "buttonExtEDSMCube";
-            this.buttonExtEDSMCube.Size = new System.Drawing.Size(176, 23);
-            this.buttonExtEDSMCube.TabIndex = 38;
-            this.buttonExtEDSMCube.Text = "From EDSM Cube Systems";
-            this.buttonExtEDSMCube.UseVisualStyleBackColor = true;
-            this.buttonExtEDSMCube.Click += new System.EventHandler(this.buttonExtEDSMCube_Click);
+            this.buttonExtDB.Location = new System.Drawing.Point(168, 88);
+            this.buttonExtDB.Name = "buttonExtDB";
+            this.buttonExtDB.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtDB.TabIndex = 38;
+            this.buttonExtDB.Text = "From DB";
+            this.buttonExtDB.UseVisualStyleBackColor = true;
+            this.buttonExtDB.Click += new System.EventHandler(this.buttonExtDBClick);
             // 
             // numberBoxDoubleX
             // 
@@ -338,15 +318,42 @@
             this.labelZ.TabIndex = 35;
             this.labelZ.Text = "Z";
             // 
+            // buttonExtVisited
+            // 
+            this.buttonExtVisited.Location = new System.Drawing.Point(360, 62);
+            this.buttonExtVisited.Name = "buttonExtVisited";
+            this.buttonExtVisited.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtVisited.TabIndex = 38;
+            this.buttonExtVisited.Text = "From Visited Systems";
+            this.buttonExtVisited.UseVisualStyleBackColor = true;
+            this.buttonExtVisited.Click += new System.EventHandler(this.buttonExtVisitedClick);
+            // 
+            // checkBoxCustomCube
+            // 
+            this.checkBoxCustomCube.AutoSize = true;
+            this.checkBoxCustomCube.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCustomCube.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCustomCube.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCustomCube.FontNerfReduction = 0.5F;
+            this.checkBoxCustomCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomCube.Location = new System.Drawing.Point(456, 33);
+            this.checkBoxCustomCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCustomCube.Name = "checkBoxCustomCube";
+            this.checkBoxCustomCube.Size = new System.Drawing.Size(51, 17);
+            this.checkBoxCustomCube.TabIndex = 39;
+            this.checkBoxCustomCube.Text = "Cube";
+            this.checkBoxCustomCube.TickBoxReductionSize = 10;
+            this.checkBoxCustomCube.UseVisualStyleBackColor = true;
+            // 
             // FindSystemsUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.buttonExtDBLookup);
-            this.Controls.Add(this.buttonExtDBCube);
-            this.Controls.Add(this.buttonExtDBSphere);
-            this.Controls.Add(this.buttonExtEDSMCube);
-            this.Controls.Add(this.buttonExtEDSMSphere);
+            this.Controls.Add(this.checkBoxCustomCube);
+            this.Controls.Add(this.buttonExtNames);
+            this.Controls.Add(this.buttonExtVisited);
+            this.Controls.Add(this.buttonExtDB);
+            this.Controls.Add(this.buttonExtEDSM);
             this.Controls.Add(this.buttonExtExcel);
             this.Controls.Add(this.numberBoxMaxRadius);
             this.Controls.Add(this.numberBoxDoubleZ);
@@ -361,7 +368,7 @@
             this.Controls.Add(this.labelX);
             this.Controls.Add(this.labelFilter);
             this.Name = "FindSystemsUserControl";
-            this.Size = new System.Drawing.Size(664, 241);
+            this.Size = new System.Drawing.Size(664, 140);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,8 +376,9 @@
 
         #endregion
 
-        private ExtendedControls.ButtonExt buttonExtDBLookup;
-        private ExtendedControls.ButtonExt buttonExtEDSMSphere;
+        private ExtendedControls.ButtonExt buttonExtNames;
+        private ExtendedControls.ButtonExt buttonExtEDSM;
+        private ExtendedControls.ButtonExt buttonExtVisited;
         private ExtendedControls.ButtonExt buttonExtExcel;
         private ExtendedControls.AutoCompleteTextBox textBoxSystemName;
         private System.Windows.Forms.Label labelRadMin;
@@ -378,14 +386,13 @@
         private System.Windows.Forms.Label labelRadMax;
         private ExtendedControls.NumberBoxDouble numberBoxMinRadius;
         private ExtendedControls.NumberBoxDouble numberBoxMaxRadius;
-        private ExtendedControls.ButtonExt buttonExtDBSphere;
-        private ExtendedControls.ButtonExt buttonExtDBCube;
-        private ExtendedControls.ButtonExt buttonExtEDSMCube;
+        private ExtendedControls.ButtonExt buttonExtDB;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleX;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleY;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleZ;
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.Label labelY;
         private System.Windows.Forms.Label labelZ;
+        private ExtendedControls.CheckBoxCustom checkBoxCustomCube;
     }
 }

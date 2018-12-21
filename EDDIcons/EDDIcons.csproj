@@ -331,7 +331,6 @@
     <EmbeddedResource Include="GalMap\stellarRemnant.png" />
     <EmbeddedResource Include="GalMap\surfacePOI.png" />
     <EmbeddedResource Include="Panels\Commodities.png" />
-    <EmbeddedResource Include="Panels\EDSM.png" />
     <EmbeddedResource Include="Panels\EstimatedValues.png" />
     <EmbeddedResource Include="Panels\Expedition.png" />
     <EmbeddedResource Include="Panels\Exploration.png" />
@@ -680,6 +679,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Controls\Search\SearchMaterials.png" />
+    <EmbeddedResource Include="Panels\Search.png" />
+    <EmbeddedResource Include="Controls\Search\SearchStars.png" />
     <EmbeddedResource Include="Controls\ScanGrid\Belt.png" />
     <EmbeddedResource Include="Controls\ScanGrid\Ring.png" />
     <EmbeddedResource Include="Panels\GroupMarker.png" />

@@ -1,707 +1,944 @@
-﻿///////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////// Journals
-///////////////////////////////////////////////////////////////////////////
 
-JournalTypeEnum.Unknown: "Unknown" @
-JournalTypeEnum.AfmuRepairs: "Afmu Repairs" @
-JournalTypeEnum.ApproachBody: "Approach Body" @
-JournalTypeEnum.ApproachSettlement: "Approach Settlement" @
-JournalTypeEnum.Bounty: "Bounty" @
-JournalTypeEnum.BuyAmmo: "Buy Ammo" @
-JournalTypeEnum.BuyDrones: "Buy Drones" @
-JournalTypeEnum.BuyExplorationData: "Buy Exploration Data" @
-JournalTypeEnum.BuyTradeData: "Buy Trade Data" @
-JournalTypeEnum.CapShipBond: "Cap Ship Bond" @
-JournalTypeEnum.Cargo: "Cargo" @
-JournalTypeEnum.CargoDepot: "Cargo Depot" @
-JournalTypeEnum.ChangeCrewRole: "Change Crew Role" @
-JournalTypeEnum.ClearSavedGame: "Clear Saved Game" @
-JournalTypeEnum.CockpitBreached: "Cockpit Breached" @
-JournalTypeEnum.CollectCargo: "Collect Cargo" @
-JournalTypeEnum.Commander: "Commander" @
-JournalTypeEnum.CommitCrime: "Commit Crime" @
-JournalTypeEnum.CommunityGoal: "Community Goal" @
-JournalTypeEnum.CommunityGoalJoin: "Community Goal Join" @
-JournalTypeEnum.CommunityGoalReward: "Community Goal Reward" @
-JournalTypeEnum.Continued: "Continued" @
-JournalTypeEnum.CrewAssign: "Crew Assign" @
-JournalTypeEnum.CrewFire: "Crew Fire" @
-JournalTypeEnum.CrewHire: "Crew Hire" @
-JournalTypeEnum.DatalinkScan: "Datalink Scan" @
-JournalTypeEnum.Died: "Died" @
-JournalTypeEnum.DiscoveryScan: "Discovery Scan" @
-JournalTypeEnum.Docked: "Docked" @
-JournalTypeEnum.DockFighter: "Dock Fighter" @
-JournalTypeEnum.DockingCancelled: "Docking Cancelled" @
-JournalTypeEnum.DockingDenied: "Docking Denied" @
-JournalTypeEnum.DockingGranted: "Docking Granted" @
-JournalTypeEnum.DockingRequested: "Docking Requested" @
-JournalTypeEnum.DockingTimeout: "Docking Timeout" @
-JournalTypeEnum.DockSRV: "Dock SRV" @
-JournalTypeEnum.EjectCargo: "Eject Cargo" @
-JournalTypeEnum.EndCrewSession: "End Crew Session" @
-JournalTypeEnum.EngineerApply: "Engineer Apply" @
-JournalTypeEnum.EngineerContribution: "Engineer Contribution" @
-JournalTypeEnum.EngineerCraft: "Engineer Craft" @
-JournalTypeEnum.EngineerLegacyConvert: "Engineer Legacy Convert" @
-JournalTypeEnum.EngineerProgress: "Engineer Progress" @
-JournalTypeEnum.EscapeInterdiction: "Escape Interdiction" @
-JournalTypeEnum.FactionKillBond: "Faction Kill Bond" @
-JournalTypeEnum.FSDJump: "FSD Jump" @
-JournalTypeEnum.FuelScoop: "Fuel Scoop" @
-JournalTypeEnum.Fileheader: "Fileheader" @
-JournalTypeEnum.FighterDestroyed: "Fighter Destroyed" @
-JournalTypeEnum.FighterRebuilt: "Fighter Rebuilt" @
-JournalTypeEnum.Friends: "Friends" @
-JournalTypeEnum.HeatDamage: "Heat Damage" @
-JournalTypeEnum.HeatWarning: "Heat Warning" @
-JournalTypeEnum.HullDamage: "Hull Damage" @
-JournalTypeEnum.Interdicted: "Interdicted" @
-JournalTypeEnum.Interdiction: "Interdiction" @
-JournalTypeEnum.JetConeBoost: "Jet Cone Boost" @
-JournalTypeEnum.JetConeDamage: "Jet Cone Damage" @
-JournalTypeEnum.JoinACrew: "Join A Crew" @
-JournalTypeEnum.KickCrewMember: "Kick Crew Member" @
-JournalTypeEnum.LaunchDrone: "Launch Drone" @
-JournalTypeEnum.LaunchFighter: "Launch Fighter" @
-JournalTypeEnum.LaunchSRV: "Launch SRV" @
-JournalTypeEnum.LeaveBody: "Leave Body" @
-JournalTypeEnum.Liftoff: "Liftoff" @
-JournalTypeEnum.LoadGame: "Load Game" @
-JournalTypeEnum.Loadout: "Loadout" @
-JournalTypeEnum.Location: "Location" @
-JournalTypeEnum.Market: "Market" @
-JournalTypeEnum.MarketBuy: "Market Buy" @
-JournalTypeEnum.MarketSell: "Market Sell" @
-JournalTypeEnum.MaterialCollected: "Material Collected" @
-JournalTypeEnum.MaterialDiscarded: "Material Discarded" @
-JournalTypeEnum.MaterialDiscovered: "Material Discovered" @
-JournalTypeEnum.MaterialTrade: "Material Trade" @
-JournalTypeEnum.Materials: "Materials" @
-JournalTypeEnum.MiningRefined: "Mining Refined" @
-JournalTypeEnum.Missions: "Missions" @
-JournalTypeEnum.MissionAbandoned: "Mission Abandoned" @
-JournalTypeEnum.MissionAccepted: "Mission Accepted" @
-JournalTypeEnum.MissionCompleted: "Mission Completed" @
-JournalTypeEnum.MissionFailed: "Mission Failed" @
-JournalTypeEnum.MissionRedirected: "Mission Redirected" @
-JournalTypeEnum.ModuleInfo: "Module Info" @
-JournalTypeEnum.ModuleBuy: "Module Buy" @
-JournalTypeEnum.ModuleRetrieve: "Module Retrieve" @
-JournalTypeEnum.ModuleSell: "Module Sell" @
-JournalTypeEnum.ModuleStore: "Module Store" @
-JournalTypeEnum.ModuleSwap: "Module Swap" @
-JournalTypeEnum.Music: "Music" @
-JournalTypeEnum.NavBeaconScan: "Nav Beacon Scan" @
-JournalTypeEnum.NewCommander: "New Commander" @
-JournalTypeEnum.NpcCrewPaidWage: "Npc Crew Paid Wage" @
-JournalTypeEnum.NpcCrewRank: "Npc Crew Rank" @
-JournalTypeEnum.Outfitting: "Outfitting" @
-JournalTypeEnum.Passengers: "Passengers" @
-JournalTypeEnum.PayFines: "Pay Fines" @
-JournalTypeEnum.PayBounties: "Pay Bounties" @
-JournalTypeEnum.PayLegacyFines: "Pay Legacy Fines" @
-JournalTypeEnum.Powerplay: "Powerplay" @
-JournalTypeEnum.PowerplayCollect: "Powerplay Collect" @
-JournalTypeEnum.PowerplayDefect: "Powerplay Defect" @
-JournalTypeEnum.PowerplayDeliver: "Powerplay Deliver" @
-JournalTypeEnum.PowerplayFastTrack: "Powerplay Fast Track" @
-JournalTypeEnum.PowerplayJoin: "Powerplay Join" @
-JournalTypeEnum.PowerplayLeave: "Powerplay Leave" @
-JournalTypeEnum.PowerplaySalary: "Powerplay Salary" @
-JournalTypeEnum.PowerplayVote: "Powerplay Vote" @
-JournalTypeEnum.PowerplayVoucher: "Powerplay Voucher" @
-JournalTypeEnum.Progress: "Progress" @
-JournalTypeEnum.Promotion: "Promotion" @
-JournalTypeEnum.PVPKill: "PVP Kill" @
-JournalTypeEnum.QuitACrew: "Quit A Crew" @
-JournalTypeEnum.Rank: "Rank" @
-JournalTypeEnum.RebootRepair: "Reboot Repair" @
-JournalTypeEnum.ReceiveText: "Receive Text" @
-JournalTypeEnum.RedeemVoucher: "Redeem Voucher" @
-JournalTypeEnum.RefuelAll: "Refuel All" @
-JournalTypeEnum.RefuelPartial: "Refuel Partial" @
-JournalTypeEnum.Repair: "Repair" @
-JournalTypeEnum.RepairAll: "Repair All" @
-JournalTypeEnum.RepairDrone: "Repair Drone" @
-JournalTypeEnum.Reputation: "Reputation" @
-JournalTypeEnum.RestockVehicle: "Restock Vehicle" @
-JournalTypeEnum.Resurrect: "Resurrect" @
-JournalTypeEnum.Scan: "Scan" @
-JournalTypeEnum.Scanned: "Scanned" @
-JournalTypeEnum.ScientificResearch: "Scientific Research" @
-JournalTypeEnum.Screenshot: "Screenshot" @
-JournalTypeEnum.SearchAndRescue: "Search And Rescue" @
-JournalTypeEnum.SelfDestruct: "Self Destruct" @
-JournalTypeEnum.SellDrones: "Sell Drones" @
-JournalTypeEnum.SellExplorationData: "Sell Exploration Data" @
-JournalTypeEnum.SellShipOnRebuy: "Sell Ship On Rebuy" @
-JournalTypeEnum.SendText: "Send Text" @
-JournalTypeEnum.SetUserShipName: "Set User Ship Name" @
-JournalTypeEnum.ShieldState: "Shield State" @
-JournalTypeEnum.Shipyard: "Shipyard" @
-JournalTypeEnum.ShipyardBuy: "Shipyard Buy" @
-JournalTypeEnum.ShipyardNew: "Shipyard New" @
-JournalTypeEnum.ShipyardSell: "Shipyard Sell" @
-JournalTypeEnum.ShipyardSwap: "Shipyard Swap" @
-JournalTypeEnum.ShipyardTransfer: "Shipyard Transfer" @
-JournalTypeEnum.ShipTargeted: "Ship Targeted" @
-JournalTypeEnum.Shutdown: "Shutdown" @
-JournalTypeEnum.SRVDestroyed: "SRV Destroyed" @
-JournalTypeEnum.StartJump: "Start Jump" @
-JournalTypeEnum.StoredModules: "Stored Modules" @
-JournalTypeEnum.StoredShips: "Stored Ships" @
-JournalTypeEnum.Statistics: "Statistics" @
-JournalTypeEnum.SupercruiseEntry: "Supercruise Entry" @
-JournalTypeEnum.SupercruiseExit: "Supercruise Exit" @
-JournalTypeEnum.Synthesis: "Synthesis" @
-JournalTypeEnum.SystemsShutdown: "Systems Shutdown" @
-JournalTypeEnum.TechnologyBroker: "Technology Broker" @
-JournalTypeEnum.Touchdown: "Touchdown" @
-JournalTypeEnum.UnderAttack: "Under Attack" @
-JournalTypeEnum.Undocked: "Undocked" @
-JournalTypeEnum.USSDrop: "USS Drop" @
-JournalTypeEnum.VehicleSwitch: "Vehicle Switch" @
-JournalTypeEnum.WingAdd: "Wing Add" @
-JournalTypeEnum.WingInvite: "Wing Invite" @
-JournalTypeEnum.WingJoin: "Wing Join" @
-JournalTypeEnum.WingLeave: "Wing Leave" @
-JournalTypeEnum.ModuleSellRemote: "Module Sell Remote" @
-JournalTypeEnum.FetchRemoteModule: "Fetch Remote Module" @
-JournalTypeEnum.MassModuleStore: "Mass Module Store" @
-JournalTypeEnum.DatalinkVoucher: "Datalink Voucher" @
-JournalTypeEnum.DataScanned: "Data Scanned" @
-JournalTypeEnum.CommunityGoalDiscard: "Community Goal Discard" @
-JournalTypeEnum.CrewLaunchFighter: "Crew Launch Fighter" @
-JournalTypeEnum.CrewMemberJoins: "Crew Member Joins" @
-JournalTypeEnum.CrewMemberQuits: "Crew Member Quits" @
-JournalTypeEnum.CrewMemberRoleChange: "Crew Member Role Change" @
-JournalTypeEnum.EDDItemSet: "EDD Item Set" @
-JournalTypeEnum.EDDCommodityPrices: "EDD Commodity Prices" @
-JournalTypeEnum.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
-JournalTypeEnum.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
-JournalTypeEnum.RestockVehicle_SRV: "Restock Vehicle_SRV" @
-JournalTypeEnum.RestockVehicle_Fighter: "Restock Vehicle_Fighter" @
-JournalTypeEnum.ShieldState_ShieldsUp: "Shield State_Shields Up" @
-JournalTypeEnum.ShieldState_ShieldsDown: "Shield State_Shields Down" @
-JournalTypeEnum.VehicleSwitch_Mothership: "Vehicle Switch_Mothership" @
-JournalTypeEnum.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
+SECTION JournalTypeEnum
 
+.Unknown: "Unknown" @
+.AfmuRepairs: "Afmu Repairs" @
+.ApproachBody: "Approach Body" @
+.ApproachSettlement: "Approach Settlement" @
+.Bounty: "Bounty" @
+.BuyAmmo: "Buy Ammo" @
+.BuyDrones: "Buy Drones" @
+.BuyExplorationData: "Buy Exploration Data" @
+.BuyTradeData: "Buy Trade Data" @
+.CapShipBond: "Cap Ship Bond" @
+.Cargo: "Cargo" @
+.CargoDepot: "Cargo Depot" @
+.ChangeCrewRole: "Change Crew Role" @
+.ClearSavedGame: "Clear Saved Game" @
+.CockpitBreached: "Cockpit Breached" @
+.CollectCargo: "Collect Cargo" @
+.Commander: "Commander" @
+.CommitCrime: "Commit Crime" @
+.CommunityGoal: "Community Goal" @
+.CommunityGoalJoin: "Community Goal Join" @
+.CommunityGoalReward: "Community Goal Reward" @
+.Continued: "Continued" @
+.CrewAssign: "Crew Assign" @
+.CrewFire: "Crew Fire" @
+.CrewHire: "Crew Hire" @
+.DatalinkScan: "Datalink Scan" @
+.Died: "Died" @
+.DiscoveryScan: "Discovery Scan" @
+.Docked: "Docked" @
+.DockFighter: "Dock Fighter" @
+.DockingCancelled: "Docking Cancelled" @
+.DockingDenied: "Docking Denied" @
+.DockingGranted: "Docking Granted" @
+.DockingRequested: "Docking Requested" @
+.DockingTimeout: "Docking Timeout" @
+.DockSRV: "Dock SRV" @
+.EjectCargo: "Eject Cargo" @
+.EndCrewSession: "End Crew Session" @
+.EngineerApply: "Engineer Apply" @
+.EngineerContribution: "Engineer Contribution" @
+.EngineerCraft: "Engineer Craft" @
+.EngineerLegacyConvert: "Engineer Legacy Convert" @
+.EngineerProgress: "Engineer Progress" @
+.EscapeInterdiction: "Escape Interdiction" @
+.FactionKillBond: "Faction Kill Bond" @
+.FSDJump: "FSD Jump" @
+.FuelScoop: "Fuel Scoop" @
+.Fileheader: "Fileheader" @
+.FighterDestroyed: "Fighter Destroyed" @
+.FighterRebuilt: "Fighter Rebuilt" @
+.Friends: "Friends" @
+.HeatDamage: "Heat Damage" @
+.HeatWarning: "Heat Warning" @
+.HullDamage: "Hull Damage" @
+.Interdicted: "Interdicted" @
+.Interdiction: "Interdiction" @
+.JetConeBoost: "Jet Cone Boost" @
+.JetConeDamage: "Jet Cone Damage" @
+.JoinACrew: "Join A Crew" @
+.KickCrewMember: "Kick Crew Member" @
+.LaunchDrone: "Launch Drone" @
+.LaunchFighter: "Launch Fighter" @
+.LaunchSRV: "Launch SRV" @
+.LeaveBody: "Leave Body" @
+.Liftoff: "Liftoff" @
+.LoadGame: "Load Game" @
+.Loadout: "Loadout" @
+.Location: "Location" @
+.Market: "Market" @
+.MarketBuy: "Market Buy" @
+.MarketSell: "Market Sell" @
+.MaterialCollected: "Material Collected" @
+.MaterialDiscarded: "Material Discarded" @
+.MaterialDiscovered: "Material Discovered" @
+.MaterialTrade: "Material Trade" @
+.Materials: "Materials" @
+.MiningRefined: "Mining Refined" @
+.Missions: "Missions" @
+.MissionAbandoned: "Mission Abandoned" @
+.MissionAccepted: "Mission Accepted" @
+.MissionCompleted: "Mission Completed" @
+.MissionFailed: "Mission Failed" @
+.MissionRedirected: "Mission Redirected" @
+.ModuleInfo: "Module Info" @
+.ModuleBuy: "Module Buy" @
+.ModuleRetrieve: "Module Retrieve" @
+.ModuleSell: "Module Sell" @
+.ModuleStore: "Module Store" @
+.ModuleSwap: "Module Swap" @
+.Music: "Music" @
+.NavBeaconScan: "Nav Beacon Scan" @
+.NewCommander: "New Commander" @
+.NpcCrewPaidWage: "Npc Crew Paid Wage" @
+.NpcCrewRank: "Npc Crew Rank" @
+.Outfitting: "Outfitting" @
+.Passengers: "Passengers" @
+.PayFines: "Pay Fines" @
+.PayBounties: "Pay Bounties" @
+.PayLegacyFines: "Pay Legacy Fines" @
+.Powerplay: "Powerplay" @
+.PowerplayCollect: "Powerplay Collect" @
+.PowerplayDefect: "Powerplay Defect" @
+.PowerplayDeliver: "Powerplay Deliver" @
+.PowerplayFastTrack: "Powerplay Fast Track" @
+.PowerplayJoin: "Powerplay Join" @
+.PowerplayLeave: "Powerplay Leave" @
+.PowerplaySalary: "Powerplay Salary" @
+.PowerplayVote: "Powerplay Vote" @
+.PowerplayVoucher: "Powerplay Voucher" @
+.Progress: "Progress" @
+.Promotion: "Promotion" @
+.PVPKill: "PVP Kill" @
+.QuitACrew: "Quit A Crew" @
+.Rank: "Rank" @
+.RebootRepair: "Reboot Repair" @
+.ReceiveText: "Receive Text" @
+.RedeemVoucher: "Redeem Voucher" @
+.RefuelAll: "Refuel All" @
+.RefuelPartial: "Refuel Partial" @
+.Repair: "Repair" @
+.RepairAll: "Repair All" @
+.RepairDrone: "Repair Drone" @
+.Reputation: "Reputation" @
+.RestockVehicle: "Restock Vehicle" @
+.Resurrect: "Resurrect" @
+.Scan: "Scan" @
+.Scanned: "Scanned" @
+.ScientificResearch: "Scientific Research" @
+.Screenshot: "Screenshot" @
+.SearchAndRescue: "Search And Rescue" @
+.SelfDestruct: "Self Destruct" @
+.SellDrones: "Sell Drones" @
+.SellExplorationData: "Sell Exploration Data" @
+.SellShipOnRebuy: "Sell Ship On Rebuy" @
+.SendText: "Send Text" @
+.SetUserShipName: "Set User Ship Name" @
+.ShieldState: "Shield State" @
+.Shipyard: "Shipyard" @
+.ShipyardBuy: "Shipyard Buy" @
+.ShipyardNew: "Shipyard New" @
+.ShipyardSell: "Shipyard Sell" @
+.ShipyardSwap: "Shipyard Swap" @
+.ShipyardTransfer: "Shipyard Transfer" @
+.ShipTargeted: "Ship Targeted" @
+.Shutdown: "Shutdown" @
+.SRVDestroyed: "SRV Destroyed" @
+.StartJump: "Start Jump" @
+.StoredModules: "Stored Modules" @
+.StoredShips: "Stored Ships" @
+.Statistics: "Statistics" @
+.SupercruiseEntry: "Supercruise Entry" @
+.SupercruiseExit: "Supercruise Exit" @
+.Synthesis: "Synthesis" @
+.SystemsShutdown: "Systems Shutdown" @
+.TechnologyBroker: "Technology Broker" @
+.Touchdown: "Touchdown" @
+.UnderAttack: "Under Attack" @
+.Undocked: "Undocked" @
+.USSDrop: "USS Drop" @
+.VehicleSwitch: "Vehicle Switch" @
+.WingAdd: "Wing Add" @
+.WingInvite: "Wing Invite" @
+.WingJoin: "Wing Join" @
+.WingLeave: "Wing Leave" @
+.ModuleSellRemote: "Module Sell Remote" @
+.FetchRemoteModule: "Fetch Remote Module" @
+.MassModuleStore: "Mass Module Store" @
+.DatalinkVoucher: "Datalink Voucher" @
+.DataScanned: "Data Scanned" @
+.CommunityGoalDiscard: "Community Goal Discard" @
+.CrewLaunchFighter: "Crew Launch Fighter" @
+.CrewMemberJoins: "Crew Member Joins" @
+.CrewMemberQuits: "Crew Member Quits" @
+.CrewMemberRoleChange: "Crew Member Role Change" @
+.EDDItemSet: "EDD Item Set" @
+.EDDCommodityPrices: "EDD Commodity Prices" @
+.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
+.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
+.RestockVehicle_SRV: "Restock Vehicle_SRV" @
+.RestockVehicle_Fighter: "Restock Vehicle_Fighter" @
+.ShieldState_ShieldsUp: "Shield State_Shields Up" @
+.ShieldState_ShieldsDown: "Shield State_Shields Down" @
+.VehicleSwitch_Mothership: "Vehicle Switch_Mothership" @
+.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
+.AppliedToSquadron: "Applied To Squadron" @
+.AsteroidCracked: "Asteroid Cracked" @
+.CodexEntry: "Codex Entry" @
+.DisbandedSquadron: "Disbanded Squadron" @
+.FSDTarget: "FSD Target" @
+.FSSAllBodiesFound: "FSS All Bodies Found" @
+.FSSDiscoveryScan: "FSS Discovery Scan" @
+.FSSSignalDiscovered: "FSS Signal Discovered" @
+.InvitedToSquadron: "Invited To Squadron" @
+.JoinedSquadron: "Joined Squadron" @
+.KickedFromSquadron: "Kicked From Squadron" @
+.LeftSquadron: "Left Squadron" @
+.MultiSellExplorationData: "Multi Sell Exploration Data" @
+.SAAScanComplete: "SAA Scan Complete" @
+.SharedBookmarkToSquadron: "Shared Bookmark To Squadron" @
+.SquadronCreated: "Squadron Created" @
+.SquadronDemotion: "Squadron Demotion" @
+.SquadronPromotion: "Squadron Promotion" @
+.WonATrophyForSquadron: "Won A Trophy For Squadron" @
 
-////////////////////////////////////////////////////
-///////////////////////////////////////////////////// Journals.  Note there are a lot of format strings, in both the {n} format and in FieldBuilder format
-///////////////////////////////////////////////////// Field builder uses the format "prefixtext;postfix text;Format".  Keep the semicolons right!
+SECTION JournalEntry
 
-///////////////////////////////////////////////////// JournalBounty
-JournalEntry.LegBounty: "{0} total {1:N0}" @
-JournalEntry.Target: "Target:" @
-JournalEntry.Victimfaction: "Victim faction:" @
-JournalEntry.Faction: "Faction:" @
-///////////////////////////////////////////////////// JournalBuyDrones
-JournalEntry.Type: "Type:" @
-JournalEntry.Count: "Count:" @
-JournalEntry.TotalCost: "Total Cost:; cr;N0" @
-JournalEntry.each: "each:; cr;N0" @
-///////////////////////////////////////////////////// JournalBuyExplorationData
-JournalEntry.System: "System:" @
-JournalEntry.Cost: "Cost:; cr;N0" @
-///////////////////////////////////////////////////// JournalCapShipBond
-JournalEntry.from: "< from " @
-JournalEntry.dueto: "< , due to " @
-///////////////////////////////////////////////////// JournalCargo
-JournalEntry.NoCargo: "No Cargo" @
-JournalEntry.Cargo: "Cargo, {0} items" @
-JournalEntry.items: "; items" @
-///////////////////////////////////////////////////// JournalCargoDepot
-JournalEntry.Collected: "Collected:" @
-JournalEntry.of: "< of " @
-JournalEntry.Total: "Total:" @
-JournalEntry.Progress: "Progress:;%;N1" @
-JournalEntry.Delivered: "Delivered:" @
-JournalEntry.Update: "Update, Collected:" @
-JournalEntry.ToGo: "To Go:" @
-JournalEntry.ProgressLeft: "Progress Left:;%;N1" @
-///////////////////////////////////////////////////// JournalCollectCargo
-JournalEntry.Stolen: ";Stolen" @
-///////////////////////////////////////////////////// JournalCommitCrime
-JournalCommitCrime.Fine: " Fine {0:N0}" @
-JournalCommitCrime.Bounty: " Bounty {0:N0}" @
-JournalEntry.0: "{0} on {1}" @
-JournalEntry.onfaction: "< on faction " @
-JournalEntry.Against: "Against " @
-JournalEntry.Bounty: "Bounty:; cr;N0" @
-///////////////////////////////////////////////////// JournalCommunityGoal
-CommunityGoal.Title: "Title:" @
-CommunityGoal.System: "System:" @
-CommunityGoal.At: "At:" @
-CommunityGoal.Expires: "Expires:" @
-CommunityGoal.NotComplete: "Not Complete;Complete" @
-CommunityGoal.CurrentTotal: "Current Total:" @
-CommunityGoal.Contribution: "Contribution:" @
-CommunityGoal.NumContributors: "Num Contributors:" @
-CommunityGoal.Player: "Player % Band:" @
-CommunityGoal.TopRank: "Top Rank:" @
-CommunityGoal.NotInTopRank: "Not In Top Rank;In Top Rank" @
-CommunityGoal.TierReached: "Tier Reached:" @
-CommunityGoal.Bonus: "Bonus:" @
-CommunityGoal.TopTierName: "Top Tier Name" @
-CommunityGoal.TT: "TT. Bonus" @
-///////////////////////////////////////////////////// JournalCommunityGoalDiscard
-JournalEntry.CGS: "< at ; Star System" @
-///////////////////////////////////////////////////// JournalCommunityGoalReward
-JournalEntry.Reward: "Reward:; cr;N0" @
-///////////////////////////////////////////////////// JournalCrewAssign
-JournalEntry.torole: "< to role ;" @
-///////////////////////////////////////////////////// JournalCrewFire
-JournalEntry.fired: "; fired" @
-///////////////////////////////////////////////////// JournalCrewHire
-JournalEntry.Hired: "Hired:;" @
-JournalEntry.offaction: "< of faction " @
-JournalEntry.Rank: "Rank:" @
-///////////////////////////////////////////////////// JournalCrewMemberRoleChange
-JournalEntry.Crew: "Crew:" @
-JournalEntry.Role: "Role:" @
-///////////////////////////////////////////////////// JournalDatalinkVoucher
-JournalEntry.fromfaction: "< from faction " @
-///////////////////////////////////////////////////// JournalDied
-JournalEntry.Died: "{0} in ship type {1} rank {2}" @
-JournalEntry.Killedby: "Killed by " @
-///////////////////////////////////////////////////// JournalDiscoveryScan
-JournalEntry.Dscan: "New bodies discovered:" @
-///////////////////////////////////////////////////// JournalDocked
-JournalDocked.At: "At {0}" @
-JournalEntry.insystem: "< in system " @
-JournalEntry.Wanted: ";(Wanted)" @
-JournalEntry.instate: "< in state " @
-JournalEntry.Allegiance: "Allegiance:" @
-JournalEntry.Economy: "Economy:" @
-JournalEntry.Government: "Government:" @
-JournalEntry.Stationservices: "Station services:" @
-JournalEntry.Economies: "Economies:" @
-///////////////////////////////////////////////////// JournalDockingGranted
-JournalEntry.onpad: "< on pad " @
-///////////////////////////////////////////////////// JournalCommodityPricesBase
-JournalCommodityPricesBase.PON: "Prices on ; items" @
-JournalCommodityPricesBase.CPBat: "< at " @
-JournalCommodityPricesBase.CPBin: "< in " @
-JournalCommodityPricesBase.Itemstobuy: "Items to buy:" @
-JournalCommodityPricesBase.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
-JournalCommodityPricesBase.CPBBuy: "{0}: {1}  " @
-JournalCommodityPricesBase.SO: "Sell only Items:" @
-///////////////////////////////////////////////////// JournalEDDItemSet
-JournalEntry.Name: "Name:" @
-///////////////////////////////////////////////////// JournalEjectCargo
-JournalEntry.Abandoned: ";Abandoned" @
-JournalEntry.PowerPlay: "PowerPlay:" @
-///////////////////////////////////////////////////// JournalEndCrewSession
-JournalEntry.DuetoCrime: "; Due to Crime" @
-///////////////////////////////////////////////////// JournalEngineerApply
-JournalEntry.Blueprint: "Blueprint:" @
-JournalEntry.Level: "Level:" @
-JournalEntry.Override: "Override:" @
-///////////////////////////////////////////////////// JournalEngineerContribution
-JournalEntry .Type: "Type:" @
-JournalEntry .Commodity: "Commodity:" @
-JournalEntry .Material: "Material:" @
-JournalEntry .Quantity: "Quantity:" @
-JournalEntry .TotalQuantity: "TotalQuantity:" @
-///////////////////////////////////////////////////// JournalEngineerCraftBase
-JournalEngineerCraftBase.InSlot: "In Slot:" @
-JournalEngineerCraftBase.By: "By:" @
-JournalEngineerCraftBase.Blueprint: "Blueprint:" @
-JournalEngineerCraftBase.Level: "Level:" @
+.LegBounty: "{0} total {1:N0}" @
+.Target: "Target:" @
+.Victimfaction: "Victim faction:" @
+.Faction: "Faction:" @
+.Count: "Count:" @
+.TotalCost: "Total Cost:; cr;N0" @
+.each: "each:; cr;N0" @
+.System: "System:" @
+.Cost: "Cost:; cr;N0" @
+.from: "< from " @
+.dueto: "< , due to " @
+.NoCargo: "No Cargo" @
+.Cargo: "Cargo, {0} items" @
+.items: "; items" @
 
-///////////////////////////////////////////////////// JournalEngineerProgress
-JournalEngineerProgress.Progress: "Progress:" @
-///////////////////////////////////////////////////// JournalEscapeInterdiction
-JournalEntry.NPC: "< (NPC);(Player)" @
-///////////////////////////////////////////////////// JournalFetchRemoteModule
-JournalEntry.Intoship: "Into ship:" @
-JournalEntry.TransferTime: "Transfer Time:" @
-///////////////////////////////////////////////////// JournalFileheader
-JournalEntry.Version: "Version:" @
-JournalEntry.Build: "Build:" @
-JournalEntry.Part: "Part:" @
-///////////////////////////////////////////////////// JournalFriends
-JournalEntry.NumberofStatuses: "Number of Statuses:" @
-JournalEntry.Online: "Online:" @
-JournalEntry.Offline: "Offline:" @
-///////////////////////////////////////////////////// JournalFSDJump
-JournalFSDJump.Jumpto: "Jump to {0}" @
-JournalFSDJump.Fuel: " Fuel " @
-JournalFSDJump.left: " left " @
-JournalLocOrJump.Faction: "Faction:" @
-JournalLocOrJump.Wanted: "<;(Wanted) " @
-JournalLocOrJump.State: "State:" @
-JournalLocOrJump.Allegiance: "Allegiance:" @
-JournalLocOrJump.Economy: "Economy:" @
-JournalLocOrJump.Population: "Population:" @
-JournalLocOrJump.Government: "Government:" @
-JournalLocOrJump.Inf: "Inf:;%" @
-JournalLocOrJump.PendingState: "Pending State:" @
-JournalLocOrJump.RecoveringState: "Recovering State:" @
-///////////////////////////////////////////////////// JournalFuelScoop
-JournalFuelScoop.Total: "Total:;t;0.0" @
-///////////////////////////////////////////////////// JournalInterdicted
-JournalEntry.Submitted: ";Submitted" @
-JournalEntry.to: "< to " @
-JournalEntry.Power: "Power:" @
-///////////////////////////////////////////////////// JournalInterdiction
-JournalEntry.Failedtointerdict: "Failed to interdict;Interdicted" @
-///////////////////////////////////////////////////// JournalJetConeBoost
-JournalEntry.Boost: "Boost:;;0.0" @
-///////////////////////////////////////////////////// JournalJoinACrew
-JournalEntry.Captain: "Captain:" @
-///////////////////////////////////////////////////// JournalKickCrewMember
-JournalEntry.CrewMember: "Crew Member:" @
-///////////////////////////////////////////////////// JournalLaunchFighter
-JournalEntry.Loadout: "Loadout:" @
-JournalEntry.NPCControlled: ", NPC Controlled;" @
-///////////////////////////////////////////////////// JournalLoadGame
-JournalEntry.Ship: "Ship:" @
-JournalEntry.Ident: "Ident:" @
-JournalEntry.Credits: "Credits:;;N0" @
-JournalEntry.Mode: "Mode:" @
-JournalEntry.Group: "Group:" @
-JournalEntry.NotLanded: "Not Landed;Landed" @
-JournalEntry.FuelLevel: "Fuel Level:;;0.0" @
-JournalEntry.Capacity: "Capacity:;;0.0" @
-JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" @
-///////////////////////////////////////////////////// JournalLoadout
-JournalLoadout.Modules: "Modules:" @
-JournalEntry.Hull: "Hull:; cr;N0" @
-JournalEntry.Modules: "Modules:; cr;N0" @
-JournalEntry.Rebuy: "Rebuy:; cr;N0" @
-///////////////////////////////////////////////////// JournalLocation
-JournalLocation.AtStat: "At {0}" @
-JournalLocation.LND: "Landed on {0}" @
-JournalLocation.AtStar: "At {0}" @
-JournalLocOrJump.Type: "Type " @
-JournalLocOrJump.insystem: "< in system " @
-JournalLocOrJump.Security: "Security:" @
-JournalLocOrJump.Inspacenear: "In space near " @
-JournalLocOrJump.oftype: "< of type " @
-///////////////////////////////////////////////////// JournalMarketBuy
-JournalEntry.buyprice: "< buy price ; cr;N0" @
-///////////////////////////////////////////////////// JournalMarketSell
-JournalEntry.sellprice: "< sell price ; cr;N0" @
-JournalEntry.Profit: "Profit:; cr;N0" @
-JournalEntry.Legal: "Legal;Illegal" @
-JournalEntry.NotStolen: "Not Stolen;Stolen" @
-JournalEntry.Market: "Market;BlackMarket" @
-///////////////////////////////////////////////////// JournalMassModuleStore
-JournalEntry.Totalmodules: "Total modules:" @
-JournalEntry.Hot: ";(Hot)" @
-///////////////////////////////////////////////////// JournalMaterialCollected
-JournalEntry.MatC: "< ; items" @
-///////////////////////////////////////////////////// JournalMaterialDiscovered
-JournalMaterialDiscovered.DN: ", Discovery {0}" @
-///////////////////////////////////////////////////// JournalMaterials
-JournalMaterials.Raw: "Raw:" @
-JournalMaterials.Manufactured: "Manufactured:" @
-JournalMaterials.Encoded: "Encoded:" @
-///////////////////////////////////////////////////// JournalMaterialTrade
-JournalEntry.Sold: "Sold:" @
-JournalEntry.Received: "Received:" @
-///////////////////////////////////////////////////// JournalMissionAbandoned
-JournalEntry.Fine: "Fine:" @
-///////////////////////////////////////////////////// JournalMissionCompleted
-JournalEntry.Donation: "Donation:" @
-JournalEntry.Station: "Station:" @
-JournalEntry.Commodity: "Commodity:" @
-JournalEntry.TargetFaction: "Target Faction:" @
-JournalEntry.Permits: "Permits:" @
-JournalEntry.Rewards: "Rewards:" @
-///////////////////////////////////////////////////// JournalMissionRedirected
-JournalEntry.Missionname: "Mission name:" @
-JournalMissionRedirected.From: "From:" @
-JournalMissionRedirected.To: "To:" @
-///////////////////////////////////////////////////// JournalMissions
-JournalEntry.Active: "Active:" @
-JournalEntry.Failed: "Failed:" @
-JournalEntry.Completed: "Completed:" @
-MissionItem.Passenger: "<;(Passenger)" @
-MissionItem.Expires: "Expires:" @
-///////////////////////////////////////////////////// JournalModuleBuy
-JournalEntry.into: "< into " @
-JournalEntry.Price: "Price:; cr;N0" @
-JournalEntry.Stored: "Stored:" @
-///////////////////////////////////////////////////// JournalModuleInfo
-JournalEntry .Modules: "Modules:" @
-///////////////////////////////////////////////////// JournalModuleSellRemote
-JournalEntry.Item: "Item:" @
-///////////////////////////////////////////////////// JournalModuleStore
-JournalEntry.on: " on " @
-JournalEntry.Replacedby: "Replaced by:" @
-JournalEntry.Modifications: "Modifications:" @
-///////////////////////////////////////////////////// JournalModuleSwap
-JournalEntry.Slot: "Slot:" @
-JournalEntry.Swappedwith: ", Swapped with " @
-///////////////////////////////////////////////////// JournalMusic
-JournalEntry.MusicTrack: "Music Track:" @
-///////////////////////////////////////////////////// JournalNavBeaconScan
-JournalEntry.Bodies: "Bodies:" @
-///////////////////////////////////////////////////// JournalNewCommander
-JournalEntry.StartingPackage: "Starting Package:" @
-///////////////////////////////////////////////////// JournalNpcCrewPaidWage
-JournalEntry.Wagesfor: "Wages for " @
-///////////////////////////////////////////////////// JournalOutfitting
-JournalEntry.itemsavailable: " items available" @
-///////////////////////////////////////////////////// JournalPassengers
-JournalEntry.NoPassengers: "No Passengers" @
-///////////////////////////////////////////////////// JournalPayBounties
-JournalEntry.Brokertook: ", Broker took {0:N0}%" @
-///////////////////////////////////////////////////// JournalPowerplay
-JournalEntry.Merits: "Merits:" @
-JournalEntry.Votes: "Votes:" @
-JournalEntry.Pledged: "Pledged:" @
-///////////////////////////////////////////////////// JournalPowerplayDefect
-JournalEntry.FromPower: "From Power:" @
-JournalEntry.ToPower: "To Power:" @
-///////////////////////////////////////////////////// JournalPowerplaySalary
-JournalEntry.Amount: "Amount:; cr;N0" @
-///////////////////////////////////////////////////// JournalPowerplayVoucher
-JournalEntry.Systems: ", Systems:" @
-///////////////////////////////////////////////////// JournalProgress
-JournalProgress.Combat: "Combat:;%" @
-JournalProgress.Trade: "Trade:;%" @
-JournalProgress.Exploration: "Exploration:;%" @
-JournalProgress.Federation: "Federation:;%" @
-JournalProgress.Empire: "Empire:;%" @
-JournalProgress.CQC: "CQC:;%" @
-///////////////////////////////////////////////////// JournalPromotion
-JournalPromotion.Combat: "Combat:" @
-JournalPromotion.Trade: "Trade:" @
-JournalPromotion.Exploration: "Exploration:" @
-JournalPromotion.Empire: "Empire:" @
-JournalPromotion.Federation: "Federation:" @
-JournalPromotion.CQC: "CQC:" @
-///////////////////////////////////////////////////// JournalReceiveText
-JournalReceiveText.From: "From:" @
-JournalReceiveText.Msg: "Msg:" @
-JournalReceiveText.Channel: "Channel:" @
-///////////////////////////////////////////////////// JournalRefuelAll
-JournalEntry.Fuel: "Fuel:; tons;0.0" @
-///////////////////////////////////////////////////// JournalRepairDrone
-JournalRepairDrone.Hull: "Hull:" @
-JournalEntry.Cockpit: "Cockpit:" @
-JournalEntry.Corrosion: "Corrosion:" @
-///////////////////////////////////////////////////// JournalReputation
-JournalReputation.Federation: "Federation:;;0.#" @
-JournalReputation.Empire: "Empire:;;0.#" @
-JournalReputation.Independent: "Independent:;;0.#" @
-JournalReputation.Alliance: "Alliance:;;0.#" @
-///////////////////////////////////////////////////// JournalResurrect
-JournalEntry.Option: "Option:" @
-JournalEntry.Bankrupt: ";Bankrupt" @
-///////////////////////////////////////////////////// JournalScan
-StarPlanetRing.Mass: "  Mass: {0:N4}{1}\n" @
-StarPlanetRing.InnerRadius: "  Inner Radius: {0:0.00}ls\n" @
-StarPlanetRing.OuterRadius: "  Outer Radius: {0:0.00}ls\n" @
-StarPlanetRing.IK: "  Inner Radius: {0}km\n" @
-StarPlanetRing.OK: "  Outer Radius: {0}km\n" @
-StarPlanetRing.Moons: " Moons" @
-StarPlanetRing.Icy: "Icy" @
-StarPlanetRing.Rocky: "Rocky" @
-StarPlanetRing.MetalRich: "Metal Rich" @
-StarPlanetRing.Metallic: "Metallic" @
-StarPlanetRing.RockyIce: "Rocky Ice" @
-JournalScan.Scanof: "Scan of {0}" @
-JournalScan.MSM: "Mass:;SM;0.00" @
-JournalScan.Age: "Age:;my;0.0" @
-JournalScan.RS: "Radius:;SR;0.00" @
-JournalScan.MEM: "Mass:;EM;0.00" @
-JournalScan.Landable: "<;, Landable" @
-JournalScan.Terraformable: "<;, Terraformable" @
-JournalScan.Gravity: "Gravity:;G;0.0" @
-JournalScan.RK: "Radius:;km;0" @
-JournalScan.NoAtmosphere: ", No Atmosphere" @
-JournalScan.LandC: ", Landable" @
-JournalScan.AMY: "Age: {0} my\n" @
-JournalScan.SolarMasses: "Solar Masses: {0:0.00}\n" @
-JournalScan.EarthMasses: "Earth Masses: {0:0.0000}\n" @
-JournalScan.SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
-JournalScan.BodyRadius: "Body Radius: {0:0.00}km\n" @
-JournalScan.SurfaceTemp: "Surface Temp: {0}K\n" @
-JournalScan.Luminosity: "Luminosity: {0}\n" @
-JournalScan.GV: "Gravity: {0:0.0}g\n" @
-JournalScan.SPA: "Surface Pressure: {0} Atmospheres\n" @
-JournalScan.SPP: "Surface Pressure: {0} Pa\n" @
-JournalScan.Volcanism: "Volcanism: {0}\n" @
-JournalScan.NoVolcanism: "No Volcanism" @
-JournalScan.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" @
-JournalScan.OrbitalPeriod: "Orbital Period: {0} days\n" @
-JournalScan.SMA: "Semi Major Axis: {0:0.00}AU\n" @
-JournalScan.SMK: "Semi Major Axis: {0}km\n" @
-JournalScan.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" @
-JournalScan.OrbitalInclination: "Orbital Inclination: {0:0.000}�\n" @
-JournalScan.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}�\n" @
-JournalScan.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}\n" @
-JournalScan.Axialtilt: "Axial tilt: {0:0.00}�\n" @
-JournalScan.RotationPeriod: "Rotation Period: {0} days\n" @
-JournalScan.Tidallylocked: "Tidally locked\n" @
-JournalScan.Candidateforterraforming: "Candidate for terraforming\n" @
-JournalScan.Belt: "Belt{0}" @
-JournalScan.Moons: " Moons" @
-JournalScan.Ring: "Ring{0}" @
-JournalScan.EV: "\nEstimated value: {0:N0}" @
-JournalScan.DB: "\n\nDiscovered by {0} on {1}" @
-JournalScan.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
-JournalScan.Othersstarsnotconsidered: " (Others stars not considered)\n" @
-JournalScan.Materials: "Materials:\n" @
-JournalScan.AtmosphericComposition: "Atmospheric Composition:\n" @
-JournalScan.PlanetaryComposition: "Planetary Composition:\n" @
-///////////////////////////////////////////////////// JournalScientificResearch
-JournalEntry.Category: "Category:" @
-///////////////////////////////////////////////////// JournalScreenshot
-JournalScreenshot.At: "At " @
-JournalScreenshot.in: "< in " @
-JournalScreenshot.File: "File:" @
-JournalScreenshot.Width: "Width:" @
-JournalScreenshot.Height: "Height:" @
-JournalEntry.Latitude: "Latitude:" @
-JournalEntry.Longitude: "Longitude:" @
-///////////////////////////////////////////////////// JournalSearchAndRescue
-JournalEntry.Num: "Num:" @
-JournalSearchAndRescue.Reward: "Reward:" @
-///////////////////////////////////////////////////// JournalSelfDestruct
-JournalEntry.Boom: "Boom!" @
-///////////////////////////////////////////////////// JournalSellDrones
-JournalEntry.Drones: "Drones" @
-///////////////////////////////////////////////////// JournalSellExplorationData
-JournalEntry.Bonus: "Bonus:; cr;N0" @
-JournalSellExplorationData.Total: "Total:; cr;N0" @
-JournalEntry.Scanned: "Scanned:" @
-JournalEntry.Discovered: "Discovered:" @
-///////////////////////////////////////////////////// JournalSendText
-JournalSendText.To: "To:" @
-JournalSendText.Msg: "Msg:" @
-///////////////////////////////////////////////////// JournalSetUserShipName
-JournalSetUserShipName.On: "On:" @
-///////////////////////////////////////////////////// JournalShieldState
-JournalEntry.ShieldsDown: "Shields Down;Shields Up" @
-///////////////////////////////////////////////////// JournalShipTargeted
-JournalEntry.in: "< in " @
-JournalEntry.Shield: "Shield ;;N1" @
-JournalShipTargeted.Hull: "Hull ;;N1" @
-JournalShipTargeted.at: "< at ;;N1" @
-JournalEntry.LostTarget: "Lost Target" @
-///////////////////////////////////////////////////// JournalShipyard
-JournalEntry.Ships: "Ships" @
-///////////////////////////////////////////////////// JournalShipyardSell
-JournalShipyardSell.At: "At:" @
-///////////////////////////////////////////////////// JournalShipyardSwap
-JournalShipyardSwap.Swap: "Swap " @
-JournalShipyardSwap.fora: "< for a " @
-///////////////////////////////////////////////////// JournalShipyardTransfer
-JournalShipyardTransfer.Of: "Of " @
-JournalEntry.Distance: "Distance:; ly;0.0" @
-///////////////////////////////////////////////////// JournalStartJump
-JournalStartJump.ChargingFSD: "Charging FSD" @
-///////////////////////////////////////////////////// JournalStatistics
-JournalEntry.Wealth: "Wealth:;cr;N" @
-JournalEntry.NotorietyIndex: "Notoriety Index:;;N0" @
-JournalStatistics.BankAccount: "Bank Account" @
-JournalStatistics.Combat: "Combat" @
-JournalStatistics.Crime: "Crime" @
-JournalStatistics.Smuggling: "Smuggling" @
-JournalStatistics.Trading: "Trading" @
-JournalStatistics.Mining: "Mining" @
-JournalStatistics.Exploration: "Exploration" @
-JournalStatistics.Passengers: "Passengers" @
-JournalStatistics.SearchandRescue: "Search and Rescue" @
-JournalStatistics.Engineers: "Engineers" @
-JournalStatistics.Crew: "Crew" @
-JournalStatistics.Multicrew: "Multicrew" @
-JournalStatistics.MaterialsandCommodityTrading: "Materials and Commodity Trading" @
-JournalStatistics.CQC: "CQC" @
-BankAccountClass.Wealth: "Wealth:;cr;N0" @
-BankAccountClass.SpentonShips: "Spent on Ships:;cr;N0" @
-BankAccountClass.SpentonOutfitting: "Spent on Outfitting:;cr;N0" @
-BankAccountClass.SpentonRepairs: "Spent on Repairs:;cr;N0" @
-BankAccountClass.SpentonFuel: "Spent on Fuel:;cr;N0" @
-BankAccountClass.SpendonAmmo: "Spend on Ammo:;cr;N0" @
-BankAccountClass.InsuranceClaims: "Insurance Claims:;;N0" @
-BankAccountClass.SpentonInsurance: "Spent on Insurance:;cr;N0" @
-CombatClass.Bounties: "Bounties :;;N0" @
-CombatClass.BountyProfits: "Bounty Profits:;cr;N0" @
-CombatClass.CombatBonds: "Combat Bonds:;;N0" @
-CombatClass.CombatBondProfits: "Combat Bond Profits:;cr;N0" @
-CombatClass.Assassinations: "Assassinations:;;N0" @
-CombatClass.AssassinationProfits: "Assassination Profits:;cr;N0" @
-CombatClass.HighestReward: "Highest Reward:;cr;N0" @
-CombatClass.SkimmersKilled: "Skimmers Killed:;;N0" @
-CrimeClass.NotorietyIndex: "Notoriety Index:;;N0" @
-CrimeClass.Fines: "Fines:;;N0" @
-CrimeClass.TotalFines: "Total Fines:;cr;N0" @
-CrimeClass.Bounties: "Bounties:;;N0" @
-CrimeClass.TotalBounties: "Total Bounties:;cr;N0" @
-CrimeClass.HighestBounty: "Highest Bounty:;cr;N0" @
-SmugglingClass.BlackMarkets: "Black Markets:;;N0" @
-SmugglingClass.BlackMarketProfits: "Black Market Profits:;cr;N0" @
-SmugglingClass.ResourcesSmuggled: "Resources Smuggled:;;N0" @
-SmugglingClass.AverageProfit: "Average Profit:;cr;N0" @
-SmugglingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
-TradingClass.MarketsTraded: "Markets Traded:;;N0" @
-TradingClass.Profits: "Profits:;cr;N0" @
-TradingClass.No: "No. of Resources:;;N0" @
-TradingClass.AverageProfit: "Average Profit:;cr;N0" @
-TradingClass.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
-MiningClass.Profits: "Profits:;cr;N0" @
-MiningClass.Quantity: "Quantity:;;N0" @
-MiningClass.MaterialsTypesCollected: "Materials Types Collected:;;N0" @
-ExplorationClass.SystemsVisited: "Systems Visited:;;N0" @
-ExplorationClass.Profits: "Profits:;cr;N0" @
-ExplorationClass.Level2Scans: "Level 2 Scans:;;N0" @
-ExplorationClass.Level3Scans: "Level 3 Scans:;;N0" @
-ExplorationClass.HighestPayout: "Highest Payout:;cr;N0" @
-ExplorationClass.TotalDistance: "Total Distance:;;N0" @
-ExplorationClass.NoofJumps: "No of Jumps:;;N0" @
-ExplorationClass.GreatestDistance: "Greatest Distance:;;N0" @
-ExplorationClass.TimePlayed: "Time Played:" @
-PassengerMissionsClass.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" @
-PassengerMissionsClass.VIPMissionPassengers: "VIP Mission Passengers:;;N0" @
-PassengerMissionsClass.PassengersDelivered: "Passengers Delivered:;;N0" @
-PassengerMissionsClass.PassengersEjected: "Passengers Ejected:;;N0" @
-SearchAndRescueClass.TotalItemsRescued: "Total Items Rescued:;;N0" @
-SearchAndRescueClass.Profit: "Profit:;cr;N0" @
-SearchAndRescueClass.TotalRescueTransactions: "Total Rescue Transactions:;;N0" @
-CraftingClass.EngineersUsed: "Engineers Used:;;N0" @
-CraftingClass.Blueprints: "Blueprints:;;N0" @
-CraftingClass.AtLevel1: "At Level 1:;;N0" @
-CraftingClass.AtLevel2: "At Level 2:;;N0" @
-CraftingClass.AtLevel3: "At Level 3:;;N0" @
-CraftingClass.AtLevel4: "At Level 4:;;N0" @
-CraftingClass.AtLevel5: "At Level 5:;;N0" @
-CrewClass.TotalWages: "Total Wages:;cr;N0" @
-CrewClass.Hired: "Hired:;;N0" @
-CrewClass.Fired: "Fired:;;N0" @
-CrewClass.KilledinAction: "Killed in Action:;;N0" @
-MulticrewClass.TotalTime: "Total Time:" @
-MulticrewClass.GunnerTime: "Gunner Time:;;N0" @
-MulticrewClass.FighterTime: "Fighter Time:;;N0" @
-MulticrewClass.Credits: "Credits:;cr;N0" @
-MulticrewClass.Fines: "Fines:;cr;N0" @
-MaterialTraderStatsClass.CommodityTrades: "Commodity Trades:;;N0" @
-MaterialTraderStatsClass.MaterialTraded: "Material Traded:;;N0" @
-CQCClass.TimePlayed: "Time Played:;;N0" @
-CQCClass.KDRatio: "KD Ratio:;;N" @
-CQCClass.Kills: "Kills:;;N0" @
-CQCClass.Win: "Win/Loss:;;N" @
-///////////////////////////////////////////////////// JournalStoredModules
-JournalEntry.at: "< at " @
-JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
-JournalEntry.Time: "Time:" @
-JournalEntry.Value: "Value:; cr;N0" @
-///////////////////////////////////////////////////// JournalStoredShips
-JournalStoredShips.Atstarport: "At starport:" @
-JournalStoredShips.Otherlocations: "Other locations:" @
-JournalStoredShips.SSP: "; cr;N0" @
-JournalStoredShips.Remote: "Remote:" @
-JournalStoredShips.intransit: "<; in transit" @
-///////////////////////////////////////////////////// JournalSupercruiseExit
-JournalSupercruiseExit.At: "At " @
-///////////////////////////////////////////////////// JournalUnknown
-JournalUnknown.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
-///////////////////////////////////////////////////// JournalUSSDrop
-JournalEntry.Threat: "Threat:" @
+SECTION JournalCargo
+
+.CargoShip: "Ship" @
+.CargoSRV: "SRV" @
+
+SECTION JournalEntry
+
+.Collected: "Collected:" @
+.of: "< of " @
+.Total: "Total:" @
+.Progress: "Progress:;%;N1" @
+.Delivered: "Delivered:" @
+.Update: "Update, Collected:" @
+.ToGo: "To Go:" @
+.ProgressLeft: "Progress Left:;%;N1" @
+
+SECTION JournalFSSDiscoveryScan
+
+.Others: "Others:" @
+
+SECTION JournalCodexEntry
+
+.At: "At " @
+.in: "in " @
+.NewEntry: ";New Entry" @
+.Traits: ";Traits" @
+
+SECTION JournalEntry
+
+.Stolen: ";Stolen" @
+
+SECTION JournalCommitCrime
+
+.Fine: " Fine {0:N0}" @
+.Bounty: " Bounty {0:N0}" @
+
+SECTION JournalEntry
+
+.0: "{0} on {1}" @
+.onfaction: "< on faction " @
+.Against: "Against " @
+.Bounty: "Bounty:; cr;N0" @
+
+SECTION CommunityGoal
+
+.Title: "Title:" @
+.System: "System:" @
+.At: "At:" @
+.Expires: "Expires:" @
+.NotComplete: "Not Complete;Complete" @
+.CurrentTotal: "Current Total:" @
+.Contribution: "Contribution:" @
+.NumContributors: "Num Contributors:" @
+.Player: "Player % Band:" @
+.TopRank: "Top Rank:" @
+.NotInTopRank: "Not In Top Rank;In Top Rank" @
+.TierReached: "Tier Reached:" @
+.Bonus: "Bonus:" @
+.TopTierName: "Top Tier Name" @
+.TT: "TT. Bonus" @
+
+SECTION JournalEntry
+
+.CGS: "< at ; Star System" @
+.Reward: "Reward:; cr;N0" @
+.torole: "< to role ;" @
+.fired: "; fired" @
+.Hired: "Hired:;" @
+.offaction: "< of faction " @
+.Rank: "Rank:" @
+.Crew: "Crew:" @
+.Role: "Role:" @
+.fromfaction: "< from faction " @
+.Died: "{0} in ship type {1} rank {2}" @
+.Killedby: "Killed by " @
+.Dscan: "New bodies discovered:" @
+
+SECTION FSSSignal
+
+.State: "State:" @
+.Faction: "Faction:" @
+.USSType: "USS Type:" @
+.ThreatLevel: " Threat Level:" @
+.StationBool: ";Station" @
+
+SECTION JournalFSSDiscoveryScan
+
+.Progress: "Progress:;%;N1" @
+
+SECTION JournalFSSSignalDiscovered
+
+.Detected: "Detected ; signals" @
+
+SECTION JournalDocked
+
+.At: "At {0}" @
+
+SECTION JournalEntry
+
+.insystem: "< in system " @
+.Wanted: ";(Wanted)" @
+.instate: "< in state " @
+.Allegiance: "Allegiance:" @
+.Economy: "Economy:" @
+.Government: "Government:" @
+.Stationservices: "Station services:" @
+.Economies: "Economies:" @
+.ActiveFine: ";Active Fine" @
+.onpad: "< on pad " @
+
+SECTION JournalCommodityPricesBase
+
+.PON: "Prices on ; items" @
+.CPBat: "< at " @
+.CPBin: "< in " @
+.Itemstobuy: "Items to buy:" @
+.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
+.CPBBuy: "{0}: {1}  " @
+.SO: "Sell only Items:" @
+
+SECTION JournalEntry
+
+.Name: "Name:" @
+.Abandoned: ";Abandoned" @
+.PowerPlay: "PowerPlay:" @
+.DuetoCrime: "; Due to Crime" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+.Override: "Override:" @
+.Type: "Type:" @
+.Commodity: "Commodity:" @
+.Material: "Material:" @
+.Quantity: "Quantity:" @
+.TotalQuantity: "TotalQuantity:" @
+
+SECTION JournalEngineerCraftBase
+
+.InSlot: "In Slot:" @
+.By: "By:" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+
+SECTION JournalEngineerProgress
+
+.Progress: "Progress:" @
+.Progresson: "Progress on ; Engineers" @
+
+SECTION JournalEntry
+
+.NPC: "< (NPC);(Player)" @
+.Intoship: "Into ship:" @
+.TransferTime: "Transfer Time:" @
+.Version: "Version:" @
+.Build: "Build:" @
+.Part: "Part:" @
+.NumberofStatuses: "Number of Statuses:" @
+.Online: "Online:" @
+.Offline: "Offline:" @
+
+SECTION JournalFSDJump
+
+.Jumpto: "Jump to {0}" @
+.Fuel: " Fuel " @
+.left: " left " @
+
+SECTION JournalLocOrJump
+
+.Faction: "Faction:" @
+.Wanted: "<;(Wanted) " @
+.State: "State:" @
+.Allegiance: "Allegiance:" @
+.Economy: "Economy:" @
+.Population: "Population:" @
+.Government: "Government:" @
+.Inf: "Inf:;%" @
+.PendingState: "Pending State:" @
+.RecoveringState: "Recovering State:" @
+
+SECTION JournalFuelScoop
+
+.Total: "Total:;t;0.0" @
+
+SECTION JournalEntry
+
+.Submitted: ";Submitted" @
+.to: "< to " @
+.Power: "Power:" @
+.Failedtointerdict: "Failed to interdict;Interdicted" @
+.Boost: "Boost:;;0.0" @
+.Captain: "Captain:" @
+.CrewMember: "Crew Member:" @
+.Loadout: "Loadout:" @
+.NPCControlled: ", NPC Controlled;" @
+.Ship: "Ship:" @
+.Ident: "Ident:" @
+.Credits: "Credits:;;N0" @
+.Mode: "Mode:" @
+.Group: "Group:" @
+.NotLanded: "Not Landed;Landed" @
+.FuelLevel: "Fuel Level:;;0.0" @
+.Capacity: "Capacity:;;0.0" @
+.Cashtotaldiffers: "Cash total differs, adjustment" @
+
+SECTION JournalLoadout
+
+.Modules: "Modules:" @
+
+SECTION JournalEntry
+
+.Hull: "Hull:; cr;N0" @
+.Modules: "Modules:; cr;N0" @
+.Rebuy: "Rebuy:; cr;N0" @
+
+SECTION JournalLocation
+
+.AtStat: "At {0}" @
+.LND: "Landed on {0}" @
+.AtStar: "At {0}" @
+
+SECTION JournalLocOrJump
+
+.Type: "Type " @
+.insystem: "< in system " @
+.Security: "Security:" @
+.Inspacenear: "In space near " @
+.oftype: "< of type " @
+.Happiness: "Happiness:" @
+.Reputation: "Reputation:;%;N1" @
+.SquadronSystem: ";Squadron System" @
+.HappiestSystem: ";Happiest System" @
+.HomeSystem: ";Home System" @
+.ActiveState: "Active State:" @
+
+SECTION JournalEntry
+
+.buyprice: "< buy price ; cr;N0" @
+.sellprice: "< sell price ; cr;N0" @
+.Profit: "Profit:; cr;N0" @
+.Legal: "Legal;Illegal" @
+.NotStolen: "Not Stolen;Stolen" @
+.Market: "Market;BlackMarket" @
+.Totalmodules: "Total modules:" @
+.Hot: ";(Hot)" @
+.MatC: "< ; items" @
+
+SECTION JournalMaterialDiscovered
+
+.DN: ", Discovery {0}" @
+
+SECTION JournalMaterials
+
+.Raw: "Raw:" @
+.Manufactured: "Manufactured:" @
+.Encoded: "Encoded:" @
+
+SECTION JournalEntry
+
+.Sold: "Sold:" @
+.Received: "Received:" @
+.Fine: "Fine:" @
+.Donation: "Donation:" @
+.Station: "Station:" @
+.TargetFaction: "Target Faction:" @
+.Permits: "Permits:" @
+.Rewards: "Rewards:" @
+.Missionname: "Mission name:" @
+
+SECTION JournalMissionRedirected
+
+.From: "From:" @
+.To: "To:" @
+
+SECTION JournalEntry
+
+.Active: "Active:" @
+.Failed: "Failed:" @
+.Completed: "Completed:" @
+
+SECTION MissionItem
+
+.Passenger: "<;(Passenger)" @
+.Expires: "Expires:" @
+
+SECTION JournalEntry
+
+.into: "< into " @
+.Price: "Price:; cr;N0" @
+.Stored: "Stored:" @
+
+SECTION JournalModuleInfo
+
+.Modules: "Modules:" @
+
+SECTION JournalEntry
+
+.Item: "Item:" @
+.on: " on " @
+.Replacedby: "Replaced by:" @
+.Modifications: "Modifications:" @
+.Slot: "Slot:" @
+.Swappedwith: ", Swapped with " @
+.MusicTrack: "Music Track:" @
+
+SECTION JournalMultiSellExplorationData
+
+.Total: "Total:; cr;N0" @
+
+SECTION JournalEntry
+
+.Bodies: "Bodies:" @
+.StartingPackage: "Starting Package:" @
+.Wagesfor: "Wages for " @
+.itemsavailable: " items available" @
+.NoPassengers: "No Passengers" @
+.Brokertook: ", Broker took {0:N0}%" @
+.Merits: "Merits:" @
+.Votes: "Votes:" @
+.Pledged: "Pledged:" @
+.FromPower: "From Power:" @
+.ToPower: "To Power:" @
+.Amount: "Amount:; cr;N0" @
+.Systems: ", Systems:" @
+
+SECTION JournalProgress
+
+.Combat: "Combat:;%" @
+.Trade: "Trade:;%" @
+.Exploration: "Exploration:;%" @
+.Federation: "Federation:;%" @
+.Empire: "Empire:;%" @
+.CQC: "CQC:;%" @
+
+SECTION JournalPromotion
+
+.Combat: "Combat:" @
+.Trade: "Trade:" @
+.Exploration: "Exploration:" @
+.Empire: "Empire:" @
+.Federation: "Federation:" @
+.CQC: "CQC:" @
+
+SECTION JournalReceiveText
+
+.From: "From:" @
+.Msg: "Msg:" @
+.Channel: "Channel:" @
+
+SECTION JournalEntry
+
+.Fuel: "Fuel:; tons;0.0" @
+
+SECTION JournalRepairDrone
+
+.Hull: "Hull:" @
+
+SECTION JournalEntry
+
+.Cockpit: "Cockpit:" @
+.Corrosion: "Corrosion:" @
+
+SECTION JournalReputation
+
+.Federation: "Federation:;;0.#" @
+.Empire: "Empire:;;0.#" @
+.Independent: "Independent:;;0.#" @
+.Alliance: "Alliance:;;0.#" @
+
+SECTION JournalEntry
+
+.Option: "Option:" @
+.Bankrupt: ";Bankrupt" @
+
+SECTION StarPlanetRing
+
+.Mass: "  Mass: {0:N4}{1}\n" @
+.InnerRadius: "  Inner Radius: {0:0.00}ls\n" @
+.OuterRadius: "  Outer Radius: {0:0.00}ls\n" @
+.IK: "  Inner Radius: {0}km\n" @
+.OK: "  Outer Radius: {0}km\n" @
+.Moons: " Moons" @
+.Icy: "Icy" @
+.Rocky: "Rocky" @
+.MetalRich: "Metal Rich" @
+.Metallic: "Metallic" @
+.RockyIce: "Rocky Ice" @
+
+SECTION JournalScan
+
+.Scanof: "Scan of {0}" @
+.MSM: "Mass:;SM;0.00" @
+.Age: "Age:;my;0.0" @
+.RS: "Radius:;SR;0.00" @
+.MEM: "Mass:;EM;0.00" @
+.Landable: "<;, Landable" @
+.Terraformable: "<;, Terraformable" @
+.Gravity: "Gravity:;G;0.0" @
+.RK: "Radius:;km;0" @
+.NoAtmosphere: ", No Atmosphere" @
+.LandC: ", Landable" @
+.AMY: "Age: {0} my\n" @
+.SolarMasses: "Solar Masses: {0:0.00}\n" @
+.EarthMasses: "Earth Masses: {0:0.0000}\n" @
+.SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
+.BodyRadius: "Body Radius: {0:0.00}km\n" @
+.SurfaceTemp: "Surface Temp: {0}K\n" @
+.Luminosity: "Luminosity: {0}\n" @
+.GV: "Gravity: {0:0.0}g\n" @
+.SPA: "Surface Pressure: {0} Atmospheres\n" @
+.SPP: "Surface Pressure: {0} Pa\n" @
+.Volcanism: "Volcanism: {0}\n" @
+.NoVolcanism: "No Volcanism" @
+.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" @
+.OrbitalPeriod: "Orbital Period: {0} days\n" @
+.SMA: "Semi Major Axis: {0:0.00}AU\n" @
+.SMK: "Semi Major Axis: {0}km\n" @
+.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" @
+.OrbitalInclination: "Orbital Inclination: {0:0.000}�\n" @
+.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}�\n" @
+.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}\n" @
+.Axialtilt: "Axial tilt: {0:0.00}�\n" @
+.RotationPeriod: "Rotation Period: {0} days\n" @
+.Tidallylocked: "Tidally locked\n" @
+.Candidateforterraforming: "Candidate for terraforming\n" @
+.Belt: "Belt{0}" @
+.Moons: " Moons" @
+.Ring: "Ring{0}" @
+.EV: "\nEstimated value: {0:N0}" @
+.DB: "\n\nDiscovered by {0} on {1}" @
+.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
+.Othersstarsnotconsidered: " (Others stars not considered)\n" @
+.Materials: "Materials:\n" @
+.AtmosphericComposition: "Atmospheric Composition:\n" @
+.PlanetaryComposition: "Planetary Composition:\n" @
+.MRP: "Metal Rich Planets: {0} ({1}-{2} AU)\n" @
+.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" @
+.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" @
+.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" @
+.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" @
+.HabitableZone: " - Habitable Zone, {0} ({1}-{2} AU),\n" @
+.MetalRichplanets: " - Metal Rich planets, {0} ({1}-{2} AU),\n" @
+.WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" @
+.EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
+.AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
+
+SECTION JournalSAAScanComplete
+
+.Probes: "Probes:" @
+.EfficiencyTarget: "Efficiency Target:" @
+
+SECTION JournalEntry
+
+.Category: "Category:" @
+
+SECTION JournalScreenshot
+
+.At: "At " @
+.in: "< in " @
+.File: "File:" @
+.Width: "Width:" @
+.Height: "Height:" @
+
+SECTION JournalEntry
+
+.Latitude: "Latitude:" @
+.Longitude: "Longitude:" @
+.Num: "Num:" @
+
+SECTION JournalSearchAndRescue
+
+.Reward: "Reward:" @
+
+SECTION JournalEntry
+
+.Boom: "Boom!" @
+.Drones: "Drones" @
+.Bonus: "Bonus:; cr;N0" @
+
+SECTION JournalSellExplorationData
+
+.Total: "Total:; cr;N0" @
+
+SECTION JournalEntry
+
+.Scanned: "Scanned:" @
+.Discovered: "Discovered:" @
+
+SECTION JournalSendText
+
+.To: "To:" @
+.Msg: "Msg:" @
+
+SECTION JournalSetUserShipName
+
+.On: "On:" @
+
+SECTION JournalEntry
+
+.ShieldsDown: "Shields Down;Shields Up" @
+.in: "< in " @
+.Shield: "Shield ;;N1" @
+
+SECTION JournalShipTargeted
+
+.Hull: "Hull ;;N1" @
+.at: "< at ;;N1" @
+
+SECTION JournalEntry
+
+.LostTarget: "Lost Target" @
+
+SECTION JournalShipTargeted
+
+.in: "< in " @
+
+SECTION JournalEntry
+
+.Ships: "Ships" @
+
+SECTION JournalShipyardSell
+
+.At: "At:" @
+
+SECTION JournalShipyardSwap
+
+.Swap: "Swap " @
+.fora: "< for a " @
+
+SECTION JournalShipyardTransfer
+
+.Of: "Of " @
+
+SECTION JournalEntry
+
+.Distance: "Distance:; ly;0.0" @
+
+SECTION JournalSquadronBase
+
+.Old: "Old:" @
+.New: "New:" @
+
+SECTION JournalStartJump
+
+.ChargingFSD: "Charging FSD" @
+
+SECTION JournalEntry
+
+.Wealth: "Wealth:;cr;N" @
+.NotorietyIndex: "Notoriety Index:;;N0" @
+
+SECTION JournalStatistics
+
+.BankAccount: "Bank Account" @
+.Combat: "Combat" @
+.Crime: "Crime" @
+.Smuggling: "Smuggling" @
+.Trading: "Trading" @
+.Mining: "Mining" @
+.Exploration: "Exploration" @
+.Passengers: "Passengers" @
+.SearchandRescue: "Search and Rescue" @
+.Engineers: "Engineers" @
+.Crew: "Crew" @
+.Multicrew: "Multicrew" @
+.MaterialsandCommodityTrading: "Materials and Commodity Trading" @
+.CQC: "CQC" @
+
+SECTION BankAccountClass
+
+.Wealth: "Wealth:;cr;N0" @
+.SpentonShips: "Spent on Ships:;cr;N0" @
+.SpentonOutfitting: "Spent on Outfitting:;cr;N0" @
+.SpentonRepairs: "Spent on Repairs:;cr;N0" @
+.SpentonFuel: "Spent on Fuel:;cr;N0" @
+.SpendonAmmo: "Spend on Ammo:;cr;N0" @
+.InsuranceClaims: "Insurance Claims:;;N0" @
+.SpentonInsurance: "Spent on Insurance:;cr;N0" @
+
+SECTION CombatClass
+
+.Bounties: "Bounties :;;N0" @
+.BountyProfits: "Bounty Profits:;cr;N0" @
+.CombatBonds: "Combat Bonds:;;N0" @
+.CombatBondProfits: "Combat Bond Profits:;cr;N0" @
+.Assassinations: "Assassinations:;;N0" @
+.AssassinationProfits: "Assassination Profits:;cr;N0" @
+.HighestReward: "Highest Reward:;cr;N0" @
+.SkimmersKilled: "Skimmers Killed:;;N0" @
+
+SECTION CrimeClass
+
+.NotorietyIndex: "Notoriety Index:;;N0" @
+.Fines: "Fines:;;N0" @
+.TotalFines: "Total Fines:;cr;N0" @
+.Bounties: "Bounties:;;N0" @
+.TotalBounties: "Total Bounties:;cr;N0" @
+.HighestBounty: "Highest Bounty:;cr;N0" @
+
+SECTION SmugglingClass
+
+.BlackMarkets: "Black Markets:;;N0" @
+.BlackMarketProfits: "Black Market Profits:;cr;N0" @
+.ResourcesSmuggled: "Resources Smuggled:;;N0" @
+.AverageProfit: "Average Profit:;cr;N0" @
+.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
+
+SECTION TradingClass
+
+.MarketsTraded: "Markets Traded:;;N0" @
+.Profits: "Profits:;cr;N0" @
+.No: "No. of Resources:;;N0" @
+.AverageProfit: "Average Profit:;cr;N0" @
+.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" @
+
+SECTION MiningClass
+
+.Profits: "Profits:;cr;N0" @
+.Quantity: "Quantity:;;N0" @
+.MaterialsTypesCollected: "Materials Types Collected:;;N0" @
+
+SECTION ExplorationClass
+
+.SystemsVisited: "Systems Visited:;;N0" @
+.Profits: "Profits:;cr;N0" @
+.Level2Scans: "Level 2 Scans:;;N0" @
+.Level3Scans: "Level 3 Scans:;;N0" @
+.HighestPayout: "Highest Payout:;cr;N0" @
+.TotalDistance: "Total Distance:;;N0" @
+.NoofJumps: "No of Jumps:;;N0" @
+.GreatestDistance: "Greatest Distance:;;N0" @
+.TimePlayed: "Time Played:" @
+
+SECTION PassengerMissionsClass
+
+.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" @
+.VIPMissionPassengers: "VIP Mission Passengers:;;N0" @
+.PassengersDelivered: "Passengers Delivered:;;N0" @
+.PassengersEjected: "Passengers Ejected:;;N0" @
+
+SECTION SearchAndRescueClass
+
+.TotalItemsRescued: "Total Items Rescued:;;N0" @
+.Profit: "Profit:;cr;N0" @
+.TotalRescueTransactions: "Total Rescue Transactions:;;N0" @
+
+SECTION CraftingClass
+
+.EngineersUsed: "Engineers Used:;;N0" @
+.Blueprints: "Blueprints:;;N0" @
+.AtLevel1: "At Level 1:;;N0" @
+.AtLevel2: "At Level 2:;;N0" @
+.AtLevel3: "At Level 3:;;N0" @
+.AtLevel4: "At Level 4:;;N0" @
+.AtLevel5: "At Level 5:;;N0" @
+
+SECTION CrewClass
+
+.TotalWages: "Total Wages:;cr;N0" @
+.Hired: "Hired:;;N0" @
+.Fired: "Fired:;;N0" @
+.KilledinAction: "Killed in Action:;;N0" @
+
+SECTION MulticrewClass
+
+.TotalTime: "Total Time:" @
+.GunnerTime: "Gunner Time:;;N0" @
+.FighterTime: "Fighter Time:;;N0" @
+.Credits: "Credits:;cr;N0" @
+.Fines: "Fines:;cr;N0" @
+
+SECTION MaterialTraderStatsClass
+
+.CommodityTrades: "Commodity Trades:;;N0" @
+.MaterialTraded: "Material Traded:;;N0" @
+
+SECTION CQCClass
+
+.TimePlayed: "Time Played:;;N0" @
+.KDRatio: "KD Ratio:;;N" @
+.Kills: "Kills:;;N0" @
+.Win: "Win/Loss:;;N" @
+
+SECTION JournalStoredModules
+
+.at: "< at " @
+
+SECTION JournalEntry
+
+.TransferCost: "Transfer Cost:; cr;N0" @
+.Time: "Time:" @
+.Value: "Value:; cr;N0" @
+
+SECTION JournalSupercruiseExit
+
+.in: "< in " @
+
+SECTION JournalStoredShips
+
+.Atstarport: "At starport:" @
+.Otherlocations: "Other locations:" @
+.SSP: "; cr;N0" @
+.Remote: "Remote:" @
+.intransit: "<; in transit" @
+.at: "< at " @
+
+SECTION JournalSupercruiseExit
+
+.At: "At " @
+
+SECTION JournalUnknown
+
+.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
+
+SECTION JournalEntry
+
+.Threat: "Threat:" @
+.By: "By:" @
+.HullHealth: "Hull Health;%;N1" @
+.MissionCargo: "<; (Mission Cargo)" @
+.InSlot: "In Slot:" @
