@@ -3,7 +3,7 @@ Today: "Today" => "Dzisiaj"
 24h: "24h" => "24 godz."
 7days: "7 days" => "7 Dni"
 All: "All" => "Wszystko"
-OK: "OK" @
+OK: "OK" => "OK"
 Cancel: "Cancel" => "Anuluj"
 Delete: "Delete" => "Usuń"
 Campaign: "Campaign" => "Kampania"
@@ -99,9 +99,9 @@ SECTION PopOutInfo
 .SplitterControl.Description: "Splitter (allows other panels to be placed in the it)" => "Podzielnik okna (umożliwia organizację paneli w karcie)"
 .SplitterControl.Title: "Splitter" => "Podział"
 .PanelSelector.Description: "" @
-.PanelSelector.Title: "+" @
-.Search.Title: "Search" @
-.Search.Description: "Search" @
+.PanelSelector.Title: "+" => "+"
+.Search.Title: "Search" => "Szukaj"
+.Search.Description: "Search" => "Szukaj"
 
 SECTION EDDiscoveryForm
 
@@ -198,15 +198,15 @@ SECTION EDDiscoveryForm
 .EDSMSyncE: "EDSM Sync failed: {0}" => "Synchronizacja EDSM nie powiodła się: {0}"
 .EP: "Edit Profiles" => "Edycja Profili"
 .PL: "Profile {0} Loaded" => "Wczytano Profil {0}"
-.popOutPanelToolStripMenuItem: "Pop Out Panel.." @
+.popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Panel w Nowym Oknie.."
 .CloseWarning: "EDDiscovery is updating the EDSM and EDDB databases\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery aktualizuje bazy danych EDSM i EDDB\r\nNaciśnij OK aby zamknąć teraz, Anuluj aby zaczekać na ukończenie aktualizacji"
-.notifyIconMenu_Open: "&Open EDDiscovery" @
-.notifyIconMenu_Hide: "&Hide Tray Icon" @
-.notifyIconMenu_Exit: "E&xit" @
-.buttonExt2dmap: "2D" @
-.buttonExt3dmap: "3D" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" @
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" @
+.notifyIconMenu_Open: "&Open EDDiscovery" => "&Otwórz EDDiscovery"
+.notifyIconMenu_Hide: "&Hide Tray Icon" => "Ukryj Ikonę Zasobnika"
+.notifyIconMenu_Exit: "E&xit" => "W&yjście"
+.buttonExt2dmap: "2D" => "2D"
+.buttonExt3dmap: "3D" => "3D"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Pobierz Dzienniki Ponownie"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Pobierz Dane Gwiazd Ponownie"
 
 SECTION EDDiscoveryController
 
@@ -244,7 +244,7 @@ SECTION ScreenShotConfigureForm
 
 ScreenShotConfigureForm: "Screen Shot Configure" => "Konfiguracja Zrzutów Ekranu"
 .buttonExtCancel: "Cancel" => "Anuluj"
-.buttonExtOK: "OK" @
+.buttonExtOK: "OK" => "OK"
 .groupBoxCropSettings: "Crop Settings" => "Ustawienia Przycinania"
 .labelHeight: "Height" => "Wysokość"
 .labelWidth: "Width" => "Szerokość"
@@ -263,13 +263,13 @@ ScreenShotConfigureForm: "Screen Shot Configure" => "Konfiguracja Zrzutów Ekran
 SECTION BookmarkForm
 
 BookmarkForm: "Create New Bookmark" => "Utwórz Nową Zakładkę"
-.buttonEDSM: "EDSM" @
+.buttonEDSM: "EDSM" => "EDSM"
 .labelName: "Name" => "Nazwa"
 .checkBoxTarget: "Make Target" => "Ustaw Jako Cel"
 .labelCo: "Co-ordinates" => "Współrzędne"
 .buttonDelete: "Delete" => "Usuń"
 .buttonCancel: "Cancel" => "Anuluj"
-.buttonOK: "OK" @
+.buttonOK: "OK" => "OK"
 .labelBookmarkNotes: "Bookmark Notes" => "Notatki dot. zakładki"
 .labelTravelNote: "Travel History Note" => "Notatka historii podróży"
 .labelTravelNoteEdit: "(Edit on Travel Screen)" => "(Edytuj na Ekranie Podróży)"
@@ -290,7 +290,7 @@ SECTION SurfaceBookmarksForm
 
 .labelSurface: "Surface Bookmarks In System" => "Zakładki Powierzchniowe w Układzie"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Przekaż do Kompasu"
-.BodyName: "Planetary Body" => "Planeta"
+.BodyName: "Planetary Body" => "Ciało Niebieskie"
 .SurfaceName: "Name" => "Nazwa"
 .SurfaceDesc: "Description" => "Opis"
 .Latitude: "Latitude" => "Szerokość Geogr."
@@ -307,37 +307,37 @@ SECTION SurfaceBookmarkUserControl
 .PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
 .PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
 .MAP: "Manually Add Planet" => "Dodaj Planetę Ręcznie"
-.BodyName: "Planetary Body" @
-.SurfaceName: "Name" @
-.SurfaceDesc: "Description" @
-.Latitude: "Latitude" @
-.Longitude: "Longitude" @
-.Valid: "Saveable" @
-.labelSurface: "Surface Bookmarks In System" @
-.sendToCompassToolStripMenuItem: "Send to compass" @
-.deleteToolStripMenuItem: "Delete Row" @
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" @
+.BodyName: "Planetary Body" => "Ciało Niebieskie"
+.SurfaceName: "Name" => "Nazwa"
+.SurfaceDesc: "Description" => "Opis"
+.Latitude: "Latitude" => "Szerokość Geogr."
+.Longitude: "Longitude" => "Długość Geogr."
+.Valid: "Saveable" => "Zapisywalne"
+.labelSurface: "Surface Bookmarks In System" => "Zakładki Powierzchniowe w Układzie"
+.sendToCompassToolStripMenuItem: "Send to compass" => "Przekaż do Kompasu"
+.deleteToolStripMenuItem: "Delete Row" => "Usuń Wiersz"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Dodaj Planetę Ręcznie"
 
 SECTION FindSystemsUserControl
 
 .labelRadMax: "Max" => "Maks."
 .labelRadMin: "Radius ly Min" => "Min.Promień LŚw"
 .labelFilter: "Star Name" => "Nazwa Gwiazdy"
-.Cannotfindsystem: "Cannot find system " @
-.buttonExtNames: "From DB Find Names" @
-.buttonExtEDSM: "From EDSM" @
-.buttonExtDB: "From DB" @
-.labelX: "X" @
-.labelY: "Y" @
-.labelZ: "Z" @
-.buttonExtVisited: "From Visited Systems" @
-.checkBoxCustomCube: "Cube" @
+.Cannotfindsystem: "Cannot find system " => "Nie można znaleźć układu "
+.buttonExtNames: "From DB Find Names" => "Szukaj Nazwy w Bazie Danych"
+.buttonExtEDSM: "From EDSM" => "Z EDSM"
+.buttonExtDB: "From DB" => "Z Bazy Danych"
+.labelX: "X" => "X"
+.labelY: "Y" => "Y"
+.labelZ: "Z" => "Z"
+.buttonExtVisited: "From Visited Systems" => "Z Odwiedzonych Układów"
+.checkBoxCustomCube: "Cube" => "Sześcian"
 
 SECTION ConditionFilterForm
 
 ConditionFilterForm: "Journal: Filter out fields" => "Dziennik: Filtruj pola"
 .panelOK.buttonCancel: "Cancel" => "Anuluj"
-.panelOK.buttonOK: "OK" @
+.panelOK.buttonOK: "OK" => "OK"
 
 SECTION TravelHistoryFilter
 
@@ -355,16 +355,16 @@ SECTION TravelHistoryFilter
 
 SECTION AddOnManagerForm
 
-.buttonMore: "+" @
+.buttonMore: "+" => "+"
 .buttonExtGlobals: "Globals" => "Globalne"
-.buttonOK: "OK" @
+.buttonOK: "OK" => "OK"
 .AddOnTitle: "Add-On Manager" => "Menedżer Dodatków"
 .EditTitle: "Edit Add-Ons" => "Edytuj Dodatki"
 .Type: "Type" => "Typ"
 .Name: "Name" => "Nazwa"
 .Version: "Version" => "Wersja"
 .Description: "Description" => "Opis"
-.Status: "Status" @
+.Status: "Status" => "Status"
 .Action: "Action" => "Akcja"
 .Delete: "Delete" => "Usuń"
 .Enabled: "Enabled" => "Włączone"
@@ -383,7 +383,7 @@ SECTION AddOnManagerForm
 
 SECTION AssignTravelLogSystemForm
 
-AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
+AssignTravelLogSystemForm: "AssignTravelLogSystemForm" => "Przypisywanie Nowego Układu do Wpisu Dziennika"
 .label1: "Travel Log System Name:" => "Nazwa Układu w Dzienniku Podróży:"
 .label2: "Date Visited:" => "Data Wizyty:"
 .label6: "EDSM Link:" => "Link EDSM:"
@@ -391,12 +391,12 @@ AssignTravelLogSystemForm: "AssignTravelLogSystemForm" @
 .btnFindSystem: "Find" => "Znajdź"
 .btnCancel: "Cancel" => "Anuluj"
 .label4: "Travel Log Coordinates:" => "Współrzędne w Dzienniku Podróży:"
-.btnOK: "OK" @
+.btnOK: "OK" => "OK"
 .label5: "System Coordinates" => "Współrzędne Układu"
 
 SECTION CommanderForm
 
-CommanderForm: "CommanderForm" @
+CommanderForm: "CommanderForm" => "Ustawienia Dowódcy"
 .groupBoxCustomInara: "Inara Information (optional)" => "Informacje Inara (opcjonalne)"
 .checkBoxCustomInara: "Sync to Inara" => "Synchronizuj z Inara"
 .labelINARAN: "Inara Name:" => "Nazwa w Inara:"
@@ -408,7 +408,7 @@ CommanderForm: "CommanderForm" @
 .groupBoxCustomCAPI: "Frontier Companion API (optional)" => "Frontier Companion API (opcjonalne)"
 .checkBoxCAPIEnable: "Enable Login" => "Włącz Login"
 .labelCAPIPassword: "Login Password:" => "Hasło:"
-.groupBoxCustomEDDN: "EDDN" @
+.groupBoxCustomEDDN: "EDDN" => "EDDN"
 .checkBoxCustomEDDNTo: "Send Event Information to EDDN" => "Wysyłaj Dane Zdarzeń do EDDN"
 .groupBoxCustomEDSM: "EDSM Information (optional)" => "Informacje EDSM (opcjonalne)"
 .checkBoxCustomEDSMFrom: "Sync From EDSM" => "Pobieraj dane z EDSM"
@@ -420,7 +420,7 @@ CommanderForm: "CommanderForm" @
 .labelCN: "Commander Name:" => "Nazwa Dowódcy"
 .labelJL: "Journal Location:" => "Lokalizacja Dzienników:"
 .buttonCancel: "Cancel" => "Anuluj"
-.buttonOK: "OK" @
+.buttonOK: "OK" => "OK"
 .label_index: "Commander Configure" => "Konfiguracja Dowódcy"
 .checkBoxCustomInara.ToolTip: "Sync with Inara" => "Synchronizuj z Inara"
 .textBoxBorderInaraName.ToolTip: "Give the user name for this commander on Inara" => "Wprowadź nazwę użytkownika z Inara dla tego Dowódcy"
@@ -438,7 +438,7 @@ CommanderForm: "CommanderForm" @
 .buttonExtBrowse.ToolTip: "Browse to the the journal folder" => "Przeglądaj, aby wybrać ścieżkę folderu dzienników"
 .textBoxBorderJournal.ToolTip: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\nLeave override journal location blank to use the standard Frontier location for journals" => "Wprowadź lokalizację dzienników. Zostaw to pole puste, chyba że używasz EDD na innym komputerze niż ten, na którym grasz.\nPole niestandardowej lokalizacji dzienników należy zostawić puste, aby użyć domyślnej lokalizacji dzienników Frontier."
 .textBoxBorderCmdr.ToolTip: "Enter commander name as used in Elite Dangerous" => "Wprowadź nazwę Dowódcy, której używasz w Elite Dangerous"
-.Login: "Login" @
+.Login: "Login" => "Login"
 .NoCredentials: "No Credentials" => "Brak danych dostępu"
 .LoginID: "Login ID:" => "ID Logowania:"
 .TTCAPI: "Enter your Frontier ID, which is the email you registered with Frontier. Does not work for Steam installs" => "Wprowadź swoje Frontier ID, czyli adres e-mail na który masz założone konto Frontier. Nie działa w przypadku wersji s zerwisu Steam."
@@ -457,7 +457,7 @@ CommanderForm: "CommanderForm" @
 
 SECTION ExportForm
 
-ExportForm: "ExportForm" @
+ExportForm: "ExportForm" => "Eksport"
 .checkBoxRawJournal: "Export Journals" => "Eksportuj Dzienniki"
 .buttonCancel: "Cancel" => "Anuluj"
 .labelCVSSep: "CSV Separator" => "Separator CSV"
@@ -479,17 +479,17 @@ SECTION Form2DMap
 .Custom: "Custom" => "Niestandardowe"
 Form2DMap: "2D Map" => "Mapa 2D"
 .Nomapsavailable: "No maps available" => "Brak dostępnych map"
-.toolStripButtonStars: "Stars" @
-.toolStripButtonSave: "Save" @
+.toolStripButtonStars: "Stars" => "Gwiazdy"
+.toolStripButtonSave: "Save" => "Zapisz"
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "GalaxySectorSelect" @
+GalaxySectorSelect: "GalaxySectorSelect" => "Wybór Sektora Galaktyki"
 .buttonExtCancel: "Cancel" => "Anuluj"
 .buttonExtSet: "Set" => "Ustaw"
 .labelSectorName: "Sector" => "Sektor"
 .Custom: "Custom" => "Niestandardowe"
-.Reset: "Reset" @
+.Reset: "Reset" => "Reset"
 .All: "All" => "Wszystko"
 .None: "None" => "Nic"
 .Bubble: "Bubble" => "Bąbel"
@@ -499,16 +499,16 @@ GalaxySectorSelect: "GalaxySectorSelect" @
 .NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Synchronizacja danych gwiazd jest wyłączona w ustawieniach.\r\nWłącz, żeby umożliwić aktualizację danych"
 .Warning: "Warning" => "Uwaga"
 .RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Usunąłeś sektory!\r\nTo wymaga wyczyszczenia wpisów z bazy danych, co może zająć dużo czasu\r\nCzy na pewno chcesz to zrobić?"
-.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" @
-.Select: "Select:" @
-.GALSELEN: "Enter number to jump to or near to" @
-.PresstoAccept: "Press to Accept" @
-.PresstoCancel: "Press to Cancel" @
-.GALSELTitle: "Select EDSM Galaxy Data" @
+.GALSELEX: "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed" => "EDDiscovery pobiera dane gwiazd z EDSM/EDDB, które dostarczają dodatkowych informacji. Zaznacz, ile danych chcesz przechowywać. Im więcej obszaru galaktyki zaznaczysz, tym więcej potrzeba pamięci do przechowywania danych."
+.Select: "Select:" => "Zaznacz:"
+.GALSELEN: "Enter number to jump to or near to" => "Wprowadź numer, do którego albo w pobliże którego chcesz przejść"
+.PresstoAccept: "Press to Accept" => "Naciśnij aby Zaakceptować"
+.PresstoCancel: "Press to Cancel" => "Naciśnij aby Anulować"
+.GALSELTitle: "Select EDSM Galaxy Data" => "Wybierz Dane Galaktyki z EDSM"
 
 SECTION MoveToCommander
 
-MoveToCommander: "MoveToCommander" @
+MoveToCommander: "MoveToCommander" => "Przenieś do Dowódcy"
 .buttonExtCancel: "Cancel" => "Anuluj"
 .buttonTransfer: "Transfer" => "Przenieś"
 .label1: "Move selected history to commander." => "Przenieś zaznaczoną historię do Dowódcy."
@@ -522,18 +522,18 @@ NewReleaseForm: "EDDiscovery Release" => "Wydanie EDDiscovery"
 .labelURL: "GitHub URL" => "URL GitHub"
 .labelDownload: "Download" => "Pobierz"
 .buttonPortablezip: "&Portable Zip" => "&Wersja przenośna Zip"
-.buttonUrlOpen: "&Open" @
+.buttonUrlOpen: "&Open" => "&Otwórz"
 .buttonExeInstaller: "&Exe Installer" => "&Instalator exe"
 .labelRelease: "Release info" => "Informacje o wydaniu"
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" @
-.buttonMore: "+" @
+ProfileEditor: "ProfileEditor" => "Edytor Profili"
+.buttonMore: "+" => "+"
 .label_index: "Profile Editor" => "Edytor Profili"
 .buttonExtGlobals: "Globals" => "Dane Globalne"
 .buttonExtCancel: "Cancel" => "Anuluj"
-.buttonOK: "OK" @
+.buttonOK: "OK" => "OK"
 .Custom: "Custom" => "Niestandardowe"
 .Trigger: "Trigger" => "Wyzwalacz"
 .Back: "Back" => "Wstecz"
@@ -541,11 +541,11 @@ ProfileEditor: "ProfileEditor" @
 .TrigEdit: "Edit Profile {0} Trigger" => "Edytuj wyzwalacz profilu {0}"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Edytuj wyzwalacz wsteczny profilu {0}"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Czy chcesz usunąć profil {0}?\r\nTo usunie wszystkie dane w profilu\r\ni jest nieodwracalne!"
-.Default: "Default" @
+.Default: "Default" => "Domyślne"
 
 SECTION RecordStep
 
-RecordStep: "RecordStep" @
+RecordStep: "RecordStep" => "Nagraj Krok"
 .labelGoto: "Go to" => "Idź do"
 .labelPAt: "Pointing At" => "Wskazuje Na"
 .checkBoxWaitForSlew: "Wait for slew" => "Czekaj na przesunięcie"
@@ -563,8 +563,8 @@ RecordStep: "RecordStep" @
 .labelTMEInfo: "0=default time" => "0=domyślny czas"
 .buttonCancel: "Cancel" => "Anuluj"
 .labelMsg: "Message to display" => "Wiadomość do wyświetlenia"
-.buttonOK: "OK" @
-.label_index: "Record Step" @
+.buttonOK: "OK" => "OK"
+.label_index: "Record Step" => "Nagraj Krok"
 
 SECTION SetNoteForm
 
@@ -584,7 +584,7 @@ SECTION MessageBoxTheme
 .Retry: "Retry" => "Ponów"
 .Abort: "Abort" => "Przerwij"
 .Cancel: "Cancel" => "Anuluj"
-.OK: "OK" @
+.OK: "OK" => "OK"
 .No: "No" => "Nie"
 .Yes: "Yes" => "Tak"
 
@@ -599,7 +599,7 @@ SECTION DataGridViewDialogs
 
 SECTION InfoForm
 
-.OK: "OK" @
+.OK: "OK" => "OK"
 
 SECTION KeyForm
 
@@ -608,33 +608,34 @@ KeyForm: "Define Key Sequence" => "Zdefiniuj Sekwencję Klawiszy"
 .radioButtonUp: "Up" => "Góra"
 .radioButtonDown: "Down" => "Dół"
 .radioButtonPress: "Press" => "Naciśnięcie"
-.checkBoxShift: "Shift" @
-.checkBoxCtrl: "Ctrl" @
-.checkBoxAlt: "Alt" @
+.checkBoxShift: "Shift" => "Shift"
+.checkBoxCtrl: "Ctrl" => "Ctrl"
+.checkBoxAlt: "Alt" => "Alt"
 .checkBoxKey: "Press Key" => "Naciśnij Klawisz"
 .labelNextDelay: "Current Delay" => "Obecne Opóźnienie"
 .labelSelKeys: "Select Key" => "Wybierz Klawisz"
 .labelDelay: "Start Delay(ms)" => "Opóźnienie(ms)"
 .labelSendTo: "Send To" => "Wyślij Do"
-.buttonReset: "Reset" @
+.buttonReset: "Reset" => "Reset"
 .labelKeys: "Keys" => "Klawisze"
 .buttonDelete: "Delete" => "Usuń"
 .buttonNext: "Next" => "Następne"
-.buttonTest: "Test" @
+.buttonTest: "Test" => "Test"
 .buttonCancel: "Cancel" => "Anuluj"
-.buttonOK: "OK" @
+.buttonOK: "OK" => "OK"
 
 SECTION UserControlForm
 
-.panel_minimize.ToolTip: "Minimise" @
-.panel_ontop.ToolTip: "Toggle window on top of others" @
-.panel_close.ToolTip: "Close" @
-.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" @
-.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" @
-.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
+.panel_minimize.ToolTip: "Minimise" => "Minimalizuj"
+.panel_ontop.ToolTip: "Toggle window on top of others" => "Przełącz ustawienie okna na wierzchu pozostałych"
+.panel_close.ToolTip: "Close" => "Zamknij"
+.panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" => "Włącz/Wyłącz ikonę paska zadań tego okna"
+.panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" => "Przełącz widoczność tytułu tego okna gdy przezroczyste"
+.panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key
+\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Przełącz przezroczystość okien według czterech ustawień\r\nOff - normalne okno\r\nOn (T) - przezroczyste z aktywną kontrolą gdy kursor myszki nie znajduje się w oknie\r\nOn (Tc) - przezroczyste z aktywną kontrolą, aby aktywować przytrzymaj przycisk aktywacji\r\nOn (Tf) - całkowicie przezroczyste i nieaktywne, aby aktywować przytrzymaj przycisk aktywacji\r\n\r\nSprawdź stronę ustawień, aby ustawić przycisk jako przycisk aktywacji.  \r\nKursor myszki musi być w zakresie granic okna, przycisk musi być przytrzymany przez ok. 500ms.\r\n\r\n\r\n"
 
-include Gtranslation-example-uc.tlp
+include translation-polski-uc.tlp
 
-include Gtranslation-example-je.tlp
+include translation-polski-je.tlp
 
-include Gtranslation-example-ed.tlp
+include translation-polski-ed.tlp

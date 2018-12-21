@@ -115,7 +115,7 @@ SECTION JournalTypeEnum
 .PVPKill: "PVP Kill" => "Zabójstwo PvP"
 .QuitACrew: "Quit A Crew" => "Opuszczenie Załogi"
 .Rank: "Rank" => "Ranga"
-.RebootRepair: "Reboot Repair" @
+.RebootRepair: "Reboot Repair" => "Ponowne uruchomienie i Naprawa"
 .ReceiveText: "Receive Text" => "Otrzymano Wiadomość"
 .RedeemVoucher: "Redeem Voucher" => "Odebranie Nagrody"
 .RefuelAll: "Refuel All" => "Tankowanie do Pełna"
@@ -186,19 +186,19 @@ SECTION JournalTypeEnum
 .VehicleSwitch_Mothership: "Vehicle Switch_Mothership" @
 .VehicleSwitch_Fighter: "Vehicle Switch_Fighter" @
 .AppliedToSquadron: "Applied To Squadron" @
-.AsteroidCracked: "Asteroid Cracked" @
-.CodexEntry: "Codex Entry" @
+.AsteroidCracked: "Asteroid Cracked" => "Rozbito Asteroidę"
+.CodexEntry: "Codex Entry" => "Wpis Kodeksu"
 .DisbandedSquadron: "Disbanded Squadron" @
-.FSDTarget: "FSD Target" @
-.FSSAllBodiesFound: "FSS All Bodies Found" @
-.FSSDiscoveryScan: "FSS Discovery Scan" @
-.FSSSignalDiscovered: "FSS Signal Discovered" @
+.FSDTarget: "FSD Target" => "Cel FSD"
+.FSSAllBodiesFound: "FSS All Bodies Found" => "FSS - Znaleziono Wszystkie Ciała Niebieskie"
+.FSSDiscoveryScan: "FSS Discovery Scan" => "FSS - Skan Badawczy"
+.FSSSignalDiscovered: "FSS Signal Discovered" => "FSS - Odkryto Sygnał"
 .InvitedToSquadron: "Invited To Squadron" @
 .JoinedSquadron: "Joined Squadron" @
 .KickedFromSquadron: "Kicked From Squadron" @
 .LeftSquadron: "Left Squadron" @
-.MultiSellExplorationData: "Multi Sell Exploration Data" @
-.SAAScanComplete: "SAA Scan Complete" @
+.MultiSellExplorationData: "Multi Sell Exploration Data" => "Sprzedaż Masowa Danych Eksploracyjnych"
+.SAAScanComplete: "SAA Scan Complete" => "Ukończono Skan SAA"
 .SharedBookmarkToSquadron: "Shared Bookmark To Squadron" @
 .SquadronCreated: "Squadron Created" @
 .SquadronDemotion: "Squadron Demotion" @
@@ -224,8 +224,8 @@ SECTION JournalEntry
 
 SECTION JournalCargo
 
-.CargoShip: "Ship" @
-.CargoSRV: "SRV" @
+.CargoShip: "Ship" => "Statek"
+.CargoSRV: "SRV" => "SRV"
 
 SECTION JournalEntry
 
@@ -240,14 +240,14 @@ SECTION JournalEntry
 
 SECTION JournalFSSDiscoveryScan
 
-.Others: "Others:" @
+.Others: "Others:" => "Inne:"
 
 SECTION JournalCodexEntry
 
-.At: "At " @
-.in: "in " @
-.NewEntry: ";New Entry" @
-.Traits: ";Traits" @
+.At: "At " => "W układzie "
+.in: "in " => "w "
+.NewEntry: ";New Entry" => ";Nowy Wpis"
+.Traits: ";Traits" => ";Cechy"
 
 SECTION JournalEntry
 
@@ -279,7 +279,7 @@ SECTION CommunityGoal
 .TopRank: "Top Rank:" => "Najwyższa Ranga:"
 .NotInTopRank: "Not In Top Rank;In Top Rank" @
 .TierReached: "Tier Reached:" => "Osiągnięty Poziom:"
-.Bonus: "Bonus:" @
+.Bonus: "Bonus:" => "Bonus:"
 .TopTierName: "Top Tier Name" => "Nazwa Najw. Poziomu:"
 .TT: "TT. Bonus" => "Bonus"
 
@@ -288,7 +288,7 @@ SECTION JournalEntry
 .CGS: "< at ; Star System" => "< w układzie ;"
 .Reward: "Reward:; cr;N0" => "Nagroda:; cr;N0"
 .torole: "< to role ;" => "< do roli ;"
-.fired: "; fired" => "zwolniono ;"
+.fired: "; fired" => "Zwolniono ;"
 .Hired: "Hired:;" => "Zatrudniono:;"
 .offaction: "< of faction " => "< z frakcji "
 .Rank: "Rank:" => "Ranga:"
@@ -301,19 +301,19 @@ SECTION JournalEntry
 
 SECTION FSSSignal
 
-.State: "State:" @
-.Faction: "Faction:" @
-.USSType: "USS Type:" @
-.ThreatLevel: " Threat Level:" @
-.StationBool: ";Station" @
+.State: "State:" => "Stan:"
+.Faction: "Faction:" => "Frakcja:"
+.USSType: "USS Type:" => "Typ USS:"
+.ThreatLevel: " Threat Level:" => " Poziom Zagrożenia:"
+.StationBool: ";Station" => ";Stacja"
 
 SECTION JournalFSSDiscoveryScan
 
-.Progress: "Progress:;%;N1" @
+.Progress: "Progress:;%;N1" => "Postęp:;%;N1"
 
 SECTION JournalFSSSignalDiscovered
 
-.Detected: "Detected ; signals" @
+.Detected: "Detected ; signals" => "Wykryto ; sygnałów"
 
 SECTION JournalDocked
 
@@ -329,7 +329,7 @@ SECTION JournalEntry
 .Government: "Government:" => "Rząd:"
 .Stationservices: "Station services:" => "Usługi na stacji:"
 .Economies: "Economies:" => "Ekonomie:"
-.ActiveFine: ";Active Fine" @
+.ActiveFine: ";Active Fine" => ";Niezapłacona Kara"
 .onpad: "< on pad " => "< na lądowisku "
 
 SECTION JournalCommodityPricesBase
@@ -339,7 +339,7 @@ SECTION JournalCommodityPricesBase
 .CPBin: "< in " => "< w "
 .Itemstobuy: "Items to buy:" => "Przedmioty dostępne do kupienia"
 .CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " => "{0}: sprzedaż {2} Różn. {3} {4}%  "
-.CPBBuy: "{0}: {1}  " @
+.CPBBuy: "{0}: {1}  " => "{0}: {1}  "
 .SO: "Sell only Items:" => "Przedmioty Tylko do Sprzedania:"
 
 SECTION JournalEntry
@@ -353,9 +353,9 @@ SECTION JournalEntry
 .Override: "Override:" @
 .Type: "Type:" => "Typ:"
 .Commodity: "Commodity:" => "Towar:"
-.Material: "Material:" @
-.Quantity: "Quantity:" @
-.TotalQuantity: "TotalQuantity:" @
+.Material: "Material:" => "Materiał:"
+.Quantity: "Quantity:" => "Ilość:"
+.TotalQuantity: "TotalQuantity:" => "Łączna Ilość:"
 
 SECTION JournalEngineerCraftBase
 
@@ -367,7 +367,7 @@ SECTION JournalEngineerCraftBase
 SECTION JournalEngineerProgress
 
 .Progress: "Progress:" => "Postęp:"
-.Progresson: "Progress on ; Engineers" @
+.Progresson: "Progress on ; Engineers" => "Postęp u ; Inżynierów"
 
 SECTION JournalEntry
 
@@ -378,8 +378,8 @@ SECTION JournalEntry
 .Build: "Build:" @
 .Part: "Part:" @
 .NumberofStatuses: "Number of Statuses:" => "Ilość Statusów:"
-.Online: "Online:" @
-.Offline: "Offline:" @
+.Online: "Online:" => "Online:"
+.Offline: "Offline:" => "Offline:"
 
 SECTION JournalFSDJump
 
@@ -416,7 +416,7 @@ SECTION JournalEntry
 .Loadout: "Loadout:" => "Wyposażenie:"
 .NPCControlled: ", NPC Controlled;" => ", Kontrolowane przez NPC;"
 .Ship: "Ship:" => "Statek:"
-.Ident: "Ident:" @
+.Ident: "Ident:" => "ID statku:"
 .Credits: "Credits:;;N0" => "Kredyty:;;N0"
 .Mode: "Mode:" => "Tryb:"
 .Group: "Group:" => "Grupa:"
@@ -448,12 +448,12 @@ SECTION JournalLocOrJump
 .Security: "Security:" => "Strzeżony:"
 .Inspacenear: "In space near " => "W przestrzeni w pobliżu "
 .oftype: "< of type " => "< typu "
-.Happiness: "Happiness:" @
-.Reputation: "Reputation:;%;N1" @
+.Happiness: "Happiness:" => "Zadowolenie:"
+.Reputation: "Reputation:;%;N1" => "Reputacja:;%;N1"
 .SquadronSystem: ";Squadron System" @
-.HappiestSystem: ";Happiest System" @
-.HomeSystem: ";Home System" @
-.ActiveState: "Active State:" @
+.HappiestSystem: ";Happiest System" => ";Układ o Największym Zadowoleniu"
+.HomeSystem: ";Home System" => ";Układ Domowy"
+.ActiveState: "Active State:" => "Aktywny Stan:"
 
 SECTION JournalEntry
 
@@ -513,7 +513,7 @@ SECTION JournalEntry
 
 SECTION JournalModuleInfo
 
-.Modules: "Modules:" @
+.Modules: "Modules:" => "Moduły:"
 
 SECTION JournalEntry
 
@@ -527,7 +527,7 @@ SECTION JournalEntry
 
 SECTION JournalMultiSellExplorationData
 
-.Total: "Total:; cr;N0" @
+.Total: "Total:; cr;N0" => "Razem:; cr;N0"
 
 SECTION JournalEntry
 
@@ -537,8 +537,8 @@ SECTION JournalEntry
 .itemsavailable: " items available" => " dostępnych przedmiotów"
 .NoPassengers: "No Passengers" => "Brak Pasażerów"
 .Brokertook: ", Broker took {0:N0}%" => ", Pośrednik otrzymał {0:N0}%"
-.Merits: "Merits:" @
-.Votes: "Votes:" @
+.Merits: "Merits:" => "Zasługi:"
+.Votes: "Votes:" => "Głosy:"
 .Pledged: "Pledged:" @
 .FromPower: "From Power:" @
 .ToPower: "To Power:" @
@@ -552,7 +552,7 @@ SECTION JournalProgress
 .Exploration: "Exploration:;%" => "Eksploracja:;%"
 .Federation: "Federation:;%" => "Federacja:;%"
 .Empire: "Empire:;%" => "Imperium:;%"
-.CQC: "CQC:;%" @
+.CQC: "CQC:;%" => "CQC:;%"
 
 SECTION JournalPromotion
 
@@ -561,7 +561,7 @@ SECTION JournalPromotion
 .Exploration: "Exploration:" => "Eksploracja:"
 .Empire: "Empire:" => "Imperium:"
 .Federation: "Federation:" => "Federacja:"
-.CQC: "CQC:" @
+.CQC: "CQC:" => "CQC"
 
 SECTION JournalReceiveText
 
@@ -655,22 +655,22 @@ SECTION JournalScan
 .Materials: "Materials:\n" => "Materiały: \n"
 .AtmosphericComposition: "Atmospheric Composition:\n" => "Skład Atmosfery:\n"
 .PlanetaryComposition: "Planetary Composition:\n" => "Skład Planety:\n"
-.MRP: "Metal Rich Planets: {0} ({1}-{2} AU)\n" @
-.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" @
-.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" @
-.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" @
-.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" @
-.HabitableZone: " - Habitable Zone, {0} ({1}-{2} AU),\n" @
-.MetalRichplanets: " - Metal Rich planets, {0} ({1}-{2} AU),\n" @
-.WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" @
-.EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
-.AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
-.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
+.MRP: "Metal Rich Planets: {0} ({1}-{2} AU)\n" => "Planety Bogate w Metale: {0} ({1}-{2} AU)\n"
+.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" => "Planety Oceaniczne: {0} ({1}-{2} AU)\n"
+.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" => "Planety Ziemiopodobne: {0} ({1}-{2} AU)\n"
+.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" => "Planety Amoniakowe: {0} ({1}-{2} AU)\n"
+.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" => "Planety Lodowe: {0} ({1} AU do {2})\n"
+.HabitableZone: " - Habitable Zone, {0} ({1}-{2} AU),\n" => " - Ekosfera, {0} ({1}-{2} AU),\n"
+.MetalRichplanets: " - Metal Rich planets, {0} ({1}-{2} AU),\n" => " - Planety Bogate w Metale, {0} ({1}-{2} AU),\n"
+.WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" => " - Planety Oceaniczne, {0} ({1}-{2} AU),\n"
+.EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" => " - Planety Ziemiopodobne, {0} ({1}-{2} AU),\n"
+.AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" => " - Planety Amoniakowe, {0} ({1}-{2} AU),\n"
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" => " - Planety Lodowe, {0} (od {1} AU)\n\n"
 
 SECTION JournalSAAScanComplete
 
-.Probes: "Probes:" @
-.EfficiencyTarget: "Efficiency Target:" @
+.Probes: "Probes:" => "Sondy:"
+.EfficiencyTarget: "Efficiency Target:" => "Cel Wydajności:"
 
 SECTION JournalEntry
 
@@ -698,7 +698,7 @@ SECTION JournalEntry
 
 .Boom: "Boom!" => "Bum!"
 .Drones: "Drones" => "Drony"
-.Bonus: "Bonus:; cr;N0" @
+.Bonus: "Bonus:; cr;N0" => "Bonus:; cr;N0"
 
 SECTION JournalSellExplorationData
 
@@ -735,7 +735,7 @@ SECTION JournalEntry
 
 SECTION JournalShipTargeted
 
-.in: "< in " @
+.in: "< in " => "< w "
 
 SECTION JournalEntry
 
@@ -787,7 +787,7 @@ SECTION JournalStatistics
 .Crew: "Crew" => "Załoga"
 .Multicrew: "Multicrew" @
 .MaterialsandCommodityTrading: "Materials and Commodity Trading" => "Handel Materiałami i Towarami"
-.CQC: "CQC" @
+.CQC: "CQC" => "CQC"
 
 SECTION BankAccountClass
 
@@ -894,7 +894,7 @@ SECTION MulticrewClass
 
 SECTION MaterialTraderStatsClass
 
-.CommodityTrades: "Commodity Trades:;;N0" @
+.CommodityTrades: "Commodity Trades:;;N0" => "Transakcje Handlu Towarami:;;N0"
 .MaterialTraded: "Material Traded:;;N0" => "Ilość Przehandlowanych Materiałów:;;N0"
 
 SECTION CQCClass
@@ -906,7 +906,7 @@ SECTION CQCClass
 
 SECTION JournalStoredModules
 
-.at: "< at " @
+.at: "< at " => "< w "
 
 SECTION JournalEntry
 
@@ -916,16 +916,16 @@ SECTION JournalEntry
 
 SECTION JournalSupercruiseExit
 
-.in: "< in " @
+.in: "< in " => "< w "
 
 SECTION JournalStoredShips
 
 .Atstarport: "At starport:" => "W porcie gwiezdnym:"
 .Otherlocations: "Other locations:" => "Inne Lokacje:"
-.SSP: "; cr;N0" @
+.SSP: "; cr;N0" => "; cr;N0"
 .Remote: "Remote:" => "Zdalne:"
 .intransit: "<; in transit" => "<; w tranzycie"
-.at: "< at " @
+.at: "< at " => "< w "
 
 SECTION JournalSupercruiseExit
 
@@ -938,7 +938,7 @@ SECTION JournalUnknown
 SECTION JournalEntry
 
 .Threat: "Threat:" => "Zagrożenie:"
-.By: "By:" @
-.HullHealth: "Hull Health;%;N1" @
-.MissionCargo: "<; (Mission Cargo)" @
-.InSlot: "In Slot:" @
+.By: "By:" => "Przez:"
+.HullHealth: "Hull Health;%;N1" => "Stan Poszycia;%;N1"
+.MissionCargo: "<; (Mission Cargo)" => "<; (Ładunek Misji)"
+.InSlot: "In Slot:" => "W Przegrodzie:"

@@ -261,9 +261,11 @@
     <None Include="EliteDangerous\translation-deutsch-ed.tlp" />
     <None Include="EliteDangerous\translation-example-ed.tlp" />
     <None Include="EliteDangerous\translation-italiano-ed.tlp" />
+    <None Include="EliteDangerous\translation-polski-ed.tlp" />
     <None Include="JournalEvents\translation-deutsch-je.tlp" />
     <None Include="JournalEvents\translation-example-je.tlp" />
     <None Include="JournalEvents\translation-italiano-je.tlp" />
+    <None Include="JournalEvents\translation-polski-je.tlp" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
