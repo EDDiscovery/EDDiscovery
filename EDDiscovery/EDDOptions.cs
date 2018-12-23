@@ -34,8 +34,14 @@ namespace EDDiscovery
             {
                 if (options == null)
                     options = new EDDOptions();
+
                 return options;
             }
+        }
+
+        private EDDOptions()
+        {
+            Init();
         }
 
         static EDDOptions options = null;
@@ -63,6 +69,7 @@ namespace EDDiscovery
         public bool CheckRelease { get; private set; }
         public bool CheckGithubFiles { get; private set; }
         public bool ResetLanguage { get; set; }
+        public bool SafeMode { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -249,6 +256,7 @@ namespace EDDiscovery
 
                 switch (opt)
                 {
+                    case "safemode": SafeMode = true; break;
                     case "norepositionwindow": NoWindowReposition = true; break;
                     case "portable": StoreDataInProgramDirectory = true; break;
                     case "nrw": NoWindowReposition = true; break;
@@ -290,7 +298,7 @@ namespace EDDiscovery
             }
         }
 
-        public void Init()
+        private void Init()
         {
 #if !DEBUG
             CheckGithubFiles = true;

@@ -80,7 +80,7 @@ namespace EDDiscovery
         {   // Really just a workaround for the clumsy terniary operator if constructing new but different things.
             get
             {
-                if (Control.ModifierKeys.HasFlag(Keys.Shift))
+                if (Control.ModifierKeys.HasFlag(Keys.Shift) || EDDOptions.Instance.SafeMode )
                     return new SafeModeForm();
                 else
                     return new SplashForm();
