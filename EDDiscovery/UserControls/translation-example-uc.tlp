@@ -733,6 +733,9 @@ SECTION UserControlSettings
 .RemoveSectors: "Remove Sectors" @
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
+.groupBoxCustomSafeMode: "Move System DB / Reset UI etc" @
+.buttonExtSafeMode: "Restart in Safe Mode" @
+.labelSafeMode: "Click this to perform special operations" @
 
 SECTION UserControlShipYards
 
