@@ -54,8 +54,7 @@ namespace EDDiscovery.Forms
 
         private void buttonDbs_Click(object sender, EventArgs e)
         {
-            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
-            opt.Init();
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
             if (File.Exists(opt.UserDatabasePath) && File.Exists(opt.SystemDatabasePath))
             {
@@ -113,8 +112,7 @@ namespace EDDiscovery.Forms
 
         private void buttonDeleteSystemDB_Click(object sender, EventArgs e)
         {
-            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
-            opt.Init();
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
             if (File.Exists(opt.SystemDatabasePath))
             {
@@ -134,8 +132,7 @@ namespace EDDiscovery.Forms
 
         private void buttonRemoveDLLs_Click(object sender, EventArgs e)
         {
-            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
-            opt.Init();
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
             string dllfolder = opt.DLLAppDirectory();
 
@@ -158,8 +155,7 @@ namespace EDDiscovery.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            EDDiscovery.EDDOptions opt = new EDDiscovery.EDDOptions();
-            opt.Init();
+            EDDiscovery.EDDOptions opt = EDDiscovery.EDDOptions.Instance;
 
             string apfolder = opt.ActionsAppDirectory();
 

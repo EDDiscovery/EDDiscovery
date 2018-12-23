@@ -585,6 +585,13 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void buttonExtSafeMode_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+
+            // Restart the app passing "/restart [processId]" as cmd line args
+            System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+        }
     }
 }
 

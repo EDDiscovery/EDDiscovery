@@ -96,6 +96,9 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.groupBoxCustomLanguage = new ExtendedControls.GroupBoxCustom();
             this.comboBoxCustomLanguage = new ExtendedControls.ComboBoxCustom();
+            this.groupBoxCustomSafeMode = new ExtendedControls.GroupBoxCustom();
+            this.buttonExtSafeMode = new ExtendedControls.ButtonExt();
+            this.labelSafeMode = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxCustomHistoryLoad.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
@@ -106,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             this.groupBoxCustomLanguage.SuspendLayout();
+            this.groupBoxCustomSafeMode.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -982,12 +986,49 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomLanguage.ValueMember = "";
             // 
+            // groupBoxCustomSafeMode
+            // 
+            this.groupBoxCustomSafeMode.AlternateClientBackColor = System.Drawing.Color.Blue;
+            this.groupBoxCustomSafeMode.BackColorScaling = 0.5F;
+            this.groupBoxCustomSafeMode.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomSafeMode.BorderColorScaling = 0.5F;
+            this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
+            this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
+            this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 560);
+            this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
+            this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(425, 60);
+            this.groupBoxCustomSafeMode.TabIndex = 21;
+            this.groupBoxCustomSafeMode.TabStop = false;
+            this.groupBoxCustomSafeMode.Text = "Move System DB / Reset UI etc";
+            this.groupBoxCustomSafeMode.TextPadding = 0;
+            this.groupBoxCustomSafeMode.TextStartPosition = -1;
+            // 
+            // buttonExtSafeMode
+            // 
+            this.buttonExtSafeMode.Location = new System.Drawing.Point(218, 19);
+            this.buttonExtSafeMode.Name = "buttonExtSafeMode";
+            this.buttonExtSafeMode.Size = new System.Drawing.Size(201, 23);
+            this.buttonExtSafeMode.TabIndex = 10;
+            this.buttonExtSafeMode.Text = "Restart in Safe Mode";
+            this.buttonExtSafeMode.UseVisualStyleBackColor = true;
+            this.buttonExtSafeMode.Click += new System.EventHandler(this.buttonExtSafeMode_Click);
+            // 
+            // labelSafeMode
+            // 
+            this.labelSafeMode.Location = new System.Drawing.Point(10, 19);
+            this.labelSafeMode.Name = "labelSafeMode";
+            this.labelSafeMode.Size = new System.Drawing.Size(202, 38);
+            this.labelSafeMode.TabIndex = 5;
+            this.labelSafeMode.Text = "Click this to perform special operations";
+            // 
             // UserControlSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.groupBoxCustomHistoryLoad);
             this.Controls.Add(this.groupBoxCustomLanguage);
+            this.Controls.Add(this.groupBoxCustomSafeMode);
             this.Controls.Add(this.groupBoxCustomEDSM);
             this.Controls.Add(this.groupBoxCustomScreenShots);
             this.Controls.Add(this.groupBoxPopOuts);
@@ -1011,6 +1052,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCommanders.ResumeLayout(false);
             this.dataViewScrollerPanel1.ResumeLayout(false);
             this.groupBoxCustomLanguage.ResumeLayout(false);
+            this.groupBoxCustomSafeMode.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1067,5 +1109,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ComboBoxCustom comboBoxCustomLanguage;
         private ExtendedControls.CheckBoxCustom checkBoxCustomResize;
         private ExtendedControls.CheckBoxCustom checkBoxPanelSortOrder;
+        private ExtendedControls.GroupBoxCustom groupBoxCustomSafeMode;
+        private ExtendedControls.ButtonExt buttonExtSafeMode;
+        private System.Windows.Forms.Label labelSafeMode;
     }
 }

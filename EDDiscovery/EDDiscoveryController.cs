@@ -110,8 +110,6 @@ namespace EDDiscovery
         {
             msg.Invoke("Checking Config");
 
-            EDDOptions.Instance.Init();
-
             string logpath = EDDOptions.Instance.LogAppDirectory();
 
             BaseUtils.LogClean.DeleteOldLogFiles(logpath, "*.hlog", 2, 256);        // Remove hlogs faster
