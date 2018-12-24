@@ -428,6 +428,8 @@ SECTION UserControlModules
 .comboBoxShips.ToolTip: "Select ship to view" => "Wybierz statek do wyświetlenia"
 .labelVehicle: "Unknown" => "Nieznane"
 .labelShip: "Ship" => "Statek"
+.EDSURL: "Enter ED Shipyard URL" => "Wprowadź URL ED Shipyard"
+.CURL: "Enter Coriolis URL" => "Wprowadź URL Coriolis"
 
 SECTION UserControlNotePanel
 
@@ -733,6 +735,16 @@ SECTION UserControlSettings
 .RemoveSectors: "Remove Sectors" => "Usuń Sektory"
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Usuwanie {0} sektora(ów).\r\n\r\nTo zajmie pewien czas (do 30 minut w zależności od typu dysku i ilości sektorów).\r\nMożesz dalej używać EDD w trakcie tej operacji,\r\nale może działać powoli. Nie zamykaj EDD dopóki nie otrzymasz w tym oknie informacji,\r\nże proces ukończył pracę\r\n\r\n"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Ukończono, proszę zamknąć to okno.\r\nJeśli masz już otwartą mapę 3D, zmiany nie będą na niej widoczne do następnego uruchomienia EDD\r\n"
+.270daysold: ">270 days old" => "Starsze niż 270 dni"
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Skany,Ładunek,Misje,Stan,Skoki itp."
+.EJS: "Jumps and Scans" => "Skoki i Skany"
+.EJ: "Jumps" => "Skoki"
+.EN: "Nothing" => "Nic"
+.labelHistoryEssItems: "Essential Entries Are" => "Nezbędne Wpisy To"
+.groupBoxCustomSafeMode: "Move System DB / Reset UI etc" => "Przenieś Bazę Danych Układów / Resetuj UI itp."
+.labelSafeMode: "Click this to perform special operations" => "Kliknij, aby wykonać specjalne operacje"
+.buttonExtSafeMode: "Restart in Safe Mode" => "Uruchom ponownie w Trybie Bezpiecznym"
+.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "Tryb Bezpieczny umożliwia wykonywanie operacji specjalnych, takich jak przeniesienie baz danych, reset UI, reset paczek akcji, plików DLL itp."
 
 SECTION UserControlShipYards
 
