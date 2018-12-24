@@ -72,6 +72,8 @@ namespace EDDiscovery
         private bool drawduringresize = true;
         private bool sortpanelsalpha = false;
         private string essentialeventtype = "Default";
+        private string coriolisURL = "";
+        private string eddshipyardURL = "";
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -276,6 +278,32 @@ namespace EDDiscovery
             }
         }
 
+        public string CoriolisURL
+        {
+            get
+            {
+                return coriolisURL;
+            }
+            set
+            {
+                coriolisURL = value;
+                SQLiteConnectionUser.PutSettingString("CorolisURL", value);
+            }
+        }
+
+        public string EDDShipyardURL
+        {
+            get
+            {
+                return eddshipyardURL;
+            }
+            set
+            {
+                eddshipyardURL = value;
+                SQLiteConnectionUser.PutSettingString("EDDShipyardURL", value);
+            }
+        }
+
         public string Language         // as standard culture en-gb or en etc, or Auto
         {
             get
@@ -341,6 +369,8 @@ namespace EDDiscovery
                 drawduringresize = SQLiteConnectionUser.GetSettingBool("DrawDuringResizeWindow", true);
                 sortpanelsalpha = SQLiteConnectionUser.GetSettingBool("PanelsSortedByName", false);
                 essentialeventtype = SQLiteConnectionUser.GetSettingString("EssentialEventType", "Default");
+                coriolisURL = SQLiteConnectionUser.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
+                eddshipyardURL = SQLiteConnectionUser.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

@@ -428,6 +428,8 @@ SECTION UserControlModules
 .comboBoxShips.ToolTip: "Select ship to view" @
 .labelVehicle: "Unknown" @
 .labelShip: "Ship" @
+.EDSURL: "Enter ED Shipyard URL" @
+.CURL: "Enter Coriolis URL" @
 
 SECTION UserControlNotePanel
 

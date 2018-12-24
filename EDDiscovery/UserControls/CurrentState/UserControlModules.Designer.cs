@@ -233,6 +233,7 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
             this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
             this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
+            this.buttonExtEDShipyard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtEDShipyard_MouseDown);
             // 
             // buttonExtCoriolis
             // 
@@ -245,6 +246,7 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Corolis");
             this.buttonExtCoriolis.UseVisualStyleBackColor = false;
             this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
+            this.buttonExtCoriolis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtCoriolis_MouseDown);
             // 
             // labelVehicle
             // 

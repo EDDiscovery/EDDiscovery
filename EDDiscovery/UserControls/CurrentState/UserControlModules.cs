@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
 
-                string uri = Properties.Resources.URLCoriolis + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
+                string uri = EDDConfig.Instance.CoriolisURL  + "data=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s) + "&bn=" + Uri.EscapeDataString(si.Name);
 
                 if (!BaseUtils.BrowserInfo.LaunchBrowser(uri))
                 {
@@ -361,6 +361,16 @@ namespace EDDiscovery.UserControls
                     info.Info("Cannot launch browser, use this JSON for manual Coriolis import", FindForm().Icon, s);
                     info.ShowDialog(FindForm());
                 }
+            }
+        }
+
+        private void buttonExtCoriolis_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL, "Enter Coriolis URL".Tx(this,"CURL"), this.FindForm().Icon);
+                if (url != null)
+                    EDDConfig.Instance.CoriolisURL = url;
             }
         }
 
@@ -380,7 +390,7 @@ namespace EDDiscovery.UserControls
             {
                 string s = si.ToJSONLoadout();
 
-                string uri = Properties.Resources.URLEDShipyard + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s);
+                string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" + BaseUtils.HttpUriEncode.URIGZipBase64Escape(s);
 
                 //File.WriteAllText(@"c:\code\out.txt", uri);
 
@@ -390,6 +400,16 @@ namespace EDDiscovery.UserControls
                     info.Info("Cannot launch browser, use this JSON for manual ED Shipyard import", FindForm().Icon, s);
                     info.ShowDialog(FindForm());
                 }
+            }
+        }
+
+        private void buttonExtEDShipyard_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".Tx(this,"EDSURL"), this.FindForm().Icon);
+                if (url != null)
+                    EDDConfig.Instance.EDDShipyardURL = url;
             }
         }
 
@@ -461,5 +481,6 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
     }
 }
