@@ -80,6 +80,8 @@ namespace EDDiscovery.UserControls
             this.JournalDirCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.GroupBoxCustom();
+            this.comboBoxCustomEssentialEntries = new ExtendedControls.ComboBoxCustom();
+            this.labelHistoryEssItems = new System.Windows.Forms.Label();
             this.labelHistorySel = new System.Windows.Forms.Label();
             this.groupBoxCustomEDSM = new ExtendedControls.GroupBoxCustom();
             this.groupBoxCustomScreenShots = new ExtendedControls.GroupBoxCustom();
@@ -705,20 +707,58 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.BackColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.BorderColor = System.Drawing.Color.LightGray;
             this.groupBoxCustomHistoryLoad.BorderColorScaling = 0.5F;
+            this.groupBoxCustomHistoryLoad.Controls.Add(this.comboBoxCustomEssentialEntries);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.comboBoxCustomHistoryLoadTime);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxShowUIEvents);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxUTC);
+            this.groupBoxCustomHistoryLoad.Controls.Add(this.labelHistoryEssItems);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.labelHistorySel);
             this.groupBoxCustomHistoryLoad.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomHistoryLoad.Location = new System.Drawing.Point(3, 182);
             this.groupBoxCustomHistoryLoad.Name = "groupBoxCustomHistoryLoad";
-            this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(425, 126);
+            this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(425, 157);
             this.groupBoxCustomHistoryLoad.TabIndex = 21;
             this.groupBoxCustomHistoryLoad.TabStop = false;
             this.groupBoxCustomHistoryLoad.Text = "History Options";
             this.groupBoxCustomHistoryLoad.TextPadding = 0;
             this.groupBoxCustomHistoryLoad.TextStartPosition = -1;
+            // 
+            // comboBoxCustomEssentialEntries
+            // 
+            this.comboBoxCustomEssentialEntries.ArrowWidth = 1;
+            this.comboBoxCustomEssentialEntries.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomEssentialEntries.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomEssentialEntries.DataSource = null;
+            this.comboBoxCustomEssentialEntries.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomEssentialEntries.DisplayMember = "";
+            this.comboBoxCustomEssentialEntries.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomEssentialEntries.DropDownHeight = 300;
+            this.comboBoxCustomEssentialEntries.DropDownWidth = 400;
+            this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomEssentialEntries.ItemHeight = 13;
+            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(176, 125);
+            this.comboBoxCustomEssentialEntries.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomEssentialEntries.Name = "comboBoxCustomEssentialEntries";
+            this.comboBoxCustomEssentialEntries.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEssentialEntries.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEssentialEntries.ScrollBarWidth = 16;
+            this.comboBoxCustomEssentialEntries.SelectedIndex = -1;
+            this.comboBoxCustomEssentialEntries.SelectedItem = null;
+            this.comboBoxCustomEssentialEntries.SelectedValue = null;
+            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(194, 21);
+            this.comboBoxCustomEssentialEntries.TabIndex = 7;
+            this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.comboBoxCustomEssentialEntries.ValueMember = "";
+            // 
+            // labelHistoryEssItems
+            // 
+            this.labelHistoryEssItems.AutoSize = true;
+            this.labelHistoryEssItems.Location = new System.Drawing.Point(10, 125);
+            this.labelHistoryEssItems.Name = "labelHistoryEssItems";
+            this.labelHistoryEssItems.Size = new System.Drawing.Size(103, 13);
+            this.labelHistoryEssItems.TabIndex = 5;
+            this.labelHistoryEssItems.Text = "Essential Entries Are";
             // 
             // labelHistorySel
             // 
@@ -759,7 +799,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 397);
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 425);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
             this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(426, 100);
             this.groupBoxCustomScreenShots.TabIndex = 20;
@@ -810,7 +850,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 312);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 340);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 82);
             this.groupBoxTheme.TabIndex = 18;
@@ -949,7 +989,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 503);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 531);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(426, 51);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -995,7 +1035,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 560);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 588);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
             this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(425, 60);
             this.groupBoxCustomSafeMode.TabIndex = 21;
@@ -1011,6 +1051,8 @@ namespace EDDiscovery.UserControls
             this.buttonExtSafeMode.Size = new System.Drawing.Size(201, 23);
             this.buttonExtSafeMode.TabIndex = 10;
             this.buttonExtSafeMode.Text = "Restart in Safe Mode";
+            this.toolTip.SetToolTip(this.buttonExtSafeMode, "Safe Mode allows you to perform special operations, such as moving the databases," +
+        " resetting the UI, resetting the action packs,  DLLs etc.");
             this.buttonExtSafeMode.UseVisualStyleBackColor = true;
             this.buttonExtSafeMode.Click += new System.EventHandler(this.buttonExtSafeMode_Click);
             // 
@@ -1112,5 +1154,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.GroupBoxCustom groupBoxCustomSafeMode;
         private ExtendedControls.ButtonExt buttonExtSafeMode;
         private System.Windows.Forms.Label labelSafeMode;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomEssentialEntries;
+        private System.Windows.Forms.Label labelHistoryEssItems;
     }
 }

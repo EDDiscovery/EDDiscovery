@@ -346,6 +346,20 @@ namespace EliteDangerousCore
                 JournalTypeEnum.ClearSavedGame,
             };
 
+        static public JournalTypeEnum[] JumpScanEssentialEvents = new JournalTypeEnum[]     // 
+            {
+                JournalTypeEnum.FSDJump,
+                JournalTypeEnum.Scan,
+            };
+        static public JournalTypeEnum[] JumpEssentialEvents = new JournalTypeEnum[]     // 
+            {
+                JournalTypeEnum.FSDJump,
+            };
+
+        static public JournalTypeEnum[] NoEssentialEvents = new JournalTypeEnum[]     // 
+            {
+            };
+
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();        // enum -> type
 
         /// <summary>

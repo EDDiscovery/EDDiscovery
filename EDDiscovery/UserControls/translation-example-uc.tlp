@@ -726,6 +726,7 @@ SECTION UserControlSettings
 .60daysold: ">60 days old" @
 .90daysold: ">90 days old" @
 .180daysold: ">180 days old" @
+.270daysold: ">270 days old" @
 .365daysold: "> 365 days old" @
 .AddC: "Commander name is not valid or duplicate" @
 .AddT: "Cannot create Commander" @
@@ -733,9 +734,15 @@ SECTION UserControlSettings
 .RemoveSectors: "Remove Sectors" @
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" @
+.EJS: "Jumps and Scans" @
+.EJ: "Jumps" @
+.EN: "Nothing" @
+.labelHistoryEssItems: "Essential Entries Are" @
 .groupBoxCustomSafeMode: "Move System DB / Reset UI etc" @
-.buttonExtSafeMode: "Restart in Safe Mode" @
 .labelSafeMode: "Click this to perform special operations" @
+.buttonExtSafeMode: "Restart in Safe Mode" @
+.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." @
 
 SECTION UserControlShipYards
 

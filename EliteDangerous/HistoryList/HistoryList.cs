@@ -916,7 +916,8 @@ namespace EliteDangerousCore
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
                                     bool Keepuievents = true,
-                                    int fullhistoryloaddaylimit = 0
+                                    int fullhistoryloaddaylimit = 0,
+                                    string essentialitems = ""
                                     )
         {
             HistoryList hist = new HistoryList();
@@ -940,8 +941,13 @@ namespace EliteDangerousCore
             
             if ( fullhistoryloaddaylimit >0 )
             {
+                var list = (essentialitems == nameof(JournalEntry.JumpScanEssentialEvents)) ? JournalEntry.JumpScanEssentialEvents :
+                           (essentialitems == nameof(JournalEntry.JumpEssentialEvents)) ? JournalEntry.JumpEssentialEvents :
+                           (essentialitems == nameof(JournalEntry.NoEssentialEvents)) ? JournalEntry.NoEssentialEvents :
+                            JournalEntry.EssentialEvents;
+
                 jlist = JournalEntry.GetAll(CurrentCommander, 
-                    ids: JournalEntry.EssentialEvents, 
+                    ids: list,
                     allidsafter: DateTime.UtcNow.Subtract(new TimeSpan(fullhistoryloaddaylimit, 0, 0, 0))
                     ).OrderBy(x => x.EventTimeUTC).ThenBy(x => x.Id).ToList();
             }

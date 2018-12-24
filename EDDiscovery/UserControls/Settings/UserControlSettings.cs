@@ -100,11 +100,18 @@ namespace EDDiscovery.UserControls
             checkBoxCustomEDSMEDDBDownload.Checked = EDDConfig.Instance.EDSMEDDBDownload;
             this.checkBoxCustomEDSMEDDBDownload.CheckedChanged += new System.EventHandler(this.checkBoxCustomEDSMDownload_CheckedChanged);
 
-            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this,"DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), "> 365 days old".Tx(this) };
-            comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 365 };
+            comboBoxCustomHistoryLoadTime.Items = new string[] { "Disabled-Load All".Tx(this,"DLA"), ">7 days old".Tx(this), ">30 days old".Tx(this), ">60 days old".Tx(this), ">90 days old".Tx(this), ">180 days old".Tx(this), ">270 days old".Tx(this), "> 365 days old".Tx(this) };
+            comboBoxCustomHistoryLoadTime.Tag = new int[] { 0, 7, 30, 60, 90, 180, 270, 365 };
             int ix = Array.FindIndex(comboBoxCustomHistoryLoadTime.Tag as int[], x => x == EDDConfig.Instance.FullHistoryLoadDayLimit);
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
+
+            var eetn = new string[] { nameof(JournalEntry.EssentialEvents) , nameof(JournalEntry.JumpScanEssentialEvents), nameof(JournalEntry.JumpEssentialEvents), nameof(JournalEntry.NoEssentialEvents)};
+            comboBoxCustomEssentialEntries.Items = new string[] { "Scans,Cargo,Missions,State,Jumps etc".Tx(this, "ESM"), "Jumps and Scans".Tx(this, "EJS"), "Jumps".Tx(this, "EJ"), "Nothing".Tx(this, "EN") };
+            comboBoxCustomEssentialEntries.Tag = eetn;
+            ix = Array.FindIndex(eetn, x => x == EDDConfig.Instance.EssentialEventTypes);
+            comboBoxCustomEssentialEntries.SelectedIndex = ix >= 0 ? ix : 0;
+            comboBoxCustomEssentialEntries.SelectedIndexChanged += ComboBoxCustomEssentialEntries_SelectedIndexChanged;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
@@ -244,6 +251,17 @@ namespace EDDiscovery.UserControls
                 discoveryform.RefreshHistoryAsync();
             }
         }
+
+        private void ComboBoxCustomEssentialEntries_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxCustomEssentialEntries.SelectedIndex >= 0)       // paranoia
+            {
+                string[] tn = comboBoxCustomEssentialEntries.Tag as string[];
+                EDDConfig.Instance.EssentialEventTypes = tn[comboBoxCustomEssentialEntries.SelectedIndex];
+                discoveryform.RefreshHistoryAsync();
+            }
+        }
+
 
         #endregion
 
@@ -585,13 +603,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Safemode
+
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            Application.Exit();
-
-            // Restart the app passing "/restart [processId]" as cmd line args
-            System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".Tx(this,"SM"), "Confirm restart to safe mode".Tx(this, "CSM"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            {
+                Application.Exit();
+                System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
+            }
         }
+
+        #endregion
     }
 }
 

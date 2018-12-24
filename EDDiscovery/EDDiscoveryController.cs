@@ -802,7 +802,8 @@ namespace EDDiscovery
                     () => PendingClose, 
                     (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this,"PLF") , s)), args.NetLogPath,
                     args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
-                    EDDConfig.Instance.ShowUIEvents, EDDConfig.Instance.FullHistoryLoadDayLimit);
+                    EDDConfig.Instance.ShowUIEvents, 
+                    EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");
             }
