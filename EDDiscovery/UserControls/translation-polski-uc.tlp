@@ -4,9 +4,9 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Typ Zakładki"
 .ColBookmarkName: "Bookmark Name" => "Nazwa Zakładki"
 .ColDescription: "Description" => "Opis"
-.ColX: "X" @
-.ColY: "Y" @
-.ColZ: "Z" @
+.ColX: "X" => "X"
+.ColY: "Y" => "Y"
+.ColZ: "Z" => "Z"
 .labelSearch: "Search" => "Szukaj"
 .toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" => "Pokaż na mapie 3D"
 .openInEDSMToolStripMenuItem: "Open in EDSM" => "Otwórz w EDSM"
@@ -67,9 +67,9 @@ SECTION UserControlCombatPanel
 
 SECTION UserControlContainerGrid
 
-.buttonExtTile.ToolTip: "Tile the grid panels" @
-.buttonExtDelete.ToolTip: "Remove selected panel" @
-.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" @
+.buttonExtTile.ToolTip: "Tile the grid panels" => "Ułóż panele w siatce"
+.buttonExtDelete.ToolTip: "Remove selected panel" => "Usuń zaznaczony panel"
+.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Wybierz panel do umieszczenia w siatce"
 
 SECTION UserControlCompass
 
@@ -79,29 +79,29 @@ SECTION UserControlCompass
 
 SECTION UserControlSearch
 
-.MaterialsCommodities: "Materials Commodities" @
-.Stars: "Stars" @
+.MaterialsCommodities: "Materials Commodities" => "Materiały i Towary"
+.Stars: "Stars" => "Gwiazdy"
 
 SECTION UserControlSearchMaterialsCommodities
 
-.ColumnStar: "Star" @
-.ColumnLocation: "Location" @
-.ColumnCurrentDistance: "Current Distance" @
-.ColumnPosition: "Position" @
-.buttonExtFind: "Find" @
-.label2: "Item 2" @
-.label1: "Item 1" @
-.RareCommodity: ", Rare Commodity" @
-.AND: "AND" @
-.OR: "OR" @
+.ColumnStar: "Star" => "Gwiazda"
+.ColumnLocation: "Location" => "Lokalizacja"
+.ColumnCurrentDistance: "Current Distance" => "Obecna Odległość"
+.ColumnPosition: "Position" => "Pozycja"
+.buttonExtFind: "Find" => "Znajdź"
+.label2: "Item 2" => "Przedmiot 2"
+.label1: "Item 1" => "Przedmiot 1"
+.RareCommodity: ", Rare Commodity" => "Rzadki Towar"
+.AND: "AND" => "I"
+.OR: "OR" => "LUB"
 
 SECTION DataGridViewStarResults
 
-.3d: "Go to star on 3D Map" @
-.EDSM: "View on EDSM" @
-.Data: "View Data On Entry" @
-.Sys: "System" @
-.Station: "Station" @
+.3d: "Go to star on 3D Map" => "Przejdź do gwiazdy na mapie 3D"
+.EDSM: "View on EDSM" => "Pokaż w EDSM"
+.Data: "View Data On Entry" => "Pokaż Dane Wpisu"
+.Sys: "System" => "Układ"
+.Station: "Station" => "Stacja"
 
 SECTION UserControlEngineering
 
@@ -121,7 +121,7 @@ SECTION UserControlEngineering
 .buttonFilterLevel: "Filter By Level" => "Filtruj wg Poziomu"
 .buttonFilterEngineer: "Filter By Engineer" => "Filtruj wg Inżyniera"
 .buttonFilterModule: "Filter By Module" => "Filtruj wg Modułu"
-.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność"
+.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 .chkHistoric.ToolTip: "When clicked on, use the materials at the cursor to estimate, when off always use the latest materials." => "Jeśli zaznaczono, używaj materiałów na pozycji kursora w celu oszacowania, jeśli nie zaznaczono, zawsze są używane najnowsze materiały"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Ustaw wszystkie wartości pożądanych na zero"
 .buttonFilterMaterial.ToolTip: "Filter the table by material" => "Filtruj tabelę według materiału"
@@ -129,7 +129,7 @@ SECTION UserControlEngineering
 .buttonFilterLevel.ToolTip: "Filter the table by level" => "Filtruj tabelę według poziomu ulepszenia"
 .buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Filtruj tabelę według inżyniera"
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtruj tabelę według typu modułu"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
 SECTION UserControlEstimatedValues
 
@@ -181,13 +181,13 @@ SECTION UserControlExploration
 
 .ColumnSystemName: "System Name" => "Nazwa Układu"
 .ColumnDist: "Dist" => "Odległość"
-.ColumnX: "X" @
-.ColumnY: "Y" @
-.ColumnZ: "Z" @
+.ColumnX: "X" => "X"
+.ColumnY: "Y" => "Y"
+.ColumnZ: "Z" => "Z"
 .ColumnVisits: "Visits" => "Wizyty"
 .ColumnScans: "Scans" => "Skany"
 .ColumnPrimaryStar: "Pri star" => "Gł. gwiazda"
-.ColumnInfo: "Info" @
+.ColumnInfo: "Info" => "Informacje"
 .ColumnNote: "Note" => "Notatka"
 .labelFilename: "Filename" => "Nazwa pliku"
 .labelName: "Exploration set:" => "Zest. Eksploracji:"
@@ -243,11 +243,11 @@ SECTION UserControlJournalGrid
 .TTFilt3: "Total filtered out {0}" => "Razem filtrowanie {0}"
 .TTTotal: "Filter out entries matching the field selection, " => "Filtr wpisów według wyboru pola, "
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
-.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" @
-.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" @
+.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "Zaznacz, jeśli kursor ma przenosić się na najwyższy wpis gdy zostanie dodany nowy wpis"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtruj wpisy na podstawie typu zdarzenia"
+.comboBoxJournalWindow.ToolTip: "Select the entries selected by age" => "Sortuj wpisy według wieku"
 
 SECTION UserControlLedger
 
@@ -262,7 +262,7 @@ SECTION UserControlLedger
 .labelTime: "Time" => "Czas"
 .buttonFilter: "Event Filter" => "Filtr Zdarzeń"
 .labelSearch: "Search" => "Szukaj"
-.buttonFilter.ToolTip: "Display entries matching this event type filter" => "Wyświetl wpisy pasujące do filtra typu zdarzenia"
+.buttonFilter.ToolTip: "Display entries matching this event type filter" => "Wyświetl wpisy pasujące do tego filtra typu zdarzenia"
 .textBoxFilter.ToolTip: "Search to particular items" => "Szukaj konkretnych elementów"
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Zaznacz wpisy według wieku"
 .toolStripMenuItemGotoItem: "Go to entry on grid" => "Przejdź do wpisu w tabeli"
@@ -270,27 +270,27 @@ SECTION UserControlLedger
 
 SECTION UserControlLocalMap
 
-.labelExtMin: "Min" @
-.labelExtMax: "Max" @
+.labelExtMin: "Min" => "Min"
+.labelExtMax: "Max" => "Max"
 .toolStripMenuZoom: "Zoom" => "Zbliżenie"
-.toolStripMenuZoom.toolStripMenuZoom1: "1:1" @
-.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" @
-.toolStripMenuZoom.toolStripMenuZoom15: "1.5:1" @
-.toolStripMenuZoom.toolStripMenuZoom175: "1.75:1" @
-.toolStripMenuZoom.toolStripMenuZoom2: "2:1" @
-.toolStripMenuZoom.toolStripMenuZoom25: "2.5:1" @
-.toolStripMenuZoom.toolStripMenuZoom3: "3:1" @
-.toolStripMenuZoom.toolStripMenuZoom35: "3.5:1" @
-.toolStripMenuZoom.toolStripMenuZoom4: "4:1" @
-.toolStripMenuZoom.toolStripMenuZoom5: "5:1" @
-.toolStripMenuZoom.toolStripMenuZoom6: "6:1" @
-.toolStripMenuZoom.toolStripMenuZoom8: "8:1" @
-.toolStripMenuZoom.toolStripMenuZoom10: "10:1" @
+.toolStripMenuZoom.toolStripMenuZoom1: "1:1" => "1:1"
+.toolStripMenuZoom.toolStripMenuZoom125: "1.25:1" => "1.25:1"
+.toolStripMenuZoom.toolStripMenuZoom15: "1.5:1" => "1.5:1"
+.toolStripMenuZoom.toolStripMenuZoom175: "1.75:1" => "1.75:1"
+.toolStripMenuZoom.toolStripMenuZoom2: "2:1" => "2:1"
+.toolStripMenuZoom.toolStripMenuZoom25: "2.5:1" => "2.5:1"
+.toolStripMenuZoom.toolStripMenuZoom3: "3:1" => "3:1"
+.toolStripMenuZoom.toolStripMenuZoom35: "3.5:1" => "3.5:1"
+.toolStripMenuZoom.toolStripMenuZoom4: "4:1" => "4:1"
+.toolStripMenuZoom.toolStripMenuZoom5: "5:1" => "5:1"
+.toolStripMenuZoom.toolStripMenuZoom6: "6:1" => "6:1"
+.toolStripMenuZoom.toolStripMenuZoom8: "8:1" => "8:1"
+.toolStripMenuZoom.toolStripMenuZoom10: "10:1" => "10:1"
 .toolStripMenuZoomCenterMap: "Center Map" => "Wyśrodkuj Mapę"
-.toolStripMenuReset: "Reset" @
+.toolStripMenuReset: "Reset" => "Reset"
 .aboutToolStripAbout: "About" => "Informacje"
-.panelTop.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" @
-.3dmap: "3D Map of closest systems from {0}" => "Mapa 3D układów najbliższych od {0}"
+.panelTop.ToolTip: "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button" => "Obrót lewym przyciskiem myszki, zbliżenie kółkiem, przesuwanie środkiwym przyciskiem"
+.3dmap: "3D Map of closest systems from {0}" => "Mapa 3D układów najbliższych do {0}"
 
 SECTION UserControlLog
 
@@ -311,7 +311,7 @@ SECTION UserControlMarketData
 .ProfitFromCol: "Profit From cr/t" => "Zysk Z cr/t>"
 .checkBoxAutoSwap: "AutoSwap" => "Auto-Zamień"
 .checkBoxBuyOnly: "Buy Only" => "Tylko Kupno"
-.labelVs: "Vs" @
+.labelVs: "Vs" => "Vs"
 .labelLocation: "No Data" => "Brak Danych"
 .ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap the comparision to the previous market data.\r\nUseful when doing A->B->A trading" => "Gdy docierasz na stację z którą porównujesz (po prawej)\r\nzamień porównanie do poprzednich danych rynkowych.\r\nPrzydatne w przypadku prowadzenia handlu A->B->A"
 .checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Pokazuj tylko przedmioty które pożna kupić"
@@ -319,7 +319,7 @@ SECTION UserControlMarketData
 .comboBoxCustomFrom.ToolTip: "Click to select between tracking the cursor or a particular market data set" => "Kliknij aby wybrać pomiędzy śledzeniem kursora a konkretnym zestawem danych rynkowych"
 .Conly: "Cargo only, no market data on this item" => "Tylko ładunek, brak danych rynkowych dotyczących tego przedmiotu"
 .LEntry: "Travel History Entry Last" => "Ostatni Wpis Historii Podróży"
-.panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" @
+.panelButtons.ToolTip: "When arriving at a station where you are comparing against (on the right)\r\nswap t" => "Po dotarciu na stację z którą porównujesz (po prawej)\r\n\r\nzamień porównanie do poprzednich danych rynkowych.\r\nPrzydatne w przypadku prowadzenia handlu A->B->A"
 
 SECTION UserControlMaterials
 
@@ -376,7 +376,7 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Wynik (cr)"
 .pColInfo: "Info" => "Informacje"
 .labelTo: "to" => "do"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.panelButtons.ToolTip: "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność" 
 .MPlural: " Missions" => "Misje"
 .MSingular: " Mission" => "Misja"
 .Name: "Name" => "Nazwa"
@@ -422,12 +422,12 @@ SECTION UserControlModules
 .NValid: "A Value is not valid" => "Wartość nie jest prawidłowa"
 .SC: "Ship Configure" => "Konfiguracja Statku"
 .MI: "Module Information" => "Informacje o Modułach"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" @
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" @
-.buttonExtCoriolis.ToolTip: "Send to Corolis" @
-.comboBoxShips.ToolTip: "Select ship to view" @
-.labelVehicle: "Unknown" @
-.labelShip: "Ship" @
+.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguruj dodatkowe dane brakujące w Dzienniku Elite"
+.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Prześlij do ED Ship Yard"
+.buttonExtCoriolis.ToolTip: "Send to Corolis" => "Prześlij do Coriolis"
+.comboBoxShips.ToolTip: "Select ship to view" => "Wybierz statek do wyświetlenia"
+.labelVehicle: "Unknown" => "Nieznane"
+.labelShip: "Ship" => "Statek"
 
 SECTION UserControlNotePanel
 
@@ -461,18 +461,18 @@ SECTION UserControlPanelSelector
 SECTION UserControlPlot
 
 .sysName: "Name" => "Nazwa"
-.sysX: "X" @
-.sysY: "Y" @
-.sysZ: "Z" @
+.sysX: "X" => "X"
+.sysY: "Y" => "Y"
+.sysZ: "Z" => "Z"
 .sysVisits: "Visits" => "Wizyty"
 .labelExtMin: "Min" => "Min."
 .labelExtMax: "Max" => "Maks."
 .optionsToolStripMenuItem: "Options" => "Opcje"
 .optionsToolStripMenuItem.exportToToolStripMenuItem: "Export to..." => "Eksportuj do..."
-.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" @
-.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" @
-.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" @
-.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" @
+.optionsToolStripMenuItem.exportToToolStripMenuItem.pNGToolStripMenuItem: "PNG" => "PNG"
+.optionsToolStripMenuItem.exportToToolStripMenuItem.pDFToolStripMenuItem: "PDF" => "PDF"
+.optionsToolStripMenuItem.exportToToolStripMenuItem.sVGToolStripMenuItem: "SVG" => "SVG"
+.optionsToolStripMenuItem.exportToToolStripMenuItem.tXTToolStripMenuItem: "TXT" => "TXT"
 .comboBoxView.ToolTip: "Orientation of the Plot" => "Orientacja Planu"
 .textMinRadius.ToolTip: "Minimum Range" => "Minimalny Zakres"
 .textMaxRadius.ToolTip: "Maximum Range" => "Maksymalny Zakres"
@@ -496,17 +496,17 @@ SECTION UserControlRoute
 
 .SystemCol: "System" => "Układ"
 .DistanceCol: "Distance" => "Odległość"
-.XCol: "X" @
-.YCol: "Y" @
-.ZCol: "Z" @
+.XCol: "X" => "X"
+.YCol: "Y" => "Y"
+.ZCol: "Z" => "Z"
 .WayPointDistCol: "Dist. Waypoint" => "Odległ. pkt. naw."
 .DeviationCol: "Deviation" => "Odstępstwo"
-.buttonExtExcel: "2" @
+.buttonExtExcel: "2" => "2"
 .buttonExtTravelTo: "History" => "Historia"
 .buttonExtTravelFrom: "History" => "Historia"
 .buttonExtTargetTo: "Target" => "Cel"
-.buttonToEDSM: "EDSM" @
-.buttonFromEDSM: "EDSM" @
+.buttonToEDSM: "EDSM" => "EDSM"
+.buttonFromEDSM: "EDSM" => "EDSM"
 .buttonTargetFrom: "Target" => "Cel"
 .cmd3DMap: "3D Map" => "Mapa 3D"
 .labelLy2: "ly" => "lat świetlnych"
@@ -519,7 +519,7 @@ SECTION UserControlRoute
 .labelFrom: "From" => "Z"
 .showInEDSMToolStripMenuItem: "Show in EDSM" => "Pokaż w EDSM"
 .copyToolStripMenuItem: "Copy" => "Kopiuj"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do Excel"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
 .textBox_ToName.ToolTip: "Alternate Name" => "Alternatywna Nazwa"
 .textBox_FromName.ToolTip: "Alternate name" => "Alternatywna nazwa"
 .comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Wybierz miarę do użycia podczas szukania trasy"
@@ -582,15 +582,15 @@ SECTION UserControlScan
 .checkBoxLarge.ToolTip: "Image size large" => "Duży rozmiar obrazów"
 .checkBoxSmall.ToolTip: "Image size small" => "Mały rozmiar obrazów"
 .checkBoxMedium.ToolTip: "Image size medium" => "Średni rozmiar obrazów"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do Excel"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
 .lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij na panelu prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
 .AV: "Approx value: {0:N0}" => "Wartość w przybliżeniu: {0:N0}"
 .NSD: "No scan data available" => "Brak dostępnych danych skanu"
 .BC: "Barycentre of {0}" => "Barycentrum {0}"
-.showSystemToolStripMenuItem: "Show System" @
-.cancelShowSystemToolStripMenuItem: "Cancel Show System" @
-.panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
-.rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
+.showSystemToolStripMenuItem: "Show System" => "Wyświetl Układ"
+.cancelShowSystemToolStripMenuItem: "Cancel Show System" => "Anuluj Wyświetlenie Układu"
+.panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij panel prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
+.rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij panel prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
 
 SECTION UserControlScanGrid
 
@@ -611,33 +611,33 @@ SECTION UserControlScanGrid
 .Value: "Value" => "Wartość"
 .SS: "Scan Summary for {0}. {1}" => "Podsumowanie Skanów {0}. {1}"
 .AV: "Approx total scan value: {0:N0}" => "Przybliżona całkowita wartość skanów: {0:N0}"
-.Radius: "Radius" @
-.Temperature: "Temperature" @
-.MetalRichbodies: "Metal Rich bodies" @
-.Waterworlds: "Water worlds" @
-.Earthlikesplanets: "Earth likes planets" @
-.Ammoniaworlds: "Ammonia worlds" @
-.Volcanicactivity: "Volcanic activity" @
-.Belt: "Belt: " @
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
-.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" @
-.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" @
-.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" @
-.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" @
-.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" @
-.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" @
-.structuresToolStripMenuItem: "Structures" @
-.structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" @
-.structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" @
-.materialsToolStripMenuItem: "Materials" @
-.valuesToolStripMenuItem: "Values" @
-.columnsToolStripMenuItem: "Columns" @
-.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" @
-.columnsToolStripMenuItem.classToolStripMenuItem: "Class" @
-.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" @
-.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
-.toolStripStatusTotalValue: "Estimated scans value" @
+.Radius: "Radius" => "Promień"
+.Temperature: "Temperature" => "Temperatura"
+.MetalRichbodies: "Metal Rich bodies" => "Planety Bogate w Metale"
+.Waterworlds: "Water worlds" => "Planety oceaniczne"
+.Earthlikesplanets: "Earth likes planets" => "Planety ziemiopodobne"
+.Ammoniaworlds: "Ammonia worlds" => "Planety amoniakowe"
+.Volcanicactivity: "Volcanic activity" => "Aktywność wulkaniczna"
+.Belt: "Belt: " => "Pas: "
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Podsumowanie skanu dla {0}: {1} gwiazd(a/y); {2} planet ({3} skalistych, {4} gazowych olbrzymów), {5} księżyców"
+.circumstellarZoneToolStripMenuItem: "Circumstellar Zones" => "Strefy Okołogwiazdowe"
+.circumstellarZoneToolStripMenuItem.habitableZoneToolStripMenuItem: "Habitable Zone" => "Ekosfera"
+.circumstellarZoneToolStripMenuItem.metalRichToolStripMenuItem: "Metal Rich" => "Planety Bogate w Metale"
+.circumstellarZoneToolStripMenuItem.waterWorldsToolStripMenuItem: "Water Worlds" => "Planety Oceaniczne"
+.circumstellarZoneToolStripMenuItem.earthLikePlanetsToolStripMenuItem: "Earth Like Planets" => "Planety Ziemiopodobne"
+.circumstellarZoneToolStripMenuItem.ammoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Planety Amoniakowe"
+.circumstellarZoneToolStripMenuItem.icyBodiesToolStripMenuItem: "Icy Bodies" => "Planety Lodowe"
+.structuresToolStripMenuItem: "Structures" => "Struktury"
+.structuresToolStripMenuItem.beltsToolStripMenuItem: "Belts" => "Pasy Asteroid"
+.structuresToolStripMenuItem.ringsToolStripMenuItem: "Rings" => "Pierścienie"
+.materialsToolStripMenuItem: "Materials" => "Meteriały"
+.valuesToolStripMenuItem: "Values" => "Wartości"
+.columnsToolStripMenuItem: "Columns" => "Kolumny"
+.columnsToolStripMenuItem.nameToolStripMenuItem: "Name" => "Nazwa"
+.columnsToolStripMenuItem.classToolStripMenuItem: "Class" => "Klasa"
+.columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" => "Odległość"
+.columnsToolStripMenuItem.informationToolStripMenuItem: "Information" => "Informacje"
+.toolStripStatusTotalValue: "Estimated scans value" => "Wartość"
 .toolStripStatusGreen: "GREEN SYSTEM" @
 
 SECTION UserControlSettings
@@ -805,14 +805,14 @@ SECTION UserControlSpanel
 .Target: "Target" => "Cel"
 .TVE: "View system on EDSM" => "Pokaż układ w EDSM"
 .SPF: "Summary Panel: Filter out fields" => "Filtruj pola"
-.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" @
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" @
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" @
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
-.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
-.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
+.showCircumstellarZonesToolStripMenuItem: "Show Circumstellar Zones" => "Pokaż Strefy Okołogwiazdowe"
+.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Metal Rich Planets" => "Planety Bogate w Metale"
+.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Water Worlds" => "Planety Oceaniczne"
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Earth Like" => "Planety Ziemiopodobne"
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Planety Amoniakowe"
+.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Planety Lodowe"
+.dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Całkowicie ukryj Panel"
+.Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" => "Ekosfera, {0} ({1}-{2} AU),\n"
 
 SECTION UserControlStarDistance
 
@@ -844,10 +844,10 @@ SECTION UserControlStarList
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "Pokaż w EDSM"
 .setNoteToolStripMenuItem: "Set Note" => "Ustaw Notatkę"
 .checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "Zaznacz, jeśli kursor ma przenosić się na najwyższy wpis gdy zostanie dodany nowy wpis"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do Excel"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
 .checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" => "Pokaż/Ukryj obecność materiałów Jumponium"
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" => "Pokaż/Ukryj klasy Specjalnych Ciał Niebieskich"
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst aby wyszukać we wszystkich polach"
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM. Due to server constraints, you must click on a system to retreive data on it from EDSM." => "Pokaż/Ukryj dane ciał niebieskich z EDSM. Z powodu ograniczeń serwerów, musisz kliknąć układ aby pobrać informacje o nim z EDSM."
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Pokaż wpisy według wieku"
 .FV: "First visit {0}" => "Pierwsza wizyta {0}"
@@ -871,7 +871,7 @@ SECTION UserControlStarList
 .AW: "{0} is an ammonia world" => "{0} to planeta amoniakowa"
 .BFSD: " Basic" => " Podstawowy"
 .SFSD: " Standard" => " Standardowy"
-.PFSD: " Premium" @
+.PFSD: " Premium" => "Premium"
 .LE: "{0} has {1} level elements." => "{0} zawiera składniki - poziom {1}"
 .OB: "{0} Other bodies" => "{0} innych ciał niebieskich"
 .FSD: "This system has materials for FSD boost: " => "Ten układ zawiera materiały do doładowania FSD: "
@@ -996,17 +996,17 @@ SECTION UserControlStats
 .TradesCompleted: "Trades Completed" => "Ukończone Wymiany"
 .MaterialsTraded: "Materials Traded" => "Wymienione Materiały"
 .TME: "{0} days {1} hours {1} minutes" => "{0} dni, {1} godzin, {1} minut"
-.Name: "Name" @
-.Ident: "Ident" @
-.TravelledLy: "Travelled Ly" @
-.BodiesScanned: "Bodies Scanned" @
-.GoodsBought: "Goods Bought" @
-.GoodsSold: "Goods Sold" @
-.Destroyed: "Destroyed" @
-.Unknown: "Unknown" @
-.tabControlCustomStats.tabPageByShip: "By Ship" @
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
-.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
+.Name: "Name" => "Nazwa"
+.Ident: "Ident" => "ID statku"
+.TravelledLy: "Travelled Ly" => "Przebyto Lat Świetlnych"
+.BodiesScanned: "Bodies Scanned" => "Przeskanowano Ciał Niebieskich"
+.GoodsBought: "Goods Bought" => "Kupiono Towarów"
+.GoodsSold: "Goods Sold" => "Sprzedano Towarów"
+.Destroyed: "Destroyed" => "Zniszczono"
+.Unknown: "Unknown" => "Nieznane"
+.tabControlCustomStats.tabPageByShip: "By Ship" => "Według Statku"
+.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" => "Element"
+.tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" => "Informacje"
 
 SECTION UserControlSynthesis
 
@@ -1028,18 +1028,18 @@ SECTION UserControlSynthesis
 .buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "Filtruj tabelę według poziomu syntezy"
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Filtruj tabelę według typu syntezy"
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Ustaw wszystkie wartości pożądanych na zero"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" @
+.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
 SECTION UserControlSysInfo
 
 .labelSysName: "System" => "Układ"
 .labelOpen: "Open" => "Otwórz"
-.buttonEDSM: "EDSM" @
+.buttonEDSM: "EDSM" => "EDSM"
 .labelVisits: "Visits" => "Wizyty"
 .labelBodyName: "Body" => "Obiekt"
 .labelPosition: "Pos" => "Pozycja"
 .labelHomeDist: "Home" => "Dom"
-.labelSolDist: "Sol" @
+.labelSolDist: "Sol" => "Sol"
 .labelState: "State" => "Stan"
 .labelAllegiance: "Allegiance" => "Przynależ."
 .labelGov: "Gov" => "Rząd"
@@ -1055,7 +1055,7 @@ SECTION UserControlSysInfo
 .labelTravel: "Travel" => "Podróż"
 .labelGamemode: "Mode" => "Tryb"
 .labelTarget: "Target" => "Cel"
-.buttonEDSMTarget: "EDSM" @
+.buttonEDSMTarget: "EDSM" => "EDSM"
 .toolStripSystem: "Display System Name" => "Wyświetl Nazwę Układu"
 .toolStripEDSM: "Display EDSM Buttons" => "Wyświetl Przyciski EDSM"
 .toolStripEDSMDownLine: "EDSM buttons on separate line" => "Przyciski EDSM w osobnej linii"
@@ -1076,37 +1076,37 @@ SECTION UserControlSysInfo
 .toolStripTravel: "Display Travel Trip Statistics" => "Wskaźnik Statystyk Podróźy"
 .toolStripMissionList: "Display Mission List" => "Wskaźnik Listy Misji"
 .toolStripSkinny: "When transparent, use skinny look" => "Używaj trybu zwężonego gdy przezroczyste"
-.toolStripReset: "Reset" @
+.toolStripReset: "Reset" => "Reset"
 .toolStripRemoveAll: "Remove All" => "Usuń Wszystko"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Przytrzymaj klawisz Ctrl i przeciągnij element lewym przyciskiem myszki aby zmienić jego pozycję. Dostępne 8 kolumn"
 .textBoxTarget.ToolTip: "Sets the target" => "Ustawia Cel"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Odległość do Celu"
 .NoMissions: "No Missions" => "Brak Misji"
-.NA: "N/A" @
+.NA: "N/A" => "N/A"
 .SysUnk: "System unknown to EDSM" => "Układ nie jest znany w EDSM"
 .Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Pozycja to {0:0.00}, {1:0.00}, {2:0.00}"
 .Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "Na Mapie 3D, kliknij prawym przyciskiem myszki aby utworzyć zakładkę, znacznik regionu, lub kliknij na znaczniku notatki i zaznacz 'Ustaw Cel' lub wpisz tutaj i naciśnij Enter"
 
 SECTION UserControlContainerSplitter
 
-.sizeRatioToolStripMenuItem: "Set Size Ratio" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem13: "1:3" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem12: "1:2" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem23: "2:3" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem11: "1:1" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem32: "3:2" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem21: "2:1" @
-.sizeRatioToolStripMenuItem.toolStripMenuItem31: "3:1" @
-.ChangetoHorizontalSplit: "Change to Horizontal Split" @
-.ChangetoVerticalSplit: "Change to Vertical Split" @
-.SplitLeftPanel: "Split Left Panel" @
-.SplitTopPanel: "Split Top Panel" @
-.SplitRightPanel: "Split Right Panel" @
-.SplitBottomPanel: "Split Bottom Panel" @
-.MergeLeftPanel: "Merge Left Panel" @
-.MergeTopPanel: "Merge Top Panel" @
-.MergeRightPanel: "Merge Right Panel" @
-.MergeBottomPanel: "Merge Bottom Panel" @
+.sizeRatioToolStripMenuItem: "Set Size Ratio" => "Ustaw Stosunek Rozmiaru"
+.sizeRatioToolStripMenuItem.toolStripMenuItem13: "1:3" => "1:3"
+.sizeRatioToolStripMenuItem.toolStripMenuItem12: "1:2" => "1:2"
+.sizeRatioToolStripMenuItem.toolStripMenuItem23: "2:3" => "2:3"
+.sizeRatioToolStripMenuItem.toolStripMenuItem11: "1:1" => "1:1"
+.sizeRatioToolStripMenuItem.toolStripMenuItem32: "3:2" => "3:2"
+.sizeRatioToolStripMenuItem.toolStripMenuItem21: "2:1" => "2:1"
+.sizeRatioToolStripMenuItem.toolStripMenuItem31: "3:1" => "3:1"
+.ChangetoHorizontalSplit: "Change to Horizontal Split" => "Zmień na Podział Poziomy"
+.ChangetoVerticalSplit: "Change to Vertical Split" => "Zmień na Podział Pionowy"
+.SplitLeftPanel: "Split Left Panel" => "Podziel Lewy Panel"
+.SplitTopPanel: "Split Top Panel" => "Podziel Górny Panel"
+.SplitRightPanel: "Split Right Panel" => "Podziel Prawy Panel"
+.SplitBottomPanel: "Split Bottom Panel" => "Podziel Dolny Panel"
+.MergeLeftPanel: "Merge Left Panel" => "Połącz Lewy Panel"
+.MergeTopPanel: "Merge Top Panel" => "Połącz Górny Panel"
+.MergeRightPanel: "Merge Right Panel" => "Połącz Prawy Panel"
+.MergeBottomPanel: "Merge Bottom Panel" => "Połącz Dolny Panel"
 
 SECTION UserControlTravelGrid
 
@@ -1160,22 +1160,22 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "Nie można znaleźć Lokalizacji lib wpisu FSDJump związanego z wybranym wpisem dziennika"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Potwierdź, że chcesz usunąć ten wpis\r\nMoże pojawić się ponownie, jeśli dzienniki zostaną przeskanowane od nowa"
-.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.buttonField.ToolTip: "Filter out entries matching the field selection" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" @
-.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
-.comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "Zaznacz, jeśli kursor ma przenosić się na najwyższy wpis gdy zostanie dodany nowy wpis"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
+.buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtruj wpisy według wyboru pola"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtruj wpisy według typu zdarzenia"
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
+.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "Sortuj wpisy według wieku"
 
 SECTION UserControlTrilateration
 
 .ColumnSystem: "System" => "Układ"
-.ColumnDistance: "Distance" @
+.ColumnDistance: "Distance" => "Odległość"
 .ColumnCalculated: "Calculated" => "Obliczono"
-.ColumnStatus: "Status" @
+.ColumnStatus: "Status" => "Status"
 .Source: "Source" => "Źródło"
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Pożądany Układ"
-.toolStrip: "<Press Start New>" @
+.toolStrip: "<Press Start New>" => "<Naciśnij 'Rozpocznij Nowe'>"
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Usuń z pożądanych układów"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" => "Pokaż w EDSM"
 .deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Usuń wszystkie o znanej pozycji"
@@ -1190,7 +1190,7 @@ SECTION UserControlTrilateration
 .toolStripButtonRemoveAll: "toolStripButton1" => "Usuń Wszystkie"
 .toolStripButtonMap: "3d map" => "Mapa 3D"
 .toolStripLabelSystem: "From System:" => "Z Układu:"
-.toolStripTextBoxSystem: "<Press Start New>" @
+.toolStripTextBoxSystem: "<Press Start New>" => "<Naciśnij 'Rozpocznij Nowe'>"
 .toolStripLabel1: "Visited without coordinates:" => "Odwiedzone bez współrzędnych:"
 .toolStripAddFromHistory: "Add 20 oldest" => "Dodaj 20 najstarszych"
 .toolStripAddRecentHistory: "Add 20 newest" => "Dodaj 20 najnowszych"
@@ -1228,6 +1228,6 @@ SECTION UserControlTrippanel
 
 SECTION ScanDisplay
 
-.AV: "Approx value: {0:N0}" @
-.NSD: "No scan data available" @
-.BC: "Barycentre of {0}" @
+.AV: "Approx value: {0:N0}" => "Wartość w przybliżeniu: {0:N0}"
+.NSD: "No scan data available" => "Brak dostępnych danych skanu"
+.BC: "Barycentre of {0}" => "Barycentrum {0}"
