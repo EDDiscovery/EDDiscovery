@@ -881,7 +881,7 @@ namespace EDDiscovery.UserControls
                 TreeNode crew = treeViewStats.Nodes.Add("Crew"); 
                 AddChildNode(crew, "Total Wages".Tx(this), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(crew, "Total Hired".Tx(this), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
-                AddChildNode(crew, "Total Fired".Tx(this), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
+                AddChildNode(crew, "Total Fired".Tx(this), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(crew, "Died in Line of Duty".Tx(this), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(10,1) == "Y") crew.Expand();
 
