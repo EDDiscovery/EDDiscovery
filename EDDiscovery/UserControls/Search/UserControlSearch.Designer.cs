@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             this.tabStrip.SelectedIndex = -1;
             this.tabStrip.ShowPopOut = false;
             this.tabStrip.Size = new System.Drawing.Size(804, 716);
-            this.tabStrip.StripMode = ExtendedControls.TabStrip.StripModeType.StripTop;
+            this.tabStrip.StripMode = ExtendedControls.TabStrip.StripModeType.StripTopOpen;
             this.tabStrip.TabFieldSpacing = 8;
             this.tabStrip.TabIndex = 0;
             // 

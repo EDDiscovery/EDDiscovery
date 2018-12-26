@@ -181,7 +181,7 @@ namespace EDDiscovery.UserControls.Search
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {
-                if (controlname == "OK")
+                if (controlname == "OK" || controlname == "Cancel")
                     f.Close();
             };
 
