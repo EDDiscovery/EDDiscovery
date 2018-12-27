@@ -15,13 +15,9 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using BaseUtils;
 using ActionLanguage;
-using Conditions;
+using BaseUtils;
 
 namespace EDDiscovery.Actions
 {
@@ -60,7 +56,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp) != ConditionFunctions.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != Functions.ExpandResult.Failed)
                 {
                     string cmdname = exp[0].ToLowerInvariant();
                     string nextword = exp.Count >= 2 ? exp[1] : null;
@@ -286,7 +282,7 @@ namespace EDDiscovery.Actions
 
                             if (f != null)
                             {
-                                Conditions.ConditionVariables c = new Conditions.ConditionVariables();
+                                BaseUtils.Variables c = new BaseUtils.Variables();
 
                                 for ( int w = 2; w < exp.Count; w++ )
                                 {

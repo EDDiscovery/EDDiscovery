@@ -23,7 +23,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseUtils;
 using ActionLanguage;
-using Conditions;
 using AudioExtensions;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
@@ -47,7 +46,7 @@ namespace EDDiscovery.Actions
 
         private string lasteditedpack;
 
-        static public ConditionFunctionHandlers DefaultGetCFH(ConditionFunctions c, ConditionVariables vars, ConditionPersistentData handles, int recdepth)
+        static public FunctionHandlers DefaultGetCFH(Functions c, Variables vars, FunctionPersistentData handles, int recdepth)
         {
             return new ConditionEDDFunctions(c, vars, handles, recdepth);
         }
@@ -115,9 +114,9 @@ namespace EDDiscovery.Actions
             voicerecon.SpeechRecognised += Voicerecon_SpeechRecognised;
             voicerecon.SpeechNotRecognised += Voicerecon_SpeechNotRecognised;
 
-            ConditionFunctions.GetCFH = DefaultGetCFH;
+            Functions.GetCFH = DefaultGetCFH;
 
-            LoadPeristentVariables(new ConditionVariables(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), ConditionVariables.FromMode.MultiEntryComma));
+            LoadPeristentVariables(new Variables(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), Variables.FromMode.MultiEntryComma));
 
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
 
@@ -388,7 +387,7 @@ namespace EDDiscovery.Actions
                             discoveryform.RemoveMenuItemsFromAddOns(kv.Key);
                     }
 
-                    ActionRun(ActionEventEDList.onInstall, null, new ConditionVariables("InstallList", changes));
+                    ActionRun(ActionEventEDList.onInstall, null, new Variables("InstallList", changes));
 
                     ActionConfigureKeys();
 
@@ -412,7 +411,7 @@ namespace EDDiscovery.Actions
             string voicename = Globals.GetString(ActionSay.globalvarspeechvoice, "Default");
             string volume = Globals.GetString(ActionSay.globalvarspeechvolume, "Default");
             string rate = Globals.GetString(ActionSay.globalvarspeechrate, "Default");
-            ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+            Variables effects = new Variables(PersistentVariables.GetString(ActionSay.globalvarspeecheffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.SpeechConfigure cfg = new ExtendedAudioForms.SpeechConfigure();
             cfg.Init(AudioQueueSpeech, SpeechSynthesizer,
@@ -437,7 +436,7 @@ namespace EDDiscovery.Actions
         public void ConfigureWave(string title)
         {
             string volume = Globals.GetString(ActionPlay.globalvarplayvolume, "60");
-            ConditionVariables effects = new ConditionVariables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), ConditionVariables.FromMode.MultiEntryComma);
+            Variables effects = new Variables(PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.WaveConfigureDialog dlg = new ExtendedAudioForms.WaveConfigureDialog();
             dlg.Init(AudioQueueWave, true,
@@ -448,7 +447,7 @@ namespace EDDiscovery.Actions
 
             if (dlg.ShowDialog(discoveryform) == DialogResult.OK)
             {
-                ConditionVariables cond = new ConditionVariables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
+                Variables cond = new Variables(dlg.Effects);// add on any effects variables (and may add in some previous variables, since we did not purge)
 
                 SetPeristentGlobal(ActionPlay.globalvarplayvolume, dlg.Volume);
                 SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
@@ -487,10 +486,10 @@ namespace EDDiscovery.Actions
             SetInternalGlobal("RefreshCount", refreshcount);
             SetInternalGlobal("Commander", commander);
 
-            if (actionfiles.IsConditionFlagSet(ConditionVariables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
+            if (actionfiles.IsConditionFlagSet(Variables.flagRunAtRefresh))      // any events have this flag? .. don't usually do this, so worth checking first
             {
                 foreach (HistoryEntry he in discoverycontroller.history.EntryOrder)
-                    ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), ConditionVariables.flagRunAtRefresh);
+                    ActionRunOnEntry(he, ActionEventEDList.RefreshJournal(he), Variables.flagRunAtRefresh);
             }
 
             ActionRun(ActionEventEDList.onRefreshEnd);
@@ -501,18 +500,18 @@ namespace EDDiscovery.Actions
             return ActionRun(ev, he, null, flagstart, now);
         }
 
-        public override int ActionRun(ActionEvent ev, ConditionVariables additionalvars = null,
+        public override int ActionRun(ActionEvent ev, Variables additionalvars = null,
                                 string flagstart = null, bool now = false)              // override base
         { return ActionRun(ev, null, additionalvars, flagstart, now); }
 
-        public int ActionRun(ActionEvent ev, HistoryEntry he = null, ConditionVariables additionalvars = null,
+        public int ActionRun(ActionEvent ev, HistoryEntry he = null, Variables additionalvars = null,
                                 string flagstart = null, bool now = false)       //set flagstart to be the first flag of the actiondata..
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, flagstart);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)
             {
-                ConditionVariables eventvars = new ConditionVariables();
+                Variables eventvars = new Variables();
                 Actions.ActionVars.TriggerVars(eventvars, ev.TriggerName, ev.TriggerType);
                 Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
                 Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore
@@ -521,10 +520,10 @@ namespace EDDiscovery.Actions
 
                 //System.Diagnostics.Debug.WriteLine("Dispatch Program with" + Environment.NewLine + eventvars.ToString(prefix:".. ", separ: Environment.NewLine));
 
-                ConditionVariables testvars = new ConditionVariables(Globals);
+                Variables testvars = new Variables(Globals);
                 testvars.Add(eventvars);
 
-                ConditionFunctions functions = new ConditionFunctions(testvars, null);
+                Functions functions = new Functions(testvars, null);
 
                 if (actionfiles.CheckActions(ale, he?.journalEntry, testvars, functions) > 0)
                 {
@@ -537,7 +536,7 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRunProgram(string packname, string programname, ConditionVariables runvars, bool now = false)
+        public bool ActionRunProgram(string packname, string programname, Variables runvars, bool now = false)
         {
             Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
 
@@ -664,7 +663,7 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyevents.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                ActionRun(ActionEventEDList.onKeyPress, new ConditionVariables("KeyPress", keyname));
+                ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname));
                 return true;
             }
             else
@@ -770,13 +769,13 @@ namespace EDDiscovery.Actions
         private void Voicerecon_SpeechRecognised(string text, float confidence)
         {
             System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Recognised " + text + " " + confidence.ToStringInvariant("0.0"));
-            ActionRun(ActionEventEDList.onVoiceInput, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
+            ActionRun(ActionEventEDList.onVoiceInput, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
         }
 
         private void Voicerecon_SpeechNotRecognised(string text, float confidence)
         {
             System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " Failed recognition " + text + " " + confidence.ToStringInvariant("0.00"));
-            ActionRun(ActionEventEDList.onVoiceInputFailed, new ConditionVariables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
+            ActionRun(ActionEventEDList.onVoiceInputFailed, new Variables(new string[] { "VoiceInput", text, "VoiceConfidence", (confidence*100F).ToStringInvariant("0.00") }));
         }
 
         #endregion

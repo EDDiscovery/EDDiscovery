@@ -18,7 +18,6 @@ using System.Collections.Generic;
 using BaseUtils;
 using ActionLanguage;
 using System.Windows.Forms;
-using Conditions;
 using System;
 using EliteDangerousCore;
 
@@ -58,7 +57,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(preexpand, out exp) != ConditionFunctions.ExpandResult.Failed && preexpand.Count>=2)
+                if (ap.functions.ExpandStrings(preexpand, out exp) != Functions.ExpandResult.Failed && preexpand.Count>=2)
                 {
                     System.Diagnostics.Debug.WriteLine("dll call " + string.Join(",", preexpand));
 

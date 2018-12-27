@@ -16,12 +16,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseUtils;
 using ActionLanguage;
-using Conditions;
 using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
@@ -44,7 +41,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != Functions.ExpandResult.Failed)
             {
                 HistoryList hl = (ap.actioncontroller as ActionController).HistoryList;
                 StringParser sp = new StringParser(res);
@@ -153,7 +150,7 @@ namespace EDDiscovery.Actions
                         hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
-                        hltest = UserControls.FilterHelpers.CheckFilterTrue(hltest, cond, new ConditionVariables()); // apply filter..
+                        hltest = UserControls.FilterHelpers.CheckFilterTrue(hltest, cond, new Variables()); // apply filter..
 
                     if (fwd)
                         ReportEntry(ap, hltest, 0, prefix);
@@ -235,7 +232,7 @@ namespace EDDiscovery.Actions
             {
                 try
                 {
-                    ConditionVariables values = new ConditionVariables();
+                    Variables values = new Variables();
                     ActionVars.HistoryEventVars(values, hl[pos], prefix);
                     ActionVars.ShipBasicInformation(values, hl[pos].ShipInformation, prefix);
                     ActionVars.SystemVars(values, hl[pos].System, prefix);

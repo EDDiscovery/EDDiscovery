@@ -15,12 +15,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseUtils;
-using Conditions;
 using ActionLanguage;
 using EliteDangerousCore;
 
@@ -72,7 +68,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp) != Conditions.ConditionFunctions.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != BaseUtils.Functions.ExpandResult.Failed)
                 {
                     int time;
                     if (exp[1].InvariantParse(out time))
@@ -141,7 +137,7 @@ namespace EDDiscovery.Actions
 
             TimerInfo ti = t.Tag as TimerInfo;
 
-            (ti.ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, new ConditionVariables("TimerName", ti.name), now: false);    // queue at end an event
+            (ti.ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, new Variables("TimerName", ti.name), now: false);    // queue at end an event
 
             //System.Diagnostics.Debug.WriteLine("REMOVED Timers " + timers.Count);
             timers.Remove(t);   // done with it

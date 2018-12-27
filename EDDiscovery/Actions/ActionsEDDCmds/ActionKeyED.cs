@@ -21,7 +21,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseUtils;
 using AudioExtensions;
-using Conditions;
 using ActionLanguage;
 using static EliteDangerousCore.BindingsFile;
 
@@ -113,7 +112,7 @@ namespace EDDiscovery.Actions
         static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
         {
             string keys;
-            ConditionVariables statementvars;
+            Variables statementvars;
             if (FromString(userdata, out keys, out statementvars))
             {
                 // during this check, we don't moan about a binding not being present, since we don't need to..

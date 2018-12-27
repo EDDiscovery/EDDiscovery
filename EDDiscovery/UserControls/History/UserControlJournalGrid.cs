@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
         EventFilterSelector cfs = new EventFilterSelector();
-        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
+        private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private string DbFilterSave { get { return DBName("JournalGridControlEventFilter" ); } }

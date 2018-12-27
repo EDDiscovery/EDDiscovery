@@ -13,7 +13,7 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using Conditions;
+using BaseUtils;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
@@ -26,9 +26,9 @@ namespace EDDiscovery.Actions
 {
     // inherit from base functions and add/override some functions
 
-    public class ConditionEDDFunctions : ConditionFunctionsBase
+    public class ConditionEDDFunctions : FunctionsBasic
     {
-        public ConditionEDDFunctions(ConditionFunctions c, ConditionVariables v, ConditionPersistentData h, int recd) : base(c, v, h, recd)
+        public ConditionEDDFunctions(Functions c, Variables v, FunctionPersistentData h, int recd) : base(c, v, h, recd)
         {
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {

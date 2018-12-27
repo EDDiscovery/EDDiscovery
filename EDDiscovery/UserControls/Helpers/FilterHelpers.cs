@@ -25,26 +25,26 @@ namespace EDDiscovery.UserControls
 {
     static public class FilterHelpers
     {
-        static public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)    // conditions match for item to stay
+        static public List<HistoryEntry> CheckFilterTrue(List<HistoryEntry> he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars)    // conditions match for item to stay
         {
             if (cond.Count == 0)       // no filters, all in
                 return he;
             else
             {
                 string er;
-                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, new Conditions.ConditionVariables[] { othervars, new Conditions.ConditionVariables("Note", s.snc?.Note ?? "") }, out er, null) select s).ToList();
+                List<HistoryEntry> ret = (from s in he where cond.CheckFilterTrue(s.journalEntry, new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.snc?.Note ?? "") }, out er, null) select s).ToList();
                 return ret;
             }
         }
 
-        static public bool FilterHistory(HistoryEntry he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars)                // true if it should be included
+        static public bool FilterHistory(HistoryEntry he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars)                // true if it should be included
         {
             string er;
             return cond.CheckFilterFalse(he.journalEntry, he.journalEntry.EventTypeStr,
-                new Conditions.ConditionVariables[] { othervars , new Conditions.ConditionVariables("Note", he.snc?.Note ?? "") }, out er, null);     // true it should be included
+                new BaseUtils.Variables[] { othervars , new BaseUtils.Variables("Note", he.snc?.Note ?? "") }, out er, null);     // true it should be included
         }
 
-        static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, Conditions.ConditionLists cond, Conditions.ConditionVariables othervars, out int count)    // filter in all entries
+        static public List<HistoryEntry> FilterHistory(List<HistoryEntry> he, BaseUtils.ConditionLists cond, BaseUtils.Variables othervars, out int count)    // filter in all entries
         {
             count = 0;
             if (cond.Count == 0)       // no filters, all in
@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             {
                 string er;
                 List<HistoryEntry> ret = (from s in he where cond.CheckFilterFalse(s.journalEntry, s.journalEntry.EventTypeStr,
-                            new Conditions.ConditionVariables[] { othervars, new Conditions.ConditionVariables("Note", s.snc?.Note ?? "") }, 
+                            new BaseUtils.Variables[] { othervars, new BaseUtils.Variables("Note", s.snc?.Note ?? "") }, 
                             out er, null) select s).ToList();
 
                 count = he.Count - ret.Count;

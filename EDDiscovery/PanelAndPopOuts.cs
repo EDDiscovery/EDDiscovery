@@ -402,7 +402,7 @@ namespace EDDiscovery
 
                 discoveryform.theme.ApplyToForm(tcf);
 
-                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new Conditions.ConditionVariables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
+                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }
 
             return ctrl;

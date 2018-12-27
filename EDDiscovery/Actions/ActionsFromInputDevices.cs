@@ -92,7 +92,7 @@ namespace EDDiscovery.Actions
                 string match = je.EventName();              // same as bindings name..
                 System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
-                ac.ActionRun(Actions.ActionEventEDList.onEliteInputRaw, additionalvars: new Conditions.ConditionVariables(new string[]
+                ac.ActionRun(Actions.ActionEventEDList.onEliteInputRaw, additionalvars: new BaseUtils.Variables(new string[]
                         { "Device" , je.Device.ID().Name, "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
 
                 BindingsFile.Device dv = GetBindingDeviceFromInputDeviceIdentifier(je.Device.ID());
@@ -122,7 +122,7 @@ namespace EDDiscovery.Actions
                                 {
                                     System.Diagnostics.Debug.WriteLine("Action " + a.assignedfunc + "-");
                                     assignmentsinonstate.Remove(a);
-                                    ac.ActionRun(Actions.ActionEventEDList.onEliteInputOff, additionalvars: new Conditions.ConditionVariables(new string[]
+                                    ac.ActionRun(Actions.ActionEventEDList.onEliteInputOff, additionalvars: new BaseUtils.Variables(new string[]
                                      { "Binding" , a.assignedfunc }));
                                 }
                             }
@@ -151,7 +151,7 @@ namespace EDDiscovery.Actions
 
                         foreach (string s in bindingstoexecute)
                         {
-                            ac.ActionRun(Actions.ActionEventEDList.onEliteInput, additionalvars: new Conditions.ConditionVariables(new string[]
+                            ac.ActionRun(Actions.ActionEventEDList.onEliteInput, additionalvars: new BaseUtils.Variables(new string[]
                             { "Device" , je.Device.ID().Name, "Binding" , s , "BindingList" , String.Join(",",bindingstoexecute),
                               "EventName", match , "Pressed" , je.Pressed?"1":"0", "Value" , je.Value.ToStringInvariant() }));
                         }

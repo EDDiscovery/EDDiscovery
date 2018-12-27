@@ -17,10 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaseUtils;
-using Conditions;
 
 namespace EDDiscovery.Versions
 {
@@ -45,7 +42,7 @@ namespace EDDiscovery.Versions
             public string downloadedpath;           // where its stored on disk to be installed from
             public string downloadedfilename;       // filename
             public int[] downloadedversion;
-            public ConditionVariables downloadedvars;
+            public Variables downloadedvars;
             public string downloadedserver;         // where to get any additional files from
             public string downloadedserverpath;     // and its path
 
@@ -58,7 +55,7 @@ namespace EDDiscovery.Versions
             public string localpath;            // always set
             public int[] localversion;          // may be null if file does not have version
             public bool localmodified;          // if local file exists, sha comparison
-            public ConditionVariables localvars;    //  null, or set if local has variables
+            public Variables localvars;    //  null, or set if local has variables
             public bool? localenable;       // null, or set if local has variables and a Enable flag
 
             public ItemState state;
@@ -133,7 +130,7 @@ namespace EDDiscovery.Versions
                 try
                 {
                     bool? enabled;   // don't care about this in remote files
-                    ConditionVariables cv = ReadVarsFromFile(f.FullName,out enabled);
+                    Variables cv = ReadVarsFromFile(f.FullName,out enabled);
 
                     if (cv != null)
                     {
@@ -204,7 +201,7 @@ namespace EDDiscovery.Versions
             }
         }
 
-        private ConditionVariables ReadVarsFromFile(string file, out bool? enable)
+        private Variables ReadVarsFromFile(string file, out bool? enable)
         {
             return ActionLanguage.ActionFile.ReadVarsAndEnableFromFile(file, out enable);      // note other files share the actionfile Enabled and INSTALL format.. not the other bits
         }
@@ -309,7 +306,7 @@ namespace EDDiscovery.Versions
 
         // true for write, for read its true if the same..
 
-        static bool WriteOrCheckSHAFile(DownloadItem it, ConditionVariables vars, string appfolder, bool write)
+        static bool WriteOrCheckSHAFile(DownloadItem it, Variables vars, string appfolder, bool write)
         {
             try
             {

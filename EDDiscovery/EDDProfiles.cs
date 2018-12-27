@@ -1,11 +1,8 @@
 ﻿using BaseUtils;
-using Conditions;
 using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EDDiscovery
 {
@@ -68,13 +65,13 @@ namespace EDDiscovery
             {
                 Id = internalnumber;
                 Name = name;
-                TripCondition = new Conditions.ConditionLists();
+                TripCondition = new BaseUtils.ConditionLists();
                 TripCondition.Read(tripcondition);
                 if (TripCondition.Count == 0)
                 {
                     TripCondition.Read("Condition AlwaysFalse");
                 }
-                BackCondition = new Conditions.ConditionLists();
+                BackCondition = new BaseUtils.ConditionLists();
                 BackCondition.Read(backcondition);
                 if (BackCondition.Count == 0)
                 {
@@ -221,13 +218,13 @@ namespace EDDiscovery
                 return false;
         }
 
-        public int ActionOn(ConditionVariables vars, out string errlist)        // -1 no change, else id of new profile
+        public int ActionOn(Variables vars, out string errlist)        // -1 no change, else id of new profile
         {
             errlist = string.Empty;
 
             //System.Diagnostics.Debug.WriteLine("Profile check on " + vars.ToString(separ: Environment.NewLine));
 
-            ConditionFunctions functions = new ConditionFunctions(vars, null);
+            Functions functions = new Functions(vars, null);
 
             foreach (Profile p in ProfileList)
             {

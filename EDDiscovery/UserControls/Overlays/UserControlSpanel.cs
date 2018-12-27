@@ -25,7 +25,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using EMK.LightGeometry;
 using ExtendedControls;
-using Conditions;
+using BaseUtils;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;

@@ -267,7 +267,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEDSMSyncComplete?.Invoke(count,list);
-                    ActionRun(Actions.ActionEventEDList.onEDSMSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onEDSMSync, null, new BaseUtils.Variables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -277,7 +277,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEDDNSyncComplete?.Invoke(count);
-                    ActionRun(Actions.ActionEventEDList.onEDDNSync, null, new Conditions.ConditionVariables(new string[] { "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onEDDNSync, null, new BaseUtils.Variables(new string[] { "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -287,7 +287,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Debug.Assert(Application.MessageLoop);
                     OnEGOSyncComplete?.Invoke(count,list);
-                    ActionRun(Actions.ActionEventEDList.onEGOSync, null, new Conditions.ConditionVariables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
+                    ActionRun(Actions.ActionEventEDList.onEGOSync, null, new BaseUtils.Variables(new string[] { "EventStarList", list, "EventCount", count.ToStringInvariant() }));
                 });
             };
 
@@ -352,7 +352,7 @@ namespace EDDiscovery
             tabControlMain.SelectedIndexChanged += (snd, ea) =>
             {
                 if (tabControlMain.SelectedIndex >= 0)   // may go to -1 on a clear all
-                    ActionRun(Actions.ActionEventEDList.onTabChange, null, new Conditions.ConditionVariables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
+                    ActionRun(Actions.ActionEventEDList.onTabChange, null, new BaseUtils.Variables("TabName", tabControlMain.TabPages[tabControlMain.SelectedIndex].Text));
             };
 
             actioncontroller.CheckWarn();
@@ -473,7 +473,7 @@ namespace EDDiscovery
         public bool DLLRunAction( string eventname, string paras )
         {
             System.Diagnostics.Debug.WriteLine("Run " + eventname + "(" + paras + ")");
-            actioncontroller.ActionRun(Actions.ActionEventEDList.DLLEvent(eventname),new Conditions.ConditionVariables(paras,Conditions.ConditionVariables.FromMode.MultiEntryComma));
+            actioncontroller.ActionRun(Actions.ActionEventEDList.DLLEvent(eventname),new BaseUtils.Variables(paras,BaseUtils.Variables.FromMode.MultiEntryComma));
             return true;
         }
 
@@ -791,7 +791,7 @@ namespace EDDiscovery
 
         private void Controller_NewUIEvent(UIEvent uievent)
         {
-            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
+            BaseUtils.Variables cv = new BaseUtils.Variables();
 
             string prefix = "EventClass_";
             cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
@@ -1500,7 +1500,7 @@ namespace EDDiscovery
         private void MenuTrigger_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem it = sender as ToolStripMenuItem;
-            Conditions.ConditionVariables vars = new Conditions.ConditionVariables(new string[]
+            BaseUtils.Variables vars = new BaseUtils.Variables(new string[]
             {   "MenuName", it.Name,
                 "MenuText", it.Text,
                 "TopLevelMenuName" , it.OwnerItem.Name,
@@ -1509,12 +1509,12 @@ namespace EDDiscovery
             actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null, vars);
         }
 
-        public Conditions.ConditionVariables Globals { get { return actioncontroller.Globals; } }
+        public BaseUtils.Variables Globals { get { return actioncontroller.Globals; } }
 
         public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
         { return actioncontroller.ActionRunOnEntry(he, av); }
 
-        public int ActionRun(ActionLanguage.ActionEvent ev, HistoryEntry he = null, Conditions.ConditionVariables additionalvars = null, string flagstart = null, bool now = false)
+        public int ActionRun(ActionLanguage.ActionEvent ev, HistoryEntry he = null, BaseUtils.Variables additionalvars = null, string flagstart = null, bool now = false)
         { return actioncontroller.ActionRun(ev,he,additionalvars,flagstart,now); }
 
 #endregion
@@ -1670,7 +1670,7 @@ namespace EDDiscovery
 
         public void CheckActionProfile(HistoryEntry he)
         {
-            Conditions.ConditionVariables eventvars = new Conditions.ConditionVariables();
+            BaseUtils.Variables eventvars = new BaseUtils.Variables();
             Actions.ActionVars.TriggerVars(eventvars, he.journalEntry.EventTypeStr, "JournalEvent");
             Actions.ActionVars.HistoryEventVars(eventvars, he, "Event");     // if HE is null, ignored
             Actions.ActionVars.ShipBasicInformation(eventvars, he?.ShipInformation, "Event");     // if He null, or si null, ignore

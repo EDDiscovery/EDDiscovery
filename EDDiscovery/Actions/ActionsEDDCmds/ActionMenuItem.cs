@@ -49,7 +49,7 @@ namespace EDDiscovery.Actions
             {
                 List<string> exp;
 
-                if (ap.functions.ExpandStrings(ctrl, out exp) != Conditions.ConditionFunctions.ExpandResult.Failed)
+                if (ap.functions.ExpandStrings(ctrl, out exp) != BaseUtils.Functions.ExpandResult.Failed)
                 {
                     if (exp.Count == 1)
                     {

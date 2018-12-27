@@ -81,7 +81,7 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        private Conditions.ConditionLists fieldfilter = new Conditions.ConditionLists();
+        private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
@@ -1108,7 +1108,7 @@ namespace EDDiscovery.UserControls
 
         private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        //DEBUG ONLY
         {
-            Conditions.ConditionVariables cv = new Conditions.ConditionVariables();
+            BaseUtils.Variables cv = new BaseUtils.Variables();
             cv.AddPropertiesFieldsOfClass(rightclicksystem.journalEntry, "", new Type[] { typeof(System.Drawing.Image), typeof(System.Drawing.Icon), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
             discoveryform.LogLine(cv.ToString(separ: Environment.NewLine));
             //if (rightclicksystem.ShipInformation != null)
@@ -1297,7 +1297,7 @@ namespace EDDiscovery.UserControls
                         lasttypecount = (same) ? ++lasttypecount : 0;
 
                         discoveryform.DEBUGGETAC.SetPeristentGlobal("GlobalSaySaid", "");
-                        Conditions.ConditionFunctionHandlers.SetRandom(new Random(rw.Index + 1));
+                        BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
                         discoveryform.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
 
                         Newtonsoft.Json.Linq.JObject jo = he.journalEntry.GetJson();

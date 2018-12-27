@@ -14,19 +14,14 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaseUtils;
-using Conditions;
 using EliteDangerousCore;
 
 namespace EDDiscovery.Actions
 {
     class ActionVars
     {
-        static public void TriggerVars(ConditionVariables vars, string trigname, string triggertype)
+        static public void TriggerVars(Variables vars, string trigname, string triggertype)
         {
             vars["TriggerName"] = trigname;       // Program gets eventname which triggered it.. (onRefresh, LoadGame..)
             vars["TriggerType"] = triggertype;       // type (onRefresh, or OnNew, or ProgramTrigger for all others)
@@ -34,7 +29,7 @@ namespace EDDiscovery.Actions
             vars["TriggerUTCTime"] = DateTime.UtcNow.ToStringUS();  // time it was started, US format, to match JSON.
         }
 
-        static public void HistoryEventVars(ConditionVariables vars, HistoryEntry he, string prefix)
+        static public void HistoryEventVars(Variables vars, HistoryEntry he, string prefix)
         {
             if (he != null)
             {
@@ -79,7 +74,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public void SystemVars(ConditionVariables vars, ISystem s, string prefix)
+        static public void SystemVars(Variables vars, ISystem s, string prefix)
         {
             if (s != null)
             {
@@ -103,7 +98,7 @@ namespace EDDiscovery.Actions
         }
 
 
-        static public void ShipBasicInformation(ConditionVariables vars, ShipInformation si, string prefix)
+        static public void ShipBasicInformation(Variables vars, ShipInformation si, string prefix)
         {
             string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0";
 

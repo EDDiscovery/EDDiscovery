@@ -15,12 +15,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaseUtils;
 using ActionLanguage;
-using Conditions;
 
 namespace EDDiscovery.Actions
 {
@@ -42,7 +38,7 @@ namespace EDDiscovery.Actions
         public override bool ExecuteAction(ActionProgramRun ap)
         {
             string res;
-            if (ap.functions.ExpandString(UserData, out res) != Conditions.ConditionFunctions.ExpandResult.Failed)
+            if (ap.functions.ExpandString(UserData, out res) != BaseUtils.Functions.ExpandResult.Failed)
             {
                 StringParser sp = new StringParser(res);
 
@@ -66,7 +62,7 @@ namespace EDDiscovery.Actions
                 {
                     EliteDangerousCore.ShipInformationList lst = (ap.actioncontroller as ActionController).HistoryList.shipinformationlist;
 
-                    ConditionVariables values = new ConditionVariables();
+                    Variables values = new Variables();
 
                     if (cmdname.Length > 0)
                     {
