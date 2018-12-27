@@ -168,7 +168,7 @@ namespace EDDiscovery.Forms
             frm.InitCondition(string.Format("Edit Profile {0} Trigger".Tx(this,"TrigEdit"), g.name.Text), this.Icon, new List<string>(), g.triggercondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                g.triggercondition = frm.result;
+                g.triggercondition = frm.Result;
                 disabletriggers = true;
                 g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(g.triggercondition, g.backcondition) + 1;
                 disabletriggers = false;
@@ -181,7 +181,7 @@ namespace EDDiscovery.Forms
             frm.InitCondition(string.Format("Edit Profile {0} Back Trigger".Tx(this,"BackEdit"), g.name.Text), this.Icon, new List<string>(), g.backcondition);
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                g.backcondition = frm.result;
+                g.backcondition = frm.Result;
                 disabletriggers = true;
                 g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(g.triggercondition, g.backcondition) + 1;
                 disabletriggers = false;

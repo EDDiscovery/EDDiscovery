@@ -1220,7 +1220,7 @@ namespace EDDiscovery.UserControls
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
             {
-                fieldfilter = frm.result;
+                fieldfilter = frm.Result;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 HistoryChanged(current_historylist);
             }
