@@ -99,7 +99,10 @@ namespace EDDiscovery.UserControls
 
         List<HistoryEntry> comboboxentries = new List<HistoryEntry>(); // filled by combobox
 
-        private void OnChanged(HistoryEntry he, HistoryList hl)
+        private void OnChanged(HistoryEntry he, HistoryList hl) =>
+            OnChanged(he, hl, true);
+
+        private void OnChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (!Object.ReferenceEquals(he, last_he) )       // if last was null, or he has changed, we have a possible change..
             {

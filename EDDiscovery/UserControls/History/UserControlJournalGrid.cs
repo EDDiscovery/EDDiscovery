@@ -697,8 +697,7 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewJournal.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                if (OnTravelSelectionChanged != null)
-                    OnTravelSelectionChanged(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
+                OnTravelSelectionChanged?.Invoke(dataGridViewJournal.Rows[row].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist, true);
             }
         }
     }

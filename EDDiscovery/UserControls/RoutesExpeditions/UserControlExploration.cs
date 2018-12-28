@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
             UpdateSystemRows();
         }
 
-        private void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // when user clicks around..
         {
             UpdateSystemRows();
         }
