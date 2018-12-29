@@ -128,7 +128,11 @@ namespace EDDiscovery.UserControls
         }
 
         HistoryEntry last_he = null;
-        private void Display(HistoryEntry he, HistoryList hl)
+
+        private void Display(HistoryEntry he, HistoryList hl) =>
+            Display(he, hl, true);
+
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             last_he = he;
             Display();

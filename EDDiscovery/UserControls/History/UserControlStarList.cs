@@ -652,8 +652,7 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewStarList.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("Fire Change Sel row" + row);
-                if (OnTravelSelectionChanged != null)
-                    OnTravelSelectionChanged((dataGridViewStarList.Rows[row].Tag as List<HistoryEntry>)[0], current_historylist);
+                OnTravelSelectionChanged?.Invoke((dataGridViewStarList.Rows[row].Tag as List<HistoryEntry>)[0], current_historylist, true);
             }
         }
 

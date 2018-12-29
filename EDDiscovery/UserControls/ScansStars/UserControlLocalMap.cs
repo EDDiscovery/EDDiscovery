@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
             KickComputation(uctg.GetCurrentHistoryEntry);
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             KickComputation(he);
             RefreshMap();

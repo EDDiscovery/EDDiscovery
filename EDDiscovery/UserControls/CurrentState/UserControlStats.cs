@@ -86,7 +86,10 @@ namespace EDDiscovery.UserControls
             SizeControls();         // need to size controls here as well.. goes tabstrip.. create user control.. calls updatestats with incorrect size.. added to UC panel.. relayout
         }
 
-        public void TravelGridChanged(HistoryEntry he, HistoryList hl)
+        private void TravelGridChanged(HistoryEntry he, HistoryList hl) =>
+            TravelGridChanged(he, hl, true);
+
+        public void TravelGridChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             Stats(he, hl);
         }
@@ -107,7 +110,7 @@ namespace EDDiscovery.UserControls
             if (hl == null)
                 hl = last_hl;
 
-            if (he == null || hl == null)
+            if (hl == null)
                 return;
 
             last_hl = hl;

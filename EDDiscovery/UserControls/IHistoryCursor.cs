@@ -19,7 +19,7 @@ namespace EDDiscovery.UserControls
 {
     // Any UCs wanting to be a cursor, must implement this interface
 
-    public delegate void ChangedSelectionHEHandler(HistoryEntry he, HistoryList hl);
+    public delegate void ChangedSelectionHEHandler(HistoryEntry he, HistoryList hl, bool selectedEntry);
 
     public interface IHistoryCursor
     {

@@ -241,7 +241,7 @@ namespace EDDiscovery
             RequestPaint();
         }
 
-        private void PrimaryCursor_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl)
+        private void PrimaryCursor_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             UpdateHistorySystem(he.System);
         }

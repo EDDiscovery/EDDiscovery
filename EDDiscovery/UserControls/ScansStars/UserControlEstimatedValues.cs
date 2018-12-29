@@ -79,8 +79,10 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void Display(HistoryEntry he, HistoryList hl) =>
+            Display(he, hl, true);
 
-        private void Display(HistoryEntry he, HistoryList hl)            // Called at first start or hooked to change cursor
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // Called at first start or hooked to change cursor
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {

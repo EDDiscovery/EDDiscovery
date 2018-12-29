@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         /// <param name="he">HistoryEntry</param>
         /// <param name="hl">HistoryList</param>
-        private void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             ResetDefaults();
             DrawSystem(he, false);

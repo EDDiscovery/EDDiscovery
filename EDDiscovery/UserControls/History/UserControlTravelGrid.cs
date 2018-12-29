@@ -484,9 +484,10 @@ namespace EDDiscovery.UserControls
             {
                 int row = dataGridViewTravel.CurrentCell.RowIndex;
                 //System.Diagnostics.Debug.WriteLine("TG:Fire Change Sel row" + row);
-                if (OnTravelSelectionChanged != null)
-                    OnTravelSelectionChanged(dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist);
+                OnTravelSelectionChanged?.Invoke(dataGridViewTravel.Rows[row].Cells[TravelHistoryColumns.HistoryTag].Tag as HistoryEntry, current_historylist, true);
             }
+            else if (current_historylist != null && current_historylist.Count > 0)
+                OnTravelSelectionChanged?.Invoke(current_historylist.Last(), current_historylist, false);
         }
 
         private void dataGridViewTravel_CellClick(object sender, DataGridViewCellEventArgs e)

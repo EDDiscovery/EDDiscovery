@@ -156,7 +156,10 @@ namespace EDDiscovery.UserControls
         bool neverdisplayed = true;
         HistoryEntry last_he = null;
 
-        private void Display(HistoryEntry he, HistoryList hl)
+        private void Display(HistoryEntry he, HistoryList hl) =>
+            Display(he, hl, true);
+
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             //System.Diagnostics.Debug.WriteLine("SI:Display ");
 

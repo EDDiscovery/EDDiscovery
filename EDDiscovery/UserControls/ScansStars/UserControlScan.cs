@@ -140,7 +140,10 @@ namespace EDDiscovery.UserControls
             Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
         }
 
-        private void Display(HistoryEntry he, HistoryList hl)            // when user clicks around..
+        private void Display(HistoryEntry he, HistoryList hl) =>
+            Display(he, hl, true);
+
+        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // when user clicks around..
         {
             if (he != null && (last_he == null || he.System != last_he.System))
             {

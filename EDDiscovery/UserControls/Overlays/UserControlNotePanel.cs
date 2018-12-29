@@ -82,7 +82,10 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged += DisplaySelected;
         }
 
-        private void DisplaySelected(HistoryEntry he, HistoryList hl)
+        private void DisplaySelected(HistoryEntry he, HistoryList hl) =>
+            DisplaySelected(he, hl, true);
+
+        private void DisplaySelected(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (he != null && he.EntryType == JournalTypeEnum.FSDJump)
                 Display(he);
