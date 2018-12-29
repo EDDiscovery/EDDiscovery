@@ -376,7 +376,7 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Wynik (cr)"
 .pColInfo: "Info" => "Informacje"
 .labelTo: "to" => "do"
-.panelButtons.ToolTip: "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność" 
+.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność"
 .MPlural: " Missions" => "Misje"
 .MSingular: " Mission" => "Misja"
 .Name: "Name" => "Nazwa"
