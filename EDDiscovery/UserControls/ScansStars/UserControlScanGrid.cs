@@ -393,8 +393,12 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append("Temperature".Tx(this)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (").Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
 
                             // print the main atmospheric composition and pressure, if presents
-                            if (sn.ScanData.Atmosphere != null && sn.ScanData.Atmosphere != "None")
-                                bdDetails.Append(Environment.NewLine).Append(sn.ScanData.Atmosphere).Append(", ").Append((sn.ScanData.nSurfacePressure.Value / JournalScan.oneAtmosphere_Pa).ToString("N3")).Append("Pa.");
+                            if (!String.IsNullOrEmpty(sn.ScanData.Atmosphere) && sn.ScanData.Atmosphere != "None")
+                            {
+                                bdDetails.Append(Environment.NewLine).Append(sn.ScanData.Atmosphere);
+                                if (sn.ScanData.nSurfacePressure.HasValue)
+                                    bdDetails.Append(", ").Append((sn.ScanData.nSurfacePressure.Value / JournalScan.oneAtmosphere_Pa).ToString("N3")).Append("Pa.");
+                            }
 
                             // tell us that a bodie is landable, and shows its gravity
                             if (sn.ScanData.IsLandable)
