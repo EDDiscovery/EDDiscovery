@@ -350,8 +350,7 @@ namespace EDDiscovery.UserControls
                             if (ShowOverlays)
                             {
                                 bool valuable = sc.EstimatedValue > 50000;
-                                bool mapped = sc.IsMapped(hl);
-                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (mapped ? 1 : 0);
+                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sn.IsMapped ? 1 : 0);
                                 int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
                                 int pos = 0;
 
@@ -373,7 +372,7 @@ namespace EDDiscovery.UserControls
                                     pos += ovsize + 1;
                                 }
 
-                                if (mapped)
+                                if (sn.IsMapped)
                                     g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
                             }
 
