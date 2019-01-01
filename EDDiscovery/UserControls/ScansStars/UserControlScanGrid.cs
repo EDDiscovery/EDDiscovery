@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlScanGrid : UserControlCommonBase
     {
         private HistoryEntry last_he = null;
+        private HistoryList last_hl = null;
 
         private bool showStellarZones = true;
         private bool showHabitable = true;
@@ -129,7 +130,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            DrawSystem(uctg.GetCurrentHistoryEntry, false);
+            DrawSystem(uctg.GetCurrentHistoryEntry, discoveryform.history, false);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace EDDiscovery.UserControls
         /// <param name="hl">HistoryList</param>
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            DrawSystem(he, he.EntryType == JournalTypeEnum.Scan);
+            DrawSystem(he, hl, he.EntryType == JournalTypeEnum.Scan);
         }
 
         /// <summary>
@@ -150,7 +151,7 @@ namespace EDDiscovery.UserControls
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             ResetDefaults();
-            DrawSystem(he, false);
+            DrawSystem(he, hl, false);
         }
 
         private void ResetDefaults()
@@ -184,7 +185,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         /// <param name="he">HistoryEntry</param>
         /// <param name="force">Boolean</param>
-        private void DrawSystem(HistoryEntry he, bool force)
+        private void DrawSystem(HistoryEntry he, HistoryList hl, bool force)
         {
             StarScan.SystemNode scannode = null;
 
@@ -192,9 +193,10 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Scan grid " + samesys + " F:" + force);
 
-            if (he == null)     //  no he, no display
+            if (he == null || hl == null)     //  no he, no display
             {
-                last_he = null;
+                last_he = he;
+                last_hl = hl;
                 dataGridViewScangrid.Rows.Clear();
                 SetControlText("No Scan".Tx());
                 return;
@@ -216,6 +218,7 @@ namespace EDDiscovery.UserControls
             }
 
             last_he = he;
+            last_hl = hl;
 
             // only record first row if same system 
             var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
@@ -417,6 +420,9 @@ namespace EDDiscovery.UserControls
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
                                 bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
+
+                            if (sn.ScanData.IsMapped(hl))
+                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
 
                             // materials                        
                             if (sn.ScanData.HasMaterials)
@@ -624,112 +630,112 @@ namespace EDDiscovery.UserControls
         {
             showStellarZones = circumstellarZoneToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showStellarZones", showStellarZones);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void habitableZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showHabitable = habitableZoneToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showHabitable", showHabitable);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void metallicRichToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showMetalRich = metalRichToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showMetalRich", showMetalRich);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void waterWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showWaterWorlds = waterWorldsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showWaterWorlds", showWaterWorlds);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void earthLikePlanetsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showEarthLike = earthLikePlanetsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showEarthLike", showEarthLike);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void ammoniaWorldsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showAmmonia = ammoniaWorldsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showAmmonia", showAmmonia);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void icyBodiesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showIcyBodies = icyBodiesToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showIcyBodies", showIcyBodies);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void structuresToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showStructures = structuresToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showStructures", showStructures);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void beltsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showBelts = beltsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showBelts", showBelts);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void ringsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showRings = ringsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showRings", showRings);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void materialsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showMaterials = materialsToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showMaterials", showMaterials);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void valuesToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             showValues = valuesToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showValues", showValues);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
         
         private void nameToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colName.Visible = nameToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "colName", colName.Visible);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void classToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colClass.Visible = classToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "colClass", colClass.Visible);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void distanceToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colDistance.Visible = distanceToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "colDistance", colDistance.Visible);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         private void informationToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
         {
             colBriefing.Visible = informationToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "colBriefing", colBriefing.Visible);
-            DrawSystem(last_he, true);
+            DrawSystem(last_he, last_hl, true);
         }
 
         #endregion

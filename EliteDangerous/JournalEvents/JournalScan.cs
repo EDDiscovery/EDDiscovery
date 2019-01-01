@@ -976,6 +976,15 @@ namespace EliteDangerousCore.JournalEvents
             return null;
         }
 
+        public bool IsMapped(HistoryList hl)
+        {
+            var mapped = (from h in hl where h.journalEntry.EventTypeID == JournalTypeEnum.SAAScanComplete select h.journalEntry as JournalSAAScanComplete);
+            if (mapped.Any())
+                return mapped.Where(m => m.BodyName == BodyName).Any();
+
+            return false;
+        }
+
         // Habitable zone calculations, formula cribbed from JackieSilver's HabZone Calculator with permission
         private double DistanceForBlackBodyTemperature(double targetTemp)
         {

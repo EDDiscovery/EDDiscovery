@@ -679,6 +679,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\Mapped.png" />
     <EmbeddedResource Include="Controls\Search\SearchMaterials.png" />
     <EmbeddedResource Include="Panels\Search.png" />
     <EmbeddedResource Include="Controls\Search\SearchStars.png" />

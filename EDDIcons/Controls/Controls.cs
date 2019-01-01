@@ -169,6 +169,7 @@ namespace EDDiscovery.Icons
         public static Image Scan_Bodies_HighValue { get { return IconSet.GetIcon("Controls.Scan.Bodies.HighValue"); } }
         public static Image Scan_Bodies_Terraformable { get { return IconSet.GetIcon("Controls.Scan.Bodies.Terraformable"); } }
         public static Image Scan_Bodies_Volcanism { get { return IconSet.GetIcon("Controls.Scan.Bodies.Volcanism"); } }
+        public static Image Scan_Bodies_Mapped { get { return IconSet.GetIcon("Controls.Scan.Bodies.Mapped"); } }
         public static Image Scan_Bodies_RingOnly { get { return IconSet.GetIcon("Controls.Scan.Bodies.RingOnly"); } }
         public static Image Scan_Bodies_RingGap { get { return IconSet.GetIcon("Controls.Scan.Bodies.RingGap"); } }
         public static Image Scan_Bodies_MaterialMore { get { return IconSet.GetIcon("Controls.Scan.Bodies.MaterialMore"); } }
