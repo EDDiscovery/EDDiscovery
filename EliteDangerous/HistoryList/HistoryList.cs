@@ -211,6 +211,14 @@ namespace EliteDangerousCore
             }
         }
 
+        public List<HistoryEntry> FilterByScan
+        {
+            get
+            {
+                return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan select s).ToList();
+            }
+        }
+
         public HistoryEntry GetByJID(long jid)
         {
             return historylist.Find(x => x.Journalid == jid);
@@ -412,7 +420,8 @@ namespace EliteDangerousCore
 
         public List<JournalScan> GetScanList(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+                .Distinct(new ScansAreForSameBody()).ToList();
         }
 
         public int GetTonnesBought(string forShipKey)

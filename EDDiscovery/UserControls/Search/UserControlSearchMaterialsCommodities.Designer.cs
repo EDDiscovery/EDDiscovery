@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM1 = new ExtendedControls.ComboBoxCustom();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -111,6 +112,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnStar,
@@ -124,7 +126,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.Size = new System.Drawing.Size(784, 635);
             this.dataGridView.TabIndex = 0;
-            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEDSM_SortCompare);
+            this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // ColumnStar
             // 
@@ -165,6 +167,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelTop
             // 
+            this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.buttonExtFind);
             this.panelTop.Controls.Add(this.comboBoxCustomCMANDOR);
             this.panelTop.Controls.Add(this.comboBoxCustomCM2);
@@ -179,7 +182,7 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtFind
             // 
-            this.buttonExtFind.Location = new System.Drawing.Point(422, 14);
+            this.buttonExtFind.Location = new System.Drawing.Point(386, 14);
             this.buttonExtFind.Name = "buttonExtFind";
             this.buttonExtFind.Size = new System.Drawing.Size(120, 23);
             this.buttonExtFind.TabIndex = 3;
@@ -200,7 +203,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCMANDOR.DropDownWidth = 600;
             this.comboBoxCustomCMANDOR.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCMANDOR.ItemHeight = 13;
-            this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(422, 43);
+            this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(386, 43);
             this.comboBoxCustomCMANDOR.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCMANDOR.Name = "comboBoxCustomCMANDOR";
             this.comboBoxCustomCMANDOR.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -289,6 +292,17 @@ namespace EDDiscovery.UserControls
             this.label1.TabIndex = 0;
             this.label1.Text = "Item 1";
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(521, 14);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 37;
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // UserControlSearchMaterialsCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -322,5 +336,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
         private ExtendedControls.ComboBoxCustom comboBoxCustomCMANDOR;
+        private ExtendedControls.ButtonExt buttonExtExcel;
     }
 }

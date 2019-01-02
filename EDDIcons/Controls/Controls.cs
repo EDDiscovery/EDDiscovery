@@ -249,6 +249,7 @@ namespace EDDiscovery.Icons
         #region EDDiscovery.UserControls.Search
         public static Image SearchStars { get { return IconSet.GetIcon("Controls.Search.SearchStars"); } }
         public static Image SearchMaterials { get { return IconSet.GetIcon("Controls.Search.SearchMaterials"); } }
+        public static Image SearchScan { get { return IconSet.GetIcon("Controls.Search.Scan"); } }
         #endregion
 
     }

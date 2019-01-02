@@ -16,6 +16,7 @@ namespace EDDiscovery.UserControls.Search
     public class DataGridViewStarResults : DataGridView
     {
         EDDiscoveryForm discoveryform;
+        public bool CheckEDSM { get; set; }
 
         public DataGridViewStarResults()
         {
@@ -167,7 +168,8 @@ namespace EDDiscovery.UserControls.Search
             else
             {       // default is the scan display output
                 sd = new ScanDisplay();
-                sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = sd.CheckEDSM = true;
+                sd.CheckEDSM = CheckEDSM;
+                sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = true;
                 sd.SetSize(48);
                 sd.Size = new Size(width - 20, 1024);
                 sd.DrawSystem(sys, null, discoveryform.history);
@@ -193,7 +195,7 @@ namespace EDDiscovery.UserControls.Search
             f.Show(this.FindForm());
         }
 
-        public void Excel()
+        public void Excel(int columnsout)
         {
             if (Rows.Count == 0)
             {
@@ -221,21 +223,30 @@ namespace EDDiscovery.UserControls.Search
                             return BaseUtils.CSVWriteGrid.LineStatus.EOF;
                     };
 
-                    string[] colh = new string[] { Columns[0].HeaderText, Columns[1].HeaderText, Columns[2].HeaderText, "X", "Y", "Z", "ID" };
+                    List<string> colh = new List<string>();
+                    for (int i = 0; i < columnsout; i++)
+                        colh.Add(Columns[i].HeaderText);
+                    colh.AddRange(new string[] { "X", "Y", "Z", "ID" });
 
                     grd.GetHeader += delegate (int c)
                     {
-                        return (c < colh.Length && frm.IncludeHeader) ? colh[c] : null;
+                        return (c < colh.Count && frm.IncludeHeader) ? colh[c] : null;
                     };
 
                     grd.GetLine += delegate (int r)
                     {
                         DataGridViewRow rw = Rows[r];
                         ISystem sys = SysFrom(rw.Tag);
-                        return new Object[]
-                        {
-                            rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, sys.X.ToString("0.#"), sys.Y.ToString("0.#"), sys.Z.ToString("0.#"),sys.EDSMID
-                        };
+                        List<Object> data = new List<object>();
+                        for (int i = 0; i < columnsout; i++)
+                            data.Add(rw.Cells[i].Value);
+
+                        data.Add(sys.X.ToString("0.#"));
+                        data.Add(sys.Y.ToString("0.#"));
+                        data.Add(sys.Z.ToString("0.#"));
+                        data.Add(sys.EDSMID);
+
+                        return data.ToArray();
                     };
 
                     if (grd.WriteCSV(frm.Path))

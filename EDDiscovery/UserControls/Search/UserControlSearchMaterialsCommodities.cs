@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            dataGridView.CheckEDSM = true;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = 26;
@@ -175,11 +176,15 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void dataGridViewEDSM_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 2)
                 e.SortDataGridViewColumnNumeric();
         }
 
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            dataGridView.Excel(3);
+        }
     }
 }
