@@ -47,13 +47,14 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            dataGridView.CheckEDSM = true;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.RowTemplate.Height = 26;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             findSystemsUserControl.Init(displaynumber, "SearchFindSys", true, discoveryform);
-            findSystemsUserControl.Excel += dataGridView.Excel;
+            findSystemsUserControl.Excel += () => { dataGridView.Excel(3); };
             findSystemsUserControl.ReturnSystems += StarsFound;
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { findSystemsUserControl });
@@ -107,7 +108,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void dataGridViewEDSM_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 1 || e.Column.Index == 2)
                 e.SortDataGridViewColumnNumeric();

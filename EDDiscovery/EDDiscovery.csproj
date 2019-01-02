@@ -535,6 +535,12 @@
     <Compile Include="UserControls\Search\UserControlSearchMaterialsCommodities.Designer.cs">
       <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Search\UserControlSearchScans.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Search\UserControlSearchScans.Designer.cs">
+      <DependentUpon>UserControlSearchScans.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Search\UserControlSearchStars.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -750,6 +756,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\UserControlSearchMaterialsCommodities.resx">
       <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Search\UserControlSearchScans.resx">
+      <DependentUpon>UserControlSearchScans.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\UserControlSearchStars.resx">
       <DependentUpon>UserControlSearchStars.cs</DependentUpon>

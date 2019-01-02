@@ -36,6 +36,8 @@ namespace EliteDangerousCore.JournalEvents
         public double? nRotationPeriod { get; set; }                // direct
         public double? nSurfaceTemperature { get; set; }            // direct
         public double? nRadius { get; set; }                        // direct
+        public double? nRadiusSols { get; set; }                  
+        public double? nRadiusEarths { get; set; }                
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public int EstimatedValue { get; set; }
@@ -88,13 +90,16 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }
         public EDVolcanismProperty VolcanismProperty;               // Volcanism -> Property (None, Major, Minor)
         public double? nSurfaceGravity { get; set; }                // direct
+        public double? nSurfaceGravityG { get; set; }             
         public double? nSurfacePressure { get; set; }               // direct
         public bool? nLandable { get; set; }                        // direct
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
+
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }       // fdname and name is the same for materials on planets.  name is lower case
         public bool HasMaterial(string name) { return Materials != null && Materials.ContainsKey(name.ToLowerInvariant()); } 
+        public string MaterialList { get; private set; }                         // material list, names, comma separ, or null
 
         public bool IsEDSMBody { get; private set; }
         public string EDSMDiscoveryCommander { get; private set; }      // may be null if not known
@@ -206,6 +211,11 @@ namespace EliteDangerousCore.JournalEvents
             nAge = evt["Age_MY"].DoubleNull();
             nStellarMass = evt["StellarMass"].DoubleNull();
             nRadius = evt["Radius"].DoubleNull();
+            if (nRadius != null)
+            {
+                nRadiusSols = nRadius.Value / oneSolRadius_m;
+                nRadiusEarths = nRadius.Value / oneEarthRadius_m;
+            }
             nAbsoluteMagnitude = evt["AbsoluteMagnitude"].DoubleNull();
             Luminosity = evt["Luminosity"].StrNull();
 
@@ -237,6 +247,8 @@ namespace EliteDangerousCore.JournalEvents
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
             nMassEM = evt["MassEM"].DoubleNull();
             nSurfaceGravity = evt["SurfaceGravity"].DoubleNull();
+            if (nSurfaceGravity.HasValue)
+                nSurfaceGravityG = nSurfaceGravity / oneGee_m_s2;
             nSurfaceTemperature = evt["SurfaceTemperature"].DoubleNull();
             nSurfacePressure = evt["SurfacePressure"].DoubleNull();
             nLandable = evt["Landable"].BoolNull();
@@ -293,6 +305,9 @@ namespace EliteDangerousCore.JournalEvents
                         Materials[jo["Name"].Str().ToLowerInvariant()] = jo["Percent"].Double();
                     }
                 }
+
+                var na = (from x in Materials select x.Key).ToArray();
+                MaterialList = String.Join(",", na);
             }
 
             JToken atmos = (JToken)evt["AtmosphereComposition"];

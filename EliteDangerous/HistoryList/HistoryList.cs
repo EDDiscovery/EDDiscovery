@@ -211,6 +211,14 @@ namespace EliteDangerousCore
             }
         }
 
+        public List<HistoryEntry> FilterByScan
+        {
+            get
+            {
+                return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan select s).ToList();
+            }
+        }
+
         public HistoryEntry GetByJID(long jid)
         {
             return historylist.Find(x => x.Journalid == jid);
