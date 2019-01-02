@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
             if (he == null)     //  no he, no display
             {
-                last_he = null;
+                last_he = he;
                 dataGridViewScangrid.Rows.Clear();
                 SetControlText("No Scan".Tx());
                 return;
@@ -417,6 +417,9 @@ namespace EDDiscovery.UserControls
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
                                 bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
+
+                            if (sn.IsMapped)
+                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
 
                             // materials                        
                             if (sn.ScanData.HasMaterials)
