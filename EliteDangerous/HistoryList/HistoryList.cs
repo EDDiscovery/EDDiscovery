@@ -1104,6 +1104,8 @@ namespace EliteDangerousCore
                 return 2000;
             else if (je.EventTypeID == JournalTypeEnum.FuelScoop)
                 return 10000;
+            else if (je.EventTypeID == JournalTypeEnum.ShipTargeted)
+                return 500; // short, so normally does not merge unless your clicking around like mad
             else
                 return 0;
         }
@@ -1134,6 +1136,13 @@ namespace EliteDangerousCore
                 {
                     var jdprev = prev as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
                     var jd = je as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
+                    jdprev.Add(jd);
+                    return true;
+                }
+                else if (je.EventTypeID == JournalTypeEnum.ShipTargeted && prev.EventTypeID == JournalTypeEnum.ShipTargeted) // merge friends
+                {
+                    var jdprev = prev as EliteDangerousCore.JournalEvents.JournalShipTargeted;
+                    var jd = je as EliteDangerousCore.JournalEvents.JournalShipTargeted;
                     jdprev.Add(jd);
                     return true;
                 }
