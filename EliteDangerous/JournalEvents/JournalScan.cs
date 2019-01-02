@@ -1350,6 +1350,18 @@ namespace EliteDangerousCore.JournalEvents
             }
 
         }
+    }
 
+    public class ScansAreForSameBody : EqualityComparer<JournalScan>
+    {
+        public override bool Equals(JournalScan x, JournalScan y)
+        {
+            return x.BodyName == y.BodyName;
+        }
+
+        public override int GetHashCode(JournalScan obj)
+        {
+            return obj.BodyName.GetHashCode();
+        }
     }
 }

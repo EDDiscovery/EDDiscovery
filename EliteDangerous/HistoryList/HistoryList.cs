@@ -420,7 +420,8 @@ namespace EliteDangerousCore
 
         public List<JournalScan> GetScanList(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+                .Distinct(new ScansAreForSameBody()).ToList();
         }
 
         public int GetTonnesBought(string forShipKey)
