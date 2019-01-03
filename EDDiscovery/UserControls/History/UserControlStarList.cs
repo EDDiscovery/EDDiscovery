@@ -197,8 +197,9 @@ namespace EDDiscovery.UserControls
 
             for (int i = 0; i < syslists.Count; i += 1000)
             {
-                List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[i + 1000 > syslists.Count ? syslists.Count - i : 1000];
-                syslists.CopyTo(i, syslistchunk, 0, syslistchunk.Length);
+                int totake = Math.Min(1000, syslists.Count - i);
+                List<HistoryEntry>[] syslistchunk = new List<HistoryEntry>[totake];
+                syslists.CopyTo(i, syslistchunk, 0, totake);
                 syslistchunks.Add(syslistchunk);
             }
 
@@ -215,7 +216,6 @@ namespace EDDiscovery.UserControls
                         if (row != null)
                             dataGridViewStarList.Rows.Add(row);
                     }
-                    dataGridViewStarList.Rows.AddRange(CreateHistoryRows(syslistchunk, filtertext).ToArray());
                 });
             }
 
@@ -340,20 +340,6 @@ namespace EDDiscovery.UserControls
             rw.Cells[3].ToolTipText = tip;
 
             return rw;
-        }
-
-        private List<DataGridViewRow> CreateHistoryRows(IEnumerable<List<HistoryEntry>> syslists, string search)
-        {
-            List<DataGridViewRow> rows = new List<DataGridViewRow>();
-
-            foreach (List<HistoryEntry> syslist in syslists) // will be in order of entry..
-            {
-                DataGridViewRow rw = CreateHistoryRow(syslist, search);
-                if (rw != null)
-                    rows.Add(rw);
-            }
-
-            return rows;
         }
 
         string Infoline(List<HistoryEntry> syslist)
