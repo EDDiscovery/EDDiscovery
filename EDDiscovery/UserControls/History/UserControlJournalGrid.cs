@@ -49,6 +49,7 @@ namespace EDDiscovery.UserControls
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
+
         public HistoryEntry GetCurrentHistoryEntry { get { return dataGridViewJournal.CurrentCell != null ? dataGridViewJournal.Rows[dataGridViewJournal.CurrentCell.RowIndex].Cells[JournalHistoryColumns.HistoryTag].Tag as HistoryEntry : null; } }
 
 

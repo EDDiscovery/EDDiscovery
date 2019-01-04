@@ -60,17 +60,24 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuCopyPaste, this);
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewExplore, DbColumnSave);
+
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg.OnTravelSelectionChanged -= Display;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Display;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
         }
 
         public override void Closing()
@@ -78,6 +85,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewExplore, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
@@ -99,6 +108,12 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Updating info due to new record coming in
+
+        private void OnNewStars(List<string> obj, OnNewStarsPushType command)    // and if a user asked for stars to be added
+        {
+            if (command == OnNewStarsPushType.Exploration)
+                AddSystems(obj);
+        }
 
         private void UpdateSystemRows()
         {
@@ -322,16 +337,19 @@ namespace EDDiscovery.UserControls
             if (systems.Count == 0)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(),
-                    "The imported file contains no known system names".Tx(this,"NoSys"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    "The imported file contains no known system names".Tx(this, "NoSys"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             ClearExplorationSet();
 
+            AddSystems(systems);
+        }
+
+        void AddSystems(List<string> systems)
+        { 
             foreach (var sysname in systems)
-            {
                 dataGridViewExplore.Rows.Add(sysname, "", "");
-            }
 
             UpdateSystemRows();
         }
@@ -416,16 +434,11 @@ namespace EDDiscovery.UserControls
 
                 if (systems.Count == 0)
                 {
-                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".Tx(this,"NoSys"),
+                    ExtendedControls.MessageBoxTheme.Show(FindForm(), "The imported file contains no known system names".Tx(this, "NoSys"),
                         "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
                 else
-                {
-                    foreach (var sysname in systems)
-                        dataGridViewExplore.Rows.Add(sysname, "", "");
-
-                    UpdateSystemRows();
-                }
+                    AddSystems(systems);
 
                 f.DialogResult = DialogResult.OK;
                 f.Close();

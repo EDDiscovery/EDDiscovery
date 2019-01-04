@@ -188,20 +188,33 @@ namespace EDDiscovery.UserControls
 
         private void addToTrilaterationToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            AddTo(OnNewStarsPushType.TriSystems);
+        }
+
+        private void addToExplorationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTo(OnNewStarsPushType.Exploration);
+        }
+
+        private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTo(OnNewStarsPushType.Expedition);
+
+        }
+
+        private void AddTo(OnNewStarsPushType pushtype)
+        { 
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewNearest.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
                                                                         .Distinct()
                                                                         .OrderBy(cell => cell.Index);
 
-            this.Cursor = Cursors.WaitCursor;
-            string sysName = "";
+            List<string> syslist = new List<string>();
             foreach (DataGridViewRow r in selectedRows)
-            {
-                sysName = r.Cells[0].Value.ToString();
-                discoveryform.NewTriLatStars(new List<string>() { sysName }, false);
-            }
+                syslist.Add(r.Cells[0].Value.ToString());
 
-            this.Cursor = Cursors.Default;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).FireNewStarList(syslist, pushtype);
         }
 
         private void viewOnEDSMToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -246,5 +259,6 @@ namespace EDDiscovery.UserControls
             if (this.IsHandleCreated)
                 KickComputation(last_he, true);
         }
+
     }
 }

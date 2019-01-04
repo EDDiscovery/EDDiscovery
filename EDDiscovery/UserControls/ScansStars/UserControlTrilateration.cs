@@ -52,8 +52,6 @@ namespace EDDiscovery.UserControls
             FreezeTrilaterationUI();
             toolStripTextBoxSystem.Text = "Press Start New".Tx(this,"ToolStripText");
 
-            discoveryform.OnNewStarsForTrilat += Discoveryform_OnNewStarsForTrilat;
-
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(wantedContextMenu, this);
             BaseUtils.Translator.Instance.Translate(trilatContextMenu, this);
@@ -61,26 +59,39 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
-        public override void Closing()
-        {
-            discoveryform.OnNewStarsForTrilat -= Discoveryform_OnNewStarsForTrilat;
-        }
-
         public override void LoadLayout()
         {
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
         }
+
+        public override void Closing()
+        {
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
+            uctg = thc;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += Discoveryform_OnNewStarsForTrilat;
+        }
+
 
         #endregion
 
         #region Interaction with outside
 
-        private void Discoveryform_OnNewStarsForTrilat(List<string> list, bool wanted)      // when someone wants to send us sys, they do it via this IF
+        private void Discoveryform_OnNewStarsForTrilat(List<string> list, OnNewStarsPushType selection)      // when someone wants to send us sys, they do it via this IF
         {
             foreach (string s in list)
             {
-                if (wanted)
+                if (selection == OnNewStarsPushType.TriWanted)
                     AddWantedSystem(s);
-                else
+                else if (selection == OnNewStarsPushType.TriSystems)
                     AddSystemToDataGridViewDistances(s, false);
             }
         }

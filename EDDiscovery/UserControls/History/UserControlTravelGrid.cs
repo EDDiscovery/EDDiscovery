@@ -31,7 +31,7 @@ using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursor
+    public partial class UserControlTravelGrid : UserControlCommonBase, IHistoryCursorNewStarList
     {
         #region Public IF
 
@@ -47,6 +47,8 @@ namespace EDDiscovery.UserControls
 
         // implement IHistoryCursor fields
         public event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
+
+        public event OnNewStarsSubPanelsHandler OnNewStarList;
 
         // for primary travel grid for auto note jump
         public delegate void KeyDownInCell(int asciikeycode, int rowno, int colno, bool note);
@@ -919,25 +921,30 @@ namespace EDDiscovery.UserControls
 
         private void trilaterationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddSystemToOthers(true, false, false);
+            AddSystemToOthers(dist:true);
         }
 
         private void wantedSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddSystemToOthers(false, true, false);
+            AddSystemToOthers(wanted:true);
         }
 
         private void bothToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddSystemToOthers(true, true, false);
+            AddSystemToOthers(dist:true, wanted:true);
         }
 
         private void routeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddSystemToOthers(false, false, true);
+            AddSystemToOthers(expedition:true);
         }
 
-        private void AddSystemToOthers(bool dist, bool wanted, bool route)
+        private void explorationPanelToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddSystemToOthers(exploration:true);
+        }
+
+        private void AddSystemToOthers(bool dist = false, bool wanted = false, bool expedition = false, bool exploration = false)
         {
             IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
                                                                         .Select(cell => cell.OwningRow)
@@ -961,21 +968,23 @@ namespace EDDiscovery.UserControls
             }
 
             if (dist)
-            {
-                discoveryform.NewTriLatStars(systemnamelist, false);
-            }
+                FireNewStarList(systemnamelist, OnNewStarsPushType.TriSystems);
 
             if (wanted)
-            {
-                discoveryform.NewTriLatStars(systemnamelist, true);
-            }
+                FireNewStarList(systemnamelist, OnNewStarsPushType.TriWanted);
 
-            if (route)
-            {
-                discoveryform.NewExpeditionStars(systemnamelist);
-            }
+            if (expedition)
+                FireNewStarList(systemnamelist, OnNewStarsPushType.Expedition);
+
+            if (exploration)
+                FireNewStarList(systemnamelist, OnNewStarsPushType.Exploration);
 
             this.Cursor = Cursors.Default;
+        }
+
+        public void FireNewStarList(List<string> system, OnNewStarsPushType pushtype)
+        {
+            OnNewStarList?.Invoke(system, pushtype);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1449,7 +1458,6 @@ namespace EDDiscovery.UserControls
 
         }
 
-#endregion
-
+        #endregion
     }
 }

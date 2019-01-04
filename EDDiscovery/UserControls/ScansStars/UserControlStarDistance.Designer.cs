@@ -52,6 +52,8 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addToTrilaterationToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToExplorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToExpeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
@@ -76,9 +78,11 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addToTrilaterationToolStripMenuItem1,
+            this.addToExplorationToolStripMenuItem,
+            this.addToExpeditionToolStripMenuItem,
             this.viewOnEDSMToolStripMenuItem1});
             this.contextMenuStrip.Name = "closestContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(177, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(177, 92);
             // 
             // addToTrilaterationToolStripMenuItem1
             // 
@@ -86,6 +90,20 @@ namespace EDDiscovery.UserControls
             this.addToTrilaterationToolStripMenuItem1.Size = new System.Drawing.Size(176, 22);
             this.addToTrilaterationToolStripMenuItem1.Text = "Add to Trilateration";
             this.addToTrilaterationToolStripMenuItem1.Click += new System.EventHandler(this.addToTrilaterationToolStripMenuItem1_Click);
+            // 
+            // addToExplorationToolStripMenuItem
+            // 
+            this.addToExplorationToolStripMenuItem.Name = "addToExplorationToolStripMenuItem";
+            this.addToExplorationToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.addToExplorationToolStripMenuItem.Text = "Add To Exploration";
+            this.addToExplorationToolStripMenuItem.Click += new System.EventHandler(this.addToExplorationToolStripMenuItem_Click);
+            // 
+            // addToExpeditionToolStripMenuItem
+            // 
+            this.addToExpeditionToolStripMenuItem.Name = "addToExpeditionToolStripMenuItem";
+            this.addToExpeditionToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.addToExpeditionToolStripMenuItem.Text = "Add to Expedition";
+            this.addToExpeditionToolStripMenuItem.Click += new System.EventHandler(this.addToExpeditionToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem1
             // 
@@ -349,5 +367,7 @@ namespace EDDiscovery.UserControls
         private Panel panelTop;
         private ToolTip toolTip;
         private ExtendedControls.CheckBoxCustom checkBoxCube;
+        private ToolStripMenuItem addToExplorationToolStripMenuItem;
+        private ToolStripMenuItem addToExpeditionToolStripMenuItem;
     }
 }

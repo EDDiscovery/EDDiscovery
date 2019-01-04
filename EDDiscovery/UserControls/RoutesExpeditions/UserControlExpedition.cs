@@ -55,21 +55,11 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnNewCalculatedRoute += _discoveryForm_OnNewCalculatedRoute;
-            discoveryform.OnNewStarsForExpedition += Discoveryform_OnNewStarsForExpedition;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolStrip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuCopyPaste, this);
             BaseUtils.Translator.Instance.Translate(ctxMenuCombo, this);
-        }
-
-        public override void Closing()
-        {
-            DGVSaveColumnLayout(dataGridViewRouteSystems, DbColumnSave);
-
-            discoveryform.OnNewCalculatedRoute -= _discoveryForm_OnNewCalculatedRoute;
-            discoveryform.OnNewStarsForExpedition -= Discoveryform_OnNewStarsForExpedition;
-            discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
         }
 
         public override void LoadLayout()
@@ -78,6 +68,29 @@ namespace EDDiscovery.UserControls
 
             UpdateRoutes();
             discoveryform.OnExpeditionsDownloaded += Discoveryform_OnExpeditionsDownloaded; // only from now on are we interested in a change
+
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+            uctg = thc;
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList += OnNewStars;
+        }
+
+        public override void Closing()
+        {
+            DGVSaveColumnLayout(dataGridViewRouteSystems, DbColumnSave);
+
+            discoveryform.OnNewCalculatedRoute -= _discoveryForm_OnNewCalculatedRoute;
+            discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
+
+            if (uctg is IHistoryCursorNewStarList)
+                (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
         }
 
         private void Discoveryform_OnExpeditionsDownloaded(bool changed)        // because this is done async, pick up so we can refresh
@@ -104,9 +117,10 @@ namespace EDDiscovery.UserControls
             latestplottedroute = obj;
         }
 
-        private void Discoveryform_OnNewStarsForExpedition(List<string> obj)    // and if a user asked for stars to be added
+        private void OnNewStars(List<string> obj, OnNewStarsPushType command)    // and if a user asked for stars to be added
         {
-            AppendRows(obj.ToArray());
+            if (command == OnNewStarsPushType.Expedition)
+                AppendRows(obj.ToArray());
         }
 
         #endregion

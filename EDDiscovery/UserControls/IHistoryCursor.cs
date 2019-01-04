@@ -24,8 +24,18 @@ namespace EDDiscovery.UserControls
     public interface IHistoryCursor
     {
         event ChangedSelectionHEHandler OnTravelSelectionChanged;   // as above, different format, for certain older controls
+
         void FireChangeSelection();                                 // fire a change sel event to everyone
         void GotoPosByJID(long jid);                                // goto a pos by JID
         HistoryEntry GetCurrentHistoryEntry { get; }                // whats your current entry, null if not
+    }
+
+    public enum OnNewStarsPushType { TriWanted, TriSystems, Expedition, Exploration };
+    public delegate void OnNewStarsSubPanelsHandler(System.Collections.Generic.List<string> syslist, OnNewStarsPushType pushtype);
+
+    public interface IHistoryCursorNewStarList : IHistoryCursor     // some cursors add these extra functions on
+    {
+        event OnNewStarsSubPanelsHandler OnNewStarList;
+        void FireNewStarList(System.Collections.Generic.List<string> syslist, OnNewStarsPushType pushtype);
     }
 }

@@ -74,8 +74,6 @@ namespace EDDiscovery
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry, bool> OnNoteChanged;  // UI.Note has been updated attached to this note
         public event Action<List<ISystem>> OnNewCalculatedRoute;        // route plotter has a new one
-        public event Action<List<string>> OnNewStarsForExpedition;      // add stars to expedition 
-        public event Action<List<string>, bool> OnNewStarsForTrilat;    // add stars to trilat (false distance, true wanted)
         public event Action OnAddOnsChanged;                            // add on changed
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM Sync has completed with this list of stars are newly created
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
@@ -1388,21 +1386,9 @@ namespace EDDiscovery
                 OnNewCalculatedRoute(list);
         }
 
-        public void NewTriLatStars(List<string> list, bool wanted)
-        {
-            if (OnNewStarsForTrilat != null)
-                OnNewStarsForTrilat(list, wanted);
-        }
+        #endregion
 
-        public void NewExpeditionStars(List<string> list)
-        {
-            if (OnNewStarsForExpedition != null)
-                OnNewStarsForExpedition(list);
-        }
-
-#endregion
-
-#region Add Ons
+        #region Add Ons
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             buttonExtManageAddOns_Click(sender,e);
