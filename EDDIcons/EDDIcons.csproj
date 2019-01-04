@@ -679,6 +679,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Controls\readme.txt" />
+    <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
     <EmbeddedResource Include="Controls\Scan\Bodies\Mapped.png" />
     <EmbeddedResource Include="Controls\Search\Scan.png" />

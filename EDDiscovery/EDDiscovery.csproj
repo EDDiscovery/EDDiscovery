@@ -478,6 +478,12 @@
     <Compile Include="UserControls\Overlays\UserControlNotePanel.Designer.cs">
       <DependentUpon>UserControlNotePanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\UserControlMissionOverlay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlMissionOverlay.Designer.cs">
+      <DependentUpon>UserControlMissionOverlay.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlRouteTracker.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -729,6 +735,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlNotePanel.resx">
       <DependentUpon>UserControlNotePanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlMissionOverlay.resx">
+      <DependentUpon>UserControlMissionOverlay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlRouteTracker.resx">
       <DependentUpon>UserControlRouteTracker.cs</DependentUpon>

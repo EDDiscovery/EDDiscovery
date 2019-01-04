@@ -72,6 +72,7 @@ namespace EDDiscovery
             ShipYardPanel,          // 37
             OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
             SplitterControl,        // 39
+            MissionOverlay,         // 40
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -130,6 +131,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" , transparent: false) },
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates", transparent:true) },
+            { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay", transparent:true) },
 
             { new PanelInfo( "Settings") },
             { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
