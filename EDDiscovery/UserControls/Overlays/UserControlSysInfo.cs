@@ -54,10 +54,11 @@ namespace EDDiscovery.UserControls
         const int BitSelGameMode = 15;
         const int BitSelTravel = 16;
         const int BitSelMissions = 17;
+        const int BitSelJumpRange = 18;
 
-        int[] SmallItems = new int[] {BitSelFuel,BitSelCargo,BitSelVisits, BitSelMats, BitSelData , BitSelCredits };
+        int[] SmallItems = new int[] {BitSelFuel,BitSelCargo,BitSelVisits, BitSelMats, BitSelData , BitSelCredits, BitSelJumpRange};
 
-        const int BitSelTotal = 18;
+        const int BitSelTotal = 19;
         const int Positions = BitSelTotal * 2;      // two columns of positions, one at 0, one at +300 pixels ish, 
         const int BitSelEDSMButtonsNextLine = 28;
         const int BitSelSkinny = 29;
@@ -86,7 +87,9 @@ namespace EDDiscovery.UserControls
                                                         toolStripSystemState, toolStripNotes, toolStripTarget,
                                                         toolStripShip, toolStripFuel , toolStripCargo, toolStripMaterialCounts,  toolStripDataCount,
                                                         toolStripCredits,
-                                                        toolStripGameMode,toolStripTravel, toolStripMissionList };
+                                                        toolStripGameMode,toolStripTravel, toolStripMissionList,
+                                                        toolStripJumpRange};
+            Debug.Assert(toolstriplist.Length == BitSelTotal);
 
             Selection = SQLiteDBClass.GetSettingInt(DbSelection, BitSelDefault);
             string rs = SQLiteDBClass.GetSettingString(DbOSave, "-");
@@ -262,15 +265,28 @@ namespace EDDiscovery.UserControls
                 textBoxData.Text = he.MaterialCommodity.DataCount.ToStringInvariant();
                 textBoxCredits.Text = he.Credits.ToString("N0");
 
+                textBoxJumpRange.Text = "";
+
                 if (he.ShipInformation != null)
                 {
-                    textBoxShip.Text = he.ShipInformation.ShipFullInfo(cargo: false, fuel: false);
-                    if (he.ShipInformation.FuelCapacity > 0 && he.ShipInformation.FuelLevel > 0)
-                        textBoxFuel.Text = he.ShipInformation.FuelLevel.ToStringInvariant("0.#") + "/" + he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
-                    else if (he.ShipInformation.FuelCapacity > 0)
-                        textBoxFuel.Text = he.ShipInformation.FuelCapacity.ToStringInvariant("0.#");
+                    ShipInformation si = he.ShipInformation;
+
+                    textBoxShip.Text = si.ShipFullInfo(cargo: false, fuel: false);
+                    if (si.FuelCapacity > 0 && si.FuelLevel > 0)
+                        textBoxFuel.Text = si.FuelLevel.ToStringInvariant("0.#") + "/" + si.FuelCapacity.ToStringInvariant("0.#");
+                    else if (si.FuelCapacity > 0)
+                        textBoxFuel.Text = si.FuelCapacity.ToStringInvariant("0.#");
                     else
                         textBoxFuel.Text = "N/A".Tx(this,"NA");
+
+                    EliteDangerousCalculations.FSDSpec fsd = si.GetFSDSpec();
+                    if ( fsd != null )
+                    {
+                        EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount, 
+                                                                    si.ModuleMass() + si.HullMass(), si.FuelCapacity, si.FuelCapacity / 2);
+
+                        textBoxJumpRange.Text = ji.cursinglejump.ToString("N1") + "ly";
+                    }
                 }
                 else
                     textBoxShip.Text = textBoxFuel.Text = "";
@@ -489,6 +505,11 @@ namespace EDDiscovery.UserControls
             ToggleSelection(sender, BitSelFuel);
         }
 
+        private void displayJumpRangeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToggleSelection(sender, BitSelJumpRange);
+        }
+
         private void toolStripMissionsList_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelMissions);
@@ -678,6 +699,10 @@ namespace EDDiscovery.UserControls
 
                                 case BitSelMissions:
                                     this.SetPos(ref labpos, labelMissions, datapos, richTextBoxScrollMissions, richTextBoxScrollMissions.Height + 8, si);
+                                    break;
+
+                                case BitSelJumpRange:
+                                    this.SetPos(ref labpos, labelJumpRange, datapos, textBoxJumpRange, vspacing, si);
                                     break;
 
                                 default:
@@ -942,5 +967,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        
     }
 }

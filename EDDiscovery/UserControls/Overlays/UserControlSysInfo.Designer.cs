@@ -119,6 +119,9 @@ namespace EDDiscovery.UserControls
             this.panelFD = new ExtendedControls.PanelNoTheme();
             this.richTextBoxScrollMissions = new ExtendedControls.RichTextBoxScroll();
             this.labelMissions = new System.Windows.Forms.Label();
+            this.textBoxJumpRange = new ExtendedControls.TextBoxBorder();
+            this.labelJumpRange = new System.Windows.Forms.Label();
+            this.toolStripJumpRange = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -144,11 +147,12 @@ namespace EDDiscovery.UserControls
             this.toolStripGameMode,
             this.toolStripTravel,
             this.toolStripMissionList,
+            this.toolStripJumpRange,
             this.toolStripSkinny,
             this.toolStripReset,
             this.toolStripRemoveAll});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(256, 488);
+            this.contextMenuStrip.Size = new System.Drawing.Size(256, 532);
             // 
             // toolStripSystem
             // 
@@ -299,6 +303,9 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripCredits
             // 
+            this.toolStripCredits.Checked = true;
+            this.toolStripCredits.CheckOnClick = true;
+            this.toolStripCredits.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripCredits.Name = "toolStripCredits";
             this.toolStripCredits.Size = new System.Drawing.Size(255, 22);
             this.toolStripCredits.Text = "Display Credits";
@@ -788,12 +795,15 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.Location = new System.Drawing.Point(51, 275);
             this.richTextBoxNote.Name = "richTextBoxNote";
             this.richTextBoxNote.ReadOnly = false;
+            this.richTextBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxNote.ScrollBarLineTweak = 0;
             this.richTextBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
@@ -1355,12 +1365,15 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.Location = new System.Drawing.Point(54, 575);
             this.richTextBoxScrollMissions.Name = "richTextBoxScrollMissions";
             this.richTextBoxScrollMissions.ReadOnly = false;
+            this.richTextBoxScrollMissions.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxScrollMissions.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBoxScrollMissions.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBoxScrollMissions.ScrollBarBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScrollMissions.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxScrollMissions.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxScrollMissions.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBoxScrollMissions.ScrollBarLineTweak = 0;
             this.richTextBoxScrollMissions.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxScrollMissions.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxScrollMissions.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
@@ -1388,11 +1401,56 @@ namespace EDDiscovery.UserControls
             this.labelMissions.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.labelMissions.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // textBoxJumpRange
+            // 
+            this.textBoxJumpRange.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textBoxJumpRange.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textBoxJumpRange.BackErrorColor = System.Drawing.Color.Red;
+            this.textBoxJumpRange.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxJumpRange.BorderColorScaling = 0.5F;
+            this.textBoxJumpRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxJumpRange.ClearOnFirstChar = false;
+            this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxJumpRange.InErrorCondition = false;
+            this.textBoxJumpRange.Location = new System.Drawing.Point(57, 671);
+            this.textBoxJumpRange.Multiline = false;
+            this.textBoxJumpRange.Name = "textBoxJumpRange";
+            this.textBoxJumpRange.ReadOnly = true;
+            this.textBoxJumpRange.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textBoxJumpRange.SelectionLength = 0;
+            this.textBoxJumpRange.SelectionStart = 0;
+            this.textBoxJumpRange.Size = new System.Drawing.Size(48, 20);
+            this.textBoxJumpRange.TabIndex = 47;
+            this.textBoxJumpRange.TabStop = false;
+            this.textBoxJumpRange.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxJumpRange.WordWrap = true;
+            // 
+            // labelJumpRange
+            // 
+            this.labelJumpRange.AutoSize = true;
+            this.labelJumpRange.Location = new System.Drawing.Point(9, 674);
+            this.labelJumpRange.Name = "labelJumpRange";
+            this.labelJumpRange.Size = new System.Drawing.Size(32, 13);
+            this.labelJumpRange.TabIndex = 48;
+            this.labelJumpRange.Text = "Jump";
+            // 
+            // displayJumpRangeToolStripMenuItem
+            // 
+            this.toolStripJumpRange.Checked = true;
+            this.toolStripJumpRange.CheckOnClick = true;
+            this.toolStripJumpRange.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripJumpRange.Name = "displayJumpRangeToolStripMenuItem";
+            this.toolStripJumpRange.Size = new System.Drawing.Size(255, 22);
+            this.toolStripJumpRange.Text = "Display Jump Range";
+            this.toolStripJumpRange.Click += new System.EventHandler(this.displayJumpRangeToolStripMenuItem_Click);
+            // 
             // UserControlSysInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ContextMenuStrip = this.contextMenuStrip;
+            this.Controls.Add(this.textBoxJumpRange);
+            this.Controls.Add(this.labelJumpRange);
             this.Controls.Add(this.panelFD);
             this.Controls.Add(this.labelSysName);
             this.Controls.Add(this.textBoxSystem);
@@ -1530,5 +1588,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.RichTextBoxScroll richTextBoxScrollMissions;
         private System.Windows.Forms.Label labelMissions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMissionList;
+        private ExtendedControls.TextBoxBorder textBoxJumpRange;
+        private System.Windows.Forms.Label labelJumpRange;
+        private System.Windows.Forms.ToolStripMenuItem toolStripJumpRange;
     }
 }
