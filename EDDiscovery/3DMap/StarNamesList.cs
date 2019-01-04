@@ -100,7 +100,7 @@ namespace EDDiscovery
         List<StarNames> _starnamestoforeground;                     // transfer list between the back/fore
         LinkedList<StarNames> _starnamesforeground;                 // foreground list, linked list since we remove entries in the middle at random
 
-        static Font _starfont = new Font("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
+        static Font _starfont = BaseUtils.FontLoader.GetFont("MS Sans Serif", 16F);       // font size really determines the nicenest of the image, not its size on screen.. 12 point enough
 
         StarGrids _stargrids;
         FormMap _formmap;

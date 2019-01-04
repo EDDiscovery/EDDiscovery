@@ -50,8 +50,8 @@ namespace EDDiscovery.UserControls
         private int topmargin;
         private const int materialspacer = 4;
 
-        private Font stdfont = new Font("Microsoft Sans Serif", 8.25F);
-        private Font stdfontUnderline = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
+        private Font stdfont = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F);
+        private Font stdfontUnderline = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
 
         #region Init
         public ScanDisplay()
