@@ -65,6 +65,7 @@ namespace EliteDangerousCore
         CrewMemberJoins = 1270,
         CrewMemberQuits = 1280,
         CrewMemberRoleChange = 1285,
+        CrimeVictim = 129,
         DataScanned = 1030,
         DatalinkScan = 130,
         DatalinkVoucher = 1020,

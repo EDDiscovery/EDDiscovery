@@ -161,6 +161,26 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.CrimeVictim)]
+    public class JournalCrimeVictim : JournalEntry      // presuming its co-incident with commit crime so don't double count bounties
+    {
+        public JournalCrimeVictim(JObject evt) : base(evt, JournalTypeEnum.CrimeVictim)
+        {
+            CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();
+            Offender = evt["Offender"].Str();
+            Bounty = evt["Bounty"].Long();
+        }
+        public string CrimeType { get; set; }
+        public string Offender { get; set; }
+        public long Bounty { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", CrimeType, "Offender ".Txb(this), Offender, "Bounty:; cr;N0".Txb(this), Bounty);
+            detailed = "";
+        }
+    }
+
     [JournalEntryType(JournalTypeEnum.FactionKillBond)]
     public class JournalFactionKillBond : JournalEntry, ILedgerNoCashJournalEntry
     {
