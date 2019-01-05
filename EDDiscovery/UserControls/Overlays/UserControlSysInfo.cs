@@ -578,7 +578,7 @@ namespace EDDiscovery.UserControls
 
                     int bitno = Lines[r].Items[c]-1;    // stored +1
 
-                    if (bitno >= 0)
+                    if (bitno >= 0 && bitno < toolstriplist.Length)     // ensure within range, ignore any out of range, in case going backwards in versions
                     {
                         bool ison = (Selection & (1 << bitno)) != 0;
 
