@@ -263,7 +263,7 @@ namespace EliteDangerousCore
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
         public string EventSummaryName { get; private set; }     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
 
-        public System.Drawing.Image Icon { get { return JournalTypeIcons[this.IconEventType]; } }   // Icon to paint for this
+        public System.Drawing.Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
         public DateTime EventTimeUTC { get;  set; }
 
@@ -413,7 +413,7 @@ namespace EliteDangerousCore
 
         public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
 
-        public virtual string FillSummary { get { return SummaryNames[EventTypeID];  } }  // entry may be overridden for specialist output
+        public virtual string FillSummary { get { return SummaryNames.ContainsKey(EventTypeID) ? SummaryNames[EventTypeID] : "Unknown"; } }  // entry may be overridden for specialist output
 
         #endregion
 
@@ -431,7 +431,10 @@ namespace EliteDangerousCore
         public JournalEntry(JObject jo, JournalTypeEnum jtype)              // called by journal entries to create themselves
         {
             EventTypeID = jtype;
-            EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+            if (DateTime.TryParse(jo["timestamp"].Str(), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out DateTime etime))
+                EventTimeUTC = etime;
+            else
+                EventTimeUTC = DateTime.MinValue;
             TLUId = 0;
         }
 
