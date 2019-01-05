@@ -347,6 +347,20 @@ namespace EliteDangerousCore
                 JournalTypeEnum.ClearSavedGame,
             };
 
+        static public JournalTypeEnum[] FullStatsEssentialEvents
+        {
+            get
+            {
+                var statsAdditional = new JournalTypeEnum[]
+                {
+                    // Travel
+                    JournalTypeEnum.JetConeBoost, JournalTypeEnum.Touchdown, JournalTypeEnum.HeatWarning, JournalTypeEnum.HeatDamage,
+                    JournalTypeEnum.FuelScoop, JournalTypeEnum.SAAScanComplete
+                };
+                return EssentialEvents.Concat(statsAdditional).ToArray();
+            }
+        }
+
         static public JournalTypeEnum[] JumpScanEssentialEvents = new JournalTypeEnum[]     // 
             {
                 JournalTypeEnum.FSDJump,

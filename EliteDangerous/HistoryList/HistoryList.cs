@@ -958,6 +958,7 @@ namespace EliteDangerousCore
                 var list = (essentialitems == nameof(JournalEntry.JumpScanEssentialEvents)) ? JournalEntry.JumpScanEssentialEvents :
                            (essentialitems == nameof(JournalEntry.JumpEssentialEvents)) ? JournalEntry.JumpEssentialEvents :
                            (essentialitems == nameof(JournalEntry.NoEssentialEvents)) ? JournalEntry.NoEssentialEvents :
+                           (essentialitems == nameof(JournalEntry.FullStatsEssentialEvents)) ? JournalEntry.FullStatsEssentialEvents :
                             JournalEntry.EssentialEvents;
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
