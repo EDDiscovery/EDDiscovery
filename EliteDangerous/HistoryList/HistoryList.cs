@@ -341,6 +341,11 @@ namespace EliteDangerousCore
             return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
+        public int GetNrMapped(DateTime start, DateTime to)
+        {
+            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.SAAScanComplete && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+        }
+
         public long GetScanValue(DateTime start, DateTime to)
         {
             var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
@@ -953,6 +958,7 @@ namespace EliteDangerousCore
                 var list = (essentialitems == nameof(JournalEntry.JumpScanEssentialEvents)) ? JournalEntry.JumpScanEssentialEvents :
                            (essentialitems == nameof(JournalEntry.JumpEssentialEvents)) ? JournalEntry.JumpEssentialEvents :
                            (essentialitems == nameof(JournalEntry.NoEssentialEvents)) ? JournalEntry.NoEssentialEvents :
+                           (essentialitems == nameof(JournalEntry.FullStatsEssentialEvents)) ? JournalEntry.FullStatsEssentialEvents :
                             JournalEntry.EssentialEvents;
 
                 jlist = JournalEntry.GetAll(CurrentCommander, 
