@@ -47,6 +47,11 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
+            this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
@@ -56,11 +61,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM1 = new ExtendedControls.ComboBoxCustom();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -129,6 +129,42 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(784, 635);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
+            // 
+            // ColumnDate
+            // 
+            this.ColumnDate.FillWeight = 80F;
+            this.ColumnDate.HeaderText = "Date";
+            this.ColumnDate.Name = "ColumnDate";
+            // 
+            // ColumnStar
+            // 
+            this.ColumnStar.HeaderText = "Star";
+            this.ColumnStar.MinimumWidth = 50;
+            this.ColumnStar.Name = "ColumnStar";
+            this.ColumnStar.ReadOnly = true;
+            // 
+            // ColumnLocation
+            // 
+            this.ColumnLocation.HeaderText = "Location";
+            this.ColumnLocation.MinimumWidth = 50;
+            this.ColumnLocation.Name = "ColumnLocation";
+            this.ColumnLocation.ReadOnly = true;
+            // 
+            // ColumnCurrentDistance
+            // 
+            this.ColumnCurrentDistance.FillWeight = 40F;
+            this.ColumnCurrentDistance.HeaderText = "Current Distance";
+            this.ColumnCurrentDistance.MinimumWidth = 50;
+            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
+            this.ColumnCurrentDistance.ReadOnly = true;
+            // 
+            // ColumnPosition
+            // 
+            this.ColumnPosition.FillWeight = 75F;
+            this.ColumnPosition.HeaderText = "Position";
+            this.ColumnPosition.MinimumWidth = 50;
+            this.ColumnPosition.Name = "ColumnPosition";
+            this.ColumnPosition.ReadOnly = true;
             // 
             // toolTip
             // 
@@ -274,42 +310,6 @@ namespace EDDiscovery.UserControls
             this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Item 1";
-            // 
-            // ColumnDate
-            // 
-            this.ColumnDate.FillWeight = 80F;
-            this.ColumnDate.HeaderText = "Date";
-            this.ColumnDate.Name = "ColumnDate";
-            // 
-            // ColumnStar
-            // 
-            this.ColumnStar.HeaderText = "Star";
-            this.ColumnStar.MinimumWidth = 50;
-            this.ColumnStar.Name = "ColumnStar";
-            this.ColumnStar.ReadOnly = true;
-            // 
-            // ColumnLocation
-            // 
-            this.ColumnLocation.HeaderText = "Location";
-            this.ColumnLocation.MinimumWidth = 50;
-            this.ColumnLocation.Name = "ColumnLocation";
-            this.ColumnLocation.ReadOnly = true;
-            // 
-            // ColumnCurrentDistance
-            // 
-            this.ColumnCurrentDistance.FillWeight = 40F;
-            this.ColumnCurrentDistance.HeaderText = "Current Distance";
-            this.ColumnCurrentDistance.MinimumWidth = 50;
-            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
-            this.ColumnCurrentDistance.ReadOnly = true;
-            // 
-            // ColumnPosition
-            // 
-            this.ColumnPosition.FillWeight = 75F;
-            this.ColumnPosition.HeaderText = "Position";
-            this.ColumnPosition.MinimumWidth = 50;
-            this.ColumnPosition.Name = "ColumnPosition";
-            this.ColumnPosition.ReadOnly = true;
             // 
             // UserControlSearchMaterialsCommodities
             // 
