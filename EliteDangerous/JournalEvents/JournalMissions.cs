@@ -238,7 +238,8 @@ namespace EliteDangerousCore.JournalEvents
                                         "Type:", TargetTypeFriendly,
                                         "Target Faction:", TargetFaction,
                                         "Target Type:", TargetTypeLocalised,
-                                        "Passengers:", PassengerCount);
+                                        "Passengers:", PassengerCount,
+                                        "Count:", Count);
 
         }
 

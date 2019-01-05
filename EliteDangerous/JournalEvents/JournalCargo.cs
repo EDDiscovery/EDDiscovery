@@ -172,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.CargoDepot)]
-    public class JournalCargoDepot : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalCargoDepot : JournalEntry, IMaterialCommodityJournalEntry, IMissions
     {
         public JournalCargoDepot(JObject evt) : base(evt, JournalTypeEnum.CargoDepot)
         {
@@ -223,9 +223,13 @@ namespace EliteDangerousCore.JournalEvents
                 mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
         }
 
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        {
+            mlist.CargoDepot(this);
+        }
+
         public override void FillInformation(out string info, out string detailed)
         {
-
             if (UpdateEnum == UpdateTypeEnum.Collect)
             {
                 info = BaseUtils.FieldBuilder.Build("Collected:".Txb(this), Count, "< of ".Txb(this), FriendlyCargoType, "Total:".Txb(this), ItemsDelivered, "To Go:", ItemsToGo, "Progress:;%;N1".Txb(this), ProgressPercent);
