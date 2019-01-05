@@ -28,6 +28,10 @@ using EDDiscovery.Forms;
 
 namespace EDDiscovery.UserControls
 {
+    // scale to window width - split list in two if too long - maybe the text thing could do this
+    // option to hide during dock
+    // option to be verbose or terse
+
     public partial class UserControlMissionOverlay :   UserControlCommonBase
     {
         private  HistoryEntry currentHE;

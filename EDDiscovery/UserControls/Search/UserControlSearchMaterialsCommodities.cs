@@ -120,7 +120,11 @@ namespace EDDiscovery.UserControls
                            where x.EntryType == JournalTypeEnum.Market && ((JournalMarket)x.journalEntry).HasCommodityToBuy(cm.FDName)
                            select new Tuple<HistoryEntry, string>(x, ((JournalMarket)x.journalEntry).Station));
 
-            return scans.Concat(markets);
+            var markets2 = (from x in discoveryform.history
+                           where x.EntryType == JournalTypeEnum.EDDCommodityPrices && ((JournalEDDCommodityPrices)x.journalEntry).HasCommodityToBuy(cm.FDName)
+                           select new Tuple<HistoryEntry, string>(x, ((JournalEDDCommodityPrices)x.journalEntry).Station));
+
+            return scans.Concat(markets).Concat(markets2);
         }
 
         private void buttonExtFind_Click(object sender, EventArgs e)

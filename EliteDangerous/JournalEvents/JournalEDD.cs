@@ -58,6 +58,9 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public List<CCommodities> Commodities { get; protected set; }   // never null
 
+        public bool HasCommodity(string fdname) { return Commodities.FindIndex(x => x.fdname.Equals(fdname, System.StringComparison.InvariantCultureIgnoreCase)) >= 0; }
+        public bool HasCommodityToBuy(string fdname) { return Commodities.FindIndex(x => x.fdname.Equals(fdname, System.StringComparison.InvariantCultureIgnoreCase) && x.stock > 0) >= 0; }
+
         public override void FillInformation(out string info, out string detailed)
         {
             FillInformation(out info, out detailed, Commodities.Count > 60 ? 2 : 1);
