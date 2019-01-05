@@ -328,7 +328,7 @@ namespace EliteDangerousCore
 
         public int GetFSDJumps(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry).Count();
         }
 
         public int GetFSDJumps(string forShipKey)
@@ -338,7 +338,8 @@ namespace EliteDangerousCore
 
         public int GetNrScans(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
+            return (from s in historylist where s.journalEntry.EventTypeID == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+                .Distinct(new ScansAreForSameBody()).Count();
         }
 
         public int GetNrMapped(DateTime start, DateTime to)
@@ -348,7 +349,8 @@ namespace EliteDangerousCore
 
         public long GetScanValue(DateTime start, DateTime to)
         {
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan).ToList<JournalScan>();
+            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+                .Distinct(new ScansAreForSameBody()).ToList();
 
             return (from t in list select (long)t.EstimatedValue).Sum();
         }
@@ -450,7 +452,8 @@ namespace EliteDangerousCore
 
         public int GetBodiesScanned(string forShipKey)
         {
-            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s).Count();
+            return (from s in historylist where s.EntryType == JournalTypeEnum.Scan && $"{s.ShipTypeFD.ToLowerInvariant()}:{s.ShipId}" == forShipKey select s.journalEntry as JournalScan)
+                .Distinct(new ScansAreForSameBody()).Count();
         }
 
         public int GetFSDJumpsBeforeUTC(DateTime utc)
