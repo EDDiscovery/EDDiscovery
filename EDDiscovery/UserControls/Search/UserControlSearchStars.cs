@@ -85,6 +85,9 @@ namespace EDDiscovery.UserControls
 
             if (systems != null)
             {
+                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[1];
+                SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Ascending;
+
                 ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
                 bool centresort = false;
 
@@ -103,7 +106,8 @@ namespace EDDiscovery.UserControls
                     centresort |= ret.Item2 >= 0;
                 }
 
-                dataGridView.Sort(centresort ? ColumnCentreDistance : ColumnCurrentDistance, ListSortDirection.Ascending);
+                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
             }
 
         }

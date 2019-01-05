@@ -216,7 +216,10 @@ namespace EDDiscovery.UserControls
             {
                 this.Cursor = Cursors.WaitCursor;
                 dataGridView.Rows.Clear();
-                
+
+                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+                SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
+
                 ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
 
                 foreach ( var he in discoveryform.history.FilterByScan)
@@ -245,7 +248,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                dataGridView.Sort(ColumnDate, ListSortDirection.Descending);
+                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
                 this.Cursor = Cursors.Default;
             }
 

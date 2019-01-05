@@ -47,19 +47,20 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
-            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.Panel();
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.buttonExtFind = new ExtendedControls.ButtonExt();
             this.comboBoxCustomCMANDOR = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCustomCM2 = new ExtendedControls.ComboBoxCustom();
             this.comboBoxCustomCM1 = new ExtendedControls.ComboBoxCustom();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
+            this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnLocation = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnCurrentDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panelTop.SuspendLayout();
@@ -115,6 +116,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.CheckEDSM = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnDate,
             this.ColumnStar,
             this.ColumnLocation,
             this.ColumnCurrentDistance,
@@ -127,36 +129,6 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Size = new System.Drawing.Size(784, 635);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
-            // 
-            // ColumnStar
-            // 
-            this.ColumnStar.HeaderText = "Star";
-            this.ColumnStar.MinimumWidth = 50;
-            this.ColumnStar.Name = "ColumnStar";
-            this.ColumnStar.ReadOnly = true;
-            // 
-            // ColumnLocation
-            // 
-            this.ColumnLocation.HeaderText = "Location";
-            this.ColumnLocation.MinimumWidth = 50;
-            this.ColumnLocation.Name = "ColumnLocation";
-            this.ColumnLocation.ReadOnly = true;
-            // 
-            // ColumnCurrentDistance
-            // 
-            this.ColumnCurrentDistance.FillWeight = 40F;
-            this.ColumnCurrentDistance.HeaderText = "Current Distance";
-            this.ColumnCurrentDistance.MinimumWidth = 50;
-            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
-            this.ColumnCurrentDistance.ReadOnly = true;
-            // 
-            // ColumnPosition
-            // 
-            this.ColumnPosition.FillWeight = 75F;
-            this.ColumnPosition.HeaderText = "Position";
-            this.ColumnPosition.MinimumWidth = 50;
-            this.ColumnPosition.Name = "ColumnPosition";
-            this.ColumnPosition.ReadOnly = true;
             // 
             // toolTip
             // 
@@ -179,6 +151,17 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(804, 81);
             this.panelTop.TabIndex = 8;
+            // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(521, 14);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 37;
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // buttonExtFind
             // 
@@ -292,16 +275,41 @@ namespace EDDiscovery.UserControls
             this.label1.TabIndex = 0;
             this.label1.Text = "Item 1";
             // 
-            // buttonExtExcel
+            // ColumnDate
             // 
-            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(521, 14);
-            this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
-            this.buttonExtExcel.TabIndex = 37;
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
-            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            this.ColumnDate.FillWeight = 80F;
+            this.ColumnDate.HeaderText = "Date";
+            this.ColumnDate.Name = "ColumnDate";
+            // 
+            // ColumnStar
+            // 
+            this.ColumnStar.HeaderText = "Star";
+            this.ColumnStar.MinimumWidth = 50;
+            this.ColumnStar.Name = "ColumnStar";
+            this.ColumnStar.ReadOnly = true;
+            // 
+            // ColumnLocation
+            // 
+            this.ColumnLocation.HeaderText = "Location";
+            this.ColumnLocation.MinimumWidth = 50;
+            this.ColumnLocation.Name = "ColumnLocation";
+            this.ColumnLocation.ReadOnly = true;
+            // 
+            // ColumnCurrentDistance
+            // 
+            this.ColumnCurrentDistance.FillWeight = 40F;
+            this.ColumnCurrentDistance.HeaderText = "Current Distance";
+            this.ColumnCurrentDistance.MinimumWidth = 50;
+            this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
+            this.ColumnCurrentDistance.ReadOnly = true;
+            // 
+            // ColumnPosition
+            // 
+            this.ColumnPosition.FillWeight = 75F;
+            this.ColumnPosition.HeaderText = "Position";
+            this.ColumnPosition.MinimumWidth = 50;
+            this.ColumnPosition.Name = "ColumnPosition";
+            this.ColumnPosition.ReadOnly = true;
             // 
             // UserControlSearchMaterialsCommodities
             // 
@@ -331,11 +339,12 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ComboBoxCustom comboBoxCustomCM1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private ExtendedControls.ComboBoxCustom comboBoxCustomCMANDOR;
+        private ExtendedControls.ButtonExt buttonExtExcel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocation;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCurrentDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPosition;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomCMANDOR;
-        private ExtendedControls.ButtonExt buttonExtExcel;
     }
 }

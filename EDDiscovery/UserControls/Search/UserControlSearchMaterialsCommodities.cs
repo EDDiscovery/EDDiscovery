@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Init(discoveryform);
 
-            itemlist = MaterialCommodityData.GetCommoditiesRaw();
+            itemlist = MaterialCommodityData.GetAll();
             Array.Sort(itemlist, (left, right) => left.Name.CompareTo(right.Name));
 
             var list = (from x in itemlist select x.Name + " (" + x.Category + ", " + x.Type + ((x.Rarity) ? ", Rare Commodity".Tx(this):"") + ")");
@@ -110,45 +110,67 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        IEnumerable<Tuple<HistoryEntry,string>> Search(MaterialCommodityData cm)
+        void Search(MaterialCommodityData cm, Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist, 
+                                        string prefix = "")
         {
-            var scans = (from x in discoveryform.history
-                         where x.EntryType == JournalTypeEnum.Scan && ((JournalScan)x.journalEntry).HasMaterial(cm.FDName)
-                         select new Tuple<HistoryEntry, string>(x, ((JournalScan)x.journalEntry).BodyName));
-
-            var markets = (from x in discoveryform.history
-                           where x.EntryType == JournalTypeEnum.Market && ((JournalMarket)x.journalEntry).HasCommodityToBuy(cm.FDName)
-                           select new Tuple<HistoryEntry, string>(x, ((JournalMarket)x.journalEntry).Station));
-
-            var markets2 = (from x in discoveryform.history
-                           where x.EntryType == JournalTypeEnum.EDDCommodityPrices && ((JournalEDDCommodityPrices)x.journalEntry).HasCommodityToBuy(cm.FDName)
-                           select new Tuple<HistoryEntry, string>(x, ((JournalEDDCommodityPrices)x.journalEntry).Station));
-
-            return scans.Concat(markets).Concat(markets2);
-        }
-
-        private void buttonExtFind_Click(object sender, EventArgs e)
-        {
-            var total = Search(itemlist[comboBoxCustomCM1.SelectedIndex]);
-
-            if ( comboBoxCustomCM2.SelectedIndex>0)         
-            {
-                var other = Search(itemlist[comboBoxCustomCM2.SelectedIndex-1]).ToArray();
-
-                if ( comboBoxCustomCMANDOR.SelectedIndex == 0 )
-                {
-                    SysComparer cmp = new SysComparer();
-                    total = total.Where((x) => Array.Find(other, (y) => cmp.Equals(x, y)) != null);
-                }
-                else
-                    total = total.Concat(other);        // OR
-            }
-
-            total = total.Distinct(new SysComparer());
-
             ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
-            var starlist = (from x in total select new Tuple<HistoryEntry, string, double>(x.Item1, x.Item2, x.Item1.System.Distance(cursystem))).ToList();
-            StarsFound(starlist);
+
+            foreach ( var he in discoveryform.history)      // oldest first..
+            {
+                Tuple<HistoryEntry, string> found = null;
+                bool checkstation = false;
+
+                if (he.EntryType == JournalTypeEnum.Scan)
+                {
+                    var je = he.journalEntry as JournalScan;
+                    if (je.HasMaterial(cm.FDName))
+                        found = new Tuple<HistoryEntry, string>(he, prefix + je.BodyName);
+                }
+                else if (he.EntryType == JournalTypeEnum.Market)
+                {
+                    var je = he.journalEntry as JournalMarket;
+                    if (je.HasCommodityToBuy(cm.FDName))
+                    {
+                        found = new Tuple<HistoryEntry, string>(he, prefix + je.Station);
+                        checkstation = true;
+                    }
+                }
+                else if (he.EntryType == JournalTypeEnum.EDDCommodityPrices)
+                {
+                    var je = he.journalEntry as JournalEDDCommodityPrices;
+                    if (je.HasCommodityToBuy(cm.FDName))
+                    { 
+                        found = new Tuple<HistoryEntry, string>(he, prefix + je.Station);
+                        checkstation = true;
+                    }
+                }
+                else if (he.EntryType == JournalTypeEnum.MaterialDiscovered)
+                {
+                    var je = he.journalEntry as JournalMaterialDiscovered;
+                    if (je.Name.Equals(cm.FDName))
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx(this, "DIS") + he.WhereAmI);
+                }
+                else if (he.EntryType == JournalTypeEnum.MaterialCollected)
+                {
+                    var je = he.journalEntry as JournalMaterialCollected;
+                    if (je.Name.Equals(cm.FDName))
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx(this, "DIS") + he.WhereAmI);
+                }
+
+                if (found != null)
+                {
+                    string keyname = he.System.Name + (checkstation ? ":"+he.WhereAmI : "");
+                    double dist = cursystem.Distance(he.System);
+
+                    if (foundlist.ContainsKey(keyname))
+                    {
+                        if (!foundlist[keyname].Item2.Contains(found.Item2))     // don't double repeat
+                            foundlist[keyname] = new Tuple<HistoryEntry, string, double>(he, foundlist[keyname].Item2.AppendPrePad(found.Item2, Environment.NewLine), dist);
+                    }
+                    else 
+                        foundlist[keyname] = new Tuple<HistoryEntry, string, double>(he, found.Item2, dist);
+                }
+            }
         }
 
         private void StarsFound(List<Tuple<HistoryEntry, string, double>> systems)       // systems may be null
@@ -159,13 +181,17 @@ namespace EDDiscovery.UserControls
 
             if (systems != null)
             {
+                DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+                SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
+
                 ISystem cursystem = discoveryform.history.CurrentSystem;        // could be null
 
                 foreach (var ret in systems)
                 {
                     ISystem sys = ret.Item1.System;
                     string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
-                    object[] rowobj = {     sys.Name,
+                    object[] rowobj = {     (EDDConfig.Instance.DisplayUTC ? ret.Item1.EventTimeUTC : ret.Item1.EventTimeLocal).ToString(),
+                                            sys.Name,
                                             ret.Item2,
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")
@@ -175,9 +201,41 @@ namespace EDDiscovery.UserControls
                     dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = ret.Item1;
                 }
 
-                dataGridView.Sort(ColumnCurrentDistance, ListSortDirection.Ascending);
+                dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
             }
 
+        }
+
+        private void buttonExtFind_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist = new Dictionary<string, Tuple<HistoryEntry, string, double>>();
+            Search(itemlist[comboBoxCustomCM1.SelectedIndex], foundlist);
+
+            if (comboBoxCustomCM2.SelectedIndex > 0)
+            {
+                if (comboBoxCustomCMANDOR.SelectedIndex == 0)       // AND
+                {
+                    Dictionary<string, Tuple<HistoryEntry, string, double>> foundlist2 = new Dictionary<string, Tuple<HistoryEntry, string, double>>();
+                    Search(itemlist[comboBoxCustomCM2.SelectedIndex - 1], foundlist2, "(2)");
+
+                    List<string> keyremove = new List<string>();
+                    foreach( var kp in foundlist)
+                    {
+                        if (!foundlist2.ContainsKey(kp.Key))
+                            keyremove.Add(kp.Key);
+                    }
+                    foreach (var keyname in keyremove)
+                        foundlist.Remove(keyname);
+                }
+                else
+                {
+                    Search(itemlist[comboBoxCustomCM2.SelectedIndex - 1], foundlist, "(2)");
+                }
+
+            }
+
+            StarsFound(foundlist.Values.ToList());
         }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -188,7 +246,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
-            dataGridView.Excel(3);
+            dataGridView.Excel(4);
         }
     }
 }

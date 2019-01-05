@@ -156,9 +156,9 @@ namespace EDDiscovery.UserControls.Search
             ScanDisplay sd = null;
             string title = "System".Tx(this, "Sys") + ": " + sys.Name;
 
-            if (he != null && he.EntryType == JournalTypeEnum.Market)  // station data..
+            if (he != null && (he.EntryType == JournalTypeEnum.Market || he.EntryType == JournalTypeEnum.EDDCommodityPrices))  // station data..
             {
-                JournalMarket jm = he.journalEntry as JournalMarket;
+                JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 jm.FillInformation(out string info, out string detailed,1);
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.RichTextBoxScroll), detailed, new Point(0, 40), new Size(width - 20, height - 85), null));
