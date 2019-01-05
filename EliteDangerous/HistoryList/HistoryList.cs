@@ -328,7 +328,7 @@ namespace EliteDangerousCore
 
         public int GetFSDJumps(DateTime start, DateTime to)
         {
-            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry).Count();
+            return (from s in historylist where s.IsFSDJump && s.EventTimeLocal >= start && s.EventTimeLocal < to select s).Count();
         }
 
         public int GetFSDJumps(string forShipKey)
