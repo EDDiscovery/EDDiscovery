@@ -446,6 +446,10 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetScanValue(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value".Tx(this), strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetNrMapped(timearr[ii], endTime).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Mapped".Tx(this), strarr);
             }
             else
             {
@@ -544,6 +548,10 @@ namespace EDDiscovery.UserControls
                 for (int ii = 0; ii < intervals; ii++)
                     strarr[ii] = hl.GetScanValue(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
                 StatToDGV(dataGridViewTravel, "Scan value".Tx(this), strarr);
+
+                for (int ii = 0; ii < intervals; ii++)
+                    strarr[ii] = hl.GetNrMapped(timeintervals[ii + 1], timeintervals[ii]).ToString("N0", System.Globalization.CultureInfo.CurrentCulture);
+                StatToDGV(dataGridViewTravel, "Mapped".Tx(this), strarr);
             }
 
             for (int i = 1; i < dataGridViewTravel.Columns.Count; i++)
