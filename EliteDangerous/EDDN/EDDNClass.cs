@@ -134,7 +134,6 @@ namespace EliteDangerousCore.EDDN
                     ["Government"] = true,
                     ["FactionState"] = true,
                     ["Happiness"] = true,
-                    ["HomeSystem"] = true,
                     ["Influence"] = true,
                     ["ActiveStates"] = new JArray
                     {
@@ -393,7 +392,8 @@ namespace EliteDangerousCore.EDDN
                 foreach (JObject faction in factions)
                 {
                     faction.Remove("MyReputation");
-                    faction.Remove("PlayerFaction");
+                    faction.Remove("SquadronFaction");
+                    faction.Remove("HomeSystem");
                     faction.Remove("HappiestSystem");
                     RemoveCommonKeys(faction);
                 }
