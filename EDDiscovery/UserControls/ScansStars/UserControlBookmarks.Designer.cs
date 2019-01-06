@@ -50,6 +50,7 @@
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -62,6 +63,7 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonExtExcel);
             this.panelButtons.Controls.Add(this.buttonDelete);
             this.panelButtons.Controls.Add(this.buttonNew);
             this.panelButtons.Controls.Add(this.buttonEdit);
@@ -292,6 +294,17 @@
             this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 203);
             this.userControlSurfaceBookmarks.TabIndex = 5;
             // 
+            // buttonExtExcel
+            // 
+            this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
+            this.buttonExtExcel.Location = new System.Drawing.Point(308, 3);
+            this.buttonExtExcel.Name = "buttonExtExcel";
+            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.TabIndex = 38;
+            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
+            // 
             // UserControlBookmarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -336,5 +349,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBookmarks;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonExtExcel;
     }
 }

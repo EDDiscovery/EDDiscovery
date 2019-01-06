@@ -79,6 +79,17 @@ namespace EliteDangerousCore.DB
                 return null;
         }
 
+        public IEnumerator<Tuple<Planet,Location>> GetEnumerator()
+        {
+            foreach (Planet pl in Planets)
+            {
+                foreach (Location loc in pl.Locations)
+                {
+                    yield return new Tuple<Planet,Location>(pl,loc);
+                }
+            }
+        }
+
         public Planet GetPlanet(string planet)  // null if planet does not exist.. else array
         {
             return Planets?.Find(x => x.Name.Equals(planet, StringComparison.InvariantCultureIgnoreCase));
@@ -447,6 +458,5 @@ namespace EliteDangerousCore.DB
             globalbookmarks.RemoveAll(x => x.id == id);
             OnBookmarkChange?.Invoke(bk,true);
         }
-
     }
 }

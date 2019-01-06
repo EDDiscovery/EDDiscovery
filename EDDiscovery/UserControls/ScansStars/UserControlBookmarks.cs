@@ -345,5 +345,108 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        private void buttonExtExcel_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewBookMarks.Rows.Count == 0)
+            {
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            Forms.ExportForm frm = new Forms.ExportForm();
+            frm.Init(new string[] { "Export Current View" }, disablestartendtime: true);
+
+            if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                if (frm.SelectedIndex == 0)
+                {
+                    string path = frm.Path;               //string path = "C:\\code\\f.csv"; // debug
+
+                    BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid();
+                    grd.SetCSVDelimiter(frm.Comma);
+
+                    grd.GetLineStatus += delegate (int r)
+                    {
+                        if (r < dataGridViewBookMarks.Rows.Count)
+                        {
+                            return BaseUtils.CSVWriteGrid.LineStatus.OK;
+                        }
+                        else
+                            return BaseUtils.CSVWriteGrid.LineStatus.EOF;
+                    };
+
+                    List<string> colh = new List<string>();
+                    colh.AddRange(new string[] { "Type", "System/Region", "Note","X","Y", "Z", "Planet", "Name", "Comment", "Lat","Long"});
+
+                    grd.GetHeader += delegate (int c)
+                    {
+                        return (c < colh.Count && frm.IncludeHeader) ? colh[c] : null;
+                    };
+
+                    int bkrowno = 0;
+                    IEnumerator<Tuple<PlanetMarks.Planet, PlanetMarks.Location>> planetloc = null;
+
+                    grd.GetLine += delegate (int r)
+                    {
+                        DataGridViewRow rw = dataGridViewBookMarks.Rows[bkrowno];
+                        BookmarkClass bk = rw.Tag as BookmarkClass;
+                        bool firstplanetrow = false;
+
+                        if (planetloc == null && bk.hasPlanetaryMarks)          // if not iterating planets, but it has one, iterate
+                        {
+                            planetloc = bk.PlanetaryMarks.GetEnumerator();
+                            planetloc.MoveNext();       // move to first
+                            firstplanetrow = true;
+                        }
+
+                        List<Object> retrow = new List<Object>
+                        {
+                                bk.isRegion ? "Region" : "System",
+                                bk.isRegion ? bk.Heading : bk.StarName,
+                                bk.Note,
+                                bk.x.ToString("0.##"),
+                                bk.y.ToString("0.##"),
+                                bk.z.ToString("0.##"),
+                        };
+
+                        if (planetloc != null)
+                        {
+                            var plloc = planetloc.Current;
+                            List<Object> planetrow = new List<Object>
+                            {
+                                plloc.Item1.Name,
+                                plloc.Item2.Name,
+                                plloc.Item2.Comment,
+                                plloc.Item2.Latitude.ToString("0.##"),
+                                plloc.Item2.Longitude.ToString("0.##"),
+                            };
+
+                            if ( !firstplanetrow )
+                            {
+                                retrow = new List<object>() { "", "", "", "", "", "" };
+                            }
+
+                            retrow.AddRange(planetrow);
+                        }
+
+                        if (planetloc == null || planetloc.MoveNext() == false)
+                        {
+                            planetloc = null;
+                            bkrowno++;
+                        }
+
+                        return retrow.ToArray();
+                    };
+
+                    if (grd.WriteCSV(path))
+                    {
+                        if (frm.AutoOpen)
+                            System.Diagnostics.Process.Start(path);
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+        }
     }
 }
