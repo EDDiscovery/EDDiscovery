@@ -32,6 +32,7 @@ namespace EliteDangerousCore.DB
             public double Latitude;
             public double Longitude;
 
+            [Newtonsoft.Json.JsonIgnore]
             public bool IsWholePlanetBookmark { get { return Name== "" && Latitude == 0 && Longitude == 0; } }
         }
 
@@ -136,10 +137,15 @@ namespace EliteDangerousCore.DB
             AddOrUpdateLocation(planet, loc.Name, loc.Comment, loc.Latitude, loc.Longitude);
         }
 
+        public void AddOrUpdatePlanetBookmark(string planet, string comment)
+        {
+            AddOrUpdateLocation(planet, "", comment, 0,0 );
+        }
+
         public bool DeleteLocation(string planet, string placename)
         {
             Planet p = GetPlanet(planet);            // p = null if planet does not exist, else list of existing places
-            Location l = GetLocation(p, placename); // if p != null, find placenameYour okay, its 
+            Location l = GetLocation(p, placename); // if p != null, find placename 
             if (l != null)
             {
                 p.Locations.Remove(l);
@@ -289,7 +295,7 @@ namespace EliteDangerousCore.DB
                 return true;
             }
         }
-        
+
         // with a found bookmark.. add locations in the system
         public void AddOrUpdateLocation(string planet, string placename, string comment, double latp, double longp)
         {
@@ -298,8 +304,16 @@ namespace EliteDangerousCore.DB
             PlanetaryMarks.AddOrUpdateLocation(planet, placename, comment, latp, longp);
             Update();
         }
-        
-		// Update notes
+
+        public void AddOrUpdatePlanetBookmark(string planet, string comment)
+        {
+            if (PlanetaryMarks == null)
+                PlanetaryMarks = new PlanetMarks();
+            PlanetaryMarks.AddOrUpdatePlanetBookmark(planet, comment);
+            Update();
+        }
+
+        // Update notes
         public void UpdateNotes(string notes)
         {
             Note = notes;

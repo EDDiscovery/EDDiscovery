@@ -103,8 +103,10 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap EDSM_ExportToExcel {
-            get {
+        public static System.Drawing.Bitmap EDSM_ExportToExcel
+        {
+            get
+            {
                 object obj = ResourceManager.GetObject("EDSM_ExportToExcel", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
@@ -1809,5 +1811,18 @@ namespace EDDiscovery.Icons {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ImportExcel
+        {
+            get
+            {
+                object obj = ResourceManager.GetObject("ImportExcel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
     }
 }

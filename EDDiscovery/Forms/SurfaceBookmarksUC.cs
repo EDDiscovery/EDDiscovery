@@ -73,7 +73,6 @@ namespace EDDiscovery.Forms
                 {
                     foreach (Location loc in pl.Locations)
                     {
-                        System.Diagnostics.Debug.WriteLine("Rows " + dataGridViewMarks.Rows.Count);
                         using (DataGridViewRow dr = dataGridViewMarks.Rows[dataGridViewMarks.Rows.Add()])
                         {
                             if (!BodyName.Items.Contains(pl.Name))      // ensure planet in collection so we don't get errors..
