@@ -81,10 +81,19 @@ namespace EDDiscovery.Forms
 
                             dr.Cells[0].Value = pl.Name;
                             dr.Cells[0].ReadOnly = true;
-                            dr.Cells[1].Value = loc.Name;
                             dr.Cells[2].Value = loc.Comment;
-                            dr.Cells[3].Value = loc.Latitude.ToString("F4");
-                            dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                            dr.Cells[1].Value = loc.Name;
+
+                            if (loc.IsWholePlanetBookmark)              // whole planet gets empty lat/long
+                            {
+                                dr.Cells[3].Value = dr.Cells[4].Value = "";
+                            }
+                            else
+                            {
+                                dr.Cells[3].Value = loc.Latitude.ToString("F4");
+                                dr.Cells[4].Value = loc.Longitude.ToString("F4");
+                            }
+
                             ((DataGridViewCheckBoxCell)dr.Cells[5]).Value = true;
                             dr.Tag = loc;
                         }
@@ -183,7 +192,7 @@ namespace EDDiscovery.Forms
             {
                 deleteToolStripMenuItem.Enabled = dataGridViewMarks.Rows[rightclickrow].IsNewRow == false;
                 var check = (DataGridViewCheckBoxCell)dataGridViewMarks.Rows[rightclickrow].Cells[5];
-                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true;
+                sendToCompassToolStripMenuItem.Enabled = check.Value != null && (bool)(check.Value) == true && !dataGridViewMarks.Rows[rightclickrow].Cells[1].IsNullOrEmpty();
             }
         }
 
@@ -276,10 +285,14 @@ namespace EDDiscovery.Forms
                 System.Diagnostics.Debug.WriteLine("Commit " + rw.Cells[0].Value.ToString());
 
                 Location newLoc = rw.Tag != null ? (Location)rw.Tag : new Location();
-                newLoc.Name = rw.Cells[1].Value.ToString();
-                newLoc.Comment = rw.Cells[2].Value != null ? rw.Cells[2].Value.ToString() : ""; // not required to set descr.
-                newLoc.Latitude = Double.Parse(rw.Cells[3].Value.ToString());
-                newLoc.Longitude = Double.Parse(rw.Cells[4].Value.ToString());
+
+                newLoc.Name = rw.Cells[1].IsNullOrEmpty() ? "" : rw.Cells[1].Value.ToString();      // planet bookmarks not required to set name
+                newLoc.Comment = rw.Cells[2].IsNullOrEmpty() ? "" : rw.Cells[2].Value.ToString(); // not required to set descr.
+                if (rw.Cells[3].IsNullOrEmpty() || !double.TryParse(rw.Cells[3].Value.ToString(), out newLoc.Latitude))        // planet bookmarks not required to set pos
+                    newLoc.Latitude = 0;
+                if (rw.Cells[4].IsNullOrEmpty() || !double.TryParse(rw.Cells[4].Value.ToString(), out newLoc.Longitude))
+                    newLoc.Longitude = 0;
+
                 planetmarks.AddOrUpdateLocation(rw.Cells[0].Value.ToString(), newLoc);
                 rw.Tag = newLoc;
                 rw.Cells[0].ReadOnly = true;    // can't change the planet.  Can change the name as we are directly editing the loc in memory
@@ -297,13 +310,20 @@ namespace EDDiscovery.Forms
 
                 if (s.Length > 0)
                 {
-                    double? v = s.ParseDoubleNull();
-                    double lm = e.ColumnIndex == 3 ? 90 : 180;
-
-                    if (v == null || v.Value < -lm || v.Value > lm)
+                    if (s == "-")
                     {
-                        e.Cancel = true;
-                        dataGridViewMarks.Rows[e.RowIndex].ErrorText = "Invalid coordinate";
+
+                    }
+                    else
+                    {
+                        double? v = s.ParseDoubleNull();
+                        double lm = e.ColumnIndex == 3 ? 90 : 180;
+
+                        if (v == null || v.Value < -lm || v.Value > lm)
+                        {
+                            e.Cancel = true;
+                            dataGridViewMarks.Rows[e.RowIndex].ErrorText = "Invalid coordinate";
+                        }
                     }
                 }
             }
@@ -311,7 +331,13 @@ namespace EDDiscovery.Forms
 
         private bool ValidRow(DataGridViewRow dr)
         {
-            if (dr.Cells[0].Value == null || dr.Cells[1].Value == null || dr.Cells[3].Value == null || dr.Cells[4].Value == null)
+            if (dr.Cells[0].IsNullOrEmpty())      // must have a planet
+                return false;
+
+            if (dr.Cells[1].IsNullOrEmpty() && dr.Cells[3].IsNullOrEmpty() && dr.Cells[4].IsNullOrEmpty())
+                return true;                    // marker of a planet wide bookmark
+
+            if (dr.Cells[1].IsNullOrEmpty() || dr.Cells[3].IsNullOrEmpty() || dr.Cells[4].IsNullOrEmpty())     // must be set..
                 return false;
 
             if (!Double.TryParse(dr.Cells[3].Value.ToString(), out double lat))
@@ -320,7 +346,7 @@ namespace EDDiscovery.Forms
             if (!Double.TryParse(dr.Cells[4].Value.ToString(), out double lon))
                 return false;
 
-            return dr.Cells[0].Value.ToString().HasChars() && dr.Cells[1].Value.ToString().HasChars() && lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
+            return lat >= -180 && lat <= 180 && lon >= -180 && lon <= 180;
         }
 
 

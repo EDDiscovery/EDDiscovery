@@ -31,15 +31,17 @@ namespace EliteDangerousCore.DB
             public string Comment;
             public double Latitude;
             public double Longitude;
+
+            public bool IsWholePlanetBookmark { get { return Name== "" && Latitude == 0 && Longitude == 0; } }
         }
 
         public class Planet
         {
             public string Name;
-            public List<Location> Locations;
+            public List<Location> Locations;            // may be null from reader..
         }
 
-        public List<Planet> Planets;            // may be null
+        public List<Planet> Planets;                    // may be null if no planets
 
         public bool hasMarks { get { return Planets != null && Planets.Count > 0 && Planets.Where(pl => pl.Locations.Count > 0).Any(); } }
 
@@ -96,9 +98,12 @@ namespace EliteDangerousCore.DB
                 if (Planets == null)
                     Planets = new List<Planet>();       // new planet list
 
-                p = new Planet() { Name = planet, Locations = new List<Location>() };
+                p = new Planet() { Name = planet };
                 Planets.Add(p);
             }
+
+            if (p.Locations == null)                    // done here, just in case we read a planet not locations in json.
+                p.Locations = new List<Location>();
 
             Location l = GetLocation(p, placename);     // location on planet by name
 
