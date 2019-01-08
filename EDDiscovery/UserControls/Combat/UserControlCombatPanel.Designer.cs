@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             this.labelFactionKills = new ExtendedControls.LabelExt();
             this.labelBalance = new ExtendedControls.LabelExt();
             this.labelTotalCrimes = new ExtendedControls.LabelExt();
+            this.labelTarget = new ExtendedControls.LabelExt();
             this.labelFaction = new ExtendedControls.LabelExt();
             this.labelTotalReward = new ExtendedControls.LabelExt();
             this.labelFactionReward = new ExtendedControls.LabelExt();
@@ -87,18 +88,19 @@ namespace EDDiscovery.UserControls
             this.panelStatus.Controls.Add(this.labelFactionKills);
             this.panelStatus.Controls.Add(this.labelBalance);
             this.panelStatus.Controls.Add(this.labelTotalCrimes);
+            this.panelStatus.Controls.Add(this.labelTarget);
             this.panelStatus.Controls.Add(this.labelFaction);
             this.panelStatus.Controls.Add(this.labelTotalReward);
             this.panelStatus.Controls.Add(this.labelFactionReward);
             this.panelStatus.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelStatus.Location = new System.Drawing.Point(0, 32);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(798, 56);
+            this.panelStatus.Size = new System.Drawing.Size(713, 80);
             this.panelStatus.TabIndex = 5;
             // 
             // labelCredits
             // 
-            this.labelCredits.Location = new System.Drawing.Point(4, 3);
+            this.labelCredits.Location = new System.Drawing.Point(4, 25);
             this.labelCredits.Name = "labelCredits";
             this.labelCredits.Size = new System.Drawing.Size(100, 24);
             this.labelCredits.TabIndex = 4;
@@ -108,7 +110,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalKills
             // 
-            this.labelTotalKills.Location = new System.Drawing.Point(110, 3);
+            this.labelTotalKills.Location = new System.Drawing.Point(119, 25);
             this.labelTotalKills.Name = "labelTotalKills";
             this.labelTotalKills.Size = new System.Drawing.Size(100, 24);
             this.labelTotalKills.TabIndex = 4;
@@ -118,7 +120,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelFactionKills
             // 
-            this.labelFactionKills.Location = new System.Drawing.Point(110, 29);
+            this.labelFactionKills.Location = new System.Drawing.Point(119, 51);
             this.labelFactionKills.Name = "labelFactionKills";
             this.labelFactionKills.Size = new System.Drawing.Size(100, 24);
             this.labelFactionKills.TabIndex = 4;
@@ -128,7 +130,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelBalance
             // 
-            this.labelBalance.Location = new System.Drawing.Point(315, 3);
+            this.labelBalance.Location = new System.Drawing.Point(324, 25);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(100, 24);
             this.labelBalance.TabIndex = 4;
@@ -138,7 +140,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalCrimes
             // 
-            this.labelTotalCrimes.Location = new System.Drawing.Point(420, 3);
+            this.labelTotalCrimes.Location = new System.Drawing.Point(429, 25);
             this.labelTotalCrimes.Name = "labelTotalCrimes";
             this.labelTotalCrimes.Size = new System.Drawing.Size(100, 24);
             this.labelTotalCrimes.TabIndex = 4;
@@ -146,9 +148,18 @@ namespace EDDiscovery.UserControls
             this.labelTotalCrimes.TextBackColor = System.Drawing.SystemColors.Control;
             this.toolTip.SetToolTip(this.labelTotalCrimes, "How many times you\'ve been caught!");
             // 
+            // labelTarget
+            // 
+            this.labelTarget.Location = new System.Drawing.Point(3, 1);
+            this.labelTarget.Name = "labelTarget";
+            this.labelTarget.Size = new System.Drawing.Size(720, 24);
+            this.labelTarget.TabIndex = 4;
+            this.labelTarget.Text = "Target";
+            this.labelTarget.TextBackColor = System.Drawing.SystemColors.Control;
+            // 
             // labelFaction
             // 
-            this.labelFaction.Location = new System.Drawing.Point(3, 29);
+            this.labelFaction.Location = new System.Drawing.Point(3, 51);
             this.labelFaction.Name = "labelFaction";
             this.labelFaction.Size = new System.Drawing.Size(100, 24);
             this.labelFaction.TabIndex = 4;
@@ -158,7 +169,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalReward
             // 
-            this.labelTotalReward.Location = new System.Drawing.Point(210, 3);
+            this.labelTotalReward.Location = new System.Drawing.Point(219, 25);
             this.labelTotalReward.Name = "labelTotalReward";
             this.labelTotalReward.Size = new System.Drawing.Size(100, 24);
             this.labelTotalReward.TabIndex = 4;
@@ -168,7 +179,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelFactionReward
             // 
-            this.labelFactionReward.Location = new System.Drawing.Point(210, 29);
+            this.labelFactionReward.Location = new System.Drawing.Point(219, 51);
             this.labelFactionReward.Name = "labelFactionReward";
             this.labelFactionReward.Size = new System.Drawing.Size(100, 24);
             this.labelFactionReward.TabIndex = 4;
@@ -184,7 +195,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(798, 32);
+            this.panelTop.Size = new System.Drawing.Size(713, 32);
             this.panelTop.TabIndex = 5;
             // 
             // checkBoxCustomGridOn
@@ -251,10 +262,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCombat.Controls.Add(this.dataGridViewCombat);
             this.dataViewScrollerPanelCombat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelCombat.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelCombat.Location = new System.Drawing.Point(0, 88);
+            this.dataViewScrollerPanelCombat.Location = new System.Drawing.Point(0, 112);
             this.dataViewScrollerPanelCombat.Name = "dataViewScrollerPanelCombat";
             this.dataViewScrollerPanelCombat.ScrollBarWidth = 20;
-            this.dataViewScrollerPanelCombat.Size = new System.Drawing.Size(798, 273);
+            this.dataViewScrollerPanelCombat.Size = new System.Drawing.Size(713, 249);
             this.dataViewScrollerPanelCombat.TabIndex = 3;
             this.dataViewScrollerPanelCombat.VerticalScrollBarDockRight = true;
             // 
@@ -269,13 +280,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(778, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(693, 21);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 252);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 228);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -325,7 +336,7 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewCombat.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewCombat.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewCombat.Size = new System.Drawing.Size(778, 273);
+            this.dataGridViewCombat.Size = new System.Drawing.Size(693, 249);
             this.dataGridViewCombat.TabIndex = 0;
             this.dataGridViewCombat.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCombat_CellDoubleClick);
             this.dataGridViewCombat.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCombat_SortCompare);
@@ -364,7 +375,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelStatus);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlCombatPanel";
-            this.Size = new System.Drawing.Size(798, 361);
+            this.Size = new System.Drawing.Size(713, 361);
             this.panelStatus.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
@@ -397,5 +408,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.CheckBoxCustom checkBoxCustomGridOn;
         private System.Windows.Forms.ToolTip toolTip;
+        private ExtendedControls.LabelExt labelTarget;
     }
 }

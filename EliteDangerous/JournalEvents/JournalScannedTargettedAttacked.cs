@@ -125,17 +125,20 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else if (ScanStage.Value == 2)
                 {
-                    info = BaseUtils.FieldBuilder.Build("Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
-                        "", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised);
+                    info = BaseUtils.FieldBuilder.Build(
+                        "", PilotName_Localised, "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised,
+                        "Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth);
+                        
 
                 }
                 else if (ScanStage.Value == 3)
                 {
-                    info = BaseUtils.FieldBuilder.Build("Faction:".Txb(this), Faction,
-                                    "", LegalStatus, "Bounty:; cr;N0".Txb(this), Bounty,
-                                    "", SubSystem, "< at ;;N1".Tx(this), SubSystemHealth,
+                    info = BaseUtils.FieldBuilder.Build(
+                                    "", PilotName_Localised, "<(;)", LegalStatus, "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised,
                                     "Shield ;;N1".Txb(this), ShieldHealth, "Hull ;;N1".Tx(this), HullHealth,
-                                    "", PilotName_Localised, " " + "Rank:".Txb(this), PilotRank, "< in ".Tx(this), Ship_Localised);
+                                    "Bounty:; cr;N0".Txb(this), Bounty, 
+                                    "", SubSystem, "< at ;;N1".Tx(this), SubSystemHealth
+                                    );
                 }
                 else
                     info = "Unknown Scan Stage type - report to EDD team";
