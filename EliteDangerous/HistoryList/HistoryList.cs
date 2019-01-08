@@ -1105,7 +1105,7 @@ namespace EliteDangerousCore
             }
         }
 
-        public static int MergeTypeDelay(JournalEntry je)   //0 = none
+        public static int MergeTypeDelay(JournalEntry je)   // 0 = no delay, delay for attempts to merge items..
         {
             if (je.EventTypeID == JournalTypeEnum.Friends)
                 return 2000;
@@ -1114,7 +1114,7 @@ namespace EliteDangerousCore
             else if (je.EventTypeID == JournalTypeEnum.FuelScoop)
                 return 10000;
             else if (je.EventTypeID == JournalTypeEnum.ShipTargeted)
-                return 500; // short, so normally does not merge unless your clicking around like mad
+                return 250; // short, so normally does not merge unless your clicking around like mad
             else
                 return 0;
         }
@@ -1124,36 +1124,61 @@ namespace EliteDangerousCore
         {
             if (prev != null)
             {
-                if (je.EventTypeID == JournalTypeEnum.FuelScoop && prev.EventTypeID == JournalTypeEnum.FuelScoop)  // merge scoops
+                bool prevsame = je.EventTypeID == prev.EventTypeID;
+
+                if (prevsame)
                 {
-                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfs = je as EliteDangerousCore.JournalEvents.JournalFuelScoop;
-                    EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
-                    jfsprev.Scooped += jfs.Scooped;
-                    jfsprev.Total = jfs.Total;
-                    //System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
-                    return true;
-                }
-                else if (je.EventTypeID == JournalTypeEnum.Friends && prev.EventTypeID == JournalTypeEnum.Friends) // merge friends
-                {
-                    EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
-                    EliteDangerousCore.JournalEvents.JournalFriends jf = je as EliteDangerousCore.JournalEvents.JournalFriends;
-                    jfprev.AddFriend(jf);
-                    //System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
-                    return true;
-                }
-                else if (je.EventTypeID == JournalTypeEnum.FSSSignalDiscovered && prev.EventTypeID == JournalTypeEnum.FSSSignalDiscovered) // merge friends
-                {
-                    var jdprev = prev as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
-                    var jd = je as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
-                    jdprev.Add(jd);
-                    return true;
-                }
-                else if (je.EventTypeID == JournalTypeEnum.ShipTargeted && prev.EventTypeID == JournalTypeEnum.ShipTargeted) // merge friends
-                {
-                    var jdprev = prev as EliteDangerousCore.JournalEvents.JournalShipTargeted;
-                    var jd = je as EliteDangerousCore.JournalEvents.JournalShipTargeted;
-                    jdprev.Add(jd);
-                    return true;
+                    if (je.EventTypeID == JournalTypeEnum.FuelScoop )  // merge scoops
+                    {
+                        EliteDangerousCore.JournalEvents.JournalFuelScoop jfs = je as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                        EliteDangerousCore.JournalEvents.JournalFuelScoop jfsprev = prev as EliteDangerousCore.JournalEvents.JournalFuelScoop;
+                        jfsprev.Scooped += jfs.Scooped;
+                        jfsprev.Total = jfs.Total;
+                        //System.Diagnostics.Debug.WriteLine("Merge FS " + jfsprev.EventTimeUTC);
+                        return true;
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.Friends ) // merge friends
+                    {
+                        EliteDangerousCore.JournalEvents.JournalFriends jfprev = prev as EliteDangerousCore.JournalEvents.JournalFriends;
+                        EliteDangerousCore.JournalEvents.JournalFriends jf = je as EliteDangerousCore.JournalEvents.JournalFriends;
+                        jfprev.AddFriend(jf);
+                        //System.Diagnostics.Debug.WriteLine("Merge Friends " + jfprev.EventTimeUTC + " " + jfprev.NameList.Count);
+                        return true;
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.FSSSignalDiscovered ) 
+                    {
+                        var jdprev = prev as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
+                        var jd = je as EliteDangerousCore.JournalEvents.JournalFSSSignalDiscovered;
+                        jdprev.Add(jd);
+                        return true;
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.ShipTargeted ) 
+                    {
+                        var jdprev = prev as EliteDangerousCore.JournalEvents.JournalShipTargeted;
+                        var jd = je as EliteDangerousCore.JournalEvents.JournalShipTargeted;
+                        jdprev.Add(jd);
+                        return true;
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.UnderAttack)     // not merged during play
+                    {
+                        var jdprev = prev as EliteDangerousCore.JournalEvents.JournalUnderAttack;
+                        var jd = je as EliteDangerousCore.JournalEvents.JournalUnderAttack;
+                        jdprev.Add(jd.Target);
+                        return true;
+                    }
+                    else if (je.EventTypeID == JournalTypeEnum.ReceiveText)     // not merged during play
+                    {
+                        var jdprev = prev as EliteDangerousCore.JournalEvents.JournalReceiveText;
+                        var jd = je as EliteDangerousCore.JournalEvents.JournalReceiveText;
+                        
+                        // merge if same channel and its an NPC.. player texts are not merged.
+                        if (jd.Channel == jdprev.Channel && jdprev.Channel.Equals("NPC", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            jdprev.Add(jd);
+                            return true;
+                        }
+                    }
+
                 }
             }
 

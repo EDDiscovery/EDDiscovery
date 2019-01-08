@@ -117,6 +117,7 @@ namespace EliteDangerousCore
         private const string CockpitType = "Cockpit";
         private const string CargoBayDoorType = "Cargo Bay Door";
         private const string WearAndTearType = "Wear and Tear";
+        private const string StellarScanner = "Scanners";
 
         public List<string> GetAllModTypes(bool removenonbuyable = true)                            // all module types..
         {
@@ -257,40 +258,12 @@ namespace EliteDangerousCore
             { ShipPropID.Class, new ShipInfoInt(1)},
         };
 
-        // not in corolis 28/11/2018..
-
-        static Dictionary<ShipPropID, ShipInfo> mamba = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Mamba")},
-            { ShipPropID.HullMass, new ShipInfoDouble(250F)},
-            { ShipPropID.Name, new ShipInfoString("Mamba")},
-            { ShipPropID.Manu, new ShipInfoString("Zorgon Perterson")},
-            { ShipPropID.Speed, new ShipInfoInt(240)},
-            { ShipPropID.Boost, new ShipInfoInt(380)},
-            { ShipPropID.HullCost, new ShipInfoInt(0)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-
-        static Dictionary<ShipPropID, ShipInfo> krait_light = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Krait_Light")},
-            { ShipPropID.HullMass, new ShipInfoDouble(270F)},
-            { ShipPropID.Name, new ShipInfoString("Krait Phantom")},
-            { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
-            { ShipPropID.Speed, new ShipInfoInt(160)},
-            { ShipPropID.Boost, new ShipInfoInt(350)},
-            { ShipPropID.HullCost, new ShipInfoInt(0)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-
         static Dictionary<string, Dictionary<ShipPropID, ShipInfo>> noncorolisships = new Dictionary<string, Dictionary<ShipPropID, ShipInfo>>
         {
             { "empire_fighter",  imperial_fighter},
             { "federation_fighter",  federation_fighter},
             { "independent_fighter",  taipan_fighter},       //EDDI evidence
             { "testbuggy",  srv},
-            { "mamba",  mamba},
-            { "krait_light",  krait_light},
         };
 
         #endregion
@@ -455,6 +428,11 @@ namespace EliteDangerousCore
 
             { "modularcargobaydoor", new ShipModule( -1, 0 , "Modular Cargo Bay Door", CargoBayDoorType ) },
             { "modularcargobaydoorfdl", new ShipModule( -1, 0 , "FDL Cargo Bay Door", CargoBayDoorType ) },
+
+            // Previous ED's had a stellar body scanner - corolis removed it in 3.3
+            { "int_stellarbodydiscoveryscanner_advanced", new ShipModule(128663561, 2, 0, null,"Stellar Body Discovery Scanner Advanced", "Stellar Body Discovery Scanner")},
+            { "int_stellarbodydiscoveryscanner_intermediate", new ShipModule(128663560, 2, 0, "Range:1000ls","Stellar Body Discovery Scanner Intermediate", "Stellar Body Discovery Scanner")},
+            { "int_stellarbodydiscoveryscanner_standard", new ShipModule(128662535, 2, 0, "Range:500ls","Stellar Body Discovery Scanner Standard", "Stellar Body Discovery Scanner")},
 
             // Vanities found in logs (not exhaustive)
 
@@ -955,7 +933,11 @@ namespace EliteDangerousCore
              { "decal_combat_novice", new ShipModule(-1,0, "Decal Combat Novice", VanityType ) },
              { "decal_trade_merchant", new ShipModule(-1,0, "Decal Trade Merchant", VanityType ) },
              { "nameplate_shipname_black", new ShipModule(-1,0, "Nameplate Shipname Black", VanityType ) },
-          };
+
+             { "decal_powerplay_utopia", new ShipModule(-1,0, "Decal Power Play Utopia", VanityType ) },
+             { "nameplate_wings03_black", new ShipModule(-1,0, "Nameplate Wings 3 Black", VanityType ) },
+             { "nameplate_explorer02_grey", new ShipModule(-1,0, "Nameplate Explorer 2 Grey", VanityType ) },
+        };
 
         #endregion
 
@@ -967,6 +949,8 @@ namespace EliteDangerousCore
 
             ///////////////////////////////////// FROM MODULE SCAN
 
+            { "hpt_mining_abrblstr_fixed_small", new ShipModule(128915458, 2, 0.34F, "ROF:5/s, Damage:4, Range:1000m, Speed:667m/s, Reload:2s, ThermL:1.8","Mining Abrblstr Fixed Small", "Mining")},
+            { "hpt_mining_abrblstr_turret_small", new ShipModule(128915459, 2, 0.47F, "ROF:5/s, Damage:4, Range:1000m, Speed:667m/s, Reload:2s, ThermL:1.8","Mining Abrblstr Turret Small", "Mining")},
             { "hpt_atdumbfiremissile_fixed_medium", new ShipModule(128788699, 4, 1.2F, "Ammo:64/8, Damage:64, Speed:750m/s, Reload:5s, ThermL:2.4","AX Dumbfire Missile Fixed Medium", "Missile Rack")},
             { "hpt_atdumbfiremissile_turret_medium", new ShipModule(128788704, 4, 1.2F, "Ammo:64/8, Damage:50, Speed:750m/s, Reload:5s, ThermL:1.5","AX Dumbfire Missile Turret Medium", "Missile Rack")},
             { "hpt_atdumbfiremissile_fixed_large", new ShipModule(128788700, 8, 1.62F, "Ammo:128/12, Damage:64, Speed:750m/s, Reload:5s, ThermL:3.6","AX Dumbfire Missile Fixed Large", "Missile Rack")},
@@ -990,7 +974,7 @@ namespace EliteDangerousCore
             { "hpt_pulselaserburst_fixed_small", new ShipModule(128049400, 2, 0.65F, "ROF:2/s, Damage:1.7, Range:3000m, ThermL:0.4","Burst Laser Fixed Small", "Burst Laser")},
             { "hpt_pulselaserburst_gimbal_small", new ShipModule(128049404, 2, 0.64F, "ROF:2.2/s, Damage:1.2, Range:3000m, ThermL:0.3","Burst Laser Gimbal Small", "Burst Laser")},
             { "hpt_pulselaserburst_turret_small", new ShipModule(128049407, 2, 0.6F, "ROF:1.9/s, Damage:0.9, Range:3000m, ThermL:0.2","Burst Laser Turret Small", "Burst Laser")},
-            { "hpt_pulselaserburst_fixed_small_scatter", new ShipModule(128671449, 2, 0.8F, "ROF:7.6/s, Damage:3.6, Range:3000m, ThermL:0.3","Burst Laser Fixed Small Scatter", "Burst Laser")},
+            { "hpt_pulselaserburst_fixed_small_scatter", new ShipModule(128671449, 2, 0.8F, "ROF:7.6/s, Damage:3.6, Range:1000m, ThermL:0.3","Burst Laser Fixed Small Scatter", "Burst Laser")},
             { "hpt_pulselaserburst_fixed_medium", new ShipModule(128049401, 4, 1.05F, "ROF:1.6/s, Damage:3.5, Range:3000m, ThermL:0.8","Burst Laser Fixed Medium", "Burst Laser")},
             { "hpt_pulselaserburst_gimbal_medium", new ShipModule(128049405, 4, 1.04F, "ROF:1.8/s, Damage:2.5, Range:3000m, ThermL:0.7","Burst Laser Gimbal Medium", "Burst Laser")},
             { "hpt_pulselaserburst_turret_medium", new ShipModule(128049408, 4, 0.98F, "ROF:1.6/s, Damage:1.7, Range:3000m, ThermL:0.4","Burst Laser Turret Medium", "Burst Laser")},
@@ -1033,11 +1017,16 @@ namespace EliteDangerousCore
             { "hpt_cloudscanner_size0_class3", new ShipModule(128662527, 1.3F, 0.8F, "Range:3000m","Cloud Scanner Rating C", "Hyperspace Cloud Scanner")},
             { "hpt_cloudscanner_size0_class4", new ShipModule(128662528, 1.3F, 1.6F, "Range:3500m","Cloud Scanner Rating B", "Hyperspace Cloud Scanner")},
             { "hpt_cloudscanner_size0_class5", new ShipModule(128662529, 1.3F, 3.2F, "Range:4000m","Cloud Scanner Rating A", "Hyperspace Cloud Scanner")},
+            { "hpt_guardian_gausscannon_fixed_small", new ShipModule(0, 2, 1.91F, "Ammo:80/1, Damage:22, Range:3000m, Reload:1s, ThermL:15","Guardian Gauss Cannon Fixed Small", "Guardian")},
             { "hpt_guardian_gausscannon_fixed_medium", new ShipModule(128833687, 4, 2.61F, "Ammo:80/1, Damage:70, Range:3000m, Reload:1s, ThermL:25","Guardian Gauss Cannon Fixed Medium", "Guardian")},
+            { "hpt_guardian_plasmalauncher_fixed_small", new ShipModule(0, 2, 1.4F, "Ammo:200/15, Damage:1.7, Range:3000m, Speed:1200m/s, Reload:3s, ThermL:4.2","Guardian Plasma Launcher Fixed Small", "Guardian")},
+            { "hpt_guardian_plasmalauncher_turret_small", new ShipModule(0, 2, 1.6F, "Ammo:200/15, Damage:1.1, Range:3000m, Speed:1200m/s, Reload:3s, ThermL:5","Guardian Plasma Launcher Turret Small", "Guardian")},
             { "hpt_guardian_plasmalauncher_fixed_medium", new ShipModule(128833998, 4, 2.13F, "Ammo:200/15, Damage:5, Range:3500m, Speed:1200m/s, Reload:3s, ThermL:5.2","Guardian Plasma Launcher Fixed Medium", "Guardian")},
             { "hpt_guardian_plasmalauncher_turret_medium", new ShipModule(128833999, 4, 2.01F, "Ammo:200/15, Damage:4, Range:3500m, Speed:1200m/s, Reload:3s, ThermL:5.8","Guardian Plasma Launcher Turret Medium", "Guardian")},
             { "hpt_guardian_plasmalauncher_fixed_large", new ShipModule(128834783, 8, 3.1F, "Ammo:200/15, Damage:3.4, Range:3000m, Speed:1200m/s, Reload:3s, ThermL:6.2","Guardian Plasma Launcher Fixed Large", "Guardian")},
             { "hpt_guardian_plasmalauncher_turret_large", new ShipModule(128834784, 8, 2.53F, "Ammo:200/15, Damage:3.3, Range:3000m, Speed:1200m/s, Reload:3s, ThermL:6.4","Guardian Plasma Launcher Turret Large", "Guardian")},
+            { "hpt_guardian_shardcannon_fixed_small", new ShipModule(0, 2, 0.87F, "Ammo:180/5, Damage:2, Range:1700m, Speed:1133m/s, Reload:5s, ThermL:0.7","Guardian Shard Cannon Fixed Small", "Guardian")},
+            { "hpt_guardian_shardcannon_turret_small", new ShipModule(0, 2, 0.72F, "Ammo:180/5, Damage:1.1, Range:1700m, Speed:1133m/s, Reload:5s, ThermL:0.6","Guardian Shard Cannon Turret Small", "Guardian")},
             { "hpt_guardian_shardcannon_fixed_medium", new ShipModule(128834000, 4, 1.21F, "Ammo:180/5, Damage:3.7, Range:1700m, Speed:1133m/s, Reload:5s, ThermL:1.2","Guardian Shard Cannon Fixed Medium", "Guardian")},
             { "hpt_guardian_shardcannon_turret_medium", new ShipModule(0, 4, 1.16F, "Ammo:180/5, Damage:2.4, Range:1700m, Speed:1133m/s, Reload:5s, ThermL:1.1","Guardian Shard Cannon Turret Medium", "Guardian")},
             { "hpt_guardian_shardcannon_fixed_large", new ShipModule(128834778, 8, 1.68F, "Ammo:180/5, Damage:5.2, Range:1700m, Speed:1133m/s, Reload:5s, ThermL:2.2","Guardian Shard Cannon Fixed Large", "Guardian")},
@@ -1062,6 +1051,8 @@ namespace EliteDangerousCore
             { "hpt_basicmissilerack_fixed_medium", new ShipModule(128049493, 4, 1.2F, "Ammo:18/6, Damage:40, Speed:625m/s, Reload:12s, ThermL:3.6","Seeker Missile Rack Fixed Medium", "Missile Rack")},
             { "hpt_dumbfiremissilerack_fixed_medium_lasso", new ShipModule(128732552, 4, 1.2F, "Ammo:48/12, Damage:40, Speed:750m/s, Reload:5s, ThermL:3.6","Dumbfire Missile Rack Fixed Medium Lasso", "Missile Rack")},
             { "hpt_drunkmissilerack_fixed_medium", new ShipModule(128671344, 4, 1.2F, "Ammo:120/12, Damage:7.5, Speed:600m/s, Reload:5s, ThermL:3.6","Pack Hound Missile Rack Fixed Medium", "Missile Rack")},
+            { "hpt_dumbfiremissilerack_fixed_large", new ShipModule(0, 8, 1.62F, "Ammo:96/12, Damage:50, Speed:750m/s, Reload:5s, ThermL:3.6","Dumbfire Missile Rack Fixed Large", "Missile Rack")},
+            { "hpt_basicmissilerack_fixed_large", new ShipModule(128049494, 8, 1.62F, "Ammo:36/6, Damage:40, Speed:625m/s, Reload:12s, ThermL:3.6","Seeker Missile Rack Fixed Large", "Missile Rack")},
             { "hpt_multicannon_fixed_small", new ShipModule(128049455, 2, 0.28F, "Ammo:2100/100, Damage:1.1, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0.1","Multi Cannon Fixed Small", "Multi Cannon")},
             { "hpt_multicannon_gimbal_small", new ShipModule(128049459, 2, 0.37F, "Ammo:2100/90, Damage:0.8, Range:4000m, Speed:1600m/s, Reload:5s, ThermL:0.1","Multi Cannon Gimbal Small", "Multi Cannon")},
             { "hpt_multicannon_turret_small", new ShipModule(128049462, 2, 0.26F, "Ammo:2100/90, Damage:0.6, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0","Multi Cannon Turret Small", "Multi Cannon")},
@@ -1071,6 +1062,7 @@ namespace EliteDangerousCore
             { "hpt_multicannon_turret_medium", new ShipModule(128049463, 4, 0.5F, "Ammo:2100/90, Damage:1.2, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0.1","Multi Cannon Turret Medium", "Multi Cannon")},
             { "hpt_multicannon_fixed_large", new ShipModule(128049457, 8, 0.64F, "Ammo:2100/100, Damage:3.9, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0.3","Multi Cannon Fixed Large", "Multi Cannon")},
             { "hpt_multicannon_gimbal_large", new ShipModule(128049461, 8, 0.97F, "Ammo:2100/90, Damage:2.8, Range:4000m, Speed:1600m/s, Reload:5s, ThermL:0.3","Multi Cannon Gimbal Large", "Multi Cannon")},
+            { "hpt_multicannon_turret_large", new ShipModule(128049464, 8, 0.86F, "Ammo:2100/90, Damage:2.2, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0.2","Multi Cannon Turret Large", "Multi Cannon")},
             { "hpt_multicannon_fixed_huge", new ShipModule(128049458, 16, 0.73F, "Ammo:2100/100, Damage:4.6, Range:4000m, Speed:1600m/s, Reload:4s, ThermL:0.4","Multi Cannon Fixed Huge", "Multi Cannon")},
             { "hpt_multicannon_gimbal_huge", new ShipModule(128681996, 16, 1.22F, "Ammo:2100/90, Damage:3.5, Range:4000m, Speed:1600m/s, Reload:5s, ThermL:0.5","Multi Cannon Gimbal Huge", "Multi Cannon")},
             { "hpt_plasmaaccelerator_fixed_medium", new ShipModule(128049465, 4, 1.43F, "Ammo:100/5, Damage:54.3, Range:3500m, Speed:875m/s, Reload:6s, ThermL:15.6","Plasma Accelerator Fixed Medium", "Plasma Accelerator")},
@@ -1090,6 +1082,11 @@ namespace EliteDangerousCore
             { "hpt_pulselaser_turret_large", new ShipModule(128049390, 8, 0.89F, "ROF:2.7/s, Damage:3.5, Range:3000m, ThermL:0.6","Pulse Laser Turret Large", "Pulse Laser")},
             { "hpt_pulselaser_fixed_huge", new ShipModule(128049384, 16, 1.33F, "ROF:2.6/s, Damage:10.2, Range:3000m, ThermL:1.6","Pulse Laser Fixed Huge", "Pulse Laser")},
             { "hpt_pulselaser_gimbal_huge", new ShipModule(128681995, 16, 1.37F, "ROF:2.8/s, Damage:7.8, Range:3000m, ThermL:1.6","Pulse Laser Gimbal Huge", "Pulse Laser")},
+            { "hpt_mrascanner_size0_class5", new ShipModule(128915722, 1.3F, 3.2F, null,"Mrascanner Size 0 Rating A", "hpt mrascanner")},
+            { "hpt_mrascanner_size0_class4", new ShipModule(128915721, 1.3F, 1.6F, null,"Mrascanner Size 0 Rating B", "hpt mrascanner")},
+            { "hpt_mrascanner_size0_class3", new ShipModule(128915720, 1.3F, 0.8F, null,"Mrascanner Size 0 Rating C", "hpt mrascanner")},
+            { "hpt_mrascanner_size0_class2", new ShipModule(128915719, 1.3F, 0.8F, null,"Mrascanner Size 0 Rating D", "hpt mrascanner")},
+            { "hpt_mrascanner_size0_class1", new ShipModule(128915718, 1.3F, 0.8F, null,"Mrascanner Size 0 Rating E", "hpt mrascanner")},
             { "hpt_railgun_fixed_small", new ShipModule(128049488, 2, 1.15F, "Ammo:80/1, Damage:23.3, Range:3000m, Reload:1s, ThermL:12","Railgun Fixed Small", "Railgun")},
             { "hpt_railgun_fixed_medium", new ShipModule(128049489, 4, 1.63F, "Ammo:80/1, Damage:41.5, Range:3000m, Reload:1s, ThermL:20","Railgun Fixed Medium", "Railgun")},
             { "hpt_railgun_fixed_medium_burst", new ShipModule(128671341, 4, 1.63F, "Ammo:240/3, Damage:15, Range:3000m, Reload:1s, ThermL:11","Railgun Fixed Medium Burst", "Railgun")},
@@ -1097,20 +1094,30 @@ namespace EliteDangerousCore
             { "hpt_flakmortar_turret_medium", new ShipModule(128793058, 4, 1.2F, "Ammo:32/1, Damage:34, Speed:550m/s, Reload:2s, ThermL:3.6","Flak Mortar Turret Medium", "Flak Mortar")},
             { "hpt_flechettelauncher_fixed_medium", new ShipModule(128833996, 4, 1.2F, "Ammo:72/1, Damage:13, Speed:550m/s, Reload:2s, ThermL:3.6","Flechette Launcher Fixed Medium", "Flechette Launcher")},
             { "hpt_flechettelauncher_turret_medium", new ShipModule(128833997, 4, 1.2F, "Ammo:72/1, Damage:13, Speed:550m/s, Reload:2s, ThermL:3.6","Flechette Launcher Turret Medium", "Flechette Launcher")},
-            { "hpt_shieldbooster_size0_class1", new ShipModule(128668532, 0.5F, 0.2F, "Boost:4.0%","Shield Booster Rating E", "Shield Booster")},
-            { "hpt_shieldbooster_size0_class2", new ShipModule(128668533, 1, 0.5F, "Boost:8.0%","Shield Booster Rating D", "Shield Booster")},
-            { "hpt_shieldbooster_size0_class3", new ShipModule(128668534, 2, 0.7F, "Boost:12.0%","Shield Booster Rating C", "Shield Booster")},
-            { "hpt_shieldbooster_size0_class4", new ShipModule(128668535, 3, 1, "Boost:16.0%","Shield Booster Rating B", "Shield Booster")},
-            { "hpt_shieldbooster_size0_class5", new ShipModule(128668536, 3.5F, 1.2F, "Boost:20.0%","Shield Booster Rating A", "Shield Booster")},
+            { "hpt_mining_seismchrgwarhd_turret_medium", new ShipModule(128049381, 4, 1.2F, "Ammo:72/1, Damage:15, Range:3000m, Speed:350m/s, ThermL:3.6","Mining Seism Chrg Warhd Turret Medium", "Mining")},
+            { "hpt_mining_seismchrgwarhd_fixed_medium", new ShipModule(128049381, 4, 1.01F, "Ammo:72/1, Damage:15, Range:3000m, Speed:350m/s, ThermL:3.6","Mining Seism Chrg Warhd Fixed Medium", "Mining")},
+            { "hpt_shieldbooster_size0_class1", new ShipModule(128668532, 0.5F, 0.2F, "Boost:4.0%, Explosive:0%, Kinetic:0%, Thermal:0%","Shield Booster Rating E", "Shield Booster")},
+            { "hpt_shieldbooster_size0_class2", new ShipModule(128668533, 1, 0.5F, "Boost:8.0%, Explosive:0%, Kinetic:0%, Thermal:0%","Shield Booster Rating D", "Shield Booster")},
+            { "hpt_shieldbooster_size0_class3", new ShipModule(128668534, 2, 0.7F, "Boost:12.0%, Explosive:0%, Kinetic:0%, Thermal:0%","Shield Booster Rating C", "Shield Booster")},
+            { "hpt_shieldbooster_size0_class4", new ShipModule(128668535, 3, 1, "Boost:16.0%, Explosive:0%, Kinetic:0%, Thermal:0%","Shield Booster Rating B", "Shield Booster")},
+            { "hpt_shieldbooster_size0_class5", new ShipModule(128668536, 3.5F, 1.2F, "Boost:20.0%, Explosive:0%, Kinetic:0%, Thermal:0%","Shield Booster Rating A", "Shield Booster")},
             { "hpt_plasmashockcannon_fixed_large", new ShipModule(128834780, 8, 0.89F, "Ammo:240/16, Damage:18.1, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:2.7","Plasma Shock Cannon Fixed Large", "Plasma Shock Cannon")},
             { "hpt_plasmashockcannon_gimbal_large", new ShipModule(128834781, 8, 0.89F, "Ammo:240/16, Damage:14.9, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:3.1","Plasma Shock Cannon Gimbal Large", "Plasma Shock Cannon")},
             { "hpt_plasmashockcannon_turret_large", new ShipModule(128834782, 8, 0.64F, "Ammo:240/16, Damage:12.3, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:2.2","Plasma Shock Cannon Turret Large", "Plasma Shock Cannon")},
-            { "hpt_plasmashockcannon_gimbal_medium", new ShipModule(128834003, 4, 0.61F, "Ammo:240/16, Damage:14.9, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:2.1","Plasma Shock Cannon Gimbal Medium", "Plasma Shock Cannon")},
+            { "hpt_plasmashockcannon_gimbal_medium", new ShipModule(128834003, 4, 0.89F, "Ammo:240/16, Damage:14.9, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:2.1","Plasma Shock Cannon Gimbal Medium", "Plasma Shock Cannon")},
             { "hpt_plasmashockcannon_fixed_medium", new ShipModule(128834002, 4, 0.57F, "Ammo:240/16, Damage:13, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:1.8","Plasma Shock Cannon Fixed Medium", "Plasma Shock Cannon")},
             { "hpt_plasmashockcannon_turret_medium", new ShipModule(128834004, 4, 0.5F, "Ammo:240/16, Damage:9, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:1.2","Plasma Shock Cannon Turret Medium", "Plasma Shock Cannon")},
+            { "hpt_plasmashockcannon_fixed_small", new ShipModule(0, 2, 0.41F, "Ammo:240/16, Damage:8.6, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:1.1","Plasma Shock Cannon Fixed Small", "Plasma Shock Cannon")},
+            { "hpt_plasmashockcannon_gimbal_small", new ShipModule(0, 2, 0.47F, "Ammo:240/16, Damage:6.9, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:1.5","Plasma Shock Cannon Gimbal Small", "Plasma Shock Cannon")},
+            { "hpt_plasmashockcannon_turret_small", new ShipModule(0, 2, 0.54F, "Ammo:240/16, Damage:4.5, Range:3000m, Speed:1200m/s, Reload:6s, ThermL:0.7","Plasma Shock Cannon Turret Small", "Plasma Shock Cannon")},
             { "hpt_antiunknownshutdown_tiny", new ShipModule(128771884, 1.3F, 0.2F, "Range:3000m","Shutdown Field Neutraliser", "Shutdown Field Neutraliser")},
+            { "hpt_mining_subsurfdispmisle_fixed_medium", new ShipModule(128049381, 4, 0.93F, "Ammo:96/1, Damage:5, Range:3000m, Speed:550m/s, Reload:2s, ThermL:2.9","Mining Subsurfdispmisle Fixed Medium", "Mining")},
+            { "hpt_mining_subsurfdispmisle_turret_medium", new ShipModule(128049381, 4, 0.93F, "Ammo:96/1, Damage:5, Range:3000m, Speed:550m/s, Reload:2s, ThermL:2.9","Mining Subsurfdispmisle Turret Medium", "Mining")},
+            { "hpt_mining_subsurfdispmisle_fixed_small", new ShipModule(128049381, 2, 0.42F, "Ammo:32/1, Damage:5, Range:3000m, Speed:550m/s, Reload:2s, ThermL:2.2","Mining Subsurfdispmisle Fixed Small", "Mining")},
+            { "hpt_mining_subsurfdispmisle_turret_small", new ShipModule(128049381, 2, 0.42F, "Ammo:32/1, Damage:5, Range:3000m, Speed:550m/s, Reload:2s, ThermL:2.2","Mining Subsurfdispmisle Turret Small", "Mining")},
             { "hpt_advancedtorppylon_fixed_small", new ShipModule(128049509, 2, 0.4F, "Ammo:1/1, Damage:120, Speed:250m/s, Reload:5s, ThermL:45","Advanced Torp Pylon Fixed Small", "Missile Rack")},
             { "hpt_advancedtorppylon_fixed_medium", new ShipModule(128049510, 4, 0.4F, "Ammo:2/1, Damage:120, Speed:250m/s, Reload:5s, ThermL:50","Advanced Torp Pylon Fixed Medium", "Missile Rack")},
+            { "hpt_advancedtorppylon_fixed_large", new ShipModule(128049511, 8, 0.6F, "Ammo:4/4, Damage:120, Speed:250m/s, Reload:5s, ThermL:55","Advanced Torp Pylon Fixed Large", "Missile Rack")},
             { "hpt_xenoscanner_basic_tiny", new ShipModule(128793115, 1.3F, 0.2F, "Range:500m","Xeno Scanner Seeker", "Xeno Scanner")},
             { "int_repairer_size1_class1", new ShipModule(128667598, 0, 0.54F, "Ammo:1000, Repair:12","Auto Field Maintenance Class 1 Rating E", "Auto Field Maintenance")},
             { "int_repairer_size1_class2", new ShipModule(128667606, 0, 0.72F, "Ammo:900, Repair:14.4","Auto Field Maintenance Class 1 Rating D", "Auto Field Maintenance")},
@@ -1297,16 +1304,16 @@ namespace EliteDangerousCore
             { "int_guardianfsdbooster_size3", new ShipModule(128833977, 1.3F, 1.27F, null,"Guardian FSD Booster Class 3", "Guardian FSD Booster")},
             { "int_guardianfsdbooster_size4", new ShipModule(128833978, 1.3F, 1.65F, null,"Guardian FSD Booster Class 4", "Guardian FSD Booster")},
             { "int_guardianfsdbooster_size5", new ShipModule(128833979, 1.3F, 2.14F, null,"Guardian FSD Booster Class 5", "Guardian FSD Booster")},
-            { "int_guardianhullreinforcement_size1_class2", new ShipModule(128833946, 1, 0.56F, "Thermal:2%","Guardian Hull Reinforcement Class 1 Rating D", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size1_class1", new ShipModule(128833945, 2, 0.45F, "Thermal:2%","Guardian Hull Reinforcement Class 1 Rating E", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size2_class2", new ShipModule(128833948, 2, 0.79F, "Thermal:2%","Guardian Hull Reinforcement Class 2 Rating D", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size2_class1", new ShipModule(128833947, 4, 0.68F, "Thermal:2%","Guardian Hull Reinforcement Class 2 Rating E", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size3_class2", new ShipModule(128833950, 4, 1.01F, "Thermal:2%","Guardian Hull Reinforcement Class 3 Rating D", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size3_class1", new ShipModule(128833949, 8, 0.9F, "Thermal:2%","Guardian Hull Reinforcement Class 3 Rating E", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size4_class2", new ShipModule(128833952, 8, 1.24F, "Thermal:2%","Guardian Hull Reinforcement Class 4 Rating D", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size4_class1", new ShipModule(128833951, 16, 1.13F, "Thermal:2%","Guardian Hull Reinforcement Class 4 Rating E", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size5_class2", new ShipModule(128833954, 16, 1.46F, "Thermal:2%","Guardian Hull Reinforcement Class 5 Rating D", "Guardian Hull Reinforcement")},
-            { "int_guardianhullreinforcement_size5_class1", new ShipModule(128833953, 32, 1.35F, "Thermal:2%","Guardian Hull Reinforcement Class 5 Rating E", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size1_class2", new ShipModule(128833946, 1, 0.56F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 1 Rating D", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size1_class1", new ShipModule(128833945, 2, 0.45F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 1 Rating E", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size2_class2", new ShipModule(128833948, 2, 0.79F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 2 Rating D", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size2_class1", new ShipModule(128833947, 4, 0.68F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 2 Rating E", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size3_class2", new ShipModule(128833950, 4, 1.01F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 3 Rating D", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size3_class1", new ShipModule(128833949, 8, 0.9F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 3 Rating E", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size4_class2", new ShipModule(128833952, 8, 1.24F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 4 Rating D", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size4_class1", new ShipModule(128833951, 16, 1.13F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 4 Rating E", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size5_class2", new ShipModule(128833954, 16, 1.46F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 5 Rating D", "Guardian Hull Reinforcement")},
+            { "int_guardianhullreinforcement_size5_class1", new ShipModule(128833953, 32, 1.35F, "Explosive:0%, Kinetic:0%, Thermal:2%","Guardian Hull Reinforcement Class 5 Rating E", "Guardian Hull Reinforcement")},
             { "int_guardianmodulereinforcement_size1_class2", new ShipModule(128833956, 1, 0.34F, "Protection:0.6","Guardian Module Reinforcement Class 1 Rating D", "Guardian Module Reinforcement")},
             { "int_guardianmodulereinforcement_size1_class1", new ShipModule(128833955, 2, 0.27F, "Protection:0.3","Guardian Module Reinforcement Class 1 Rating E", "Guardian Module Reinforcement")},
             { "int_guardianmodulereinforcement_size2_class2", new ShipModule(128833958, 2, 0.47F, "Protection:0.6","Guardian Module Reinforcement Class 2 Rating D", "Guardian Module Reinforcement")},
@@ -1393,7 +1400,7 @@ namespace EliteDangerousCore
             { "int_buggybay_size4_class2", new ShipModule(128672291, 10, 1.2F, null,"Planetary Vehicle Hangar Class 4 Rating G", "Planetary Vehicle Hangar")},
             { "int_buggybay_size6_class1", new ShipModule(128672292, 34, 0.6F, null,"Planetary Vehicle Hangar Class 6 Rating H", "Planetary Vehicle Hangar")},
             { "int_buggybay_size6_class2", new ShipModule(128672293, 17, 1.8F, null,"Planetary Vehicle Hangar Class 6 Rating G", "Planetary Vehicle Hangar")},
-            { "int_shieldgenerator_size1_class5_strong", new ShipModule(128671323, 2.6F, 2.52F, "OptMass:25t, MaxMass:63t, MinMass:13t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 1 Rating A Strong", "Shield Generator")},
+            { "int_shieldgenerator_size1_class5_strong", new ShipModule(128671323, 2.5F, 2.52F, "OptMass:25t, MaxMass:63t, MinMass:13t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 1 Rating A Strong", "Shield Generator")},
             { "int_shieldgenerator_size2_class5_strong", new ShipModule(128671324, 5, 3.15F, "OptMass:55t, MaxMass:138t, MinMass:23t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 2 Rating A Strong", "Shield Generator")},
             { "int_shieldgenerator_size3_class5_strong", new ShipModule(128671325, 10, 3.78F, "OptMass:165t, MaxMass:413t, MinMass:83t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 3 Rating A Strong", "Shield Generator")},
             { "int_shieldgenerator_size4_class5_strong", new ShipModule(128671326, 20, 4.62F, "OptMass:285t, MaxMass:713t, MinMass:143t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 4 Rating A Strong", "Shield Generator")},
@@ -1466,9 +1473,6 @@ namespace EliteDangerousCore
             { "int_dronecontrol_repair_size7_class4", new ShipModule(128777345, 128, 0.97F, "Range:2km","Repair Drone Controller Class 7 Rating B", "Limpet Controller")},
             { "int_dronecontrol_repair_size7_class5", new ShipModule(128777346, 80, 0.83F, "Range:2.4km","Repair Drone Controller Class 7 Rating A", "Limpet Controller")},
             { "int_dronecontrol_unkvesselresearch", new ShipModule(128793116, 1.3F, 0.4F, "Time:300s, Range:2000m","Drone Controller Vessel Research", "Research Limpet Controller")},
-            { "int_stellarbodydiscoveryscanner_advanced", new ShipModule(128663561, 2, 0, null,"Stellar Body Discovery Scanner Advanced", "Stellar Body Discovery Scanner")},
-            { "int_stellarbodydiscoveryscanner_intermediate", new ShipModule(128663560, 2, 0, "Range:1000ls","Stellar Body Discovery Scanner Intermediate", "Stellar Body Discovery Scanner")},
-            { "int_stellarbodydiscoveryscanner_standard", new ShipModule(128662535, 2, 0, "Range:500ls","Stellar Body Discovery Scanner Standard", "Stellar Body Discovery Scanner")},
             { "int_shieldcellbank_size1_class1", new ShipModule(128064298, 1.3F, 0.41F, "Ammo:3/1, ThermL:170","Shield Cell Bank Class 1 Rating E", "Shield Cell Bank")},
             { "int_shieldcellbank_size1_class2", new ShipModule(128064299, 0.5F, 0.55F, "Ammo:0/1, ThermL:170","Shield Cell Bank Class 1 Rating D", "Shield Cell Bank")},
             { "int_shieldcellbank_size1_class3", new ShipModule(128064300, 1.3F, 0.69F, "Ammo:2/1, ThermL:170","Shield Cell Bank Class 1 Rating C", "Shield Cell Bank")},
@@ -1545,7 +1549,7 @@ namespace EliteDangerousCore
             { "int_shieldgenerator_size8_class3", new ShipModule(128064295, 160, 4, "OptMass:1800t, MaxMass:4500t, MinMass:900t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 8 Rating C", "Shield Generator")},
             { "int_shieldgenerator_size8_class4", new ShipModule(128064296, 256, 4.8F, "OptMass:1800t, MaxMass:4500t, MinMass:900t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 8 Rating B", "Shield Generator")},
             { "int_shieldgenerator_size8_class5", new ShipModule(128064297, 160, 5.6F, "OptMass:1800t, MaxMass:4500t, MinMass:900t, Explosive:50%, Kinetic:40%, Thermal:-20%","Shield Generator Class 8 Rating A", "Shield Generator")},
-            { "int_detailedsurfacescanner_tiny", new ShipModule(128666634, 1.3F, 0, null,"Detailed Surface Scanner", "Detailed Surface Scanner")},
+            { "int_detailedsurfacescanner_tiny", new ShipModule(128666634, 0, 0, null,"Detailed Surface Scanner", "Detailed Surface Scanner")},
             { "int_hyperdrive_size8_class1", new ShipModule(128064133, 160, 0.56F, "OptMass:0t","Hyperdrive Class 8 Rating E", "Hyperdrive")},
             { "int_hyperdrive_size8_class2", new ShipModule(128064134, 64, 0.63F, "OptMass:0t","Hyperdrive Class 8 Rating D", "Hyperdrive")},
             { "int_hyperdrive_size8_class3", new ShipModule(128064135, 160, 0.7F, "OptMass:0t","Hyperdrive Class 8 Rating C", "Hyperdrive")},
@@ -1790,7 +1794,6 @@ namespace EliteDangerousCore
             { "int_engine_size3_class5_fast", new ShipModule(128682013, 5, 5, "OptMass:90t, MaxMass:200t, MinMass:70t","Thrusters Class 3 Rating A Fast", "Thrusters")},
             { "int_engine_size2_class5_fast", new ShipModule(128682014, 2.5F, 4, "OptMass:60t, MaxMass:120t, MinMass:50t","Thrusters Class 2 Rating A Fast", "Thrusters")},
 
-
             ///////////////////////////////////// FROM SHIP DATA SCAN - Corolis has some module info in the ships folder
 
             { "adder_armour_grade1", new ShipModule(128049268,0,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Adder Lightweight Armour","Armour")},
@@ -1923,6 +1926,16 @@ namespace EliteDangerousCore
             { "krait_mkii_armour_grade3", new ShipModule(128816571,67,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Krait Mk II Military Armour","Armour")},
             { "krait_mkii_armour_mirrored", new ShipModule(128816572,67,0,"Explosive:-50%, Kinetic:-75%, Thermal:50%","Krait Mk II Mirrored Surface Composite Armour","Armour")},
             { "krait_mkii_armour_reactive", new ShipModule(128816573,67,0,"Explosive:20%, Kinetic:25%, Thermal:-40%","Krait Mk II Reactive Surface Composite Armour","Armour")},
+            { "krait_light_armour_grade1", new ShipModule(128839283,0,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Krait Phantom Lightweight Armour","Armour")},
+            { "krait_light_armour_grade2", new ShipModule(128839284,36,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Krait Phantom Reinforced Armour","Armour")},
+            { "krait_light_armour_grade3", new ShipModule(128839285,67,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Krait Phantom Military Armour","Armour")},
+            { "krait_light_armour_mirrored", new ShipModule(128839286,67,0,"Explosive:-50%, Kinetic:-75%, Thermal:50%","Krait Phantom Mirrored Surface Composite Armour","Armour")},
+            { "krait_light_armour_reactive", new ShipModule(128839287,67,0,"Explosive:20%, Kinetic:25%, Thermal:-40%","Krait Phantom Reactive Surface Composite Armour","Armour")},
+            { "mamba_armour_grade1", new ShipModule(128915981,0,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Mamba Lightweight Armour","Armour")},
+            { "mamba_armour_grade2", new ShipModule(128915982,19,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Mamba Reinforced Armour","Armour")},
+            { "mamba_armour_grade3", new ShipModule(128915983,38,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Mamba Military Armour","Armour")},
+            { "mamba_armour_mirrored", new ShipModule(128915984,38,0,"Explosive:-50%, Kinetic:-75%, Thermal:50%","Mamba Mirrored Surface Composite Armour","Armour")},
+            { "mamba_armour_reactive", new ShipModule(128915985,38,0,"Explosive:20%, Kinetic:25%, Thermal:-40%","Mamba Reactive Surface Composite Armour","Armour")},
             { "orca_armour_grade1", new ShipModule(128049328,0,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Orca Lightweight Armour","Armour")},
             { "orca_armour_grade2", new ShipModule(128049329,21,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Orca Reinforced Armour","Armour")},
             { "orca_armour_grade3", new ShipModule(128049330,87,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Orca Military Armour","Armour")},
@@ -1973,6 +1986,8 @@ namespace EliteDangerousCore
             { "vulture_armour_grade3", new ShipModule(128049312,35,0,"Explosive:-40%, Kinetic:-20%, Thermal:0%","Vulture Military Armour","Armour")},
             { "vulture_armour_mirrored", new ShipModule(128049313,35,0,"Explosive:-50%, Kinetic:-75%, Thermal:50%","Vulture Mirrored Surface Composite Armour","Armour")},
             { "vulture_armour_reactive", new ShipModule(128049314,35,0,"Explosive:20%, Kinetic:25%, Thermal:-40%","Vulture Reactive Surface Composite Armour","Armour")},
+
+
         };
 
         #endregion
@@ -1989,6 +2004,39 @@ namespace EliteDangerousCore
             { ShipPropID.Boost, new ShipInfoInt(320)},
             { ShipPropID.HullCost, new ShipInfoInt(40000)},
             { ShipPropID.Class, new ShipInfoInt(1)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> alliance_challenger = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("TypeX_3")},
+            { ShipPropID.HullMass, new ShipInfoDouble(450F)},
+            { ShipPropID.Name, new ShipInfoString("Alliance Challenger")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(204)},
+            { ShipPropID.Boost, new ShipInfoInt(310)},
+            { ShipPropID.HullCost, new ShipInfoInt(28041035)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> alliance_chieftain = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("TypeX")},
+            { ShipPropID.HullMass, new ShipInfoDouble(400F)},
+            { ShipPropID.Name, new ShipInfoString("Alliance Chieftain")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(230)},
+            { ShipPropID.Boost, new ShipInfoInt(330)},
+            { ShipPropID.HullCost, new ShipInfoInt(18182883)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> alliance_crusader = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("TypeX_2")},
+            { ShipPropID.HullMass, new ShipInfoDouble(500F)},
+            { ShipPropID.Name, new ShipInfoString("Alliance Crusader")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(180)},
+            { ShipPropID.Boost, new ShipInfoInt(300)},
+            { ShipPropID.HullCost, new ShipInfoInt(22866341)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
         };
         static Dictionary<ShipPropID, ShipInfo> anaconda = new Dictionary<ShipPropID, ShipInfo>
         {
@@ -2038,7 +2086,7 @@ namespace EliteDangerousCore
         {
             { ShipPropID.FDID, new ShipInfoString("CobraMkIII")},
             { ShipPropID.HullMass, new ShipInfoDouble(180F)},
-            { ShipPropID.Name, new ShipInfoString("Cobra MkIII")},
+            { ShipPropID.Name, new ShipInfoString("Cobra Mk III")},
             { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
             { ShipPropID.Speed, new ShipInfoInt(280)},
             { ShipPropID.Boost, new ShipInfoInt(400)},
@@ -2049,7 +2097,7 @@ namespace EliteDangerousCore
         {
             { ShipPropID.FDID, new ShipInfoString("CobraMkIV")},
             { ShipPropID.HullMass, new ShipInfoDouble(210F)},
-            { ShipPropID.Name, new ShipInfoString("Cobra MkIV")},
+            { ShipPropID.Name, new ShipInfoString("Cobra Mk IV")},
             { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
             { ShipPropID.Speed, new ShipInfoInt(200)},
             { ShipPropID.Boost, new ShipInfoInt(300)},
@@ -2204,11 +2252,55 @@ namespace EliteDangerousCore
             { ShipPropID.FDID, new ShipInfoString("Empire_Eagle")},
             { ShipPropID.HullMass, new ShipInfoDouble(50F)},
             { ShipPropID.Name, new ShipInfoString("Imperial Eagle")},
-            { ShipPropID.Manu, new ShipInfoString("Core Dynamics")},
+            { ShipPropID.Manu, new ShipInfoString("Gutamaya")},
             { ShipPropID.Speed, new ShipInfoInt(300)},
             { ShipPropID.Boost, new ShipInfoInt(400)},
             { ShipPropID.HullCost, new ShipInfoInt(72180)},
             { ShipPropID.Class, new ShipInfoInt(1)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> keelback = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Independant_Trader")},
+            { ShipPropID.HullMass, new ShipInfoDouble(180F)},
+            { ShipPropID.Name, new ShipInfoString("Keelback")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(200)},
+            { ShipPropID.Boost, new ShipInfoInt(300)},
+            { ShipPropID.HullCost, new ShipInfoInt(2943870)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> krait_mkii = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Krait_MkII")},
+            { ShipPropID.HullMass, new ShipInfoDouble(320F)},
+            { ShipPropID.Name, new ShipInfoString("Krait Mk II")},
+            { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
+            { ShipPropID.Speed, new ShipInfoInt(240)},
+            { ShipPropID.Boost, new ShipInfoInt(330)},
+            { ShipPropID.HullCost, new ShipInfoInt(42409425)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> krait_phantom = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Krait_Light")},
+            { ShipPropID.HullMass, new ShipInfoDouble(270F)},
+            { ShipPropID.Name, new ShipInfoString("Krait Phantom")},
+            { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
+            { ShipPropID.Speed, new ShipInfoInt(250)},
+            { ShipPropID.Boost, new ShipInfoInt(350)},
+            { ShipPropID.HullCost, new ShipInfoInt(42409425)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> mamba = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Mamba")},
+            { ShipPropID.HullMass, new ShipInfoDouble(250F)},
+            { ShipPropID.Name, new ShipInfoString("Mamba")},
+            { ShipPropID.Manu, new ShipInfoString("Zorgon Peterson")},
+            { ShipPropID.Speed, new ShipInfoInt(310)},
+            { ShipPropID.Boost, new ShipInfoInt(380)},
+            { ShipPropID.HullCost, new ShipInfoInt(55866341)},
+            { ShipPropID.Class, new ShipInfoInt(2)},
         };
         static Dictionary<ShipPropID, ShipInfo> orca = new Dictionary<ShipPropID, ShipInfo>
         {
@@ -2243,6 +2335,17 @@ namespace EliteDangerousCore
             { ShipPropID.HullCost, new ShipInfoInt(4070)},
             { ShipPropID.Class, new ShipInfoInt(1)},
         };
+        static Dictionary<ShipPropID, ShipInfo> type_10_defender = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Type9_Military")},
+            { ShipPropID.HullMass, new ShipInfoDouble(1200F)},
+            { ShipPropID.Name, new ShipInfoString("Type-10 Defender")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(179)},
+            { ShipPropID.Boost, new ShipInfoInt(219)},
+            { ShipPropID.HullCost, new ShipInfoInt(121454173)},
+            { ShipPropID.Class, new ShipInfoInt(3)},
+        };
         static Dictionary<ShipPropID, ShipInfo> type_6_transporter = new Dictionary<ShipPropID, ShipInfo>
         {
             { ShipPropID.FDID, new ShipInfoString("Type6")},
@@ -2254,11 +2357,33 @@ namespace EliteDangerousCore
             { ShipPropID.HullCost, new ShipInfoInt(865790)},
             { ShipPropID.Class, new ShipInfoInt(2)},
         };
+        static Dictionary<ShipPropID, ShipInfo> type_7_transport = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Type7")},
+            { ShipPropID.HullMass, new ShipInfoDouble(350F)},
+            { ShipPropID.Name, new ShipInfoString("Type-7 Transporter")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(180)},
+            { ShipPropID.Boost, new ShipInfoInt(300)},
+            { ShipPropID.HullCost, new ShipInfoInt(16780510)},
+            { ShipPropID.Class, new ShipInfoInt(3)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> type_9_heavy = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("Type9")},
+            { ShipPropID.HullMass, new ShipInfoDouble(850F)},
+            { ShipPropID.Name, new ShipInfoString("Type-9 Heavy")},
+            { ShipPropID.Manu, new ShipInfoString("Lakon")},
+            { ShipPropID.Speed, new ShipInfoInt(130)},
+            { ShipPropID.Boost, new ShipInfoInt(200)},
+            { ShipPropID.HullCost, new ShipInfoInt(73255150)},
+            { ShipPropID.Class, new ShipInfoInt(3)},
+        };
         static Dictionary<ShipPropID, ShipInfo> viper = new Dictionary<ShipPropID, ShipInfo>
         {
             { ShipPropID.FDID, new ShipInfoString("Viper")},
             { ShipPropID.HullMass, new ShipInfoDouble(50F)},
-            { ShipPropID.Name, new ShipInfoString("Viper MkIII")},
+            { ShipPropID.Name, new ShipInfoString("Viper")},
             { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
             { ShipPropID.Speed, new ShipInfoInt(320)},
             { ShipPropID.Boost, new ShipInfoInt(400)},
@@ -2269,7 +2394,7 @@ namespace EliteDangerousCore
         {
             { ShipPropID.FDID, new ShipInfoString("Viper_MkIV")},
             { ShipPropID.HullMass, new ShipInfoDouble(190F)},
-            { ShipPropID.Name, new ShipInfoString("Viper MkIV")},
+            { ShipPropID.Name, new ShipInfoString("Viper Mk IV")},
             { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
             { ShipPropID.Speed, new ShipInfoInt(270)},
             { ShipPropID.Boost, new ShipInfoInt(340)},
@@ -2287,103 +2412,12 @@ namespace EliteDangerousCore
             { ShipPropID.HullCost, new ShipInfoInt(4689640)},
             { ShipPropID.Class, new ShipInfoInt(1)},
         };
-        static Dictionary<ShipPropID, ShipInfo> type_10_defender = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Type9_Military")},
-            { ShipPropID.HullMass, new ShipInfoDouble(1200F)},
-            { ShipPropID.Name, new ShipInfoString("Type-10 Defender")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(179)},
-            { ShipPropID.Boost, new ShipInfoInt(219)},
-            { ShipPropID.HullCost, new ShipInfoInt(121454173)},
-            { ShipPropID.Class, new ShipInfoInt(3)},
-        };
-        static Dictionary<ShipPropID, ShipInfo> type_9_heavy = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Type9")},
-            { ShipPropID.HullMass, new ShipInfoDouble(850F)},
-            { ShipPropID.Name, new ShipInfoString("Type-9 Heavy")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(130)},
-            { ShipPropID.Boost, new ShipInfoInt(200)},
-            { ShipPropID.HullCost, new ShipInfoInt(73255150)},
-            { ShipPropID.Class, new ShipInfoInt(3)},
-        };
-        static Dictionary<ShipPropID, ShipInfo> alliance_chieftain = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("TypeX")},
-            { ShipPropID.HullMass, new ShipInfoDouble(400F)},
-            { ShipPropID.Name, new ShipInfoString("Alliance Chieftain")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(230)},
-            { ShipPropID.Boost, new ShipInfoInt(330)},
-            { ShipPropID.HullCost, new ShipInfoInt(18182883)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-        static Dictionary<ShipPropID, ShipInfo> keelback = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Independant_Trader")},
-            { ShipPropID.HullMass, new ShipInfoDouble(180F)},
-            { ShipPropID.Name, new ShipInfoString("Keelback")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(200)},
-            { ShipPropID.Boost, new ShipInfoInt(300)},
-            { ShipPropID.HullCost, new ShipInfoInt(2943870)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-        static Dictionary<ShipPropID, ShipInfo> type_7_transport = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Type7")},
-            { ShipPropID.HullMass, new ShipInfoDouble(350F)},
-            { ShipPropID.Name, new ShipInfoString("Type-7 Transporter")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(180)},
-            { ShipPropID.Boost, new ShipInfoInt(300)},
-            { ShipPropID.HullCost, new ShipInfoInt(16780510)},
-            { ShipPropID.Class, new ShipInfoInt(3)},
-        };
-
-        static Dictionary<ShipPropID, ShipInfo> krait_mkii = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("Krait_MkII")},
-            { ShipPropID.HullMass, new ShipInfoDouble(320F)},
-            { ShipPropID.Name, new ShipInfoString("Krait MkII")},
-            { ShipPropID.Manu, new ShipInfoString("Faulcon DeLacy")},
-            { ShipPropID.Speed, new ShipInfoInt(150)},
-            { ShipPropID.Boost, new ShipInfoInt(330)},
-            { ShipPropID.HullCost, new ShipInfoInt(42409425)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-
-        static Dictionary<ShipPropID, ShipInfo> alliance_challenger = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("TypeX_3")},
-            { ShipPropID.HullMass, new ShipInfoDouble(450F)},
-            { ShipPropID.Name, new ShipInfoString("Alliance Challenger")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(130)},
-            { ShipPropID.Boost, new ShipInfoInt(310)},
-            { ShipPropID.HullCost, new ShipInfoInt(28041035)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-
-        static Dictionary<ShipPropID, ShipInfo> alliance_crusader = new Dictionary<ShipPropID, ShipInfo>
-        {
-            { ShipPropID.FDID, new ShipInfoString("TypeX_2")},
-            { ShipPropID.HullMass, new ShipInfoDouble(500F)},
-            { ShipPropID.Name, new ShipInfoString("Alliance Crusader")},
-            { ShipPropID.Manu, new ShipInfoString("Lakon")},
-            { ShipPropID.Speed, new ShipInfoInt(180)},
-            { ShipPropID.Boost, new ShipInfoInt(300)},
-            { ShipPropID.HullCost, new ShipInfoInt(22866341)},
-            { ShipPropID.Class, new ShipInfoInt(2)},
-        };
-
-        // DO NOT USE DIRECTLY - public is for checking only
-
-        static public Dictionary<string, Dictionary<ShipPropID, ShipInfo>> ships = new Dictionary<string, Dictionary<ShipPropID, ShipInfo>>
+        static Dictionary<string, Dictionary<ShipPropID, ShipInfo>> ships = new Dictionary<string, Dictionary<ShipPropID, ShipInfo>>
         {
             { "adder",adder},
+            { "typex_3",alliance_challenger},
+            { "typex",alliance_chieftain},
+            { "typex_2",alliance_crusader},
             { "anaconda",anaconda},
             { "asp",asp},
             { "asp_scout",asp_scout},
@@ -2404,27 +2438,23 @@ namespace EliteDangerousCore
             { "empire_courier",imperial_courier},
             { "cutter",imperial_cutter},
             { "empire_eagle",imperial_eagle},
+            { "independant_trader",keelback},
+            { "krait_mkii",krait_mkii},
+            { "krait_light",krait_phantom},
+            { "mamba",mamba},
             { "orca",orca},
             { "python",python},
             { "sidewinder",sidewinder},
+            { "type9_military",type_10_defender},
             { "type6",type_6_transporter},
+            { "type7",type_7_transport},
+            { "type9",type_9_heavy},
             { "viper",viper},
             { "viper_mkiv",viper_mk_iv},
             { "vulture",vulture},
-            { "type9_military",type_10_defender},
-            { "type9",type_9_heavy},
-            { "typex",alliance_chieftain},
-            { "independant_trader",keelback},
-            { "type7",type_7_transport},
-            { "typex_2",alliance_crusader},
-            { "typex_3",alliance_challenger},
-            { "krait_mkii",krait_mkii},
-
         };
 
-
         #endregion
-
 
     }
 }

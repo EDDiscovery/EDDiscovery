@@ -143,8 +143,6 @@ namespace EliteDangerousCore.JournalEvents
             else
                 info = "Lost Target".Txb(this);
 
-            info = EventTimeUTC.ToStringZulu() + ":" + info;
-
             return info;
         }
 
@@ -159,12 +157,31 @@ namespace EliteDangerousCore.JournalEvents
             Target = evt["Target"].Str();
         }
 
-        public string Target { get; set; }
+        public string Target { get; set; }                  // always first one if merged list.
+        public List<string> MergedEntries { get; set; }     // if verbose.. doing it this way does not break action packs as the variables are maintained
+                                                            // This is second, third merge etc.  First one is in above variables
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", Target);
             detailed = "";
+            if (MergedEntries != null)
+            {
+                info = (MergedEntries.Count+1).ToString("N0") + " " + "times".Tx(this, "ACOUNT");
+                for (int i = MergedEntries.Count - 1; i >= 0; i--)
+                    detailed = detailed.AppendPrePad(MergedEntries[i], System.Environment.NewLine);
+                detailed = detailed.AppendPrePad(Target, System.Environment.NewLine);   // ours is the last one
+            }
+            else
+            {
+                info = BaseUtils.FieldBuilder.Build("", Target);
+            }
+        }
+
+        public void Add( string target )
+        {
+            if (MergedEntries == null)
+                MergedEntries = new List<string>();
+            MergedEntries.Add(target);    // first is second oldest, etc
         }
 
     }

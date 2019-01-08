@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
@@ -58,11 +59,35 @@ namespace EliteDangerousCore.JournalEvents
         public string MessageLocalised { get; set; }
         public string Channel { get; set; }         // wing/local/voicechat/friend/player/npc : 3.3 adds squadron/starsystem
 
+        public List<JournalReceiveText> MergedEntries { get; set; }    // if verbose.. doing it this way does not break action packs as the variables are maintained
+                                                                       // This is second, third merge etc.  First one is in above variables
+
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "Msg:".Tx(this), MessageLocalised, "Channel:".Tx(this), Channel);
             detailed = "";
+            if (MergedEntries == null)
+                info = ToString();
+            else
+            {
+                info = (MergedEntries.Count() + 1).ToString() + " Texts".Tx(this, "Text") + " " + "From Channel:".Tx(this, "FC") + Channel;
+                for (int i = MergedEntries.Count - 1; i >= 0; i--)
+                    detailed = detailed.AppendPrePad(MergedEntries[i].ToString(), System.Environment.NewLine);
+                detailed = detailed.AppendPrePad(ToString(), System.Environment.NewLine);   // ours is the last one
+            }
         }
+
+        public override string ToString()
+        {
+            return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "Msg:".Tx(this), MessageLocalised, "Channel:".Tx(this), Channel);
+        }
+
+        public void Add(JournalReceiveText next)
+        {
+            if (MergedEntries == null)
+                MergedEntries = new List<JournalReceiveText>();
+            MergedEntries.Add(next);
+        }
+
     }
 
 }
