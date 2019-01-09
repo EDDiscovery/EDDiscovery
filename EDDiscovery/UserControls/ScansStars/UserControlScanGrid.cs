@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
-                                bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
+                                bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
 
                             if (sn.IsMapped)
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
