@@ -180,6 +180,21 @@ namespace EDDiscovery.UserControls
 
         #region PopulateGrid
 
+        private struct Overlays
+        {
+            public int positions;
+            public bool landable, materials, volcanism, mapped;
+            
+            public Overlays(int p1, bool p2, bool p3, bool p4, bool p5)
+            {
+                positions = p1;
+                landable = p2;
+                materials = p3;
+                volcanism = p4;
+                mapped = p5;
+            }
+        }
+
         /// <summary>
         /// Draw the system bodies
         /// </summary>
@@ -237,8 +252,11 @@ namespace EDDiscovery.UserControls
                 var bdClass = new StringBuilder();
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
-                var bdOverlays = new StringBuilder();
-                var bdNOverlays = 0;
+
+                Overlays _overlays = new Overlays();
+
+                //var bdOverlays = new StringBuilder();
+                //var bdNOverlays = 0;
                 
                 if (sn.type == StarScan.ScanNodeType.ring)
                 {
@@ -416,18 +434,22 @@ namespace EDDiscovery.UserControls
 
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
 
-                                bdOverlays.Append("landable."); // do not translate! For internal use only!
+                                _overlays.landable = true;                                                                
                             }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
+
                             {
-                                bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
-                                bdOverlays.Append("volcanism."); // do not translate! For internal use only!
-                                bdNOverlays = bdNOverlays + 1;
+                                bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
+                                _overlays.volcanism = true;
+                                _overlays.positions++;
                             }
 
-                            // materials                        
+                            if (sn.IsMapped)
+                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
+
+                            // materials
                             if (sn.ScanData.HasMaterials)
                             {
                                 toolStripProgressBar.Visible = true;
@@ -445,8 +467,8 @@ namespace EDDiscovery.UserControls
 
                                 ReportJumponium(ret);
 
-                                bdOverlays.Append("materials."); // do not translate! For internal use only!
-                                bdNOverlays = bdNOverlays + 1;
+                                _overlays.materials = true;
+                                _overlays.positions++;
                             }
                         }
 
@@ -485,8 +507,8 @@ namespace EDDiscovery.UserControls
                             if (sn.IsMapped)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
-                                bdOverlays.Append("mapped."); // do not translate! For internal use only!
-                                bdNOverlays = bdNOverlays + 1;
+                                _overlays.mapped = true;
+                                _overlays.positions++;
                             }
                         }
 
@@ -506,9 +528,7 @@ namespace EDDiscovery.UserControls
 
                         var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
                                                 
-                        cur.Tag = img;
-
-                        cur.ErrorText = bdNOverlays + bdOverlays.ToString();
+                        cur.Tag = img;                                               
                         
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                     sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
@@ -622,7 +642,7 @@ namespace EDDiscovery.UserControls
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 6, vpos, sz, sz));
 
                 // body icon overlay
-                if (cur.ErrorText.Contains("landable"))
+                if (("landable"))
                 {
                     e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(e.RowBounds.Left + 2, vpos - 4, sz + 8, sz + 8));
                 }
