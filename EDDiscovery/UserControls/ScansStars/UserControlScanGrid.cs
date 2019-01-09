@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
         {
             StarScan.SystemNode scannode = null;
 
-            var _overlays = new Overlays();
+            var overlays = new Overlays();
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
@@ -430,20 +430,20 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
-                                _overlays.landable = true;
+                                overlays.landable = true;
                             }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
-                                _overlays.volcanism = true;
+                                overlays.volcanism = true;
                             }
 
                             if (sn.IsMapped)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
-                                _overlays.mapped = true;
+                                overlays.mapped = true;
                             }
 
                             // materials                        
@@ -462,7 +462,7 @@ namespace EDDiscovery.UserControls
                                 if (ret.Length > 0 && showMaterials)
                                 {
                                     bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
-                                    _overlays.materials = true;
+                                    overlays.materials = true;
                                 }
 
                                 ReportJumponium(ret);
@@ -520,7 +520,7 @@ namespace EDDiscovery.UserControls
 
                         cur.Tag = img;
 
-                        cur.Cells[0].Tag = _overlays;
+                        cur.Cells[0].Tag = overlays;
 
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                     sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            var _overlays = cur.Cells[0].Tag as Overlays?;
+            var overlays = cur.Cells[0].Tag as Overlays?;
 
             if (cur.Tag != null)
             {
@@ -634,38 +634,41 @@ namespace EDDiscovery.UserControls
                 var vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
                 e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 6, vpos, sz, sz));
 
-                // body icon overlay
-                if (_overlays.Value.landable)
+                if (overlays != null)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(e.RowBounds.Left + 1, vpos - 4, sz + 8, sz + 8));
-                }
+                    // body icon overlay
+                    if (overlays.Value.landable)
+                    {
+                        e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(e.RowBounds.Left + 1, vpos - 4, sz + 8, sz + 8));
+                    }
 
-                // side overlays
-                var pos = 0; // counter. DO NOT CHANGE!
-                var top = e.RowBounds.Top - 20; // top margin, adjusted to the number of needed overlays
+                    // side overlays
+                    var pos = 0; // counter. DO NOT CHANGE!
+                    var top = e.RowBounds.Top - 20; // top margin, adjusted to the number of needed overlays
 
-                var left = e.RowBounds.Left + 42; // left margin                
-                var overlaySize = 16; // overlays icon size
+                    var left = e.RowBounds.Left + 42; // left margin                
+                    const int overlaySize = 16; // overlays icon size
 
-                if (_overlays.Value.materials)
-                {
-                    pos++;
+                    if (overlays.Value.materials)
+                    {
+                        pos++;
 
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
-                }
+                        e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
+                    }
 
-                if (_overlays.Value.volcanism)
-                {
-                    pos++;
+                    if (overlays.Value.volcanism)
+                    {
+                        pos++;
 
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
-                }
+                        e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
+                    }
 
-                if (_overlays.Value.mapped)
-                {
-                    pos++;
+                    if (overlays.Value.mapped)
+                    {
+                        pos++;
 
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
+                        e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
+                    }
                 }
             }
         }
