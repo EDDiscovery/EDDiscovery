@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using System.Collections.Concurrent;
 using System.Threading;
 using System.Drawing.Drawing2D;
+using EDDiscovery.Icons;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
@@ -236,6 +237,8 @@ namespace EDDiscovery.UserControls
                 var bdClass = new StringBuilder();
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
+                var bdOverlays = new StringBuilder();
+                var bdNOverlays = 0;
                 
                 if (sn.type == StarScan.ScanNodeType.ring)
                 {
@@ -412,14 +415,17 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
+
+                                bdOverlays.Append("landable."); // do not translate! For internal use only!
                             }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
+                            {
                                 bdDetails.Append(Environment.NewLine).Append("Volcanic activity".Tx(this)).Append(". ");
-
-                            if (sn.IsMapped)
-                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
+                                bdOverlays.Append("volcanism."); // do not translate! For internal use only!
+                                bdNOverlays = bdNOverlays + 1;
+                            }
 
                             // materials                        
                             if (sn.ScanData.HasMaterials)
@@ -438,6 +444,9 @@ namespace EDDiscovery.UserControls
                                     bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
 
                                 ReportJumponium(ret);
+
+                                bdOverlays.Append("materials."); // do not translate! For internal use only!
+                                bdNOverlays = bdNOverlays + 1;
                             }
                         }
 
@@ -472,6 +481,13 @@ namespace EDDiscovery.UserControls
                                     }
                                 }
                             }
+
+                            if (sn.IsMapped)
+                            {
+                                bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
+                                bdOverlays.Append("mapped."); // do not translate! For internal use only!
+                                bdNOverlays = bdNOverlays + 1;
+                            }
                         }
 
                         //! for all relevant bodies:
@@ -485,13 +501,15 @@ namespace EDDiscovery.UserControls
 
                         // pick an image
                         var img = sn.ScanData.IsStar ? sn.ScanData.GetStarTypeImage() : sn.ScanData.GetPlanetClassImage();
-
+                        
                         dataGridViewScangrid.Rows.Add(new object[] { null, sn.ScanData.BodyName, bdClass, bdDist, bdDetails });
 
                         var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
-
+                                                
                         cur.Tag = img;
 
+                        cur.ErrorText = bdNOverlays + bdOverlays.ToString();
+                        
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                     sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                     }
@@ -594,13 +612,46 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
+            
             if (cur.Tag != null)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
                 var sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
                 var vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
-                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 1, vpos, sz, sz));
+                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(e.RowBounds.Left + 6, vpos, sz, sz));
+
+                // body icon overlay
+                if (cur.ErrorText.Contains("landable"))
+                {
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(e.RowBounds.Left + 2, vpos - 4, sz + 8, sz + 8));
+                }
+
+                // side overlays
+
+                var pos = 0;
+                var top = e.RowBounds.Top - 20;
+
+                if (cur.ErrorText.Contains("materials"))
+                {
+                    pos++;
+
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(e.RowBounds.Left + 42, top + (pos * 20) + 2, 16, 16));
+                }
+
+                if (cur.ErrorText.Contains("volcanism"))
+                {
+                    pos++;
+
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(e.RowBounds.Left + 42, top + (pos * 20) + 2, 16, 16));
+                }
+
+                if (cur.ErrorText.Contains("mapped"))
+                {
+                    pos++;
+
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(e.RowBounds.Left + 42, top + (pos * 20) + 2, 16, 16));
+                }
             }
         }
 
