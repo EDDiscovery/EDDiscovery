@@ -180,6 +180,22 @@ namespace EDDiscovery.UserControls
         #region PopulateGrid
 
         /// <summary>
+        /// Constructor to pass properties to postdrawing function
+        /// </summary>
+        private struct Overlays
+        {
+            public bool landable, materials, volcanism, mapped;
+
+            public Overlays(bool p1, bool p2, bool p3, bool p4)
+            {
+                landable = p1;
+                materials = p2;
+                volcanism = p3;
+                mapped = p4;
+            }
+        }
+
+        /// <summary>
         /// Draw the system bodies
         /// </summary>
         /// <param name="he">HistoryEntry</param>
@@ -187,6 +203,8 @@ namespace EDDiscovery.UserControls
         private void DrawSystem(HistoryEntry he, bool force)
         {
             StarScan.SystemNode scannode = null;
+
+            var _overlays = new Overlays();
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
@@ -412,14 +430,21 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
+                                _overlays.landable = true;
                             }
 
                             // tell us that there is some volcanic activity
-                            if (sn.ScanData.Volcanism != null)
+                            if (sn.ScanData.Volcanism != nill)
+                            {
                                 bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
+                                _overlays.volcanism = true;
+                            }
 
                             if (sn.IsMapped)
+                            {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
+                                _overlays.mapped = true;
+                            }
 
                             // materials                        
                             if (sn.ScanData.HasMaterials)
@@ -435,7 +460,10 @@ namespace EDDiscovery.UserControls
                                 }
 
                                 if (ret.Length > 0 && showMaterials)
+                                {
                                     bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
+                                    _overlays.materials = true;
+                                }
 
                                 ReportJumponium(ret);
                             }
@@ -491,6 +519,8 @@ namespace EDDiscovery.UserControls
                         var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
                         cur.Tag = img;
+
+                        cur.Cells[0].Tag = _overlays;
 
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                     sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
