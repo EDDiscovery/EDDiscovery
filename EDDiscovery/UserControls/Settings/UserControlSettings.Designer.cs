@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
             this.buttonAddCommander = new ExtendedControls.ButtonExt();
             this.checkBoxCustomResize = new ExtendedControls.CheckBoxCustom();
             this.checkBoxPanelSortOrder = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtSafeMode = new ExtendedControls.ButtonExt();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -99,7 +100,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage = new ExtendedControls.GroupBoxCustom();
             this.comboBoxCustomLanguage = new ExtendedControls.ComboBoxCustom();
             this.groupBoxCustomSafeMode = new ExtendedControls.GroupBoxCustom();
-            this.buttonExtSafeMode = new ExtendedControls.ButtonExt();
             this.labelSafeMode = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).BeginInit();
             this.groupBoxCustomHistoryLoad.SuspendLayout();
@@ -143,8 +143,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.Size = new System.Drawing.Size(139, 21);
             this.comboBoxCustomHistoryLoadTime.TabIndex = 7;
             this.comboBoxCustomHistoryLoadTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxCustomHistoryLoadTime, "Select either load all records, or load only essential items of records older tha" +
-        "n a set time before now");
+            this.toolTip.SetToolTip(this.comboBoxCustomHistoryLoadTime, "Reduce Memory use. Select either load all records, or load only essential items o" +
+        "f records older than a set time before now");
             this.comboBoxCustomHistoryLoadTime.ValueMember = "";
             // 
             // checkBoxShowUIEvents
@@ -640,6 +640,18 @@ namespace EDDiscovery.UserControls
             this.checkBoxPanelSortOrder.UseVisualStyleBackColor = true;
             this.checkBoxPanelSortOrder.CheckedChanged += new System.EventHandler(this.checkBoxPanelSortOrder_CheckedChanged);
             // 
+            // buttonExtSafeMode
+            // 
+            this.buttonExtSafeMode.Location = new System.Drawing.Point(218, 19);
+            this.buttonExtSafeMode.Name = "buttonExtSafeMode";
+            this.buttonExtSafeMode.Size = new System.Drawing.Size(201, 23);
+            this.buttonExtSafeMode.TabIndex = 10;
+            this.buttonExtSafeMode.Text = "Restart in Safe Mode";
+            this.toolTip.SetToolTip(this.buttonExtSafeMode, "Safe Mode allows you to perform special operations, such as moving the databases," +
+        " resetting the UI, resetting the action packs,  DLLs etc.");
+            this.buttonExtSafeMode.UseVisualStyleBackColor = true;
+            this.buttonExtSafeMode.Click += new System.EventHandler(this.buttonExtSafeMode_Click);
+            // 
             // dataGridViewCommanders
             // 
             this.dataGridViewCommanders.AllowUserToAddRows = false;
@@ -720,7 +732,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(425, 157);
             this.groupBoxCustomHistoryLoad.TabIndex = 21;
             this.groupBoxCustomHistoryLoad.TabStop = false;
-            this.groupBoxCustomHistoryLoad.Text = "History Options";
+            this.groupBoxCustomHistoryLoad.Text = "History/Memory Options";
             this.groupBoxCustomHistoryLoad.TextPadding = 0;
             this.groupBoxCustomHistoryLoad.TextStartPosition = -1;
             // 
@@ -749,6 +761,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(194, 21);
             this.comboBoxCustomEssentialEntries.TabIndex = 7;
             this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomEssentialEntries, "Select which items you consider essential to load older than the time above");
             this.comboBoxCustomEssentialEntries.ValueMember = "";
             // 
             // labelHistoryEssItems
@@ -1043,18 +1056,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Text = "Move System DB / Reset UI etc";
             this.groupBoxCustomSafeMode.TextPadding = 0;
             this.groupBoxCustomSafeMode.TextStartPosition = -1;
-            // 
-            // buttonExtSafeMode
-            // 
-            this.buttonExtSafeMode.Location = new System.Drawing.Point(218, 19);
-            this.buttonExtSafeMode.Name = "buttonExtSafeMode";
-            this.buttonExtSafeMode.Size = new System.Drawing.Size(201, 23);
-            this.buttonExtSafeMode.TabIndex = 10;
-            this.buttonExtSafeMode.Text = "Restart in Safe Mode";
-            this.toolTip.SetToolTip(this.buttonExtSafeMode, "Safe Mode allows you to perform special operations, such as moving the databases," +
-        " resetting the UI, resetting the action packs,  DLLs etc.");
-            this.buttonExtSafeMode.UseVisualStyleBackColor = true;
-            this.buttonExtSafeMode.Click += new System.EventHandler(this.buttonExtSafeMode_Click);
             // 
             // labelSafeMode
             // 
