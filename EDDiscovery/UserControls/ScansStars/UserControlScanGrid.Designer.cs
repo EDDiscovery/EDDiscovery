@@ -47,11 +47,6 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
-            this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -77,6 +72,11 @@ namespace EDDiscovery.UserControls
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusGreen = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
             this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 549);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 550);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -126,56 +126,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 549);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 550);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
             this.dataGridViewScangrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dataGridViewScangrid_MouseClick);
-            // 
-            // colImage
-            // 
-            this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.colImage.HeaderText = "";
-            this.colImage.MinimumWidth = 36;
-            this.colImage.Name = "colImage";
-            this.colImage.ReadOnly = true;
-            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colImage.Width = 36;
-            // 
-            // colName
-            // 
-            this.colName.FillWeight = 37.56873F;
-            this.colName.HeaderText = "Name";
-            this.colName.MinimumWidth = 20;
-            this.colName.Name = "colName";
-            this.colName.ReadOnly = true;
-            this.colName.ToolTipText = "Body name";
-            // 
-            // colClass
-            // 
-            this.colClass.FillWeight = 46.96092F;
-            this.colClass.HeaderText = "Class";
-            this.colClass.MinimumWidth = 20;
-            this.colClass.Name = "colClass";
-            this.colClass.ReadOnly = true;
-            this.colClass.ToolTipText = "Body class";
-            // 
-            // colDistance
-            // 
-            this.colDistance.FillWeight = 23.39628F;
-            this.colDistance.HeaderText = "Distance";
-            this.colDistance.Name = "colDistance";
-            this.colDistance.ReadOnly = true;
-            this.colDistance.ToolTipText = "Body relative distance";
-            // 
-            // colBriefing
-            // 
-            this.colBriefing.FillWeight = 93.92184F;
-            this.colBriefing.HeaderText = "Information";
-            this.colBriefing.MinimumWidth = 20;
-            this.colBriefing.Name = "colBriefing";
-            this.colBriefing.ReadOnly = true;
-            this.colBriefing.ToolTipText = "Body detailed information";
             // 
             // vScrollBarCustom2
             // 
@@ -195,7 +150,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 531);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 532);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -429,16 +384,16 @@ namespace EDDiscovery.UserControls
             this.toolStripStatusGreen,
             this.toolStripProgressBar});
             this.statusStripSummary.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
-            this.statusStripSummary.Location = new System.Drawing.Point(0, 549);
+            this.statusStripSummary.Location = new System.Drawing.Point(0, 550);
             this.statusStripSummary.Name = "statusStripSummary";
-            this.statusStripSummary.Size = new System.Drawing.Size(572, 23);
+            this.statusStripSummary.Size = new System.Drawing.Size(572, 22);
             this.statusStripSummary.SizingGrip = false;
             this.statusStripSummary.TabIndex = 27;
             // 
             // toolStripStatusTotalValue
             // 
             this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
-            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
+            this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 17);
             this.toolStripStatusTotalValue.Text = "Estimated scans value";
             // 
             // toolStripStatusGreen
@@ -461,6 +416,51 @@ namespace EDDiscovery.UserControls
             this.toolStripProgressBar.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripProgressBar.Size = new System.Drawing.Size(100, 17);
             this.toolStripProgressBar.Visible = false;
+            // 
+            // colImage
+            // 
+            this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colImage.HeaderText = "";
+            this.colImage.MinimumWidth = 48;
+            this.colImage.Name = "colImage";
+            this.colImage.ReadOnly = true;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colImage.Width = 48;
+            // 
+            // colName
+            // 
+            this.colName.FillWeight = 37.56873F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 20;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            this.colName.ToolTipText = "Body name";
+            // 
+            // colClass
+            // 
+            this.colClass.FillWeight = 46.96092F;
+            this.colClass.HeaderText = "Class";
+            this.colClass.MinimumWidth = 20;
+            this.colClass.Name = "colClass";
+            this.colClass.ReadOnly = true;
+            this.colClass.ToolTipText = "Body class";
+            // 
+            // colDistance
+            // 
+            this.colDistance.FillWeight = 23.39628F;
+            this.colDistance.HeaderText = "Distance";
+            this.colDistance.Name = "colDistance";
+            this.colDistance.ReadOnly = true;
+            this.colDistance.ToolTipText = "Body relative distance";
+            // 
+            // colBriefing
+            // 
+            this.colBriefing.FillWeight = 93.92184F;
+            this.colBriefing.HeaderText = "Information";
+            this.colBriefing.MinimumWidth = 20;
+            this.colBriefing.Name = "colBriefing";
+            this.colBriefing.ReadOnly = true;
+            this.colBriefing.ToolTipText = "Body detailed information";
             // 
             // UserControlScanGrid
             // 
@@ -504,14 +504,14 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem classToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem distanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem informationToolStripMenuItem;
+        private ExtendedControls.StatusStripCustom statusStripSummary;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGreen;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
         private System.Windows.Forms.DataGridViewTextBoxColumn colImage;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
-        private ExtendedControls.StatusStripCustom statusStripSummary;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGreen;
-        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;
     }
 }
