@@ -35,6 +35,20 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMissionOverlay :   UserControlCommonBase
     {
         private  HistoryEntry currentHE;
+        private string DBSelections { get { return DBName("MissionOverlay", "Sel"); } }
+
+        [Flags]
+        enum SelectionBits
+        {
+            None = 0,
+            StartDate = 1,
+            MissionDescription = 2,
+            RewardInfo = 4,
+            FactionInfo = 8,
+            MissionName = 16,
+            EndDate = 32,
+            Default = MissionName | StartDate | EndDate | MissionDescription | RewardInfo | FactionInfo
+        }
 
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
@@ -42,6 +56,8 @@ namespace EDDiscovery.UserControls
             pictureBox.BackColor = this.BackColor = curcol;
             Display(currentHE);
         }
+
+        bool debug_followcursor = false;        // only for debugging, normally locked to last entry
 
         #region Init
 
@@ -53,24 +69,70 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             BaseUtils.Translator.Instance.Translate(this);
-            //BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
+
+            SelectionBits sel = (SelectionBits)SQLiteConnectionUser.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+
+            missionDescriptionToolStripMenuItem.Checked = (sel & SelectionBits.MissionName) != SelectionBits.None;
+            startDateToolStripMenuItem.Checked = (sel & SelectionBits.StartDate) != SelectionBits.None;
+            endDateToolStripMenuItem.Checked = (sel & SelectionBits.StartDate) != SelectionBits.None;
+            factionInformationToolStripMenuItem.Checked = (sel & SelectionBits.FactionInfo) != SelectionBits.None;
+            missionDescriptionToolStripMenuItem.Checked = (sel & SelectionBits.MissionDescription) != SelectionBits.None;
+            rewardToolStripMenuItem.Checked = (sel & SelectionBits.RewardInfo) != SelectionBits.None;
+
+            // TAGS relate controls to selection bits
+            missionNameToolStripMenuItem.Tag = SelectionBits.MissionName;
+            startDateToolStripMenuItem.Tag = SelectionBits.StartDate;
+            endDateToolStripMenuItem.Tag = SelectionBits.EndDate;
+            factionInformationToolStripMenuItem.Tag = SelectionBits.FactionInfo;
+            missionDescriptionToolStripMenuItem.Tag = SelectionBits.MissionDescription;
+            rewardToolStripMenuItem.Tag = SelectionBits.RewardInfo;
+
+            missionNameToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+            startDateToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+            endDateToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+            factionInformationToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+            missionDescriptionToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+            rewardToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
+
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
         }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
+            discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
+            if (debug_followcursor)
+                uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged; //DEBUG
+
+            Resize += UserControlMissionOverlay_Resize;
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
+            Display(hl.GetLast);
+        }
+
+        private void Discoveryform_OnNewEntry(HistoryEntry he, HistoryList hl)
+        {
+            Display(he);
+        }
+
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        {
+            Display(he);
+        }
+
+        private void UserControlMissionOverlay_Resize(object sender, EventArgs e)
+        {
+            Display(currentHE);
         }
 
         public override void Closing()
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
+            discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            if (debug_followcursor)
+                uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
         }
 
         #endregion
@@ -79,12 +141,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            Display(uctg.GetCurrentHistoryEntry);
-        }
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
-        {
-            Display(he);
+            Display(discoveryform.history.GetLast);
         }
 
         private void Display(HistoryEntry he)
@@ -109,20 +166,38 @@ namespace EDDiscovery.UserControls
 
                 foreach (MissionState ms in mcurrent)
                 {
-                    string text = BaseUtils.FieldBuilder.Build(
-                                    "", JournalFieldNaming.ShortenMissionName(ms.Mission.Name),
-                                    "< (;-", (EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal),
-                                    "<;)", (EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime()),
-                                    "< ", ms.DestinationSystemStation(),
-                                    " ", ms.Mission.TargetFaction,
-                                    "< ", ms.Mission.TargetLocalised,
-                                    "< ", ms.Mission.KillCount?.ToString("N") ?? null,
-                                    " ", ms.Mission.CommodityLocalised,
-                                    "< ", ms.Mission.Count,
-                                    " ", ms.Mission.Reward.GetValueOrDefault().ToString("N0")
-                                    );
+                    string text = "";
 
-                    var ie = pictureBox.AddTextAutoSize(new Point(10, vpos), new Size(1200, 35), text, displayfont, textcolour, backcolour, 1.0F);
+                    if (missionNameToolStripMenuItem.Checked)
+                        text += JournalFieldNaming.ShortenMissionName(ms.Mission.Name);
+
+                    if (missionDescriptionToolStripMenuItem.Checked && ms.Mission.LocalisedName.HasChars() )
+                        text = text.AppendPrePad(ms.Mission.LocalisedName, ", ");
+
+                    if (startDateToolStripMenuItem.Checked)
+                        text = text.AppendPrePad( EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC.ToString() : ms.Mission.EventTimeLocal.ToString(), ", ");
+
+                    if (endDateToolStripMenuItem.Checked)
+                        text = text.AppendPrePad(EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry.ToString() : ms.Mission.Expiry.ToLocalTime().ToString(), startDateToolStripMenuItem.Checked ? "-" : ", ");
+
+                    string mainpart = BaseUtils.FieldBuilder.Build(
+                                        "< ", ms.DestinationSystemStation(),
+                                        " ", factionInformationToolStripMenuItem.Checked ? ms.Mission.TargetFaction : null,
+                                        "< ", ms.Mission.TargetLocalised,
+                                        "< ", ms.Mission.KillCount?.ToString("N") ?? null,
+                                        " ", ms.Mission.CommodityLocalised,
+                                        "< ", ms.Mission.Count,
+                                        " Left ".Tx(this, "IL"), ms.CargoDepot?.ItemsToGo
+                                        );
+
+                    text = text.AppendPrePad(mainpart, ", ");
+
+                    if (rewardToolStripMenuItem.Checked && ms.Mission.Reward.HasValue && ms.Mission.Reward > 0 )
+                        text = text.AppendPrePad( BaseUtils.FieldBuilder.Build(" ;cr", ms.Mission.Reward.GetValueOrDefault().ToString("N0")) , ", ");
+
+                    StringFormat frmt = new StringFormat();
+
+                    var ie = pictureBox.AddTextAutoSize(new Point(10, vpos), new Size(this.Width-20, 200), text, displayfont, textcolour, backcolour, 1.0F, frmt:frmt);
                     vpos = ie.pos.Bottom + 4;
                 }
             }
@@ -134,7 +209,21 @@ namespace EDDiscovery.UserControls
         #region UI
 
 
-        #endregion
+        private void Selection_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
+            SelectionBits sel = (SelectionBits)(tsmi.Tag);     // tag contains bit number
 
+            SelectionBits cur = (SelectionBits)SQLiteConnectionUser.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+            cur = (cur & ~sel);
+            if ( tsmi.Checked )
+                cur |= sel;
+            SQLiteConnectionUser.PutSettingInt(DBSelections, (int)cur);
+
+            System.Diagnostics.Debug.WriteLine("Mission overal sel code " + cur);
+            Display(currentHE);
+        }
+
+        #endregion
     }
 }

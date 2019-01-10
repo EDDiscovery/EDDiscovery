@@ -47,7 +47,7 @@ namespace EliteDangerousCore
             return (Redirected != null) ? ("->" + Redirected.NewDestinationSystem.AppendPrePad(Redirected.NewDestinationStation, ":")) : Mission.DestinationSystem.AppendPrePad(Mission.DestinationStation, ":");
         }
 
-        public string Info()            // looking at state
+        public string Info()            // Missions panel uses this for info column
         {
             string info = Mission.MissionAuxInfo();
             if (CargoDepot != null)
@@ -61,7 +61,7 @@ namespace EliteDangerousCore
             return info;
         }
 
-        public string FullInfo()
+        public string FullInfo()    // DLL Uses this for mission info
         {
             return Mission.MissionBasicInfo() + "," + Mission.MissionDetailedInfo() + ((Completed != null) ? (Environment.NewLine + Completed.MissionInformation()) : "");
         }

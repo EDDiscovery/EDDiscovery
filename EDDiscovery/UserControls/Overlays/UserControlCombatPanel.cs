@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
             JournalTypeEnum.Died,
             JournalTypeEnum.FighterDestroyed,JournalTypeEnum.FighterRebuilt,JournalTypeEnum.PVPKill,
             JournalTypeEnum.Interdicted,JournalTypeEnum.EscapeInterdiction,
-            JournalTypeEnum.HeatDamage,JournalTypeEnum.HeatWarning, JournalTypeEnum.HullDamage,
+            JournalTypeEnum.HeatDamage,JournalTypeEnum.HullDamage,
             JournalTypeEnum.SRVDestroyed
         };
 
@@ -441,14 +441,16 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = current != null ? current.TargetFaction.Length > 0 : false;
-            labelCredits.Text = (discoveryform.history.GetLast?.Credits.ToString("N0") ?? "") + "cr";
-            labelTotalKills.Text = "Kills:".Tx(this) + total_kills.ToStringInvariant();
-            labelTotalReward.Text = total_reward.ToString("N0") + "cr";
+            labelTotalKills.Text = (total_kills>0) ? ("Kills:".Tx(this) + total_kills.ToStringInvariant()) : "";
             labelFactionKills.Text = faction ? ("Faction:".Tx(this) + faction_kills.ToStringInvariant()) : "";
-            labelFactionReward.Text = faction ? (faction_reward.ToString("N0") + "cr") : "";
             labelFaction.Text = faction ? (current.TargetFaction) : "";
             labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes:".Tx(this) + total_crimes.ToStringInvariant()) : "";
-            labelBalance.Text = "Bal:".Tx(this) + balance.ToString("N0") + "cr";
+
+            labelCredits.Text = (discoveryform.history.GetLast != null) ? (discoveryform.history.GetLast.Credits.ToString("N0") + "cr") : "";
+            labelBalance.Text = (balance > 0 ) ? ("Bal:".Tx(this) + balance.ToString("N0") + "cr") : "";
+            labelFactionReward.Text = (faction && faction_reward != balance) ? (faction_reward.ToString("N0") + "cr") : "";
+            labelTotalReward.Text = (total_reward != balance) ? (total_reward.ToString("N0") + "cr") : "";
+
         }
 
         static JournalTypeEnum[] targetofflist = new JournalTypeEnum[]            // ones to display without any extra detail

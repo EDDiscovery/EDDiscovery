@@ -191,7 +191,7 @@ namespace EDDiscovery.Actions
 
         public bool EditPack(string name)            // edit pack name
         {
-            ActionPackEditPack frm = new ActionPackEditPack();
+            ActionPackEditPackForm frm = new ActionPackEditPackForm();
 
             frm.AdditionalNames += Frm_onAdditionalNames;
             frm.CreateActionPackEdit += SetPackEditorAndCondition;

@@ -107,6 +107,7 @@ namespace EliteDangerousCore.JournalEvents
             Faction = evt["Faction"].Str();
             FDName = evt["Name"].Str();
             Name = JournalFieldNaming.GetBetterMissionName(FDName);
+            LocalisedName = evt["LocalisedName"].Str(); 
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);    // remove $, underscore it
@@ -151,6 +152,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string Faction { get; private set; }                 // in MissionAccepted order
         public string Name { get; private set; }
+        public string LocalisedName { get; private set; }
         public string FDName { get; private set; }
 
         public string DestinationSystem { get; private set; }
@@ -201,45 +203,46 @@ namespace EliteDangerousCore.JournalEvents
 
         private static DateTime ED32Date = new DateTime(2018, 8, 28, 10, 0, 0);
 
-        public string MissionBasicInfo()          // other stuff for the mission panel which it does not already cover
+        public string MissionBasicInfo()          // MissionList::FullInfo uses this. Journal Entry info brief uses this
         {
             DateTime exp = Expiry;
             if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
             return BaseUtils.FieldBuilder.Build("", Name,
-                                      "< from ", Faction,
-                                      "System:", DestinationSystem,
-                                      "Station:", DestinationStation,
-                                      "Expiry:", exp,
-                                      "Influence:", Influence,
-                                      "Reputation:", Reputation,
-                                      "Reward:; cr;N0", Reward,
-                                      "; (Wing)", Wing);
+                                      "< from ".Tx(this), Faction,
+                                      "System:".Txb(this), DestinationSystem,
+                                      "Station:".Txb(this), DestinationStation,
+                                      "Expiry:".Tx(this), exp,
+                                      "Influence:".Tx(this), Influence,
+                                      "Reputation:".Tx(this), Reputation,
+                                      "Reward:; cr;N0".Tx(this), Reward,
+                                      "; (Wing)".Tx(this), Wing);
         }
 
-        public string MissionDetailedInfo()          // other stuff for the mission panel which it does not already cover
+        public string MissionDetailedInfo()          // MissionList::FullInfo (DLL uses this), Journal Entry detailed info
         {
-            return BaseUtils.FieldBuilder.Build("Deliver:", CommodityLocalised,
-                                           "Target:", TargetLocalised,
-                                           "Type:", TargetTypeFriendly,
-                                           "Target Faction:", TargetFaction,
-                                           "Target Type:", TargetTypeLocalised,
-                                           "Kill Count:", KillCount,
-                                           "Passengers:", PassengerCount);
+            return BaseUtils.FieldBuilder.Build("Deliver:".Tx(this), CommodityLocalised,
+                                           "Target:".Txb(this), TargetLocalised,
+                                           "Type:".Txb(this), TargetTypeFriendly,
+                                           "Target Faction:".Txb(this), TargetFaction,
+                                           "Target Type:".Tx(this), TargetTypeLocalised,
+                                           "Kill Count:".Tx(this), KillCount,
+                                           "Passengers:".Tx(this), PassengerCount);
         }
 
-        public string MissionAuxInfo()          // other stuff for the mission panel which it does not already cover
+        public string MissionAuxInfo()          //  MissionList:info, used for MissionList:Info, used in mission panels.
         {
-            return BaseUtils.FieldBuilder.Build("Influence:", Influence,
-                                        "Reputation:", Reputation,
-                                        "Deliver:", CommodityLocalised,
-                                        "Target:", TargetLocalised,
-                                        "Type:", TargetTypeFriendly,
-                                        "Target Faction:", TargetFaction,
-                                        "Target Type:", TargetTypeLocalised,
-                                        "Passengers:", PassengerCount,
-                                        "Count:", Count);
+            return BaseUtils.FieldBuilder.Build("", LocalisedName,
+                                        "Influence:".Tx(this), Influence,
+                                        "Reputation:".Tx(this), Reputation,
+                                        "Deliver:".Tx(this), CommodityLocalised,
+                                        "Target:".Txb(this), TargetLocalised,
+                                        "Type:".Txb(this), TargetTypeFriendly,
+                                        "Target Faction:".Txb(this), TargetFaction,
+                                        "Target Type:".Tx(this), TargetTypeLocalised,
+                                        "Passengers:".Tx(this), PassengerCount,
+                                        "Count:".Tx(this), Count);
 
         }
 

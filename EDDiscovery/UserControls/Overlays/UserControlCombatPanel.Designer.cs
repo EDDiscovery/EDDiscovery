@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelCredits.Location = new System.Drawing.Point(4, 25);
             this.labelCredits.Name = "labelCredits";
-            this.labelCredits.Size = new System.Drawing.Size(100, 24);
+            this.labelCredits.Size = new System.Drawing.Size(142, 24);
             this.labelCredits.TabIndex = 4;
             this.labelCredits.Text = "Credits";
             this.labelCredits.TextBackColor = System.Drawing.SystemColors.Control;
@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalKills
             // 
-            this.labelTotalKills.Location = new System.Drawing.Point(119, 25);
+            this.labelTotalKills.Location = new System.Drawing.Point(145, 25);
             this.labelTotalKills.Name = "labelTotalKills";
             this.labelTotalKills.Size = new System.Drawing.Size(100, 24);
             this.labelTotalKills.TabIndex = 4;
@@ -120,7 +120,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelFactionKills
             // 
-            this.labelFactionKills.Location = new System.Drawing.Point(119, 51);
+            this.labelFactionKills.Location = new System.Drawing.Point(145, 51);
             this.labelFactionKills.Name = "labelFactionKills";
             this.labelFactionKills.Size = new System.Drawing.Size(100, 24);
             this.labelFactionKills.TabIndex = 4;
@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelBalance
             // 
-            this.labelBalance.Location = new System.Drawing.Point(324, 25);
+            this.labelBalance.Location = new System.Drawing.Point(245, 25);
             this.labelBalance.Name = "labelBalance";
             this.labelBalance.Size = new System.Drawing.Size(100, 24);
             this.labelBalance.TabIndex = 4;
@@ -140,7 +140,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalCrimes
             // 
-            this.labelTotalCrimes.Location = new System.Drawing.Point(429, 25);
+            this.labelTotalCrimes.Location = new System.Drawing.Point(455, 25);
             this.labelTotalCrimes.Name = "labelTotalCrimes";
             this.labelTotalCrimes.Size = new System.Drawing.Size(100, 24);
             this.labelTotalCrimes.TabIndex = 4;
@@ -161,7 +161,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelFaction.Location = new System.Drawing.Point(3, 51);
             this.labelFaction.Name = "labelFaction";
-            this.labelFaction.Size = new System.Drawing.Size(100, 24);
+            this.labelFaction.Size = new System.Drawing.Size(143, 24);
             this.labelFaction.TabIndex = 4;
             this.labelFaction.Text = "Faction";
             this.labelFaction.TextBackColor = System.Drawing.SystemColors.Control;
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelTotalReward
             // 
-            this.labelTotalReward.Location = new System.Drawing.Point(219, 25);
+            this.labelTotalReward.Location = new System.Drawing.Point(349, 25);
             this.labelTotalReward.Name = "labelTotalReward";
             this.labelTotalReward.Size = new System.Drawing.Size(100, 24);
             this.labelTotalReward.TabIndex = 4;
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
             // 
             // labelFactionReward
             // 
-            this.labelFactionReward.Location = new System.Drawing.Point(219, 51);
+            this.labelFactionReward.Location = new System.Drawing.Point(245, 51);
             this.labelFactionReward.Name = "labelFactionReward";
             this.labelFactionReward.Size = new System.Drawing.Size(100, 24);
             this.labelFactionReward.TabIndex = 4;

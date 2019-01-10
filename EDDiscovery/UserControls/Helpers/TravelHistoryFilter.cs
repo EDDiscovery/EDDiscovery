@@ -193,15 +193,18 @@ namespace EDDiscovery.UserControls
         string dbstring;
         public event EventHandler Changed;
 
-        private string selectedlist;
-        private string selectedlistname;
-        private int reserved = 2;
+        private List<Tuple<string, string>> extraoptions = new List<Tuple<string, string>>();
+        private int ReservedEntries { get { return 2 + extraoptions.Count(); } }
 
-        public void ConfigureThirdOption(string n , string l )      // could be extended later for more..
+        public void AddExtraOption(string n , string events )      // could be extended later for more..
         {
-            selectedlistname = n;
-            selectedlist = l;
-            reserved = 3;
+            extraoptions.Add(new Tuple<string,string>(n,events));
+        }
+
+        public void AddStandardExtraOptions()
+        {
+            AddExtraOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
+            AddExtraOption("Missions".Tx(), "Mission Accepted;Mission Completed;Mission Abandoned;Mission Redirected;Mission Failed;");
         }
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent)
@@ -213,7 +216,7 @@ namespace EDDiscovery.UserControls
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent, List<string> list)
         {
-            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 2, 600), back, fore, fnt, parent, list);
+            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 3,600), back, fore, fnt, parent, list);
         }
 
         public void FilterButton(string db, Point p, Size s, Color back, Color fore, Font fnt, Form parent)
@@ -232,8 +235,7 @@ namespace EDDiscovery.UserControls
                 cc.Items.Add("All".Tx());       // displayed, translate
                 cc.Items.Add("None".Tx());
 
-                if (selectedlist != null)
-                    cc.Items.Add(selectedlistname);
+                cc.Items.AddRange(extraoptions.Select((x)=>x.Item1).ToArray());
 
                 cc.Items.AddRange(list.ToArray());
 
@@ -253,13 +255,14 @@ namespace EDDiscovery.UserControls
 
         private void SetFilterSet()
         {
-            string list = cc.GetChecked(reserved);
+            string list = cc.GetChecked(ReservedEntries);
             //Console.WriteLine("List {0}", list);
             cc.SetChecked(list.Equals("All"), 0, 1);
             cc.SetChecked(list.Equals("None"), 1, 1);
 
-            if ( selectedlist!=null)
-                cc.SetChecked(list.Equals(selectedlist), 2, 1);
+            int p = 2;
+            foreach(var eo in extraoptions)
+                cc.SetChecked(list.Equals(eo.Item2), p++, 1);
         }
 
         private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)
@@ -269,15 +272,15 @@ namespace EDDiscovery.UserControls
             cc.SetChecked(e.NewValue == CheckState.Checked, e.Index, 1);        // force check now (its done after it) so our functions work..
 
             if (e.Index == 0 && e.NewValue == CheckState.Checked)
-                cc.SetChecked(true, reserved);
+                cc.SetChecked(true, ReservedEntries);
 
             if ((e.Index == 1 && e.NewValue == CheckState.Checked) || (e.Index <= 2 && e.NewValue == CheckState.Unchecked))
-                cc.SetChecked(false, reserved);
+                cc.SetChecked(false, ReservedEntries);
 
-            if (selectedlist != null && e.Index == 2 && e.NewValue == CheckState.Checked)
+            if (e.Index >= 2 && e.Index < 2 + extraoptions.Count() && e.NewValue == CheckState.Checked)
             {
-                cc.SetChecked(false, reserved);
-                cc.SetChecked(selectedlist);
+                cc.SetChecked(false, e.Index );
+                cc.SetChecked(extraoptions[e.Index-2].Item2);
             }
 
             SetFilterSet();
@@ -285,7 +288,7 @@ namespace EDDiscovery.UserControls
 
         private void FilterClosed(Object sender, FormClosedEventArgs e)
         {
-            SQLiteDBClass.PutSettingString(dbstring, cc.GetChecked(3));
+            SQLiteDBClass.PutSettingString(dbstring, cc.GetChecked(ReservedEntries));
             cc = null;
 
             if (Changed != null)

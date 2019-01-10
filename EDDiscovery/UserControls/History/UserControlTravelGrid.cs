@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs.ConfigureThirdOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
+            cfs.AddStandardExtraOptions();
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 

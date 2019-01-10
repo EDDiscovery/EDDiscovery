@@ -34,6 +34,7 @@ namespace EliteDangerousCore.JournalEvents
             Category = evt["Category"].Str();
             Category_Localised = JournalFieldNaming.CheckLocalisation(evt["Category_Localised"].Str(), Category);
             Region = evt["Region"].Str();
+            Region_Localised = evt["Region_Localised"].Str();
             System = evt["System"].Str();
             SystemAddress = evt["SystemAddress"].LongNull();
             IsNewEntry = evt["IsNewEntry"].BoolNull();
@@ -50,6 +51,7 @@ namespace EliteDangerousCore.JournalEvents
         public string SubCategory { get; set; }
         public string SubCategory_Localised { get; set; }
         public string Region { get; set; }
+        public string Region_Localised { get; set; }
         public string System { get; set; }
         public long? SystemAddress { get; set; }
         public bool? IsNewEntry { get; set; }
@@ -59,7 +61,7 @@ namespace EliteDangerousCore.JournalEvents
         public override void FillInformation(out string info, out string detailed)
         {
             info = BaseUtils.FieldBuilder.Build("At ".Tx(this), System,
-                                                "in ".Tx(this), Region,
+                                                "in ".Tx(this), Region_Localised,
                                                 "", Name_Localised,
                                                 "", Category_Localised,
                                                 "", SubCategory_Localised,

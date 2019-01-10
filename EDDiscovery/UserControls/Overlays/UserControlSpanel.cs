@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs.ConfigureThirdOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
+            cfs.AddStandardExtraOptions();
             cfs.Changed += EventFilterChanged;
 
             dividers = new ButtonExt[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
