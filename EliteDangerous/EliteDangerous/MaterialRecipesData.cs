@@ -47,9 +47,13 @@ namespace EliteDangerousCore
 
                     string s = new string(ilist[i].TakeWhile(c => !Char.IsLetter(c)).ToArray());
                     ingredients[i] = ilist[i].Substring(s.Length);
-                    count[i] = int.Parse(s);
+
+                    bool countsuccess = int.TryParse(s, out count[i]);
+                    System.Diagnostics.Debug.Assert(countsuccess, "Count missing from ingredient");
+
                     MaterialCommodityData mcd = MaterialCommodityData.GetByShortName(ingredients[i]);
-                    System.Diagnostics.Debug.Assert(mcd != null, "Recipe is " + name + " " + indg + " i=" + i + " " + ingredients[i]);
+                    System.Diagnostics.Debug.Assert(mcd != null, "Not found ingredient " + name + " " + indg + " i=" + i + " " + ingredients[i]);
+
                     ingredientsstringlong = ingredientsstringlong.AppendPrePad(count[i].ToStringInvariant() + " x " + mcd.Name, Environment.NewLine);
                 }
             }
@@ -88,6 +92,13 @@ namespace EliteDangerousCore
         public class TechBrokerUnlockRecipe : Recipe
         {
             public TechBrokerUnlockRecipe(string n, string indg)
+                : base(n, indg)
+            { }
+        }
+
+        public class SpecialEffectRecipe : Recipe
+        {
+            public SpecialEffectRecipe(string n, string indg)
                 : base(n, indg)
             { }
         }
@@ -1072,6 +1083,95 @@ namespace EliteDangerousCore
             new TechBrokerUnlockRecipe("GDN Hybrid Fighter V 1","1GMVB,25GPCe,26PEOD,18PBOD,25GTC"),
             new TechBrokerUnlockRecipe("GDN Hybrid Fighter V 2","1GMVB,25GPCe,26PEOD,18GSWC,25GTC"),
             new TechBrokerUnlockRecipe("GDN Hybrid Fighter V 3","1GMVB,25GPCe,26PEOD,18GSWP,25GTC"),
+        };
+
+        public static List<SpecialEffectRecipe> SpecialEffects = new List<SpecialEffectRecipe>()
+        {
+            new SpecialEffectRecipe("Concordant Sequence (Pulse Laser,Burst Laser,Beam Laser)","5FoC,3EFW,1Zr"),
+            new SpecialEffectRecipe("Scramble Spectrum (Pulse Laser,Burst Laser)","5CS,3USS,5ESED"),
+            new SpecialEffectRecipe("Thermal Shock (Pulse Laser,Burst Laser,Beam Laser,Multicannon)","5FFC,3HRC,3CCo,3W"),
+            new SpecialEffectRecipe("Phasing Sequence (Pulse Laser,Burst Laser,Plasma Accelerator)","5FoC,3ASPA,3Nb,3CCom"),
+            new SpecialEffectRecipe("Inertial Impact (Burst Laser)","5FFC,5DSCR,5ADWE"),
+            new SpecialEffectRecipe("Thermal Vent (Beam Laser)","5FFC,3CPo,3PAll"),
+            new SpecialEffectRecipe("Regeneration Sequence (Beam Laser)","3RFC,4SS,1PSFD"),
+            new SpecialEffectRecipe("Incendiary Rounds (Multicannon,Frag Cannon)","5HCW,5P,5S,3PA"),
+            new SpecialEffectRecipe("Auto Loader (Cannon,Multicannon)","4ME,3MC,3HDC"),
+            new SpecialEffectRecipe("Smart Rounds (Cannon,Multicannon)","5MS,3SFP,3DED,3CSD"),
+            new SpecialEffectRecipe("Dazzle Shell (Plasma Accelerator,Frag Cannon)","5MS,4Mn,5HC,5MS"),
+            new SpecialEffectRecipe("Corrosive Shell (Multicannon,Frag Cannon)","5CSU,4PAll,3As"),
+            new SpecialEffectRecipe("Screening Shell (Frag Cannon)","5MS,5DSCR,5MCF,3Nb"),
+            new SpecialEffectRecipe("Force Shell (Cannon)","5MS,5Zn,3PA,3HCW"),
+            new SpecialEffectRecipe("High Yield Shell (Cannon)","5MS,3PLA,3CM,5Ni"),
+            new SpecialEffectRecipe("Dispersal Field (Plasma Accelerator,Cannon)","5CCo,5HC,5IED,5WSE"),
+            new SpecialEffectRecipe("Thermal Conduit (Beam Laser,Plasma Accelerator)","5HDP,5S,5TeA"),
+            new SpecialEffectRecipe("Target Lock Breaker (Plasma Accelerator)","5Se,3SFP,1AEC"),
+            new SpecialEffectRecipe("Feedback Cascade (Rail Gun)","5OSK,5SHE,5FiC"),
+            new SpecialEffectRecipe("Super Penetrator (Rail Gun)","3PLA,3RFC,3Zr,5USS"),
+            new SpecialEffectRecipe("Plasma Slug (Rail Gun)","3HE,2EFW,2RFC,4Hg"),
+            new SpecialEffectRecipe("Plasma Slug (Plasma Accelerator)","3HE,2EFW,2RFC,4Hg"),
+            new SpecialEffectRecipe("Overload Munitions (Seeker Missile,Dumb Missile,Mine)","5FiC,4TEC,2ASPA,3Ge"),
+            new SpecialEffectRecipe("FSD Interrupt (Dumb Missile)","3SWS,5AFT,5ME,3CCom"),
+            new SpecialEffectRecipe("Thermal Cascade (Cannon,Seeker Missile,Dumb Missile)","5HCW,4HC,3HDC,5P"),
+            new SpecialEffectRecipe("Penetrator Munitions (Dumb Missile)","5GA,3EA,3Zr"),
+            new SpecialEffectRecipe("Drag Munitions (Frag Cannon,Seeker Missile)","5C,5GR,2Mo"),
+            new SpecialEffectRecipe("Emissive Munitions (Pulse Laser,Multicannon,Seeker Missile,Dumb Missile,Mine)","4ME,3UED,3HE,3Mn"),
+            new SpecialEffectRecipe("Penetrator Payload (Torpedo)","3MC,3W,5ABSD,3Se"),
+            new SpecialEffectRecipe("Mass Lock Munition (Torpedo)","5ME,3HDC,3ASPA"),
+            new SpecialEffectRecipe("Reverberating Cascade (Torpedo,Mine)","2CCom,3CSD,4FiC,4Cr"),
+            new SpecialEffectRecipe("Shift-lock Canister (Mine)","5TeA,3SWS,5SAll"),
+            new SpecialEffectRecipe("Ion Disruption (Mine)","5S,5P,3CHD,3EA"),
+            new SpecialEffectRecipe("Radiant Canister (Mine)","1Po,3PA,4HDP"),
+            new SpecialEffectRecipe("Fast Charge (Shield Generator)","5WSE,3FFC,1CoS"),
+            new SpecialEffectRecipe("Multi-weave (Shield Generator)","5WSE,3FFC,1ASPA"),
+            new SpecialEffectRecipe("Hi-Cap (Shield Generator)","5WSE,3FFC,1CPo"),
+            new SpecialEffectRecipe("Lo-draw (Shield Generator)","5WSE,3FFC,1CPo"),
+            new SpecialEffectRecipe("Thermo Block (Shield Generator)","5WSE,3FFC,1HV"),
+            new SpecialEffectRecipe("Force Block (Shield Generator)","5WSE,3FFC,1DED"),
+            new SpecialEffectRecipe("Double Braced (Shield Generator)","5WSE,3FFC,1CCom"),
+            new SpecialEffectRecipe("Stripped Down (Shield Generator)","5WSE,3FFC,1PLA"),
+            new SpecialEffectRecipe("Thermal Spread (Engine)","5Fe,3HC,1HV"),
+            new SpecialEffectRecipe("Drive Distributors (Engine)","5Fe,3HC,1SFP"),
+            new SpecialEffectRecipe("Drag Drives (Engine)","5Fe,3HC,1SFP"),
+            new SpecialEffectRecipe("Double Braced (Engine)","5Fe,3HC,1FPC"),
+            new SpecialEffectRecipe("Stripped Down (Engine)","5Fe,3HC,1PLA"),
+            new SpecialEffectRecipe("Deep Charge (FSD)","5ADWE,3GA,1EHT"),
+            new SpecialEffectRecipe("Mass Manager (FSD)","5ADWE,3GA,1EHT"),
+            new SpecialEffectRecipe("Double Braced (FSD)","5ADWE,3GA,1CCom"),
+            new SpecialEffectRecipe("Stripped Down (FSD)","5ADWE,3GA,1PLA"),
+            new SpecialEffectRecipe("Thermal Spread (FSD)","5ADWE,3GA,1HV,3GR"),
+            new SpecialEffectRecipe("Monstered (Power Plant)","5GR,3V,1PCa"),
+            new SpecialEffectRecipe("Thermal Spread (Power Plant)","5GR,3V,1HV"),
+            new SpecialEffectRecipe("Double Braced (Power Plant)","5GR,3V,1FPC"),
+            new SpecialEffectRecipe("Stripped Down (Power Plant)","5GR,3V,1PLA"),
+            new SpecialEffectRecipe("Cluster Capacitors (Power Distributor)","5P,3HRC,1Cd"),
+            new SpecialEffectRecipe("Super Conduits (Power Distributor)","5P,3HRC,1SFP"),
+            new SpecialEffectRecipe("Flow Control (Power Distributor)","5P,3HRC,1CPo"),
+            new SpecialEffectRecipe("Double Braced (Power Distributor)","5P,3HRC,1FPC"),
+            new SpecialEffectRecipe("Stripped Down (Power Distributor)","5P,3HRC,1PLA"),
+            new SpecialEffectRecipe("Recycling Cell (Shield Cell)","5CSU,3Cr,1CCom"),
+            new SpecialEffectRecipe("Boss Cells (Shield Cell)","5CSU,3Cr,1PCa"),
+            new SpecialEffectRecipe("Flow Control (Shield Cell)","5CSU,3Cr,1CPo"),
+            new SpecialEffectRecipe("Double Braced (Shield Cell)","5CSU,3Cr,1Y"),
+            new SpecialEffectRecipe("Stripped Down (Shield Cell)","5CSU,3Cr,1PLA"),
+            new SpecialEffectRecipe("Oversized (Weapon)","5MS,3MC,1Ru"),
+            new SpecialEffectRecipe("Multi-servos (Pulse Laser,Burst Laser,Cannon,Multicannon,Plasma Accelerator,Rail Gun,Frag Cannon,Missile)","5MS,4FoC,2CPo,2CCom"),
+            new SpecialEffectRecipe("Flow Control (Weapon)","5MS,3HC,1EFW"),
+            new SpecialEffectRecipe("Double Braced (Weapon)","5MS,5CC,3V"),
+            new SpecialEffectRecipe("Stripped Down (Weapon)","5SAll,5C,1Sn"),
+            new SpecialEffectRecipe("Reflective Plating (Armour)","5CC,3HDP,2ThA"),
+            new SpecialEffectRecipe("Angled Plating (Armour)","5CC,3HDC,3Zr"),
+            new SpecialEffectRecipe("Layered Plating (Armour)","5HCW,3HDC,1Nb"),
+            new SpecialEffectRecipe("Deep Plating (Armour)","5CC,3ME,2Mo"),
+            new SpecialEffectRecipe("Reflective Plating (Hull Reinforcement)","5HCW,3HDP,1PLA,4Zn"),
+            new SpecialEffectRecipe("Angled Plating (Hull Reinforcement)","5TeA,3Zr,5C,3HDC"),
+            new SpecialEffectRecipe("Layered Plating (Hull Reinforcement)","5HCW,3SS,3W"),
+            new SpecialEffectRecipe("Deep Plating (Hull Reinforcement)","5CC,3Mo,2Ru"),
+            new SpecialEffectRecipe("Thermo Block (Shield Booster)","5ABSD,3CCe,3HV"),
+            new SpecialEffectRecipe("Force Block (Shield Booster)","5USA,3SS,2ASPA"),
+            new SpecialEffectRecipe("Blast Block (Shield Booster)","5ISSA,3HRC,3HDP,2Se"),
+            new SpecialEffectRecipe("Flow Control (Shield Booster)","5ISSA,3SFP,3FoC,3Nb"),
+            new SpecialEffectRecipe("Double Braced (Shield Booster)","5DSCR,3GA,3SHE"),
+            new SpecialEffectRecipe("Super Capacitors (Shield Booster)","3USS,5CC,2Cd"),
         };
 
         #endregion

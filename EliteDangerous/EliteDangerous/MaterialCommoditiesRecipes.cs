@@ -14,11 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
-using EliteDangerousCore.DB;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace EliteDangerousCore
 {
@@ -153,92 +150,5 @@ namespace EliteDangerousCore
             return shoppingList;
         }
 
-    }
-
-    public class RecipeFilterSelector
-    {
-        ExtendedControls.CheckedListControlCustom cc;
-        string dbstring;
-        public event EventHandler Changed;
-
-        private int reserved = 1;
-
-        private List<string> options;
-
-        public RecipeFilterSelector(List<string> opts)
-        {
-            options = opts;
-        }
-
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent)
-        {
-            FilterButton(db, ctr, back, fore, parent, options);
-        }
-
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Form parent, List<string> list)
-        {
-            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 2, 400), back, fore, parent, list);
-        }
-
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent)
-        {
-            FilterButton(db, p, s, back, fore, parent, options);
-        }
-
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Form parent, List<string> list)
-        {
-            if (cc == null)
-            {
-                dbstring = db;
-                cc = new ExtendedControls.CheckedListControlCustom();
-                cc.Items.Add("All");
-                cc.Items.Add("None");
-
-                cc.Items.AddRange(list.ToArray());
-
-                cc.SetChecked(SQLiteDBClass.GetSettingString(dbstring, "All"));
-                SetFilterSet();
-
-                cc.FormClosed += FilterClosed;
-                cc.CheckedChanged += FilterCheckChanged;
-                cc.PositionSize(p, s);
-                cc.SetColour(back, fore);
-                cc.Show(parent);
-            }
-            else
-                cc.Close();
-        }
-
-        private void SetFilterSet()
-        {
-            string list = cc.GetChecked(reserved);
-            cc.SetChecked(list.Equals("All"), 0, 1);
-            cc.SetChecked(list.Equals("None"), 1, 1);
-
-        }
-
-        private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)
-        {
-            //Console.WriteLine("Changed " + e.Index);
-
-            cc.SetChecked(e.NewValue == CheckState.Checked, e.Index, 1);        // force check now (its done after it) so our functions work..
-
-            if (e.Index == 0 && e.NewValue == CheckState.Checked)
-                cc.SetChecked(true, reserved);
-
-            if (e.Index == 1 && e.NewValue == CheckState.Checked)
-                cc.SetChecked(false, reserved);
-
-            SetFilterSet();
-        }
-
-        private void FilterClosed(Object sender, FormClosedEventArgs e)
-        {
-            SQLiteDBClass.PutSettingString(dbstring, cc.GetChecked(2));
-            cc = null;
-
-            if (Changed != null)
-                Changed(sender, e);
-        }
     }
 }

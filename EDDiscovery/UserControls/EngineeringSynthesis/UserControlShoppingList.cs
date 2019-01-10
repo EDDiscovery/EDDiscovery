@@ -33,7 +33,8 @@ namespace EDDiscovery.UserControls
         private List<Tuple<Recipes.Recipe, int>> EngineeringWanted = new List<Tuple<Recipes.Recipe, int>>();
         private List<Tuple<Recipes.Recipe, int>> SynthesisWanted = new List<Tuple<Recipes.Recipe, int>>();
         private List<Recipes.Recipe> TechBrokerWanted = new List<Recipes.Recipe>();
-        private RecipeFilterSelector tbs;
+        private RecipeFilterSelector techbrokerselection;
+        private RecipeFilterSelector specialeffectsselection;
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool hidePlanetMatsWithNoCapacity;
@@ -48,8 +49,9 @@ namespace EDDiscovery.UserControls
         private string DbHighlightAvailableMats { get { return DBName("ShoppingListHighlightAvailable" ); } }
         private string DBShowSystemAvailability { get { return DBName("ShoppingListSystemAvailability" ); } }
         private string DBUseEDSMForSystemAvailability { get { return DBName("ShoppingListUseEDSM" ); } }
-        private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter" ); } }
-        
+        private string DBTechBrokerFilterSave { get { return DBName("ShoppingListTechBrokerFilter"); } }
+        private string DBSpecialEffectsFilterSave { get { return DBName("ShoppingListSpecialEffectsFilter"); } }
+
         #region Init
 
         public UserControlShoppingList()
@@ -83,8 +85,12 @@ namespace EDDiscovery.UserControls
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
             List<string> techBrokerList = Recipes.TechBrokerUnlocks.Select(r => r.name).ToList();
-            tbs = new RecipeFilterSelector(techBrokerList);
-            tbs.Changed += TechBrokerSelectionChanged;
+            techbrokerselection = new RecipeFilterSelector(techBrokerList);
+            techbrokerselection.Changed += TechBrokerSelectionChanged;
+
+            List<string> seList = Recipes.SpecialEffects.Select(r => r.name).ToList();
+            specialeffectsselection = new RecipeFilterSelector(seList);
+            specialeffectsselection.Changed += SpecialEffectsSelectionChanged;
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { userControlSynthesis, userControlEngineering });
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -167,6 +173,7 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = this.BackColor;
                 List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+
                 string techBrokers = SQLiteDBClass.GetSettingString(DBTechBrokerFilterSave, "None");
                 if (techBrokers != "None")
                 {
@@ -174,6 +181,17 @@ namespace EDDiscovery.UserControls
                     foreach (Recipes.Recipe r in Recipes.TechBrokerUnlocks)
                     {
                         if (techBrokers == "All" || techBrokerList.Contains(r.name))
+                            totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
+                    }
+                }
+
+                string specialeffects = SQLiteDBClass.GetSettingString(DBSpecialEffectsFilterSave, "None");
+                if (specialeffects != "None")
+                {
+                    List<string> seList = specialeffects.Split(';').ToList<string>();
+                    foreach (Recipes.Recipe r in Recipes.SpecialEffects)
+                    {
+                        if (specialeffects == "All" || specialeffects.Contains(r.name))
                             totalWanted.Add(new Tuple<Recipes.Recipe, int>(r, 1));
                     }
                 }
@@ -314,7 +332,7 @@ namespace EDDiscovery.UserControls
             // if transparent, we don't show the eng/synth panels
             userControlEngineering.Visible = userControlSynthesis.Visible = !IsTransparent;
             userControlEngineering.Enabled = userControlSynthesis.Enabled = !IsTransparent;
-            buttonTechBroker.Visible = buttonTechBroker.Enabled = !IsTransparent;
+            buttonTechBroker.Visible = buttonSpecialEffects.Visible = !IsTransparent;
 
         }
 
@@ -358,22 +376,35 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
+        private void buttonTechBroker_Click(object sender, EventArgs e)
+        {
+            Button b = sender as Button;
+            techbrokerselection.FilterButton(DBTechBrokerFilterSave, b,
+                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
+        }
+
         private void TechBrokerSelectionChanged(object sender, EventArgs e)
         {
             Display();
         }
 
-        private void buttonTechBroker_Click(object sender, EventArgs e)
+        private void buttonSpecialEffects_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            tbs.FilterButton(DBTechBrokerFilterSave, b,
+            specialeffectsselection.FilterButton(DBSpecialEffectsFilterSave, b,
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
-                
+
+        private void SpecialEffectsSelectionChanged(object sender, EventArgs e)
+        {
+            Display();
+        }
+
         private void onlyCapacityToolStripMenuItem_Click(object sender, EventArgs e)
         {
             hidePlanetMatsWithNoCapacity = ((ToolStripMenuItem)sender).Checked;
             Display();
         }
+
     }
 }

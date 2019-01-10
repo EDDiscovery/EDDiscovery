@@ -59,6 +59,7 @@ namespace EDDiscovery.UserControls
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonSpecialEffects = new ExtendedControls.ButtonExt();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -110,6 +111,7 @@ namespace EDDiscovery.UserControls
             // 
             // splitContainerRightHorz.Panel1
             // 
+            this.splitContainerRightHorz.Panel1.Controls.Add(this.buttonSpecialEffects);
             this.splitContainerRightHorz.Panel1.Controls.Add(this.buttonTechBroker);
             this.splitContainerRightHorz.Panel1.Controls.Add(this.userControlSynthesis);
             // 
@@ -124,7 +126,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonTechBroker.Location = new System.Drawing.Point(3, 3);
             this.buttonTechBroker.Name = "buttonTechBroker";
-            this.buttonTechBroker.Size = new System.Drawing.Size(121, 23);
+            this.buttonTechBroker.Size = new System.Drawing.Size(150, 23);
             this.buttonTechBroker.TabIndex = 1;
             this.buttonTechBroker.Text = "Tech Broker Unlocks";
             this.buttonTechBroker.UseVisualStyleBackColor = true;
@@ -222,6 +224,16 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
+            // buttonSpecialEffects
+            // 
+            this.buttonSpecialEffects.Location = new System.Drawing.Point(190, 3);
+            this.buttonSpecialEffects.Name = "buttonSpecialEffects";
+            this.buttonSpecialEffects.Size = new System.Drawing.Size(121, 23);
+            this.buttonSpecialEffects.TabIndex = 1;
+            this.buttonSpecialEffects.Text = "Special Effects";
+            this.buttonSpecialEffects.UseVisualStyleBackColor = true;
+            this.buttonSpecialEffects.Click += new System.EventHandler(this.buttonSpecialEffects_Click);
+            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -259,5 +271,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonTechBroker;
         private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
+        private ExtendedControls.ButtonExt buttonSpecialEffects;
     }
 }
