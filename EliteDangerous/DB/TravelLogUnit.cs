@@ -100,11 +100,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
-                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    id = (long)cn.SQLScalar( cmd2);
                 }
 
                 return true;
@@ -130,7 +130,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 return true;
             }
@@ -144,7 +144,7 @@ namespace EliteDangerousCore.DB
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
-                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    DataSet ds = cn.SQLQueryText( cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
 

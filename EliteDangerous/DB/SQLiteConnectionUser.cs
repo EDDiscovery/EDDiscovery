@@ -19,22 +19,23 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
+using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionUser : SQLiteConnectionED<SQLiteConnectionUser>
+    public class SQLiteConnectionUser : SQLExtConnectionWithRegister<SQLiteConnectionUser>
     {
         protected static List<EDCommander> EarlyCommanders;
 
-        public SQLiteConnectionUser() : base(EDDSqlDbSelection.EDDUser)
+        public SQLiteConnectionUser() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, Initialize)
         {
         }
 
-        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDUser, utctimeindicator: utc)
+        public SQLiteConnectionUser(bool utc = true, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, Initialize, utctimeindicator: utc)
         {
         }
 
-        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDUser, utctimeindicator: utc, initializing: initializing)
+        protected SQLiteConnectionUser(bool initializing, bool utc, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, Initialize, utctimeindicator: utc, initializing: initializing)
         {
         }
 
@@ -151,46 +152,46 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void UpgradeUserDB2(SQLiteConnectionED conn)
+        private static void UpgradeUserDB2(SQLExtConnection conn)
         {
             string query4 = "CREATE TABLE SystemNote (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , Name TEXT NOT NULL , Time DATETIME NOT NULL )";
 
             PerformUpgrade(conn, 2, false, false, new[] { query4 });
         }
 
-        private static void UpgradeUserDB4(SQLiteConnectionED conn)
+        private static void UpgradeUserDB4(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN Note TEXT";
             PerformUpgrade(conn, 4, true, false, new[] { query1 });
         }
 
-        private static void UpgradeUserDB7(SQLiteConnectionED conn)
+        private static void UpgradeUserDB7(SQLExtConnection conn)
         {
             string query3 = "CREATE TABLE TravelLogUnit(id INTEGER PRIMARY KEY  NOT NULL, type INTEGER NOT NULL, name TEXT NOT NULL, size INTEGER, path TEXT)";
             PerformUpgrade(conn, 7, true, false, new[] { query3 });
         }
 
-        private static void UpgradeUserDB9(SQLiteConnectionED conn)
+        private static void UpgradeUserDB9(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE Objects (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , SystemName TEXT NOT NULL , ObjectName TEXT NOT NULL , ObjectType INTEGER NOT NULL , ArrivalPoint Float, Gravity FLOAT, Atmosphere Integer, Vulcanism Integer, Terrain INTEGER, Carbon BOOL, Iron BOOL, Nickel BOOL, Phosphorus BOOL, Sulphur BOOL, Arsenic BOOL, Chromium BOOL, Germanium BOOL, Manganese BOOL, Selenium BOOL NOT NULL , Vanadium BOOL, Zinc BOOL, Zirconium BOOL, Cadmium BOOL, Mercury BOOL, Molybdenum BOOL, Niobium BOOL, Tin BOOL, Tungsten BOOL, Antimony BOOL, Polonium BOOL, Ruthenium BOOL, Technetium BOOL, Tellurium BOOL, Yttrium BOOL, Commander  Text, UpdateTime DATETIME, Status INTEGER )";
             PerformUpgrade(conn, 9, true, false, new[] { query1 });
         }
 
-        private static void UpgradeUserDB10(SQLiteConnectionED conn)
+        private static void UpgradeUserDB10(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE wanted_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, systemname TEXT UNIQUE NOT NULL)";
             PerformUpgrade(conn, 10, true, false, new[] { query1 });
         }
 
 
-        private static void UpgradeUserDB11(SQLiteConnectionED conn)
+        private static void UpgradeUserDB11(SQLExtConnection conn)
         {
             string query2 = "ALTER TABLE Objects ADD COLUMN Landed BOOL";
             string query3 = "ALTER TABLE Objects ADD COLUMN terraform Integer";
             PerformUpgrade(conn, 11, true, false, new[] { query2, query3 });
         }
 
-        private static void UpgradeUserDB12(SQLiteConnectionED conn)
+        private static void UpgradeUserDB12(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE routes_expeditions (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT UNIQUE NOT NULL, start DATETIME, end DATETIME)";
             string query2 = "CREATE TABLE route_systems (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, routeid INTEGER NOT NULL, systemname TEXT NOT NULL)";
@@ -198,13 +199,13 @@ namespace EliteDangerousCore.DB
         }
 
 
-        private static void UpgradeUserDB16(SQLiteConnectionED conn)
+        private static void UpgradeUserDB16(SQLExtConnection conn)
         {
             string query = "CREATE TABLE Bookmarks (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , StarName TEXT, x double NOT NULL, y double NOT NULL, z double NOT NULL, Time DATETIME NOT NULL, Heading TEXT, Note TEXT NOT Null )";
             PerformUpgrade(conn, 16, true, false, new[] { query });
         }
 
-        private static void UpgradeUserDB101(SQLiteConnectionED conn)
+        private static void UpgradeUserDB101(SQLExtConnection conn)
         {
             string query1 = "DROP TABLE IF EXISTS Systems";
             string query2 = "DROP TABLE IF EXISTS SystemAliases";
@@ -214,7 +215,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4 });
         }
 
-        private static void UpgradeUserDB102(SQLiteConnectionED conn)
+        private static void UpgradeUserDB102(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE Commanders (Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, Name TEXT NOT NULL, EdsmApiKey TEXT NOT NULL, NetLogDir TEXT, Deleted INTEGER NOT NULL)";
 
@@ -247,13 +248,13 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 103, true, false, new[] { query1, query2 });
         }
 
-        private static void UpgradeUserDB104(SQLiteConnectionED conn)
+        private static void UpgradeUserDB104(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN journalid Integer NOT NULL DEFAULT 0";
             PerformUpgrade(conn, 104, true, false, new[] { query1 });
         }
 
-        private static void UpgradeUserDB105(SQLiteConnectionED conn)
+        private static void UpgradeUserDB105(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE TravelLogUnit ADD COLUMN CommanderId INTEGER REFERENCES Commanders(Id) ";
             string query2 = "DROP TABLE IF EXISTS JournalEntries";
@@ -273,14 +274,14 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 105, true, false, new[] { query1, query2, query3 });
         }
 
-        private static void UpgradeUserDB106(SQLiteConnectionED conn)
+        private static void UpgradeUserDB106(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE SystemNote ADD COLUMN EdsmId INTEGER NOT NULL DEFAULT -1";
             PerformUpgrade(conn, 106, true, false, new[] { query1 });
         }
 
 
-        private static void UpgradeUserDB107(SQLiteConnectionED conn)
+        private static void UpgradeUserDB107(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Commanders ADD COLUMN SyncToEdsm INTEGER NOT NULL DEFAULT 1";
             string query2 = "ALTER TABLE Commanders ADD COLUMN SyncFromEdsm INTEGER NOT NULL DEFAULT 0";
@@ -288,7 +289,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 107, true, false, new[] { query1, query2, query3});
         }
 
-        private static void UpgradeUserDB108(SQLiteConnectionED conn)
+        private static void UpgradeUserDB108(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Commanders ADD COLUMN JournalDir TEXT";
             PerformUpgrade(conn, 108, true, false, new[] { query1 }, () =>
@@ -499,7 +500,7 @@ namespace EliteDangerousCore.DB
 
         public static List<EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
         {
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
+            if (File.Exists(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath))
             {
                 bool closeconn = false;
 
@@ -532,7 +533,7 @@ namespace EliteDangerousCore.DB
         {
             Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
 
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDUser)))
+            if (File.Exists(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath))
             {
                 try
                 {
@@ -553,6 +554,56 @@ namespace EliteDangerousCore.DB
         public static void EarlyReadRegister()
         {
             EarlyRegister = EarlyGetRegister();
+        }
+    }
+
+    // very old class used everywhere to get register stuff from user DB. its easier for now to keep this so we don't change 1000's of files.
+
+    public static class SQLiteDBClass 
+    {
+        static public bool keyExists(string sKey)
+        {
+            return SQLiteConnectionUser.keyExists(sKey);
+        }
+
+        static public int GetSettingInt(string key, int defaultvalue)
+        {
+            return SQLiteConnectionUser.GetSettingInt(key, defaultvalue);
+        }
+
+        static public bool PutSettingInt(string key, int intvalue)
+        {
+            return SQLiteConnectionUser.PutSettingInt(key, intvalue);
+        }
+
+        static public double GetSettingDouble(string key, double defaultvalue)
+        {
+            return SQLiteConnectionUser.GetSettingDouble(key, defaultvalue);
+        }
+
+        static public bool PutSettingDouble(string key, double doublevalue)
+        {
+            return SQLiteConnectionUser.PutSettingDouble(key, doublevalue);
+        }
+
+        static public bool GetSettingBool(string key, bool defaultvalue)
+        {
+            return SQLiteConnectionUser.GetSettingBool(key, defaultvalue);
+        }
+
+        static public bool PutSettingBool(string key, bool boolvalue)
+        {
+            return SQLiteConnectionUser.PutSettingBool(key, boolvalue);
+        }
+
+        static public string GetSettingString(string key, string defaultvalue)
+        {
+            return SQLiteConnectionUser.GetSettingString(key, defaultvalue);
+        }
+
+        static public bool PutSettingString(string key, string strvalue)
+        {
+            return SQLiteConnectionUser.PutSettingString(key, strvalue);
         }
     }
 }

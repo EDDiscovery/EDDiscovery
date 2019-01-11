@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2015 - 2016 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,26 +14,22 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
+using System.Threading;
+using System.IO;
+using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    public class RegisterEntry
+    public enum EDDbAccessMode
     {
-        public string ValueString { get; private set; }
-        public long ValueInt { get; private set; }
-        public double ValueDouble { get; private set; }
-        public byte[] ValueBlob { get; private set; }
-
-        protected RegisterEntry()
-        {
-        }
-
-        public RegisterEntry(string stringval = null, byte[] blobval = null, long intval = 0, double floatval = Double.NaN)
-        {
-            ValueString = stringval;
-            ValueBlob = blobval;
-            ValueInt = intval;
-            ValueDouble = floatval;
-        }
+        Reader,
+        Writer,
+        Indeterminate
     }
+
+
 }

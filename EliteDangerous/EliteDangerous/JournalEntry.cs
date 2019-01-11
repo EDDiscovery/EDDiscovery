@@ -514,11 +514,11 @@ namespace EliteDangerousCore
                 cmd.AddParameterWithValue("@EdsmId", EdsmID);
                 cmd.AddParameterWithValue("@Synced", Synced);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
                 {
-                    Id = (int)(long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    Id = (int)(long)cn.SQLScalar( cmd2);
                 }
                 return true;
             }
@@ -544,7 +544,7 @@ namespace EliteDangerousCore
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
                 cmd.AddParameterWithValue("@EdsmId", EdsmID);
                 cmd.AddParameterWithValue("@Synced", Synced);
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 return true;
             }
@@ -566,7 +566,7 @@ namespace EliteDangerousCore
                 {
                     cmd.AddParameterWithValue("@ID", Id);
                     cmd.AddParameterWithValue("@EventData", jo.ToString());
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                 }
             }
             finally
@@ -591,7 +591,7 @@ namespace EliteDangerousCore
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM JournalEntries WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", idvalue);
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
             }
         }
 
@@ -679,7 +679,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@sync", Synced);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", Id , Synced));
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                 }
             }
             finally
@@ -700,7 +700,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with map colour", Id));
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                     CommanderId = cmdrid;
                 }
             }
@@ -718,7 +718,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@cmdridto", to);
                     cmd.AddParameterWithValue("@cmdridfrom", from);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                 }
             }
             return true;
@@ -883,7 +883,7 @@ namespace EliteDangerousCore
 
                     cmd.CommandText += " Order By EventTime ASC";
 
-                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    DataSet ds = cn.SQLQueryText( cmd);
 
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
@@ -1143,7 +1143,7 @@ namespace EliteDangerousCore
                         cmd.AddParameterWithValue("@cmd", currentcmdrid);
                     }
 
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                 }
             }
         }

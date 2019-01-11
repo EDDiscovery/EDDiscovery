@@ -1,5 +1,6 @@
 ﻿using EliteDangerousCore.DB;
 using Newtonsoft.Json.Linq;
+using SQLLiteExtensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -27,7 +28,7 @@ namespace EliteDangerousCore.EDDB
 
             while (!sr.EndOfStream)
             {
-                using (SQLiteTxnLockED<SQLiteConnectionSystem> tl = new SQLiteTxnLockED<SQLiteConnectionSystem>())
+                using (SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>())
                 {
                     tl.OpenWriter();
                     using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db

@@ -18,6 +18,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SQLLiteExtensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -328,7 +329,7 @@ namespace EliteDangerousCore.EDSM
                     int oldupdatecnt = updatecount;
                     int oldcount = count;
 
-                    using (SQLiteTxnLockED<SQLiteConnectionSystem> tl = new SQLiteTxnLockED<SQLiteConnectionSystem>())
+                    using (SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>())
                     {
                         tl.OpenWriter();
                         using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))

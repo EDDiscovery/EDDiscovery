@@ -959,6 +959,10 @@
       <Project>{4cfa37d5-4182-4cae-afc3-7563a13b44ee}</Project>
       <Name>OpenTKUtils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj">
+      <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>
+      <Name>SQLLite</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>

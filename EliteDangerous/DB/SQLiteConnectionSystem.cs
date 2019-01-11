@@ -17,20 +17,21 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
+    public class SQLiteConnectionSystem : SQLExtConnectionWithRegister<SQLiteConnectionSystem>
     {
-        public SQLiteConnectionSystem() : base(EDDSqlDbSelection.EDDSystem)
+        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, Initialize)
         {
         }
 
-        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem)
+        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, Initialize)
         {
         }
 
-        protected SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem, initializing: initializing)
+        protected SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, Initialize, initializing: initializing)
         {
         }
 
@@ -93,7 +94,7 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        private static void UpgradeSystemsDB2(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB2(SQLExtConnection conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
@@ -102,7 +103,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 2, false, false, new[] { query, query3, query5 });
         }
 
-        private static void UpgradeSystemsDB6(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB6(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_eddb Integer";
             string query2 = "ALTER TABLE Systems ADD COLUMN faction TEXT";
@@ -131,14 +132,14 @@ namespace EliteDangerousCore.DB
                 query11, query12, query13, query14, query15, query16, query17 });
         }
 
-        private static void UpgradeSystemsDB11(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB11(SQLExtConnection conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
             PerformUpgrade(conn, 11, true, false, new[] { query1 });
         }
 
-        private static void UpgradeSystemsDB15(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB15(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
             string query2 = "UPDATE Systems SET versiondate = datetime('now')";
@@ -146,7 +147,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 15, true, false, new[] { query1, query2 });
         }
 
-        private static void UpgradeSystemsDB17(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB17(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
             string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
@@ -155,7 +156,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 17, true, false, new[] { query1, query4, query5 });
         }
 
-        private static void UpgradeSystemsDB19(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB19(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE SystemAliases (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, id_edsm INTEGER, id_edsm_mergedto INTEGER)";
             string query2 = "CREATE INDEX SystemAliases_name ON SystemAliases (name)";
@@ -165,7 +166,7 @@ namespace EliteDangerousCore.DB
             PerformUpgrade(conn, 19, true, false, new[] { query1, query2, query3, query4 });
         }
 
-        private static void UpgradeSystemsDB20(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB20(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
             string query2 = "ALTER TABLE Systems ADD COLUMN randomid Integer NOT NULL DEFAULT -1";
@@ -176,7 +177,7 @@ namespace EliteDangerousCore.DB
             }); 
         }
 
-        private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB101(SQLExtConnection conn)
         {
             string query1 = "DROP TABLE IF EXISTS Bookmarks";
             string query2 = "DROP TABLE IF EXISTS SystemNote";
@@ -192,7 +193,7 @@ namespace EliteDangerousCore.DB
             });
         }
 
-        private static void UpgradeSystemsDB102(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB102(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE SystemNames (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -392,21 +393,6 @@ namespace EliteDangerousCore.DB
                     CreateSystemsTableIndexesNoLock();
                 }
             }
-        }
-
-        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
-        {
-            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
-
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem)))
-            {
-                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Reader))
-                {
-                    conn.GetRegister(reg);
-                }
-            }
-
-            return reg;
         }
     }
 }
