@@ -31,7 +31,7 @@ namespace EliteDangerousCore.EDDB
                 using (SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>())
                 {
                     tl.OpenWriter();
-                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
+                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
                     {
                         DbCommand selectCmd = null;
                         DbCommand insertCmd = null;

@@ -125,8 +125,9 @@ namespace EliteDangerousCore
 
                 if (commander == null )
                 {
+                    // in the default condition, we have a hidden commander, and first Cmdr. Jameson.
                     commander = EDCommander.GetListCommanders().FirstOrDefault();
-                    if (EDCommander.NumberOfCommanders == 1 && commander != null && commander.Name == "Jameson (Default)")
+                    if (EDCommander.NumberOfCommanders == 2 && commander != null && commander.Name == "Jameson (Default)")
                     {
                         commander.Name = newname;
                         commander.EdsmName = newname;
@@ -143,7 +144,7 @@ namespace EliteDangerousCore
                 {
                     TravelLogUnit.CommanderId = cmdrid;
                     TravelLogUnit.Update();
-                    System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
+//                    System.Diagnostics.Trace.WriteLine(string.Format("TLU {0} updated with commander {1}", TravelLogUnit.Path, cmdrid));
                 }
             }
             else if (je is ISystemStationEntry && ((ISystemStationEntry)je).IsTrainingEvent)
@@ -195,7 +196,7 @@ namespace EliteDangerousCore
 
             if (toosoon)                                                // if seeing repeats, remove
             {
-                System.Diagnostics.Debug.WriteLine("**** Remove as dup " + je.EventTypeStr);
+               // System.Diagnostics.Debug.WriteLine("**** Remove as dup " + je.EventTypeStr);
                 return null;
             }
 

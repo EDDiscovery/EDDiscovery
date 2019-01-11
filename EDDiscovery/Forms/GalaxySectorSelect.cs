@@ -230,13 +230,13 @@ namespace EDDiscovery.Forms
 
             int width = 700;
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "ED Discovery downloads star data from EDSM/EDDB which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed".Tx(t,"GALSELEX"), 
-                            new Point(10, 30), new Size(width-30, 60), ""));
+                            new Point(10, 30), new Size(width-50, 70), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Select:".Tx(t), new Point(10, 100), new Size(160, 24), ""));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Entry", "All",
-                        new Point(180, 100), new Size(width-180-20, 24),
-                        "Enter number to jump to or near to".Tx(t, "GALSELEN"), list));
+                        new Point(180, 100), new Size(width-180-100, 24),
+                        "Select the data set".Tx(t, "GALSELEN"), list));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width-20-80, 140), new Size(80, 24), "Press to Accept".Tx(t)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".Tx(t)));
 
             //f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(t)));
 

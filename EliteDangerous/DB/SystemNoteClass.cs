@@ -180,7 +180,7 @@ namespace EliteDangerousCore.DB
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {

@@ -61,7 +61,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (Inventory == null)  // so, if cargo contained info, we use that.. else we try for cargo.json.
             {
-                System.Diagnostics.Debug.WriteLine("Cargo with no data, checking file.." + historyrefreshparse);
+                //System.Diagnostics.Debug.WriteLine("Cargo with no data, checking file.." + historyrefreshparse);
 
                 JObject jnew = ReadAdditionalFile(System.IO.Path.Combine(directory, "Cargo.json"), waitforfile: !historyrefreshparse, checktimestamptype: true);  // check timestamp..
                 if (jnew != null)        // new json, rescan. returns null if cargo in the folder is not related to this entry by time.
@@ -73,7 +73,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("Cargo with with data, no need to check file.." + historyrefreshparse);
+                //System.Diagnostics.Debug.WriteLine("Cargo with with data, no need to check file.." + historyrefreshparse);
                 return true;
             }
         }
