@@ -170,13 +170,14 @@ namespace EliteDangerousCore.Inara
             return Event("setCommanderGameStatistics", dt, jsonfromstats);
         }
 
-        static public JToken setCommanderRankEngineer(string name, string progress, int value, DateTime dt)
+        static public JToken setCommanderRankEngineer(string name, string progress, int? value, DateTime dt)
         {
             JObject eventData = new JObject();
             eventData["engineerName"] = name;
             if ( progress.HasChars() )
                 eventData["rankStage"] = progress;
-            eventData["rankValue"] = value;
+            if ( value.HasValue )
+                eventData["rankValue"] = value.Value;
             return Event("setCommanderRankEngineer", dt, eventData);
         }
 

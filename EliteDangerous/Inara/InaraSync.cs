@@ -328,7 +328,7 @@ namespace EliteDangerousCore.Inara
                     {
                         var je = he.journalEntry as JournalEngineerProgress;
                         foreach( var x in je.Engineers )
-                            eventstosend.Add(InaraClass.setCommanderRankEngineer(x.Engineer, x.Progress, x.Rank.HasValue ? x.Rank.Value : 1, he.EventTimeUTC));
+                            eventstosend.Add(InaraClass.setCommanderRankEngineer(x.Engineer, x.Progress, x.Rank, he.EventTimeUTC));
                         break;
                     }
 
