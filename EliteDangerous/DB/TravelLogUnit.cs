@@ -100,11 +100,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
-                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    id = (long)cn.SQLScalar( cmd2);
                 }
 
                 return true;
@@ -130,7 +130,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 return true;
             }
@@ -140,11 +140,11 @@ namespace EliteDangerousCore.DB
         {
             List<TravelLogUnit> list = new List<TravelLogUnit>();
 
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
-                    DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                    DataSet ds = cn.SQLQueryText( cmd);
                     if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         return list;
 
@@ -162,7 +162,7 @@ namespace EliteDangerousCore.DB
         public static List<string> GetAllNames()
         {
             List<string> names = new List<string>();
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
                 {
@@ -180,7 +180,7 @@ namespace EliteDangerousCore.DB
 
         public static TravelLogUnit Get(string name)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
                 {
@@ -206,7 +206,7 @@ namespace EliteDangerousCore.DB
 
         public static TravelLogUnit Get(long id)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
             {
                 using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
                 {

@@ -17,92 +17,96 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionSystem : SQLiteConnectionED<SQLiteConnectionSystem>
+    public class SQLiteConnectionSystem : SQLExtConnectionWithLockRegister<SQLiteConnectionSystem>
     {
-        public SQLiteConnectionSystem() : base(EDDSqlDbSelection.EDDSystem)
+        public SQLiteConnectionSystem() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, false, Initialize, AccessMode.ReaderWriter)
+        {   
+        }
+
+        public SQLiteConnectionSystem(AccessMode mode = AccessMode.ReaderWriter) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, false, Initialize, mode)
         {
         }
 
-        public SQLiteConnectionSystem(EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem)
-        {
-        }
-
-        protected SQLiteConnectionSystem(bool initializing, EDDbAccessMode mode = EDDbAccessMode.Indeterminate) : base(EDDSqlDbSelection.EDDSystem, initializing: initializing)
-        {
+        private SQLiteConnectionSystem(bool utc, Action init) : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath, utc, init, AccessMode.ReaderWriter)
+        {       
         }
 
         public static void Initialize()
         {
             InitializeIfNeeded(() =>
             {
-                UpgradeSystemsDB();
+                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(false, null))       // use this special one so we don't get double init.
+                {
+                    System.Diagnostics.Debug.WriteLine("Initialise System DB");
+                    UpgradeSystemsDB(conn);
+                }
             });
         }
 
-        protected static bool UpgradeSystemsDB()
+        protected static bool UpgradeSystemsDB(SQLiteConnectionSystem conn)
         {
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Writer))
+            int dbver;
+            try
             {
-                int dbver;
-                try
-                {
-                    ExecuteQuery(conn, "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
-                    dbver = conn.GetSettingIntCN("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code
+                conn.ExecuteQuery( "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
 
-                    DropOldSystemTables(conn);
+                SQLExtRegister reg = new SQLExtRegister(conn);
+                dbver = reg.GetSettingInt("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code
 
-                    if (dbver < 2)
-                        UpgradeSystemsDB2(conn);
+                DropOldSystemTables(conn);
 
-                    if (dbver < 6)
-                        UpgradeSystemsDB6(conn);
+                if (dbver < 2)
+                    UpgradeSystemsDB2(conn);
 
-                    if (dbver < 11)
-                        UpgradeSystemsDB11(conn);
+                if (dbver < 6)
+                    UpgradeSystemsDB6(conn);
 
-                    if (dbver < 15)
-                        UpgradeSystemsDB15(conn);
+                if (dbver < 11)
+                    UpgradeSystemsDB11(conn);
 
-                    if (dbver < 17)
-                        UpgradeSystemsDB17(conn);
+                if (dbver < 15)
+                    UpgradeSystemsDB15(conn);
 
-                    if (dbver < 19)
-                        UpgradeSystemsDB19(conn);
+                if (dbver < 17)
+                    UpgradeSystemsDB17(conn);
 
-                    if (dbver < 20)
-                        UpgradeSystemsDB20(conn);
+                if (dbver < 19)
+                    UpgradeSystemsDB19(conn);
 
-                    if (dbver < 100)
-                        UpgradeSystemsDB101(conn);
+                if (dbver < 20)
+                    UpgradeSystemsDB20(conn);
 
-                    if (dbver < 102)
-                        UpgradeSystemsDB102(conn);
+                if (dbver < 100)
+                    UpgradeSystemsDB101(conn);
 
-                    CreateSystemDBTableIndexes(conn);
+                if (dbver < 102)
+                    UpgradeSystemsDB102(conn);
 
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    ExtendedControls.MessageBoxTheme.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
-                    return false;
-                }
+                CreateSystemDBTableIndexes(conn);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ExtendedControls.MessageBoxTheme.Show("UpgradeSystemsDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
+                return false;
             }
         }
 
-        private static void UpgradeSystemsDB2(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB2(SQLExtConnection conn)
         {
             string query = "CREATE TABLE Systems (id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , name TEXT NOT NULL COLLATE NOCASE , x FLOAT, y FLOAT, z FLOAT, cr INTEGER, commandercreate TEXT, createdate DATETIME, commanderupdate TEXT, updatedate DATETIME, status INTEGER, population INTEGER )";
             string query3 = "CREATE TABLE Distances (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL  UNIQUE , NameA TEXT NOT NULL , NameB TEXT NOT NULL , Dist FLOAT NOT NULL , CommanderCreate TEXT NOT NULL , CreateTime DATETIME NOT NULL , Status INTEGER NOT NULL )";
             string query5 = "CREATE INDEX DistanceName ON Distances (NameA ASC, NameB ASC)";
 
-            PerformUpgrade(conn, 2, false, false, new[] { query, query3, query5 });
+            conn.PerformUpgrade( 2, false, false, new[] { query, query3, query5 });
         }
 
-        private static void UpgradeSystemsDB6(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB6(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_eddb Integer";
             string query2 = "ALTER TABLE Systems ADD COLUMN faction TEXT";
@@ -126,57 +130,58 @@ namespace EliteDangerousCore.DB
             string query16 = "CREATE INDEX StationsIndex_system_ID  ON Stations (system_id ASC)";
             string query17 = "CREATE INDEX StationsIndex_system_Name  ON Stations (Name ASC)";
 
-            PerformUpgrade(conn, 6, true, false, new[] {
+            conn.PerformUpgrade( 6, true, false, new[] {
                 query1, query2, query4, query5, query6, query7, query8, query9, query10,
                 query11, query12, query13, query14, query15, query16, query17 });
         }
 
-        private static void UpgradeSystemsDB11(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB11(SQLExtConnection conn)
         {
             //Default is Color.Red.ToARGB()
             string query1 = "ALTER TABLE Systems ADD COLUMN FirstDiscovery BOOL";
-            PerformUpgrade(conn, 11, true, false, new[] { query1 });
+            conn.PerformUpgrade( 11, true, false, new[] { query1 });
         }
 
-        private static void UpgradeSystemsDB15(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB15(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN versiondate DATETIME";
             string query2 = "UPDATE Systems SET versiondate = datetime('now')";
 
-            PerformUpgrade(conn, 15, true, false, new[] { query1, query2 });
+            conn.PerformUpgrade( 15, true, false, new[] { query1, query2 });
         }
 
-        private static void UpgradeSystemsDB17(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB17(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN id_edsm Integer";
             string query4 = "ALTER TABLE Distances ADD COLUMN id_edsm Integer";
             string query5 = "CREATE INDEX Distances_EDSM_ID_Index ON Distances (id_edsm ASC)";
 
-            PerformUpgrade(conn, 17, true, false, new[] { query1, query4, query5 });
+            conn.PerformUpgrade( 17, true, false, new[] { query1, query4, query5 });
         }
 
-        private static void UpgradeSystemsDB19(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB19(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE SystemAliases (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, name TEXT, id_edsm INTEGER, id_edsm_mergedto INTEGER)";
             string query2 = "CREATE INDEX SystemAliases_name ON SystemAliases (name)";
             string query3 = "CREATE UNIQUE INDEX SystemAliases_id_edsm ON SystemAliases (id_edsm)";
             string query4 = "CREATE INDEX SystemAliases_id_edsm_mergedto ON SystemAliases (id_edsm_mergedto)";
 
-            PerformUpgrade(conn, 19, true, false, new[] { query1, query2, query3, query4 });
+            conn.PerformUpgrade( 19, true, false, new[] { query1, query2, query3, query4 });
         }
 
-        private static void UpgradeSystemsDB20(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB20(SQLExtConnection conn)
         {
             string query1 = "ALTER TABLE Systems ADD COLUMN gridid Integer NOT NULL DEFAULT -1";
             string query2 = "ALTER TABLE Systems ADD COLUMN randomid Integer NOT NULL DEFAULT -1";
 
-            PerformUpgrade(conn, 20, true, false, new[] { query1, query2 }, () =>
+            conn.PerformUpgrade( 20, true, false, new[] { query1, query2 }, () =>
             {
-                conn.PutSettingStringCN("EDSMLastSystems", "2010 - 01 - 01 00:00:00"); // force EDSM sync..  MUST do this manually, can't use main function as it needs internal one
+                SQLExtRegister reg = new SQLExtRegister(conn);
+                reg.PutSettingString("EDSMLastSystems", "2010 - 01 - 01 00:00:00"); // force EDSM sync..  MUST do this manually, can't use main function as it needs internal one
             }); 
         }
 
-        private static void UpgradeSystemsDB101(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB101(SQLExtConnection conn)
         {
             string query1 = "DROP TABLE IF EXISTS Bookmarks";
             string query2 = "DROP TABLE IF EXISTS SystemNote";
@@ -187,12 +192,12 @@ namespace EliteDangerousCore.DB
             string query7 = "VACUUM";
 
 
-            PerformUpgrade(conn, 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
+            conn.PerformUpgrade( 101, true, false, new[] { query1, query2, query3, query4, query5, query6, query7 }, () =>
             {
             });
         }
 
-        private static void UpgradeSystemsDB102(SQLiteConnectionED conn)
+        private static void UpgradeSystemsDB102(SQLExtConnection conn)
         {
             string query1 = "CREATE TABLE SystemNames (" +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -224,7 +229,7 @@ namespace EliteDangerousCore.DB
                 "EddbUpdatedAt Integer, " + // Seconds since 1970-01-01 00:00:00 UTC
                 "State Integer, " +
                 "NeedsPermit Integer)";
-            PerformUpgrade(conn, 102, true, false, new[] { query1, query2, query3 });
+            conn.PerformUpgrade( 102, true, false, new[] { query1, query2, query3 });
         }
 
 
@@ -348,15 +353,15 @@ namespace EliteDangerousCore.DB
         {
             using (var conn = new SQLiteConnectionSystem())
             {
-                ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems_temp");
-                ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames_temp");
-                ExecuteQuery(conn,
+                conn.ExecuteQuery( "DROP TABLE IF EXISTS EdsmSystems_temp");
+                conn.ExecuteQuery( "DROP TABLE IF EXISTS SystemNames_temp");
+                conn.ExecuteQuery(
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
                         "EdsmId INTEGER NOT NULL )");
 
-                ExecuteQuery(conn,
+                conn.ExecuteQuery(
                     "CREATE TABLE EdsmSystems_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "EdsmId INTEGER NOT NULL, " +
@@ -381,32 +386,17 @@ namespace EliteDangerousCore.DB
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     {
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS Systems");
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS EdsmSystems");
-                        ExecuteQuery(conn, "DROP TABLE IF EXISTS SystemNames");
-                        ExecuteQuery(conn, "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
-                        ExecuteQuery(conn, "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
+                        conn.ExecuteQuery( "DROP TABLE IF EXISTS Systems");
+                        conn.ExecuteQuery( "DROP TABLE IF EXISTS EdsmSystems");
+                        conn.ExecuteQuery( "DROP TABLE IF EXISTS SystemNames");
+                        conn.ExecuteQuery( "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                        conn.ExecuteQuery( "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
                         txn.Commit();
                     }
-                    ExecuteQuery(conn, "VACUUM");
+                    conn.ExecuteQuery( "VACUUM");
                     CreateSystemsTableIndexesNoLock();
                 }
             }
-        }
-
-        public static Dictionary<string, RegisterEntry> EarlyGetRegister()
-        {
-            Dictionary<string, RegisterEntry> reg = new Dictionary<string, RegisterEntry>();
-
-            if (File.Exists(GetSQLiteDBFile(EDDSqlDbSelection.EDDSystem)))
-            {
-                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(true, EDDbAccessMode.Reader))
-                {
-                    conn.GetRegister(reg);
-                }
-            }
-
-            return reg;
         }
     }
 }

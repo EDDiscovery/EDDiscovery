@@ -289,7 +289,7 @@ namespace EliteDangerousCore
             {
                 commandersDict.Clear();
 
-                var cmdrs = SQLiteConnectionUser.GetCommanders(conn);
+                var cmdrs = GetCommanders(conn);
                 int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
 
                 foreach (EDCommander cmdr in cmdrs)
@@ -345,11 +345,49 @@ namespace EliteDangerousCore
             }
         }
 
-#endregion
 
-#endregion
+        public static List<EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
+        {
+            List<EDCommander> commanders = new List<EDCommander>();
 
-#region Private properties and methods
+            bool closeconn = false;
+            if (conn == null)
+            {
+                closeconn = true;
+                conn = new SQLiteConnectionUser(true, SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
+            }
+
+            if (SQLiteConnectionUser.GetSettingInt("DBVer", 1,conn) >= 102)
+            {
+                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
+                {
+                    using (DbDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            EDCommander edcmdr = new EDCommander(reader);
+
+                            string name = Convert.ToString(reader["Name"]);
+                            string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
+
+                            commanders.Add(edcmdr);
+                        }
+                    }
+                }
+            }
+
+            if (closeconn && conn != null)
+                conn.Dispose();
+            return commanders;
+        }
+
+
+
+        #endregion
+
+        #endregion
+
+        #region Private properties and methods
         private static Dictionary<int, EDCommander> commandersDict;
         private static int commanderID = Int32.MinValue;
 

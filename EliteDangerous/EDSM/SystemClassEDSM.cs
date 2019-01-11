@@ -18,6 +18,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using SQLLiteExtensions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -70,7 +71,7 @@ namespace EliteDangerousCore.EDSM
 
                 while (!jr_eof)
                 {
-                    using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))  // open the db
+                    using (SQLiteConnectionSystem cn2 = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
                     {
                         using (DbTransaction txn = cn2.BeginTransaction())
                         {
@@ -147,7 +148,7 @@ namespace EliteDangerousCore.EDSM
 
         private static Dictionary<long, SystemClassBase> GetEdsmSystemsLite()
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Reader))
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
             {
                 Dictionary<long, SystemClassBase> systemsByEdsmId = new Dictionary<long, SystemClassBase>();
 
@@ -328,10 +329,10 @@ namespace EliteDangerousCore.EDSM
                     int oldupdatecnt = updatecount;
                     int oldcount = count;
 
-                    using (SQLiteTxnLockED<SQLiteConnectionSystem> tl = new SQLiteTxnLockED<SQLiteConnectionSystem>())
+                    using (SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>())
                     {
                         tl.OpenWriter();
-                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: EDDbAccessMode.Writer))
+                        using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))
                         {
                             using (DbTransaction txn = cn.BeginTransaction())
                             {

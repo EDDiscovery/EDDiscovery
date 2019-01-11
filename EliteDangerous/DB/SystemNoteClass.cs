@@ -70,11 +70,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@edsmid", EdsmId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
                 {
-                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    id = (long)cn.SQLScalar( cmd2);
                 }
 
                 globalSystemNotes.Add(this);
@@ -104,7 +104,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@EdsmId", EdsmId);
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 Dirty = false;
             }
@@ -125,7 +125,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
@@ -171,7 +171,7 @@ namespace EliteDangerousCore.DB
             {
                 using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
                 {
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                    cn.SQLNonQueryText( cmd);
                 }
             }
         }
@@ -180,11 +180,11 @@ namespace EliteDangerousCore.DB
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {
-                        DataSet ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                        DataSet ds = cn.SQLQueryText( cmd);
                         if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {
                             return false;

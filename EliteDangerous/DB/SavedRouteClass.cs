@@ -118,11 +118,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@end", EndDate);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
                 {
-                    Id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    Id = (long)cn.SQLScalar( cmd2);
                 }
 
                 using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
@@ -134,7 +134,7 @@ namespace EliteDangerousCore.DB
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                        cn.SQLNonQueryText( cmd2);
                     }
                 }
 
@@ -160,12 +160,12 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@start", StartDate);
                 cmd.AddParameterWithValue("@end", EndDate);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
                 {
                     cmd2.AddParameterWithValue("@routeid", Id);
-                    SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                    cn.SQLNonQueryText( cmd2);
                 }
 
                 using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
@@ -177,7 +177,7 @@ namespace EliteDangerousCore.DB
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        SQLiteDBClass.SQLNonQueryText(cn, cmd2);
+                        cn.SQLNonQueryText( cmd2);
                     }
                 }
 
@@ -217,17 +217,17 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: EDDbAccessMode.Reader))
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
                     {
-                        DataSet ds1 = SQLiteDBClass.SQLQueryText(cn, cmd1);
+                        DataSet ds1 = cn.SQLQueryText( cmd1);
 
                         if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
                         {
                             using (DbCommand cmd2 = cn.CreateCommand("select * from route_systems"))
                             {
-                                DataSet ds2 = SQLiteDBClass.SQLQueryText(cn, cmd2);
+                                DataSet ds2 = cn.SQLQueryText( cmd2);
 
                                 foreach (DataRow dr in ds1.Tables[0].Rows)
                                 {

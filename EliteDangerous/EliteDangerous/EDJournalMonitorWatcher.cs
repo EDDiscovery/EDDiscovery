@@ -228,7 +228,7 @@ namespace EliteDangerousCore
 
         public void ParseJournalFiles(Func<bool> cancelRequested, Action<int, string> updateProgress, bool forceReload = false)
         {
-            System.Diagnostics.Trace.WriteLine("Scanned " + WatcherFolder);
+//            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF", true), "Scanned " + WatcherFolder);
 
             Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & 0xFF) == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
@@ -267,6 +267,8 @@ namespace EliteDangerousCore
                 }
             }
 
+            //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), "Ready to update");
+
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
@@ -274,9 +276,13 @@ namespace EliteDangerousCore
                     EDJournalReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
+                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
+
                     reader.ReadJournal(out List<JournalReaderEntry> entries, historyrefreshparsing:true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
 
                     ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
+
+                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 
                     using (DbTransaction tn = cn.BeginTransaction())
                     {
@@ -285,7 +291,7 @@ namespace EliteDangerousCore
                             if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
                                 jre.JournalEntry.Add(jre.Json, cn, tn);
-                                System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
+                                //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                             }
                         }
 

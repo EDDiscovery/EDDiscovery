@@ -130,16 +130,17 @@ namespace EDDiscovery
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
 
-            HttpCom.LogPath = logpath;
 
-            SQLiteConnectionUser.EarlyReadRegister();
+            msg.Invoke("Scanning Memory Banks");
+
+            InitializeDatabases();
+            //SQLiteConnectionUser.EarlyReadRegister();
+
+            HttpCom.LogPath = logpath;
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Init config finished");
 
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
-
-            msg.Invoke("Scanning Memory Banks");
-            InitializeDatabases();
 
             GlobalBookMarkList.LoadBookmarks();
 

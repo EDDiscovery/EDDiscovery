@@ -239,11 +239,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    id = (long)SQLiteDBClass.SQLScalar(cn, cmd2);
+                    id = (long)cn.SQLScalar( cmd2);
                 }
 
                 return true;
@@ -272,7 +272,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
 
                 return true;
             }
@@ -291,7 +291,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                SQLiteDBClass.SQLNonQueryText(cn, cmd);
+                cn.SQLNonQueryText( cmd);
                 return true;
             }
         }
@@ -370,13 +370,13 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: EDDbAccessMode.Reader))
+                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {
                         DataSet ds = null;
 
-                        ds = SQLiteDBClass.SQLQueryText(cn, cmd);
+                        ds = cn.SQLQueryText( cmd);
 
                         if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
                         {

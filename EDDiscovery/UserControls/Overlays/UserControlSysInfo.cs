@@ -743,7 +743,7 @@ namespace EDDiscovery.UserControls
             Lines[BitSelCredits].Items[0] = 0;
 
             BaseUtils.LineStore.CompressOrder(Lines);
-            BaseUtils.LineStore.DumpOrder(Lines, "Reset");
+            //BaseUtils.LineStore.DumpOrder(Lines, "Reset");
         }
 
         void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing , int i )
@@ -895,7 +895,7 @@ namespace EDDiscovery.UserControls
                     Lines[fromrow].Items[fromcol] = -1;
 
                     BaseUtils.LineStore.CompressOrder(Lines);
-                    BaseUtils.LineStore.DumpOrder(Lines, "Move");
+                   // BaseUtils.LineStore.DumpOrder(Lines, "Move");
 
                     UpdateViewOnSelection();
                     Cursor.Current = Cursors.Default;
