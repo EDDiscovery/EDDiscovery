@@ -100,7 +100,6 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CAPITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TravelHistoryFilterTests.cs" />
   </ItemGroup>

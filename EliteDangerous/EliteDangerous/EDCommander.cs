@@ -452,9 +452,7 @@ namespace EliteDangerousCore
 
         public string Info { get
             {
-                bool isdisabled;
-                bool confirmed = EliteDangerousCore.CompanionAPI.CompanionCredentials.CredentialState(Name, out isdisabled) == EliteDangerousCore.CompanionAPI.CompanionCredentials.State.CONFIRMED;
-                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";To Inara" , syncToInara, ";CAPI" , confirmed, "<;(Disabled)" , isdisabled, ";To EGO", syncToEGO);
+                return BaseUtils.FieldBuilder.Build(";To EDDN", syncToEddn, ";To EDSM", syncToEdsm, ";From EDSM", syncFromEdsm, ";To Inara" , syncToInara, ";To EGO", syncToEGO);
             } }
 
 #endregion
