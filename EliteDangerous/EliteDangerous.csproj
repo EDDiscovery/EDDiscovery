@@ -64,16 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompanionAPI\CCommander.cs" />
-    <Compile Include="CompanionAPI\CMarket.cs" />
-    <Compile Include="CompanionAPI\CompanionAPIClass.cs" />
-    <Compile Include="CompanionAPI\CompanionCredentials.cs" />
-    <Compile Include="CompanionAPI\CompanionException.cs" />
-    <Compile Include="CompanionAPI\CProfile.cs" />
-    <Compile Include="CompanionAPI\CShip.cs" />
-    <Compile Include="CompanionAPI\CStarport.cs" />
-    <Compile Include="CompanionAPI\CSystem.cs" />
-    <Compile Include="CompanionAPI\RijndaelCrypt.cs" />
     <Compile Include="Config\EliteConfigInstance.cs" />
     <Compile Include="Config\IEliteConfig.cs" />
     <Compile Include="Config\IEliteOptions.cs" />
