@@ -626,9 +626,12 @@ namespace EDDiscovery.UserControls
                                 if (dgvr.Visible && he.EventTimeLocal.CompareTo(frm.StartTime) >= 0 && he.EventTimeLocal.CompareTo(frm.EndTime) <= 0)
                                 {
                                     string forExport = he.journalEntry.GetJson()?.ToString().Replace("\r\n", "");
-                                    forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
-                                    writer.Write(forExport);
-                                    writer.WriteLine();
+                                    if (forExport != null)
+                                    {
+                                        forExport = System.Text.RegularExpressions.Regex.Replace(forExport, "(\"(?:[^\"\\\\]|\\\\.)*\")|\\s+", "$1");
+                                        writer.Write(forExport);
+                                        writer.WriteLine();
+                                    }
                                 }
                             }
                         }

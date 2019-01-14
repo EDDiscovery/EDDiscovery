@@ -1317,7 +1317,7 @@ namespace EDDiscovery.UserControls
 
                         if (s.Length > 0 && !s.Equals(laststring))
                         {
-                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
+                            System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
                             laststring = s;
                         }
                     }
