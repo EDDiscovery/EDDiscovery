@@ -139,10 +139,10 @@ namespace EDDiscovery
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
 
-            if (File.Exists(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF")))
-            {
-                BaseUtils.FontLoader.AddFontFile(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF"));
-            }
+            //if (File.Exists(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF")))     // removed for now, since the font dialogs don't allow us to pick this local font.. yet
+            //{
+            //    BaseUtils.FontLoader.AddFontFile(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF"));
+            //}
         }
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form

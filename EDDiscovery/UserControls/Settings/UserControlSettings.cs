@@ -278,7 +278,9 @@ namespace EDDiscovery.UserControls
                       ("The font used by this theme is not available on your system." + Environment.NewLine +
                       "The font needed is \"{0}\"." + Environment.NewLine +
                       "Install this font to fully use this theme." + Environment.NewLine +
-                      "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine + Environment.NewLine +
+                      "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
+                      "and is in your install folder " + Path.GetDirectoryName(Application.ExecutablePath) + " - install it manually" + Environment.NewLine +
+                      Environment.NewLine +
                       "Would you like to load this theme using a replacement font?").Tx(this, "Font"), fontwanted);
 
                 DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.YesNo);

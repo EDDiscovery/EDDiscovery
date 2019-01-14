@@ -824,9 +824,6 @@
     <None Include="App.Portable.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="EUROCAPS.TTF">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Resources\3dmaphelp.txt" />
     <None Include="Resources\EDD License.rtf" />
