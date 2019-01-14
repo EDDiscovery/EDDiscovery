@@ -631,7 +631,7 @@ namespace EliteDangerousCore.EDSM
             //  string s = edsmsystems; bool success = true; // debug, comment out next two lines
 
             bool newfile;
-            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EDSMClass.ServerAddress + "dump/systemsWithCoordinates.json", edsmsystems, out newfile, (n, s) =>
+            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, out newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 

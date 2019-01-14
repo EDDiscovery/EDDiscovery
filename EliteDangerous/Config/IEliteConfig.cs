@@ -22,5 +22,7 @@ namespace EliteDangerousCore
         bool ClearCommodities { get; }
         bool ClearMaterials { get; }
         bool DisplayUTC { get; }
+        string EDSMFullSystemsURL { get; }
+        string EDDBSystemsURL { get; }
     }
 }

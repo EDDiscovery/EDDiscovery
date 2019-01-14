@@ -178,4 +178,10 @@
   <data name="EDD_License" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EDD License.rtf;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="URLEDDBSystems" xml:space="preserve">
+    <value>https://eddiscovery.space/eddb/systems_populated.jsonl</value>
+  </data>
+  <data name="URLEDSMFullSystems" xml:space="preserve">
+    <value>https://www.edsm.net/dump/systemsWithCoordinates.json</value>
+  </data>
 </root>

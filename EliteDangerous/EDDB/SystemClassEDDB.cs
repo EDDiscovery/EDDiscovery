@@ -166,7 +166,7 @@ namespace EliteDangerousCore.EDDB
 
                                         if (++c % 10000 == 0)
                                         {
-                                            Console.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info " + hasinfo + " update " + updated + " new " + inserted);
+                                            System.Diagnostics.Trace.WriteLine("EDDB Count " + c + " Delta " + (Environment.TickCount - lasttc) + " info " + hasinfo + " update " + updated + " new " + inserted);
                                             lasttc = Environment.TickCount;
                                         }
                                     }
@@ -217,7 +217,8 @@ namespace EliteDangerousCore.EDDB
 
             string systemFileName = Path.Combine(eddbdir, "systems_populated.jsonl");
 
-            bool success = BaseUtils.DownloadFileHandler.DownloadFile("http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl", systemFileName);
+            //"http://robert.astronet.se/Elite/eddb/v5/systems_populated.jsonl"
+            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, systemFileName);
 
             if (success)
             {

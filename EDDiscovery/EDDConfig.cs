@@ -74,6 +74,8 @@ namespace EDDiscovery
         private string essentialeventtype = "Default";
         private string coriolisURL = "";
         private string eddshipyardURL = "";
+        private string eddbsystemsurl = "";
+        private string edsmfullsystemsurl = "";
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -343,6 +345,38 @@ namespace EDDiscovery
             }
         }
 
+        public string EDSMFullSystemsURL   
+        {
+            get
+            {
+                if (edsmfullsystemsurl == "Default")
+                    return Properties.Resources.URLEDSMFullSystems;
+                else
+                    return edsmfullsystemsurl;
+            }
+            set
+            {
+                edsmfullsystemsurl = value;
+                SQLiteConnectionUser.PutSettingString("EDSMFullSystemsURL", value);
+            }
+        }
+        
+        public string EDDBSystemsURL
+        {
+            get
+            {
+                if (edsmfullsystemsurl == "Default")
+                    return Properties.Resources.URLEDDBSystems;
+                else
+                    return eddbsystemsurl;
+            }
+            set
+            {
+                eddbsystemsurl = value;
+                SQLiteConnectionUser.PutSettingString("EDDBSystemsURL", value);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -371,6 +405,8 @@ namespace EDDiscovery
                 essentialeventtype = SQLiteConnectionUser.GetSettingString("EssentialEventType", "Default");
                 coriolisURL = SQLiteConnectionUser.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
                 eddshipyardURL = SQLiteConnectionUser.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
+                edsmfullsystemsurl = SQLiteConnectionUser.GetSettingString("EDSMFullSystemsURL", "Default");
+                eddbsystemsurl = SQLiteConnectionUser.GetSettingString("EDDBSystemsURL", "Default");
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }
