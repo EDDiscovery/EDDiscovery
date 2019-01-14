@@ -397,6 +397,12 @@ namespace EliteDangerousCore.EDSM
                 }
 
                 JObject json = je.GetJson();
+
+                if (json == null)
+                {
+                    continue;
+                }
+
                 RemoveCommonKeys(json);
                 if (je.EventTypeID == JournalTypeEnum.FSDJump && json["FuelUsed"].Empty())
                     json["_convertedNetlog"] = true;
