@@ -778,7 +778,7 @@ namespace EliteDangerousCore
                         }
                         catch (Exception ex)
                         {
-                            Trace.WriteLine($"Error parsing journal entry\n{text}\n{ex.ToString()}");
+                            Trace.WriteLine($"Error parsing journal entry\n{EDataString}\n{ex.ToString()}");
                             return null;
                         }
                     }
