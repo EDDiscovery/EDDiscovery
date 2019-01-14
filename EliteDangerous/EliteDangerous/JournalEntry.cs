@@ -1174,7 +1174,17 @@ namespace EliteDangerousCore
 
         static public JournalEntry CreateJournalEntry(string text)
         {
-            JObject jo = (JObject)JObject.Parse(text);
+            JObject jo;
+
+            try
+            {
+                jo = (JObject)JObject.Parse(text);
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine($"Error parsing journal entry\n{text}\n{ex.ToString()}");
+                return new JournalUnknown(new JObject());
+            }
 
             return CreateJournalEntry(jo);
         }
