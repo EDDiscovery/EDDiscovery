@@ -771,7 +771,16 @@ namespace EliteDangerousCore
                     while (reader.Read())
                     {
                         string EDataString = (string)reader["EventData"];
-                        return JObject.Parse(EDataString);
+
+                        try
+                        {
+                            return JObject.Parse(EDataString);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine($"Error parsing journal entry\n{text}\n{ex.ToString()}");
+                            return null;
+                        }
                     }
                 }
             }
