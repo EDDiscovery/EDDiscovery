@@ -431,6 +431,11 @@ namespace EliteDangerousCore.EDDN
 
             JObject message = journal.GetJson();
 
+            if (message == null)
+            {
+                return null;
+            }
+
             if (message["FuelUsed"].Empty() || message["SystemAddress"] == null)  // Old ED 2.1 messages has no Fuel used fields
                 return null;
 
@@ -463,6 +468,11 @@ namespace EliteDangerousCore.EDDN
 
             JObject message = journal.GetJson();
 
+            if (message == null)
+            {
+                return null;
+            }
+
             message = RemoveCommonKeys(message);
             message = RemoveFactionReputation(message);
             message.Remove("StarPosFromEDSM");
@@ -492,6 +502,11 @@ namespace EliteDangerousCore.EDDN
 
             JObject message = journal.GetJson();
 
+            if (message == null)
+            {
+                return null;
+            }
+
             message = RemoveCommonKeys(message);
             message = RemoveStationEconomyKeys(message);
             message.Remove("CockpitBreach");
@@ -517,6 +532,11 @@ namespace EliteDangerousCore.EDDN
             msg["$schemaRef"] = GetEDDNJournalSchemaRef();
 
             JObject message = journal.GetJson();
+
+            if (message == null)
+            {
+                return null;
+            }
 
             message = RemoveCommonKeys(message);
 
@@ -567,6 +587,11 @@ namespace EliteDangerousCore.EDDN
 
             JObject message = journal.GetJson();
 
+            if (message == null)
+            {
+                return null;
+            }
+
             message = RemoveCommonKeys(message);
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
@@ -616,6 +641,11 @@ namespace EliteDangerousCore.EDDN
 
             JObject message = journal.GetJson();
 
+            if (message == null)
+            {
+                return null;
+            }
+
             message = RemoveCommonKeys(message);
 
             message["StarPos"] = new JArray(new float[] { (float)x, (float)y, (float)z });
@@ -638,6 +668,11 @@ namespace EliteDangerousCore.EDDN
             msg["$schemaRef"] = GetEDDNJournalSchemaRef();
 
             JObject message = journal.GetJson();
+
+            if (message == null)
+            {
+                return null;
+            }
 
             message["StarSystem"] = system.Name;
             message["StarPos"] = new JArray(new float[] { (float)system.X, (float)system.Y, (float)system.Z });

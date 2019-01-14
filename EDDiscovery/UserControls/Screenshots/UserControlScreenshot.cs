@@ -88,25 +88,29 @@ namespace EDDiscovery.UserControls
                     JournalScreenshot ss = (JournalScreenshot)he.journalEntry;
 
                     JObject jo = ss.GetJson();
-                    if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
-                    {
-                        string store_name = jo["EDDOutputFile"].Str();
-                        Point size = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
 
-                        ScreenShot(store_name, size);
-                    }
-                    else if (jo["EDDInputFile"] != null && File.Exists(jo["EDDInputFile"].Str()))
+                    if (jo != null)
                     {
-                        string filename = jo["EDDInputFile"].Str();
-                        ScreenShot(filename, new Point(ss.Width, ss.Height));
-                    }
-                    else
-                    {
-                        string filename = discoveryform.screenshotconverter.GetScreenshotPath(ss);
-
-                        if (File.Exists(filename))
+                        if (jo["EDDOutputFile"] != null && File.Exists(jo["EDDOutputFile"].Str()))
                         {
+                            string store_name = jo["EDDOutputFile"].Str();
+                            Point size = new Point(jo["EDDOutputWidth"].Int(), jo["EDDOutputHeight"].Int());
+
+                            ScreenShot(store_name, size);
+                        }
+                        else if (jo["EDDInputFile"] != null && File.Exists(jo["EDDInputFile"].Str()))
+                        {
+                            string filename = jo["EDDInputFile"].Str();
                             ScreenShot(filename, new Point(ss.Width, ss.Height));
+                        }
+                        else
+                        {
+                            string filename = discoveryform.screenshotconverter.GetScreenshotPath(ss);
+
+                            if (File.Exists(filename))
+                            {
+                                ScreenShot(filename, new Point(ss.Width, ss.Height));
+                            }
                         }
                     }
                 }
