@@ -349,12 +349,22 @@ namespace EliteDangerousCore
 
         public long GetScanValue(DateTime start, DateTime to)
         {
-            var sw = Stopwatch.StartNew();
-            var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
+            var scans = historylist
+                .Where(s => s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to)
+                .Select(h => h.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
 
-            var total = (from t in list select (long)t.EstimatedValue(false, false)).Sum();
-            sw.Stop();
+            var mappings = historylist.Where(s => s.EntryType == JournalTypeEnum.SAAScanComplete).Select(h => h.journalEntry as JournalSAAScanComplete).ToList();
+
+            var total = scans.Select(scan =>
+            {
+                var mapping = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
+                if (mapping == null)
+                    return scan.EstimatedValue(false, false);
+                else
+                    return scan.EstimatedValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+            }).Sum();
+
             return total;
         }
 
