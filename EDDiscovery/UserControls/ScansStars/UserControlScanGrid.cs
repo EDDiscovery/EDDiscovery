@@ -291,7 +291,7 @@ namespace EDDiscovery.UserControls
                             cur.Tag = img;
 
                             cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                        sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
+                                        sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity, mapped: sn.IsMapped, efficiencyBonus: sn.WasMappedEfficiently);
                         }
                     }
                 }
@@ -505,7 +505,7 @@ namespace EDDiscovery.UserControls
                         //! for all relevant bodies:
 
                         // give estimated value
-                        var value = sn.ScanData.EstimatedValue;
+                        var value = sn.ScanData.EstimatedValue(sn.IsMapped, sn.WasMappedEfficiently);
                         if (showValues)
                         {
                             bdDetails.Append(Environment.NewLine).Append("Value".Tx(this)).Append(" ").Append(value.ToString("N0"));
@@ -610,9 +610,9 @@ namespace EDDiscovery.UserControls
 
             foreach (var body in system.Bodies)
             {
-                if (body?.ScanData?.EstimatedValue != null)
-                {
-                    value += body.ScanData.EstimatedValue;
+                if (body.ScanData != null)
+                { 
+                    value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
                 }
             }
 
