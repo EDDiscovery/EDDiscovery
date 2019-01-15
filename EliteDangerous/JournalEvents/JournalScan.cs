@@ -1071,7 +1071,8 @@ namespace EliteDangerousCore.JournalEvents
                 case EDPlanet.Metal_rich_body:
                     // CFT value is scaled same as WW/ELW from 3.2, not confirmed in game
                     // They're like hen's teeth anyway....
-                    kValue = Terraformable ? 65631 : 21790;
+                    kValue = 21790;
+                    if (Terraformable) kValue += 65631;
                     break;
                 case EDPlanet.Ammonia_world:
                     kValue = 96932;
@@ -1081,16 +1082,19 @@ namespace EliteDangerousCore.JournalEvents
                     break;
                 case EDPlanet.Sudarsky_class_II_gas_giant:
                 case EDPlanet.High_metal_content_body:
-                    kValue = Terraformable ? 100677 : 9654;
+                    kValue = 9654;
+                    if (Terraformable) kValue += 100677;
                     break;
                 case EDPlanet.Water_world:
-                    kValue = Terraformable ? 116295 : 64831;
+                    kValue = 64831;
+                    if (Terraformable) kValue += 116295;
                     break;
                 case EDPlanet.Earthlike_body:
                     kValue = 116295;
                     break;
                 default:
-                    kValue = Terraformable ? 93328 : 300;
+                    kValue = 300;
+                    if (Terraformable) kValue += 93328;
                     break;
             }
 

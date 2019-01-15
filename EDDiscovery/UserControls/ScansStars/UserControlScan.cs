@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (checkBoxEDSM.Checked || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimatedValue;
+                        value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
                     }
                 }
             }
@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
                             if (frm.SelectedIndex < 3)
                             {
                                 var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime);
-                                scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
+                                scans = entries.ConvertAll(x => (JournalScan)x);
                             }
                             else
                             {
@@ -579,7 +579,8 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                writer.Write(csv.Format(scan.EstimatedValue));
+                                // Todo - get the real mapping values in here...
+                                writer.Write(csv.Format(scan.EstimatedValue(false, false)));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)

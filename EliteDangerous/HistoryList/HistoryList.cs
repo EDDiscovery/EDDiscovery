@@ -349,10 +349,13 @@ namespace EliteDangerousCore
 
         public long GetScanValue(DateTime start, DateTime to)
         {
+            var sw = Stopwatch.StartNew();
             var list = (from s in historylist where s.EntryType == JournalTypeEnum.Scan && s.EventTimeLocal >= start && s.EventTimeLocal < to select s.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
 
-            return (from t in list select (long)t.EstimatedValue).Sum();
+            var total = (from t in list select (long)t.EstimatedValue(false, false)).Sum();
+            sw.Stop();
+            return total;
         }
 
         public int GetDocked(DateTime start, DateTime to)
