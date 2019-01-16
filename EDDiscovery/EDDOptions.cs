@@ -26,6 +26,90 @@ namespace EDDiscovery
 {
     public class EDDOptions : EliteDangerousCore.IEliteOptions
     {
+        #region Option processing
+
+        private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool toeol)
+        {
+            optname = optname.ToLowerInvariant();
+            //System.Diagnostics.Debug.WriteLine("     Option " + optname);
+
+            if (optname == "-optionsfile" || optname == "-appfolder")
+            {
+                ca.Remove();   // waste it
+            }
+            else if (optname == "-translationfolder")
+            {
+                translationfolder = ca.NextEmpty();
+                TranslatorDirectoryIncludeSearchUpDepth = ca.Int();
+            }
+            else if (optname == "-userdbpath")
+            {
+                UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-systemsdbpath")
+            {
+                SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-iconspath")
+            {
+                IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-tracelog")
+            {
+                TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname.StartsWith("-"))
+            {
+                string opt = optname.Substring(1);
+
+                switch (opt)
+                {
+                    case "safemode": SafeMode = true; break;
+                    case "norepositionwindow": NoWindowReposition = true; break;
+                    case "portable": StoreDataInProgramDirectory = true; break;
+                    case "nrw": NoWindowReposition = true; break;
+                    case "showactionbutton": ActionButton = true; break;
+                    case "noload": NoLoad = true; break;
+                    case "nosystems": NoSystemsLoad = true; break;
+                    case "logexceptions": LogExceptions = true; break;
+                    case "nogithubpacks": DontAskGithubForPacks = true; break;
+                    case "checkrelease": CheckRelease = true; break;
+                    case "checkgithub": CheckGithubFiles = true; break;
+                    case "nocheckrelease": CheckRelease = false; break;
+                    case "nocheckgithub": CheckGithubFiles = false; break;
+                    case "edsmbeta":
+                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
+                        break;
+                    case "edsmnull":
+                        EDSMClass.ServerAddress = "";
+                        break;
+                    case "disablebetacheck":
+                        DisableBetaCommanderCheck = true;
+                        break;
+                    case "forcebeta":       // use to move logs to a beta commander for testing
+                        ForceBetaOnCommander = true;
+                        break;
+                    case "notheme": NoTheme = true; break;
+                    case "tabsreset": TabsReset = true; break;
+                    case "nosound": NoSound = true; break;
+                    case "no3dmap": No3DMap = true; break;
+                    case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
+                    case "resetlanguage": ResetLanguage = true; break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
+                        break;
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Unrecognized non option {optname}");
+            }
+        }
+
+        #endregion
+
+        #region Variables
+
         public static bool Instanced { get { return options != null; } }
 
         public static EDDOptions Instance
@@ -37,11 +121,6 @@ namespace EDDiscovery
 
                 return options;
             }
-        }
-
-        private EDDOptions()
-        {
-            Init();
         }
 
         static EDDOptions options = null;
@@ -99,6 +178,15 @@ namespace EDDiscovery
         private string AppFolder;      // internal to use.. for -appfolder option
         private bool StoreDataInProgramDirectory;  // internal to us, to indicate portable
         private string translationfolder; // internal to us
+
+        #endregion
+
+        #region Implementation
+
+        private EDDOptions()
+        {
+            Init();
+        }
 
         private void SetAppDataDirectory()
         {
@@ -220,83 +308,6 @@ namespace EDDiscovery
             }
         }
 
-        private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool toeol)
-        {
-            optname = optname.ToLowerInvariant();
-            //System.Diagnostics.Debug.WriteLine("     Option " + optname);
-
-            if (optname == "-optionsfile" || optname == "-appfolder" )
-            {
-                ca.Remove();   // waste it
-            }
-            else if (optname == "-translationfolder")
-            {
-                translationfolder = ca.NextEmpty();
-                TranslatorDirectoryIncludeSearchUpDepth = ca.Int();
-            }
-            else if (optname == "-userdbpath")
-            {
-                UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-systemsdbpath")
-            {
-                SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-iconspath")
-            {
-                IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-tracelog")
-            {
-                TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname.StartsWith("-"))
-            {
-                string opt = optname.Substring(1);
-
-                switch (opt)
-                {
-                    case "safemode": SafeMode = true; break;
-                    case "norepositionwindow": NoWindowReposition = true; break;
-                    case "portable": StoreDataInProgramDirectory = true; break;
-                    case "nrw": NoWindowReposition = true; break;
-                    case "showactionbutton": ActionButton = true; break;
-                    case "noload": NoLoad = true; break;
-                    case "nosystems": NoSystemsLoad = true; break;
-                    case "logexceptions": LogExceptions = true; break;
-                    case "nogithubpacks": DontAskGithubForPacks = true; break;
-                    case "checkrelease": CheckRelease = true; break;
-                    case "checkgithub": CheckGithubFiles = true; break;
-                    case "nocheckrelease": CheckRelease = false; break;
-                    case "nocheckgithub": CheckGithubFiles = false; break;
-                    case "edsmbeta":
-                        EDSMClass.ServerAddress = "http://beta.edsm.net:8080/";
-                        break;
-                    case "edsmnull":
-                        EDSMClass.ServerAddress = "";
-                        break;
-                    case "disablebetacheck":
-                        DisableBetaCommanderCheck = true;
-                        break;
-                    case "forcebeta":       // use to move logs to a beta commander for testing
-                        ForceBetaOnCommander = true;
-                        break;
-                    case "notheme": NoTheme = true; break;
-                    case "tabsreset": TabsReset = true; break;
-                    case "nosound": NoSound = true; break;
-                    case "no3dmap": No3DMap = true; break;
-                    case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
-                    case "resetlanguage": ResetLanguage = true; break;
-                    default:
-                        System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
-                        break;
-                }
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine($"Unrecognized non option {optname}");
-            }
-        }
 
         private void Init()
         {
@@ -349,4 +360,6 @@ namespace EDDiscovery
         }
 
     }
+
+    #endregion
 }

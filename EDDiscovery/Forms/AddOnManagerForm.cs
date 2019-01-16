@@ -90,6 +90,7 @@ namespace EDDiscovery.Forms
 
         private void DownloadManager_Shown(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
             CheckThread = new System.Threading.Thread(new System.Threading.ThreadStart(CheckState));
             CheckThread.Start();
         }
@@ -149,6 +150,7 @@ namespace EDDiscovery.Forms
 
         void ReadyToDisplay()
         {
+            this.Cursor = Cursors.Default;
             panelVScroll.RemoveAllControls(new List<Control>() { buttonMore});
 
             mgr = new VersioningManager();
