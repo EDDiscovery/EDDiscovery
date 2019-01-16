@@ -402,7 +402,8 @@ namespace EliteDangerousCore.DB
         // return any mark
         public BookmarkClass FindBookmarkOnRegion(string name)   
         {
-            return globalbookmarks.Find(x => x.Heading != null && x.Name.Equals(x.Heading, StringComparison.InvariantCultureIgnoreCase));
+            BookmarkClass bc = globalbookmarks.Find(x => x.Heading != null && x.Heading.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+            return bc;
         }
 
         public BookmarkClass FindBookmarkOnSystem(string name)
@@ -429,7 +430,7 @@ namespace EliteDangerousCore.DB
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
 
-            if (bk == null)
+            if (addit)
             {
                 bk = new BookmarkClass();
                 bk.Note = "";       // set empty, in case notes==null
@@ -470,7 +471,12 @@ namespace EliteDangerousCore.DB
             long id = bk.id;
             bk.Delete();
             globalbookmarks.RemoveAll(x => x.id == id);
-            OnBookmarkChange?.Invoke(bk,true);
+            OnBookmarkChange?.Invoke(bk, true);
+        }
+
+        public void TriggerChange(BookmarkClass bk)
+        {
+            OnBookmarkChange?.Invoke(bk, true);
         }
     }
 }

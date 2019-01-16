@@ -157,7 +157,10 @@ namespace EDDiscovery.Actions
                             {
                                 BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmark(name, region);
                                 if (bk != null)
+                                {
                                     bk.UpdateNotes(notes);
+                                    GlobalBookMarkList.Instance.TriggerChange(bk);
+                                }
                                 else
                                     ap.ReportError("UpdateNote cannot find star or region " + name);
                             }
@@ -207,7 +210,10 @@ namespace EDDiscovery.Actions
                                             string comment = sp.NextQuotedWord();       // can be null
 
                                             if (planet != null && latp != null && longp != null)
+                                            {
                                                 bk.AddOrUpdateLocation(planet, placename, comment ?? "", latp.Value, longp.Value);
+                                                GlobalBookMarkList.Instance.TriggerChange(bk);
+                                            }
                                             else
                                                 ap.ReportError("AddPlanet missing parameters");
                                         }
@@ -216,7 +222,9 @@ namespace EDDiscovery.Actions
                                             string comment = sp.NextQuotedWord();
                                             if (comment != null)
                                             {
-                                                if (!bk.UpdateLocationComment(planet, placename, comment))
+                                                if (bk.UpdateLocationComment(planet, placename, comment))
+                                                    GlobalBookMarkList.Instance.TriggerChange(bk);
+                                                else
                                                     ap.ReportError("UpdatePlanetNote no such placename");
                                             }
                                             else
@@ -224,7 +232,9 @@ namespace EDDiscovery.Actions
                                         }
                                         else if (deleteplanet)
                                         {
-                                            if (!bk.DeleteLocation(planet, placename))
+                                            if (bk.DeleteLocation(planet, placename))
+                                                GlobalBookMarkList.Instance.TriggerChange(bk);
+                                            else
                                                 ap.ReportError("DeletePlanet no such placename");
                                         }
                                         else if ( planetmarkexists )
