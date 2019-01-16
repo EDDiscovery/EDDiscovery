@@ -26,7 +26,7 @@ namespace EliteDangerousCore.JournalEvents
     public class JournalScan : JournalEntry
     {
         private int? estimatedValue;
-        private bool valueCalculatedForMapped = false;
+        private bool valueCalculatedWithMappingMultiplier = false;
 
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
         public string BodyDesignation { get; set; }
@@ -575,8 +575,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public int EstimatedValue(bool mapped, bool efficiencyBonus)
         {
-            if (!estimatedValue.HasValue || mapped != valueCalculatedForMapped)
+            if (!estimatedValue.HasValue || mapped != valueCalculatedWithMappingMultiplier)
+            {
+                valueCalculatedWithMappingMultiplier = mapped;
                 estimatedValue = CalculateEstimatedValue(mapped, efficiencyBonus);
+            }
 
             return estimatedValue.Value;
         }
@@ -1015,6 +1018,8 @@ namespace EliteDangerousCore.JournalEvents
 
         private int CalculateEstimatedValue(bool mapped = false, bool efficient = false)
         {
+            // see https://forums.frontier.co.uk/showthread.php/232000-Exploration-value-formulae/ for detail
+
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
                 return EstimatedValueED22();
 
@@ -1213,8 +1218,6 @@ namespace EliteDangerousCore.JournalEvents
 
         private double PlanetValue(double k, double m, double map)
         {
-            // see https://forums.frontier.co.uk/showthread.php/232000-Exploration-value-formulae/page21
-            // confidence on q is still low
             const double q = 0.56591828;
             return Math.Max((k + (k * Math.Pow(m, 0.2) * q)) * map, 500);
         }

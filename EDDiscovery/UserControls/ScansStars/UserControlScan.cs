@@ -439,7 +439,7 @@ namespace EDDiscovery.UserControls
                         else
                         {
                             List<JournalScan> scans = null;
-
+                            
                             if (frm.SelectedIndex < 3)
                             {
                                 var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime);
@@ -476,6 +476,11 @@ namespace EDDiscovery.UserControls
 
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
+
+                            List<JournalSAAScanComplete> mappings = ShowPlanets ? 
+                                JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime)
+                                .ConvertAll(x => (JournalSAAScanComplete)x)
+                                : null;
 
                             if (frm.IncludeHeader)
                             {
@@ -579,8 +584,18 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                // Todo - get the real mapping values in here...
-                                writer.Write(csv.Format(scan.EstimatedValue(false, false)));
+                                if (string.IsNullOrEmpty(scan.PlanetClass))
+                                {
+                                    writer.Write(csv.Format(scan.EstimatedValue(false, false)));
+                                }
+                                else
+                                {
+                                    var map = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
+                                    if (map == null)
+                                        writer.Write(csv.Format(scan.EstimatedValue(false, false)));
+                                    else
+                                        writer.Write(csv.Format(scan.EstimatedValue(true, map.ProbesUsed <= map.EfficiencyTarget)));
+                                }
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)
