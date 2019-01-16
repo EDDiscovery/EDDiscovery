@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
                 mapped = p4;
             }
         }
-
+                
         /// <summary>
         /// Draw the system bodies
         /// </summary>
@@ -432,6 +432,8 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
                                 overlays.landable = true;
                             }
+                            else
+                            { overlays.landable = false; overlays.materials = false; }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
@@ -439,13 +441,17 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
                                 overlays.volcanism = true;
                             }
+                            else
+                            { overlays.volcanism = false; }
 
                             if (sn.IsMapped)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
                                 overlays.mapped = true;
                             }
-
+                            else
+                            { overlays.mapped = false; }
+                            
                             // materials                        
                             if (sn.ScanData.HasMaterials)
                             {
@@ -456,15 +462,21 @@ namespace EDDiscovery.UserControls
                                 {
                                     var mc = MaterialCommodityData.GetByFDName(mat.Key);
                                     if (mc?.IsJumponium == true)
+                                    {
                                         ret = ret.AppendPrePad(mc.Name, ", ");
+                                        overlays.materials = true;
+                                    }
+                                    else
+                                    {
+                                        overlays.materials = false;
+                                    }
                                 }
 
                                 if (ret.Length > 0 && showMaterials)
                                 {
                                     bdDetails.Append(Environment.NewLine).Append("This body contains: ".Tx(this, "BC")).Append(ret);
-                                    overlays.materials = true;
                                 }
-
+                                                                
                                 ReportJumponium(ret);
                             }
                         }
