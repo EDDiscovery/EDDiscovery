@@ -1444,6 +1444,17 @@ namespace EDDiscovery
                 return;
             }
 
+            if (!EDCommander.Current.SyncToEddn)
+            {
+                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".Tx(this, "ConfirmSyncToEDSM");
+                string dlgcapt = "Confirm EDSM sync".Tx(this, "ConfirmSyncToEDSMCaption");
+
+                if (ExtendedControls.MessageBoxTheme.Show(this, dlgtext, dlgcapt, MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             try
             {
                 EDSMJournalSync.SendEDSMEvents(l => LogLine(l), history, manual: true);
