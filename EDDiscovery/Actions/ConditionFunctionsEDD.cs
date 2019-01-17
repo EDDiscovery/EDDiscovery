@@ -127,6 +127,9 @@ namespace EDDiscovery.Actions
                                     });
 
             paras[0].Value = paras[0].Value.Replace("  ", " ");
+            paras[0].Value = paras[0].Value.Replace("Belt Cluster", ", Belt Cluster");
+
+
 
             return ReplaceVarCommon(out output, true);
         }
