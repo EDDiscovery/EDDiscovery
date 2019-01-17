@@ -461,6 +461,15 @@ namespace EliteDangerousCore
             VerifyList();
         }
 
+        public void FuelReservoirReplenished(JournalReservoirReplenished e)
+        {
+            if (HaveCurrentShip)
+            {
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.FuelMain);
+            }
+            VerifyList();
+        }
+
         public void RefuelAll(JournalRefuelAll e)
         {
             if (HaveCurrentShip)

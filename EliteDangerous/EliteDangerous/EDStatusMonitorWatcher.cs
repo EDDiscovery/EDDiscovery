@@ -66,7 +66,8 @@ namespace EliteDangerousCore
         long? prev_flags = null;        // force at least one out here by invalid values
         int prev_guifocus = -1;                 
         int prev_firegroup = -1;
-        double prev_fuel = -1;
+        double prev_curfuel = -1;
+        double prev_curres = -1;
         int prev_cargo = -1;
         UIEvents.UIPips.Pips prev_pips = new UIEvents.UIPips.Pips();
         UIEvents.UIPosition.Position prev_pos = new UIEvents.UIPosition.Position();     // default is MinValue
@@ -228,11 +229,18 @@ namespace EliteDangerousCore
                             prev_firegroup = curfiregroup.Value;
                         }
 
-                        double? curfuel = jo["Fuel"].DoubleNull();      // may appear/disappear and only introduced for 3.3
-                        if (curfuel != null && curfuel.Value != prev_fuel)
+                        JToken jfuel = (JToken)jo["Fuel"];
+
+                        if (jfuel != null && jfuel.Type == JTokenType.Object)        // because they changed its type in 3.3.2
                         {
-                            events.Add(new UIEvents.UIFuel(curfuel.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
-                            prev_fuel = curfuel.Value;
+                            double? curfuel = jfuel["FuelMain"].DoubleNull();
+                            double? curres = jfuel["FuelReservoir"].DoubleNull();
+                            if (curfuel != null && curres != null && ( curfuel.Value != prev_curfuel || curres.Value != prev_curres) )
+                            {
+                                events.Add(new UIEvents.UIFuel(curfuel.Value,  curres.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
+                                prev_curfuel = curfuel.Value;
+                                prev_curres = curres.Value;
+                            }
                         }
 
                         int? curcargo = jo["Cargo"].IntNull();      // may appear/disappear and only introduced for 3.3

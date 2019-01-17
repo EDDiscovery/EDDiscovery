@@ -244,7 +244,7 @@ namespace EliteDangerousCore.JournalEvents
             string enginfo = "";
             foreach (var p in Engineers)
             {
-                enginfo = enginfo.AppendPrePad(BaseUtils.FieldBuilder.Build("", p.Engineer, "", p.Progress, "Rank:", p.Rank, ";%",p.RankProgress), System.Environment.NewLine);
+                enginfo = enginfo.AppendPrePad(BaseUtils.FieldBuilder.Build("", p.Engineer, "", p.Progress, "Rank:".Tx(this), p.Rank, ";%",p.RankProgress), System.Environment.NewLine);
             }
 
             detailed = "";

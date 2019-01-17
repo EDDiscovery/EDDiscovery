@@ -100,4 +100,28 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.ReservoirReplenished)]
+    public class JournalReservoirReplenished : JournalEntry, IShipInformation
+    {
+        public JournalReservoirReplenished(JObject evt) : base(evt, JournalTypeEnum.ReservoirReplenished)
+        {
+            FuelMain = evt["FuelMain"].Double();
+            FuelReservoir = evt["FuelReservoir"].Double();
+        }
+
+        public double FuelMain { get; set; }
+        public double FuelReservoir { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("Main:;t;0.0".Tx(this), FuelMain, "Reservoir:;t;0.0".Tx(this), FuelReservoir);
+            detailed = "";
+        }
+
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        {
+            shp.FuelReservoirReplenished(this);
+        }
+    }
+
 }

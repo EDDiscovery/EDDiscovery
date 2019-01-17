@@ -55,15 +55,73 @@ namespace EliteDangerousCore.JournalEvents
     {
         public JournalAsteroidCracked(JObject evt) : base(evt, JournalTypeEnum.AsteroidCracked)
         {
-            Body= evt["Body"].Str();
+            Body = evt["Body"].Str();
         }
 
-        public string Body { get; set; }                                        
+        public string Body { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
             info = Body;
             detailed = "";
+        }
+    }
+
+    [JournalEntryType(JournalTypeEnum.ProspectedAsteroid)]
+    public class JournalProspectedAsteroid : JournalEntry
+    {
+        public class Material
+        {
+            public string Name { get; set; }        //FDNAME
+            public string FriendlyName { get; set; }        //friendly
+            public double Proportion { get; set; }      // 0-100
+
+            public void Normalise()
+            {
+                Name = JournalFieldNaming.FDNameTranslation(Name);
+                FriendlyName = MaterialCommodityData.GetNameByFDName(Name);
+            }
+        }
+
+        public JournalProspectedAsteroid(JObject evt) : base(evt, JournalTypeEnum.ProspectedAsteroid)
+        {
+            Content = evt["Content"].Str();     // strange string with $AsteroidMaterialContent_High
+            Content_Localised = JournalFieldNaming.CheckLocalisationTranslation(evt["Content_Localised"].Str(), Content);
+
+            MotherlodeMaterial = JournalFieldNaming.FDNameTranslation(evt["MotherlodeMaterial"].Str());
+            FriendlyMotherlodeMaterial = MaterialCommodityData.GetNameByFDName(MotherlodeMaterial);
+
+            Remaining = evt["Remaining"].Double();      // 0-100o
+            Materials = evt["Materials"]?.ToObjectProtected<Material[]>().OrderBy(x => x.Name)?.ToArray();
+
+            if ( Materials != null )
+            {
+                foreach (Material m in Materials)
+                    m.Normalise();
+            }
+        }
+
+        public string Content { get; set; }
+        public string Content_Localised { get; set; }
+
+        public string MotherlodeMaterial { get; set; }
+        public string FriendlyMotherlodeMaterial { get; set; }
+
+        public double Remaining { get; set; }
+        public Material[] Materials { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", FriendlyMotherlodeMaterial, "", Content_Localised, "Remaining:;%;N1".Tx(this), Remaining);
+            detailed = "";
+
+            if ( Materials != null )
+            {
+                foreach (Material m in Materials)
+                {
+                    detailed = detailed.AppendPrePad( BaseUtils.FieldBuilder.Build("", m.FriendlyName, "< ;%;N1", m.Proportion), System.Environment.NewLine );
+                }
+            }
         }
     }
 

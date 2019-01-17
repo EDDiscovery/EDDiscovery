@@ -211,8 +211,8 @@ namespace EliteDangerousCore
 
             public override string ToString()
             {
-                string ret = BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine, "Engineer:", Engineer, "Blueprint:", FriendlyBlueprintName,
-                        "Level:", Level, "Quality:", Quality, "Experimental Effect:", ExperimentalEffect_Localised);
+                string ret = BaseUtils.FieldBuilder.BuildSetPad(Environment.NewLine, "Engineer:".Tx(this), Engineer, "Blueprint:".Tx(this), FriendlyBlueprintName,
+                        "Level:".Tx(this), Level, "Quality:".Tx(this), Quality, "Experimental Effect:".Tx(this), ExperimentalEffect_Localised);
 
                 if (Modifiers != null)
                 {
@@ -224,8 +224,13 @@ namespace EliteDangerousCore
                             ret += BaseUtils.FieldBuilder.Build("", m.Label, "<:", m.ValueStr) + Environment.NewLine;
                         else
                         {
-                            bool better = m.LessIsGood ? (m.Value < m.OriginalValue) : (m.Value > m.OriginalValue);
-                            ret += BaseUtils.FieldBuilder.Build("", m.FriendlyLabel, "<:;;N2", m.Value, "Original:;;N2", m.OriginalValue, "< (Worse); (Better)", better) + Environment.NewLine;
+                            if (m.Value != m.OriginalValue)
+                            {
+                                bool better = m.LessIsGood ? (m.Value < m.OriginalValue) : (m.Value > m.OriginalValue);
+                                ret += BaseUtils.FieldBuilder.Build("", m.FriendlyLabel, "<:;;N2", m.Value, "Original:;;N2".Tx(this), m.OriginalValue, "< (Worse); (Better)".Tx(this), better) + Environment.NewLine;
+                            }
+                            else
+                                ret += BaseUtils.FieldBuilder.Build("", m.FriendlyLabel, "<:;;N2", m.Value) + Environment.NewLine;
                         }
                     }
                 }

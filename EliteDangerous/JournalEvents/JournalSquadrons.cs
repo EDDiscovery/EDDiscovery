@@ -143,4 +143,21 @@ namespace EliteDangerousCore.JournalEvents
         }
     }
 
+    [JournalEntryType(JournalTypeEnum.SquadronStartup)]
+    public class JournalSquadronStartup : JournalSquadronBase
+    {
+        public JournalSquadronStartup(JObject evt) : base(evt, JournalTypeEnum.SquadronStartup)
+        {
+            CurrentRank = (SquadronRank)evt["CurrentRank"].Int();
+        }
+
+        public SquadronRank CurrentRank { get; set; }
+
+        public override void FillInformation(out string info, out string detailed)
+        {
+            info = BaseUtils.FieldBuilder.Build("", Name, "Rank:".Txb(this), CurrentRank.ToString().SplitCapsWord());
+            detailed = "";
+        }
+    }
+
 }
