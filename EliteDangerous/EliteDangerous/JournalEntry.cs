@@ -264,7 +264,6 @@ namespace EliteDangerousCore
 
         public JournalTypeEnum EventTypeID { get; private set; }
         public string EventTypeStr { get { return EventTypeID.ToString(); } }             // name of event. these two duplicate each other, string if for debuggin in the db view of a browser
-        public string EventSummaryName { get; private set; }     // filled in during creation, its EventTypeID expanded out.  Stored since splitcaseword is expensive in time
 
         public System.Drawing.Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
@@ -408,7 +407,7 @@ namespace EliteDangerousCore
 
         // enum -> Summary name
 
-        private static Dictionary<JournalTypeEnum, string> SummaryNames = GetJournalSummaryNames();
+        private static Dictionary<JournalTypeEnum, string> SummaryNames = GetJournalSummaryNames();     // precompute the names due to the expense of splitcapsword
 
         private static Dictionary<JournalTypeEnum, string> GetJournalSummaryNames()
         {
@@ -430,7 +429,7 @@ namespace EliteDangerousCore
 
         public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
 
-        public virtual string FillSummary { get { return SummaryNames.ContainsKey(EventTypeID) ? SummaryNames[EventTypeID] : "Unknown"; } }  // entry may be overridden for specialist output
+        public virtual string SummaryName(ISystem sys) { return SummaryNames.ContainsKey(EventTypeID) ? SummaryNames[EventTypeID] : EventTypeID.ToString(); }  // entry may be overridden for specialist output
 
         #endregion
 
@@ -439,7 +438,7 @@ namespace EliteDangerousCore
         public JournalEntry(DateTime utc, int synced , JournalTypeEnum jtype)       // manual creation via NEW
         {
             EventTypeID = jtype;
-            EventSummaryName = FillSummary;     // after creation, so journal fields are populated.
+            //EventSummaryName = FillSummary;     // after creation, so journal fields are populated.
             EventTimeUTC = utc;
             Synced = synced;
             TLUId = 0;
@@ -739,7 +738,6 @@ namespace EliteDangerousCore
                 jo["faction"] = faction;
                 jo["commodities"] = jcommodities;
                 JournalEDDCommodityPrices jis = new JournalEDDCommodityPrices(jo);
-                jis.EventSummaryName = jis.FillSummary;
                 jis.CommanderId = cmdrid;
                 jis.Add(jo, cn);
 
@@ -1220,7 +1218,6 @@ namespace EliteDangerousCore
                     ret = (JournalEntry)Activator.CreateInstance(jtype, jo);
             }
 
-            ret.EventSummaryName = ret.FillSummary;     // after creation, so journal fields are populated.
             return ret;
         }
 

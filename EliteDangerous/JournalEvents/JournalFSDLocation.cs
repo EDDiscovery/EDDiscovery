@@ -279,7 +279,7 @@ namespace EliteDangerousCore.JournalEvents
         public string[] StationServices { get; set; }
         public JournalDocked.Economies[] StationEconomyList { get; set; }        // may be null
 
-        public override string FillSummary { get
+        public override string SummaryName(ISystem sys) 
             {
                 if (Docked)
                     return string.Format("At {0}".Tx(this, "AtStat"), StationName);
@@ -287,7 +287,7 @@ namespace EliteDangerousCore.JournalEvents
                     return string.Format("Landed on {0}".Tx(this, "LND"), Body);
                 else
                     return string.Format("At {0}".Tx(this, "AtStar"), StarSystem);
-            } }
+            }
 
         public override void FillInformation(out string info, out string detailed) 
         {
@@ -385,7 +385,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
         public bool EDSMFirstDiscover { get; set; }
 
-        public override string FillSummary { get { return string.Format("Jump to {0}".Tx(this), StarSystem); } }
+        public override string SummaryName(ISystem sys) { return string.Format("Jump to {0}".Tx(this), StarSystem); }
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -543,7 +543,7 @@ namespace EliteDangerousCore.JournalEvents
         public string StarClass { get; set; }
         public string FriendlyStarClass { get; set; }
 
-        public override string FillSummary { get { return "Charging FSD".Tx(this); } }
+        public override string SummaryName(ISystem sys) { return "Charging FSD".Tx(this); }
 
         public override void FillInformation(out string info, out string detailed)
         {

@@ -1399,7 +1399,7 @@ namespace EDDiscovery.UserControls
                         he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                         return new Object[] {
                             dataGridViewTravel.Rows[r].Cells[0].Value,
-                            he.journalEntry.EventSummaryName,
+                            he.EventSummary,
                             (he.System != null) ? he.System.Name : "Unknown",    // paranoia
                             he.WhereAmI,
                             he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",

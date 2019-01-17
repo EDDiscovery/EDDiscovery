@@ -50,7 +50,7 @@ namespace EliteDangerousCore
         public DateTime EventTimeUTC { get { return journalEntry.EventTimeUTC; } }
         public TimeSpan AgeOfEntry() { return DateTime.Now - EventTimeUTC; }
 
-        public string EventSummary { get { return journalEntry.EventSummaryName;} }
+        public string EventSummary { get { return journalEntry.SummaryName(System);} }
 
         public bool EdsmSync { get { return journalEntry.SyncedEDSM; } }           // flag populated from journal entry when HE is made. Have we synced?
         public bool EDDNSync { get { return journalEntry.SyncedEDDN; } }

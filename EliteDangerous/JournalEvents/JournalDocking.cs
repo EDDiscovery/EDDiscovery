@@ -83,7 +83,7 @@ namespace EliteDangerousCore.JournalEvents
             public double Proportion;
         }
 
-        public override string FillSummary { get { return string.Format("At {0}".Tx(this), StationName); } }
+        public override string SummaryName(ISystem sys) { return string.Format("At {0}".Tx(this), StationName); }
 
         public override void FillInformation(out string info, out string detailed)      
         {
