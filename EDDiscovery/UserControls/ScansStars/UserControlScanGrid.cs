@@ -639,7 +639,7 @@ namespace EDDiscovery.UserControls
                 if (icons != 0)
                 {
                     iconsize = Math.Min(iconsize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
-                    System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
+                    //System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
                     right -= iconsize;
                 }
 

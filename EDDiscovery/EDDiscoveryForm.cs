@@ -1440,8 +1440,19 @@ namespace EDDiscovery
 
             if (!edsm.ValidCredentials)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".Tx(this,"NoEDSMAPI"));
+                ExtendedControls.MessageBoxTheme.Show(this, "Please ensure a commander is selected and it has a EDSM API key set".Tx(this, "NoEDSMAPI"));
                 return;
+            }
+
+            if (!EDCommander.Current.SyncToEdsm)
+            {
+                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".Tx(this, "ConfirmSyncToEDSM");
+                string dlgcapt = "Confirm EDSM sync".Tx(this, "ConfirmSyncToEDSMCaption");
+
+                if (ExtendedControls.MessageBoxTheme.Show(this, dlgtext, dlgcapt, MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    return;
+                }
             }
 
             try
