@@ -25,9 +25,6 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.Scan)]
     public class JournalScan : JournalEntry
     {
-        private int? estimatedValue;
-        private bool valueCalculatedWithMappingMultiplier = false;
-
         public bool IsStar { get { return !String.IsNullOrEmpty(StarType); } }
         public string BodyDesignation { get; set; }
 
@@ -364,6 +361,8 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
+        #region Information Returns
+
         public override string SummaryName(ISystem sys)
         {
             string text = "Scan of {0}".Tx(this);
@@ -586,8 +585,9 @@ namespace EliteDangerousCore.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            if (EstimatedValue(mapped, efficiencyBonus) > 0)
-                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), estimatedValue);
+            int v = EstimatedValue(mapped, efficiencyBonus);
+            if (v>0)
+                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), v);
 
             if (EDSMDiscoveryCommander != null)
                 scanText.AppendFormat("\n\nDiscovered by {0} on {1}".Tx(this, "DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
@@ -595,17 +595,6 @@ namespace EliteDangerousCore.JournalEvents
             scanText.AppendFormat("\nScan Type: {0}".Tx(this, "SCNT"), ScanType);
 
             return scanText.ToNullSafeString().Replace("\n", "\n" + inds);
-        }
-
-        public int EstimatedValue(bool mapped, bool efficiencyBonus)
-        {
-            if (!estimatedValue.HasValue || mapped != valueCalculatedWithMappingMultiplier)
-            {
-                valueCalculatedWithMappingMultiplier = mapped;
-                estimatedValue = CalculateEstimatedValue(mapped, efficiencyBonus);
-            }
-
-            return estimatedValue.Value;
         }
 
 		// goldilocks zone
@@ -1040,6 +1029,24 @@ namespace EliteDangerousCore.JournalEvents
 			return radius / oneLS_m;
 		}
 
+        #endregion
+
+        #region Estimated Value
+
+        private int? estimatedValue;                                // Use EstimatedValue function to get value, not this variable
+        private bool valueCalculatedWithMappingMultiplier = false;
+
+        public int EstimatedValue(bool mapped, bool efficiencyBonus)            // get value. Cache in memory
+        {
+            if (!estimatedValue.HasValue || mapped != valueCalculatedWithMappingMultiplier)
+            {
+                valueCalculatedWithMappingMultiplier = mapped;
+                estimatedValue = CalculateEstimatedValue(mapped, efficiencyBonus);
+            }
+
+            return estimatedValue.Value;
+        }
+
         private int CalculateEstimatedValue(bool mapped = false, bool efficient = false)
         {
             // see https://forums.frontier.co.uk/showthread.php/232000-Exploration-value-formulae/ for detail
@@ -1089,7 +1096,8 @@ namespace EliteDangerousCore.JournalEvents
                         kValue = 1200;
                         break;
                 }
-                return (int)StarValue(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+
+                return (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
 
             if (PlanetClass == null)  //Asteroid belt
@@ -1135,8 +1143,23 @@ namespace EliteDangerousCore.JournalEvents
             else
                 mapMultiplier = 1;
 
-            return (int)PlanetValue(kValue, mass, mapMultiplier);
+            return (int)PlanetValue33(kValue, mass, mapMultiplier);
         }
+
+        private double StarValue32And33(double k, double m)
+        {
+            return k + (m * k / 66.25);
+        }
+
+        private double PlanetValue33(double k, double m, double map)
+        {
+            const double q = 0.56591828;
+            return Math.Max((k + (k * Math.Pow(m, 0.2) * q)) * map, 500);
+        }
+
+        #endregion
+
+        #region ED 3.2 values
 
         private int EstimatedValue32()
         {
@@ -1179,7 +1202,8 @@ namespace EliteDangerousCore.JournalEvents
                         kValue = 2880;
                         break;
                 }
-                return (int)StarValue(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+
+                return (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
             else if (PlanetClass == null)  //Asteroid belt
                 return 0;
@@ -1227,12 +1251,6 @@ namespace EliteDangerousCore.JournalEvents
 
                 return val;
             }
-
-        }
-
-        private double StarValue(double k, double m)
-        {
-            return k + (m * k / 66.25);
         }
 
         private double PlanetValueED32(double k, double m)
@@ -1240,11 +1258,9 @@ namespace EliteDangerousCore.JournalEvents
             return k + (3 * k * Math.Pow(m, 0.199977) / 5.3);
         }
 
-        private double PlanetValue(double k, double m, double map)
-        {
-            const double q = 0.56591828;
-            return Math.Max((k + (k * Math.Pow(m, 0.2) * q)) * map, 500);
-        }
+        #endregion
+
+        #region ED 22 
 
         private int EstimatedValueED22()
         {
@@ -1464,8 +1480,6 @@ namespace EliteDangerousCore.JournalEvents
                         //high = 2225;
                         return 2225;
 
-
-
                     case EDPlanet.Water_giant:
                     case EDPlanet.Water_giant_with_life:
                     case EDPlanet.Gas_giant_with_water_based_life:
@@ -1481,12 +1495,12 @@ namespace EliteDangerousCore.JournalEvents
                         //high = 2000;
                         return 0;
                 }
-
-
             }
 
         }
     }
+
+    #endregion
 
     public class ScansAreForSameBody : EqualityComparer<JournalScan>
     {
