@@ -858,10 +858,10 @@ namespace EliteDangerousCore.JournalEvents
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
 
-            scanText.Append(indents + "Atmospheric Composition:\n".Tx(this));
+            scanText.Append("Atmospheric Composition:\n".Tx(this));
             foreach (KeyValuePair<string, double> comp in AtmosphereComposition)
             {
-                scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
+                scanText.AppendFormat(indents + "{0} - {1}%\n", comp.Key, comp.Value.ToString("N2"));
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
@@ -875,11 +875,11 @@ namespace EliteDangerousCore.JournalEvents
             StringBuilder scanText = new StringBuilder();
             string indents = new string(' ', indent);
 
-            scanText.Append(indents + "Planetary Composition:\n".Tx(this));
+            scanText.Append("Planetary Composition:\n".Tx(this));
             foreach (KeyValuePair<string, double> comp in PlanetComposition)
             {
                 if (comp.Value > 0)
-                    scanText.AppendFormat(indents + indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
+                    scanText.AppendFormat(indents + "{0} - {1}%\n", comp.Key, (comp.Value * 100).ToString("N2"));
             }
 
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')

@@ -182,17 +182,9 @@ namespace EDDiscovery.UserControls
         /// <summary>
         /// Constructor to pass properties to postdrawing function
         /// </summary>
-        private struct Overlays
+        private class Overlays
         {
-            public bool landable, materials, volcanism, mapped;
-
-            public Overlays(bool p1, bool p2, bool p3, bool p4)
-            {
-                landable = p1;
-                materials = p2;
-                volcanism = p3;
-                mapped = p4;
-            }
+            public bool landable, materials, volcanism, mapped;     // all false on creation
         }
                 
         /// <summary>
@@ -203,8 +195,6 @@ namespace EDDiscovery.UserControls
         private void DrawSystem(HistoryEntry he, bool force)
         {
             StarScan.SystemNode scannode = null;
-
-            var overlays = new Overlays();
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
@@ -289,7 +279,7 @@ namespace EDDiscovery.UserControls
                             var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
                             cur.Tag = img;
-
+                            cur.Cells[0].Tag = null;
                             cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                         sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity, mapped: sn.IsMapped, efficiencyBonus: sn.WasMappedEfficiently);
                         }
@@ -297,7 +287,9 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
+                    var overlays = new Overlays();
                     // check for null data
+
                     if (sn.ScanData?.BodyName != null)
                     {
                         // check for body class
@@ -432,8 +424,6 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(Environment.NewLine).Append("Landable".Tx(this)).Append(Gg).Append(". ");
                                 overlays.landable = true;
                             }
-                            else
-                            { overlays.landable = false; overlays.materials = false; }
 
                             // tell us that there is some volcanic activity
                             if (sn.ScanData.Volcanism != null)
@@ -441,16 +431,12 @@ namespace EDDiscovery.UserControls
                                 bdDetails.Append(Environment.NewLine).Append("Geological activity".Tx(this)).Append(": ").Append(sn.ScanData.Volcanism).Append(". ");
                                 overlays.volcanism = true;
                             }
-                            else
-                            { overlays.volcanism = false; }
 
                             if (sn.IsMapped)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
                                 overlays.mapped = true;
                             }
-                            else
-                            { overlays.mapped = false; }
                             
                             // materials                        
                             if (sn.ScanData.HasMaterials)
@@ -464,11 +450,7 @@ namespace EDDiscovery.UserControls
                                     if (mc?.IsJumponium == true)
                                     {
                                         ret = ret.AppendPrePad(mc.Name, ", ");
-                                        //overlays.materials = true;
-                                    }
-                                    else
-                                    {
-                                        //overlays.materials = false;
+                                        overlays.materials = true;
                                     }
                                 }
 
@@ -533,7 +515,6 @@ namespace EDDiscovery.UserControls
                         cur.Tag = img;
 
                         cur.Cells[0].Tag = overlays;
-
                         cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
                                     sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                     }
@@ -636,64 +617,63 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            var overlays = cur.Cells[0].Tag as Overlays?;
+            Overlays overlays = cur.Cells[0].Tag as Overlays;       // may be null
 
             if (cur.Tag != null)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
-                var sz = dataGridViewScangrid.RowTemplate.MinimumHeight - 2;
-                var vpos = e.RowBounds.Top + e.RowBounds.Height / 2 - sz / 2;
 
-                var leftmargin = e.RowBounds.Left + 6;
+                int top = e.RowBounds.Top + 4;
+                int bot = e.RowBounds.Bottom - 4;
+                int left = e.RowBounds.Left + 4;
+                int right = e.RowBounds.Left + cur.Cells[0].Size.Width - 4;
 
-                if ((overlays.Value.mapped == false) && (overlays.Value.volcanism == false))
+                int icons = 0;
+
+                if (overlays != null)
+                    icons = (overlays.mapped ? 1 : 0) + (overlays.volcanism ? 1 : 0) + (overlays.materials ? 1 : 0) + (overlays.landable ? 1 : 0);
+
+                int iconsize = 12;
+
+                if (icons != 0)
                 {
-                    leftmargin += 6;
+                    iconsize = Math.Min(iconsize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
+                    System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
+                    right -= iconsize;
                 }
-                
-                e.Graphics.DrawImage((Image)cur.Tag, new Rectangle(leftmargin, vpos, sz, sz));
 
+                int size = Math.Min(bot - top, right - left);                           
 
-                    if (overlays != null)
-                    {
-                        // body icon overlay
-                        if (overlays.Value.landable)
-                        {
-                            e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(leftmargin - 5, vpos - 4, sz + 8, sz + 8));
-                        }
+                Image img = cur.Tag as Image;
+                e.Graphics.DrawImage(img, new Rectangle((right+left)/2-size/2, (bot+top)/2-size/2, size, size));        // main icon
 
-                        // side overlays
-                        var pos = 0; // counter. DO NOT CHANGE!
-                        var top = e.RowBounds.Top - 20; // top margin, adjusted to the number of needed overlays
+                int vposoverlay = (top+bot)/2 - iconsize*icons/2;                       // position it centrally vertically
 
-                        var left = e.RowBounds.Left + 37; // left margin                
-                        const int overlaySize = 16; // overlays icon size
-
-                        /*
-                        if (overlays.Value.materials)
-                        {
-                            pos++;
-
-                            e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
-                        }
-                        */
-
-                        if (overlays.Value.volcanism)
-                        {
-                            pos++;
-
-                            e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
-                        }
-
-                        if (overlays.Value.mapped)
-                        {
-                            pos++;
-
-                            e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(left, top + (pos * 20) + 2, overlaySize, overlaySize));
-                        }
-                    }
+                if (overlays?.landable ?? false)
+                {
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    vposoverlay += iconsize + 2;
                 }
+
+                if (overlays?.materials ?? false)
+                {
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay , iconsize, iconsize));
+                    vposoverlay += iconsize + 2;
+                }
+
+                if (overlays?.volcanism ?? false)
+                {
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    vposoverlay += iconsize + 2;
+                }
+
+                if (overlays?.mapped ?? false)
+                {
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
+
+                }
+            }
         }
 
         #region ContextMenuInteraction
