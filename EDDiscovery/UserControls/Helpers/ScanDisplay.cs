@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (CheckEDSM || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimatedValue;
+                        value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
                     }
                 }
             }
@@ -329,10 +329,11 @@ namespace EDDiscovery.UserControls
                 else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !ShowMaterials;
+                    bool valuable = sc.EstimatedValue(sn.IsMapped, sn.WasMappedEfficiently) > 50000;
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
-                    if (ImageRequiresAnOverlay(sc, indicatematerials))
+                    if (ImageRequiresAnOverlay(sc, indicatematerials, valuable))
                     {
                         Bitmap bmp = new Bitmap(size.Width * 2, quarterheight * 6);
 
@@ -349,7 +350,6 @@ namespace EDDiscovery.UserControls
 
                             if (ShowOverlays)
                             {
-                                bool valuable = sc.EstimatedValue > 50000;
                                 int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sn.IsMapped ? 1 : 0);
                                 int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
                                 int pos = 0;
@@ -444,14 +444,14 @@ namespace EDDiscovery.UserControls
             return endpoint;
         }
 
-        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials)
+        private static bool ImageRequiresAnOverlay(JournalScan sc, bool indicatematerials, bool valuable)
         {
             return sc.IsLandable || 
                 sc.HasRings || 
                 indicatematerials || 
                 sc.Terraformable ||
                 sc.HasMeaningfulVolcanism ||
-                sc.EstimatedValue > 50000;
+                valuable;
         }
 
 

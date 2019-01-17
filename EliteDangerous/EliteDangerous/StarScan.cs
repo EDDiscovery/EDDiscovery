@@ -78,6 +78,7 @@ namespace EliteDangerousCore
             public int level;                       // level within SystemNode
             public int? BodyID;
             public bool IsMapped;
+            public bool WasMappedEfficiently;
 
             public bool IsTopLevelNode;
 
@@ -531,6 +532,7 @@ namespace EliteDangerousCore
             if (relatedScan != null)
             {
                 relatedScan.IsMapped = true;
+                relatedScan.WasMappedEfficiently = sc.ProbesUsed <= sc.EfficiencyTarget;
                 return true; // We already have the scan
             }
 

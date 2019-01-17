@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (checkBoxEDSM.Checked || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimatedValue;
+                        value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
                     }
                 }
             }
@@ -439,11 +439,11 @@ namespace EDDiscovery.UserControls
                         else
                         {
                             List<JournalScan> scans = null;
-
+                            
                             if (frm.SelectedIndex < 3)
                             {
                                 var entries = JournalEntry.GetByEventType(JournalTypeEnum.Scan, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime);
-                                scans = entries.ConvertAll<JournalScan>(x => (JournalScan)x);
+                                scans = entries.ConvertAll(x => (JournalScan)x);
                             }
                             else
                             {
@@ -476,6 +476,11 @@ namespace EDDiscovery.UserControls
 
                             bool ShowStars = frm.SelectedIndex < 2 || frm.SelectedIndex == 3;
                             bool ShowPlanets = frm.SelectedIndex == 0 || frm.SelectedIndex == 2 || frm.SelectedIndex == 4;
+
+                            List<JournalSAAScanComplete> mappings = ShowPlanets ? 
+                                JournalEntry.GetByEventType(JournalTypeEnum.SAAScanComplete, EDCommander.CurrentCmdrID, frm.StartTime, frm.EndTime)
+                                .ConvertAll(x => (JournalSAAScanComplete)x)
+                                : null;
 
                             if (frm.IncludeHeader)
                             {
@@ -579,7 +584,18 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                writer.Write(csv.Format(scan.EstimatedValue));
+                                if (string.IsNullOrEmpty(scan.PlanetClass))
+                                {
+                                    writer.Write(csv.Format(scan.EstimatedValue(false, false)));
+                                }
+                                else
+                                {
+                                    var map = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
+                                    if (map == null)
+                                        writer.Write(csv.Format(scan.EstimatedValue(false, false)));
+                                    else
+                                        writer.Write(csv.Format(scan.EstimatedValue(true, map.ProbesUsed <= map.EfficiencyTarget)));
+                                }
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)
