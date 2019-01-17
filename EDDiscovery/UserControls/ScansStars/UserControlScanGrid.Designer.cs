@@ -420,16 +420,17 @@ namespace EDDiscovery.UserControls
             // colImage
             // 
             this.colImage.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colImage.FillWeight = 1F;
             this.colImage.HeaderText = "";
-            this.colImage.MinimumWidth = 48;
+            this.colImage.MinimumWidth = 55;
             this.colImage.Name = "colImage";
             this.colImage.ReadOnly = true;
-            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colImage.Width = 48;
+            this.colImage.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.colImage.Width = 55;
             // 
             // colName
             // 
-            this.colName.FillWeight = 37.56873F;
+            this.colName.FillWeight = 42.49234F;
             this.colName.HeaderText = "Name";
             this.colName.MinimumWidth = 20;
             this.colName.Name = "colName";
@@ -438,7 +439,7 @@ namespace EDDiscovery.UserControls
             // 
             // colClass
             // 
-            this.colClass.FillWeight = 46.96092F;
+            this.colClass.FillWeight = 53.11543F;
             this.colClass.HeaderText = "Class";
             this.colClass.MinimumWidth = 20;
             this.colClass.Name = "colClass";
@@ -447,7 +448,7 @@ namespace EDDiscovery.UserControls
             // 
             // colDistance
             // 
-            this.colDistance.FillWeight = 23.39628F;
+            this.colDistance.FillWeight = 26.4625F;
             this.colDistance.HeaderText = "Distance";
             this.colDistance.Name = "colDistance";
             this.colDistance.ReadOnly = true;
@@ -455,7 +456,7 @@ namespace EDDiscovery.UserControls
             // 
             // colBriefing
             // 
-            this.colBriefing.FillWeight = 93.92184F;
+            this.colBriefing.FillWeight = 106.2309F;
             this.colBriefing.HeaderText = "Information";
             this.colBriefing.MinimumWidth = 20;
             this.colBriefing.Name = "colBriefing";
