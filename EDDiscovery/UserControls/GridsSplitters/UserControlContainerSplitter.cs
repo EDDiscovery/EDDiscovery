@@ -105,8 +105,16 @@ namespace EDDiscovery.UserControls
             ResumeLayout();
 
             BaseUtils.Translator.Instance.Translate(contextMenuStripSplitter, this);
-        }
 
+            RunActionOnSplitterTree((p, c, uccb) =>
+            {
+                int tagid = (int)c.Tag;
+                int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
+                System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
+
+                uccb.Init(discoveryform, displaynumber);
+            });
+        }
 
         public override void LoadLayout()           // cursor now set up, initial setup complete..
         {
@@ -117,21 +125,12 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("--------------------" + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
 
-            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            RunActionOnSplitterTree((p, c, uccb) =>
             {
-                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
-                if (uccb != null)     // tab strip may not have a control set..
-                {
-                    int tagid = (int)c.Tag;
-                    int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                    System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
-
-                    uccb.Init(discoveryform, displaynumber);
-                    uccb.SetCursor(ucursor_inuse);
-                    uccb.LoadLayout();
-                    discoveryform.theme.ApplyToControls(uccb);
-                    uccb.InitialDisplay();
-                }
+                uccb.SetCursor(ucursor_inuse);
+                uccb.LoadLayout();
+                discoveryform.theme.ApplyToControls(uccb);
+                uccb.InitialDisplay();
             });
 
             Invalidate(true);
@@ -176,6 +175,17 @@ namespace EDDiscovery.UserControls
             });
         }
 
+        private void RunActionOnSplitterTree(Action<SplitterPanel, Control, UserControlCommonBase> action)
+        {
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            {
+                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
+                {
+                    action(p, c, uccb);
+                }
+            });
+        }
 
         private Control MakeNode(string s)
         {
@@ -292,14 +302,10 @@ namespace EDDiscovery.UserControls
             {
                 ucursor_inuse = ucursor_history;
 
-                (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+                RunActionOnSplitterTree((p, c, uccb) =>
                 {
-                    UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
-                    if (uccb != null)     // tab strip may not have a control set..
-                    {
-                        uccb.ChangeCursorType(ucursor_inuse);
-                        //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
-                    }
+                    uccb.ChangeCursorType(ucursor_inuse);
+                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
                 });
             }
         }
@@ -330,14 +336,10 @@ namespace EDDiscovery.UserControls
                 ucursor_inuse = (uctgfound != null) ? uctgfound : ucursor_history;    // select
                 //System.Diagnostics.Debug.WriteLine("Children of " + this.GetHashCode() + " Change to " + ucursor_inuse.GetHashCode());
 
-                (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+                RunActionOnSplitterTree((p, c, uccb) =>
                 {
-                    UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
-                    if (uccb != null)     // tab strip may not have a control set..
-                    {
-                        uccb.ChangeCursorType(ucursor_inuse);
-                        //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
-                    }
+                    uccb.ChangeCursorType(ucursor_inuse);
+                    //System.Diagnostics.Debug.WriteLine("Change cursor call to " + c.Name + " " + uccb.Name);
                 });
 
                 ucursor_inuse.FireChangeSelection();       // let the uctg tell the children a change event, so they can refresh
@@ -488,13 +490,9 @@ namespace EDDiscovery.UserControls
             this.BackColor = curcol;
             panelPlayfield.BackColor = curcol;
 
-            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
+            RunActionOnSplitterTree((p, c, uccb) =>
             {
-                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
-                if (uccb != null)     // tab strip may not have a control set..
-                {
-                    uccb.SetTransparency(on, curcol);
-                }
+                uccb.SetTransparency(on, curcol);
             });
         }
 
