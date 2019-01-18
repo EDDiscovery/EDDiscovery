@@ -317,10 +317,16 @@ namespace EDDiscovery.UserControls
                         SetLabels();
                     }
                 }
+
+                if (he.EntryType == JournalTypeEnum.Undocked && current.Type == FilterEntry.EntryType.Lastdock )        // on undock, and we are in last docked mode, refresh
+                {
+                    Display();
+                }
             }
 
             if (he.EntryType == JournalTypeEnum.MissionAccepted)        // mission accepted means another entry..
                 FillCampaignCombo();                                    // could only add entries, so no need to check it its disappeared
+
 
             SetTarget(he);
         }
