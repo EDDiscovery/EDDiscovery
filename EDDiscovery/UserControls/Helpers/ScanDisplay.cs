@@ -631,6 +631,11 @@ namespace EDDiscovery.UserControls
             HideInfo();
         }
 
+        public void SetBackground(Color c)
+        {
+            imagebox.BackColor = vScrollBarCustom.SliderColor = vScrollBarCustom.BackColor = c;
+        }
+
 
         #endregion
     }

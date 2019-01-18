@@ -100,8 +100,9 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-        // TBD    imagebox.BackColor = this.BackColor = panelStars.BackColor = panelStars.vsc.SliderColor = panelStars.vsc.BackColor = panelControls.BackColor = curcol;
-			rollUpPanelTop.BackColor = curcol;
+            panelStars.SetBackground(curcol);
+            this.BackColor = panelControls.BackColor = curcol;
+            rollUpPanelTop.BackColor = curcol;
 			rollUpPanelTop.ShowHiddenMarker = !on;
         }
 

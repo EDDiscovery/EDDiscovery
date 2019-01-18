@@ -356,13 +356,13 @@ namespace EliteDangerousCore
 
             var mappings = historylist.Where(s => s.EntryType == JournalTypeEnum.SAAScanComplete).Select(h => h.journalEntry as JournalSAAScanComplete).ToList();
 
-            var total = scans.Select(scan =>
+            long total = scans.Select(scan =>
             {
                 var mapping = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
                 if (mapping == null)
-                    return scan.EstimatedValue(false, false);
+                    return (long)scan.EstimatedValue(false, false);
                 else
-                    return scan.EstimatedValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                    return (long)scan.EstimatedValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
             }).Sum();
 
             return total;
