@@ -701,7 +701,7 @@ namespace EDDiscovery
             this.buttonExtEDSMSync.Name = "buttonExtEDSMSync";
             this.buttonExtEDSMSync.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDSMSync.TabIndex = 2;
-            this.toolTip.SetToolTip(this.buttonExtEDSMSync, "Synchronize with EDSM, To and From");
+            this.toolTip.SetToolTip(this.buttonExtEDSMSync, "Send any unsynced logs to EDSM");
             this.buttonExtEDSMSync.UseVisualStyleBackColor = true;
             this.buttonExtEDSMSync.Click += new System.EventHandler(this.buttonExtEDSMSync_Click);
             //
