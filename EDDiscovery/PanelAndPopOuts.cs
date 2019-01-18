@@ -389,11 +389,14 @@ namespace EDDiscovery
 
                 System.Diagnostics.Trace.WriteLine("PO:Make " + windowtitle + " ucf " + ctrl.GetType().Name);
 
+                //System.Diagnostics.Debug.WriteLine("TCF init");
                 tcf.Init(ctrl, windowtitle, discoveryform.theme.WindowsFrame, refname, discoveryform.TopMost,
                             poi.DefaultTransparent, discoveryform.theme.LabelColor, discoveryform.theme.SPanelColor);
 
+                //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
+                //System.Diagnostics.Debug.WriteLine("Show");
                 tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 
                 if (tcf.UserControl != null)

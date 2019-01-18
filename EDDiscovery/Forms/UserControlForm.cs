@@ -71,6 +71,7 @@ namespace EDDiscovery.Forms
         public void Init(EDDiscovery.UserControls.UserControlCommonBase c, string title, bool winborder, string rf, bool deftopmostp ,
                          bool deftransparentp , Color labelnormal , Color labeltransparent )
         {
+            //System.Diagnostics.Debug.WriteLine("UCF Init+");
             RestoreFormPositionRegKey = "PopUpForm" + rf;      // position remember key
 
             UserControl = c;
@@ -106,6 +107,7 @@ namespace EDDiscovery.Forms
             Invalidate();
 
             BaseUtils.Translator.Instance.Translate(toolTip1,this);
+            //System.Diagnostics.Debug.WriteLine("UCF Init-");
         }
 
         public void SetControlText(string text)
@@ -171,6 +173,7 @@ namespace EDDiscovery.Forms
 
         private void UpdateTransparency()
         {
+            //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans+");
             curwindowsborder = (!IsTransparent && defwindowsborder);    // we have a border if not transparent and we have a def border
             bool showtransparent = IsTransparent && !inpanelshow;           // are we transparent..  must not be in panel show
 
@@ -208,6 +211,7 @@ namespace EDDiscovery.Forms
             else
                 timer.Stop();
 
+            //System.Diagnostics.Debug.WriteLine("UCF UpdateTrans-");
         }
 
         private void UpdateControls()
@@ -253,6 +257,7 @@ namespace EDDiscovery.Forms
 
         private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
         {
+            //System.Diagnostics.Debug.WriteLine("UCF Shown+");
             this.BringToFront();
 
             if (IsTransparencySupported)
@@ -269,12 +274,14 @@ namespace EDDiscovery.Forms
 
             if (UserControl != null)
             {
+                System.Diagnostics.Debug.WriteLine("UCCB Call set curosr, load layout, initial display");
                 UserControl.SetCursor(UserControl.discoveryform.PrimaryCursor);
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
 
             IsLoaded = true;
+            //System.Diagnostics.Debug.WriteLine("UCF Shown-");
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)

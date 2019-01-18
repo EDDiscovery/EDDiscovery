@@ -678,6 +678,9 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\SquadronStartup.png" />
+    <EmbeddedResource Include="Journal\ReservoirReplenished.png" />
+    <EmbeddedResource Include="Journal\ProspectedAsteroid.png" />
     <EmbeddedResource Include="Controls\Bookmarks\ImportExcel.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />

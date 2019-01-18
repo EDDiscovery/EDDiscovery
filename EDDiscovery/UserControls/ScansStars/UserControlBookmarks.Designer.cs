@@ -85,6 +85,7 @@
             this.buttonExtImport.Name = "buttonExtImport";
             this.buttonExtImport.Size = new System.Drawing.Size(24, 24);
             this.buttonExtImport.TabIndex = 38;
+            this.toolTip.SetToolTip(this.buttonExtImport, "Import bookmarks to EDD from CSV file");
             this.buttonExtImport.UseVisualStyleBackColor = true;
             this.buttonExtImport.Click += new System.EventHandler(this.buttonExtImport_Click);
             // 
@@ -96,6 +97,7 @@
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 38;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Export bookmarks to CSV file");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
