@@ -1183,9 +1183,9 @@ namespace EliteDangerousCore
                     {
                         var jdprev = prev as EliteDangerousCore.JournalEvents.JournalReceiveText;
                         var jd = je as EliteDangerousCore.JournalEvents.JournalReceiveText;
-                        
-                        // merge if same channel and its an NPC.. player texts are not merged.
-                        if (jd.Channel == jdprev.Channel && jdprev.Channel.Equals("NPC", StringComparison.InvariantCultureIgnoreCase))
+
+                        // merge if same channel 
+                        if (jd.Channel == jdprev.Channel )
                         {
                             jdprev.Add(jd);
                             return true;

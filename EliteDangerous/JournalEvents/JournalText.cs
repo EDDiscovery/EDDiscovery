@@ -69,16 +69,21 @@ namespace EliteDangerousCore.JournalEvents
                 info = ToString();
             else
             {
-                info = (MergedEntries.Count() + 1).ToString() + " Texts".Tx(this, "Text") + " " + "From Channel:".Tx(this, "FC") + Channel;
+                info = (MergedEntries.Count() + 1).ToString() + " Texts".Tx(this, "Text") + " " + "from ".Tx(this, "FC") + Channel;
                 for (int i = MergedEntries.Count - 1; i >= 0; i--)
-                    detailed = detailed.AppendPrePad(MergedEntries[i].ToString(), System.Environment.NewLine);
-                detailed = detailed.AppendPrePad(ToString(), System.Environment.NewLine);   // ours is the last one
+                    detailed = detailed.AppendPrePad(MergedEntries[i].ToStringNC(), System.Environment.NewLine);
+                detailed = detailed.AppendPrePad(ToStringNC(), System.Environment.NewLine);   // ours is the last one
             }
         }
 
         public override string ToString()
         {
-            return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "Msg:".Tx(this), MessageLocalised, "Channel:".Tx(this), Channel);
+            return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "< on ".Tx(this), Channel, "<: ", MessageLocalised);
+        }
+
+        public string ToStringNC()
+        {
+            return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "<: ", MessageLocalised);
         }
 
         public void Add(JournalReceiveText next)
