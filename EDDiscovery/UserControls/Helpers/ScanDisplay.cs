@@ -633,7 +633,7 @@ namespace EDDiscovery.UserControls
 
         public void SetBackground(Color c)
         {
-            imagebox.BackColor = vScrollBarCustom.SliderColor = vScrollBarCustom.BackColor = c;
+            panelStars.BackColor = imagebox.BackColor = vScrollBarCustom.SliderColor = vScrollBarCustom.BackColor = c;
         }
 
 
