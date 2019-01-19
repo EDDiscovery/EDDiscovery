@@ -199,7 +199,21 @@ namespace EDDiscovery.Actions
 
                             if (he.System.EDDBID > 0)
                             {
-                                url = "http://ross.eddb.io/system/update/" + he.System.EDDBID.ToString();
+                                url = Properties.Resources.URLRossSystem + he.System.EDDBID.ToString();
+                                System.Diagnostics.Process.Start(url);
+                            }
+
+                            ap[prefix + "URL"] = url;
+                        }
+                        else if (cmdname.Equals("eddb"))
+                        {
+                            (ap.actioncontroller as ActionController).HistoryList.FillEDSM(he);
+
+                            string url = "";
+
+                            if (he.System.EDDBID > 0)
+                            {
+                                url = Properties.Resources.URLEDDBSystem + he.System.EDDBID.ToString();
                                 System.Diagnostics.Process.Start(url);
                             }
 
@@ -214,6 +228,17 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("missions"))
                         {
                             ActionVars.MissionInformation(ap, he.MissionList, prefix);
+                        }
+                        else if (cmdname.Equals("note"))
+                        {
+                            string note = sp.NextQuotedWord();
+                            if (note != null)
+                            {
+                                he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
+                                (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
+                            }
+                            else
+                                ap.ReportError("Missing note text in Event NOTE");
                         }
                         else
                             ap.ReportError("Unknown command " + cmdname + " in Event");

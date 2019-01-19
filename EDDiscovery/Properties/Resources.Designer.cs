@@ -175,6 +175,15 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to http://eddb.io/system/.
+        /// </summary>
+        internal static string URLEDDBSystem {
+            get {
+                return ResourceManager.GetString("URLEDDBSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://eddiscovery.space/eddb/systems_populated.jsonl.
         /// </summary>
         internal static string URLEDDBSystems {
@@ -288,6 +297,15 @@ namespace EDDiscovery.Properties {
         internal static string URLProjectWiki {
             get {
                 return ResourceManager.GetString("URLProjectWiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://ross.eddb.io/system/update/.
+        /// </summary>
+        internal static string URLRossSystem {
+            get {
+                return ResourceManager.GetString("URLRossSystem", resourceCulture);
             }
         }
     }

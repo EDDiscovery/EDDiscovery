@@ -323,7 +323,7 @@ namespace EDDiscovery.UserControls
         private void buttonEDDB_Click(object sender, EventArgs e)
         {
             if (last_he != null && last_he.System.EDDBID > 0)
-                Process.Start("http://eddb.io/system/" + last_he.System.EDDBID.ToString());
+                Process.Start(Properties.Resources.URLEDDBSystem + last_he.System.EDDBID.ToString());
         }
 
         private void buttonRoss_Click(object sender, EventArgs e)
@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
                 discoveryform.history.FillEDSM(last_he);
 
                 if (last_he.System.EDDBID > 0)
-                    Process.Start("http://ross.eddb.io/system/update/" + last_he.System.EDDBID.ToString());
+                    Process.Start(Properties.Resources.URLRossSystem + last_he.System.EDDBID.ToString());
             }
         }
 

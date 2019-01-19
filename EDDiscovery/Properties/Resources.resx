@@ -184,4 +184,10 @@
   <data name="URLEDSMFullSystems" xml:space="preserve">
     <value>https://www.edsm.net/dump/systemsWithCoordinates.json</value>
   </data>
+  <data name="URLEDDBSystem" xml:space="preserve">
+    <value>http://eddb.io/system/</value>
+  </data>
+  <data name="URLRossSystem" xml:space="preserve">
+    <value>http://ross.eddb.io/system/update/</value>
+  </data>
 </root>
