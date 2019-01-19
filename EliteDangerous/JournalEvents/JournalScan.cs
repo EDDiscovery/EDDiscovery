@@ -117,6 +117,8 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
+        public int EstimatedValue { get; private set; }           // Currently calculated EstimatedValue.  May change after scanning it
+
         // Constants:
 
         // stellar references
@@ -359,6 +361,7 @@ namespace EliteDangerousCore.JournalEvents
                 EDSMDiscoveryUTC = discovery["date"].DateTimeUTC();
             }
 
+            EstimateScanValue(false, false);                        // do the basic no mapped no efficency map as the basic formula
         }
 
         #region Information Returns
@@ -422,7 +425,7 @@ namespace EliteDangerousCore.JournalEvents
             //}
         }
 
-        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null, bool mapped = false, bool efficiencyBonus = false)
+        public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)//, bool mapped = false, bool efficiencyBonus = false)
         {
             string inds = new string(' ', indent);
 
@@ -585,9 +588,8 @@ namespace EliteDangerousCore.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            int v = EstimatedValue(mapped, efficiencyBonus);
-            if (v>0)
-                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), v);
+            if (EstimatedValue>0)
+                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), EstimatedValue);
 
             if (EDSMDiscoveryCommander != null)
                 scanText.AppendFormat("\n\nDiscovered by {0} on {1}".Tx(this, "DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
@@ -1033,29 +1035,34 @@ namespace EliteDangerousCore.JournalEvents
 
         #region Estimated Value
 
-        private int? estimatedValue;                                // Use EstimatedValue function to get value, not this variable
+        private bool calculatedValue = false;
         private bool valueCalculatedWithMappingMultiplier = false;
 
-        public int EstimatedValue(bool mapped, bool efficiencyBonus)            // get value. Cache in memory
-        {
-            if (!estimatedValue.HasValue || mapped != valueCalculatedWithMappingMultiplier)
-            {
-                valueCalculatedWithMappingMultiplier = mapped;
-                estimatedValue = CalculateEstimatedValue(mapped, efficiencyBonus);
-            }
-
-            return estimatedValue.Value;
-        }
-
-        private int CalculateEstimatedValue(bool mapped = false, bool efficient = false)
+        public int EstimateScanValue(bool mapped = false, bool efficient = false)       // call to estimate scan value given these parameters. Updates EstimatedValue
         {
             // see https://forums.frontier.co.uk/showthread.php/232000-Exploration-value-formulae/ for detail
 
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
-                return EstimatedValueED22();
+            {
+                EstimatedValue = EstimatedValueED22();
+                return EstimatedValue;
+            }
 
             if (EventTimeUTC < new DateTime(2018, 12, 11, 9, 0, 0, DateTimeKind.Utc))
-                return EstimatedValue32();
+            {
+                EstimatedValue = EstimatedValue32();
+                return EstimatedValue;
+            }
+
+            // 3.3 onwards
+
+            //System.Diagnostics.Debug.WriteLine("Scan calc " + mapped + " ef " + efficient + " Current " + EstimatedValue);
+
+            if ( calculatedValue && ( mapped == false || valueCalculatedWithMappingMultiplier == true)) // we have a estimate already, or a better estimate with mapped.
+                return EstimatedValue;
+
+            calculatedValue = true;
+            valueCalculatedWithMappingMultiplier = mapped;                                  // remember..
 
             double kValue;
 
@@ -1097,53 +1104,59 @@ namespace EliteDangerousCore.JournalEvents
                         break;
                 }
 
-                return (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
+                EstimatedValue = (int)StarValue32And33(kValue, nStellarMass.HasValue ? nStellarMass.Value : 1.0);
             }
-
-            if (PlanetClass == null)  //Asteroid belt
-                return 0;
-
-            switch (PlanetTypeID)
-            {
-                case EDPlanet.Metal_rich_body:
-                    // CFT value is scaled same as WW/ELW from 3.2, not confirmed in game
-                    // They're like hen's teeth anyway....
-                    kValue = 21790;
-                    if (Terraformable) kValue += 65631;
-                    break;
-                case EDPlanet.Ammonia_world:
-                    kValue = 96932;
-                    break;
-                case EDPlanet.Sudarsky_class_I_gas_giant:
-                    kValue = 1656;
-                    break;
-                case EDPlanet.Sudarsky_class_II_gas_giant:
-                case EDPlanet.High_metal_content_body:
-                    kValue = 9654;
-                    if (Terraformable) kValue += 100677;
-                    break;
-                case EDPlanet.Water_world:
-                    kValue = 64831;
-                    if (Terraformable) kValue += 116295;
-                    break;
-                case EDPlanet.Earthlike_body:
-                    kValue = 116295;
-                    break;
-                default:
-                    kValue = 300;
-                    if (Terraformable) kValue += 93328;
-                    break;
-            }
-
-            double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;
-
-            double mapMultiplier;
-            if (mapped)
-                mapMultiplier = 3.3333333333 * (efficient ? 1.25 : 1);
             else
-                mapMultiplier = 1;
+            {
+                EstimatedValue = 0;
 
-            return (int)PlanetValue33(kValue, mass, mapMultiplier);
+                if (PlanetClass != null)  //Asteroid belt is null
+                {
+                    switch (PlanetTypeID)
+                    {
+                        case EDPlanet.Metal_rich_body:
+                            // CFT value is scaled same as WW/ELW from 3.2, not confirmed in game
+                            // They're like hen's teeth anyway....
+                            kValue = 21790;
+                            if (Terraformable) kValue += 65631;
+                            break;
+                        case EDPlanet.Ammonia_world:
+                            kValue = 96932;
+                            break;
+                        case EDPlanet.Sudarsky_class_I_gas_giant:
+                            kValue = 1656;
+                            break;
+                        case EDPlanet.Sudarsky_class_II_gas_giant:
+                        case EDPlanet.High_metal_content_body:
+                            kValue = 9654;
+                            if (Terraformable) kValue += 100677;
+                            break;
+                        case EDPlanet.Water_world:
+                            kValue = 64831;
+                            if (Terraformable) kValue += 116295;
+                            break;
+                        case EDPlanet.Earthlike_body:
+                            kValue = 116295;
+                            break;
+                        default:
+                            kValue = 300;
+                            if (Terraformable) kValue += 93328;
+                            break;
+                    }
+
+                    double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;
+
+                    double mapMultiplier;
+                    if (mapped)
+                        mapMultiplier = 3.3333333333 * (efficient ? 1.25 : 1);
+                    else
+                        mapMultiplier = 1;
+
+                    EstimatedValue = (int)PlanetValue33(kValue, mass, mapMultiplier);
+                }
+            }
+
+            return EstimatedValue;
         }
 
         private double StarValue32And33(double k, double m)

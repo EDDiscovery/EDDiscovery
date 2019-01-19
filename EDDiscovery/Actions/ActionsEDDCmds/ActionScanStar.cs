@@ -188,7 +188,7 @@ namespace EDDiscovery.Actions
                 }
 
                 ap[prefix + "_text"] = sc.DisplayString();
-                ap[prefix + "_value"] = sc.EstimatedValue(false, false).ToStringInvariant();
+                ap[prefix + "_value"] = sc.EstimatedValue.ToStringInvariant();
             }
 
             if ( subname != null )

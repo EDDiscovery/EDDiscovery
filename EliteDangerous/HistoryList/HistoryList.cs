@@ -360,9 +360,9 @@ namespace EliteDangerousCore
             {
                 var mapping = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
                 if (mapping == null)
-                    return (long)scan.EstimatedValue(false, false);
+                    return (long)scan.EstimateScanValue(false, false);
                 else
-                    return (long)scan.EstimatedValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                    return (long)scan.EstimateScanValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
             }).Sum();
 
             return total;

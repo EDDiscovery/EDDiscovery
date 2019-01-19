@@ -278,10 +278,12 @@ namespace EDDiscovery.UserControls
 
                             var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
+                            sn.ScanData.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently);        // ensure its up to date
+
                             cur.Tag = img;
                             cur.Cells[0].Tag = null;
                             cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
-                                        sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity, mapped: sn.IsMapped, efficiencyBonus: sn.WasMappedEfficiently);
+                                        sn.ScanData.DisplayString(historicmatlist: last_he.MaterialCommodity, currentmatlist: discoveryform.history.GetLast?.MaterialCommodity);
                         }
                     }
                 }
@@ -499,7 +501,7 @@ namespace EDDiscovery.UserControls
                         //! for all relevant bodies:
 
                         // give estimated value
-                        var value = sn.ScanData.EstimatedValue(sn.IsMapped, sn.WasMappedEfficiently);
+                        var value = sn.ScanData.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently);
                         if (showValues)
                         {
                             bdDetails.Append(Environment.NewLine).Append("Value".Tx(this)).Append(" ").Append(value.ToString("N0"));
@@ -605,7 +607,7 @@ namespace EDDiscovery.UserControls
             {
                 if (body.ScanData != null)
                 { 
-                    value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
+                    value += body.ScanData.EstimateScanValue(body.IsMapped, body.WasMappedEfficiently);
                 }
             }
 

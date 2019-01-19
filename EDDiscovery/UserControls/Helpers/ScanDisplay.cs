@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (CheckEDSM || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimatedValue(body.IsMapped, body.WasMappedEfficiently);
+                        value += body.ScanData.EstimateScanValue(body.IsMapped, body.WasMappedEfficiently);
                     }
                 }
             }
@@ -329,7 +329,7 @@ namespace EDDiscovery.UserControls
                 else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !ShowMaterials;
-                    bool valuable = sc.EstimatedValue(sn.IsMapped, sn.WasMappedEfficiently) > 50000;
+                    bool valuable = sc.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently) > 50000;
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
