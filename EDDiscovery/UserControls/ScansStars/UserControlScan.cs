@@ -178,7 +178,8 @@ namespace EDDiscovery.UserControls
             else
             {
                 SetControlText(data == null ? "No Scan".Tx() : data.system.Name);
-                BuildSystemInfo(data);
+                if (data != null)
+                    BuildSystemInfo(data);
             }
 
         }
