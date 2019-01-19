@@ -57,6 +57,8 @@ namespace EDDiscovery.Actions
                 vars[prefix + "ContainsRares"] = he.ContainsRares() ? "1" : "0";
                 vars[prefix + "EventSummary"] = he.EventSummary;
 
+                vars[prefix + "Note"] = he.snc?.Note ?? "";
+
                 he.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 vars[prefix + "EventDescription"] = EventDescription;
                 vars[prefix + "EventDetailedInfo"] = EventDetailedInfo;
