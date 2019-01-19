@@ -172,9 +172,14 @@ namespace EDDiscovery.UserControls
             StarScan.SystemNode data = panelStars.DrawSystem(showing_system, showing_matcomds, discoveryform.history);
 
             if (showing_system == null)
+            {
                 SetControlText("No System");
-            else 
+            }
+            else
+            {
                 SetControlText(data == null ? "No Scan".Tx() : data.system.Name);
+                BuildSystemInfo(data);
+            }
 
         }
 
