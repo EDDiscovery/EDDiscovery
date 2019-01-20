@@ -579,8 +579,10 @@ namespace EDDiscovery
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14)  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".Tx(this,"EDSM"));
-                    galacticMapping.DownloadFromEDSM();
-                    SQLiteConnectionSystem.PutSettingString("EDSMGalMapLast", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+                    if (galacticMapping.DownloadFromEDSM())
+                    {
+                        SQLiteConnectionSystem.PutSettingString("EDSMGalMapLast", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+                    }
                 }
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");

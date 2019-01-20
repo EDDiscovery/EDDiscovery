@@ -68,10 +68,10 @@ namespace EDDiscovery.UserControls
 
             // dataGridView setup - the rule is, use the designer for most properties.. only do these here since they are so buried or not available.
 
-            // this allows the row to grow to accomodate the text.. with a min height of 32.
+            // this allows the row to grow to accomodate the text.. with a min height of 48px.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 32;
+            dataGridViewScangrid.RowTemplate.MinimumHeight = 48;
             this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
         }
 
@@ -641,6 +641,7 @@ namespace EDDiscovery.UserControls
                 if (icons != 0)
                 {
                     iconsize = Math.Min(iconsize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
+                                        
                     //System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
                     right -= iconsize;
                 }
@@ -654,7 +655,7 @@ namespace EDDiscovery.UserControls
 
                 if (overlays?.landable ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));                    
                     vposoverlay += iconsize + 2;
                 }
 
