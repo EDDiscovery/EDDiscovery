@@ -24,7 +24,7 @@ namespace EliteDangerousCore.EDSM
 {
     public class GalacticMapping
     {
-        readonly string GalacticMappingFile = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json");
+        private string GalacticMappingFile { get { return Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json"); } }
 
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;
