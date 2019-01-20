@@ -48,7 +48,7 @@ namespace EliteDangerousCore.EDSM
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                string url = EDSMClass.ServerAddress + "galactic-mapping/json-edd";
+                string url = EDSMClass.ServerAddress + "en/galactic-mapping/json-edd";
                 bool newfile;
 
                 return BaseUtils.DownloadFileHandler.DownloadFile(url, GalacticMappingFile, out newfile);
