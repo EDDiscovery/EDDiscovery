@@ -24,7 +24,7 @@ namespace EliteDangerousCore.EDSM
 {
     public class GalacticMapping
     {
-        readonly string GalacticMappingFile = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json");
+        private string GalacticMappingFile { get { return Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "galacticmapping.json"); } }
 
         public List<GalacticMapObject> galacticMapObjects = null;
         public List<GalMapType> galacticMapTypes = null;
@@ -48,7 +48,7 @@ namespace EliteDangerousCore.EDSM
             try
             {
                 EDSMClass edsm = new EDSMClass();
-                string url = EDSMClass.ServerAddress + "galactic-mapping/json-edd";
+                string url = EDSMClass.ServerAddress + "en/galactic-mapping/json-edd";
                 bool newfile;
 
                 return BaseUtils.DownloadFileHandler.DownloadFile(url, GalacticMappingFile, out newfile);
