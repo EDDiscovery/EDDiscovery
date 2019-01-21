@@ -175,6 +175,20 @@ namespace EliteDangerousCore.EDDN
             ["MarketID"] = true,
             ["StationName"] = true,
             ["StationType"] = true,
+            ["StationFaction"] = true,
+            ["StationAllegiance"] = true,
+            ["StationGovernment"] = true,
+            ["StationEconomy"] = true,
+            ["StationServices"] = "[]",
+            ["StationState"] = true,
+            ["StationEconomies"] = new JArray
+            {
+                new JObject
+                {
+                    ["Name"] = true,
+                    ["Proportion"] = true
+                }
+            },
         };
 
         private static readonly JObject AllowedFieldsDocked = new JObject(AllowedFieldsCommon)
@@ -475,6 +489,7 @@ namespace EliteDangerousCore.EDDN
 
             message = RemoveCommonKeys(message);
             message = RemoveFactionReputation(message);
+            message = RemoveStationEconomyKeys(message);
             message.Remove("StarPosFromEDSM");
             message.Remove("Latitude");
             message.Remove("Longitude");
