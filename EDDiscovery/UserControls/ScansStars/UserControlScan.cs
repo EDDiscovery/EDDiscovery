@@ -261,51 +261,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void SetSizeCheckBoxes(int size)
-        {
-            progchange = true;
-            checkBoxLarge.Checked = (size == 128);
-            checkBoxMedium.Checked = (size == 96);
-            checkBoxSmall.Checked = (size == 64);
-            checkBoxTiny.Checked = (size == 48);
-
-            if (!checkBoxLarge.Checked && !checkBoxMedium.Checked && !checkBoxSmall.Checked && !checkBoxTiny.Checked)
-            {
-                checkBoxSmall.Checked = true;
-                size = 64;
-            }
-
-            panelStars.SetSize(size);
-            SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
-            progchange = false;
-
-            DrawSystem();
-        }
-
-        private void checkBoxLarge_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!progchange)
-                SetSizeCheckBoxes(128);
-        }
-
-        private void checkBoxMedium_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!progchange)
-                SetSizeCheckBoxes(96);
-        }
-
-        private void checkBoxSmall_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!progchange)
-                SetSizeCheckBoxes(64);
-        }
-
-        private void checkBoxTiny_CheckedChanged(object sender, EventArgs e)
-        {
-            if (!progchange)
-                SetSizeCheckBoxes(48);
-        }
-
         private void checkBoxEDSM_CheckedChanged(object sender, EventArgs e)
         {
             if (!progchange)
