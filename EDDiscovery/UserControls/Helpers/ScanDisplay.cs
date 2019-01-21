@@ -578,7 +578,8 @@ namespace EDDiscovery.UserControls
             beltsize = new Size(StarSize.Width * 1 / 2, StarSize.Height);
             planetsize = new Size(StarSize.Width * 3 / 4, StarSize.Height * 3 / 4);
             moonsize = new Size(StarSize.Width * 2 / 4, StarSize.Height * 2 / 4);
-            materialsize = new Size(24, 24);
+            int matsize = stars >= 64 ? 24 : 16;
+            materialsize = new Size(matsize, matsize);
             itemsepar = new Size(stars / 16, stars / 16);
             topmargin = 10;
             leftmargin = 0;
