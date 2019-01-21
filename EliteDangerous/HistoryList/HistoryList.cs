@@ -1095,7 +1095,7 @@ namespace EliteDangerousCore
 
                     he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);                           // the missions
 
-                    if (je.EventTypeID == JournalTypeEnum.Scan)
+                    if (je.EventTypeID == JournalTypeEnum.Scan && je is JournalScan)
                     {
                         if (!this.starscan.AddScanToBestSystem(je as JournalScan, i, hl))
                         {
