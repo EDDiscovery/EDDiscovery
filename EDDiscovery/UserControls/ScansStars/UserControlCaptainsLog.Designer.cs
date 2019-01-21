@@ -32,21 +32,20 @@
             this.panelButtons = new System.Windows.Forms.Panel();
             this.buttonDelete = new ExtendedControls.ButtonExt();
             this.buttonNew = new ExtendedControls.ButtonExt();
-            this.buttonEdit = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
             this.labelSearch = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
             this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -57,7 +56,6 @@
             // 
             this.panelButtons.Controls.Add(this.buttonDelete);
             this.panelButtons.Controls.Add(this.buttonNew);
-            this.panelButtons.Controls.Add(this.buttonEdit);
             this.panelButtons.Controls.Add(this.textBoxFilter);
             this.panelButtons.Controls.Add(this.labelSearch);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
@@ -69,11 +67,11 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(270, 0);
+            this.buttonDelete.Location = new System.Drawing.Point(242, 0);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(32, 32);
             this.buttonDelete.TabIndex = 27;
-            this.toolTip.SetToolTip(this.buttonDelete, "Delete selected bookmark");
+            this.toolTip.SetToolTip(this.buttonDelete, "Delete selected entries");
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -84,20 +82,9 @@
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(32, 32);
             this.buttonNew.TabIndex = 2;
-            this.toolTip.SetToolTip(this.buttonNew, "New Bookmark");
+            this.toolTip.SetToolTip(this.buttonNew, "New Entry");
             this.buttonNew.UseVisualStyleBackColor = true;
             this.buttonNew.Click += new System.EventHandler(this.buttonNew_Click);
-            // 
-            // buttonEdit
-            // 
-            this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(236, 0);
-            this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(32, 32);
-            this.buttonEdit.TabIndex = 3;
-            this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
-            this.buttonEdit.UseVisualStyleBackColor = true;
-            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
             // 
             // textBoxFilter
             // 
@@ -157,13 +144,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(656, 34);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(656, 21);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 377);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 390);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -181,11 +168,11 @@
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ColTags,
             this.ColTime,
             this.ColSystem,
             this.ColBodyName,
-            this.ColNote});
+            this.ColNote,
+            this.ColTags});
             this.dataGridView.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
@@ -193,10 +180,41 @@
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.Size = new System.Drawing.Size(656, 411);
             this.dataGridView.TabIndex = 4;
-            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
+            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
+            this.dataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEnter);
+            this.dataGridView.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView_EditingControlShowing);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
+            // 
+            // ColTime
+            // 
+            this.ColTime.HeaderText = "Time";
+            this.ColTime.Name = "ColTime";
+            this.ColTime.ReadOnly = true;
+            // 
+            // ColSystem
+            // 
+            this.ColSystem.HeaderText = "System";
+            this.ColSystem.Name = "ColSystem";
+            this.ColSystem.ReadOnly = true;
+            // 
+            // ColBodyName
+            // 
+            this.ColBodyName.HeaderText = "Body";
+            this.ColBodyName.Name = "ColBodyName";
+            this.ColBodyName.ReadOnly = true;
+            // 
+            // ColNote
+            // 
+            this.ColNote.FillWeight = 300F;
+            this.ColNote.HeaderText = "Note";
+            this.ColNote.Name = "ColNote";
+            // 
+            // ColTags
+            // 
+            this.ColTags.HeaderText = "Tags";
+            this.ColTags.Name = "ColTags";
             // 
             // contextMenuStrip
             // 
@@ -220,36 +238,6 @@
             this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
             this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
-            // 
-            // ColTags
-            // 
-            this.ColTags.HeaderText = "Tags";
-            this.ColTags.Name = "ColTags";
-            this.ColTags.ReadOnly = true;
-            // 
-            // ColTime
-            // 
-            this.ColTime.HeaderText = "Time";
-            this.ColTime.Name = "ColTime";
-            this.ColTime.ReadOnly = true;
-            // 
-            // ColSystem
-            // 
-            this.ColSystem.HeaderText = "System";
-            this.ColSystem.Name = "ColSystem";
-            this.ColSystem.ReadOnly = true;
-            // 
-            // ColBodyName
-            // 
-            this.ColBodyName.HeaderText = "Body";
-            this.ColBodyName.Name = "ColBodyName";
-            // 
-            // ColNote
-            // 
-            this.ColNote.FillWeight = 300F;
-            this.ColNote.HeaderText = "Note";
-            this.ColNote.Name = "ColNote";
-            this.ColNote.ReadOnly = true;
             // 
             // UserControlCaptainsLog
             // 
@@ -275,7 +263,6 @@
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.DataGridView dataGridView;
         private ExtendedControls.ButtonExt buttonNew;
-        private ExtendedControls.ButtonExt buttonEdit;
         private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
         private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
         private System.Windows.Forms.ToolTip toolTip;
@@ -283,10 +270,10 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonDelete;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
     }
 }

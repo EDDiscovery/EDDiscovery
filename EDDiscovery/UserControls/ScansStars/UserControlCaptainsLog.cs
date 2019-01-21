@@ -1,4 +1,5 @@
 ﻿using EDDiscovery.Forms;
+using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
@@ -10,8 +11,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCaptainsLog : UserControlCommonBase
     {
-        DataGridViewRow currentedit = null;
-
         Timer searchtimer;
 
         #region init
@@ -29,14 +28,16 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this, new Control[] { });
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            ColNote.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
         }
 
         public override void Closing()
         {
-            SaveBackAnyChanges();
-
+    //        SaveBackAnyChanges();
             searchtimer.Dispose();
-
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
         }
         #endregion
@@ -51,8 +52,6 @@ namespace EDDiscovery.UserControls
        
         private void Display()
         {
-            this.dataGridView.SelectionChanged -= new System.EventHandler(this.dataGridView_SelectionChanged);
-
             int lastrow = dataGridView.CurrentCell != null ? dataGridView.CurrentCell.RowIndex : -1;
 
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
@@ -66,12 +65,14 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
                 var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells( dataGridView , entry.Tags ??"",
+                rw.CreateCells(dataGridView, 
                     EDDConfig.Instance.DisplayUTC ? entry.TimeUTC : entry.TimeLocal,
                     entry.SystemName,
                     entry.BodyName,
-                    entry.Note
+                    entry.Note,
+                    entry.Tags ?? ""
                  );
+
                 rw.Tag = entry;
 
                 dataGridView.Rows.Add(rw);
@@ -84,57 +85,76 @@ namespace EDDiscovery.UserControls
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count)
                 dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[2];
-
-            RefreshCurrentEdit();
-
-            this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView_SelectionChanged);
         }
 
-        private void RefreshCurrentEdit()
-        {
-            if (dataGridView.CurrentCell != null)
-            {
-                currentedit = dataGridView.Rows[dataGridView.CurrentCell.RowIndex];
-                System.Diagnostics.Debug.WriteLine("Move to row " + currentedit.Index );
-            }
-            else
-            {
-                currentedit = null;
-            }
-        }
-
-        private void SaveBackAnyChanges()
-        {
-            if (currentedit != null)
-            {
-                //CaptainsLogClass bk = (CaptainsLogClass)currentedit.Tag;
-                //string newNote = "";
-                //if (null != currentedit.Cells[2].Value)
-                //{
-                //    newNote = currentedit.Cells[2].Value.ToString();
-                //}
-                ////System.Diagnostics.Debug.WriteLine("Checking for save " + currentedit.Index);
-
-                //if (!newNote.Equals(bk.Note) )     // notes or planet marks changed
-                //{
-                //    updating = true;
-                //    //System.Diagnostics.Debug.WriteLine("Save back " + bk.Name + " " + newNote);
-                //    currentedit.Tag = GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.isRegion,
-                //                    bk.isRegion ? bk.Heading : bk.StarName,
-                //                    bk.x, bk.y, bk.z, bk.Time,
-                //                    newNote
-                //                    );
-                //    updating = false;
-               // }
-
-                currentedit = null;
-            }
-        }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            //if (e.Column.Index >= 3)
-                //e.SortDataGridViewColumnNumeric();
+            if (e.Column.Index == 0)
+                e.SortDataGridViewColumnDate();
+        }
+
+        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            inupdate = true;
+
+            System.Diagnostics.Debug.WriteLine("Cell end edit" + e.RowIndex + " " + e.ColumnIndex);
+            DataGridViewRow rw = dataGridView.CurrentCell.OwningRow;
+            CaptainsLogClass entry = rw.Tag as CaptainsLogClass;        // may be null
+
+            string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
+            string tags = rw.Cells[4].Value != null ? (string)rw.Cells[4].Value : null;
+
+            CaptainsLogClass cls = GlobalCaptainsLogList.Instance.AddOrUpdate(entry,
+                        rw.Cells[1].Value as string,
+                        rw.Cells[2].Value as string,
+                        entry?.TimeUTC ?? ((DateTime)rw.Cells[0].Tag),
+                        notes,
+                        tags);
+
+            rw.Tag = cls;
+
+            rw.MinimumHeight = 16;
+
+            inupdate = false;
+        }
+
+        DataGridViewRow currowgoingtoedit = null;
+
+        private void dataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex >= 3)
+            {
+                currowgoingtoedit = dataGridView.Rows[e.RowIndex];
+                System.Diagnostics.Debug.WriteLine("Cell enter " + e.RowIndex + " " + e.ColumnIndex);
+            }
+        }
+
+        private void dataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            currowgoingtoedit.MinimumHeight = 128;
+            TextBox tb = e.Control as TextBox;
+            tb.ScrollBars = ScrollBars.Both;
+        }
+
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+
+            //string tags = rw.Cells[4].Value != null ? (string)rw.Cells[4].Value : null;
+            if (e.ColumnIndex == 3)
+            {
+                dataGridView.EndEdit();
+
+                string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
+
+                string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(this), notes,
+                                "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, width: 800, vspacing: 400);
+
+                if (s != null)
+                    rw.Cells[3].Value = s;
+            }
+
         }
 
         #endregion
@@ -143,31 +163,21 @@ namespace EDDiscovery.UserControls
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
-            updating = true;
-            //UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, null, null, false);
-            updating = false;
-            Display();
-        }
+            HistoryEntry he = discoveryform.history.GetLast;
 
-        private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            buttonEdit_Click(sender, e);
-        }
+            var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+            rw.CreateCells(dataGridView,
+                EDDConfig.Instance.DisplayUTC ? DateTime.UtcNow : DateTime.Now,
+                he?.System.Name ?? "?",
+                he?.WhereAmI ?? "?",
+                "",
+                ""
+             );
 
-        private void buttonEdit_Click(object sender, EventArgs e)
-        {
-            if (currentedit != null)      // if we have a current cell.. 
-            {
-                //CaptainsLogClass bk = (CaptainsLogClass)currentedit.Tag;
+            rw.Tag = null;
+            rw.Cells[0].Tag = DateTime.UtcNow;      // new ones store the date in here.
 
-                //SaveBackAnyChanges();
-                //EliteDangerousCore.ISystem sys = bk.isStar ? EliteDangerousCore.SystemCache.FindSystem(bk.Name) : null;
-
-                //updating = true;
-                //UserControls.TargetHelpers.showBookmarkForm(this.FindForm(), discoveryform, sys, bk, false);
-                //updating = false;
-                //Display();
-            }
+            dataGridView.Rows.Insert(0,rw);
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -185,45 +195,39 @@ namespace EDDiscovery.UserControls
             {
                 if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").Tx(this,"CFN"), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
-                    updating = true;
                     foreach (int r in rows)
                     {
                         CaptainsLogClass entry = (CaptainsLogClass)dataGridView.Rows[r].Tag;
-                        //System.Diagnostics.Debug.WriteLine("Delete " + bk.Name);
-                        GlobalCaptainsLogList.Instance.Delete(entry);
+
+                        if (entry != null)
+                            GlobalCaptainsLogList.Instance.Delete(entry);
                     }
-                    updating = false;
                     Display();
                 }
 
             }
-            else if (currentedit != null)      // if we have a current cell.. 
+            else if ( dataGridView.CurrentCell != null)      // if we have a current cell.. 
             {
-                CaptainsLogClass entry = (CaptainsLogClass)currentedit.Tag;
+                DataGridViewRow rw = dataGridView.CurrentCell.OwningRow;
 
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(this,"CF"),  entry.SystemName + ":" + entry.BodyName ), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (rw.Tag != null)
                 {
-                    updating = true;
-                    GlobalCaptainsLogList.Instance.Delete(entry);
-                    updating = false;
-                    Display();
+                    CaptainsLogClass entry = (CaptainsLogClass)rw.Tag;
+
+                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(this, "CF"), entry.SystemName + ":" + entry.BodyName), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    {
+                        GlobalCaptainsLogList.Instance.Delete(entry);
+                        Display();
+                    }
                 }
+                else
+                    Display();
             }
         }
 
-        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if(e.ColumnIndex == 2)
-            {
-              //  SaveBackAnyChanges();
-            }
-        }
+        #endregion
 
-        private void dataGridView_SelectionChanged(object sender, EventArgs e)
-        {
-            SaveBackAnyChanges();
-            RefreshCurrentEdit();
-        }
+        #region Filter
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)
         {
@@ -236,11 +240,7 @@ namespace EDDiscovery.UserControls
             searchtimer.Stop();
             this.Cursor = Cursors.WaitCursor;
 
-            SaveBackAnyChanges();
-
             dataGridView.FilterGridView(textBoxFilter.Text);
-
-            RefreshCurrentEdit();
 
             this.Cursor = Cursors.Default;
         }
@@ -249,15 +249,15 @@ namespace EDDiscovery.UserControls
 
         #region Reaction to bookmarks doing stuff from outside sources
 
-        bool updating;
+        bool inupdate = false;
         private void LogChanged(CaptainsLogClass bk, bool deleted)
         {
-            //System.Diagnostics.Debug.WriteLine("Changed called " + updating);
-            if (updating)
-                return;
-
-            // removed this - this can overwrite commanded changes SaveBackAnyChanges();
-            Display();
+            if (!inupdate)
+            {
+                if (dataGridView.IsCurrentCellInEditMode)
+                    dataGridView.EndEdit();
+                Display();
+            }
         }
 
         #endregion
