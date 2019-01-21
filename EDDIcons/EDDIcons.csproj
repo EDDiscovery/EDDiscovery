@@ -678,6 +678,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\SizeTinyTiny.png" />
+    <EmbeddedResource Include="Controls\Scan\SizeMinuscule.png" />
     <EmbeddedResource Include="Journal\SquadronStartup.png" />
     <EmbeddedResource Include="Journal\ReservoirReplenished.png" />
     <EmbeddedResource Include="Journal\ProspectedAsteroid.png" />

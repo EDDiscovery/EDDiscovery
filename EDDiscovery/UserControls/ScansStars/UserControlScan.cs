@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             progchange = false;
 
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
-            SetSizeCheckBoxes(size);
+            SetSizeImage(size);
 
             discoveryform.OnNewEntry += NewEntry;
 
@@ -372,6 +372,70 @@ namespace EDDiscovery.UserControls
         {
             override_system = false;
             DrawSystem(last_he);
+        }
+
+
+        DropDownCustom dropdown;
+
+        private void buttonSize_Click(object sender, EventArgs e)
+        {
+            // 128,96,64,48
+            dropdown = new DropDownCustom("", true);
+
+            dropdown.SelectionBackColor = EDDTheme.Instance.ButtonBackColor;
+            dropdown.ForeColor = EDDTheme.Instance.ButtonTextColor;
+            dropdown.BackColor = EDDTheme.Instance.ButtonBackColor;
+            dropdown.BorderColor = EDDTheme.Instance.ButtonBorderColor;
+            dropdown.MouseOverBackgroundColor = EDDTheme.Instance.ButtonBackColor.Multiply(1.4f);
+
+            Image[] imagelist = new Image[] { global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeMedium ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeSmall ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeTiny ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeTinyTiny ,
+                global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule ,
+            };
+
+            string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
+
+            dropdown.ItemHeight = imagelist[0].Size.Height + 2;
+            dropdown.Items = textlist.ToList();
+            dropdown.ImageItems = imagelist.ToList();
+            dropdown.FlatStyle = FlatStyle.Popup;
+            dropdown.Activated += (s, ea) =>
+            {
+                Point location = buttonSize.PointToScreen(new Point(0, 0));
+                dropdown.Location = dropdown.PositionWithinScreen(location.X, location.Y);
+                this.Invalidate(true);
+            };
+            dropdown.SelectedIndexChanged += (s, ea) =>
+            {
+                int size = textlist[dropdown.SelectedIndex].InvariantParseInt(64);
+                SetSizeImage(size);
+                DrawSystem();
+            };
+
+            dropdown.Size = new Size(64, dropdown.ItemHeight * textlist.Length + 8);
+            dropdown.Show(this.FindForm());
+        }
+
+        private void SetSizeImage(int size)
+        {
+            if (size == 128)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
+            else if (size == 96)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMedium;
+            else if (size == 64)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeSmall;
+            else if (size == 48)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTiny;
+            else if (size == 32)
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeTinyTiny;
+            else
+                buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeMinuscule;
+
+            panelStars.SetSize(size);
+            SQLiteDBClass.PutSettingInt(DbSave + "Size", size);
         }
 
         #endregion
@@ -700,6 +764,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
     }
 }
 
