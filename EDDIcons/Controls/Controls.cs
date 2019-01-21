@@ -189,6 +189,7 @@ namespace EDDiscovery.Icons
         #region EDDiscovery.UserControls.UserControlScanGrid
         public static Image ScanGrid_Belt { get { return IconSet.GetIcon("Controls.ScanGrid.Belt"); } }
         public static Image ScanGrid_Ring { get { return IconSet.GetIcon("Controls.ScanGrid.Ring"); } }
+        public static Image ScanGrid_Landable { get { return IconSet.GetIcon("Controls.ScanGrid.Touchdown"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlSPanel
         public static Image SPanel_ResizeColumn { get { return IconSet.GetIcon("Controls.SPanel.ResizeColumn"); } }

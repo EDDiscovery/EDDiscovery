@@ -619,61 +619,61 @@ namespace EDDiscovery.UserControls
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
             var cur = dataGridViewScangrid.Rows[e.RowIndex];
-            Overlays overlays = cur.Cells[0].Tag as Overlays;       // may be null
+            var overlays = cur.Cells[0].Tag as Overlays;       // may be null
 
             if (cur.Tag != null)
             {
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
 
-                int top = e.RowBounds.Top + 4;
-                int bot = e.RowBounds.Bottom - 4;
-                int left = e.RowBounds.Left + 4;
-                int right = e.RowBounds.Left + cur.Cells[0].Size.Width - 4;
+                var top = e.RowBounds.Top + 4;
+                var bot = e.RowBounds.Bottom - 4;
+                var left = e.RowBounds.Left + 4;
+                var right = e.RowBounds.Left + cur.Cells[0].Size.Width - 4;
 
                 int icons = 0;
 
                 if (overlays != null)
                     icons = (overlays.mapped ? 1 : 0) + (overlays.volcanism ? 1 : 0) + (overlays.materials ? 1 : 0) + (overlays.landable ? 1 : 0);
 
-                int iconsize = 12;
+                int overlaysize = 14;
 
                 if (icons != 0)
                 {
-                    iconsize = Math.Min(iconsize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
+                    overlaysize = Math.Min(overlaysize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
                                         
                     //System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
-                    right -= iconsize;
+                    right -= overlaysize;
                 }
 
-                int size = Math.Min(bot - top, right - left);                           
+                var size = Math.Min(bot - top, right - left);
 
-                Image img = cur.Tag as Image;
-                e.Graphics.DrawImage(img, new Rectangle((right+left)/2-size/2, (bot+top)/2-size/2, size, size));        // main icon
+                var bodyicon = cur.Tag as Image;
+                e.Graphics.DrawImage(bodyicon, new Rectangle((right+left)/2-size/2, (bot+top)/2-size/2, size, size));        // main icon
 
-                int vposoverlay = (top+bot)/2 - iconsize*icons/2;                       // position it centrally vertically
+                var vposoverlay = (top+bot)/2 - overlaysize*icons/2;                       // position it centrally vertically
 
                 if (overlays?.landable ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));                    
-                    vposoverlay += iconsize + 2;
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.ScanGrid_Landable, new Rectangle(right, vposoverlay, overlaysize, overlaysize));                    
+                    vposoverlay += overlaysize + 2;
                 }
 
                 if (overlays?.materials ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay , iconsize, iconsize));
-                    vposoverlay += iconsize + 2;
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay , overlaysize, overlaysize));
+                    vposoverlay += overlaysize + 2;
                 }
 
                 if (overlays?.volcanism ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                    vposoverlay += iconsize + 2;
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, overlaysize, overlaysize));
+                    vposoverlay += overlaysize + 2;
                 }
 
                 if (overlays?.mapped ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, overlaysize, overlaysize));
 
                 }
             }
