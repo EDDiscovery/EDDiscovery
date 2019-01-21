@@ -129,7 +129,8 @@ namespace EDDiscovery
         {
             return Task.Factory.StartNew(() =>
             {
-                bool check = EDDOptions.Instance.CheckGithubFiles;
+                // only download if check github is on and we are not debugging the notifications with an override..
+                bool check = EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null;
                 string notificationsdir = EDDOptions.Instance.NotificationsAppDirectory();
 
                 if (check)      // if download from github first..
