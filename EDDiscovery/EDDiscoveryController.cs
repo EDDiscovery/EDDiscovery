@@ -143,6 +143,7 @@ namespace EDDiscovery
             Trace.WriteLine($"*** Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
 
             GlobalBookMarkList.LoadBookmarks();
+            GlobalCaptainsLogList.LoadLog();
 
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);

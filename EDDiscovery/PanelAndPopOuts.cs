@@ -73,6 +73,7 @@ namespace EDDiscovery
             OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
             SplitterControl,        // 39
             MissionOverlay,         // 40
+            CaptainsLog,            // 41 Actually its important for debugging purposes so you can recongnised the ID
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -115,6 +116,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
             { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "System and planetary bookmarks", transparent:false)},
+            { new PanelInfo( PanelIDs.CaptainsLog, typeof(UserControlCaptainsLog), "Captains Log", "CaptainsLog", "Captains Log - notes on your travels", transparent:false)},
 
             { new PanelInfo( "Combat") },
             { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Combat statistics", transparent:false)},

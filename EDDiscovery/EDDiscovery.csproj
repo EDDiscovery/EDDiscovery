@@ -527,6 +527,12 @@
     <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.Designer.cs">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlCaptainsLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlCaptainsLog.Designer.cs">
+      <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ScansStars\UserControlBookmarks.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -760,6 +766,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlCaptainsLog.resx">
+      <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
