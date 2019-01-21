@@ -62,6 +62,8 @@ namespace EDDiscovery.UserControls
             this.earthLikePlanetsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ammoniaWorldsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.icyBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.orbitalDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.starsOnlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.structuresToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.beltsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -212,13 +214,14 @@ namespace EDDiscovery.UserControls
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.circumstellarZoneToolStripMenuItem,
+            this.orbitalDetailsToolStripMenuItem,
             this.structuresToolStripMenuItem,
             this.materialsToolStripMenuItem,
             this.valuesToolStripMenuItem,
             this.toolStripSeparator1,
             this.columnsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 142);
             // 
             // circumstellarZoneToolStripMenuItem
             // 
@@ -303,6 +306,28 @@ namespace EDDiscovery.UserControls
             this.icyBodiesToolStripMenuItem.Text = "Icy Bodies";
             this.icyBodiesToolStripMenuItem.ToolTipText = "Toggle ice bodies zone visibility";
             this.icyBodiesToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.icyBodiesToolStripMenuItem_CheckStateChanged);
+            // 
+            // orbitalDetailsToolStripMenuItem
+            // 
+            this.orbitalDetailsToolStripMenuItem.Checked = true;
+            this.orbitalDetailsToolStripMenuItem.CheckOnClick = true;
+            this.orbitalDetailsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.orbitalDetailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.starsOnlyToolStripMenuItem});
+            this.orbitalDetailsToolStripMenuItem.Name = "orbitalDetailsToolStripMenuItem";
+            this.orbitalDetailsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.orbitalDetailsToolStripMenuItem.Text = "Orbital details";
+            this.orbitalDetailsToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.orbitalDetailsToolStripMenuItem_CheckStateChanged);
+            // 
+            // starsOnlyToolStripMenuItem
+            // 
+            this.starsOnlyToolStripMenuItem.Checked = true;
+            this.starsOnlyToolStripMenuItem.CheckOnClick = true;
+            this.starsOnlyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.starsOnlyToolStripMenuItem.Name = "starsOnlyToolStripMenuItem";
+            this.starsOnlyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.starsOnlyToolStripMenuItem.Text = "Stars only";
+            this.starsOnlyToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.starsOnlyToolStripMenuItem_CheckStateChanged);
             // 
             // structuresToolStripMenuItem
             // 
@@ -514,5 +539,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn colClass;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn colBriefing;
+        private System.Windows.Forms.ToolStripMenuItem orbitalDetailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem starsOnlyToolStripMenuItem;
     }
 }

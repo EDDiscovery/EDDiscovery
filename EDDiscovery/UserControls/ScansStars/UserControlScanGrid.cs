@@ -37,6 +37,8 @@ namespace EDDiscovery.UserControls
         private HistoryEntry last_he = null;
 
         private bool showStellarZones = true;
+        private bool showOrbitalDetails = true;
+        private bool showOrbitalDetailsForStarsOnly;
         private bool showHabitable = true;
         private bool showMetalRich = true;
         private bool showWaterWorlds = true;
@@ -56,7 +58,7 @@ namespace EDDiscovery.UserControls
         private bool hasNiobium;
         private bool hasPopolonium;
         private bool hasVanadium;
-        private bool hasYttrium;
+        private bool hasYttrium;        
 
         private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
         private string DbSave { get { return DBName("ScanGridPanel"); } }
@@ -86,6 +88,8 @@ namespace EDDiscovery.UserControls
 
             // retrieve context menu entries check state from DB
             circumstellarZoneToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showStellarZones", true);
+            orbitalDetailsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showOrbitalDetails", true);
+            starsOnlyToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showOrbitalDetailsForStarsOnly", true);
             habitableZoneToolStripMenuItem.Checked = SQLiteDBClass.PutSettingBool(DbSave + "showHabitable", true);
             metalRichToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showMetalRich", true);
             waterWorldsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showWaterWorlds", true);
@@ -147,6 +151,7 @@ namespace EDDiscovery.UserControls
         /// </summary>
         /// <param name="he">HistoryEntry</param>
         /// <param name="hl">HistoryList</param>
+        /// <param name="selectedEntry">refer to the selected history entry</param>
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             ResetDefaults();
@@ -157,7 +162,6 @@ namespace EDDiscovery.UserControls
         {
             // reset isGreenSystem tag
             isGreenSystem = false;
-
 
             // reset indicator for jumponium materials
             hasArsenic = false;
@@ -180,7 +184,7 @@ namespace EDDiscovery.UserControls
         #region PopulateGrid
 
         /// <summary>
-        /// Constructor to pass properties to postdrawing function
+        /// Class used to pass properties to postdrawing function for overlays icons
         /// </summary>
         private class Overlays
         {
@@ -295,7 +299,7 @@ namespace EDDiscovery.UserControls
                     if (sn.ScanData?.BodyName != null)
                     {
                         // check for body class
-                        if (sn.ScanData.IsStar)
+                        if ((sn.ScanData.nOrbitalPeriod != null) && sn.ScanData.IsStar)
                         {
                             // is a star, so populate its information field with relevant data
                             _stars++;
@@ -328,7 +332,22 @@ namespace EDDiscovery.UserControls
 
                             // show the temperature
                             if (sn.ScanData.nSurfaceTemperature.HasValue)
-                                bdDetails.Append("Temperature".Tx(this)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value)).Append("K.");
+                                bdDetails.Append("Temperature".Tx(this)).Append(": ").Append(sn.ScanData.nSurfaceTemperature.Value).Append("K.");
+
+                            // show orbital details
+                            if (showOrbitalDetails)
+                            {
+                                bdDetails.Append(Environment.NewLine);
+
+                                if (sn.ScanData.nOrbitalPeriod.HasValue)
+                                    bdDetails.Append("Orbital period".Tx(this)).Append(": ").Append((sn.ScanData.nOrbitalPeriod.Value / JournalScan.oneDay_s).ToString("N1")).Append("days. ");
+
+                                if (sn.ScanData.nOrbitalInclination.HasValue)
+                                    bdDetails.Append("Orbital Inclination".Tx(this)).Append(": ").Append(sn.ScanData.nOrbitalInclination.Value.ToString("N3")).Append("°. ");
+
+                                if (sn.ScanData.nEccentricity.HasValue)
+                                    bdDetails.Append("Orbital Eccentricity".Tx(this)).Append(": ").Append(sn.ScanData.nEccentricity.Value.ToString("N3")).Append(". ");
+                            }
 
                             // habitable zone for stars - do not display for black holes.
                             if (showStellarZones)
@@ -403,6 +422,21 @@ namespace EDDiscovery.UserControls
                             // show the temperature, both in K and C degrees
                             if (sn.ScanData.nSurfaceTemperature.HasValue)
                                 bdDetails.Append("Temperature".Tx(this)).Append(": ").Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (").Append((sn.ScanData.nSurfaceTemperature.Value - 273).ToString("N2")).Append("C).");
+
+                            // show orbital details
+                            if (!showOrbitalDetailsForStarsOnly && showOrbitalDetails)
+                            {
+                                bdDetails.Append(Environment.NewLine);
+
+                                if (sn.ScanData.nOrbitalPeriod.HasValue)
+                                    bdDetails.Append("Orbital period".Tx(this)).Append(": ").Append(sn.ScanData.nOrbitalPeriod.Value).Append("days. ");
+
+                                if (sn.ScanData.nOrbitalInclination.HasValue)
+                                    bdDetails.Append("Orbital Inclination".Tx(this)).Append(": ").Append(sn.ScanData.nOrbitalInclination.Value).Append("°. ");
+
+                                if (sn.ScanData.nEccentricity.HasValue)
+                                    bdDetails.Append("Orbital Eccentricity".Tx(this)).Append(": ").Append(sn.ScanData.nEccentricity.Value).Append(". ");
+                            }
 
                             // print the main atmospheric composition and pressure, if presents
                             if (!String.IsNullOrEmpty(sn.ScanData.Atmosphere) && sn.ScanData.Atmosphere != "None")
@@ -546,7 +580,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region global_functions
+        #region Helpers
                 
         private void ReportJumponium(string ret)
         {
@@ -596,7 +630,7 @@ namespace EDDiscovery.UserControls
             {
                 toolStripProgressBar.Value += 1;
                 hasYttrium = ret.Contains("Yttrium");
-            }                        
+            }
         }
 
         private string BuildScanValue(StarScan.SystemNode system)
@@ -615,6 +649,8 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+
+        #region Icons
 
         private void dataGridViewScangrid_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
         {
@@ -674,10 +710,11 @@ namespace EDDiscovery.UserControls
                 if (overlays?.mapped ?? false)
                 {
                     e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, overlaysize, overlaysize));
-
                 }
             }
         }
+
+        #endregion
 
         #region ContextMenuInteraction
 
@@ -702,6 +739,20 @@ namespace EDDiscovery.UserControls
         {
             showStellarZones = circumstellarZoneToolStripMenuItem.Checked;
             SQLiteDBClass.PutSettingBool(DbSave + "showStellarZones", showStellarZones);
+            DrawSystem(last_he, true);
+        }
+
+        private void orbitalDetailsToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showOrbitalDetails = orbitalDetailsToolStripMenuItem.Checked;
+            SQLiteDBClass.PutSettingBool(DbSave + "showOrbitalDetails", showOrbitalDetails);
+            DrawSystem(last_he, true);
+        }
+
+        private void starsOnlyToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            showOrbitalDetailsForStarsOnly = starsOnlyToolStripMenuItem.Checked;
+            SQLiteDBClass.PutSettingBool(DbSave + "showOrbitalDetailsForStarsOnly", showOrbitalDetailsForStarsOnly);
             DrawSystem(last_he, true);
         }
 
