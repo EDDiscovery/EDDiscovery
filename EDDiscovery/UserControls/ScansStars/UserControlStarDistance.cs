@@ -91,17 +91,20 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            KickComputation(uctg.GetCurrentHistoryEntry, true);
+            if (this.IsHandleCreated)
+                KickComputation(uctg.GetCurrentHistoryEntry, true);
         }
 
         private void Discoveryform_OnHistoryChange(HistoryList obj)
         {
-            KickComputation(obj.GetLast);   // copes with getlast = null
+            if (this.IsHandleCreated)
+                KickComputation(obj.GetLast);   // copes with getlast = null
         }
 
         private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            KickComputation(he);
+            if (this.IsHandleCreated)
+                KickComputation(he);
         }
 
         private void KickComputation(HistoryEntry he, bool force = false)
@@ -114,10 +117,16 @@ namespace EDDiscovery.UserControls
 
                 // Get nearby systems from the systems DB.
                 computer.CalculateClosestSystems(he.System, 
-                    (s, d) => BeginInvoke((MethodInvoker)delegate { NewStarListComputed(s, d); }) , 
+                    NewStarListComputedAsync, 
                     maxitems, textMinRadius.Value, textMaxRadius.Value, !checkBoxCube.Checked
                     );     // hook here, force closes system update
             }
+        }
+
+        private void NewStarListComputedAsync(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)
+        {
+            if (this.IsHandleCreated)
+                this.BeginInvoke(new Action(() => NewStarListComputed(sys, list)));
         }
 
         private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI
