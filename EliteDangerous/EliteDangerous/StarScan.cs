@@ -228,6 +228,13 @@ namespace EliteDangerousCore
         // used by historylist directly for a single update during play, in foreground..  Also used by above.. so can be either in fore/back
         public bool AddScanToBestSystem(JournalScan je, int startindex, List<HistoryEntry> hl, out HistoryEntry he, out JournalLocOrJump jl)
         {
+            if (je?.BodyName == null)
+            {
+                he = null;
+                jl = null;
+                return false;
+            }
+
             for (int j = startindex; j >= 0; j--)
             {
                 he = hl[j];
