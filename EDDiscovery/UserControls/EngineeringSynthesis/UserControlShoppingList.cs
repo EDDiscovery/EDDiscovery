@@ -113,8 +113,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbHighlightAvailableMats, showListAvailability);
             SQLiteDBClass.PutSettingBool(DBShowSystemAvailability, showSystemAvailability);
             SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
-            userControlEngineering.Closing();
-            userControlSynthesis.Closing();
+            userControlEngineering.CloseDown();
+            userControlSynthesis.CloseDown();
         }
 
         #endregion

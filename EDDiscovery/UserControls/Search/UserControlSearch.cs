@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             tabStrip.OnRemoving += (tab, ctrl) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                uccb.Closing();
+                uccb.CloseDown();
             };
         }
 

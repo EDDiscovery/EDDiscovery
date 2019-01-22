@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
         public int displaynumber { get; protected set; }
         public EDDiscoveryForm discoveryform { get; protected set; }
         public IHistoryCursor uctg { get; protected set; }          // valid at loadlayout
+        private bool IsClosed { get; set; }
 
         // in calling order..
         public void Init(EDDiscoveryForm ed, int dn)
@@ -68,9 +69,28 @@ namespace EDDiscovery.UserControls
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available
         public virtual void InitialDisplay() { }    // do the initial display
-        public virtual void Closing() { }           // close it
+        public virtual void Closing() { }           // DO NOT USE DIRECTLY - USE CLOSEDOWN()
 
         // end calling order.
+
+        public void CloseDown()     // Call to close down.
+        {
+            Closing();
+            IsClosed = true;
+        }
+
+        protected override void Dispose(bool disposing)     // ensure closed during disposal.
+        {
+            if (disposing)
+            {
+                if (!IsClosed)
+                {
+                    CloseDown();
+                }
+            }
+
+            base.Dispose(disposing);
+        }
 
         public virtual void ChangeCursorType(IHistoryCursor thc) { }     // optional, cursor has changed
 

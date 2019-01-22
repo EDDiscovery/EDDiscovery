@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
 
                 //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
 
-                uc.Closing();
+                uc.CloseDown();
             }
 
             SQLiteConnectionUser.PutSettingString(DbWindows, s);
@@ -212,7 +212,7 @@ namespace EDDiscovery.UserControls
         public void ClosePanel( UserControlContainerResizable uccr )
         {
             UserControlCommonBase uc = (UserControlCommonBase)uccr.control;
-            uc.Closing();
+            uc.CloseDown();
             panelPlayfield.Controls.Remove(uccr);
             uccrlist.Remove(uccr);
             Invalidate();
