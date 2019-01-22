@@ -578,6 +578,13 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+                
+        private void buttonChatTokens_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Open the ChatTokens dialog");
+            ChatConsoleSetup ccsForm = new ChatConsoleSetup();
+            ccsForm.ShowDialog();
+        }
 
         public static void RemoveSectors(List<int> sectors, Action<string> inform)
         {
