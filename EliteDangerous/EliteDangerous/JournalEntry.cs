@@ -197,7 +197,7 @@ namespace EliteDangerousCore
                  
         /// <summary>
         /// chatconsole events
-        /// use alternative icons, to properly recognized them in the journal events list
+        /// use alternative icons, to properly recognized them in the journal events list and provide filtering
         /// </summary>
         SendDiaryEntry = 8210, // insert a new entry in the captain's log at current location/date
         SendDiaryClear = 8219, // clear last entry at current location
@@ -208,9 +208,10 @@ namespace EliteDangerousCore
 
         SendTargetSet = 8230, // set target to specified system
         SendTargetUnSet = 8231, // unset current target
-        SendMarkerStart = 8232, // set start marker to current system
-        SendMarkerStop = 8233, // set stop marker to current system
-        SendMarkerClear = 8239, // remove start/stop marker from current system
+
+        SendFlagStart = 8232, // set trip start flag to current system
+        SendFlagEnd = 8233, // set trip stop flag to current system
+        SendFlagClear = 8239, // remove start/stop marker from current system
 
         SendCommand = 8240, // execute a command
 

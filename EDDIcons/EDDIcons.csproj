@@ -678,6 +678,17 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\SendCommand.png" />
+    <EmbeddedResource Include="Journal\SendDiaryClear.png" />
+    <EmbeddedResource Include="Journal\SendDiaryEntry.png" />
+    <EmbeddedResource Include="Journal\SendFlagClear.png" />
+    <EmbeddedResource Include="Journal\SendFlagEnd.png" />
+    <EmbeddedResource Include="Journal\SendFlagStart.png" />
+    <EmbeddedResource Include="Journal\SendNoteAppend.png" />
+    <EmbeddedResource Include="Journal\SendNoteClear.png" />
+    <EmbeddedResource Include="Journal\SendNoteReplace.png" />
+    <EmbeddedResource Include="Journal\SendTargetSet.png" />
+    <EmbeddedResource Include="Journal\SendTargetUnset.png" />
     <EmbeddedResource Include="Controls\Scan\SizeTinyTiny.png" />
     <EmbeddedResource Include="Controls\Scan\SizeMinuscule.png" />
     <EmbeddedResource Include="Journal\SquadronStartup.png" />
