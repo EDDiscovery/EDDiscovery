@@ -210,9 +210,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEDSMConfigureArea
             // 
-            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(218, 19);
+            this.buttonExtEDSMConfigureArea.Location = new System.Drawing.Point(213, 19);
             this.buttonExtEDSMConfigureArea.Name = "buttonExtEDSMConfigureArea";
-            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(126, 23);
+            this.buttonExtEDSMConfigureArea.Size = new System.Drawing.Size(153, 23);
             this.buttonExtEDSMConfigureArea.TabIndex = 10;
             this.buttonExtEDSMConfigureArea.Text = "Galaxy Select";
             this.toolTip.SetToolTip(this.buttonExtEDSMConfigureArea, "Configure what parts of the galaxy is stored in the databases");
@@ -246,7 +246,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomCopyToClipboard.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomCopyToClipboard.FontNerfReduction = 0.5F;
             this.checkBoxCustomCopyToClipboard.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(232, 19);
+            this.checkBoxCustomCopyToClipboard.Location = new System.Drawing.Point(140, 44);
             this.checkBoxCustomCopyToClipboard.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCopyToClipboard.Name = "checkBoxCustomCopyToClipboard";
             this.checkBoxCustomCopyToClipboard.Size = new System.Drawing.Size(108, 17);
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomMarkHiRes.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomMarkHiRes.FontNerfReduction = 0.5F;
             this.checkBoxCustomMarkHiRes.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 65);
+            this.checkBoxCustomMarkHiRes.Location = new System.Drawing.Point(9, 44);
             this.checkBoxCustomMarkHiRes.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomMarkHiRes.Name = "checkBoxCustomMarkHiRes";
             this.checkBoxCustomMarkHiRes.Size = new System.Drawing.Size(103, 17);
@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomRemoveOriginals.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomRemoveOriginals.FontNerfReduction = 0.5F;
             this.checkBoxCustomRemoveOriginals.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(9, 42);
+            this.checkBoxCustomRemoveOriginals.Location = new System.Drawing.Point(140, 19);
             this.checkBoxCustomRemoveOriginals.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomRemoveOriginals.Name = "checkBoxCustomRemoveOriginals";
             this.checkBoxCustomRemoveOriginals.Size = new System.Drawing.Size(109, 17);
@@ -294,9 +294,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtScreenshot
             // 
-            this.buttonExtScreenshot.Location = new System.Drawing.Point(286, 42);
+            this.buttonExtScreenshot.Location = new System.Drawing.Point(9, 67);
             this.buttonExtScreenshot.Name = "buttonExtScreenshot";
-            this.buttonExtScreenshot.Size = new System.Drawing.Size(129, 23);
+            this.buttonExtScreenshot.Size = new System.Drawing.Size(102, 23);
             this.buttonExtScreenshot.TabIndex = 10;
             this.buttonExtScreenshot.Text = "Configure";
             this.toolTip.SetToolTip(this.buttonExtScreenshot, "Configure further screenshot options");
@@ -314,9 +314,9 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomEnableScreenshots.Location = new System.Drawing.Point(9, 19);
             this.checkBoxCustomEnableScreenshots.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomEnableScreenshots.Name = "checkBoxCustomEnableScreenshots";
-            this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(169, 17);
+            this.checkBoxCustomEnableScreenshots.Size = new System.Drawing.Size(125, 17);
             this.checkBoxCustomEnableScreenshots.TabIndex = 5;
-            this.checkBoxCustomEnableScreenshots.Text = "Enable screenshot conversion";
+            this.checkBoxCustomEnableScreenshots.Text = "Convert Screenshots";
             this.checkBoxCustomEnableScreenshots.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxCustomEnableScreenshots, "Screen shot conversion on/off");
             this.checkBoxCustomEnableScreenshots.UseVisualStyleBackColor = true;
@@ -329,7 +329,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxMinimizeToNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxMinimizeToNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 74);
+            this.checkBoxMinimizeToNotifyIcon.Location = new System.Drawing.Point(10, 46);
             this.checkBoxMinimizeToNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMinimizeToNotifyIcon.Name = "checkBoxMinimizeToNotifyIcon";
             this.checkBoxMinimizeToNotifyIcon.Size = new System.Drawing.Size(179, 17);
@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.DropDownWidth = 150;
             this.comboBoxClickThruKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxClickThruKey.ItemHeight = 13;
-            this.comboBoxClickThruKey.Location = new System.Drawing.Point(218, 17);
+            this.comboBoxClickThruKey.Location = new System.Drawing.Point(208, 17);
             this.comboBoxClickThruKey.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxClickThruKey.Name = "comboBoxClickThruKey";
             this.comboBoxClickThruKey.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -362,7 +362,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.SelectedIndex = -1;
             this.comboBoxClickThruKey.SelectedItem = null;
             this.comboBoxClickThruKey.SelectedValue = null;
-            this.comboBoxClickThruKey.Size = new System.Drawing.Size(126, 21);
+            this.comboBoxClickThruKey.Size = new System.Drawing.Size(158, 21);
             this.comboBoxClickThruKey.TabIndex = 6;
             this.comboBoxClickThruKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxClickThruKey, resources.GetString("comboBoxClickThruKey.ToolTip"));
@@ -376,7 +376,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxUseNotifyIcon.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUseNotifyIcon.FontNerfReduction = 0.5F;
             this.checkBoxUseNotifyIcon.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(10, 51);
+            this.checkBoxUseNotifyIcon.Location = new System.Drawing.Point(208, 46);
             this.checkBoxUseNotifyIcon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUseNotifyIcon.Name = "checkBoxUseNotifyIcon";
             this.checkBoxUseNotifyIcon.Size = new System.Drawing.Size(154, 17);
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxKeepOnTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxKeepOnTop.FontNerfReduction = 0.5F;
             this.checkBoxKeepOnTop.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(10, 120);
+            this.checkBoxKeepOnTop.Location = new System.Drawing.Point(208, 69);
             this.checkBoxKeepOnTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxKeepOnTop.Name = "checkBoxKeepOnTop";
             this.checkBoxKeepOnTop.Size = new System.Drawing.Size(88, 17);
@@ -611,7 +611,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomResize.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCustomResize.FontNerfReduction = 0.5F;
             this.checkBoxCustomResize.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 97);
+            this.checkBoxCustomResize.Location = new System.Drawing.Point(10, 69);
             this.checkBoxCustomResize.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomResize.Name = "checkBoxCustomResize";
             this.checkBoxCustomResize.Size = new System.Drawing.Size(186, 17);
@@ -631,7 +631,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxPanelSortOrder.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxPanelSortOrder.FontNerfReduction = 0.5F;
             this.checkBoxPanelSortOrder.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxPanelSortOrder.Location = new System.Drawing.Point(10, 143);
+            this.checkBoxPanelSortOrder.Location = new System.Drawing.Point(9, 92);
             this.checkBoxPanelSortOrder.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxPanelSortOrder.Name = "checkBoxPanelSortOrder";
             this.checkBoxPanelSortOrder.Size = new System.Drawing.Size(188, 17);
@@ -647,7 +647,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtSafeMode.Location = new System.Drawing.Point(213, 19);
             this.buttonExtSafeMode.Name = "buttonExtSafeMode";
-            this.buttonExtSafeMode.Size = new System.Drawing.Size(202, 23);
+            this.buttonExtSafeMode.Size = new System.Drawing.Size(153, 23);
             this.buttonExtSafeMode.TabIndex = 10;
             this.buttonExtSafeMode.Text = "Restart in Safe Mode";
             this.toolTip.SetToolTip(this.buttonExtSafeMode, "Safe Mode allows you to perform special operations, such as moving the databases," +
@@ -685,9 +685,9 @@ namespace EDDiscovery.UserControls
             // 
             // buttonChatTokens
             // 
-            this.buttonChatTokens.Location = new System.Drawing.Point(14, 19);
+            this.buttonChatTokens.Location = new System.Drawing.Point(12, 19);
             this.buttonChatTokens.Name = "buttonChatTokens";
-            this.buttonChatTokens.Size = new System.Drawing.Size(129, 23);
+            this.buttonChatTokens.Size = new System.Drawing.Size(132, 23);
             this.buttonChatTokens.TabIndex = 10;
             this.buttonChatTokens.Text = "Configure Tokens";
             this.toolTip.SetToolTip(this.buttonChatTokens, "Configure the tokens wich are used to deal with interactive feature of the in-gam" +
@@ -806,7 +806,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
             this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMEDDBDownload);
             this.groupBoxCustomEDSM.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 475);
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(440, 421);
             this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
             this.groupBoxCustomEDSM.Size = new System.Drawing.Size(379, 60);
             this.groupBoxCustomEDSM.TabIndex = 21;
@@ -827,9 +827,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 408);
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 345);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
-            this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(426, 92);
+            this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(265, 107);
             this.groupBoxCustomScreenShots.TabIndex = 20;
             this.groupBoxCustomScreenShots.TabStop = false;
             this.groupBoxCustomScreenShots.Text = "Screenshots";
@@ -850,9 +850,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
             this.groupBoxPopOuts.Controls.Add(this.labelTKey);
             this.groupBoxPopOuts.FillClientAreaWithAlternateColor = false;
-            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 288);
+            this.groupBoxPopOuts.Location = new System.Drawing.Point(440, 292);
             this.groupBoxPopOuts.Name = "groupBoxPopOuts";
-            this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 181);
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(379, 122);
             this.groupBoxPopOuts.TabIndex = 19;
             this.groupBoxPopOuts.TabStop = false;
             this.groupBoxPopOuts.Text = "Window Options";
@@ -878,7 +878,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 345);
+            this.groupBoxTheme.Location = new System.Drawing.Point(2, 460);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 57);
             this.groupBoxTheme.TabIndex = 18;
@@ -903,7 +903,7 @@ namespace EDDiscovery.UserControls
             this.groupBox3dmap.Controls.Add(this.textBoxHomeSystem);
             this.groupBox3dmap.Controls.Add(this.panel_defaultmapcolor);
             this.groupBox3dmap.FillClientAreaWithAlternateColor = false;
-            this.groupBox3dmap.Location = new System.Drawing.Point(440, 182);
+            this.groupBox3dmap.Location = new System.Drawing.Point(440, 186);
             this.groupBox3dmap.Name = "groupBox3dmap";
             this.groupBox3dmap.Size = new System.Drawing.Size(379, 100);
             this.groupBox3dmap.TabIndex = 17;
@@ -1017,9 +1017,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 506);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(274, 402);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
-            this.groupBoxCustomLanguage.Size = new System.Drawing.Size(266, 51);
+            this.groupBoxCustomLanguage.Size = new System.Drawing.Size(155, 51);
             this.groupBoxCustomLanguage.TabIndex = 21;
             this.groupBoxCustomLanguage.TabStop = false;
             this.groupBoxCustomLanguage.Text = "Language";
@@ -1040,7 +1040,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.DropDownWidth = 267;
             this.comboBoxCustomLanguage.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomLanguage.ItemHeight = 13;
-            this.comboBoxCustomLanguage.Location = new System.Drawing.Point(10, 19);
+            this.comboBoxCustomLanguage.Location = new System.Drawing.Point(12, 19);
             this.comboBoxCustomLanguage.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomLanguage.Name = "comboBoxCustomLanguage";
             this.comboBoxCustomLanguage.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -1049,7 +1049,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.SelectedIndex = -1;
             this.comboBoxCustomLanguage.SelectedItem = null;
             this.comboBoxCustomLanguage.SelectedValue = null;
-            this.comboBoxCustomLanguage.Size = new System.Drawing.Size(239, 21);
+            this.comboBoxCustomLanguage.Size = new System.Drawing.Size(132, 21);
             this.comboBoxCustomLanguage.TabIndex = 0;
             this.comboBoxCustomLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomLanguage.ValueMember = "";
@@ -1063,9 +1063,9 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 563);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(440, 487);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
-            this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(426, 60);
+            this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(381, 53);
             this.groupBoxCustomSafeMode.TabIndex = 21;
             this.groupBoxCustomSafeMode.TabStop = false;
             this.groupBoxCustomSafeMode.Text = "Move System DB / Reset UI etc";
@@ -1076,7 +1076,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelSafeMode.Location = new System.Drawing.Point(10, 19);
             this.labelSafeMode.Name = "labelSafeMode";
-            this.labelSafeMode.Size = new System.Drawing.Size(202, 38);
+            this.labelSafeMode.Size = new System.Drawing.Size(202, 23);
             this.labelSafeMode.TabIndex = 5;
             this.labelSafeMode.Text = "Click this to perform special operations";
             // 
@@ -1088,7 +1088,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxChatTokens.BorderColorScaling = 0.5F;
             this.groupBoxChatTokens.Controls.Add(this.buttonChatTokens);
             this.groupBoxChatTokens.FillClientAreaWithAlternateColor = false;
-            this.groupBoxChatTokens.Location = new System.Drawing.Point(275, 506);
+            this.groupBoxChatTokens.Location = new System.Drawing.Point(274, 345);
             this.groupBoxChatTokens.Name = "groupBoxChatTokens";
             this.groupBoxChatTokens.Size = new System.Drawing.Size(154, 51);
             this.groupBoxChatTokens.TabIndex = 22;
@@ -1112,7 +1112,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.groupBox3dmap);
             this.Controls.Add(this.groupBoxCommanders);
             this.Name = "UserControlSettings";
-            this.Size = new System.Drawing.Size(843, 644);
+            this.Size = new System.Drawing.Size(824, 547);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCommanders)).EndInit();
             this.groupBoxCustomHistoryLoad.ResumeLayout(false);
             this.groupBoxCustomHistoryLoad.PerformLayout();
