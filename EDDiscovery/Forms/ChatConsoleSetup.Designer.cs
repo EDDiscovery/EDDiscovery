@@ -496,8 +496,11 @@
             this.Controls.Add(this.buttonExt2);
             this.Controls.Add(this.buttonExt1);
             this.Controls.Add(this.groupBoxUserTokens);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "ChatConsoleSetup";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "ChatConsoleSetup";
+            this.TopMost = true;
             this.groupBoxUserTokens.ResumeLayout(false);
             this.groupBoxUserTokens.PerformLayout();
             this.ResumeLayout(false);

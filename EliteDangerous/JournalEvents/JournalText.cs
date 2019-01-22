@@ -19,6 +19,11 @@ using System.Linq;
 
 namespace EliteDangerousCore.JournalEvents
 {
+    public struct SendTextEvent
+    {
+        public bool chat, log, note, target, marker, command;
+    }
+
     [JournalEntryType(JournalTypeEnum.SendText)]
     public class JournalSendText : JournalEntry
     {

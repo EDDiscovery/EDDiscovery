@@ -181,6 +181,12 @@
     <Compile Include="DLL\EDDDLLCaller.cs" />
     <Compile Include="DLL\EDDDLLManager.cs" />
     <Compile Include="DLL\EDDInterface.cs" />
+    <Compile Include="Forms\ChatConsoleSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChatConsoleSetup.Designer.cs">
+      <DependentUpon>ChatConsoleSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DraggableFormPos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -653,6 +659,9 @@
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.Designer.cs">
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\ChatConsoleSetup.resx">
+      <DependentUpon>ChatConsoleSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CommanderForm.resx">
       <DependentUpon>CommanderForm.cs</DependentUpon>
     </EmbeddedResource>
