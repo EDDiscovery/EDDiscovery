@@ -233,10 +233,10 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("note") || cmdname.Equals("notereplace"))
                         {
-                            string note = sp.NextQuotedWord();
-                            if (note != null)
+                            string notetext = sp.NextQuotedWord();
+                            if (notetext != null)
                             {
-                                he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
+                                he.SetJournalSystemNoteText(notetext, true, EDCommander.Current.SyncToEdsm);
                                 (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
                             }
                             else
@@ -244,13 +244,13 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("noteappend"))
                         {
-                            string note = sp.NextQuotedWord();
-                            if (note != null)
+                            string notetext = sp.NextQuotedWord();
+                            if (notetext != null)
                             {
-                                var previousNote = he.System.SystemNote;
+                                var previousNote = he.System.SystemNote.ToNullSafeString();                                
                                 var joinedNote = new StringBuilder();
                                                                 
-                                joinedNote.Append(previousNote).AppendLine().Append("\n---\n").AppendLine().Append(note); // ideally, the divider should be recognized by EDSM as well...
+                                joinedNote.Append(previousNote).AppendLine().Append("\n---\n").AppendLine().Append(notetext); // ideally, the divider should be recognized by EDSM as well...
 
                                 he.SetJournalSystemNoteText(joinedNote.ToString(), true, EDCommander.Current.SyncToEdsm);
                                 (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
@@ -263,9 +263,14 @@ namespace EDDiscovery.Actions
                             var targetSystem = sp.NextQuotedWord();
                             if (targetSystem != null)
                             {
-                                ISystem target = SystemClassDB.GetSystem(targetSystem);
+                                var target = SystemCache.FindSystem(targetSystem);
 
-                                TargetClass.SetTargetGMO(target.Name, target.ID, target.X, target.Y, target.Z);
+                                if (target != null)
+                                {
+                                    ap.DebugOutput(target.Name);
+                                }
+
+                                //TargetClass.SetTargetGMO(target.Name, target.ID, target.X, target.Y, target.Z);
                                 ap.DebugOutput("Target set to " + targetSystem);
                             }
                             else
