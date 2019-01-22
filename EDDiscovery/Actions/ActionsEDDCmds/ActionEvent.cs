@@ -20,6 +20,7 @@ using System.Windows.Forms;
 using BaseUtils;
 using ActionLanguage;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 
 namespace EDDiscovery.Actions
 {
@@ -240,8 +241,28 @@ namespace EDDiscovery.Actions
                             else
                                 ap.ReportError("Missing note text in Event NOTE");
                         }
+                        else if (cmdname.Equals("targetset"))
+                        {
+                            var targetSystem = sp.NextQuotedWord();
+                            if (targetSystem != null)
+                            {
+                                // placeholder
+                                ap.ReportError("Target setted to" + targetSystem);
+                            }
+                            else
+                            {
+                                ap.ReportError("To set a target you need to provide a system name");
+                            }
+                        }
+                        else if (cmdname.Equals("targetunset"))
+                        {
+                            TargetClass.ClearTarget();
+                            ap.ReportError("Target unset!");
+                        }
                         else
+                        {
                             ap.ReportError("Unknown command " + cmdname + " in Event");
+                        }
                     }
                 }
             }
