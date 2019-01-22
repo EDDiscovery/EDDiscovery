@@ -21,6 +21,7 @@ using BaseUtils;
 using ActionLanguage;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System.Text;
 
 namespace EDDiscovery.Actions
 {
@@ -230,7 +231,7 @@ namespace EDDiscovery.Actions
                         {
                             ActionVars.MissionInformation(ap, he.MissionList, prefix);
                         }
-                        else if (cmdname.Equals("note"))
+                        else if (cmdname.Equals("note") || cmdname.Equals("notereplace"))
                         {
                             string note = sp.NextQuotedWord();
                             if (note != null)
@@ -241,13 +242,31 @@ namespace EDDiscovery.Actions
                             else
                                 ap.ReportError("Missing note text in Event NOTE");
                         }
+                        else if (cmdname.Equals("noteappend"))
+                        {
+                            string note = sp.NextQuotedWord();
+                            if (note != null)
+                            {
+                                var previousNote = he.System.SystemNote;
+                                var joinedNote = new StringBuilder;
+                                                                
+                                joinedNote.Append(previousNote).AppendLine().Append("\n---\n").AppendLine().Append(note); // ideally, the divider should be recognized by EDSM as well...
+
+                                he.SetJournalSystemNoteText(joinedNote.ToString(), true, EDCommander.Current.SyncToEdsm);
+                                (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
+                            }
+                            else
+                                ap.ReportError("Missing note text in Event NOTE");
+                        }
                         else if (cmdname.Equals("targetset"))
                         {
                             var targetSystem = sp.NextQuotedWord();
                             if (targetSystem != null)
                             {
-                                // placeholder
-                                ap.ReportError("Target setted to" + targetSystem);
+                                ISystem target = SystemClassDB.GetSystem(targetSystem);
+
+                                TargetClass.SetTargetGMO(target.Name, target.ID, target.X, target.Y, target.Z);
+                                ap.DebugOutput("Target set to " + targetSystem);
                             }
                             else
                             {
@@ -257,7 +276,7 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("targetunset"))
                         {
                             TargetClass.ClearTarget();
-                            ap.ReportError("Target unset!");
+                            ap.DebugOutput("Target unset!");
                         }
                         else
                         {
