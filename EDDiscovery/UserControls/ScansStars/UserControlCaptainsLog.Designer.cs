@@ -46,6 +46,7 @@
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonTags = new ExtendedControls.ButtonExt();
             this.panelButtons.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -54,6 +55,7 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonTags);
             this.panelButtons.Controls.Add(this.buttonDelete);
             this.panelButtons.Controls.Add(this.buttonNew);
             this.panelButtons.Controls.Add(this.textBoxFilter);
@@ -239,6 +241,16 @@
             this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
             this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
             // 
+            // buttonTags
+            // 
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonTags.Location = new System.Drawing.Point(280, 0);
+            this.buttonTags.Name = "buttonTags";
+            this.buttonTags.Size = new System.Drawing.Size(32, 32);
+            this.buttonTags.TabIndex = 27;
+            this.buttonTags.UseVisualStyleBackColor = true;
+            this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
+            // 
             // UserControlCaptainsLog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,5 +287,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
+        private ExtendedControls.ButtonExt buttonTags;
     }
 }
