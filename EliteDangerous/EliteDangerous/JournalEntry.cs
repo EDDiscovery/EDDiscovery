@@ -194,6 +194,26 @@ namespace EliteDangerousCore
         SellExplorationData = 810,
         SellShipOnRebuy = 815,
         SendText = 820,
+                 
+        /// <summary>
+        /// chatconsole events
+        /// use alternative icons, to properly recognized them in the journal events list
+        /// </summary>
+        SendDiaryEntry = 8210, // insert a new entry in the captain's log at current location/date
+        SendDiaryClear = 8219, // clear last entry at current location
+
+        SendNoteAppend = 8220, // append text to current system note (create a new note if empty)
+        SendNoteReplace = 8221, // replace current system note
+        SendNoteClear = 8229, // clear current system note
+
+        SendTargetSet = 8230, // set target to specified system
+        SendTargetUnSet = 8231, // unset current target
+        SendMarkerStart = 8232, // set start marker to current system
+        SendMarkerStop = 8233, // set stop marker to current system
+        SendMarkerClear = 8239, // remove start/stop marker from current system
+
+        SendCommand = 8240, // execute a command
+
         SetUserShipName = 825,
         SharedBookmarkToSquadron = 826,
         ShieldState = 830,
