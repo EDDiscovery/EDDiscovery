@@ -90,6 +90,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingInt(DbCM1, comboBoxCustomCM1.SelectedIndex);
             SQLiteConnectionUser.PutSettingInt(DbCM2, comboBoxCustomCM2.SelectedIndex);
             SQLiteConnectionUser.PutSettingInt(DbCMANDOR, comboBoxCustomCMANDOR.SelectedIndex);
+
+            base.Closing();
         }
 
         #endregion

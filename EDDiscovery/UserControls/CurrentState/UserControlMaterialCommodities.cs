@@ -85,6 +85,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewMC, DbColumnSave);
 
             uctg.OnTravelSelectionChanged -= Display;
+
+            base.Closing();
         }
 
         void SetCheckBoxes()

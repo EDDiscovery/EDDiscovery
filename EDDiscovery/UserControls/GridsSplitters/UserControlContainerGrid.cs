@@ -150,6 +150,8 @@ namespace EDDiscovery.UserControls
 
             SQLiteConnectionUser.PutSettingString(DbZOrder, z);
             //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
+
+            base.Closing();
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)     // a grid below changed its travel grid, update our history one

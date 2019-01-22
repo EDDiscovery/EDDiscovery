@@ -99,6 +99,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
             uctg.OnTravelSelectionChanged -= DisplaySelected;
             SQLiteDBClass.PutSettingInt(DbSave + "Config", (int)config);
+
+            base.Closing();
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made..

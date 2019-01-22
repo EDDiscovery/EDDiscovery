@@ -38,6 +38,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Dispose();
 
             GlobalBookMarkList.Instance.OnBookmarkChange -= BookmarksChanged;
+
+            base.Closing();
         }
         #endregion
 

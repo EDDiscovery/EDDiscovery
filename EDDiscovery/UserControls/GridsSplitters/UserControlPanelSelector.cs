@@ -56,6 +56,8 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             discoveryform.OnAddOnsChanged -= Discoveryform_OnAddOnsChanged;
+
+            base.Closing();
         }
 
         private void Redraw()

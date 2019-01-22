@@ -73,6 +73,8 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+
+            base.Closing();
         }
 
 

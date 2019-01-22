@@ -83,6 +83,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbSave + "dev", showDeviationFromRouteToolStripMenuItem.Checked);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+
+            base.Closing();
         }
 
         #endregion

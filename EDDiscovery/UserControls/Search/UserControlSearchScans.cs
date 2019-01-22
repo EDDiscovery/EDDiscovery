@@ -156,6 +156,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingString(DbQuerySave, conditionFilterUC.Result.ToString());
             Queries.Instance.Save();
             SQLiteConnectionUser.PutSettingDouble(DbSplitterSave, splitContainer.GetSplitterDistance());
+
+            base.Closing();
         }
 
         #endregion

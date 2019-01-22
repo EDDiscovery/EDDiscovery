@@ -68,6 +68,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingString(DbStatsTreeStateSave, GameStatTreeState());
             discoveryform.OnNewEntry -= AddNewEntry;
             uctg.OnTravelSelectionChanged -= TravelGridChanged;
+
+            base.Closing();
         }
 
         private void AddNewEntry(HistoryEntry he, HistoryList hl)

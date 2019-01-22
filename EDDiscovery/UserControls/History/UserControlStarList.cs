@@ -135,6 +135,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+
+            base.Closing();
         }
 
         #endregion

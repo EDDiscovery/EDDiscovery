@@ -139,6 +139,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
             SQLiteDBClass.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
             SQLiteDBClass.PutSettingInt(DbSelection, Selection);
+
+            base.Closing();
         }
 
         #endregion

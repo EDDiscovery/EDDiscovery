@@ -69,6 +69,8 @@ namespace EDDiscovery.UserControls
         {
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= Discoveryform_OnNewStarsForTrilat;
+
+            base.Closing();
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

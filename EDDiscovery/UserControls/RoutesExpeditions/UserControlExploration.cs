@@ -87,6 +87,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= NewEntry;
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+
+            base.Closing();
         }
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update

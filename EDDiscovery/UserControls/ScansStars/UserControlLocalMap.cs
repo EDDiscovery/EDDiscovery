@@ -98,6 +98,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingInt(DbSave + "MapMaxItems", maxitems);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationX", prevxr);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "MapRotationY", prevyr);
+
+            base.Closing();
         }
 
         public override void InitialDisplay()

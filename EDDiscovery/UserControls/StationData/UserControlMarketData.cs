@@ -80,6 +80,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbAutoSwap, checkBoxAutoSwap.Checked);
             discoveryform.OnNewEntry -= OnChanged;
             uctg.OnTravelSelectionChanged -= OnChanged;
+
+            base.Closing();
         }
 
         public override void InitialDisplay()

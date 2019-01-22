@@ -121,6 +121,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= AddNewEntry;
             SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
             searchtimer.Dispose();
+
+            base.Closing();
         }
 
         #endregion

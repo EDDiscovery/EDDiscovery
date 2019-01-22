@@ -210,6 +210,8 @@ namespace EDDiscovery.UserControls
 
             SQLiteConnectionUser.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
             SQLiteConnectionUser.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
+
+            base.Closing();
         }
 
         public override void SetTransparency(bool on, Color curbackcol)

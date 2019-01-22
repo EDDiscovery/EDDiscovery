@@ -81,6 +81,8 @@ namespace EDDiscovery.UserControls
         {
             SQLiteConnectionUser.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();
+
+            base.Closing();
         }
 
         #endregion

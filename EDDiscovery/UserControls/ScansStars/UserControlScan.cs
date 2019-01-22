@@ -90,6 +90,8 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             closing = true;
+
+            base.Closing();
         }
 		
 		#endregion

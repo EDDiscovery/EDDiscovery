@@ -153,6 +153,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingString(DbOSave, Order.ToString(","));
             SQLiteDBClass.PutSettingString(DbWSave, Wanted.ToString(","));
             SQLiteDBClass.PutSettingBool(DbHistoricMatsSave, isHistoric);
+
+            base.Closing();
         }
 
 

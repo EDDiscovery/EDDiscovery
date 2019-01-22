@@ -110,6 +110,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbEndDateChecked, customDateTimePickerEnd.Checked);
 
             SQLiteDBClass.PutSettingDouble(DbSplitter, splitContainerMissions.GetSplitterDistance());
+
+            base.Closing();
         }
 
         #endregion

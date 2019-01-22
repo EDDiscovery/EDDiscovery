@@ -100,6 +100,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbSave("RouteFromState"), textBox_From.ReadOnly);
             SQLiteDBClass.PutSettingBool(DbSave("RouteToState"), textBox_To.ReadOnly);
             SQLiteDBClass.PutSettingInt(DbSave("RouteMetric"), comboBoxRoutingMetric.SelectedIndex);
+
+            base.Closing();
         }
 
         private void ToggleButtons(bool state)

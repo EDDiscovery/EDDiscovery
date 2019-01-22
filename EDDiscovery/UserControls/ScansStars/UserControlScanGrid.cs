@@ -125,6 +125,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewScangrid, DbColumnSave);
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+
+            base.Closing();
         }
 
         public override void InitialDisplay()

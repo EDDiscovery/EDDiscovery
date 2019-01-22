@@ -133,6 +133,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             if (debug_followcursor)
                 uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+
+            base.Closing();
         }
 
         #endregion

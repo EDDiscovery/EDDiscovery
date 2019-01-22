@@ -48,6 +48,8 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             discoveryform.OnNewLogEntry -= AppendText;
+
+            base.Closing();
         }
 
         public void AppendText(string s, Color c)

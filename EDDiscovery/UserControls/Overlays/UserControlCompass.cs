@@ -81,6 +81,8 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry -= OnNewEntry;
             discoveryform.OnNewUIEvent -= OnNewUIEvent;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
+
+            base.Closing();
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }

@@ -173,6 +173,8 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name + " " + uccb.Name);
                 }
             });
+
+            base.Closing();
         }
 
         private void RunActionOnSplitterTree(Action<SplitterPanel, Control, UserControlCommonBase> action)

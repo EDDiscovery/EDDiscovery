@@ -73,6 +73,8 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
             findSystemsUserControl.Closing();
+
+            base.Closing();
         }
 
         #endregion

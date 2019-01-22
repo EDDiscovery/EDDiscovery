@@ -61,6 +61,8 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.screenshotconverter.OnScreenShot -= ScreenShot;
             uctg.OnTravelSelectionChanged -= Display;
+
+            base.Closing();
         }
 
         public void ScreenShot(string path, Point size)

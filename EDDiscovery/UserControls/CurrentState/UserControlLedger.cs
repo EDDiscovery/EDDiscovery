@@ -73,6 +73,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewLedger, DbColumnSave);
             discoveryform.OnHistoryChange -= Redisplay;
             discoveryform.OnNewEntry -= NewEntry;
+
+            base.Closing();
         }
 
         #endregion

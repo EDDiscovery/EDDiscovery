@@ -132,6 +132,8 @@ namespace EDDiscovery.UserControls
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged -= ParentForm_TopMostChanged;
+
+            base.Closing();
         }
 
         private void DiscoveryForm_OnRefreshCommanders()

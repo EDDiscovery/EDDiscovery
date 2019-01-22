@@ -92,6 +92,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DbSave + "Drange", showFSDRangeToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "target", showTargetToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool(DbSave + "travel", showTravelledDistanceToolStripMenuItem.Checked);
+
+            base.Closing();
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }

@@ -91,6 +91,8 @@ namespace EDDiscovery.UserControls
 
             if (uctg is IHistoryCursorNewStarList)
                 (uctg as IHistoryCursorNewStarList).OnNewStarList -= OnNewStars;
+
+            base.Closing();
         }
 
         private void Discoveryform_OnExpeditionsDownloaded(bool changed)        // because this is done async, pick up so we can refresh

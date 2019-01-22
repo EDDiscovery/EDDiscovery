@@ -62,6 +62,8 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
+
+            base.Closing();
         }
 
         public override void InitialDisplay()

@@ -115,6 +115,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingBool(DBUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
             userControlEngineering.Closing();
             userControlSynthesis.Closing();
+
+            base.Closing();
         }
 
         #endregion

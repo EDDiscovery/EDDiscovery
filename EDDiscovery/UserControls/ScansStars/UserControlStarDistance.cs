@@ -87,6 +87,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
+
+            base.Closing();
         }
 
         public override void InitialDisplay()

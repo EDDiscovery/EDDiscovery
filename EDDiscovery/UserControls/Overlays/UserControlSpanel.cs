@@ -210,6 +210,8 @@ namespace EDDiscovery.UserControls
             SQLiteDBClass.PutSettingInt(DbSave + "Layout", layoutorder);
             string s = string.Join<int>(",", columnpos);
             SQLiteDBClass.PutSettingString(DbSave + "PanelTabs", s);
+
+            base.Closing();
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }

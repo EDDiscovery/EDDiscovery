@@ -117,6 +117,8 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
             SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
             SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
+
+            base.Closing();
         }
 
         public override void InitialDisplay()
