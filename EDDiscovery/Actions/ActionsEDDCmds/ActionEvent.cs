@@ -248,7 +248,7 @@ namespace EDDiscovery.Actions
                             if (note != null)
                             {
                                 var previousNote = he.System.SystemNote;
-                                var joinedNote = new StringBuilder;
+                                var joinedNote = new StringBuilder();
                                                                 
                                 joinedNote.Append(previousNote).AppendLine().Append("\n---\n").AppendLine().Append(note); // ideally, the divider should be recognized by EDSM as well...
 
