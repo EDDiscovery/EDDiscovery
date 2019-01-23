@@ -31,8 +31,19 @@ namespace EliteDangerousCore.JournalEvents
             MarketID = evt["MarketID"].LongNull();
             CockpitBreach = evt["CockpitBreach"].Bool();
 
-            Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
-            FactionState = evt["FactionState"].Str().SplitCapsWord();
+            JToken jk = (JToken)evt["StationFaction"];
+            if (jk != null && jk.Type == JTokenType.Object)     // new 3.03
+            {
+                JObject jo = jk as JObject;
+                Faction = jk["Name"].Str();                // system faction pick up
+                FactionState = jk["FactionState"].Str();
+            }
+            else
+            {
+                // old pre 3.3.3 had this
+                Faction = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationFaction", "Faction" });
+                FactionState = evt["FactionState"].Str();           // PRE 2.3 .. not present in newer files, fixed up in next bit of code (but see 3.3.2 as its been incorrectly reintroduced)
+            }
 
             Allegiance = JSONObjectExtensions.GetMultiStringDef(evt, new string[] { "StationAllegiance", "Allegiance" });
 
@@ -89,7 +100,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             info = BaseUtils.FieldBuilder.Build("Type:".Txb(this), StationType, "< in system ".Txb(this), StarSystem, ";(Wanted)".Txb(this), Wanted, 
                 ";Active Fine".Txb(this),ActiveFine,
-                "Faction:".Txb(this), Faction,  "< in state ".Txb(this), FactionState);
+                "Faction:".Txb(this), Faction,  "< in state ".Txb(this), FactionState.SplitCapsWord());
 
             detailed = BaseUtils.FieldBuilder.Build("Allegiance:".Txb(this), Allegiance, "Economy:".Txb(this), Economy_Localised, "Government:".Txb(this), Government_Localised);
 
@@ -97,7 +108,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 string l = "";
                 foreach (string s in StationServices)
-                    l = l.AppendPrePad(s, ", ");
+                    l = l.AppendPrePad(s.SplitCapsWord(), ", ");
                 detailed += System.Environment.NewLine + "Station services:".Txb(this) + l;
             }
 
