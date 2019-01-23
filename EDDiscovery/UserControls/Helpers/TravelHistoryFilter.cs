@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
         public void AddStandardExtraOptions()
         {
             AddExtraOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
-            AddExtraOption("Missions".Tx(), "Mission Accepted;Mission Completed;Mission Abandoned;Mission Redirected;Mission Failed;");
+            AddExtraOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;");
         }
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent)
