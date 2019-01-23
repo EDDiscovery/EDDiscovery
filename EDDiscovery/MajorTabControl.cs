@@ -91,7 +91,7 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
                 {
-                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}" + Environment.NewLine + ex.StackTrace);
+                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}" );
                 }
             }
 
