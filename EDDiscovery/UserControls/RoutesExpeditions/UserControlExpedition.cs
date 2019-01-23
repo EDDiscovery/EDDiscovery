@@ -760,8 +760,13 @@ namespace EDDiscovery.UserControls
 
         private ISystem GetSystem(string sysname)
         {
-            ISystem sys;
-            SystemClassDB.TryGetSystem(sysname, out sys, true);
+            ISystem sys = SystemCache.FindSystem(sysname);
+
+            if (sys == null)
+            {
+                SystemClassDB.TryGetSystem(sysname, out sys, true);
+            }
+
             return sys;
         }
 
