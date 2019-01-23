@@ -203,8 +203,9 @@ namespace EDDiscovery.UserControls
 
         public void AddStandardExtraOptions()
         {
+            // must be in alpha order..
             AddExtraOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
-            AddExtraOption("Missions".Tx(), "Mission Accepted;Mission Completed;Mission Abandoned;Mission Redirected;Mission Failed;");
+            AddExtraOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;");
         }
 
         public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent)
@@ -261,8 +262,11 @@ namespace EDDiscovery.UserControls
             cc.SetChecked(list.Equals("None"), 1, 1);
 
             int p = 2;
-            foreach(var eo in extraoptions)
+            foreach (var eo in extraoptions)
+            {
+                System.Diagnostics.Debug.WriteLine("check " + eo.Item2 + " vs " + list);
                 cc.SetChecked(list.Equals(eo.Item2), p++, 1);
+            }
         }
 
         private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)

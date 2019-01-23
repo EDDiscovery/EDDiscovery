@@ -244,7 +244,7 @@ namespace EliteDangerousCore.DB
                 bk.Update();
             }
 
-            System.Diagnostics.Debug.WriteLine("Write captains log " + bk.SystemName + ":" + bk.BodyName + " Notes " + notes);
+            //System.Diagnostics.Debug.WriteLine("Write captains log " + bk.SystemName + ":" + bk.BodyName + " Notes " + notes);
 
             OnLogEntryChanged?.Invoke(bk, false);
 

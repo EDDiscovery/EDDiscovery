@@ -36,8 +36,9 @@ namespace EDDiscovery.Forms
 
         List<Group> groups;
 
-        int panelmargin = 3;
-        const int vscrollmargin = 10;
+        int panelmargin = 2;
+
+        #region Init
 
         public TagsForm()
         {
@@ -78,8 +79,8 @@ namespace EDDiscovery.Forms
             g.panel.BorderStyle = BorderStyle.FixedSingle;
 
             g.name = new ExtendedControls.TextBoxBorder();
-            g.name.Size = new Size(200, 24);
-            g.name.Location = new Point(panelmargin, panelmargin);
+            g.name.Size = new Size(250, 24);
+            g.name.Location = new Point(panelmargin, panelmargin+6);
             g.name.Text = var;
             g.panel.Controls.Add(g.name);
             toolTip1.SetToolTip(g.name, "Tag name");
@@ -87,16 +88,17 @@ namespace EDDiscovery.Forms
             int nextpos = g.name.Right;
 
             g.icon = new ExtendedControls.ButtonExt();
-            g.icon.Size = new Size(32, 32);
-            g.icon.Location = new Point(g.name.Right + 8, g.name.Top);
+            g.icon.Size = new Size(28, 28);
+            g.icon.Location = new Point(g.name.Right + 8, panelmargin);
             g.icon.Image = img;
-            toolTip1.SetToolTip(g.icon, "Image");
-            g.panel.Controls.Add(g.icon);
             g.icon.Click += Icon_Click;
+            g.icon.ImageLayout = ImageLayout.Stretch;
+            toolTip1.SetToolTip(g.icon, "Select image for this tag");
+            g.panel.Controls.Add(g.icon);
 
             g.del = new ExtendedControls.ButtonExt();
             g.del.Size = new Size(24, 24);
-            g.del.Location = new Point(g.icon.Right + 24, g.name.Top);
+            g.del.Location = new Point(g.icon.Right + 24, panelmargin+2);
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
@@ -121,7 +123,7 @@ namespace EDDiscovery.Forms
 
             foreach (Group g in groups)
             {
-                g.panel.Size = new Size(panelwidth-panelmargin*2, 40);
+                g.panel.Size = new Size(panelwidth-panelmargin*2, 36);
                 g.panel.Location = new Point(panelmargin, y);
                 y += g.panel.Height + 6;
             }
@@ -136,60 +138,21 @@ namespace EDDiscovery.Forms
 
             if (minmax) // stop circular relationsship with resize
             {
-                this.MinimumSize = new Size(600, y);
+                this.MinimumSize = new Size(400, y);
                 this.MaximumSize = new Size(Screen.FromControl(this).WorkingArea.Width, Screen.FromControl(this).WorkingArea.Height);
             }
         }
 
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            //result = new Variables();
-            //result_altops = new Dictionary<string, string>();
+        #endregion
 
-            //foreach ( Group g in groups)
-            //{
-            //    if (g.var.Text.Length > 0)      // only ones with names are considered
-            //    {
-            //        result[g.var.Text] = g.value.Text.EscapeControlChars();
-
-            //        if (g.op != null)
-            //            result_altops[g.var.Text] = g.op.Text;
-            //    }
-            //}
-
-            //result_refresh = checkBoxCustomRefresh.Checked;
-
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void Del_Clicked(object sender, EventArgs e)
-        {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
-            Group g = (Group)b.Tag;
-
-            g.panel.Controls.Clear();
-            panelVScroll1.Controls.Remove(g.panel);
-            groups.Remove(g);
-            Invalidate(true);
-            FixUpGroups();
-        }
-
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void buttonMore_Click(object sender, EventArgs e)
-        {
-            CreateEntry("", EDDiscovery.Icons.IconSet.GetIcon("Legacy.star"));
-        }
+        #region UI
 
         ExtendedControls.DropDownCustom dropdown;
 
         private void Icon_Click(object sender, EventArgs e)
         {
+            ExtendedControls.ButtonExt but = sender as ExtendedControls.ButtonExt;
+
             dropdown = new ExtendedControls.DropDownCustom("", true);
 
             List<string> Dickeys = new List<string>(EDDiscovery.Icons.IconSet.Icons.Keys);
@@ -209,6 +172,8 @@ namespace EDDiscovery.Forms
             };
             dropdown.SelectedIndexChanged += (s, ea) =>
             {
+                Image img = images[dropdown.SelectedIndex];
+                but.Image = img;
             };
 
             dropdown.Size = new Size(400, 800);
@@ -216,6 +181,51 @@ namespace EDDiscovery.Forms
             EDDTheme.Instance.ApplyToControls(dropdown);
             dropdown.Show(this.FindForm());
         }
+
+        private void Del_Clicked(object sender, EventArgs e)
+        {
+            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            Group g = (Group)b.Tag;
+
+            g.panel.Controls.Clear();
+            panelVScroll1.Controls.Remove(g.panel);
+            groups.Remove(g);
+            Invalidate(true);
+            FixUpGroups();
+        }
+
+        private void buttonOK_Click(object sender, EventArgs e)
+        {
+            Result = new Dictionary<string, Image>();
+            foreach (Group g in groups)
+            {
+                if (g.name.Text.Length > 0)      // only ones with names are considered
+                    Result[g.name.Text] = g.icon.Image;
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void buttonCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void buttonMore_Click(object sender, EventArgs e)
+        {
+            CreateEntry("", EDDiscovery.Icons.IconSet.GetIcon("Legacy.star"));
+        }
+
+        private void panel_close_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        #endregion
+
+        #region Draggables
 
         private void label_index_MouseDown(object sender, MouseEventArgs e)
         {
@@ -232,10 +242,7 @@ namespace EDDiscovery.Forms
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void panel_close_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+        #endregion
 
 
     }

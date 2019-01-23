@@ -67,7 +67,7 @@ namespace EDDiscovery.Forms
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(468, 4);
+            this.buttonCancel.Location = new System.Drawing.Point(234, 4);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 9;
@@ -78,7 +78,7 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(562, 4);
+            this.buttonOK.Location = new System.Drawing.Point(328, 4);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 10;
@@ -88,9 +88,9 @@ namespace EDDiscovery.Forms
             // 
             // statusStripCustom
             // 
-            this.statusStripCustom.Location = new System.Drawing.Point(3, 349);
+            this.statusStripCustom.Location = new System.Drawing.Point(3, 224);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(643, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(409, 22);
             this.statusStripCustom.TabIndex = 28;
             this.statusStripCustom.Text = "statusStripCustom1";
             // 
@@ -102,7 +102,7 @@ namespace EDDiscovery.Forms
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(3, 3);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(643, 24);
+            this.panelTop.Size = new System.Drawing.Size(409, 24);
             this.panelTop.TabIndex = 29;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
@@ -110,7 +110,7 @@ namespace EDDiscovery.Forms
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_close.Location = new System.Drawing.Point(620, 0);
+            this.panel_close.Location = new System.Drawing.Point(386, 0);
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
             this.panel_close.Selectable = false;
@@ -123,7 +123,7 @@ namespace EDDiscovery.Forms
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(590, 0);
+            this.panel_minimize.Location = new System.Drawing.Point(356, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
             this.panel_minimize.Selectable = false;
@@ -148,9 +148,9 @@ namespace EDDiscovery.Forms
             this.panelOK.Controls.Add(this.buttonCancel);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelOK.Location = new System.Drawing.Point(3, 319);
+            this.panelOK.Location = new System.Drawing.Point(3, 194);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(643, 30);
+            this.panelOK.Size = new System.Drawing.Size(409, 30);
             this.panelOK.TabIndex = 31;
             // 
             // panelOuter
@@ -160,7 +160,7 @@ namespace EDDiscovery.Forms
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelOuter.Location = new System.Drawing.Point(3, 27);
             this.panelOuter.Name = "panelOuter";
-            this.panelOuter.Size = new System.Drawing.Size(643, 292);
+            this.panelOuter.Size = new System.Drawing.Size(409, 167);
             this.panelOuter.TabIndex = 32;
             // 
             // panelVScroll1
@@ -172,7 +172,7 @@ namespace EDDiscovery.Forms
             this.panelVScroll1.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll1.Name = "panelVScroll1";
             this.panelVScroll1.ScrollBarWidth = 20;
-            this.panelVScroll1.Size = new System.Drawing.Size(641, 290);
+            this.panelVScroll1.Size = new System.Drawing.Size(407, 165);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
             // 
@@ -187,13 +187,13 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(621, 0);
-            this.vScrollBarCustom2.Maximum = -246;
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(387, 0);
+            this.vScrollBarCustom2.Maximum = -121;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 290);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 165);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 0;
@@ -202,8 +202,8 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -246;
-            this.vScrollBarCustom2.ValueLimited = -246;
+            this.vScrollBarCustom2.Value = -121;
+            this.vScrollBarCustom2.ValueLimited = -121;
             // 
             // buttonMore
             // 
@@ -225,7 +225,7 @@ namespace EDDiscovery.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(649, 371);
+            this.ClientSize = new System.Drawing.Size(415, 246);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);

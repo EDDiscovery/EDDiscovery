@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonTags = new ExtendedControls.ButtonExt();
             this.buttonDelete = new ExtendedControls.ButtonExt();
             this.buttonNew = new ExtendedControls.ButtonExt();
             this.textBoxFilter = new ExtendedControls.TextBoxBorder();
@@ -46,7 +47,6 @@
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonTags = new ExtendedControls.ButtonExt();
             this.panelButtons.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -65,6 +65,16 @@
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(676, 32);
             this.panelButtons.TabIndex = 0;
+            // 
+            // buttonTags
+            // 
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonTags.Location = new System.Drawing.Point(280, 0);
+            this.buttonTags.Name = "buttonTags";
+            this.buttonTags.Size = new System.Drawing.Size(32, 32);
+            this.buttonTags.TabIndex = 27;
+            this.buttonTags.UseVisualStyleBackColor = true;
+            this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
             // 
             // buttonDelete
             // 
@@ -182,11 +192,9 @@
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.Size = new System.Drawing.Size(656, 411);
             this.dataGridView.TabIndex = 4;
-            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
-            this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
-            this.dataGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEnter);
-            this.dataGridView.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridView_EditingControlShowing);
+            this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
+            this.dataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView_KeyDown);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridView_MouseDown);
             // 
             // ColTime
@@ -212,11 +220,13 @@
             this.ColNote.FillWeight = 300F;
             this.ColNote.HeaderText = "Note";
             this.ColNote.Name = "ColNote";
+            this.ColNote.ReadOnly = true;
             // 
             // ColTags
             // 
             this.ColTags.HeaderText = "Tags";
             this.ColTags.Name = "ColTags";
+            this.ColTags.ReadOnly = true;
             // 
             // contextMenuStrip
             // 
@@ -240,16 +250,6 @@
             this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
             this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
             this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
-            // 
-            // buttonTags
-            // 
-            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
-            this.buttonTags.Location = new System.Drawing.Point(280, 0);
-            this.buttonTags.Name = "buttonTags";
-            this.buttonTags.Size = new System.Drawing.Size(32, 32);
-            this.buttonTags.TabIndex = 27;
-            this.buttonTags.UseVisualStyleBackColor = true;
-            this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
             // 
             // UserControlCaptainsLog
             // 
@@ -282,11 +282,11 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonDelete;
+        private ExtendedControls.ButtonExt buttonTags;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
-        private ExtendedControls.ButtonExt buttonTags;
     }
 }

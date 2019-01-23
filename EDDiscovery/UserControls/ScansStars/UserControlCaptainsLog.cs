@@ -19,6 +19,8 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -26,6 +28,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlCaptainsLog : UserControlCommonBase
     {
+        private string DbColumnSave { get { return DBName("CaptainsLogPanel", "DGVCol"); } }
+        private string DbSaveTags { get { return "CaptainsLogPanelTagNames"; } }    // global, not panel related
+
+        public Dictionary<string, Image> tags;
+
         Timer searchtimer;
 
         #region init
@@ -47,11 +54,39 @@ namespace EDDiscovery.UserControls
             ColNote.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
+
+            LoadTags();
+        }
+
+        void LoadTags()
+        {
+            tags = new Dictionary<string, Image>();
+
+            string taglist = SQLiteConnectionUser.GetSettingString(DbSaveTags, "Expedition=Journal.FSDJump;Died=Journal.Died");
+            string[] tagdefs = taglist.Split(';');
+            foreach (var s in tagdefs)
+            {
+                string[] parts = s.Split('=');
+                // valid number, valid length, image exists
+                if (parts.Length == 2 && parts[0].Length>0 && parts[1].Length>0 && EDDiscovery.Icons.IconSet.Icons.ContainsKey(parts[1])) 
+                {
+                    Image img = EDDiscovery.Icons.IconSet.Icons[parts[1]];      // image.tag has name - defined by icon system
+                    tags[parts[0]] = img;
+                }
+            }
+        }
+
+        public override void LoadLayout()
+        {
+            DGVLoadColumnLayout(dataGridView, DbColumnSave);
         }
 
         public override void Closing()
         {
-    //        SaveBackAnyChanges();
+            DGVSaveColumnLayout(dataGridView, DbColumnSave);
+            string[] list = (from x in tags select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+            SQLiteConnectionUser.PutSettingString(DbSaveTags, string.Join(";",list));
+
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
         }
@@ -64,7 +99,6 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-       
         private void Display()
         {
             int lastrow = dataGridView.CurrentCell != null ? dataGridView.CurrentCell.RowIndex : -1;
@@ -74,21 +108,23 @@ namespace EDDiscovery.UserControls
 
             dataGridView.SuspendLayout();
 
+            System.Diagnostics.Debug.WriteLine("Redraw");
             dataGridView.Rows.Clear();
             
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
                 //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
                 var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells(dataGridView, 
+                rw.CreateCells(dataGridView,
                     EDDConfig.Instance.DisplayUTC ? entry.TimeUTC : entry.TimeLocal,
                     entry.SystemName,
                     entry.BodyName,
                     entry.Note,
-                    entry.Tags ?? ""
+                    "TBD"
                  );
 
                 rw.Tag = entry;
+                rw.Cells[4].Tag = entry.Tags ?? "";
 
                 dataGridView.Rows.Add(rw);
             }
@@ -98,7 +134,10 @@ namespace EDDiscovery.UserControls
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-            if (lastrow >= 0 && lastrow < dataGridView.Rows.Count)
+            if ( textBoxFilter.Text.HasChars() )
+                dataGridView.FilterGridView(textBoxFilter.Text);
+
+            if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
                 dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[2];
         }
 
@@ -109,68 +148,122 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnDate();
         }
 
-        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Cell key down" + e.KeyCode);
+
+            if (e.KeyCode == Keys.Enter && dataGridView.CurrentCell != null)
+            {
+                DataGridViewRow rw = dataGridView.CurrentCell.OwningRow;
+
+                if (dataGridView.CurrentCell.ColumnIndex == 3)
+                    EditNote(rw);
+                else if (dataGridView.CurrentCell.ColumnIndex == 4)
+                    EditTags(rw);
+
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+            if (e.ColumnIndex == 3)
+                EditNote(rw);
+            else if (e.ColumnIndex == 4)
+                EditTags(rw);
+        }
+
+        private void EditNote(DataGridViewRow rw)
+        {
+            string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
+
+            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(this), notes,
+                            "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, width: 800, vspacing: 400, cursoratend: true);
+
+            if (s != null)
+            {
+                rw.Cells[3].Value = s;
+                dataGridView.InvalidateCell(rw.Cells[3]);
+                StoreRow(rw);
+            }
+        }
+
+        ExtendedControls.CheckedListControlCustom dropdown;
+
+        private void EditTags(DataGridViewRow rw)
+        { 
+            List<string> Dickeys = new List<string>(tags.Keys);
+            Dickeys.Sort();
+            List<Image> images = (from x in Dickeys select tags[x]).ToList();
+
+            dropdown = new ExtendedControls.CheckedListControlCustom();
+            dropdown.Items.Add("All".Tx());       // displayed, translate
+            dropdown.Items.Add("None".Tx());
+
+            dropdown.Items.AddRange(Dickeys.ToArray());
+
+            string curtags = (rw.Cells[4].Tag as string) ?? "";
+            System.Diagnostics.Debug.WriteLine("Cur keys" + curtags);
+            dropdown.SetChecked(curtags);
+            SetFilterSet();
+
+            //dropdown.FormClosed += FilterClosed;
+            dropdown.CheckedChanged += (sv, ev) =>
+            {
+                dropdown.SetChecked(ev.NewValue == CheckState.Checked, ev.Index, 1);        // force check now (its done after it) so our functions work..
+
+                if (ev.Index == 0 && ev.NewValue == CheckState.Checked)
+                    dropdown.SetChecked(true, 2);
+
+                if ((ev.Index == 1 && ev.NewValue == CheckState.Checked) || (ev.Index <= 2 && ev.NewValue == CheckState.Unchecked))
+                    dropdown.SetChecked(false, 2);
+
+                SetFilterSet();
+            };
+
+            dropdown.FormClosed += (sv, ev) =>
+            {
+                rw.Cells[4].Tag = dropdown.GetChecked(2);
+                dataGridView.InvalidateCell(rw.Cells[4]);
+                StoreRow(rw);
+            };
+
+            Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
+
+            dropdown.PositionSize(loc, new Size(400, 400));
+            EDDTheme.Instance.ApplyToControls(dropdown);
+            dropdown.Show(this.FindForm());
+        }
+
+        private void StoreRow( DataGridViewRow rw)
         {
             inupdate = true;
-
-            System.Diagnostics.Debug.WriteLine("Cell end edit" + e.RowIndex + " " + e.ColumnIndex);
-            DataGridViewRow rw = dataGridView.CurrentCell.OwningRow;
             CaptainsLogClass entry = rw.Tag as CaptainsLogClass;        // may be null
 
             string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
-            string tags = rw.Cells[4].Value != null ? (string)rw.Cells[4].Value : null;
+            string tags = rw.Cells[4].Tag != null ? (string)rw.Cells[4].Tag : null;
 
             CaptainsLogClass cls = GlobalCaptainsLogList.Instance.AddOrUpdate(entry,
-                        rw.Cells[1].Value as string,
-                        rw.Cells[2].Value as string,
-                        entry?.TimeUTC ?? ((DateTime)rw.Cells[0].Tag),
-                        notes,
-                        tags);
+                           rw.Cells[1].Value as string,
+                           rw.Cells[2].Value as string,
+                           entry?.TimeUTC ?? ((DateTime)rw.Cells[0].Tag),
+                           notes,
+                           tags);
 
             rw.Tag = cls;
-
-            rw.MinimumHeight = 16;
 
             inupdate = false;
         }
 
-        DataGridViewRow currowgoingtoedit = null;
-
-        private void dataGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
+        private void SetFilterSet()
         {
-            if (e.ColumnIndex >= 3)
-            {
-                currowgoingtoedit = dataGridView.Rows[e.RowIndex];
-                System.Diagnostics.Debug.WriteLine("Cell enter " + e.RowIndex + " " + e.ColumnIndex);
-            }
+            string list = dropdown.GetChecked(2);
+            //Console.WriteLine("List {0}", list);
+            dropdown.SetChecked(list.Equals("All"), 0, 1);
+            dropdown.SetChecked(list.Equals("None"), 1, 1);
         }
 
-        private void dataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
-        {
-            currowgoingtoedit.MinimumHeight = 128;
-            TextBox tb = e.Control as TextBox;
-            tb.ScrollBars = ScrollBars.Both;
-        }
-
-        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-
-            //string tags = rw.Cells[4].Value != null ? (string)rw.Cells[4].Value : null;
-            if (e.ColumnIndex == 3)
-            {
-                dataGridView.EndEdit();
-
-                string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
-
-                string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(this), notes,
-                                "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, width: 800, vspacing: 400);
-
-                if (s != null)
-                    rw.Cells[3].Value = s;
-            }
-
-        }
 
         #endregion
 
@@ -238,6 +331,15 @@ namespace EDDiscovery.UserControls
                 else
                     Display();
             }
+        }
+
+        private void buttonTags_Click(object sender, EventArgs e)
+        {
+            TagsForm tg = new TagsForm();
+            tg.Init("Set Tags".Tx(this), this.FindForm().Icon, tags);
+
+            if (tg.ShowDialog() == DialogResult.OK)
+                tags = tg.Result;
         }
 
         #endregion
@@ -335,15 +437,7 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.Default;
         }
 
-        private void buttonTags_Click(object sender, EventArgs e)
-        {
-            TagsForm tg  = new TagsForm();
-            tg.Init("Set Tags".Tx(this), this.FindForm().Icon, null);
 
-            if ( tg.ShowDialog() == DialogResult.OK )
-            {
-            }
-        }
 
         #endregion
 
