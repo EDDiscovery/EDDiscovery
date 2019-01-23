@@ -89,7 +89,10 @@ namespace EDDiscovery
                         CreateTab(p, name, displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
                     }
                 }
-                catch { }   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
+                catch (Exception ex)   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
+                {
+                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}" );
+                }
             }
 
             SelectedIndex = restoretab;
@@ -129,7 +132,7 @@ namespace EDDiscovery
             foreach (TabPage p in TabPages)      // all main tabs, load/display
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.Closing();
+                uccb.CloseDown();
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
                 idlist.Add( Object.ReferenceEquals(uccb,primary) ? -1 : (int)pi.PopoutID);      // primary is marked -1
                 idlist.Add(uccb.displaynumber);
@@ -172,7 +175,7 @@ namespace EDDiscovery
             {
                 TabPage page = TabPages[tabIndex];
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.Closing();
+                uccb.CloseDown();
                 page.Dispose();
             }
         }

@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..
                 {
-                    uccb.Closing();
+                    uccb.CloseDown();
                     //System.Diagnostics.Debug.WriteLine("Closing " + c.Name + " " + c.GetType().Name + " " + uccb.Name);
                 }
             });
@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
                 tabstrip.OnRemoving += (tab, ctrl) =>
                 {
                     UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                    uccb.Closing();
+                    uccb.CloseDown();
                     AssignTHC();        // in case we removed anything
                 };
 

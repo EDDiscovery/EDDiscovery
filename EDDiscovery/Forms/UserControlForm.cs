@@ -294,7 +294,7 @@ namespace EDDiscovery.Forms
             IsLoaded = false;
 
             if (UserControl != null)
-                UserControl.Closing();
+                UserControl.CloseDown();
         }
 
 #endregion
