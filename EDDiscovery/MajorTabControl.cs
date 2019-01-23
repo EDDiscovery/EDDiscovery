@@ -89,7 +89,10 @@ namespace EDDiscovery
                         CreateTab(p, name, displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
                     }
                 }
-                catch { }   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
+                catch (Exception ex)   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
+                {
+                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}");
+                }
             }
 
             SelectedIndex = restoretab;
