@@ -70,15 +70,28 @@ namespace EDDiscovery.UserControls
             checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
+            checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;
+            checkBoxMinimizeToNotifyIcon.CheckedChanged += checkBoxMinimizeToNotifyIcon_CheckedChanged;
+            checkBoxKeepOnTop.CheckedChanged += checkBoxKeepOnTop_CheckedChanged;
+            checkBoxPanelSortOrder.CheckedChanged += checkBoxPanelSortOrder_CheckedChanged;
+            checkBoxUseNotifyIcon.CheckedChanged += checkBoxUseNotifyIcon_CheckedChanged;
+            checkBoxUTC.CheckedChanged += checkBoxUTC_CheckedChanged;
+            checkBoxShowUIEvents.CheckedChanged += checkBoxShowUIEvents_CheckedChanged;
+            checkBoxCustomResize.CheckedChanged += checkBoxCustomResize_CheckedChanged;
+
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
             textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
 
             textBoxDefaultZoom.ValueNoChange = EDDConfig.Instance.MapZoom;
 
+            textBoxDefaultZoom.ValueChanged += textBoxDefaultZoom_ValueChanged;
+
             bool selectionCentre = EDDConfig.Instance.MapCentreOnSelection;
             radioButtonHistorySelection.Checked = selectionCentre;
             radioButtonCentreHome.Checked = !selectionCentre;
+
+            radioButtonCentreHome.CheckedChanged += radioButtonCentreHome_CheckedChanged;
 
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
             dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();

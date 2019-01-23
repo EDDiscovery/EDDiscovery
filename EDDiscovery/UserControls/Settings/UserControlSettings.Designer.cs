@@ -165,7 +165,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxShowUIEvents, "Show the UI events (such as Music) in the history. The quantity of them can be ve" +
         "ry large");
             this.checkBoxShowUIEvents.UseVisualStyleBackColor = true;
-            this.checkBoxShowUIEvents.CheckedChanged += new System.EventHandler(this.checkBoxShowUIEvents_CheckedChanged);
             // 
             // checkBoxOrderRowsInverted
             // 
@@ -184,7 +183,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxOrderRowsInverted.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxOrderRowsInverted, "Number oldest entry 1, latest entry highest");
             this.checkBoxOrderRowsInverted.UseVisualStyleBackColor = true;
-            this.checkBoxOrderRowsInverted.CheckedChanged += new System.EventHandler(this.checkBoxOrderRowsInverted_CheckedChanged);
             // 
             // checkBoxUTC
             // 
@@ -203,7 +201,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxUTC.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxUTC, "Display game time (UTC) instead of your local time");
             this.checkBoxUTC.UseVisualStyleBackColor = true;
-            this.checkBoxUTC.CheckedChanged += new System.EventHandler(this.checkBoxUTC_CheckedChanged);
             // 
             // buttonExtEDSMConfigureArea
             // 
@@ -335,7 +332,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxMinimizeToNotifyIcon.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxMinimizeToNotifyIcon, "Minimize the main window to the system notification area (system tray) icon.");
             this.checkBoxMinimizeToNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxMinimizeToNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxMinimizeToNotifyIcon_CheckedChanged);
             // 
             // comboBoxClickThruKey
             // 
@@ -382,7 +378,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxUseNotifyIcon.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxUseNotifyIcon, "Show a system notification area (system tray) icon for EDDiscovery.");
             this.checkBoxUseNotifyIcon.UseVisualStyleBackColor = true;
-            this.checkBoxUseNotifyIcon.CheckedChanged += new System.EventHandler(this.checkBoxUseNotifyIcon_CheckedChanged);
             // 
             // checkBoxKeepOnTop
             // 
@@ -401,7 +396,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxKeepOnTop.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxKeepOnTop, "This window, and its children, top");
             this.checkBoxKeepOnTop.UseVisualStyleBackColor = true;
-            this.checkBoxKeepOnTop.CheckedChanged += new System.EventHandler(this.checkBoxKeepOnTop_CheckedChanged);
             // 
             // comboBoxTheme
             // 
@@ -482,7 +476,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.textBoxDefaultZoom, "Set the zoom level of the map. 1 is normal");
             this.textBoxDefaultZoom.Value = 0D;
             this.textBoxDefaultZoom.WordWrap = true;
-            this.textBoxDefaultZoom.ValueChanged += new System.EventHandler(this.textBoxDefaultZoom_ValueChanged);
             // 
             // radioButtonHistorySelection
             // 
@@ -519,7 +512,6 @@ namespace EDDiscovery.UserControls
             this.radioButtonCentreHome.Text = "Home System";
             this.toolTip.SetToolTip(this.radioButtonCentreHome, "Select home system as opening location");
             this.radioButtonCentreHome.UseVisualStyleBackColor = true;
-            this.radioButtonCentreHome.CheckedChanged += new System.EventHandler(this.radioButtonCentreHome_CheckedChanged);
             // 
             // textBoxHomeSystem
             // 
@@ -618,7 +610,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxCustomResize, "Check to allow EDD to redraw the screen during main window resize. Only disable i" +
         "f its too slow");
             this.checkBoxCustomResize.UseVisualStyleBackColor = true;
-            this.checkBoxCustomResize.CheckedChanged += new System.EventHandler(this.checkBoxCustomResize_CheckedChanged);
             // 
             // checkBoxPanelSortOrder
             // 
@@ -638,7 +629,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.checkBoxPanelSortOrder, "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires R" +
         "estart");
             this.checkBoxPanelSortOrder.UseVisualStyleBackColor = true;
-            this.checkBoxPanelSortOrder.CheckedChanged += new System.EventHandler(this.checkBoxPanelSortOrder_CheckedChanged);
             // 
             // buttonExtSafeMode
             // 
