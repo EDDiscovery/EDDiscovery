@@ -225,8 +225,8 @@ namespace EDDiscovery.UserControls
             dropdown.FormClosed += (sv, ev) =>
             {
                 rw.Cells[4].Tag = dropdown.GetChecked(2);
-                dataGridView.InvalidateCell(rw.Cells[4]);
                 StoreRow(rw);
+                dataGridView.InvalidateRow(rw.Index);
             };
 
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
@@ -435,6 +435,37 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"SysU"));
 
             this.Cursor = Cursors.Default;
+        }
+
+        private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+            string tagstring = rw.Cells[4].Tag as string;
+
+            if (tagstring != null)
+            {
+                string[] splittags = tagstring.Split(';');
+
+                Rectangle area = dataGridView.GetCellDisplayRectangle(4, rw.Index, false);
+                area.Width = 24;
+                area.Height = 24;
+
+                Handle all
+
+                System.Diagnostics.Debug.WriteLine("Repaint" + rw.Index);
+                for ( int i =0; i < splittags.Length; i++ )
+                {
+                    System.Diagnostics.Debug.WriteLine("with " + splittags[i]);
+                    if (tags.ContainsKey(splittags[i]))
+                    {
+                        e.Graphics.DrawImage(tags[splittags[i]], area);
+                        area.Y += 26;
+                    }
+                }
+
+
+            }
+
         }
 
 
