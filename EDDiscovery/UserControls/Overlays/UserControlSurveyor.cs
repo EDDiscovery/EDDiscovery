@@ -281,7 +281,8 @@ namespace EDDiscovery.UserControls
         private void pictureBoxHotspot_MouseClick(object sender, MouseEventArgs e)
         {
             contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
+            contextMenuStrip.Top = e.Y;
+            contextMenuStrip.Left = e.X;
         }
     }
 }
- 
