@@ -195,19 +195,19 @@ namespace EDDiscovery.UserControls
                             DrawToScreen(body.Current, bodiesCount);
                         }
 
-                        if (body.Current.ringed && hasRingsToolStripMenuItem.Checked)
+                        if (body.Current.ringed && !body.Current.ammonia && !body.Current.earthlike && !body.Current.waterworld && hasRingsToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
                             DrawToScreen(body.Current, bodiesCount);
                         }
 
-                        if (body.Current.volcanism && hasVolcanismToolStripMenuItem.Checked)
+                        if (body.Current.volcanism && !body.Current.ammonia && !body.Current.earthlike && !body.Current.waterworld && hasVolcanismToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
                             DrawToScreen(body.Current, bodiesCount);
                         }
 
-                        if (body.Current.terraformable && terraformableToolStripMenuItem.Checked)
+                        if (body.Current.terraformable && !body.Current.ammonia && !body.Current.earthlike && !body.Current.waterworld && terraformableToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
                             DrawToScreen(body.Current, bodiesCount);
@@ -225,11 +225,13 @@ namespace EDDiscovery.UserControls
             information.Append(body.name);
 
             // Additional information
-            information.Append((body.ammonia) ? @" is an ammonia world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
-            information.Append((body.earthlike) ? @" is an earth like world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
-            information.Append((body.waterworld && !body.terraformable) ? @" is a water world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
-            information.Append((body.waterworld && body.terraformable) ? @" is a terraformable water world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
-            information.Append((body.terraformable && !body.waterworld) ? @" is a terraformable planet." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.ammonia) ? @" is an ammonia world." : null);
+            information.Append((body.earthlike) ? @" is an earth like world." : null);
+            information.Append((body.waterworld && !body.terraformable) ? @" is a water world." : null);
+            information.Append((body.waterworld && body.terraformable) ? @" is a terraformable water world." : null);
+            information.Append((body.terraformable && !body.waterworld) ? @" is a terraformable planet." : null);
+            information.Append((body.ringed) ? @" Has ring." : null);
+            information.Append((body.volcanism) ? @" Geological activity reported." : null);
 
             Debug.Print(information.ToString()); // for testing
 
