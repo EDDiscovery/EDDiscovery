@@ -240,6 +240,7 @@
     <Compile Include="Forms\SafeModeForm.Designer.cs">
       <DependentUpon>SafeModeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MajorTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
