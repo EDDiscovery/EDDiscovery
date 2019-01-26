@@ -76,8 +76,17 @@ namespace EDDiscovery.UserControls
             CreateWantedBodiesList(he, he.EntryType == JournalTypeEnum.Scan);
         }
 
+        public override Color ColorTransparency => Color.Green;
+
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            this.BackColor = curcol;
+        }
+
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
+            EDDTheme.Instance.ApplyToControls(this);
+
             pictureBoxHotspot.ClearImageList();
 
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
@@ -240,6 +249,8 @@ namespace EDDiscovery.UserControls
             var vPos = (bodiesCount * iconSize) - iconSize;
 
             //! TODO: draw icons and brief information to panel
+
+
         }
 
         private void ammoniaToolStripMenuItem_Click(object sender, EventArgs e)
