@@ -217,7 +217,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void DrawToScreen(WantedBodies body, int bodiesCount)
+        private static void DrawToScreen(WantedBodies body, int bodiesCount)
         {
             var information = new StringBuilder();
 
@@ -225,13 +225,11 @@ namespace EDDiscovery.UserControls
             information.Append(body.name);
 
             // Additional information
-            information.Append((body.ammonia) ? @" is an ammonia world." : null);
-            information.Append((body.earthlike) ? @" is an earth like world." : null);
-            information.Append((body.waterworld && !body.terraformable) ? @" is a water world." : null);
-            information.Append((body.waterworld && body.terraformable) ? @" is a terraformable water world." : null);
-            information.Append((body.terraformable) ? @" is a terraformable planet." : null);
-            information.Append((body.ringed) ? @" Has ring." : null);
-            information.Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.ammonia) ? @" is an ammonia world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.earthlike) ? @" is an earth like world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.waterworld && !body.terraformable) ? @" is a water world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.waterworld && body.terraformable) ? @" is a terraformable water world." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.terraformable && !body.waterworld) ? @" is a terraformable planet." : null).Append((body.ringed) ? @" Has ring." : null).Append((body.volcanism) ? @" Geological activity reported." : null);
 
             Debug.Print(information.ToString()); // for testing
 
