@@ -140,6 +140,7 @@
             this.pictureBoxHotspot.Name = "pictureBoxHotspot";
             this.pictureBoxHotspot.Size = new System.Drawing.Size(64, 64);
             this.pictureBoxHotspot.TabIndex = 1;
+            this.pictureBoxHotspot.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHotspot_MouseClick);
             // 
             // UserControlSurveyor
             // 

@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
             information.Append((body.ringed) ? @" Has ring." : null);
             information.Append((body.volcanism) ? @" Geological activity reported." : null);
 
-            Debug.Print(information.ToString()); // for testing
+            //Debug.Print(information.ToString()); // for testing
 
             // Drawing Elements
             const int rowHeight = 24;
