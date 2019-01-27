@@ -39,6 +39,7 @@
             this.hasVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pictureBoxHotspot = new ExtendedControls.PictureBoxHotspot();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxHotspot)).BeginInit();
             this.SuspendLayout();
@@ -133,21 +134,19 @@
             // 
             // pictureBoxHotspot
             // 
-            this.pictureBoxHotspot.BackColor = System.Drawing.SystemColors.Control;
+            this.pictureBoxHotspot.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxHotspot.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxHotspot.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxHotspot.Name = "pictureBoxHotspot";
             this.pictureBoxHotspot.Size = new System.Drawing.Size(64, 64);
             this.pictureBoxHotspot.TabIndex = 1;
-            this.pictureBoxHotspot.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxHotspot_MouseClick);
             // 
             // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.SystemColors.Control;
+            this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.pictureBoxHotspot);
             this.MinimumSize = new System.Drawing.Size(64, 64);
             this.Name = "UserControlSurveyor";
@@ -169,5 +168,6 @@
         private System.Windows.Forms.ToolStripMenuItem hasVolcanismToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem hasRingsToolStripMenuItem;
         private ExtendedControls.PictureBoxHotspot pictureBoxHotspot;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

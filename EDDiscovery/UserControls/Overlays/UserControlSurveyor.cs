@@ -88,10 +88,7 @@ namespace EDDiscovery.UserControls
             EDDTheme.Instance.ApplyToControls(this);
 
             pictureBoxHotspot.ClearImageList();
-
-            Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-            Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-
+            
             CreateWantedBodiesList(he, false);
 
             pictureBoxHotspot.Render();
@@ -99,8 +96,8 @@ namespace EDDiscovery.UserControls
 
         public class WantedBodies
         {
-            public string name { get; set; }
-            public Image img { get; set; }
+            public string Name { get; set; }
+            public Image Img { get; set; }
             public bool terraformable, waterworld, earthlike, ammonia, volcanism, ringed;
         }
                 
@@ -108,8 +105,8 @@ namespace EDDiscovery.UserControls
         {
             return new WantedBodies()
             {
-                name = bdName,
-                img = bdImg,
+                Name = bdName,
+                Img = bdImg,
                 ringed = bodyHasRings,
                 terraformable = bodyIsTerraformable,
                 volcanism = bodyHasVolcanism,
@@ -226,12 +223,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private static void DrawToScreen(WantedBodies body, int bodiesCount)
+        private void DrawToScreen(WantedBodies body, int bodiesCount)
         {
             var information = new StringBuilder();
 
             // Name
-            information.Append(body.name);
+            information.Append(body.Name);
 
             // Additional information
             information.Append((body.ammonia) ? @" is an ammonia world." : null);
@@ -245,12 +242,23 @@ namespace EDDiscovery.UserControls
             Debug.Print(information.ToString()); // for testing
 
             // Drawing Elements
-            const int iconSize = 48;
-            var vPos = (bodiesCount * iconSize) - iconSize;
+            const int rowHeight = 24;
+            var vPos = (bodiesCount * rowHeight) - rowHeight;
 
-            //! TODO: draw icons and brief information to panel
+            var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-
+            if (body != null)
+            {
+                pictureBoxHotspot?.AddTextAutoSize(
+                    new Point(0, vPos + 4),
+                    new Size(pictureBoxHotspot.Width, 24),
+                    information.ToString(),
+                    DefaultFont,
+                    textcolour,
+                    backcolour,
+                    1.0F);
+            }
         }
 
         private void ammoniaToolStripMenuItem_Click(object sender, EventArgs e)
