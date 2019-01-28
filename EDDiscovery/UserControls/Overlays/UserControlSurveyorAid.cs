@@ -1,4 +1,19 @@
-﻿using System;
+﻿/*
+ * Copyright © 2016 - 2017 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -7,64 +22,103 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using EMK.LightGeometry;
-using ExtendedControls;
-using BaseUtils;
-using EDDiscovery.Forms;
-using EliteDangerousCore.DB;
+using System.Collections.Concurrent;
+using System.Threading;
+using System.Drawing.Drawing2D;
 using EliteDangerousCore;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using System.Diagnostics;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlSurveyor : UserControlCommonBase
+    public partial class UserControlSurveyorAid : UserControlCommonBase
     {
-        private HistoryEntry last_he;
+        HistoryEntry last_he = null;
+
+        HistoryList current_historylist;
 
         private string DbSave { get { return DBName("Surveyor"); } }
         private Font displayfont;
 
-        public UserControlSurveyor()
+        enum UIState { Normal, SystemMap, GalMap };
+        UIState uistate = UIState.Normal;
+
+        public UserControlSurveyorAid()
         {
             InitializeComponent();
         }
 
+        #region Overrides
+
         public override void Init()
         {
-            displayfont = discoveryform.theme.GetFont;
-
+            discoveryform.OnHistoryChange += Display;
             discoveryform.OnNewEntry += NewEntry;
+            discoveryform.OnNewUIEvent += OnNewUIEvent;
 
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            displayfont = discoveryform.theme.GetFont;
             EDDTheme.Instance.ApplyToControls(this);
 
             // set context menu checkboxes
-            ammoniaToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAmmonia", true);
-            earthsLikeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showEarthlike", true);
+            ammoniaWorldToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAmmonia", true);
+            earthlikeWorldToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showEarthlike", true);
             waterWorldToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showWaterWorld", true);
             terraformableToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showTerraformable", true);
             hasVolcanismToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showVolcanism", true);
             hasRingsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRinged", true);
-
-            // allow strings translation
-            Translator.Instance.Translate(this);
-            Translator.Instance.Translate(contextMenuStrip, this);
-
-            pictureBoxHotspot.Render();
+            hideAlreadyMappedBodiesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "hideMapped", true);
         }
+
+        private void Display(HistoryList hl)
+        {
+            DrawSystem(uctg.GetCurrentHistoryEntry);
+        }
+
+        private void OnNewUIEvent(UIEvent uievent)
+        {
+            EliteDangerousCore.UIEvents.UIJournalMusic jm = uievent as EliteDangerousCore.UIEvents.UIJournalMusic;
+
+            if (jm != null)
+            {
+                string ev = jm.Track;
+
+                bool refresh = false;
+                if (ev.Contains("GalaxyMap"))
+                {
+                    refresh = (uistate != UIState.GalMap);
+                    uistate = UIState.GalMap;
+                }
+                else if (ev.Contains("SystemMap"))
+                {
+                    refresh = (uistate != UIState.SystemMap);
+                    uistate = UIState.SystemMap;
+                }
+                else
+                {
+                    refresh = (uistate != UIState.Normal);
+                    uistate = UIState.Normal;
+                }
+
+                //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
+                if (refresh && !jm.Shown)      // if we materially changed, and we are not showing ui events, need to update here
+                    Display(current_historylist);
+
+            }
+        }   
 
         public override void LoadLayout()
         {
-            pictureBoxHotspot.Render();
             uctg.OnTravelSelectionChanged += Display;
         }
 
-        public override void InitialDisplay()
-        {
-            CreateWantedBodiesList(uctg.GetCurrentHistoryEntry, true);
-            pictureBoxHotspot.Render();
-        }
-
+        /// <summary>
+        /// Called when the cursor move to another system
+        /// </summary>
+        /// <param name="thc"></param>
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
@@ -74,13 +128,30 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            discoveryform.OnNewEntry -= NewEntry;
             uctg.OnTravelSelectionChanged -= Display;
+            discoveryform.OnNewEntry -= NewEntry;
+            discoveryform.OnHistoryChange -= Display;
+            discoveryform.OnNewUIEvent -= OnNewUIEvent;
         }
 
+        public override void InitialDisplay()
+        {
+            DrawSystem(uctg.GetCurrentHistoryEntry);
+        }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// called when a new entry is made.. check to see if its a scan update
+        /// </summary>
+        /// <param name="he">HistoryEntry</param>
+        /// <param name="hl">HistoryList</param>
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            CreateWantedBodiesList(uctg.GetCurrentHistoryEntry, he.EntryType == JournalTypeEnum.Scan);
+            if (he.EntryType == JournalTypeEnum.Scan)
+            DrawSystem(he);
         }
 
         public override Color ColorTransparency => Color.Green;
@@ -90,12 +161,20 @@ namespace EDDiscovery.UserControls
             this.BackColor = curcol;
         }
 
+        /// <summary>
+        /// Called at first start or hooked to change cursor
+        /// </summary>
+        /// <param name="he">HistoryEntry</param>
+        /// <param name="hl">HistoryList</param>
+        /// <param name="selectedEntry">todo: describe selectedEntry parameter on Display</param>
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            pictureBoxHotspot.ClearImageList();
-            CreateWantedBodiesList(he, false);
-            pictureBoxHotspot.Render();
+            DrawSystem(he);
         }
+
+        #endregion
+
+        #region Main
 
         public class WantedBodies
         {
@@ -104,9 +183,11 @@ namespace EDDiscovery.UserControls
             public string DistanceFromArrival { get; internal set; }
 
             public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped;
+
+            public string VolcanismString { get; set; }
         }
-                
-        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped)
+
+        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped)
         {
             return new WantedBodies()
             {
@@ -116,22 +197,30 @@ namespace EDDiscovery.UserControls
                 Ringed = bodyHasRings,
                 Terraformable = bodyIsTerraformable,
                 Volcanism = bodyHasVolcanism,
+                VolcanismString = bodyVolcanismString,
                 Ammonia = isAmmoniaWorld,
                 Earthlike = isAnEarthLike,
                 WaterWorld = isWaterWorld,
                 Mapped = mapped
             };
         }
-
-        private void CreateWantedBodiesList(HistoryEntry he, bool force)
+        
+        /// <summary>
+        /// Retrieve the list of bodies which match the user needs
+        /// </summary>
+        /// <param name="he">HistoryEntry</param>
+        /// <param name="force">Boolean</param>
+        private void DrawSystem(HistoryEntry he)
         {
+            pictureBoxSurveyorAid.ClearImageList();
+
             StarScan.SystemNode scannode = null;
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
 
             if (he == null)     //  no he, no display
             {
-                last_he = he;                
+                last_he = he;
                 SetControlText("No Scan".Tx());
                 return;
             }
@@ -141,13 +230,10 @@ namespace EDDiscovery.UserControls
 
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
-                    last_he = null;                
+                    last_he = null;
                     SetControlText("No Scan".Tx());
                     return;
                 }
-
-                if (samesys)      // same system, no force, no redisplay
-                    return;
             }
 
             last_he = he;
@@ -179,13 +265,15 @@ namespace EDDiscovery.UserControls
 
                             distanceString.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
 
-                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped));
+                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped));
                         }
                     }
                 }
 
                 SelectBodiesToDisplay(wanted_nodes);
             }
+
+            pictureBoxSurveyorAid.Render();
         }
 
         private void SelectBodiesToDisplay(List<WantedBodies> wanted_nodes)
@@ -198,13 +286,13 @@ namespace EDDiscovery.UserControls
                 {
                     while (body.MoveNext())
                     {
-                        if (body.Current.Ammonia && ammoniaToolStripMenuItem.Checked)
+                        if (body.Current.Ammonia && ammoniaWorldToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
                             DrawToScreen(body.Current, bodiesCount);
                         }
 
-                        if (body.Current.Earthlike && earthsLikeToolStripMenuItem.Checked)
+                        if (body.Current.Earthlike && earthlikeWorldToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
                             DrawToScreen(body.Current, bodiesCount);
@@ -244,13 +332,7 @@ namespace EDDiscovery.UserControls
 
             // Is already surface mapped or not?
             if (body.Mapped)
-            {
                 information.Append("o "); // let the cmdr see that this body is already mapped
-            }
-            else
-            {
-                information.Append("  ");
-            }
 
             // Name
             information.Append(body.Name);
@@ -262,7 +344,7 @@ namespace EDDiscovery.UserControls
             information.Append((body.WaterWorld && body.Terraformable) ? @" is a terraformable water world." : null);
             information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet." : null);
             information.Append((body.Ringed) ? @" Has ring." : null);
-            information.Append((body.Volcanism) ? @" Geological activity reported." : null);
+            information.Append((body.Volcanism) ? @" Has " + body.VolcanismString : null);
 
             information.Append(@" " + body.DistanceFromArrival);
 
@@ -277,56 +359,67 @@ namespace EDDiscovery.UserControls
 
             if (body != null)
             {
-                pictureBoxHotspot?.AddTextAutoSize(
-                    new Point(0, vPos + 4),
-                    new Size(pictureBoxHotspot.Width, 24),
-                    information.ToString(),
-                    DefaultFont,
-                    textcolour,
-                    backcolour,
-                    1.0F);
+                if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
+                {
+                    pictureBoxSurveyorAid?.AddTextAutoSize(
+                        new Point(0, vPos + 4),
+                        new Size(pictureBoxSurveyorAid.Width, 24),
+                        information.ToString(),
+                        DefaultFont,
+                        textcolour,
+                        backcolour,
+                        1.0F);
+                }
             }
 
-            pictureBoxHotspot.Refresh();
+            pictureBoxSurveyorAid.Refresh();
         }
 
-        private void ammoniaToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "showAmmonia", ammoniaToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            SQLiteDBClass.PutSettingBool(DbSave + "showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
+            DrawSystem(last_he);
         }
 
-        private void earthsLikeToolStripMenuItem_Click(object sender, EventArgs e)
+        private void earthlikeWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingBool(DbSave + "showEarthlike", earthsLikeToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            SQLiteDBClass.PutSettingBool(DbSave + "showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
+            DrawSystem(last_he);
         }
 
         private void waterWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showWaterWorld", waterWorldToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            DrawSystem(last_he);
         }
 
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showTerraformable", terraformableToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            DrawSystem(last_he);
         }
 
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showVolcanism", hasVolcanismToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            DrawSystem(last_he);
         }
 
         private void hasRingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showRinged", hasRingsToolStripMenuItem.Checked);
-            CreateWantedBodiesList(last_he, true);
+            DrawSystem(last_he);
         }
 
-        private void pictureBoxHotspot_MouseClick(object sender, MouseEventArgs e)
+        private void hideAlreadyMappedBodiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
+            DrawSystem(last_he);
+        }
+
+        private void pictureBoxSurveyorAid_MouseClick(object sender, MouseEventArgs e)
         {
             contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
             contextMenuStrip.Top = MousePosition.Y;
