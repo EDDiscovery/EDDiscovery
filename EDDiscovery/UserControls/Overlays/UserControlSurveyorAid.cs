@@ -365,7 +365,7 @@ namespace EDDiscovery.UserControls
                         new Point(0, vPos + 4),
                         new Size(pictureBoxSurveyorAid.Width, 24),
                         information.ToString(),
-                        DefaultFont,
+                        displayfont,
                         textcolour,
                         backcolour,
                         1.0F);
