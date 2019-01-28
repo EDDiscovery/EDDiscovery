@@ -497,6 +497,12 @@
     <Compile Include="UserControls\Overlays\UserControlSpanel.Designer.cs">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSurveyor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\UserControlSurveyor.Designer.cs">
+      <DependentUpon>UserControlSurveyor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -745,6 +751,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSpanel.resx">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\UserControlSurveyor.resx">
+      <DependentUpon>UserControlSurveyor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
