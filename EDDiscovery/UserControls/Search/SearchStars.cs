@@ -33,13 +33,13 @@ namespace EDDiscovery.UserControls
     // Search UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the Search UCCB
     // Make sure DB saving has unique names.. they all share the same displayno.
 
-    public partial class UserControlSearchStars : UserControlCommonBase
+    public partial class SearchStars : UserControlCommonBase
     {
         private string DbColumnSave { get { return DBName("UCSearchStars", "DGVCol"); } }
 
         #region Init
 
-        public UserControlSearchStars()
+        public SearchStars()
         {
             InitializeComponent();
             var corner = dataGridView.TopLeftHeaderCell; // work around #1487

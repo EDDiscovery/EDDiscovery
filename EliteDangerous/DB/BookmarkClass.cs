@@ -56,8 +56,10 @@ namespace EliteDangerousCore.DB
                     Planets = jo["Marks"].ToObjectProtected<List<Planet>>();
                 }
             }
-            catch
-            { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("BK PM " + ex.ToString());
+            }
         }
 
         public PlanetMarks()
@@ -393,8 +395,9 @@ namespace EliteDangerousCore.DB
                     }
                 }
             }
-            catch
+            catch( Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.ToString());
                 return false;
             }
         }

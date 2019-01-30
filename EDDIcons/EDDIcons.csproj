@@ -684,6 +684,9 @@
     <EmbeddedResource Include="Journal\ReservoirReplenished.png" />
     <EmbeddedResource Include="Journal\ProspectedAsteroid.png" />
     <EmbeddedResource Include="Controls\Bookmarks\ImportExcel.png" />
+    <EmbeddedResource Include="Controls\CaptainsLog\Delete.png" />
+    <EmbeddedResource Include="Controls\CaptainsLog\New.png" />
+    <Content Include="Controls\CaptainsLog\Tags.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls
 {
-    partial class UserControlCaptainsLog
+    partial class CaptainsLogEntries
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,6 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.dateTimePickerEndDate = new ExtendedControls.CustomDateTimePicker();
+            this.labelEndDate = new System.Windows.Forms.Label();
+            this.dateTimePickerStartDate = new ExtendedControls.CustomDateTimePicker();
+            this.labelDateStart = new System.Windows.Forms.Label();
             this.buttonTags = new ExtendedControls.ButtonExt();
             this.buttonDelete = new ExtendedControls.ButtonExt();
             this.buttonNew = new ExtendedControls.ButtonExt();
@@ -46,6 +50,7 @@
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoStar3dmap = new System.Windows.Forms.ToolStripMenuItem();
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openAScanPanelViewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelButtons.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -55,6 +60,10 @@
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.dateTimePickerEndDate);
+            this.panelButtons.Controls.Add(this.labelEndDate);
+            this.panelButtons.Controls.Add(this.dateTimePickerStartDate);
+            this.panelButtons.Controls.Add(this.labelDateStart);
             this.panelButtons.Controls.Add(this.buttonTags);
             this.panelButtons.Controls.Add(this.buttonDelete);
             this.panelButtons.Controls.Add(this.buttonNew);
@@ -63,8 +72,60 @@
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(676, 32);
+            this.panelButtons.Size = new System.Drawing.Size(676, 68);
             this.panelButtons.TabIndex = 0;
+            // 
+            // dateTimePickerEndDate
+            // 
+            this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
+            this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
+            this.dateTimePickerEndDate.Checked = false;
+            this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(419, 38);
+            this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
+            this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
+            this.dateTimePickerEndDate.ShowCheckBox = true;
+            this.dateTimePickerEndDate.ShowUpDown = false;
+            this.dateTimePickerEndDate.Size = new System.Drawing.Size(211, 20);
+            this.dateTimePickerEndDate.TabIndex = 32;
+            this.dateTimePickerEndDate.TextBackColor = System.Drawing.Color.AliceBlue;
+            this.dateTimePickerEndDate.Value = new System.DateTime(2017, 8, 30, 10, 50, 42, 853);
+            // 
+            // labelEndDate
+            // 
+            this.labelEndDate.AutoSize = true;
+            this.labelEndDate.Location = new System.Drawing.Point(343, 44);
+            this.labelEndDate.Name = "labelEndDate";
+            this.labelEndDate.Size = new System.Drawing.Size(55, 13);
+            this.labelEndDate.TabIndex = 31;
+            this.labelEndDate.Text = "End Date:";
+            // 
+            // dateTimePickerStartDate
+            // 
+            this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
+            this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
+            this.dateTimePickerStartDate.Checked = false;
+            this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.dateTimePickerStartDate.Location = new System.Drawing.Point(80, 38);
+            this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
+            this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
+            this.dateTimePickerStartDate.ShowCheckBox = true;
+            this.dateTimePickerStartDate.ShowUpDown = false;
+            this.dateTimePickerStartDate.Size = new System.Drawing.Size(211, 20);
+            this.dateTimePickerStartDate.TabIndex = 29;
+            this.dateTimePickerStartDate.TextBackColor = System.Drawing.Color.AliceBlue;
+            this.dateTimePickerStartDate.Value = new System.DateTime(2010, 1, 1, 0, 0, 0, 0);
+            // 
+            // labelDateStart
+            // 
+            this.labelDateStart.AutoSize = true;
+            this.labelDateStart.Location = new System.Drawing.Point(4, 44);
+            this.labelDateStart.Name = "labelDateStart";
+            this.labelDateStart.Size = new System.Drawing.Size(58, 13);
+            this.labelDateStart.TabIndex = 28;
+            this.labelDateStart.Text = "Start Date:";
             // 
             // buttonTags
             // 
@@ -138,10 +199,10 @@
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 68);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 411);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 375);
             this.dataViewScrollerPanel.TabIndex = 5;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -162,7 +223,7 @@
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 390);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 354);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -190,9 +251,10 @@
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView.Size = new System.Drawing.Size(656, 411);
+            this.dataGridView.Size = new System.Drawing.Size(656, 375);
             this.dataGridView.TabIndex = 4;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
+            this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridView_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             this.dataGridView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridView_KeyDown);
@@ -202,19 +264,16 @@
             // 
             this.ColTime.HeaderText = "Time";
             this.ColTime.Name = "ColTime";
-            this.ColTime.ReadOnly = true;
             // 
             // ColSystem
             // 
             this.ColSystem.HeaderText = "System";
             this.ColSystem.Name = "ColSystem";
-            this.ColSystem.ReadOnly = true;
             // 
             // ColBodyName
             // 
             this.ColBodyName.HeaderText = "Body";
             this.ColBodyName.Name = "ColBodyName";
-            this.ColBodyName.ReadOnly = true;
             // 
             // ColNote
             // 
@@ -233,32 +292,40 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemGotoStar3dmap,
-            this.openInEDSMToolStripMenuItem});
+            this.openInEDSMToolStripMenuItem,
+            this.openAScanPanelViewToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripBookmarks";
-            this.contextMenuStrip.Size = new System.Drawing.Size(158, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(201, 70);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // toolStripMenuItemGotoStar3dmap
             // 
             this.toolStripMenuItemGotoStar3dmap.Name = "toolStripMenuItemGotoStar3dmap";
-            this.toolStripMenuItemGotoStar3dmap.Size = new System.Drawing.Size(157, 22);
+            this.toolStripMenuItemGotoStar3dmap.Size = new System.Drawing.Size(200, 22);
             this.toolStripMenuItemGotoStar3dmap.Text = "Goto in 3D Map";
             this.toolStripMenuItemGotoStar3dmap.Click += new System.EventHandler(this.toolStripMenuItemGotoStar3dmap_Click);
             // 
             // openInEDSMToolStripMenuItem
             // 
             this.openInEDSMToolStripMenuItem.Name = "openInEDSMToolStripMenuItem";
-            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.openInEDSMToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
             this.openInEDSMToolStripMenuItem.Text = "Open in EDSM";
             this.openInEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
             // 
-            // UserControlCaptainsLog
+            // openAScanPanelViewToolStripMenuItem
+            // 
+            this.openAScanPanelViewToolStripMenuItem.Name = "openAScanPanelViewToolStripMenuItem";
+            this.openAScanPanelViewToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.openAScanPanelViewToolStripMenuItem.Text = "Open a Scan Panel View";
+            this.openAScanPanelViewToolStripMenuItem.Click += new System.EventHandler(this.openAScanPanelViewToolStripMenuItem_Click);
+            // 
+            // CaptainsLogEntries
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelButtons);
-            this.Name = "UserControlCaptainsLog";
+            this.Name = "CaptainsLogEntries";
             this.Size = new System.Drawing.Size(676, 443);
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
@@ -284,10 +351,15 @@
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
         private ExtendedControls.ButtonExt buttonDelete;
         private ExtendedControls.ButtonExt buttonTags;
+        private ExtendedControls.CustomDateTimePicker dateTimePickerEndDate;
+        private System.Windows.Forms.Label labelEndDate;
+        private ExtendedControls.CustomDateTimePicker dateTimePickerStartDate;
+        private System.Windows.Forms.Label labelDateStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColNote;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
+        private System.Windows.Forms.ToolStripMenuItem openAScanPanelViewToolStripMenuItem;
     }
 }

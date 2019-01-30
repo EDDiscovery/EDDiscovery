@@ -14,28 +14,35 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
-using System.Drawing;
+using EDDiscovery.Forms;
+using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlSearch : UserControlCommonBase
+    public partial class UserControlCaptainsLog : UserControlCommonBase
     {
-        private string DbSelectedSave { get { return DBName("UCSearch", "Tab"); } }
+        private string DbSelectedSave { get { return DBName("UCCaptainsLogTop", "Tab"); } }
 
-        #region Init
-
-        public UserControlSearch()
+        public UserControlCaptainsLog()
         {
             InitializeComponent();
         }
 
+        DateTime? gotodate = null;
+        bool createnew = false;
+
         public override void Init()
         {
-            tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials, EDDiscovery.Icons.Controls.SearchScan};
-            tabStrip.TextList = new string[] { "Stars".Tx(this), "Materials Commodities".Tx(this) , "Scans".Tx(this) };
-            tabStrip.TagList = new Type[] { typeof(SearchStars), typeof(SearchMaterialsCommodities), typeof(SearchScans)};
+            tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials };
+            tabStrip.TextList = new string[] { "Diary".Tx(this), "Entries".Tx(this) };
+            tabStrip.TagList = new Type[] { typeof(CaptainsLogDiary), typeof(CaptainsLogEntries) };
 
             tabStrip.OnCreateTab += (tab, si) =>
             {
@@ -49,8 +56,28 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Init(discoveryform, displaynumber);
                 uccb.LoadLayout();
-                discoveryform.theme.ApplyToControls(tab);
+                discoveryform.theme.ApplyToControls(tab);       // theme BEFORE initial display on purpose
                 uccb.InitialDisplay();
+
+                if (uccb is CaptainsLogDiary)
+                {
+                    (uccb as CaptainsLogDiary).ClickedonDate = (d,b) =>
+                    {
+                        gotodate = d;
+                        createnew = b;
+                        tabStrip.SelectedIndex = 1;
+                    };
+                }
+                else if ( uccb is CaptainsLogEntries )
+                {
+                    if ( gotodate.HasValue )
+                    {
+                        var clentries = uccb as CaptainsLogEntries;
+                        System.Diagnostics.Debug.WriteLine("Goto " + gotodate);
+                        clentries.SelectDate(gotodate.Value,createnew);
+                        gotodate = null;
+                    }
+                }
             };
 
             tabStrip.OnRemoving += (tab, ctrl) =>
@@ -72,9 +99,5 @@ namespace EDDiscovery.UserControls
             SQLiteConnectionUser.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();
         }
-
-        #endregion
-
-
     }
 }

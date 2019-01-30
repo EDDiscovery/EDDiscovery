@@ -432,6 +432,7 @@ namespace EliteDangerousCore.DB
         {
             string query1 = "CREATE TABLE CaptainsLog ( " +
                 "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Commander INTEGER NOT NULL, " + 
                 "Time DATETIME NOT NULL, " +
                 "SystemName TEXT NOT NULL COLLATE NOCASE, " +
                 "BodyName TEXT NOT NULL COLLATE NOCASE, " +

@@ -256,12 +256,25 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
     <Compile Include="UserControls\Helpers\RecipeFilterSelector.cs" />
     <Compile Include="UserControls\Helpers\TagsForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\TagsForm.Designer.cs">
       <DependentUpon>TagsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\CaptainsLogDiary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\CaptainsLogDiary.Designer.cs">
+      <DependentUpon>CaptainsLogDiary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\CaptainsLogEntries.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\CaptainsLogEntries.Designer.cs">
+      <DependentUpon>CaptainsLogEntries.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Overlays\UserControlCombatPanel.cs">
       <SubType>UserControl</SubType>
@@ -353,10 +366,10 @@
     <Compile Include="UserControls\History\UserControlJournalGrid.Designer.cs">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\History\UserControlLog.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlLog.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\History\UserControlLog.Designer.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlLog.Designer.cs">
       <DependentUpon>UserControlLog.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\History\UserControlStarList.cs">
@@ -533,38 +546,38 @@
     <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.Designer.cs">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlCaptainsLog.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlCaptainsLog.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlCaptainsLog.Designer.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlCaptainsLog.Designer.cs">
       <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlBookmarks.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlBookmarks.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\UserControlBookmarks.Designer.cs">
+    <Compile Include="UserControls\LogsBookmarks\UserControlBookmarks.Designer.cs">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\DataGridViewStarResults.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchMaterialsCommodities.cs">
+    <Compile Include="UserControls\Search\SearchMaterialsCommodities.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchMaterialsCommodities.Designer.cs">
-      <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
+    <Compile Include="UserControls\Search\SearchMaterialsCommodities.Designer.cs">
+      <DependentUpon>SearchMaterialsCommodities.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchScans.cs">
+    <Compile Include="UserControls\Search\SearchScans.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchScans.Designer.cs">
-      <DependentUpon>UserControlSearchScans.cs</DependentUpon>
+    <Compile Include="UserControls\Search\SearchScans.Designer.cs">
+      <DependentUpon>SearchScans.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchStars.cs">
+    <Compile Include="UserControls\Search\SearchStars.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Search\UserControlSearchStars.Designer.cs">
-      <DependentUpon>UserControlSearchStars.cs</DependentUpon>
+    <Compile Include="UserControls\Search\SearchStars.Designer.cs">
+      <DependentUpon>SearchStars.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Search\UserControlSearch.cs">
       <SubType>UserControl</SubType>
@@ -698,6 +711,12 @@
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogDiary.resx">
+      <DependentUpon>CaptainsLogDiary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogEntries.resx">
+      <DependentUpon>CaptainsLogEntries.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCombatPanel.resx">
       <DependentUpon>UserControlCombatPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -776,20 +795,20 @@
     <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlCaptainsLog.resx">
+    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlCaptainsLog.resx">
       <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\UserControlBookmarks.resx">
+    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Search\UserControlSearchMaterialsCommodities.resx">
-      <DependentUpon>UserControlSearchMaterialsCommodities.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Search\SearchMaterialsCommodities.resx">
+      <DependentUpon>SearchMaterialsCommodities.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Search\UserControlSearchScans.resx">
-      <DependentUpon>UserControlSearchScans.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Search\SearchScans.resx">
+      <DependentUpon>SearchScans.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Search\UserControlSearchStars.resx">
-      <DependentUpon>UserControlSearchStars.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Search\SearchStars.resx">
+      <DependentUpon>SearchStars.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\UserControlSearch.resx">
       <DependentUpon>UserControlSearch.cs</DependentUpon>

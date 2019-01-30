@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             if (e.Index == 0 && e.NewValue == CheckState.Checked)
                 cc.SetChecked(true, ReservedEntries);
 
-            if ((e.Index == 1 && e.NewValue == CheckState.Checked) || (e.Index <= 2 && e.NewValue == CheckState.Unchecked))
+            if ((e.Index == 1 && e.NewValue == CheckState.Checked) )
                 cc.SetChecked(false, ReservedEntries);
 
             if (e.Index >= 2 && e.Index < 2 + extraoptions.Count() && e.NewValue == CheckState.Checked)

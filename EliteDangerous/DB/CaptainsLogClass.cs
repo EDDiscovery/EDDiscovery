@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -25,7 +25,8 @@ namespace EliteDangerousCore.DB
 {
     public class CaptainsLogClass
     {
-        public long id { get; private set; }
+        public long ID { get; private set; }
+        public int Commander { get; private set; }
         public DateTime TimeUTC { get; private set; }
         public string SystemName { get; private set; }
         public string BodyName { get; private set; }
@@ -34,6 +35,7 @@ namespace EliteDangerousCore.DB
         public string Parameters { get; private set; }     // may be null
 
         public DateTime TimeLocal { get { return TimeUTC.ToLocalTime(); } }
+        public DateTime Time(bool utc) { return utc ? TimeUTC : TimeLocal; }
 
         public CaptainsLogClass()
         {
@@ -41,7 +43,8 @@ namespace EliteDangerousCore.DB
 
         public CaptainsLogClass(DataRow dr)
         {
-            id = (long)dr["Id"];
+            ID = (long)dr["Id"];
+            Commander = (int)(long)dr["Commander"];
             TimeUTC = (DateTime)dr["Time"];
             SystemName = (string)dr["SystemName"];
             BodyName = (string)dr["BodyName"];
@@ -53,14 +56,15 @@ namespace EliteDangerousCore.DB
                 Parameters = (string)dr["Parameters"];
         }
 
-        public void Set( string s , string b , DateTime t, string n, string tags = null, string p = null)
+        public void Set( int cmdr, string system , string body , DateTime timeutc, string note, string tags = null, string paras = null)
         {
-            SystemName = s;
-            BodyName = b;
-            TimeUTC = t;
-            Note = n;
+            Commander = cmdr;
+            SystemName = system;
+            BodyName = body;
+            TimeUTC = timeutc;
+            Note = note;
             Tags = tags;
-            Parameters = p;
+            Parameters = paras;
         }
 
         internal bool Add()
@@ -73,8 +77,9 @@ namespace EliteDangerousCore.DB
 
         private bool Add(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into CaptainsLog (Time, SystemName, BodyName, Note, Tags, Parameters) values (@t,@s,@b,@n,@g,@p)"))
+            using (DbCommand cmd = cn.CreateCommand("Insert into CaptainsLog (Commander, Time, SystemName, BodyName, Note, Tags, Parameters) values (@c,@t,@s,@b,@n,@g,@p)"))
             {
+                cmd.AddParameterWithValue("@c", Commander);
                 cmd.AddParameterWithValue("@t", TimeUTC);
                 cmd.AddParameterWithValue("@s", SystemName);
                 cmd.AddParameterWithValue("@b", BodyName);
@@ -85,7 +90,7 @@ namespace EliteDangerousCore.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    ID = (long)cn.SQLScalar( cmd2);
                 }
 
                 return true;
@@ -102,9 +107,10 @@ namespace EliteDangerousCore.DB
 
         private bool Update(SQLiteConnectionUser cn)
         {
-            using (DbCommand cmd = cn.CreateCommand("Update CaptainsLog set Time=@t, SystemName=@s, BodyName=@b, Note=@n, Tags=@g, Parameters=@p where ID=@id"))
+            using (DbCommand cmd = cn.CreateCommand("Update CaptainsLog set Commander=@c, Time=@t, SystemName=@s, BodyName=@b, Note=@n, Tags=@g, Parameters=@p where ID=@id"))
             {
-                cmd.AddParameterWithValue("@id", id);
+                cmd.AddParameterWithValue("@id", ID);
+                cmd.AddParameterWithValue("@c", Commander);
                 cmd.AddParameterWithValue("@t", TimeUTC);
                 cmd.AddParameterWithValue("@s", SystemName);
                 cmd.AddParameterWithValue("@b", BodyName);
@@ -129,7 +135,7 @@ namespace EliteDangerousCore.DB
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM CaptainsLog WHERE id = @id"))
             {
-                cmd.AddParameterWithValue("@id", id);
+                cmd.AddParameterWithValue("@id", ID);
                 cn.SQLNonQueryText( cmd);
                 return true;
             }
@@ -189,14 +195,21 @@ namespace EliteDangerousCore.DB
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.ToString());
                 return false;
             }
         }
 
-        // return any mark
-        //public CaptainsLogClass FindNote(string systemname, string bodyname)
+        public CaptainsLogClass[] Find(DateTime start, DateTime end, bool utc)
+        {
+            if ( utc )
+                return (from x in LogEntries where x.TimeUTC >= start && x.TimeUTC <= end select x).ToArray();
+            else
+                return (from x in LogEntries where x.TimeLocal >= start && x.TimeLocal <= end select x).ToArray();
+        }
+
         //{
         //    CaptainsLogClass bc = globallog.Find(x => x.BodyName.Equals(bodyname, StringComparison.InvariantCultureIgnoreCase) && x.SystemName.Equals(systemname, StringComparison.InvariantCultureIgnoreCase));
         //    return bc;
@@ -222,7 +235,7 @@ namespace EliteDangerousCore.DB
 
         // bk = null, new note, else update. Note systemname/bodyname are not unique.  Id it the only unique property
 
-        public CaptainsLogClass AddOrUpdate(CaptainsLogClass bk, string systemname, string bodyname, DateTime tme, string notes, string tags = null, string parameters = null)
+        public CaptainsLogClass AddOrUpdate(CaptainsLogClass bk, int commander, string systemname, string bodyname, DateTime timeutc, string notes, string tags = null, string parameters = null)
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
@@ -234,7 +247,7 @@ namespace EliteDangerousCore.DB
                 System.Diagnostics.Debug.WriteLine("New log created");
             }
 
-            bk.Set(systemname, bodyname, tme, notes, tags, parameters);
+            bk.Set(commander, systemname, bodyname, timeutc, notes, tags, parameters);
 
             if (addit)
                 bk.Add();
@@ -254,9 +267,9 @@ namespace EliteDangerousCore.DB
         public void Delete(CaptainsLogClass bk)
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            long id = bk.id;
+            long id = bk.ID;
             bk.Delete();
-            globallog.RemoveAll(x => x.id == id);
+            globallog.RemoveAll(x => x.ID == id);
             OnLogEntryChanged?.Invoke(bk, true);
         }
 

@@ -20,7 +20,7 @@ using System.Linq;
 using System.Windows.Forms;
 using BaseUtils;
 
-namespace EDDiscovery.Forms
+namespace EDDiscovery.UserControls
 { 
     public partial class TagsForm : ExtendedControls.DraggableForm
     {

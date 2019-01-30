@@ -39,7 +39,7 @@ namespace EDDiscovery.UserControls
     // Search UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the Search UCCB
     // Make sure DB saving has unique names.. they all share the same displayno.
 
-    public partial class UserControlSearchScans : UserControlCommonBase
+    public partial class SearchScans : UserControlCommonBase
     {
         class Queries
         {
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlSearchScans()
+        public SearchScans()
         {
             InitializeComponent();
             var corner = dataGridView.TopLeftHeaderCell; // work around #1487

@@ -16,7 +16,7 @@
 
 namespace EDDiscovery.UserControls
 {
-    partial class ScanDisplay
+    partial class ScanDisplayControl
     {
         /// <summary> 
         /// Required designer variable.

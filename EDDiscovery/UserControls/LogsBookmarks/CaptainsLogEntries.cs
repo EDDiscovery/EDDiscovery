@@ -26,17 +26,27 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlCaptainsLog : UserControlCommonBase
+    // CL UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the CL UCCB
+    // Make sure DB saving has unique names.. they all share the same displayno.
+
+    public partial class CaptainsLogEntries : UserControlCommonBase
     {
         private string DbColumnSave { get { return DBName("CaptainsLogPanel", "DGVCol"); } }
         private string DbSaveTags { get { return "CaptainsLogPanelTagNames"; } }    // global, not panel related
+        private string DbStartDate { get { return DBName("CaptainsLogPanel", "SD"); } }    
+        private string DbEndDate { get { return DBName("CaptainsLogPanel", "ED"); } }   
 
         public Dictionary<string, Image> tags;
 
+        const int TagHeight = 24;
+        const int TagSpacing = 26;
+        const int MinRowSize = 24;
+
         Timer searchtimer;
+        bool updateprogramatically;
 
         #region init
-        public UserControlCaptainsLog()
+        public CaptainsLogEntries()
         {
             InitializeComponent();
         }
@@ -56,6 +66,11 @@ namespace EDDiscovery.UserControls
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
             LoadTags();
+
+            dateTimePickerStartDate.Value = SQLiteConnectionUser.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
+            dateTimePickerEndDate.Value = SQLiteConnectionUser.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
+            dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
         }
 
         void LoadTags()
@@ -84,8 +99,12 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
+
             string[] list = (from x in tags select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
             SQLiteConnectionUser.PutSettingString(DbSaveTags, string.Join(";",list));
+
+            SQLiteConnectionUser.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
+            SQLiteConnectionUser.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
 
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
@@ -110,23 +129,41 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Debug.WriteLine("Redraw");
             dataGridView.Rows.Clear();
-            
+
+            bool pickstart = dateTimePickerStartDate.Checked;       // Picker is UTC or local dependent on UTC Config selection.. just changes compare against entry
+            bool pickend = dateTimePickerEndDate.Checked;
+            DateTime pickenddate = dateTimePickerEndDate.Value.EndOfDay();
+
+            bool utc = EDDConfig.Instance.DisplayUTC;
+
             foreach (CaptainsLogClass entry in GlobalCaptainsLogList.Instance.LogEntries)
             {
-                //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
-                var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells(dataGridView,
-                    EDDConfig.Instance.DisplayUTC ? entry.TimeUTC : entry.TimeLocal,
-                    entry.SystemName,
-                    entry.BodyName,
-                    entry.Note,
-                    "TBD"
-                 );
+                if (entry.Commander == EDCommander.CurrentCmdrID)
+                {
+                    if ((pickstart == false || entry.Time(utc) >= dateTimePickerStartDate.Value) &&     // >= <= does not care about kind.
+                        (pickend == false || entry.Time(utc) <= pickenddate))
+                    {
+                        //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
+                        var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+                        rw.CreateCells(dataGridView,
+                            entry.Time(utc),
+                            entry.SystemName,
+                            entry.BodyName,
+                            entry.Note,
+                            ""
+                            );
 
-                rw.Tag = entry;
-                rw.Cells[4].Tag = entry.Tags ?? "";
+                        rw.Tag = entry;
+                        rw.Cells[0].Tag = entry.TimeUTC;      // column 0 gets time utc
 
-                dataGridView.Rows.Add(rw);
+                        List<string> taglist = entry.Tags?.SplitNoEmptyStrings(';');        // may be null - we do not use all or none note
+                        rw.Cells[4].Tag = taglist;
+                        if (taglist != null)
+                            rw.MinimumHeight = Math.Max(taglist.Count * TagSpacing, MinRowSize);
+
+                        dataGridView.Rows.Add(rw);
+                    }
+                }
             }
 
             dataGridView.ResumeLayout();
@@ -135,43 +172,113 @@ namespace EDDiscovery.UserControls
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
             if ( textBoxFilter.Text.HasChars() )
-                dataGridView.FilterGridView(textBoxFilter.Text);
+                dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count && dataGridView.Rows[lastrow].Visible)
-                dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[2];
+                dataGridView.CurrentCell = dataGridView.Rows[Math.Min(lastrow, dataGridView.Rows.Count - 1)].Cells[3];
         }
 
+        private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+            List<string> tagstring = rw.Cells[4].Tag as List<string>;
+
+            if (tagstring != null)
+            {
+                System.Diagnostics.Debug.WriteLine("Row " + e.RowIndex + " Tags '" + tagstring.Count + "'");
+
+                Rectangle area = dataGridView.GetCellDisplayRectangle(4, rw.Index, false);
+                area.Width = 24;
+                area.Height = 24;
+
+                int tagscount = 0;
+                for (int i = 0; i < tagstring.Count; i++)
+                {
+                    if (tags.ContainsKey(tagstring[i]))
+                    {
+                        e.Graphics.DrawImage(tags[tagstring[i]], area);
+                        area.Y += 26;
+                        tagscount++;
+                    }
+                }
+            }
+        }
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
             if (e.Column.Index == 0)
                 e.SortDataGridViewColumnDate();
+            else if (e.Column.Index == 4)
+                e.SortDataGridViewColumnTagsAsStringsLists(dataGridView);
         }
 
+        #endregion
+        #region Editing
+
+        // keydown on form, see if to edit
         private void dataGridView_KeyDown(object sender, KeyEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Cell key down" + e.KeyCode);
 
-            if (e.KeyCode == Keys.Enter && dataGridView.CurrentCell != null)
+            if (e.KeyCode == Keys.Enter && dataGridView.CurrentCell != null )
             {
                 DataGridViewRow rw = dataGridView.CurrentCell.OwningRow;
 
                 if (dataGridView.CurrentCell.ColumnIndex == 3)
+                {
                     EditNote(rw);
+                    e.Handled = true;
+                }
                 else if (dataGridView.CurrentCell.ColumnIndex == 4)
+                {
                     EditTags(rw);
-
-                e.Handled = true;
+                    e.Handled = true;
+                }
             }
         }
 
         private void dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex >= 0)    // row -1 is the header..
+            {
+                DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
+
+                if (e.ColumnIndex == 3)
+                    EditNote(rw);
+                else if (e.ColumnIndex == 4)
+                    EditTags(rw);
+            }
+        }
+
+        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
             DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            if (e.ColumnIndex == 3)
-                EditNote(rw);
-            else if (e.ColumnIndex == 4)
-                EditTags(rw);
+
+            if ( e.ColumnIndex == 0 )
+            {
+                string v = rw.Cells[0].Value as string;
+
+                System.Globalization.DateTimeStyles dts = EDDConfig.Instance.DisplayUTC ?
+                    System.Globalization.DateTimeStyles.AssumeUniversal | System.Globalization.DateTimeStyles.AdjustToUniversal :
+                    System.Globalization.DateTimeStyles.AssumeLocal | System.Globalization.DateTimeStyles.AdjustToUniversal;
+
+                if (v!= null && DateTime.TryParse(v, System.Globalization.CultureInfo.CurrentCulture, dts, out DateTime res))
+                {
+                    rw.Cells[0].Tag = res;
+                    StoreRow(rw);
+                }
+                else
+                {
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad Date Time format".Tx(this, "DTF"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DateTime prev = (DateTime)rw.Cells[0].Tag;
+                    rw.Cells[0].Value = EDDConfig.Instance.DisplayUTC ? prev : prev.ToLocalTime();
+                }
+            }
+            else if (e.ColumnIndex <= 2 )
+            {
+                if (rw.Cells[3].Value != null && ((string)rw.Cells[3].Value).Length > 0)
+                    StoreRow(rw);
+            }
         }
 
         private void EditNote(DataGridViewRow rw)
@@ -192,7 +299,7 @@ namespace EDDiscovery.UserControls
         ExtendedControls.CheckedListControlCustom dropdown;
 
         private void EditTags(DataGridViewRow rw)
-        { 
+        {
             List<string> Dickeys = new List<string>(tags.Keys);
             Dickeys.Sort();
             List<Image> images = (from x in Dickeys select tags[x]).ToList();
@@ -203,28 +310,30 @@ namespace EDDiscovery.UserControls
 
             dropdown.Items.AddRange(Dickeys.ToArray());
 
-            string curtags = (rw.Cells[4].Tag as string) ?? "";
+            List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             System.Diagnostics.Debug.WriteLine("Cur keys" + curtags);
-            dropdown.SetChecked(curtags);
-            SetFilterSet();
+            dropdown.SetChecked(curtags);   // null allowed
+            SetAllOrNone();
 
             //dropdown.FormClosed += FilterClosed;
             dropdown.CheckedChanged += (sv, ev) =>
             {
                 dropdown.SetChecked(ev.NewValue == CheckState.Checked, ev.Index, 1);        // force check now (its done after it) so our functions work..
 
-                if (ev.Index == 0 && ev.NewValue == CheckState.Checked)
-                    dropdown.SetChecked(true, 2);
+                if (ev.Index == 0 && ev.NewValue == CheckState.Checked)                     // all, and checked
+                    dropdown.SetChecked(true, 2);                                           // rest go on..
 
-                if ((ev.Index == 1 && ev.NewValue == CheckState.Checked) || (ev.Index <= 2 && ev.NewValue == CheckState.Unchecked))
-                    dropdown.SetChecked(false, 2);
+                if ((ev.Index == 1 && ev.NewValue == CheckState.Checked) )                  // none is checked..
+                    dropdown.SetChecked(false, 2);                                          // rest off
 
-                SetFilterSet();
+                SetAllOrNone();
             };
 
             dropdown.FormClosed += (sv, ev) =>
             {
-                rw.Cells[4].Tag = dropdown.GetChecked(2);
+                List<string> newtags = dropdown.GetCheckedList(2, allornone:false);         // we don't use all or none to store - too difficult!
+                rw.Cells[4].Tag = newtags;
+                rw.MinimumHeight = Math.Max(newtags.Count * TagSpacing, MinRowSize);
                 StoreRow(rw);
                 dataGridView.InvalidateRow(rw.Index);
             };
@@ -236,18 +345,25 @@ namespace EDDiscovery.UserControls
             dropdown.Show(this.FindForm());
         }
 
+        private void SetAllOrNone()
+        {
+            string list = dropdown.GetChecked(2);       // here we use All or None to find out list extent
+            dropdown.SetChecked(list.Equals("All"), 0, 1);
+            dropdown.SetChecked(list.Equals("None"), 1, 1);
+        }
+
         private void StoreRow( DataGridViewRow rw)
         {
             inupdate = true;
             CaptainsLogClass entry = rw.Tag as CaptainsLogClass;        // may be null
 
             string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
-            string tags = rw.Cells[4].Tag != null ? (string)rw.Cells[4].Tag : null;
+            string tags = rw.Cells[4].Tag != null ? string.Join(";", rw.Cells[4].Tag as List<string>) : null;
 
-            CaptainsLogClass cls = GlobalCaptainsLogList.Instance.AddOrUpdate(entry,
+            CaptainsLogClass cls = GlobalCaptainsLogList.Instance.AddOrUpdate(entry, EDCommander.CurrentCmdrID,
                            rw.Cells[1].Value as string,
                            rw.Cells[2].Value as string,
-                           entry?.TimeUTC ?? ((DateTime)rw.Cells[0].Tag),
+                           (DateTime)rw.Cells[0].Tag,       // tag is UTC
                            notes,
                            tags);
 
@@ -256,34 +372,54 @@ namespace EDDiscovery.UserControls
             inupdate = false;
         }
 
-        private void SetFilterSet()
-        {
-            string list = dropdown.GetChecked(2);
-            //Console.WriteLine("List {0}", list);
-            dropdown.SetChecked(list.Equals("All"), 0, 1);
-            dropdown.SetChecked(list.Equals("None"), 1, 1);
-        }
+        #endregion
 
+        #region Interactions with other tabs
+
+        public void SelectDate(DateTime date, bool createnew)       // date is local or utc, dependent on config
+        {
+            updateprogramatically = true;
+            dateTimePickerEndDate.Value = dateTimePickerStartDate.Value = date;
+            dateTimePickerEndDate.Checked = dateTimePickerStartDate.Checked = true;
+
+            updateprogramatically = false;
+            Display();
+
+            if (createnew)
+                buttonNew_Click(null, null);
+        }
 
         #endregion
 
         #region UI
 
-        private void buttonNew_Click(object sender, EventArgs e)
+        private void buttonNew_Click(object nu1, EventArgs nu2)
         {
             HistoryEntry he = discoveryform.history.GetLast;
 
+            DateTime entrytimeutc = DateTime.UtcNow;
+            string system = he?.System.Name ?? "?";
+            string body = he?.WhereAmI ?? "?";
+
+            if (dateTimePickerEndDate.Checked)      // we are not at the current time..
+            {
+                entrytimeutc = EDDConfig.Instance.DisplayUTC ? dateTimePickerEndDate.Value : dateTimePickerEndDate.Value.ToUniversalTime();
+                system = "?";
+                body = "?";
+            }
+
             var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+
             rw.CreateCells(dataGridView,
-                EDDConfig.Instance.DisplayUTC ? DateTime.UtcNow : DateTime.Now,
-                he?.System.Name ?? "?",
-                he?.WhereAmI ?? "?",
+                EDDConfig.Instance.DisplayUTC ? entrytimeutc : entrytimeutc.ToLocalTime(),
+                system,
+                body,
                 "",
                 ""
              );
 
             rw.Tag = null;
-            rw.Cells[0].Tag = DateTime.UtcNow;      // new ones store the date in here.
+            rw.Cells[0].Tag = entrytimeutc;      // new ones store the date in here as UTC see StoreNote
 
             dataGridView.Rows.Insert(0,rw);
         }
@@ -357,7 +493,7 @@ namespace EDDiscovery.UserControls
             searchtimer.Stop();
             this.Cursor = Cursors.WaitCursor;
 
-            dataGridView.FilterGridView(textBoxFilter.Text);
+            dataGridView.FilterGridView(textBoxFilter.Text, checktags: true);
 
             this.Cursor = Cursors.Default;
         }
@@ -381,13 +517,13 @@ namespace EDDiscovery.UserControls
 
         #region Right clicks
 
-        CaptainsLogClass rightclickbookmark = null;
+        CaptainsLogClass rightclickentry = null;
 
         private void dataGridView_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
             {
-                rightclickbookmark = null;
+                rightclickentry = null;
             }
 
             if (dataGridView.SelectedCells.Count < 2 || dataGridView.SelectedRows.Count == 1)      // if single row completely selected, or 1 cell or less..
@@ -400,7 +536,7 @@ namespace EDDiscovery.UserControls
 
                     if (e.Button == MouseButtons.Right)         // right click on travel map, get in before the context menu
                     {
-                        rightclickbookmark = (CaptainsLogClass)dataGridView.Rows[hti.RowIndex].Tag;
+                        rightclickentry = (CaptainsLogClass)dataGridView.Rows[hti.RowIndex].Tag;
                     }
                 }
             }
@@ -408,8 +544,9 @@ namespace EDDiscovery.UserControls
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            toolStripMenuItemGotoStar3dmap.Enabled = rightclickbookmark != null;
-            openInEDSMToolStripMenuItem.Enabled = rightclickbookmark != null;
+            toolStripMenuItemGotoStar3dmap.Enabled = rightclickentry != null;
+            openInEDSMToolStripMenuItem.Enabled = rightclickentry != null;
+            openAScanPanelViewToolStripMenuItem.Enabled = rightclickentry != null;
         }
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
@@ -419,7 +556,7 @@ namespace EDDiscovery.UserControls
 
             if (discoveryform.Map.Is3DMapsRunning)             // double check here! for paranoia.
             {
-                EliteDangerousCore.ISystem s = EliteDangerousCore.SystemCache.FindSystem(rightclickbookmark.SystemName);
+                EliteDangerousCore.ISystem s = EliteDangerousCore.SystemCache.FindSystem(rightclickentry.SystemName);
 
                 if ( s != null && discoveryform.Map.MoveTo((float)s.X, (float)s.Y, (float)s.Z))
                     discoveryform.Map.Show();
@@ -431,44 +568,22 @@ namespace EDDiscovery.UserControls
             this.Cursor = Cursors.WaitCursor;
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
-            if (!edsm.ShowSystemInEDSM(rightclickbookmark.SystemName, null))
+            if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName, null))
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx(this,"SysU"));
 
             this.Cursor = Cursors.Default;
         }
 
-        private void dataGridView_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void openAScanPanelViewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DataGridViewRow rw = dataGridView.Rows[e.RowIndex];
-            string tagstring = rw.Cells[4].Tag as string;
+            ISystem sys = SystemCache.FindSystem(rightclickentry.SystemName);
 
-            if (tagstring != null)
-            {
-                string[] splittags = tagstring.Split(';');
-
-                Rectangle area = dataGridView.GetCellDisplayRectangle(4, rw.Index, false);
-                area.Width = 24;
-                area.Height = 24;
-
-                Handle all
-
-                System.Diagnostics.Debug.WriteLine("Repaint" + rw.Index);
-                for ( int i =0; i < splittags.Length; i++ )
-                {
-                    System.Diagnostics.Debug.WriteLine("with " + splittags[i]);
-                    if (tags.ContainsKey(splittags[i]))
-                    {
-                        e.Graphics.DrawImage(tags[splittags[i]], area);
-                        area.Y += 26;
-                    }
-                }
-
-
-            }
+            if ( sys != null )
+                ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), sys, true, discoveryform.history);
+            else
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No such system".Tx(this, "NSS") + " " + rightclickentry.SystemName, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
-
-
 
         #endregion
 

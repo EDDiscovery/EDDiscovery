@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel = new ExtendedControls.ButtonExt();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelTop = new ExtendedControls.RollUpPanel();
-            this.panelStars = new EDDiscovery.UserControls.ScanDisplay();
+            this.panelStars = new EDDiscovery.UserControls.ScanDisplayControl();
             this.contextMenuStrip.SuspendLayout();
             this.panelControls.SuspendLayout();
             this.rollUpPanelTop.SuspendLayout();
@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.CheckBoxCustom checkBoxCustomHideFullMats;
         private System.Windows.Forms.ToolStripMenuItem showSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cancelShowSystemToolStripMenuItem;
-        private ScanDisplay panelStars;
+        private ScanDisplayControl panelStars;
         private ExtendedControls.ButtonExt buttonSize;
     }
 }
