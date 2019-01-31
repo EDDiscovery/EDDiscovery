@@ -118,11 +118,14 @@ namespace EliteDangerousCore.EDDN
             ["SystemAllegiance"] = true,
             ["SystemEconomy"] = true,
             ["SystemSecondEconomy"] = true,
-            ["SystemFaction"] = true,
+            ["SystemFaction"] = new JObject
+            {
+                ["Name"] = true,
+                ["FactionState"] = true,
+            },
             ["SystemGovernment"] = true,
             ["SystemSecurity"] = true,
             ["Population"] = true,
-            ["FactionState"] = true,
             ["PowerplayState"] = true,
             ["Powers"] = "[]",
             ["Factions"] = new JArray
@@ -175,7 +178,11 @@ namespace EliteDangerousCore.EDDN
             ["MarketID"] = true,
             ["StationName"] = true,
             ["StationType"] = true,
-            ["StationFaction"] = true,
+            ["StationFaction"] = new JObject
+            {
+                ["Name"] = true,
+                ["FactionState"] = true,
+            },
             ["StationAllegiance"] = true,
             ["StationGovernment"] = true,
             ["StationEconomy"] = true,
@@ -200,10 +207,13 @@ namespace EliteDangerousCore.EDDN
             ["StationName"] = true,
             ["StationType"] = true,
             ["DistFromStarLS"] = true,
-            ["StationFaction"] = true,
+            ["StationFaction"] = new JObject
+            {
+                ["Name"] = true,
+                ["FactionState"] = true,
+            },
             ["StationAllegiance"] = true,
             ["StationGovernment"] = true,
-            ["FactionState"] = true,
             ["StationEconomy"] = true,
             ["StationServices"] = "[]",
             ["StationState"] = true,
