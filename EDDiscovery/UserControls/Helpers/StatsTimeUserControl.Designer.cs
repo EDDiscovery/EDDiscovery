@@ -46,13 +46,13 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.panelControls = new System.Windows.Forms.Panel();
-            this.CustomDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
-            this.CustomDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();
-            this.checkBoxCustomStars = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomPlanets = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomGraph = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomText = new ExtendedControls.CheckBoxCustom();
-            this.comboBoxTimeMode = new ExtendedControls.ComboBoxCustom();
+            this.CustomDateTimePickerTo = new ExtendedControls.ExtDateTimePicker();
+            this.CustomDateTimePickerFrom = new ExtendedControls.ExtDateTimePicker();
+            this.checkBoxCustomStars = new ExtendedControls.ExtCheckBox();
+            this.checkBoxCustomPlanets = new ExtendedControls.ExtCheckBox();
+            this.checkBoxCustomGraph = new ExtendedControls.ExtCheckBox();
+            this.checkBoxCustomText = new ExtendedControls.ExtCheckBox();
+            this.comboBoxTimeMode = new ExtendedControls.ExtComboBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.panelControls.SuspendLayout();
             this.SuspendLayout();
@@ -246,13 +246,13 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private System.Windows.Forms.Panel panelControls;
-        internal ExtendedControls.ComboBoxCustom comboBoxTimeMode;
+        internal ExtendedControls.ExtComboBox comboBoxTimeMode;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomStars;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomPlanets;
-        internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerTo;
-        internal ExtendedControls.CustomDateTimePicker CustomDateTimePickerFrom;
-        private CheckBoxCustom checkBoxCustomGraph;
-        private CheckBoxCustom checkBoxCustomText;
+        private ExtendedControls.ExtCheckBox checkBoxCustomStars;
+        private ExtendedControls.ExtCheckBox checkBoxCustomPlanets;
+        internal ExtendedControls.ExtDateTimePicker CustomDateTimePickerTo;
+        internal ExtendedControls.ExtDateTimePicker CustomDateTimePickerFrom;
+        private ExtCheckBox checkBoxCustomGraph;
+        private ExtCheckBox checkBoxCustomText;
     }
 }

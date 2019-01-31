@@ -31,21 +31,21 @@
             this.labelRadMin = new System.Windows.Forms.Label();
             this.labelFilter = new System.Windows.Forms.Label();
             this.labelRadMax = new System.Windows.Forms.Label();
-            this.buttonExtNames = new ExtendedControls.ButtonExt();
-            this.buttonExtEDSM = new ExtendedControls.ButtonExt();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
+            this.buttonExtNames = new ExtendedControls.ExtButton();
+            this.buttonExtEDSM = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.numberBoxMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.numberBoxMinRadius = new ExtendedControls.NumberBoxDouble();
-            this.textBoxSystemName = new ExtendedControls.AutoCompleteTextBox();
-            this.buttonExtDB = new ExtendedControls.ButtonExt();
+            this.textBoxSystemName = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.buttonExtDB = new ExtendedControls.ExtButton();
             this.numberBoxDoubleX = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleY = new ExtendedControls.NumberBoxDouble();
             this.numberBoxDoubleZ = new ExtendedControls.NumberBoxDouble();
             this.labelX = new System.Windows.Forms.Label();
             this.labelY = new System.Windows.Forms.Label();
             this.labelZ = new System.Windows.Forms.Label();
-            this.buttonExtVisited = new ExtendedControls.ButtonExt();
-            this.checkBoxCustomCube = new ExtendedControls.CheckBoxCustom();
+            this.buttonExtVisited = new ExtendedControls.ExtButton();
+            this.checkBoxCustomCube = new ExtendedControls.ExtCheckBox();
             this.SuspendLayout();
             // 
             // labelRadMin
@@ -376,23 +376,23 @@
 
         #endregion
 
-        private ExtendedControls.ButtonExt buttonExtNames;
-        private ExtendedControls.ButtonExt buttonExtEDSM;
-        private ExtendedControls.ButtonExt buttonExtVisited;
-        private ExtendedControls.ButtonExt buttonExtExcel;
-        private ExtendedControls.AutoCompleteTextBox textBoxSystemName;
+        private ExtendedControls.ExtButton buttonExtNames;
+        private ExtendedControls.ExtButton buttonExtEDSM;
+        private ExtendedControls.ExtButton buttonExtVisited;
+        private ExtendedControls.ExtButton buttonExtExcel;
+        private ExtendedControls.ExtTextBoxAutoComplete textBoxSystemName;
         private System.Windows.Forms.Label labelRadMin;
         private System.Windows.Forms.Label labelFilter;
         private System.Windows.Forms.Label labelRadMax;
         private ExtendedControls.NumberBoxDouble numberBoxMinRadius;
         private ExtendedControls.NumberBoxDouble numberBoxMaxRadius;
-        private ExtendedControls.ButtonExt buttonExtDB;
+        private ExtendedControls.ExtButton buttonExtDB;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleX;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleY;
         private ExtendedControls.NumberBoxDouble numberBoxDoubleZ;
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.Label labelY;
         private System.Windows.Forms.Label labelZ;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomCube;
+        private ExtendedControls.ExtCheckBox checkBoxCustomCube;
     }
 }

@@ -435,7 +435,7 @@ namespace EDDiscovery.UserControls
 
         private void ComboBoxCustomLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
             EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
             ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this, "Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -494,7 +494,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxClickThruKey_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
             Keys k = c.Text.ToVkey();
             EDDConfig.Instance.ClickThruKey = k;
         }

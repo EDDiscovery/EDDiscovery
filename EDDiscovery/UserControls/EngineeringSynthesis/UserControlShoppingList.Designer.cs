@@ -45,10 +45,10 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerVertical = new ExtendedControls.SplitContainerCustom();
-            this.pictureBoxList = new ExtendedControls.PictureBoxHotspot();
-            this.splitContainerRightHorz = new ExtendedControls.SplitContainerCustom();
-            this.buttonTechBroker = new ExtendedControls.ButtonExt();
+            this.splitContainerVertical = new ExtendedControls.ExtSplitContainer();
+            this.pictureBoxList = new ExtendedControls.ExtPictureBox();
+            this.splitContainerRightHorz = new ExtendedControls.ExtSplitContainer();
+            this.buttonTechBroker = new ExtendedControls.ExtButton();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonSpecialEffects = new ExtendedControls.ButtonExt();
+            this.buttonSpecialEffects = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -257,9 +257,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.SplitContainerCustom splitContainerVertical;
-        private ExtendedControls.PictureBoxHotspot pictureBoxList;
-        private ExtendedControls.SplitContainerCustom splitContainerRightHorz;
+        private ExtendedControls.ExtSplitContainer splitContainerVertical;
+        private ExtendedControls.ExtPictureBox pictureBoxList;
+        private ExtendedControls.ExtSplitContainer splitContainerRightHorz;
         private UserControlSynthesis userControlSynthesis;
         private UserControlEngineering userControlEngineering;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
@@ -269,8 +269,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem useHistoricMaterialCountsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem useEDSMDataInSystemAvailabilityToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonTechBroker;
+        private ExtendedControls.ExtButton buttonTechBroker;
         private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonSpecialEffects;
+        private ExtendedControls.ExtButton buttonSpecialEffects;
     }
 }

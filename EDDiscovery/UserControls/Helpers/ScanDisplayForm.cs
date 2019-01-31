@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 jm.FillInformation(out string info, out string detailed,1);
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.RichTextBoxScroll), detailed, new Point(0, 40), new Size(width - 20, height - 85), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, 40), new Size(width - 20, height - 85), null));
 
                 title += ", " +"Station".Tx(ty) + ": " + jm.Station;
             }
@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {

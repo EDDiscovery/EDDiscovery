@@ -50,9 +50,9 @@ namespace EDDiscovery.UserControls
             this.ItemName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Information = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mostVisited = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.panelData = new ExtendedControls.PanelVScroll();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
-            this.tabControlCustomStats = new ExtendedControls.TabControlCustom();
+            this.panelData = new ExtendedControls.ExtPanelScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
+            this.tabControlCustomStats = new ExtendedControls.ExtTabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
             this.tabPageTravel = new System.Windows.Forms.TabPage();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             this.ScanNotUsed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlStatsTimeScan = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
-            this.treeViewStats = new ExtendedControls.Controls.TreeViewCustom();
+            this.treeViewStats = new ExtendedControls.Controls.ExtTreeView();
             this.tabPageByShip = new System.Windows.Forms.TabPage();
             this.dataGridViewByShip = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -419,11 +419,11 @@ namespace EDDiscovery.UserControls
 
         private System.Windows.Forms.DataGridView dataGridViewStats;
         private System.Windows.Forms.DataVisualization.Charting.Chart mostVisited;
-        private ExtendedControls.PanelVScroll panelData;
+        private ExtendedControls.ExtPanelScroll panelData;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn Information;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
-        private ExtendedControls.TabControlCustom tabControlCustomStats;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
+        private ExtendedControls.ExtTabControl tabControlCustomStats;
         private System.Windows.Forms.TabPage tabPageGeneral;
         private System.Windows.Forms.TabPage tabPageTravel;
         private System.Windows.Forms.TabPage tabPageScan;
@@ -434,7 +434,7 @@ namespace EDDiscovery.UserControls
         private StatsTimeUserControl userControlStatsTimeScan;
         private System.Windows.Forms.DataGridView dataGridViewScan;
         private System.Windows.Forms.TabPage tabPageGameStats;
-        private ExtendedControls.Controls.TreeViewCustom treeViewStats;
+        private ExtendedControls.Controls.ExtTreeView treeViewStats;
         private System.Windows.Forms.DataGridViewTextBoxColumn ScanNotUsed;
         private System.Windows.Forms.TabPage tabPageByShip;
         private System.Windows.Forms.DataGridView dataGridViewByShip;

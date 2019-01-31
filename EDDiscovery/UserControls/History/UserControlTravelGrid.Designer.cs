@@ -45,13 +45,13 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
-            this.buttonField = new ExtendedControls.ButtonExt();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.checkBoxMoveToTop = new ExtendedControls.ExtCheckBox();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.buttonField = new ExtendedControls.ExtButton();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +81,8 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -586,13 +586,13 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private System.Windows.Forms.Panel TopPanel;
-        private ExtendedControls.ButtonExt buttonFilter;
-        private ExtendedControls.TextBoxBorder textBoxFilter;
+        private ExtendedControls.ExtButton buttonFilter;
+        private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
+        internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         public System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
@@ -609,14 +609,14 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolStripMenuItem removeJournalEntryToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonField;
+        private ExtendedControls.ExtButton buttonField;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem writeEventInfoToLogDebugToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExtExcel;
+        private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
-        private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
+        private ExtendedControls.ExtCheckBox checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsAcrossSelectionToolSpeechStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;

@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        ExtendedControls.CheckedListControlCustom dropdown;
+        ExtendedControls.CheckedListBoxForm dropdown;
 
         private void EditTags(DataGridViewRow rw)
         {
@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Image> images = (from x in Dickeys select tags[x]).ToList();
 
-            dropdown = new ExtendedControls.CheckedListControlCustom();
+            dropdown = new ExtendedControls.CheckedListBoxForm();
             dropdown.Items.Add("All".Tx());       // displayed, translate
             dropdown.Items.Add("None".Tx());
 

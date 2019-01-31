@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonLeft = new ExtendedControls.ButtonExt();
-            this.buttonRight = new ExtendedControls.ButtonExt();
+            this.buttonLeft = new ExtendedControls.ExtButton();
+            this.buttonRight = new ExtendedControls.ExtButton();
             this.SuspendLayout();
             // 
             // buttonLeft
@@ -70,7 +70,7 @@
         #endregion
 
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonLeft;
-        private ExtendedControls.ButtonExt buttonRight;
+        private ExtendedControls.ExtButton buttonLeft;
+        private ExtendedControls.ExtButton buttonRight;
     }
 }

@@ -130,7 +130,7 @@ namespace EDDiscovery.Forms
 
         private void checkBoxRawJournal_CheckedChanged(object sender, EventArgs e)
         {
-            ExtendedControls.CheckBoxCustom control = (ExtendedControls.CheckBoxCustom)sender;
+            ExtendedControls.ExtCheckBox control = (ExtendedControls.ExtCheckBox)sender;
             if (control.Checked && control.Visible)
             {
                 checkBoxIncludeHeader.Checked = false;

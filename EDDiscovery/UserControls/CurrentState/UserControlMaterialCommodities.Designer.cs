@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewMC = new System.Windows.Forms.DataGridView();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -53,13 +53,13 @@ namespace EDDiscovery.UserControls
             this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.textBoxItems2 = new ExtendedControls.TextBoxBorder();
-            this.textBoxItems1 = new ExtendedControls.TextBoxBorder();
+            this.textBoxItems2 = new ExtendedControls.ExtTextBox();
+            this.textBoxItems1 = new ExtendedControls.ExtTextBox();
             this.labelItems2 = new System.Windows.Forms.Label();
             this.labelItems1 = new System.Windows.Forms.Label();
-            this.checkBoxClear = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxClear = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).BeginInit();
@@ -302,9 +302,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewMC;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ShortName;
@@ -314,9 +314,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
         private System.Windows.Forms.Label labelNoItems;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.CheckBoxCustom checkBoxClear;
-        private ExtendedControls.TextBoxBorder textBoxItems2;
-        private ExtendedControls.TextBoxBorder textBoxItems1;
+        private ExtendedControls.ExtCheckBox checkBoxClear;
+        private ExtendedControls.ExtTextBox textBoxItems2;
+        private ExtendedControls.ExtTextBox textBoxItems1;
         private System.Windows.Forms.Label labelItems2;
         private System.Windows.Forms.Label labelItems1;
     }

@@ -32,12 +32,12 @@ namespace EDDiscovery.Forms
         class Group
         {
             public Panel panel;
-            public ExtendedControls.RichTextBoxScroll name;
-            public ExtendedControls.ComboBoxCustom stdtrigger;
-            public ExtendedControls.ButtonExt edittriggerbutton;
-            public ExtendedControls.ButtonExt editbacktriggerbutton;
-            public ExtendedControls.ButtonExt deletebutton;
-            public ExtendedControls.CheckBoxCustom chkbox;
+            public ExtendedControls.ExtRichTextBox name;
+            public ExtendedControls.ExtComboBox stdtrigger;
+            public ExtendedControls.ExtButton edittriggerbutton;
+            public ExtendedControls.ExtButton editbacktriggerbutton;
+            public ExtendedControls.ExtButton deletebutton;
+            public ExtendedControls.ExtCheckBox chkbox;
             public ConditionLists triggercondition;
             public ConditionLists backcondition;
             public int Id;
@@ -97,13 +97,13 @@ namespace EDDiscovery.Forms
             g.panel.BorderStyle = BorderStyle.FixedSingle;
             g.panel.Tag = g;
 
-            g.name = new ExtendedControls.RichTextBoxScroll();
+            g.name = new ExtendedControls.ExtRichTextBox();
             g.name.Location = new Point(4, textheightmargin);      // 8 spacing, allow 8*4 to indent
             g.name.Size = new Size(200, 24);
             g.name.Text = name;
             g.panel.Controls.Add(g.name);
 
-            g.stdtrigger = new ExtendedControls.ComboBoxCustom();
+            g.stdtrigger = new ExtendedControls.ExtComboBox();
             g.stdtrigger.Location = new Point(210, textheightmargin);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
             g.stdtrigger.Items.Add("Custom".Tx(this));
@@ -113,7 +113,7 @@ namespace EDDiscovery.Forms
             g.stdtrigger.Tag = g;
             g.panel.Controls.Add(g.stdtrigger);
 
-            g.edittriggerbutton = new ExtendedControls.ButtonExt();
+            g.edittriggerbutton = new ExtendedControls.ExtButton();
             g.edittriggerbutton.Location = new Point(420, textheightmargin);
             g.edittriggerbutton.Size = new Size(100, 24);
             g.edittriggerbutton.Text = "Trigger".Tx(this);
@@ -121,7 +121,7 @@ namespace EDDiscovery.Forms
             g.edittriggerbutton.Click += EditTrigger_Click;
             g.panel.Controls.Add(g.edittriggerbutton);
 
-            g.editbacktriggerbutton = new ExtendedControls.ButtonExt();
+            g.editbacktriggerbutton = new ExtendedControls.ExtButton();
             g.editbacktriggerbutton.Location = new Point(530, textheightmargin);
             g.editbacktriggerbutton.Size = new Size(100, 24);
             g.editbacktriggerbutton.Text = "Back".Tx(this);
@@ -129,7 +129,7 @@ namespace EDDiscovery.Forms
             g.editbacktriggerbutton.Click += EditBack_Click;
             g.panel.Controls.Add(g.editbacktriggerbutton);
 
-            g.chkbox = new ExtendedControls.CheckBoxCustom();
+            g.chkbox = new ExtendedControls.ExtCheckBox();
             g.chkbox.Location = new Point(640, textheightmargin);
             g.chkbox.Size = new Size(150, 24);
             g.chkbox.Text = "Default".Tx(this);
@@ -138,7 +138,7 @@ namespace EDDiscovery.Forms
             g.chkbox.Click += Chkbox_Click;
             g.panel.Controls.Add(g.chkbox);
 
-            g.deletebutton = new ExtendedControls.ButtonExt();
+            g.deletebutton = new ExtendedControls.ExtButton();
             g.deletebutton.Location = new Point(panelVScrollMain.Width-60, textheightmargin);
             g.deletebutton.Size = new Size(24, 24);
             g.deletebutton.Text = "X";
@@ -204,7 +204,7 @@ namespace EDDiscovery.Forms
         private void Stdtrigger_SelectedIndexChanged(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            ExtendedControls.ComboBoxCustom c = sender as ExtendedControls.ComboBoxCustom;
+            ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
 
             if ( !disabletriggers && c.SelectedIndex>=1)
             {
@@ -277,7 +277,7 @@ namespace EDDiscovery.Forms
         {
             if (!disablechk)
             {
-                ExtendedControls.CheckBoxCustom c = sender as ExtendedControls.CheckBoxCustom;
+                ExtendedControls.ExtCheckBox c = sender as ExtendedControls.ExtCheckBox;
                 disablechk = true;
                 foreach (Group g in groups)
                     g.chkbox.Checked = false;

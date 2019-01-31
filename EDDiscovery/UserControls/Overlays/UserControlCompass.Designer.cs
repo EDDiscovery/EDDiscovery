@@ -45,14 +45,14 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.labelTargetLat = new ExtendedControls.LabelExt();
-            this.labelExtTargetLong = new ExtendedControls.LabelExt();
-            this.checkBoxHideTransparent = new ExtendedControls.CheckBoxCustom();
+            this.labelTargetLat = new ExtendedControls.ExtLabel();
+            this.labelExtTargetLong = new ExtendedControls.ExtLabel();
+            this.checkBoxHideTransparent = new ExtendedControls.ExtCheckBox();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
             this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
-            this.comboBoxBookmarks = new ExtendedControls.ComboBoxCustom();
-            this.labelBookmark = new ExtendedControls.LabelExt();
-            this.buttonNewBookmark = new ExtendedControls.ButtonExt();
+            this.comboBoxBookmarks = new ExtendedControls.ExtComboBox();
+            this.labelBookmark = new ExtendedControls.ExtLabel();
+            this.buttonNewBookmark = new ExtendedControls.ExtButton();
             this.compassControl = new ExtendedControls.CompassControl();
             this.SuspendLayout();
             // 
@@ -256,14 +256,14 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.LabelExt labelTargetLat;
-        private ExtendedControls.LabelExt labelExtTargetLong;
-        private ExtendedControls.CheckBoxCustom checkBoxHideTransparent;
+        private ExtendedControls.ExtLabel labelTargetLat;
+        private ExtendedControls.ExtLabel labelExtTargetLong;
+        private ExtendedControls.ExtCheckBox checkBoxHideTransparent;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;
-        private ExtendedControls.ComboBoxCustom comboBoxBookmarks;
-        private ExtendedControls.LabelExt labelBookmark;
-        private ExtendedControls.ButtonExt buttonNewBookmark;
+        private ExtendedControls.ExtComboBox comboBoxBookmarks;
+        private ExtendedControls.ExtLabel labelBookmark;
+        private ExtendedControls.ExtButton buttonNewBookmark;
         private ExtendedControls.CompassControl compassControl;
     }
 }

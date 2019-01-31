@@ -746,7 +746,7 @@ namespace EDDiscovery.UserControls
             //BaseUtils.LineStore.DumpOrder(Lines, "Reset");
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box, int vspacing , int i )
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box, int vspacing , int i )
         {
             lab.Location = lp;
             box.Location = tp;
@@ -755,7 +755,7 @@ namespace EDDiscovery.UserControls
             lp.Y += vspacing;
         }
 
-        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.RichTextBoxScroll box, int vspacing , int i)
+        void SetPos(ref Point lp, Label lab, Point tp, ExtendedControls.ExtRichTextBox box, int vspacing , int i)
         {
             lab.Location = lp;
             box.Location = tp;
@@ -764,7 +764,7 @@ namespace EDDiscovery.UserControls
             lp.Y += vspacing;
         }
 
-        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.TextBoxBorder box , int i)
+        void OffsetPos(Point lp, Label lab, Point tp, ExtendedControls.ExtTextBox box , int i)
         {
             lab.Location = lp;
             box.Location = tp;
@@ -951,9 +951,9 @@ namespace EDDiscovery.UserControls
             {
                 foreach (Control c in Controls)
                 {
-                    if (c is ExtendedControls.TextBoxBorder)
+                    if (c is ExtendedControls.ExtTextBox)
                     {
-                        ExtendedControls.TextBoxBorder b = c as ExtendedControls.TextBoxBorder;
+                        ExtendedControls.ExtTextBox b = c as ExtendedControls.ExtTextBox;
                         b.ControlBackground = Color.Red;
                         b.BorderStyle = BorderStyle.None;
                         b.BorderColor = Color.Transparent;

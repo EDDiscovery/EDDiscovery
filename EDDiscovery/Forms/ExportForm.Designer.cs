@@ -29,19 +29,19 @@
         private void InitializeComponent()
         {
             this.panelBottom = new System.Windows.Forms.Panel();
-            this.checkBoxRawJournal = new ExtendedControls.CheckBoxCustom();
-            this.buttonCancel = new ExtendedControls.ButtonExt();
+            this.checkBoxRawJournal = new ExtendedControls.ExtCheckBox();
+            this.buttonCancel = new ExtendedControls.ExtButton();
             this.labelCVSSep = new System.Windows.Forms.Label();
-            this.radioButtonSemiColon = new ExtendedControls.RadioButtonCustom();
-            this.buttonExport = new ExtendedControls.ButtonExt();
-            this.radioButtonComma = new ExtendedControls.RadioButtonCustom();
-            this.checkBoxIncludeHeader = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxCustomAutoOpen = new ExtendedControls.CheckBoxCustom();
-            this.customDateTimePickerFrom = new ExtendedControls.CustomDateTimePicker();
-            this.customDateTimePickerTo = new ExtendedControls.CustomDateTimePicker();
-            this.comboBoxCustomExportType = new ExtendedControls.ComboBoxCustom();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.radioButtonSemiColon = new ExtendedControls.ExtRadioButton();
+            this.buttonExport = new ExtendedControls.ExtButton();
+            this.radioButtonComma = new ExtendedControls.ExtRadioButton();
+            this.checkBoxIncludeHeader = new ExtendedControls.ExtCheckBox();
+            this.checkBoxCustomAutoOpen = new ExtendedControls.ExtCheckBox();
+            this.customDateTimePickerFrom = new ExtendedControls.ExtDateTimePicker();
+            this.customDateTimePickerTo = new ExtendedControls.ExtDateTimePicker();
+            this.comboBoxCustomExportType = new ExtendedControls.ExtComboBox();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -258,7 +258,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(327, 2);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -327,21 +327,21 @@
         #endregion
 
         private System.Windows.Forms.Panel panelBottom;
-        private ExtendedControls.RadioButtonCustom radioButtonSemiColon;
-        private ExtendedControls.RadioButtonCustom radioButtonComma;
+        private ExtendedControls.ExtRadioButton radioButtonSemiColon;
+        private ExtendedControls.ExtRadioButton radioButtonComma;
         private System.Windows.Forms.Label labelCVSSep;
-        private ExtendedControls.CheckBoxCustom checkBoxIncludeHeader;
-        private ExtendedControls.CustomDateTimePicker customDateTimePickerFrom;
-        private ExtendedControls.CustomDateTimePicker customDateTimePickerTo;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomExportType;
-        private ExtendedControls.ButtonExt buttonCancel;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtCheckBox checkBoxIncludeHeader;
+        private ExtendedControls.ExtDateTimePicker customDateTimePickerFrom;
+        private ExtendedControls.ExtDateTimePicker customDateTimePickerTo;
+        private ExtendedControls.ExtComboBox comboBoxCustomExportType;
+        private ExtendedControls.ExtButton buttonCancel;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomAutoOpen;
-        private ExtendedControls.ButtonExt buttonExport;
+        private ExtendedControls.ExtCheckBox checkBoxCustomAutoOpen;
+        private ExtendedControls.ExtButton buttonExport;
         private System.Windows.Forms.Panel panelOuter;
-        private ExtendedControls.CheckBoxCustom checkBoxRawJournal;
+        private ExtendedControls.ExtCheckBox checkBoxRawJournal;
         private System.Windows.Forms.Panel panelTop;
     }
 }

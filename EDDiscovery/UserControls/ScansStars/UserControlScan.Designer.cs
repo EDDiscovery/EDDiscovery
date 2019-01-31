@@ -50,16 +50,16 @@ namespace EDDiscovery.UserControls
             this.cancelShowSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblSystemInfo = new System.Windows.Forms.Label();
             this.panelControls = new System.Windows.Forms.Panel();
-            this.checkBoxCustomHideFullMats = new ExtendedControls.CheckBoxCustom();
-            this.chkShowOverlays = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxMaterials = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxMaterialsRare = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxEDSM = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxMoons = new ExtendedControls.CheckBoxCustom();
-            this.buttonSize = new ExtendedControls.ButtonExt();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
+            this.checkBoxCustomHideFullMats = new ExtendedControls.ExtCheckBox();
+            this.chkShowOverlays = new ExtendedControls.ExtCheckBox();
+            this.checkBoxMaterials = new ExtendedControls.ExtCheckBox();
+            this.checkBoxMaterialsRare = new ExtendedControls.ExtCheckBox();
+            this.checkBoxEDSM = new ExtendedControls.ExtCheckBox();
+            this.checkBoxMoons = new ExtendedControls.ExtCheckBox();
+            this.buttonSize = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.rollUpPanelTop = new ExtendedControls.RollUpPanel();
+            this.rollUpPanelTop = new ExtendedControls.ExtPanelRollUp();
             this.panelStars = new EDDiscovery.UserControls.ScanDisplayControl();
             this.contextMenuStrip.SuspendLayout();
             this.panelControls.SuspendLayout();
@@ -373,21 +373,21 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.CheckBoxCustom checkBoxMaterials;
-        private ExtendedControls.CheckBoxCustom checkBoxMoons;
-        private ExtendedControls.CheckBoxCustom checkBoxMaterialsRare;
+        private ExtendedControls.ExtCheckBox checkBoxMaterials;
+        private ExtendedControls.ExtCheckBox checkBoxMoons;
+        private ExtendedControls.ExtCheckBox checkBoxMaterialsRare;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemToolbar;
-        private ExtendedControls.CheckBoxCustom checkBoxEDSM;
-        private ExtendedControls.ButtonExt buttonExtExcel;
+        private ExtendedControls.ExtCheckBox checkBoxEDSM;
+        private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.Label lblSystemInfo;
-        private ExtendedControls.CheckBoxCustom chkShowOverlays;
+        private ExtendedControls.ExtCheckBox chkShowOverlays;
         private System.Windows.Forms.Panel panelControls;
-        private ExtendedControls.RollUpPanel rollUpPanelTop;
-        private ExtendedControls.CheckBoxCustom checkBoxCustomHideFullMats;
+        private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
+        private ExtendedControls.ExtCheckBox checkBoxCustomHideFullMats;
         private System.Windows.Forms.ToolStripMenuItem showSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cancelShowSystemToolStripMenuItem;
         private ScanDisplayControl panelStars;
-        private ExtendedControls.ButtonExt buttonSize;
+        private ExtendedControls.ExtButton buttonSize;
     }
 }

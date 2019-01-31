@@ -31,18 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GalaxySectorSelect));
             this.imageViewer = new EDDiscovery.Forms.ImageViewerWithGrid();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.buttonExtCancel = new ExtendedControls.ButtonExt();
-            this.buttonExtSet = new ExtendedControls.ButtonExt();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.buttonExtCancel = new ExtendedControls.ExtButton();
+            this.buttonExtSet = new ExtendedControls.ExtButton();
             this.labelZ = new System.Windows.Forms.Label();
             this.labelZName = new System.Windows.Forms.Label();
             this.labelX = new System.Windows.Forms.Label();
             this.labelXName = new System.Windows.Forms.Label();
             this.labelID = new System.Windows.Forms.Label();
             this.labelSectorName = new System.Windows.Forms.Label();
-            this.comboBoxSelections = new ExtendedControls.ComboBoxCustom();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.comboBoxSelections = new ExtendedControls.ExtComboBox();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -96,7 +96,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(1122, 6);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -252,18 +252,18 @@
 
         private ImageViewerWithGrid imageViewer;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ComboBoxCustom comboBoxSelections;
+        private ExtendedControls.ExtComboBox comboBoxSelections;
         private System.Windows.Forms.Label labelZ;
         private System.Windows.Forms.Label labelZName;
         private System.Windows.Forms.Label labelX;
         private System.Windows.Forms.Label labelXName;
         private System.Windows.Forms.Label labelID;
         private System.Windows.Forms.Label labelSectorName;
-        private ExtendedControls.ButtonExt buttonExtSet;
-        private ExtendedControls.ButtonExt buttonExtCancel;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
-        private ExtendedControls.StatusStripCustom statusStripCustom;
+        private ExtendedControls.ExtButton buttonExtSet;
+        private ExtendedControls.ExtButton buttonExtCancel;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelOuter;
     }
 }

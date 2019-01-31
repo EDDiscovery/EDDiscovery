@@ -1559,12 +1559,12 @@ namespace EDDiscovery
 
         #region PopOuts
 
-        ExtendedControls.DropDownCustom popoutdropdown;
+        ExtendedControls.ExtListBoxForm popoutdropdown;
 
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
             Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
-            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+            popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
             popoutdropdown.StartPosition = FormStartPosition.Manual;
             popoutdropdown.Location = location;
             popoutdropdown.ItemHeight = 26;

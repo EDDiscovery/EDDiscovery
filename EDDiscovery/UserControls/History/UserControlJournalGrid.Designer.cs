@@ -44,8 +44,8 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewJournal = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,13 +61,13 @@ namespace EDDiscovery.UserControls
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBoxMoveToTop = new ExtendedControls.CheckBoxCustom();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
-            this.buttonField = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.checkBoxMoveToTop = new ExtendedControls.ExtCheckBox();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.buttonField = new ExtendedControls.ExtButton();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.comboBoxJournalWindow = new ExtendedControls.ComboBoxCustom();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.comboBoxJournalWindow = new ExtendedControls.ExtComboBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -410,26 +410,26 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private System.Windows.Forms.DataGridView dataGridViewJournal;
         private System.Windows.Forms.Panel panel1;
-        private ExtendedControls.TextBoxBorder textBoxFilter;
+        private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
-        private ExtendedControls.ButtonExt buttonFilter;
-        private ExtendedControls.ComboBoxCustom comboBoxJournalWindow;
+        private ExtendedControls.ExtButton buttonFilter;
+        private ExtendedControls.ExtComboBox comboBoxJournalWindow;
         private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemStartStop;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonField;
+        private ExtendedControls.ExtButton buttonField;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedScanToEDDNToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsOnThisEntryToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExtExcel;
+        private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
-        private ExtendedControls.CheckBoxCustom checkBoxMoveToTop;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtCheckBox checkBoxMoveToTop;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn Event;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnType;

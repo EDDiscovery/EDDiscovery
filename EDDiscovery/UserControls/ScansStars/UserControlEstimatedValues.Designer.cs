@@ -43,8 +43,8 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new System.Windows.Forms.DataGridView();
             this.BodyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -141,8 +141,8 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewEstimatedValues;
         private System.Windows.Forms.DataGridViewTextBoxColumn BodyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn EstValue;

@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.Panel();
             this.labelExtMin = new System.Windows.Forms.Label();
             this.labelExtMax = new System.Windows.Forms.Label();
-            this.comboBoxView = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxView = new ExtendedControls.ExtComboBox();
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             this.plotViewTop = new OxyPlot.WindowsForms.PlotView();
             this.plotViewSide = new OxyPlot.WindowsForms.PlotView();
             this.plotViewFront = new OxyPlot.WindowsForms.PlotView();
-            this.reportView = new ExtendedControls.TextBoxBorder();
+            this.reportView = new ExtendedControls.ExtTextBox();
             this.panelTop.SuspendLayout();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
@@ -477,7 +477,7 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem toolStripMenuItem35;
         private ToolStripMenuItem toolStripMenuItem4;
-        private ExtendedControls.ComboBoxCustom comboBoxView;
+        private ExtendedControls.ExtComboBox comboBoxView;
         private ToolTip toolTip;
         private DataGridView dataGridList;
         private DataGridViewTextBoxColumn sysName;
@@ -488,7 +488,7 @@ namespace EDDiscovery.UserControls
         private OxyPlot.WindowsForms.PlotView plotViewTop;
         private OxyPlot.WindowsForms.PlotView plotViewSide;
         private OxyPlot.WindowsForms.PlotView plotViewFront;
-        private ExtendedControls.TextBoxBorder reportView;
+        private ExtendedControls.ExtTextBox reportView;
         private Label labelExtMin;
         private Label labelExtMax;
         private MenuStrip menuStrip;

@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery
 {
-    public class MajorTabControl : ExtendedControls.TabControlCustom
+    public class MajorTabControl : ExtendedControls.ExtTabControl
     {
         EDDiscoveryForm eddiscovery;
 

@@ -52,7 +52,7 @@ namespace EDDiscovery
             {
             this.components = new System.ComponentModel.Container();
             this.glControlContainer = new System.Windows.Forms.Panel();
-            this.textboxFrom = new ExtendedControls.AutoCompleteTextBox();
+            this.textboxFrom = new ExtendedControls.ExtTextBoxAutoComplete();
             this.labelSystemCoords = new System.Windows.Forms.Label();
             this.toolStripControls = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonGoBackward = new System.Windows.Forms.ToolStripButton();
@@ -102,20 +102,20 @@ namespace EDDiscovery
             this.playbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip = new ExtendedControls.StatusStripCustom();
+            this.statusStrip = new ExtendedControls.ExtStatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.dotSelectedSystemCoords = new System.Windows.Forms.PictureBox();
             this.dotSystemCoords = new System.Windows.Forms.PictureBox();
-            this.buttonCenter = new ExtendedControls.ButtonExt();
-            this.buttonLookAt = new ExtendedControls.ButtonExt();
+            this.buttonCenter = new ExtendedControls.ExtButton();
+            this.buttonLookAt = new ExtendedControls.ExtButton();
             this.labelClickedSystemCoords = new System.Windows.Forms.Label();
             this.systemselectionMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelAuxControls = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.toolStripControls.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -807,7 +807,7 @@ namespace EDDiscovery
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(1507, 5);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -871,12 +871,12 @@ namespace EDDiscovery
             #endregion
 
             private Panel glControlContainer;
-            internal ExtendedControls.AutoCompleteTextBox textboxFrom;
+            internal ExtendedControls.ExtTextBoxAutoComplete textboxFrom;
             private Label labelSystemCoords;
         private ToolStrip toolStripControls;
         private ToolStripButton toolStripButtonLastKnownPosition;
         private ToolStripButton toolStripButtonGrid;
-        private ExtendedControls.StatusStripCustom statusStrip;
+        private ExtendedControls.ExtStatusStrip statusStrip;
         private ToolStripStatusLabel statusLabel;
         private ToolTip toolTip1;
         private ToolStripButton toolStripButtonPerspective;
@@ -923,8 +923,8 @@ namespace EDDiscovery
         private ToolStripMenuItem LoadFileToolStripMenuItem;
         private ToolStripMenuItem pauseRecordToolStripMenuItem;
         private ToolStripMenuItem recordStepToStepToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonCenter;
-        private ExtendedControls.ButtonExt buttonLookAt;
+        private ExtendedControls.ExtButton buttonCenter;
+        private ExtendedControls.ExtButton buttonLookAt;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem toolStripMenuItemClearRecording;
         private ToolStripMenuItem newRecordStepToolStripMenuItem;
@@ -934,7 +934,7 @@ namespace EDDiscovery
         private ToolStripMenuItem useWhiteForDiscsInsteadOfAssignedMapColourToolStripMenuItem;
         private Panel panelTop;
         private Panel panelOuter;
-        private ExtendedControls.DrawnPanel panel_minimize;
-        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
     }
     }

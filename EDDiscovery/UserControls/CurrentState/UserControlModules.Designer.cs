@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewModules = new System.Windows.Forms.DataGridView();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ItemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,14 +54,14 @@ namespace EDDiscovery.UserControls
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.buttonExtConfigure = new ExtendedControls.ButtonExt();
-            this.buttonExtEDShipyard = new ExtendedControls.ButtonExt();
-            this.buttonExtCoriolis = new ExtendedControls.ButtonExt();
+            this.buttonExtConfigure = new ExtendedControls.ExtButton();
+            this.buttonExtEDShipyard = new ExtendedControls.ExtButton();
+            this.buttonExtCoriolis = new ExtendedControls.ExtButton();
             this.labelVehicle = new System.Windows.Forms.Label();
             this.labelShip = new System.Windows.Forms.Label();
-            this.comboBoxShips = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxShips = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
@@ -317,17 +317,17 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewModules;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
-        internal ExtendedControls.ComboBoxCustom comboBoxShips;
+        internal ExtendedControls.ExtComboBox comboBoxShips;
         private System.Windows.Forms.Label labelShip;
         private System.Windows.Forms.Label labelVehicle;
-        private ExtendedControls.ButtonExt buttonExtCoriolis;
+        private ExtendedControls.ExtButton buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonExtEDShipyard;
-        private ExtendedControls.ButtonExt buttonExtConfigure;
+        private ExtendedControls.ExtButton buttonExtEDShipyard;
+        private ExtendedControls.ExtButton buttonExtConfigure;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;

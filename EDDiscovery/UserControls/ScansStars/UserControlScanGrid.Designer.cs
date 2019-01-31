@@ -45,14 +45,14 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewScangrid = new System.Windows.Forms.DataGridView();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colClass = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.circumstellarZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.distanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.informationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStripSummary = new ExtendedControls.StatusStripCustom();
+            this.statusStripSummary = new ExtendedControls.ExtStatusStrip();
             this.toolStripStatusTotalValue = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusGreen = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
@@ -482,8 +482,8 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewScangrid;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -505,7 +505,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem classToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem distanceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem informationToolStripMenuItem;
-        private ExtendedControls.StatusStripCustom statusStripSummary;
+        private ExtendedControls.ExtStatusStrip statusStripSummary;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusTotalValue;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusGreen;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar;

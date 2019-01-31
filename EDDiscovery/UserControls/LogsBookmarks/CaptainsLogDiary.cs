@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
 
         private string DbDateSave { get { return DBName("CaptainsLogPanel", "DiaryMonth"); } }
         DateTime curmonth;
-        ExtendedControls.ButtonExt[] daybuttons = new ExtendedControls.ButtonExt[31];
+        ExtendedControls.ExtButton[] daybuttons = new ExtendedControls.ExtButton[31];
         Label[] daynameslabels = new Label[7];
         bool layoutdone = false;
         Font calfont;
@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
 
             for (int i = 1; i <= 31; i++)
             {
-                ExtendedControls.ButtonExt b = new ExtendedControls.ButtonExt();
+                ExtendedControls.ExtButton b = new ExtendedControls.ExtButton();
                 b.Click += DayClick;
                 Controls.Add(b);
                 daybuttons[i - 1] = b;
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
 
         private void DayClick(object sender, EventArgs e)       // send a button click up
         {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton b = sender as ExtendedControls.ExtButton;
             int dayno = b.Text.InvariantParseInt(-1);
             ClickedonDate?.Invoke(new DateTime(curmonth.Year, curmonth.Month, dayno), (int)b.Tag == 0);
         }

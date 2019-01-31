@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
 
     public class RecipeFilterSelector
     {
-        ExtendedControls.CheckedListControlCustom cc;
+        ExtendedControls.CheckedListBoxForm cc;
         string dbstring;
         public event EventHandler Changed;
 
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             if (cc == null)
             {
                 dbstring = db;
-                cc = new ExtendedControls.CheckedListControlCustom();
+                cc = new ExtendedControls.CheckedListBoxForm();
                 cc.Items.Add("All");
                 cc.Items.Add("None");
 

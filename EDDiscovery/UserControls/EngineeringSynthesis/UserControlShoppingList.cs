@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
 
                 Font font = discoveryform.theme.GetFont;
                 pictureBoxList.ClearImageList();
-                PictureBoxHotspot.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
+                ExtPictureBox.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
                 font.Dispose();
 

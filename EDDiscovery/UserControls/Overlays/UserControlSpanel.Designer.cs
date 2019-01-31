@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			this.pictureBox = new ExtendedControls.PictureBoxHotspot();
+			this.pictureBox = new ExtendedControls.ExtPictureBox();
 			this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.showSystemInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showCircumstellarZonesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,19 +89,19 @@ namespace EDDiscovery.UserControls
 			this.scanAboveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.scanBelowMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.scanOnTopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.buttonExt0 = new ExtendedControls.ButtonExt();
-			this.buttonExt1 = new ExtendedControls.ButtonExt();
-			this.buttonExt2 = new ExtendedControls.ButtonExt();
-			this.buttonExt3 = new ExtendedControls.ButtonExt();
-			this.buttonExt4 = new ExtendedControls.ButtonExt();
-			this.buttonExt5 = new ExtendedControls.ButtonExt();
-			this.buttonExt6 = new ExtendedControls.ButtonExt();
-			this.buttonExt7 = new ExtendedControls.ButtonExt();
-			this.buttonExt8 = new ExtendedControls.ButtonExt();
-			this.buttonExt9 = new ExtendedControls.ButtonExt();
-			this.buttonExt10 = new ExtendedControls.ButtonExt();
-			this.buttonExt11 = new ExtendedControls.ButtonExt();
-			this.buttonExt12 = new ExtendedControls.ButtonExt();
+			this.buttonExt0 = new ExtendedControls.ExtButton();
+			this.buttonExt1 = new ExtendedControls.ExtButton();
+			this.buttonExt2 = new ExtendedControls.ExtButton();
+			this.buttonExt3 = new ExtendedControls.ExtButton();
+			this.buttonExt4 = new ExtendedControls.ExtButton();
+			this.buttonExt5 = new ExtendedControls.ExtButton();
+			this.buttonExt6 = new ExtendedControls.ExtButton();
+			this.buttonExt7 = new ExtendedControls.ExtButton();
+			this.buttonExt8 = new ExtendedControls.ExtButton();
+			this.buttonExt9 = new ExtendedControls.ExtButton();
+			this.buttonExt10 = new ExtendedControls.ExtButton();
+			this.buttonExt11 = new ExtendedControls.ExtButton();
+			this.buttonExt12 = new ExtendedControls.ExtButton();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			this.contextMenuStrip.SuspendLayout();
 			this.SuspendLayout();
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
 			this.pictureBox.Name = "pictureBox";
 			this.pictureBox.Size = new System.Drawing.Size(892, 680);
 			this.pictureBox.TabIndex = 0;
-			this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
+			this.pictureBox.ClickElement += new ExtendedControls.ExtPictureBox.OnElement(this.pictureBox_ClickElement);
 			this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
 			// 
 			// contextMenuStrip
@@ -780,7 +780,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.PictureBoxHotspot pictureBox;
+        private ExtendedControls.ExtPictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemTargetLine;
         private System.Windows.Forms.ToolStripMenuItem EDSMButtonToolStripMenuItem;
@@ -811,19 +811,19 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem orderTargetDistanceXYZNotesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configureEventFilterToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem configureFieldFilterToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExt0;
-        private ExtendedControls.ButtonExt buttonExt1;
-        private ExtendedControls.ButtonExt buttonExt2;
-        private ExtendedControls.ButtonExt buttonExt3;
-        private ExtendedControls.ButtonExt buttonExt4;
-        private ExtendedControls.ButtonExt buttonExt5;
-        private ExtendedControls.ButtonExt buttonExt6;
-        private ExtendedControls.ButtonExt buttonExt7;
-        private ExtendedControls.ButtonExt buttonExt8;
-        private ExtendedControls.ButtonExt buttonExt9;
-        private ExtendedControls.ButtonExt buttonExt10;
-        private ExtendedControls.ButtonExt buttonExt11;
-        private ExtendedControls.ButtonExt buttonExt12;
+        private ExtendedControls.ExtButton buttonExt0;
+        private ExtendedControls.ExtButton buttonExt1;
+        private ExtendedControls.ExtButton buttonExt2;
+        private ExtendedControls.ExtButton buttonExt3;
+        private ExtendedControls.ExtButton buttonExt4;
+        private ExtendedControls.ExtButton buttonExt5;
+        private ExtendedControls.ExtButton buttonExt6;
+        private ExtendedControls.ExtButton buttonExt7;
+        private ExtendedControls.ExtButton buttonExt8;
+        private ExtendedControls.ExtButton buttonExt9;
+        private ExtendedControls.ExtButton buttonExt10;
+        private ExtendedControls.ExtButton buttonExt11;
+        private ExtendedControls.ExtButton buttonExt12;
         private System.Windows.Forms.ToolStripMenuItem iconToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showSystemInformationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCircumstellarZonesToolStripMenuItem;
