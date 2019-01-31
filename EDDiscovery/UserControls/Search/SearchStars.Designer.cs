@@ -44,8 +44,8 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnCentreDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -182,8 +182,8 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
         private System.Windows.Forms.ToolTip toolTip;
         private FindSystemsUserControl findSystemsUserControl;

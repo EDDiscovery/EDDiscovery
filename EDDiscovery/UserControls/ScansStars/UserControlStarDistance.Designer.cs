@@ -55,8 +55,8 @@ namespace EDDiscovery.UserControls
             this.addToExplorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToExpeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.dataViewScrollerPanel2 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.labelExtMax = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.checkBoxCube = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxCube = new ExtendedControls.ExtCheckBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
@@ -354,8 +354,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem addToTrilaterationToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem viewOnEDSMToolStripMenuItem1;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel2;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewNearest;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
@@ -366,7 +366,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMaxRadius;
         private Panel panelTop;
         private ToolTip toolTip;
-        private ExtendedControls.CheckBoxCustom checkBoxCube;
+        private ExtendedControls.ExtCheckBox checkBoxCube;
         private ToolStripMenuItem addToExplorationToolStripMenuItem;
         private ToolStripMenuItem addToExpeditionToolStripMenuItem;
     }

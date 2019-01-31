@@ -36,9 +36,9 @@ namespace EDDiscovery.Forms
             public Label version;
             public Label shortdesc;
             public Label actionlabel;
-            public ExtendedControls.ButtonExt actionbutton;
-            public ExtendedControls.ButtonExt deletebutton;
-            public ExtendedControls.CheckBoxCustom enabled;
+            public ExtendedControls.ExtButton actionbutton;
+            public ExtendedControls.ExtButton deletebutton;
+            public ExtendedControls.ExtCheckBox enabled;
         }
 
         List<Group> groups = new List<Group>();
@@ -207,7 +207,7 @@ namespace EDDiscovery.Forms
                 g.type.Text = di.itemtype;
                 g.panel.Controls.Add(g.type);
 
-                g.info = new ExtendedControls.ButtonExt();
+                g.info = new ExtendedControls.ExtButton();
                 g.info.Location = new Point(tabs[1], labelheightmargin + 2);      // 8 spacing, allow 8*4 to indent
                 g.info.Size = new Size(16,16);
                 g.info.Text = "i";
@@ -266,7 +266,7 @@ namespace EDDiscovery.Forms
 
                     if (isversion)        
                     {
-                        g.actionbutton = new ExtendedControls.ButtonExt();
+                        g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                         g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20, 24);
                         g.actionbutton.Text = (di.state == VersioningManager.ItemState.NotPresent) ? "Install".Tx(this) : "Update".Tx(this);
@@ -281,7 +281,7 @@ namespace EDDiscovery.Forms
 
                     if (loaded)     // may not be loaded IF its got an error.
                     {
-                        g.actionbutton = new ExtendedControls.ButtonExt();
+                        g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                         g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20, 24);
                         g.actionbutton.Text = "Edit".Tx(this);
@@ -293,7 +293,7 @@ namespace EDDiscovery.Forms
 
                 if ( di.HasLocalCopy)
                 {
-                    g.deletebutton = new ExtendedControls.ButtonExt();
+                    g.deletebutton = new ExtendedControls.ExtButton();
                     g.deletebutton.Location = new Point(tabs[6]+20, labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
                     g.deletebutton.Size = new Size(24, 24);
                     g.deletebutton.Text = "X";
@@ -304,7 +304,7 @@ namespace EDDiscovery.Forms
 
                 if ( di.localenable.HasValue )
                 {
-                    g.enabled = new ExtendedControls.CheckBoxCustom();
+                    g.enabled = new ExtendedControls.ExtCheckBox();
                     g.enabled.Location = new Point(tabs[7], labelheightmargin);
                     g.enabled.Size = new Size(100, 20);
                     g.enabled.Text = "Enabled".Tx(this);
@@ -364,7 +364,7 @@ namespace EDDiscovery.Forms
 
         private void Enabled_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckBoxCustom cb = sender as ExtendedControls.CheckBoxCustom;
+            ExtendedControls.ExtCheckBox cb = sender as ExtendedControls.ExtCheckBox;
             Group g = cb.Tag as Group;
             VersioningManager.SetEnableFlag(g.di, cb.Checked, EDDOptions.Instance.AppDataDirectory);
             changelist[g.di.itemname] = cb.Checked ? "+" : "-";
@@ -372,7 +372,7 @@ namespace EDDiscovery.Forms
 
         private void Actionbutton_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton cb = sender as ExtendedControls.ExtButton;
             Group g = cb.Tag as Group;
 
             if (g.di.localmodified)
@@ -393,7 +393,7 @@ namespace EDDiscovery.Forms
 
         private void ActionbuttonEdit_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton cb = sender as ExtendedControls.ExtButton;
             Group g = cb.Tag as Group;
             EditActionFile?.Invoke(g.name.Text);
             ReadyToDisplay();
@@ -401,7 +401,7 @@ namespace EDDiscovery.Forms
 
         private void Deletebutton_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ButtonExt cb = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton cb = sender as ExtendedControls.ExtButton;
             Group g = cb.Tag as Group;
 
             if (ExtendedControls.MessageBoxTheme.Show(this, string.Format("Do you really want to delete {0}".Tx(this,"DeleteWarn"), g.di.itemname), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)

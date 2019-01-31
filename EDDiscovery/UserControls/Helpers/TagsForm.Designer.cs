@@ -44,18 +44,18 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.buttonCancel = new ExtendedControls.ButtonExt();
-            this.buttonOK = new ExtendedControls.ButtonExt();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.buttonCancel = new ExtendedControls.ExtButton();
+            this.buttonOK = new ExtendedControls.ExtButton();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
             this.panelOuter = new System.Windows.Forms.Panel();
-            this.panelVScroll1 = new ExtendedControls.PanelVScroll();
-            this.vScrollBarCustom2 = new ExtendedControls.VScrollBarCustom();
-            this.buttonMore = new ExtendedControls.ButtonExt();
+            this.panelVScroll1 = new ExtendedControls.ExtPanelScroll();
+            this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
+            this.buttonMore = new ExtendedControls.ExtButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(356, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -246,18 +246,18 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.ButtonExt buttonCancel;
-        private ExtendedControls.ButtonExt buttonOK;
-        private ExtendedControls.StatusStripCustom statusStripCustom;
+        private ExtendedControls.ExtButton buttonCancel;
+        private ExtendedControls.ExtButton buttonOK;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelOK;
         private System.Windows.Forms.Panel panelOuter;
-        private ExtendedControls.PanelVScroll panelVScroll1;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom2;
-        private ExtendedControls.ButtonExt buttonMore;
+        private ExtendedControls.ExtPanelScroll panelVScroll1;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom2;
+        private ExtendedControls.ExtButton buttonMore;
         private System.Windows.Forms.ToolTip toolTip1;
     }
 }

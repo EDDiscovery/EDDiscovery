@@ -257,7 +257,7 @@ namespace EDDiscovery.UserControls
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".Tx(this), routenames, new Size(400, 400)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".Tx(this)));
             f.Trigger += (dialogname, controlname, tag) =>
             {
                 if (controlname != "Route")

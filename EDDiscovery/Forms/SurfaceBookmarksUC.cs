@@ -215,11 +215,11 @@ namespace EDDiscovery.Forms
             int ctrlleft = 150;
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Planet:".Tx(this,"PL"), new Point(10, 40), new Size(140, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.TextBoxBorder),
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
                 "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".Tx(this, "EPN")));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx(this)));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 100, 70), new Size(80, 24), "Press to Accept".Tx(this)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(this)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {

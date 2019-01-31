@@ -44,15 +44,15 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewSynthesis = new System.Windows.Forms.DataGridView();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.chkHistoric = new ExtendedControls.CheckBoxCustom();
-            this.buttonMaterialFilter = new ExtendedControls.ButtonExt();
-            this.buttonFilterLevel = new ExtendedControls.ButtonExt();
-            this.buttonRecipeFilter = new ExtendedControls.ButtonExt();
-            this.buttonClear = new ExtendedControls.ButtonExt();
+            this.chkHistoric = new ExtendedControls.ExtCheckBox();
+            this.buttonMaterialFilter = new ExtendedControls.ExtButton();
+            this.buttonFilterLevel = new ExtendedControls.ExtButton();
+            this.buttonRecipeFilter = new ExtendedControls.ExtButton();
+            this.buttonClear = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -297,16 +297,16 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewSynthesis;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonClear;
-        private ExtendedControls.ButtonExt buttonRecipeFilter;
-        private ExtendedControls.ButtonExt buttonFilterLevel;
-        private ExtendedControls.ButtonExt buttonMaterialFilter;
-        private ExtendedControls.CheckBoxCustom chkHistoric;
+        private ExtendedControls.ExtButton buttonClear;
+        private ExtendedControls.ExtButton buttonRecipeFilter;
+        private ExtendedControls.ExtButton buttonFilterLevel;
+        private ExtendedControls.ExtButton buttonMaterialFilter;
+        private ExtendedControls.ExtCheckBox chkHistoric;
         private System.Windows.Forms.DataGridViewTextBoxColumn UpgradeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Level;
         private System.Windows.Forms.DataGridViewTextBoxColumn MaxCol;

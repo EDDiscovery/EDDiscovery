@@ -54,9 +54,9 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.panelRouteInfo = new System.Windows.Forms.Panel();
-            this.textBoxFileName = new ExtendedControls.TextBoxBorder();
+            this.textBoxFileName = new ExtendedControls.ExtTextBox();
             this.labelFilename = new System.Windows.Forms.Label();
-            this.textBoxRouteName = new ExtendedControls.TextBoxBorder();
+            this.textBoxRouteName = new ExtendedControls.ExtTextBox();
             this.labelName = new System.Windows.Forms.Label();
             this.contextMenuCopyPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.setTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewExplore = new System.Windows.Forms.DataGridView();
-            this.ColumnSystemName = new ExtendedControls.AutoCompleteDGVColumn();
+            this.ColumnSystemName = new ExtendedControls.ExtDataGridViewColumnAutoComplete();
             this.ColumnDist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnY = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -76,8 +76,8 @@ namespace EDDiscovery.UserControls
             this.ColumnPrimaryStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.toolStrip.SuspendLayout();
             this.panelRouteInfo.SuspendLayout();
             this.contextMenuCopyPaste.SuspendLayout();
@@ -481,7 +481,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Panel panelRouteInfo;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private ExtendedControls.TextBoxBorder textBoxRouteName;
+        private ExtendedControls.ExtTextBox textBoxRouteName;
         private System.Windows.Forms.ContextMenuStrip contextMenuCopyPaste;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
@@ -494,12 +494,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
         private System.Windows.Forms.DataGridView dataGridViewExplore;
         private System.Windows.Forms.ToolStripButton toolStripButtonLoad;
-        private ExtendedControls.TextBoxBorder textBoxFileName;
+        private ExtendedControls.ExtTextBox textBoxFileName;
         private System.Windows.Forms.Label labelFilename;
         private System.Windows.Forms.ToolStripButton tsbAddSystems;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
-        private ExtendedControls.AutoCompleteDGVColumn ColumnSystemName;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
+        private ExtendedControls.ExtDataGridViewColumnAutoComplete ColumnSystemName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDist;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnY;

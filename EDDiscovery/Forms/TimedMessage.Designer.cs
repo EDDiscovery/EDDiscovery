@@ -43,7 +43,7 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelMessage = new ExtendedControls.LabelExt();
+            this.labelMessage = new ExtendedControls.ExtLabel();
             this.SuspendLayout();
             // 
             // labelMessage
@@ -73,6 +73,6 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private ExtendedControls.LabelExt labelMessage;
+        private ExtendedControls.ExtLabel labelMessage;
     }
 }

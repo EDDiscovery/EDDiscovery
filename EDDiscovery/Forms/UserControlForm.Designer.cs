@@ -45,17 +45,17 @@ namespace EDDiscovery.Forms
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlForm));
-            this.label_index = new ExtendedControls.LabelExt();
-            this.labelControlText = new ExtendedControls.LabelExt();
+            this.label_index = new ExtendedControls.ExtLabel();
+            this.labelControlText = new ExtendedControls.ExtLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.panel_ontop = new ExtendedControls.DrawnPanel();
-            this.panel_transparent = new ExtendedControls.DrawnPanel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_taskbaricon = new ExtendedControls.DrawnPanel();
-            this.panel_showtitle = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_ontop = new ExtendedControls.ExtPanelDrawn();
+            this.panel_transparent = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_taskbaricon = new ExtendedControls.ExtPanelDrawn();
+            this.panel_showtitle = new ExtendedControls.ExtPanelDrawn();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.statusStripBottom = new ExtendedControls.StatusStripCustom();
+            this.statusStripBottom = new ExtendedControls.ExtStatusStrip();
             this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -88,7 +88,7 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(582, -2);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -102,7 +102,7 @@ namespace EDDiscovery.Forms
             // panel_ontop
             // 
             this.panel_ontop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_ontop.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Floating;
+            this.panel_ontop.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Floating;
             this.panel_ontop.Location = new System.Drawing.Point(558, -2);
             this.panel_ontop.Name = "panel_ontop";
             this.panel_ontop.Padding = new System.Windows.Forms.Padding(6);
@@ -114,7 +114,7 @@ namespace EDDiscovery.Forms
             // panel_transparent
             // 
             this.panel_transparent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_transparent.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Transparent;
+            this.panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Transparent;
             this.panel_transparent.Location = new System.Drawing.Point(486, -2);
             this.panel_transparent.Name = "panel_transparent";
             this.panel_transparent.Padding = new System.Windows.Forms.Padding(6);
@@ -139,7 +139,7 @@ namespace EDDiscovery.Forms
             // panel_taskbaricon
             // 
             this.panel_taskbaricon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_taskbaricon.ImageSelected = ExtendedControls.DrawnPanel.ImageType.WindowInTaskBar;
+            this.panel_taskbaricon.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.WindowInTaskBar;
             this.panel_taskbaricon.Location = new System.Drawing.Point(534, -2);
             this.panel_taskbaricon.Name = "panel_taskbaricon";
             this.panel_taskbaricon.Padding = new System.Windows.Forms.Padding(6);
@@ -151,7 +151,7 @@ namespace EDDiscovery.Forms
             // panel_showtitle
             // 
             this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_showtitle.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Captioned;
+            this.panel_showtitle.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Captioned;
             this.panel_showtitle.Location = new System.Drawing.Point(510, -2);
             this.panel_showtitle.Name = "panel_showtitle";
             this.panel_showtitle.Padding = new System.Windows.Forms.Padding(6);
@@ -208,16 +208,16 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private ExtendedControls.LabelExt label_index;
-        private ExtendedControls.DrawnPanel panel_minimize;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.StatusStripCustom statusStripBottom;
-        private ExtendedControls.LabelExt labelControlText;
-        private ExtendedControls.DrawnPanel panel_ontop;
+        private ExtendedControls.ExtLabel label_index;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtStatusStrip statusStripBottom;
+        private ExtendedControls.ExtLabel labelControlText;
+        private ExtendedControls.ExtPanelDrawn panel_ontop;
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.DrawnPanel panel_transparent;
+        private ExtendedControls.ExtPanelDrawn panel_transparent;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DrawnPanel panel_taskbaricon;
-        private ExtendedControls.DrawnPanel panel_showtitle;
+        private ExtendedControls.ExtPanelDrawn panel_taskbaricon;
+        private ExtendedControls.ExtPanelDrawn panel_showtitle;
     }
 }

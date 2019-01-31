@@ -45,8 +45,8 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelVScroll = new ExtendedControls.PanelVScroll();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.panelVScroll = new ExtendedControls.ExtPanelScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.panelVScroll.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
         #endregion
 
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.PanelVScroll panelVScroll;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
+        private ExtendedControls.ExtPanelScroll panelVScroll;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
     }
 }

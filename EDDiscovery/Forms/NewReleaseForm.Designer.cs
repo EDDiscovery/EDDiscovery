@@ -43,21 +43,21 @@ namespace EDDiscovery.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxReleaseName = new ExtendedControls.TextBoxBorder();
+            this.textBoxReleaseName = new ExtendedControls.ExtTextBox();
             this.labelName = new System.Windows.Forms.Label();
             this.labelURL = new System.Windows.Forms.Label();
-            this.textBoxGitHubURL = new ExtendedControls.TextBoxBorder();
-            this.buttonUrlOpen = new ExtendedControls.ButtonExt();
-            this.richTextBoxReleaseInfo = new ExtendedControls.RichTextBoxScroll();
+            this.textBoxGitHubURL = new ExtendedControls.ExtTextBox();
+            this.buttonUrlOpen = new ExtendedControls.ExtButton();
+            this.richTextBoxReleaseInfo = new ExtendedControls.ExtRichTextBox();
             this.labelRelease = new System.Windows.Forms.Label();
-            this.buttonExeInstaller = new ExtendedControls.ButtonExt();
-            this.buttonPortablezip = new ExtendedControls.ButtonExt();
+            this.buttonExeInstaller = new ExtendedControls.ExtButton();
+            this.buttonPortablezip = new ExtendedControls.ExtButton();
             this.labelDownload = new System.Windows.Forms.Label();
-            this.buttonMsiInstaller = new ExtendedControls.ButtonExt();
-            this.btnClose = new ExtendedControls.ButtonExt();
+            this.buttonMsiInstaller = new ExtendedControls.ExtButton();
+            this.btnClose = new ExtendedControls.ExtButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.pnlCaption = new System.Windows.Forms.Panel();
-            this.pnlClose = new ExtendedControls.DrawnPanel();
+            this.pnlClose = new ExtendedControls.ExtPanelDrawn();
             this.lblCaption = new System.Windows.Forms.Label();
             this.pnlBack = new System.Windows.Forms.Panel();
             this.panelMain.SuspendLayout();
@@ -333,22 +333,22 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private ExtendedControls.TextBoxBorder textBoxReleaseName;
+        private ExtendedControls.ExtTextBox textBoxReleaseName;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.Label labelURL;
-        private ExtendedControls.TextBoxBorder textBoxGitHubURL;
-        private ExtendedControls.ButtonExt buttonUrlOpen;
-        private ExtendedControls.RichTextBoxScroll richTextBoxReleaseInfo;
+        private ExtendedControls.ExtTextBox textBoxGitHubURL;
+        private ExtendedControls.ExtButton buttonUrlOpen;
+        private ExtendedControls.ExtRichTextBox richTextBoxReleaseInfo;
         private System.Windows.Forms.Label labelRelease;
-        private ExtendedControls.ButtonExt buttonExeInstaller;
-        private ExtendedControls.ButtonExt buttonPortablezip;
+        private ExtendedControls.ExtButton buttonExeInstaller;
+        private ExtendedControls.ExtButton buttonPortablezip;
         private System.Windows.Forms.Label labelDownload;
-        private ExtendedControls.ButtonExt buttonMsiInstaller;
-        private ExtendedControls.ButtonExt btnClose;
+        private ExtendedControls.ExtButton buttonMsiInstaller;
+        private ExtendedControls.ExtButton btnClose;
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel pnlCaption;
         private System.Windows.Forms.Label lblCaption;
-        private ExtendedControls.DrawnPanel pnlClose;
+        private ExtendedControls.ExtPanelDrawn pnlClose;
         private System.Windows.Forms.Panel pnlBack;
     }
 }

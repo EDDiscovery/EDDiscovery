@@ -45,10 +45,10 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelStars = new ExtendedControls.PanelVScroll();
-            this.rtbNodeInfo = new ExtendedControls.RichTextBoxScroll();
-            this.imagebox = new ExtendedControls.PictureBoxHotspot();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.panelStars = new ExtendedControls.ExtPanelScroll();
+            this.rtbNodeInfo = new ExtendedControls.ExtRichTextBox();
+            this.imagebox = new ExtendedControls.ExtPictureBox();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelStars.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
@@ -156,10 +156,10 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.PanelVScroll panelStars;
+        private ExtendedControls.ExtPanelScroll panelStars;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
-        private ExtendedControls.RichTextBoxScroll rtbNodeInfo;
-        private ExtendedControls.PictureBoxHotspot imagebox;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
+        private ExtendedControls.ExtRichTextBox rtbNodeInfo;
+        private ExtendedControls.ExtPictureBox imagebox;
     }
 }

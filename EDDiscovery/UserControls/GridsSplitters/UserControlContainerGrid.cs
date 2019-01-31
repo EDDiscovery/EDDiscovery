@@ -40,7 +40,7 @@ namespace EDDiscovery.UserControls
         private string DbPositions { get { return DBName("GridControlPositons" ); } }
         private string DbZOrder { get { return DBName("GridControlZOrder" ); } }
 
-        ExtendedControls.DropDownCustom popoutdropdown;
+        ExtendedControls.ExtListBoxForm popoutdropdown;
 
         public UserControlContainerGrid()
         {
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
-            popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+            popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
 
             popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();

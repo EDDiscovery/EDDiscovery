@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox = new ExtendedControls.PictureBoxHotspot();
+            this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showEDSMStartButtonsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTargetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(728, 570);
             this.pictureBox.TabIndex = 0;
-            this.pictureBox.ClickElement += new ExtendedControls.PictureBoxHotspot.OnElement(this.pictureBox_ClickElement);
+            this.pictureBox.ClickElement += new ExtendedControls.ExtPictureBox.OnElement(this.pictureBox_ClickElement);
             // 
             // contextMenuStrip
             // 
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.PictureBoxHotspot pictureBox;
+        private ExtendedControls.ExtPictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem showEDSMStartButtonsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showFuelLevelToolStripMenuItem;

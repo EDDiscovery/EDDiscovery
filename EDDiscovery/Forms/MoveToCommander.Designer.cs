@@ -45,9 +45,9 @@ namespace EDDiscovery.Forms
         {
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonExtCancel = new ExtendedControls.ButtonExt();
-            this.buttonTransfer = new ExtendedControls.ButtonExt();
-            this.comboBoxCommanders = new ExtendedControls.ComboBoxCustom();
+            this.buttonExtCancel = new ExtendedControls.ExtButton();
+            this.buttonTransfer = new ExtendedControls.ExtButton();
+            this.comboBoxCommanders = new ExtendedControls.ExtComboBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -139,10 +139,10 @@ namespace EDDiscovery.Forms
 
         #endregion
 
-        private ExtendedControls.ComboBoxCustom comboBoxCommanders;
+        private ExtendedControls.ExtComboBox comboBoxCommanders;
         private System.Windows.Forms.Label label1;
-        private ExtendedControls.ButtonExt buttonTransfer;
+        private ExtendedControls.ExtButton buttonTransfer;
         private System.Windows.Forms.Panel panel1;
-        private ExtendedControls.ButtonExt buttonExtCancel;
+        private ExtendedControls.ExtButton buttonExtCancel;
     }
 }

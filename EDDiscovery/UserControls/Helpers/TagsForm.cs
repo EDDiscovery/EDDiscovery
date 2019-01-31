@@ -29,9 +29,9 @@ namespace EDDiscovery.UserControls
         public class Group
         {
             public Panel panel;
-            public ExtendedControls.TextBoxBorder name;
-            public ExtendedControls.ButtonExt icon;
-            public ExtendedControls.ButtonExt del;
+            public ExtendedControls.ExtTextBox name;
+            public ExtendedControls.ExtButton icon;
+            public ExtendedControls.ExtButton del;
         }
 
         List<Group> groups;
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             g.panel = new Panel();
             g.panel.BorderStyle = BorderStyle.FixedSingle;
 
-            g.name = new ExtendedControls.TextBoxBorder();
+            g.name = new ExtendedControls.ExtTextBox();
             g.name.Size = new Size(250, 24);
             g.name.Location = new Point(panelmargin, panelmargin+6);
             g.name.Text = var;
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
             int nextpos = g.name.Right;
 
-            g.icon = new ExtendedControls.ButtonExt();
+            g.icon = new ExtendedControls.ExtButton();
             g.icon.Size = new Size(28, 28);
             g.icon.Location = new Point(g.name.Right + 8, panelmargin);
             g.icon.Image = img;
@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls
             toolTip1.SetToolTip(g.icon, "Select image for this tag");
             g.panel.Controls.Add(g.icon);
 
-            g.del = new ExtendedControls.ButtonExt();
+            g.del = new ExtendedControls.ExtButton();
             g.del.Size = new Size(24, 24);
             g.del.Location = new Point(g.icon.Right + 24, panelmargin+2);
             g.del.Text = "X";
@@ -147,13 +147,13 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
-        ExtendedControls.DropDownCustom dropdown;
+        ExtendedControls.ExtListBoxForm dropdown;
 
         private void Icon_Click(object sender, EventArgs e)
         {
-            ExtendedControls.ButtonExt but = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton but = sender as ExtendedControls.ExtButton;
 
-            dropdown = new ExtendedControls.DropDownCustom("", true);
+            dropdown = new ExtendedControls.ExtListBoxForm("", true);
 
             List<string> Dickeys = new List<string>(EDDiscovery.Icons.IconSet.Icons.Keys);
             Dickeys.Sort();
@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
 
         private void Del_Clicked(object sender, EventArgs e)
         {
-            ExtendedControls.ButtonExt b = sender as ExtendedControls.ButtonExt;
+            ExtendedControls.ExtButton b = sender as ExtendedControls.ExtButton;
             Group g = (Group)b.Tag;
 
             g.panel.Controls.Clear();

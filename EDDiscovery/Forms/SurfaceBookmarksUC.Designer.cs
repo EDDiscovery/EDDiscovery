@@ -37,8 +37,8 @@ namespace EDDiscovery.Forms
             this.addPlanetManuallyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelSurface = new System.Windows.Forms.Label();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewMarks = new System.Windows.Forms.DataGridView();
             this.BodyName = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.SurfaceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -231,8 +231,8 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.DataGridViewTextBoxColumn Longitude;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Valid;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addPlanetManuallyToolStripMenuItem;
     }

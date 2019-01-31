@@ -30,16 +30,16 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.buttonExtImport = new ExtendedControls.ButtonExt();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
-            this.buttonDelete = new ExtendedControls.ButtonExt();
-            this.buttonNew = new ExtendedControls.ButtonExt();
-            this.buttonEdit = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.buttonExtImport = new ExtendedControls.ExtButton();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.buttonDelete = new ExtendedControls.ExtButton();
+            this.buttonNew = new ExtendedControls.ExtButton();
+            this.buttonEdit = new ExtendedControls.ExtButton();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewBookMarks = new System.Windows.Forms.DataGridView();
             this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -344,16 +344,16 @@
         #endregion
 
         private System.Windows.Forms.Panel panelButtons;
-        private ExtendedControls.TextBoxBorder textBoxFilter;
+        private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.DataGridView dataGridViewBookMarks;
         private EDDiscovery.Forms.SurfaceBookmarkUserControl userControlSurfaceBookmarks;
-        private ExtendedControls.ButtonExt buttonNew;
-        private ExtendedControls.ButtonExt buttonEdit;
-        private ExtendedControls.ButtonExt buttonDelete;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtButton buttonNew;
+        private ExtendedControls.ExtButton buttonEdit;
+        private ExtendedControls.ExtButton buttonDelete;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBookmarkName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescription;
@@ -364,7 +364,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripBookmarks;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoStar3dmap;
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExtExcel;
-        private ExtendedControls.ButtonExt buttonExtImport;
+        private ExtendedControls.ExtButton buttonExtExcel;
+        private ExtendedControls.ExtButton buttonExtImport;
     }
 }

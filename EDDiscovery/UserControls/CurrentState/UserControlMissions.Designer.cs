@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanelCurrent = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanelCurrent = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewCurrent = new System.Windows.Forms.DataGridView();
             this.cColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColStartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,9 +55,9 @@ namespace EDDiscovery.UserControls
             this.cColTargetFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomCur = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomCur = new ExtendedControls.ExtScrollBar();
             this.panelPrev = new System.Windows.Forms.Panel();
-            this.dataViewScrollerPanelPrev = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanelPrev = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewPrevious = new System.Windows.Forms.DataGridView();
             this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,12 +68,12 @@ namespace EDDiscovery.UserControls
             this.pColTargetFaction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomPrev = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomPrev = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelValue = new System.Windows.Forms.Label();
             this.labelTo = new System.Windows.Forms.Label();
-            this.customDateTimePickerEnd = new ExtendedControls.CustomDateTimePicker();
-            this.customDateTimePickerStart = new ExtendedControls.CustomDateTimePicker();
+            this.customDateTimePickerEnd = new ExtendedControls.ExtDateTimePicker();
+            this.customDateTimePickerStart = new ExtendedControls.ExtDateTimePicker();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
@@ -498,20 +498,20 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanelCurrent;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelCurrent;
         private System.Windows.Forms.DataGridView dataGridViewCurrent;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomCur;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomCur;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelPrev;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.DataGridView dataGridViewPrevious;
         private System.Windows.Forms.Panel panelCurrent;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanelPrev;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomPrev;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelPrev;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomPrev;
         private System.Windows.Forms.SplitContainer splitContainerMissions;
-        private ExtendedControls.CustomDateTimePicker customDateTimePickerStart;
+        private ExtendedControls.ExtDateTimePicker customDateTimePickerStart;
         private System.Windows.Forms.Label labelTo;
-        private ExtendedControls.CustomDateTimePicker customDateTimePickerEnd;
+        private ExtendedControls.ExtDateTimePicker customDateTimePickerEnd;
         private System.Windows.Forms.Label labelValue;
         private System.Windows.Forms.DataGridViewTextBoxColumn cColName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cColStartDate;

@@ -47,8 +47,8 @@ namespace EDDiscovery.Forms
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelDevelopersEnum = new System.Windows.Forms.Label();
-            this.buttonOK = new ExtendedControls.ButtonExt();
-            this.textBoxLicense = new ExtendedControls.RichTextBoxScroll();
+            this.buttonOK = new ExtendedControls.ExtButton();
+            this.textBoxLicense = new ExtendedControls.ExtRichTextBox();
             this.panelLinks = new System.Windows.Forms.Panel();
             this.linkLabelDeveloperChat = new System.Windows.Forms.LinkLabel();
             this.linkLabelHelp = new System.Windows.Forms.LinkLabel();
@@ -65,7 +65,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation = new System.Windows.Forms.Label();
             this.panelLogo = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
             this.panelLinks.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelLogo)).BeginInit();
@@ -368,9 +368,9 @@ namespace EDDiscovery.Forms
 
         #endregion
         private System.Windows.Forms.Label labelDevelopersEnum;
-        private ExtendedControls.ButtonExt buttonOK;
+        private ExtendedControls.ExtButton buttonOK;
         internal System.Windows.Forms.Label labelVersion;
-        private ExtendedControls.RichTextBoxScroll textBoxLicense;
+        private ExtendedControls.ExtRichTextBox textBoxLicense;
         private System.Windows.Forms.Panel panelLinks;
         internal System.Windows.Forms.Label labelLinks;
         private System.Windows.Forms.LinkLabel linkLabelEliteDangerous;
@@ -387,6 +387,6 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Label labelNoAffiliation;
         private System.Windows.Forms.PictureBox panelLogo;
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.DrawnPanel panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_close;
     }
 }

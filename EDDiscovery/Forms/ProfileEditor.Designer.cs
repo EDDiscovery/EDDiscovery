@@ -29,18 +29,18 @@
         private void InitializeComponent()
         {
             this.panelOuter = new System.Windows.Forms.Panel();
-            this.panelVScrollMain = new ExtendedControls.PanelVScroll();
-            this.buttonMore = new ExtendedControls.ButtonExt();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.panelVScrollMain = new ExtendedControls.ExtPanelScroll();
+            this.buttonMore = new ExtendedControls.ExtButton();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
-            this.buttonExtGlobals = new ExtendedControls.ButtonExt();
-            this.buttonExtCancel = new ExtendedControls.ButtonExt();
-            this.buttonOK = new ExtendedControls.ButtonExt();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.buttonExtGlobals = new ExtendedControls.ExtButton();
+            this.buttonExtCancel = new ExtendedControls.ExtButton();
+            this.buttonOK = new ExtendedControls.ExtButton();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelOuter.SuspendLayout();
             this.panelVScrollMain.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -137,7 +137,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(832, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -233,17 +233,17 @@
         #endregion
 
         private System.Windows.Forms.Panel panelOuter;
-        private ExtendedControls.PanelVScroll panelVScrollMain;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtPanelScroll panelVScrollMain;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelOK;
-        private ExtendedControls.ButtonExt buttonExtGlobals;
-        private ExtendedControls.ButtonExt buttonOK;
-        private ExtendedControls.ButtonExt buttonExtCancel;
-        private ExtendedControls.StatusStripCustom statusStripCustom;
-        private ExtendedControls.ButtonExt buttonMore;
+        private ExtendedControls.ExtButton buttonExtGlobals;
+        private ExtendedControls.ExtButton buttonOK;
+        private ExtendedControls.ExtButton buttonExtCancel;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
+        private ExtendedControls.ExtButton buttonMore;
     }
 }

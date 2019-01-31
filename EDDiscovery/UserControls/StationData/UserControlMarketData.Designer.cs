@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewMarketData = new System.Windows.Forms.DataGridView();
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,13 +56,13 @@ namespace EDDiscovery.UserControls
             this.GalAvgCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitToCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProfitFromCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.checkBoxAutoSwap = new ExtendedControls.CheckBoxCustom();
-            this.checkBoxBuyOnly = new ExtendedControls.CheckBoxCustom();
+            this.checkBoxAutoSwap = new ExtendedControls.ExtCheckBox();
+            this.checkBoxBuyOnly = new ExtendedControls.ExtCheckBox();
             this.labelVs = new System.Windows.Forms.Label();
-            this.comboBoxCustomTo = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCustomFrom = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxCustomTo = new ExtendedControls.ExtComboBox();
+            this.comboBoxCustomFrom = new ExtendedControls.ExtComboBox();
             this.labelLocation = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
@@ -364,16 +364,16 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewMarketData;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Label labelLocation;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomTo;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomFrom;
+        private ExtendedControls.ExtComboBox comboBoxCustomTo;
+        private ExtendedControls.ExtComboBox comboBoxCustomFrom;
         private System.Windows.Forms.Label labelVs;
-        private ExtendedControls.CheckBoxCustom checkBoxBuyOnly;
+        private ExtendedControls.ExtCheckBox checkBoxBuyOnly;
         private System.Windows.Forms.DataGridViewTextBoxColumn CategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn SellCol;
@@ -384,6 +384,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn GalAvgCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitToCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ProfitFromCol;
-        private ExtendedControls.CheckBoxCustom checkBoxAutoSwap;
+        private ExtendedControls.ExtCheckBox checkBoxAutoSwap;
     }
 }

@@ -47,15 +47,15 @@ namespace EDDiscovery.UserControls
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelYard = new System.Windows.Forms.Label();
             this.labelYardSel = new System.Windows.Forms.Label();
-            this.comboBoxYards = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxYards = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewShips = new System.Windows.Forms.DataGridView();
             this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.panelButtons.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShips)).BeginInit();
@@ -224,13 +224,13 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.Panel panelButtons;
-        internal ExtendedControls.ComboBoxCustom comboBoxYards;
+        internal ExtendedControls.ExtComboBox comboBoxYards;
         private System.Windows.Forms.Label labelYardSel;
         private System.Windows.Forms.Label labelYard;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
         private System.Windows.Forms.DataGridView dataGridViewShips;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Col3;

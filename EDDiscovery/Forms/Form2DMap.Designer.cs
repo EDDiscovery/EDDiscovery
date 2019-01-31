@@ -55,12 +55,12 @@ namespace EDDiscovery
             this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
             this.imageViewer = new ExtendedControls.ImageViewer();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelOuter = new System.Windows.Forms.Panel();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.toolStrip.SuspendLayout();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -219,7 +219,7 @@ namespace EDDiscovery
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(925, 5);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -310,11 +310,11 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripButton toolStripButtonStars;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelOuter;
-        private ExtendedControls.StatusStripCustom statusStripCustom;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;

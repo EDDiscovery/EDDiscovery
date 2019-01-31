@@ -44,19 +44,19 @@ namespace EDDiscovery.Forms
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panelVScroll = new ExtendedControls.PanelVScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.VScrollBarCustom();
-            this.buttonMore = new ExtendedControls.ButtonExt();
-            this.richTextBoxScrollDescription = new ExtendedControls.RichTextBoxScroll();
+            this.panelVScroll = new ExtendedControls.ExtPanelScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.buttonMore = new ExtendedControls.ExtButton();
+            this.richTextBoxScrollDescription = new ExtendedControls.ExtRichTextBox();
             this.panelOK = new System.Windows.Forms.Panel();
-            this.buttonExtGlobals = new ExtendedControls.ButtonExt();
-            this.buttonOK = new ExtendedControls.ButtonExt();
-            this.statusStripCustom = new ExtendedControls.StatusStripCustom();
+            this.buttonExtGlobals = new ExtendedControls.ExtButton();
+            this.buttonOK = new ExtendedControls.ExtButton();
+            this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelTop.SuspendLayout();
             this.panelOuter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -95,7 +95,7 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(1175, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -295,18 +295,18 @@ namespace EDDiscovery.Forms
         #endregion
 
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
-        private ExtendedControls.StatusStripCustom statusStripCustom;
+        private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelOuter;
         private System.Windows.Forms.Panel panelOK;
-        private ExtendedControls.ButtonExt buttonOK;
-        private ExtendedControls.RichTextBoxScroll richTextBoxScrollDescription;
-        private ExtendedControls.PanelVScroll panelVScroll;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom1;
+        private ExtendedControls.ExtButton buttonOK;
+        private ExtendedControls.ExtRichTextBox richTextBoxScrollDescription;
+        private ExtendedControls.ExtPanelScroll panelVScroll;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private ExtendedControls.ButtonExt buttonExtGlobals;
-        private ExtendedControls.ButtonExt buttonMore;
+        private ExtendedControls.ExtButton buttonExtGlobals;
+        private ExtendedControls.ExtButton buttonMore;
     }
 }

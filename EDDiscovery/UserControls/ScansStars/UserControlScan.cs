@@ -292,10 +292,10 @@ namespace EDDiscovery.UserControls
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
             int width = 700;
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(160, 24), null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.AutoCompleteTextBox), "", new Point(180, 40), new Size(width-180-20, 24), null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(180, 40), new Size(width-180-20, 24), null));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24),""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24),""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -307,7 +307,7 @@ namespace EDDiscovery.UserControls
             };
 
             f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"),null,null);
-            f.GetControl<ExtendedControls.AutoCompleteTextBox>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
+            f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
             DialogResult res = f.ShowDialog(this.FindForm());
 
             if ( res == DialogResult.OK )
@@ -330,12 +330,12 @@ namespace EDDiscovery.UserControls
         }
 
 
-        DropDownCustom dropdown;
+        ExtListBoxForm dropdown;
 
         private void buttonSize_Click(object sender, EventArgs e)
         {
             // 128,96,64,48
-            dropdown = new DropDownCustom("", true);
+            dropdown = new ExtListBoxForm("", true);
 
             Image[] imagelist = new Image[] { global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeMedium ,

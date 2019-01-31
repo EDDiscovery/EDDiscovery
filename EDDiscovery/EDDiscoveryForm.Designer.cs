@@ -88,10 +88,10 @@ namespace EDDiscovery
             this.labelInfoBoxTop = new System.Windows.Forms.Label();
             this.label_version = new System.Windows.Forms.Label();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
-            this.buttonReloadActions = new ExtendedControls.ButtonExt();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.statusStrip = new ExtendedControls.StatusStripCustom();
+            this.buttonReloadActions = new ExtendedControls.ExtButton();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.statusStrip = new ExtendedControls.ExtStatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -99,16 +99,16 @@ namespace EDDiscovery
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Hide = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconMenu_Exit = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelToolBar = new ExtendedControls.RollUpPanel();
-            this.comboBoxCustomProfiles = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCommander = new ExtendedControls.ComboBoxCustom();
-            this.buttonExtEDSMSync = new ExtendedControls.ButtonExt();
-            this.buttonExtPopOut = new ExtendedControls.ButtonExt();
-            this.buttonExtEditAddOns = new ExtendedControls.ButtonExt();
-            this.buttonExtManageAddOns = new ExtendedControls.ButtonExt();
-            this.buttonExtRefresh = new ExtendedControls.ButtonExt();
-            this.buttonExt2dmap = new ExtendedControls.ButtonExt();
-            this.buttonExt3dmap = new ExtendedControls.ButtonExt();
+            this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
+            this.comboBoxCustomProfiles = new ExtendedControls.ExtComboBox();
+            this.comboBoxCommander = new ExtendedControls.ExtComboBox();
+            this.buttonExtEDSMSync = new ExtendedControls.ExtButton();
+            this.buttonExtPopOut = new ExtendedControls.ExtButton();
+            this.buttonExtEditAddOns = new ExtendedControls.ExtButton();
+            this.buttonExtManageAddOns = new ExtendedControls.ExtButton();
+            this.buttonExtRefresh = new ExtendedControls.ExtButton();
+            this.buttonExt2dmap = new ExtendedControls.ExtButton();
+            this.buttonExt3dmap = new ExtendedControls.ExtButton();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.tabControlMain = new EDDiscovery.MajorTabControl();
@@ -524,7 +524,7 @@ namespace EDDiscovery
             // panel_minimize
             //
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(937, 2);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -914,7 +914,7 @@ namespace EDDiscovery
         }
 
         #endregion
-        private ExtendedControls.ButtonExt buttonReloadActions;
+        private ExtendedControls.ExtButton buttonReloadActions;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
@@ -931,11 +931,11 @@ namespace EDDiscovery
         private System.Windows.Forms.Panel panel_eddiscovery;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem eDDiscoveryChatDiscordToolStripMenuItem;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_version;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private ExtendedControls.StatusStripCustom statusStrip;
+        private ExtendedControls.ExtStatusStrip statusStrip;
         private System.Windows.Forms.ToolStripMenuItem show3DMapsToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -963,19 +963,19 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorTop;
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparatorBottom;
         private System.Windows.Forms.ToolStripMenuItem editLastActionPackToolStripMenuItem;
-        private ExtendedControls.RollUpPanel panelToolBar;
-        private ExtendedControls.ComboBoxCustom comboBoxCommander;
-        private ExtendedControls.ButtonExt buttonExt3dmap;
-        private ExtendedControls.ButtonExt buttonExt2dmap;
-        private ExtendedControls.ButtonExt buttonExtRefresh;
-        private ExtendedControls.ButtonExt buttonExtEDSMSync;
+        private ExtendedControls.ExtPanelRollUp panelToolBar;
+        private ExtendedControls.ExtComboBox comboBoxCommander;
+        private ExtendedControls.ExtButton buttonExt3dmap;
+        private ExtendedControls.ExtButton buttonExt2dmap;
+        private ExtendedControls.ExtButton buttonExtRefresh;
+        private ExtendedControls.ExtButton buttonExtEDSMSync;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEGOScansToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonExtEditAddOns;
-        private ExtendedControls.ButtonExt buttonExtManageAddOns;
+        private ExtendedControls.ExtButton buttonExtEditAddOns;
+        private ExtendedControls.ExtButton buttonExtManageAddOns;
         private System.Windows.Forms.ToolStripMenuItem howToRunInSafeModeToResetVariousParametersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportVistedStarsListToEliteDangerousToolStripMenuItem;
-        private ExtendedControls.ButtonExt buttonExtPopOut;
+        private ExtendedControls.ExtButton buttonExtPopOut;
         private EDDiscovery.MajorTabControl tabControlMain;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripTabs;
         private System.Windows.Forms.ToolStripMenuItem addTabToolStripMenuItem;
@@ -984,7 +984,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem renameTabToolStripMenuItem;
         private System.Windows.Forms.Panel panelMenuTop;
         private System.Windows.Forms.ToolStripMenuItem sendHistoricDataToInaraToolStripMenuItem;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomProfiles;
+        private ExtendedControls.ExtComboBox comboBoxCustomProfiles;
         private System.Windows.Forms.ToolStripMenuItem popOutPanelToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fetchLogsAgainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fetchStarDataAgainToolStripMenuItem;

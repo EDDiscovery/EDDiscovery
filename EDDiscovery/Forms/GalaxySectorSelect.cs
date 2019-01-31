@@ -236,7 +236,7 @@ namespace EDDiscovery.Forms
                         new Point(180, 100), new Size(width-180-100, 24),
                         "Select the data set".Tx(t, "GALSELEN"), list));
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".Tx(t)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width-40-80, 150), new Size(80, 24), "Press to Accept".Tx(t)));
 
             //f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 70), new Size(80, 24), "Press to Cancel".Tx(t)));
 

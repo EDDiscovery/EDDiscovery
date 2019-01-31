@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
                 return txlist;
         }
 
-        public static void InitaliseComboBox( ExtendedControls.ComboBoxCustom cc , string dbname , bool incldockstartend = true )
+        public static void InitaliseComboBox( ExtendedControls.ExtComboBox cc , string dbname , bool incldockstartend = true )
         {
             cc.Enabled = false;
             cc.DisplayMember = nameof(TravelHistoryFilter.Label);
@@ -189,7 +189,7 @@ namespace EDDiscovery.UserControls
 
     public class EventFilterSelector
     {
-        ExtendedControls.CheckedListControlCustom cc;
+        ExtendedControls.CheckedListBoxForm cc;
         string dbstring;
         public event EventHandler Changed;
 
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
             if (cc == null)
             {
                 dbstring = db;
-                cc = new ExtendedControls.CheckedListControlCustom();
+                cc = new ExtendedControls.CheckedListBoxForm();
                 cc.Items.Add("All".Tx());       // displayed, translate
                 cc.Items.Add("None".Tx());
 

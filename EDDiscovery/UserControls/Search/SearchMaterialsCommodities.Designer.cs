@@ -44,8 +44,8 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
-            this.vScrollBarCustom = new ExtendedControls.VScrollBarCustom();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new EDDiscovery.UserControls.Search.DataGridViewStarResults();
             this.ColumnDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnStar = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,11 +54,11 @@ namespace EDDiscovery.UserControls
             this.ColumnPosition = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.Panel();
-            this.buttonExtExcel = new ExtendedControls.ButtonExt();
-            this.buttonExtFind = new ExtendedControls.ButtonExt();
-            this.comboBoxCustomCMANDOR = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCustomCM2 = new ExtendedControls.ComboBoxCustom();
-            this.comboBoxCustomCM1 = new ExtendedControls.ComboBoxCustom();
+            this.buttonExtExcel = new ExtendedControls.ExtButton();
+            this.buttonExtFind = new ExtendedControls.ExtButton();
+            this.comboBoxCustomCMANDOR = new ExtendedControls.ExtComboBox();
+            this.comboBoxCustomCM2 = new ExtendedControls.ExtComboBox();
+            this.comboBoxCustomCM1 = new ExtendedControls.ExtComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -329,18 +329,18 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustom;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private EDDiscovery.UserControls.Search.DataGridViewStarResults dataGridView;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ButtonExt buttonExtFind;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomCM2;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomCM1;
+        private ExtendedControls.ExtButton buttonExtFind;
+        private ExtendedControls.ExtComboBox comboBoxCustomCM2;
+        private ExtendedControls.ExtComboBox comboBoxCustomCM1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private ExtendedControls.ComboBoxCustom comboBoxCustomCMANDOR;
-        private ExtendedControls.ButtonExt buttonExtExcel;
+        private ExtendedControls.ExtComboBox comboBoxCustomCMANDOR;
+        private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnLocation;

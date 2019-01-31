@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.rollUpPanelMenu = new ExtendedControls.RollUpPanel();
-            this.buttonExtTile = new ExtendedControls.ButtonExt();
-            this.buttonExtDelete = new ExtendedControls.ButtonExt();
+            this.rollUpPanelMenu = new ExtendedControls.ExtPanelRollUp();
+            this.buttonExtTile = new ExtendedControls.ExtButton();
+            this.buttonExtDelete = new ExtendedControls.ExtButton();
             this.panelPlayfield = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonExtPopOut = new ExtendedControls.ButtonExt();
+            this.buttonExtPopOut = new ExtendedControls.ExtButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.rollUpPanelMenu.SuspendLayout();
             this.SuspendLayout();
@@ -132,12 +132,12 @@
         }
 
         #endregion
-        private ExtendedControls.RollUpPanel rollUpPanelMenu;
+        private ExtendedControls.ExtPanelRollUp rollUpPanelMenu;
         private System.Windows.Forms.Panel panelPlayfield;
-        private ExtendedControls.ButtonExt buttonExtDelete;
+        private ExtendedControls.ExtButton buttonExtDelete;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ButtonExt buttonExtTile;
-        private ExtendedControls.ButtonExt buttonExtPopOut;
+        private ExtendedControls.ExtButton buttonExtTile;
+        private ExtendedControls.ExtButton buttonExtPopOut;
         private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_Clicked(object sender, EventArgs e)
         {
-            ((ExtendedControls.TextBoxBorder)sender).SelectAll(); // clicking highlights everything
+            ((ExtendedControls.ExtTextBox)sender).SelectAll(); // clicking highlights everything
         }
 
         #region router
@@ -285,7 +285,7 @@ namespace EDDiscovery.UserControls
 
         private void textBox_Range_KeyPress(object sender, KeyPressEventArgs e)
         {
-            ExtendedControls.TextBoxBorder tbb = sender as ExtendedControls.TextBoxBorder;
+            ExtendedControls.ExtTextBox tbb = sender as ExtendedControls.ExtTextBox;
             tbb.NumericKeyPressHandler(e);
         }
 
@@ -393,7 +393,7 @@ namespace EDDiscovery.UserControls
             SelectFromMaster(true);                       // coords master
             fromupdatetimer.Stop();
             fromupdatetimer.Start();
-            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // entering selects everything
+            ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // entering selects everything
         }
 
         private void textBox_From_TextChanged(object sender, EventArgs e)
@@ -558,7 +558,7 @@ namespace EDDiscovery.UserControls
             SelectToMaster(true);                       // coords master
             toupdatetimer.Stop();
             toupdatetimer.Start();
-            ((ExtendedControls.TextBoxBorder)sender).Select(0, 1000); // clicking highlights everything
+            ((ExtendedControls.ExtTextBox)sender).Select(0, 1000); // clicking highlights everything
         }
 
         private void textBox_To_TextChanged(object sender, EventArgs e)

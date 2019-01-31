@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
 
         private void checkBoxHideTransparent_CheckedChanged(object sender, EventArgs e)
         {
-            autoHideTargetCoords = ((CheckBoxCustom)sender).Checked;
+            autoHideTargetCoords = ((ExtCheckBox)sender).Checked;
             SetTransparency(IsTransparent, BackColor);
         }
 

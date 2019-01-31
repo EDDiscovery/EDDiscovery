@@ -607,21 +607,21 @@ namespace EDDiscovery.UserControls
             int width = 430;
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Name:".Tx(this), new Point(10, 40), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Name", typeof(ExtendedControls.TextBoxBorder), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".Tx(this, "C1")) { clearonfirstchar = newentry });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Name", typeof(ExtendedControls.ExtTextBox), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".Tx(this, "C1")) { clearonfirstchar = newentry });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Faction:".Tx(this), new Point(10, 70), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Faction", typeof(ExtendedControls.TextBoxBorder), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".Tx(this, "C2")) );
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".Tx(this, "C2")) );
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Start:".Tx(this), new Point(10, 100), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTS", typeof(ExtendedControls.CustomDateTimePicker), entry.StartTime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".Tx(this, "C3")) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), entry.StartTime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".Tx(this, "C3")) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
             f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "End:".Tx(this), new Point(10, 130), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.CustomDateTimePicker), entry.EndTime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".Tx(this, "C4")) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), entry.EndTime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".Tx(this, "C4")) { customdateformat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ButtonExt), "OK".Tx(), new Point(width - 100, 180), new Size(80, 24), "Press to Accept".Tx(this, "C5")));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ButtonExt), "Cancel".Tx(), new Point(width - 200, 180), new Size(80, 24), "Press to Cancel".Tx(this, "C6")));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 100, 180), new Size(80, 24), "Press to Accept".Tx(this, "C5")));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 180), new Size(80, 24), "Press to Cancel".Tx(this, "C6")));
             if ( allowdel )
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Delete", typeof(ExtendedControls.ButtonExt), "Delete".Tx(), new Point(10, 180), new Size(80, 24), "Press to Delete".Tx(this, "C7")));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".Tx(), new Point(10, 180), new Size(80, 24), "Press to Delete".Tx(this, "C7")));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {

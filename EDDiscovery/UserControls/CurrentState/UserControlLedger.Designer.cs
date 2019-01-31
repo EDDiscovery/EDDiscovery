@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataViewScrollerPanel = new ExtendedControls.DataViewScrollerPanel();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewLedger = new System.Windows.Forms.DataGridView();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -56,13 +56,13 @@ namespace EDDiscovery.UserControls
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.vScrollBarCustomMC = new ExtendedControls.VScrollBarCustom();
+            this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelTime = new System.Windows.Forms.Label();
-            this.buttonFilter = new ExtendedControls.ButtonExt();
-            this.textBoxFilter = new ExtendedControls.TextBoxBorder();
+            this.buttonFilter = new ExtendedControls.ExtButton();
+            this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.comboBoxHistoryWindow = new ExtendedControls.ComboBoxCustom();
+            this.comboBoxHistoryWindow = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).BeginInit();
@@ -329,15 +329,15 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.DataViewScrollerPanel dataViewScrollerPanel;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewLedger;
-        private ExtendedControls.VScrollBarCustom vScrollBarCustomMC;
+        private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
         private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.Label labelNoItems;
-        private ExtendedControls.ButtonExt buttonFilter;
-        internal ExtendedControls.ComboBoxCustom comboBoxHistoryWindow;
+        private ExtendedControls.ExtButton buttonFilter;
+        internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label labelSearch;
-        private ExtendedControls.TextBoxBorder textBoxFilter;
+        private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemGotoItem;
         private System.Windows.Forms.ToolTip toolTip;

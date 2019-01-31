@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox = new ExtendedControls.PictureBoxHotspot();
+            this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setRouteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showJumpsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.PictureBoxHotspot pictureBox;
+        private ExtendedControls.ExtPictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem setRouteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoCopyWPToolStripMenuItem;

@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.richTextBox_History = new ExtendedControls.RichTextBoxScroll();
+            this.richTextBox_History = new ExtendedControls.ExtRichTextBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -114,7 +114,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        internal ExtendedControls.RichTextBoxScroll richTextBox_History;
+        internal ExtendedControls.ExtRichTextBox richTextBox_History;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemCopy;

@@ -37,12 +37,12 @@
             this.labelTDetails = new System.Windows.Forms.Label();
             this.labelDetails = new System.Windows.Forms.Label();
             this.panelBack = new System.Windows.Forms.Panel();
-            this.buttonCancel = new ExtendedControls.ButtonExt();
-            this.buttonSave = new ExtendedControls.ButtonExt();
-            this.textBoxNote = new ExtendedControls.RichTextBoxScroll();
+            this.buttonCancel = new ExtendedControls.ExtButton();
+            this.buttonSave = new ExtendedControls.ExtButton();
+            this.textBoxNote = new ExtendedControls.ExtRichTextBox();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.DrawnPanel();
-            this.panel_minimize = new ExtendedControls.DrawnPanel();
+            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelBack.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -217,7 +217,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.DrawnPanel.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(476, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -259,19 +259,19 @@
         #endregion
         private System.Windows.Forms.Label labelTTimestamp;
         private System.Windows.Forms.Label labelTSystem;
-        private ExtendedControls.ButtonExt buttonCancel;
-        private ExtendedControls.ButtonExt buttonSave;
+        private ExtendedControls.ExtButton buttonCancel;
+        private ExtendedControls.ExtButton buttonSave;
         private System.Windows.Forms.Label labelTSummary;
         private System.Windows.Forms.Label labelTimestamp;
         private System.Windows.Forms.Label labelSystem;
         private System.Windows.Forms.Label labelSummary;
         private System.Windows.Forms.Label labelTDetails;
         private System.Windows.Forms.Label labelDetails;
-        private ExtendedControls.RichTextBoxScroll textBoxNote;
+        private ExtendedControls.ExtRichTextBox textBoxNote;
         private System.Windows.Forms.Panel panelBack;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.DrawnPanel panel_close;
-        private ExtendedControls.DrawnPanel panel_minimize;
+        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtPanelDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
     }
 }

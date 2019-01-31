@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.pictureBox = new ExtendedControls.PictureBoxHotspot();
+            this.pictureBox = new ExtendedControls.ExtPictureBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.miGMPNotes = new System.Windows.Forms.ToolStripMenuItem();
             this.miSystemNotes = new System.Windows.Forms.ToolStripMenuItem();
@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        private ExtendedControls.PictureBoxHotspot pictureBox;
+        private ExtendedControls.ExtPictureBox pictureBox;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem miSystemNotes;
         private System.Windows.Forms.ToolStripMenuItem miGMPNotes;
