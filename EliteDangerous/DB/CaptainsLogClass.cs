@@ -88,7 +88,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@p", Parameters);
                 cn.SQLNonQueryText( cmd);
 
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
+                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from CaptainsLog"))
                 {
                     ID = (long)cn.SQLScalar( cmd2);
                 }

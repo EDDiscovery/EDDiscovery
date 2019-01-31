@@ -306,7 +306,6 @@ namespace EDDiscovery.UserControls
             if (s != null)
             {
                 rw.Cells[3].Value = s;
-                dataGridView.InvalidateCell(rw.Cells[3]);
                 StoreRow(rw);
             }
         }
