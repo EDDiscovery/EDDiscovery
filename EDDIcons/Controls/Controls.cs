@@ -128,9 +128,6 @@ namespace EDDiscovery.Icons
         public static Image Map3D_Travel_WhiteStars { get { return IconSet.GetIcon("Controls.Map3D.Travel.WhiteStars"); } }
         public static Image Map3D_YellowDot { get { return IconSet.GetIcon("Controls.Map3D.YellowDot"); } }
         #endregion
-        #region EDDiscovery.UserControls.UserControlEDSM
-        public static Image EDSM_ExportToExcel { get { return IconSet.GetIcon("Controls.EDSM.ExportToExcel"); } }
-        #endregion
         #region EDDiscovery.UserControls.UserControlExpedition
         public static Image Expedition_Delete { get { return IconSet.GetIcon("Controls.Expedition.Delete"); } }
         public static Image Expedition_Export { get { return IconSet.GetIcon("Controls.Expedition.Export"); } }
@@ -151,8 +148,6 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlJournalGrid
         public static Image JournalGrid_ExportToExcel { get { return IconSet.GetIcon("Controls.JournalGrid.ExportToExcel"); } }
-        public static Image JournalGrid_Journal { get { return IconSet.GetIcon("Controls.JournalGrid.Journal"); } }
-        public static Image JournalGrid_Popout { get { return IconSet.GetIcon("Controls.JournalGrid.Popout"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlModules
         public static Image Modules_ShowOnCoriolis { get { return IconSet.GetIcon("Controls.Modules.ShowOnCoriolis"); } }
@@ -190,7 +185,6 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlScanGrid
         public static Image ScanGrid_Belt { get { return IconSet.GetIcon("Controls.ScanGrid.Belt"); } }
-        public static Image ScanGrid_Ring { get { return IconSet.GetIcon("Controls.ScanGrid.Ring"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlSPanel
         public static Image SPanel_ResizeColumn { get { return IconSet.GetIcon("Controls.SPanel.ResizeColumn"); } }
@@ -200,7 +194,6 @@ namespace EDDiscovery.Icons
         public static Image StarList_BodyClass { get { return IconSet.GetIcon("Controls.StarList.BodyClasses"); } }
         public static Image StarList_Jumponium { get { return IconSet.GetIcon("Controls.StarList.Jumponium"); } }
         public static Image StarList_ExportToExcel { get { return IconSet.GetIcon("Controls.StarList.ExportToExcel"); } }
-        public static Image StarList_History { get { return IconSet.GetIcon("Controls.StarList.History"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlStatsTime
         public static Image StatsTime_Graph { get { return IconSet.GetIcon("Controls.StatsTime.Graph"); } }
@@ -210,8 +203,6 @@ namespace EDDiscovery.Icons
         #endregion
         #region EDDiscovery.UserControls.UserControlTravelGrid
         public static Image TravelGrid_ExportToExcel { get { return IconSet.GetIcon("Controls.TravelGrid.ExportToExcel"); } }
-        public static Image TravelGrid_History { get { return IconSet.GetIcon("Controls.TravelGrid.History"); } }
-        public static Image TravelGrid_Popout { get { return IconSet.GetIcon("Controls.TravelGrid.Popout"); } }
         public static Image TravelGrid_FlagStart { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStart"); } }
         public static Image TravelGrid_FlagStop { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStop"); } }
         #endregion
@@ -227,16 +218,11 @@ namespace EDDiscovery.Icons
         public static Image UCContainer_Remove { get { return IconSet.GetIcon("Controls.UCContainer.Remove"); } }
         public static Image UCContainer_Tile { get { return IconSet.GetIcon("Controls.UCContainer.Tile"); } }
         #endregion
-        #region EDDiscovery.UserControls.UserControlPlot
-        public static Image Plot_Dots { get { return IconSet.GetIcon("Controls.Plot.Dots"); } }
-        #endregion
         #region EDDiscovery.UserControls.UserControlSysInfo
         public static Image firstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
         public static Image notfirstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.notfirstdiscover"); } }
         #endregion
         #region TabStrip
-        public static Image TabStrip_ArrowLeft { get { return IconSet.GetIcon("Controls.TabStrip.ArrowLeft"); } }
-        public static Image TabStrip_ArrowRight { get { return IconSet.GetIcon("Controls.TabStrip.ArrowRight"); } }
         public static Image TabStrip_Popout { get { return IconSet.GetIcon("Controls.TabStrip.Popout"); } }
         #endregion
         #region Selector
@@ -253,6 +239,13 @@ namespace EDDiscovery.Icons
         public static Image SearchStars { get { return IconSet.GetIcon("Controls.Search.SearchStars"); } }
         public static Image SearchMaterials { get { return IconSet.GetIcon("Controls.Search.SearchMaterials"); } }
         public static Image SearchScan { get { return IconSet.GetIcon("Controls.Search.Scan"); } }
+        #endregion
+        #region EDDiscovery.UserControls.CaptainsLog
+        public static Image CaptainsLog_Delete { get { return IconSet.GetIcon("Controls.CaptainsLog.Delete"); } }
+        public static Image CaptainsLog_New { get { return IconSet.GetIcon("Controls.CaptainsLog.New"); } }
+        public static Image CaptainsLog_Tags { get { return IconSet.GetIcon("Controls.CaptainsLog.Tags"); } }
+        public static Image CaptainsLog_Entries { get { return IconSet.GetIcon("Controls.CaptainsLog.Entries"); } }
+        public static Image CaptainsLog_Diary { get { return IconSet.GetIcon("Controls.CaptainsLog.Diary"); } }
         #endregion
 
     }

@@ -109,8 +109,9 @@ namespace EliteDangerousCore.DB
                     }
                 }
             }
-            catch
+            catch (System.Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("Exception " + ex.ToString());
                 return null;
             }
         }

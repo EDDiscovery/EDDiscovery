@@ -13,20 +13,10 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+
+ using System;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using EDDiscovery.Controls;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.EDDN;
 using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
@@ -45,7 +35,7 @@ namespace EDDiscovery.UserControls
         {
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials, EDDiscovery.Icons.Controls.SearchScan};
             tabStrip.TextList = new string[] { "Stars".Tx(this), "Materials Commodities".Tx(this) , "Scans".Tx(this) };
-            tabStrip.TagList = new Type[] { typeof(UserControlSearchStars), typeof(UserControlSearchMaterialsCommodities), typeof(UserControlSearchScans)};
+            tabStrip.TagList = new Type[] { typeof(SearchStars), typeof(SearchMaterialsCommodities), typeof(SearchScans)};
 
             tabStrip.OnCreateTab += (tab, si) =>
             {
@@ -59,8 +49,8 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Init(discoveryform, displaynumber);
                 uccb.LoadLayout();
-                uccb.InitialDisplay();
                 discoveryform.theme.ApplyToControls(tab);
+                uccb.InitialDisplay();
             };
 
             tabStrip.OnRemoving += (tab, ctrl) =>
@@ -73,8 +63,8 @@ namespace EDDiscovery.UserControls
         public override void InitialDisplay()
         {
             int seltab = SQLiteConnectionUser.GetSettingInt(DbSelectedSave, 0);
-            if (seltab >= 0 && seltab <= tabStrip.ImageList.Length)
-                tabStrip.SelectedIndex = seltab;
+            seltab = seltab.Range(0, tabStrip.ImageList.Length - 1);
+            tabStrip.SelectedIndex = seltab;
         }
 
         public override void Closing()

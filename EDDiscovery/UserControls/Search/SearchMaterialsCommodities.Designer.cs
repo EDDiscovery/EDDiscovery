@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlSearchMaterialsCommodities      
+    partial class SearchMaterialsCommodities      
     {
         /// <summary> 
         /// Required designer variable.

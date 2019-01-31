@@ -144,6 +144,9 @@ namespace EliteDangerousCore.DB
                 if (dbver < 119)
                     UpgradeUserDB119(conn);
 
+                if (dbver < 120)
+                    UpgradeUserDB120(conn);
+
                 CreateUserDBTableIndexes(conn);
 
                 return true;
@@ -423,6 +426,22 @@ namespace EliteDangerousCore.DB
         {
             string query1 = "ALTER TABLE Commanders ADD COLUMN InaraName TEXT";
             conn.PerformUpgrade(119, true, false, new[] { query1 });
+        }
+
+        private static void UpgradeUserDB120(SQLiteConnectionUser conn)
+        {
+            string query1 = "CREATE TABLE CaptainsLog ( " +
+                "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "Commander INTEGER NOT NULL, " + 
+                "Time DATETIME NOT NULL, " +
+                "SystemName TEXT NOT NULL COLLATE NOCASE, " +
+                "BodyName TEXT NOT NULL COLLATE NOCASE, " +
+                "Note TEXT NOT NULL, " +
+                "Tags TEXT DEFAULT NULL, " +
+                "Parameters TEXT DEFAULT NULL" +
+                ") ";
+
+            conn.PerformUpgrade(120, true, false, new[] { query1 });
         }
 
 

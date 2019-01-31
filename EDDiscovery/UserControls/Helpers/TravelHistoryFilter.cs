@@ -203,6 +203,7 @@ namespace EDDiscovery.UserControls
 
         public void AddStandardExtraOptions()
         {
+            // must be in alpha order..
             AddExtraOption("Travel".Tx(), "Docked;FSD Jump;Undocked;");
             AddExtraOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;");
         }
@@ -261,8 +262,11 @@ namespace EDDiscovery.UserControls
             cc.SetChecked(list.Equals("None"), 1, 1);
 
             int p = 2;
-            foreach(var eo in extraoptions)
+            foreach (var eo in extraoptions)
+            {
+                System.Diagnostics.Debug.WriteLine("check " + eo.Item2 + " vs " + list);
                 cc.SetChecked(list.Equals(eo.Item2), p++, 1);
+            }
         }
 
         private void FilterCheckChanged(Object sender, ItemCheckEventArgs e)
@@ -274,7 +278,7 @@ namespace EDDiscovery.UserControls
             if (e.Index == 0 && e.NewValue == CheckState.Checked)
                 cc.SetChecked(true, ReservedEntries);
 
-            if ((e.Index == 1 && e.NewValue == CheckState.Checked) || (e.Index <= 2 && e.NewValue == CheckState.Unchecked))
+            if ((e.Index == 1 && e.NewValue == CheckState.Checked) )
                 cc.SetChecked(false, ReservedEntries);
 
             if (e.Index >= 2 && e.Index < 2 + extraoptions.Count() && e.NewValue == CheckState.Checked)

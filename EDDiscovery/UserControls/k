@@ -1,0 +1,275 @@
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\CurrentState\UserControlLedger.Designer.cs
+  287:             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  288:             this.comboBoxHistoryWindow.DropDownHeight = 200;
+  289:             this.comboBoxHistoryWindow.DropDownWidth = 1;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\CurrentState\UserControlModules.Designer.cs
+  277:             this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  278:             this.comboBoxShips.DropDownHeight = 300;
+  279:             this.comboBoxShips.DropDownWidth = 400;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\EngineeringSynthesis\UserControlShoppingList.Designer.cs
+  180:             this.showBodyMaterialsWhenLandedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 1 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\GridsSplitters\UserControlContainerGrid.cs
+   43:         ExtendedControls.DropDownCustom popoutdropdown;
+  295:             popoutdropdown = new ExtendedControls.DropDownCustom("", true);
+  297:             popoutdropdown.ItemHeight = 26;
+  298:             popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
+  299:             popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
+  300:             popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
+  302:             popoutdropdown.FlatStyle = FlatStyle.Popup;
+  303:             popoutdropdown.Activated += (s, ea) =>
+  306:                 popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
+  309:             popoutdropdown.SelectedIndexChanged += (s, ea) =>
+  311:                 UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]),
+  321:             popoutdropdown.Size = new Size(500, 26 * 20);
+  322:             discoveryform.theme.ApplyToControls(popoutdropdown);
+  323:             popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
+  324:             popoutdropdown.Show(this);
+A total of 18 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\GridsSplitters\UserControlContainerSplitter.cs
+  220:                 tabstrip.DropDownWidth = 500;
+  221:                 tabstrip.DropDownHeight = 500;
+A total of 2 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\GridsSplitters\UserControlContainerSplitter.Designer.cs
+  116:             this.sizeRatioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 1 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Helpers\FindSystemsUserControl.Designer.cs
+  175:             this.textBoxSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  176:             this.textBoxSystemName.DropDownBorderColor = System.Drawing.Color.Green;
+  177:             this.textBoxSystemName.DropDownHeight = 200;
+  178:             this.textBoxSystemName.DropDownItemHeight = 13;
+  179:             this.textBoxSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+  180:             this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+  181:             this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+  182:             this.textBoxSystemName.DropDownWidth = 0;
+A total of 8 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Helpers\StatsTimeUserControl.Designer.cs
+  203:             this.comboBoxTimeMode.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  204:             this.comboBoxTimeMode.DropDownHeight = 200;
+  205:             this.comboBoxTimeMode.DropDownWidth = 1;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\History\UserControlJournalGrid.cs
+  135:         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
+  167:             fdropdown = hl.Count() - result.Count();
+  348:             comboBoxJournalWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
+A total of 4 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\History\UserControlJournalGrid.Designer.cs
+  357:             this.comboBoxJournalWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  358:             this.comboBoxJournalWindow.DropDownHeight = 200;
+  359:             this.comboBoxJournalWindow.DropDownWidth = 1;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\History\UserControlStarList.Designer.cs
+  241:             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  242:             this.comboBoxHistoryWindow.DropDownHeight = 200;
+  243:             this.comboBoxHistoryWindow.DropDownWidth = 1;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\History\UserControlTravelGrid.cs
+  166:         int fdropdown, ftotalevents, ftotalfilters;     // filter totals
+  196:             fdropdown = hl.Count() - result.Count();
+  434:             comboBoxHistoryWindow.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(this, "TTFilt1"), fdropdown + ms) : "Select the entries by age, ".Tx(this, "TTSelAge") + ms);
+A total of 4 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\History\UserControlTravelGrid.Designer.cs
+  208:             this.comboBoxHistoryWindow.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  209:             this.comboBoxHistoryWindow.DropDownHeight = 200;
+  210:             this.comboBoxHistoryWindow.DropDownWidth = 1;
+  331:             this.addToTrilaterationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 4 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Overlays\UserControlCombatPanel.Designer.cs
+  227:             this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  228:             this.comboBoxCustomCampaign.DropDownHeight = 400;
+  229:             this.comboBoxCustomCampaign.DropDownWidth = 600;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Overlays\UserControlCompass.Designer.cs
+  167:             this.comboBoxBookmarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  168:             this.comboBoxBookmarks.DropDownHeight = 200;
+  169:             this.comboBoxBookmarks.DropDownWidth = 200;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Overlays\UserControlSpanel.Designer.cs
+  160:    this.showCircumstellarZonesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  333:    this.dontShowInformationWhenToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  388:    this.OrdertoolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  433:    this.surfaceScanDetailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  487:    this.showInPositionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 5 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Overlays\UserControlSysInfo.Designer.cs
+  860:             this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  861:             this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
+  862:             this.textBoxTarget.DropDownHeight = 200;
+  863:             this.textBoxTarget.DropDownItemHeight = 13;
+  864:             this.textBoxTarget.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+  865:             this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+  866:             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+  867:             this.textBoxTarget.DropDownWidth = 0;
+A total of 8 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\RoutesExpeditions\UserControlExpedition.cs
+  168:             if (ctxMenuItemUndelete.HasDropDownItems)
+  170:                 for (int i = ctxMenuItemUndelete.DropDownItems.Count - 1; i >= 0; i--)
+  171:                     ctxMenuItemUndelete.DropDownItems[i].Dispose();
+  172:                 ctxMenuItemUndelete.DropDownItems.Clear();
+  183:                 ctxMenuItemUndelete.DropDownItems.Add(menuitem);
+  285:             if (e.Button == MouseButtons.Right && ctxMenuItemUndelete.DropDownItems.Count > 0)
+A total of 6 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\RoutesExpeditions\UserControlExpedition.Designer.cs
+  178:             this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  179:             this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
+  180:             this.toolStripComboBoxRouteSelection.DropDownWidth = 200;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\RoutesExpeditions\UserControlRoute.Designer.cs
+  394:             this.comboBoxRoutingMetric.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  395:             this.comboBoxRoutingMetric.DropDownHeight = 200;
+  396:             this.comboBoxRoutingMetric.DropDownWidth = 234;
+  502:             this.textBox_From.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  503:             this.textBox_From.DropDownBorderColor = System.Drawing.Color.Green;
+  504:             this.textBox_From.DropDownHeight = 200;
+  505:             this.textBox_From.DropDownItemHeight = 13;
+  506:             this.textBox_From.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+  507:             this.textBox_From.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+  508:             this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+  509:             this.textBox_From.DropDownWidth = 0;
+  563:             this.textBox_To.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  564:             this.textBox_To.DropDownBorderColor = System.Drawing.Color.Green;
+  565:             this.textBox_To.DropDownHeight = 200;
+  566:             this.textBox_To.DropDownItemHeight = 13;
+  567:             this.textBox_To.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+  568:             this.textBox_To.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+  569:             this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+  570:             this.textBox_To.DropDownWidth = 0;
+A total of 19 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\ScansStars\UserControlLocalMap.Designer.cs
+ 1075:             this.toolStripMenuZoom.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 1 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\ScansStars\UserControlPlot.Designer.cs
+  130:             this.comboBoxView.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  131:             this.comboBoxView.DropDownHeight = 106;
+  132:             this.comboBoxView.DropDownWidth = 75;
+  224:             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  236:             this.exportToToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 5 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\ScansStars\UserControlScan.cs
+  333:         DropDownCustom dropdown;
+  338:             dropdown = new DropDownCustom("", true);
+  340:             dropdown.SelectionBackColor = EDDTheme.Instance.ButtonBackColor;
+  341:             dropdown.ForeColor = EDDTheme.Instance.ButtonTextColor;
+  342:             dropdown.BackColor = EDDTheme.Instance.ButtonBackColor;
+  343:             dropdown.BorderColor = EDDTheme.Instance.ButtonBorderColor;
+  344:             dropdown.MouseOverBackgroundColor = EDDTheme.Instance.ButtonBackColor.Multiply(1.4f);
+  356:             dropdown.ItemHeight = imagelist[0].Size.Height + 2;
+  357:             dropdown.Items = textlist.ToList();
+  358:             dropdown.ImageItems = imagelist.ToList();
+  359:             dropdown.FlatStyle = FlatStyle.Popup;
+  360:             dropdown.Activated += (s, ea) =>
+  363:                 dropdown.Location = dropdown.PositionWithinScreen(location.X, location.Y);
+  366:             dropdown.SelectedIndexChanged += (s, ea) =>
+  368:                 int size = textlist[dropdown.SelectedIndex].InvariantParseInt(64);
+  373:             dropdown.Size = new Size(64, dropdown.ItemHeight * textlist.Length + 8);
+  374:             dropdown.Show(this.FindForm());
+A total of 21 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\ScansStars\UserControlScanGrid.Designer.cs
+  228:             this.circumstellarZoneToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  312:             this.structuresToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+  372:             this.columnsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Search\UserControlSearch.Designer.cs
+   62:             this.tabStrip.DropDownBackgroundColor = System.Drawing.Color.Gray;
+   63:             this.tabStrip.DropDownBorderColor = System.Drawing.Color.Green;
+   64:             this.tabStrip.DropDownHeight = 500;
+   65:             this.tabStrip.DropDownItemSeperatorColor = System.Drawing.Color.Purple;
+   66:             this.tabStrip.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+   67:             this.tabStrip.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+   68:             this.tabStrip.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+   69:             this.tabStrip.DropDownWidth = 400;
+A total of 8 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Search\UserControlSearchMaterialsCommodities.Designer.cs
+  220:             this.comboBoxCustomCMANDOR.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  221:             this.comboBoxCustomCMANDOR.DropDownHeight = 400;
+  222:             this.comboBoxCustomCMANDOR.DropDownWidth = 600;
+  248:             this.comboBoxCustomCM2.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  249:             this.comboBoxCustomCM2.DropDownHeight = 400;
+  250:             this.comboBoxCustomCM2.DropDownWidth = 600;
+  276:             this.comboBoxCustomCM1.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  277:             this.comboBoxCustomCM1.DropDownHeight = 400;
+  278:             this.comboBoxCustomCM1.DropDownWidth = 600;
+A total of 9 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Search\UserControlSearchScans.Designer.cs
+  241:             this.comboBoxSearches.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  242:             this.comboBoxSearches.DropDownHeight = 400;
+  243:             this.comboBoxSearches.DropDownWidth = 400;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\Settings\UserControlSettings.Designer.cs
+  129:             this.comboBoxCustomHistoryLoadTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  130:             this.comboBoxCustomHistoryLoadTime.DropDownHeight = 300;
+  131:             this.comboBoxCustomHistoryLoadTime.DropDownWidth = 1;
+  348:             this.comboBoxClickThruKey.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  349:             this.comboBoxClickThruKey.DropDownHeight = 200;
+  350:             this.comboBoxClickThruKey.DropDownWidth = 150;
+  415:             this.comboBoxTheme.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  416:             this.comboBoxTheme.DropDownHeight = 150;
+  417:             this.comboBoxTheme.DropDownWidth = 267;
+  534:             this.textBoxHomeSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  535:             this.textBoxHomeSystem.DropDownBorderColor = System.Drawing.Color.Green;
+  536:             this.textBoxHomeSystem.DropDownHeight = 200;
+  537:             this.textBoxHomeSystem.DropDownItemHeight = 13;
+  538:             this.textBoxHomeSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
+  539:             this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
+  540:             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
+  541:             this.textBoxHomeSystem.DropDownWidth = 0;
+  747:             this.comboBoxCustomEssentialEntries.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  748:             this.comboBoxCustomEssentialEntries.DropDownHeight = 300;
+  749:             this.comboBoxCustomEssentialEntries.DropDownWidth = 400;
+ 1023:             this.comboBoxCustomLanguage.DropDownBackgroundColor = System.Drawing.Color.Gray;
+ 1024:             this.comboBoxCustomLanguage.DropDownHeight = 150;
+ 1025:             this.comboBoxCustomLanguage.DropDownWidth = 267;
+A total of 23 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\StationData\UserControlMarketData.Designer.cs
+  286:             this.comboBoxCustomTo.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  287:             this.comboBoxCustomTo.DropDownHeight = 150;
+  288:             this.comboBoxCustomTo.DropDownWidth = 400;
+  315:             this.comboBoxCustomFrom.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  316:             this.comboBoxCustomFrom.DropDownHeight = 150;
+  317:             this.comboBoxCustomFrom.DropDownWidth = 400;
+A total of 6 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\StationData\UserControlOutfitting.Designer.cs
+  164:             this.comboBoxYards.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  165:             this.comboBoxYards.DropDownHeight = 400;
+  166:             this.comboBoxYards.DropDownWidth = 500;
+A total of 3 matches
+
+File : C:\Code\EDDiscovery\EDDiscovery\UserControls\StationData\UserControlShipYards.Designer.cs
+  101:             this.comboBoxYards.DropDownBackgroundColor = System.Drawing.Color.Gray;
+  102:             this.comboBoxYards.DropDownHeight = 400;
+  103:             this.comboBoxYards.DropDownWidth = 500;
+A total of 3 matches
+
+A grand total of 189 matches in 31 files out of 105

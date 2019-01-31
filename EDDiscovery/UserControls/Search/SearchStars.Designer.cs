@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlSearchStars       
+    partial class SearchStars       
     {
         /// <summary> 
         /// Required designer variable.

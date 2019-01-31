@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
     // Search UCs use the UCCB template BUT are not directly inserted into the normal panels.. they are inserted into the Search UCCB
     // Make sure DB saving has unique names.. they all share the same displayno.
 
-    public partial class UserControlSearchMaterialsCommodities : UserControlCommonBase
+    public partial class SearchMaterialsCommodities : UserControlCommonBase
     {
         private string DbColumnSave { get { return DBName("UCSearchMC", "DGVCol"); } }
         private string DbCM1 { get { return DBName("UCSearchMC", "CM1"); } }
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private MaterialCommodityData[] itemlist;
         #region Init
 
-        public UserControlSearchMaterialsCommodities()
+        public SearchMaterialsCommodities()
         {
             InitializeComponent();
             var corner = dataGridView.TopLeftHeaderCell; // work around #1487

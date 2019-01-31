@@ -188,11 +188,13 @@ namespace EDDiscovery.UserControls
             this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_controls.Location = new System.Drawing.Point(0, 0);
             this.panel_controls.Name = "panel_controls";
-            this.panel_controls.Size = new System.Drawing.Size(924, 28);
+            this.panel_controls.Size = new System.Drawing.Size(1088, 32);
             this.panel_controls.TabIndex = 24;
             // 
             // toolStrip
             // 
+            this.toolStrip.AutoSize = false;
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSubmitDistances,
             this.toolStripButtonNew,
@@ -209,25 +211,27 @@ namespace EDDiscovery.UserControls
             this.toolStripAddRecentHistory});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(924, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1088, 32);
             this.toolStrip.TabIndex = 24;
             // 
             // toolStripButtonSubmitDistances
             // 
             this.toolStripButtonSubmitDistances.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.toolStripButtonSubmitDistances.Image = global::EDDiscovery.Icons.Controls.Trilateration_SubmitDistances;
+            this.toolStripButtonSubmitDistances.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonSubmitDistances.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSubmitDistances.Name = "toolStripButtonSubmitDistances";
-            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(118, 22);
+            this.toolStripButtonSubmitDistances.Size = new System.Drawing.Size(126, 29);
             this.toolStripButtonSubmitDistances.Text = "&Submit Distances";
             this.toolStripButtonSubmitDistances.Click += new System.EventHandler(this.toolStripButtonSubmitDistances_Click);
             // 
             // toolStripButtonNew
             // 
             this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Trilateration_StartNew;
+            this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(76, 22);
+            this.toolStripButtonNew.Size = new System.Drawing.Size(84, 29);
             this.toolStripButtonNew.Text = "Start &new";
             this.toolStripButtonNew.ToolTipText = "Calculate coordinates for current system";
             this.toolStripButtonNew.Click += new System.EventHandler(this.buttonStartNew_Click);
@@ -235,15 +239,16 @@ namespace EDDiscovery.UserControls
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripButtonRemoveUnused
             // 
             this.toolStripButtonRemoveUnused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Icons.Controls.Trilateration_RemoveUnused;
+            this.toolStripButtonRemoveUnused.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
-            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonRemoveUnused.Text = "toolStripButtonRemoveUnused";
             this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
             this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
@@ -252,9 +257,10 @@ namespace EDDiscovery.UserControls
             // 
             this.toolStripButtonRemoveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonRemoveAll.Image = global::EDDiscovery.Icons.Controls.Trilateration_RemoveAll;
+            this.toolStripButtonRemoveAll.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonRemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRemoveAll.Name = "toolStripButtonRemoveAll";
-            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRemoveAll.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonRemoveAll.Text = "toolStripButton1";
             this.toolStripButtonRemoveAll.ToolTipText = "Remove all";
             this.toolStripButtonRemoveAll.Click += new System.EventHandler(this.toolStripButtonRemoveAll_Click);
@@ -263,9 +269,10 @@ namespace EDDiscovery.UserControls
             // 
             this.toolStripButtonMap.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.toolStripButtonMap.Image = global::EDDiscovery.Icons.Controls.Trilateration_ShowOnMap;
+            this.toolStripButtonMap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMap.Name = "toolStripButtonMap";
-            this.toolStripButtonMap.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonMap.Size = new System.Drawing.Size(28, 29);
             this.toolStripButtonMap.Text = "3d map";
             this.toolStripButtonMap.ToolTipText = "Show 3d map";
             this.toolStripButtonMap.Click += new System.EventHandler(this.toolStripButtonMap_Click);
@@ -273,38 +280,38 @@ namespace EDDiscovery.UserControls
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
             // 
             // toolStripLabelSystem
             // 
             this.toolStripLabelSystem.Name = "toolStripLabelSystem";
-            this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 22);
+            this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 29);
             this.toolStripLabelSystem.Text = "From System:";
             // 
             // toolStripTextBoxSystem
             // 
             this.toolStripTextBoxSystem.Name = "toolStripTextBoxSystem";
             this.toolStripTextBoxSystem.ReadOnly = true;
-            this.toolStripTextBoxSystem.Size = new System.Drawing.Size(200, 25);
+            this.toolStripTextBoxSystem.Size = new System.Drawing.Size(200, 32);
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(154, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(154, 29);
             this.toolStripLabel1.Text = "Visited without coordinates:";
             this.toolStripLabel1.ToolTipText = "Start New to update count";
             // 
             // toolStripLabelNoCoords
             // 
             this.toolStripLabelNoCoords.Name = "toolStripLabelNoCoords";
-            this.toolStripLabelNoCoords.Size = new System.Drawing.Size(0, 22);
+            this.toolStripLabelNoCoords.Size = new System.Drawing.Size(0, 29);
             // 
             // toolStripAddFromHistory
             // 
             this.toolStripAddFromHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripAddFromHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripAddFromHistory.Name = "toolStripAddFromHistory";
-            this.toolStripAddFromHistory.Size = new System.Drawing.Size(83, 22);
+            this.toolStripAddFromHistory.Size = new System.Drawing.Size(83, 29);
             this.toolStripAddFromHistory.Text = "Add 20 oldest";
             this.toolStripAddFromHistory.ToolTipText = "Add the oldest 20 unknown systems from history to wanted list";
             this.toolStripAddFromHistory.Click += new System.EventHandler(this.toolStripAddFromHistory_Click);
@@ -314,7 +321,7 @@ namespace EDDiscovery.UserControls
             this.toolStripAddRecentHistory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripAddRecentHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripAddRecentHistory.Name = "toolStripAddRecentHistory";
-            this.toolStripAddRecentHistory.Size = new System.Drawing.Size(88, 22);
+            this.toolStripAddRecentHistory.Size = new System.Drawing.Size(88, 29);
             this.toolStripAddRecentHistory.Text = "Add 20 newest";
             this.toolStripAddRecentHistory.ToolTipText = "Add 20 most recent systems with no coordinates";
             this.toolStripAddRecentHistory.Click += new System.EventHandler(this.toolStripAddRecentHistory_Click);
@@ -322,7 +329,7 @@ namespace EDDiscovery.UserControls
             // splitContainerCustom1
             // 
             this.splitContainerCustom1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 28);
+            this.splitContainerCustom1.Location = new System.Drawing.Point(0, 32);
             this.splitContainerCustom1.Name = "splitContainerCustom1";
             // 
             // splitContainerCustom1.Panel1
@@ -332,8 +339,8 @@ namespace EDDiscovery.UserControls
             // splitContainerCustom1.Panel2
             // 
             this.splitContainerCustom1.Panel2.Controls.Add(this.dataViewScroller_Wanted);
-            this.splitContainerCustom1.Size = new System.Drawing.Size(924, 653);
-            this.splitContainerCustom1.SplitterDistance = 500;
+            this.splitContainerCustom1.Size = new System.Drawing.Size(1088, 820);
+            this.splitContainerCustom1.SplitterDistance = 588;
             this.splitContainerCustom1.TabIndex = 25;
             // 
             // splitContainerCustom2
@@ -350,8 +357,8 @@ namespace EDDiscovery.UserControls
             // splitContainerCustom2.Panel2
             // 
             this.splitContainerCustom2.Panel2.Controls.Add(this.richTextBox_History);
-            this.splitContainerCustom2.Size = new System.Drawing.Size(500, 653);
-            this.splitContainerCustom2.SplitterDistance = 539;
+            this.splitContainerCustom2.Size = new System.Drawing.Size(588, 820);
+            this.splitContainerCustom2.SplitterDistance = 675;
             this.splitContainerCustom2.TabIndex = 0;
             // 
             // dataViewScroller_Distances
@@ -363,7 +370,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
             this.dataViewScroller_Distances.ScrollBarWidth = 20;
-            this.dataViewScroller_Distances.Size = new System.Drawing.Size(500, 539);
+            this.dataViewScroller_Distances.Size = new System.Drawing.Size(588, 675);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
@@ -378,13 +385,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(480, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(568, 21);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 518);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 654);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -409,7 +416,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(480, 539);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(568, 675);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -460,12 +467,15 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ReadOnly = false;
+            this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
+    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
             this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
+            this.richTextBox_History.ScrollBarLineTweak = 0;
             this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
@@ -473,7 +483,7 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
-            this.richTextBox_History.Size = new System.Drawing.Size(500, 110);
+            this.richTextBox_History.Size = new System.Drawing.Size(588, 141);
             this.richTextBox_History.TabIndex = 0;
             this.richTextBox_History.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBox_History.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
@@ -487,7 +497,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
             this.dataViewScroller_Wanted.ScrollBarWidth = 20;
-            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(420, 653);
+            this.dataViewScroller_Wanted.Size = new System.Drawing.Size(496, 820);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
@@ -502,13 +512,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(400, 21);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(476, 21);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 632);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 799);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -546,7 +556,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(400, 653);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(476, 820);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -571,11 +581,10 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.splitContainerCustom1);
             this.Controls.Add(this.panel_controls);
             this.Name = "UserControlTrilateration";
-            this.Size = new System.Drawing.Size(924, 681);
+            this.Size = new System.Drawing.Size(1088, 852);
             this.trilatContextMenu.ResumeLayout(false);
             this.wantedContextMenu.ResumeLayout(false);
             this.panel_controls.ResumeLayout(false);
-            this.panel_controls.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.splitContainerCustom1.Panel1.ResumeLayout(false);

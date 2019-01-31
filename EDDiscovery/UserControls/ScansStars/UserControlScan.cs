@@ -337,12 +337,6 @@ namespace EDDiscovery.UserControls
             // 128,96,64,48
             dropdown = new DropDownCustom("", true);
 
-            dropdown.SelectionBackColor = EDDTheme.Instance.ButtonBackColor;
-            dropdown.ForeColor = EDDTheme.Instance.ButtonTextColor;
-            dropdown.BackColor = EDDTheme.Instance.ButtonBackColor;
-            dropdown.BorderColor = EDDTheme.Instance.ButtonBorderColor;
-            dropdown.MouseOverBackgroundColor = EDDTheme.Instance.ButtonBackColor.Multiply(1.4f);
-
             Image[] imagelist = new Image[] { global::EDDiscovery.Icons.Controls.Scan_SizeLarge ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeMedium ,
                 global::EDDiscovery.Icons.Controls.Scan_SizeSmall ,
@@ -371,6 +365,9 @@ namespace EDDiscovery.UserControls
             };
 
             dropdown.Size = new Size(64, dropdown.ItemHeight * textlist.Length + 8);
+
+            EDDTheme.Instance.ApplyToControls(dropdown);
+
             dropdown.Show(this.FindForm());
         }
 

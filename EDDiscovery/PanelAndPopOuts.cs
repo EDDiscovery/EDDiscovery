@@ -73,6 +73,7 @@ namespace EDDiscovery
             OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
             SplitterControl,        // 39
             MissionOverlay,         // 40
+            CaptainsLog,            // 41 Actually its important for debugging purposes so you can recongnised the ID
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -82,7 +83,7 @@ namespace EDDiscovery
         static private List<PanelInfo> paneldefinition = new List<PanelInfo>()
         {
             { new PanelInfo( "History") },
-            { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Program log" ) },
+            { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
             { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list", transparent: false) },
@@ -108,13 +109,16 @@ namespace EDDiscovery
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
-            { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","List of nearest stars") },
-            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Scan value estimates of bodies in system", transparent: false) },
+            { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
+            { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },
             { new PanelInfo( PanelIDs.LocalMap, typeof(UserControlLocalMap), "Map 3D Local Systems", "LocalMap", "Map in 3D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Plot, typeof(UserControlPlot), "Map 2D Local Systems", "Plot", "Map in 2D of local systems", transparent: false) },
             { new PanelInfo( PanelIDs.Search, typeof(UserControlSearch), "Search", "SearchFinder", "Search") },
             { new PanelInfo( PanelIDs.Trilateration, typeof(UserControlTrilateration) ,"Trilateration", "Trilateration", "Trilateration of stars with unknown positions") },
-            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "System and planetary bookmarks", transparent:false)},
+
+            { new PanelInfo( "Bookmarks and Logs") },
+            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets", transparent:false)},
+            { new PanelInfo( PanelIDs.CaptainsLog, typeof(UserControlCaptainsLog), "Captain's Log", "CaptainsLog", "Captain's Log - notes on your travels", transparent:false)},
 
             { new PanelInfo( "Combat") },
             { new PanelInfo( PanelIDs.CombatPanel, typeof(UserControlCombatPanel), "Combat", "Combat", "Combat statistics", transparent:false)},
