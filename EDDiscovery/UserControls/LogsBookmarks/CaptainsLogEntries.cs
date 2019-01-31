@@ -33,8 +33,10 @@ namespace EDDiscovery.UserControls
     {
         private string DbColumnSave { get { return DBName("CaptainsLogPanel", "DGVCol"); } }
         private string DbSaveTags { get { return "CaptainsLogPanelTagNames"; } }    // global, not panel related
-        private string DbStartDate { get { return DBName("CaptainsLogPanel", "SD"); } }    
-        private string DbEndDate { get { return DBName("CaptainsLogPanel", "ED"); } }   
+        private string DbStartDate { get { return DBName("CaptainsLogPanel", "SD"); } }
+        private string DbStartDateOn { get { return DBName("CaptainsLogPanel", "SDOn"); } }
+        private string DbEndDate { get { return DBName("CaptainsLogPanel", "ED"); } }
+        private string DbEndDateOn { get { return DBName("CaptainsLogPanel", "EDOn"); } }
 
         public Dictionary<string, Image> tags;
 
@@ -68,9 +70,13 @@ namespace EDDiscovery.UserControls
             LoadTags();
 
             dateTimePickerStartDate.Value = SQLiteConnectionUser.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
+            dateTimePickerStartDate.Checked = SQLiteConnectionUser.GetSettingBool(DbStartDateOn, false);
             dateTimePickerEndDate.Value = SQLiteConnectionUser.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dateTimePickerEndDate.Checked = SQLiteConnectionUser.GetSettingBool(DbEndDateOn, false);
             dateTimePickerStartDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
+
+            discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
         }
 
         void LoadTags()
@@ -105,15 +111,24 @@ namespace EDDiscovery.UserControls
 
             SQLiteConnectionUser.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
             SQLiteConnectionUser.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
+            SQLiteConnectionUser.PutSettingBool(DbStartDateOn, dateTimePickerStartDate.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbEndDateOn, dateTimePickerEndDate.Checked);
 
             searchtimer.Dispose();
             GlobalCaptainsLogList.Instance.OnLogEntryChanged -= LogChanged;
+
+            discoveryform.OnRefreshCommanders -= Discoveryform_OnRefreshCommanders;
         }
         #endregion
 
         #region display
 
         public override void InitialDisplay()
+        {
+            Display();
+        }
+
+        private void Discoveryform_OnRefreshCommanders()
         {
             Display();
         }

@@ -502,11 +502,7 @@
     <EmbeddedResource Include="Controls\StatsTime\Planets.png" />
     <EmbeddedResource Include="Controls\StatsTime\Stars.png" />
     <EmbeddedResource Include="Controls\StatsTime\Text.png" />
-    <EmbeddedResource Include="Controls\TabStrip\ArrowLeft.png" />
-    <EmbeddedResource Include="Controls\TabStrip\ArrowRight.png" />
-    <EmbeddedResource Include="Controls\TabStrip\PanelList.png" />
     <EmbeddedResource Include="Controls\TabStrip\Popout.png" />
-    <EmbeddedResource Include="Controls\TabStrip\NoPanelSelected.png" />
     <EmbeddedResource Include="Controls\TravelGrid\ExportToExcel.png" />
     <EmbeddedResource Include="Controls\Trilateration\RemoveAll.png" />
     <EmbeddedResource Include="Controls\Trilateration\RemoveUnused.png" />
@@ -666,6 +662,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\CaptainsLog.png" />
     <EmbeddedResource Include="Controls\Scan\SizeTinyTiny.png" />
     <EmbeddedResource Include="Controls\Scan\SizeMinuscule.png" />
     <EmbeddedResource Include="Journal\SquadronStartup.png" />

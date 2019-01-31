@@ -98,22 +98,22 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            int buttop = 40;
+            int buttop = Math.Max(16,this.Height/8);
 
             int hspacing = (this.Width)/8;
             int butwidth = hspacing * 3 / 4;
-            int vspacing = (this.Height - 40) / 5;
+            int vspacing = (this.Height - buttop) / 5;
             int butheight = vspacing * 3 / 4;
 
             int butleft = hspacing / 2;
             int leftrighthoffset = hspacing/2-4;
 
-            calfont = discoveryform.theme.GetFontAtSize(butwidth / 4);      // tried disposing of old font but that crashes since the button is still assigned to it..
-            labfont = discoveryform.theme.GetFontAtSize(butwidth / 5);
+            calfont = discoveryform.theme.GetFontAtSize(Math.Max(1,butwidth / 4));      // tried disposing of old font but that crashes since the button is still assigned to it..
+            labfont = discoveryform.theme.GetFontAtSize(Math.Min(Math.Max(butwidth / 5,1),24));
 
             for (int i = 0; i < 7; i++)
             {
-                daynameslabels[i].Size = new Size(butwidth, 24);
+                daynameslabels[i].Size = new Size(butwidth, buttop-4);
                 daynameslabels[i].Location = new Point(butleft + hspacing * i, 4);
                 daynameslabels[i].Font = labfont;
             }
