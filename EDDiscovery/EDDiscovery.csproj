@@ -174,6 +174,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
+      <Link>Icons\Controls.Designer.cs</Link>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Controls.resx</DependentUpon>
+    </None>
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
     <Compile Include="Actions\AudioHelper.cs" />
@@ -935,14 +941,8 @@
     <None Include="..\EDDIcons\Controls\Fakes\Controls.resx">
       <Link>Icons\Controls.resx</Link>
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
       <CustomToolNamespace>EDDiscovery.Icons</CustomToolNamespace>
-    </None>
-    <None Include="..\EDDIcons\Controls\Fakes\Controls.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Controls.resx</DependentUpon>
-      <Link>Icons\Controls.Designer.cs</Link>
+      <LastGenOutput>Controls.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

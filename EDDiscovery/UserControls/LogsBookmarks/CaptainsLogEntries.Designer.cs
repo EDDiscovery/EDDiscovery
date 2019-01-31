@@ -129,17 +129,18 @@
             // 
             // buttonTags
             // 
-            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonTags.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Tags;
             this.buttonTags.Location = new System.Drawing.Point(280, 0);
             this.buttonTags.Name = "buttonTags";
             this.buttonTags.Size = new System.Drawing.Size(32, 32);
             this.buttonTags.TabIndex = 27;
+            this.toolTip.SetToolTip(this.buttonTags, "Edit Tags");
             this.buttonTags.UseVisualStyleBackColor = true;
             this.buttonTags.Click += new System.EventHandler(this.buttonTags_Click);
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
+            this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_Delete;
             this.buttonDelete.Location = new System.Drawing.Point(242, 0);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(32, 32);
@@ -150,7 +151,7 @@
             // 
             // buttonNew
             // 
-            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.Bookmarks_New;
+            this.buttonNew.Image = global::EDDiscovery.Icons.Controls.CaptainsLog_New;
             this.buttonNew.Location = new System.Drawing.Point(204, 0);
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(32, 32);
@@ -180,7 +181,7 @@
             this.textBoxFilter.Size = new System.Drawing.Size(148, 20);
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textBoxFilter, "Search for Bookmark");
+            this.toolTip.SetToolTip(this.textBoxFilter, "Search for Log Entries");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 

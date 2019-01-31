@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             // 
             // toolStrip
             // 
+            this.toolStrip.AutoSize = false;
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonNew,
@@ -101,33 +102,36 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxRouteSelection});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(787, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1134, 32);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripButtonNew
             // 
             this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.Expedition_New;
+            this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(85, 22);
+            this.toolStripButtonNew.Size = new System.Drawing.Size(93, 29);
             this.toolStripButtonNew.Text = "New Route";
             this.toolStripButtonNew.Click += new System.EventHandler(this.toolStripButtonNew_Click);
             // 
             // toolStripButtonImportFile
             // 
             this.toolStripButtonImportFile.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportFile;
+            this.toolStripButtonImportFile.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportFile.Name = "toolStripButtonImportFile";
-            this.toolStripButtonImportFile.Size = new System.Drawing.Size(82, 22);
+            this.toolStripButtonImportFile.Size = new System.Drawing.Size(90, 29);
             this.toolStripButtonImportFile.Text = "Import file";
             this.toolStripButtonImportFile.Click += new System.EventHandler(this.toolStripButtonImportFile_Click);
             // 
             // toolStripButtonImportRoute
             // 
             this.toolStripButtonImportRoute.Image = global::EDDiscovery.Icons.Controls.Expedition_ImportRoute;
+            this.toolStripButtonImportRoute.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonImportRoute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonImportRoute.Name = "toolStripButtonImportRoute";
-            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonImportRoute.Size = new System.Drawing.Size(102, 29);
             this.toolStripButtonImportRoute.Text = "Import route";
             this.toolStripButtonImportRoute.ToolTipText = "Import from route tab";
             this.toolStripButtonImportRoute.Click += new System.EventHandler(this.toolStripButtonImportRoute_Click);
@@ -135,18 +139,20 @@ namespace EDDiscovery.UserControls
             // toolStripButtonSave
             // 
             this.toolStripButtonSave.Image = global::EDDiscovery.Icons.Controls.Expedition_Save;
+            this.toolStripButtonSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(85, 22);
+            this.toolStripButtonSave.Size = new System.Drawing.Size(93, 29);
             this.toolStripButtonSave.Text = "Save Route";
             this.toolStripButtonSave.Click += new System.EventHandler(this.toolStripButtonSave_Click);
             // 
             // toolStripButtonExport
             // 
             this.toolStripButtonExport.Image = global::EDDiscovery.Icons.Controls.Expedition_Export;
+            this.toolStripButtonExport.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonExport.Name = "toolStripButtonExport";
-            this.toolStripButtonExport.Size = new System.Drawing.Size(60, 22);
+            this.toolStripButtonExport.Size = new System.Drawing.Size(68, 29);
             this.toolStripButtonExport.Text = "Export";
             this.toolStripButtonExport.ToolTipText = "Export to file";
             this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
@@ -154,17 +160,19 @@ namespace EDDiscovery.UserControls
             // toolStripButtonDelete
             // 
             this.toolStripButtonDelete.Image = global::EDDiscovery.Icons.Controls.Expedition_Delete;
+            this.toolStripButtonDelete.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(94, 22);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(102, 29);
             this.toolStripButtonDelete.Text = "Delete Route";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
             // 
             // toolStripButtonShowOn3DMap
             // 
             this.toolStripButtonShowOn3DMap.Image = global::EDDiscovery.Icons.Controls.Expedition_ShowOnMap;
+            this.toolStripButtonShowOn3DMap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonShowOn3DMap.Name = "toolStripButtonShowOn3DMap";
-            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(117, 20);
+            this.toolStripButtonShowOn3DMap.Size = new System.Drawing.Size(125, 29);
             this.toolStripButtonShowOn3DMap.Text = "Show on 3D Map";
             this.toolStripButtonShowOn3DMap.Click += new System.EventHandler(this.toolStripButtonShowOn3DMap_Click);
             // 
@@ -188,7 +196,7 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
-            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(200, 22);
+            this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(200, 29);
             this.toolStripComboBoxRouteSelection.ValueMember = "";
             this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             this.toolStripComboBoxRouteSelection.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripComboBoxRouteSelection_MouseUp);
@@ -209,9 +217,9 @@ namespace EDDiscovery.UserControls
             this.panelRouteInfo.Controls.Add(this.textBoxRouteName);
             this.panelRouteInfo.Controls.Add(this.labelRouteName);
             this.panelRouteInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRouteInfo.Location = new System.Drawing.Point(0, 25);
+            this.panelRouteInfo.Location = new System.Drawing.Point(0, 32);
             this.panelRouteInfo.Name = "panelRouteInfo";
-            this.panelRouteInfo.Size = new System.Drawing.Size(787, 89);
+            this.panelRouteInfo.Size = new System.Drawing.Size(1134, 89);
             this.panelRouteInfo.TabIndex = 1;
             // 
             // labelCml
@@ -416,9 +424,9 @@ namespace EDDiscovery.UserControls
             this.Note});
             this.dataGridViewRouteSystems.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridViewRouteSystems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 114);
+            this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 121);
             this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
-            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(787, 436);
+            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1134, 552);
             this.dataGridViewRouteSystems.TabIndex = 2;
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
@@ -524,7 +532,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.panelRouteInfo);
             this.Controls.Add(this.toolStrip);
             this.Name = "UserControlExpedition";
-            this.Size = new System.Drawing.Size(787, 550);
+            this.Size = new System.Drawing.Size(1134, 673);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.panelRouteInfo.ResumeLayout(false);
@@ -533,7 +541,6 @@ namespace EDDiscovery.UserControls
             this.contextMenuCopyPaste.ResumeLayout(false);
             this.ctxMenuCombo.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

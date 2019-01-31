@@ -93,9 +93,9 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap DateTimePicker_Calendar {
+        public static System.Drawing.Bitmap CaptainsLog_Delete {
             get {
-                object obj = ResourceManager.GetObject("DateTimePicker_Calendar", resourceCulture);
+                object obj = ResourceManager.GetObject("CaptainsLog_Delete", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +103,39 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap EDSM_ExportToExcel {
+        public static System.Drawing.Bitmap CaptainsLog_Diary {
             get {
-                object obj = ResourceManager.GetObject("EDSM_ExportToExcel", resourceCulture);
+                object obj = ResourceManager.GetObject("CaptainsLog_Diary", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CaptainsLog_Entries {
+            get {
+                object obj = ResourceManager.GetObject("CaptainsLog_Entries", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CaptainsLog_New {
+            get {
+                object obj = ResourceManager.GetObject("CaptainsLog_New", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap CaptainsLog_Tags {
+            get {
+                object obj = ResourceManager.GetObject("CaptainsLog_Tags", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -276,26 +306,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap JournalGrid_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("JournalGrid_ExportToExcel", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap JournalGrid_Journal {
-            get {
-                object obj = ResourceManager.GetObject("JournalGrid_Journal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap JournalGrid_Popout {
-            get {
-                object obj = ResourceManager.GetObject("JournalGrid_Popout", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1293,16 +1303,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Plot_Dots {
-            get {
-                object obj = ResourceManager.GetObject("Plot_Dots", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap RollUpPanel_PinDown {
             get {
                 object obj = ResourceManager.GetObject("RollUpPanel_PinDown", resourceCulture);
@@ -1603,16 +1603,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap StarList_History {
-            get {
-                object obj = ResourceManager.GetObject("StarList_History", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap StarList_Jumponium {
             get {
                 object obj = ResourceManager.GetObject("StarList_Jumponium", resourceCulture);
@@ -1663,56 +1653,6 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap TabStrip_ArrowLeft {
-            get {
-                object obj = ResourceManager.GetObject("TabStrip_ArrowLeft", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TabStrip_ArrowRight {
-            get {
-                object obj = ResourceManager.GetObject("TabStrip_ArrowRight", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TabStrip_NoPanelSelected {
-            get {
-                object obj = ResourceManager.GetObject("TabStrip_NoPanelSelected", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TabStrip_PanelList {
-            get {
-                object obj = ResourceManager.GetObject("TabStrip_PanelList", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TabStrip_Popout {
-            get {
-                object obj = ResourceManager.GetObject("TabStrip_Popout", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap TravelGrid_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("TravelGrid_ExportToExcel", resourceCulture);
@@ -1736,26 +1676,6 @@ namespace EDDiscovery.Icons {
         public static System.Drawing.Bitmap TravelGrid_FlagStop {
             get {
                 object obj = ResourceManager.GetObject("TravelGrid_FlagStop", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TravelGrid_History {
-            get {
-                object obj = ResourceManager.GetObject("TravelGrid_History", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap TravelGrid_Popout {
-            get {
-                object obj = ResourceManager.GetObject("TravelGrid_Popout", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

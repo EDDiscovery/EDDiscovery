@@ -40,7 +40,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials };
+            tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.CaptainsLog_Diary, EDDiscovery.Icons.Controls.CaptainsLog_Entries};
             tabStrip.TextList = new string[] { "Diary".Tx(this), "Entries".Tx(this) };
             tabStrip.TagList = new Type[] { typeof(CaptainsLogDiary), typeof(CaptainsLogEntries) };
 

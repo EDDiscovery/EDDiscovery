@@ -7,6 +7,7 @@ Adding icons is complicated
 
 5. Open the resource file in Fakes to view the icons
 6. Drag the icon from the folder into the resource view to add it.
+7. Rename, in the resource editor, the resource entry so its not generic if required - add on a prefix
 
 Controls.Designer.CS should have:
 
@@ -30,9 +31,11 @@ Controls.resx should show the icon and have:
         public static Image firstdiscover { get { return IconSet.GetIcon("Controls.SysInfo.firstdiscover"); } }
         #endregion
 
-Note the firstdiscovery name MUST MATCH the resx name..  EVEN though it looks like it does need to, 
+Note the firstdiscovery name MUST MATCH incl case the resx name..  EVEN though it looks like it does need to,
 it must, as the designer must be using some reflection to match the name with the resx file.
 This is a trap for young players!
+
+!! Beware of case in all of these - keep it consistent
 
 8. Rebuild manually EDDICONS
 
