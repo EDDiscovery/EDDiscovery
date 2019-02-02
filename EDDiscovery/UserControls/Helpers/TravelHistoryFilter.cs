@@ -189,6 +189,7 @@ namespace EDDiscovery.UserControls
 
     public class EventFilterSelector
     {
+        //ExtendedControls.CheckedIconListBoxForm cc;
         ExtendedControls.CheckedListBoxForm cc;
         string dbstring;
         public event EventHandler Changed;
@@ -208,37 +209,51 @@ namespace EDDiscovery.UserControls
             AddExtraOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;");
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent)
+        public void FilterButtonJournal(string db, Control ctr, Form parent)
+        {
+            List<JournalTypeEnum> jevents = JournalEntry.GetEnumOfEventsWithOptMethod();
+            jevents.Sort(delegate (JournalTypeEnum left, JournalTypeEnum right)     // in order, oldest first
+            {
+                return left.ToString().CompareTo(right.ToString());
+            });
+
+            List<string> events = jevents.Select(x => x.ToString().SplitCapsWord()).ToList();
+            List<Image> images = jevents.Select(x => JournalEntry.JournalTypeIcons[x]).ToList();
+            events.Sort();
+            FilterButton(db, ctr, parent, events,images);
+        }
+
+        public void FilterButton(string db, Control ctr, Form parent, List<string> list, List<Image> images = null )
+        {
+            FilterButtonInt(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 3,600), parent, list , images);
+        }
+
+        public void FilterButtonJournal(string db, Point p, Size s, Form parent)
         {
             List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
             events.Sort();
-            FilterButton(db, ctr, back, fore, fnt, parent, events);
+            FilterButtonInt(db, p, s, parent, events);
         }
 
-        public void FilterButton(string db, Control ctr, Color back, Color fore, Font fnt, Form parent, List<string> list)
-        {
-            FilterButton(db, ctr.PointToScreen(new Point(0, ctr.Size.Height)), new Size(ctr.Width * 3,600), back, fore, fnt, parent, list);
-        }
-
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Font fnt, Form parent)
-        {
-            List<string> events = JournalEntry.GetListOfEventsWithOptMethod(towords: true);
-            events.Sort();
-            FilterButton(db, p, s, back, fore, fnt, parent, events);
-        }
-
-        public void FilterButton(string db, Point p, Size s, Color back, Color fore, Font fnt, Form parent, List<string> list)
+        private void FilterButtonInt(string db, Point p, Size s, Form parent, List<string> list, List<Image> images = null)
         {
             if (cc == null)
             {
                 dbstring = db;
+                //                cc = new ExtendedControls.CheckedIconListBoxForm();
                 cc = new ExtendedControls.CheckedListBoxForm();
-                cc.Items.Add("All".Tx());       // displayed, translate
-                cc.Items.Add("None".Tx());
+                cc.AddItem("All".Tx());       // displayed, translate
+                cc.AddItem("None".Tx());
 
-                cc.Items.AddRange(extraoptions.Select((x)=>x.Item1).ToArray());
+                cc.AddItems(extraoptions.Select((x)=>x.Item1).ToArray());
 
-                cc.Items.AddRange(list.ToArray());
+                if (images != null)
+                {
+                    //cc.AddNullImageItems(extraoptions.Count + 2);
+                    //cc.AddImageItems(images);
+                }
+
+                cc.AddItems(list.ToArray());
 
                 cc.SetChecked(SQLiteDBClass.GetSettingString(dbstring, "All"));
                 SetFilterSet();
@@ -246,8 +261,8 @@ namespace EDDiscovery.UserControls
                 cc.FormClosed += FilterClosed;
                 cc.CheckedChanged += FilterCheckChanged;
                 cc.PositionSize(p,s);
-                cc.SetColour(back,fore);
-                cc.SetFont(fnt);
+
+                //EDDiscovery.EDDTheme.Instance.ApplyToControls(cc, applytothis:true);
                 cc.Show(parent);
             }
             else

@@ -357,8 +357,7 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.FilterButton(DbFilterSave, b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
+            cfs.FilterButtonJournal(DbFilterSave, b, this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)

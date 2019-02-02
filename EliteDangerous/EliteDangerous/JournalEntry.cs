@@ -1225,17 +1225,15 @@ namespace EliteDangerousCore
 
         #region Misc
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        static public List<JournalTypeEnum> GetEnumOfEventsWithOptMethod(string method = null, string method2 = null)
         {
-            List<string> ret = new List<string>();
+            List<JournalTypeEnum> ret = new List<JournalTypeEnum>();
 
             foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
             {
-                string n = jte.ToString();
-
                 if (method == null)
                 {
-                    ret.Add((towords) ? n.SplitCapsWord() : n);
+                    ret.Add(jte);
                 }
                 else
                 {
@@ -1249,13 +1247,54 @@ namespace EliteDangerousCore
                             m = jtype.GetMethod(method2);
 
                         if (m != null)
-                            ret.Add((towords) ? n.SplitCapsWord() : n);
+                            ret.Add(jte);
                     }
                 }
             }
 
             return ret;
         }
+
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        {
+            var list = GetEnumOfEventsWithOptMethod(method, method2);
+            if (towords)
+                return list.Select(x => x.ToString()).ToList();
+            else
+                return list.Select(x => x.ToString().SplitCapsWord()).ToList();
+        }
+
+        //static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        //{
+        //    List<string> ret = new List<string>();
+
+        //    foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
+        //    {
+        //        string n = jte.ToString();
+
+        //        if (method == null)
+        //        {
+        //            ret.Add((towords) ? n.SplitCapsWord() : n);
+        //        }
+        //        else
+        //        {
+        //            Type jtype = TypeOfJournalEntry(jte);
+
+        //            if (jtype != null)      // may be null, Unknown for instance
+        //            {
+        //                System.Reflection.MethodInfo m = jtype.GetMethod(method);
+
+        //                if (m == null && method2 != null)
+        //                    m = jtype.GetMethod(method2);
+
+        //                if (m != null)
+        //                    ret.Add((towords) ? n.SplitCapsWord() : n);
+        //            }
+        //        }
+        //    }
+
+        //    return ret;
+        //}
 
         protected JObject ReadAdditionalFile( string extrafile, bool waitforfile, bool checktimestamptype )       // read file, return new JSON
         {

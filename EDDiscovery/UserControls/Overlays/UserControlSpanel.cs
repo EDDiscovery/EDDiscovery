@@ -1038,8 +1038,7 @@ namespace EDDiscovery.UserControls
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            cfs.FilterButton(DbFilterSave, contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(180,400), 
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm());
+            cfs.FilterButtonJournal(DbFilterSave, contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(180,400), this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)
