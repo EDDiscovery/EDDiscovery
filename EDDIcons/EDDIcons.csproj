@@ -662,6 +662,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\Surveyor.png" />
     <EmbeddedResource Include="Panels\CaptainsLog.png" />
     <EmbeddedResource Include="Controls\Scan\SizeTinyTiny.png" />
     <EmbeddedResource Include="Controls\Scan\SizeMinuscule.png" />
