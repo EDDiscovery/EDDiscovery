@@ -37,9 +37,8 @@ namespace EDDiscovery.UserControls
     {
         HistoryEntry last_he = null;
 
-        HistoryList current_historylist;        
+        private string DbSave => DBName("Surveyor");
 
-        private string DbSave { get { return DBName("Surveyor"); } }
         private Font displayfont;
         
 
@@ -53,8 +52,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-            discoveryform.OnNewUIEvent += OnNewUIEvent;
+            discoveryform.OnNewEntry += NewEntry;            
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -75,10 +73,6 @@ namespace EDDiscovery.UserControls
         private void Display(HistoryList hl)
         {
             DrawSystem(uctg.GetCurrentHistoryEntry);
-        }
-
-        private void OnNewUIEvent(UIEvent uievent)
-        {
         }
 
         public override void LoadLayout()
@@ -102,7 +96,6 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             discoveryform.OnHistoryChange -= Display;
-            discoveryform.OnNewUIEvent -= OnNewUIEvent;
         }
 
         public override void InitialDisplay()
