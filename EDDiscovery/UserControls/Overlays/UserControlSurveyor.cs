@@ -115,12 +115,20 @@ namespace EDDiscovery.UserControls
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
             if (he.EntryType == JournalTypeEnum.Scan)
-            DrawSystem(he);
+            {
+                DrawSystem(he);
+            }
 
             if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
             {
                 SetControlText("System scan complete.".Tx());
             }
+
+            if (he.EntryType == JournalTypeEnum.FSDJump)
+            {
+                pictureBoxSurveyor.ClearImageList();
+                Refresh();
+            }            
         }
 
         public override Color ColorTransparency => Color.Green;
@@ -189,7 +197,7 @@ namespace EDDiscovery.UserControls
             if (he == null)     //  no he, no display
             {
                 last_he = he;
-                SetControlText("No Scan".Tx());
+                SetControlText("No scan reported.".Tx());
                 return;
             }
             else
@@ -199,7 +207,7 @@ namespace EDDiscovery.UserControls
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
                     last_he = null;
-                    SetControlText("No Scan".Tx());
+                    SetControlText("No scan reported.".Tx());
                     return;
                 }
             }
@@ -339,7 +347,7 @@ namespace EDDiscovery.UserControls
                         1.0F);
                 }
             }
-
+                        
             pictureBoxSurveyor.Refresh();
         }
 
