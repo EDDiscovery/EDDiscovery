@@ -69,9 +69,12 @@ namespace EliteDangerousCore.EDSM
 
         public void ResetFetch()
         {
-            KeyName(out string latestdatekeyname, out string oldestdatekeyname);
-            SQLiteConnectionUser.DeleteKey(latestdatekeyname);
-            SQLiteConnectionUser.DeleteKey(oldestdatekeyname);
+            if (Commander != null)
+            {
+                KeyName(out string latestdatekeyname, out string oldestdatekeyname);
+                SQLiteConnectionUser.DeleteKey(latestdatekeyname);
+                SQLiteConnectionUser.DeleteKey(oldestdatekeyname);
+            }
         }
 
         private void FetcherThreadProc()
