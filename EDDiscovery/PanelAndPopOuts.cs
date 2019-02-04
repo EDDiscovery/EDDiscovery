@@ -74,6 +74,7 @@ namespace EDDiscovery
             SplitterControl,        // 39
             MissionOverlay,         // 40
             CaptainsLog,            // 41 Actually its important for debugging purposes so you can recongnised the ID
+            Surveyor,               // 42
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -131,6 +132,7 @@ namespace EDDiscovery
             { new PanelInfo( "Overlay Panels") },
             { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information" , transparent:false ) },
             { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay" , transparent: false ) },
+            { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surface map aid" , transparent: false ) },
             { new PanelInfo( PanelIDs.Trippanel, typeof(UserControlTrippanel), "Trip Computer", "Trippanel", "Trip computer overlay" , transparent: false) },
             { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" , transparent: false) },
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay", transparent: false) },
