@@ -189,7 +189,23 @@ namespace EliteDangerousCore
         public EliteDangerousCalculations.FSDSpec GetFSDSpec()          // may be null due to not having the info
         {
             ShipModule fsd = GetModule("Frame Shift Drive");
-            return fsd?.GetFSDSpec() ?? null;
+            EliteDangerousCalculations.FSDSpec spec = fsd?.GetFSDSpec();
+
+            if (spec != null)
+            {
+                foreach (ShipModule sm in Modules.Values)
+                {
+                    int classpos;
+                    if (sm.Item.Contains("Guardian FSD Booster") && (classpos = sm.Item.IndexOf("Class ")) != -1)
+                    {
+                        spec.SetFSDBooster(sm.Item[classpos + 6] - '0');
+                        break;
+                    }
+                }
+                return spec;
+            }
+
+            return null;
         }
 
         public double ModuleMass()

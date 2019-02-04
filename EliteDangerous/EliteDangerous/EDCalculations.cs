@@ -18,6 +18,7 @@ namespace EliteDangerousCore
             private double lc;
             private double mOpt;
             private double mfpj;
+            private double boost;
 
             public int FsdClass { get { return fsdClass; } }
             public string Rating { get { return rating; } }
@@ -25,6 +26,7 @@ namespace EliteDangerousCore
             public double LinearConstant { get { return lc; } }
             public double OptimalMass { get { return mOpt; } set { mOpt = value; } }
             public double MaxFuelPerJump { get { return mfpj; } set { mfpj = value; } }
+            public double FSDBoosterRange { get { return boost; } set { boost = value; } }
 
             public FSDSpec(int fsdClass,
                 string rating,
@@ -41,6 +43,19 @@ namespace EliteDangerousCore
                 this.lc = lc;
                 this.mOpt = mOpt;
                 this.mfpj = mfpj;
+                this.boost = 0;
+            }
+
+            public void SetFSDBooster(int fsdBoosterClass)
+            {
+                if (fsdBoosterClass > 0 && fsdBoosterClass <= 5 )
+                {
+                    FSDBoosterRange = FSDBoosterSpec[fsdBoosterClass];
+                }
+                else
+                {
+                    FSDBoosterRange = 0;
+                }
             }
 
             public class JumpInfo
@@ -68,7 +83,7 @@ namespace EliteDangerousCore
 
             public double MaxJump(int currentCargo, double unladenMass, double fuel)
             {
-                return Math.Pow(MaxFuelPerJump / (LinearConstant * 0.001), 1 / PowerConstant) * OptimalMass / (currentCargo + unladenMass + fuel);
+                return Math.Pow(MaxFuelPerJump / (LinearConstant * 0.001), 1 / PowerConstant) * OptimalMass / (currentCargo + unladenMass + fuel) + FSDBoosterRange;
             }
 
             public double CalculateMaxJumpDistance(double cargo, double unladenmass, double fuel, out double jumps)
@@ -82,12 +97,12 @@ namespace EliteDangerousCore
                 double d = 0.0;
 
                 if (fuel > 0.0)
-                    d = Math.Pow(fr / (lc * 0.001), 1 / pc) * mOpt / mass;      // fr is what we have for 1 jump..
+                    d = Math.Pow(fr / (lc * 0.001), 1 / pc) * mOpt / mass + boost;      // fr is what we have for 1 jump... This is probably incorrect for the boost but it is the same formula as coriolis
 
                 for (int idx = 0; idx < jumps; idx++)   // if any more jumps past the first
                 {
                     mass += mfpj;
-                    d += Math.Pow(mfpj / (lc * 0.001), 1 / pc) * mOpt / mass;
+                    d += Math.Pow(mfpj / (lc * 0.001), 1 / pc) * mOpt / mass + boost;
                 }
 
                 return d;
@@ -148,5 +163,7 @@ namespace EliteDangerousCore
                 new FSDSpec(7   ,"A"    ,2.75   ,12 ,2700   ,12.8)
             }
         );
+
+        public static double[] FSDBoosterSpec = { 0, 4, 6, 7.75, 9.25, 10.5 }; // Boost range with module size as index
     }
 }
