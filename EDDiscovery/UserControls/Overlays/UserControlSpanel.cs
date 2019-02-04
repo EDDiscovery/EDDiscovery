@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         private string DbFilterSave { get { return DBName("SPanelEventFilter" ); } }
         private string DbFieldFilter { get { return DBName("SPanelFieldFilter" ); } }
 
-        EventFilterSelector cfs = new EventFilterSelector();
+        FilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
 
         private Timer scanhide = new Timer();
@@ -177,7 +177,9 @@ namespace EDDiscovery.UserControls
             if (filter.Length > 0)
                 fieldfilter.FromJSON(filter);        // load filter
 
-            cfs.AddStandardExtraOptions();
+            cfs = new FilterSelector(DbFilterSave);
+            cfs.AddJournalExtraOptions();
+            cfs.AddJournalEntries();
             cfs.Changed += EventFilterChanged;
 
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
@@ -1038,10 +1040,10 @@ namespace EDDiscovery.UserControls
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            cfs.FilterButtonJournal(DbFilterSave, contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(180,400), this.FindForm());
+            cfs.Filter(contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(300,800), this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, EventArgs e)
+        private void EventFilterChanged(object sender, Object e)
         {
             Display(current_historylist);
         }

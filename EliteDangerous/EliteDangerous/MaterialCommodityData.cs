@@ -29,12 +29,15 @@ namespace EliteDangerousCore
         public string Name { get; private set; }                    // name of it in nice text
         public string FDName { get; private set; }                  // fdname, lower case..
         public string Type { get; private set; }                    // and its type, for materials its commonality, for commodities its group ("Metals" etc).
-        public string TranslatedType { get; private set; }          // translation of above..
+        public string TranslatedType { get; private set; }          // translation of above..        
         public string Shortname { get; private set; }               // short abv. name
         public Color Colour { get; private set; }                   // colour if its associated with one
         public bool Rarity { get; private set; }                    // if it is a rare commodity
 
         public bool IsCommodity { get { return Category == CommodityCategory; } }
+        public bool IsRaw { get { return Category == MaterialRawCategory; } }
+        public bool IsEncoded { get { return Category == MaterialEncodedCategory; } }
+        public bool IsManufactured { get { return Category == MaterialManufacturedCategory; } }
         public bool IsEncodedOrManufactured { get { return Category == MaterialEncodedCategory || Category == MaterialManufacturedCategory; } }
         public bool IsRareCommodity { get { return Rarity && Category.Equals(CommodityCategory); } }
         public bool IsCommonMaterial { get { return Type == MaterialFreqCommon || Type == MaterialFreqVeryCommon; } }
@@ -117,28 +120,53 @@ namespace EliteDangerousCore
             return cachelist.Values.ToArray();
         }
 
-        public static MaterialCommodityData[] GetMaterials()
+
+        // use this delegate to find them
+        public static MaterialCommodityData[] Get(Func<MaterialCommodityData,bool> func, bool sorted)
         {
             if (cachelist == null)
                 FillTable();
 
-            return cachelist.Values.Where(x => x.Category != CommodityCategory).ToArray();
+            MaterialCommodityData[] items = cachelist.Values.Where(func).ToArray();
+
+            if ( sorted )
+            {
+                Array.Sort(items, delegate (MaterialCommodityData left, MaterialCommodityData right)     // in order, name
+                {
+                    return left.Name.CompareTo(right.Name.ToString());
+                });
+
+            }
+
+            return items;
         }
 
-        public static MaterialCommodityData[] GetCommodities()
+        public static MaterialCommodityData[] GetCommodities(bool sorted)
         {
-            if (cachelist == null)
-                FillTable();
-
-            return cachelist.Values.Where(x => x.Category == CommodityCategory).ToArray();
+            return Get(x => x.Category == CommodityCategory, sorted);
         }
 
-        public static MaterialCommodityData[] GetCommoditiesRaw()
+        public static MaterialCommodityData[] GetMaterials(bool sorted)
         {
-            if (cachelist == null)
-                FillTable();
+            return Get(x => x.Category != CommodityCategory, sorted);
+        }
 
-            return cachelist.Values.Where(x => x.Category == CommodityCategory || x.Category == MaterialRawCategory).ToArray();
+        public static string[] GetTypes(Func<MaterialCommodityData, bool> func, bool sorted)
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            string[] types = mcs.Where(func).Select(x => x.Type).Distinct().ToArray();
+            if (sorted)
+                Array.Sort(types);
+            return types;
+        }
+
+        public static string[] GetMembersOfType(string typename, bool sorted)
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            string[] members = mcs.Where(x=>x.Type.Equals(typename,StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToArray();
+            if (sorted)
+                Array.Sort(members);
+            return members;
         }
 
         #endregion

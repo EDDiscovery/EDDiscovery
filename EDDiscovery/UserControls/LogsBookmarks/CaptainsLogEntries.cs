@@ -46,6 +46,8 @@ namespace EDDiscovery.UserControls
 
         Timer searchtimer;
         bool updateprogramatically;
+        ExtendedControls.CheckedIconListBoxFilterForm cfs;
+
 
         #region init
         public CaptainsLogEntries()
@@ -77,6 +79,10 @@ namespace EDDiscovery.UserControls
             dateTimePickerEndDate.ValueChanged += (s, e) => { if (!updateprogramatically) Display(); };
 
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
+
+            cfs = new ExtendedControls.CheckedIconListBoxFilterForm();
+            cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
+            cfs.SaveBack += TagsChanged;
         }
 
         void LoadTags()
@@ -310,7 +316,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        ExtendedControls.CheckedListBoxForm dropdown;
+
 
         private void EditTags(DataGridViewRow rw)
         {
@@ -318,52 +324,23 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Image> images = (from x in Dickeys select tags[x]).ToList();
 
-            dropdown = new ExtendedControls.CheckedListBoxForm();
-            dropdown.Items.Add("All".Tx());       // displayed, translate
-            dropdown.Items.Add("None".Tx());
-
-            dropdown.Items.AddRange(Dickeys.ToArray());
-
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
+            string taglist = curtags != null ? string.Join(";", curtags) : "";
             System.Diagnostics.Debug.WriteLine("Cur keys" + curtags);
-            dropdown.SetChecked(curtags);   // null allowed
-            SetAllOrNone();
-
-            //dropdown.FormClosed += FilterClosed;
-            dropdown.CheckedChanged += (sv, ev) =>
-            {
-                dropdown.SetChecked(ev.NewValue == CheckState.Checked, ev.Index, 1);        // force check now (its done after it) so our functions work..
-
-                if (ev.Index == 0 && ev.NewValue == CheckState.Checked)                     // all, and checked
-                    dropdown.SetChecked(true, 2);                                           // rest go on..
-
-                if ((ev.Index == 1 && ev.NewValue == CheckState.Checked) )                  // none is checked..
-                    dropdown.SetChecked(false, 2);                                          // rest off
-
-                SetAllOrNone();
-            };
-
-            dropdown.FormClosed += (sv, ev) =>
-            {
-                List<string> newtags = dropdown.GetCheckedList(2, allornone:false);         // we don't use all or none to store - too difficult!
-                rw.Cells[4].Tag = newtags;
-                rw.MinimumHeight = Math.Max(newtags.Count * TagSpacing, MinRowSize);
-                StoreRow(rw);
-                dataGridView.InvalidateRow(rw.Index);
-            };
 
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
 
-            dropdown.PositionSize(loc, new Size(400, 400));
-            EDDTheme.Instance.ApplyToControls(dropdown);
-            dropdown.Show(this.FindForm());
+            cfs.Filter(taglist, loc, new Size(250, 600), this.FindForm(), Dickeys, images, tag:rw);
         }
 
-        private void SetAllOrNone()
+        private void TagsChanged(string newtags, Object tag)
         {
-            string list = dropdown.GetChecked(2);       // here we use All or None to find out list extent
-            dropdown.SetChecked(list.Equals("All"), 0, 1);
-            dropdown.SetChecked(list.Equals("None"), 1, 1);
+            var slist = newtags.Split(';').ToList();            // ; at end due to definition..
+            DataGridViewRow rwtagedited = tag as DataGridViewRow;
+            rwtagedited.Cells[4].Tag = slist;
+            rwtagedited.MinimumHeight = Math.Max((slist.Count-1) * TagSpacing, MinRowSize);
+            StoreRow(rwtagedited);
+            dataGridView.InvalidateRow(rwtagedited.Index);
         }
 
         private void StoreRow( DataGridViewRow rw)

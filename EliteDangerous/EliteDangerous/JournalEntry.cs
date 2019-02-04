@@ -235,6 +235,7 @@ namespace EliteDangerousCore
         EDDItemSet = 2000,
         EDDCommodityPrices = 2010,
 
+        ICONIDsStart = 10000,
         // Specials Event IDs for ICON selection - alternate Icons for these events
         RestockVehicle_SRV = 10750,
         RestockVehicle_Fighter = 10751,
@@ -1232,22 +1233,25 @@ namespace EliteDangerousCore
 
             foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
             {
-                if (methods == null)
+                if ((int)jte < (int)JournalTypeEnum.ICONIDsStart)
                 {
-                    ret.Add(jte);
-                }
-                else
-                {
-                    Type jtype = TypeOfJournalEntry(jte);
-
-                    if (jtype != null)      // may be null, Unknown for instance
+                    if (methods == null)
                     {
-                        foreach( var n in methods)
+                        ret.Add(jte);
+                    }
+                    else
+                    {
+                        Type jtype = TypeOfJournalEntry(jte);
+
+                        if (jtype != null)      // may be null, Unknown for instance
                         {
-                            if (jtype.GetMethod(n) != null )
+                            foreach (var n in methods)
                             {
-                                ret.Add(jte);
-                                break;
+                                if (jtype.GetMethod(n) != null)
+                                {
+                                    ret.Add(jte);
+                                    break;
+                                }
                             }
                         }
                     }

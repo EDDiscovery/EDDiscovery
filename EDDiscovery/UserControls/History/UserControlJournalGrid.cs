@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlJournalGrid : UserControlCommonBase, IHistoryCursor
     {
-        EventFilterSelector cfs = new EventFilterSelector();
+        FilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
@@ -82,7 +82,10 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewJournal.RowTemplate.Height = 26;
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            cfs.AddStandardExtraOptions();
+
+            cfs = new FilterSelector(DbFilterSave);
+            cfs.AddJournalExtraOptions();
+            cfs.AddJournalEntries();
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
@@ -357,10 +360,10 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.JournalEvents(DbFilterSave, b, this.FindForm());
+            cfs.Filter(b, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, EventArgs e)
+        private void EventFilterChanged(object sender, Object e)
         {
             Display(current_historylist);
         }

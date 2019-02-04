@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        EventFilterSelector cfs = new EventFilterSelector();
+        FilterSelector cfs;
 
         Timer searchtimer;
         Timer todotimer;
@@ -105,7 +105,9 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 
-            cfs.AddStandardExtraOptions();
+            cfs = new FilterSelector(DbFilterSave);
+            cfs.AddJournalExtraOptions();
+            cfs.AddJournalEntries();
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
@@ -1208,10 +1210,10 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.JournalEvents(DbFilterSave, b, this.FindForm());
+            cfs.Filter(b, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, EventArgs e)
+        private void EventFilterChanged(object sender, Object e)
         {
             HistoryChanged(current_historylist,true);
         }

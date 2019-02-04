@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
             this.Price = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonFilter = new ExtendedControls.ExtButton();
             this.textBoxItems2 = new ExtendedControls.ExtTextBox();
             this.textBoxItems1 = new ExtendedControls.ExtTextBox();
             this.labelItems2 = new System.Windows.Forms.Label();
@@ -183,6 +184,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
+            this.panelButtons.Controls.Add(this.buttonFilter);
             this.panelButtons.Controls.Add(this.textBoxItems2);
             this.panelButtons.Controls.Add(this.textBoxItems1);
             this.panelButtons.Controls.Add(this.labelItems2);
@@ -193,6 +195,17 @@ namespace EDDiscovery.UserControls
             this.panelButtons.Name = "panelButtons";
             this.panelButtons.Size = new System.Drawing.Size(704, 28);
             this.panelButtons.TabIndex = 2;
+            // 
+            // buttonFilter
+            // 
+            this.buttonFilter.Location = new System.Drawing.Point(6, 2);
+            this.buttonFilter.Name = "buttonFilter";
+            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
+            this.buttonFilter.TabIndex = 5;
+            this.buttonFilter.Text = "Filter";
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out items");
+            this.buttonFilter.UseVisualStyleBackColor = true;
+            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
             // textBoxItems2
             // 
@@ -205,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems2.ClearOnFirstChar = false;
             this.textBoxItems2.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxItems2.InErrorCondition = false;
-            this.textBoxItems2.Location = new System.Drawing.Point(360, 3);
+            this.textBoxItems2.Location = new System.Drawing.Point(295, 3);
             this.textBoxItems2.Multiline = false;
             this.textBoxItems2.Name = "textBoxItems2";
             this.textBoxItems2.ReadOnly = false;
@@ -229,7 +242,7 @@ namespace EDDiscovery.UserControls
             this.textBoxItems1.ClearOnFirstChar = false;
             this.textBoxItems1.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxItems1.InErrorCondition = false;
-            this.textBoxItems1.Location = new System.Drawing.Point(210, 3);
+            this.textBoxItems1.Location = new System.Drawing.Point(145, 3);
             this.textBoxItems1.Multiline = false;
             this.textBoxItems1.Name = "textBoxItems1";
             this.textBoxItems1.ReadOnly = false;
@@ -245,7 +258,7 @@ namespace EDDiscovery.UserControls
             // labelItems2
             // 
             this.labelItems2.AutoSize = true;
-            this.labelItems2.Location = new System.Drawing.Point(310, 4);
+            this.labelItems2.Location = new System.Drawing.Point(245, 4);
             this.labelItems2.Name = "labelItems2";
             this.labelItems2.Size = new System.Drawing.Size(43, 13);
             this.labelItems2.TabIndex = 3;
@@ -254,7 +267,7 @@ namespace EDDiscovery.UserControls
             // labelItems1
             // 
             this.labelItems1.AutoSize = true;
-            this.labelItems1.Location = new System.Drawing.Point(160, 4);
+            this.labelItems1.Location = new System.Drawing.Point(95, 4);
             this.labelItems1.Name = "labelItems1";
             this.labelItems1.Size = new System.Drawing.Size(43, 13);
             this.labelItems1.TabIndex = 3;
@@ -268,7 +281,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxClear.FontNerfReduction = 0.5F;
             this.checkBoxClear.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxClear.Location = new System.Drawing.Point(6, 3);
+            this.checkBoxClear.Location = new System.Drawing.Point(376, 6);
             this.checkBoxClear.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxClear.Name = "checkBoxClear";
             this.checkBoxClear.Size = new System.Drawing.Size(116, 17);
@@ -319,5 +332,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTextBox textBoxItems1;
         private System.Windows.Forms.Label labelItems2;
         private System.Windows.Forms.Label labelItems1;
+        private ExtendedControls.ExtButton buttonFilter;
     }
 }
