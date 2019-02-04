@@ -1135,7 +1135,7 @@ namespace EliteDangerousCore
         // true if merged back to previous..
         public static bool MergeEntries(JournalEntry prev, JournalEntry je)
         {
-            if (prev != null)
+            if (prev != null && !EliteConfigInstance.InstanceOptions.DisableMerge)
             {
                 bool prevsame = je.EventTypeID == prev.EventTypeID;
 

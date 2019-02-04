@@ -674,6 +674,8 @@
     <EmbeddedResource Include="Controls\CaptainsLog\Tags.png" />
     <EmbeddedResource Include="Controls\CaptainsLog\Diary.png" />
     <EmbeddedResource Include="Controls\CaptainsLog\Entries.png" />
+    <EmbeddedResource Include="Controls\General\All.png" />
+    <EmbeddedResource Include="Controls\General\None.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

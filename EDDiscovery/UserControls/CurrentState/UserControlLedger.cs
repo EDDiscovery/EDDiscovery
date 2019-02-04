@@ -50,7 +50,9 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;
 
-            cfs.AddExtraOption("Cash Transactions".Tx(this), string.Join(";", EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger")));
+            var jes = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "Ledger" });
+            string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
+            cfs.AddExtraOption("Cash Transactions".Tx(this), cashtype , JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
 
             cfs.Changed += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldockstartend:false);
@@ -162,10 +164,7 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.FilterButton(DbFilterSave, b,
-                             discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, discoveryform.theme.GetFontStandardFontSize(), this.FindForm() ,
-                             EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(true, "Ledger", "LedgerNC")
-                             );
+            cfs.JournalEvents(DbFilterSave, b, this.FindForm(), new string[] { "Ledger", "LedgerNC" });
         }
 
         private void comboBoxHistoryWindow_SelectedIndexChanged(object sender, EventArgs e)

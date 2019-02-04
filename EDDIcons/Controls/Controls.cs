@@ -247,6 +247,10 @@ namespace EDDiscovery.Icons
         public static Image CaptainsLog_Entries { get { return IconSet.GetIcon("Controls.CaptainsLog.Entries"); } }
         public static Image CaptainsLog_Diary { get { return IconSet.GetIcon("Controls.CaptainsLog.Diary"); } }
         #endregion
+        #region General
+        public static Image All { get { return IconSet.GetIcon("Controls.General.All"); } }
+        public static Image None { get { return IconSet.GetIcon("Controls.General.None"); } }
+        #endregion
 
     }
 }

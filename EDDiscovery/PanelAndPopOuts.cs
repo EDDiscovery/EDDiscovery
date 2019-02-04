@@ -85,7 +85,7 @@ namespace EDDiscovery
             { new PanelInfo( "History") },
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid view") },
-            { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "Travel History", "TravelHistory", "History grid view") },
+            { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "History", "TravelHistory", "History grid view") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list", transparent: false) },
 
             { new PanelInfo( "Current State") },
