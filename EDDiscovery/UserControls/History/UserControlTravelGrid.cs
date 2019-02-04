@@ -1208,7 +1208,7 @@ namespace EDDiscovery.UserControls
         private void buttonFilter_Click(object sender, EventArgs e)
         {
             Button b = sender as Button;
-            cfs.FilterButtonJournal(DbFilterSave, b, this.FindForm());
+            cfs.JournalEvents(DbFilterSave, b, this.FindForm());
         }
 
         private void EventFilterChanged(object sender, EventArgs e)

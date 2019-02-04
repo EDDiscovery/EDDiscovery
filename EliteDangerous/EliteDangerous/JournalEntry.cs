@@ -1225,13 +1225,14 @@ namespace EliteDangerousCore
 
         #region Misc
 
-        static public List<JournalTypeEnum> GetEnumOfEventsWithOptMethod(string method = null, string method2 = null)
+        // retuen JEnums with events matching optional methods
+        static public List<JournalTypeEnum> GetEnumOfEventsWithOptMethod(string[] methods = null)
         {
             List<JournalTypeEnum> ret = new List<JournalTypeEnum>();
 
             foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
             {
-                if (method == null)
+                if (methods == null)
                 {
                     ret.Add(jte);
                 }
@@ -1241,13 +1242,14 @@ namespace EliteDangerousCore
 
                     if (jtype != null)      // may be null, Unknown for instance
                     {
-                        System.Reflection.MethodInfo m = jtype.GetMethod(method);
-
-                        if (m == null && method2 != null)
-                            m = jtype.GetMethod(method2);
-
-                        if (m != null)
-                            ret.Add(jte);
+                        foreach( var n in methods)
+                        {
+                            if (jtype.GetMethod(n) != null )
+                            {
+                                ret.Add(jte);
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -1255,46 +1257,28 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
+        // return name instead
+        static public List<string> GetListOfEventsWithOptMethod(bool towords, string[] methods = null)
         {
-            var list = GetEnumOfEventsWithOptMethod(method, method2);
+            var list = GetEnumOfEventsWithOptMethod(methods);
             if (towords)
-                return list.Select(x => x.ToString()).ToList();
-            else
                 return list.Select(x => x.ToString().SplitCapsWord()).ToList();
+            else
+                return list.Select(x => x.ToString()).ToList();
         }
 
-        //static public List<string> GetListOfEventsWithOptMethod(bool towords, string method = null, string method2 = null)
-        //{
-        //    List<string> ret = new List<string>();
+        // rename name and icon
+        static public List<Tuple<string,Image>> GetListOfEventsWithOptMethodSortedImage(bool towords, string[] methods =null)
+        {
+            List<JournalTypeEnum> jevents = JournalEntry.GetEnumOfEventsWithOptMethod(methods);
+            jevents.Sort(delegate (JournalTypeEnum left, JournalTypeEnum right)     // in order, oldest first
+            {
+                return left.ToString().CompareTo(right.ToString());
+            });
 
-        //    foreach (JournalTypeEnum jte in Enum.GetValues(typeof(JournalTypeEnum)))
-        //    {
-        //        string n = jte.ToString();
-
-        //        if (method == null)
-        //        {
-        //            ret.Add((towords) ? n.SplitCapsWord() : n);
-        //        }
-        //        else
-        //        {
-        //            Type jtype = TypeOfJournalEntry(jte);
-
-        //            if (jtype != null)      // may be null, Unknown for instance
-        //            {
-        //                System.Reflection.MethodInfo m = jtype.GetMethod(method);
-
-        //                if (m == null && method2 != null)
-        //                    m = jtype.GetMethod(method2);
-
-        //                if (m != null)
-        //                    ret.Add((towords) ? n.SplitCapsWord() : n);
-        //            }
-        //        }
-        //    }
-
-        //    return ret;
-        //}
+            return jevents.Select(x => new Tuple<string, Image>(x.ToString().SplitCapsWord(),
+                JournalTypeIcons.ContainsKey(x) ? JournalTypeIcons[x] : JournalTypeIcons[JournalTypeEnum.Unknown])).ToList();
+        }
 
         protected JObject ReadAdditionalFile( string extrafile, bool waitforfile, bool checktimestamptype )       // read file, return new JSON
         {

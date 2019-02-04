@@ -33,6 +33,7 @@ namespace EDDiscovery.Actions
             if (functions == null)        // one time init, done like this cause can't do it in {}
             {
                 functions = new Dictionary<string, FuncEntry>();
+                functions.Add("body", new FuncEntry(Body, FuncEntry.PT.MESE, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
                 functions.Add("systempath", new FuncEntry(SystemPath, FuncEntry.PT.LmeSE));   // literal
                 functions.Add("version", new FuncEntry(Version, FuncEntry.PT.ImeSE));
                 functions.Add("star", new FuncEntry(Star, FuncEntry.PT.MESE, FuncEntry.PT.LmeSE));
@@ -129,9 +130,22 @@ namespace EDDiscovery.Actions
             paras[0].Value = paras[0].Value.Replace("  ", " ");
             paras[0].Value = paras[0].Value.Replace("Belt Cluster", ", Belt Cluster");
 
-
-
             return ReplaceVarCommon(out output, true);
+        }
+
+        protected bool Body(out string output)
+        {
+            paras[0].Value = paras[0].Value.Trim();
+
+            // if [0] starts with [1], and there is more in [0] then [1], remove
+            if (paras[0].Value.StartsWith(paras[1].Value, StringComparison.InvariantCultureIgnoreCase) && paras[0].Value.Length > paras[1].Value.Length )
+            {
+                paras[0].Value = paras[0].Value.Substring(paras[1].Value.Length);
+            }
+
+            paras[1].Value = paras[2].Value;    // move root var name to [1] where Star expects it to be.
+
+            return Star(out output);        // do star
         }
 
         protected bool Events(out string output)
