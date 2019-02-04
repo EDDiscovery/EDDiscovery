@@ -51,11 +51,19 @@ namespace EDDiscovery.UserControls
             reportView.Visible = false;
 
             this.plotViewTop.ActualController.UnbindMouseDown(OxyMouseButton.Left);
-            this.plotViewTop.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+            this.plotViewTop.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);            
             this.plotViewFront.ActualController.UnbindMouseDown(OxyMouseButton.Left);
             this.plotViewFront.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
             this.plotViewSide.ActualController.UnbindMouseDown(OxyMouseButton.Left);
             this.plotViewSide.ActualController.BindMouseEnter(PlotCommands.HoverSnapTrack);
+
+            this.plotViewTop.ActualController.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
+            this.plotViewFront.ActualController.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
+            this.plotViewSide.ActualController.BindMouseDown(OxyMouseButton.Left, PlotCommands.PanAt);
+
+            this.plotViewTop.ActualController.BindMouseDown(OxyMouseButton.Right, PlotCommands.ZoomRectangle);
+            this.plotViewFront.ActualController.BindMouseDown(OxyMouseButton.Right, PlotCommands.ZoomRectangle);
+            this.plotViewSide.ActualController.BindMouseDown(OxyMouseButton.Right, PlotCommands.ZoomRectangle);
         }
 
         const double defaultmaximumradarradius = 50;
