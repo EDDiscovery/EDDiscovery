@@ -42,7 +42,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.BuyDrones)]
-    public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
+    public class JournalBuyDrones : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry
     {
         public JournalBuyDrones(JObject evt) : base(evt, JournalTypeEnum.BuyDrones)
         {
@@ -57,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", Count, 0, conn);
         }
@@ -76,7 +76,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.SellDrones)]
-    public class JournalSellDrones : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
+    public class JournalSellDrones : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry
     {
         public JournalSellDrones(JObject evt) : base(evt, JournalTypeEnum.SellDrones)
         {
@@ -90,7 +90,7 @@ namespace EliteDangerousCore.JournalEvents
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", -Count, 0, conn);
         }
@@ -108,7 +108,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.LaunchDrone)]
-    public class JournalLaunchDrone : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalLaunchDrone : JournalEntry, ICommodityJournalEntry
     {
         public JournalLaunchDrone(JObject evt) : base(evt, JournalTypeEnum.LaunchDrone)
         {
@@ -119,7 +119,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Type { get; set; }
         public string FriendlyType { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0, conn);
         }

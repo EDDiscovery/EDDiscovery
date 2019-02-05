@@ -45,7 +45,6 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.labelNoItems = new System.Windows.Forms.Label();
             this.dataGridViewMC = new System.Windows.Forms.DataGridView();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ShortName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,7 +68,6 @@ namespace EDDiscovery.UserControls
             // 
             // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel.Controls.Add(this.labelNoItems);
             this.dataViewScrollerPanel.Controls.Add(this.dataGridViewMC);
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -80,15 +78,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(704, 536);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
-            // 
-            // labelNoItems
-            // 
-            this.labelNoItems.AutoSize = true;
-            this.labelNoItems.Location = new System.Drawing.Point(3, 33);
-            this.labelNoItems.Name = "labelNoItems";
-            this.labelNoItems.Size = new System.Drawing.Size(82, 13);
-            this.labelNoItems.TabIndex = 2;
-            this.labelNoItems.Text = "No Items Found";
             // 
             // dataGridViewMC
             // 
@@ -290,7 +279,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxClear.TickBoxReductionSize = 10;
             this.toolTip.SetToolTip(this.checkBoxClear, "Remove zero items the time after they go to zero");
             this.checkBoxClear.UseVisualStyleBackColor = true;
-            this.checkBoxClear.CheckStateChanged += new System.EventHandler(this.checkBoxClear_CheckStateChanged);
             // 
             // toolTip
             // 
@@ -305,7 +293,6 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlMaterialCommodities";
             this.Size = new System.Drawing.Size(704, 564);
             this.dataViewScrollerPanel.ResumeLayout(false);
-            this.dataViewScrollerPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMC)).EndInit();
             this.panelButtons.ResumeLayout(false);
             this.panelButtons.PerformLayout();
@@ -325,7 +312,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Number;
         private System.Windows.Forms.DataGridViewTextBoxColumn Price;
-        private System.Windows.Forms.Label labelNoItems;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBoxClear;
         private ExtendedControls.ExtTextBox textBoxItems2;

@@ -21,7 +21,7 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Cargo)]
-    public class JournalCargo : JournalEntry, IMaterialCommodityJournalEntry, IAdditionalFiles
+    public class JournalCargo : JournalEntry, ICommodityJournalEntry, IAdditionalFiles
     {
         public class Cargo
         {
@@ -110,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Vessel.Equals("Ship"))      // only want ship cargo to change lists..
             {
@@ -128,7 +128,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.EjectCargo)]
-    public class JournalEjectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
+    public class JournalEjectCargo : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalEjectCargo(JObject evt) : base(evt, JournalTypeEnum.EjectCargo)
         {
@@ -152,7 +152,7 @@ namespace EliteDangerousCore.JournalEvents
         public string PowerplayOrigin { get; set; }
         public long? MissionID { get; set; }             // if applicable
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0, conn);
         }
@@ -172,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.CargoDepot)]
-    public class JournalCargoDepot : JournalEntry, IMaterialCommodityJournalEntry, IMissions
+    public class JournalCargoDepot : JournalEntry, ICommodityJournalEntry, IMissions
     {
         public JournalCargoDepot(JObject evt) : base(evt, JournalTypeEnum.CargoDepot)
         {
@@ -217,7 +217,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public long? MarketID { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (CargoType.Length > 0 && Count > 0)
                 mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0, conn);
@@ -253,7 +253,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.CollectCargo)]
-    public class JournalCollectCargo : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
+    public class JournalCollectCargo : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalCollectCargo(JObject evt) : base(evt, JournalTypeEnum.CollectCargo)
         {
@@ -271,7 +271,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool Stolen { get; set; }
         public long? MissionID { get; set; }             // if applicable
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0, conn);
         }

@@ -124,25 +124,28 @@ namespace EliteDangerousCore.JournalEvents
 
     //When written: by EDD when a user manually sets an item count (material or commodity)
     [JournalEntryType(JournalTypeEnum.EDDItemSet)]
-    public class JournalEDDItemSet : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalEDDItemSet : JournalEntry, ICommodityJournalEntry, IMaterialJournalEntry
     {
         public JournalEDDItemSet(JObject evt) : base(evt, JournalTypeEnum.EDDItemSet)
         {
             Materials = new MaterialListClass(evt["Materials"]?.ToObjectProtected<MaterialItem[]>().ToList());
-            Commodities = new CommodityList(evt["Commodities"]?.ToObjectProtected<CommodityItem[]>().ToList());
+            Commodities = new CommodityListClass(evt["Commodities"]?.ToObjectProtected<CommodityItem[]>().ToList());
         }
 
         public MaterialListClass Materials { get; set; }             // FDNAMES
-        public CommodityList Commodities { get; set; }
+        public CommodityListClass Commodities { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Materials != null)
             {
                 foreach (MaterialItem m in Materials.Materials)
                     mc.Set(m.Category, m.Name, m.Count, 0, conn);
             }
+        }
 
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        { 
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
@@ -205,9 +208,9 @@ namespace EliteDangerousCore.JournalEvents
             public System.Collections.Generic.List<MaterialItem> Materials { get; protected set; }
         }
 
-        public class CommodityList
+        public class CommodityListClass
         {
-            public CommodityList(System.Collections.Generic.List<CommodityItem> ma)
+            public CommodityListClass(System.Collections.Generic.List<CommodityItem> ma)
             {
                 Commodities = ma ?? new System.Collections.Generic.List<CommodityItem>();
                 foreach (CommodityItem i in Commodities)

@@ -67,7 +67,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MarketBuy)]
-    public class JournalMarketBuy : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
+    public class JournalMarketBuy : JournalEntry, ICommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMarketBuy(JObject evt) : base(evt, JournalTypeEnum.MarketBuy)
         {
@@ -89,7 +89,7 @@ namespace EliteDangerousCore.JournalEvents
         public long TotalCost { get; set; }
         public long? MarketID { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice, conn);
         }
@@ -108,7 +108,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MarketSell)]
-    public class JournalMarketSell : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry
+    public class JournalMarketSell : JournalEntry, ICommodityJournalEntry, ILedgerJournalEntry
     {
         public JournalMarketSell(JObject evt) : base(evt, JournalTypeEnum.MarketSell)
         {
@@ -139,7 +139,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool BlackMarket { get; set; }
         public long? MarketID { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0, conn);
         }

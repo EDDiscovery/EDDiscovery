@@ -100,7 +100,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MissionAccepted)]
-    public class JournalMissionAccepted : JournalEntry, IMissions, IMaterialCommodityJournalEntry
+    public class JournalMissionAccepted : JournalEntry, IMissions, ICommodityJournalEntry
     {
         public JournalMissionAccepted(JObject evt) : base(evt, JournalTypeEnum.MissionAccepted)
         {
@@ -251,7 +251,7 @@ namespace EliteDangerousCore.JournalEvents
             mlist.Accepted(this, sys, body);
         }
 
-        public void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName) && EventTimeUTC < ED32Date)
             {
@@ -263,7 +263,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MissionCompleted)]
-    public class JournalMissionCompleted : JournalEntry, IMaterialCommodityJournalEntry, ILedgerJournalEntry, IMissions
+    public class JournalMissionCompleted : JournalEntry, ICommodityJournalEntry, IMaterialJournalEntry, ILedgerJournalEntry, IMissions
     {
         public JournalMissionCompleted(JObject evt) : base(evt, JournalTypeEnum.MissionCompleted)
         {
@@ -349,7 +349,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public FactionEffectsEntry[] FactionEffects;
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Commodity != null && Count != null)
             {
@@ -361,7 +361,10 @@ namespace EliteDangerousCore.JournalEvents
                 foreach (CommodityRewards c in CommodityReward)
                     mc.Change(MaterialCommodityData.CommodityCategory, c.Name, c.Count, 0, conn);
             }
+        }
 
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
             if (MaterialsReward != null)
             {
                 foreach (MaterialRewards m in MaterialsReward)                 // 7/3/2018 not yet fully proven.. changed in 3.02

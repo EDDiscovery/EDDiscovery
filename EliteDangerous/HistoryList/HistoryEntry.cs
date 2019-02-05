@@ -278,7 +278,7 @@ namespace EliteDangerousCore
 
         public void ProcessWithUserDb(JournalEntry je, HistoryEntry prev, HistoryList hl, SQLiteConnectionUser conn)      // called after above with a USER connection
         {
-            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity, conn, EliteConfigInstance.InstanceConfig.ClearMaterials, EliteConfigInstance.InstanceConfig.ClearCommodities);
+            MaterialCommodity = MaterialCommoditiesList.Process(je, prev?.MaterialCommodity, conn);
 
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }

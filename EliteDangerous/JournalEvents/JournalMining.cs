@@ -19,7 +19,7 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.MiningRefined)]
-    public class JournalMiningRefined : JournalEntry, IMaterialCommodityJournalEntry, ILedgerNoCashJournalEntry
+    public class JournalMiningRefined : JournalEntry, ICommodityJournalEntry, ILedgerNoCashJournalEntry
     {
         public JournalMiningRefined(JObject evt) : base(evt, JournalTypeEnum.MiningRefined)
         {
@@ -33,7 +33,7 @@ namespace EliteDangerousCore.JournalEvents
         public string FriendlyType { get; set; }
         public string Type_Localised { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0, conn);
         }

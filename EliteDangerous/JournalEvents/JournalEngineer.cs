@@ -44,7 +44,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.EngineerContribution)]
-    public class JournalEngineerContribution : JournalEntry, ILedgerJournalEntry, IMaterialCommodityJournalEntry
+    public class JournalEngineerContribution : JournalEntry, ILedgerJournalEntry, ICommodityJournalEntry, IMaterialJournalEntry
     {
         public JournalEngineerContribution(JObject evt) : base(evt, JournalTypeEnum.EngineerContribution)
         {
@@ -81,12 +81,16 @@ namespace EliteDangerousCore.JournalEvents
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        {
+            if (Type.Equals("Materials"))
+                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+        }
+
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Type.Equals("Commodity"))
                 mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0, conn);
-            else if (Type.Equals("Materials"))
-                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, conn, true);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
@@ -107,7 +111,7 @@ namespace EliteDangerousCore.JournalEvents
 
     // Base class used for craft and legacy
 
-    public class JournalEngineerCraftBase : JournalEntry, IMaterialCommodityJournalEntry, IShipInformation
+    public class JournalEngineerCraftBase : JournalEntry, IMaterialJournalEntry, IShipInformation
     {
         public JournalEngineerCraftBase(JObject evt, JournalTypeEnum en) : base(evt, en)
         {
@@ -158,11 +162,11 @@ namespace EliteDangerousCore.JournalEvents
 
         public Dictionary<string, int> Ingredients { get; set; }        // not for legacy convert
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Ingredients != null)
             {
-                foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials
+                foreach (KeyValuePair<string, int> k in Ingredients)        // may be commodities or materials but mostly materials so we put it under this
                     mc.Craft(k.Key, k.Value);
             }
         }

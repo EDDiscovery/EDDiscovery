@@ -19,7 +19,7 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.SearchAndRescue)]
-    public class JournalSearchAndRescue : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalSearchAndRescue : JournalEntry, ICommodityJournalEntry
     {
         public JournalSearchAndRescue(JObject evt) : base(evt, JournalTypeEnum.SearchAndRescue)
         {
@@ -39,7 +39,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Reward { get; set; }
         public long? MarketID { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0, conn);
         }

@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
         {
             last_he = he;
             //touchdown and liftoff ensure shopping list refresh in case displaying landed planet mats, scan for mat availability while flying in same
-            if (he.journalEntry is IMaterialCommodityJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  
+            if (he.journalEntry is IMaterialJournalEntry || he.journalEntry.EventTypeID == JournalTypeEnum.Touchdown || he.journalEntry.EventTypeID == JournalTypeEnum.Liftoff  
                 || he.IsLocOrJump || he.journalEntry.EventTypeID == JournalTypeEnum.Scan)
                 Display();
         }

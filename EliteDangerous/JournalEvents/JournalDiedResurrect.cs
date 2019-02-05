@@ -19,7 +19,7 @@ using System.Linq;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Died)]
-    public class JournalDied : JournalEntry, IMissions, IMaterialCommodityJournalEntry
+    public class JournalDied : JournalEntry, IMissions, ICommodityJournalEntry
     {
         public class Killer
         {
@@ -69,7 +69,7 @@ namespace EliteDangerousCore.JournalEvents
             mlist.Died(this.EventTimeUTC);
         }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Died();
         }

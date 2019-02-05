@@ -22,7 +22,7 @@ using System.Text;
 namespace EliteDangerousCore.JournalEvents
 {
     [JournalEntryType(JournalTypeEnum.Materials)]
-    public class JournalMaterials : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalMaterials : JournalEntry, IMaterialJournalEntry
     {
         public class Material
         {
@@ -98,7 +98,7 @@ namespace EliteDangerousCore.JournalEvents
             return sb.ToString();
         }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
             mc.Clear(false);
@@ -119,7 +119,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MaterialCollected)]
-    public class JournalMaterialCollected : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalMaterialCollected : JournalEntry, IMaterialJournalEntry
     {
         public JournalMaterialCollected(JObject evt) : base(evt, JournalTypeEnum.MaterialCollected)
         {
@@ -133,7 +133,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(Category, Name, Count, 0, conn);
         }
@@ -146,7 +146,7 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.MaterialDiscarded)]
-    public class JournalMaterialDiscarded : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalMaterialDiscarded : JournalEntry, IMaterialJournalEntry
     {
         public JournalMaterialDiscarded(JObject evt) : base(evt, JournalTypeEnum.MaterialDiscarded)
         {
@@ -161,7 +161,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }    // FDName
         public int Count { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             mc.Change(Category, Name, -Count, 0, conn);
         }
@@ -200,7 +200,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.MaterialTrade)]
-    public class JournalMaterialTrade : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalMaterialTrade : JournalEntry, IMaterialJournalEntry
     {
         public JournalMaterialTrade(JObject evt) : base(evt, JournalTypeEnum.MaterialTrade)
         {
@@ -244,7 +244,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Paid != null && Received != null)
             {
@@ -267,7 +267,7 @@ namespace EliteDangerousCore.JournalEvents
 
 
     [JournalEntryType(JournalTypeEnum.Synthesis)]
-    public class JournalSynthesis : JournalEntry, IMaterialCommodityJournalEntry
+    public class JournalSynthesis : JournalEntry, IMaterialJournalEntry
     {
         public JournalSynthesis(JObject evt) : base(evt, JournalTypeEnum.Synthesis)
         {
@@ -302,7 +302,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
 
-        public void MaterialList(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Materials != null)
             {

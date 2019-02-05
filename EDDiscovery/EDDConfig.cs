@@ -59,8 +59,6 @@ namespace EDDiscovery
         private bool minimizeToNotifyIcon = false;
         private bool keepOnTop = false; /**< Whether to keep the windows on top or not */
         private bool displayUTC = false;
-        private bool clearMaterials = false;
-        private bool clearCommodities = false;
         private bool showuievents = false;
         private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string defaultwavedevice = "Default";
@@ -147,32 +145,6 @@ namespace EDDiscovery
             {
                 displayUTC = value;
                 SQLiteConnectionUser.PutSettingBool("DisplayUTC", value);
-            }
-        }
-
-        public bool ClearMaterials
-        {
-            get
-            {
-                return clearMaterials;
-            }
-            set
-            {
-                clearMaterials = value;
-                SQLiteConnectionUser.PutSettingBool("ClearMaterials", value);
-            }
-        }
-
-        public bool ClearCommodities
-        {
-            get
-            {
-                return clearCommodities;
-            }
-            set
-            {
-                clearCommodities = value;
-                SQLiteConnectionUser.PutSettingBool("ClearCommodities", value);
             }
         }
 
@@ -390,8 +362,6 @@ namespace EDDiscovery
                 minimizeToNotifyIcon = SQLiteConnectionUser.GetSettingBool("MinimizeToNotifyIcon", false, conn);
                 keepOnTop = SQLiteConnectionUser.GetSettingBool("KeepOnTop", false, conn);
                 displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
-                clearCommodities = SQLiteConnectionUser.GetSettingBool("ClearCommodities", false, conn);
-                clearMaterials = SQLiteConnectionUser.GetSettingBool("ClearMaterials", false, conn);
                 defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);

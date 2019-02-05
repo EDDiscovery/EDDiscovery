@@ -62,7 +62,7 @@ namespace EliteDangerousCore
             return list.FindIndex(x => x.Details.IsRareCommodity && x.Count > 0) != -1;
         }
 
-        public MaterialCommoditiesList Clone(bool clearzeromaterials, bool clearzerocommodities)       // returns a new copy of this class.. all items a copy
+        public MaterialCommoditiesList Clone()       // returns a new copy of this class.. all items a copy
         {
             MaterialCommoditiesList mcl = new MaterialCommoditiesList();
 
@@ -70,7 +70,7 @@ namespace EliteDangerousCore
             {
                 bool commodity = item.Details.IsCommodity;
                 // if items, or commodity and not clear zero, or material and not clear zero, add
-                if (item.Count > 0 || (commodity && !clearzerocommodities) || (!commodity && !clearzeromaterials))
+                if (item.Count > 0 )
                     mcl.list.Add(item);
             });
 
@@ -207,17 +207,25 @@ namespace EliteDangerousCore
             //log.Write("", true);
         }
 
-        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn,
-                                                        bool clearzeromaterials, bool clearzerocommodities)
+        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn )
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 
-            if (je is IMaterialCommodityJournalEntry)
+            if (je is ICommodityJournalEntry || je is IMaterialJournalEntry)    // could be both
             {
-                IMaterialCommodityJournalEntry e = je as IMaterialCommodityJournalEntry;
-                newmc = newmc.Clone(clearzeromaterials, clearzerocommodities);          // so we need a new one, makes a new list, but copies the items..
-                e.MaterialList(newmc, conn);
-                // newmc.Dump();    // debug
+                newmc = newmc.Clone();          // so we need a new one, makes a new list, but copies the items..
+
+                if (je is ICommodityJournalEntry)
+                {
+                    ICommodityJournalEntry e = je as ICommodityJournalEntry;
+                    e.UpdateCommodities(newmc, conn);
+                }
+
+                if (je is IMaterialJournalEntry)
+                {
+                    IMaterialJournalEntry e = je as IMaterialJournalEntry;
+                    e.UpdateMaterials(newmc, conn);
+                }
             }
 
             return newmc;

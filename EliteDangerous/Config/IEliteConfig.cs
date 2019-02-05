@@ -19,8 +19,6 @@ namespace EliteDangerousCore
     public interface IEliteConfig
     {
         int DefaultMapColour { get; }
-        bool ClearCommodities { get; }
-        bool ClearMaterials { get; }
         bool DisplayUTC { get; }
         string EDSMFullSystemsURL { get; }
         string EDDBSystemsURL { get; }

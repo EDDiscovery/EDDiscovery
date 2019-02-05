@@ -18,9 +18,14 @@ using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore
 {
-    public interface IMaterialCommodityJournalEntry
+    public interface IMaterialJournalEntry
     {
-        void MaterialList(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
+        void UpdateMaterials(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
+    }
+
+    public interface ICommodityJournalEntry
+    {
+        void UpdateCommodities(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
     }
 
     public interface ILedgerJournalEntry
