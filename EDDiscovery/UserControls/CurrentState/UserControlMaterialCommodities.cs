@@ -154,15 +154,16 @@ namespace EDDiscovery.UserControls
 
             List<MaterialCommodities> mc = mcl.Sort(!materials);
 
-            string filter = EliteDangerousCore.DB.SQLiteDBClass.GetSettingString(DbFilterSave, "All");
-
             if (mc.Count > 0)
             {
+                string[] filter = EliteDangerousCore.DB.SQLiteDBClass.GetSettingString(DbFilterSave, "All").SplitNoEmptyStartFinish(';');
+                bool all = filter.Length > 0 && filter[0] == "All";
+
                 labelNoItems.Visible = false;
 
                 foreach (MaterialCommodities m in mc)
                 {
-                    if (filter == "All" || filter.Contains(m.Details.Name + ";"))
+                    if (all || filter.Contains(m.Details.Name))
                     {
                         object[] rowobj;
 
