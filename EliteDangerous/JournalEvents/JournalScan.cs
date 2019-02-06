@@ -94,6 +94,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool? nLandable { get; set; }                        // direct
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
+        public double? nMassMM { get; set; }                        // only if nMassEM is set, moon mass in MMs
 
         public bool HasMaterials { get { return Materials != null && Materials.Any(); } }
         public Dictionary<string, double> Materials { get; set; }       // fdname and name is the same for materials on planets.  name is lower case
@@ -128,7 +129,9 @@ namespace EliteDangerousCore.JournalEvents
         public const double oneEarthRadius_m = 6371000;
         public const double oneAtmosphere_Pa = 101325;
         public const double oneGee_m_s2 = 9.80665;
-        public const double oneMoon_MT = 73420000000000;
+        public const double oneEarth_MT = 5.972e15;        // mega tons, 1 meta ton = 1e6 tons = 1e9 kg (google 5.972e21 tons)
+        public const double oneMoon_MT = 7.34767309e13;     // mega tons, 1 meta ton = 1e6 tons = 1e9 kg
+        public const double EarthMoonMassRatio = oneEarth_MT/oneMoon_MT; 
 
         // astrometric
         public const double oneLS_m = 299792458;
@@ -247,6 +250,8 @@ namespace EliteDangerousCore.JournalEvents
             Volcanism = evt["Volcanism"].StrNull();
             VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
             nMassEM = evt["MassEM"].DoubleNull();
+            if (nMassEM.HasValue)
+                nMassMM = nMassEM.Value * EarthMoonMassRatio;
             nSurfaceGravity = evt["SurfaceGravity"].DoubleNull();
             if (nSurfaceGravity.HasValue)
                 nSurfaceGravityG = nSurfaceGravity / oneGee_m_s2;
@@ -407,7 +412,17 @@ namespace EliteDangerousCore.JournalEvents
                 if (g.HasValue)
                     g = g / oneGee_m_s2;
 
-                info = BaseUtils.FieldBuilder.Build("", PlanetClass, "Mass:;EM;0.00".Tx(this,"MEM"), nMassEM, 
+                info = PlanetClass;
+
+                if ( nMassEM.HasValue)
+                {
+                    if (nMassEM < 0.01)
+                        info += BaseUtils.FieldBuilder.Build(", Mass:;MM;0.00".Tx(this, "MMoM"), nMassMM.Value);
+                    else
+                        info += BaseUtils.FieldBuilder.Build(", Mass:;EM;0.00".Tx(this, "MEM"), nMassEM.Value );
+                }
+
+                info += BaseUtils.FieldBuilder.Build(
                                                 "<;, Landable".Tx(this), IsLandable, 
                                                 "<;, Terraformable".Tx(this), TerraformState == "Terraformable", "", Atmosphere, 
                                                  "Gravity:;G;0.0".Tx(this), g, 
@@ -472,7 +487,12 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("Solar Masses: {0:0.00}\n".Tx(this), nStellarMass.Value);
 
                 if (nMassEM.HasValue)
-                    scanText.AppendFormat("Earth Masses: {0:0.0000}\n".Tx(this), nMassEM.Value);
+                {
+                    if (nMassEM < 0.01)
+                        scanText.AppendFormat("Moon Masses: {0:0.00}\n".Tx(this), nMassMM.Value);
+                    else
+                        scanText.AppendFormat("Earth Masses: {0:0.00}\n".Tx(this), nMassEM.Value);
+                }
 
                 if (nRadius.HasValue)
                 {
