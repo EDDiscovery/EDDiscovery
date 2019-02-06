@@ -841,17 +841,11 @@ namespace EliteDangerousCore
                 if (hs == he)
                 {
                     if (he.StartMarker || he.StopMarker)
-                    {
-                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false);
-                    }
+                        hs.journalEntry.ClearStartStopFlag();
                     else if (started == false)
-                    {
-                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
-                    }
+                        hs.journalEntry.SetStartFlag();
                     else
-                    {
-                        hs.journalEntry.UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true);
-                    }
+                        hs.journalEntry.SetStopFlag();
 
                     break;
                 }

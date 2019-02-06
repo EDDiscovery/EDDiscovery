@@ -651,6 +651,21 @@ namespace EliteDangerousCore
             }
         }
 
+        public void SetStartFlag()
+        {
+            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
+        }
+
+        public void SetStopFlag()
+        {
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true);
+        }
+
+        public void ClearStartStopFlag()
+        {
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false);
+        }
+
         public void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2 , SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             bool closeConn = false;

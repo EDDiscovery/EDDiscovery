@@ -404,10 +404,11 @@ namespace EliteDangerousCore.JournalEvents
 
         static public List<Tuple<string, Image>> FilterItems()
         {
+            Type t = typeof(JournalScan);
             return new List<Tuple<string, Image>>() {
-                new Tuple<string,Image>( "Scan Auto", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
-                new Tuple<string,Image>( "Scan Basic", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
-                new Tuple<string,Image>( "Scan Nav", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,Image>( "Scan Auto".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,Image>( "Scan Basic".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,Image>( "Scan Nav".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
             };
         }
 
