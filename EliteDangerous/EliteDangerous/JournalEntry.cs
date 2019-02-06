@@ -268,7 +268,7 @@ namespace EliteDangerousCore
 
         public System.Drawing.Image Icon { get { return JournalTypeIcons.ContainsKey(this.IconEventType) ? JournalTypeIcons[this.IconEventType] : JournalTypeIcons[JournalTypeEnum.Unknown]; } }   // Icon to paint for this
 
-        public DateTime EventTimeUTC { get;  set; }
+        public DateTime EventTimeUTC { get; set; }
 
         public long EdsmID { get; protected set; }                      // 0 = unassigned, >0 = assigned
 
@@ -313,6 +313,22 @@ namespace EliteDangerousCore
         }
 
         #endregion
+
+        #region Formatting control and Icons
+
+        protected virtual JournalTypeEnum IconEventType { get { return EventTypeID; } }  // entry may be overridden to dynamically change icon event for an event
+        public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
+
+        // the long name of it, such as Approach Body. May be overridden
+        public virtual string SummaryName(ISystem sys) { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); }  // entry may be overridden for specialist output
+
+        // the name used to filter it.. and the filter keyword.  May be overridden
+        public virtual string EventFilterName { get { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); } } // text name used in filter
+
+        #endregion
+
+
+
 
         #region Static properties and fields
 
@@ -380,10 +396,7 @@ namespace EliteDangerousCore
 
         private static Dictionary<JournalTypeEnum, Type> JournalEntryTypes = GetJournalEntryTypes();        // enum -> type
 
-        /// <summary>
-        /// Gets the mapping of journal type value to JournalEntry type
-        /// </summary>
-        /// <returns>Map of type values to types</returns>
+        // Gets the mapping of journal type value to JournalEntry type
         private static Dictionary<JournalTypeEnum, Type> GetJournalEntryTypes()
         {
             Dictionary<JournalTypeEnum, Type> typedict = new Dictionary<JournalTypeEnum, Type>();
@@ -408,29 +421,13 @@ namespace EliteDangerousCore
 
         // enum -> Summary name
 
-        private static Dictionary<JournalTypeEnum, string> SummaryNames = GetJournalSummaryNames();     // precompute the names due to the expense of splitcapsword
+        private static Dictionary<JournalTypeEnum, string> TranslatedEventNames = GetJournalTranslatedNames();     // precompute the names due to the expense of splitcapsword
 
-        private static Dictionary<JournalTypeEnum, string> GetJournalSummaryNames()
+        private static Dictionary<JournalTypeEnum, string> GetJournalTranslatedNames()
         {
             var v = Enum.GetValues(typeof(JournalTypeEnum)).OfType<JournalTypeEnum>();
-            return v.ToDictionary(e => e, e => e.ToString().SplitCapsWord().Tx(typeof(JournalTypeEnum),e.ToString()));
+            return v.ToDictionary(e => e, e => e.ToString().SplitCapsWord().Tx(typeof(JournalTypeEnum), e.ToString()));
         }
-
-        #endregion
-
-        #region Formatting control and Icons
-
-        protected virtual JournalTypeEnum IconEventType     // entry may be overridden to dynamically change icon event for an event
-        {
-            get
-            {
-                return EventTypeID;
-            }
-        }
-
-        public abstract void FillInformation(out string info, out string detailed);     // all entries must implement
-
-        public virtual string SummaryName(ISystem sys) { return SummaryNames.ContainsKey(EventTypeID) ? SummaryNames[EventTypeID] : EventTypeID.ToString(); }  // entry may be overridden for specialist output
 
         #endregion
 
@@ -439,7 +436,6 @@ namespace EliteDangerousCore
         public JournalEntry(DateTime utc, int synced , JournalTypeEnum jtype)       // manual creation via NEW
         {
             EventTypeID = jtype;
-            //EventSummaryName = FillSummary;     // after creation, so journal fields are populated.
             EventTimeUTC = utc;
             Synced = synced;
             TLUId = 0;
@@ -1261,18 +1257,15 @@ namespace EliteDangerousCore
             return ret;
         }
 
-        // return name instead
-        static public List<string> GetListOfEventsWithOptMethod(bool towords, string[] methods = null)
+        // return name instead of enum, unsorted
+        static public List<string> GetNamesOfEventsWithOptMethod(string[] methods = null)
         {
             var list = GetEnumOfEventsWithOptMethod(methods);
-            if (towords)
-                return list.Select(x => x.ToString().SplitCapsWord()).ToList();
-            else
-                return list.Select(x => x.ToString()).ToList();
+            return list.Select(x => x.ToString()).ToList();
         }
 
-        // rename name and icon
-        static public List<Tuple<string,Image>> GetListOfEventsWithOptMethodSortedImage(bool towords, string[] methods =null)
+        // rename name (possibly translated) and icon, sorted.
+        static public List<Tuple<string,Image>> GetTranslatedNamesOfEventsWithOptMethod(string[] methods =null)
         {
             List<JournalTypeEnum> jevents = JournalEntry.GetEnumOfEventsWithOptMethod(methods);
             jevents.Sort(delegate (JournalTypeEnum left, JournalTypeEnum right)     // in order, oldest first
@@ -1280,7 +1273,7 @@ namespace EliteDangerousCore
                 return left.ToString().CompareTo(right.ToString());
             });
 
-            return jevents.Select(x => new Tuple<string, Image>(x.ToString().SplitCapsWord(),
+            return jevents.Select(x => new Tuple<string, Image>(TranslatedEventNames[x],
                 JournalTypeIcons.ContainsKey(x) ? JournalTypeIcons[x] : JournalTypeIcons[JournalTypeEnum.Unknown])).ToList();
         }
 

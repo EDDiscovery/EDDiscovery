@@ -41,33 +41,37 @@ namespace EDDiscovery.UserControls
             AddGroupOption("Travel".Tx(), "Docked;FSD Jump;Undocked;", JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
             //AddGroupOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;", JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
-            var mile = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "UpdateMissions" });
+            var mile = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
             AddGroupOption("Missions".Tx(), miltype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
-            var mle = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "UpdateMaterials" });
+            var mle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateMaterials" });
             string mattype = string.Join(";", mle.Select(x => x.Item1)) + ";";
             AddGroupOption("Materials".Tx(), mattype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
 
-            var cle = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "UpdateCommodities" });
+            var cle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateCommodities" });
             string comtype = string.Join(";", cle.Select(x => x.Item1)) + ";";
             AddGroupOption("Commodities".Tx(), comtype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
 
-            var lle = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "Ledger", "LedgerNC" });
+            var lle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
             AddGroupOption("Ledger".Tx(), legtype, EDDiscovery.Icons.IconSet.GetIcon("Panels.Ledger"));
 
-            var sle = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "ShipInformation" });
+            var sle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
             AddGroupOption("Ship".Tx(), shiptype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
-
         }
 
         public void AddJournalEntries(string[] methods = null)
         {
-            var items = JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, methods);
-            foreach (var x in items)
-                AddStandardOption(x.Item1, x.Item2);
+            var items = JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(methods);
+
+            AddStandardOption(items);
+
+            var scanitems = EliteDangerousCore.JournalEvents.JournalScan.FilterItems();
+            AddStandardOption(scanitems);
+
+            SortStandardOptions();
         }
 
         // do not use base Filter options - use these.

@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;
 
-            var jes = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethodSortedImage(true, new string[] { "Ledger" });
+            var jes = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
             cfs = new FilterSelector(DbFilterSave);

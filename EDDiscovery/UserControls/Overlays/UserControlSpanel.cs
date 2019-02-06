@@ -1055,7 +1055,7 @@ namespace EDDiscovery.UserControls
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Summary Panel: Filter out fields".Tx(this,"SPF"),
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetListOfEventsWithOptMethod(false) ,
+                            JournalEntry.GetNamesOfEventsWithOptMethod() ,
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

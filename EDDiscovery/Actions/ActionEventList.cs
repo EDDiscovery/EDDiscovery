@@ -101,7 +101,7 @@ namespace EDDiscovery.Actions
 
             if (!excludejournal)
             {
-                List<string> jevents = EliteDangerousCore.JournalEntry.GetListOfEventsWithOptMethod(towords: false);
+                List<string> jevents = EliteDangerousCore.JournalEntry.GetNamesOfEventsWithOptMethod();
                 jevents.Sort();
                 eventlist.AddRange(ActionEventEDList.EventsFromNames(jevents, "", "NewEntry", "Journal"));      // presume NewEntry as its the most prevalent.  Trigger type is not used in this circumstance except in Perform
             }

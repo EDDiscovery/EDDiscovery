@@ -138,6 +138,7 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Target", typeof(ActionTarget), ActionBase.ActionType.Cmd);
         }
 
         public void ReLoad(bool completereload = true)        // COMPLETE reload..

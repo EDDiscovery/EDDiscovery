@@ -36,9 +36,16 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyType { get { return "Planet"; } }
         public string BodyDesignation { get; set; }
 
+        public override string SummaryName(ISystem sys)
+        {
+            string sn = base.SummaryName(sys);
+            sn += " " + Body.ReplaceIfStartsWith(StarSystem);
+            return sn;
+        }
+
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = Body;
+            info = "In ".Tx(this) + StarSystem;
             detailed = "";
         }
     }
@@ -61,9 +68,16 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyDesignation { get; set; }
         public string BodyType { get { return "Planet"; } }
 
+        public override string SummaryName(ISystem sys)
+        {
+            string sn = base.SummaryName(sys);
+            sn += " " + Body.ReplaceIfStartsWith(StarSystem);
+            return sn;
+        }
+
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Body;
+            info = "In ".Tx(this) + StarSystem;
             detailed = "";
         }
     }

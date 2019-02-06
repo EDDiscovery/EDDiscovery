@@ -16,6 +16,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -383,10 +384,31 @@ namespace EliteDangerousCore.JournalEvents
             else if (ScanType.Contains("Nav"))
                 text = "Nav scan of {0}".Tx(this);
 
-            if (sys != null && BodyName.Length > sys.Name.Length) //paranoid on sys, it should always be there, but..
-                return string.Format(text, BodyName.Substring(sys.Name.Length).Trim());
-            else
-                return string.Format(text, BodyName); 
+            return string.Format(text, BodyName.ReplaceIfStartsWith(sys.Name)); 
+        }
+
+        public override string EventFilterName
+        {
+            get
+            {
+                if (ScanType == "AutoScan" )
+                    return "Scan Auto";
+                else if (ScanType == "Basic")
+                    return "Scan Basic";
+                else if (ScanType.Contains("Nav"))
+                    return "Scan Nav";
+                else
+                    return base.EventFilterName;
+            }
+        }
+
+        static public List<Tuple<string, Image>> FilterItems()
+        {
+            return new List<Tuple<string, Image>>() {
+                new Tuple<string,Image>( "Scan Auto", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,Image>( "Scan Basic", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+                new Tuple<string,Image>( "Scan Nav", JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
+            };
         }
 
         public override void FillInformation(out string info, out string detailed)  
@@ -412,17 +434,15 @@ namespace EliteDangerousCore.JournalEvents
                 if (g.HasValue)
                     g = g / oneGee_m_s2;
 
-                info = PlanetClass;
-
-                if ( nMassEM.HasValue)
+                double? mass = nMassEM;
+                string mstr = "Mass:;EM;0.00".Tx(this, "MEM");
+                if (mass.HasValue && mass < 0.01)
                 {
-                    if (nMassEM < 0.01)
-                        info += BaseUtils.FieldBuilder.Build(", Mass:;MM;0.00".Tx(this, "MMoM"), nMassMM.Value);
-                    else
-                        info += BaseUtils.FieldBuilder.Build(", Mass:;EM;0.00".Tx(this, "MEM"), nMassEM.Value );
+                    mass = nMassMM.Value;
+                    mstr = "Mass:;MM;0.00".Tx(this, "MMoM");
                 }
 
-                info += BaseUtils.FieldBuilder.Build(
+                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, mstr, mass,
                                                 "<;, Landable".Tx(this), IsLandable, 
                                                 "<;, Terraformable".Tx(this), TerraformState == "Terraformable", "", Atmosphere, 
                                                  "Gravity:;G;0.0".Tx(this), g, 

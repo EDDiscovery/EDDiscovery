@@ -303,14 +303,19 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDocked.Economies[] StationEconomyList { get; set; }        // may be null
 
         public override string SummaryName(ISystem sys) 
+        {
+            if (Docked)
+                return string.Format("At {0}".Tx(this, "AtStat"), StationName);
+            else
             {
-                if (Docked)
-                    return string.Format("At {0}".Tx(this, "AtStat"), StationName);
-                else if (Latitude.HasValue && Longitude.HasValue)
-                    return string.Format("Landed on {0}".Tx(this, "LND"), Body);
+                string bodyname = Body.HasChars() ? Body.ReplaceIfStartsWith(StarSystem) : StarSystem;
+                if (Latitude.HasValue && Longitude.HasValue)
+                    return string.Format("Landed on {0}".Tx(this, "LND"), bodyname);
                 else
-                    return string.Format("At {0}".Tx(this, "AtStar"), StarSystem);
+                    return string.Format("At {0}".Tx(this, "AtStar"), bodyname);
             }
+
+        }
 
         public override void FillInformation(out string info, out string detailed) 
         {
@@ -363,7 +368,7 @@ namespace EliteDangerousCore.JournalEvents
             }
             else
             {
-                info = BaseUtils.FieldBuilder.Build("In space near ".Txb(this), Body, "< of type ".Txb(this), BodyType);
+                info = "In space near ".Txb(this) + BodyType + " " + Body;
                 detailed = "";
             }
         }

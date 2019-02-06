@@ -1226,7 +1226,7 @@ namespace EDDiscovery.UserControls
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetListOfEventsWithOptMethod(false),
+                            JournalEntry.GetNamesOfEventsWithOptMethod(),
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

@@ -295,7 +295,7 @@ namespace EliteDangerousCore
 
         public bool IsJournalEventInEventFilter(string[] events)
         {
-            return events.Contains(EntryType.ToString().SplitCapsWord());
+            return events.Contains(journalEntry.EventFilterName);
         }
 
         public bool IsJournalEventInEventFilter(string eventstr)

@@ -78,7 +78,10 @@ namespace EliteDangerousCore.JournalEvents
 
         public override string ToString()
         {
-            return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "< on ".Tx(this), Channel, "<: ", MessageLocalised);
+            if ( FromLocalised.HasChars() )
+                return BaseUtils.FieldBuilder.Build("From:".Tx(this), FromLocalised, "< on ".Tx(this), Channel, "<: ", MessageLocalised);
+            else
+                return BaseUtils.FieldBuilder.Build("", Channel, "<: ", MessageLocalised);
         }
 
         public string ToStringNC()
