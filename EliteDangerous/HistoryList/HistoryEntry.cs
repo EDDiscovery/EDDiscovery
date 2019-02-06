@@ -63,12 +63,13 @@ namespace EliteDangerousCore
         public bool IsShipChange { get { return (EntryType == JournalTypeEnum.LoadGame || EntryType == JournalTypeEnum.Docked) && ShipInformation != null; } }
         public bool IsBetaMessage { get { return journalEntry?.Beta ?? false; } }
 
-        public double TravelledDistance { get; private set; }
-        public TimeSpan TravelledSeconds { get; private set; }
-        public bool isTravelling { get; private set; }
-        public int TravelledMissingjump { get; private set; }
-        public int Travelledjumps { get; private set; }
-        public string TravelledJumpsAndMisses { get { return Travelledjumps.ToStringInvariant() + ((TravelledMissingjump > 0) ? (" (" + TravelledMissingjump.ToStringInvariant() + ")") : ""); } }
+        public double TravelledDistance { get { return TravelStatus.TravelledDistance; } }
+        public TimeSpan TravelledSeconds { get { return TravelStatus.TravelledSeconds; } }
+        public bool isTravelling { get { return TravelStatus.IsTravelling; } }
+        public int TravelledMissingjump { get { return TravelStatus.TravelledMissingjump; } }
+        public int Travelledjumps { get { return TravelStatus.Travelledjumps; } }
+        public string TravelInfo() { return TravelStatus.ToString(StopMarker ? "Travelled" : "Travelling "); }
+        public string TravelledJumpsAndMisses { get { return TravelStatus.TravelledJumpsAndMisses; } }
 
         public bool IsLanded { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Landed; } }
         public bool IsDocked { get { return EntryStatus.TravelState == HistoryEntryStatus.TravelStateType.Docked; } }
@@ -117,6 +118,7 @@ namespace EliteDangerousCore
         public SystemNoteClass snc;     // system note class found attached to this entry. May be null
 
         private HistoryEntryStatus EntryStatus { get;  set; }
+        private HistoryTravelStatus TravelStatus { get; set; }
 
         #endregion
 
@@ -225,54 +227,8 @@ namespace EliteDangerousCore
                 EntryStatus = HistoryEntryStatus.Update(prev?.EntryStatus, je, isys.Name)
             };
 
-            if (prev != null )
-            {
-                if (prev.StopMarker)            // if we had a stop marker previously, means the next one needs to clear the counters
-                {
-                    he.isTravelling = false;               // still travelling if its a start marker
-                    he.TravelledDistance = 0;
-                    he.TravelledSeconds = new TimeSpan(0);
-                    he.TravelledMissingjump = 0;
-                    he.Travelledjumps = 0;
-                }
-                else
-                {
-                    he.isTravelling = prev.isTravelling;
-                    he.TravelledDistance = prev.TravelledDistance;
-                    he.TravelledSeconds = prev.TravelledSeconds;
-                    he.TravelledMissingjump = prev.TravelledMissingjump;
-                    he.Travelledjumps = prev.Travelledjumps;
-                }
-            }
-
-            if (he.StartMarker)           // start marker, start travelling
-                he.isTravelling = true;
-
-            if ( he.isTravelling )
-            {
-                if (he.IsFSDJump && !he.MultiPlayer)   // if jump, and not multiplayer..
-                {
-                    double dist = ((JournalFSDJump)je).JumpDist;
-                    if (dist <= 0)
-                        he.TravelledMissingjump++;
-                    else
-                    {
-                        he.TravelledDistance += dist;
-                        he.Travelledjumps++;
-                    }
-                }
-
-                if (prev != null)
-                {
-                    TimeSpan diff = he.EventTimeUTC.Subtract(prev.EventTimeUTC);
-
-                    if (he.EntryType != JournalTypeEnum.LoadGame && diff < new TimeSpan(2, 0, 0))   // time between last entry and load game is not real time
-                    {
-                        he.TravelledSeconds += diff;
-                    }
-                }
-            }
-
+            he.TravelStatus = HistoryTravelStatus.Update(prev?.TravelStatus, prev , he);    // need a real he so can't do that as part of the constructor.
+            
             return he;
         }
 
@@ -296,26 +252,6 @@ namespace EliteDangerousCore
         }
 
         #endregion
-
-        public string TravelInfo()          // use to get a summary of travel info.. 
-        {
-            if (StopMarker)
-            {
-                return "Travelled " + TravelledDistance.ToStringInvariant("0.0") + " LY"
-                                     + ", " + Travelledjumps + " jumps"
-                                     + ((TravelledMissingjump > 0) ? ", " + TravelledMissingjump + " unknown distance jumps" : "") +
-                                      ", time " + TravelledSeconds;
-            }
-            else if (isTravelling && IsFSDJump)
-            {
-                return "Travelling distance " + TravelledDistance.ToString("0.0") + " LY"
-                + ", " + Travelledjumps + " jumps"
-                + ((TravelledMissingjump > 0) ? ", " + TravelledMissingjump + " unknown distance jumps" : "") +
-                ", time " + TravelledSeconds;
-            }
-            else
-                return null;
-        }
 
         public System.Drawing.Image GetIcon
         {
