@@ -99,6 +99,8 @@
     <Compile Include="Journal\EDJournalClass.cs" />
     <Compile Include="Journal\EDJournalReader.cs" />
     <Compile Include="Journal\EDJournalMonitorWatcher.cs" />
+    <Compile Include="Journal\JournalEssentialEvents.cs" />
+    <Compile Include="Journal\JournalEntryDB.cs" />
     <Compile Include="Journal\JournalEnums.cs" />
     <Compile Include="Status\EDStatusMonitorWatcher.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
