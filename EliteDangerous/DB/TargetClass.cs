@@ -91,6 +91,12 @@ namespace EliteDangerousCore.DB
             return tt != TargetType.None;
         }
 
+        public static TargetType GetTargetType()
+        {
+            TargetType tt = (TargetType)SQLiteDBClass.GetSettingInt("TargetPositionType", (int)TargetType.None);
+            return tt;
+        }
+
         public static bool GetTargetPosition(out string name, out Point3D t)
         {
             double x, y, z;

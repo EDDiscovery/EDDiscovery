@@ -29,14 +29,14 @@ namespace EDDiscovery.UserControls
 {
     static class TargetHelpers
     {
-        public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn)
+        public static void setTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn)
         {
-            setTargetSystem(sender, _discoveryForm, sn, true);
+            setTargetSystem(sender, discoveryform, sn, true);
 
         }
-        public static void setTargetSystem(Object sender, EDDiscoveryForm _discoveryForm, String sn, Boolean prompt)
+        public static void setTargetSystem(Object sender, EDDiscoveryForm discoveryform, String sn, Boolean prompt)
         {
-            Form senderForm = ((Control)sender)?.FindForm() ?? _discoveryForm;
+            Form senderForm = ((Control)sender)?.FindForm() ?? discoveryform;
 
             if (string.IsNullOrWhiteSpace(sn))
             {
@@ -45,14 +45,14 @@ namespace EDDiscovery.UserControls
                     if (ExtendedControls.MessageBoxTheme.Show(senderForm, "Confirm deletion of target", "Delete a target", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         TargetClass.ClearTarget();
-                        _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
+                        discoveryform.NewTargetSet(sender);          // tells everyone who cares a new target was set
                     }
                 }
 
                 return;
             }
 
-            ISystem sc = _discoveryForm.history.FindSystem(sn);
+            ISystem sc = discoveryform.history.FindSystem(sn);
             string msgboxtext = null;
 
             if (sc != null && sc.HasCoordinate)
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
                 if (sn.Length > 2 && sn.Substring(0, 2).Equals("G:"))
                     sn = sn.Substring(2, sn.Length - 2);
 
-                GalacticMapObject gmo = _discoveryForm.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
+                GalacticMapObject gmo = discoveryform.galacticMapping.Find(sn, true, true);    // ignore if its off, find any part of string, find if disabled
 
                 if (gmo != null)
                 {
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            _discoveryForm.NewTargetSet(sender);          // tells everyone who cares a new target was set
+            discoveryform.NewTargetSet(sender);          // tells everyone who cares a new target was set
 
             if (msgboxtext != null && prompt)
                 ExtendedControls.MessageBoxTheme.Show(senderForm, msgboxtext, "Create a target", MessageBoxButtons.OK);

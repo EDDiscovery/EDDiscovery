@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,11 +14,9 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaseUtils;
 using ActionLanguage;
 using EliteDangerousCore;
@@ -125,6 +123,11 @@ namespace EDDiscovery.Actions
                         if (name == null)
                         {
                             ap.ReportError("Missing name in command");
+                        }
+                        else if (cmdname.Equals("EXIST", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmark(name, region);
+                            ap[prefix + "Exists"] = (bk != null).ToStringIntValue();
                         }
                         else if (cmdname.Equals("ADD", StringComparison.InvariantCultureIgnoreCase))
                         {

@@ -180,6 +180,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Controls.resx</DependentUpon>
     </None>
+    <Compile Include="Actions\ActionsEDDCmds\ActionGMO.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionTarget.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />

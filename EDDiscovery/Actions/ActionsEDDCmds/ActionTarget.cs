@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright © 2017-2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,11 +14,8 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
- using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BaseUtils;
 using ActionLanguage;
 using EliteDangerousCore;
@@ -48,32 +45,89 @@ namespace EDDiscovery.Actions
             {
                 StringParser sp = new StringParser(res);
 
+                string prefix = "T_";
                 string cmdname = sp.NextWord();
+
+                if (cmdname != null && cmdname.Equals("PREFIX", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    prefix = sp.NextWord();
+
+                    if (prefix == null)
+                    {
+                        ap.ReportError("Missing name after Prefix in Target");
+                        return true;
+                    }
+
+                    cmdname = sp.NextWord();
+                }
 
                 if (cmdname != null )
                 {
                     if (cmdname.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        //                        ap[prefix + "MatchCount"] = (bcount - 1).ToStringInvariant();
-                        //                      ap[prefix + "TotalCount"] = GlobalBookMarkList.Instance.Bookmarks.Count.ToStringInvariant();
+                        bool tset = EliteDangerousCore.DB.TargetClass.IsTargetSet();
+                        ap[prefix + "TargetSet"] = tset.ToStringIntValue();
+                        if (tset)
+                        {
+                            EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+                            ap[prefix + "TargetType"] =EliteDangerousCore.DB.TargetClass.GetTargetType().ToString();
+                            ap[prefix + "TargetPositionFullName"] = name;
+                            ap[prefix + "TargetPositionName"] = EliteDangerousCore.DB.TargetClass.GetNameWithoutPrefix(name);
+
+                            if (!double.IsNaN(x) && !double.IsNaN(y) && !double.IsNaN(z))
+                            {
+                                ap[prefix + "TargetPositionX"] = x.ToStringInvariant("0.##");
+                                ap[prefix + "TargetPositionY"] = y.ToStringInvariant("0.##");
+                                ap[prefix + "TargetPositionZ"] = z.ToStringInvariant("0.##");
+                            }
+                        }
                     }
                     else
                     {
-                        string name = sp.NextWord();
+                        string name = sp.NextQuotedWord();
 
                         if (name != null)
                         {
+                            EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
+
                             if (cmdname.Equals("BOOKMARK", StringComparison.InvariantCultureIgnoreCase))
                             {
-                            }
-                            else if (cmdname.Equals("BOOKMARKNEW", StringComparison.InvariantCultureIgnoreCase))
-                            {
+                                BookmarkClass bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(name);    // has it been bookmarked?
+
+                                if (bk != null)
+                                {
+                                    TargetClass.SetTargetBookmark(name, bk.id, bk.x, bk.y, bk.z);
+                                    discoveryform.NewTargetSet(this);
+                                }
+                                else
+                                    ap.ReportError("Bookmark '" + name + "' not found");
+
                             }
                             else if (cmdname.Equals("GMO", StringComparison.InvariantCultureIgnoreCase))
                             {
+                                EliteDangerousCore.EDSM.GalacticMapObject gmo = discoveryform.galacticMapping.Find(name, true, true);
+
+                                if (gmo != null)
+                                {
+                                    TargetClass.SetTargetGMO("G:" + gmo.name, gmo.id, gmo.points[0].X, gmo.points[0].Y, gmo.points[0].Z);
+                                    discoveryform.NewTargetSet(this);
+                                }
+
+                                else
+                                    ap.ReportError("GMO '" + name + "' not found");
                             }
                             else if (cmdname.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
                             {
+                                SystemNoteClass nc = SystemNoteClass.GetNoteOnSystem(name);        // has it got a note?
+                                ISystem sc = discoveryform.history.FindSystem(name);
+
+                                if ( sc != null && sc.HasCoordinate && nc != null )
+                                {
+                                    TargetClass.SetTargetNotedSystem(name, nc.id, sc.X, sc.Y, sc.Z);
+                                    discoveryform.NewTargetSet(this);
+                                }
+                                else
+                                    ap.ReportError("No Note found on entries in system '" + name + "'");
                             }
                             else
                             {

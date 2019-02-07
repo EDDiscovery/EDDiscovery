@@ -125,6 +125,7 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("DLLCall", typeof(ActionDLLCall), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("EliteBindings", typeof(ActionEliteBindings), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Event", typeof(ActionEventCmd), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("GMO", typeof(ActionGMO), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Historytab", typeof(ActionHistoryTab), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Key", typeof(ActionKeyED), ActionBase.ActionType.Cmd);       // override key
             ActionBase.AddCommand("Ledger", typeof(ActionLedger), ActionBase.ActionType.Cmd);
@@ -137,8 +138,8 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Scan", typeof(ActionScan), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Ship", typeof(ActionShip), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
-            ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Target", typeof(ActionTarget), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
         }
 
         public void ReLoad(bool completereload = true)        // COMPLETE reload..
