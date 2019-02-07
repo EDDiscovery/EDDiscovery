@@ -594,6 +594,13 @@ namespace EliteDangerousCore
             }
         }
 
+        public void UpdateMapColour(int v)
+        {
+            JournalFSDJump fsd = this as JournalFSDJump;        // only update if fsd
+            if ( fsd != null )
+                fsd.SetMapColour(v);
+        }
+
         //dist >0 to update
         public static void UpdateEDSMIDPosJump(long journalid, ISystem system, bool jsonpos, double dist, SQLiteConnectionUser cn = null, DbTransaction tn = null)
         {
@@ -651,19 +658,34 @@ namespace EliteDangerousCore
             }
         }
 
-        public void SetStartFlag()
+        public void SetStartMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, cn, txn);
         }
 
-        public void SetStopFlag()
+        public void SetStopMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, cn, txn);
         }
 
-        public void ClearStartStopFlag()
+        public void ClearStartStopMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, cn, txn);
+        }
+
+        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        {
+            UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
+        }
+
+        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        {
+            UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn, txn);
+        }
+
+        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        {
+            UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
         }
 
         public void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2 , SQLiteConnectionUser cn = null, DbTransaction txn = null)

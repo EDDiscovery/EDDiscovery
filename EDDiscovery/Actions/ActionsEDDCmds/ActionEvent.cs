@@ -166,7 +166,6 @@ namespace EDDiscovery.Actions
                     else
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
-                        ap[prefix + "JID"] = jidindex.ToStringInvariant();
 
                         if (cmdname.Equals("action"))
                         {
@@ -229,6 +228,18 @@ namespace EDDiscovery.Actions
                         {
                             ActionVars.MissionInformation(ap, he.MissionList, prefix);
                         }
+                        else if (cmdname.Equals("setstartmarker"))
+                        {
+                            he.journalEntry.SetStartMarker();
+                        }
+                        else if (cmdname.Equals("setstopmarker"))
+                        {
+                            he.journalEntry.SetStopMarker();
+                        }
+                        else if (cmdname.Equals("clearstartstopmarker"))
+                        {
+                            he.journalEntry.ClearStartStopMarker();
+                        }
                         else if (cmdname.Equals("note"))
                         {
                             string note = sp.NextQuotedWord();
@@ -263,7 +274,10 @@ namespace EDDiscovery.Actions
                     ActionVars.SystemVars(values, hl[pos].System, prefix);
                     ap.Add(values);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Exception reporting entry variables in event " + ex.Message);
+                }
 
                 ap[prefix + "JID"] = hl[pos].Journalid.ToStringInvariant();
                 ap[prefix + "Count"] = hl.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);     // give a count of matches

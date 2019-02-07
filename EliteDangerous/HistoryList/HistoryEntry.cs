@@ -27,7 +27,7 @@ namespace EliteDangerousCore
     [DebuggerDisplay("Event {EntryType} {System.Name} ({System.X,nq},{System.Y,nq},{System.Z,nq}) {EventTimeUTC} Inx:{Indexno} JID:{Journalid}")]
     public class HistoryEntry           // DONT store commander ID.. this history is externally filtered on it.
     {
-        #region Variables
+        #region Public Variables
 
         public int Indexno;            // for display purposes.  from 1 to number of records
 
@@ -116,6 +116,10 @@ namespace EliteDangerousCore
         public MissionList MissionList { get; set; }
 
         public SystemNoteClass snc;     // system note class found attached to this entry. May be null
+
+        #endregion
+
+        #region Private Variables
 
         private HistoryEntryStatus EntryStatus { get;  set; }
         private HistoryTravelStatus TravelStatus { get; set; }
@@ -239,6 +243,10 @@ namespace EliteDangerousCore
             snc = SystemNoteClass.GetSystemNote(Journalid, IsFSDJump, System);       // may be null
         }
 
+        #endregion
+
+        #region Interaction
+
         public void SetJournalSystemNoteText(string text, bool commit, bool sendtoedsm)
         {
             if (snc == null || snc.Journalid == 0)           // if no system note, or its one on a system, from now on we assign journal system notes only from this IF
@@ -249,48 +257,6 @@ namespace EliteDangerousCore
 
             if (snc != null && commit && sendtoedsm && snc.FSDEntry)                    // if still have a note, and commiting, and send to esdm, and FSD jump
                 EDSMClass.SendComments(snc.SystemName, snc.Note, snc.EdsmId);
-        }
-
-        #endregion
-
-        public System.Drawing.Image GetIcon
-        {
-            get
-            {
-                if (journalEntry != null)
-                    return journalEntry.Icon;
-                else if (EntryType == JournalTypeEnum.FSDJump)
-                    return JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump];
-                else
-                    return JournalEntry.JournalTypeIcons[JournalTypeEnum.Unknown];
-            }
-        }
-
-
-        public void UpdateMapColour(int v)
-        {
-            if (EntryType == JournalTypeEnum.FSDJump)
-                (journalEntry as JournalFSDJump).UpdateMapColour(v);
-        }
-
-        public void UpdateCommanderID(int v)
-        {
-            journalEntry.UpdateCommanderID(v);
-        }
-
-        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
-        {
-            journalEntry.UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
-        }
-
-        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
-        {
-            journalEntry.UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn, txn);
-        }
-
-        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
-        {
-            journalEntry.UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
         }
 
         public bool IsJournalEventInEventFilter(string[] events)
@@ -318,5 +284,6 @@ namespace EliteDangerousCore
             return null;
         }
 
+        #endregion
     }
 }

@@ -184,7 +184,7 @@ namespace EliteDangerousCore.EGO
             {
                 if (ego.PostMessage(msg, out newRecord))
                 {
-                    he.SetEGOSync();
+                    he.journalEntry.SetEGOSync();
                     return true;
                 }
             }

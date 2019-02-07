@@ -476,7 +476,7 @@ namespace EDDiscovery.UserControls
 
                 if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
                 {
-                    Image img = he.GetIcon;
+                    Image img = he.journalEntry.Icon;
                     ExtendedControls.ExtPictureBox.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null, false);
                     e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
                 }

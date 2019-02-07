@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
 
             e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-            e.Graphics.DrawImage(he.GetIcon, new Rectangle(hstart, top, size, size));
+            e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
             hstart += size + padding;
 
             if (he.IsFSDJump && showfsdmapcolour)
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
                 {
                     HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                     System.Diagnostics.Debug.Assert(sp != null);
-                    sp.UpdateMapColour(mapColorDialog.Color.ToArgb());
+                    sp.journalEntry.UpdateMapColour(mapColorDialog.Color.ToArgb());
                 }
 
                 this.Cursor = Cursors.Default;
@@ -862,7 +862,7 @@ namespace EDDiscovery.UserControls
             {
                 HistoryEntry sp = (HistoryEntry)r.Cells[TravelHistoryColumns.HistoryTag].Tag;
                 System.Diagnostics.Debug.Assert(sp != null);
-                sp.UpdateCommanderID(-1);
+                sp.journalEntry.UpdateCommanderID(-1);
                 rowsbyjournalid.Remove(sp.Journalid);
             }
 
@@ -909,7 +909,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (HistoryEntry sp in listsyspos)
                 {
-                    sp.UpdateCommanderID(movefrm.selectedCommander.Nr);
+                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Nr);
                 }
 
                 foreach (DataGridViewRow row in selectedRows)

@@ -198,7 +198,7 @@ namespace EliteDangerousCore.EDSM
                     {
                         hasbeta = true;
                         betatime = he.EventTimeUTC;
-                        he.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
+                        he.journalEntry.SetEdsmSync();       // crappy slow but unusual, but lets mark them as sent..
                     }
                     else if (! ( he.MultiPlayer || discardEvents.Contains(eventtype) || alwaysDiscard.Contains(eventtype) ))
                     {
@@ -465,7 +465,7 @@ namespace EliteDangerousCore.EDSM
                                     }
                                 }
 
-                                he.SetEdsmSync(cn, txn);
+                                he.journalEntry.SetEdsmSync(cn, txn);
 
                                 if (msgnr == 500)
                                 {

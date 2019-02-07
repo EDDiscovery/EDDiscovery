@@ -203,7 +203,7 @@ namespace EliteDangerousCore.EDDN
             {
                 if (eddn.PostMessage(msg))
                 {
-                    he.SetEddnSync();
+                    he.journalEntry.SetEddnSync();
                     return true;
                 }
                 else

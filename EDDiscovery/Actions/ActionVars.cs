@@ -35,27 +35,39 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
+                vars[prefix + "JID"] = he.Journalid.ToString(ct);
                 vars[prefix + "LocalTime"] = he.EventTimeLocal.ToStringUS();
-                vars[prefix + "DockedState"] = he.IsDocked ? "1" : "0";
-                vars[prefix + "LandedState"] = he.IsLanded ? "1" : "0";
-                vars[prefix + "Hyperspace"] = he.IsInHyperSpace ? "1" : "0";
+                vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
+                vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();
+                vars[prefix + "Hyperspace"] = he.IsInHyperSpace.ToStringIntValue();
                 vars[prefix + "WhereAmI"] = he.WhereAmI;
                 vars[prefix + "BodyType"] = he.BodyType;
                 vars[prefix + "ShipType"] = he.ShipType;
+                vars[prefix + "ShipTypeFD"] = he.ShipTypeFD;
                 vars[prefix + "ShipId"] = he.ShipId.ToString(ct);
                 vars[prefix + "IndexOf"] = he.Indexno.ToString(ct);
-                vars[prefix + "JID"] = he.Journalid.ToString(ct);
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 
                 vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToString("0.0");
                 vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
-                vars[prefix + "IsTravelling"] = he.isTravelling ? "1" : "0";
+                vars[prefix + "IsTravelling"] = he.isTravelling.ToStringIntValue();
                 vars[prefix + "TravelledJumps"] = he.Travelledjumps.ToStringInvariant();
                 vars[prefix + "TravelledMissingJumps"] = he.TravelledMissingjump.ToStringInvariant();
-                vars[prefix + "MultiPlayer"] = he.MultiPlayer ? "1" : "0";
-                vars[prefix + "ContainsRares"] = he.ContainsRares() ? "1" : "0";
+                vars[prefix + "MultiPlayer"] = he.MultiPlayer.ToStringIntValue();
+                vars[prefix + "ContainsRares"] = he.ContainsRares().ToStringIntValue();
                 vars[prefix + "EventSummary"] = he.EventSummary;
+
+                vars[prefix + "StartMarker"] = he.StartMarker.ToStringIntValue();
+                vars[prefix + "StopMarker"] = he.StopMarker.ToStringIntValue();
+                vars[prefix + "EdsmSync"] = he.EdsmSync.ToStringIntValue();
+                vars[prefix + "EddnSync"] = he.EDDNSync.ToStringIntValue();
+                vars[prefix + "EgoSync"] = he.EGOSync.ToStringIntValue();
+                vars[prefix + "Beta"] = he.IsBetaMessage.ToStringIntValue();
+                vars[prefix + "GameMode"] = he.GameMode;
+                vars[prefix + "Group"] = he.Group;
+                vars[prefix + "Wanted"] = he.Wanted.ToStringIntValue();
+                vars[prefix + "MarketId"] = he.MarketID.HasValue ? he.MarketID.ToStringInvariant() : "0";
 
                 vars[prefix + "Note"] = he.snc?.Note ?? "";
 
@@ -95,7 +107,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "EDDBPrimaryEconomy"] = s.PrimaryEconomy.ToNullUnknownString();
                 vars[prefix + "EDDBFaction"] = s.Faction.ToNullUnknownString();
                 vars[prefix + "EDDBPopulation"] = s.Population.ToString(ct);
-                vars[prefix + "EDDBNeedsPermit"] = (s.NeedsPermit != 0) ? "1" : "0";
+                vars[prefix + "EDDBNeedsPermit"] = (s.NeedsPermit != 0).ToStringIntValue();
             }
         }
 
@@ -205,7 +217,7 @@ namespace EDDiscovery.Actions
                 vars[mp + "Target"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetFriendly);
                 vars[mp + "TargetType"] = ms.Mission.TargetTypeLocalised.Alt(ms.Mission.TargetTypeFriendly);
                 vars[mp + "Passengers"] = ms.Mission.PassengerCount.ToStringInvariant();
-                vars[mp + "Completed"] = ms.Completed != null ? "1" : "0";
+                vars[mp + "Completed"] = (ms.Completed != null).ToStringIntValue();
                 if (ms.Completed != null)
                 {
                     vars[mp + "Reward"] = ms.Completed.Reward.ToStringInvariant();

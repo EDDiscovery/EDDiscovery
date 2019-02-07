@@ -490,7 +490,7 @@ namespace EliteDangerousCore.JournalEvents
             shp.FSDJump(this);
         }
 
-        public void UpdateMapColour(int mapcolour)
+        public void SetMapColour(int mapcolour)
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
             {

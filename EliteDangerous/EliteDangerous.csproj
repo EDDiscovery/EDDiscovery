@@ -96,16 +96,16 @@
     <Compile Include="EliteDangerous\CommodityPrices.cs" />
     <Compile Include="EliteDangerous\EDCalculations.cs" />
     <Compile Include="EliteDangerous\EDCommander.cs" />
-    <Compile Include="EliteDangerous\EDJournalClass.cs" />
-    <Compile Include="EliteDangerous\EDJournalReader.cs" />
-    <Compile Include="EliteDangerous\EDJournalMonitorWatcher.cs" />
-    <Compile Include="EliteDangerous\EDStatusMonitorWatcher.cs" />
+    <Compile Include="Journal\EDJournalClass.cs" />
+    <Compile Include="Journal\EDJournalReader.cs" />
+    <Compile Include="Journal\EDJournalMonitorWatcher.cs" />
+    <Compile Include="Status\EDStatusMonitorWatcher.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
     <Compile Include="EliteDangerous\FrontierToVKey.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
-    <Compile Include="EliteDangerous\JournalEntry.cs" />
-    <Compile Include="EliteDangerous\JournalEntryAttributes.cs" />
-    <Compile Include="EliteDangerous\JournalEntryInterfaces.cs" />
+    <Compile Include="Journal\JournalEntry.cs" />
+    <Compile Include="Journal\JournalEntryAttributes.cs" />
+    <Compile Include="Journal\JournalEntryInterfaces.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
     <Compile Include="EliteDangerous\LogReaderBase.cs" />
@@ -202,7 +202,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="EliteDangerous\UIEvents.cs" />
+    <Compile Include="Status\UIEvents.cs" />
     <Compile Include="UIEvents\UIFuel.cs" />
     <Compile Include="UIEvents\UINightVision.cs" />
     <Compile Include="UIEvents\UIHUDInAnalysisMode.cs" />
