@@ -29,232 +29,6 @@ using System.Text;
 
 namespace EliteDangerousCore
 {
-    public enum JournalTypeEnum
-    {
-        Unknown = 0,
-
-        AfmuRepairs = 3,
-        ApproachBody = 4,
-        ApproachSettlement = 5,
-        AppliedToSquadron = 6,
-        AsteroidCracked = 7,
-        Bounty = 10,
-        BuyAmmo = 20,
-        BuyDrones = 30,
-        BuyExplorationData = 40,
-        BuyTradeData = 50,
-        CapShipBond = 60,
-        Cargo = 63,
-        CargoDepot = 64,
-        ChangeCrewRole = 65,
-        ClearSavedGame = 70,
-        CockpitBreached = 80,
-        CodexEntry = 85,
-        CollectCargo = 90,
-        Commander = 95,
-        CommitCrime = 100,
-        CommunityGoal = 109,
-        CommunityGoalJoin = 110,
-        CommunityGoalReward = 120,
-        CommunityGoalDiscard = 1040,
-        Continued = 125,
-        CrewAssign = 126,
-        CrewFire = 127,
-        CrewHire = 128,
-        CrewLaunchFighter = 1268,
-        CrewMemberJoins = 1270,
-        CrewMemberQuits = 1280,
-        CrewMemberRoleChange = 1285,
-        CrimeVictim = 129,
-        DataScanned = 1030,
-        DatalinkScan = 130,
-        DatalinkVoucher = 1020,
-        Died = 140,
-        DiscoveryScan = 141,
-        DisbandedSquadron = 142,
-        Docked = 145,
-        DockFighter = 150,
-        DockingCancelled = 160,
-        DockingDenied = 170,
-        DockingGranted = 180,
-        DockingRequested = 190,
-        DockingTimeout = 200,
-        DockSRV = 210,
-        EjectCargo = 220,
-        EndCrewSession = 225,
-        EngineerApply = 230,
-        EngineerContribution = 235,
-        EngineerCraft = 240,
-        EngineerLegacyConvert = 241,
-        EngineerProgress = 250,
-        EscapeInterdiction = 260,
-        FactionKillBond = 270,
-        FetchRemoteModule = 1000,
-        FSDJump = 280,
-        FSDTarget = 281,
-        FSSAllBodiesFound = 285,
-        FuelScoop = 290,
-        Fileheader = 300,
-        FighterDestroyed = 303,
-        FighterRebuilt = 304,
-        Friends = 305,
-        FSSDiscoveryScan = 306,
-        FSSSignalDiscovered = 307,
-        HeatDamage = 310,
-        HeatWarning = 320,
-        HullDamage = 330,
-        Interdicted = 340,
-        Interdiction = 350,
-        InvitedToSquadron = 351,
-        JoinedSquadron = 353,
-        JetConeBoost = 354,
-        JetConeDamage = 355,
-        JoinACrew = 356,
-        KickCrewMember = 357,
-        KickedFromSquadron = 358,
-        LaunchDrone = 359,
-        LaunchFighter = 360,
-        LaunchSRV = 370,
-        LeftSquadron = 371,
-        LeaveBody = 375,
-        Liftoff = 380,
-        LoadGame = 390,
-        Loadout = 395,
-        Location = 400,
-        MassModuleStore = 1010,
-        Market = 405,
-        MarketBuy = 410,
-        MarketSell = 420,
-        MaterialCollected = 430,
-        MaterialDiscarded = 440,
-        MaterialDiscovered = 450,
-        MaterialTrade = 451,
-        Materials = 455,
-        MiningRefined = 460,
-        Missions = 465,
-        MissionAbandoned = 470,
-        MissionAccepted = 480,
-        MissionCompleted = 490,
-        MissionFailed = 500,
-        MissionRedirected = 505,
-        ModuleInfo = 508,
-        ModuleBuy = 510,
-        ModuleRetrieve = 515,
-        ModuleSell = 520,
-        ModuleSellRemote = 990,
-        ModuleStore = 525,
-        ModuleSwap = 530,
-        MultiSellExplorationData = 533,
-        Music = 535,
-        NavBeaconScan = 538,
-        NewCommander = 540,
-        NpcCrewPaidWage = 541,
-        NpcCrewRank = 542,
-        Outfitting = 543,
-        Passengers = 545,
-        PayFines = 550,
-        PayBounties = 551,
-        PayLegacyFines = 560,
-        Powerplay = 565,
-        PowerplayCollect = 570,
-        PowerplayDefect = 580,
-        PowerplayDeliver = 590,
-        PowerplayFastTrack = 600,
-        PowerplayJoin = 610,
-        PowerplayLeave = 620,
-        PowerplaySalary = 630,
-        PowerplayVote = 640,
-        PowerplayVoucher = 650,
-        Progress = 660,
-        Promotion = 670,
-        ProspectedAsteroid = 673,
-        PVPKill = 675,
-        QuitACrew = 677,
-        Rank = 680,
-        RebootRepair = 690,
-        ReceiveText = 700,
-        RedeemVoucher = 710,
-        RefuelAll = 720,
-        RefuelPartial = 730,
-        Repair = 740,
-        RepairAll = 745,
-        RepairDrone = 747,
-        Reputation = 748,
-        RestockVehicle = 750,
-        Resurrect = 760,
-        ReservoirReplenished = 763,
-        SAAScanComplete = 765,
-        Scan = 770,
-        Scanned = 772,
-        ScientificResearch = 775,
-        Screenshot = 780,
-        SearchAndRescue = 785,
-        SelfDestruct = 790,
-        SellDrones = 800,
-        SellExplorationData = 810,
-        SellShipOnRebuy = 815,
-        SendText = 820,
-        SetUserShipName = 825,
-        SharedBookmarkToSquadron = 826,
-        ShieldState = 830,
-        Shipyard = 837,
-        ShipyardBuy = 840,
-        ShipyardNew = 850,
-        ShipyardSell = 860,
-        ShipyardSwap = 870,
-        ShipyardTransfer = 880,
-        ShipTargeted = 881,
-        Shutdown = 882,
-        SRVDestroyed = 883,
-        StartJump = 885,
-        Statistics = 888,
-        StoredModules = 886,
-        StoredShips = 887,
-        SupercruiseEntry = 890,
-        SquadronCreated = 891,
-        SquadronDemotion = 892,
-        SquadronPromotion = 893,
-        SquadronStartup = 894,
-        SupercruiseExit = 900,
-        Synthesis = 910,
-        SystemsShutdown = 915,
-        TechnologyBroker = 918,
-        Touchdown = 920,
-        UnderAttack = 925,
-        Undocked = 930,
-        USSDrop = 940,
-        VehicleSwitch = 950,
-        WingAdd = 960,
-        WingInvite = 965,
-        WingJoin = 970,
-        WingLeave = 980,
-        WonATrophyForSquadron = 985,
-
-        // EDD Entries
-
-        EDDItemSet = 2000,
-        EDDCommodityPrices = 2010,
-
-        ICONIDsStart = 10000,
-        // Specials Event IDs for ICON selection - alternate Icons for these events
-        RestockVehicle_SRV = 10750,
-        RestockVehicle_Fighter = 10751,
-        ShieldState_ShieldsUp = 10830,
-        ShieldState_ShieldsDown = 10831,
-        VehicleSwitch_Mothership = 10950,
-        VehicleSwitch_Fighter = 10951,
-    }
-
-    public enum SyncFlags
-    {
-        NoBit = 0,                      // for sync change func only
-        EDSM = 0x01,
-        EDDN = 0x02,
-        EGO = 0x04,
-        StartMarker = 0x0100,           // measure distance start pos marker
-        StopMarker = 0x0200,            // measure distance stop pos marker
-    }
-
     [DebuggerDisplay("Event {EventTypeStr} {EventTimeUTC} EdsmID {EdsmID} JID {Id} C {CommanderId}")]
     public abstract class JournalEntry
     {
@@ -272,8 +46,6 @@ namespace EliteDangerousCore
 
         public long EdsmID { get; protected set; }                      // 0 = unassigned, >0 = assigned
 
-        private int Synced { get; set; }                     // sync flags
-
         public DateTime EventTimeLocal { get { return EventTimeUTC.ToLocalTime(); } }
 
         public bool SyncedEDSM { get { return (Synced & (int)SyncFlags.EDSM) != 0; } }
@@ -281,6 +53,7 @@ namespace EliteDangerousCore
         public bool SyncedEGO { get { return (Synced & (int)SyncFlags.EGO) != 0; } }
         public bool StartMarker { get { return (Synced & (int)SyncFlags.StartMarker) != 0; } }
         public bool StopMarker { get { return (Synced & (int)SyncFlags.StopMarker) != 0; } }
+
         private bool? beta;                        // True if journal entry is from beta
         public virtual bool Beta
         {
@@ -295,6 +68,17 @@ namespace EliteDangerousCore
                 return beta ?? false;
             }
         }
+
+        private enum SyncFlags
+        {
+            NoBit = 0,                      // for sync change func only
+            EDSM = 0x01,
+            EDDN = 0x02,
+            EGO = 0x04,
+            StartMarker = 0x0100,           // measure distance start pos marker
+            StopMarker = 0x0200,            // measure distance stop pos marker
+        }
+        private int Synced { get; set; }                     // sync flags
 
         public bool IsUIEvent { get { return this is IUIEvent; } }
 
@@ -433,11 +217,11 @@ namespace EliteDangerousCore
 
         #region Creation
 
-        public JournalEntry(DateTime utc, int synced , JournalTypeEnum jtype)       // manual creation via NEW
+        public JournalEntry(DateTime utc, JournalTypeEnum jtype, bool edsmsynced)       // manual creation via NEW
         {
             EventTypeID = jtype;
             EventTimeUTC = utc;
-            Synced = synced;
+            Synced = edsmsynced ? (int)SyncFlags.EDSM : 0;
             TLUId = 0;
         }
 
@@ -688,7 +472,7 @@ namespace EliteDangerousCore
             UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
         }
 
-        public void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2 , SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        private void UpdateSyncFlagBit(SyncFlags bit1, bool value1, SyncFlags bit2, bool value2 , SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             bool closeConn = false;
 

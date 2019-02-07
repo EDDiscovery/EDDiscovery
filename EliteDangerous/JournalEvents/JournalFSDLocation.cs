@@ -85,7 +85,7 @@ namespace EliteDangerousCore.JournalEvents
             public string State { get; set; }
         }
 
-        protected JournalLocOrJump(DateTime utc, ISystem sys, int synced, JournalTypeEnum jtype) : base(utc, synced, jtype)
+        protected JournalLocOrJump(DateTime utc, ISystem sys, JournalTypeEnum jtype, bool edsmsynced ) : base(utc, jtype, edsmsynced)
         {
             StarSystem = sys.Name;
             StarPos = new EMK.LightGeometry.Vector3((float)sys.X, (float)sys.Y, (float)sys.Z);
@@ -399,7 +399,7 @@ namespace EliteDangerousCore.JournalEvents
             EDSMFirstDiscover = evt["EDD_EDSMFirstDiscover"].Bool(false);
         }
 
-        public JournalFSDJump(DateTime utc, ISystem sys, int colour, bool first, int synced) : base(utc, sys, synced, JournalTypeEnum.FSDJump)
+        public JournalFSDJump(DateTime utc, ISystem sys, int colour, bool first, bool edsmsynced) : base(utc, sys, JournalTypeEnum.FSDJump, edsmsynced)
         {
             MapColor = colour;
             EDSMFirstDiscover = first;
