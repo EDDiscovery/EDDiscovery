@@ -85,7 +85,7 @@ namespace EliteDangerousCore.Inara
             List<JToken> eventstosend = new List<JToken>();
 
             HistoryEntry last = history.GetLast;
-            if (last != null)
+            if (last != null && last.EventTimeUTC > DateTime.UtcNow.AddDays(-30))
             {
                 var si = last.ShipInformation;
 
