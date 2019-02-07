@@ -28,6 +28,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using EDDiscovery;
 using EliteDangerousCore.DB;
+using System.Drawing;
 
 namespace EDDiscovery
 {
@@ -74,6 +75,7 @@ namespace EDDiscovery
         private string eddshipyardURL = "";
         private string eddbsystemsurl = "";
         private string edsmfullsystemsurl = "";
+        Dictionary<string, Image> captainslogtaglist;
 
         /// <summary>
         /// Controls whether or not a system notification area (systray) icon will be shown.
@@ -332,7 +334,7 @@ namespace EDDiscovery
                 SQLiteConnectionUser.PutSettingString("EDSMFullSystemsURL", value);
             }
         }
-        
+
         public string EDDBSystemsURL
         {
             get
@@ -346,6 +348,51 @@ namespace EDDiscovery
             {
                 eddbsystemsurl = value;
                 SQLiteConnectionUser.PutSettingString("EDDBSystemsURL", value);
+            }
+        }
+
+        public string CaptainsLogTags       // get/set as string..
+        {
+            get
+            {
+                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+                return string.Join(";", list);
+            }
+            set
+            {
+                captainslogtaglist = new Dictionary<string, Image>();       // read the value, and look up icons, create the table..
+
+                string[] tagdefs = value.Split(';');
+                foreach (var s in tagdefs)
+                {
+                    string[] parts = s.Split('=');
+                    // valid number, valid length, image exists
+                    if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && EDDiscovery.Icons.IconSet.Icons.ContainsKey(parts[1]))
+                    {
+                        Image img = EDDiscovery.Icons.IconSet.Icons[parts[1]];      // image.tag has name - defined by icon system
+                        captainslogtaglist[parts[0]] = img;
+                    }
+                }
+
+                // write back what is correct. Incorrect icons will be removed.
+                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+                string setting = string.Join(";", list);
+                SQLiteConnectionUser.PutSettingString("CaptainsLogPanelTagNames", setting);
+            }
+        }
+
+        public Dictionary<string,Image> CaptainsLogTagImage // set as dictionary/string
+        {
+            get
+            {
+                return captainslogtaglist;
+            }
+            set
+            {
+                captainslogtaglist = value;
+                string[] list = (from x in captainslogtaglist select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
+                string setting = string.Join(";", list);
+                SQLiteConnectionUser.PutSettingString("CaptainsLogPanelTagNames", setting);
             }
         }
 
@@ -377,6 +424,7 @@ namespace EDDiscovery
                 eddshipyardURL = SQLiteConnectionUser.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
                 edsmfullsystemsurl = SQLiteConnectionUser.GetSettingString("EDSMFullSystemsURL", "Default");
                 eddbsystemsurl = SQLiteConnectionUser.GetSettingString("EDDBSystemsURL", "Default");
+                CaptainsLogTags = SQLiteConnectionUser.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }

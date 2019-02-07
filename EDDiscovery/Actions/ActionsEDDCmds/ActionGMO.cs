@@ -27,7 +27,7 @@ namespace EDDiscovery.Actions
 
         public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<string> eventvars)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Command string", UserData, "Configure Target Command" , cp.Icon);
+            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Command string", UserData, "Configure GMO Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;
@@ -52,7 +52,7 @@ namespace EDDiscovery.Actions
 
                     if (prefix == null)
                     {
-                        ap.ReportError("Missing name after Prefix in Target");
+                        ap.ReportError("Missing name after Prefix in GMO");
                         return true;
                     }
 
@@ -65,12 +65,21 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("LIST", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        int i = 1;
+                        string wildcard = sp.NextQuotedWord() ?? "*";
+
+                        int count = 1;
                         foreach( var g in discoveryform.galacticMapping.galacticMapObjects)
                         {
-                            string nprefix = prefix + (i++).ToStringInvariant() + "_";
-                            DumpGMO(ap, nprefix, g);
+                            if (g.name.WildCardMatch(wildcard))
+                            {
+                                string nprefix = prefix + (count++).ToStringInvariant() + "_";
+                                DumpGMO(ap, nprefix, g);
+                            }
                         }
+
+                        ap[prefix + "MatchCount"] = (count - 1).ToStringInvariant();
+                        ap[prefix + "TotalCount"] = discoveryform.galacticMapping.galacticMapObjects.Count.ToStringInvariant();
+
                     }
                     else
                     {

@@ -159,6 +159,9 @@ namespace EliteDangerousCore.DB
 
         public List<CaptainsLogClass> LogEntries { get { return globallog; } }
 
+        public List<CaptainsLogClass> LogEntriesCmdr(int cmdrid) { return globallog.Where(x => x.Commander == cmdrid).ToList(); }
+        public List<CaptainsLogClass> LogEntriesCmdrTimeOrder(int cmdrid) { return globallog.Where(x => x.Commander == cmdrid).OrderBy(x=>x.TimeUTC).ToList(); }
+
         public Action<CaptainsLogClass, bool> OnLogEntryChanged;        // bool = true if deleted
 
         private static GlobalCaptainsLogList gbl = null;
@@ -202,12 +205,12 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public CaptainsLogClass[] Find(DateTime start, DateTime end, bool utc)
+        public CaptainsLogClass[] Find(DateTime start, DateTime end, bool utc, int cmdr)
         {
             if ( utc )
-                return (from x in LogEntries where x.TimeUTC >= start && x.TimeUTC <= end select x).ToArray();
+                return (from x in LogEntries where x.TimeUTC >= start && x.TimeUTC <= end && x.Commander == cmdr select x).ToArray();
             else
-                return (from x in LogEntries where x.TimeLocal >= start && x.TimeLocal <= end select x).ToArray();
+                return (from x in LogEntries where x.TimeLocal >= start && x.TimeLocal <= end && x.Commander == cmdr select x).ToArray();
         }
 
         //{

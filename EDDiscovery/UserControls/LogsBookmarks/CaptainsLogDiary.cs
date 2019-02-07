@@ -141,7 +141,9 @@ namespace EDDiscovery.UserControls
                     }
 
                     // display is in local or utc time, dependent on Config.  So we need to compare local or utc times
-                    int noentries = GlobalCaptainsLogList.Instance.Find(new DateTime(curmonth.Year, curmonth.Month, i + 1), new DateTime(curmonth.Year, curmonth.Month, i + 1, 23, 59, 59), EDDConfig.Instance.DisplayUTC).Length;
+                    int noentries = GlobalCaptainsLogList.Instance.Find(new DateTime(curmonth.Year, curmonth.Month, i + 1), 
+                                                                        new DateTime(curmonth.Year, curmonth.Month, i + 1, 23, 59, 59), 
+                                                                        EDDConfig.Instance.DisplayUTC , EDCommander.CurrentCmdrID).Length;
 
                     daybuttons[i].Tag = noentries;
 

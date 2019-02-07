@@ -32,13 +32,10 @@ namespace EDDiscovery.UserControls
     public partial class CaptainsLogEntries : UserControlCommonBase
     {
         private string DbColumnSave { get { return DBName("CaptainsLogPanel", "DGVCol"); } }
-        private string DbSaveTags { get { return "CaptainsLogPanelTagNames"; } }    // global, not panel related
         private string DbStartDate { get { return DBName("CaptainsLogPanel", "SD"); } }
         private string DbStartDateOn { get { return DBName("CaptainsLogPanel", "SDOn"); } }
         private string DbEndDate { get { return DBName("CaptainsLogPanel", "ED"); } }
         private string DbEndDateOn { get { return DBName("CaptainsLogPanel", "EDOn"); } }
-
-        public Dictionary<string, Image> tags;
 
         const int TagHeight = 24;
         const int TagSpacing = 26;
@@ -69,8 +66,6 @@ namespace EDDiscovery.UserControls
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopLeft;
 
-            LoadTags();
-
             dateTimePickerStartDate.Value = SQLiteConnectionUser.GetSettingDate(DbStartDate, new DateTime(2014, 12, 14));
             dateTimePickerStartDate.Checked = SQLiteConnectionUser.GetSettingBool(DbStartDateOn, false);
             dateTimePickerEndDate.Value = SQLiteConnectionUser.GetSettingDate(DbEndDate, new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
@@ -85,24 +80,6 @@ namespace EDDiscovery.UserControls
             cfs.SaveBack += TagsChanged;
         }
 
-        void LoadTags()
-        {
-            tags = new Dictionary<string, Image>();
-
-            string taglist = SQLiteConnectionUser.GetSettingString(DbSaveTags, "Expedition=Journal.FSDJump;Died=Journal.Died");
-            string[] tagdefs = taglist.Split(';');
-            foreach (var s in tagdefs)
-            {
-                string[] parts = s.Split('=');
-                // valid number, valid length, image exists
-                if (parts.Length == 2 && parts[0].Length>0 && parts[1].Length>0 && EDDiscovery.Icons.IconSet.Icons.ContainsKey(parts[1])) 
-                {
-                    Image img = EDDiscovery.Icons.IconSet.Icons[parts[1]];      // image.tag has name - defined by icon system
-                    tags[parts[0]] = img;
-                }
-            }
-        }
-
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView, DbColumnSave);
@@ -111,9 +88,6 @@ namespace EDDiscovery.UserControls
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
-
-            string[] list = (from x in tags select (x.Key + "=" + (string)x.Value.Tag)).ToArray();
-            SQLiteConnectionUser.PutSettingString(DbSaveTags, string.Join(";",list));
 
             SQLiteConnectionUser.PutSettingDate(DbStartDate, dateTimePickerStartDate.Value);
             SQLiteConnectionUser.PutSettingDate(DbEndDate, dateTimePickerEndDate.Value);
@@ -215,9 +189,9 @@ namespace EDDiscovery.UserControls
                 int tagscount = 0;
                 for (int i = 0; i < tagstring.Count; i++)
                 {
-                    if (tags.ContainsKey(tagstring[i]))
+                    if (EDDConfig.Instance.CaptainsLogTagImage.ContainsKey(tagstring[i]))
                     {
-                        e.Graphics.DrawImage(tags[tagstring[i]], area);
+                        e.Graphics.DrawImage(EDDConfig.Instance.CaptainsLogTagImage[tagstring[i]], area);
                         area.Y += 26;
                         tagscount++;
                     }
@@ -320,9 +294,9 @@ namespace EDDiscovery.UserControls
 
         private void EditTags(DataGridViewRow rw)
         {
-            List<string> Dickeys = new List<string>(tags.Keys);
+            List<string> Dickeys = new List<string>(EDDConfig.Instance.CaptainsLogTagImage.Keys);
             Dickeys.Sort();
-            List<Image> images = (from x in Dickeys select tags[x]).ToList();
+            List<Image> images = (from x in Dickeys select EDDConfig.Instance.CaptainsLogTagImage[x]).ToList();
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             string taglist = curtags != null ? string.Join(";", curtags) : "";
@@ -463,10 +437,12 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".Tx(this), this.FindForm().Icon, tags);
+            tg.Init("Set Tags".Tx(this), this.FindForm().Icon, EDDConfig.Instance.CaptainsLogTagImage);
 
             if (tg.ShowDialog() == DialogResult.OK)
-                tags = tg.Result;
+            {
+                EDDConfig.Instance.CaptainsLogTagImage = tg.Result;
+            }
         }
 
         #endregion

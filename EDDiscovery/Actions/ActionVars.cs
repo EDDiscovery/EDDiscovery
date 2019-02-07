@@ -36,6 +36,7 @@ namespace EDDiscovery.Actions
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
+                vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUS();
                 vars[prefix + "LocalTime"] = he.EventTimeLocal.ToStringUS();
                 vars[prefix + "DockedState"] = he.IsDocked.ToStringIntValue();
                 vars[prefix + "LandedState"] = he.IsLanded.ToStringIntValue();

@@ -121,6 +121,7 @@ namespace EDDiscovery.Actions
             lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
 
             ActionBase.AddCommand("Bookmarks", typeof(ActionBookmarks), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Captainslog", typeof(ActionCaptainsLog), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Commodities", typeof(ActionCommodities), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("DLLCall", typeof(ActionDLLCall), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("EliteBindings", typeof(ActionEliteBindings), ActionBase.ActionType.Cmd);
