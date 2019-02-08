@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             Init();
         }    
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
-        // themeing in pop out form happens here
+        // themeing happens at this point
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available

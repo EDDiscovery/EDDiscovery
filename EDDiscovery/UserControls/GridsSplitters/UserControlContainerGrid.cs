@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,30 +15,24 @@
  */
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using EDDiscovery.Forms;
-using EDDiscovery.UserControls;
 using EliteDangerousCore.DB;
-using EliteDangerousCore;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlContainerGrid: UserControlCommonBase        // circular, huh! neat!
+    public partial class UserControlContainerGrid : UserControlCommonBase        // circular, huh! neat!
     {
         private IHistoryCursor ucursor_history;     // one passed to us, refers to thc.uctg
         private IHistoryCursor ucursor_inuse;  // one in use
 
         private List<UserControlContainerResizable> uccrlist = new List<UserControlContainerResizable>();
 
-        private string DbWindows { get { return DBName("GridControlWindows" ); } }
-        private string DbPositions { get { return DBName("GridControlPositons" ); } }
-        private string DbZOrder { get { return DBName("GridControlZOrder" ); } }
+        private string DBWindowNames { get { return DBName("GridControlWindows"); } }
+        private string DbPositionSize { get { return DBName("GridControlPositons"); } }
+        private string DbZOrder { get { return DBName("GridControlZOrder"); } }
 
         ExtendedControls.ExtListBoxForm popoutdropdown;
 
@@ -48,68 +42,82 @@ namespace EDDiscovery.UserControls
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
         }
 
-        bool checkmulticall = false;    // debug for now
+        #region UCCB interface
 
-        public override void LoadLayout()       // unlike splitter, we don't need to be so careful about the cursor.  We can load in load layout
+
+        public override void Init()
         {
-            ucursor_history = ucursor_inuse = uctg;
+            //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DBWindowNames);
 
-            System.Diagnostics.Debug.Assert(checkmulticall == false);
-            checkmulticall = true;      // examples seen of multi call, lets trap it
+            var windows = GetSavedSettings();
 
-            //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DbWindows);
-
-            string[] names = SQLiteConnectionUser.GetSettingString(DbWindows, "").Split(',');
-            int[] positions;
-            int[] zorder;
-
-            string pos = SQLiteConnectionUser.GetSettingString(DbPositions, "");
-            string zo = SQLiteConnectionUser.GetSettingString(DbZOrder, "");
-
-            SuspendLayout();
-
-            if ( pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder,0,names.Length-1) && 
-                        names.Length == zorder.Length && positions.Length == 4*names.Length )
+            if (windows != null )
             {
-                int ppos = 0;
-                foreach (string n in names)
+                foreach (var n in windows)
                 {
-                    Type t = Type.GetType("EDDiscovery.UserControls." + n);
-                    if (t != null )
+                    Type t = Type.GetType("EDDiscovery.UserControls." + n.Item1);
+                    if (t != null)
                     {
                         UserControlCommonBase uccb = (UserControlCommonBase)Activator.CreateInstance(t);
-                        CreatePanel(uccb , new Point(positions[ppos++], positions[ppos++]), new Size(positions[ppos++], positions[ppos++]));
-                    }
-                }
-
-                ppos = 0;
-
-                foreach (int item in zorder)
-                {
-                    if (item >= 0 && item < uccrlist.Count)
-                    {
-                        UserControlContainerResizable uccr = uccrlist[item];
-                        panelPlayfield.Controls.SetChildIndex(uccr, ppos++);
+                        CreateInitPanel(uccb);
                     }
                 }
             }
 
             ResumeLayout();
-            Invalidate(true);
-            Update();        // need this to FORCE a full refresh in case there are lots of windows
-            //System.Diagnostics.Debug.WriteLine("----- Grid Restore END " + DbWindows);
-
             UpdateButtons();
-
-            AssignTHC();
         }
 
-        void UpdateButtons()
+        public override Color ColorTransparency { get { return Color.Green; } }
+        public override void SetTransparency(bool on, Color curcol)
         {
-            buttonExtDelete.Enabled = (from x in uccrlist where x.Selected select x).Count() > 0;
-            buttonExtTile.Enabled = uccrlist.Count > 0;
+            this.BackColor = curcol;
+            panelPlayfield.BackColor = curcol;
+            rollUpPanelMenu.BackColor = curcol;
+            rollUpPanelMenu.ShowHiddenMarker = !on;
+
+            foreach (UserControlContainerResizable r in uccrlist)
+            {
+                r.BorderColor = on ? Color.Transparent : discoveryform.theme.GridBorderLines;
+                UserControlCommonBase uc = (UserControlCommonBase)r.control;
+                uc.SetTransparency(on, curcol);
+            }
         }
 
+        public override void LoadLayout()   // init and themeing done, now we can complete the UCCB process, set positioning etc.
+        {
+            ucursor_history = uctg;                 // record base one
+            ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
+
+            var windows = GetSavedSettings();
+
+            if (windows != null)
+            {
+                int i = 0;
+
+                foreach (UserControlContainerResizable u in uccrlist)
+                {
+                    UserControlCommonBase uc = (UserControlCommonBase)u.control;
+                    LoadLayoutPanel(u, uc, windows[i].Item2, windows[i].Item3);
+                    i++;
+                }
+
+                for (i = 0; i < windows.Count; i++)
+                {
+                    int item = windows[i].Item4;        // item index
+
+                    if (item >= 0 && item < uccrlist.Count)
+                    {
+                        UserControlContainerResizable uccr = uccrlist[item];
+                        //System.Diagnostics.Debug.WriteLine("Set " + uccr.control.GetType().Name + " to " + i);
+                        panelPlayfield.Controls.SetChildIndex(uccr, i);
+                    }
+                }
+
+                Update();        // need this to FORCE a full refresh in case there are lots of windows
+            }
+        }
+        
         public override void InitialDisplay()
         {
             foreach (UserControlContainerResizable r in uccrlist)
@@ -127,24 +135,26 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uc = (UserControlCommonBase)r.control;
 
-                s = s.AppendPrePad(uc.GetType().Name,",");
+                s = s.AppendPrePad(uc.GetType().Name, ",");
                 p = p.AppendPrePad(r.Location.X + "," + r.Location.Y + "," + r.Size.Width + "," + r.Size.Height, ",");
-
-                //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name);
+                
+                //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name + " at " + r.Location + " sz " + r.Size);
 
                 uc.CloseDown();
             }
 
-            SQLiteConnectionUser.PutSettingString(DbWindows, s);
-            SQLiteConnectionUser.PutSettingString(DbPositions, p);
+            SQLiteConnectionUser.PutSettingString(DBWindowNames, s);
+            SQLiteConnectionUser.PutSettingString(DbPositionSize, p);
 
             string z = "";
 
-            foreach( Control c in panelPlayfield.Controls )
+            foreach (Control c in panelPlayfield.Controls)
             {
-                if ( c is UserControlContainerResizable )
+                if (c is UserControlContainerResizable)
                 {
-                    z = z.AppendPrePad(uccrlist.FindIndex(x => x.Equals(c)).ToStringInvariant(), ",");
+                    int index = uccrlist.FindIndex(x => x.Equals(c));
+                    z = z.AppendPrePad(index.ToStringInvariant(), ",");
+                    //System.Diagnostics.Debug.WriteLine("Order.." + index + "=" + (c as UserControlContainerResizable).control.GetType().Name );
                 }
             }
 
@@ -168,14 +178,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #region Open/Close
+        #endregion
 
-        private UserControlContainerResizable CreatePanel(UserControlCommonBase uccb , Point pos, Size size)
+        #region Panel control
+
+        private UserControlContainerResizable CreateInitPanel(UserControlCommonBase uccb)
         {
             UserControlContainerResizable uccr = new UserControlContainerResizable();
 
             PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByType(uccb.GetType());
-            uccr.Init(uccb,pi.WindowTitle);
+            uccr.Init(uccb, pi.WindowTitle);
             uccr.ResizeStart += ResizeStart;
             uccr.ResizeEnd += ResizeEnd;
             uccr.BorderColor = discoveryform.theme.GridBorderLines;
@@ -186,30 +198,28 @@ namespace EDDiscovery.UserControls
             int numopenedinside = uccrlist.Count(x => x.GetType().Equals(uccb.GetType()));    // how many others are there?
 
             int dnum = DisplayNumberOfGrid(numopenedinside);
-            System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum + " Assign THC " + ucursor_inuse.GetHashCode() );
 
             panelPlayfield.Controls.Add(uccr);
 
+            //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum);
             uccb.Init(discoveryform, dnum);
-            uccb.SetCursor(ucursor_inuse);
-            uccb.LoadLayout();
-
-            uccr.Font = discoveryform.theme.GetFont;        // Important. Apply font autoscaling to the user control
-                                                            // ApplyToForm does not apply the font to the actual UC, only
-                                                            // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
-                                                            // the children directly attached to the discoveryform are not autoscaled
-
             discoveryform.theme.ApplyToControls(uccr, discoveryform.theme.GetFont);
-
-            uccr.Location = pos;
-            uccr.Size = size;
-
-            uccb.InitialDisplay();
 
             return uccr;
         }
 
-        public void ClosePanel( UserControlContainerResizable uccr )
+        private void LoadLayoutPanel(UserControlContainerResizable uccr, UserControlCommonBase uccb, Point pos, Size size)
+        {
+            //System.Diagnostics.Trace.WriteLine("GD:Cursor/Load/Init " + uccb.GetType().Name + " to " + pos + " " + size);
+            uccb.SetCursor(ucursor_inuse);
+            uccb.LoadLayout();
+            uccb.InitialDisplay();
+
+            uccr.Location = pos;        // must set on load layout, themeing is defined between init and load layout and can shift numbers
+            uccr.Size = size;
+        }
+
+        public void ClosePanel(UserControlContainerResizable uccr)
         {
             UserControlCommonBase uc = (UserControlCommonBase)uccr.control;
             uc.CloseDown();
@@ -220,6 +230,16 @@ namespace EDDiscovery.UserControls
             uccr.Dispose();
             UpdateButtons();
             AssignTHC();
+        }
+
+        #endregion
+
+        #region Open/Close
+
+        void UpdateButtons()
+        {
+            buttonExtDelete.Enabled = (from x in uccrlist where x.Selected select x).Count() > 0;
+            buttonExtTile.Enabled = uccrlist.Count > 0;
         }
 
         private void Select(UserControlContainerResizable uccr)
@@ -243,7 +263,7 @@ namespace EDDiscovery.UserControls
             UpdateButtons();
         }
 
-        private void AssignTHC()
+        private IHistoryCursor FindTHC()
         {
             var v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlTravelGrid));   // find one with TG
 
@@ -254,6 +274,12 @@ namespace EDDiscovery.UserControls
                 v = uccrlist.Find(x => x.control.GetType() == typeof(UserControlStarList));   // find one with Journal grid if no TG
 
             IHistoryCursor uctgfound = (v != null) ? (v.control as IHistoryCursor) : null;    // if found, set to it
+            return uctgfound;
+        }
+
+        private void AssignTHC()
+        {
+            IHistoryCursor uctgfound = FindTHC();
 
             if ( (uctgfound != null && !Object.ReferenceEquals(uctgfound,ucursor_inuse) ) ||    // if got one but its not the one currently in use
                  (uctgfound == null && !Object.ReferenceEquals(ucursor_history,ucursor_inuse))    // or not found, but we are not on the history one
@@ -308,9 +334,13 @@ namespace EDDiscovery.UserControls
             };
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
-                UserControlContainerResizable uccr = CreatePanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]),
+                UserControlContainerResizable uccr = CreateInitPanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]));
+
+                LoadLayoutPanel(uccr, uccr.control as UserControlCommonBase,
                                             new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
                                             new Size(Math.Min(300, panelPlayfield.Width - 10), Math.Min(300, panelPlayfield.Height - 10)));
+
+
                 Select(null);
                 uccr.Selected = true;
                 uccr.BringToFront();
@@ -351,7 +381,7 @@ namespace EDDiscovery.UserControls
                 rows = (uccrlist.Count + cols - 1) / cols;
             }
 
-            System.Diagnostics.Debug.WriteLine("Bands " + bands + " C " + cols + " R " + rows);
+            //System.Diagnostics.Debug.WriteLine("Bands " + bands + " C " + cols + " R " + rows);
             
             h = h / rows;
             w = w / cols;
@@ -378,22 +408,30 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Transparency
+        #region Saving
 
-        public override Color ColorTransparency { get { return Color.Green; } }
-        public override void SetTransparency(bool on, Color curcol)
+        List<Tuple<string, Point, Size, int>> GetSavedSettings()
         {
-            this.BackColor = curcol;
-            panelPlayfield.BackColor = curcol;
-            rollUpPanelMenu.BackColor = curcol;
-            rollUpPanelMenu.ShowHiddenMarker = !on;
+            string[] names = SQLiteConnectionUser.GetSettingString(DBWindowNames, "").Split(',');
+            int[] positions;
+            int[] zorder;
+            string pos = SQLiteConnectionUser.GetSettingString(DbPositionSize, "");
+            string zo = SQLiteConnectionUser.GetSettingString(DbZOrder, "");
 
-            foreach (UserControlContainerResizable r in uccrlist)
+            if (pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder, 0, names.Length - 1) &&
+                        names.Length == zorder.Length && positions.Length == 4 * names.Length)
             {
-                r.BorderColor = on ? Color.Transparent : discoveryform.theme.GridBorderLines;
-                UserControlCommonBase uc = (UserControlCommonBase)r.control;
-                uc.SetTransparency(on, curcol);
+                List<Tuple<string, Point, Size, int>> ret = new List<Tuple<string, Point, Size, int>>();
+                for (int i = 0; i < names.Length; i++)
+                {
+                    int ppos = i * 4;
+                    ret.Add(new Tuple<string, Point, Size, int>(names[i], new Point(positions[ppos++], positions[ppos++]),
+                                    new Size(positions[ppos++], positions[ppos++]), zorder[i]));
+                }
+                return ret;
             }
+            else
+                return null;
         }
 
         #endregion
