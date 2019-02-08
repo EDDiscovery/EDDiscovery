@@ -134,7 +134,7 @@ namespace EliteDangerousCore
                 return (i as ShipModuleData.ShipInfoString).Value;
             else
             {
-                System.Diagnostics.Debug.WriteLine("Unknown FD ship ID" + inname);
+                System.Diagnostics.Debug.WriteLine("Unknown FD ship ID:" + inname);
                 return inname.SplitCapsWordFull();
             }
         }
@@ -189,7 +189,7 @@ namespace EliteDangerousCore
                 return (i as ShipModuleData.ShipInfoString).Value;
             else
             {
-                System.Diagnostics.Debug.WriteLine("Unknown FD ship ID" + inname);
+                System.Diagnostics.Debug.WriteLine("Unknown FD ship ID:" + inname);
                 return inname;
             }
         }

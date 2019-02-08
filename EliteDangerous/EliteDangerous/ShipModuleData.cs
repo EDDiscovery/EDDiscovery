@@ -246,6 +246,40 @@ namespace EliteDangerousCore
             { ShipPropID.Class, new ShipInfoInt(1)},
         };
 
+        static Dictionary<ShipPropID, ShipInfo> GDN_Hybrid_v1_fighter = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("GDN_Hybrid_Fighter_V1")},
+            { ShipPropID.HullMass, new ShipInfoDouble(0F)},
+            { ShipPropID.Name, new ShipInfoString("Guardian Hybrid Fighter V1")},
+            { ShipPropID.Manu, new ShipInfoString("Unknown")},
+            { ShipPropID.Speed, new ShipInfoInt(0)},
+            { ShipPropID.Boost, new ShipInfoInt(0)},
+            { ShipPropID.HullCost, new ShipInfoInt(0)},
+            { ShipPropID.Class, new ShipInfoInt(1)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> GDN_Hybrid_v2_fighter = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("GDN_Hybrid_Fighter_V2")},
+            { ShipPropID.HullMass, new ShipInfoDouble(0F)},
+            { ShipPropID.Name, new ShipInfoString("Guardian Hybrid Fighter V2")},
+            { ShipPropID.Manu, new ShipInfoString("Unknown")},
+            { ShipPropID.Speed, new ShipInfoInt(0)},
+            { ShipPropID.Boost, new ShipInfoInt(0)},
+            { ShipPropID.HullCost, new ShipInfoInt(0)},
+            { ShipPropID.Class, new ShipInfoInt(1)},
+        };
+        static Dictionary<ShipPropID, ShipInfo> GDN_Hybrid_v3_fighter = new Dictionary<ShipPropID, ShipInfo>
+        {
+            { ShipPropID.FDID, new ShipInfoString("GDN_Hybrid_Fighter_V3")},
+            { ShipPropID.HullMass, new ShipInfoDouble(0F)},
+            { ShipPropID.Name, new ShipInfoString("Guardian Hybrid Fighter V3")},
+            { ShipPropID.Manu, new ShipInfoString("Unknown")},
+            { ShipPropID.Speed, new ShipInfoInt(0)},
+            { ShipPropID.Boost, new ShipInfoInt(0)},
+            { ShipPropID.HullCost, new ShipInfoInt(0)},
+            { ShipPropID.Class, new ShipInfoInt(1)},
+        };
+
         static Dictionary<ShipPropID, ShipInfo> srv = new Dictionary<ShipPropID, ShipInfo>
         {
             { ShipPropID.FDID, new ShipInfoString("TestBuggy")},
@@ -264,6 +298,9 @@ namespace EliteDangerousCore
             { "federation_fighter",  federation_fighter},
             { "independent_fighter",  taipan_fighter},       //EDDI evidence
             { "testbuggy",  srv},
+            { "gdn_hybrid_fighter_v1",  GDN_Hybrid_v1_fighter},
+            { "gdn_hybrid_fighter_v2",  GDN_Hybrid_v2_fighter},
+            { "gdn_hybrid_fighter_v3",  GDN_Hybrid_v3_fighter},
         };
 
         #endregion
