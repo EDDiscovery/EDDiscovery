@@ -215,13 +215,16 @@ namespace EDDiscovery.UserControls
         public override void SetTransparency(bool on, Color curbackcol)
         {
             dataViewScrollerPanelCombat.Visible = !on || checkBoxCustomGridOn.Checked;
+            dataViewScrollerPanelCombat.BackColor = curbackcol;
+            BackColor = curbackcol;
             panelTop.Visible = !on;
-            panelStatus.BackColor = on ? Color.Transparent : curbackcol;
+            panelStatus.BackColor =  curbackcol;
 
             Color fore = on ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
 
-            labelTarget.Font = labelCredits.Font = labelTotalKills.Font = labelTotalReward.Font = labelFactionKills.Font = labelFactionReward.Font = labelFaction.Font = labelTotalCrimes.Font = labelBalance.Font = on ? transparentfont : EDDTheme.Instance.GetFont;
-            
+            labelTarget.Font = labelCredits.Font = labelTotalKills.Font = labelTotalReward.Font = labelFactionKills.Font = labelFactionReward.Font = 
+                        labelFaction.Font = labelTotalCrimes.Font = labelBalance.Font = on ? transparentfont : EDDTheme.Instance.GetFont;
+
             labelTarget.ForeColor = labelCredits.ForeColor = labelTotalKills.ForeColor = labelTotalReward.ForeColor = labelFactionKills.ForeColor = labelFactionReward.ForeColor = labelFaction.ForeColor = labelTotalCrimes.ForeColor = labelBalance.ForeColor = fore;
             labelTarget.TextBackColor = labelCredits.TextBackColor = labelTotalKills.TextBackColor = labelTotalReward.TextBackColor = labelFactionKills.TextBackColor = labelFactionReward.TextBackColor = labelFaction.TextBackColor = labelTotalCrimes.TextBackColor = labelBalance.TextBackColor = curbackcol;
 

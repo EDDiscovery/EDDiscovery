@@ -145,12 +145,12 @@ namespace EDDiscovery
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
+            msg.Invoke("Decoding Symbols");
+            Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
+
             msg.Invoke("Locating Crew Members");
             EDDConfig.Instance.Update(false);
             EDDProfiles.Instance.LoadProfiles();
-
-            msg.Invoke("Decoding Symbols");
-            Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
 
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
 

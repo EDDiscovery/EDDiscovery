@@ -113,6 +113,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
 
                 uccb.Init(discoveryform, displaynumber);
+                discoveryform.theme.ApplyToControls(uccb);  // mimic themeing applied via pop out - its done before ucf::shown
             });
         }
 
@@ -129,7 +130,6 @@ namespace EDDiscovery.UserControls
             {
                 uccb.SetCursor(ucursor_inuse);
                 uccb.LoadLayout();
-                discoveryform.theme.ApplyToControls(uccb);
                 uccb.InitialDisplay();
             });
 
@@ -487,13 +487,23 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
+            //System.Diagnostics.Debug.WriteLine("Splitter panel to tx " + on + " " + curcol);
+
             this.BackColor = curcol;
             panelPlayfield.BackColor = curcol;
 
-            RunActionOnSplitterTree((p, c, uccb) =>
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
-                uccb.SetTransparency(on, curcol);
+                ExtendedControls.TabStrip ts = c as ExtendedControls.TabStrip;
+                ts.StripBackColor = curcol;     // make sure the strip gets the correct colour..
+
+                UserControlCommonBase uccb = (ts != null ? (ts.CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
+                {
+                    uccb.SetTransparency(on, curcol); 
+                }
             });
+
         }
 
         #endregion
