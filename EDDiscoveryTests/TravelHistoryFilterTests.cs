@@ -37,7 +37,7 @@ namespace EDDiscoveryTests
         [Test]
         public void No_filter_does_not_filter_anything()
         {
-            JournalFSDJump jsd = new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)), sol, 0, false, 0);
+            JournalFSDJump jsd = new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(500000)), sol, 0, false, false);
             var veryOldData = HistoryEntry.FromJournalEntry(jsd, null, out bool notused);
             var input = new HistoryList(new List<HistoryEntry> { veryOldData });
 
@@ -47,8 +47,8 @@ namespace EDDiscoveryTests
         [Test]
         public void Data_age_filter_removes_data_older_than_the_limit_and_keeps_data_more_recent_than_the_limit()
         {
-            var fourDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(4)), sol, 0, false, 0), null, out bool notused1);
-            var now = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(0)), sol, 0, false, 0), null, out bool notused2);
+            var fourDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(4)), sol, 0, false, false), null, out bool notused1);
+            var now = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(0)), sol, 0, false, false), null, out bool notused2);
             var input = new HistoryList(new List<HistoryEntry> { fourDaysAgo, now });
 
             Check.That(TravelHistoryFilter.FromDays(2).Filter(input)).ContainsExactly(now);
@@ -57,9 +57,9 @@ namespace EDDiscoveryTests
         [Test]
         public void Last_2_items_filter_returns_the_2_most_recent_items_sorted_by_most_recent_and_removes_the_older_items()
         {
-            var twentyDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(20)), sol, 0, false, 0), null, out bool notused);
-            var tenDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(10)), sol, 0, false, 0), null, out bool notused2);
-            var thirtyDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)), sol, 0, false, 0), null, out bool notused3);
+            var twentyDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(20)), sol, 0, false, false), null, out bool notused);
+            var tenDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(10)), sol, 0, false, false), null, out bool notused2);
+            var thirtyDaysAgo = HistoryEntry.FromJournalEntry(new JournalFSDJump(DateTime.UtcNow.Subtract(TimeSpan.FromDays(30)), sol, 0, false, false), null, out bool notused3);
             var input = new HistoryList(new List<HistoryEntry> { twentyDaysAgo, tenDaysAgo, thirtyDaysAgo });
 
             Check.That(TravelHistoryFilter.Last(2).Filter(input)).ContainsExactly(tenDaysAgo, twentyDaysAgo);
