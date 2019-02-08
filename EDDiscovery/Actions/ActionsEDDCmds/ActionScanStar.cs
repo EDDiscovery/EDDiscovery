@@ -241,7 +241,7 @@ namespace EDDiscovery.Actions
 
                 if (cmdname != null)
                 {
-                    ISystem sc = SystemClassDB.GetSystem(cmdname);
+                    ISystem sc = SystemCache.FindSystem(cmdname);
                     ap[prefix + "Found"] = sc != null ? "1" : "0";
 
                     if (sc != null)
@@ -250,6 +250,31 @@ namespace EDDiscovery.Actions
                         ActionVars.SystemVars(vars, sc, prefix);
                         ap.Add(vars);
                         ActionVars.SystemVarsFurtherInfo(ap, (ap.actioncontroller as ActionController).HistoryList, sc, prefix);
+
+                        string options = sp.NextWord();
+
+                        if ( options != null)
+                        {
+                            if ( options.Equals("NEAREST", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                double mindist = sp.NextDouble(0.01);
+                                double maxdist = sp.NextDouble(20.0);
+                                int number = sp.NextInt(50);
+                                bool cube = (sp.NextWord() ?? "Spherical").Equals("Cube", StringComparison.InvariantCultureIgnoreCase);  // spherical default for all but cube
+
+                                StarDistanceComputer computer = new StarDistanceComputer();
+
+                                apr = ap;
+                                ret_prefix = prefix;
+
+                                computer.CalculateClosestSystems(sc,
+                                    (sys,list)=> (apr.actioncontroller as ActionController).DiscoveryForm.BeginInvoke(new Action(() => NewStarListComputed(sys, list))),
+                                    (mindist>0) ? (number-1) : number,          // adds an implicit 1 on for centre star
+                                    mindist, maxdist, !cube);
+
+                                return false;   // go to sleep until value computed
+                            }
+                        }
                     }
                 }
                 else
@@ -258,7 +283,28 @@ namespace EDDiscovery.Actions
             else
                 ap.ReportError(res);
 
+
             return true;
+        }
+
+        ActionProgramRun apr;
+        string ret_prefix;
+
+        private void NewStarListComputed(ISystem sys, BaseUtils.SortedListDoubleDuplicate<ISystem> list)      // In UI thread
+        {
+            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            int i = 1;
+            foreach( var s in list )
+            {
+                string p = ret_prefix + (i++).ToStringInvariant() + "_";
+                ActionVars.SystemVars(apr.variables, s.Value, p);
+                ActionVars.SystemVarsFurtherInfo(apr, (apr.actioncontroller as ActionController).HistoryList, s.Value, p);
+                apr[p + "Dist"] = Math.Sqrt(s.Key).ToStringInvariant("0.##");
+            }
+
+            apr[ret_prefix + "Count"] = list.Count.ToStringInvariant();
+
+            apr.ResumeAfterPause();
         }
     }
 }

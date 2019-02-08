@@ -229,25 +229,47 @@ namespace EDDiscovery.Actions
                             {
                                 if (indexof >= 0)   // don't ruin -1 if set
                                     indexof++;
+
+                                nextcmd = sp.NextWord();
                             }
                             else if (nextcmd.Equals("BACKWARD", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 indexof--;      // if -1, its okay to make it -2.
+
+                                nextcmd = sp.NextWord();
                             }
-                            else if (nextcmd != null)
+                        }
+
+                        if (nextcmd != null)
+                        {
+                            if (nextcmd.Equals("DELETE", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                ap.ReportError("Unknown iterator");
+                                if (indexof >= 0 && indexof < cllist.Count)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Would delete " + cllist[indexof].ID);
+                                    GlobalCaptainsLogList.Instance.Delete(cllist[indexof]);
+                                }
+                                else
+                                    ap.ReportError("Delete entry is not found");
+
                                 return true;
                             }
                         }
 
-                        if ( indexof >= 0 && indexof < cllist.Count )
+                        if (nextcmd != null)
                         {
-                            DumpCL(ap, prefix, cllist[indexof]);
+                            ap.ReportError("Unknown iterator or command " + nextcmd);
                         }
                         else
                         {
-                            ap[prefix + "Id"] = "-1";
+                            if (indexof >= 0 && indexof < cllist.Count)
+                            {
+                                DumpCL(ap, prefix, cllist[indexof]);
+                            }
+                            else
+                            {
+                                ap[prefix + "Id"] = "-1";
+                            }
                         }
 
                         return true;
@@ -293,9 +315,5 @@ namespace EDDiscovery.Actions
         {
             return cl.Tags != null && cl.Tags.WildCardMatch(match);
         }
-
-
     }
-
-
 }

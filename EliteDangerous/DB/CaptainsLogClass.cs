@@ -123,19 +123,19 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        internal bool Delete()
+        public bool Delete()
         {
             using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
             {
-                return Delete(cn);
+                return Delete(cn,ID);
             }
         }
 
-        private bool Delete(SQLiteConnectionUser cn)
+        static private bool Delete(SQLiteConnectionUser cn, long id)
         {
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM CaptainsLog WHERE id = @id"))
             {
-                cmd.AddParameterWithValue("@id", ID);
+                cmd.AddParameterWithValue("@id", id);
                 cn.SQLNonQueryText( cmd);
                 return true;
             }
@@ -212,29 +212,6 @@ namespace EliteDangerousCore.DB
             else
                 return (from x in LogEntries where x.TimeLocal >= start && x.TimeLocal <= end && x.Commander == cmdr select x).ToArray();
         }
-
-        //{
-        //    CaptainsLogClass bc = globallog.Find(x => x.BodyName.Equals(bodyname, StringComparison.InvariantCultureIgnoreCase) && x.SystemName.Equals(systemname, StringComparison.InvariantCultureIgnoreCase));
-        //    return bc;
-        //}
-
-        //public List<CaptainsLogClass> FindNoteOnSystem(string systemname)
-        //{
-        //    CaptainsLogClass bc = globallog.Find(x => x.SystemName.Equals(systemname, StringComparison.InvariantCultureIgnoreCase));
-        //    return bc;
-        //}
-
-        //public CaptainsLogClass FindNoteOnBodyName(string bodyname)
-        //{
-        //    CaptainsLogClass bc = globallog.Find(x => x.BodyName.Equals(bodyname, StringComparison.InvariantCultureIgnoreCase));
-        //    return bc;
-        //}
-
-        //public CaptainsLogClass EnsureNoteOnSystem(string systemname, string bodyname,   DateTime tme, string note, string tags = null, string parameters = null )
-        //{
-        //    CaptainsLogClass bk = FindNote(systemname, bodyname);
-        //    return bk != null ? bk : AddOrUpdate(null, systemname, bodyname, tme, note, tags, parameters);
-        //}
 
         // bk = null, new note, else update. Note systemname/bodyname are not unique.  Id it the only unique property
 

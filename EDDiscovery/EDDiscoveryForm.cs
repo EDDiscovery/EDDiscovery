@@ -112,6 +112,12 @@ namespace EDDiscovery
         }
         public void RefreshDisplays() { Controller.RefreshDisplays(); }
         public void RecalculateHistoryDBs() { Controller.RecalculateHistoryDBs(); }
+
+        public void ChangeToCommander(int id)
+        {
+            EDCommander.CurrentCmdrID = id;
+            Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+        }
         #endregion
 
         #region Initialisation
@@ -1405,11 +1411,8 @@ namespace EDDiscovery
             if (comboBoxCommander.SelectedIndex >= 0 && comboBoxCommander.Enabled)     // DONT trigger during LoadCommandersListBox
             {
                 var itm = (from EDCommander c in EDCommander.GetListInclHidden() where c.Name.Equals(comboBoxCommander.Text) select c).ToList();
-
-                EDCommander.CurrentCmdrID = itm[0].Nr;
-                Controller.RefreshHistoryAsync(currentcmdr: EDCommander.CurrentCmdrID);                                   // which will cause DIsplay to be called as some point
+                ChangeToCommander(itm[0].Nr);
             }
-
         }
 
 
