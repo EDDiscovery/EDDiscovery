@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlSpanel : UserControlCommonBase
     {
         private string DbSave { get { return DBName("SPanel" ); } }
-        private string DbFilterSave { get { return DBName("SPanelEventFilter" ); } }
+        private string DbFilterSave { get { return DBName("SPanelEventFilter2" ); } }
         private string DbFieldFilter { get { return DBName("SPanelFieldFilter" ); } }
 
         FilterSelector cfs;
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Changed += EventFilterChanged;
+            cfs.Closing += EventFilterChanged;
 
             dividers = new ExtButton[] { buttonExt0, buttonExt1, buttonExt2, buttonExt3, buttonExt4, buttonExt5, buttonExt6, buttonExt7, buttonExt8, buttonExt9, buttonExt10, buttonExt11, buttonExt12 };
 
@@ -1055,7 +1055,7 @@ namespace EDDiscovery.UserControls
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Summary Panel: Filter out fields".Tx(this,"SPF"),
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetNamesOfEventsWithOptMethod() ,
+                            JournalEntry.GetNameOfEvents() ,
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

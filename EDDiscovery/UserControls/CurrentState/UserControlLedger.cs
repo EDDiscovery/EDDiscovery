@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
     {
         FilterSelector cfs; 
 
-        private string DbFilterSave { get { return DBName("LedgerGridEventFilter" ); } }
+        private string DbFilterSave { get { return DBName("LedgerGridEventFilter2" ); } }
         private string DbColumnSave { get { return DBName("LedgerGrid" ,  "DGVCol"); } }
         private string DbHistorySave { get { return DBName("LedgerGridEDUIHistory" ); } }
 
@@ -50,13 +50,13 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
             dataGridViewLedger.RowTemplate.Height = 26;
 
-            var jes = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "Ledger" });
+            var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
             cfs = new FilterSelector(DbFilterSave);
-            cfs.AddGroupOption("Cash Transactions".Tx(this), cashtype , JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
+            cfs.AddGroupOption(cashtype, "Cash Transactions".Tx(this),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
-            cfs.Changed += EventFilterChanged;
+            cfs.Closing += EventFilterChanged;
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldockstartend:false);
 

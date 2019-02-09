@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
 
         FilterSelector cfs;
         private string DbColumnSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid",  "DGVCol"); } }
-        private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter"); } }
+        private string DbFilterSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "Filter2"); } }
         private string DbClearZeroSave { get { return DBName((materials) ? "MaterialsGrid" : "CommoditiesGrid", "ClearZero"); } }
 
         #region Init
@@ -68,11 +68,11 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
 
                 MaterialCommodityData[] raw = items.Where(x => x.IsRaw).ToArray();
-                cfs.AddGroupOption("Raw", String.Join(";", raw.Select(x => x.Name).ToArray()) + ";");
+                cfs.AddGroupOption(String.Join(";", raw.Select(x => x.Name).ToArray()) + ";", "Raw");
                 MaterialCommodityData[] enc = items.Where(x => x.IsEncoded).ToArray();
-                cfs.AddGroupOption("Encoded", String.Join(";", enc.Select(x => x.Name).ToArray()) + ";");
+                cfs.AddGroupOption(String.Join(";", enc.Select(x => x.Name).ToArray()) + ";", "Encoded");
                 MaterialCommodityData[] manu = items.Where(x => x.IsManufactured).ToArray();
-                cfs.AddGroupOption("Manufactured", String.Join(";", manu.Select(x => x.Name).ToArray()) + ";");
+                cfs.AddGroupOption(String.Join(";", manu.Select(x => x.Name).ToArray()) + ";", "Manufactured" );
             }
             else
             {
@@ -86,22 +86,22 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
 
                 MaterialCommodityData[] rare = items.Where(x => x.IsRareCommodity).ToArray();
-                cfs.AddGroupOption("Rare", String.Join(";", rare.Select(x => x.Name).ToArray()) + ";");
+                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.Name).ToArray()) + ";", "Rare");
             }
 
             foreach (string t in types)
             {
                 string[] members = MaterialCommodityData.GetMembersOfType(t, true);
-                cfs.AddGroupOption(t, String.Join(";", members) + ";");
+                cfs.AddGroupOption(String.Join(";", members) + ";",t);
             }
 
             foreach (var x in items)
-                cfs.AddStandardOption(x.Name);
+                cfs.AddStandardOption(x.Name,x.Name);
 
             checkBoxClear.Checked = EliteDangerousCore.DB.SQLiteDBClass.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
 
-            cfs.Changed += FilterChanged;
+            cfs.Closing += FilterChanged;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)

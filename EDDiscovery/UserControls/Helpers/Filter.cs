@@ -15,8 +15,6 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -32,46 +30,47 @@ namespace EDDiscovery.UserControls
         public FilterSelector(string db) : base()
         {
             dbstring = db;
-            SaveBack += (x,t)=> SQLiteDBClass.PutSettingString(dbstring, x);
+            Closing += (x,t)=> SQLiteDBClass.PutSettingString(dbstring, x);
         }
 
         public void AddJournalExtraOptions()
         {
             // must be in alpha order..
-            AddGroupOption("Travel".Tx(), "Docked;FSD Jump;Undocked;", JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
             //AddGroupOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;", JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
-            var mile = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateMissions" });
+            var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
-            AddGroupOption("Missions".Tx(), miltype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
+            AddGroupOption(miltype, "Missions".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
-            var mle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateMaterials" });
+            var mle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMaterials" });
+            mle.Add(EliteDangerousCore.JournalEntry.GetNameImageOfEvent(JournalTypeEnum.MaterialDiscovered));
             string mattype = string.Join(";", mle.Select(x => x.Item1)) + ";";
-            AddGroupOption("Materials".Tx(), mattype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
+            AddGroupOption(mattype, "Materials".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
 
-            var cle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "UpdateCommodities" });
+            var cle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCommodities" });
             string comtype = string.Join(";", cle.Select(x => x.Item1)) + ";";
-            AddGroupOption("Commodities".Tx(), comtype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
+            AddGroupOption(comtype, "Commodities".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
 
-            var lle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "Ledger", "LedgerNC" });
+            var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            AddGroupOption("Ledger".Tx(), legtype, EDDiscovery.Icons.IconSet.GetIcon("Panels.Ledger"));
+            AddGroupOption(legtype, "Ledger".Tx(), EDDiscovery.Icons.IconSet.GetIcon("Panels.Ledger"));
 
-            var sle = EliteDangerousCore.JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(new string[] { "ShipInformation" });
+            var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
-            AddGroupOption("Ship".Tx(), shiptype, JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
+            AddGroupOption(shiptype, "Ship".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
         }
 
         public void AddJournalEntries(string[] methods = null)
         {
-            var items = JournalEntry.GetTranslatedNamesOfEventsWithOptMethod(methods);
+            var items = JournalEntry.GetNameImageOfEvents(methods);
 
             AddStandardOption(items);
 
             var scanitems = EliteDangerousCore.JournalEvents.JournalScan.FilterItems();
-            AddStandardOption(scanitems);
+            AddStandardOption(scanitems);   // sorted by text
 
-            SortStandardOptions();
+            SortStandardOptions();  // sorted by text
         }
 
         // do not use base Filter options - use these.

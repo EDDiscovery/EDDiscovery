@@ -76,9 +76,8 @@ namespace EliteDangerousCore
         // the long name of it, such as Approach Body. May be overridden, is translated
         public virtual string SummaryName(ISystem sys) { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); }  // entry may be overridden for specialist output
 
-        // the name used to filter it.. and the filter keyword.  May be overridden, is translated
-        // this is different to the above since the summary name is a text presentation string, this is the string to be used in the event filter drop down menu.
-        public virtual string EventFilterName { get { return TranslatedEventNames.ContainsKey(EventTypeID) ? TranslatedEventNames[EventTypeID] : EventTypeID.ToString(); } } // text name used in filter
+        // the name used to filter it.. and the filter keyword. Its normally the enum of the event.
+        public virtual string EventFilterName { get { return EventTypeID.ToString(); } } // text name used in filter
 
         #endregion
 
@@ -139,7 +138,7 @@ namespace EliteDangerousCore
         #region Event Information - return event enums/icons/text etc.
 
         // return JEnums with events matching optional methods, unsorted
-        static public List<JournalTypeEnum> GetEnumOfEventsWithOptMethod(string[] methods = null)
+        static public List<JournalTypeEnum> GetEnumOfEvents(string[] methods = null)
         {
             List<JournalTypeEnum> ret = new List<JournalTypeEnum>();
 
@@ -174,30 +173,42 @@ namespace EliteDangerousCore
         }
 
         // return name instead of enum, unsorted
-        static public List<string> GetNamesOfEventsWithOptMethod(string[] methods = null)
+        static public List<string> GetNameOfEvents(string[] methods = null)
         {
-            var list = GetEnumOfEventsWithOptMethod(methods);
+            var list = GetEnumOfEvents(methods);
             return list.Select(x => x.ToString()).ToList();
         }
 
-        // rename name (possibly translated) and icon, sorted.
-        static public List<Tuple<string, Image>> GetTranslatedNamesOfEventsWithOptMethod(string[] methods = null)
+        // enum name, translated name, image
+        static public List<Tuple<string, string, Image>> GetNameImageOfEvents(string[] methods = null, bool sort = false)
         {
-            List<JournalTypeEnum> jevents = JournalEntry.GetEnumOfEventsWithOptMethod(methods);
-            jevents.Sort(delegate (JournalTypeEnum left, JournalTypeEnum right)     // in order, oldest first
-            {
-                return left.ToString().CompareTo(right.ToString());
-            });
+            List<JournalTypeEnum> jevents = JournalEntry.GetEnumOfEvents(methods);
 
-            return jevents.Select(x => new Tuple<string, Image>(TranslatedEventNames[x],
+            var list = jevents.Select(x => new Tuple<string, string, Image>(x.ToString(), TranslatedEventNames[x],
                 JournalTypeIcons.ContainsKey(x) ? JournalTypeIcons[x] : JournalTypeIcons[JournalTypeEnum.Unknown])).ToList();
+
+            if (sort)
+            {
+                list.Sort(delegate (Tuple<string, string, Image> left, Tuple<string, string, Image> right)     // in order, oldest first
+                {
+                    return left.Item2.ToString().CompareTo(right.Item2.ToString());
+                });
+            }
+
+            return list;
+        }
+
+        static public Tuple<string, string, Image> GetNameImageOfEvent(JournalTypeEnum ev)
+        {
+            return new Tuple<string, string, Image>(ev.ToString(), TranslatedEventNames[ev],
+                JournalTypeIcons.ContainsKey(ev) ? JournalTypeIcons[ev] : JournalTypeIcons[JournalTypeEnum.Unknown]);
         }
 
         #endregion
 
-        #region Factory creation
+            #region Factory creation
 
-        static public JournalEntry CreateJournalEntry(string text)
+            static public JournalEntry CreateJournalEntry(string text)
         {
             JObject jo;
 

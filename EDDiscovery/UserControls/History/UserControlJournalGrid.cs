@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string DbFilterSave { get { return DBName("JournalGridControlEventFilter" ); } }
+        private string DbFilterSave { get { return DBName("JournalGridControlEventFilter2" ); } }
         private string DbColumnSave { get { return DBName("JournalGrid", "DGVCol"); } }
         private string DbHistorySave { get { return DBName("JournalEDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("JournalGridControlFieldFilter" ); } }
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Changed += EventFilterChanged;
+            cfs.Closing += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
@@ -395,7 +395,7 @@ namespace EDDiscovery.UserControls
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("Journal: Filter out fields",
                             Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetNamesOfEventsWithOptMethod() ,
+                            JournalEntry.GetNameOfEvents() ,
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)

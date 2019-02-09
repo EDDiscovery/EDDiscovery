@@ -43,8 +43,6 @@ namespace EDDiscovery.UserControls
 
         Timer searchtimer;
         bool updateprogramatically;
-        ExtendedControls.CheckedIconListBoxFilterForm cfs;
-
 
         #region init
         public CaptainsLogEntries()
@@ -75,9 +73,6 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnRefreshCommanders += Discoveryform_OnRefreshCommanders;
 
-            cfs = new ExtendedControls.CheckedIconListBoxFilterForm();
-            cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
-            cfs.SaveBack += TagsChanged;
         }
 
         public override void LoadLayout()
@@ -296,7 +291,12 @@ namespace EDDiscovery.UserControls
         {
             List<string> Dickeys = new List<string>(EDDConfig.Instance.CaptainsLogTagImage.Keys);
             Dickeys.Sort();
-            List<Image> images = (from x in Dickeys select EDDConfig.Instance.CaptainsLogTagImage[x]).ToList();
+            List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
+
+            ExtendedControls.CheckedIconListBoxFilterForm cfs = new ExtendedControls.CheckedIconListBoxFilterForm();
+            cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
+            cfs.Closing += TagsChanged;
+            cfs.AddStandardOption(options);
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
             string taglist = curtags != null ? string.Join(";", curtags) : "";
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
 
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
 
-            cfs.Filter(taglist, loc, new Size(250, 600), this.FindForm(), Dickeys, images, tag:rw);
+            cfs.Filter(taglist, loc, new Size(250, 600), this.FindForm(), tag:rw);
         }
 
         private void TagsChanged(string newtags, Object tag)

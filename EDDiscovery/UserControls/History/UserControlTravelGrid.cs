@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
 
         private const int DefaultRowHeight = 26;
 
-        private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter" ); } }
+        private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter2" ); } }
         private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
         private string DbHistorySave { get { return DBName("EDUIHistory" ); } }
         private string DbFieldFilter { get { return DBName("TravelHistoryControlFieldFilter" ); } }
@@ -108,7 +108,8 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.Changed += EventFilterChanged;
+            cfs.Closing += EventFilterChanged;
+
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
             checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
@@ -1226,7 +1227,7 @@ namespace EDDiscovery.UserControls
             namelist.AddRange(discoveryform.Globals.NameList);
             frm.InitFilter("History: Filter out fields",
                             System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetNamesOfEventsWithOptMethod(),
+                            JournalEntry.GetNameOfEvents(),
                             (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
                             namelist, fieldfilter);
             if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
