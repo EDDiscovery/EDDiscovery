@@ -163,7 +163,16 @@ namespace EliteDangerousCore
         public static string[] GetMembersOfType(string typename, bool sorted)
         {
             MaterialCommodityData[] mcs = GetAll();
-            string[] members = mcs.Where(x=>x.Type.Equals(typename,StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToArray();
+            string[] members = mcs.Where(x => x.Type.Equals(typename, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.Name).ToArray();
+            if (sorted)
+                Array.Sort(members);
+            return members;
+        }
+
+        public static string[] GetFDNameMembersOfType(string typename, bool sorted)
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            string[] members = mcs.Where(x => x.Type.Equals(typename, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.FDName).ToArray();
             if (sorted)
                 Array.Sort(members);
             return members;

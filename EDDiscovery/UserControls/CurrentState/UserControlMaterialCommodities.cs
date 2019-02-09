@@ -68,11 +68,11 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
 
                 MaterialCommodityData[] raw = items.Where(x => x.IsRaw).ToArray();
-                cfs.AddGroupOption(String.Join(";", raw.Select(x => x.Name).ToArray()) + ";", "Raw");
+                cfs.AddGroupOption(String.Join(";", raw.Select(x => x.FDName).ToArray()) + ";", "Raw");
                 MaterialCommodityData[] enc = items.Where(x => x.IsEncoded).ToArray();
-                cfs.AddGroupOption(String.Join(";", enc.Select(x => x.Name).ToArray()) + ";", "Encoded");
+                cfs.AddGroupOption(String.Join(";", enc.Select(x => x.FDName).ToArray()) + ";", "Encoded");
                 MaterialCommodityData[] manu = items.Where(x => x.IsManufactured).ToArray();
-                cfs.AddGroupOption(String.Join(";", manu.Select(x => x.Name).ToArray()) + ";", "Manufactured" );
+                cfs.AddGroupOption(String.Join(";", manu.Select(x => x.FDName).ToArray()) + ";", "Manufactured" );
             }
             else
             {
@@ -86,17 +86,17 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
 
                 MaterialCommodityData[] rare = items.Where(x => x.IsRareCommodity).ToArray();
-                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.Name).ToArray()) + ";", "Rare");
+                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare");
             }
 
             foreach (string t in types)
             {
-                string[] members = MaterialCommodityData.GetMembersOfType(t, true);
+                string[] members = MaterialCommodityData.GetFDNameMembersOfType(t, true);
                 cfs.AddGroupOption(String.Join(";", members) + ";",t);
             }
 
             foreach (var x in items)
-                cfs.AddStandardOption(x.Name,x.Name);
+                cfs.AddStandardOption(x.FDName,x.Name);
 
             checkBoxClear.Checked = EliteDangerousCore.DB.SQLiteDBClass.GetSettingBool(DbClearZeroSave, true);
             checkBoxClear.CheckedChanged += CheckBoxClear_CheckedChanged;
@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
 
             foreach ( MaterialCommodityData mcd in allitems)        // we go thru all items..
             {
-                if (all || filter.Contains(mcd.Name) )      // and see if they are in the filter
+                if (all || filter.Contains(mcd.FDName) )      // and see if they are in the filter
                 {
                     object[] rowobj;
 
