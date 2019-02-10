@@ -29,7 +29,7 @@ namespace EliteDangerousCore
         public JObject Json;
     }
 
-    public class EDJournalReader : LogReaderBase
+    public class EDJournalReader : TravelLogUnitLogReader
     {
         JournalEvents.JournalShipyard lastshipyard = null;
         JournalEvents.JournalStoredShips laststoredships = null;

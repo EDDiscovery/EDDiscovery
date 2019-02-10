@@ -90,7 +90,7 @@
     <Compile Include="EDSM\SystemClassEDSM.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
-    <Compile Include="EliteDangerous\BindingsFile.cs" />
+    <Compile Include="Bindings\BindingsFile.cs" />
     <Compile Include="EliteDangerous\Bodies.cs" />
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
     <Compile Include="EliteDangerous\CommodityPrices.cs" />
@@ -104,14 +104,14 @@
     <Compile Include="Journal\JournalEnums.cs" />
     <Compile Include="Status\EDStatusMonitorWatcher.cs" />
     <Compile Include="EliteDangerous\EDTypesFromJSON.cs" />
-    <Compile Include="EliteDangerous\FrontierToVKey.cs" />
+    <Compile Include="Bindings\FrontierToVKey.cs" />
     <Compile Include="EliteDangerous\ISystem.cs" />
     <Compile Include="Journal\JournalEntry.cs" />
     <Compile Include="Journal\JournalEntryAttributes.cs" />
     <Compile Include="Journal\JournalEntryInterfaces.cs" />
     <Compile Include="EliteDangerous\JournalFieldNaming.cs" />
     <Compile Include="EliteDangerous\Ledger.cs" />
-    <Compile Include="EliteDangerous\LogReaderBase.cs" />
+    <Compile Include="DB\TravelLogUnitLogReader.cs" />
     <Compile Include="EliteDangerous\MaterialCommodityData.cs" />
     <Compile Include="EliteDangerous\MaterialCommoditiesList.cs" />
     <Compile Include="EliteDangerous\MaterialRecipesData.cs" />
@@ -122,8 +122,8 @@
     <Compile Include="EliteDangerous\ShipInformationList.cs" />
     <Compile Include="EliteDangerous\ShipModule.cs" />
     <Compile Include="EliteDangerous\ShipModuleData.cs" />
-    <Compile Include="EliteDangerous\NetLogClass.cs" />
-    <Compile Include="EliteDangerous\NetLogReader.cs" />
+    <Compile Include="NetLogs\NetLogClass.cs" />
+    <Compile Include="NetLogs\NetLogReader.cs" />
     <Compile Include="EliteDangerous\Ranks.cs" />
     <Compile Include="EliteDangerous\RoutePlotter.cs" />
     <Compile Include="EliteDangerous\ShipInformation.cs" />
@@ -279,6 +279,7 @@
       <Name>ExtendedControls</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.1\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

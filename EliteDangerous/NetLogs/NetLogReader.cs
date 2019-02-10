@@ -25,7 +25,7 @@ using Newtonsoft.Json.Linq;
 
 namespace EliteDangerousCore
 {
-    public class NetLogFileReader : LogReaderBase
+    public class NetLogFileReader : TravelLogUnitLogReader
     {
         // Header line regular expression
         private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright © 2015 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -19,7 +19,9 @@ using EliteDangerousCore.DB;
 
 namespace EliteDangerousCore
 {
-    public class LogReaderBase
+    // this is bound into the TLU, so its really a class using the TLU, its not a generic log reader, so rename it thus
+
+    public class TravelLogUnitLogReader
     {
         // File buffer
         protected byte[] buffer;
@@ -32,7 +34,7 @@ namespace EliteDangerousCore
         public long filePos { get { return TravelLogUnit.Size; } }
         public TravelLogUnit TravelLogUnit { get; protected set; }
 
-        public LogReaderBase(string filename)
+        public TravelLogUnitLogReader(string filename)
         {
             FileInfo fi = new FileInfo(filename);
 
@@ -44,7 +46,7 @@ namespace EliteDangerousCore
             };
         }
 
-        public LogReaderBase(TravelLogUnit tlu)
+        public TravelLogUnitLogReader(TravelLogUnit tlu)
         {
             this.TravelLogUnit = tlu;
         }
