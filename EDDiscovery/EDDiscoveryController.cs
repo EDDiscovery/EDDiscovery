@@ -805,7 +805,7 @@ namespace EDDiscovery
                 hist = HistoryList.LoadHistory(journalmonitor, 
                     () => PendingClose, 
                     (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this,"PLF") , s)), args.NetLogPath,
-                    args.ForceJournalReload, args.ForceJournalReload, args.CurrentCommander, 
+                    args.ForceNetLogReload, args.ForceJournalReload, args.CurrentCommander, 
                     EDDConfig.Instance.ShowUIEvents, 
                     EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
 
