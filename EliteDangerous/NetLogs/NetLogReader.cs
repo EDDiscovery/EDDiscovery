@@ -29,6 +29,7 @@ namespace EliteDangerousCore
     {
         // Header line regular expression
         private static Regex netlogHeaderRe = new Regex(@"^(?<Localtime>\d\d-\d\d-\d\d-\d\d:\d\d) (?<Timezone>.*) [(](?<GMT>\d\d:\d\d) GMT[)]");
+        private static Regex netlogHeaderRe23 = new Regex(@"^(?<Localtime>\d\d\d\d-\d\d-\d\d \d\d:\d\d) (?<Timezone>.*)");
 
         // Public release date of Elite: Dangerous
         DateTime gammastart = new DateTime(2014, 11, 22, 13, 00, 00);
@@ -43,6 +44,8 @@ namespace EliteDangerousCore
         public DateTime LastLogTime { get; set; }
         public TimeZoneInfo TimeZone { get; set; }
         public TimeSpan TimeZoneOffset { get; set; }
+
+        public bool Is23NetLog { get; set; }
 
         public NetLogFileReader(string filename) : base(filename)
         {
@@ -102,6 +105,10 @@ namespace EliteDangerousCore
             {
                 return ParseTime(line.Substring(1, 8));
             }
+            else if (line.Length > 14 && line[0] == '{' && line[3] == ':' && line[6] == ':' && line[9] == 'G' && line[10] == 'M' && line[11] == 'T' && line[12] == ' ')
+            {
+                return ParseTime(line.Substring(1, 8));
+            }
 
             return false;
         }
@@ -128,6 +135,9 @@ namespace EliteDangerousCore
                 {18:15:14} System:"Pleiades Sector HR-W d1-41" StarPos:(-83.969,-146.156,-334.219)ly Body:0 RelPos:(-1.19887e+07,-9.95573e+06,2.55124e+06)km Supercruise
                 string rgexpstr = "{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\d+) StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
 
+                From ED 2.3
+                {12:55:06GMT 96.066s} System:"Stuemeae KM-W c1-342" StarPos:(26.344,-20.563,25899.250)ly Body:9 RelPos:(244.784,1133.47,732.025)km NormalFlight
+                string rgexpstr = "{{(?<Hour>\\d+):(?<Minute>\\d+):(?<Second>\\d+)GMT \\d+\\.\\d+s} System:\"(?<SystemName>[^\"]+)\" StarPos:\\((?<Pos>.*?)\\)ly Body:(?<Body>\d+) StarPos:\\((?<Pos>.*?)\\)ly( +(?<TravelMode>\\w+))?";
 
                 Pre ED 2.1/1.6
                     {09:36:16} System:0(Thuechea JE-O b11-0) Body:1 Pos:(-6.67432e+009,7.3151e+009,-1.19125e+010) Supercruise
@@ -241,7 +251,7 @@ namespace EliteDangerousCore
                             this.CQC = true;
                     }
 
-                    int offset = line.IndexOf("} System:") - 8;
+                    int offset = Is23NetLog ? (line.IndexOf("GMT ") - 8) : (line.IndexOf("} System:") - 8);
                     if (offset >= 1 && ParseTime(line.Substring(offset, 8)) && this.CQC == false)
                     {
                         //Console.WriteLine(" RD:" + line );
@@ -279,18 +289,20 @@ namespace EliteDangerousCore
             DateTime lastlog;
             TimeZoneInfo tzinfo;
             TimeSpan tzoffset;
-            bool ret = ReadLogTimeInfo(TravelLogUnit, out lastlog, out tzinfo, out tzoffset);
+            bool is23netlog;
+            bool ret = ReadLogTimeInfo(TravelLogUnit, out lastlog, out tzinfo, out tzoffset, out is23netlog);
             if (ret)
             {
                 LastLogTime = lastlog;
                 TimeZone = tzinfo;
                 TimeZoneOffset = tzoffset;
                 TravelLogUnit.type = 1;
+                Is23NetLog = is23netlog;
             }
             return ret;
         }
 
-        public static bool ReadLogTimeInfo(TravelLogUnit tlu, out DateTime lastlog, out TimeZoneInfo tzi, out TimeSpan tzoffset)
+        public static bool ReadLogTimeInfo(TravelLogUnit tlu, out DateTime lastlog, out TimeZoneInfo tzi, out TimeSpan tzoffset, out bool is23netlog)
         {
             string line = null;
             string filename = Path.Combine(tlu.Path, tlu.Name);
@@ -298,6 +310,7 @@ namespace EliteDangerousCore
             lastlog = DateTime.UtcNow;
             tzi = TimeZoneInfo.Local;
             tzoffset = tzi.GetUtcOffset(lastlog);
+            is23netlog = false;
 
             if (!File.Exists(filename))
             {
@@ -312,85 +325,122 @@ namespace EliteDangerousCore
                     using (TextReader reader = new StreamReader(stream))
                     {
                         line = reader.ReadLine();
+
+                        if (line == null)
+                        {
+                            return false;
+                        }
+
+                        Regex re = netlogHeaderRe;
+                        string timefmt = "yy-MM-dd-HH:mm";
+                        string gmtimefmt = "h\\:mm";
+
+                        if (line == "============================================")
+                        {
+                            re = netlogHeaderRe23;
+                            is23netlog = true;
+                            reader.ReadLine();
+                            line = reader.ReadLine();
+                            timefmt = "yyyy-MM-dd HH:mm";
+                        }
+
+                        // Extract the start time from the first line
+                        Match match = re.Match(line);
+                        if (match != null && match.Success)
+                        {
+                            string localtimestr = match.Groups["Localtime"].Value;
+                            string timezonename = match.Groups["Timezone"].Value.Trim();
+                            string gmtimestr = is23netlog ? null : match.Groups["GMT"].Value;
+
+                            if (is23netlog)
+                            {
+                                reader.ReadLine();
+                                line = reader.ReadLine();
+                                if (line == null || line.Length < 13 || line[0] != '{' || line[3] != ':' || line[6] != ':' || line[9] != 'G')
+                                {
+                                    return false;
+                                }
+                                gmtimestr = line.Substring(1, 5);
+                            }
+
+
+                            DateTime localtime = DateTime.MinValue;
+                            TimeSpan gmtime = TimeSpan.MinValue;
+                            tzi = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.DaylightName.Trim() == timezonename || t.StandardName.Trim() == timezonename);
+
+                            if (tzi != null)
+                            {
+                                tzoffset = tzi.GetUtcOffset(lastlog);
+                            }
+
+                            if (DateTime.TryParseExact(localtimestr, timefmt, CultureInfo.InvariantCulture, DateTimeStyles.None, out localtime) &&
+                                TimeSpan.TryParseExact(gmtimestr, gmtimefmt, CultureInfo.InvariantCulture, out gmtime))
+                            {
+                                // Grab the timezone offset
+                                tzoffset = localtime.TimeOfDay - gmtime;
+                                if (tzoffset.Minutes == 59 || tzoffset.Minutes == 44 || tzoffset.Minutes == 29 || tzoffset.Minutes == 14)
+                                {
+                                    tzoffset = tzoffset + new TimeSpan(0, 1, 0);
+                                }
+
+                                if (tzi != null)
+                                {
+                                    // Correct for wildly inaccurate values
+                                    if (tzoffset > tzi.BaseUtcOffset + TimeSpan.FromHours(18))
+                                    {
+                                        tzoffset -= TimeSpan.FromHours(24);
+                                    }
+                                    else if (tzoffset < tzi.BaseUtcOffset - TimeSpan.FromHours(18))
+                                    {
+                                        tzoffset += TimeSpan.FromHours(24);
+                                    }
+                                }
+                                else
+                                {
+                                    // No timezone specified - try to make the timezone offset make sense
+                                    // Unfortunately anything east of Tonga (GMT+13) or west of Hawaii (GMT-10)
+                                    // will be a day off.
+
+                                    if (tzoffset <= TimeSpan.FromHours(-10.5))
+                                    {
+                                        tzoffset += TimeSpan.FromHours(24);
+                                    }
+                                    else if (tzoffset > TimeSpan.FromHours(13.5))
+                                    {
+                                        tzoffset -= TimeSpan.FromHours(24);
+                                    }
+
+                                    double tzhrs = tzoffset.TotalHours;
+                                    bool tzneg = tzhrs < 0;
+                                    if (tzneg) tzhrs = -tzhrs;
+                                    int tzmins = (int)Math.Truncate(tzhrs * 60) % 60;
+                                    tzhrs = Math.Truncate(tzhrs);
+
+                                    string tzname = tzhrs == 0 ? "GMT" : $"GMT{(tzneg ? "-" : "+")}{tzhrs.ToString("00", CultureInfo.InvariantCulture)}{tzmins.ToString("00", CultureInfo.InvariantCulture)}";
+                                    tzi = TimeZoneInfo.CreateCustomTimeZone(tzname, tzoffset, tzname, tzname);
+                                }
+
+                                // Set the start time, timezone info and timezone offset
+                                lastlog = localtime - tzoffset;
+                            }
+
+                            if (is23netlog)
+                            {
+                                tzoffset = TimeSpan.Zero;
+                                tzi = TimeZoneInfo.Utc;
+                            }
+
+                            return true;
+                        }
+
                     }
                 }
             }
             catch
             {
-            }
-
-            // File may not have been written yet.
-            if (line == null)
-            {
                 return false;
             }
 
-            // Extract the start time from the first line
-            Match match = netlogHeaderRe.Match(line);
-            if (match != null && match.Success)
-            {
-                string localtimestr = match.Groups["Localtime"].Value;
-                string timezonename = match.Groups["Timezone"].Value.Trim();
-                string gmtimestr = match.Groups["GMT"].Value;
-
-                DateTime localtime = DateTime.MinValue;
-                TimeSpan gmtime = TimeSpan.MinValue;
-                tzi = TimeZoneInfo.GetSystemTimeZones().FirstOrDefault(t => t.DaylightName.Trim() == timezonename || t.StandardName.Trim() == timezonename);
-
-                if (tzi != null)
-                {
-                    tzoffset = tzi.GetUtcOffset(lastlog);
-                }
-
-                if (DateTime.TryParseExact(localtimestr, "yy-MM-dd-HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out localtime) &&
-                    TimeSpan.TryParseExact(gmtimestr, "h\\:mm", CultureInfo.InvariantCulture, out gmtime))
-                {
-                    // Grab the timezone offset
-                    tzoffset = localtime.TimeOfDay - gmtime;
-
-                    if (tzi != null)
-                    {
-                        // Correct for wildly inaccurate values
-                        if (tzoffset > tzi.BaseUtcOffset + TimeSpan.FromHours(18))
-                        {
-                            tzoffset -= TimeSpan.FromHours(24);
-                        }
-                        else if (tzoffset < tzi.BaseUtcOffset - TimeSpan.FromHours(18))
-                        {
-                            tzoffset += TimeSpan.FromHours(24);
-                        }
-                    }
-                    else
-                    {
-                        // No timezone specified - try to make the timezone offset make sense
-                        // Unfortunately anything east of Tonga (GMT+13) or west of Hawaii (GMT-10)
-                        // will be a day off.
-
-                        if (tzoffset <= TimeSpan.FromHours(-10.5))
-                        {
-                            tzoffset += TimeSpan.FromHours(24);
-                        }
-                        else if (tzoffset > TimeSpan.FromHours(13.5))
-                        {
-                            tzoffset -= TimeSpan.FromHours(24);
-                        }
-
-                        double tzhrs = tzoffset.TotalHours;
-                        bool tzneg = tzhrs < 0;
-                        if (tzneg) tzhrs = -tzhrs;
-                        int tzmins = (int)Math.Truncate(tzhrs * 60) % 60;
-                        tzhrs = Math.Truncate(tzhrs);
-
-                        string tzname = tzhrs == 0 ? "GMT" : $"GMT{(tzneg ? "-" : "+")}{tzhrs.ToString("00", CultureInfo.InvariantCulture)}{tzmins.ToString("00", CultureInfo.InvariantCulture)}";
-                        tzi = TimeZoneInfo.CreateCustomTimeZone(tzname, tzoffset, tzname, tzname);
-                    }
-
-                    // Set the start time, timezone info and timezone offset
-                    lastlog = localtime - tzoffset;
-                }
-
-                return true;
-            }
 
             return false;
         }
