@@ -196,7 +196,7 @@ namespace EDDiscovery.UserControls
 
         private string BuildScanValue(StarScan.SystemNode system)
         {
-            var value = 0;
+            long value = 0;
 
             foreach (var body in system.Bodies)
             {
@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (CheckEDSM || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimateScanValue(body.IsMapped, body.WasMappedEfficiently);
+                        value += body.ScanData.EstimatedValue;
                     }
                 }
             }
@@ -324,7 +324,7 @@ namespace EDDiscovery.UserControls
                 else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !ShowMaterials;
-                    bool valuable = sc.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently) > 50000;
+                    bool valuable = sc.EstimatedValue > 50000;
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 
@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
 
                             if (ShowOverlays)
                             {
-                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sn.IsMapped ? 1 : 0);
+                                int overlaystotal = (sc.Terraformable ? 1 : 0) + (sc.HasMeaningfulVolcanism ? 1 : 0) + (valuable ? 1 : 0) + (sc.Mapped ? 1 : 0);
                                 int ovsize = (overlaystotal>1) ? quarterheight : (quarterheight*3/2);
                                 int pos = 0;
 
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
                                     pos += ovsize + 1;
                                 }
 
-                                if (sn.IsMapped)
+                                if (sc.Mapped)
                                     g.DrawImage(Icons.Controls.Scan_Bodies_Mapped, new Rectangle(0, pos, ovsize, ovsize));
                             }
 

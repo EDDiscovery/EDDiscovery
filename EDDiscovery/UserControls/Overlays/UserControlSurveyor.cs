@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
-                    if (sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
+                    if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
                     {
                         bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped;
 
@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
                             earthlike = sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body ? true : false;
                             waterworld = sn.ScanData.PlanetTypeID == EDPlanet.Water_world ? true : false;
 
-                            mapped = sn.IsMapped;
+                            mapped = sn.ScanData.Mapped;
 
                             var distanceString = new StringBuilder();
 

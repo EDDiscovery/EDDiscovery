@@ -354,16 +354,7 @@ namespace EliteDangerousCore
                 .Select(h => h.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
 
-            var mappings = historylist.Where(s => s.EntryType == JournalTypeEnum.SAAScanComplete).Select(h => h.journalEntry as JournalSAAScanComplete).ToList();
-
-            long total = scans.Select(scan =>
-            {
-                var mapping = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
-                if (mapping == null)
-                    return (long)scan.EstimateScanValue(false, false);
-                else
-                    return (long)scan.EstimateScanValue(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
-            }).Sum();
+            long total = scans.Select(scan => scan.EstimatedValue).Sum();
 
             return total;
         }
@@ -918,7 +909,7 @@ namespace EliteDangerousCore
             }
             else if (je is JournalSAAScanComplete)
             {
-                starscan.AddScanToBestSystem((JournalSAAScanComplete)je, Count - 1, EntryOrder);
+                starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, Count - 1, EntryOrder);
             }
             else if (je is JournalFSSDiscoveryScan && he.System != null)
             {
@@ -926,9 +917,7 @@ namespace EliteDangerousCore
             }
             else if (je is IBodyNameAndID)
             {
-                JournalLocOrJump jl;
-                HistoryEntry jlhe;
-                starscan.AddBodyToBestSystem((IBodyNameAndID)je, Count - 1, EntryOrder, out jlhe, out jl);
+                starscan.AddBodyToBestSystem((IBodyNameAndID)je, Count - 1, EntryOrder);
             }
 
             return he;
@@ -1098,7 +1087,7 @@ namespace EliteDangerousCore
                     }
                     else if (je.EventTypeID == JournalTypeEnum.SAAScanComplete)
                     {
-                        this.starscan.AddScanToBestSystem((JournalSAAScanComplete)je, i, hl);
+                        this.starscan.AddSAAScanToBestSystem((JournalSAAScanComplete)je, i, hl);
                     }
                     else if (je.EventTypeID == JournalTypeEnum.FSSDiscoveryScan && he.System != null)
                     {

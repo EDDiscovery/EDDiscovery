@@ -278,8 +278,6 @@ namespace EDDiscovery.UserControls
 
                             var cur = dataGridViewScangrid.Rows[dataGridViewScangrid.Rows.Count - 1];
 
-                            sn.ScanData.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently);        // ensure its up to date
-
                             cur.Tag = img;
                             cur.Cells[0].Tag = null;
                             cur.Cells[4].Tag = cur.Cells[0].ToolTipText = cur.Cells[1].ToolTipText = cur.Cells[2].ToolTipText = cur.Cells[3].ToolTipText = cur.Cells[4].ToolTipText =
@@ -434,7 +432,7 @@ namespace EDDiscovery.UserControls
                                 overlays.volcanism = true;
                             }
 
-                            if (sn.IsMapped)
+                            if (sn.ScanData.Mapped)
                             {
                                 bdDetails.Append(Environment.NewLine).Append("Surface mapped".Tx(this)).Append(". ");
                                 overlays.mapped = true;
@@ -501,9 +499,9 @@ namespace EDDiscovery.UserControls
                         //! for all relevant bodies:
 
                         // give estimated value
-                        var value = sn.ScanData.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently);
                         if (showValues)
                         {
+                            var value = sn.ScanData.EstimatedValue;
                             bdDetails.Append(Environment.NewLine).Append("Value".Tx(this)).Append(" ").Append(value.ToString("N0"));
                         }
 
@@ -601,13 +599,13 @@ namespace EDDiscovery.UserControls
 
         private string BuildScanValue(StarScan.SystemNode system)
         {
-            var value = 0;
+            long value = 0;
 
             foreach (var body in system.Bodies)
             {
                 if (body.ScanData != null)
-                { 
-                    value += body.ScanData.EstimateScanValue(body.IsMapped, body.WasMappedEfficiently);
+                {
+                    value += body.ScanData.EstimatedValue;
                 }
             }
 

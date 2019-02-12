@@ -35,9 +35,9 @@ namespace EDDiscovery.UserControls
 
         public void AddJournalExtraOptions()
         {
-            // must be in alpha order..
             AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
-            //AddGroupOption("Missions".Tx(), "Mission Abandoned;Mission Accepted;Mission Completed;Mission Failed;Mission Redirected;", JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
+
+            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";

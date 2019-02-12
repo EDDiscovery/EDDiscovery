@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
                 foreach(StarScan.ScanNode sn in all_nodes)
                 {
                     if ( sn.ScanData != null && sn.ScanData.BodyName != null )
-                        dataGridViewEstimatedValues.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimateScanValue(sn.IsMapped, sn.WasMappedEfficiently) });
+                        dataGridViewEstimatedValues.Rows.Add(new object[] { sn.ScanData.BodyName, sn.ScanData.EstimatedValue});
                 }
 
                 dataGridViewEstimatedValues.Sort(this.EstValue, ListSortDirection.Descending);

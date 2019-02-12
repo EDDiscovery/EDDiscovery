@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
 
         private string BuildScanValue(StarScan.SystemNode system)
         {
-            var value = 0;
+            long value = 0;
 
             foreach (var body in system.Bodies)
             {
@@ -200,7 +200,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (checkBoxEDSM.Checked || !body.ScanData.IsEDSMBody)
                     {
-                        value += body.ScanData.EstimateScanValue(body.IsMapped, body.WasMappedEfficiently);
+                        value += body.ScanData.EstimatedValue;
                     }
                 }
             }
@@ -607,18 +607,7 @@ namespace EDDiscovery.UserControls
 
                                 writer.Write(csv.Format(scan.EventTimeUTC));
                                 writer.Write(csv.Format(scan.BodyName));
-                                if (string.IsNullOrEmpty(scan.PlanetClass))
-                                {
-                                    writer.Write(csv.Format(scan.EstimateScanValue(false, false)));
-                                }
-                                else
-                                {
-                                    var map = mappings.FirstOrDefault(m => m.BodyName == scan.BodyName);
-                                    if (map == null)
-                                        writer.Write(csv.Format(scan.EstimateScanValue(false, false)));
-                                    else
-                                        writer.Write(csv.Format(scan.EstimateScanValue(true, map.ProbesUsed <= map.EfficiencyTarget)));
-                                }
+                                writer.Write(csv.Format(scan.EstimatedValue));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
 
                                 if (ShowStars)

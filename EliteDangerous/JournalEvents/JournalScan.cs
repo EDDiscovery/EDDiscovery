@@ -119,7 +119,18 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public int EstimatedValue { get; private set; }           // Currently calculated EstimatedValue.  May change after scanning it
+        public bool Mapped { get { return mapped;}  }                          // affects prices
+        public bool EfficientMapped { get { return efficientmapped; } }                          // affects prices
+        public int EstimatedValue { get; private set; }           // Current Estimated Value
+        public int EstimatedValueFirstDiscoveredFirstMapped { get; private set; }           // 0 if not mapped
+        public int EstimatedValueFirstMapped { get; private set; }                          // 0 if not mapped
+
+        public void SetMapped(bool m, bool e)
+        {
+            mapped = m; efficientmapped = e; EstimateScanValue(); 
+        }
+
+        private bool mapped, efficientmapped;
 
         // Constants:
 
@@ -367,7 +378,7 @@ namespace EliteDangerousCore.JournalEvents
                 EDSMDiscoveryUTC = discovery["date"].DateTimeUTC();
             }
 
-            EstimateScanValue(false, false);                        // do the basic no mapped no efficency map as the basic formula
+            EstimateScanValue();                        // do the basic no mapped no efficency map as the basic formula
         }
 
         #region Information Returns
@@ -629,8 +640,19 @@ namespace EliteDangerousCore.JournalEvents
             if (scanText.Length > 0 && scanText[scanText.Length - 1] == '\n')
                 scanText.Remove(scanText.Length - 1, 1);
 
-            if (EstimatedValue>0)
-                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this,"EV"), EstimatedValue);
+            if (EstimatedValue > 0)
+            {
+                scanText.AppendFormat("\nEstimated value: {0:N0}".Tx(this, "EV"), EstimatedValue);
+                if (Mapped)
+                {
+                    scanText.Append(" " + "Mapped".Tx(this, "MPI"));
+                    if (EfficientMapped)
+                        scanText.Append(" " + "Efficiently".Tx(this, "MPIE"));
+
+                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
+                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
+                }
+            }
 
             if (EDSMDiscoveryCommander != null)
                 scanText.AppendFormat("\n\nDiscovered by {0} on {1}".Tx(this, "DB"), EDSMDiscoveryCommander, EDSMDiscoveryUTC.ToStringZulu());
@@ -1076,34 +1098,25 @@ namespace EliteDangerousCore.JournalEvents
 
         #region Estimated Value
 
-        private bool calculatedValue = false;
-        private bool valueCalculatedWithMappingMultiplier = false;
-
-        public int EstimateScanValue(bool mapped = false, bool efficient = false)       // call to estimate scan value given these parameters. Updates EstimatedValue
+        private void EstimateScanValue()       // call to estimate scan value given these parameters. Updates EstimatedValue
         {
             // see https://forums.frontier.co.uk/showthread.php/232000-Exploration-value-formulae/ for detail
 
             if (EventTimeUTC < new DateTime(2017, 4, 11, 12, 0, 0, 0, DateTimeKind.Utc))
             {
                 EstimatedValue = EstimatedValueED22();
-                return EstimatedValue;
+                return;
             }
 
             if (EventTimeUTC < new DateTime(2018, 12, 11, 9, 0, 0, DateTimeKind.Utc))
             {
                 EstimatedValue = EstimatedValue32();
-                return EstimatedValue;
+                return;
             }
 
             // 3.3 onwards
 
             //System.Diagnostics.Debug.WriteLine("Scan calc " + mapped + " ef " + efficient + " Current " + EstimatedValue);
-
-            if ( calculatedValue && ( mapped == false || valueCalculatedWithMappingMultiplier == true)) // we have a estimate already, or a better estimate with mapped.
-                return EstimatedValue;
-
-            calculatedValue = true;
-            valueCalculatedWithMappingMultiplier = mapped;                                  // remember..
 
             double kValue;
 
@@ -1187,17 +1200,20 @@ namespace EliteDangerousCore.JournalEvents
 
                     double mass = nMassEM.HasValue ? nMassEM.Value : 1.0;
 
-                    double mapMultiplier;
-                    if (mapped)
-                        mapMultiplier = 3.3333333333 * (efficient ? 1.25 : 1);
+                    if (Mapped)
+                    {
+                        EstimatedValue = (int)PlanetValue33(kValue, mass, 3.3333333333 * (EfficientMapped ? 1.25 : 1));
+                        EstimatedValueFirstDiscoveredFirstMapped = (int)PlanetValue33(kValue, mass, 3.699622554 * (EfficientMapped ? 1.25 : 1));
+                        EstimatedValueFirstMapped = (int)PlanetValue33(kValue, mass, 8.0956 * (EfficientMapped ? 1.25 : 1));
+                    }
                     else
-                        mapMultiplier = 1;
+                    {
+                        EstimatedValue = (int)PlanetValue33(kValue, mass, 1);
+                        EstimatedValueFirstDiscoveredFirstMapped = EstimatedValueFirstMapped = 0;
+                    }
 
-                    EstimatedValue = (int)PlanetValue33(kValue, mass, mapMultiplier);
                 }
             }
-
-            return EstimatedValue;
         }
 
         private double StarValue32And33(double k, double m)
