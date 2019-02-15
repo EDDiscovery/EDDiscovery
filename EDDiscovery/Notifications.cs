@@ -72,7 +72,8 @@ namespace EDDiscovery
                         foreach (XElement entry in toplevel.Elements())
                         {
                             try
-                            {       // protect each notification from each other..
+                            {       
+                               // protect each notification from each other..
 
                                // System.Diagnostics.Debug.WriteLine(" Entry " + entry.Name);
 
@@ -115,12 +116,18 @@ namespace EDDiscovery
 
                                 notes.Add(n);
                             }
-                            catch { };
+                            catch ( Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine("Notification XML File " + notfile + " inner exception " + ex.Message);
+                            };
                         }
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Notification XML File " + notfile + " failed to read " + ex.Message);
+            }
 
             return notes;
         }
