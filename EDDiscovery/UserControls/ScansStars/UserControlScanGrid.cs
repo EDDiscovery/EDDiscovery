@@ -384,7 +384,8 @@ namespace EDDiscovery.UserControls
                                 bdClass.Append(" ").Append("Moon".Tx(this));
 
                                 // moon distances from center body are measured from in SemiMajorAxis
-                                bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
+                                if (sn.ScanData.nSemiMajorAxis.HasValue)
+                                    bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / JournalScan.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                             }
 
                             if (sn.ScanData.PlanetClass != null && sn.ScanData.PlanetClass.Contains("Giant"))
