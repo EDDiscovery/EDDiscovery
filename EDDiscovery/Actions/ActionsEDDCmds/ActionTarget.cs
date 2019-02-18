@@ -54,7 +54,7 @@ namespace EDDiscovery.Actions
 
                     if (prefix == null)
                     {
-                        ap.ReportError("Missing name after Prefix in Target");
+                        ap.ReportError("Missing name after Prefix in Target");                        
                         return true;
                     }
 
@@ -82,6 +82,17 @@ namespace EDDiscovery.Actions
                             }
                         }
                     }
+                    else if (cmdname.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        bool tset = EliteDangerousCore.DB.TargetClass.IsTargetSet();
+                        ap[prefix + "TargetClear"] = tset.ToStringIntValue();
+                        if (tset)
+                        {
+                            TargetClass.ClearTarget();
+                        }
+                    }
+
+
                     else
                     {
                         string name = sp.NextQuotedWord();
