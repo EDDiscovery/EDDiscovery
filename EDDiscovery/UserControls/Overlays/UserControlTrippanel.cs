@@ -295,12 +295,12 @@ namespace EDDiscovery.UserControls
                     if (he.StartMarker)
                         return;
 
-                    he.journalEntry.SetStartMarker(); 
+                    he.journalEntry.SetStartFlag(); 
 
                     if (list.Count() > 1 && he.isTravelling)
                     {
                         he = list.ToArray()[1];
-                        he.journalEntry.SetStopMarker();
+                        he.journalEntry.SetEndFlag();
                     }
 
                     discoveryform.RefreshHistoryAsync();
