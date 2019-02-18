@@ -82,7 +82,7 @@ namespace EDDiscovery.Actions
                             }
                         }
                     }
-                    else if (cmdname.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
+                    else if (cmdname.Equals("CLEAR", StringComparison.InvariantCultureIgnoreCase))
                     {
                         bool tset = EliteDangerousCore.DB.TargetClass.IsTargetSet();
                         ap[prefix + "TargetClear"] = tset.ToStringIntValue();
