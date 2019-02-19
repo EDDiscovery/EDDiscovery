@@ -832,11 +832,11 @@ namespace EliteDangerousCore
                 if (hs == he)
                 {
                     if (he.StartMarker || he.StopMarker)
-                        hs.journalEntry.ClearStartStopMarker();
+                        hs.journalEntry.ClearStartEndFlag();
                     else if (started == false)
-                        hs.journalEntry.SetStartMarker();
+                        hs.journalEntry.SetStartFlag();
                     else
-                        hs.journalEntry.SetStopMarker();
+                        hs.journalEntry.SetEndFlag();
 
                     break;
                 }

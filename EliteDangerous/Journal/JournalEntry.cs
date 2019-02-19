@@ -103,17 +103,17 @@ namespace EliteDangerousCore
 
         #region Setters - db is updated
 
-        public void SetStartMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetStartFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, cn, txn);
         }
 
-        public void SetStopMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, cn, txn);
         }
 
-        public void ClearStartStopMarker(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void ClearStartEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
         {
             UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, cn, txn);
         }

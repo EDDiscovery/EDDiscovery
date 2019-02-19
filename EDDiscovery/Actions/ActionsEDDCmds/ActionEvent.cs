@@ -230,15 +230,15 @@ namespace EDDiscovery.Actions
                         }
                         else if (cmdname.Equals("setstartmarker"))
                         {
-                            he.journalEntry.SetStartMarker();
+                            he.journalEntry.SetStartFlag();
                         }
                         else if (cmdname.Equals("setstopmarker"))
                         {
-                            he.journalEntry.SetStopMarker();
+                            he.journalEntry.SetEndFlag();
                         }
                         else if (cmdname.Equals("clearstartstopmarker"))
                         {
-                            he.journalEntry.ClearStartStopMarker();
+                            he.journalEntry.ClearStartEndFlag();
                         }
                         else if (cmdname.Equals("note"))
                         {
