@@ -142,7 +142,7 @@ namespace EDDiscovery.Actions
                         string taglist = sp.NextQuotedWord();
 
                         if ( systemname != null && bodyname != null && dte != null )
-                        { 
+                        {
                             GlobalCaptainsLogList.Instance.AddOrUpdate(null, cmdrid, systemname, bodyname, dte.Value, note ?? "", taglist);
                         }
                         else
@@ -165,7 +165,7 @@ namespace EDDiscovery.Actions
                             ap.ReportError("Missing tag list");
                     }
                     else
-                    {
+                    {   // ********************** Iterator forms, FROM/LAST/FIRST/TIME [Forward|Backward]
                         long? cid = -1;
 
                         if (cmdname.Equals("From", StringComparison.InvariantCultureIgnoreCase))
@@ -240,29 +240,62 @@ namespace EDDiscovery.Actions
                             }
                         }
 
+                        bool validindex = indexof >= 0 && indexof < cllist.Count;
+
                         if (nextcmd != null)
                         {
-                            if (nextcmd.Equals("DELETE", StringComparison.InvariantCultureIgnoreCase))
+                            if (!validindex)     // these must have a valid target..
                             {
-                                if (indexof >= 0 && indexof < cllist.Count)
+                                ap.ReportError("Entry is not found");
+                            }
+                            else
+                            {
+                                CaptainsLogClass cl = cllist[indexof];
+
+                                if (nextcmd.Equals("DELETE", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    System.Diagnostics.Debug.WriteLine("Would delete " + cllist[indexof].ID);
-                                    GlobalCaptainsLogList.Instance.Delete(cllist[indexof]);
+                                    GlobalCaptainsLogList.Instance.Delete(cl);
                                 }
                                 else
-                                    ap.ReportError("Delete entry is not found");
+                                {
+                                    string text = sp.NextQuotedWord();
 
-                                return true;
+                                    if (text != null)
+                                    {
+                                        if (nextcmd.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            GlobalCaptainsLogList.Instance.AddOrUpdate(cl, cl.Commander, cl.SystemName, cl.BodyName, cl.TimeUTC,
+                                                                                       text, cl.Tags, cl.Parameters);
+                                        }
+                                        else if (nextcmd.Equals("SYSTEM", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            GlobalCaptainsLogList.Instance.AddOrUpdate(cl, cl.Commander, text, cl.BodyName, cl.TimeUTC,
+                                                                                       cl.Note, cl.Tags, cl.Parameters);
+                                        }
+                                        else if (nextcmd.Equals("BODY", StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            GlobalCaptainsLogList.Instance.AddOrUpdate(cl, cl.Commander, cl.SystemName, text, cl.TimeUTC,
+                                                                                       cl.Note, cl.Tags, cl.Parameters);
+                                        }
+                                        else
+                                            ap.ReportError("Unknown command " + nextcmd);
+                                    }
+                                    else
+                                        ap.ReportError("Missing text after " + nextcmd);
+                                }
                             }
-                        }
 
+                            return true;
+                        }
+                        
+                                   
                         if (nextcmd != null)
                         {
                             ap.ReportError("Unknown iterator or command " + nextcmd);
                         }
                         else
-                        {
-                            if (indexof >= 0 && indexof < cllist.Count)
+                        {       // straight report
+                            if (validindex)
                             {
                                 DumpCL(ap, prefix, cllist[indexof]);
                             }
