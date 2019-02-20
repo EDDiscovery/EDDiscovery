@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -126,9 +126,17 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSDJump)
             {
+                SetControlText("In hyperspace...".Tx());
                 pictureBoxSurveyor.ClearImageList();
                 Refresh();
-            }            
+            }
+            if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
+            {
+                StarScan.SystemNode sn;
+                sn = discoveryform.history.starscan.FindSystem(he.System, true);
+                var bodies_found = sn.TotalBodies;
+                SetControlText(bodies_found + " bodies found.");
+            }
         }
 
         public override Color ColorTransparency => Color.Green;
