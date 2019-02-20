@@ -44,10 +44,10 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.TopPanel = new System.Windows.Forms.Panel();
             this.checkBoxMoveToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
@@ -64,8 +64,8 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setNoteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewStarList = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
-            this.dataViewScrollerPanel1.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem,
             this.setNoteToolStripMenuItem});
             this.contextMenuStrip.Name = "historyContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(221, 114);
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 92);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // removeSortingOfColumnsToolStripMenuItem
@@ -316,47 +316,47 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
-            // dataViewScrollerPanel1
+            // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewStarList);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(870, 578);
-            this.dataViewScrollerPanel1.TabIndex = 28;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewStarList);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(870, 578);
+            this.dataViewScrollerPanel.TabIndex = 28;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // vScrollBarCustom1
+            // vScrollBarCustom
             // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(847, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 557);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = true;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(847, 0);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 578);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 4;
+            this.vScrollBarCustom.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridViewStarList
             // 
@@ -365,14 +365,14 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewStarList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewStarList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewStarList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnTime,
@@ -380,24 +380,24 @@ namespace EDDiscovery.UserControls
             this.ColumnVisits,
             this.ColumnInformation});
             this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewStarList.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStarList.Name = "dataGridViewStarList";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewStarList.RowHeadersWidth = 50;
             this.dataGridViewStarList.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStarList.Size = new System.Drawing.Size(847, 578);
@@ -427,8 +427,8 @@ namespace EDDiscovery.UserControls
             // 
             // ColumnVisits
             // 
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.NullValue = null;
+            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle6;
             this.ColumnVisits.FillWeight = 40F;
             this.ColumnVisits.HeaderText = "Visits";
             this.ColumnVisits.MinimumWidth = 50;
@@ -448,14 +448,14 @@ namespace EDDiscovery.UserControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel1);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.TopPanel);
             this.Name = "UserControlStarList";
             this.Size = new System.Drawing.Size(870, 610);
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
             this.contextMenuStrip.ResumeLayout(false);
-            this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).EndInit();
             this.ResumeLayout(false);
 
@@ -468,8 +468,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
-        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         public System.Windows.Forms.DataGridView dataGridViewStarList;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;

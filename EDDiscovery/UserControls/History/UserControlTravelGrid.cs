@@ -202,6 +202,7 @@ namespace EDDiscovery.UserControls
 
             result = FilterHelpers.FilterHistory(result, fieldfilter, discoveryform.Globals, out ftotalfilters);
 
+            panelOutlining.Clear();
             dataGridViewTravel.Rows.Clear();
             rowsbyjournalid.Clear();
 
@@ -221,18 +222,26 @@ namespace EDDiscovery.UserControls
             string filtertext = textBoxFilter.Text;
             List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
+            Outlining outlining = new Outlining();
+
             if (chunks.Count != 0)
             {
                 var chunk = chunks[0];
 
-                dataGridViewTravel.SuspendLayout();
+                dataViewScrollerPanel.Suspend();
+
                 foreach (var item in chunk)
                 {
                     var row = CreateHistoryRow(item, filtertext);
                     if (row != null)
+                    {
+                        outlining.Outline(item, dataGridViewTravel.RowCount);
+                        row.Cells[2].Value = dataGridViewTravel.RowCount.ToString() + (string)row.Cells[2].Value;
                         dataGridViewTravel.Rows.Add(row);
+                    }
                 }
-                dataGridViewTravel.ResumeLayout();
+
+                dataViewScrollerPanel.Resume();
 
                 int rowno = FindGridPosByJID(pos.Item1, true);     // find row.. must be visible..  -1 if not found/not visible
 
@@ -253,14 +262,19 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
-                    dataGridViewTravel.SuspendLayout();
+                    dataViewScrollerPanel.Suspend();
+
                     foreach (var item in chunk)
                     {
                         var row = CreateHistoryRow(item, filtertext);
                         if (row != null)
+                        {
+                            outlining.Outline(item, dataGridViewTravel.RowCount);
                             dataGridViewTravel.Rows.Add(row);
+                        }
                     }
-                    dataGridViewTravel.ResumeLayout();
+
+                    dataViewScrollerPanel.Resume();
                 });
             }
 
@@ -288,6 +302,10 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewTravel.Sort(dataGridViewTravel.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                     dataGridViewTravel.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
+                }
+                else
+                {
+                    panelOutlining.Add(outlining.Rollups);
                 }
 
                 FireChangeSelection();      // and since we repainted, we should fire selection, as we in effect may have selected a new one
@@ -1462,4 +1480,65 @@ namespace EDDiscovery.UserControls
 
         #endregion
     }
+
+
+    public class Outlining
+    {
+        public List<ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline> Rollups;
+
+        private int maingroup;
+        private int maingroupcount;
+        private int scancodex;
+
+        public Outlining()
+        {
+            Rollups = new List<ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline>();
+            maingroup = -1;
+            maingroupcount = 0;
+            scancodex = -1;
+        }
+
+        public void Outline(HistoryEntry he, int rowindex)
+        {
+            //if (Rollups.Count > 200)
+              //  return;
+
+            bool fsstype = he.EntryType == JournalTypeEnum.CodexEntry || he.EntryType == JournalTypeEnum.Scan || he.EntryType == JournalTypeEnum.FSSDiscoveryScan
+                            || he.EntryType == JournalTypeEnum.FSSAllBodiesFound || he.EntryType == JournalTypeEnum.FSSSignalDiscovered;
+
+            if (he.EntryType == JournalTypeEnum.Shutdown)
+            {
+                maingroup = rowindex;
+            }
+            else if (he.EntryType == JournalTypeEnum.Fileheader)
+            {
+                if ( maingroup != -1 )
+                {
+                    Rollups.Add(new ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline(maingroup, rowindex, maingroupcount<1));
+                    System.Diagnostics.Debug.WriteLine("Main Roll up" + maingroup + "-" + rowindex);
+                    maingroup = rowindex + 1;
+                    maingroupcount++;
+                }
+            }
+            else if ( fsstype )
+            {
+                if (scancodex == -1)
+                    scancodex = rowindex;
+            }
+
+            if ( scancodex != -1 && !fsstype)
+            {
+                if (rowindex - scancodex > 2)
+                {
+                    Rollups.Add(new ExtendedControls.ExtPanelDataGridViewScrollOutlining.Outline(scancodex, rowindex-1, false));
+                    System.Diagnostics.Debug.WriteLine("Scan Roll up" + scancodex + "-" + rowindex);
+                }
+
+                scancodex = -1;
+
+            }
+        }
+    }
 }
+
+

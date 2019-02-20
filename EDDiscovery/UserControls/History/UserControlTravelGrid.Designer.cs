@@ -81,8 +81,9 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -91,7 +92,7 @@ namespace EDDiscovery.UserControls
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
-            this.dataViewScrollerPanel1.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -457,47 +458,55 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
-            // dataViewScrollerPanel1
+            // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(870, 578);
-            this.dataViewScrollerPanel1.TabIndex = 28;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.panelOutlining);
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewTravel);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(870, 578);
+            this.dataViewScrollerPanel.TabIndex = 28;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // vScrollBarCustom1
+            // panelOutlining
             // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(847, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 557);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
+            this.panelOutlining.Location = new System.Drawing.Point(0, 0);
+            this.panelOutlining.Name = "panelOutlining";
+            this.panelOutlining.Size = new System.Drawing.Size(10, 100);
+            this.panelOutlining.TabIndex = 5;
+            // 
+            // vScrollBarCustom
+            // 
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = true;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(847, 0);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 578);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 4;
+            this.vScrollBarCustom.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridViewTravel
             // 
@@ -513,11 +522,11 @@ namespace EDDiscovery.UserControls
             this.ColumnNote});
             this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(837, 578);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
@@ -570,14 +579,14 @@ namespace EDDiscovery.UserControls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel1);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.TopPanel);
             this.Name = "UserControlTravelGrid";
             this.Size = new System.Drawing.Size(870, 610);
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
             this.historyContextMenu.ResumeLayout(false);
-            this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
             this.ResumeLayout(false);
 
@@ -591,8 +600,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
-        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         public System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
@@ -630,5 +639,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem gotoNextStartStopMarkerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runEntryThroughProfileSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem explorationPanelToolStripMenuItem;
+        private ExtendedControls.ExtPanelDataGridViewScrollOutlining panelOutlining;
     }
 }

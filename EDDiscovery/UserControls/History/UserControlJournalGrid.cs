@@ -194,14 +194,14 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
-                    dataGridViewJournal.SuspendLayout();
+                    dataViewScrollerPanel.Suspend();
                     foreach (var item in chunk)
                     {
                         var row = CreateHistoryRow(item, filtertext);
                         if (row != null)
                             dataGridViewJournal.Rows.Add(row);
                     }
-                    dataGridViewJournal.ResumeLayout();
+                    dataViewScrollerPanel.Resume();
                 });
             }
 

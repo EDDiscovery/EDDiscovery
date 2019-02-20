@@ -209,13 +209,15 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
-                    dataGridViewStarList.SuspendLayout();
+                    dataViewScrollerPanel.Suspend();
                     foreach (var syslist in syslistchunk)
                     {
                         var row = CreateHistoryRow(syslist, filtertext);
                         if (row != null)
                             dataGridViewStarList.Rows.Add(row);
                     }
+
+                    dataViewScrollerPanel.Resume();
                 });
             }
 
