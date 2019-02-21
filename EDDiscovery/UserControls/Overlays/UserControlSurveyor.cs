@@ -114,6 +114,8 @@ namespace EDDiscovery.UserControls
         /// <param name="hl">HistoryList</param>
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
+            var sn = discoveryform.history.starscan.FindSystem(he.System, true);
+
             if (he.EntryType == JournalTypeEnum.Scan)
             {
                 DrawSystem(he);
@@ -126,14 +128,13 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSDJump)
             {
-                SetControlText("In hyperspace...".Tx());
+                SetControlText(string.Empty);
                 pictureBoxSurveyor.ClearImageList();
                 Refresh();
             }
+
             if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
             {
-                StarScan.SystemNode sn;
-                sn = discoveryform.history.starscan.FindSystem(he.System, true);
                 var bodies_found = sn.TotalBodies;
                 SetControlText(bodies_found + " bodies found.");
             }
