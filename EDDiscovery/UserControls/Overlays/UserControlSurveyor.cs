@@ -13,23 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Drawing.Drawing2D;
 using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -40,7 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbSave => DBName("Surveyor");
 
         private Font displayfont;
-        
+
 
         public UserControlSurveyor()
         {
@@ -52,7 +44,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;            
+            discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -136,7 +128,10 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
             {
                 var bodies_found = sn.TotalBodies;
-                SetControlText(bodies_found + " bodies found.");
+                if (bodies_found != null)
+                {
+                    SetControlText(bodies_found + " bodies found.");
+                }
             }
         }
 
@@ -190,7 +185,7 @@ namespace EDDiscovery.UserControls
                 Mapped = mapped
             };
         }
-        
+
         /// <summary>
         /// Retrieve the list of bodies which match the user needs
         /// </summary>
@@ -356,7 +351,7 @@ namespace EDDiscovery.UserControls
                         1.0F);
                 }
             }
-                        
+
             pictureBoxSurveyor.Refresh();
         }
 
