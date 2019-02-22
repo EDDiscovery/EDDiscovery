@@ -106,8 +106,6 @@ namespace EDDiscovery.UserControls
         /// <param name="hl">HistoryList</param>
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
-            var sn = discoveryform.history.starscan.FindSystem(he.System, true);
-
             if (he.EntryType == JournalTypeEnum.Scan)
             {
                 DrawSystem(he);
@@ -127,9 +125,10 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
             {
-                if (sn.TotalBodies != null)
+                var je = he.journalEntry as JournalFSSDiscoveryScan;
+                if (je != null)
                 {
-                    var bodies_found = sn.TotalBodies;
+                    var bodies_found = je.BodyCount;
                     SetControlText(bodies_found + " bodies found.");
                 }
             }
