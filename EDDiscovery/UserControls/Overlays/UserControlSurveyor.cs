@@ -127,9 +127,9 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
             {
-                var bodies_found = sn.TotalBodies;
-                if (bodies_found != null)
+                if (sn.TotalBodies != null)
                 {
+                    var bodies_found = sn.TotalBodies;
                     SetControlText(bodies_found + " bodies found.");
                 }
             }
