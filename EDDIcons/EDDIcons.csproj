@@ -214,16 +214,8 @@
     <EmbeddedResource Include="Journal\WingLeave.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Legacy\eddiscovery_logo.png" />
-    <EmbeddedResource Include="Legacy\edsmown.png" />
-    <EmbeddedResource Include="Legacy\G8V_and_G9V.png" />
-    <EmbeddedResource Include="Legacy\Globe_yellow.png" />
-    <EmbeddedResource Include="Legacy\M1VA.png" />
-    <EmbeddedResource Include="Legacy\module.png" />
     <EmbeddedResource Include="Legacy\speaker.png" />
     <EmbeddedResource Include="Legacy\star.png" />
-    <EmbeddedResource Include="Legacy\textreceived.png" />
-    <EmbeddedResource Include="Legacy\textsent.png" />
     <EmbeddedResource Include="Planets\Ammonia_world.png" />
     <EmbeddedResource Include="Planets\Earthlike_body.png" />
     <EmbeddedResource Include="Planets\Gas_giant_with_ammonia_based_life.png" />
@@ -662,6 +654,7 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\Star.png" />
     <EmbeddedResource Include="Controls\TravelGrid\EventFilter.png" />
     <EmbeddedResource Include="Controls\TravelGrid\FieldFilter.png" />
     <EmbeddedResource Include="Controls\TravelGrid\Outlines.png" />

@@ -539,7 +539,7 @@ namespace EDDiscovery.UserControls
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                     dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
 
-                toolStripStatusTotalValue.Text = BuildScanValue(scannode);
+                toolStripStatusTotalValue.Text = "~"+ scannode.ScanValue(true).ToString() + " cr";
             }
         }
 
@@ -598,20 +598,6 @@ namespace EDDiscovery.UserControls
             }                        
         }
 
-        private string BuildScanValue(StarScan.SystemNode system)
-        {
-            long value = 0;
-
-            foreach (var body in system.Bodies)
-            {
-                if (body.ScanData != null)
-                {
-                    value += body.ScanData.EstimatedValue;
-                }
-            }
-
-            return string.Format("Estimated total scan value: {0:N0}".Tx(this, "AV"), value);
-        }
 
         #endregion
 

@@ -50,16 +50,14 @@ namespace EDDiscovery.Icons
 
         }
 
-        private static void InitLegacyIcons()
-        {
-            Icons["Legacy.settings"] = IconSet.GetIcon("Controls.Main.Tools.Settings");             // from use by action system..
-            Icons["Legacy.missioncompleted"] = IconSet.GetIcon("Journal.MissionCompleted");
-        }
-
         public static void ResetIcons()
         {
             Icons = defaultIcons.ToArray().ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.InvariantCultureIgnoreCase);
-            InitLegacyIcons();
+
+            // alias names used in older action packs to new locations
+            Icons["settings"] = IconSet.GetIcon("Controls.Main.Tools.Settings");             // from use by action system..
+            Icons["missioncompleted"] = IconSet.GetIcon("Journal.MissionCompleted");
+            Icons["speaker"] = IconSet.GetIcon("Legacy.speaker");
         }
 
         public static void LoadIconsFromDirectory(string path)      // tested 1/feb/2018
@@ -190,11 +188,6 @@ namespace EDDiscovery.Icons
         {
             if (Icons == null)      // seen designer barfing over this
                 return null;
-
-            if (!name.Contains("."))
-            {
-                name = "Legacy." + name;
-            }
 
             //System.Diagnostics.Debug.WriteLine("ICON " + name);
 
