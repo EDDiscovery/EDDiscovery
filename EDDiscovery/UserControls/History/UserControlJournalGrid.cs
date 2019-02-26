@@ -84,12 +84,13 @@ namespace EDDiscovery.UserControls
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             cfs = new FilterSelector(DbFilterSave);
+            cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
             cfs.Closing += EventFilterChanged;
             TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
-            checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
@@ -122,7 +123,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewJournal, DbColumnSave);
             discoveryform.OnHistoryChange -= Display;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -307,7 +308,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (checkBoxMoveToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
+                if (checkBoxCursorToTop.Checked && dataGridViewJournal.DisplayedRowCount(false) > 0)   // Move focus to new row
                 {
                     dataGridViewJournal.ClearSelection();
                     int rowno = dataGridViewJournal.Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -363,9 +364,10 @@ namespace EDDiscovery.UserControls
             cfs.Filter(b, this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, Object e)
+        private void EventFilterChanged(object sender, bool same, Object e)
         {
-            Display(current_historylist);
+            if (!same)
+                Display(current_historylist);
         }
 
         private void textBoxFilter_TextChanged(object sender, EventArgs e)

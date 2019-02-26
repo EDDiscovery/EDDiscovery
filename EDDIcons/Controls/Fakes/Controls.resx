@@ -628,4 +628,16 @@
   <data name="CaptainsLog_Entries" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\captainslog\entries.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="TravelGrid_CursorToTop" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\cursortotop.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_EventFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\eventfilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_FieldFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\fieldfilter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="TravelGrid_Outlines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\travelgrid\outlines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

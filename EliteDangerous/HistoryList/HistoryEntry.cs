@@ -284,6 +284,11 @@ namespace EliteDangerousCore
             return null;
         }
 
+        public void UpdateShipInformation(ShipInformation si)       // something externally updated SI
+        {
+            ShipInformation = si;
+        }
+
         #endregion
     }
 }

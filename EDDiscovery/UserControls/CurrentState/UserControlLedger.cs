@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
 
             cfs = new FilterSelector(DbFilterSave);
+            cfs.AddAllNone();
             cfs.AddGroupOption(cashtype, "Cash Transactions".Tx(this),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
             cfs.Closing += EventFilterChanged;
@@ -185,9 +186,10 @@ namespace EDDiscovery.UserControls
             dataGridViewLedger.FilterGridView(textBoxFilter.Text);
         }
 
-        private void EventFilterChanged(object sender, Object e)
+        private void EventFilterChanged(object sender, bool same, Object e)
         {
-            Display(current_mc);
+            if (!same)
+                Display(current_mc);
         }
 
         #region right clicks

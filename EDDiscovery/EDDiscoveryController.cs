@@ -480,7 +480,15 @@ namespace EDDiscovery
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
 
+            var uifuel = u as EliteDangerousCore.UIEvents.UIFuel;       // UI Fuel has information on fuel level - update it.
+            if (uifuel != null && history != null)
+            {
+                history.shipinformationlist.UIFuel(uifuel);             // update the SI global value
+                history.GetLast?.UpdateShipInformation(history.shipinformationlist.CurrentShip);    // and make the last entry have this updated info.
+            }
+
             OnNewUIEvent?.Invoke(u);
+
         }
 
         #endregion

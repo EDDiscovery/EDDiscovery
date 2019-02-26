@@ -58,7 +58,6 @@ namespace EDDiscovery.UserControls
             // 
             this.panelVScroll.Controls.Add(this.vScrollBarCustom);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelVScroll.InternalMargin = new System.Windows.Forms.Padding(0);
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
             this.panelVScroll.ScrollBarWidth = 20;

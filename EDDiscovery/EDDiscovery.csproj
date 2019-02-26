@@ -266,6 +266,7 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\Helpers\Outliner.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
     <Compile Include="UserControls\Helpers\RecipeFilterSelector.cs" />
     <Compile Include="UserControls\Helpers\TagsForm.cs">

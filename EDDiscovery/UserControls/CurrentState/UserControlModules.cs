@@ -52,6 +52,7 @@ namespace EDDiscovery.UserControls
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -73,6 +74,7 @@ namespace EDDiscovery.UserControls
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= Discoveryform_OnNewEntry;
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
         }
 
 
@@ -121,6 +123,12 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Enabled = false;
             comboBoxShips.SelectedItem = cursel;
             comboBoxShips.Enabled = true;
+        }
+
+        private void Discoveryform_OnNewUIEvent(UIEvent obj)
+        {
+            if (obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
+                Display(last_he, discoveryform.history);
         }
 
         public override void InitialDisplay()

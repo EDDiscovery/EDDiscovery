@@ -110,6 +110,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget += RefreshTargetDisplay;
             discoveryform.OnNoteChanged += OnNoteChanged;
             discoveryform.OnEDSMSyncComplete += Discoveryform_OnEDSMSyncComplete;
+            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
 
             panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // just to hide it during boot up
 
@@ -137,6 +138,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewTarget -= RefreshTargetDisplay;
             discoveryform.OnNoteChanged -= OnNoteChanged;
             discoveryform.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
+            discoveryform.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             SQLiteDBClass.PutSettingString(DbOSave, BaseUtils.LineStore.ToString(Lines));
             SQLiteDBClass.PutSettingInt(DbSelection, Selection);
         }
@@ -154,6 +156,12 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("EDSM SYNC COMPLETED with " + count + " '" + syslist + "'");
             Display(last_he, discoveryform.history);
+        }
+
+        private void Discoveryform_OnNewUIEvent(UIEvent obj)
+        {
+            if ( obj is EliteDangerousCore.UIEvents.UIFuel) // fuel UI update the SI information globally.
+                Display(last_he, discoveryform.history);
         }
 
         bool neverdisplayed = true;

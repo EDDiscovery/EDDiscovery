@@ -205,6 +205,10 @@ namespace EDDiscovery.Icons
         public static Image TravelGrid_ExportToExcel { get { return IconSet.GetIcon("Controls.TravelGrid.ExportToExcel"); } }
         public static Image TravelGrid_FlagStart { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStart"); } }
         public static Image TravelGrid_FlagStop { get { return IconSet.GetIcon("Controls.TravelGrid.FlagStop"); } }
+        public static Image TravelGrid_CursorToTop { get { return IconSet.GetIcon("Controls.TravelGrid.CursorToTop"); } }
+        public static Image TravelGrid_Outlines { get { return IconSet.GetIcon("Controls.TravelGrid.Outlines"); } }
+        public static Image TravelGrid_FieldFilter { get { return IconSet.GetIcon("Controls.TravelGrid.FieldFilter"); } }
+        public static Image TravelGrid_EventFilter { get { return IconSet.GetIcon("Controls.TravelGrid.EventFilter"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlTrilateration
         public static Image Trilateration_RemoveAll { get { return IconSet.GetIcon("Controls.Trilateration.RemoveAll"); } }

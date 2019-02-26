@@ -162,7 +162,6 @@ namespace EliteDangerousCore
                             stream.Dispose();
                     }
 
-
                     if (jo != null)
                     {
                         DateTime EventTimeUTC = DateTime.Parse(jo.Value<string>("timestamp"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
@@ -170,6 +169,9 @@ namespace EliteDangerousCore
                         List<UIEvent> events = new List<UIEvent>();
 
                         long curflags = (long)jo["Flags"].Long();
+
+                        bool fireoverall = false;
+                        bool fireoverallrefresh = prev_guifocus == -1;     //meaning its a refresh
 
                         if (prev_flags == null || curflags != prev_flags.Value)
                         {
@@ -181,7 +183,7 @@ namespace EliteDangerousCore
 
                             bool refresh = prevshiptype == UIEvents.UIShipType.Shiptype.None;   // refresh if prev ship was none..
 
-                            if ( prevshiptype != curtype )
+                            if (prevshiptype != curtype)
                             {
                                 events.Add(new UIEvents.UIShipType(curtype, EventTimeUTC, refresh));        // CHANGE of ship
                                 prev_flags = ~curflags;       // force re-reporting
@@ -197,6 +199,7 @@ namespace EliteDangerousCore
                                 events.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags, prev_flags.Value, EventTimeUTC, refresh));
 
                             prev_flags = curflags;
+                            fireoverall = true;
                         }
 
                         int curguifocus = (int)jo["GuiFocus"].Int();
@@ -204,6 +207,7 @@ namespace EliteDangerousCore
                         {
                             events.Add(new UIEvents.UIGUIFocus(curguifocus, EventTimeUTC, prev_guifocus == -1));
                             prev_guifocus = curguifocus;
+                            fireoverall = true;
                         }
 
                         int[] pips = jo["Pips"]?.ToObjectProtected<int[]>();
@@ -218,6 +222,7 @@ namespace EliteDangerousCore
                                 UIEvents.UIPips.Pips newpips = new UIEvents.UIPips.Pips() { Systems = sys, Engines = eng, Weapons = wep };
                                 events.Add(new UIEvents.UIPips(newpips, EventTimeUTC, prev_pips.Engines<0));
                                 prev_pips = newpips;
+                                fireoverall = true;
                             }
                         }
 
@@ -227,6 +232,7 @@ namespace EliteDangerousCore
                         {
                             events.Add(new UIEvents.UIFireGroup(curfiregroup.Value + 1, EventTimeUTC, prev_firegroup == -1));
                             prev_firegroup = curfiregroup.Value;
+                            fireoverall = true;
                         }
 
                         JToken jfuel = (JToken)jo["Fuel"];
@@ -240,6 +246,7 @@ namespace EliteDangerousCore
                                 events.Add(new UIEvents.UIFuel(curfuel.Value,  curres.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
                                 prev_curfuel = curfuel.Value;
                                 prev_curres = curres.Value;
+                                fireoverall = true;
                             }
                         }
 
@@ -248,6 +255,7 @@ namespace EliteDangerousCore
                         {
                             events.Add(new UIEvents.UICargo(curcargo.Value, ShipType(prev_flags.Value), EventTimeUTC, prev_firegroup == -1));
                             prev_cargo = curcargo.Value;
+                            fireoverall = true;
                         }
 
                         double jlat = jo["Latitude"].Double(double.MinValue);       // if not there, min value
@@ -261,6 +269,18 @@ namespace EliteDangerousCore
                             events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC, jlat == double.MinValue));
                             prev_pos = newpos;
                             prev_heading = jheading;
+                            fireoverall = true;
+                        }
+
+                        if ( fireoverall )
+                        {
+                            List<UITypeEnum> flagsset = ReportFlagState(typeof(StatusFlagsShip), curflags);
+                            flagsset.AddRange(ReportFlagState(typeof(StatusFlagsSRV), curflags));
+                            flagsset.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags));
+
+                            events.Add(new UIEvents.UIOverallStatus(ShipType(curflags), flagsset, prev_guifocus, prev_pips, prev_firegroup, 
+                                                                    prev_curfuel,prev_curres, prev_cargo, prev_pos, prev_heading,
+                                                                    EventTimeUTC, fireoverallrefresh));        // overall list of flags set
                         }
 
                         if (events.Count > 0)
@@ -281,6 +301,21 @@ namespace EliteDangerousCore
             }
         }
 
+        List<UITypeEnum> ReportFlagState(Type enumtype, long curflags)
+        {
+            List<UITypeEnum> flags = new List<UITypeEnum>();
+            foreach (string n in Enum.GetNames(enumtype))
+            {
+                int v = (int)Enum.Parse(enumtype, n);
+
+                bool flag = ((curflags >> v) & 1) != 0;
+                if (flag)
+                    flags.Add((UITypeEnum)Enum.Parse(typeof(UITypeEnum), n));
+            }
+
+            return flags;
+        }
+
         List<UIEvent> ReportFlagState(Type enumtype, long curflags, long prev_flags, DateTime EventTimeUTC, bool refresh)
         {
             List<UIEvent> events = new List<UIEvent>();
@@ -292,10 +327,11 @@ namespace EliteDangerousCore
             {
                 int v = (int)Enum.Parse(enumtype, n);
 
+                bool flag = ((curflags >> v) & 1) != 0;
+
                 if (((delta >> v) & 1) != 0)
                 {
-                    bool flag = ((curflags >> v) & 1) != 0;
-                  //  System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
+                    //  System.Diagnostics.Debug.WriteLine("..Flag " + n + " changed to " + flag);
                     events.Add(UIEvent.CreateFlagEvent(n, flag, EventTimeUTC, refresh));
                 }
             }

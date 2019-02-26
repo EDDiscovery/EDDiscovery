@@ -15,6 +15,7 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -23,21 +24,28 @@ namespace EDDiscovery.UserControls
 {
     // Extends the filter form to know how to save back to DB.  and to add some standard option lists in
 
-    public class FilterSelector : ExtendedControls.CheckedIconListBoxFilterForm
+    public class FilterSelector : ExtendedControls.CheckedIconListBoxSelectionForm
     {
         private string dbstring;
+
+        public new Action<string, bool, Object> Closing;                       // Action on close, string is the settings, bool is true if same as before, object is sender
 
         public FilterSelector(string db) : base()
         {
             dbstring = db;
-            Closing += (x,t)=> SQLiteDBClass.PutSettingString(dbstring, x);
+            base.Closing += (x, t) =>                                          // use the base class closing, and work out if we changed anything
+            {
+                string org = SQLiteDBClass.GetSettingString(dbstring,"All");
+                SQLiteDBClass.PutSettingString(dbstring, x);
+                this.Closing?.Invoke(x, x.Equals(org), t);
+            };
         }
 
         public void AddJournalExtraOptions()
         {
             AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
-            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
@@ -75,14 +83,14 @@ namespace EDDiscovery.UserControls
 
         // do not use base Filter options - use these.
 
-        public void Filter(Control ctr, Form parent)
+        public void Filter(Control ctr, Form parent, int width = 300)
         {
-            Filter(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent);
+            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent, width);
         }
 
         public void Filter(Point p, Size s, Form parent)
         {
-            Filter(SQLiteDBClass.GetSettingString(dbstring, "All"), p, s, parent);
+            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), p, s, parent);
         }
 
     }
