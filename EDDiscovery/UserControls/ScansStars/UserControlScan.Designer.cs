@@ -160,6 +160,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.Size = new System.Drawing.Size(32, 32);
             this.extCheckBoxStar.TabIndex = 2;
             this.extCheckBoxStar.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.extCheckBoxStar, "Select another system to view");
             this.extCheckBoxStar.UseVisualStyleBackColor = false;
             this.extCheckBoxStar.Click += new System.EventHandler(this.extCheckBoxStar_Click);
             // 
