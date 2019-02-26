@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,23 +13,15 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Drawing.Drawing2D;
 using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -40,7 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbSave => DBName("Surveyor");
 
         private Font displayfont;
-        
+
 
         public UserControlSurveyor()
         {
@@ -52,7 +44,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;            
+            discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -126,9 +118,20 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSDJump)
             {
+                SetControlText(string.Empty);
                 pictureBoxSurveyor.ClearImageList();
                 Refresh();
-            }            
+            }
+
+            if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
+            {
+                var je = he.journalEntry as JournalFSSDiscoveryScan;
+                if (je != null)
+                {
+                    var bodies_found = je.BodyCount;
+                    SetControlText(bodies_found + " bodies found.");
+                }
+            }
         }
 
         public override Color ColorTransparency => Color.Green;
@@ -181,7 +184,7 @@ namespace EDDiscovery.UserControls
                 Mapped = mapped
             };
         }
-        
+
         /// <summary>
         /// Retrieve the list of bodies which match the user needs
         /// </summary>
@@ -347,7 +350,7 @@ namespace EDDiscovery.UserControls
                         1.0F);
                 }
             }
-                        
+
             pictureBoxSurveyor.Refresh();
         }
 
