@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
             ValidateEnable();
         }
 
-        private void ValidityNumberBox(bool value)
+        private void ValidityNumberBox(Object box, bool value)
         {
             ValidateEnable();
         }

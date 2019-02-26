@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         public bool ShowMaterialsRare { get; set; }
         public bool HideFullMaterials { get; set; }
         public bool ShowOverlays { get; set; }
+        public int ValueLimit { get; set; } = 50000;
 
         public int WidthAvailable { get { return this.Width - vScrollBarCustom.Width; } }   // available display width
         public Point DisplayAreaUsed { get; private set; }  // used area to display in
@@ -194,24 +195,6 @@ namespace EDDiscovery.UserControls
             return last_sn;
         }
 
-        private string BuildScanValue(StarScan.SystemNode system)
-        {
-            long value = 0;
-
-            foreach (var body in system.Bodies)
-            {
-                if (body?.ScanData != null)
-                {
-                    if (CheckEDSM || !body.ScanData.IsEDSMBody)
-                    {
-                        value += body.ScanData.EstimatedValue;
-                    }
-                }
-            }
-
-            return string.Format("Approx value: {0:N0}".Tx(this,"AV"), value);
-        }
-
         // return right bottom of area used from curpos
         Point CreatePlanetTree(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode planetnode, MaterialCommoditiesList curmats, HistoryList hl, Point curpos)
         {
@@ -324,7 +307,7 @@ namespace EDDiscovery.UserControls
                 else //else not a top-level star
                 {
                     bool indicatematerials = sc.HasMaterials && !ShowMaterials;
-                    bool valuable = sc.EstimatedValue > 50000;
+                    bool valuable = sc.EstimatedValue >= ValueLimit;
 
                     Image nodeimage = sc.IsStar ? sc.GetStarTypeImage() : sc.GetPlanetClassImage();
 

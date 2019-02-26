@@ -64,6 +64,24 @@ namespace EliteDangerousCore
                     }
                 }
             }
+
+            public long ScanValue( bool includeedsmvalue )
+            {
+                long value = 0;
+
+                foreach (var body in Bodies)
+                {
+                    if (body?.ScanData != null)
+                    {
+                        if (includeedsmvalue || !body.ScanData.IsEDSMBody)
+                        {
+                            value += body.ScanData.EstimatedValue;
+                        }
+                    }
+                }
+
+                return value;
+            }
         };
 
         public enum ScanNodeType { star, barycentre, body, belt, beltcluster, ring };

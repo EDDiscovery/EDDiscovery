@@ -61,7 +61,10 @@ namespace EDDiscovery.UserControls
             panelStars.CheckEDSM = checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
             panelStars.HideFullMaterials = checkBoxCustomHideFullMats.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsFull", false);
             panelStars.ShowOverlays = chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
+            panelStars.ValueLimit = SQLiteDBClass.GetSettingInt(DbSave + "ValueLimit", 50000);
             progchange = false;
+
+            rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
 
             int size = SQLiteDBClass.GetSettingInt(DbSave + "Size", 64);
             SetSizeImage(size);
@@ -69,7 +72,6 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
@@ -87,6 +89,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
             uctg.OnTravelSelectionChanged -= Display;
             discoveryform.OnNewEntry -= NewEntry;
             closing = true;
@@ -167,8 +170,6 @@ namespace EDDiscovery.UserControls
         {
             panelStars.HideInfo();
 
-            lblSystemInfo.Text = "";
-
             StarScan.SystemNode data = panelStars.DrawSystem(showing_system, showing_matcomds, discoveryform.history);
 
             if (showing_system == null)
@@ -177,40 +178,71 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                SetControlText(data == null ? "No Scan".Tx() : data.system.Name);
                 if (data != null)
-                    BuildSystemInfo(data);
-            }
-
-        }
-
-        private void BuildSystemInfo(StarScan.SystemNode system)
-        {
-            //systems are small... if they get too big and iterating repeatedly is a problem we'll have to move to a node-by-node approach, and move away from a single-line label
-            lblSystemInfo.Text = BuildScanValue(system);
-        }
-
-        private string BuildScanValue(StarScan.SystemNode system)
-        {
-            long value = 0;
-
-            foreach (var body in system.Bodies)
-            {
-                if (body?.ScanData != null)
                 {
-                    if (checkBoxEDSM.Checked || !body.ScanData.IsEDSMBody)
-                    {
-                        value += body.ScanData.EstimatedValue;
-                    }
+                    long value = data.ScanValue(checkBoxEDSM.Checked);
+                    SetControlText(data.system.Name + " (~" + value.ToString() + " cr)");
                 }
+                else
+                    SetControlText(data == null ? "No Scan".Tx() : data.system.Name);
             }
-
-            return string.Format("Approx value: {0:N0}".Tx(this,"AV"), value);
         }
 
         #endregion
 
         #region User interaction
+
+        private void extCheckBoxStar_Click(object sender, EventArgs e)
+        {
+            if ( extCheckBoxStar.Checked == true )
+            {
+                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+                int width = 700;
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(160, 24), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(180, 40), new Size(width - 180 - 20, 24), null));
+
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24), ""));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
+
+                f.Trigger += (dialogname, controlname, tag) =>
+                {
+                    if (controlname == "OK" || controlname == "Cancel")
+                    {
+                        f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
+                        f.Close();
+                    }
+                };
+
+                f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"), null, null);
+                f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
+                DialogResult res = f.ShowDialog(this.FindForm());
+
+                if (res == DialogResult.OK)
+                {
+                    string sname = f.Get("Sys");
+                    if (sname.HasChars())
+                    {
+                        showing_matcomds = null;
+                        showing_system = new EliteDangerousCore.SystemClass(sname);
+                        override_system = true;
+                        DrawSystem();
+                        extCheckBoxStar.Checked = true;
+                    }
+                    else
+                        extCheckBoxStar.Checked = false;
+                }
+                else
+                    extCheckBoxStar.Checked = false;
+            }
+            else
+            {
+                override_system = false;
+                DrawSystem(last_he);
+                extCheckBoxStar.Checked = false;
+            }
+
+        }
+
 
         bool progchange = false;
 
@@ -281,54 +313,42 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void toolStripMenuItemToolbar_Click(object sender, EventArgs e)
+        private void extButtonHighValue_Click(object sender, EventArgs e)
         {
-            panelControls.Visible = !panelControls.Visible;
-            lblSystemInfo.Left = panelControls.Visible ? panelControls.Width : 0; // move approx value to left if controls hidden
-        }
+            ExtendedControls.ConfigurableForm cf = new ConfigurableForm();
+            int width = 300;
+            int height = 100;
 
-        private void showSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-            int width = 700;
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(160, 24), null));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(180, 40), new Size(width-180-20, 24), null));
+            cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(ExtendedControls.NumberBoxLong), panelStars.ValueLimit.ToStringInvariant(),
+                                        new Point(5, 30), new Size(width - 5 - 20, 24), null)
+            { numberboxlongminimum = 1, numberboxlongmaximum = 2000000000 });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24),""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
+            cf.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(),
+                        new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
 
-            f.Trigger += (dialogname, controlname, tag) =>
+            cf.Trigger += (dialogname, controlname, tag) =>
             {
-                if (controlname == "OK" || controlname == "Cancel")
+                System.Diagnostics.Debug.WriteLine("control" + controlname);
+
+                if (controlname.Contains("Validity:False"))
+                    cf.SetEnabled("OK", false);
+                else if (controlname.Contains("Validity:True"))
+                    cf.SetEnabled("OK", true);
+                else if (controlname == "OK")
                 {
-                    f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
-                    f.Close();
+                    cf.DialogResult = DialogResult.OK;
+                    cf.Close();
                 }
             };
 
-            f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"),null,null);
-            f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete);
-            DialogResult res = f.ShowDialog(this.FindForm());
-
-            if ( res == DialogResult.OK )
+            if (cf.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, height), new Point(-999, -999), "Set Valuable Minimum".Tx(this, "VLMT")) == DialogResult.OK)
             {
-                string sname = f.Get("Sys");
-                if (sname.HasChars())
-                {
-                    showing_matcomds = null;
-                    showing_system = new EliteDangerousCore.SystemClass(sname);
-                    override_system = true;
-                    DrawSystem();
-                }
+                long? value = cf.GetLong("UC");
+                panelStars.ValueLimit = (int)value.Value;
+                SQLiteDBClass.PutSettingInt(DbSave + "ValueLimit", panelStars.ValueLimit);
+                DrawSystem();
             }
         }
-
-        private void cancelShowSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            override_system = false;
-            DrawSystem(last_he);
-        }
-
 
         ExtListBoxForm dropdown;
 
