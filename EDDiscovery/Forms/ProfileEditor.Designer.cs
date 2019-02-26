@@ -62,7 +62,6 @@
             this.panelVScrollMain.Controls.Add(this.buttonMore);
             this.panelVScrollMain.Controls.Add(this.vScrollBarCustom1);
             this.panelVScrollMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelVScrollMain.InternalMargin = new System.Windows.Forms.Padding(0);
             this.panelVScrollMain.Location = new System.Drawing.Point(0, 0);
             this.panelVScrollMain.Name = "panelVScrollMain";
             this.panelVScrollMain.ScrollBarWidth = 20;

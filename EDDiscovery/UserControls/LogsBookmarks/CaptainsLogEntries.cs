@@ -293,9 +293,10 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Tuple<string,string,Image>> options = (from x in Dickeys select new Tuple<string,string,Image>(x.ToString(),x.ToString(),EDDConfig.Instance.CaptainsLogTagImage[x])).ToList();
 
-            ExtendedControls.CheckedIconListBoxFilterForm cfs = new ExtendedControls.CheckedIconListBoxFilterForm();
+            ExtendedControls.CheckedIconListBoxSelectionForm cfs = new ExtendedControls.CheckedIconListBoxSelectionForm();
             cfs.AllOrNoneBack = false;      // we want the whole list, makes it easier.
             cfs.Closing += TagsChanged;
+            cfs.AddAllNone();
             cfs.AddStandardOption(options);
 
             List<string> curtags = rw.Cells[4].Tag as List<string>;     // may be null
@@ -304,7 +305,7 @@ namespace EDDiscovery.UserControls
 
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
 
-            cfs.Filter(taglist, loc, new Size(250, 600), this.FindForm(), tag:rw);
+            cfs.Show(taglist, loc, new Size(250, 600), this.FindForm(), tag:rw);
         }
 
         private void TagsChanged(string newtags, Object tag)

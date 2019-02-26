@@ -266,6 +266,7 @@
     <Compile Include="ScreenShots\ScreenShotConverter.cs" />
     <Compile Include="ScreenShots\ScreenShotDirectoryWatcher.cs" />
     <Compile Include="ScreenShots\ScreenShotImageConverter.cs" />
+    <Compile Include="UserControls\Helpers\Outliner.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayForm.cs" />
     <Compile Include="UserControls\Helpers\RecipeFilterSelector.cs" />
     <Compile Include="UserControls\Helpers\TagsForm.cs">
@@ -727,6 +728,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\History\UserControlStarList.resx">
+      <DependentUpon>UserControlStarList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogDiary.resx">
       <DependentUpon>CaptainsLogDiary.cs</DependentUpon>

@@ -58,6 +58,8 @@ namespace EDDiscovery.UserControls
             MaterialCommodityData[] items;
             string[] types;
 
+            cfs.AddAllNone();
+
             if (materials)
             {
                 dataGridViewMC.Columns.Remove(dataGridViewMC.Columns[5]);       // to give name,shortname abv,category,type,number
@@ -207,9 +209,10 @@ namespace EDDiscovery.UserControls
             cfs.Filter(b, this.FindForm());
         }
 
-        private void FilterChanged(object sender, Object e)
+        private void FilterChanged(object sender, bool same, Object e)
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
+            if (!same)
+                Display(uctg.GetCurrentHistoryEntry, discoveryform.history, true);
         }
 
         private void CheckBoxClear_CheckedChanged(object sender, EventArgs e)

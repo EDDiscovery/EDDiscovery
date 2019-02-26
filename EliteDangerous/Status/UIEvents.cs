@@ -61,7 +61,9 @@ namespace EliteDangerousCore
         Fuel,   // 3.3
         Cargo,  // 3.3
     
-        ShipType ,      // don't think this is used.. remove later.
+        ShipType ,     
+
+        OverallStatus,
     }
 
     public abstract class UIEvent

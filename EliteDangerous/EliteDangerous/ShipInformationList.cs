@@ -470,6 +470,15 @@ namespace EliteDangerousCore
             VerifyList();
         }
 
+        public void UIFuel(UIEvents.UIFuel e)
+        {
+            if (HaveCurrentShip && Math.Abs(Ships[currentid].FuelLevel - e.Fuel) > 0.05 )       // if fuel level changed (may not, UI may be just telling us the same figure)
+            {
+                Ships[currentid] = CurrentShip.SetFuelLevel(e.Fuel);
+            }
+            VerifyList();
+        }
+
         public void RefuelAll(JournalRefuelAll e)
         {
             if (HaveCurrentShip)

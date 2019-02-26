@@ -206,6 +206,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Status\UIEvents.cs" />
+    <Compile Include="UIEvents\UIOverallStatus.cs" />
     <Compile Include="UIEvents\UIFuel.cs" />
     <Compile Include="UIEvents\UINightVision.cs" />
     <Compile Include="UIEvents\UIHUDInAnalysisMode.cs" />

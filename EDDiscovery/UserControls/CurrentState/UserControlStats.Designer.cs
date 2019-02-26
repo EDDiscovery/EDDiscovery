@@ -134,7 +134,6 @@ namespace EDDiscovery.UserControls
             this.panelData.Controls.Add(this.mostVisited);
             this.panelData.Controls.Add(this.dataGridViewStats);
             this.panelData.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelData.InternalMargin = new System.Windows.Forms.Padding(0);
             this.panelData.Location = new System.Drawing.Point(3, 3);
             this.panelData.Name = "panelData";
             this.panelData.ScrollBarWidth = 20;

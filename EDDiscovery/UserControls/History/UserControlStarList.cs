@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
         {
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
 
-            checkBoxMoveToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
          
             dataGridViewStarList.MakeDoubleBuffered();
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewStarList, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxMoveToTop.Checked);
+            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
         }
 
         #endregion
@@ -209,13 +209,15 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
-                    dataGridViewStarList.SuspendLayout();
+                    dataViewScrollerPanel.Suspend();
                     foreach (var syslist in syslistchunk)
                     {
                         var row = CreateHistoryRow(syslist, filtertext);
                         if (row != null)
                             dataGridViewStarList.Rows.Add(row);
                     }
+
+                    dataViewScrollerPanel.Resume();
                 });
             }
 
@@ -287,7 +289,7 @@ namespace EDDiscovery.UserControls
             if ( he.IsFSDJump )     // FSD jumps mean move system.. so
                 HistoryChanged(hl); // just recalc all..
 
-            if (checkBoxMoveToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
+            if (checkBoxCursorToTop.Checked && dataGridViewStarList.DisplayedRowCount(false) > 0)   // Move focus to new row
             {
                 //System.Diagnostics.Debug.WriteLine("Auto Sel");
                 dataGridViewStarList.ClearSelection();

@@ -45,7 +45,8 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.TopPanel = new System.Windows.Forms.Panel();
-            this.checkBoxMoveToTop = new ExtendedControls.ExtCheckBox();
+            this.extCheckBoxOutlines = new ExtendedControls.ExtCheckBox();
+            this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.buttonField = new ExtendedControls.ExtButton();
             this.buttonFilter = new ExtendedControls.ExtButton();
@@ -81,23 +82,33 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
+            this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewTravel = new System.Windows.Forms.DataGridView();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Icon = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.contextMenuStripOutlines = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.outliningOnOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanEventsOutliningOnOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripRollUpOlderOutlines = new System.Windows.Forms.ToolStripMenuItem();
+            this.rollUpOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TopPanel.SuspendLayout();
             this.historyContextMenu.SuspendLayout();
-            this.dataViewScrollerPanel1.SuspendLayout();
+            this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).BeginInit();
+            this.contextMenuStripOutlines.SuspendLayout();
             this.SuspendLayout();
             // 
             // TopPanel
             // 
-            this.TopPanel.Controls.Add(this.checkBoxMoveToTop);
+            this.TopPanel.Controls.Add(this.extCheckBoxOutlines);
+            this.TopPanel.Controls.Add(this.checkBoxCursorToTop);
             this.TopPanel.Controls.Add(this.buttonExtExcel);
             this.TopPanel.Controls.Add(this.buttonField);
             this.TopPanel.Controls.Add(this.buttonFilter);
@@ -111,31 +122,66 @@ namespace EDDiscovery.UserControls
             this.TopPanel.Size = new System.Drawing.Size(870, 32);
             this.TopPanel.TabIndex = 27;
             // 
-            // checkBoxMoveToTop
+            // extCheckBoxOutlines
             // 
-            this.checkBoxMoveToTop.AutoSize = true;
-            this.checkBoxMoveToTop.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxMoveToTop.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxMoveToTop.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxMoveToTop.FontNerfReduction = 0.5F;
-            this.checkBoxMoveToTop.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxMoveToTop.Location = new System.Drawing.Point(575, 7);
-            this.checkBoxMoveToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxMoveToTop.Name = "checkBoxMoveToTop";
-            this.checkBoxMoveToTop.Size = new System.Drawing.Size(90, 17);
-            this.checkBoxMoveToTop.TabIndex = 29;
-            this.checkBoxMoveToTop.Text = "Cursor to Top";
-            this.checkBoxMoveToTop.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxMoveToTop, "Select if cursor moves to top entry when a new entry is received");
-            this.checkBoxMoveToTop.UseVisualStyleBackColor = true;
+            this.extCheckBoxOutlines.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxOutlines.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxOutlines.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxOutlines.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxOutlines.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxOutlines.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxOutlines.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxOutlines.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.extCheckBoxOutlines.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.extCheckBoxOutlines.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.extCheckBoxOutlines.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.extCheckBoxOutlines.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extCheckBoxOutlines.FontNerfReduction = 0.5F;
+            this.extCheckBoxOutlines.Image = global::EDDiscovery.Icons.Controls.TravelGrid_Outlines;
+            this.extCheckBoxOutlines.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBoxOutlines.Location = new System.Drawing.Point(485, 1);
+            this.extCheckBoxOutlines.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBoxOutlines.Name = "extCheckBoxOutlines";
+            this.extCheckBoxOutlines.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxOutlines.TabIndex = 30;
+            this.extCheckBoxOutlines.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.extCheckBoxOutlines, "Control Outlining");
+            this.extCheckBoxOutlines.UseVisualStyleBackColor = false;
+            this.extCheckBoxOutlines.Click += new System.EventHandler(this.extButtonOutlines_Click);
+            // 
+            // checkBoxCursorToTop
+            // 
+            this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxCursorToTop.FontNerfReduction = 0.5F;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.TravelGrid_CursorToTop;
+            this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(450, 1);
+            this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
+            this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxCursorToTop.TabIndex = 30;
+            this.checkBoxCursorToTop.TickBoxReductionSize = 10;
+            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
+            this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
             // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(545, 4);
+            this.buttonExtExcel.Location = new System.Drawing.Point(520, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 28;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
@@ -143,22 +189,22 @@ namespace EDDiscovery.UserControls
             // 
             // buttonField
             // 
-            this.buttonField.Location = new System.Drawing.Point(464, 3);
+            this.buttonField.Image = global::EDDiscovery.Icons.Controls.TravelGrid_FieldFilter;
+            this.buttonField.Location = new System.Drawing.Point(415, 1);
             this.buttonField.Name = "buttonField";
-            this.buttonField.Size = new System.Drawing.Size(75, 23);
+            this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 25;
-            this.buttonField.Text = "Field Filter";
             this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
             // buttonFilter
             // 
-            this.buttonFilter.Location = new System.Drawing.Point(383, 3);
+            this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.TravelGrid_EventFilter;
+            this.buttonFilter.Location = new System.Drawing.Point(380, 1);
             this.buttonFilter.Name = "buttonFilter";
-            this.buttonFilter.Size = new System.Drawing.Size(75, 23);
+            this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 25;
-            this.buttonFilter.Text = "Event Filter";
             this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
@@ -457,47 +503,56 @@ namespace EDDiscovery.UserControls
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
             // 
-            // dataViewScrollerPanel1
+            // dataViewScrollerPanel
             // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewTravel);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 32);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(870, 578);
-            this.dataViewScrollerPanel1.TabIndex = 28;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            this.dataViewScrollerPanel.Controls.Add(this.panelOutlining);
+            this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustom);
+            this.dataViewScrollerPanel.Controls.Add(this.dataGridViewTravel);
+            this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(870, 578);
+            this.dataViewScrollerPanel.TabIndex = 28;
+            this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
-            // vScrollBarCustom1
+            // panelOutlining
             // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(847, 21);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 557);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
+            this.panelOutlining.KeepLastEntriesVisibleOnRollUp = 1;
+            this.panelOutlining.Location = new System.Drawing.Point(0, 0);
+            this.panelOutlining.Name = "panelOutlining";
+            this.panelOutlining.Size = new System.Drawing.Size(10, 578);
+            this.panelOutlining.TabIndex = 5;
+            // 
+            // vScrollBarCustom
+            // 
+            this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom.HideScrollBar = true;
+            this.vScrollBarCustom.LargeChange = 0;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(847, 0);
+            this.vScrollBarCustom.Maximum = -1;
+            this.vScrollBarCustom.Minimum = 0;
+            this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.Name = "vScrollBarCustom";
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 578);
+            this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SmallChange = 1;
+            this.vScrollBarCustom.TabIndex = 4;
+            this.vScrollBarCustom.Text = "vScrollBarCustom1";
+            this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom.Value = -1;
+            this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridViewTravel
             // 
@@ -513,14 +568,15 @@ namespace EDDiscovery.UserControls
             this.ColumnNote});
             this.dataGridViewTravel.ContextMenuStrip = this.historyContextMenu;
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewTravel.Location = new System.Drawing.Point(10, 0);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersWidth = 100;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(847, 578);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(837, 578);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellClick);
             this.dataGridViewTravel.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewTravel_CellDoubleClick);
+            this.dataGridViewTravel.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewTravel_ColumnHeaderMouseClick);
             this.dataGridViewTravel.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewTravel_RowPostPaint);
             this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
             this.dataGridViewTravel.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyDown);
@@ -566,19 +622,81 @@ namespace EDDiscovery.UserControls
             this.ColumnNote.Name = "ColumnNote";
             this.ColumnNote.ReadOnly = true;
             // 
+            // contextMenuStripOutlines
+            // 
+            this.contextMenuStripOutlines.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.outliningOnOffToolStripMenuItem,
+            this.scanEventsOutliningOnOffToolStripMenuItem,
+            this.toolStripRollUpOlderOutlines});
+            this.contextMenuStripOutlines.Name = "contextMenuStripOutlines";
+            this.contextMenuStripOutlines.Size = new System.Drawing.Size(190, 70);
+            // 
+            // outliningOnOffToolStripMenuItem
+            // 
+            this.outliningOnOffToolStripMenuItem.Checked = true;
+            this.outliningOnOffToolStripMenuItem.CheckOnClick = true;
+            this.outliningOnOffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.outliningOnOffToolStripMenuItem.Name = "outliningOnOffToolStripMenuItem";
+            this.outliningOnOffToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.outliningOnOffToolStripMenuItem.Text = "Outlining On";
+            // 
+            // scanEventsOutliningOnOffToolStripMenuItem
+            // 
+            this.scanEventsOutliningOnOffToolStripMenuItem.Checked = true;
+            this.scanEventsOutliningOnOffToolStripMenuItem.CheckOnClick = true;
+            this.scanEventsOutliningOnOffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.scanEventsOutliningOnOffToolStripMenuItem.Name = "scanEventsOutliningOnOffToolStripMenuItem";
+            this.scanEventsOutliningOnOffToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.scanEventsOutliningOnOffToolStripMenuItem.Text = "Scan Events Outlining";
+            // 
+            // toolStripRollUpOlderOutlines
+            // 
+            this.toolStripRollUpOlderOutlines.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rollUpOffToolStripMenuItem,
+            this.rollUpAfterFirstToolStripMenuItem,
+            this.rollUpAfter5ToolStripMenuItem});
+            this.toolStripRollUpOlderOutlines.Name = "toolStripRollUpOlderOutlines";
+            this.toolStripRollUpOlderOutlines.Size = new System.Drawing.Size(189, 22);
+            this.toolStripRollUpOlderOutlines.Text = "Roll up older entries";
+            // 
+            // rollUpOffToolStripMenuItem
+            // 
+            this.rollUpOffToolStripMenuItem.Checked = true;
+            this.rollUpOffToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rollUpOffToolStripMenuItem.Name = "rollUpOffToolStripMenuItem";
+            this.rollUpOffToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpOffToolStripMenuItem.Text = "Off";
+            // 
+            // rollUpAfterFirstToolStripMenuItem
+            // 
+            this.rollUpAfterFirstToolStripMenuItem.Checked = true;
+            this.rollUpAfterFirstToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rollUpAfterFirstToolStripMenuItem.Name = "rollUpAfterFirstToolStripMenuItem";
+            this.rollUpAfterFirstToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpAfterFirstToolStripMenuItem.Text = "After First";
+            // 
+            // rollUpAfter5ToolStripMenuItem
+            // 
+            this.rollUpAfter5ToolStripMenuItem.Checked = true;
+            this.rollUpAfter5ToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.rollUpAfter5ToolStripMenuItem.Name = "rollUpAfter5ToolStripMenuItem";
+            this.rollUpAfter5ToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.rollUpAfter5ToolStripMenuItem.Text = "After 5";
+            // 
             // UserControlTravelGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataViewScrollerPanel1);
+            this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.TopPanel);
             this.Name = "UserControlTravelGrid";
             this.Size = new System.Drawing.Size(870, 610);
             this.TopPanel.ResumeLayout(false);
             this.TopPanel.PerformLayout();
             this.historyContextMenu.ResumeLayout(false);
-            this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
+            this.contextMenuStripOutlines.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -591,8 +709,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelSearch;
         internal ExtendedControls.ExtComboBox comboBoxHistoryWindow;
         private System.Windows.Forms.Label labelTime;
-        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel1;
-        private ExtendedControls.ExtScrollBar vScrollBarCustom1;
+        private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
+        private ExtendedControls.ExtScrollBar vScrollBarCustom;
         public System.Windows.Forms.DataGridView dataGridViewTravel;
         private System.Windows.Forms.ContextMenuStrip historyContextMenu;
         private System.Windows.Forms.ToolStripMenuItem mapGotoStartoolStripMenuItem;
@@ -616,7 +734,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem writeEventInfoToLogDebugToolStripMenuItem;
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem copyJournalEntryToClipboardToolStripMenuItem;
-        private ExtendedControls.ExtCheckBox checkBoxMoveToTop;
         private System.Windows.Forms.ToolStripMenuItem createEditBookmarkToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runActionsAcrossSelectionToolSpeechStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
@@ -630,5 +747,15 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem gotoNextStartStopMarkerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runEntryThroughProfileSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem explorationPanelToolStripMenuItem;
+        private ExtendedControls.ExtPanelDataGridViewScrollOutlining panelOutlining;
+        private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripOutlines;
+        private System.Windows.Forms.ToolStripMenuItem outliningOnOffToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scanEventsOutliningOnOffToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripRollUpOlderOutlines;
+        private System.Windows.Forms.ToolStripMenuItem rollUpOffToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rollUpAfterFirstToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rollUpAfter5ToolStripMenuItem;
+        private ExtendedControls.ExtCheckBox extCheckBoxOutlines;
     }
 }

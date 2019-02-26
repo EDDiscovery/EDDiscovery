@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelStars.InternalMargin = new System.Windows.Forms.Padding(0);
             this.panelStars.Location = new System.Drawing.Point(0, 0);
             this.panelStars.Name = "panelStars";
             this.panelStars.ScrollBarWidth = 20;

@@ -178,6 +178,7 @@ namespace EDDiscovery.UserControls
                 fieldfilter.FromJSON(filter);        // load filter
 
             cfs = new FilterSelector(DbFilterSave);
+            cfs.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
             cfs.Closing += EventFilterChanged;
@@ -1043,9 +1044,10 @@ namespace EDDiscovery.UserControls
             cfs.Filter(contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(300,800), this.FindForm());
         }
 
-        private void EventFilterChanged(object sender, Object e)
+        private void EventFilterChanged(object sender, bool same, Object e)
         {
-            Display(current_historylist);
+            if (!same)
+                Display(current_historylist);
         }
 
         private void configureFieldFilterToolStripMenuItem_Click(object sender, EventArgs e)
