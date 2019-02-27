@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
         private string DbSave => DBName("Surveyor");
 
         private Font displayfont;
-
+        private Alignment align;
 
         public UserControlSurveyor()
         {
@@ -60,6 +60,7 @@ namespace EDDiscovery.UserControls
             hasVolcanismToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showVolcanism", true);
             hasRingsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "hideMapped", true);
+            align = (Alignment)SQLiteDBClass.GetSettingInt(DbSave + nameof(align), 0);
         }
 
         private void Display(HistoryList hl)
@@ -324,7 +325,6 @@ namespace EDDiscovery.UserControls
             information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet." : null);
             information.Append((body.Ringed) ? @" Has ring." : null);
             information.Append((body.Volcanism) ? @" Has " + body.VolcanismString : null);
-
             information.Append(@" " + body.DistanceFromArrival);
 
             //Debug.Print(information.ToString()); // for testing
@@ -336,25 +336,78 @@ namespace EDDiscovery.UserControls
             var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-            if (body != null)
+            using (var bitmap = new Bitmap(1, 1))
             {
-                if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
+                var grfx = Graphics.FromImage(bitmap);
+
+                using (var font = new Font(displayfont, FontStyle.Regular))
                 {
-                    pictureBoxSurveyor?.AddTextAutoSize(
-                        new Point(0, vPos + 4),
-                        new Size(pictureBoxSurveyor.Width, 24),
-                        information.ToString(),
-                        displayfont,
-                        textcolour,
-                        backcolour,
-                        1.0F);
+                    if (body != null)
+                    {
+                        if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
+                        {
+                            var containerWidth = pictureBoxSurveyor.Width;
+                            var labelOffset = 0;
+
+                            var label = information.ToString();
+                            using (var stringFormat = new StringFormat(StringFormatFlags.MeasureTrailingSpaces))
+                            {
+                                var bounds = grfx.MeasureString(label, font, new PointF(0, 0), stringFormat);
+
+                                if (align == Alignment.center)
+                                {
+                                    labelOffset = (int)((containerWidth - bounds.Width) / 2);
+
+                                    pictureBoxSurveyor?.AddTextAutoSize(
+                                        new Point(labelOffset, vPos + 4),
+                                        new Size((int)bounds.Width, 24),
+                                        information.ToString(),
+                                        displayfont,
+                                        textcolour,
+                                        backcolour,
+                                        1.0F);
+                                }
+                                else if (align == Alignment.right)
+                                {
+                                    labelOffset = (int)(containerWidth - bounds.Width);
+
+                                    pictureBoxSurveyor?.AddTextAutoSize(
+                                        new Point(labelOffset, vPos + 4),
+                                        new Size((int)bounds.Width, 24),
+                                        information.ToString(),
+                                        displayfont,
+                                        textcolour,
+                                        backcolour,
+                                        1.0F);
+                                }
+                                else
+                                {
+                                    pictureBoxSurveyor?.AddTextAutoSize(
+                                        new Point(labelOffset, vPos + 4),
+                                        new Size((int)bounds.Width, 24),
+                                        information.ToString(),
+                                        displayfont,
+                                        textcolour,
+                                        backcolour,
+                                        1.0F);
+                                }
+                            }
+                        }
+                    }
+
+                    pictureBoxSurveyor.Refresh();
                 }
             }
-
-            pictureBoxSurveyor.Refresh();
         }
 
         #endregion
+
+        private enum Alignment
+        {
+            left = 0,
+            center = 1,
+            right = 2,
+        }
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -403,6 +456,51 @@ namespace EDDiscovery.UserControls
             contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
             contextMenuStrip.Top = MousePosition.Y;
             contextMenuStrip.Left = MousePosition.X;
+        }
+
+        private void leftToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.left);
+
+            align = Alignment.left;
+
+            if (leftToolStripMenuItem.Checked)
+            {
+                centerToolStripMenuItem.Checked = false;
+                rightToolStripMenuItem.Checked = false;
+            }
+
+            DrawSystem(last_he);
+        }
+
+        private void centerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.center);
+
+            align = Alignment.center;
+
+            if (centerToolStripMenuItem.Checked)
+            {
+                leftToolStripMenuItem.Checked = false;
+                rightToolStripMenuItem.Checked = false;
+            }
+
+            DrawSystem(last_he);
+        }
+
+        private void rightToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.right);
+
+            align = Alignment.right;
+
+            if (rightToolStripMenuItem.Checked)
+            {
+                centerToolStripMenuItem.Checked = false;
+                leftToolStripMenuItem.Checked = false;
+            }
+
+            DrawSystem(last_he);
         }
     }
 }
