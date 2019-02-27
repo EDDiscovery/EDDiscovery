@@ -84,7 +84,7 @@ namespace EDDiscovery.UserControls
             this.hideAlreadyMappedBodiesToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 98);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 120);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem.CheckOnClick = true;
             this.ammoniaWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
-            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
             this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             // 
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             this.earthlikeWorldToolStripMenuItem.CheckOnClick = true;
             this.earthlikeWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
-            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
             this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             // 
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.waterWorldToolStripMenuItem.CheckOnClick = true;
             this.waterWorldToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
-            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.waterWorldToolStripMenuItem.Text = "Water World";
             this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
             // 
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem.CheckOnClick = true;
             this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.terraformableToolStripMenuItem.Text = "Terraformable";
             this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
             // 
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
             this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
             this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
             // 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.CheckOnClick = true;
             this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
             this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
             // 
@@ -189,15 +189,13 @@ namespace EDDiscovery.UserControls
             this.rightToolStripMenuItem});
             this.textAlignToolStripMenuItem.Name = "textAlignToolStripMenuItem";
             this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
-            this.textAlignToolStripMenuItem.Text = "Text Alignment";
+            this.textAlignToolStripMenuItem.Text = "Alignment";
             // 
             // leftToolStripMenuItem
             // 
-            this.leftToolStripMenuItem.Checked = true;
             this.leftToolStripMenuItem.CheckOnClick = true;
-            this.leftToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.leftToolStripMenuItem.Name = "leftToolStripMenuItem";
-            this.leftToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.leftToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.leftToolStripMenuItem.Text = "Left";
             this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
             // 
@@ -205,7 +203,7 @@ namespace EDDiscovery.UserControls
             // 
             this.centerToolStripMenuItem.CheckOnClick = true;
             this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
-            this.centerToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.centerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.centerToolStripMenuItem.Text = "Center";
             this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
             // 
@@ -213,7 +211,7 @@ namespace EDDiscovery.UserControls
             // 
             this.rightToolStripMenuItem.CheckOnClick = true;
             this.rightToolStripMenuItem.Name = "rightToolStripMenuItem";
-            this.rightToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
+            this.rightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rightToolStripMenuItem.Text = "Right";
             this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
             // 
@@ -224,6 +222,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.pictureBoxSurveyor);
             this.Name = "UserControlSurveyor";
             this.Size = new System.Drawing.Size(478, 229);
+            this.Resize += new System.EventHandler(this.UserControlSurveyor_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);

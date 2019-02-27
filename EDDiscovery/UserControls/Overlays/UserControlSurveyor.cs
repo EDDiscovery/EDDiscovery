@@ -16,6 +16,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using BaseUtils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -157,6 +158,8 @@ namespace EDDiscovery.UserControls
         }
 
         public override Color ColorTransparency => Color.Green;
+
+        public int labelOffset { get; private set; }
 
         public override void SetTransparency(bool on, Color curcol)
         {
@@ -367,56 +370,36 @@ namespace EDDiscovery.UserControls
                     {
                         if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
                         {
-                            var containerWidth = pictureBoxSurveyor.Width;
-                            var labelOffset = 0;
-
+                            var containerSize = new Size(pictureBoxSurveyor.Width, 24);
                             var label = information.ToString();
-                            using (var stringFormat = new StringFormat(StringFormatFlags.MeasureTrailingSpaces))
+
+                            var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, displayfont, textcolour, backcolour, 1.0F);
+
+                            if (align == Alignment.center)
                             {
-                                var bounds = grfx.MeasureString(label, font, new PointF(0, 0), stringFormat);
-
-                                if (align == Alignment.center)
-                                {
-                                    labelOffset = (int)((containerWidth - bounds.Width) / 2);
-
-                                    pictureBoxSurveyor?.AddTextAutoSize(
-                                        new Point(labelOffset, vPos + 4),
-                                        new Size((int)bounds.Width, 24),
-                                        information.ToString(),
-                                        displayfont,
-                                        textcolour,
-                                        backcolour,
-                                        1.0F);
-                                }
-                                else if (align == Alignment.right)
-                                {
-                                    labelOffset = (int)(containerWidth - bounds.Width);
-
-                                    pictureBoxSurveyor?.AddTextAutoSize(
-                                        new Point(labelOffset, vPos + 4),
-                                        new Size((int)bounds.Width, 24),
-                                        information.ToString(),
-                                        displayfont,
-                                        textcolour,
-                                        backcolour,
-                                        1.0F);
-                                }
-                                else
-                                {
-                                    pictureBoxSurveyor?.AddTextAutoSize(
-                                        new Point(labelOffset, vPos + 4),
-                                        new Size((int)bounds.Width, 24),
-                                        information.ToString(),
-                                        displayfont,
-                                        textcolour,
-                                        backcolour,
-                                        1.0F);
-                                }
+                                labelOffset = (int)((containerSize.Width - bounds.Width) / 2);
                             }
-                        }
-                    }
+                            else if (align == Alignment.right)
+                            {
+                                labelOffset = (int)(containerSize.Width - bounds.Width);
+                            }
+                            else
+                            {
+                                labelOffset = 0;
+                            }
 
-                    pictureBoxSurveyor.Refresh();
+                            pictureBoxSurveyor?.AddTextAutoSize(
+                                    new Point(labelOffset, vPos + 4),
+                                    new Size((int)bounds.Width, 24),
+                                    information.ToString(),
+                                    displayfont,
+                                    textcolour,
+                                    backcolour,
+                                    1.0F);
+                        }
+
+                        pictureBoxSurveyor.Refresh();
+                    }
                 }
             }
         }
@@ -514,6 +497,11 @@ namespace EDDiscovery.UserControls
                 leftToolStripMenuItem.Checked = false;
             }
 
+            DrawSystem(last_he);
+        }
+
+        private void UserControlSurveyor_Resize(object sender, EventArgs e)
+        {
             DrawSystem(last_he);
         }
     }
