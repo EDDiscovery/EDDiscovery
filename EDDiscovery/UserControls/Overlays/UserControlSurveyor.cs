@@ -32,6 +32,14 @@ namespace EDDiscovery.UserControls
         private string DbSave => DBName("Surveyor");
 
         private Font displayfont;
+
+        private enum Alignment
+        {
+            left = 0,
+            center = 1,
+            right = 2,
+        }
+
         private Alignment align;
 
         public UserControlSurveyor()
@@ -61,6 +69,19 @@ namespace EDDiscovery.UserControls
             hasRingsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "hideMapped", true);
             align = (Alignment)SQLiteDBClass.GetSettingInt(DbSave + nameof(align), 0);
+
+            switch (align)
+            {
+                case Alignment.right:
+                    rightToolStripMenuItem.Checked = true;
+                    break;
+                case Alignment.center:
+                    centerToolStripMenuItem.Checked = true;
+                    break;
+                default:
+                    leftToolStripMenuItem.Checked = true;
+                    break;
+            }
         }
 
         private void Display(HistoryList hl)
@@ -401,13 +422,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        private enum Alignment
-        {
-            left = 0,
-            center = 1,
-            right = 2,
-        }
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
