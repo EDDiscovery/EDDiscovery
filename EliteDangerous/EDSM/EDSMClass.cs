@@ -991,6 +991,8 @@ namespace EliteDangerousCore.EDSM
                               "&fromSoftwareVersion=" + Uri.EscapeDataString(fromSoftwareVersion) +
                               "&message=" + EscapeLongDataString(message.ToString(Newtonsoft.Json.Formatting.None));
 
+            //BaseUtils.HttpCom.WriteLog(message.ToString(Newtonsoft.Json.Formatting.Indented), "");
+
             MimeType = "application/x-www-form-urlencoded";
             var response = RequestPost(postdata, "api-journal-v1", handleException: true);
 
@@ -1003,6 +1005,7 @@ namespace EliteDangerousCore.EDSM
             try
             {
 
+              //  BaseUtils.HttpCom.WriteLog("Back:", response.Body);
                 JObject resp = JObject.Parse(response.Body);
                 errmsg = resp["msg"]?.ToString();
 
