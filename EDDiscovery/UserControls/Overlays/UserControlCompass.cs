@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
             compassControl.AutoSetStencilTicks = true;
             buttonNewBookmark.Enabled = false;
 
-            BaseUtils.Translator.Instance.Translate(this, new Control[] { labelExtTargetLong });
+            BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
         public override void SetTransparency(bool on, Color curbackcol)
         {
-            labelExtTargetLong.TextBackColor = labelTargetLat.TextBackColor = curbackcol;
+            labelTargetLat.TextBackColor = curbackcol;
             numberBoxTargetLatitude.BackColor = numberBoxTargetLongitude.BackColor = curbackcol;
             labelBookmark.BackColor = curbackcol;
             checkBoxHideTransparent.BackColor = curbackcol;
@@ -108,14 +108,14 @@ namespace EDDiscovery.UserControls
             {
                 if (on)
                 {
-                    labelExtTargetLong.Visible = labelTargetLat.Visible = false;
+                    labelTargetLat.Visible = false;
                     numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = false;
                     buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = false;
                     compassControl.Top = 0;
                 }
                 else
                 {
-                    labelExtTargetLong.Visible = labelTargetLat.Visible = true;
+                    labelTargetLat.Visible = true;
                     numberBoxTargetLatitude.Visible = numberBoxTargetLongitude.Visible = checkBoxHideTransparent.Visible = true;
                     buttonNewBookmark.Visible = labelBookmark.Visible = comboBoxBookmarks.Visible = true;
                     compassControl.Top = comboBoxBookmarks.Bottom + 8;

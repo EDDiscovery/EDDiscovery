@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMaterialCollected;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx(this, "DIS") + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx(this, "COL") + he.WhereAmI);
                 }
 
                 if (found != null)

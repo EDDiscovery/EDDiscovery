@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
             this.vScrollBarCustom.Location = new System.Drawing.Point(728, 0);
-            this.vScrollBarCustom.Maximum = -104;
+            this.vScrollBarCustom.Maximum = -108;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -126,13 +126,12 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 2;
-            this.vScrollBarCustom.Text = "vScrollBarCustom1";
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -104;
-            this.vScrollBarCustom.ValueLimited = -104;
+            this.vScrollBarCustom.Value = -108;
+            this.vScrollBarCustom.ValueLimited = -108;
             // 
             // toolTip
             // 
@@ -140,12 +139,12 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
-            // UserControlScanDisplay
+            // ScanDisplayControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelStars);
-            this.Name = "UserControlScanDisplay";
+            this.Name = "ScanDisplayControl";
             this.Size = new System.Drawing.Size(748, 682);
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
             this.panelStars.ResumeLayout(false);

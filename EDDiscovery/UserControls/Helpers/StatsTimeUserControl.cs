@@ -140,11 +140,11 @@ namespace EDDiscovery.UserControls
 
         private void UserControlStatsTime_Load(object sender, EventArgs e)
         {
-            comboBoxTimeMode.Items.Add("Summary");
-            comboBoxTimeMode.Items.Add("Day");
-            comboBoxTimeMode.Items.Add("Week");
-            comboBoxTimeMode.Items.Add("Month");
-            comboBoxTimeMode.Items.Add("Custom");
+            comboBoxTimeMode.Items.Add("Summary".Tx(this));
+            comboBoxTimeMode.Items.Add("Day".Tx(this));
+            comboBoxTimeMode.Items.Add("Week".Tx(this));
+            comboBoxTimeMode.Items.Add("Month".Tx(this));
+            comboBoxTimeMode.Items.Add("Custom".Tx(this));
             comboBoxTimeMode.SelectedIndex = 0;
         }
 

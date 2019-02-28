@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
             if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
             {
-                SetControlText("System scan complete.".Tx());
+                SetControlText("System scan complete.".Tx(this));
             }
 
             if (he.EntryType == JournalTypeEnum.FSDJump)
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
                 if (je != null)
                 {
                     var bodies_found = je.BodyCount;
-                    SetControlText(bodies_found + " bodies found.");
+                    SetControlText(bodies_found + " bodies found.".Tx(this));
                 }
             }
         }
@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
             if (he == null)     //  no he, no display
             {
                 last_he = he;
-                SetControlText("No scan reported.".Tx());
+                SetControlText("No scan reported.".Tx(this));
                 return;
             }
             else
@@ -235,7 +235,7 @@ namespace EDDiscovery.UserControls
                 if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
                 {
                     last_he = null;
-                    SetControlText("No scan reported.".Tx());
+                    SetControlText("No scan reported.".Tx(this));
                     return;
                 }
             }
@@ -342,13 +342,13 @@ namespace EDDiscovery.UserControls
             information.Append(body.Name);
 
             // Additional information
-            information.Append((body.Ammonia) ? @" is an ammonia world." : null);
-            information.Append((body.Earthlike) ? @" is an earth like world." : null);
-            information.Append((body.WaterWorld && !body.Terraformable) ? @" is a water world." : null);
-            information.Append((body.WaterWorld && body.Terraformable) ? @" is a terraformable water world." : null);
-            information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet." : null);
-            information.Append((body.Ringed) ? @" Has ring." : null);
-            information.Append((body.Volcanism) ? @" Has " + body.VolcanismString : null);
+            information.Append((body.Ammonia) ? @" is an ammonia world.".Tx(this) : null);
+            information.Append((body.Earthlike) ? @" is an earth like world.".Tx(this) : null);
+            information.Append((body.WaterWorld && !body.Terraformable) ? @" is a water world.".Tx(this) : null);
+            information.Append((body.WaterWorld && body.Terraformable) ? @" is a terraformable water world.".Tx(this) : null);
+            information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
+            information.Append((body.Ringed) ? @" Has ring.".Tx(this) : null);
+            information.Append((body.Volcanism) ? @" Has ".Tx(this) + body.VolcanismString : null);
             information.Append(@" " + body.DistanceFromArrival);
 
             //Debug.Print(information.ToString()); // for testing
