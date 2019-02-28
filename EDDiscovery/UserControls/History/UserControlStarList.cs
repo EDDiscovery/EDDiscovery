@@ -84,8 +84,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
-
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
          
@@ -119,6 +117,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
         }
 
         public override void LoadLayout()

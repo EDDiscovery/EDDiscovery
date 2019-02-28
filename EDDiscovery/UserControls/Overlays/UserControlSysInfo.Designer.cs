@@ -1439,7 +1439,7 @@ namespace EDDiscovery.UserControls
             this.toolStripJumpRange.Checked = true;
             this.toolStripJumpRange.CheckOnClick = true;
             this.toolStripJumpRange.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripJumpRange.Name = "displayJumpRangeToolStripMenuItem";
+            this.toolStripJumpRange.Name = "toolStripJumpRange";
             this.toolStripJumpRange.Size = new System.Drawing.Size(255, 22);
             this.toolStripJumpRange.Text = "Display Jump Range";
             this.toolStripJumpRange.Click += new System.EventHandler(this.displayJumpRangeToolStripMenuItem_Click);

@@ -86,16 +86,21 @@ SECTION UserControlSearch
 
 .MaterialsCommodities: "Materials Commodities" @
 .Stars: "Stars" @
+UserControlSearch.Scans: "Scans" @
 
 SearchMaterialsCommodities.RareCommodity: ", Rare Commodity" @
 SearchMaterialsCommodities.AND: "AND" @
 SearchMaterialsCommodities.OR: "OR" @
 SearchMaterialsCommodities.DIS: "Discovered at " @
 SearchMaterialsCommodities.COL: "Collected at " @
-
 SearchMaterialsCommodities.label2: "Item 2" @
 SearchMaterialsCommodities.label1: "Item 1" @
 SearchMaterialsCommodities.buttonExtFind: "Find" @
+SearchMaterialsCommodities.ColumnDate: "Date" @
+SearchMaterialsCommodities.ColumnStar: "Star" @
+SearchMaterialsCommodities.ColumnLocation: "Location" @
+SearchMaterialsCommodities.ColumnCurrentDistance: "Current Distance" @
+SearchMaterialsCommodities.ColumnPosition: "Position" @
 
 SearchScans.Select: "Select" @
 SearchScans.Name: "Name:" @
@@ -104,12 +109,21 @@ SearchScans.DEL: "Confirm deletion of" @
 SearchScans.DELNO: "Cannot delete this entry" @
 SearchScans.CNV: "Condition is not valid" @
 SearchScans.CD: "Condition" @
-
 SearchScans.buttonDelete: "Delete" @
 SearchScans.buttonSave: "Save" @
 SearchScans.buttonFind: "Find" @
+SearchScans.ColumnDate: "Date" @
+SearchScans.ColumnStar: "Star" @
+SearchScans.ColumnInformation: "Information" @
+SearchScans.ColumnCurrentDistance: "Current Distance" @
+SearchScans.ColumnPosition: "Position" @
 
-UserControlSearch.Scans: "Scans" @
+SearchStars.ColumnStar: "Star" @
+SearchStars.ColumnCentreDistance: "Centre Distance" @
+SearchStars.ColumnCurrentDistance: "Current Distance" @
+SearchStars.ColumnPosition: "Position" @
+
+
 
 
 SECTION DataGridViewStarResults
@@ -429,8 +443,15 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
-.Slot: "Slot" @
-.Info: "Info" @
+UserControlModules.ItemLocalised: "Type" @
+UserControlModules.ItemCol: "Item" @
+UserControlModules.SlotCol: "Slot" @
+UserControlModules.ItemInfo: "Info" @
+UserControlModules.Mass: "Mass" @
+UserControlModules.BluePrint: "BluePrint" @
+UserControlModules.PriorityEnable: "P/E" @
+UserControlModules.StoredModules: "Stored Modules" @
+UserControlModules.TravelHistoryEntry: "Travel History Entry" @
 .Value: "Value" @
 .System: "System" @
 .TxTime: "Tx Time" @
@@ -645,7 +666,7 @@ UserControlScanGrid.Geologicalactivity: "Geological activity" @
 UserControlScanGrid.Surfacemapped: "Surface mapped" @
 .colName: "Name" @
 .colClass: "Class" @
-.Distance: "Distance" @
+.colDistance: "Distance" @
 .colBriefing: "Briefing" @
 .Moon: "Moon" @
 .MainStar: "Main Star" @
@@ -1269,6 +1290,11 @@ CaptainsLogEntries.CF: "Do you really want to delete the note for {0}\r\nConfirm
 CaptainsLogEntries.SetTags: "Set Tags" @
 CaptainsLogEntries.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
 CaptainsLogEntries.NSS: "No such system" @
+CaptainsLogEntries.ColTime: "Time" @
+CaptainsLogEntries.ColSystem: "System" @
+CaptainsLogEntries.ColBodyName: "Body" @
+CaptainsLogEntries.ColNote: "Note" @
+CaptainsLogEntries.ColTags: "Tags" @
 
 CaptainsLogEntries.labelEndDate: "End Date:" @
 CaptainsLogEntries.labelDateStart: "Start Date:" @

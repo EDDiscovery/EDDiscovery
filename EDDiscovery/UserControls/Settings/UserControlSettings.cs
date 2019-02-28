@@ -38,6 +38,9 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
+            BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
             ResetThemeList();
             SetEntryThemeComboBox();
 
@@ -125,9 +128,6 @@ namespace EDDiscovery.UserControls
             ix = Array.FindIndex(eetn, x => x == EDDConfig.Instance.EssentialEventTypes);
             comboBoxCustomEssentialEntries.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomEssentialEntries.SelectedIndexChanged += ComboBoxCustomEssentialEntries_SelectedIndexChanged;
-
-            BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip,this);
         }
 
         public override void InitialDisplay()

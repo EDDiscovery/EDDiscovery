@@ -88,7 +88,6 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
             cfs.Closing += EventFilterChanged;
-            TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
 
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
@@ -108,6 +107,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxJournalWindow, DbHistorySave);
         }
 
         public override void LoadLayout()

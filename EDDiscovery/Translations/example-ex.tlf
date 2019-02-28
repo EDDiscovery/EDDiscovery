@@ -102,6 +102,13 @@ SECTION PopOutInfo
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" @
 .Search.Description: "Search" @
+PopOutInfo.CaptainsLog.Title: "Captain's Log" @
+PopOutInfo.CaptainsLog.Description: "Captain's Log - notes on your travels" @
+PopOutInfo.Surveyor.Title: "Surveyor" @
+PopOutInfo.Surveyor.Description: "Surface map aid" @
+PopOutInfo.MissionOverlay.Title: "Mission Overlay" @
+PopOutInfo.MissionOverlay.Description: "Mission List overlay" @
+
 
 SECTION EDDiscoveryForm
 

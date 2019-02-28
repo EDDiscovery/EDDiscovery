@@ -112,8 +112,6 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.Closing += EventFilterChanged;
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
-
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
@@ -151,6 +149,10 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(historyContextMenu, this);
             BaseUtils.Translator.Instance.Translate(contextMenuStripOutlines, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
+
+
         }
 
         private void ToolStripOutliningOn_CheckStateChanged(object sender, EventArgs e)
