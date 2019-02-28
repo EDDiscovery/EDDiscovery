@@ -586,3 +586,15 @@ SECTION MaterialCommodityData
 .opal: "Opal" @
 .thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
 .ancientkey: "Ancient Key" @
+
+EngineeringData.Engineer: "Engineer:" @
+EngineeringData.Blueprint: "Blueprint:" @
+EngineeringData.Level: "Level:" @
+EngineeringData.Quality: "Quality:" @
+EngineeringData.ExperimentalEffect: "Experimental Effect:" @
+EngineeringData.Original: "Original:;;N2" @
+EngineeringData.Worse: "< (Worse); (Better)" @
+
+
+MissionState.ToGo: "To Go:" @
+MissionState.Progress: "Progress:;%;N1" @

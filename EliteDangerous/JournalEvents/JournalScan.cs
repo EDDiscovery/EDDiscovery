@@ -416,7 +416,8 @@ namespace EliteDangerousCore.JournalEvents
         static public List<Tuple<string, string, Image>> FilterItems()
         {
             Type t = typeof(JournalScan);
-            return new List<Tuple<string, string, Image>>() {
+            return new List<Tuple<string, string, Image>>()
+            {
                 new Tuple<string, string,Image>( "Scan Auto", "Scan Auto".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
                 new Tuple<string,string,Image>( "Scan Basic", "Scan Basic".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
                 new Tuple<string,string,Image>( "Scan Nav", "Scan Nav".Tx(t), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan] ),
