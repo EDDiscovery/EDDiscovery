@@ -88,76 +88,135 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.AutoEllipsis = false;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(582, -2);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 24;
             this.panel_minimize.TabStop = false;
+            this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_minimize, "Minimise");
+            this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // panel_ontop
             // 
             this.panel_ontop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_ontop.AutoEllipsis = false;
+            this.panel_ontop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_ontop.Image = null;
             this.panel_ontop.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Floating;
             this.panel_ontop.Location = new System.Drawing.Point(558, -2);
+            this.panel_ontop.MouseOverColor = System.Drawing.Color.White;
+            this.panel_ontop.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_ontop.MouseSelectedColorEnable = true;
             this.panel_ontop.Name = "panel_ontop";
             this.panel_ontop.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_ontop.PanelDisabledScaling = 0.25F;
+            this.panel_ontop.Selectable = true;
             this.panel_ontop.Size = new System.Drawing.Size(24, 24);
             this.panel_ontop.TabIndex = 24;
+            this.panel_ontop.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_ontop, "Toggle window on top of others");
+            this.panel_ontop.UseMnemonic = true;
             this.panel_ontop.Click += new System.EventHandler(this.panel_ontop_Click);
             // 
             // panel_transparent
             // 
             this.panel_transparent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_transparent.AutoEllipsis = false;
+            this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_transparent.Image = null;
             this.panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Transparent;
             this.panel_transparent.Location = new System.Drawing.Point(486, -2);
+            this.panel_transparent.MouseOverColor = System.Drawing.Color.White;
+            this.panel_transparent.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_transparent.MouseSelectedColorEnable = true;
             this.panel_transparent.Name = "panel_transparent";
             this.panel_transparent.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_transparent.PanelDisabledScaling = 0.25F;
+            this.panel_transparent.Selectable = true;
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
+            this.panel_transparent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
+            this.panel_transparent.UseMnemonic = true;
             this.panel_transparent.Click += new System.EventHandler(this.panel_transparency_Click);
             // 
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.AutoEllipsis = false;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = null;
+            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(606, -2);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 25;
             this.panel_close.TabStop = false;
+            this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_close, "Close");
+            this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_taskbaricon
             // 
             this.panel_taskbaricon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_taskbaricon.AutoEllipsis = false;
+            this.panel_taskbaricon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_taskbaricon.Image = null;
             this.panel_taskbaricon.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.WindowInTaskBar;
             this.panel_taskbaricon.Location = new System.Drawing.Point(534, -2);
+            this.panel_taskbaricon.MouseOverColor = System.Drawing.Color.White;
+            this.panel_taskbaricon.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_taskbaricon.MouseSelectedColorEnable = true;
             this.panel_taskbaricon.Name = "panel_taskbaricon";
             this.panel_taskbaricon.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_taskbaricon.PanelDisabledScaling = 0.25F;
+            this.panel_taskbaricon.Selectable = true;
             this.panel_taskbaricon.Size = new System.Drawing.Size(24, 24);
             this.panel_taskbaricon.TabIndex = 24;
+            this.panel_taskbaricon.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_taskbaricon, "Toggle show taskbar icon for this window");
+            this.panel_taskbaricon.UseMnemonic = true;
             this.panel_taskbaricon.Click += new System.EventHandler(this.panel_taskbaricon_Click);
             // 
             // panel_showtitle
             // 
             this.panel_showtitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_showtitle.AutoEllipsis = false;
+            this.panel_showtitle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_showtitle.Image = null;
             this.panel_showtitle.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Captioned;
             this.panel_showtitle.Location = new System.Drawing.Point(510, -2);
+            this.panel_showtitle.MouseOverColor = System.Drawing.Color.White;
+            this.panel_showtitle.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_showtitle.MouseSelectedColorEnable = true;
             this.panel_showtitle.Name = "panel_showtitle";
             this.panel_showtitle.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_showtitle.PanelDisabledScaling = 0.25F;
+            this.panel_showtitle.Selectable = true;
             this.panel_showtitle.Size = new System.Drawing.Size(24, 24);
             this.panel_showtitle.TabIndex = 26;
+            this.panel_showtitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.toolTip1.SetToolTip(this.panel_showtitle, "Toggle title visibility for this window when transparent");
+            this.panel_showtitle.UseMnemonic = true;
             this.panel_showtitle.Click += new System.EventHandler(this.panel_showtitle_Click);
             // 
             // panelTop
@@ -185,7 +244,6 @@ namespace EDDiscovery.Forms
             this.statusStripBottom.Name = "statusStripBottom";
             this.statusStripBottom.Size = new System.Drawing.Size(634, 22);
             this.statusStripBottom.TabIndex = 26;
-            this.statusStripBottom.Text = "statusStripCustom1";
             // 
             // UserControlForm
             // 
@@ -195,7 +253,6 @@ namespace EDDiscovery.Forms
             this.Controls.Add(this.statusStripBottom);
             this.Controls.Add(this.panelTop);
             this.Name = "UserControlForm";
-            this.Text = "<code>";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UserControlForm_FormClosing);
             this.Shown += new System.EventHandler(this.UserControlForm_Shown);
             this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControlForm_Layout);

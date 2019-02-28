@@ -105,6 +105,9 @@ SECTION PopOutInfo
 
 SECTION EDDiscoveryForm
 
+EDDiscoveryForm.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
+EDDiscoveryForm.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
+
 .toolsToolStripMenuItem: "&Tools" @
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" @
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" @
