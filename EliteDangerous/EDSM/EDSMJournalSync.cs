@@ -123,6 +123,7 @@ namespace EliteDangerousCore.EDSM
             "FuelScoop",
             "Friends",
             "UnderAttack",
+            "FSDTarget"     // disabled 28/2/2019 due to it creating a system entry and preventing systemcreated from working
         };
         private static HashSet<JournalTypeEnum> holdEvents = new HashSet<JournalTypeEnum>
         {
