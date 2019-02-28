@@ -37,6 +37,9 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelHelp, Resources.URLProjectWiki);
             SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
 
+
+            BaseUtils.Translator.Instance.Translate(this);
+
             var x = Properties.Resources.EDD_License;
             textBoxLicense.Rtf = x;
             textBoxLicense.ScrollBarLineTweak = -15;     // RTF ends up formatting it with non regular spacing.. add on 15 lines so you can see the bottom. fudge
