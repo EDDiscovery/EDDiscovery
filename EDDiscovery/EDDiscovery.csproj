@@ -152,6 +152,9 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.109.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.109.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Speech" />
@@ -893,6 +896,7 @@
     <None Include="Resources\GNE.ico" />
     <None Include="Resources\Logo.png" />
     <None Include="Resources\mapuc.txt" />
+    <Content Include="Translations\draft.txt" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="Forms\Form2DMap.resx">
@@ -906,6 +910,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AssignTravelLogSystemForm.resx">
       <DependentUpon>AssignTravelLogSystemForm.cs</DependentUpon>
@@ -946,10 +951,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Translations\chinese-zh.tlf" />
     <None Include="Translations\deutsch-de.tlf" />
     <None Include="Translations\example-ex.tlf" />
     <None Include="Translations\Italiano-it.tlf" />
     <None Include="Translations\polski-pl.tlf" />
+    <None Include="Translations\portugues-pt-br.tlf" />
+    <None Include="Translations\translation-chinese-uc.tlp" />
+    <None Include="Translations\translation-chinese-ed.tlp" />
+    <None Include="Translations\translation-chinese-je.tlp" />
     <None Include="UserControls\translation-deutsch-uc.tlp" />
     <None Include="UserControls\translation-example-uc.tlp" />
     <None Include="UserControls\translation-italiano-uc.tlp" />

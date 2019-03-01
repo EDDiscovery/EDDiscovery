@@ -1,4 +1,6 @@
-﻿Warning: "Warning" => "Attenzione"
+﻿Language = "Italiano"             //Always put in the first line!
+
+Warning: "Warning" => "Attenzione"
 Today: "Today" => "Oggi"
 24h: "24h" @
 7days: "7 days" => "7 giorni"
@@ -632,6 +634,89 @@ SECTION UserControlForm
 .panel_taskbaricon.ToolTip: "Toggle show taskbar icon for this window" @
 .panel_showtitle.ToolTip: "Toggle title visibility for this window when transparent" @
 .panel_transparent.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
+
+SECTION AboutForm
+
+AboutForm: "About EDDiscovery" @
+.buttonOK: "OK" @
+.labelLinks: "Links" @
+.labelDevelopers: "Developers" @
+.labelNoAffiliation: "EDDiscovery is not affiliated with Frontier Developments plc.\r\nFree Advanced Inst" @
+
+SECTION ThemeStandardEditor
+
+ThemeStandardEditor: "Edit Theme" @
+.buttonOK: "OK" @
+.label29: "S-Panel" @
+.label8: "Fore" @
+.label23: "Scroll Button" @
+.label18: "Scroll Arrow" @
+.label25: "Dropdown text" @
+.label24: "Dropdown back" @
+.label17: "Scroll Slider" @
+.label2: "Border" @
+.label20: "Known" @
+.label22: "Label" @
+.label26: "ToolStrip" @
+.label28: "Check Tick" @
+.label21: "Checkbox" @
+.label19: "Unknown" @
+.label4: "Success" @
+.label15: "Highlight" @
+.label7: "Back" @
+.label6: "Form" @
+.label16: "Groups" @
+.label5: "Tab Control" @
+.label14: "Misc" @
+.label13: "Visited" @
+.label12: "Menu" @
+.label11: "Grid Data" @
+.label10: "Grid Border" @
+.label9: "Button" @
+.label1: "Text" @
+.label_opacity: "Opacity" @
+.checkBox_theme_windowframe: "Window Frame" @
+.label3: "Font" @
+.groupBox1: "Other Controls" @
+.groupBoxColors: "Colours" @
+.PTT1: "Form Back Colour" @
+.PTT2: "Text box Back Colour" @
+.PTT3: "Text box Text Colour" @
+.PTT4: "Text box Highlight Colour" @
+.PTT15: "Text box Success Colour" @
+.PTT5: "Button Back Colour" @
+.PTT6: "Button Text Colour" @
+.PTT7: "Grid Border Back Colour" @
+.PTT8: "Grid Border Text Colour" @
+.PTT9: "Grid Cell Back Colour" @
+.PTT10: "Grid Cell Text Colour" @
+.PTT11: "Menu Back Colour" @
+.PTT12: "Menu Text Colour" @
+.PTT13: "Visited system without known position" @
+.PTT14: "Visited system with coordinates" @
+.PTT16: "Check Box Text Colour" @
+.PTT17: "Label Text Colour" @
+.PTT18: "Group box Back Colour" @
+.PTT19: "Group box Text Colour" @
+.PTT30: "Text Box Border Colour" @
+.PTT31: "Button Border Colour" @
+.PTT32: "Grid Border Line Colour" @
+.PTT33: "Group box Border Line Colour" @
+.PTT35: "Tab Control Border Line Colour" @
+.PTT40: "Text Box Scroll Bar Slider Colour" @
+.PTT41: "Text Box Scroll Bar Arrow Colour" @
+.PTT42: "Text Box Scroll Bar Button Colour" @
+.PTT43: "Grid Scroll Bar Slider Colour" @
+.PTT44: "Grid Scroll Bar Arrow Colour" @
+.PTT45: "Grid Scroll Bar Button Colour" @
+.PTT50: "Menu Dropdown Back Colour" @
+.PTT51: "Menu Dropdown Text Colour" @
+.PTT60: "Tool Strip Back Colour" @
+.PTT61: "Tool Strip Border Colour" @
+.PTT70: "Check Box Tick Color" @
+.PTT71: "S-Panel Text Colour" @
+.FontSize: " points" @
+.FDNHRS: "Font does not have regular style" @
 
 include translation-italiano-uc.tlp
 

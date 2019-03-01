@@ -1,0 +1,63 @@
+﻿
+
+
+
+
+选择一个用来显示透明弹窗窗体的热键。\r\n当透明弹窗设定在Tc（鼠标穿透但是可以点击按钮等\r\n控件）或者在Tf（鼠标穿透且不能进行操作）时，把\r\n鼠标指针指在窗体上按下热键500毫米以上后可以活激\r\n透明窗体。不是所有的按钮都能保证可以正常使用。
+
+
+
+
+
+.toolStripMenuItemTargetLine: "Show Target Line" => "显示目标行"
+.EDSMButtonToolStripMenuItem: "EDSM Button" => "显示EDSM按钮"
+.toolStripMenuItemTime: "Show Time" => "显示时间"
+.iconToolStripMenuItem: "Show Event Icon" => "显示事件图标"
+.showDescriptionToolStripMenuItem: "Show Description" => "显示描述"
+.showInformationToolStripMenuItem: "Show Information" => "显示信息"
+.showNotesToolStripMenuItem: "Show Notes" => "显示笔记"
+.showXYZToolStripMenuItem: "Show XYZ" => "显示星系坐标"
+.showTargetToolStripMenuItem: "Show Target Distance per Star" => "显示每个星系与目标的距离""
+.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
+.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "跳至下一个起点/终点的标记"
+.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "跳转至3D星图"
+.viewOnEDSMToolStripMenuItem: "View on EDSM" => "在EDSM网站上查看"
+.starMapColourToolStripMenuItem: "Star Map Colour..." => "星图上的颜色..."
+.addToTrilaterationToolStripMenuItem: "Add to ..." => "添加至..."
+.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "三边测量面板里的星系"
+.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "三边测量面板里的待测星系"
+.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "以上两项"
+.addToTrilaterationToolStripMenuItem.routeToolStripMenuItem: "Expedition Panel" => "远航面板"
+.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" => "探索面板"
+.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "移动当前条目至另外一个指挥官名下"
+.hideSystemToolStripMenuItem: "Hide Entries" => "隐藏此条目"
+.selectCorrectSystemToolStripMenuItem: "Assign new system" => "指向至新的星系"
+.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "移除此项航行记录"
+.sendUnsyncedScanToEDDNToolStripMenuItem: "Send unsynced scan to EDDN" => "发送未同步的扫描数据到EDDN"
+.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这项条目运行脚本"
+.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "复制航行日志条目到剪切板和系统日志"
+.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" @
+.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
+.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
+.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
+.TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
+.TTFilt1: "Filtered {0}" => "过滤掉了{0}"
+.TTSelAge: "Select the entries by age, " => "安照时间顺序选取条目，"
+.TTFilt2: "Filtered {0}" => "过滤掉了{0}"
+.TTEvent: "Filter out entries based on event type, " => "根据事件类型筛选条目，"
+.TTFilt3: "Total filtered out {0}" => "总共过滤掉了{0}"
+.TTTotal: "Filter out entries matching the field selection, " => "筛选匹配域选项的条目，"
+.CSTART: "Clear Start marker" => "清除起点标记"
+.CSTOP: "Clear Stop marker" => "清除终点标记"
+.SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
+.SETSTARTTC: "Set Start marker for travel calculations" => "设为航行计算的起点"
+.SETSTSTOP: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
+.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+.NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "无法找到与所选条目相关联的地点或FSD跳跃事件"
+.Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "你确认要删除此项条目吗？\r\n它有可能会在重新扫描游戏日志文件的时候再次出现"
+.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "勾选后当事件更新时，使光标自动返回顶部。"
+.buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
+.buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
+.buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
+.textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "输入文本以搜索所有的域"
+.comboBoxHistoryWindow.ToolTip: "Select the entries by age" => "安照时间顺序选取条目"
