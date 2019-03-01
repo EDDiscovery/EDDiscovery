@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
                 int row = dataGridViewCommanders.CurrentCell.RowIndex;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander ".Tx(this, "DYWDC") + cmdr.Name + "?", "Delete commander".Tx(this, "DC"), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -622,7 +622,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Safe Mode".Tx(this,"SM"), "Confirm restart to safe mode".Tx(this, "CSM"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".Tx(this,"CSM"), "Safe mode".Tx(this, "SM"), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 Application.Exit();
                 System.Diagnostics.Process.Start(Application.ExecutablePath, "-safemode");
