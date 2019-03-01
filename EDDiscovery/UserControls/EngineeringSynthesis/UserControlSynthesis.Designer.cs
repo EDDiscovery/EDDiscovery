@@ -46,6 +46,13 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewSynthesis = new System.Windows.Forms.DataGridView();
+            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.chkHistoric = new ExtendedControls.ExtCheckBox();
@@ -54,13 +61,6 @@ namespace EDDiscovery.UserControls
             this.buttonRecipeFilter = new ExtendedControls.ExtButton();
             this.buttonClear = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.UpgradeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Level = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MaxCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WantedCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Available = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -107,6 +107,66 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseDown);
             this.dataGridViewSynthesis.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dataGridViewSynthesis_MouseMove);
             // 
+            // UpgradeCol
+            // 
+            this.UpgradeCol.HeaderText = "Upgrade/Mat";
+            this.UpgradeCol.MinimumWidth = 50;
+            this.UpgradeCol.Name = "UpgradeCol";
+            this.UpgradeCol.ReadOnly = true;
+            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Level
+            // 
+            this.Level.FillWeight = 50F;
+            this.Level.HeaderText = "Level";
+            this.Level.MinimumWidth = 50;
+            this.Level.Name = "Level";
+            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // MaxCol
+            // 
+            this.MaxCol.FillWeight = 25F;
+            this.MaxCol.HeaderText = "Max";
+            this.MaxCol.MinimumWidth = 50;
+            this.MaxCol.Name = "MaxCol";
+            this.MaxCol.ReadOnly = true;
+            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // WantedCol
+            // 
+            this.WantedCol.FillWeight = 25F;
+            this.WantedCol.HeaderText = "Wanted";
+            this.WantedCol.MinimumWidth = 50;
+            this.WantedCol.Name = "WantedCol";
+            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Available
+            // 
+            this.Available.FillWeight = 25F;
+            this.Available.HeaderText = "Avail.";
+            this.Available.MinimumWidth = 50;
+            this.Available.Name = "Available";
+            this.Available.ReadOnly = true;
+            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Notes
+            // 
+            this.Notes.FillWeight = 150F;
+            this.Notes.HeaderText = "Notes";
+            this.Notes.MinimumWidth = 50;
+            this.Notes.Name = "Notes";
+            this.Notes.ReadOnly = true;
+            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // Recipe
+            // 
+            this.Recipe.FillWeight = 50F;
+            this.Recipe.HeaderText = "Recipe";
+            this.Recipe.MinimumWidth = 15;
+            this.Recipe.Name = "Recipe";
+            this.Recipe.ReadOnly = true;
+            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
             // vScrollBarCustomMC
             // 
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -118,17 +178,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 21);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 519);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 540);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
@@ -218,66 +277,6 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // UpgradeCol
-            // 
-            this.UpgradeCol.HeaderText = "Upgrade/Mat";
-            this.UpgradeCol.MinimumWidth = 50;
-            this.UpgradeCol.Name = "UpgradeCol";
-            this.UpgradeCol.ReadOnly = true;
-            this.UpgradeCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Level
-            // 
-            this.Level.FillWeight = 50F;
-            this.Level.HeaderText = "Level";
-            this.Level.MinimumWidth = 50;
-            this.Level.Name = "Level";
-            this.Level.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // MaxCol
-            // 
-            this.MaxCol.FillWeight = 25F;
-            this.MaxCol.HeaderText = "Max";
-            this.MaxCol.MinimumWidth = 50;
-            this.MaxCol.Name = "MaxCol";
-            this.MaxCol.ReadOnly = true;
-            this.MaxCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // WantedCol
-            // 
-            this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Wanted";
-            this.WantedCol.MinimumWidth = 50;
-            this.WantedCol.Name = "WantedCol";
-            this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Available
-            // 
-            this.Available.FillWeight = 25F;
-            this.Available.HeaderText = "Avail.";
-            this.Available.MinimumWidth = 50;
-            this.Available.Name = "Available";
-            this.Available.ReadOnly = true;
-            this.Available.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Notes
-            // 
-            this.Notes.FillWeight = 150F;
-            this.Notes.HeaderText = "Notes";
-            this.Notes.MinimumWidth = 50;
-            this.Notes.Name = "Notes";
-            this.Notes.ReadOnly = true;
-            this.Notes.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Recipe
-            // 
-            this.Recipe.FillWeight = 50F;
-            this.Recipe.HeaderText = "Recipe";
-            this.Recipe.MinimumWidth = 15;
-            this.Recipe.Name = "Recipe";
-            this.Recipe.ReadOnly = true;
-            this.Recipe.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // UserControlSynthesis
             // 

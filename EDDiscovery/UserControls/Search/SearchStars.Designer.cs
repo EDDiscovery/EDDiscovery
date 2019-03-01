@@ -81,17 +81,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 21);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 571);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 592);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
-            this.vScrollBarCustom.Text = "vScrollBarCustom1";
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
@@ -166,13 +165,13 @@ namespace EDDiscovery.UserControls
             this.findSystemsUserControl.Size = new System.Drawing.Size(804, 124);
             this.findSystemsUserControl.TabIndex = 32;
             // 
-            // UserControlSearchStars
+            // SearchStars
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.findSystemsUserControl);
-            this.Name = "UserControlSearchStars";
+            this.Name = "SearchStars";
             this.Size = new System.Drawing.Size(804, 716);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();

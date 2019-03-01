@@ -46,7 +46,6 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.labelTargetLat = new ExtendedControls.ExtLabel();
-            this.labelExtTargetLong = new ExtendedControls.ExtLabel();
             this.checkBoxHideTransparent = new ExtendedControls.ExtCheckBox();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
             this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
@@ -69,16 +68,6 @@ namespace EDDiscovery.UserControls
             this.labelTargetLat.TabIndex = 4;
             this.labelTargetLat.Text = "Target";
             this.labelTargetLat.TextBackColor = System.Drawing.Color.Transparent;
-            // 
-            // labelExtTargetLong
-            // 
-            this.labelExtTargetLong.AutoSize = true;
-            this.labelExtTargetLong.Location = new System.Drawing.Point(113, 7);
-            this.labelExtTargetLong.Name = "labelExtTargetLong";
-            this.labelExtTargetLong.Size = new System.Drawing.Size(10, 13);
-            this.labelExtTargetLong.TabIndex = 6;
-            this.labelExtTargetLong.Text = ",";
-            this.labelExtTargetLong.TextBackColor = System.Drawing.Color.Transparent;
             // 
             // checkBoxHideTransparent
             // 
@@ -180,7 +169,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.SelectedValue = null;
             this.comboBoxBookmarks.Size = new System.Drawing.Size(247, 21);
             this.comboBoxBookmarks.TabIndex = 11;
-            this.comboBoxBookmarks.Text = "comboBoxCustom1";
             this.comboBoxBookmarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxBookmarks.ValueMember = "";
             this.comboBoxBookmarks.SelectedIndexChanged += new System.EventHandler(this.comboBoxBookmarks_SelectedIndexChanged);
@@ -246,7 +234,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.numberBoxTargetLongitude);
             this.Controls.Add(this.numberBoxTargetLatitude);
             this.Controls.Add(this.checkBoxHideTransparent);
-            this.Controls.Add(this.labelExtTargetLong);
             this.Controls.Add(this.labelTargetLat);
             this.Name = "UserControlCompass";
             this.Size = new System.Drawing.Size(490, 157);
@@ -258,7 +245,6 @@ namespace EDDiscovery.UserControls
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtLabel labelTargetLat;
-        private ExtendedControls.ExtLabel labelExtTargetLong;
         private ExtendedControls.ExtCheckBox checkBoxHideTransparent;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;

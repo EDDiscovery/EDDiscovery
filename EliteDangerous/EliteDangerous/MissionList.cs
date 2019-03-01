@@ -52,7 +52,7 @@ namespace EliteDangerousCore
             string info = Mission.MissionAuxInfo();
             if (CargoDepot != null)
             {
-                info += Environment.NewLine + BaseUtils.FieldBuilder.Build("To Go:", CargoDepot.ItemsToGo, "Progress:;%;N1".Txb(this), CargoDepot.ProgressPercent);
+                info += Environment.NewLine + BaseUtils.FieldBuilder.Build("To Go:".Tx(this), CargoDepot.ItemsToGo, "Progress:;%;N1".Tx(this), CargoDepot.ProgressPercent);
             }
             if (Completed != null)
             {

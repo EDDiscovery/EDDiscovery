@@ -75,13 +75,13 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomResize = new ExtendedControls.ExtCheckBox();
             this.checkBoxPanelSortOrder = new ExtendedControls.ExtCheckBox();
             this.buttonExtSafeMode = new ExtendedControls.ExtButton();
+            this.comboBoxCustomEssentialEntries = new ExtendedControls.ExtComboBox();
             this.dataGridViewCommanders = new System.Windows.Forms.DataGridView();
             this.ColumnCommander = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EdsmName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.JournalDirCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NotesCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBoxCustomHistoryLoad = new ExtendedControls.ExtGroupBox();
-            this.comboBoxCustomEssentialEntries = new ExtendedControls.ExtComboBox();
             this.labelHistoryEssItems = new System.Windows.Forms.Label();
             this.labelHistorySel = new System.Windows.Forms.Label();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
@@ -642,6 +642,34 @@ namespace EDDiscovery.UserControls
             this.buttonExtSafeMode.UseVisualStyleBackColor = true;
             this.buttonExtSafeMode.Click += new System.EventHandler(this.buttonExtSafeMode_Click);
             // 
+            // comboBoxCustomEssentialEntries
+            // 
+            this.comboBoxCustomEssentialEntries.ArrowWidth = 1;
+            this.comboBoxCustomEssentialEntries.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomEssentialEntries.ButtonColorScaling = 0.5F;
+            this.comboBoxCustomEssentialEntries.DataSource = null;
+            this.comboBoxCustomEssentialEntries.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomEssentialEntries.DisplayMember = "";
+            this.comboBoxCustomEssentialEntries.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.comboBoxCustomEssentialEntries.DropDownHeight = 300;
+            this.comboBoxCustomEssentialEntries.DropDownWidth = 400;
+            this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomEssentialEntries.ItemHeight = 13;
+            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(176, 125);
+            this.comboBoxCustomEssentialEntries.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.comboBoxCustomEssentialEntries.Name = "comboBoxCustomEssentialEntries";
+            this.comboBoxCustomEssentialEntries.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEssentialEntries.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.comboBoxCustomEssentialEntries.ScrollBarWidth = 16;
+            this.comboBoxCustomEssentialEntries.SelectedIndex = -1;
+            this.comboBoxCustomEssentialEntries.SelectedItem = null;
+            this.comboBoxCustomEssentialEntries.SelectedValue = null;
+            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(194, 21);
+            this.comboBoxCustomEssentialEntries.TabIndex = 7;
+            this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxCustomEssentialEntries, "Select which items you consider essential to load older than the time above");
+            this.comboBoxCustomEssentialEntries.ValueMember = "";
+            // 
             // dataGridViewCommanders
             // 
             this.dataGridViewCommanders.AllowUserToAddRows = false;
@@ -725,34 +753,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.Text = "History/Memory Options";
             this.groupBoxCustomHistoryLoad.TextPadding = 0;
             this.groupBoxCustomHistoryLoad.TextStartPosition = -1;
-            // 
-            // comboBoxCustomEssentialEntries
-            // 
-            this.comboBoxCustomEssentialEntries.ArrowWidth = 1;
-            this.comboBoxCustomEssentialEntries.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomEssentialEntries.ButtonColorScaling = 0.5F;
-            this.comboBoxCustomEssentialEntries.DataSource = null;
-            this.comboBoxCustomEssentialEntries.DisableBackgroundDisabledShadingGradient = false;
-            this.comboBoxCustomEssentialEntries.DisplayMember = "";
-            this.comboBoxCustomEssentialEntries.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomEssentialEntries.DropDownHeight = 300;
-            this.comboBoxCustomEssentialEntries.DropDownWidth = 400;
-            this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomEssentialEntries.ItemHeight = 13;
-            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(176, 125);
-            this.comboBoxCustomEssentialEntries.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.comboBoxCustomEssentialEntries.Name = "comboBoxCustomEssentialEntries";
-            this.comboBoxCustomEssentialEntries.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomEssentialEntries.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomEssentialEntries.ScrollBarWidth = 16;
-            this.comboBoxCustomEssentialEntries.SelectedIndex = -1;
-            this.comboBoxCustomEssentialEntries.SelectedItem = null;
-            this.comboBoxCustomEssentialEntries.SelectedValue = null;
-            this.comboBoxCustomEssentialEntries.Size = new System.Drawing.Size(194, 21);
-            this.comboBoxCustomEssentialEntries.TabIndex = 7;
-            this.comboBoxCustomEssentialEntries.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxCustomEssentialEntries, "Select which items you consider essential to load older than the time above");
-            this.comboBoxCustomEssentialEntries.ValueMember = "";
             // 
             // labelHistoryEssItems
             // 
@@ -966,17 +966,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(671, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(671, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 129);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 150);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 3;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;

@@ -57,16 +57,21 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textAlignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.leftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rightToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBoxSurveyorAid
+            // pictureBoxSurveyor
             // 
             this.pictureBoxSurveyor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxSurveyor.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxSurveyor.Name = "pictureBoxSurveyor";
             this.pictureBoxSurveyor.Size = new System.Drawing.Size(478, 229);
+            this.pictureBoxSurveyor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBoxSurveyor.TabIndex = 0;
             this.pictureBoxSurveyor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBoxSurveyorAid_MouseClick);
             // 
@@ -76,9 +81,10 @@ namespace EDDiscovery.UserControls
             this.planetaryClassesToolStripMenuItem,
             this.bodyFeaturesToolStripMenuItem,
             this.toolStripSeparator1,
-            this.hideAlreadyMappedBodiesToolStripMenuItem});
+            this.hideAlreadyMappedBodiesToolStripMenuItem,
+            this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 98);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 120);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -136,7 +142,7 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem.CheckOnClick = true;
             this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.terraformableToolStripMenuItem.Text = "Terraformable";
             this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
             // 
@@ -146,7 +152,7 @@ namespace EDDiscovery.UserControls
             this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
             this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
             this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
             // 
@@ -156,7 +162,7 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.CheckOnClick = true;
             this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
             this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
             // 
@@ -175,16 +181,52 @@ namespace EDDiscovery.UserControls
             this.hideAlreadyMappedBodiesToolStripMenuItem.Text = "Hide already mapped bodies";
             this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
             // 
-            // UserControlSurveyorAid
+            // textAlignToolStripMenuItem
+            // 
+            this.textAlignToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.leftToolStripMenuItem,
+            this.centerToolStripMenuItem,
+            this.rightToolStripMenuItem});
+            this.textAlignToolStripMenuItem.Name = "textAlignToolStripMenuItem";
+            this.textAlignToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.textAlignToolStripMenuItem.Text = "Alignment";
+            // 
+            // leftToolStripMenuItem
+            // 
+            this.leftToolStripMenuItem.CheckOnClick = true;
+            this.leftToolStripMenuItem.Name = "leftToolStripMenuItem";
+            this.leftToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.leftToolStripMenuItem.Text = "Left";
+            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
+            // 
+            // centerToolStripMenuItem
+            // 
+            this.centerToolStripMenuItem.CheckOnClick = true;
+            this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
+            this.centerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.centerToolStripMenuItem.Text = "Center";
+            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
+            // 
+            // rightToolStripMenuItem
+            // 
+            this.rightToolStripMenuItem.CheckOnClick = true;
+            this.rightToolStripMenuItem.Name = "rightToolStripMenuItem";
+            this.rightToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rightToolStripMenuItem.Text = "Right";
+            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
+            // 
+            // UserControlSurveyor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pictureBoxSurveyor);
-            this.Name = "UserControlSurveyorAid";
+            this.Name = "UserControlSurveyor";
             this.Size = new System.Drawing.Size(478, 229);
+            this.Resize += new System.EventHandler(this.UserControlSurveyor_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSurveyor)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -202,5 +244,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem hasRingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem hideAlreadyMappedBodiesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem textAlignToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem leftToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem centerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rightToolStripMenuItem;
     }
 }

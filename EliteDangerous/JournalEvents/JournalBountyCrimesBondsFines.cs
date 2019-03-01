@@ -162,8 +162,10 @@ namespace EliteDangerousCore.JournalEvents
     }
 
     [JournalEntryType(JournalTypeEnum.CrimeVictim)]
-    public class JournalCrimeVictim : JournalEntry      // presuming its co-incident with commit crime so don't double count bounties
+    public class JournalCrimeVictim : JournalEntry      
     {
+        // presuming its co-incident with commit crime so don't double count bounties
+
         public JournalCrimeVictim(JObject evt) : base(evt, JournalTypeEnum.CrimeVictim)
         {
             CrimeType = evt["CrimeType"].Str().SplitCapsWordFull();

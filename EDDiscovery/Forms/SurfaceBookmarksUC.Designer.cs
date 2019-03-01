@@ -59,7 +59,7 @@ namespace EDDiscovery.Forms
             this.deleteToolStripMenuItem,
             this.addPlanetManuallyToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(185, 92);
+            this.contextMenuStrip.Size = new System.Drawing.Size(185, 70);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
             // 
             // sendToCompassToolStripMenuItem
@@ -125,17 +125,16 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(637, 21);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(637, 0);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 147);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 168);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 7;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
@@ -201,13 +200,13 @@ namespace EDDiscovery.Forms
             this.Valid.Name = "Valid";
             this.Valid.ReadOnly = true;
             // 
-            // SurfaceBookmarksForm
+            // SurfaceBookmarkUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
-            this.Name = "SurfaceBookmarksForm";
+            this.Name = "SurfaceBookmarkUserControl";
             this.Size = new System.Drawing.Size(657, 200);
             this.contextMenuStrip.ResumeLayout(false);
             this.panelTop.ResumeLayout(false);

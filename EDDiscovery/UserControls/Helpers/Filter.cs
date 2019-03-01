@@ -43,30 +43,30 @@ namespace EDDiscovery.UserControls
 
         public void AddJournalExtraOptions()
         {
-            AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            AddGroupOption("ApproachBody;Docked;FSDJump;Location;Undocked;", "Travel".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
-            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
+            AddGroupOption("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan", "Scan".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
-            AddGroupOption(miltype, "Missions".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
+            AddGroupOption(miltype, "Missions".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
             var mle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMaterials" });
             mle.Add(EliteDangerousCore.JournalEntry.GetNameImageOfEvent(JournalTypeEnum.MaterialDiscovered));
             string mattype = string.Join(";", mle.Select(x => x.Item1)) + ";";
-            AddGroupOption(mattype, "Materials".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
+            AddGroupOption(mattype, "Materials".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
 
             var cle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCommodities" });
             string comtype = string.Join(";", cle.Select(x => x.Item1)) + ";";
-            AddGroupOption(comtype, "Commodities".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
+            AddGroupOption(comtype, "Commodities".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            AddGroupOption(legtype, "Ledger".Tx(), EDDiscovery.Icons.IconSet.GetIcon("Panels.Ledger"));
+            AddGroupOption(legtype, "Ledger".Tx(this), EDDiscovery.Icons.IconSet.GetIcon("Panels.Ledger"));
 
             var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
-            AddGroupOption(shiptype, "Ship".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
+            AddGroupOption(shiptype, "Ship".Tx(this), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
         }
 
         public void AddJournalEntries(string[] methods = null)

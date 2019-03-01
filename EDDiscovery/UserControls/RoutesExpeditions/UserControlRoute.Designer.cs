@@ -31,27 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.labelLy2 = new System.Windows.Forms.Label();
-            this.labelLy1 = new System.Windows.Forms.Label();
-            this.labelTo = new System.Windows.Forms.Label();
-            this.labelMaxJump = new System.Windows.Forms.Label();
-            this.labelDistance = new System.Windows.Forms.Label();
-            this.labelMetric = new System.Windows.Forms.Label();
-            this.labelFrom = new System.Windows.Forms.Label();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
-            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
-            this.dataGridViewRoute = new System.Windows.Forms.DataGridView();
-            this.SystemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DistanceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.YCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.textBox_ToName = new ExtendedControls.ExtTextBox();
             this.textBox_FromName = new ExtendedControls.ExtTextBox();
@@ -66,14 +45,35 @@
             this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
             this.textBox_Range = new ExtendedControls.ExtTextBox();
             this.textBox_To = new ExtendedControls.ExtTextBoxAutoComplete();
+            this.labelLy2 = new System.Windows.Forms.Label();
+            this.labelLy1 = new System.Windows.Forms.Label();
             this.textBox_Distance = new ExtendedControls.ExtTextBox();
+            this.labelTo = new System.Windows.Forms.Label();
             this.textBox_ToZ = new ExtendedControls.ExtTextBox();
+            this.labelMaxJump = new System.Windows.Forms.Label();
             this.textBox_ToY = new ExtendedControls.ExtTextBox();
+            this.labelDistance = new System.Windows.Forms.Label();
             this.textBox_ToX = new ExtendedControls.ExtTextBox();
+            this.labelMetric = new System.Windows.Forms.Label();
             this.textBox_FromZ = new ExtendedControls.ExtTextBox();
             this.button_Route = new ExtendedControls.ExtButton();
             this.textBox_FromY = new ExtendedControls.ExtTextBox();
+            this.labelFrom = new System.Windows.Forms.Label();
             this.textBox_FromX = new ExtendedControls.ExtTextBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.showInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.dataGridViewRoute = new System.Windows.Forms.DataGridView();
+            this.SystemCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DistanceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.XCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.YCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ZCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.WayPointDistCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeviationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel1.SuspendLayout();
@@ -116,211 +116,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(706, 193);
             this.panel1.TabIndex = 0;
-            // 
-            // labelLy2
-            // 
-            this.labelLy2.AutoSize = true;
-            this.labelLy2.Location = new System.Drawing.Point(563, 150);
-            this.labelLy2.Name = "labelLy2";
-            this.labelLy2.Size = new System.Drawing.Size(14, 13);
-            this.labelLy2.TabIndex = 43;
-            this.labelLy2.Text = "ly";
-            // 
-            // labelLy1
-            // 
-            this.labelLy1.AutoSize = true;
-            this.labelLy1.Location = new System.Drawing.Point(563, 123);
-            this.labelLy1.Name = "labelLy1";
-            this.labelLy1.Size = new System.Drawing.Size(14, 13);
-            this.labelLy1.TabIndex = 44;
-            this.labelLy1.Text = "ly";
-            // 
-            // labelTo
-            // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(301, 14);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(20, 13);
-            this.labelTo.TabIndex = 49;
-            this.labelTo.Text = "To";
-            // 
-            // labelMaxJump
-            // 
-            this.labelMaxJump.AutoSize = true;
-            this.labelMaxJump.Location = new System.Drawing.Point(419, 122);
-            this.labelMaxJump.Name = "labelMaxJump";
-            this.labelMaxJump.Size = new System.Drawing.Size(52, 13);
-            this.labelMaxJump.TabIndex = 45;
-            this.labelMaxJump.Text = "Max jump";
-            // 
-            // labelDistance
-            // 
-            this.labelDistance.AutoSize = true;
-            this.labelDistance.Location = new System.Drawing.Point(422, 155);
-            this.labelDistance.Name = "labelDistance";
-            this.labelDistance.Size = new System.Drawing.Size(49, 13);
-            this.labelDistance.TabIndex = 46;
-            this.labelDistance.Text = "Distance";
-            // 
-            // labelMetric
-            // 
-            this.labelMetric.AutoSize = true;
-            this.labelMetric.Location = new System.Drawing.Point(3, 122);
-            this.labelMetric.Name = "labelMetric";
-            this.labelMetric.Size = new System.Drawing.Size(36, 13);
-            this.labelMetric.TabIndex = 47;
-            this.labelMetric.Text = "Metric";
-            // 
-            // labelFrom
-            // 
-            this.labelFrom.AutoSize = true;
-            this.labelFrom.Location = new System.Drawing.Point(3, 14);
-            this.labelFrom.Name = "labelFrom";
-            this.labelFrom.Size = new System.Drawing.Size(30, 13);
-            this.labelFrom.TabIndex = 48;
-            this.labelFrom.Text = "From";
-            // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showInEDSMToolStripMenuItem,
-            this.copyToolStripMenuItem});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(151, 48);
-            // 
-            // showInEDSMToolStripMenuItem
-            // 
-            this.showInEDSMToolStripMenuItem.Name = "showInEDSMToolStripMenuItem";
-            this.showInEDSMToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.showInEDSMToolStripMenuItem.Text = "Show in EDSM";
-            this.showInEDSMToolStripMenuItem.Click += new System.EventHandler(this.showInEDSMToolStripMenuItem_Click);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
-            // dataViewScrollerPanel1
-            // 
-            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
-            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
-            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 193);
-            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 221);
-            this.dataViewScrollerPanel1.TabIndex = 29;
-            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
-            // 
-            // vScrollBarCustom1
-            // 
-            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
-            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
-            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
-            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
-            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom1.HideScrollBar = true;
-            this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(683, 23);
-            this.vScrollBarCustom1.Maximum = -1;
-            this.vScrollBarCustom1.Minimum = 0;
-            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 198);
-            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
-            this.vScrollBarCustom1.SmallChange = 1;
-            this.vScrollBarCustom1.TabIndex = 4;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
-            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
-            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -1;
-            this.vScrollBarCustom1.ValueLimited = -1;
-            // 
-            // dataGridViewRoute
-            // 
-            this.dataGridViewRoute.AllowUserToAddRows = false;
-            this.dataGridViewRoute.AllowUserToDeleteRows = false;
-            this.dataGridViewRoute.AllowUserToResizeRows = false;
-            this.dataGridViewRoute.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewRoute.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.SystemCol,
-            this.DistanceCol,
-            this.XCol,
-            this.YCol,
-            this.ZCol,
-            this.WayPointDistCol,
-            this.DeviationCol});
-            this.dataGridViewRoute.ContextMenuStrip = this.contextMenuStrip;
-            this.dataGridViewRoute.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewRoute.Name = "dataGridViewRoute";
-            this.dataGridViewRoute.ReadOnly = true;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(683, 221);
-            this.dataGridViewRoute.TabIndex = 1;
-            this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
-            this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
-            // 
-            // SystemCol
-            // 
-            this.SystemCol.FillWeight = 200F;
-            this.SystemCol.HeaderText = "System";
-            this.SystemCol.MinimumWidth = 50;
-            this.SystemCol.Name = "SystemCol";
-            this.SystemCol.ReadOnly = true;
-            // 
-            // DistanceCol
-            // 
-            this.DistanceCol.HeaderText = "Distance";
-            this.DistanceCol.Name = "DistanceCol";
-            this.DistanceCol.ReadOnly = true;
-            // 
-            // XCol
-            // 
-            this.XCol.HeaderText = "X";
-            this.XCol.Name = "XCol";
-            this.XCol.ReadOnly = true;
-            // 
-            // YCol
-            // 
-            this.YCol.HeaderText = "Y";
-            this.YCol.Name = "YCol";
-            this.YCol.ReadOnly = true;
-            // 
-            // ZCol
-            // 
-            this.ZCol.HeaderText = "Z";
-            this.ZCol.Name = "ZCol";
-            this.ZCol.ReadOnly = true;
-            // 
-            // WayPointDistCol
-            // 
-            this.WayPointDistCol.HeaderText = "Dist. Waypoint";
-            this.WayPointDistCol.Name = "WayPointDistCol";
-            this.WayPointDistCol.ReadOnly = true;
-            // 
-            // DeviationCol
-            // 
-            this.DeviationCol.HeaderText = "Deviation";
-            this.DeviationCol.Name = "DeviationCol";
-            this.DeviationCol.ReadOnly = true;
             // 
             // buttonExtExcel
             // 
@@ -585,6 +380,24 @@
             this.textBox_To.TextChanged += new System.EventHandler(this.textBox_To_TextChanged);
             this.textBox_To.Enter += new System.EventHandler(this.textBox_To_Enter);
             // 
+            // labelLy2
+            // 
+            this.labelLy2.AutoSize = true;
+            this.labelLy2.Location = new System.Drawing.Point(563, 150);
+            this.labelLy2.Name = "labelLy2";
+            this.labelLy2.Size = new System.Drawing.Size(14, 13);
+            this.labelLy2.TabIndex = 43;
+            this.labelLy2.Text = "ly";
+            // 
+            // labelLy1
+            // 
+            this.labelLy1.AutoSize = true;
+            this.labelLy1.Location = new System.Drawing.Point(563, 123);
+            this.labelLy1.Name = "labelLy1";
+            this.labelLy1.Size = new System.Drawing.Size(14, 13);
+            this.labelLy1.TabIndex = 44;
+            this.labelLy1.Text = "ly";
+            // 
             // textBox_Distance
             // 
             this.textBox_Distance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
@@ -610,6 +423,15 @@
             this.toolTip.SetToolTip(this.textBox_Distance, "Distance between start and end");
             this.textBox_Distance.WordWrap = true;
             this.textBox_Distance.Click += new System.EventHandler(this.textBox_Clicked);
+            // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(301, 14);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(20, 13);
+            this.labelTo.TabIndex = 49;
+            this.labelTo.Text = "To";
             // 
             // textBox_ToZ
             // 
@@ -638,6 +460,15 @@
             this.textBox_ToZ.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToZ.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
             // 
+            // labelMaxJump
+            // 
+            this.labelMaxJump.AutoSize = true;
+            this.labelMaxJump.Location = new System.Drawing.Point(419, 122);
+            this.labelMaxJump.Name = "labelMaxJump";
+            this.labelMaxJump.Size = new System.Drawing.Size(52, 13);
+            this.labelMaxJump.TabIndex = 45;
+            this.labelMaxJump.Text = "Max jump";
+            // 
             // textBox_ToY
             // 
             this.textBox_ToY.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
@@ -665,6 +496,15 @@
             this.textBox_ToY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToY.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
             // 
+            // labelDistance
+            // 
+            this.labelDistance.AutoSize = true;
+            this.labelDistance.Location = new System.Drawing.Point(422, 155);
+            this.labelDistance.Name = "labelDistance";
+            this.labelDistance.Size = new System.Drawing.Size(49, 13);
+            this.labelDistance.TabIndex = 46;
+            this.labelDistance.Text = "Distance";
+            // 
             // textBox_ToX
             // 
             this.textBox_ToX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
@@ -691,6 +531,15 @@
             this.textBox_ToX.TextChanged += new System.EventHandler(this.textBox_ToXYZ_TextChanged);
             this.textBox_ToX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_ToX.Enter += new System.EventHandler(this.textBox_ToXYZ_Enter);
+            // 
+            // labelMetric
+            // 
+            this.labelMetric.AutoSize = true;
+            this.labelMetric.Location = new System.Drawing.Point(3, 122);
+            this.labelMetric.Name = "labelMetric";
+            this.labelMetric.Size = new System.Drawing.Size(36, 13);
+            this.labelMetric.TabIndex = 47;
+            this.labelMetric.Text = "Metric";
             // 
             // textBox_FromZ
             // 
@@ -758,6 +607,15 @@
             this.textBox_FromY.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromY.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
             // 
+            // labelFrom
+            // 
+            this.labelFrom.AutoSize = true;
+            this.labelFrom.Location = new System.Drawing.Point(3, 14);
+            this.labelFrom.Name = "labelFrom";
+            this.labelFrom.Size = new System.Drawing.Size(30, 13);
+            this.labelFrom.TabIndex = 48;
+            this.labelFrom.Text = "From";
+            // 
             // textBox_FromX
             // 
             this.textBox_FromX.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
@@ -784,6 +642,147 @@
             this.textBox_FromX.TextChanged += new System.EventHandler(this.textBox_FromXYZ_TextChanged);
             this.textBox_FromX.Click += new System.EventHandler(this.textBox_Clicked);
             this.textBox_FromX.Enter += new System.EventHandler(this.textBox_FromXYZ_Enter);
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showInEDSMToolStripMenuItem,
+            this.copyToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(151, 48);
+            // 
+            // showInEDSMToolStripMenuItem
+            // 
+            this.showInEDSMToolStripMenuItem.Name = "showInEDSMToolStripMenuItem";
+            this.showInEDSMToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.showInEDSMToolStripMenuItem.Text = "Show in EDSM";
+            this.showInEDSMToolStripMenuItem.Click += new System.EventHandler(this.showInEDSMToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // dataViewScrollerPanel1
+            // 
+            this.dataViewScrollerPanel1.Controls.Add(this.vScrollBarCustom1);
+            this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
+            this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 193);
+            this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
+            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 221);
+            this.dataViewScrollerPanel1.TabIndex = 29;
+            this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
+            // 
+            // vScrollBarCustom1
+            // 
+            this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
+            this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
+            this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
+            this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
+            this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.vScrollBarCustom1.HideScrollBar = true;
+            this.vScrollBarCustom1.LargeChange = 0;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(683, 0);
+            this.vScrollBarCustom1.Maximum = -1;
+            this.vScrollBarCustom1.Minimum = 0;
+            this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.Name = "vScrollBarCustom1";
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 221);
+            this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SmallChange = 1;
+            this.vScrollBarCustom1.TabIndex = 4;
+            this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
+            this.vScrollBarCustom1.ThumbDrawAngle = 0F;
+            this.vScrollBarCustom1.Value = -1;
+            this.vScrollBarCustom1.ValueLimited = -1;
+            // 
+            // dataGridViewRoute
+            // 
+            this.dataGridViewRoute.AllowUserToAddRows = false;
+            this.dataGridViewRoute.AllowUserToDeleteRows = false;
+            this.dataGridViewRoute.AllowUserToResizeRows = false;
+            this.dataGridViewRoute.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRoute.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SystemCol,
+            this.DistanceCol,
+            this.XCol,
+            this.YCol,
+            this.ZCol,
+            this.WayPointDistCol,
+            this.DeviationCol});
+            this.dataGridViewRoute.ContextMenuStrip = this.contextMenuStrip;
+            this.dataGridViewRoute.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewRoute.Name = "dataGridViewRoute";
+            this.dataGridViewRoute.ReadOnly = true;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewRoute.Size = new System.Drawing.Size(683, 221);
+            this.dataGridViewRoute.TabIndex = 1;
+            this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
+            this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
+            // 
+            // SystemCol
+            // 
+            this.SystemCol.FillWeight = 200F;
+            this.SystemCol.HeaderText = "System";
+            this.SystemCol.MinimumWidth = 50;
+            this.SystemCol.Name = "SystemCol";
+            this.SystemCol.ReadOnly = true;
+            // 
+            // DistanceCol
+            // 
+            this.DistanceCol.HeaderText = "Distance";
+            this.DistanceCol.Name = "DistanceCol";
+            this.DistanceCol.ReadOnly = true;
+            // 
+            // XCol
+            // 
+            this.XCol.HeaderText = "X";
+            this.XCol.Name = "XCol";
+            this.XCol.ReadOnly = true;
+            // 
+            // YCol
+            // 
+            this.YCol.HeaderText = "Y";
+            this.YCol.Name = "YCol";
+            this.YCol.ReadOnly = true;
+            // 
+            // ZCol
+            // 
+            this.ZCol.HeaderText = "Z";
+            this.ZCol.Name = "ZCol";
+            this.ZCol.ReadOnly = true;
+            // 
+            // WayPointDistCol
+            // 
+            this.WayPointDistCol.HeaderText = "Dist. Waypoint";
+            this.WayPointDistCol.Name = "WayPointDistCol";
+            this.WayPointDistCol.ReadOnly = true;
+            // 
+            // DeviationCol
+            // 
+            this.DeviationCol.HeaderText = "Deviation";
+            this.DeviationCol.Name = "DeviationCol";
+            this.DeviationCol.ReadOnly = true;
             // 
             // UserControlRoute
             // 

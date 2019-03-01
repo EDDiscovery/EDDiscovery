@@ -24,7 +24,7 @@ namespace EDDiscovery.Actions
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing Windows speech synthesis engine: {0}\nSpeech synthesis will be unavailable".Tx(), ex.Message));
+                    log(String.Format("Error initializing Windows speech synthesis engine: {0}\nSpeech synthesis will be unavailable", ex.Message));
                     return new DummySpeechEngine();
                 }
             }
@@ -44,7 +44,7 @@ namespace EDDiscovery.Actions
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing Windows speech recognition engine: {0}\nSpeech recognition will be unavailable".Tx(), ex.Message));
+                    log(String.Format("Error initializing Windows speech recognition engine: {0}\nSpeech recognition will be unavailable", ex.Message));
                     return new VoiceRecognitionDummy();
                 }
             }
@@ -64,7 +64,7 @@ namespace EDDiscovery.Actions
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing CSCore Audio driver: {0}\nAudio will be unavailable".Tx(), ex.Message));
+                    log(String.Format("Error initializing CSCore Audio driver: {0}\nAudio will be unavailable", ex.Message));
                     return new AudioDriverDummy();
                 }
             }

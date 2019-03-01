@@ -1,4 +1,4 @@
-
+﻿
 SECTION Bodies
 
 .HMS: "Luminous Hot Main Sequence {0} star" @
@@ -586,3 +586,18 @@ SECTION MaterialCommodityData
 .opal: "Opal" @
 .thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
 .ancientkey: "Ancient Key" @
+
+SECTION EngineeringData
+
+.Engineer: "Engineer:" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+.Quality: "Quality:" @
+.ExperimentalEffect: "Experimental Effect:" @
+.Original: "Original:;;N2" @
+.Worse: "< (Worse); (Better)" @
+
+SECTION MissionState
+
+.ToGo: "To Go:" @
+.Progress: "Progress:;%;N1" @

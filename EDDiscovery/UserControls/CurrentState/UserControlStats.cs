@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
                     
                     intervals = inTrip ? 6 : 5;
                     var Col1 = new DataGridViewTextBoxColumn();
-                    Col1.HeaderText = "Type";
+                    Col1.HeaderText = "Type".Tx(this);
                     Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
@@ -339,13 +339,13 @@ namespace EDDiscovery.UserControls
 
                     if (inTrip)
                     {
-                        Col6.HeaderText = "Trip";
-                        Col7.HeaderText = "all";
+                        Col6.HeaderText = "Trip".Tx(this);
+                        Col7.HeaderText = "All".Tx(this);
                         dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
                     }
                     else
                     { 
-                        Col6.HeaderText = "all";
+                        Col6.HeaderText = "All".Tx(this);
                         dataGridViewTravel.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
                     }
                     
@@ -379,7 +379,7 @@ namespace EDDiscovery.UserControls
                 {
                     intervals = 1;
                     var Col1 = new DataGridViewTextBoxColumn();
-                    Col1.HeaderText = "Type";
+                    Col1.HeaderText = "Type".Tx(this);
                     Col1.Tag = "AlphaSort";
 
                     var Col2 = new DataGridViewTextBoxColumn();
@@ -482,7 +482,7 @@ namespace EDDiscovery.UserControls
                 strarr = new string[intervals];
 
                 var Col1 = new DataGridViewTextBoxColumn();
-                Col1.HeaderText = "Type";
+                Col1.HeaderText = "Type".Tx(this);
                 Col1.Tag = "AlphaSort";
                 dataGridViewTravel.Columns.Add(Col1);
 
@@ -623,12 +623,12 @@ namespace EDDiscovery.UserControls
                     if (inTrip)
                     {
                         Col6.HeaderText = "Trip".Tx(this);
-                        Col7.HeaderText = "all".Tx(this);
+                        Col7.HeaderText = "All".Tx(this);
                         dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6, Col7 });
                     }
                     else
                     {
-                        Col6.HeaderText = "all".Tx(this);
+                        Col6.HeaderText = "All".Tx(this);
                         dataGridViewScan.Columns.AddRange(new DataGridViewColumn[] { Col1, Col2, Col3, Col4, Col5, Col6 });
                     }
                     

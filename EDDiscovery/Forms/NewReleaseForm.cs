@@ -23,18 +23,18 @@ namespace EDDiscovery.Forms
 {
     public partial class NewReleaseForm : DraggableForm
     {
-        private GitHubRelease _release = null;
+        private GitHubRelease release = null;
 
         public NewReleaseForm(GitHubRelease release)
         {
-            _release = release;
+            this.release = release;
             InitializeComponent();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
-            _release = null;
+            release = null;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -52,19 +52,19 @@ namespace EDDiscovery.Forms
                 pnlBack.BorderStyle = BorderStyle.FixedSingle;
             }
 
-            if (_release != null)
+            if (release != null)
             {
-                textBoxReleaseName.Text = _release.ReleaseName;
-                textBoxGitHubURL.Text = _release.HtmlURL;
-                richTextBoxReleaseInfo.Text = _release.Description;
+                textBoxReleaseName.Text = release.ReleaseName;
+                textBoxGitHubURL.Text = release.HtmlURL;
+                richTextBoxReleaseInfo.Text = release.Description;
 
-                if (string.IsNullOrEmpty(_release.ExeInstallerLink))
+                if (string.IsNullOrEmpty(release.ExeInstallerLink))
                     buttonExeInstaller.Visible = false;
 
-                if (string.IsNullOrEmpty(_release.PortableInstallerLink))
+                if (string.IsNullOrEmpty(release.PortableInstallerLink))
                     buttonPortablezip.Visible = false;
 
-                if (string.IsNullOrEmpty(_release.MsiInstallerLink))
+                if (string.IsNullOrEmpty(release.MsiInstallerLink))
                     buttonMsiInstaller.Visible = false;
             }
 
@@ -75,22 +75,22 @@ namespace EDDiscovery.Forms
 
         private void buttonUrlOpen_Click(object sender, EventArgs e)
         {
-            Process.Start(_release.HtmlURL);
+            Process.Start(release.HtmlURL);
         }
 
         private void buttonExeInstaller_Click(object sender, EventArgs e)
         {
-            Process.Start(_release.ExeInstallerLink);
+            Process.Start(release.ExeInstallerLink);
         }
 
         private void buttonPortablezip_Click(object sender, EventArgs e)
         {
-            Process.Start(_release.PortableInstallerLink);
+            Process.Start(release.PortableInstallerLink);
         }
 
         private void buttonMsiInstaller_Click(object sender, EventArgs e)
         {
-            Process.Start(_release.MsiInstallerLink);
+            Process.Start(release.MsiInstallerLink);
         }
 
         private void btnClose_Click(object sender, EventArgs e)

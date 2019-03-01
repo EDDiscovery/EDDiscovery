@@ -46,17 +46,17 @@ namespace EDDiscovery.UserControls
             this.components = new System.ComponentModel.Container();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewOutfitting = new System.Windows.Forms.DataGridView();
+            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelYard = new System.Windows.Forms.Label();
             this.labelYardSel = new System.Windows.Forms.Label();
             this.comboBoxYards = new ExtendedControls.ExtComboBox();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.Col1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Col4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewOutfitting)).BeginInit();
             this.panelButtons.SuspendLayout();
@@ -95,6 +95,37 @@ namespace EDDiscovery.UserControls
             this.dataGridViewOutfitting.TabIndex = 1;
             this.dataGridViewOutfitting.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
+            // Col1
+            // 
+            this.Col1.HeaderText = "<code>";
+            this.Col1.MinimumWidth = 50;
+            this.Col1.Name = "Col1";
+            this.Col1.ReadOnly = true;
+            // 
+            // Col2
+            // 
+            this.Col2.HeaderText = "<code>";
+            this.Col2.Name = "Col2";
+            this.Col2.ReadOnly = true;
+            // 
+            // Col3
+            // 
+            this.Col3.HeaderText = "<code>";
+            this.Col3.Name = "Col3";
+            this.Col3.ReadOnly = true;
+            // 
+            // Col4
+            // 
+            this.Col4.HeaderText = "<code>";
+            this.Col4.Name = "Col4";
+            this.Col4.ReadOnly = true;
+            // 
+            // ColPrice
+            // 
+            this.ColPrice.HeaderText = "<code>";
+            this.ColPrice.Name = "ColPrice";
+            this.ColPrice.ReadOnly = true;
+            // 
             // vScrollBarCustomMC
             // 
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
@@ -106,17 +137,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 15);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 525);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 540);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
-            this.vScrollBarCustomMC.Text = "vScrollBarCustom1";
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
@@ -181,37 +211,6 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.comboBoxYards, "Select ship to view");
             this.comboBoxYards.ValueMember = "";
             this.comboBoxYards.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
-            // 
-            // Col1
-            // 
-            this.Col1.HeaderText = "<code>";
-            this.Col1.MinimumWidth = 50;
-            this.Col1.Name = "Col1";
-            this.Col1.ReadOnly = true;
-            // 
-            // Col2
-            // 
-            this.Col2.HeaderText = "<code>";
-            this.Col2.Name = "Col2";
-            this.Col2.ReadOnly = true;
-            // 
-            // Col3
-            // 
-            this.Col3.HeaderText = "<code>";
-            this.Col3.Name = "Col3";
-            this.Col3.ReadOnly = true;
-            // 
-            // Col4
-            // 
-            this.Col4.HeaderText = "<code>";
-            this.Col4.Name = "Col4";
-            this.Col4.ReadOnly = true;
-            // 
-            // ColPrice
-            // 
-            this.ColPrice.HeaderText = "<code>";
-            this.ColPrice.Name = "ColPrice";
-            this.ColPrice.ReadOnly = true;
             // 
             // UserControlOutfitting
             // 

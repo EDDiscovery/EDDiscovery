@@ -59,14 +59,14 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
             cfs.Closing += EventFilterChanged;
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave , incldockstartend:false);
-
             discoveryform.OnHistoryChange += Redisplay;
             discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
+            TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave, incldockstartend: false);
         }
 
         public override void LoadLayout()

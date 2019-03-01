@@ -90,17 +90,16 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 34);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 601);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 635);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
-            this.vScrollBarCustom.Text = "vScrollBarCustom1";
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
@@ -233,7 +232,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCMANDOR.SelectedValue = null;
             this.comboBoxCustomCMANDOR.Size = new System.Drawing.Size(79, 21);
             this.comboBoxCustomCMANDOR.TabIndex = 2;
-            this.comboBoxCustomCMANDOR.Text = "comboBoxCustom1";
             this.comboBoxCustomCMANDOR.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomCMANDOR.ValueMember = "";
             // 
@@ -261,7 +259,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM2.SelectedValue = null;
             this.comboBoxCustomCM2.Size = new System.Drawing.Size(283, 21);
             this.comboBoxCustomCM2.TabIndex = 2;
-            this.comboBoxCustomCM2.Text = "comboBoxCustom1";
             this.comboBoxCustomCM2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomCM2.ValueMember = "";
             // 
@@ -289,7 +286,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCM1.SelectedValue = null;
             this.comboBoxCustomCM1.Size = new System.Drawing.Size(283, 21);
             this.comboBoxCustomCM1.TabIndex = 2;
-            this.comboBoxCustomCM1.Text = "comboBoxCustom1";
             this.comboBoxCustomCM1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomCM1.ValueMember = "";
             // 
@@ -311,13 +307,13 @@ namespace EDDiscovery.UserControls
             this.label1.TabIndex = 0;
             this.label1.Text = "Item 1";
             // 
-            // UserControlSearchMaterialsCommodities
+            // SearchMaterialsCommodities
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
-            this.Name = "UserControlSearchMaterialsCommodities";
+            this.Name = "SearchMaterialsCommodities";
             this.Size = new System.Drawing.Size(804, 716);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();

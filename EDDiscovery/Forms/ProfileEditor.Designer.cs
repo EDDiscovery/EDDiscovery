@@ -91,7 +91,7 @@
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
             this.vScrollBarCustom1.Location = new System.Drawing.Point(863, 0);
-            this.vScrollBarCustom1.Maximum = -458;
+            this.vScrollBarCustom1.Maximum = -462;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -100,13 +100,12 @@
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
-            this.vScrollBarCustom1.Text = "vScrollBarCustom1";
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -458;
-            this.vScrollBarCustom1.ValueLimited = -458;
+            this.vScrollBarCustom1.Value = -462;
+            this.vScrollBarCustom1.ValueLimited = -462;
             // 
             // panelTop
             // 
@@ -124,26 +123,45 @@
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.AutoEllipsis = false;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = null;
+            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(862, 0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
             this.panel_close.TabStop = false;
+            this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.AutoEllipsis = false;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(832, 0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.TabStop = false;
+            this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
@@ -206,7 +224,6 @@
             this.statusStripCustom.Name = "statusStripCustom";
             this.statusStripCustom.Size = new System.Drawing.Size(885, 22);
             this.statusStripCustom.TabIndex = 32;
-            this.statusStripCustom.Text = "statusStripCustom1";
             // 
             // ProfileEditor
             // 

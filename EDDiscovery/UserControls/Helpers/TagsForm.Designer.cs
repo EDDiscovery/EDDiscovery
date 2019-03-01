@@ -92,7 +92,6 @@ namespace EDDiscovery.UserControls
             this.statusStripCustom.Name = "statusStripCustom";
             this.statusStripCustom.Size = new System.Drawing.Size(409, 22);
             this.statusStripCustom.TabIndex = 28;
-            this.statusStripCustom.Text = "statusStripCustom1";
             // 
             // panelTop
             // 
@@ -110,26 +109,45 @@ namespace EDDiscovery.UserControls
             // panel_close
             // 
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_close.AutoEllipsis = false;
+            this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.Image = null;
+            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(386, 0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
+            this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(24, 24);
             this.panel_close.TabIndex = 27;
             this.panel_close.TabStop = false;
+            this.panel_close.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_close.UseMnemonic = true;
             this.panel_close.Click += new System.EventHandler(this.panel_close_Click);
             // 
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel_minimize.AutoEllipsis = false;
+            this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(356, 0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
+            this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
+            this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
+            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(24, 24);
             this.panel_minimize.TabIndex = 26;
             this.panel_minimize.TabStop = false;
+            this.panel_minimize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.panel_minimize.UseMnemonic = true;
             this.panel_minimize.Click += new System.EventHandler(this.panel_minimize_Click);
             // 
             // label_index
@@ -187,7 +205,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
             this.vScrollBarCustom2.Location = new System.Drawing.Point(387, 0);
-            this.vScrollBarCustom2.Maximum = -121;
+            this.vScrollBarCustom2.Maximum = -125;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
@@ -196,13 +214,12 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 0;
-            this.vScrollBarCustom2.Text = "vScrollBarCustom2";
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom2.Value = -121;
-            this.vScrollBarCustom2.ValueLimited = -121;
+            this.vScrollBarCustom2.Value = -125;
+            this.vScrollBarCustom2.ValueLimited = -125;
             // 
             // buttonMore
             // 
@@ -211,7 +228,7 @@ namespace EDDiscovery.UserControls
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
             this.buttonMore.TabIndex = 5;
             this.buttonMore.Text = "+";
-            this.toolTip1.SetToolTip(this.buttonMore, "Add more variables");
+            this.toolTip1.SetToolTip(this.buttonMore, "Add more tags");
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 

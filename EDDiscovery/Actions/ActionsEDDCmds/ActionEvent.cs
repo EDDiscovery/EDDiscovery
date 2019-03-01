@@ -166,6 +166,7 @@ namespace EDDiscovery.Actions
                     else
                     {
                         HistoryEntry he = hl.EntryOrder[jidindex];
+                        ap[prefix + "JID"] = jidindex.ToStringInvariant();
 
                         if (cmdname.Equals("action"))
                         {

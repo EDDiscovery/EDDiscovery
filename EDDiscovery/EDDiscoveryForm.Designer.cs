@@ -139,7 +139,6 @@ namespace EDDiscovery
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(221, 24);
             this.menuStrip.TabIndex = 16;
-            this.menuStrip.Text = "menuStrip1";
             this.menuStrip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuStrip.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
             // 
@@ -584,7 +583,6 @@ namespace EDDiscovery
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(984, 22);
             this.statusStrip.TabIndex = 22;
-            this.statusStrip.Text = "statusStrip1";
             // 
             // toolStripProgressBar1
             // 
@@ -685,7 +683,6 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.SelectedValue = null;
             this.comboBoxCustomProfiles.Size = new System.Drawing.Size(100, 21);
             this.comboBoxCustomProfiles.TabIndex = 4;
-            this.comboBoxCustomProfiles.Text = "comboBoxCustom1";
             this.comboBoxCustomProfiles.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxCustomProfiles, "Use to select new profile or edit profile settings");
             this.comboBoxCustomProfiles.ValueMember = "";

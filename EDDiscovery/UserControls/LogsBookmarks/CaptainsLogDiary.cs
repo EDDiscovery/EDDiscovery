@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             DateTime firstofmonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             curmonth = SQLiteConnectionUser.GetSettingDate(DbDateSave, firstofmonth);
 
-            string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".Tx("Daysofweek");
+            string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".Tx(this,"Daysofweek");
             string[] daynamesplit = daynames.Split(';');
 
             for (int i = 0; i < 7; i++)
