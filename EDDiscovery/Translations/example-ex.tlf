@@ -1,6 +1,6 @@
 Language = "Example"             //Always put in the first line!
 
-Warning: "Warning" 
+Warning: "Warning" @
 Today: "Today" @
 24h: "24h" @
 7days: "7 days" @
