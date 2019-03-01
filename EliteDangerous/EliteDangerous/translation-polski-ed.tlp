@@ -589,15 +589,15 @@ SECTION MaterialCommodityData
 
 SECTION EngineeringData
 
-.Engineer: "Engineer:" @
-.Blueprint: "Blueprint:" @
-.Level: "Level:" @
-.Quality: "Quality:" @
-.ExperimentalEffect: "Experimental Effect:" @
-.Original: "Original:;;N2" @
-.Worse: "< (Worse); (Better)" @
+.Engineer: "Engineer:" => "Inżynier:"
+.Blueprint: "Blueprint:" => "Schemat:"
+.Level: "Level:" => "Poziom:"
+.Quality: "Quality:" => "Jakość:"
+.ExperimentalEffect: "Experimental Effect:" => "Efekt Eksperymentalny:"
+.Original: "Original:;;N2" => "Oryginał:;;N2"
+.Worse: "< (Worse); (Better)" => "< (Gorzej); (Lepiej)"
 
 SECTION MissionState
 
-.ToGo: "To Go:" @
-.Progress: "Progress:;%;N1" @
+.ToGo: "To Go:" => "Pozostało:"
+.Progress: "Progress:;%;N1" => "Postęp:;%;N1"

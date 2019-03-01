@@ -204,9 +204,9 @@ SECTION JournalTypeEnum
 .SquadronDemotion: "Squadron Demotion" @
 .SquadronPromotion: "Squadron Promotion" @
 .WonATrophyForSquadron: "Won A Trophy For Squadron" @
-.CrimeVictim: "Crime Victim" @
-.ProspectedAsteroid: "Prospected Asteroid" @
-.ReservoirReplenished: "Reservoir Replenished" @
+.CrimeVictim: "Crime Victim" => "Ofiara Przestępstwa"
+.ProspectedAsteroid: "Prospected Asteroid" => "Zbadano Asteroidę"
+.ReservoirReplenished: "Reservoir Replenished" => "Wypełniono Rezerwę"
 .SquadronStartup: "Squadron Startup" @
 .ICONIDsStart: "ICONI Ds Start" @
 
@@ -290,7 +290,7 @@ SECTION JournalEngineerProgress
 
 .Progress: "Progress:" => "Postęp:"
 .Progresson: "Progress on ; Engineers" => "Postęp u ; Inżynierów"
-.Rank: "Rank:" @
+.Rank: "Rank:" => "Ranga:"
 
 SECTION JournalFSDJump
 
@@ -300,7 +300,7 @@ SECTION JournalFSDJump
 
 SECTION JournalLeaveBody
 
-.In: "In " @
+.In: "In " => "W "
 
 SECTION JournalLocOrJump
 
@@ -345,17 +345,17 @@ SECTION JournalLocOrJump
 
 SECTION JournalMissionAccepted
 
-.from: "< from " @
+.from: "< from " => "< z "
 .Expiry: "Expiry:" @
-.Influence: "Influence:" @
-.Reputation: "Reputation:" @
-.Reward: "Reward:; cr;N0" @
+.Influence: "Influence:" => "Wpływ:"
+.Reputation: "Reputation:" => "Reputacja:"
+.Reward: "Reward:; cr;N0" => "Nagroda:; cr;N0"
 .Wing: "; (Wing)" @
 .Deliver: "Deliver:" @
-.TargetType: "Target Type:" @
-.KillCount: "Kill Count:" @
-.Passengers: "Passengers:" @
-.Count: "Count:" @
+.TargetType: "Target Type:" => "Typ Celu:"
+.KillCount: "Kill Count:" => "Liczba Zabójstw:"
+.Passengers: "Passengers:" => "Pasażerowie:"
+.Count: "Count:" => "Ilość:"
 
 SECTION JournalMaterialDiscovered
 
@@ -396,7 +396,7 @@ SECTION JournalProgress
 
 SECTION JournalProspectedAsteroid
 
-.Remaining: "Remaining:;%;N1" @
+.Remaining: "Remaining:;%;N1" => "Pozostało:;%;N1"
 
 SECTION JournalPromotion
 
@@ -413,8 +413,8 @@ SECTION JournalReceiveText
 .Msg: "Msg:" => "Treść:"
 .Channel: "Channel:" => "Kanał:"
 .Text: " Texts" @
-.FC: "from " @
-.on: "< on " @
+.FC: "from " => "z "
+.on: "< on " => "< na "
 
 SECTION JournalEntry
 
@@ -433,8 +433,8 @@ SECTION JournalReputation
 
 SECTION JournalReservoirReplenished
 
-.Main: "Main:;t;0.0" @
-.Reservoir: "Reservoir:;t;0.0" @
+.Main: "Main:;t;0.0" => "Główny:;t;0.0"
+.Reservoir: "Reservoir:;t;0.0" => "Rezerwa:;t;0.0"
 
 SECTION StarPlanetRing
 
@@ -452,13 +452,13 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
-.Autoscanof: "Autoscan of {0}" @
-.Detailedscanof: "Detailed scan of {0}" @
-.Basicscanof: "Basic scan of {0}" @
-.Navscanof: "Nav scan of {0}" @
-.ScanAuto: "Scan Auto" @
-.ScanBasic: "Scan Basic" @
-.ScanNav: "Scan Nav" @
+.Autoscanof: "Autoscan of {0}" => "Autoskan {0}"
+.Detailedscanof: "Detailed scan of {0}" => "Dokładny skan {0}"
+.Basicscanof: "Basic scan of {0}" => "Podstawowy skan {0}"
+.Navscanof: "Nav scan of {0}" => "Skan nawigacyjny {0}"
+.ScanAuto: "Scan Auto" => "Skan Auto"
+.ScanBasic: "Scan Basic" => "Skan Podstawowy"
+.ScanNav: "Scan Nav" => "Skan Nawigacyjny"
 .Scanof: "Scan of {0}" => "Skan {0}"
 .MSM: "Mass:;SM;0.00" => "Masa:;MS;0.00"
 .Age: "Age:;my;0.0" => "Wiek:;mln.lat;0.0"
@@ -515,16 +515,16 @@ SECTION JournalScan
 .EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" => " - Planety Ziemiopodobne, {0} ({1}-{2} AU),\n"
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" => " - Planety Amoniakowe, {0} ({1}-{2} AU),\n"
 .IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" => " - Planety Lodowe, {0} (od {1} AU)\n\n"
-.DISTA: "Dist:;ls;0.0" @
-.BNME: "Name:" @
-.MMoM: "Mass:;MM;0.00" @
-.SNME: "Name:" @
-.MoonMasses: "Moon Masses: {0:0.00}\n" @
-.MPI: "Mapped" @
-.MPIE: "Efficiently" @
-.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
-.EVFM: "\nFirst Mapped value: {0:N0}" @
-.SCNT: "\nScan Type: {0}" @
+.DISTA: "Dist:;ls;0.0" => "Odległość:;ls;0.0"
+.BNME: "Name:" => "Nazwa:"
+.MMoM: "Mass:;MM;0.00" => "Masa:;MM;0.00"
+.SNME: "Name:" => "Nazwa:"
+.MoonMasses: "Moon Masses: {0:0.00}\n" => "Mas Księżyca: {0:0.00}\n"
+.MPI: "Mapped" => "Zmapowano"
+.MPIE: "Efficiently" => "Wydajnie"
+.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" => "\nWartość Pierwszego Odkrycia+Mapowania: {0:N0}"
+.EVFM: "\nFirst Mapped value: {0:N0}" => "\nWartość Pierwszego Mapowania: {0:N0}"
+.SCNT: "\nScan Type: {0}" => "\nTyp Skanu: {0}"
 
 SECTION JournalSAAScanComplete
 
@@ -560,7 +560,7 @@ SECTION JournalShipTargeted
 
 .Hull: "Hull ;;N1" => "Poszycie ;;N1"
 .at: "< at ;;N1" => "< w ;;N1"
-.MC: " Target Events" @
+.MC: " Target Events" => "Zdarzenia Namierzenia Celu"
 .in: "< in " => "< w "
 
 SECTION JournalShipyardSell
@@ -578,8 +578,8 @@ SECTION JournalShipyardTransfer
 
 SECTION JournalSquadronBase
 
-.Old: "Old:" @
-.New: "New:" @
+.Old: "Old:" => "Stare:"
+.New: "New:" => "Nowe:"
 
 SECTION JournalStartJump
 
@@ -728,7 +728,7 @@ SECTION JournalStoredModules
 
 SECTION JournalSquadronBase
 
-.Rank: "Rank:" @
+.Rank: "Rank:" => "Ranga:"
 
 SECTION JournalSupercruiseExit
 
