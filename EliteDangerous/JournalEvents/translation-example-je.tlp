@@ -1,4 +1,4 @@
-
+﻿
 SECTION JournalTypeEnum
 
 .Unknown: "Unknown" @
@@ -204,12 +204,11 @@ SECTION JournalTypeEnum
 .SquadronDemotion: "Squadron Demotion" @
 .SquadronPromotion: "Squadron Promotion" @
 .WonATrophyForSquadron: "Won A Trophy For Squadron" @
-JournalTypeEnum.CrimeVictim: "Crime Victim" @
-JournalTypeEnum.ProspectedAsteroid: "Prospected Asteroid" @
-JournalTypeEnum.ReservoirReplenished: "Reservoir Replenished" @
-JournalTypeEnum.SquadronStartup: "Squadron Startup" @
-JournalTypeEnum.ICONIDsStart: "ICONI Ds Start" @
-
+.CrimeVictim: "Crime Victim" @
+.ProspectedAsteroid: "Prospected Asteroid" @
+.ReservoirReplenished: "Reservoir Replenished" @
+.SquadronStartup: "Squadron Startup" @
+.ICONIDsStart: "ICONI Ds Start" @
 
 SECTION JournalCargo
 
@@ -231,7 +230,6 @@ SECTION JournalCommitCrime
 
 .Fine: " Fine {0:N0}" @
 .Bounty: " Bounty {0:N0}" @
-
 
 SECTION CommunityGoal
 
@@ -271,7 +269,6 @@ SECTION JournalDocked
 
 .At: "At {0}" @
 
-
 SECTION JournalCommodityPricesBase
 
 .PON: "Prices on ; items" @
@@ -293,7 +290,7 @@ SECTION JournalEngineerProgress
 
 .Progress: "Progress:" @
 .Progresson: "Progress on ; Engineers" @
-JournalEngineerProgress.Rank: "Rank:" @
+.Rank: "Rank:" @
 
 SECTION JournalFSDJump
 
@@ -301,7 +298,9 @@ SECTION JournalFSDJump
 .Fuel: " Fuel " @
 .left: " left " @
 
-JournalLeaveBody.In: "In " @
+SECTION JournalLeaveBody
+
+.In: "In " @
 
 SECTION JournalLocOrJump
 
@@ -344,18 +343,19 @@ SECTION JournalLocOrJump
 .HomeSystem: ";Home System" @
 .ActiveState: "Active State:" @
 
-JournalMissionAccepted.from: "< from " @
-JournalMissionAccepted.Expiry: "Expiry:" @
-JournalMissionAccepted.Influence: "Influence:" @
-JournalMissionAccepted.Reputation: "Reputation:" @
-JournalMissionAccepted.Reward: "Reward:; cr;N0" @
-JournalMissionAccepted.Wing: "; (Wing)" @
-JournalMissionAccepted.Deliver: "Deliver:" @
-JournalMissionAccepted.TargetType: "Target Type:" @
-JournalMissionAccepted.KillCount: "Kill Count:" @
-JournalMissionAccepted.Passengers: "Passengers:" @
-JournalMissionAccepted.Count: "Count:" @
+SECTION JournalMissionAccepted
 
+.from: "< from " @
+.Expiry: "Expiry:" @
+.Influence: "Influence:" @
+.Reputation: "Reputation:" @
+.Reward: "Reward:; cr;N0" @
+.Wing: "; (Wing)" @
+.Deliver: "Deliver:" @
+.TargetType: "Target Type:" @
+.KillCount: "Kill Count:" @
+.Passengers: "Passengers:" @
+.Count: "Count:" @
 
 SECTION JournalMaterialDiscovered
 
@@ -376,7 +376,6 @@ SECTION MissionItem
 
 .Passenger: "<;(Passenger)" @
 .Expires: "Expires:" @
-SECTION JournalEntry
 
 SECTION JournalModuleInfo
 
@@ -395,7 +394,9 @@ SECTION JournalProgress
 .Empire: "Empire:;%" @
 .CQC: "CQC:;%" @
 
-JournalProspectedAsteroid.Remaining: "Remaining:;%;N1" @
+SECTION JournalProspectedAsteroid
+
+.Remaining: "Remaining:;%;N1" @
 
 SECTION JournalPromotion
 
@@ -411,10 +412,9 @@ SECTION JournalReceiveText
 .From: "From:" @
 .Msg: "Msg:" @
 .Channel: "Channel:" @
-JournalReceiveText.Text: " Texts" @
-JournalReceiveText.FC: "from " @
-JournalReceiveText.on: "< on " @
-
+.Text: " Texts" @
+.FC: "from " @
+.on: "< on " @
 
 SECTION JournalEntry
 
@@ -431,8 +431,10 @@ SECTION JournalReputation
 .Independent: "Independent:;;0.#" @
 .Alliance: "Alliance:;;0.#" @
 
-JournalReservoirReplenished.Main: "Main:;t;0.0" @
-JournalReservoirReplenished.Reservoir: "Reservoir:;t;0.0" @
+SECTION JournalReservoirReplenished
+
+.Main: "Main:;t;0.0" @
+.Reservoir: "Reservoir:;t;0.0" @
 
 SECTION StarPlanetRing
 
@@ -450,13 +452,13 @@ SECTION StarPlanetRing
 
 SECTION JournalScan
 
-JournalScan.Autoscanof: "Autoscan of {0}" @
-JournalScan.Detailedscanof: "Detailed scan of {0}" @
-JournalScan.Basicscanof: "Basic scan of {0}" @
-JournalScan.Navscanof: "Nav scan of {0}" @
-JournalScan.ScanAuto: "Scan Auto" @
-JournalScan.ScanBasic: "Scan Basic" @
-JournalScan.ScanNav: "Scan Nav" @
+.Autoscanof: "Autoscan of {0}" @
+.Detailedscanof: "Detailed scan of {0}" @
+.Basicscanof: "Basic scan of {0}" @
+.Navscanof: "Nav scan of {0}" @
+.ScanAuto: "Scan Auto" @
+.ScanBasic: "Scan Basic" @
+.ScanNav: "Scan Nav" @
 .Scanof: "Scan of {0}" @
 .MSM: "Mass:;SM;0.00" @
 .Age: "Age:;my;0.0" @
@@ -513,17 +515,16 @@ JournalScan.ScanNav: "Scan Nav" @
 .EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
 .AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
 .IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
-JournalScan.DISTA: "Dist:;ls;0.0" @
-JournalScan.BNME: "Name:" @
-JournalScan.MMoM: "Mass:;MM;0.00" @
-JournalScan.SNME: "Name:" @
-JournalScan.MoonMasses: "Moon Masses: {0:0.00}\n" @
-JournalScan.MPI: "Mapped" @
-JournalScan.MPIE: "Efficiently" @
-JournalScan.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
-JournalScan.EVFM: "\nFirst Mapped value: {0:N0}" @
-JournalScan.SCNT: "\nScan Type: {0}" @
-
+.DISTA: "Dist:;ls;0.0" @
+.BNME: "Name:" @
+.MMoM: "Mass:;MM;0.00" @
+.SNME: "Name:" @
+.MoonMasses: "Moon Masses: {0:0.00}\n" @
+.MPI: "Mapped" @
+.MPIE: "Efficiently" @
+.EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
+.EVFM: "\nFirst Mapped value: {0:N0}" @
+.SCNT: "\nScan Type: {0}" @
 
 SECTION JournalSAAScanComplete
 
@@ -559,10 +560,7 @@ SECTION JournalShipTargeted
 
 .Hull: "Hull ;;N1" @
 .at: "< at ;;N1" @
-JournalShipTargeted.MC: " Target Events" @
-
-SECTION JournalShipTargeted
-
+.MC: " Target Events" @
 .in: "< in " @
 
 SECTION JournalShipyardSell
@@ -728,8 +726,9 @@ SECTION JournalStoredModules
 
 .at: "< at " @
 
+SECTION JournalSquadronBase
 
-JournalSquadronBase.Rank: "Rank:" @
+.Rank: "Rank:" @
 
 SECTION JournalSupercruiseExit
 
@@ -748,181 +747,180 @@ SECTION JournalSupercruiseExit
 
 .At: "At " @
 
-JournalUnderAttack.ACOUNT: "times" @
+SECTION JournalUnderAttack
+
+.ACOUNT: "times" @
 
 SECTION JournalUnknown
 
 .UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
 
-JournalApproachBody.In: "In " @
+SECTION JournalApproachBody
 
+.In: "In " @
 
+SECTION JournalEntry
 
-Loaded translation example-ex to compare against
-JournalEntry.LegBounty: "{0} total {1:N0}" @
-JournalEntry.Target: "Target:" @
-JournalEntry.Victimfaction: "Victim faction:" @
-JournalEntry.Faction: "Faction:" @
-JournalEntry.from: "< from " @
-JournalEntry.dueto: "< , due to " @
-JournalEntry.0: "{0} on {1}" @
-JournalEntry.onfaction: "< on faction " @
-JournalEntry.Against: "Against " @
-JournalEntry.Cost: "Cost:; cr;N0" @
-JournalEntry.Bounty: "Bounty:; cr;N0" @
-JournalEntry.Offender: "Offender " @
-JournalEntry.Reward: "Reward:; cr;N0" @
-JournalEntry.to: "< to " @
-JournalEntry.Brokertook: ", Broker took {0:N0}%" @
-JournalEntry.Type: "Type:" @
-JournalEntry.Amount: "Amount:; cr;N0" @
-JournalEntry.System: "System:" @
-JournalEntry.NoCargo: "No Cargo" @
-JournalEntry.Cargo: "Cargo, {0} items" @
-JournalEntry.items: "; items" @
-JournalEntry.MissionCargo: "<; (Mission Cargo)" @
-JournalEntry.Count: "Count:" @
-JournalEntry.Abandoned: ";Abandoned" @
-JournalEntry.PowerPlay: "PowerPlay:" @
-JournalEntry.Collected: "Collected:" @
-JournalEntry.of: "< of " @
-JournalEntry.Total: "Total:" @
-JournalEntry.Progress: "Progress:;%;N1" @
-JournalEntry.Delivered: "Delivered:" @
-JournalEntry.Update: "Update, Collected:" @
-JournalEntry.ToGo: "To Go:" @
-JournalEntry.ProgressLeft: "Progress Left:;%;N1" @
-JournalEntry.Stolen: ";Stolen" @
-JournalEntry.StartingPackage: "Starting Package:" @
-JournalEntry.CGS: "< at ; Star System" @
-JournalEntry.torole: "< to role ;" @
-JournalEntry.fired: "; fired" @
-JournalEntry.Hired: "Hired:;" @
-JournalEntry.offaction: "< of faction " @
-JournalEntry.Rank: "Rank:" @
-JournalEntry.Crew: "Crew:" @
-JournalEntry.Role: "Role:" @
-JournalEntry.CrewMember: "Crew Member:" @
-JournalEntry.DuetoCrime: "; Due to Crime" @
-JournalEntry.Captain: "Captain:" @
-JournalEntry.fromfaction: "< from faction " @
-JournalEntry.Died: "{0} in ship type {1} rank {2}" @
-JournalEntry.Killedby: "Killed by " @
-JournalEntry.Boom: "Boom!" @
-JournalEntry.Option: "Option:" @
-JournalEntry.Bankrupt: ";Bankrupt" @
-JournalEntry.Dscan: "New bodies discovered:" @
-JournalEntry.Bodies: "Bodies:" @
-JournalEntry.insystem: "< in system " @
-JournalEntry.Wanted: ";(Wanted)" @
-JournalEntry.ActiveFine: ";Active Fine" @
-JournalEntry.instate: "< in state " @
-JournalEntry.Allegiance: "Allegiance:" @
-JournalEntry.Economy: "Economy:" @
-JournalEntry.Government: "Government:" @
-JournalEntry.Stationservices: "Station services:" @
-JournalEntry.Economies: "Economies:" @
-JournalEntry.onpad: "< on pad " @
-JournalEntry.Cockpit: "Cockpit:" @
-JournalEntry.Corrosion: "Corrosion:" @
-JournalEntry.TotalCost: "Total Cost:; cr;N0" @
-JournalEntry.each: "each:; cr;N0" @
-JournalEntry.Drones: "Drones" @
-JournalEntry.Price: "Price:; cr;N0" @
-JournalEntry.Name: "Name:" @
-JournalEntry.Blueprint: "Blueprint:" @
-JournalEntry.Level: "Level:" @
-JournalEntry.Override: "Override:" @
-JournalEntry.Commodity: "Commodity:" @
-JournalEntry.Material: "Material:" @
-JournalEntry.Quantity: "Quantity:" @
-JournalEntry.TotalQuantity: "TotalQuantity:" @
-JournalEntry.InSlot: "In Slot:" @
-JournalEntry.By: "By:" @
-JournalEntry.Bonus: "Bonus:; cr;N0" @
-JournalEntry.Scanned: "Scanned:" @
-JournalEntry.Discovered: "Discovered:" @
-JournalEntry.Loadout: "Loadout:" @
-JournalEntry.NPCControlled: ", NPC Controlled;" @
-JournalEntry.Version: "Version:" @
-JournalEntry.Build: "Build:" @
-JournalEntry.Part: "Part:" @
-JournalEntry.Ship: "Ship:" @
-JournalEntry.Ident: "Ident:" @
-JournalEntry.Credits: "Credits:;;N0" @
-JournalEntry.Mode: "Mode:" @
-JournalEntry.Group: "Group:" @
-JournalEntry.NotLanded: "Not Landed;Landed" @
-JournalEntry.FuelLevel: "Fuel Level:;;0.0" @
-JournalEntry.Capacity: "Capacity:;;0.0" @
-JournalEntry.Cashtotaldiffers: "Cash total differs, adjustment" @
-JournalEntry.NumberofStatuses: "Number of Statuses:" @
-JournalEntry.Online: "Online:" @
-JournalEntry.Offline: "Offline:" @
-JournalEntry.Submitted: ";Submitted" @
-JournalEntry.NPC: "< (NPC);(Player)" @
-JournalEntry.Power: "Power:" @
-JournalEntry.Failedtointerdict: "Failed to interdict;Interdicted" @
-JournalEntry.Boost: "Boost:;;0.0" @
-JournalEntry.buyprice: "< buy price ; cr;N0" @
-JournalEntry.sellprice: "< sell price ; cr;N0" @
-JournalEntry.Profit: "Profit:; cr;N0" @
-JournalEntry.Legal: "Legal;Illegal" @
-JournalEntry.NotStolen: "Not Stolen;Stolen" @
-JournalEntry.Market: "Market;BlackMarket" @
-JournalEntry.MatC: "< ; items" @
-JournalEntry.Sold: "Sold:" @
-JournalEntry.Received: "Received:" @
-JournalEntry.Active: "Active:" @
-JournalEntry.Failed: "Failed:" @
-JournalEntry.Completed: "Completed:" @
-JournalEntry.Station: "Station:" @
-JournalEntry.TargetFaction: "Target Faction:" @
-JournalEntry.Donation: "Donation:" @
-JournalEntry.Permits: "Permits:" @
-JournalEntry.Rewards: "Rewards:" @
-JournalEntry.Fine: "Fine:" @
-JournalEntry.Missionname: "Mission name:" @
-JournalEntry.Hot: ";(Hot)" @
-JournalEntry.HullHealth: "Hull Health;%;N1" @
-JournalEntry.Hull: "Hull:; cr;N0" @
-JournalEntry.Modules: "Modules:; cr;N0" @
-JournalEntry.Rebuy: "Rebuy:; cr;N0" @
-JournalEntry.into: "< into " @
-JournalEntry.Stored: "Stored:" @
-JournalEntry.Item: "Item:" @
-JournalEntry.on: " on " @
-JournalEntry.Replacedby: "Replaced by:" @
-JournalEntry.Modifications: "Modifications:" @
-JournalEntry.Slot: "Slot:" @
-JournalEntry.Swappedwith: ", Swapped with " @
-JournalEntry.TransferCost: "Transfer Cost:; cr;N0" @
-JournalEntry.Time: "Time:" @
-JournalEntry.Value: "Value:; cr;N0" @
-JournalEntry.Totalmodules: "Total modules:" @
-JournalEntry.Intoship: "Into ship:" @
-JournalEntry.TransferTime: "Transfer Time:" @
-JournalEntry.MusicTrack: "Music Track:" @
-JournalEntry.Wagesfor: "Wages for " @
-JournalEntry.itemsavailable: " items available" @
-JournalEntry.NoPassengers: "No Passengers" @
-JournalEntry.Merits: "Merits:" @
-JournalEntry.Votes: "Votes:" @
-JournalEntry.Pledged: "Pledged:" @
-JournalEntry.FromPower: "From Power:" @
-JournalEntry.ToPower: "To Power:" @
-JournalEntry.Systems: ", Systems:" @
-JournalEntry.Shield: "Shield ;;N1" @
-JournalEntry.LostTarget: "Lost Target" @
-JournalEntry.ShieldsDown: "Shields Down;Shields Up" @
-JournalEntry.Category: "Category:" @
-JournalEntry.Latitude: "Latitude:" @
-JournalEntry.Longitude: "Longitude:" @
-JournalEntry.Num: "Num:" @
-JournalEntry.Ships: "Ships" @
-JournalEntry.Distance: "Distance:; ly;0.0" @
-JournalEntry.Threat: "Threat:" @
-
-
-
-
+.LegBounty: "{0} total {1:N0}" @
+.Target: "Target:" @
+.Victimfaction: "Victim faction:" @
+.Faction: "Faction:" @
+.from: "< from " @
+.dueto: "< , due to " @
+.0: "{0} on {1}" @
+.onfaction: "< on faction " @
+.Against: "Against " @
+.Cost: "Cost:; cr;N0" @
+.Bounty: "Bounty:; cr;N0" @
+.Offender: "Offender " @
+.Reward: "Reward:; cr;N0" @
+.to: "< to " @
+.Brokertook: ", Broker took {0:N0}%" @
+.Type: "Type:" @
+.Amount: "Amount:; cr;N0" @
+.System: "System:" @
+.NoCargo: "No Cargo" @
+.Cargo: "Cargo, {0} items" @
+.items: "; items" @
+.MissionCargo: "<; (Mission Cargo)" @
+.Count: "Count:" @
+.Abandoned: ";Abandoned" @
+.PowerPlay: "PowerPlay:" @
+.Collected: "Collected:" @
+.of: "< of " @
+.Total: "Total:" @
+.Progress: "Progress:;%;N1" @
+.Delivered: "Delivered:" @
+.Update: "Update, Collected:" @
+.ToGo: "To Go:" @
+.ProgressLeft: "Progress Left:;%;N1" @
+.Stolen: ";Stolen" @
+.StartingPackage: "Starting Package:" @
+.CGS: "< at ; Star System" @
+.torole: "< to role ;" @
+.fired: "; fired" @
+.Hired: "Hired:;" @
+.offaction: "< of faction " @
+.Rank: "Rank:" @
+.Crew: "Crew:" @
+.Role: "Role:" @
+.CrewMember: "Crew Member:" @
+.DuetoCrime: "; Due to Crime" @
+.Captain: "Captain:" @
+.fromfaction: "< from faction " @
+.Died: "{0} in ship type {1} rank {2}" @
+.Killedby: "Killed by " @
+.Boom: "Boom!" @
+.Option: "Option:" @
+.Bankrupt: ";Bankrupt" @
+.Dscan: "New bodies discovered:" @
+.Bodies: "Bodies:" @
+.insystem: "< in system " @
+.Wanted: ";(Wanted)" @
+.ActiveFine: ";Active Fine" @
+.instate: "< in state " @
+.Allegiance: "Allegiance:" @
+.Economy: "Economy:" @
+.Government: "Government:" @
+.Stationservices: "Station services:" @
+.Economies: "Economies:" @
+.onpad: "< on pad " @
+.Cockpit: "Cockpit:" @
+.Corrosion: "Corrosion:" @
+.TotalCost: "Total Cost:; cr;N0" @
+.each: "each:; cr;N0" @
+.Drones: "Drones" @
+.Price: "Price:; cr;N0" @
+.Name: "Name:" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+.Override: "Override:" @
+.Commodity: "Commodity:" @
+.Material: "Material:" @
+.Quantity: "Quantity:" @
+.TotalQuantity: "TotalQuantity:" @
+.InSlot: "In Slot:" @
+.By: "By:" @
+.Bonus: "Bonus:; cr;N0" @
+.Scanned: "Scanned:" @
+.Discovered: "Discovered:" @
+.Loadout: "Loadout:" @
+.NPCControlled: ", NPC Controlled;" @
+.Version: "Version:" @
+.Build: "Build:" @
+.Part: "Part:" @
+.Ship: "Ship:" @
+.Ident: "Ident:" @
+.Credits: "Credits:;;N0" @
+.Mode: "Mode:" @
+.Group: "Group:" @
+.NotLanded: "Not Landed;Landed" @
+.FuelLevel: "Fuel Level:;;0.0" @
+.Capacity: "Capacity:;;0.0" @
+.Cashtotaldiffers: "Cash total differs, adjustment" @
+.NumberofStatuses: "Number of Statuses:" @
+.Online: "Online:" @
+.Offline: "Offline:" @
+.Submitted: ";Submitted" @
+.NPC: "< (NPC);(Player)" @
+.Power: "Power:" @
+.Failedtointerdict: "Failed to interdict;Interdicted" @
+.Boost: "Boost:;;0.0" @
+.buyprice: "< buy price ; cr;N0" @
+.sellprice: "< sell price ; cr;N0" @
+.Profit: "Profit:; cr;N0" @
+.Legal: "Legal;Illegal" @
+.NotStolen: "Not Stolen;Stolen" @
+.Market: "Market;BlackMarket" @
+.MatC: "< ; items" @
+.Sold: "Sold:" @
+.Received: "Received:" @
+.Active: "Active:" @
+.Failed: "Failed:" @
+.Completed: "Completed:" @
+.Station: "Station:" @
+.TargetFaction: "Target Faction:" @
+.Donation: "Donation:" @
+.Permits: "Permits:" @
+.Rewards: "Rewards:" @
+.Fine: "Fine:" @
+.Missionname: "Mission name:" @
+.Hot: ";(Hot)" @
+.HullHealth: "Hull Health;%;N1" @
+.Hull: "Hull:; cr;N0" @
+.Modules: "Modules:; cr;N0" @
+.Rebuy: "Rebuy:; cr;N0" @
+.into: "< into " @
+.Stored: "Stored:" @
+.Item: "Item:" @
+.on: " on " @
+.Replacedby: "Replaced by:" @
+.Modifications: "Modifications:" @
+.Slot: "Slot:" @
+.Swappedwith: ", Swapped with " @
+.TransferCost: "Transfer Cost:; cr;N0" @
+.Time: "Time:" @
+.Value: "Value:; cr;N0" @
+.Totalmodules: "Total modules:" @
+.Intoship: "Into ship:" @
+.TransferTime: "Transfer Time:" @
+.MusicTrack: "Music Track:" @
+.Wagesfor: "Wages for " @
+.itemsavailable: " items available" @
+.NoPassengers: "No Passengers" @
+.Merits: "Merits:" @
+.Votes: "Votes:" @
+.Pledged: "Pledged:" @
+.FromPower: "From Power:" @
+.ToPower: "To Power:" @
+.Systems: ", Systems:" @
+.Shield: "Shield ;;N1" @
+.LostTarget: "Lost Target" @
+.ShieldsDown: "Shields Down;Shields Up" @
+.Category: "Category:" @
+.Latitude: "Latitude:" @
+.Longitude: "Longitude:" @
+.Num: "Num:" @
+.Ships: "Ships" @
+.Distance: "Distance:; ly;0.0" @
+.Threat: "Threat:" @

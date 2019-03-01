@@ -151,12 +151,21 @@ namespace EliteDangerousCore
             return Get(x => x.Category != CommodityCategory, sorted);
         }
 
-        public static string[] GetTypes(Func<MaterialCommodityData, bool> func, bool sorted)
+        public static Tuple<string, string>[] GetTypes(Func<MaterialCommodityData, bool> func, bool sorted)
         {
             MaterialCommodityData[] mcs = GetAll();
-            string[] types = mcs.Where(func).Select(x => x.Type).Distinct().ToArray();
+            Tuple<string, string>[] types = mcs.Where(func).Select(x => new Tuple<string, string>(x.Type, x.TranslatedType)).Distinct().ToArray();
             if (sorted)
-                Array.Sort(types);
+                Array.Sort(types, delegate (Tuple<string, string> l, Tuple<string, string> r) { return l.Item2.CompareTo(r.Item2); });
+            return types;
+        }
+
+        public static Tuple<string, string>[] GetCategories(Func<MaterialCommodityData, bool> func, bool sorted)
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            Tuple<string, string>[] types = mcs.Where(func).Select(x => new Tuple<string, string>(x.Category, x.TranslatedCategory)).Distinct().ToArray();
+            if (sorted)
+                Array.Sort(types, delegate (Tuple<string, string> l, Tuple<string, string> r) { return l.Item2.CompareTo(r.Item2); });
             return types;
         }
 
@@ -173,6 +182,16 @@ namespace EliteDangerousCore
         {
             MaterialCommodityData[] mcs = GetAll();
             string[] members = mcs.Where(x => x.Type.Equals(typename, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.FDName).ToArray();
+            if (sorted)
+                Array.Sort(members);
+            return members;
+        }
+
+
+        public static string[] GetFDNameMembersOfCategory(string catname, bool sorted)
+        {
+            MaterialCommodityData[] mcs = GetAll();
+            string[] members = mcs.Where(x => x.Category.Equals(catname, StringComparison.InvariantCultureIgnoreCase)).Select(x => x.FDName).ToArray();
             if (sorted)
                 Array.Sort(members);
             return members;

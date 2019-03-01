@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             cfs = new FilterSelector(DbFilterSave);
 
             MaterialCommodityData[] items;
-            string[] types;
+            Tuple<string, string>[] types;
 
             cfs.AddAllNone();
 
@@ -69,12 +69,13 @@ namespace EDDiscovery.UserControls
                 items = MaterialCommodityData.GetMaterials(true);
                 types = MaterialCommodityData.GetTypes((x) => !x.IsCommodity, true);
 
-                MaterialCommodityData[] raw = items.Where(x => x.IsRaw).ToArray();
-                cfs.AddGroupOption(String.Join(";", raw.Select(x => x.FDName).ToArray()) + ";", "Raw");
-                MaterialCommodityData[] enc = items.Where(x => x.IsEncoded).ToArray();
-                cfs.AddGroupOption(String.Join(";", enc.Select(x => x.FDName).ToArray()) + ";", "Encoded");
-                MaterialCommodityData[] manu = items.Where(x => x.IsManufactured).ToArray();
-                cfs.AddGroupOption(String.Join(";", manu.Select(x => x.FDName).ToArray()) + ";", "Manufactured" );
+                Tuple<string, string>[] cats = MaterialCommodityData.GetCategories((x) => !x.IsCommodity, true);
+
+                foreach (var t in cats)
+                {
+                    string[] members = MaterialCommodityData.GetFDNameMembersOfCategory(t.Item1, true);
+                    cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
+                }
             }
             else
             {
@@ -88,13 +89,13 @@ namespace EDDiscovery.UserControls
                 types = MaterialCommodityData.GetTypes((x) => x.IsCommodity, true);
 
                 MaterialCommodityData[] rare = items.Where(x => x.IsRareCommodity).ToArray();
-                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare");
+                cfs.AddGroupOption(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".Tx(this));
             }
 
-            foreach (string t in types)
+            foreach (var t in types)
             {
-                string[] members = MaterialCommodityData.GetFDNameMembersOfType(t, true);
-                cfs.AddGroupOption(String.Join(";", members) + ";",t);
+                string[] members = MaterialCommodityData.GetFDNameMembersOfType(t.Item1, true);
+                cfs.AddGroupOption(String.Join(";", members) + ";", t.Item2);
             }
 
             foreach (var x in items)

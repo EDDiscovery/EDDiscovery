@@ -1,4 +1,4 @@
-
+﻿
 SECTION UserControlBookmarks
 
 .ColType: "Bookmark Type" @
@@ -17,8 +17,8 @@ SECTION UserControlBookmarks
 .CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" @
 .CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" @
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" @
-UserControlBookmarks.buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
-UserControlBookmarks.buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
+.buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
+.buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
 
 SECTION UserControlCombatPanel
 
@@ -66,9 +66,8 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" @
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
-UserControlCombatPanel.NT: "No Target" @
-UserControlCombatPanel.labelTarget: "Target" @
-
+.NT: "No Target" @
+.labelTarget: "Target" @
 
 SECTION UserControlContainerGrid
 
@@ -86,45 +85,48 @@ SECTION UserControlSearch
 
 .MaterialsCommodities: "Materials Commodities" @
 .Stars: "Stars" @
-UserControlSearch.Scans: "Scans" @
+.Scans: "Scans" @
 
-SearchMaterialsCommodities.RareCommodity: ", Rare Commodity" @
-SearchMaterialsCommodities.AND: "AND" @
-SearchMaterialsCommodities.OR: "OR" @
-SearchMaterialsCommodities.DIS: "Discovered at " @
-SearchMaterialsCommodities.COL: "Collected at " @
-SearchMaterialsCommodities.label2: "Item 2" @
-SearchMaterialsCommodities.label1: "Item 1" @
-SearchMaterialsCommodities.buttonExtFind: "Find" @
-SearchMaterialsCommodities.ColumnDate: "Date" @
-SearchMaterialsCommodities.ColumnStar: "Star" @
-SearchMaterialsCommodities.ColumnLocation: "Location" @
-SearchMaterialsCommodities.ColumnCurrentDistance: "Current Distance" @
-SearchMaterialsCommodities.ColumnPosition: "Position" @
+SECTION SearchMaterialsCommodities
 
-SearchScans.Select: "Select" @
-SearchScans.Name: "Name:" @
-SearchScans.SN: "Enter Search Name:" @
-SearchScans.DEL: "Confirm deletion of" @
-SearchScans.DELNO: "Cannot delete this entry" @
-SearchScans.CNV: "Condition is not valid" @
-SearchScans.CD: "Condition" @
-SearchScans.buttonDelete: "Delete" @
-SearchScans.buttonSave: "Save" @
-SearchScans.buttonFind: "Find" @
-SearchScans.ColumnDate: "Date" @
-SearchScans.ColumnStar: "Star" @
-SearchScans.ColumnInformation: "Information" @
-SearchScans.ColumnCurrentDistance: "Current Distance" @
-SearchScans.ColumnPosition: "Position" @
+.RareCommodity: ", Rare Commodity" @
+.AND: "AND" @
+.OR: "OR" @
+.DIS: "Discovered at " @
+.COL: "Collected at " @
+.label2: "Item 2" @
+.label1: "Item 1" @
+.buttonExtFind: "Find" @
+.ColumnDate: "Date" @
+.ColumnStar: "Star" @
+.ColumnLocation: "Location" @
+.ColumnCurrentDistance: "Current Distance" @
+.ColumnPosition: "Position" @
 
-SearchStars.ColumnStar: "Star" @
-SearchStars.ColumnCentreDistance: "Centre Distance" @
-SearchStars.ColumnCurrentDistance: "Current Distance" @
-SearchStars.ColumnPosition: "Position" @
+SECTION SearchScans
 
+.Select: "Select" @
+.Name: "Name:" @
+.SN: "Enter Search Name:" @
+.DEL: "Confirm deletion of" @
+.DELNO: "Cannot delete this entry" @
+.CNV: "Condition is not valid" @
+.CD: "Condition" @
+.buttonDelete: "Delete" @
+.buttonSave: "Save" @
+.buttonFind: "Find" @
+.ColumnDate: "Date" @
+.ColumnStar: "Star" @
+.ColumnInformation: "Information" @
+.ColumnCurrentDistance: "Current Distance" @
+.ColumnPosition: "Position" @
 
+SECTION SearchStars
 
+.ColumnStar: "Star" @
+.ColumnCentreDistance: "Centre Distance" @
+.ColumnCurrentDistance: "Current Distance" @
+.ColumnPosition: "Position" @
 
 SECTION DataGridViewStarResults
 
@@ -133,7 +135,6 @@ SECTION DataGridViewStarResults
 .Data: "View Data On Entry" @
 .Sys: "System" @
 .Station: "Station" @
-
 
 SECTION UserControlEngineering
 
@@ -255,9 +256,7 @@ SECTION UserControlJournalGrid
 .ColumnType: "Description" @
 .ColumnText: "Information" @
 .checkBoxMoveToTop: "Cursor to Top" @
-.buttonField: "Field Filter" @
 .labelSearch: "Search" @
-.buttonFilter: "Event Filter" @
 .labelTime: "Time" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" @
 .jumpToEntryToolStripMenuItem: "Jump to Entry" @
@@ -275,7 +274,7 @@ SECTION UserControlJournalGrid
 .TTFilt3: "Total filtered out {0}" @
 .TTTotal: "Filter out entries matching the field selection, " @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
-UserControlJournalGrid.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
@@ -387,30 +386,34 @@ SECTION UserControlCommodities
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
+.Rare: "Rare" @
 .buttonFilter.ToolTip: "Filter out items" @
 
-UserControlMissionOverlay.IL: " Left " @
-UserControlMissionOverlay.missionNameToolStripMenuItem: "Mission Name" @
-UserControlMissionOverlay.missionDescriptionToolStripMenuItem: "Mission Description" @
-UserControlMissionOverlay.startDateToolStripMenuItem: "Start Date" @
-UserControlMissionOverlay.factionInformationToolStripMenuItem: "Faction Information" @
-UserControlMissionOverlay.rewardToolStripMenuItem: "Reward" @
-UserControlMissionOverlay.endDateToolStripMenuItem: "End Date" @
+SECTION UserControlMissionOverlay
 
-UserControlSurveyor.planetaryClassesToolStripMenuItem: "Planetary Classes" @
-UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
-UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
-UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
-UserControlSurveyor.bodyFeaturesToolStripMenuItem: "Body Features" @
-UserControlSurveyor.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
-UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
-UserControlSurveyor.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
-UserControlSurveyor.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-UserControlSurveyor.textAlignToolStripMenuItem: "Alignment" @
-UserControlSurveyor.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
-UserControlSurveyor.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
-UserControlSurveyor.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
+.IL: " Left " @
+.missionNameToolStripMenuItem: "Mission Name" @
+.missionDescriptionToolStripMenuItem: "Mission Description" @
+.startDateToolStripMenuItem: "Start Date" @
+.factionInformationToolStripMenuItem: "Faction Information" @
+.rewardToolStripMenuItem: "Reward" @
+.endDateToolStripMenuItem: "End Date" @
 
+SECTION UserControlSurveyor
+
+.planetaryClassesToolStripMenuItem: "Planetary Classes" @
+.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
+.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
+.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
+.bodyFeaturesToolStripMenuItem: "Body Features" @
+.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
+.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
+.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
+.textAlignToolStripMenuItem: "Alignment" @
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 
 SECTION UserControlMissions
 
@@ -443,15 +446,15 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
-UserControlModules.ItemLocalised: "Type" @
-UserControlModules.ItemCol: "Item" @
-UserControlModules.SlotCol: "Slot" @
-UserControlModules.ItemInfo: "Info" @
-UserControlModules.Mass: "Mass" @
-UserControlModules.BluePrint: "BluePrint" @
-UserControlModules.PriorityEnable: "P/E" @
-UserControlModules.StoredModules: "Stored Modules" @
-UserControlModules.TravelHistoryEntry: "Travel History Entry" @
+.ItemLocalised: "Type" @
+.ItemCol: "Item" @
+.SlotCol: "Slot" @
+.ItemInfo: "Info" @
+.Mass: "Mass" @
+.BluePrint: "BluePrint" @
+.PriorityEnable: "P/E" @
+.StoredModules: "Stored Modules" @
+.TravelHistoryEntry: "Travel History Entry" @
 .Value: "Value" @
 .System: "System" @
 .TxTime: "Tx Time" @
@@ -635,12 +638,13 @@ SECTION UserControlRouteTracker
 .Enterroute: "Enter route" @
 
 SECTION UserControlScan
-UserControlScan.System: "System:" @
-UserControlScan.EnterSys: "Show System" @
-UserControlScan.VLMT: "Set Valuable Minimum" @
-UserControlScan.extCheckBoxStar.ToolTip: "Select another system to view" @
-UserControlScan.buttonSize.ToolTip: "Select image size" @
-UserControlScan.extButtonHighValue.ToolTip: "Set High Value Limit" @
+
+.System: "System:" @
+.EnterSys: "Show System" @
+.VLMT: "Set Valuable Minimum" @
+.extCheckBoxStar.ToolTip: "Select another system to view" @
+.buttonSize.ToolTip: "Select image size" @
+.extButtonHighValue.ToolTip: "Set High Value Limit" @
 .toolStripMenuItemToolbar: "Show/Hide Toolbar" @
 .ToolTip: "Right click on panel to show/hide the toolbar" @
 .checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" @
@@ -662,8 +666,8 @@ UserControlScan.extButtonHighValue.ToolTip: "Set High Value Limit" @
 
 SECTION UserControlScanGrid
 
-UserControlScanGrid.Geologicalactivity: "Geological activity" @
-UserControlScanGrid.Surfacemapped: "Surface mapped" @
+.Geologicalactivity: "Geological activity" @
+.Surfacemapped: "Surface mapped" @
 .colName: "Name" @
 .colClass: "Class" @
 .colDistance: "Distance" @
@@ -712,10 +716,10 @@ UserControlScanGrid.Surfacemapped: "Surface mapped" @
 
 SECTION UserControlSettings
 
-UserControlSettings.FS: "All entries for Statistics" @
-UserControlSettings.SM: "Safe Mode" @
-UserControlSettings.CSM: "Confirm restart to safe mode" @
-UserControlSettings.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" @
+.FS: "All entries for Statistics" @
+.SM: "Safe Mode" @
+.CSM: "Confirm restart to safe mode" @
+.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" @
 .groupBoxCustomHistoryLoad: "History Options" @
 .checkBoxShowUIEvents: "Show Elite UI Events in history" @
 .checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" @
@@ -834,7 +838,7 @@ SECTION UserControlShipYards
 
 SECTION UserControlShoppingList
 
-UserControlShoppingList.buttonSpecialEffects: "Special Effects" @
+.buttonSpecialEffects: "Special Effects" @
 .buttonTechBroker: "Tech Broker Unlocks" @
 .showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" @
 .showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" @
@@ -901,8 +905,8 @@ SECTION UserControlSpanel
 
 SECTION UserControlStarDistance
 
-UserControlStarDistance.addToExplorationToolStripMenuItem: "Add To Exploration" @
-UserControlStarDistance.addToExpeditionToolStripMenuItem: "Add to Expedition" @
+.addToExplorationToolStripMenuItem: "Add To Exploration" @
+.addToExpeditionToolStripMenuItem: "Add to Expedition" @
 .colName: "Name" @
 .colDistance: "Distance" @
 .colVisited: "Visited" @
@@ -930,7 +934,7 @@ SECTION UserControlStarList
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .setNoteToolStripMenuItem: "Set Note" @
-UserControlStarList.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" @
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" @
@@ -980,7 +984,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .Visits: "Visits" @
 .Type: "Type" @
-.All:"All" @
+.All: "All" @
 .JumpsBeforeSystem: "Jumps Before System" @
 .TotalNoofjumps: "Total No of jumps: " @
 .JumpHistory: "Jump History" @
@@ -1095,16 +1099,16 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip: "By Ship" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
-UserControlStats.Mapped: "Mapped" @
+.Mapped: "Mapped" @
 
 SECTION StatsTimeUserControl
 
-StatsTimeUserControl.Summary: "Summary" @
-StatsTimeUserControl.Day: "Day" @
-StatsTimeUserControl.Week: "Week" @
-StatsTimeUserControl.Month: "Month" @
-StatsTimeUserControl.Custom: "Custom" @
-StatsTimeUserControl.labelTime: "Time" @
+.Summary: "Summary" @
+.Day: "Day" @
+.Week: "Week" @
+.Month: "Month" @
+.Custom: "Custom" @
+.labelTime: "Time" @
 
 SECTION UserControlSynthesis
 
@@ -1130,8 +1134,8 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
-UserControlSysInfo.labelJumpRange: "Jump" @
-UserControlSysInfo.toolStripJumpRange: "Display Jump Range" @
+.labelJumpRange: "Jump" @
+.toolStripJumpRange: "Display Jump Range" @
 .labelSysName: "System" @
 .labelOpen: "Open" @
 .buttonEDSM: "EDSM" @
@@ -1216,8 +1220,6 @@ SECTION UserControlTravelGrid
 .ColumnDistance: "Information" @
 .ColumnNote: "Note" @
 .checkBoxMoveToTop: "Cursor to Top" @
-.buttonField: "Field Filter" @
-.buttonFilter: "Event Filter" @
 .labelSearch: "Search" @
 .labelTime: "Time" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" @
@@ -1260,55 +1262,57 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
-UserControlTravelGrid.extCheckBoxOutlines.ToolTip: "Control Outlining" @
-UserControlTravelGrid.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.extCheckBoxOutlines.ToolTip: "Control Outlining" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
-UserControlTravelGrid.outliningOnOffToolStripMenuItem: "Outlining On" @
-UserControlTravelGrid.scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" @
-UserControlTravelGrid.toolStripRollUpOlderOutlines: "Roll up older entries" @
-UserControlTravelGrid.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" @
-UserControlTravelGrid.toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
-UserControlTravelGrid.toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
-UserControlTravelGrid.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" @
+.outliningOnOffToolStripMenuItem: "Outlining On" @
+.scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" @
+.toolStripRollUpOlderOutlines: "Roll up older entries" @
+.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" @
+.toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
+.toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
+.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" @
 
-UserControlCaptainsLog.Diary: "Diary" @
-UserControlCaptainsLog.Entries: "Entries" @
+SECTION UserControlCaptainsLog
 
-CaptainsLogDiary.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" @
-CaptainsLogDiary.buttonLeft: "<" @
-CaptainsLogDiary.buttonRight: ">" @
+.Diary: "Diary" @
+.Entries: "Entries" @
 
-CaptainsLogEntries.DTF: "Bad Date Time format" @
-CaptainsLogEntries.Note: "Note:" @
-CaptainsLogEntries.EnterNote: "Enter Note" @
-CaptainsLogEntries.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
-CaptainsLogEntries.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
-CaptainsLogEntries.SetTags: "Set Tags" @
-CaptainsLogEntries.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
-CaptainsLogEntries.NSS: "No such system" @
-CaptainsLogEntries.ColTime: "Time" @
-CaptainsLogEntries.ColSystem: "System" @
-CaptainsLogEntries.ColBodyName: "Body" @
-CaptainsLogEntries.ColNote: "Note" @
-CaptainsLogEntries.ColTags: "Tags" @
+SECTION CaptainsLogDiary
 
-CaptainsLogEntries.labelEndDate: "End Date:" @
-CaptainsLogEntries.labelDateStart: "Start Date:" @
-CaptainsLogEntries.buttonTags.ToolTip: "Edit Tags" @
-CaptainsLogEntries.buttonDelete.ToolTip: "Delete selected entries" @
-CaptainsLogEntries.buttonNew.ToolTip: "New Entry" @
-CaptainsLogEntries.textBoxFilter.ToolTip: "Search for Log Entries" @
-CaptainsLogEntries.labelSearch: "Search" @
-CaptainsLogEntries.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
-CaptainsLogEntries.openInEDSMToolStripMenuItem: "Open in EDSM" @
-CaptainsLogEntries.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" @
+.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" @
+.buttonLeft: "<" @
+.buttonRight: ">" @
 
+SECTION CaptainsLogEntries
 
-
+.DTF: "Bad Date Time format" @
+.Note: "Note:" @
+.EnterNote: "Enter Note" @
+.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
+.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
+.SetTags: "Set Tags" @
+.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
+.NSS: "No such system" @
+.ColTime: "Time" @
+.ColSystem: "System" @
+.ColBodyName: "Body" @
+.ColNote: "Note" @
+.ColTags: "Tags" @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
+.buttonTags.ToolTip: "Edit Tags" @
+.buttonDelete.ToolTip: "Delete selected entries" @
+.buttonNew.ToolTip: "New Entry" @
+.textBoxFilter.ToolTip: "Search for Log Entries" @
+.labelSearch: "Search" @
+.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
+.openInEDSMToolStripMenuItem: "Open in EDSM" @
+.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" @
 
 SECTION UserControlTrilateration
 
@@ -1369,42 +1373,48 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
 
-UserControlSurveyor.Systemscancomplete: "System scan complete." @
-UserControlSurveyor.bodiesfound: " bodies found." @
-UserControlSurveyor.Noscanreported: "No scan reported." @
-UserControlSurveyor.isanammoniaworld: " is an ammonia world." @
-UserControlSurveyor.isanearthlikeworld: " is an earth like world." @
-UserControlSurveyor.isawaterworld: " is a water world." @
-UserControlSurveyor.isaterraformablewaterworld: " is a terraformable water world." @
-UserControlSurveyor.isaterraformableplanet: " is a terraformable planet." @
-UserControlSurveyor.Hasring: " Has ring." @
-UserControlSurveyor.Has: " Has " @
+SECTION UserControlSurveyor
 
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
+.Noscanreported: "No scan reported." @
+.isanammoniaworld: " is an ammonia world." @
+.isanearthlikeworld: " is an earth like world." @
+.isawaterworld: " is a water world." @
+.isaterraformablewaterworld: " is a terraformable water world." @
+.isaterraformableplanet: " is a terraformable planet." @
+.Hasring: " Has ring." @
+.Has: " Has " @
 
 SECTION ScanDisplayControl
 
-ScanDisplayControl.NSD: "No scan data available" @
-ScanDisplayControl.BC: "Barycentre of {0}" @
+.NSD: "No scan data available" @
+.BC: "Barycentre of {0}" @
 
+SECTION ScanDisplayForm
 
-ScanDisplayForm.Sys: "System" @
-ScanDisplayForm.Station: "Station" @
+.Sys: "System" @
+.Station: "Station" @
 
+SECTION TagsForm
 
-TagsForm.buttonCancel: "Cancel" @
-TagsForm.buttonOK: "OK" @
-TagsForm.label_index: "N/A" @
-TagsForm.buttonMore: "+" @
-TagsForm.buttonMore.ToolTip: "Add more tags" @
+.buttonCancel: "Cancel" @
+.buttonOK: "OK" @
+.label_index: "N/A" @
+.buttonMore: "+" @
+.buttonMore.ToolTip: "Add more tags" @
 TagsForm: "Tags" @
 
+SECTION FilterSelector
 
-FilterSelector.Travel: "Travel" @
-FilterSelector.Scan: "Scan" @
-FilterSelector.Missions: "Missions" @
-FilterSelector.Materials: "Materials" @
-FilterSelector.Commodities: "Commodities" @
-FilterSelector.Ledger: "Ledger" @
-FilterSelector.Ship: "Ship" @
+.Travel: "Travel" @
+.Scan: "Scan" @
+.Missions: "Missions" @
+.Materials: "Materials" @
+.Commodities: "Commodities" @
+.Ledger: "Ledger" @
+.Ship: "Ship" @
 
-UserControlCommonBase.Copyingtexttoclipboardfailed: "Copying text to clipboard failed" @
+SECTION UserControlCommonBase
+
+.Copyingtexttoclipboardfailed: "Copying text to clipboard failed" @

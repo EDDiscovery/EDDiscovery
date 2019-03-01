@@ -1,4 +1,4 @@
-Warning: "Warning" @
+﻿Warning: "Warning" @
 Today: "Today" @
 24h: "24h" @
 7days: "7 days" @
@@ -102,19 +102,17 @@ SECTION PopOutInfo
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" @
 .Search.Description: "Search" @
-PopOutInfo.CaptainsLog.Title: "Captain's Log" @
-PopOutInfo.CaptainsLog.Description: "Captain's Log - notes on your travels" @
-PopOutInfo.Surveyor.Title: "Surveyor" @
-PopOutInfo.Surveyor.Description: "Surface map aid" @
-PopOutInfo.MissionOverlay.Title: "Mission Overlay" @
-PopOutInfo.MissionOverlay.Description: "Mission List overlay" @
-
+.CaptainsLog.Title: "Captain's Log" @
+.CaptainsLog.Description: "Captain's Log - notes on your travels" @
+.Surveyor.Title: "Surveyor" @
+.Surveyor.Description: "Surface map aid" @
+.MissionOverlay.Title: "Mission Overlay" @
+.MissionOverlay.Description: "Mission List overlay" @
 
 SECTION EDDiscoveryForm
 
-EDDiscoveryForm.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
-EDDiscoveryForm.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
-
+.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
+.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
 .toolsToolStripMenuItem: "&Tools" @
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" @
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" @

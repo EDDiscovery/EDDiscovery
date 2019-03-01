@@ -1,4 +1,4 @@
-
+﻿
 SECTION Bodies
 
 .HMS: "Luminous Hot Main Sequence {0} star" @
@@ -587,14 +587,17 @@ SECTION MaterialCommodityData
 .thargoidtissuesampletype4: "Thargoid Hydra Tissue Sample" @
 .ancientkey: "Ancient Key" @
 
-EngineeringData.Engineer: "Engineer:" @
-EngineeringData.Blueprint: "Blueprint:" @
-EngineeringData.Level: "Level:" @
-EngineeringData.Quality: "Quality:" @
-EngineeringData.ExperimentalEffect: "Experimental Effect:" @
-EngineeringData.Original: "Original:;;N2" @
-EngineeringData.Worse: "< (Worse); (Better)" @
+SECTION EngineeringData
 
+.Engineer: "Engineer:" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+.Quality: "Quality:" @
+.ExperimentalEffect: "Experimental Effect:" @
+.Original: "Original:;;N2" @
+.Worse: "< (Worse); (Better)" @
 
-MissionState.ToGo: "To Go:" @
-MissionState.Progress: "Progress:;%;N1" @
+SECTION MissionState
+
+.ToGo: "To Go:" @
+.Progress: "Progress:;%;N1" @
