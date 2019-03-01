@@ -17,6 +17,8 @@ SECTION UserControlBookmarks
 .CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" @
 .CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" @
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" @
+.buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
+.buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
 
 SECTION UserControlCombatPanel
 
@@ -64,6 +66,8 @@ SECTION UserControlCombatPanel
 .NoOverwrite: "Name of campaign already in use, cannot overwrite" @
 .Condel: "Confirm deletion of {0}" @
 .NC: "Name changed - can't delete" @
+.NT: "No Target" @
+.labelTarget: "Target" @
 
 SECTION UserControlContainerGrid
 
@@ -81,19 +85,48 @@ SECTION UserControlSearch
 
 .MaterialsCommodities: "Materials Commodities" @
 .Stars: "Stars" @
+.Scans: "Scans" @
 
-SECTION UserControlSearchMaterialsCommodities
+SECTION SearchMaterialsCommodities
 
+.RareCommodity: ", Rare Commodity" @
+.AND: "AND" @
+.OR: "OR" @
+.DIS: "Discovered at " @
+.COL: "Collected at " @
+.label2: "Item 2" @
+.label1: "Item 1" @
+.buttonExtFind: "Find" @
+.ColumnDate: "Date" @
 .ColumnStar: "Star" @
 .ColumnLocation: "Location" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
-.buttonExtFind: "Find" @
-.label2: "Item 2" @
-.label1: "Item 1" @
-.RareCommodity: ", Rare Commodity" @
-.AND: "AND" @
-.OR: "OR" @
+
+SECTION SearchScans
+
+.Select: "Select" @
+.Name: "Name:" @
+.SN: "Enter Search Name:" @
+.DEL: "Confirm deletion of" @
+.DELNO: "Cannot delete this entry" @
+.CNV: "Condition is not valid" @
+.CD: "Condition" @
+.buttonDelete: "Delete" @
+.buttonSave: "Save" @
+.buttonFind: "Find" @
+.ColumnDate: "Date" @
+.ColumnStar: "Star" @
+.ColumnInformation: "Information" @
+.ColumnCurrentDistance: "Current Distance" @
+.ColumnPosition: "Position" @
+
+SECTION SearchStars
+
+.ColumnStar: "Star" @
+.ColumnCentreDistance: "Centre Distance" @
+.ColumnCurrentDistance: "Current Distance" @
+.ColumnPosition: "Position" @
 
 SECTION DataGridViewStarResults
 
@@ -223,9 +256,7 @@ SECTION UserControlJournalGrid
 .ColumnType: "Description" => "Descrizione"
 .ColumnText: "Information" => "Informazione"
 .checkBoxMoveToTop: "Cursor to Top" => "Cursore in cima"
-.buttonField: "Field Filter" => "Filtra Campi"
 .labelSearch: "Search" => "Cerca"
-.buttonFilter: "Event Filter" => "Filtra Eventi"
 .labelTime: "Time" => "Tempo"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Rimuovi ordinamento delle colonne"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Salta alla voce"
@@ -243,7 +274,7 @@ SECTION UserControlJournalGrid
 .TTFilt3: "Total filtered out {0}" @
 .TTTotal: "Filter out entries matching the field selection, " @
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
-.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
@@ -337,6 +368,7 @@ SECTION UserControlMaterials
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
+.buttonFilter.ToolTip: "Filter out items" @
 
 SECTION UserControlCommodities
 
@@ -354,6 +386,34 @@ SECTION UserControlCommodities
 .Data: "Data" @
 .Mats: "Mats" @
 .Total: "Total" @
+.Rare: "Rare" @
+.buttonFilter.ToolTip: "Filter out items" @
+
+SECTION UserControlMissionOverlay
+
+.IL: " Left " @
+.missionNameToolStripMenuItem: "Mission Name" @
+.missionDescriptionToolStripMenuItem: "Mission Description" @
+.startDateToolStripMenuItem: "Start Date" @
+.factionInformationToolStripMenuItem: "Faction Information" @
+.rewardToolStripMenuItem: "Reward" @
+.endDateToolStripMenuItem: "End Date" @
+
+SECTION UserControlSurveyor
+
+.planetaryClassesToolStripMenuItem: "Planetary Classes" @
+.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
+.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
+.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
+.bodyFeaturesToolStripMenuItem: "Body Features" @
+.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
+.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has Volcanism" @
+.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
+.textAlignToolStripMenuItem: "Alignment" @
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" @
+.textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" @
+.textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" @
 
 SECTION UserControlMissions
 
@@ -386,8 +446,15 @@ SECTION UserControlMissions
 
 SECTION UserControlModules
 
-.Slot: "Slot" @
-.Info: "Info" @
+.ItemLocalised: "Type" @
+.ItemCol: "Item" @
+.SlotCol: "Slot" @
+.ItemInfo: "Info" @
+.Mass: "Mass" @
+.BluePrint: "BluePrint" @
+.PriorityEnable: "P/E" @
+.StoredModules: "Stored Modules" @
+.TravelHistoryEntry: "Travel History Entry" @
 .Value: "Value" @
 .System: "System" @
 .TxTime: "Tx Time" @
@@ -428,6 +495,8 @@ SECTION UserControlModules
 .comboBoxShips.ToolTip: "Select ship to view" @
 .labelVehicle: "Unknown" @
 .labelShip: "Ship" @
+.EDSURL: "Enter ED Shipyard URL" @
+.CURL: "Enter Coriolis URL" @
 
 SECTION UserControlNotePanel
 
@@ -570,6 +639,12 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
+.System: "System:" @
+.EnterSys: "Show System" @
+.VLMT: "Set Valuable Minimum" @
+.extCheckBoxStar.ToolTip: "Select another system to view" @
+.buttonSize.ToolTip: "Select image size" @
+.extButtonHighValue.ToolTip: "Set High Value Limit" @
 .toolStripMenuItemToolbar: "Show/Hide Toolbar" @
 .ToolTip: "Right click on panel to show/hide the toolbar" @
 .checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" @
@@ -579,9 +654,6 @@ SECTION UserControlScan
 .checkBoxMaterialsRare.ToolTip: "Show rare materials only" @
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" @
 .checkBoxMoons.ToolTip: "Show/Hide Moons" @
-.checkBoxLarge.ToolTip: "Image size large" @
-.checkBoxSmall.ToolTip: "Image size small" @
-.checkBoxMedium.ToolTip: "Image size medium" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" @
 .AV: "Approx value: {0:N0}" @
@@ -594,9 +666,11 @@ SECTION UserControlScan
 
 SECTION UserControlScanGrid
 
+.Geologicalactivity: "Geological activity" @
+.Surfacemapped: "Surface mapped" @
 .colName: "Name" @
 .colClass: "Class" @
-.Distance: "Distance" @
+.colDistance: "Distance" @
 .colBriefing: "Briefing" @
 .Moon: "Moon" @
 .MainStar: "Main Star" @
@@ -642,6 +716,10 @@ SECTION UserControlScanGrid
 
 SECTION UserControlSettings
 
+.FS: "All entries for Statistics" @
+.SM: "Safe Mode" @
+.CSM: "Confirm restart to safe mode" @
+.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" @
 .groupBoxCustomHistoryLoad: "History Options" => "Opzioni dello Storico"
 .checkBoxShowUIEvents: "Show Elite UI Events in history" => "Mostra eventi Elite UI nello storico"
 .checkBoxOrderRowsInverted: "Number Rows Lastest Entry Highest" => "Numera i registri dei pi� vecchi"
@@ -726,6 +804,7 @@ SECTION UserControlSettings
 .60daysold: ">60 days old" @
 .90daysold: ">90 days old" @
 .180daysold: ">180 days old" @
+.270daysold: ">270 days old" @
 .365daysold: "> 365 days old" @
 .AddC: "Commander name is not valid or duplicate" @
 .AddT: "Cannot create Commander" @
@@ -733,6 +812,15 @@ SECTION UserControlSettings
 .RemoveSectors: "Remove Sectors" @
 .GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" @
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
+.ESM: "Scans,Cargo,Missions,State,Jumps etc" @
+.EJS: "Jumps and Scans" @
+.EJ: "Jumps" @
+.EN: "Nothing" @
+.labelHistoryEssItems: "Essential Entries Are" @
+.groupBoxCustomSafeMode: "Move System DB / Reset UI etc" @
+.labelSafeMode: "Click this to perform special operations" @
+.buttonExtSafeMode: "Restart in Safe Mode" @
+.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." @
 
 SECTION UserControlShipYards
 
@@ -750,6 +838,7 @@ SECTION UserControlShipYards
 
 SECTION UserControlShoppingList
 
+.buttonSpecialEffects: "Special Effects" @
 .buttonTechBroker: "Tech Broker Unlocks" @
 .showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" @
 .showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" @
@@ -816,6 +905,8 @@ SECTION UserControlSpanel
 
 SECTION UserControlStarDistance
 
+.addToExplorationToolStripMenuItem: "Add To Exploration" @
+.addToExpeditionToolStripMenuItem: "Add to Expedition" @
 .colName: "Name" @
 .colDistance: "Distance" @
 .colVisited: "Visited" @
@@ -843,7 +934,7 @@ SECTION UserControlStarList
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" @
 .viewOnEDSMToolStripMenuItem: "View on EDSM" @
 .setNoteToolStripMenuItem: "Set Note" @
-.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxJumponium.ToolTip: "Show/Hide presence of Jumponium Materials" @
 .checkBoxBodyClasses.ToolTip: "Show/Hide Special bodies classes" @
@@ -892,6 +983,8 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageScan.userControlStatsTimeScan.labelTime: "Time" @
 .tabControlCustomStats.tabPageGameStats: "In Game" @
 .Visits: "Visits" @
+.Type: "Type" @
+.All: "All" @
 .JumpsBeforeSystem: "Jumps Before System" @
 .TotalNoofjumps: "Total No of jumps: " @
 .JumpHistory: "Jump History" @
@@ -927,7 +1020,6 @@ SECTION UserControlStats
 .Docked: "Docked" @
 .BodyType: "Body Type" @
 .Trip: "Trip" @
-.all: "all" @
 .CurrentAssets: "Current Assets" @
 .SpentonShips: "Spent on Ships" @
 .SpentonOutfitting: "Spent on Outfitting" @
@@ -1007,6 +1099,16 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip: "By Ship" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
+.Mapped: "Mapped" @
+
+SECTION StatsTimeUserControl
+
+.Summary: "Summary" @
+.Day: "Day" @
+.Week: "Week" @
+.Month: "Month" @
+.Custom: "Custom" @
+.labelTime: "Time" @
 
 SECTION UserControlSynthesis
 
@@ -1032,6 +1134,8 @@ SECTION UserControlSynthesis
 
 SECTION UserControlSysInfo
 
+.labelJumpRange: "Jump" @
+.toolStripJumpRange: "Display Jump Range" @
 .labelSysName: "System" => "Sistema"
 .labelOpen: "Open" => "Apri"
 .buttonEDSM: "EDSM" @
@@ -1116,8 +1220,6 @@ SECTION UserControlTravelGrid
 .ColumnDistance: "Information" => "Informazioni"
 .ColumnNote: "Note" @
 .checkBoxMoveToTop: "Cursor to Top" => "Cursore all'inizio"
-.buttonField: "Field Filter" => "Filtro di Campi"
-.buttonFilter: "Event Filter" => "Filtro d'Eventi"
 .labelSearch: "Search" => "Cerca"
 .labelTime: "Time" => "Ora"
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Rimuovi l'ordinamento delle colonne"
@@ -1160,12 +1262,57 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" @
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" @
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" @
-.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" @
+.extCheckBoxOutlines.ToolTip: "Control Outlining" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" @
 .comboBoxHistoryWindow.ToolTip: "Select the entries by age" @
+.outliningOnOffToolStripMenuItem: "Outlining On" @
+.scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" @
+.toolStripRollUpOlderOutlines: "Roll up older entries" @
+.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" @
+.toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" @
+.toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" @
+.addToTrilaterationToolStripMenuItem.explorationPanelToolStripMenuItem: "Exploration Panel" @
+
+SECTION UserControlCaptainsLog
+
+.Diary: "Diary" @
+.Entries: "Entries" @
+
+SECTION CaptainsLogDiary
+
+.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" @
+.buttonLeft: "<" @
+.buttonRight: ">" @
+
+SECTION CaptainsLogEntries
+
+.DTF: "Bad Date Time format" @
+.Note: "Note:" @
+.EnterNote: "Enter Note" @
+.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
+.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
+.SetTags: "Set Tags" @
+.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
+.NSS: "No such system" @
+.ColTime: "Time" @
+.ColSystem: "System" @
+.ColBodyName: "Body" @
+.ColNote: "Note" @
+.ColTags: "Tags" @
+.labelEndDate: "End Date:" @
+.labelDateStart: "Start Date:" @
+.buttonTags.ToolTip: "Edit Tags" @
+.buttonDelete.ToolTip: "Delete selected entries" @
+.buttonNew.ToolTip: "New Entry" @
+.textBoxFilter.ToolTip: "Search for Log Entries" @
+.labelSearch: "Search" @
+.toolStripMenuItemGotoStar3dmap: "Goto in 3D Map" @
+.openInEDSMToolStripMenuItem: "Open in EDSM" @
+.openAScanPanelViewToolStripMenuItem: "Open a Scan Panel View" @
 
 SECTION UserControlTrilateration
 
@@ -1226,8 +1373,48 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
 
-SECTION ScanDisplay
+SECTION UserControlSurveyor
 
-.AV: "Approx value: {0:N0}" @
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
+.Noscanreported: "No scan reported." @
+.isanammoniaworld: " is an ammonia world." @
+.isanearthlikeworld: " is an earth like world." @
+.isawaterworld: " is a water world." @
+.isaterraformablewaterworld: " is a terraformable water world." @
+.isaterraformableplanet: " is a terraformable planet." @
+.Hasring: " Has ring." @
+.Has: " Has " @
+
+SECTION ScanDisplayControl
+
 .NSD: "No scan data available" @
 .BC: "Barycentre of {0}" @
+
+SECTION ScanDisplayForm
+
+.Sys: "System" @
+.Station: "Station" @
+
+SECTION TagsForm
+
+.buttonCancel: "Cancel" @
+.buttonOK: "OK" @
+.label_index: "N/A" @
+.buttonMore: "+" @
+.buttonMore.ToolTip: "Add more tags" @
+TagsForm: "Tags" @
+
+SECTION FilterSelector
+
+.Travel: "Travel" @
+.Scan: "Scan" @
+.Missions: "Missions" @
+.Materials: "Materials" @
+.Commodities: "Commodities" @
+.Ledger: "Ledger" @
+.Ship: "Ship" @
+
+SECTION UserControlCommonBase
+
+.Copyingtexttoclipboardfailed: "Copying text to clipboard failed" @

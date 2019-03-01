@@ -102,9 +102,17 @@ SECTION PopOutInfo
 .PanelSelector.Title: "+" @
 .Search.Title: "Search" @
 .Search.Description: "Search" @
+.CaptainsLog.Title: "Captain's Log" @
+.CaptainsLog.Description: "Captain's Log - notes on your travels" @
+.Surveyor.Title: "Surveyor" @
+.Surveyor.Description: "Surface map aid" @
+.MissionOverlay.Title: "Mission Overlay" @
+.MissionOverlay.Description: "Mission List overlay" @
 
 SECTION EDDiscoveryForm
 
+.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
+.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" @
 .toolsToolStripMenuItem: "&Tools" => "&Strumenti"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
 .toolsToolStripMenuItem.show2DMapsToolStripMenuItem: "Show &2D maps" => "Visualizza mappa &2D"
