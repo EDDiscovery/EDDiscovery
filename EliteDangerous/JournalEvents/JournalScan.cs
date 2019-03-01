@@ -35,6 +35,7 @@ namespace EliteDangerousCore.JournalEvents
         public int? BodyID { get; set; }                            // direct
         public double DistanceFromArrivalLS { get; set; }           // direct
         public double? nRotationPeriod { get; set; }                // direct
+        public double? nRotationPeriodDays { get; set; }      
         public double? nSurfaceTemperature { get; set; }            // direct
         public double? nRadius { get; set; }                        // direct
         public double? nRadiusSols { get; set; }
@@ -66,11 +67,14 @@ namespace EliteDangerousCore.JournalEvents
 
         // All orbiting bodies (Stars/Planets), not main star
         public double? nSemiMajorAxis;                              // direct
+        public double? nSemiMajorAxisAU;                            // direct
         public double? nEccentricity;                               // direct
         public double? nOrbitalInclination;                         // direct
         public double? nPeriapsis;                                  // direct
         public double? nOrbitalPeriod { get; set; }                 // direct
-        public double? nAxialTilt { get; set; }                 // direct, radians
+        public double? nOrbitalPeriodDays { get; set; }
+        public double? nAxialTilt { get; set; }                     // direct, radians
+        public double? nAxialTiltDeg { get; set; }      
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -92,6 +96,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? nSurfaceGravity { get; set; }                // direct
         public double? nSurfaceGravityG { get; set; }
         public double? nSurfacePressure { get; set; }               // direct
+        public double? nSurfacePressureEarth { get; set; }   
         public bool? nLandable { get; set; }                        // direct
         public bool IsLandable { get { return nLandable.HasValue && nLandable.Value; } }
         public double? nMassEM { get; set; }                        // direct, not in description of event, mass in EMs
@@ -236,13 +241,23 @@ namespace EliteDangerousCore.JournalEvents
             Luminosity = evt["Luminosity"].StrNull();
 
             nRotationPeriod = evt["RotationPeriod"].DoubleNull();
+            if (nRotationPeriod != null)
+                nRotationPeriodDays = nRotationPeriod.Value / oneDay_s;
 
             nOrbitalPeriod = evt["OrbitalPeriod"].DoubleNull();
+            if (nOrbitalPeriod != null)
+                nOrbitalPeriodDays = nOrbitalPeriod.Value / oneDay_s;
+
             nSemiMajorAxis = evt["SemiMajorAxis"].DoubleNull();
+            if (nSemiMajorAxis != null)
+                nSemiMajorAxisAU = nSemiMajorAxis.Value / oneAU_m;
+
             nEccentricity = evt["Eccentricity"].DoubleNull();
             nOrbitalInclination = evt["OrbitalInclination"].DoubleNull();
             nPeriapsis = evt["Periapsis"].DoubleNull();
             nAxialTilt = evt["AxialTilt"].DoubleNull();
+            if ( nAxialTilt!= null)
+                nAxialTiltDeg = nAxialTilt.Value * 180.0 / Math.PI;
 
             Rings = evt["Rings"]?.ToObjectProtected<StarPlanetRing[]>(); // may be Null
 
@@ -269,6 +284,9 @@ namespace EliteDangerousCore.JournalEvents
                 nSurfaceGravityG = nSurfaceGravity / oneGee_m_s2;
             nSurfaceTemperature = evt["SurfaceTemperature"].DoubleNull();
             nSurfacePressure = evt["SurfacePressure"].DoubleNull();
+            if (nSurfacePressure != null)
+                nSurfacePressureEarth = nSurfacePressure.Value / oneAtmosphere_Pa;
+
             nLandable = evt["Landable"].BoolNull();
 
             ReserveLevelStr = evt["ReserveLevel"].Str();
@@ -552,7 +570,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 if (nSurfacePressure.Value > 1000)
                 {
-                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n".Tx(this,"SPA"), (nSurfacePressure.Value / oneAtmosphere_Pa).ToString("N2"));
+                    scanText.AppendFormat("Surface Pressure: {0} Atmospheres\n".Tx(this,"SPA"), nSurfacePressureEarth.Value.ToString("N2"));
                 }
                 else
                 {
@@ -565,13 +583,13 @@ namespace EliteDangerousCore.JournalEvents
                                                                                             ToTitleCase(Volcanism.ToLowerInvariant()));
 
 
-            if (nOrbitalPeriod.HasValue && nOrbitalPeriod > 0)
-                scanText.AppendFormat("Orbital Period: {0} days\n".Tx(this), (nOrbitalPeriod.Value / oneDay_s).ToString("N1"));
+            if (nOrbitalPeriodDays.HasValue && nOrbitalPeriodDays > 0)
+                scanText.AppendFormat("Orbital Period: {0} days\n".Tx(this), nOrbitalPeriodDays.Value.ToString("N1"));
 
             if (nSemiMajorAxis.HasValue)
             {
                 if (IsStar || nSemiMajorAxis.Value > oneAU_m / 10)
-                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".Tx(this,"SMA"), (nSemiMajorAxis.Value / oneAU_m));
+                    scanText.AppendFormat("Semi Major Axis: {0:0.00}AU\n".Tx(this,"SMA"), nSemiMajorAxisAU.Value );
                 else
                     scanText.AppendFormat("Semi Major Axis: {0}km\n".Tx(this,"SMK"), (nSemiMajorAxis.Value / 1000).ToString("N1"));
             }
@@ -588,11 +606,11 @@ namespace EliteDangerousCore.JournalEvents
             if (nAbsoluteMagnitude.HasValue)
                 scanText.AppendFormat("Absolute Magnitude: {0:0.00}\n".Tx(this), nAbsoluteMagnitude.Value);
 
-            if (nAxialTilt.HasValue)
-                scanText.AppendFormat("Axial tilt: {0:0.00}°\n".Tx(this), nAxialTilt.Value*180.0/Math.PI);
-            
-            if (nRotationPeriod.HasValue)
-                scanText.AppendFormat("Rotation Period: {0} days\n".Tx(this), (nRotationPeriod.Value / oneDay_s).ToString("N1"));
+            if (nAxialTiltDeg.HasValue)
+                scanText.AppendFormat("Axial tilt: {0:0.00}°\n".Tx(this), nAxialTiltDeg.Value);
+
+            if (nRotationPeriodDays.HasValue)
+                scanText.AppendFormat("Rotation Period: {0} days\n".Tx(this), nRotationPeriodDays.Value.ToString("N1"));
 
             if (nTidalLock.HasValue && nTidalLock.Value)
                 scanText.Append("Tidally locked\n".Tx(this));
@@ -650,6 +668,11 @@ namespace EliteDangerousCore.JournalEvents
                     if (EfficientMapped)
                         scanText.Append(" " + "Efficiently".Tx(this, "MPIE"));
 
+                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
+                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
+                }
+                else if ( IsStar )
+                {
                     scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
                     scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
                 }

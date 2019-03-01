@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {           
-            info = BaseUtils.FieldBuilder.Build("<", Name , "; Cr" , Amount);
+            info = BaseUtils.FieldBuilder.Build("<", Name , "; Cr;N0" , Amount);
             detailed = "";
         }
 
