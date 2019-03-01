@@ -54,6 +54,10 @@ namespace EDDiscovery.Forms
 
         private void AboutForm_Load(object sender, EventArgs e)
         {
+
+            labelDevelopersEnum.Text = "Program Concept by:" + Environment.NewLine + "Developers for this release:" + Environment.NewLine + "Languages Translation:" + Environment.NewLine + "Previous Contributors:";
+
+
             buttonOK.Select();
         }
 

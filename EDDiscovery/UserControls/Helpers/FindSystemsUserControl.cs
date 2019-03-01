@@ -117,7 +117,7 @@ namespace EDDiscovery.UserControls
         {
             if (numberBoxMaxRadius.Value > 100)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "This is a large radius, it make take a long time or not work, are you sure?", "Warning - Large radius", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "This is a large radius, it may take a long time or not work, are you sure?".Tx(this, "LargeRadius"), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.Cancel)
                     return;
             }
 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 if (listsphere == null)
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "EDSM did not return any data on " + textBoxSystemName.Text + Environment.NewLine + "It may be a galactic object that it does not know about", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "EDSM did not return any data on ".Tx(this, "EDSMnoDATA1") + textBoxSystemName.Text + Environment.NewLine + "It may be a galactic object that it does not know about".Tx(this, "EDSMnoDATA2"), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 Cursor = Cursors.Default;
                 ReturnSystems(listsphere);

@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls.Search
         {
             if (Rows.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export", "Export EDSM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No data to export".Tx(this, "EDSMNoData"), "Export EDSM".Tx(this, "EDSMExport"), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 

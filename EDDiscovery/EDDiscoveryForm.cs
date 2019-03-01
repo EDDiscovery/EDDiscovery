@@ -166,7 +166,7 @@ namespace EDDiscovery
 
             BaseUtils.Translator.Instance.AddExcludedControls(new string[]
             { "ComboBoxCustom", "NumberBoxDouble", "NumberBoxLong", "VScrollBarCustom",     // Controls not for translation..
-                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker" , "NumericUpDownCustom" });
+                "StatusStripCustom" , "RichTextBoxScroll","TextBoxBorder", "AutoCompleteTextBox", "DateTimePicker" , "NumericUpDownCustom", "ExtRichTextBox" });
 
             Controller.Init();
             PanelInformation.Init();
@@ -222,6 +222,7 @@ namespace EDDiscovery
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
 
             BaseUtils.Translator.Instance.Translate(contextMenuStripTabs, this);        // need to translate BEFORE we add in extra items
+            BaseUtils.Translator.Instance.Translate(notifyIconContextMenuStrip, this);
 
             foreach (PanelInformation.PanelIDs pid in pids)
             {

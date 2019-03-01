@@ -23,11 +23,13 @@ using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlSettings : UserControlCommonBase
     {
+        public List<string> customLanguageFiles = new List<string>();
         private ExtendedControls.ThemeStandardEditor themeeditor = null;
 
         public UserControlSettings()
@@ -35,12 +37,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             var corner = dataGridViewCommanders.TopLeftHeaderCell; // work around #1487
         }
-
         public override void Init()
         {
             ResetThemeList();
             SetEntryThemeComboBox();
-
             textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
             
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
@@ -49,12 +49,37 @@ namespace EDDiscovery.UserControls
             comboBoxClickThruKey.SelectedItem = EDDConfig.Instance.ClickThruKey.VKeyToString();
             comboBoxClickThruKey.SelectedIndexChanged += comboBoxClickThruKey_SelectedIndexChanged;
 
-            comboBoxCustomLanguage.Items.AddRange(BaseUtils.Translator.EnumerateLanguageNames( EDDOptions.Instance.TranslatorFolders() ));
 
-            comboBoxCustomLanguage.Items.Add("Auto");
-            comboBoxCustomLanguage.Items.Add("Default (English)");
-            if (comboBoxCustomLanguage.Items.Contains(EDDConfig.Instance.Language))
-                comboBoxCustomLanguage.SelectedItem = EDDConfig.Instance.Language;
+            var languages = BaseUtils.Translator.EnumerateLanguages(EDDOptions.Instance.TranslatorFolders()); // Display Language names in the combobox now
+            List<string> customLanguageNames = new List<string> { };                                          // instead of file names of the translations
+            customLanguageFiles.Add("Auto");
+            customLanguageNames.Add("Auto".Tx(this, "auto")); // Translator somehow not working on combobox items if using combobox.items.add method
+            customLanguageFiles.Add("english-en");
+            customLanguageNames.Add("English (Default)".Tx(this, "english"));
+
+            foreach (var ls in languages)
+            {
+                string lf = ls.Item1 + "\\" + ls.Item2;
+                string languageName; string languageFileName;
+                languageFileName = ls.Item2.Substring(0, ls.Item2.Length - 4);
+                string line1 = File.ReadLines(lf).First();                       //Read and parsing language names from the first line of each language file.
+                string rgxCheckifLanguageName = "^Language = \"([^\"]*)\"";
+                string rgxGetLanguage = @"\""([^\""]*)\""";
+                Regex rgx = new Regex(rgxCheckifLanguageName);
+                if (rgx.IsMatch(line1))
+                {
+                    languageName = Convert.ToString(Regex.Match(Convert.ToString(Regex.Match(line1, rgxCheckifLanguageName)), rgxGetLanguage)).Trim(new char[] { '\u0022' });
+                }
+                else
+                {
+                    languageName = languageFileName;
+                }
+                customLanguageFiles.Add(languageFileName);
+                customLanguageNames.Add(languageName);
+            }
+            comboBoxCustomLanguage.Items.AddRange(customLanguageNames);
+            if (customLanguageFiles.Contains(EDDConfig.Instance.Language))
+                comboBoxCustomLanguage.SelectedItem = customLanguageNames[customLanguageFiles.IndexOf(EDDConfig.Instance.Language)];
             else
                 comboBoxCustomLanguage.SelectedIndex = comboBoxCustomLanguage.Items.Count - 1;
             comboBoxCustomLanguage.SelectedIndexChanged += ComboBoxCustomLanguage_SelectedIndexChanged;
@@ -127,11 +152,13 @@ namespace EDDiscovery.UserControls
             comboBoxCustomEssentialEntries.SelectedIndexChanged += ComboBoxCustomEssentialEntries_SelectedIndexChanged;
 
             BaseUtils.Translator.Instance.Translate(this);
-            BaseUtils.Translator.Instance.Translate(toolTip,this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
+
         }
 
         public override void InitialDisplay()
         {
+
         }
 
         public override void Closing()
@@ -436,7 +463,7 @@ namespace EDDiscovery.UserControls
         private void ComboBoxCustomLanguage_SelectedIndexChanged(object sender, EventArgs e)
         {
             ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
-            EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
+            EDDConfig.Instance.Language = customLanguageFiles[c.SelectedIndex];
             ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this, "Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 

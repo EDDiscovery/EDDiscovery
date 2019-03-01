@@ -154,11 +154,11 @@ namespace EDDiscovery.UserControls
 
                 if (showEDSMStartButtonsToolStripMenuItem.Checked)
                 {
-                    ExtendedControls.ExtPictureBox.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM", displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM");
-                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+                    ExtendedControls.ExtPictureBox.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM".Tx(this, "btnEDSM"), displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM".Tx(this, "btnEDSM-tooltip"));
+                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM".Tx(this, "btnEDSM"), edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
 
-                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
+                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start".Tx(this, "btnStart"), displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point".Tx(this, "btnStart-tooltip"));
+                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start".Tx(this, "btnStart"), edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
 
                     coltext = 100;
                 }
@@ -181,10 +181,10 @@ namespace EDDiscovery.UserControls
                         {
                             int jumps = (int)Math.Ceiling(dist / ji.avgsinglejump);
                             if (jumps > 0)
-                                mesg = jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(this) : "jumps".Tx(this));
+                                mesg = jumps.ToString() + ((jumps == 1) ? " jump".Tx(this) : " jumps".Tx(this));
                         }
 
-                        line += String.Format("-> {0} {1:N1}ly {2}", name, dist, mesg);
+                        line += String.Format(" -> {0} {1:N1}ly {2}", name, dist, mesg);
                     }
                     else
                         line += " -> Target not set".Tx(this,"NoT");
@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
 
                 if (showTravelledDistanceToolStripMenuItem.Checked)
                 {
-                    line = String.Format("{0:N1}{1},{2} " + "jumps".Tx(this) + ", {3}", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly*" : "ly"),
+                    line = String.Format("{0:N1}{1}, {2}" + " jumps".Tx(this) + ", {3}", he.TravelledDistance, ((he.TravelledMissingjump > 0) ? "ly*" : "ly"),
                                         he.Travelledjumps,
                                         he.TravelledSeconds);
                 }
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     if ( ji != null )
-                    { 
+                    {
                         HistoryEntry lastJet = discoveryform.history.GetLastHistoryEntry(x => x.journalEntry.EventTypeID == JournalTypeEnum.JetConeBoost);
 
                         double boostval = 1;
@@ -242,13 +242,13 @@ namespace EDDiscovery.UserControls
 
                         string range = "";
                         if (showCurrentFSDRangeToolStripMenuItem.Checked)
-                            range += String.Format("cur {0:N1}ly{1}", ji.cursinglejump * boostval, boostval > 1 ? " Boost" : "");
+                            range += String.Format("cur ".Tx(this) + "{0:N1}ly{1}", ji.cursinglejump * boostval, boostval > 1 ? " Boost" : "");
                         if (showAvgFSDRangeToolStripMenuItem.Checked)
-                            range = range.AppendPrePad(String.Format("avg {0:N1}ly{1}", ji.avgsinglejump * boostval , boostval > 1 ? " Boost" : ""), ", ");
+                            range = range.AppendPrePad(String.Format("avg ".Tx(this) + "{0:N1}ly{1}", ji.avgsinglejump * boostval, boostval > 1 ? " Boost" : ""), ", ");
                         if (showMaxFSDRangeToolStripMenuItem.Checked)
-                            range = range.AppendPrePad(String.Format("max {0:N1}ly{1}", ji.curfumessinglejump * boostval,boostval > 1 ? " Boost" : ""), ", ");
-                        if ( showFSDRangeToolStripMenuItem.Checked)
-                            range = range.AppendPrePad(String.Format("{0:N1}ly/{1:N0}", ji.maxjumprange, ji.maxjumps), ", ");
+                            range = range.AppendPrePad(String.Format("max ".Tx(this) + "{0:N1}ly{1}", ji.curfumessinglejump * boostval, boostval > 1 ? " Boost" : ""), ", ");
+                        if (showFSDRangeToolStripMenuItem.Checked)
+                            range = range.AppendPrePad(String.Format("{0:N1}ly / {1:N0}", ji.maxjumprange, ji.maxjumps), ", ");
 
                         if (range.HasChars())
                             addtext = addtext.AppendPrePad(range, " | ");
@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                     if (he.StartMarker)
                         return;
 
-                    he.journalEntry.SetStartFlag(); 
+                    he.journalEntry.SetStartFlag();
 
                     if (list.Count() > 1 && he.isTravelling)
                     {
