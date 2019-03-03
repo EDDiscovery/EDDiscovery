@@ -100,9 +100,14 @@ namespace EDDiscovery.UserControls
         {
             int buttop = Math.Max(16,this.Height/8);
 
+            int daysinmonth = CultureInfo.InvariantCulture.Calendar.GetDaysInMonth(curmonth.Year, curmonth.Month);
+            int dayofweek = (int)curmonth.DayOfWeek;
+            int lastdayindex = dayofweek + daysinmonth - 1;
+            int numberrows = lastdayindex / 7 + 1;
+
             int hspacing = (this.Width)/8;
             int butwidth = hspacing * 3 / 4;
-            int vspacing = (this.Height - buttop) / 5;
+            int vspacing = (this.Height - buttop) / numberrows;
             int butheight = vspacing * 3 / 4;
 
             int butleft = hspacing / 2;
@@ -122,8 +127,6 @@ namespace EDDiscovery.UserControls
             buttonLeft.Location = new Point(butleft - leftrighthoffset, buttop + vspacing * 1);
             buttonRight.Location = new Point(butleft + 6 * hspacing + butwidth + leftrighthoffset-buttonRight.Width, buttonLeft.Top);
 
-            int daysinmonth = CultureInfo.InvariantCulture.Calendar.GetDaysInMonth(curmonth.Year, curmonth.Month);
-            int dayofweek = (int)curmonth.DayOfWeek;
             int vpos = buttop;
 
             for (int i = 0; i < 31; i++)
