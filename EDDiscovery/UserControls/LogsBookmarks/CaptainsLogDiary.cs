@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
         private void DayClick(object sender, EventArgs e)       // send a button click up
         {
             ExtendedControls.ExtButton b = sender as ExtendedControls.ExtButton;
-            int dayno = b.Text.InvariantParseInt(-1);
+            int dayno = b.Text.Replace("*","").InvariantParseInt(-1);
             ClickedonDate?.Invoke(new DateTime(curmonth.Year, curmonth.Month, dayno), (int)b.Tag == 0);
         }
 
