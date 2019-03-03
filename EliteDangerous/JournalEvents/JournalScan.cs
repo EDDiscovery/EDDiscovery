@@ -140,7 +140,7 @@ namespace EliteDangerousCore.JournalEvents
         // Constants:
 
         // stellar references
-        public const double oneSolRadius_m = 695700000;
+        public const double oneSolRadius_m = 695700000; // 695,700km
 
         // planetary bodies
         public const double oneEarthRadius_m = 6371000;
@@ -401,6 +401,32 @@ namespace EliteDangerousCore.JournalEvents
 
         #region Information Returns
 
+        public string RadiusText()  // null if not set, or the best representation
+        {
+            if (nRadius != null)
+            {
+                if (nRadius >= oneSolRadius_m / 5)
+                    return nRadiusSols.Value.ToString("0.0" + "SR");
+                else
+                    return (nRadius.Value / 1000).ToString("0.0") + "km";
+            }
+            else
+                return null;
+        }
+
+        public string MassEMText()
+        {
+            if (nMassEM.HasValue)
+            {
+                if (nMassEM.Value < 0.01)
+                    return nMassMM.Value.ToString("0.00") + "MM";
+                else
+                    return nMassEM.Value.ToString("0.00") + "EM";
+            }
+            else
+                return null;
+        }
+
         public override string SummaryName(ISystem sys)
         {
             string text = "Scan of {0}".Tx(this);
@@ -446,49 +472,24 @@ namespace EliteDangerousCore.JournalEvents
         {
             if (IsStar)
             {
-                double? r = nRadius;
-                if (r.HasValue)
-                    r = r / oneSolRadius_m;
-
                 info = BaseUtils.FieldBuilder.Build("", GetStarTypeName(), "Mass:;SM;0.00".Tx(this,"MSM"), nStellarMass, 
-                                                "Age:;my;0.0".Tx(this), nAge, 
-                                                "Radius:;SR;0.00".Tx(this,"RS"), r,
+                                                "Age:;my;0.0".Tx(this), nAge,
+                                                "Radius:".Tx(this, "RS"), RadiusText(),
                                                 "Dist:;ls;0.0".Tx(this, "DISTA"), DistanceFromArrivalLS,
                                                 "Name:".Tx(this, "BNME"), BodyName);
             }
             else
             {
-                double? r = nRadius;
-                if (r.HasValue)
-                    r = r / 1000;
-                double? g = nSurfaceGravity;
-                if (g.HasValue)
-                    g = g / oneGee_m_s2;
-
-                double? mass = nMassEM;
-                string mstr = "Mass:;EM;0.00".Tx(this, "MEM");
-                if (mass.HasValue && mass < 0.01)
-                {
-                    mass = nMassMM.Value;
-                    mstr = "Mass:;MM;0.00".Tx(this, "MMoM");
-                }
-
-                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, mstr, mass,
+                info = BaseUtils.FieldBuilder.Build( "", PlanetClass, "Mass:".Tx(this,"MASS"), MassEMText(),
                                                 "<;, Landable".Tx(this), IsLandable, 
                                                 "<;, Terraformable".Tx(this), TerraformState == "Terraformable", "", Atmosphere, 
-                                                 "Gravity:;G;0.0".Tx(this), g, 
-                                                 "Radius:;km;0".Tx(this,"RK"), r,
+                                                 "Gravity:;G;0.0".Tx(this), nSurfaceGravityG,
+                                                 "Radius:".Tx(this, "RS"), RadiusText(),
                                                  "Dist:;ls;0.0".Tx(this, "DISTA"), DistanceFromArrivalLS,
                                                  "Name:".Tx(this, "SNME"), BodyName);
             }
 
             detailed = DisplayString(0, false);
-
-            //if (info.IsEmpty())
-            //{
-            //    info = detailed.Replace("\n\n", ", ").Replace("\n", ", ");
-            //    detailed = "";
-            //}
         }
 
         public string DisplayString(int indent = 0, bool includefront = true , MaterialCommoditiesList historicmatlist = null, MaterialCommoditiesList currentmatlist = null)//, bool mapped = false, bool efficiencyBonus = false)
@@ -538,20 +539,10 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("Solar Masses: {0:0.00}\n".Tx(this), nStellarMass.Value);
 
                 if (nMassEM.HasValue)
-                {
-                    if (nMassEM < 0.01)
-                        scanText.AppendFormat("Moon Masses: {0:0.00}\n".Tx(this), nMassMM.Value);
-                    else
-                        scanText.AppendFormat("Earth Masses: {0:0.00}\n".Tx(this), nMassEM.Value);
-                }
+                    scanText.AppendFormat("Mass:".Tx(this, "MASS") + " " + MassEMText() + "\n");
 
                 if (nRadius.HasValue)
-                {
-                    if (IsStar)
-                        scanText.AppendFormat("Solar Radius: {0:0.00} Sols\n".Tx(this), (nRadius.Value / oneSolRadius_m));
-                    else
-                        scanText.AppendFormat("Body Radius: {0:0.00}km\n".Tx(this), (nRadius.Value / 1000));
-                }
+                    scanText.AppendFormat("Radius:".Tx(this, "RS") + " " + RadiusText() + "\n");
 
                 if (DistanceFromArrivalLS > 0)
                     scanText.AppendFormat("Distance from Arrival Point {0:N1}ls\n".Tx(this), DistanceFromArrivalLS);
@@ -564,7 +555,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.AppendFormat("Luminosity: {0}\n".Tx(this), Luminosity);
 
             if (nSurfaceGravity.HasValue)
-                scanText.AppendFormat("Gravity: {0:0.0}g\n".Tx(this,"GV"), nSurfaceGravity.Value / oneGee_m_s2);
+                scanText.AppendFormat("Gravity: {0:0.00}g\n".Tx(this,"GV"), nSurfaceGravityG.Value );
 
             if (nSurfacePressure.HasValue && nSurfacePressure.Value > 0.00 && !PlanetClass.ToLowerInvariant().Contains("gas"))
             {
@@ -668,11 +659,6 @@ namespace EliteDangerousCore.JournalEvents
                     if (EfficientMapped)
                         scanText.Append(" " + "Efficiently".Tx(this, "MPIE"));
 
-                    scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
-                    scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
-                }
-                else if ( IsStar )
-                {
                     scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
                     scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
                 }

@@ -54,9 +54,7 @@ namespace EDDiscovery.UserControls
             textBox_From.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFrom"), "");
             textBox_To.Text = SQLiteDBClass.GetSettingString(DbSave("RouteTo"), "");
             //Console.WriteLine("Load {0} {1}", textBox_From.Text, textBox_To.Text);
-            textBox_Range.Text = SQLiteDBClass.GetSettingString(DbSave("RouteRange"), "30");
-            if (textBox_Range.Text == "")
-                textBox_Range.Text = "30";
+            textBox_Range.Value = SQLiteDBClass.GetSettingInt(DbSave("RouteRange"), 30);
             textBox_FromX.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromX"), "");
             textBox_FromY.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromY"), "");
             textBox_FromZ.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFromZ"), "");
@@ -73,7 +71,6 @@ namespace EDDiscovery.UserControls
             UpdateTo(true);
             SelectFromMaster(fromstate);
             UpdateFrom(true);
-            textBox_Range.ReadOnly = false;
             comboBoxRoutingMetric.Enabled = true;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -90,7 +87,7 @@ namespace EDDiscovery.UserControls
         {
             SQLiteDBClass.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
             SQLiteDBClass.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
-            SQLiteDBClass.PutSettingString(DbSave("RouteRange"), textBox_Range.Text);
+            SQLiteDBClass.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
             SQLiteDBClass.PutSettingString(DbSave("RouteFromX"), textBox_FromX.Text);
             SQLiteDBClass.PutSettingString(DbSave("RouteFromY"), textBox_FromY.Text);
             SQLiteDBClass.PutSettingString(DbSave("RouteFromZ"), textBox_FromZ.Text);
@@ -128,8 +125,7 @@ namespace EDDiscovery.UserControls
         private RoutePlotter CreateRoutePlotter()
         {
             RoutePlotter p = new RoutePlotter();
-            string maxrangetext = textBox_Range.Text;
-            if (!float.TryParse(maxrangetext, out p.maxrange)) p.maxrange = 30;
+            p.maxrange = textBox_Range.Value;
             p.usingcoordsfrom = textBox_From.ReadOnly == true;
             p.usingcoordsto = textBox_To.ReadOnly == true;
             GetCoordsFrom(out p.coordsfrom);                      // will be valid for a system or a co-ords box
@@ -281,12 +277,6 @@ namespace EDDiscovery.UserControls
         private void comboBoxRoutingMetric_SelectedIndexChanged(object sender, EventArgs e)
         {
             button_Route.Enabled = IsValid();
-        }
-
-        private void textBox_Range_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            ExtendedControls.ExtTextBox tbb = sender as ExtendedControls.ExtTextBox;
-            tbb.NumericKeyPressHandler(e);
         }
 
         #endregion

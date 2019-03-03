@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlRoute));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
@@ -43,7 +44,7 @@
             this.buttonTargetFrom = new ExtendedControls.ExtButton();
             this.cmd3DMap = new ExtendedControls.ExtButton();
             this.textBox_From = new ExtendedControls.ExtTextBoxAutoComplete();
-            this.textBox_Range = new ExtendedControls.ExtTextBox();
+            this.textBox_Range = new ExtendedControls.NumberBoxLong();
             this.textBox_To = new ExtendedControls.ExtTextBoxAutoComplete();
             this.labelLy2 = new System.Windows.Forms.Label();
             this.labelLy1 = new System.Windows.Forms.Label();
@@ -329,11 +330,15 @@
             this.textBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Range.ClearOnFirstChar = false;
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_Range.DelayBeforeNotification = 0;
+            this.textBox_Range.Format = "D";
             this.textBox_Range.InErrorCondition = false;
             this.textBox_Range.Location = new System.Drawing.Point(498, 121);
+            this.textBox_Range.Maximum = ((long)(999));
+            this.textBox_Range.Minimum = ((long)(1));
             this.textBox_Range.Multiline = false;
             this.textBox_Range.Name = "textBox_Range";
-            this.textBox_Range.ReadOnly = true;
+            this.textBox_Range.ReadOnly = false;
             this.textBox_Range.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBox_Range.SelectionLength = 0;
             this.textBox_Range.SelectionStart = 0;
@@ -341,9 +346,8 @@
             this.textBox_Range.TabIndex = 33;
             this.textBox_Range.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.toolTip.SetToolTip(this.textBox_Range, "Give your jump range, or search range for long jumps");
+            this.textBox_Range.Value = ((long)(0));
             this.textBox_Range.WordWrap = true;
-            this.textBox_Range.Click += new System.EventHandler(this.textBox_Clicked);
-            this.textBox_Range.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_Range_KeyPress);
             // 
             // textBox_To
             // 
@@ -816,7 +820,7 @@
         private ExtendedControls.ExtButton buttonTargetFrom;
         private ExtendedControls.ExtButton cmd3DMap;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_From;
-        internal ExtendedControls.ExtTextBox textBox_Range;
+        internal ExtendedControls.NumberBoxLong textBox_Range;
         internal ExtendedControls.ExtTextBoxAutoComplete textBox_To;
         private System.Windows.Forms.Label labelLy2;
         private System.Windows.Forms.Label labelLy1;
