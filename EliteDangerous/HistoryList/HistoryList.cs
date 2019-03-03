@@ -354,7 +354,7 @@ namespace EliteDangerousCore
                 .Select(h => h.journalEntry as JournalScan)
                 .Distinct(new ScansAreForSameBody()).ToList();
 
-            long total = scans.Select(scan => scan.EstimatedValue).Sum();
+            long total = scans.Select(scan => (long)scan.EstimatedValue).Sum();
 
             return total;
         }
