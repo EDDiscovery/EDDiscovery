@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
 
             ValidateEnable();
 
-            textBoxSystemName.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textBoxSystemName.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete,true);
 
             this.numberBoxMinRadius.TextChanged += new System.EventHandler(this.textBoxSystemName_RadiusChanged);
             this.numberBoxMaxRadius.TextChanged += new System.EventHandler(this.textBoxSystemName_RadiusChanged);

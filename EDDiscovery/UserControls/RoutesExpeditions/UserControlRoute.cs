@@ -48,8 +48,8 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
 
-            textBox_From.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
-            textBox_To.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textBox_From.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete, true);
+            textBox_To.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete , true);
 
             textBox_From.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFrom"), "");
             textBox_To.Text = SQLiteDBClass.GetSettingString(DbSave("RouteTo"), "");
