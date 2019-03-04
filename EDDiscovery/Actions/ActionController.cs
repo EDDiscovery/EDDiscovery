@@ -296,16 +296,32 @@ namespace EDDiscovery.Actions
             return cls;
         }
 
-        private List<string> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
+        private List<TypeHelpers.PropertyNameInfo> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
         {
-            List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
-            fieldnames.Sort();
+            System.Diagnostics.Debug.WriteLine("Get variables for " + evname);
+
+            List<TypeHelpers.PropertyNameInfo> fieldnames =
+                (from x in discoveryform.Globals.NameList select new BaseUtils.TypeHelpers.PropertyNameInfo(x, "Global Variable String or Number" + Environment.NewLine + "Not part of an event, set up by either EDD or one of the action packs", null, "Global")).ToList();
 
             if (evname.HasChars())
             {
-                List<string> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
+                fieldnames.Add(new TypeHelpers.PropertyNameInfo("TriggerName", "Name of event, either the JournalEntryName, or UI<event>", ConditionEntry.MatchType.Equals, "Event Trigger Info"));
+                fieldnames.Add(new TypeHelpers.PropertyNameInfo("TriggerType", "Type of trigger, either UIEvent or JournalEvent", ConditionEntry.MatchType.Equals, "Event Trigger Info"));
+
+                var events = ActionEventEDList.StaticDefinedEvents();
+
+                ActionEvent ty = events.Find(x => x.TriggerName == evname);
+                if ( ty?.Variables != null )                                           // if its a static event and it has variables, add..
+                    fieldnames.AddRange(ty.Variables);
+
+                // first see if its a journal event..
+                List<TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_", comment: "Event Variable");
+                // then if its an UI
+                if (classnames == null)
+                    classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(UIEvent.TypeOfUIEvent(evname), "EventClass_", comment: "Event Variable");    
+
                 if (classnames != null)
-                    fieldnames.InsertRange(0, classnames);
+                    fieldnames.AddRange(classnames);
             }
 
             return fieldnames;

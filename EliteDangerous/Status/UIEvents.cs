@@ -80,14 +80,19 @@ namespace EliteDangerousCore
         public string EventTypeStr { get { return EventTypeID.ToString(); } }
         public bool EventRefresh { get; set; }                  // either at the start or a forced refresh
 
-        static string JournalRootClassname = typeof(UIEvents.UIDocked).Namespace;        // pick one at random to find out root classname
+        static string UIRootClassname = typeof(UIEvents.UIDocked).Namespace;        // pick one at random to find out root classname
 
         // Flag Factory (others are created individually)
+
+        static public Type TypeOfUIEvent(string name)
+        {
+            return Type.GetType(UIRootClassname + "." + name, false, true); // no exception, ignore case here
+        }
 
         static public UIEvent CreateFlagEvent(string name, bool value, DateTime time, bool refresh)
         {
             string evname = "UI" + name;
-            Type t = Type.GetType(JournalRootClassname + "." + evname, false, true);
+            Type t = Type.GetType(UIRootClassname + "." + evname, false, true);
             if (t != null)
             {
                 UIEvent e = (UIEvent)Activator.CreateInstance(t, new Object[] { value, time , refresh });

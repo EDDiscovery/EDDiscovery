@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -28,11 +28,6 @@ using EliteDangerousCore.EDDN;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
-
-// save splitter
-// save query
-// load query list from db
-// query list is generic across all searches..
 
 namespace EDDiscovery.UserControls
 {
@@ -164,16 +159,16 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { });
             BaseUtils.Translator.Instance.Translate(toolTip, this);
-            //BaseUtils.Translator.Instance.Translate(dataGridViewEDSM.ContextMenu, this);
 
-            List<string> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan),bf:System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
-            classnames.Add("EventTimeUTC");     // add on a few from the base class..
-            classnames.Add("EventTimeLocal");
-            classnames.Add("SyncedEDSM");
+            List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(typeof(JournalScan),bf:System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeUTC", "Date Time in UTC", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
+            classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
 
             string query = SQLiteConnectionUser.GetSettingString(DbQuerySave, "");
 
-            conditionFilterUC.InitConditionList(classnames, new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
+            conditionFilterUC.VariableNames = classnames;
+            conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
 
             dataGridView.Init(discoveryform);
 
@@ -286,7 +281,7 @@ namespace EDDiscovery.UserControls
                         dataGridView.Rows[dataGridView.Rows.Count - 1].Tag = sys;
                     }
 
-                    if ( errclass == BaseUtils.ConditionLists.ErrorClass.LeftSideVarUndefined )
+                    if ( errclass == BaseUtils.ConditionLists.ErrorClass.LeftSideVarUndefined || errclass == BaseUtils.ConditionLists.ErrorClass.RightSideBadFormat )
                     {
                         ExtendedControls.MessageBoxTheme.Show(errlist, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         break;

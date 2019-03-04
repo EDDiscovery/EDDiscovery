@@ -393,17 +393,10 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
-            List<string> namelist = new List<string>() { "Note" };
-            namelist.AddRange(discoveryform.Globals.NameList);
-            frm.InitFilter("Journal: Filter out fields",
-                            Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetExecutingAssembly().Location),
-                            JournalEntry.GetNameOfEvents() ,
-                            (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); },
-                            namelist, fieldfilter);
-            if (frm.ShowDialog(this.FindForm()) == DialogResult.OK)
+            BaseUtils.ConditionLists res = FilterHelpers.ShowDialog(FindForm(), fieldfilter, discoveryform, "Journal: Filter out fields".Tx(this, "JHF"));
+            if ( res != null )
             {
-                fieldfilter = frm.Result;
+                fieldfilter = res;
                 SQLiteDBClass.PutSettingString(DbFieldFilter, fieldfilter.GetJSON());
                 Display(current_historylist);
             }

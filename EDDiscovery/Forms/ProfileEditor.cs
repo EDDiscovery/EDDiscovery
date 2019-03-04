@@ -174,27 +174,44 @@ namespace EDDiscovery.Forms
 
         bool disabletriggers = false;
 
+        private BaseUtils.ConditionLists ShowFilterDialog(BaseUtils.ConditionLists fieldfilter, string title)
+        {
+            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
+            frm.VariableNames = new List<TypeHelpers.PropertyNameInfo>();
+            frm.VariableNames.Add(new TypeHelpers.PropertyNameInfo("TriggerName", "Name of event, either the JournalEntryName, or UI<event>"));
+            frm.VariableNames.Add(new TypeHelpers.PropertyNameInfo("TriggerType", "Type of trigger, either UIEvent or JournalEvent"));
+
+            frm.InitCondition(title, Icon, fieldfilter);
+
+            if ( frm.ShowDialog(this.FindForm())==DialogResult.OK)
+            {
+                return frm.Result;
+            }
+            else
+                return null;
+        }
+
         private void EditTrigger_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
-            frm.InitCondition(string.Format("Edit Profile {0} Trigger".Tx(this,"TrigEdit"), g.name.Text), this.Icon, new List<string>(), g.triggercondition);
-            if (frm.ShowDialog() == DialogResult.OK)
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.triggercondition, string.Format("Edit Profile {0} Trigger".Tx(this, "TrigEdit"), g.name.Text));
+            if ( res != null )
             {
-                g.triggercondition = frm.Result;
+                g.triggercondition = res;
                 disabletriggers = true;
                 g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(g.triggercondition, g.backcondition) + 1;
                 disabletriggers = false;
             }
         }
+
         private void EditBack_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
-            frm.InitCondition(string.Format("Edit Profile {0} Back Trigger".Tx(this,"BackEdit"), g.name.Text), this.Icon, new List<string>(), g.backcondition);
-            if (frm.ShowDialog() == DialogResult.OK)
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.backcondition, string.Format("Edit Profile {0} Back Trigger".Tx(this, "BackEdit"), g.name.Text));
+
+            if (res != null )
             {
-                g.backcondition = frm.Result;
+                g.backcondition = res;
                 disabletriggers = true;
                 g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(g.triggercondition, g.backcondition) + 1;
                 disabletriggers = false;

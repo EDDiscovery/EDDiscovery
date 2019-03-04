@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
             ResetThemeList();
             SetEntryThemeComboBox();
 
-            textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete,true);
             
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
