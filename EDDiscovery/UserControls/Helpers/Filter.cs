@@ -16,8 +16,10 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -75,8 +77,14 @@ namespace EDDiscovery.UserControls
 
             AddStandardOption(items);
 
-            var scanitems = EliteDangerousCore.JournalEvents.JournalScan.FilterItems();
-            AddStandardOption(scanitems);   // sorted by text
+            var list = JournalEntry.GetEnumOfEvents(new string[] { "FilterItems" });
+            foreach( var e in list)
+            {
+                Type t = JournalEntry.TypeOfJournalEntry(e);
+                MethodInfo info = t.GetMethod("FilterItems", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+                List<Tuple<string, string, Image>> retlist = info.Invoke(null, new object[] { }) as List<Tuple<string, string, Image>>;
+                AddStandardOption(retlist);
+            }
 
             SortStandardOptions();  // sorted by text
         }

@@ -164,6 +164,14 @@ namespace EDDiscovery.Actions
                         else
                             ap.ReportError("Missing tag list");
                     }
+                    else if (cmdname.Equals("APPENDTAGLIST", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        string tags = sp.NextQuotedWord();
+                        if (tags != null)
+                            EDDConfig.Instance.CaptainsLogTags = EDDConfig.Instance.CaptainsLogTags.AppendPrePad(tags,";");
+                        else
+                            ap.ReportError("Missing tag list");
+                    }
                     else
                     {   // ********************** Iterator forms, FROM/LAST/FIRST/TIME [Forward|Backward]
                         long? cid = -1;
@@ -260,7 +268,7 @@ namespace EDDiscovery.Actions
                                 {
                                     string text = sp.NextQuotedWord();
 
-                                    if (text != null)
+                                    if (text != null && sp.IsEOL)
                                     {
                                         if (nextcmd.Equals("NOTE", StringComparison.InvariantCultureIgnoreCase))
                                         {
@@ -281,7 +289,7 @@ namespace EDDiscovery.Actions
                                             ap.ReportError("Unknown command " + nextcmd);
                                     }
                                     else
-                                        ap.ReportError("Missing text after " + nextcmd);
+                                        ap.ReportError("Missing text or unquoted spaced text after " + nextcmd);
                                 }
                             }
 

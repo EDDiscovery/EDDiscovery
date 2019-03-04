@@ -61,6 +61,8 @@ namespace EDDiscovery.Actions
                     cmdname = sp.NextWord();
                 }
 
+                EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
+
                 if (cmdname != null )
                 {
                     if (cmdname.Equals("GET", StringComparison.InvariantCultureIgnoreCase))
@@ -89,17 +91,15 @@ namespace EDDiscovery.Actions
                         if (tset)
                         {
                             TargetClass.ClearTarget();
+                            discoveryform.NewTargetSet(this);
                         }
                     }
-
-
                     else
                     {
                         string name = sp.NextQuotedWord();
 
                         if (name != null)
                         {
-                            EDDiscoveryForm discoveryform = (ap.actioncontroller as ActionController).DiscoveryForm;
 
                             if (cmdname.Equals("BOOKMARK", StringComparison.InvariantCultureIgnoreCase))
                             {

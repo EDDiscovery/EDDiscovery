@@ -118,12 +118,20 @@ namespace EDDiscovery.Actions
 
                 if (fwd || back)
                 {
-                    List<string> eventnames = sp.NextOptionallyBracketedList();
+                    List<string> eventnames = sp.NextOptionallyBracketedList();     // single entry, list of events
+
+                    bool not = eventnames.Count == 1 && eventnames[0].Equals("NOT", StringComparison.InvariantCultureIgnoreCase);       // if it goes NOT
+
+                    if ( not )
+                        eventnames = sp.NextOptionallyBracketedList();     // then get another list
+
+                    // is it "WHERE"
                     bool whereasfirst = eventnames.Count == 1 && eventnames[0].Equals("WHERE", StringComparison.InvariantCultureIgnoreCase);
 
                     ConditionLists cond = new ConditionLists();
                     string nextword;
 
+                    // if WHERE cond, or eventname WHERE cond
                     if ( whereasfirst || ((nextword = sp.NextWord()) != null && nextword.Equals("WHERE", StringComparison.InvariantCultureIgnoreCase) ))
                     {
                         if ( whereasfirst )     // clear out event names if it was WHERE cond..
@@ -146,8 +154,8 @@ namespace EDDiscovery.Actions
                     else
                         hltest = hl.EntryOrder.GetRange(0, jidindex );
 
-                    if (eventnames.Count > 0)
-                        hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) select h).ToList();
+                    if (eventnames.Count > 0)       // screen out event names
+                        hltest = (from h in hltest where eventnames.Contains(h.journalEntry.EventTypeStr, StringComparer.OrdinalIgnoreCase) == !not select h).ToList();
                     
                     if (cond.Count > 0)     // if we have filters, apply, filter out, true only stays
                         hltest = UserControls.FilterHelpers.CheckFilterTrue(hltest, cond, new Variables()); // apply filter..
@@ -244,13 +252,13 @@ namespace EDDiscovery.Actions
                         else if (cmdname.Equals("note"))
                         {
                             string note = sp.NextQuotedWord();
-                            if (note != null)
+                            if (note != null && sp.IsEOL)
                             {
                                 he.SetJournalSystemNoteText(note, true, EDCommander.Current.SyncToEdsm);
                                 (ap.actioncontroller as ActionController).DiscoveryForm.NoteChanged(this, he, true);
                             }
                             else
-                                ap.ReportError("Missing note text in Event NOTE");
+                                ap.ReportError("Missing note text or unquoted text in Event NOTE");
                         }
                         else
                             ap.ReportError("Unknown command " + cmdname + " in Event");
