@@ -88,7 +88,7 @@ namespace EDDiscovery.Actions
         
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)    // override again to expand any functionality
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)    // override again to expand any functionality
         {
             ActionController ac = cp as ActionController;
 

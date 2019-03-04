@@ -66,11 +66,11 @@ namespace EliteDangerousCore.JournalEvents
         public string IcyPlanetZoneOuter { get; set; }
 
         // All orbiting bodies (Stars/Planets), not main star
-        public double? nSemiMajorAxis;                              // direct
-        public double? nSemiMajorAxisAU;                            // direct
-        public double? nEccentricity;                               // direct
-        public double? nOrbitalInclination;                         // direct
-        public double? nPeriapsis;                                  // direct
+        public double? nSemiMajorAxis { get; set; }                              // direct
+        public double? nSemiMajorAxisAU { get; set; }                            // direct
+        public double? nEccentricity { get; set; }                               // direct
+        public double? nOrbitalInclination { get; set; }                         // direct
+        public double? nPeriapsis { get; set; }                                  // direct
         public double? nOrbitalPeriod { get; set; }                 // direct
         public double? nOrbitalPeriodDays { get; set; }
         public double? nAxialTilt { get; set; }                     // direct, radians
@@ -84,7 +84,7 @@ namespace EliteDangerousCore.JournalEvents
         public bool Terraformable { get { return TerraformState != null && TerraformState.ToLowerInvariant().Equals("terraformable"); } }
         public string Atmosphere { get; set; }                      // direct from journal, if not there or blank, tries AtmosphereType (Earthlikes)
         public EDAtmosphereType AtmosphereID { get; }               // Atmosphere -> ID (Ammonia, Carbon etc)
-        public EDAtmosphereProperty AtmosphereProperty;             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
+        public EDAtmosphereProperty AtmosphereProperty { get; set; }             // Atomsphere -> Property (None, Rich, Thick , Thin, Hot)
         public bool HasAtmosphericComposition { get { return AtmosphereComposition != null && AtmosphereComposition.Any(); } }
         public Dictionary<string, double> AtmosphereComposition { get; set; }
         public Dictionary<string, double> PlanetComposition { get; set; }
@@ -92,7 +92,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
         public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }
-        public EDVolcanismProperty VolcanismProperty;               // Volcanism -> Property (None, Major, Minor)
+        public EDVolcanismProperty VolcanismProperty { get; set; }               // Volcanism -> Property (None, Major, Minor)
         public double? nSurfaceGravity { get; set; }                // direct
         public double? nSurfaceGravityG { get; set; }
         public double? nSurfacePressure { get; set; }               // direct
@@ -273,9 +273,13 @@ namespace EliteDangerousCore.JournalEvents
             if (Atmosphere != null)
                 Atmosphere = Atmosphere.SplitCapsWordFull();
 
-            AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out AtmosphereProperty);
+            AtmosphereID = Bodies.AtmosphereStr2Enum(Atmosphere, out EDAtmosphereProperty ap);
+            AtmosphereProperty = ap;
+
             Volcanism = evt["Volcanism"].StrNull();
-            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out VolcanismProperty);
+            VolcanismID = Bodies.VolcanismStr2Enum(Volcanism, out EDVolcanismProperty vp);
+            VolcanismProperty = vp;
+
             nMassEM = evt["MassEM"].DoubleNull();
             if (nMassEM.HasValue)
                 nMassMM = nMassEM.Value * EarthMoonMassRatio;
@@ -406,9 +410,9 @@ namespace EliteDangerousCore.JournalEvents
             if (nRadius != null)
             {
                 if (nRadius >= oneSolRadius_m / 5)
-                    return nRadiusSols.Value.ToString("0.0" + "SR");
+                    return nRadiusSols.Value.ToString("0.#" + "SR");
                 else
-                    return (nRadius.Value / 1000).ToString("0.0") + "km";
+                    return (nRadius.Value / 1000).ToString("0.#") + "km";
             }
             else
                 return null;
@@ -419,9 +423,9 @@ namespace EliteDangerousCore.JournalEvents
             if (nMassEM.HasValue)
             {
                 if (nMassEM.Value < 0.01)
-                    return nMassMM.Value.ToString("0.00") + "MM";
+                    return nMassMM.Value.ToString("0.####") + "MM";
                 else
-                    return nMassEM.Value.ToString("0.00") + "EM";
+                    return nMassEM.Value.ToString("0.##") + "EM";
             }
             else
                 return null;

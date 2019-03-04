@@ -25,7 +25,7 @@ namespace EDDiscovery.Actions
             return (FromString(userdata) != null) ? null : "MenuItem command line not in correct format";
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<string> eventvars)
+        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
         {
             List<string> l = FromString(userdata);
             List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure MenuInput Dialog", cp.Icon,

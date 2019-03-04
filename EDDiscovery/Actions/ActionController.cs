@@ -296,16 +296,56 @@ namespace EDDiscovery.Actions
             return cls;
         }
 
-        private List<string> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
+        private List<TypeHelpers.PropertyNameInfo> Frm_onAdditionalNames(string evname)       // call back to discover name list.  evname may be empty
         {
-            List<string> fieldnames = new List<string>(discoveryform.Globals.NameList);
-            fieldnames.Sort();
+            System.Diagnostics.Debug.WriteLine("Get variables for " + evname);
+
+            List<TypeHelpers.PropertyNameInfo> fieldnames =
+                (from x in discoveryform.Globals.NameList select new BaseUtils.TypeHelpers.PropertyNameInfo(x, "Global Variable String or Number" + Environment.NewLine + "Not part of the event, set up by either EDD or one of the action packs")).ToList();
 
             if (evname.HasChars())
             {
-                List<string> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
-                if (classnames != null)
-                    fieldnames.InsertRange(0, classnames);
+                if (evname == "onVoiceInput")
+                {
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text recognised", ConditionEntry.MatchType.MatchSemicolonList));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", ConditionEntry.MatchType.NumericGreaterEqual));
+                }
+                else if (evname == "onMenuItem")
+                {
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("MenuName", "Logical name given to menu", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("MenuText", "Menu text", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("TopLevelMenuName", "Name of top level menu", ConditionEntry.MatchType.Contains));
+                }
+                else if (evname == "onEliteInputRaw")
+                {
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Device", "Logical device name", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("EventName", "Name of event, Key_<> or Joy_<> or JoyPOV<num><dir> or Joy_<axis>Axis", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Pressed", "Boolean, If key, is pressed", ConditionEntry.MatchType.IsTrue));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Value", "Value of joystick axis or POV direction", ConditionEntry.MatchType.NumericEquals));
+                }
+                else if (evname == "onEliteInput")
+                {
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Device", "Logical device name", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Binding", "Logical binding name", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("BindingList", "List of bindings", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("EventName", "Name of event, Key_<> or Joy_<> or JoyPOV<num><dir> or Joy_<axis>Axis", ConditionEntry.MatchType.Contains));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Pressed", "Boolean, If key, is pressed", ConditionEntry.MatchType.IsTrue));
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Value", "Value of joystick axis or POV direction", ConditionEntry.MatchType.NumericEquals));
+                }
+                else if (evname == "onEliteInputOff")
+                {
+                    fieldnames.Add(new TypeHelpers.PropertyNameInfo("Binding", "Logical binding name, key off", ConditionEntry.MatchType.Contains));
+                }
+                else
+                {               // first see if its a journal event..
+                    List<TypeHelpers.PropertyNameInfo> classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(evname), "EventClass_");
+
+                    if (classnames == null)
+                        classnames = BaseUtils.TypeHelpers.GetPropertyFieldNames(UIEvent.TypeOfUIEvent(evname), "EventClass_");     // see if its an UI event
+
+                    if (classnames != null)
+                        fieldnames.AddRange(classnames);
+                }
             }
 
             return fieldnames;

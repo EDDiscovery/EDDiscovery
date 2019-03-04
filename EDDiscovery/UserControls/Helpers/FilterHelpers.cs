@@ -61,5 +61,26 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        static public BaseUtils.ConditionLists ShowDialog(System.Windows.Forms.Form parent, BaseUtils.ConditionLists fieldfilter, EDDiscoveryForm discoveryform, string title )
+        {
+            ExtendedConditionsForms.ConditionFilterForm frm = new ExtendedConditionsForms.ConditionFilterForm();
+
+            frm.VariableNamesEvents += (s) => { return BaseUtils.TypeHelpers.GetPropertyFieldNames(JournalEntry.TypeOfJournalEntry(s)); };
+            frm.VariableNames = (from x in discoveryform.Globals.NameList select new BaseUtils.TypeHelpers.PropertyNameInfo(x, "Global Variable String or Number" + Environment.NewLine + "Not part of the event, set up by either EDD or one of the action packs")).ToList();
+            frm.VariableNames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("Note", "String"));
+
+            frm.InitFilter(title,
+                            parent.Icon,
+                            JournalEntry.GetNameOfEvents(),
+                            fieldfilter);
+
+            if (frm.ShowDialog(parent) == System.Windows.Forms.DialogResult.OK)
+            {
+                return frm.Result;
+            }
+            else
+                return null;
+        }
+
     }
 }
