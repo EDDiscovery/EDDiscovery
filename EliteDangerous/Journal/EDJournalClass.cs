@@ -139,22 +139,25 @@ namespace EliteDangerousCore
 
             while (!stopRequested.WaitOne(ScanTick))
             {
-                List<JournalEntry> jl = ScanTickWorker(() => stopRequested.WaitOne(0));
+                var jlu = ScanTickWorker(() => stopRequested.WaitOne(0));
 
-                if (jl != null && jl.Count != 0 && !stopRequested.WaitOne(0))
+                if (jlu != null && ( jlu.Item1.Count != 0 || jlu.Item2.Count != 0) && !stopRequested.WaitOne(0))
                 {
-                    InvokeAsyncOnUiThread(() => ScanTickDone(jl));
+                    InvokeAsyncOnUiThread(() => ScanTickDone(jlu));
                 }
             }
         }
 
-        private List<JournalEntry> ScanTickWorker(Func<bool> stopRequested)     // read the entries from all watcher..
+        private Tuple<List<JournalEntry>, List<UIEvent>> ScanTickWorker(Func<bool> stopRequested)     // read the entries from all watcher..
         {
             var entries = new List<JournalEntry>();
+            var uientries = new List<UIEvent>();
 
             foreach (JournalMonitorWatcher mw in watchers)
             {
-                entries.AddRange(mw.ScanForNewEntries());
+                var evret = mw.ScanForNewEntries();
+                entries.AddRange(evret.Item1);
+                uientries.AddRange(evret.Item2);
 
                 if (stopRequested())
                 {
@@ -162,16 +165,16 @@ namespace EliteDangerousCore
                 }
             }
 
-            return entries;
+            return new Tuple<List<JournalEntry>, List<UIEvent>>(entries, uientries);
         }
 
-        private void ScanTickDone(List<JournalEntry> entries)       // in UI thread..
+        private void ScanTickDone(Tuple<List<JournalEntry>, List<UIEvent>> entries)       // in UI thread..
         {
             ManualResetEvent stopRequested = StopRequested;
 
             if (entries != null && stopRequested != null)
             {
-                foreach (var ent in entries)                    // pass them to the handler
+                foreach (var ent in entries.Item1)                    // pass them to the handler
                 {
                     lock (stopRequested) // Make sure StopMonitor returns after this method returns
                     {
@@ -180,8 +183,20 @@ namespace EliteDangerousCore
 
                         System.Diagnostics.Trace.WriteLine(string.Format("New entry {0} {1}", ent.EventTimeUTC, ent.EventTypeStr));
 
-                        if (OnNewJournalEntry != null)
-                            OnNewJournalEntry(ent);
+                        OnNewJournalEntry?.Invoke(ent);
+                    }
+                }
+
+                foreach (var uient in entries.Item2)                    // pass them to the handler
+                {
+                    lock (stopRequested) // Make sure StopMonitor returns after this method returns
+                    {
+                        if (stopRequested.WaitOne(0))
+                            return;
+
+                        System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from journal {0} {1}", uient.EventTimeUTC, uient.EventTypeStr));
+
+                        OnNewUIEvent?.Invoke(uient);
                     }
                 }
             }
@@ -309,6 +324,7 @@ namespace EliteDangerousCore
 
                         if (events.TryDequeue(out e))
                         {
+                            System.Diagnostics.Trace.WriteLine(string.Format("New UI entry from status {0} {1}", e.EventTimeUTC, e.EventTypeStr));
                             OnNewUIEvent?.Invoke(e);
                         }
                         else

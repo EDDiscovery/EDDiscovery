@@ -56,8 +56,7 @@ namespace EDDiscovery.UserControls
         private int dividercapture = -2;        //-2 not shown, -1 shown, >=0 captured
         private int divideroriginalxpos = -1;
 
-        enum UIState { Normal, SystemMap, GalMap };
-        UIState uistate = UIState.Normal;
+        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 		
         class Configuration         // SO many now we need to prepare for a Long
         {
@@ -92,8 +91,7 @@ namespace EDDiscovery.UserControls
 
             public const long showSystemInformation = 1L << 32;
             public const long showHabInformation = 1L << 33;
-            public const long showNothingWhenSysmap = 1L << 34;
-            public const long showNothingWhenGalmap = 1L << 35;
+            public const long showNothingWhenPanel = 1L << 34;
 			public const long showNoTitleWhenHidden = 1L << 36;
 			public const long showMetalRichZone = 1L << 40;
 			public const long showWaterWrldZone = 1L << 41;
@@ -142,8 +140,7 @@ namespace EDDiscovery.UserControls
 			showEarthLikeToolStripMenuItem.Checked = Config(Configuration.showEarthLikeZone);
 			showAmmoniaWorldsToolStripMenuItem.Checked = Config(Configuration.showAmmonWrldZone);
 			showIcyPlanetsToolStripMenuItem.Checked = Config(Configuration.showIcyPlanetZone);
-            dontshowwhenInGalaxyPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenGalmap);
-            dontshowwhenInSystemMapPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenSysmap);
+            dontshowwhenInPanelToolStripMenuItem.Checked = Config(Configuration.showNothingWhenPanel);
 			completelyHideThePanelToolStripMenuItem.Checked = Config(Configuration.showNoTitleWhenHidden);
 
             SetSurfaceScanBehaviour(null);
@@ -274,13 +271,11 @@ namespace EDDiscovery.UserControls
 									   textcolour, backcolour, null);
 						}
 					}
-                    else if ( ( uistate == UIState.GalMap && Config(Configuration.showNothingWhenGalmap)) 
-							  || ( uistate == UIState.SystemMap && Config(Configuration.showNothingWhenSysmap)))
+                    else if ( uistate != EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus && Config(Configuration.showNothingWhenPanel))
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, rowheight,
-									   (uistate == UIState.GalMap) ? "Galaxy Map" : "System Map", 
+							AddColText(0, 0, rowpos, rowheight, uistate.ToString().SplitCapsWord(),
 									   textcolour, backcolour, null);
 						}
 					}
@@ -569,31 +564,15 @@ namespace EDDiscovery.UserControls
 
         private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
         {
-            EliteDangerousCore.UIEvents.UIJournalMusic jm = uievent as EliteDangerousCore.UIEvents.UIJournalMusic;
+            EliteDangerousCore.UIEvents.UIGUIFocus gui = uievent as EliteDangerousCore.UIEvents.UIGUIFocus;
 
-            if (jm != null)
+            if (gui != null)
             {
-                string ev = jm.Track;
-
-                bool refresh = false;
-                if (ev.Contains("GalaxyMap"))
-                {
-                    refresh = (uistate != UIState.GalMap);
-                    uistate = UIState.GalMap;
-                }
-                else if (ev.Contains("SystemMap"))
-                {
-                    refresh = (uistate != UIState.SystemMap);
-                    uistate = UIState.SystemMap;
-                }
-                else
-                {
-                    refresh = (uistate != UIState.Normal);
-                    uistate = UIState.Normal;
-                }
+                bool refresh = gui.GUIFocus != uistate;
+                uistate = gui.GUIFocus;
 
                 //System.Diagnostics.Debug.WriteLine("UI event " + obj + " " + uistate + " shown " + shown);
-                if (refresh && !jm.Shown)      // if we materially changed, and we are not showing ui events, need to update here
+                if (refresh )      
                     Display(current_historylist);
             }
         }
@@ -954,12 +933,7 @@ namespace EDDiscovery.UserControls
         }
         private void dontshowwhenInGalaxyPanelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FlipConfig(Configuration.showNothingWhenGalmap, ((ToolStripMenuItem)sender).Checked, true);
-        }
-
-        private void dontshowwhenInSystemPanelToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            FlipConfig(Configuration.showNothingWhenSysmap, ((ToolStripMenuItem)sender).Checked, true);
+            FlipConfig(Configuration.showNothingWhenPanel, ((ToolStripMenuItem)sender).Checked, true);
         }
 
 		private void completelyHideThePanelToolStripMenuItem_Click(object sender, EventArgs e)

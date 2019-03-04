@@ -70,7 +70,6 @@ namespace EDDiscovery.UserControls
             checkBoxPanelSortOrder.Checked = EDDConfig.Instance.SortPanelsByName;
             checkBoxUseNotifyIcon.Checked = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
             checkBoxUTC.Checked = EDDiscoveryForm.EDDConfig.DisplayUTC;
-            checkBoxShowUIEvents.Checked = EDDiscoveryForm.EDDConfig.ShowUIEvents;
             checkBoxCustomResize.Checked = EDDiscoveryForm.EDDConfig.DrawDuringResize;
 
             checkBoxOrderRowsInverted.CheckedChanged += checkBoxOrderRowsInverted_CheckedChanged;
@@ -79,7 +78,6 @@ namespace EDDiscovery.UserControls
             checkBoxPanelSortOrder.CheckedChanged += checkBoxPanelSortOrder_CheckedChanged;
             checkBoxUseNotifyIcon.CheckedChanged += checkBoxUseNotifyIcon_CheckedChanged;
             checkBoxUTC.CheckedChanged += checkBoxUTC_CheckedChanged;
-            checkBoxShowUIEvents.CheckedChanged += checkBoxShowUIEvents_CheckedChanged;
             checkBoxCustomResize.CheckedChanged += checkBoxCustomResize_CheckedChanged;
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
@@ -239,11 +237,6 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region History
-
-        private void checkBoxShowUIEvents_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.ShowUIEvents = checkBoxShowUIEvents.Checked;
-        }
 
         private void checkBoxOrderRowsInverted_CheckedChanged(object sender, EventArgs e)
         {

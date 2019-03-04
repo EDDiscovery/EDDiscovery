@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,23 +13,20 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore.UIEvents
 {
-    public class UIJournalMusic : UIEvent
+    public class UICommand : UIEvent
     {
-        public UIJournalMusic(string track, bool shown, DateTime time, bool refresh): base(UITypeEnum.JournalMusic, time, refresh)
+        public UICommand(string text, string auxtext, DateTime time, bool refresh): base(UITypeEnum.Command, time, refresh)
         {
-            Track = track;
-            Shown = shown;
+            Command = text;
+            AuxText = auxtext;
         }
 
-        public string Track { get; private set; }
-        public bool Shown { get; private set; }
+        public string Command { get; private set; }
+        public string AuxText { get; private set; }
     }
 }

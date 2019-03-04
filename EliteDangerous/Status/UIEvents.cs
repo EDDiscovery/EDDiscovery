@@ -26,7 +26,7 @@ namespace EliteDangerousCore
     {
         Unknown = 0,
         GUIFocus,
-        JournalMusic,
+        Music,
         Pips,
         Position,
         FireGroup,
@@ -60,10 +60,12 @@ namespace EliteDangerousCore
         NightVision,             // 3.3
         Fuel,   // 3.3
         Cargo,  // 3.3
-    
-        ShipType ,     
 
-        OverallStatus,
+        // EDD Ones
+
+        ShipType,              
+        OverallStatus,          
+        Command,
     }
 
     public abstract class UIEvent

@@ -97,9 +97,10 @@ namespace EliteDangerousCore
 
         // Called by EDJournalClass periodically to scan for journal entries
 
-        public List<JournalEntry> ScanForNewEntries()
+        public Tuple<List<JournalEntry>,List<UIEvent>> ScanForNewEntries()
         {
             var entries = new List<JournalEntry>();
+            var uientries = new List<UIEvent>();
 
             try
             {
@@ -113,12 +114,12 @@ namespace EliteDangerousCore
                     }
                     else
                     {
-                        ScanReader(lastnfi, entries);
+                        ScanReader(lastnfi, entries, uientries);
 
-                        if (entries.Count > 0)
+                        if (entries.Count > 0 || uientries.Count > 0 )
                         {
                             ticksNoActivity = 0;
-                            return entries;     // feed back now don't change file
+                            return new Tuple<List<JournalEntry>, List<UIEvent>>(entries,uientries);     // feed back now don't change file
                         }
                     }
                 }
@@ -128,7 +129,7 @@ namespace EliteDangerousCore
                     lastnfi = OpenFileReader(new FileInfo(filename));
                     System.Diagnostics.Debug.WriteLine(string.Format("Change to scan {0}", lastnfi.FileName));
                     if (lastnfi != null)
-                        ScanReader(lastnfi, entries);   // scan new one
+                        ScanReader(lastnfi, entries, uientries);   // scan new one
                 }
                 // every few goes, if its not there or filepos is greater equal to length (so only done when fully up to date)
                 else if ( ticksNoActivity >= 30 && (lastnfi == null || lastnfi.filePos >= new FileInfo(lastnfi.FileName).Length))
@@ -149,26 +150,26 @@ namespace EliteDangerousCore
                     }
 
                     if (lastnfi != null)
-                        ScanReader(lastnfi, entries);   // scan new one
+                        ScanReader(lastnfi, entries , uientries);   // scan new one
 
                     ticksNoActivity = 0;
                 }
 
                 ticksNoActivity++;
 
-                return entries;
+                return new Tuple<List<JournalEntry>, List<UIEvent>>(entries, uientries);     // feed back now don't change file
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Trace.WriteLine("Net tick exception : " + ex.Message);
                 System.Diagnostics.Trace.WriteLine(ex.StackTrace);
-                return new List<JournalEntry>();
+                return new Tuple<List<JournalEntry>, List<UIEvent>>(new List<JournalEntry>(), new List<UIEvent>());     // send out empty
             }
         }
 
         // Called by ScanForNewEntries (from EDJournalClass Scan Tick Worker) to scan a NFI for new entries
 
-        private void ScanReader(EDJournalReader nfi, List<JournalEntry> entries)
+        private void ScanReader(EDJournalReader nfi, List<JournalEntry> entries, List<UIEvent> uientries )
         {
             int netlogpos = 0;
 
@@ -182,12 +183,14 @@ namespace EliteDangerousCore
 
                 netlogpos = nfi.TravelLogUnit.Size;
 
-                bool readanything = nfi.ReadJournal(out List<JournalReaderEntry> ents, historyrefreshparsing:false, resetOnError: false );
+                bool readanything = nfi.ReadJournal(out List<JournalReaderEntry> ents, out List<UIEvent> uie, historyrefreshparsing: false, resetOnError: false );
 
-                //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " size " + netlogpos);
+                uientries.AddRange(uie);
 
                 if (readanything)           // if we read, we must update the travel log pos
                 {
+                    //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " ui " +uientries.Count + " size " + netlogpos);
+
                     using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
                     {
                         using (DbTransaction txn = cn.BeginTransaction())
@@ -198,10 +201,10 @@ namespace EliteDangerousCore
                             {
                                 entries.Add(jre.JournalEntry);
                                 jre.JournalEntry.Add(jre.Json, cn, txn);
-                                ticksNoActivity = 0;
                             }
 
-                            System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
+                           // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
+
                             nfi.TravelLogUnit.Update(cn);
 
                             txn.Commit();
@@ -278,24 +281,27 @@ namespace EliteDangerousCore
 
                     //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
 
-                    reader.ReadJournal(out List<JournalReaderEntry> entries, historyrefreshparsing:true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
+                    reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
 
-                    ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
-
-                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
-
-                    using (DbTransaction tn = cn.BeginTransaction())
+                    if (entries.Count > 0)
                     {
-                        foreach (JournalReaderEntry jre in entries)
-                        {
-                            if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
-                            {
-                                jre.JournalEntry.Add(jre.Json, cn, tn);
-                                //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
-                            }
-                        }
+                        ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
-                        tn.Commit();
+                        //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
+
+                        using (DbTransaction tn = cn.BeginTransaction())
+                        {
+                            foreach (JournalReaderEntry jre in entries)
+                            {
+                                if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
+                                {
+                                    jre.JournalEntry.Add(jre.Json, cn, tn);
+                                    //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
+                                }
+                            }
+
+                            tn.Commit();
+                        }
                     }
 
                     reader.TravelLogUnit.Update(cn);

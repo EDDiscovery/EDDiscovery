@@ -928,7 +928,6 @@ namespace EliteDangerousCore
                                     bool ForceNetLogReload = false,
                                     bool ForceJournalReload = false,
                                     int CurrentCommander = Int32.MinValue,
-                                    bool Keepuievents = true,
                                     int fullhistoryloaddaylimit = 0,
                                     string essentialitems = ""
                                     )
@@ -987,14 +986,13 @@ namespace EliteDangerousCore
                         continue;
                     }
 
-                    if (je.IsUIEvent && !Keepuievents)              // filter out any UI events
-                    {
+                    if ( je is EliteDangerousCore.JournalEvents.JournalMusic )      // remove music.. not shown.. now UI event. remove it for backwards compatibility
+                    { 
                         //System.Diagnostics.Debug.WriteLine("**** Filter out " + je.EventTypeStr + " on " + je.EventTimeLocal.ToString());
                         continue;
                     }
 
-                    bool journalupdate = false;
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate, conn);
 
                     prev = he;
                     jprev = je;

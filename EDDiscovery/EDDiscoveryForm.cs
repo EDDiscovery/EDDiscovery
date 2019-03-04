@@ -704,7 +704,7 @@ namespace EDDiscovery
 
             string prefix = "EventClass_";
             cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(Newtonsoft.Json.Linq.JObject) }, 5);
-            cv[prefix + "UIDisplayed"] = EDDConfig.ShowUIEvents ? "1" : "0";
+            cv[prefix + "UIDisplayed"] = "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
 

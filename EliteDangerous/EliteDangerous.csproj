@@ -206,6 +206,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Status\UIEvents.cs" />
+    <Compile Include="UIEvents\UICommand.cs" />
+    <Compile Include="UIEvents\UIMusic.cs" />
     <Compile Include="UIEvents\UIOverallStatus.cs" />
     <Compile Include="UIEvents\UIFuel.cs" />
     <Compile Include="UIEvents\UINightVision.cs" />
@@ -214,7 +216,6 @@
     <Compile Include="UIEvents\UICargo.cs" />
     <Compile Include="UIEvents\UIPosition.cs" />
     <Compile Include="UIEvents\UIPips.cs" />
-    <Compile Include="UIEvents\UIJournalMusic.cs" />
     <Compile Include="UIEvents\UIBeingInterdicted.cs" />
     <Compile Include="UIEvents\UICargoScoopDeployed.cs" />
     <Compile Include="UIEvents\UIDocked.cs" />

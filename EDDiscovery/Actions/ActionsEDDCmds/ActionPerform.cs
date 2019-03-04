@@ -315,7 +315,7 @@ namespace EDDiscovery.Actions
                                 {
                                     c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUS();
                                     c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
-                                    c["EventClass_UIDisplayed"] = EDDConfig.Instance.ShowUIEvents ? "1" : "0";
+                                    c["EventClass_UIDisplayed"] = "0";
                                     (ap.actioncontroller as ActionController).ActionRun(Actions.ActionEventEDList.onUIEvent, c);
                                 }
 

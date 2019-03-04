@@ -127,6 +127,21 @@ the pop out transparency mode if Tc (Click thru,
 controls still active) or Tf (controls inactive)
 Not all keys are guaranteed active on all keyboards</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="textBoxDefaultZoom.EndButtonImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
+        wQAAHsEBw2lUUwAAAAd0SU1FB+MDAggpB2WcKicAAAA3SURBVChTlYsBCgAgCMT2/09XmBdCWTkQVDZa
+        EQuAr3F3bnpms2RxizZZnKJUFjF6ysLMgZ8B6KDBfYNZaylsAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="textBoxHomeSystem.EndButtonImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
+        wQAAHsEBw2lUUwAAAAd0SU1FB+MDAggpB2WcKicAAAA3SURBVChTlYsBCgAgCMT2/09XmBdCWTkQVDZa
+        EQuAr3F3bnpms2RxizZZnKJUFjF6ysLMgZ8B6KDBfYNZaylsAAAAAElFTkSuQmCC
+</value>
+  </data>
   <metadata name="ColumnCommander.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>

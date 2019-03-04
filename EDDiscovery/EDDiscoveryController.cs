@@ -435,19 +435,11 @@ namespace EDDiscovery
 
         void ActionEntry(JournalEntry je)               // issue the JE to the system
         {
-            if (je.IsUIEvent)            // give windows time to set up for OnNewEvent, and tell them if its coming via showuievents
-            {
-                if (je is EliteDangerousCore.JournalEvents.JournalMusic)
-                {
-                    //System.Diagnostics.Debug.WriteLine("Dispatch from controller Journal UI event ");
-                    OnNewUIEvent?.Invoke(new EliteDangerousCore.UIEvents.UIJournalMusic((je as EliteDangerousCore.JournalEvents.JournalMusic).MusicTrack, EDDConfig.Instance.ShowUIEvents, DateTime.UtcNow, false));
-                }
-            }
 
             OnNewJournalEntry?.Invoke(je);          // Always call this on all entries...
 
             // filter out commanders, and filter out any UI events
-            if (je.CommanderId == history.CommanderId && (!je.IsUIEvent || EDDConfig.Instance.ShowUIEvents))  
+            if (je.CommanderId == history.CommanderId )  
             {
                 HistoryEntry he = history.AddJournalEntry(je, h => LogLineHighlight(h));        // add a new one on top
                 //System.Diagnostics.Debug.WriteLine("Add HE " + he.EventSummary);
@@ -814,7 +806,6 @@ namespace EDDiscovery
                     () => PendingClose, 
                     (p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(this,"PLF") , s)), args.NetLogPath,
                     args.ForceNetLogReload, args.ForceJournalReload, args.CurrentCommander, 
-                    EDDConfig.Instance.ShowUIEvents, 
                     EDDConfig.Instance.FullHistoryLoadDayLimit, EDDConfig.Instance.EssentialEventTypes);
 
                 Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load history complete with " + hist.Count + " records");

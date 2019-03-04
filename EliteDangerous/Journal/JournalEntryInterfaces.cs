@@ -68,7 +68,4 @@ namespace EliteDangerousCore
         bool ReadAdditionalFiles(string directory, bool inhistoryparse, ref Newtonsoft.Json.Linq.JObject jo);     // true if your happy, you can replace jo..
     }
 
-    public interface IUIEvent
-    {
-    }
 }

@@ -60,7 +60,6 @@ namespace EDDiscovery
         private bool minimizeToNotifyIcon = false;
         private bool keepOnTop = false; /**< Whether to keep the windows on top or not */
         private bool displayUTC = false;
-        private bool showuievents = false;
         private System.Windows.Forms.Keys clickthrukey = System.Windows.Forms.Keys.ShiftKey;
         private string defaultwavedevice = "Default";
         private string defaultvoicedevice = "Default";
@@ -173,19 +172,6 @@ namespace EDDiscovery
             {
                 defaultvoicedevice = value;
                 SQLiteConnectionUser.PutSettingString("VoiceAudioDevice", value);
-            }
-        }
-
-        public bool ShowUIEvents
-        {
-            get
-            {
-                return showuievents;
-            }
-            set
-            {
-                showuievents = value;
-                SQLiteConnectionUser.PutSettingBool("ShowUIEvents", value);
             }
         }
 
@@ -411,7 +397,6 @@ namespace EDDiscovery
                 displayUTC = SQLiteConnectionUser.GetSettingBool("DisplayUTC", false, conn);
                 defaultvoicedevice = SQLiteConnectionUser.GetSettingString("VoiceAudioDevice", "Default", conn);
                 defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
-                showuievents = SQLiteConnectionUser.GetSettingBool("ShowUIEvents", false, conn);
                 clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
                 edsmeddbdownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
                 edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "Not Set"); // from system database, not user, to keep setting with system data

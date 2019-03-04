@@ -28,8 +28,10 @@ namespace EliteDangerousCore.JournalEvents
         UnknownSettlement, DockingComputer, Starport, UnknownExploration, Exploration
     }
 
+    // Note as from 10.5.1, Music is converted to UIMusic and issued thru the UI system.  This exists to decode the journal entry before its converted
+
     [JournalEntryType(JournalTypeEnum.Music)]
-    public class JournalMusic : JournalEntry, IUIEvent
+    public class JournalMusic : JournalEntry
     {
         public JournalMusic(JObject evt ) : base(evt, JournalTypeEnum.Music)
         {

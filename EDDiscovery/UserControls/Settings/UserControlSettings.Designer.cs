@@ -47,7 +47,6 @@ namespace EDDiscovery.UserControls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSettings));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.comboBoxCustomHistoryLoadTime = new ExtendedControls.ExtComboBox();
-            this.checkBoxShowUIEvents = new ExtendedControls.ExtCheckBox();
             this.checkBoxOrderRowsInverted = new ExtendedControls.ExtCheckBox();
             this.checkBoxUTC = new ExtendedControls.ExtCheckBox();
             this.buttonExtEDSMConfigureArea = new ExtendedControls.ExtButton();
@@ -131,7 +130,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.DropDownWidth = 1;
             this.comboBoxCustomHistoryLoadTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomHistoryLoadTime.ItemHeight = 13;
-            this.comboBoxCustomHistoryLoadTime.Location = new System.Drawing.Point(232, 92);
+            this.comboBoxCustomHistoryLoadTime.Location = new System.Drawing.Point(232, 69);
             this.comboBoxCustomHistoryLoadTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomHistoryLoadTime.Name = "comboBoxCustomHistoryLoadTime";
             this.comboBoxCustomHistoryLoadTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -147,25 +146,6 @@ namespace EDDiscovery.UserControls
         "f records older than a set time before now");
             this.comboBoxCustomHistoryLoadTime.ValueMember = "";
             // 
-            // checkBoxShowUIEvents
-            // 
-            this.checkBoxShowUIEvents.AutoSize = true;
-            this.checkBoxShowUIEvents.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxShowUIEvents.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxShowUIEvents.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxShowUIEvents.FontNerfReduction = 0.5F;
-            this.checkBoxShowUIEvents.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxShowUIEvents.Location = new System.Drawing.Point(10, 23);
-            this.checkBoxShowUIEvents.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxShowUIEvents.Name = "checkBoxShowUIEvents";
-            this.checkBoxShowUIEvents.Size = new System.Drawing.Size(170, 17);
-            this.checkBoxShowUIEvents.TabIndex = 6;
-            this.checkBoxShowUIEvents.Text = "Show Elite UI Events in history";
-            this.checkBoxShowUIEvents.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxShowUIEvents, "Show the UI events (such as Music) in the history. The quantity of them can be ve" +
-        "ry large");
-            this.checkBoxShowUIEvents.UseVisualStyleBackColor = true;
-            // 
             // checkBoxOrderRowsInverted
             // 
             this.checkBoxOrderRowsInverted.AutoSize = true;
@@ -174,7 +154,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxOrderRowsInverted.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxOrderRowsInverted.FontNerfReduction = 0.5F;
             this.checkBoxOrderRowsInverted.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(10, 46);
+            this.checkBoxOrderRowsInverted.Location = new System.Drawing.Point(10, 23);
             this.checkBoxOrderRowsInverted.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxOrderRowsInverted.Name = "checkBoxOrderRowsInverted";
             this.checkBoxOrderRowsInverted.Size = new System.Drawing.Size(196, 17);
@@ -192,7 +172,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxUTC.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxUTC.FontNerfReduction = 0.5F;
             this.checkBoxUTC.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxUTC.Location = new System.Drawing.Point(10, 69);
+            this.checkBoxUTC.Location = new System.Drawing.Point(10, 46);
             this.checkBoxUTC.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxUTC.Name = "checkBoxUTC";
             this.checkBoxUTC.Size = new System.Drawing.Size(209, 17);
@@ -459,6 +439,9 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.ClearOnFirstChar = false;
             this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDefaultZoom.DelayBeforeNotification = 0;
+            this.textBoxDefaultZoom.EndButtonEnable = true;
+            this.textBoxDefaultZoom.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxDefaultZoom.EndButtonImage")));
+            this.textBoxDefaultZoom.EndButtonVisible = false;
             this.textBoxDefaultZoom.Format = "0.#######";
             this.textBoxDefaultZoom.InErrorCondition = true;
             this.textBoxDefaultZoom.Location = new System.Drawing.Point(114, 70);
@@ -515,6 +498,7 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxHomeSystem
             // 
+            this.textBoxHomeSystem.AutoCompleteCommentMarker = null;
             this.textBoxHomeSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBoxHomeSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxHomeSystem.BackErrorColor = System.Drawing.Color.Red;
@@ -531,6 +515,9 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownWidth = 0;
+            this.textBoxHomeSystem.EndButtonEnable = false;
+            this.textBoxHomeSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxHomeSystem.EndButtonImage")));
+            this.textBoxHomeSystem.EndButtonVisible = false;
             this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxHomeSystem.InErrorCondition = false;
             this.textBoxHomeSystem.Location = new System.Drawing.Point(114, 19);
@@ -655,7 +642,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.DropDownWidth = 400;
             this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomEssentialEntries.ItemHeight = 13;
-            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(176, 125);
+            this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(176, 102);
             this.comboBoxCustomEssentialEntries.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomEssentialEntries.Name = "comboBoxCustomEssentialEntries";
             this.comboBoxCustomEssentialEntries.ScrollBarButtonColor = System.Drawing.Color.LightGray;
@@ -739,7 +726,6 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.BorderColorScaling = 0.5F;
             this.groupBoxCustomHistoryLoad.Controls.Add(this.comboBoxCustomEssentialEntries);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.comboBoxCustomHistoryLoadTime);
-            this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxShowUIEvents);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxOrderRowsInverted);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.checkBoxUTC);
             this.groupBoxCustomHistoryLoad.Controls.Add(this.labelHistoryEssItems);
@@ -747,7 +733,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomHistoryLoad.FillClientAreaWithAlternateColor = false;
             this.groupBoxCustomHistoryLoad.Location = new System.Drawing.Point(3, 182);
             this.groupBoxCustomHistoryLoad.Name = "groupBoxCustomHistoryLoad";
-            this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(425, 157);
+            this.groupBoxCustomHistoryLoad.Size = new System.Drawing.Size(425, 142);
             this.groupBoxCustomHistoryLoad.TabIndex = 21;
             this.groupBoxCustomHistoryLoad.TabStop = false;
             this.groupBoxCustomHistoryLoad.Text = "History/Memory Options";
@@ -757,7 +743,7 @@ namespace EDDiscovery.UserControls
             // labelHistoryEssItems
             // 
             this.labelHistoryEssItems.AutoSize = true;
-            this.labelHistoryEssItems.Location = new System.Drawing.Point(10, 125);
+            this.labelHistoryEssItems.Location = new System.Drawing.Point(10, 102);
             this.labelHistoryEssItems.Name = "labelHistoryEssItems";
             this.labelHistoryEssItems.Size = new System.Drawing.Size(103, 13);
             this.labelHistoryEssItems.TabIndex = 5;
@@ -766,7 +752,7 @@ namespace EDDiscovery.UserControls
             // labelHistorySel
             // 
             this.labelHistorySel.AutoSize = true;
-            this.labelHistorySel.Location = new System.Drawing.Point(10, 92);
+            this.labelHistorySel.Location = new System.Drawing.Point(10, 69);
             this.labelHistorySel.Name = "labelHistorySel";
             this.labelHistorySel.Size = new System.Drawing.Size(137, 13);
             this.labelHistorySel.TabIndex = 5;
@@ -802,7 +788,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomScreenShots.Controls.Add(this.buttonExtScreenshot);
             this.groupBoxCustomScreenShots.Controls.Add(this.checkBoxCustomEnableScreenshots);
             this.groupBoxCustomScreenShots.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 425);
+            this.groupBoxCustomScreenShots.Location = new System.Drawing.Point(3, 413);
             this.groupBoxCustomScreenShots.Name = "groupBoxCustomScreenShots";
             this.groupBoxCustomScreenShots.Size = new System.Drawing.Size(426, 100);
             this.groupBoxCustomScreenShots.TabIndex = 20;
@@ -853,7 +839,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxTheme.Controls.Add(this.button_edittheme);
             this.groupBoxTheme.Controls.Add(this.buttonSaveTheme);
             this.groupBoxTheme.FillClientAreaWithAlternateColor = false;
-            this.groupBoxTheme.Location = new System.Drawing.Point(3, 340);
+            this.groupBoxTheme.Location = new System.Drawing.Point(3, 328);
             this.groupBoxTheme.Name = "groupBoxTheme";
             this.groupBoxTheme.Size = new System.Drawing.Size(426, 82);
             this.groupBoxTheme.TabIndex = 18;
@@ -991,7 +977,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.BorderColorScaling = 0.5F;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 531);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(3, 519);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(426, 51);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -1037,7 +1023,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.FillClientAreaWithAlternateColor = false;
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 588);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(3, 576);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
             this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(425, 60);
             this.groupBoxCustomSafeMode.TabIndex = 21;
@@ -1122,7 +1108,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn EdsmName;
         private System.Windows.Forms.DataGridViewTextBoxColumn JournalDirCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn NotesCol;
-        private ExtendedControls.ExtCheckBox checkBoxShowUIEvents;
         private ExtendedControls.ExtComboBox comboBoxClickThruKey;
         private System.Windows.Forms.Label labelTKey;
         private ExtendedControls.ExtGroupBox groupBoxCustomScreenShots;
