@@ -9,89 +9,165 @@ namespace EDDiscovery.Actions
 {
     public class ActionEventEDList : ActionLanguage.ActionEvent
     {
-        protected ActionEventEDList(string name, string trigtype, string cls) :base(name, trigtype, cls)
+        protected ActionEventEDList(string name, string trigtype, string cls, List<BaseUtils.TypeHelpers.PropertyNameInfo> vars) : base(name, trigtype, cls, vars)
         {
         }
 
-        protected new static List<ActionEvent> events = new List<ActionEvent>()
+        protected static List<ActionEvent> eddevents = new List<ActionEvent>()
         {
-            new ActionEventEDList("onInstall", "ProgramEvent", "Program"),
-            new ActionEventEDList("onRefreshStart", "ProgramEvent", "Program"),
-            new ActionEventEDList("onRefreshEnd", "ProgramEvent", "Program"),
-            new ActionEventEDList("onKeyPress", "KeyPress", "UI"),
-            new ActionEventEDList("onShutdown", "ProgramEvent", "Program"),
-            new ActionEventEDList("onMenuItem", "UserUIEvent", "UI"),        // 5
-            new ActionEventEDList("onTabChange", "UserUIEvent", "UI"),
-            new ActionEventEDList("onTimer", "ProgramEvent", "Action"),
-            new ActionEventEDList("onEliteInputRaw","EliteUIEvent",  "EliteUI"),
-            new ActionEventEDList("onEliteInput", "EliteUIEvent", "EliteUI"), 
-            new ActionEventEDList("onEliteInputOff", "EliteUIEvent", "EliteUI"), //10
-            new ActionEventEDList("onPopUp", "UserUIEvent", "UI"),
-            new ActionEventEDList("onPopDown", "UserUIEvent", "UI"), //12
-            new ActionEventEDList("onPanelChange", "UserUIEvent", "UI"),
-            new ActionEventEDList("onHistorySelection", "UserUIEvent", "UI"),  //14
-            new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "UIEvents"),  //15
-            new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program"),  //16
-            new ActionEventEDList("onEGOSync", "ProgramEvent", "Program"),  //17
-            new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program"),  //18
-            new ActionEventEDList("onVoiceInput", "Voice", "Voice"), //19
-            new ActionEventEDList("onVoiceInputFailed", "Voice", "VoiceOther"), //19
+            new ActionEventEDList("onInstall", "ProgramEvent", "Program", null
+                ),
+            new ActionEventEDList("onRefreshStart", "ProgramEvent", "Program",null ),
+            new ActionEventEDList("onRefreshEnd", "ProgramEvent", "Program"  , null),
+            new ActionEventEDList("onKeyPress", "KeyPress", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("KeyPress", "Logical name of key", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable")
+                }
+                ),
+            new ActionEventEDList("onShutdown", "ProgramEvent", "Program", null ),
+            new ActionEventEDList("onMenuItem", "UserUIEvent", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("MenuText", "Menu text", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("MenuName", "Logical name given to menu", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("TopLevelMenuName", "Name of top level menu", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable")
+                }
+                ),        // 5
+            new ActionEventEDList("onTabChange", "UserUIEvent", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("TabName", "Tab changed to", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                }
+                ),
+            new ActionEventEDList("onTimer", "ProgramEvent", "Action",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("TimerName", "Timer which has timed out", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable")
+                }
+                ),
+            new ActionEventEDList("onEliteInputRaw","EliteUIEvent",  "EliteUI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Device", "Logical device name", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("EventName", "Name of event, Key_<> or Joy_<> or JoyPOV<num><dir> or Joy_<axis>Axis", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Pressed", "Boolean, If key, is pressed", BaseUtils.ConditionEntry.MatchType.IsTrue, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Value", "Value of joystick axis or POV direction", BaseUtils.ConditionEntry.MatchType.NumericEquals, "Event Variable"),
+                }
+                ),
+            new ActionEventEDList("onEliteInput", "EliteUIEvent", "EliteUI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Binding", "Logical binding name", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("BindingList", "List of bindings", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Device", "Logical device name", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("EventName", "Name of event, Key_<> or Joy_<> or JoyPOV<num><dir> or Joy_<axis>Axis", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Pressed", "Boolean, If key, is pressed", BaseUtils.ConditionEntry.MatchType.IsTrue, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Value", "Value of joystick axis or POV direction", BaseUtils.ConditionEntry.MatchType.NumericEquals, "Event Variable"),
+                }
+                ),
+            new ActionEventEDList("onEliteInputOff", "EliteUIEvent", "EliteUI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("Binding", "Logical binding name, key off", BaseUtils.ConditionEntry.MatchType.Contains, "Event Variable")
+                }
+                ), //10
+            new ActionEventEDList("onPopUp", "UserUIEvent", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutName", "Logical Name of popout", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutTitle", "Title of popout", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutIndex", "Index of popout,0 on", BaseUtils.ConditionEntry.MatchType.NumericEquals, "Event Variable"),
+                }
+                ),
+            new ActionEventEDList("onPopDown", "UserUIEvent", "UI",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutName", "Logical Name of popout", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("PopOutTitle", "Title of popout", BaseUtils.ConditionEntry.MatchType.Equals, "Event Variable"),
+                }
+                ), //12
+            new ActionEventEDList("onPanelChange", "UserUIEvent", "UI", null),
+            new ActionEventEDList("onHistorySelection", "UserUIEvent", "UI", null),
+            new ActionEventEDList("onEliteUIEvent", "EliteUIEvent", "UIEvents",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("EventClass_UIDisplayed", "Indicates if UI events are shown in the journal", BaseUtils.ConditionEntry.MatchType.IsTrue, "Event Variable"),
+                }
+                ),
+            new ActionEventEDList("onEDDNSync", "ProgramEvent", "Program", null ),  //16
+            new ActionEventEDList("onEGOSync", "ProgramEvent", "Program", null ),  //17
+            new ActionEventEDList("onEDSMSync", "ProgramEvent", "Program", null ),  //18
+            new ActionEventEDList("onVoiceInput", "Voice", "Voice",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text recognised", BaseUtils.ConditionEntry.MatchType.MatchSemicolonList, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual, "Event Variable"),
+                }
+                ), //19
+            new ActionEventEDList("onVoiceInputFailed", "Voice", "VoiceOther",
+                new List<BaseUtils.TypeHelpers.PropertyNameInfo>()
+                {
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceInput", "Voice text not recognised", BaseUtils.ConditionEntry.MatchType.MatchSemicolonList, "Event Variable"),
+                    new BaseUtils.TypeHelpers.PropertyNameInfo("VoiceConfidence", "% confidence in recognition", BaseUtils.ConditionEntry.MatchType.NumericGreaterEqual, "Event Variable"),
+                }
+                ), //19
 
-            new ActionEventEDList("All","","Misc"),                      // All, special match only
+            new ActionEventEDList("All","","Misc",null),                      // All, special match only
         };
 
-        public static ActionEvent onInstall { get { return events[0]; } }
-        public static ActionEvent onRefreshStart { get { return events[1]; } }
-        public static ActionEvent onRefreshEnd { get { return events[2]; } }
-        public static ActionEvent onKeyPress { get { return events[3]; } }
-        public static ActionEvent onShutdown { get { return events[4]; } }
-        public static ActionEvent onMenuItem { get { return events[5]; } }
-        public static ActionEvent onTabChange { get { return events[6]; } }
-        public static ActionEvent onTimer { get { return events[7]; } }
-        public static ActionEvent onEliteInputRaw { get { return events[8]; } }
-        public static ActionEvent onEliteInput { get { return events[9]; } }
-        public static ActionEvent onEliteInputOff { get { return events[10]; } }
-        public static ActionEvent onPopUp { get { return events[11]; } }
-        public static ActionEvent onPopDown { get { return events[12]; } }
-        public static ActionEvent onPanelChange { get { return events[13]; } }          // withdrawn in 10
-        public static ActionEvent onHistorySelection { get { return events[14]; } }     // withdrawn in 10
-        public static ActionEvent onUIEvent { get { return events[15]; } }
-        public static ActionEvent onEDDNSync { get { return events[16]; } }
-        public static ActionEvent onEGOSync { get { return events[17]; } }
-        public static ActionEvent onEDSMSync { get { return events[18]; } }
-        public static ActionEvent onVoiceInput { get { return events[19]; } }
-        public static ActionEvent onVoiceInputFailed { get { return events[20]; } }
+        public static ActionEvent onInstall { get { return eddevents[0]; } }
+        public static ActionEvent onRefreshStart { get { return eddevents[1]; } }
+        public static ActionEvent onRefreshEnd { get { return eddevents[2]; } }
+        public static ActionEvent onKeyPress { get { return eddevents[3]; } }
+        public static ActionEvent onShutdown { get { return eddevents[4]; } }
+        public static ActionEvent onMenuItem { get { return eddevents[5]; } }
+        public static ActionEvent onTabChange { get { return eddevents[6]; } }
+        public static ActionEvent onTimer { get { return eddevents[7]; } }
+        public static ActionEvent onEliteInputRaw { get { return eddevents[8]; } }
+        public static ActionEvent onEliteInput { get { return eddevents[9]; } }
+        public static ActionEvent onEliteInputOff { get { return eddevents[10]; } }
+        public static ActionEvent onPopUp { get { return eddevents[11]; } }
+        public static ActionEvent onPopDown { get { return eddevents[12]; } }
+        public static ActionEvent onPanelChange { get { return eddevents[13]; } }          // withdrawn in 10
+        public static ActionEvent onHistorySelection { get { return eddevents[14]; } }     // withdrawn in 10
+        public static ActionEvent onUIEvent { get { return eddevents[15]; } }
+        public static ActionEvent onEDDNSync { get { return eddevents[16]; } }
+        public static ActionEvent onEGOSync { get { return eddevents[17]; } }
+        public static ActionEvent onEDSMSync { get { return eddevents[18]; } }
+        public static ActionEvent onVoiceInput { get { return eddevents[19]; } }
+        public static ActionEvent onVoiceInputFailed { get { return eddevents[20]; } }
 
         // for events marked with run at refresh, get an HE per entry
-        public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", ""); }
+        public static ActionEvent RefreshJournal(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "onRefresh", "",null); }
 
         // onNewEntry, journal event
-        public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", ""); }
+        public static ActionEvent NewEntry(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "NewEntry", "", null); }
 
         // Event cmd Action - reissue He
-        public static ActionEvent EventCmd(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "ActionProgram", ""); }
+        public static ActionEvent EventCmd(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "ActionProgram", "", null); }
 
         // UI Event
-        public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI" + ui.EventTypeStr, "EliteUIEvent", ""); }
+        public static ActionEvent EliteUIEvent(EliteDangerousCore.UIEvent ui) { return new ActionEventEDList("UI" + ui.EventTypeStr, "EliteUIEvent", "" , null); }
 
         // DLL Event
-        public static ActionEvent DLLEvent(string eventname) { return new ActionEventEDList(eventname, "DLLEvent", ""); }
+        public static ActionEvent DLLEvent(string eventname) { return new ActionEventEDList(eventname, "DLLEvent", "", null); }
 
         // Journal or Travel grid, run actions on this event
-        public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", ""); }
+        public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", "", null); }
 
         public static List<ActionEvent> EventsFromNames(List<string> alist, string prefix , string triggertype, string uiclname)
         {
             List<ActionEvent> ae = new List<ActionEvent>();
             foreach (string s in alist)
-                ae.Add(new ActionEventEDList(prefix + s, triggertype, uiclname));
+                ae.Add(new ActionEventEDList(prefix + s, triggertype, uiclname, null));
             return ae;
         }
 
         public static List<ActionEvent> StaticDefinedEvents()       
         {
             List<ActionEvent> be = new List<ActionEvent>(ActionEvent.events);
-            be.AddRange(ActionEventEDList.events);
+            be.AddRange(ActionEventEDList.eddevents);
             return be;
         }
 
