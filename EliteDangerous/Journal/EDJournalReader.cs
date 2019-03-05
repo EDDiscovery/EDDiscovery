@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 EDDiscovery development team
+ * Copyright © 2016-2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -251,23 +251,48 @@ namespace EliteDangerousCore
 
         private void AddEntry( JournalReaderEntry newentry, ref List<JournalReaderEntry> jent, ref List<UIEvent> uievents )
         {
-            if (newentry.JournalEntry is JournalEvents.JournalMusic)
+            if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.Music)
             {
                 var jm = newentry.JournalEntry as JournalEvents.JournalMusic;
                 uievents.Add(new UIEvents.UIMusic(jm.MusicTrack, jm.MusicTrackID, jm.EventTimeUTC, false));
+                return;
             }
-            else if (newentry.JournalEntry is JournalEvents.JournalSendText )
+            else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.UnderAttack)
+            {
+                var ja = newentry.JournalEntry as JournalEvents.JournalUnderAttack;
+                uievents.Add(new UIEvents.UIUnderAttack(ja.Target, ja.EventTimeUTC, false));
+                return;
+            }
+            else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.SendText)
             {
                 var jt = newentry.JournalEntry as JournalEvents.JournalSendText;
                 if (jt.Command)
                 {
                     uievents.Add(new UIEvents.UICommand(jt.Message, jt.To, jt.EventTimeUTC, false));
+                    return;
                 }
-                else
-                    jent.Add(newentry);
             }
-            else
-                jent.Add(newentry);
+            else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.ShipTargeted)
+            {
+                var jst = newentry.JournalEntry as JournalEvents.JournalShipTargeted;
+                if (jst.TargetLocked == false)
+                {
+                    uievents.Add(new UIEvents.UIShipTargeted(jst, jst.EventTimeUTC, false));
+                    return;
+                }
+
+            }
+            else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.ReceiveText)
+            {
+                var jt = newentry.JournalEntry as JournalEvents.JournalReceiveText;
+                if (jt.Channel == "Info") 
+                {
+                    uievents.Add(new UIEvents.UIReceiveText(jt, jt.EventTimeUTC, false));
+                    return;
+                }
+            }
+
+            jent.Add(newentry);
         }
     }
 }

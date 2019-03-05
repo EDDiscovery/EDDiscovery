@@ -214,6 +214,9 @@
     <Compile Include="UIEvents\UIHUDInAnalysisMode.cs" />
     <Compile Include="UIEvents\UIFireGroup.cs" />
     <Compile Include="UIEvents\UICargo.cs" />
+    <Compile Include="UIEvents\UIReceiveText.cs" />
+    <Compile Include="UIEvents\UIUnderAttack.cs" />
+    <Compile Include="UIEvents\UIShipTargeted.cs" />
     <Compile Include="UIEvents\UIPosition.cs" />
     <Compile Include="UIEvents\UIPips.cs" />
     <Compile Include="UIEvents\UIBeingInterdicted.cs" />

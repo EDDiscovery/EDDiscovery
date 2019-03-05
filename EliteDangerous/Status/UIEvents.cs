@@ -64,8 +64,13 @@ namespace EliteDangerousCore
         // EDD Ones
 
         ShipType,              
-        OverallStatus,          
+        OverallStatus,        
+        
+        // Redirected journal entries
         Command,
+        ShipTargeted,
+        UnderAttack,
+        ReceiveText,
     }
 
     public abstract class UIEvent
