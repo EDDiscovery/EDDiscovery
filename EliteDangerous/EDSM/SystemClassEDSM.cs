@@ -673,7 +673,7 @@ namespace EliteDangerousCore.EDSM
                     ReportProgress(-1, "Operation Cancelled");
                     throw new OperationCanceledException();
                 }
-            });
+            }, cancelRequested:PendingClose);
 
             if (!success)
             {
