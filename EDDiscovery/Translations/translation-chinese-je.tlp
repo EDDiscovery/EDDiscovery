@@ -1,0 +1,945 @@
+
+SECTION JournalTypeEnum
+
+.Unknown: "Unknown" => "未知"
+.AfmuRepairs: "Afmu Repairs" => "模组维护工具"
+.ApproachBody: "Approach Body" => "接近星体"
+.ApproachSettlement: "Approach Settlement" => "接近地表移民地"
+.Bounty: "Bounty" => "悬赏代券"
+.BuyAmmo: "Buy Ammo" => "购买弹药"
+.BuyDrones: "Buy Drones" => "购买无人机"
+.BuyExplorationData: "Buy Exploration Data" => "购买星图数据"
+.BuyTradeData: "Buy Trade Data" => "购买贸易数据"
+.CapShipBond: "Cap Ship Bond" => "主力战舰战争债券"
+.Cargo: "Cargo" => "货物"
+.CargoDepot: "Cargo Depot" => "货物仓库"
+.ChangeCrewRole: "Change Crew Role" => "更改船员职责"
+.ClearSavedGame: "Clear Saved Game" => "清除游戏存档"
+.CockpitBreached: "Cockpit Breached" => "驾驶舱破碎"
+.CollectCargo: "Collect Cargo" => "收集货物"
+.Commander: "Commander" => "指挥官"
+.CommitCrime: "Commit Crime" => "违法行为"
+.CommunityGoal: "Community Goal" => "社区目标"
+.CommunityGoalJoin: "Community Goal Join" => "加入社区目标"
+.CommunityGoalReward: "Community Goal Reward" => "社区目标奖励"
+.Continued: "Continued" => "继续"
+.CrewAssign: "Crew Assign" => "NPC船员分配职责"
+.CrewFire: "Crew Fire" => "NPC船员解雇"
+.CrewHire: "Crew Hire" => "NPC船员雇佣"
+.CrimeVictim: "Crime Victim" => "违法受害"
+.DatalinkScan: "Datalink Scan" => "扫描数据链接"
+.Died: "Died" => "死亡"
+.DiscoveryScan: "Discovery Scan" => "发现式扫描"
+.Docked: "Docked" => "停靠"
+.DockFighter: "Dock Fighter" => "停靠舰载机"
+.DockingCancelled: "Docking Cancelled" => "取消停靠"
+.DockingDenied: "Docking Denied" => "停靠被拒"
+.DockingGranted: "Docking Granted" => "获准停靠"
+.DockingRequested: "Docking Requested" => "请求停靠"
+.DockingTimeout: "Docking Timeout" => "停靠超时"
+.DockSRV: "Dock SRV" => "停靠SRV车"
+.EjectCargo: "Eject Cargo" => "丢弃货物"
+.EndCrewSession: "End Crew Session" => "中止船员模式"
+.EngineerApply: "Engineer Apply" => "应用改装"
+.EngineerContribution: "Engineer Contribution" => "捐赠工程师"
+.EngineerCraft: "Engineer Craft" => "生成改装"
+.EngineerLegacyConvert: "Engineer Legacy Convert" => "转换旧型改装"
+.EngineerProgress: "Engineer Progress" => "工程师进展"
+.EscapeInterdiction: "Escape Interdiction" => "逃脱FSD拦截"
+.FactionKillBond: "Faction Kill Bond" => "派系战争债券"
+.FSDJump: "FSD Jump" => "FSD跳跃"
+.FuelScoop: "Fuel Scoop" => "燃料收集"
+.Fileheader: "Fileheader" => "游戏日志文件头"
+.FighterDestroyed: "Fighter Destroyed" => "舰载机被摧毁"
+.FighterRebuilt: "Fighter Rebuilt" => "舰载机重建"
+.Friends: "Friends" => "好友"
+.HeatDamage: "Heat Damage" => "高温伤害"
+.HeatWarning: "Heat Warning" => "高温警告"
+.HullDamage: "Hull Damage" => "船体伤害"
+.Interdicted: "Interdicted" => "被拦截"
+.Interdiction: "Interdiction" => "拦截"
+.JetConeBoost: "Jet Cone Boost" => "等离子喷流助推"
+.JetConeDamage: "Jet Cone Damage" => "等离子喷流伤害"
+.JoinACrew: "Join A Crew" => "加入为船员"
+.KickCrewMember: "Kick Crew Member" => "踢出船员"
+.LaunchDrone: "Launch Drone" => "发射无人机"
+.LaunchFighter: "Launch Fighter" => "发射舰载机"
+.LaunchSRV: "Launch SRV" => "部署SRV车"
+.LeaveBody: "Leave Body" => "离开星体"
+.Liftoff: "Liftoff" => "起飞"
+.LoadGame: "Load Game" => "载入游戏"
+.Loadout: "Loadout" => "飞船装备"
+.Location: "Location" => "地点"
+.Market: "Market" => "市场数据"
+.MarketBuy: "Market Buy" => "市场采购"
+.MarketSell: "Market Sell" => "市场出售"
+.MaterialCollected: "Material Collected" => "收集材料"
+.MaterialDiscarded: "Material Discarded" => "丢弃材料"
+.MaterialDiscovered: "Material Discovered" => "发现材料"
+.MaterialTrade: "Material Trade" => "交易材料"
+.Materials: "Materials" => "材料"
+.MiningRefined: "Mining Refined" => "矿石精炼"
+.Missions: "Missions" => "任务"
+.MissionAbandoned: "Mission Abandoned" => "放弃任务"
+.MissionAccepted: "Mission Accepted" => "接受任务"
+.MissionCompleted: "Mission Completed" => "完成任务"
+.MissionFailed: "Mission Failed" => "任务失败"
+.MissionRedirected: "Mission Redirected" => "任务变更"
+.ModuleInfo: "Module Info" => "模组信息"
+.ModuleBuy: "Module Buy" => "购买模组"
+.ModuleRetrieve: "Module Retrieve" => "购回模组"
+.ModuleSell: "Module Sell" => "出售模组"
+.ModuleStore: "Module Store" => "存放模组"
+.ModuleSwap: "Module Swap" => "交换模组"
+.Music: "Music" => "音乐"
+.NavBeaconScan: "Nav Beacon Scan" => "扫描导航信标"
+.NewCommander: "New Commander" => "新指挥官"
+.NpcCrewPaidWage: "Npc Crew Paid Wage" => "NPC船员工资支付"
+.NpcCrewRank: "Npc Crew Rank" => "NPC船员等级"
+.Outfitting: "Outfitting" => "装备数据"
+.Passengers: "Passengers" => "乘客"
+.PayFines: "Pay Fines" => "支付罚款"
+.PayBounties: "Pay Bounties" => "支付悬赏"
+.PayLegacyFines: "Pay Legacy Fines" => "支付历史罚款"
+.Powerplay: "Powerplay" => "势力斗争"
+.PowerplayCollect: "Powerplay Collect" => "势力物资收集"
+.PowerplayDefect: "Powerplay Defect" => "势力叛变"
+.PowerplayDeliver: "Powerplay Deliver" => "势力物资送达"
+.PowerplayFastTrack: "Powerplay Fast Track" => "势力快速通道"
+.PowerplayJoin: "Powerplay Join" => "加入势力"
+.PowerplayLeave: "Powerplay Leave" => "离开势力"
+.PowerplaySalary: "Powerplay Salary" => "势力工资"
+.PowerplayVote: "Powerplay Vote" => "势力投票"
+.PowerplayVoucher: "Powerplay Voucher" => "势力代券"
+.Progress: "Progress" => "等级进度"
+.Promotion: "Promotion" => "晋升"
+.ProspectedAsteroid: "Prospected Asteroid" => "勘探过的小行星"
+.PVPKill: "PVP Kill" => "PVP杀敌"
+.QuitACrew: "Quit A Crew" => "离开船员"
+.Rank: "Rank" => "等级"
+.RebootRepair: "Reboot Repair" => "重启维修"
+.ReceiveText: "Receive Text" => "收到文本消息"
+.RedeemVoucher: "Redeem Voucher" => "兑换代券"
+.RefuelAll: "Refuel All" => "加满燃料"
+.RefuelPartial: "Refuel Partial" => "添加部分燃料"
+.Repair: "Repair" => "维修"
+.RepairAll: "Repair All" => "全部维修"
+.RepairDrone: "Repair Drone" => "维修无人机"
+.Reputation: "Reputation" => "声望"
+.RestockVehicle: "Restock Vehicle" => "补充库存载具"
+.ReservoirReplenished: "Reservoir Replenished" => "副燃料箱补满"
+.Resurrect: "Resurrect" => "复活"
+.Scan: "Scan" => "扫描"
+.Scanned: "Scanned" => "被扫描"
+.ScientificResearch: "Scientific Research" => "科研"
+.Screenshot: "Screenshot" => "截图"
+.SearchAndRescue: "Search And Rescue" => "搜寻与救援"
+.SelfDestruct: "Self Destruct" => "自我摧毁"
+.SellDrones: "Sell Drones" => "出售无人机"
+.SellExplorationData: "Sell Exploration Data" => "出售探索数据"
+.SellShipOnRebuy: "Sell Ship On Rebuy" => "复活时出售飞船"
+.SendText: "Send Text" => "发送文本消息"
+.SetUserShipName: "Set User Ship Name" => "设定飞船名称"
+.ShieldState: "Shield State" => "护盾状况"
+.Shipyard: "Shipyard" => "船坞数据"
+.ShipyardBuy: "Shipyard Buy" => "购买飞船"
+.ShipyardNew: "Shipyard New" => "新飞船"
+.ShipyardSell: "Shipyard Sell" => "出售飞船"
+.ShipyardSwap: "Shipyard Swap" => "交换飞船"
+.ShipyardTransfer: "Shipyard Transfer" => "转移飞船"
+.ShipTargeted: "Ship Targeted" => "锁定飞船目标"
+.Shutdown: "Shutdown" => "退出游戏"
+.SRVDestroyed: "SRV Destroyed" => "SRV车被摧毁"
+.StartJump: "Start Jump" => "开始FSD跳跃"
+.StoredModules: "Stored Modules" => "存放的模组"
+.StoredShips: "Stored Ships" => "存放的飞船"
+.Statistics: "Statistics" => "统计资料"
+.SupercruiseEntry: "Supercruise Entry" => "进入巡航"
+.SupercruiseExit: "Supercruise Exit" => "跳出巡航"
+.Synthesis: "Synthesis" => "合成"
+.SystemsShutdown: "Systems Shutdown" => "系统关闭"
+.TechnologyBroker: "Technology Broker" => "科技商"
+.Touchdown: "Touchdown" => "着陆"
+.UnderAttack: "Under Attack" => "被攻击"
+.Undocked: "Undocked" => "离港"
+.USSDrop: "USS Drop" => "跳入不明信号源"
+.VehicleSwitch: "Vehicle Switch" => "切换载具"
+.WingAdd: "Wing Add" => "添加僚机"
+.WingInvite: "Wing Invite" => "邀请僚机"
+.WingJoin: "Wing Join" => "加入僚机"
+.WingLeave: "Wing Leave" => "退出僚机"
+.ModuleSellRemote: "Module Sell Remote" => "远程出售模组"
+.FetchRemoteModule: "Fetch Remote Module" => "获取远程模组"
+.MassModuleStore: "Mass Module Store" => "批量存放模组"
+.DatalinkVoucher: "Datalink Voucher" => "数据链接代券"
+.DataScanned: "Data Scanned" => "数据扫描"
+.CommunityGoalDiscard: "Community Goal Discard" => "放弃社区任务"
+.CrewLaunchFighter: "Crew Launch Fighter" => "船员舰载机"
+.CrewMemberJoins: "Crew Member Joins" => "船员加入"
+.CrewMemberQuits: "Crew Member Quits" => "船员离开"
+.CrewMemberRoleChange: "Crew Member Role Change" => "船员改变职责"
+.EDDItemSet: "EDD Item Set" => "EDD物品集"
+.EDDCommodityPrices: "EDD Commodity Prices" => "EDD商品价格"
+.EngineerContribution_Unknown: "Engineer Contribution_Unknown" @
+.EngineerContribution_MatCommod: "Engineer Contribution_Mat Commod" @
+.RestockVehicle_SRV: "Restock Vehicle_SRV" => "补充SRV库存"
+.RestockVehicle_Fighter: "Restock Vehicle_Fighter" => "补充舰载机库存"
+.ShieldState_ShieldsUp: "Shield State_Shields Up" => "护盾恢复"
+.ShieldState_ShieldsDown: "Shield State_Shields Down" => "护盾失效"
+.VehicleSwitch_Mothership: "Vehicle Switch_Mothership" => "切换至母舰"
+.VehicleSwitch_Fighter: "Vehicle Switch_Fighter" => "切换至舰载机"
+.AppliedToSquadron: "Applied To Squadron" => "申请加入中队"
+.AsteroidCracked: "Asteroid Cracked" => "破开小行星"
+.CodexEntry: "Codex Entry" => "百科条目"
+.DisbandedSquadron: "Disbanded Squadron" => "解散中队"
+.FSDTarget: "FSD Target" => "设定FSD跳跃目标"
+.FSSAllBodiesFound: "FSS All Bodies Found" => "全光谱扫描完全部星体"
+.FSSDiscoveryScan: "FSS Discovery Scan" => "全光谱扫描仪发现式扫描"
+.FSSSignalDiscovered: "FSS Signal Discovered" => "全光谱扫描发现信号"
+.InvitedToSquadron: "Invited To Squadron" => "被邀请至中队"
+.JoinedSquadron: "Joined Squadron" => "加入中队"
+.KickedFromSquadron: "Kicked From Squadron" => "被踢出中队"
+.LeftSquadron: "Left Squadron" => "离开中队"
+.MultiSellExplorationData: "Multi Sell Exploration Data" => "批量出售探索数据"
+.SAAScanComplete: "SAA Scan Complete" => "星体测绘扫描完成"
+.SharedBookmarkToSquadron: "Shared Bookmark To Squadron" => "分享书签至中队"
+.SquadronCreated: "Squadron Created" => "创建中队"
+.SquadronDemotion: "Squadron Demotion" => "中队降级"
+.SquadronPromotion: "Squadron Promotion" => "中队晋级"
+.SquadronStartup: "Squadron Startup" => "中队信息"
+.WonATrophyForSquadron: "Won A Trophy For Squadron" => "为中队赢得一个奖杯"
+
+SECTION JournalEntry
+
+.LegBounty: "{0} total {1:N0}" @
+.Target: "Target:" => "目标："
+.Victimfaction: "Victim faction:" => "受害者派系："
+.Faction: "Faction:" => "派系："
+.Count: "Count:" => "数量："
+.TotalCost: "Total Cost:; cr;N0" => "总花费：; Cr;N0"
+.each: "each:; cr;N0" => "单价：; Cr;N0"
+.System: "System:" => "星系："
+.Cost: "Cost:; cr;N0" => "花费：; Cr;N0"
+.from: "< from " => "< 任务发配人："
+.dueto: "< , due to " => "<，由于"
+.NoCargo: "No Cargo" => "无货物"
+.Cargo: "Cargo, {0} items" => "{0}件货物"
+.items: "; items" => "; 物品"
+
+SECTION JournalCargo
+
+.CargoShip: "Ship" => "飞船"
+.CargoSRV: "SRV" => "SRV车"
+
+SECTION JournalEntry
+
+.Collected: "Collected:" => "收集的："
+.of: "< of " => "< 的"
+.Total: "Total:" => "总计:"
+.Progress: "Progress:;%;N1" => "进度：;%;N1"
+.Delivered: "Delivered:" @
+.Update: "Update, Collected:" @
+.ToGo: "To Go:" @
+.ProgressLeft: "Progress Left:;%;N1" @
+
+SECTION JournalFSSDiscoveryScan
+
+.Others: "Others:" @
+
+SECTION JournalCodexEntry
+
+.At: "At " @
+.in: "in " @
+.NewEntry: ";New Entry" @
+.Traits: ";Traits" @
+
+SECTION JournalEntry
+
+.Stolen: ";Stolen" => ";赃物"
+
+SECTION JournalCommitCrime
+
+.Fine: " Fine {0:N0}" => " 罚款 {0:N0}"
+.Bounty: " Bounty {0:N0}" => " 悬赏 {0:N0}"
+
+SECTION JournalEntry
+
+.0: "{0} on {1}" @
+.onfaction: "< on faction " => "< 派系："
+.Against: "Against " => "受害人："
+.Bounty: "Bounty:; cr;N0" => "悬赏：; Cr;N0"
+
+SECTION CommunityGoal
+
+.Title: "Title:" @
+.System: "System:" @
+.At: "At:" @
+.Expires: "Expires:" @
+.NotComplete: "Not Complete;Complete" @
+.CurrentTotal: "Current Total:" @
+.Contribution: "Contribution:" @
+.NumContributors: "Num Contributors:" @
+.Player: "Player % Band:" @
+.TopRank: "Top Rank:" @
+.NotInTopRank: "Not In Top Rank;In Top Rank" @
+.TierReached: "Tier Reached:" @
+.Bonus: "Bonus:" @
+.TopTierName: "Top Tier Name" @
+.TT: "TT. Bonus" @
+
+SECTION JournalEntry
+
+.CGS: "< at ; Star System" @
+.Reward: "Reward:; cr;N0" @
+.torole: "< to role ;" @
+.fired: "; fired" @
+.Hired: "Hired:;" @
+.offaction: "< of faction " @
+.Rank: "Rank:" @
+.Crew: "Crew:" @
+.Role: "Role:" @
+.fromfaction: "< from faction " @
+.Died: "{0} in ship type {1} rank {2}" @
+.Killedby: "Killed by " @
+.Dscan: "New bodies discovered:" @
+
+SECTION FSSSignal
+
+.State: "State:" => "状态："
+.Faction: "Faction:" => "派系："
+.USSType: "USS Type:" => "不明信号源类型："
+.ThreatLevel: " Threat Level:" => "危险级别："
+.StationBool: ";Station" => ";空间站"
+
+SECTION JournalFSSDiscoveryScan
+
+.Progress: "Progress:;%;N1" => "扫描进度：;%;N1"
+
+SECTION JournalFSSSignalDiscovered
+
+.Detected: "Detected ; signals" => "探测到;个信号"
+
+SECTION JournalDocked
+
+.At: "At {0}" => "停靠在 {0}"
+
+SECTION JournalEntry
+
+.insystem: "< in system " => "< 星系："
+.Wanted: ";(Wanted)" => ";(被通缉)"
+.instate: "< in state " => "< 状态："
+.Allegiance: "Allegiance:" => "势力："
+.Economy: "Economy:" => "经济类型："
+.Government: "Government:" => "政府类型："
+.Stationservices: "Station services:" => "可用服务："
+.Economies: "Economies:" => "经济："
+.ActiveFine: ";Active Fine" => ";有罚款"
+.onpad: "< on pad " => "< 降落坪："
+
+SECTION JournalCommodityPricesBase
+
+.PON: "Prices on ; items" @
+.CPBat: "< at " @
+.CPBin: "< in " @
+.Itemstobuy: "Items to buy:" @
+.CPBBuySell: "{0}: {1} sell {2} Diff {3} {4}%  " @
+.CPBBuy: "{0}: {1}  " @
+.SO: "Sell only Items:" @
+
+SECTION JournalEntry
+
+.Name: "Name:" => "飞船名："
+.Abandoned: ";Abandoned" @
+.PowerPlay: "PowerPlay:" @
+.DuetoCrime: "; Due to Crime" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+.Override: "Override:" @
+.Type: "Type:" => "类型："
+.Commodity: "Commodity:" @
+.Material: "Material:" @
+.Quantity: "Quantity:" @
+.TotalQuantity: "TotalQuantity:" @
+
+SECTION JournalEngineerCraftBase
+
+.InSlot: "In Slot:" @
+.By: "By:" @
+.Blueprint: "Blueprint:" @
+.Level: "Level:" @
+
+SECTION JournalEngineerProgress
+
+.Progress: "Progress:" => "进度："
+.Progresson: "Progress on ; Engineers" => "已发现;个工程师"
+
+SECTION JournalEntry
+
+.NPC: "< (NPC);(Player)" @
+.Intoship: "Into ship:" @
+.TransferTime: "Transfer Time:" => "运送时长："
+.Version: "Version:" @
+.Build: "Build:" @
+.Part: "Part:" @
+.NumberofStatuses: "Number of Statuses:" @
+.Online: "Online:" @
+.Offline: "Offline:" @
+
+SECTION JournalFSDJump
+
+.Jumpto: "Jump to {0}" => "跳跃至星系 {0}"
+.Fuel: " Fuel " => "使用燃料："
+.left: " left " => "剩余："
+
+SECTION JournalLocOrJump
+
+.Faction: "Faction:" => "派系："
+.Wanted: "<;(Wanted) " => "<;(被通缉)"
+.State: "State:" => "状态："
+.Allegiance: "Allegiance:" => "势力："
+.Economy: "Economy:" => "经济类型："
+.Population: "Population:" => "人口："
+.Government: "Government:" => "政府类型："
+.Inf: "Inf:;%" => "影响力：;%"
+.PendingState: "Pending State:" => "待定状态："
+.RecoveringState: "Recovering State:" => "回复状态："
+
+SECTION JournalFuelScoop
+
+.Total: "Total:;t;0.0" @
+
+SECTION JournalEntry
+
+.Submitted: ";Submitted" @
+.to: "< to " => "< 至 "
+.Power: "Power:" @
+.Failedtointerdict: "Failed to interdict;Interdicted" @
+.Boost: "Boost:;;0.0" @
+.Captain: "Captain:" @
+.CrewMember: "Crew Member:" @
+.Loadout: "Loadout:" @
+.NPCControlled: ", NPC Controlled;" @
+.Ship: "Ship:" => "飞船："
+.Ident: "Ident:" => "牌号"
+.Credits: "Credits:;;N0" => "账户余额：;;N0"
+.Mode: "Mode:" => "游戏模式："
+.Group: "Group:" => "组名："
+.NotLanded: "Not Landed;Landed" => "不在星球上;在星球上"
+.FuelLevel: "Fuel Level:;;0.0" => "燃料量：;;0.0t"
+.Capacity: "Capacity:;;0.0" => "燃料箱大小：;;0.0t"
+.Cashtotaldiffers: "Cash total differs, adjustment" @
+
+SECTION JournalLoadout
+
+.Modules: "Modules:" => "模组数："
+
+SECTION JournalEntry
+
+.Hull: "Hull:; cr;N0" => "船体价值：; Cr;N0"
+.Modules: "Modules:; cr;N0" => "模组价值：;Cr;N0"
+.Rebuy: "Rebuy:; cr;N0" => "保险费用：; Cr;N0"
+
+SECTION JournalLocation
+
+.AtStat: "At {0}" => "在 {0}"
+.LND: "Landed on {0}" => "登陆于 {0}"
+.AtStar: "At {0}" => "在 {0}"
+
+SECTION JournalLocOrJump
+
+.Type: "Type " @
+.insystem: "< in system " @
+.Security: "Security:" @
+.Inspacenear: "In space near " @
+.oftype: "< of type " @
+.Happiness: "Happiness:" @
+.Reputation: "Reputation:;%;N1" @
+.SquadronSystem: ";Squadron System" @
+.HappiestSystem: ";Happiest System" @
+.HomeSystem: ";Home System" @
+.ActiveState: "Active State:" @
+
+SECTION JournalEntry
+
+.buyprice: "< buy price ; cr;N0" @
+.sellprice: "< sell price ; cr;N0" @
+.Profit: "Profit:; cr;N0" @
+.Legal: "Legal;Illegal" => "合法物品;违禁品"
+.NotStolen: "Not Stolen;Stolen" => "非赃物;赃物"
+.Market: "Market;BlackMarket" => "贸易市场;黑市"
+.Totalmodules: "Total modules:" @
+.Hot: ";(Hot)" @
+.MatC: "< ; items" @
+
+SECTION JournalMaterialDiscovered
+
+.DN: ", Discovery {0}" @
+
+SECTION JournalMaterials
+
+.Raw: "Raw:" => "未加工的："
+.Manufactured: "Manufactured:" => "加工的："
+.Encoded: "Encoded:" => "编码的："
+
+SECTION JournalEntry
+
+.Sold: "Sold:" @
+.Received: "Received:" @
+.Fine: "Fine:" @
+.Donation: "Donation:" @
+.Station: "Station:" @
+.TargetFaction: "Target Faction:" @
+.Permits: "Permits:" @
+.Rewards: "Rewards:" => "任务奖励："
+.Missionname: "Mission name:" => "任务名称："
+
+SECTION JournalMissionRedirected
+
+.From: "From:" @
+.To: "To:" @
+
+SECTION JournalEntry
+
+.Active: "Active:" => "正在进行的任务数："
+.Failed: "Failed:" => "失败的任务数："
+.Completed: "Completed:" => "完成的任务数："
+
+SECTION MissionItem
+
+.Passenger: "<;(Passenger)" @
+.Expires: "Expires:" @
+
+SECTION JournalEntry
+
+.into: "< into " @
+.Price: "Price:; cr;N0" @
+.Stored: "Stored:" @
+
+SECTION JournalModuleInfo
+
+.Modules: "Modules:" @
+
+SECTION JournalEntry
+
+.Item: "Item:" @
+.on: " on " @
+.Replacedby: "Replaced by:" @
+.Modifications: "Modifications:" @
+.Slot: "Slot:" @
+.Swappedwith: ", Swapped with " @
+.MusicTrack: "Music Track:" => "音乐曲目："
+
+SECTION JournalMultiSellExplorationData
+
+.Total: "Total:; cr;N0" => "总收益:; Cr;N0"
+
+SECTION JournalEntry
+
+.Bodies: "Bodies:" => "星体数："
+.StartingPackage: "Starting Package:" @
+.Wagesfor: "Wages for " @
+.itemsavailable: " items available" @
+.NoPassengers: "No Passengers" @
+.Brokertook: ", Broker took {0:N0}%" => ", 中介人收取了{0:N0}的手续费"
+.Merits: "Merits:" @
+.Votes: "Votes:" @
+.Pledged: "Pledged:" @
+.FromPower: "From Power:" @
+.ToPower: "To Power:" @
+.Amount: "Amount:; cr;N0" @
+.Systems: ", Systems:" @
+
+SECTION JournalProgress
+
+.Combat: "Combat:;%" => "战斗：;%"
+.Trade: "Trade:;%" => "贸易：;%"
+.Exploration: "Exploration:;%" => "探索：;%"
+.Federation: "Federation:;%" => "联邦：;%"
+.Empire: "Empire:;%" => "帝国：;%"
+.CQC: "CQC:;%" => "CQC缠斗：;%"
+
+SECTION JournalPromotion
+
+.Combat: "Combat:" => "战斗："
+.Trade: "Trade:" => "贸易："
+.Exploration: "Exploration:" => "探索："
+.Empire: "Empire:" => "帝国："
+.Federation: "Federation:" => "帝国："
+.CQC: "CQC:" => "CQC缠斗："
+
+SECTION JournalReceiveText
+
+.From: "From:" => "来自："
+.Msg: "Msg:" => "内容："
+.Channel: "Channel:" => "频道："
+
+SECTION JournalEntry
+
+.Fuel: "Fuel:; tons;0.0" => "添加的燃料量：; t;0.0"
+
+SECTION JournalRepairDrone
+
+.Hull: "Hull:" => "船体修复量："
+
+SECTION JournalEntry
+
+.Cockpit: "Cockpit:" => "驾驶舱修复量："
+.Corrosion: "Corrosion:" => "侵蚀修复量："
+
+SECTION JournalReputation
+
+.Federation: "Federation:;;0.#" => "联邦：;;0.#"
+.Empire: "Empire:;;0.#" => "帝国：;;0.#"
+.Independent: "Independent:;;0.#" => "独立：;;0.#"
+.Alliance: "Alliance:;;0.#" => "联盟：;;0.#"
+
+SECTION JournalEntry
+
+.Option: "Option:" @
+.Bankrupt: ";Bankrupt" @
+
+SECTION StarPlanetRing
+
+.Mass: "  Mass: {0:N4}{1}\n" @
+.InnerRadius: "  Inner Radius: {0:0.00}ls\n" @
+.OuterRadius: "  Outer Radius: {0:0.00}ls\n" @
+.IK: "  Inner Radius: {0}km\n" @
+.OK: "  Outer Radius: {0}km\n" @
+.Moons: " Moons" @
+.Icy: "Icy" @
+.Rocky: "Rocky" @
+.MetalRich: "Metal Rich" @
+.Metallic: "Metallic" @
+.RockyIce: "Rocky Ice" @
+
+SECTION JournalScan
+
+.Scanof: "Scan of {0}" @
+.MSM: "Mass:;SM;0.00" @
+.Age: "Age:;my;0.0" @
+.RS: "Radius:;SR;0.00" @
+.MEM: "Mass:;EM;0.00" @
+.Landable: "<;, Landable" @
+.Terraformable: "<;, Terraformable" @
+.Gravity: "Gravity:;G;0.0" @
+.RK: "Radius:;km;0" @
+.NoAtmosphere: ", No Atmosphere" @
+.LandC: ", Landable" @
+.AMY: "Age: {0} my\n" @
+.SolarMasses: "Solar Masses: {0:0.00}\n" @
+.EarthMasses: "Earth Masses: {0:0.0000}\n" @
+.SolarRadius: "Solar Radius: {0:0.00} Sols\n" @
+.BodyRadius: "Body Radius: {0:0.00}km\n" @
+.SurfaceTemp: "Surface Temp: {0}K\n" @
+.Luminosity: "Luminosity: {0}\n" @
+.GV: "Gravity: {0:0.0}g\n" @
+.SPA: "Surface Pressure: {0} Atmospheres\n" @
+.SPP: "Surface Pressure: {0} Pa\n" @
+.Volcanism: "Volcanism: {0}\n" @
+.NoVolcanism: "No Volcanism" @
+.DistancefromArrivalPoint: "Distance from Arrival Point {0:N1}ls\n" @
+.OrbitalPeriod: "Orbital Period: {0} days\n" @
+.SMA: "Semi Major Axis: {0:0.00}AU\n" @
+.SMK: "Semi Major Axis: {0}km\n" @
+.OrbitalEccentricity: "Orbital Eccentricity: {0:0.000}\n" @
+.OrbitalInclination: "Orbital Inclination: {0:0.000}�\n" @
+.ArgOfPeriapsis: "Arg Of Periapsis: {0:0.000}�\n" @
+.AbsoluteMagnitude: "Absolute Magnitude: {0:0.00}\n" @
+.Axialtilt: "Axial tilt: {0:0.00}�\n" @
+.RotationPeriod: "Rotation Period: {0} days\n" @
+.Tidallylocked: "Tidally locked\n" @
+.Candidateforterraforming: "Candidate for terraforming\n" @
+.Belt: "Belt{0}" @
+.Moons: " Moons" @
+.Ring: "Ring{0}" @
+.EV: "\nEstimated value: {0:N0}" @
+.DB: "\n\nDiscovered by {0} on {1}" @
+.HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
+.Othersstarsnotconsidered: " (Others stars not considered)\n" @
+.Materials: "Materials:\n" @
+.AtmosphericComposition: "Atmospheric Composition:\n" @
+.PlanetaryComposition: "Planetary Composition:\n" @
+.MRP: "Metal Rich Planets: {0} ({1}-{2} AU)\n" @
+.WWP: "Water Worlds: {0} ({1}-{2} AU)\n" @
+.ELWP: "Earth Like Worlds: {0} ({1}-{2} AU)\n" @
+.AWP: "Ammonia Worlds: {0} ({1}-{2} AU)\n" @
+.ICYP: "Icy Planets: {0} ({1} AU to {2})\n" @
+.HabitableZone: " - Habitable Zone, {0} ({1}-{2} AU),\n" @
+.MetalRichplanets: " - Metal Rich planets, {0} ({1}-{2} AU),\n" @
+.WaterWorlds: " - Water Worlds, {0} ({1}-{2} AU),\n" @
+.EarthLikeWorlds: " - Earth Like Worlds, {0} ({1}-{2} AU),\n" @
+.AmmoniaWorlds: " - Ammonia Worlds, {0} ({1}-{2} AU),\n" @
+.IcyPlanets: " - Icy Planets, {0} (from {1} AU)\n\n" @
+
+SECTION JournalSAAScanComplete
+
+.Probes: "Probes:" @
+.EfficiencyTarget: "Efficiency Target:" @
+
+SECTION JournalEntry
+
+.Category: "Category:" @
+
+SECTION JournalScreenshot
+
+.At: "At " @
+.in: "< in " @
+.File: "File:" @
+.Width: "Width:" @
+.Height: "Height:" @
+
+SECTION JournalEntry
+
+.Latitude: "Latitude:" @
+.Longitude: "Longitude:" @
+.Num: "Num:" @
+
+SECTION JournalSearchAndRescue
+
+.Reward: "Reward:" @
+
+SECTION JournalEntry
+
+.Boom: "Boom!" @
+.Drones: "Drones" @
+.Bonus: "Bonus:; cr;N0" @
+
+SECTION JournalSellExplorationData
+
+.Total: "Total:; cr;N0" @
+
+SECTION JournalEntry
+
+.Scanned: "Scanned:" @
+.Discovered: "Discovered:" @
+
+SECTION JournalSendText
+
+.To: "To:" @
+.Msg: "Msg:" @
+
+SECTION JournalSetUserShipName
+
+.On: "On:" @
+
+SECTION JournalEntry
+
+.ShieldsDown: "Shields Down;Shields Up" @
+.in: "< in " @
+.Shield: "Shield ;;N1" @
+
+SECTION JournalShipTargeted
+
+.Hull: "Hull ;;N1" @
+.at: "< at ;;N1" @
+
+SECTION JournalEntry
+
+.LostTarget: "Lost Target" @
+
+SECTION JournalShipTargeted
+
+.in: "< in " @
+
+SECTION JournalEntry
+
+.Ships: "Ships" @
+
+SECTION JournalShipyardSell
+
+.At: "At:" @
+
+SECTION JournalShipyardSwap
+
+.Swap: "Swap " @
+.fora: "< for a " @
+
+SECTION JournalShipyardTransfer
+
+.Of: "Of " @
+
+SECTION JournalEntry
+
+.Distance: "Distance:; ly;0.0" @
+
+SECTION JournalSquadronBase
+
+.Old: "Old:" @
+.New: "New:" @
+
+SECTION JournalStartJump
+
+.ChargingFSD: "Charging FSD" => "FSD引擎充能"
+
+SECTION JournalEntry
+
+.Wealth: "Wealth:;cr;N0" => "资产：;Cr;N"
+.NotorietyIndex: "Notoriety Index:;;N0" => "恶名度：;;N0"
+
+SECTION JournalStatistics
+
+.BankAccount: "Bank Account" => "\r\n★ 银行账户"
+.Combat: "Combat" => "\r\n★ 战斗"
+.Crime: "Crime" => "\r\n★ 犯罪"
+.Smuggling: "Smuggling" => "\r\n★ 走私"
+.Trading: "Trading" => "\r\n★ 贸易"
+.Mining: "Mining" => "\r\n★ 采矿"
+.Exploration: "Exploration" => "\r\n★ 探索"
+.Passengers: "Passengers" => "\r\n★ 乘客"
+.SearchandRescue: "Search and Rescue" => "\r\n★ 搜寻与救援"
+.Engineers: "Engineers" => "\r\n★ 工程师"
+.Crew: "Crew" => "\r\n★ NPC船员"
+.Multicrew: "Multicrew" => "\r\n★ 多人船员"
+.MaterialsandCommodityTrading: "Materials and Commodity Trading" => "\r\n★ 商品和材料交易"
+.CQC: "CQC" => "\r\n★ CQC缠斗"
+
+SECTION BankAccountClass
+
+.Wealth: "Wealth:;cr;N0" => "资产：;Cr;N0"
+.SpentonShips: "Spent on Ships:;cr;N0" => "飞船花费：;Cr;N0"
+.SpentonOutfitting: "Spent on Outfitting:;cr;N0" => "装备花费：;Cr;N0"
+.SpentonRepairs: "Spent on Repairs:;cr;N0" => "维修花费：;Cr;N0"
+.SpentonFuel: "Spent on Fuel:;cr;N0" => "燃料花费：;Cr;N0"
+.SpendonAmmo: "Spend on Ammo:;cr;N0" => "弹药花费：;Cr;N0"
+.InsuranceClaims: "Insurance Claims:;;N0" => "理赔次数：;;N0"
+.SpentonInsurance: "Spent on Insurance:;cr;N0" => "保险花费：;Cr;N0"
+
+SECTION CombatClass
+
+.Bounties: "Bounties :;;N0" => "悬赏领取次数：;;N0"
+.BountyProfits: "Bounty Profits:;cr;N0" => "悬赏收益:;Cr;N0"
+.CombatBonds: "Combat Bonds:;;N0" => "战争债券数：;;N0"
+.CombatBondProfits: "Combat Bond Profits:;cr;N0" => "战争债券收益：;Cr;N0"
+.Assassinations: "Assassinations:;;N0" => "暗杀次数：;;N0"
+.AssassinationProfits: "Assassination Profits:;cr;N0" => "暗杀收益：;Cr;N0"
+.HighestReward: "Highest Reward:;cr;N0" => "最高赏金：;Cr;N0"
+.SkimmersKilled: "Skimmers Killed:;;N0" => "无人机摧毁数：;;N0"
+
+SECTION CrimeClass
+
+.NotorietyIndex: "Notoriety Index:;;N0" => "恶名度：;;N0"
+.Fines: "Fines:;;N0" => "被罚款次数：;;N0"
+.TotalFines: "Total Fines:;cr;N0" => "罚款总额：;Cr;N0"
+.Bounties: "Bounties:;;N0" => "被悬赏次数：;;N0"
+.TotalBounties: "Total Bounties:;cr;N0" => "被赏金总额：;Cr;N0"
+.HighestBounty: "Highest Bounty:;cr;N0" => "最高被赏金：;Cr;N0"
+
+SECTION SmugglingClass
+
+.BlackMarkets: "Black Markets:;;N0" => "访问黑市数：;;N0"
+.BlackMarketProfits: "Black Market Profits:;cr;N0" => "黑市交易收益：;Cr;N0"
+.ResourcesSmuggled: "Resources Smuggled:;;N0" => "走私货物总量：;t;N0"
+.AverageProfit: "Average Profit:;cr;N0" => "平均收益：;Cr;N0"
+.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" => "最高单笔交易额：;Cr;N0"
+
+SECTION TradingClass
+
+.MarketsTraded: "Markets Traded:;;N0" => "交易过的市场：;;N0"
+.Profits: "Profits:;cr;N0" => "贸易收益：;Cr;N0"
+.No: "No. of Resources:;;N0" => "交易货物总量：;t;N0"
+.AverageProfit: "Average Profit:;cr;N0" => "平均收益：;Cr;N0"
+.HighestSingleTransaction: "Highest Single Transaction:;cr;N0" => "最高单笔交易额：;Cr;N0"
+
+SECTION MiningClass
+
+.Profits: "Profits:;cr;N0" => "总收益：;Cr;N0"
+.Quantity: "Quantity:;;N0" => "精炼矿石量：;t;N0"
+.MaterialsTypesCollected: "Materials Types Collected:;;N0" => "收集矿物数：;;N0"
+
+SECTION ExplorationClass
+
+.SystemsVisited: "Systems Visited:;;N0" => "访问星系数：;;N0"
+.Profits: "Profits:;cr;N0" => "出售星图收益：;Cr;N0"
+.Level2Scans: "Level 2 Scans:;;N0" => "二级扫描次数：;;N0"
+.Level3Scans: "Level 3 Scans:;;N0" => "三级扫描次数：;;N0"
+.HighestPayout: "Highest Payout:;cr;N0" => "单星系最高价值：;Cr;N0"
+.TotalDistance: "Total Distance:;;N0" => "累计航行距离：;ly;N0"
+.NoofJumps: "No of Jumps:;;N0" => "FSD跳跃总次数：;;N0"
+.GreatestDistance: "Greatest Distance:;;N0" => "最大到达距离：;ly;N0"
+.TimePlayed: "Time Played:" => "游戏时间："
+
+SECTION PassengerMissionsClass
+
+.BulkMissionPassengers: "Bulk Mission Passengers:;;N0" => "载送的普通乘客总数：;;N0"
+.VIPMissionPassengers: "VIP Mission Passengers:;;N0" => "载送的VIP乘客总数：;;N0"
+.PassengersDelivered: "Passengers Delivered:;;N0" => "总载送乘客数：;;N0"
+.PassengersEjected: "Passengers Ejected:;;N0" => "被丢掉的乘客数：;;N0"
+
+SECTION SearchAndRescueClass
+
+.TotalItemsRescued: "Total Items Rescued:;;N0" => "总救援物品数：;;N0"
+.Profit: "Profit:;cr;N0" => "收益：;Cr;N0"
+.TotalRescueTransactions: "Total Rescue Transactions:;;N0" => "救援的物品提交次数：;;N0"
+
+SECTION CraftingClass
+
+.EngineersUsed: "Engineers Used:;;N0" @
+.Blueprints: "Blueprints:;;N0" @
+.AtLevel1: "At Level 1:;;N0" @
+.AtLevel2: "At Level 2:;;N0" @
+.AtLevel3: "At Level 3:;;N0" @
+.AtLevel4: "At Level 4:;;N0" @
+.AtLevel5: "At Level 5:;;N0" @
+
+SECTION CrewClass
+
+.TotalWages: "Total Wages:;cr;N0" @
+.Hired: "Hired:;;N0" @
+.Fired: "Fired:;;N0" @
+.KilledinAction: "Killed in Action:;;N0" @
+
+SECTION MulticrewClass
+
+.TotalTime: "Total Time:" @
+.GunnerTime: "Gunner Time:;;N0" @
+.FighterTime: "Fighter Time:;;N0" @
+.Credits: "Credits:;cr;N0" @
+.Fines: "Fines:;cr;N0" @
+
+SECTION MaterialTraderStatsClass
+
+.CommodityTrades: "Commodity Trades:;;N0" @
+.MaterialTraded: "Material Traded:;;N0" @
+
+SECTION CQCClass
+
+.TimePlayed: "Time Played:;;N0" @
+.KDRatio: "KD Ratio:;;N" @
+.Kills: "Kills:;;N0" @
+.Win: "Win/Loss:;;N" @
+
+SECTION JournalStoredModules
+
+.at: "< at " @
+
+SECTION JournalEntry
+
+.TransferCost: "Transfer Cost:; cr;N0" @
+.Time: "Time:" @
+.Value: "Value:; cr;N0" @
+
+SECTION JournalStoredShips
+
+.Atstarport: "At starport:" @
+.Otherlocations: "Other locations:" @
+.SSP: "; cr;N0" @
+.Remote: "Remote:" @
+.intransit: "<; in transit" @
+.at: "< at " @
+
+SECTION JournalSupercruiseExit
+
+.At: "At " => "到达"
+.in: "< in " => "位于 "
+
+SECTION JournalUnknown
+
+.UnhandledJournalevent: "Unhandled Journal event, Report to EDDiscovery team. " @
+
+SECTION JournalEntry
+
+.Threat: "Threat:" => "危险等级："
+.By: "By:" => "被："
+.HullHealth: "Hull Health;%;N1" => "船体HP;%;N1"
+.MissionCargo: "<; (Mission Cargo)" => "<; (任务货物)"
+.InSlot: "In Slot:" @
