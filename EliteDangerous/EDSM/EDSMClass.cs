@@ -265,12 +265,14 @@ namespace EliteDangerousCore.EDSM
             try
             {
                 string edsmhiddensystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "edsmhiddensystems.json");
-                bool newfile = false;
-                BaseUtils.DownloadFileHandler.DownloadFile(base.httpserveraddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, out newfile);
 
-                string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
-
-                return json;
+                if (BaseUtils.DownloadFile.HTTPDownloadFile(base.httpserveraddress + "api-v1/hidden-systems?showId=1", edsmhiddensystems, false, out bool newfile))
+                {
+                    string json = BaseUtils.FileHelpers.TryReadAllTextFromFile(edsmhiddensystems);
+                    return json;
+                }
+                else
+                    return null;
             }
             
             catch (Exception ex)

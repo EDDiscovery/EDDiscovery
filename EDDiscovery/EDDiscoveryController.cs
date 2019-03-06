@@ -577,7 +577,7 @@ namespace EDDiscovery
                 if (!DateTime.TryParse(rwgalmaptime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out galmaptime))
                     galmaptime = new DateTime(2000, 1, 1);
 
-                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14)  // Over 14 days do a sync from EDSM for galmap
+                if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent() )  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".Tx(this,"EDSM"));
                     if (galacticMapping.DownloadFromEDSM())
@@ -662,6 +662,9 @@ namespace EDDiscovery
                         try
                         {
                             syncstate.edsm_fullsync_count = SystemClassEDSM.PerformEDSMFullSync(grids, () => PendingClose, ReportSyncProgress, LogLine, LogLineHighlight);
+                            if (syncstate.edsm_fullsync_count == 0)     // this should always update something, the table is replaced.  If its not, its bad.  Don't allow the Updatesync to occur.
+                                return;
+
                             syncstate.perform_edsm_fullsync = false;
                         }
                         catch (Exception ex)

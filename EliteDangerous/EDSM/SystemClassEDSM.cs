@@ -630,8 +630,11 @@ namespace EliteDangerousCore.EDSM
 
             //  string s = edsmsystems; bool success = true; // debug, comment out next two lines
 
-            bool newfile;
-            bool success = BaseUtils.DownloadFileHandler.DownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, out newfile, (n, s) =>
+            // with the new downloader, the file is stored, then processed.  If the user cancels, we will use the old file again.  Once complete, the file is removed
+
+            ReportProgress(-1, "Downloading star database from EDSM");
+
+            bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDSMFullSystemsURL, edsmsystems, false, out bool newfile, (n, s) =>
             {
                 SQLiteConnectionSystem.CreateTempSystemsTable();
 
@@ -658,6 +661,8 @@ namespace EliteDangerousCore.EDSM
 
                     ReportProgress(-1, "");
 
+                    BaseUtils.FileHelpers.DeleteFileNoError(edsmsystems);       // remove file - don't hold in storage
+
                     LogLine("System Database updated with EDSM data, " + updates + " systems updated.");
 
                     GC.Collect();
@@ -665,12 +670,14 @@ namespace EliteDangerousCore.EDSM
                 else
                 {
                     success = false;
+                    ReportProgress(-1, "Operation Cancelled");
                     throw new OperationCanceledException();
                 }
             });
 
             if (!success)
             {
+                ReportProgress(-1, "EDSM Failed to download correctly");
                 LogLine("Failed to download EDSM system file from server, will check next time");
             }
 
