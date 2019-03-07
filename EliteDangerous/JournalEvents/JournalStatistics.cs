@@ -60,7 +60,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed) 
         {
-            info = BaseUtils.FieldBuilder.Build("Wealth:;cr;N".Txb(this), BankAccount.CurrentWealth, "Notoriety Index:;;N0".Txb(this), Crime.Notoriety);
+            info = BaseUtils.FieldBuilder.Build("Wealth:;cr;N0".Txb(this), BankAccount.CurrentWealth, "Notoriety Index:;;N0".Txb(this), Crime.Notoriety);
 
             detailed =  "Bank Account".Tx(this) + Environment.NewLine + BankAccount?.Format() + Environment.NewLine + 
                         "Combat".Tx(this) + Environment.NewLine + Combat?.Format() + Environment.NewLine +

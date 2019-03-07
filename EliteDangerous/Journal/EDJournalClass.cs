@@ -41,7 +41,7 @@ namespace EliteDangerousCore
         private string frontierfolder;
         private static Guid Win32FolderId_SavedGames = new Guid("4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4");
 
-        const int ScanTick = 250;       // tick time to check journals and status
+        const int ScanTick = 100;       // tick time to check journals and status
 
         public EDJournalClass(Action<Action> invokeAsyncOnUiThread)
         {

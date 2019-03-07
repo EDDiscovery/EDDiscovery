@@ -71,6 +71,7 @@ namespace EliteDangerousCore
         ShipTargeted,
         UnderAttack,
         ReceiveText,
+        FSDTarget,
     }
 
     public abstract class UIEvent

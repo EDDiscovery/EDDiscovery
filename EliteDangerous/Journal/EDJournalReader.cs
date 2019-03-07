@@ -285,11 +285,17 @@ namespace EliteDangerousCore
             else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.ReceiveText)
             {
                 var jt = newentry.JournalEntry as JournalEvents.JournalReceiveText;
-                if (jt.Channel == "Info") 
+                if (jt.Channel == "Info")
                 {
                     uievents.Add(new UIEvents.UIReceiveText(jt, jt.EventTimeUTC, false));
                     return;
                 }
+            }
+            else if (newentry.JournalEntry.EventTypeID == JournalTypeEnum.FSDTarget)
+            {
+                var jt = newentry.JournalEntry as JournalEvents.JournalFSDTarget;
+                uievents.Add(new UIEvents.UIFSDTarget(jt, jt.EventTimeUTC, false));
+                return;
             }
 
             jent.Add(newentry);
