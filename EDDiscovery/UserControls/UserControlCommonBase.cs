@@ -109,6 +109,11 @@ namespace EDDiscovery.UserControls
                 ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
         }
 
+        public bool HasControlTextArea()
+        {
+            return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is Forms.UserControlForm) || (this.Parent is UserControlContainerResizable);
+        }
+
         public void SetClipboardText(string s)
         {
             try

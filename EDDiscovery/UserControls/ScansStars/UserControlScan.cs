@@ -61,6 +61,8 @@ namespace EDDiscovery.UserControls
             panelStars.CheckEDSM = checkBoxEDSM.Checked = SQLiteDBClass.GetSettingBool(DbSave + "EDSM", false);
             panelStars.HideFullMaterials = checkBoxCustomHideFullMats.Checked = SQLiteDBClass.GetSettingBool(DbSave + "MaterialsFull", false);
             panelStars.ShowOverlays = chkShowOverlays.Checked = SQLiteDBClass.GetSettingBool(DbSave + "BodyOverlays", false);
+            extCheckBoxDisplaySystemAlways.Checked = SQLiteDBClass.GetSettingBool(DbSave + "DisplaySysAlways", false);
+            extCheckBoxDisplaySystemAlways.Visible = HasControlTextArea();
             panelStars.ValueLimit = SQLiteDBClass.GetSettingInt(DbSave + "ValueLimit", 50000);
             progchange = false;
 
@@ -107,6 +109,7 @@ namespace EDDiscovery.UserControls
             this.BackColor = panelControls.BackColor = curcol;
             rollUpPanelTop.BackColor = curcol;
 			rollUpPanelTop.ShowHiddenMarker = !on;
+            DrawSystem();
         }
 
         private void UserControlScan_Resize(object sender, EventArgs e)
@@ -170,22 +173,26 @@ namespace EDDiscovery.UserControls
         {
             panelStars.HideInfo();
 
-            StarScan.SystemNode data = panelStars.DrawSystem(showing_system, showing_matcomds, discoveryform.history);
+            StarScan.SystemNode data = panelStars.FindSystem(showing_system, discoveryform.history);
 
-            if (showing_system == null)
+            string control_text = "No System";
+
+            if (showing_system != null)
             {
-                SetControlText("No System");
-            }
-            else
-            {
+                control_text = showing_system.Name;
+
                 if (data != null)
                 {
                     long value = data.ScanValue(checkBoxEDSM.Checked);
-                    SetControlText(data.system.Name + " (~" + value.ToString() + " cr)");
+                    control_text += " ~ " + value.ToString("N0") + " cr";
                 }
                 else
-                    SetControlText(data == null ? "No Scan".Tx() : data.system.Name);
+                    control_text += " " + "No Scan".Tx();
+
             }
+
+            panelStars.DrawSystem(data, showing_matcomds, discoveryform.history, (HasControlTextArea() && !extCheckBoxDisplaySystemAlways.Checked) ? null : control_text);
+            SetControlText(control_text);
         }
 
         #endregion
@@ -309,6 +316,15 @@ namespace EDDiscovery.UserControls
             {
                 SQLiteDBClass.PutSettingBool(DbSave + "BodyOverlays", chkShowOverlays.Checked);
                 panelStars.ShowOverlays = chkShowOverlays.Checked;
+                DrawSystem();
+            }
+        }
+
+        private void extCheckBoxDisplaySystemAlways_CheckedChanged(object sender, EventArgs e)
+        {
+            if ( !progchange )
+            {
+                SQLiteDBClass.PutSettingBool(DbSave + "DisplaySysAlways", extCheckBoxDisplaySystemAlways.Checked);
                 DrawSystem();
             }
         }

@@ -1433,6 +1433,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Scan_DisplaySystemAlways {
+            get {
+                object obj = ResourceManager.GetObject("Scan_DisplaySystemAlways", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Scan_ExportToExcel {
             get {
                 object obj = ResourceManager.GetObject("Scan_ExportToExcel", resourceCulture);

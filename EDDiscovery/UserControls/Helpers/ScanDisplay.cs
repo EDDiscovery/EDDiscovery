@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
         private const int materialspacer = 4;
 
         private Font stdfont = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F);
+        private Font largerfont = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 10F);
         private Font stdfontUnderline = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
 
         #region Init
@@ -68,23 +69,29 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public StarScan.SystemNode DrawSystem(ISystem showing_system, MaterialCommoditiesList curmats, HistoryList hl )   // draw showing_system (may be null), showing_matcomds (may be null)
+        public StarScan.SystemNode FindSystem(ISystem showing_system, HistoryList hl)
+        {
+            return showing_system != null ? hl.starscan.FindSystem(showing_system, CheckEDSM, byname: true) : null;
+        }
+
+        public void DrawSystem(StarScan.SystemNode last_sn, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null )   // draw showing_system (may be null), showing_matcomds (may be null)
         {
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
             
-            if (showing_system == null)
-            {
-                imagebox.Render();
-                return null;
-            }
-
-            StarScan.SystemNode last_sn = hl.starscan.FindSystem(showing_system, CheckEDSM, byname: true);
-
-            if (last_sn != null)     // 
+            if (last_sn != null)
             {
                 Point curpos = new Point(leftmargin, topmargin);
+
+                if ( opttext != null )
+                {
+                    ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
+                    lab.TextAutosize(curpos, new Size(500, 30), opttext, largerfont, EDDTheme.Instance.LabelColor, this.BackColor);
+                    imagebox.Add(lab);
+                    curpos.Y += lab.img.Height + 8;
+                }
+
                 DisplayAreaUsed = curpos;
                 List<ExtPictureBox.ImageElement> starcontrols = new List<ExtPictureBox.ImageElement>();
 
@@ -191,8 +198,6 @@ namespace EDDiscovery.UserControls
             }
 
             imagebox.Render();      // replaces image..
-
-            return last_sn;
         }
 
         // return right bottom of area used from curpos
@@ -523,6 +528,8 @@ namespace EDDiscovery.UserControls
 
                 ExtPictureBox.ImageElement lab = new ExtPictureBox.ImageElement();
                 Size maxsize = new Size(300, 30);
+
+                //System.Diagnostics.Debug.WriteLine("Write Label " + label + " " + EDDTheme.Instance.LabelColor + " " + this.BackColor);
 
                 lab.TextCentreAutosize(labposcenthorz, maxsize, label, font, EDDTheme.Instance.LabelColor, this.BackColor);
 

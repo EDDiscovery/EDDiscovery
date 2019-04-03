@@ -56,7 +56,16 @@ namespace EDDiscovery.UserControls
                 sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = true;
                 sd.SetSize(48);
                 sd.Size = new Size(width - 20, 1024);
-                sd.DrawSystem(sys, null, hl);
+
+                StarScan.SystemNode data = sd.FindSystem(sys, hl);
+                if ( data != null )
+                {
+                    long value = data.ScanValue(sd.CheckEDSM);
+                    title += " ~ " + value.ToString("N0") + " cr";
+                }
+
+                sd.BackColor = EDDTheme.Instance.Form;
+                sd.DrawSystem( data, null , hl);
 
                 height = Math.Min(800, Math.Max(400, sd.DisplayAreaUsed.Y)) + 100;
 
