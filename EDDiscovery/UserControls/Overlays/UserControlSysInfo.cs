@@ -291,8 +291,9 @@ namespace EDDiscovery.UserControls
                     if ( fsd != null )
                     {
                         EliteDangerousCalculations.FSDSpec.JumpInfo ji = fsd.GetJumpInfo(he.MaterialCommodity.CargoCount, 
-                                                                    si.ModuleMass() + si.HullMass(), si.FuelCapacity, si.FuelCapacity / 2);
+                                                                    si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
 
+                        //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);
                         textBoxJumpRange.Text = ji.cursinglejump.ToString("N1") + "ly";
                     }
                 }
@@ -550,8 +551,11 @@ namespace EDDiscovery.UserControls
             SuspendLayout();
             int ver = 3;
 
-            foreach (Control c in this.Controls)
-                c.Visible = false;
+            foreach (Control c in extPanelScroll.Controls)
+            {
+                if ( !(c is ExtendedControls.ExtScrollBar))
+                    c.Visible = false;
+            }
 
             int textboxh = EDDTheme.Instance.FontSize > 10 ? 24 : 20;
             int vspacing = textboxh+4;
