@@ -370,7 +370,7 @@ namespace EDDiscovery.UserControls
                     {
                         if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
                         {
-                            var containerSize = new Size(pictureBoxSurveyor.Width, 24);
+                            var containerSize = new Size(Math.Max(pictureBoxSurveyor.Width,24), 24);        // note when minimized, we could have a tiny width, so need to protect
                             var label = information.ToString();
 
                             var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, displayfont, textcolour, backcolour, 1.0F);
