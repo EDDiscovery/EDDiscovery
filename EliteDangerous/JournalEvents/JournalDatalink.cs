@@ -24,7 +24,7 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDatalinkScan(JObject evt ) : base(evt, JournalTypeEnum.DatalinkScan)
         {
             Message = evt["Message"].Str();
-            MessageLocalised = JournalFieldNaming.CheckLocalisation(evt["Message_Localised"].Str(),Message);
+            MessageLocalised = JournalFieldNaming.CheckLocalisation(evt["Message_Localised"].Str(), Message);
 
         }
         public string Message { get; set; }
@@ -70,13 +70,15 @@ namespace EliteDangerousCore.JournalEvents
         public JournalDataScanned(JObject evt) : base(evt, JournalTypeEnum.DataScanned)
         {
             Type = evt["Type"].Str().SplitCapsWordFull();
+            TypeLocalised = JournalFieldNaming.CheckLocalisation(evt["Type_Localised"].Str(), Type);
         }
 
         public string Type { get; set; }
+        public string TypeLocalised { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Type;
+            info = TypeLocalised;
             detailed = "";
         }
     }

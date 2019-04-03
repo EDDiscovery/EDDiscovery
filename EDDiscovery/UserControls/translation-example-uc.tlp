@@ -120,6 +120,7 @@ SECTION SearchScans
 .ColumnInformation: "Information" @
 .ColumnCurrentDistance: "Current Distance" @
 .ColumnPosition: "Position" @
+.conditionFilterUC.buttonMore: "+" @
 
 SECTION SearchStars
 
@@ -401,6 +402,17 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.Systemscancomplete: "System scan complete." @
+.bodiesfound: " bodies found." @
+.Noscanreported: "No scan reported." @
+.isanammoniaworld: " is an ammonia world." @
+.isanearthlikeworld: " is an earth like world." @
+.isawaterworld: " is a water world." @
+.isaterraformablewaterworld: " is a terraformable water world." @
+.isaterraformableplanet: " is a terraformable planet." @
+.Hasring: " Has ring." @
+.Has: " Has " @
+
 .planetaryClassesToolStripMenuItem: "Planetary Classes" @
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
@@ -663,6 +675,7 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" @
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" @
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" @
+.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" @
 
 SECTION UserControlScanGrid
 
@@ -901,6 +914,8 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" @
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" @
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" @
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" @
+
 .Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" @
 
 SECTION UserControlStarDistance
@@ -1100,6 +1115,22 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" @
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" @
 .Mapped: "Mapped" @
+
+UserControlStats.BankAccount: "Bank Account" @
+UserControlStats.Combat: "Combat" @
+UserControlStats.Crime: "Crime" @
+UserControlStats.Smuggling: "Smuggling" @
+UserControlStats.Trading: "Trading" @
+UserControlStats.Mining: "Mining" @
+UserControlStats.Exploration: "Exploration" @
+UserControlStats.Passengers: "Passengers" @
+UserControlStats.SearchandRescue: "Search and Rescue" @
+UserControlStats.Crafting: "Crafting" @
+UserControlStats.Crew: "Crew" @
+UserControlStats.Multi: "Multi-crew" @
+UserControlStats.MaterialsTrader: "Materials Trader" @
+
+
 
 SECTION StatsTimeUserControl
 
@@ -1373,18 +1404,6 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" @
 .UKN: "System {0} unknown to EDSM" @
 
-SECTION UserControlSurveyor
-
-.Systemscancomplete: "System scan complete." @
-.bodiesfound: " bodies found." @
-.Noscanreported: "No scan reported." @
-.isanammoniaworld: " is an ammonia world." @
-.isanearthlikeworld: " is an earth like world." @
-.isawaterworld: " is a water world." @
-.isaterraformablewaterworld: " is a terraformable water world." @
-.isaterraformableplanet: " is a terraformable planet." @
-.Hasring: " Has ring." @
-.Has: " Has " @
 
 SECTION ScanDisplayControl
 
@@ -1404,6 +1423,10 @@ SECTION TagsForm
 .buttonMore: "+" @
 .buttonMore.ToolTip: "Add more tags" @
 TagsForm: "Tags" @
+TagsForm.TN: "Tag name" @
+TagsForm.SI: "Select image for this tag" @
+TagsForm.DE: "Delete entry" @
+
 
 SECTION FilterSelector
 

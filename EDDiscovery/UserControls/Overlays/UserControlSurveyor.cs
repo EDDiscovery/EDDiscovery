@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             displayfont = discoveryform.theme.GetFont;
             EDDTheme.Instance.ApplyToControls(this);

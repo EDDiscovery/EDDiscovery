@@ -117,7 +117,7 @@ namespace EliteDangerousCore.JournalEvents
 
             Target = evt["Target"].Str();
             TargetFriendly = JournalFieldNaming.GetBetterTargetTypeName(Target);        // remove $, underscore it
-            TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_localised"].Str(), TargetFriendly);        // not all
+            TargetLocalised = JournalFieldNaming.CheckLocalisation(evt["Target_Localised"].Str(), TargetFriendly);        // not all
 
             KillCount = evt["KillCount"].IntNull();
 

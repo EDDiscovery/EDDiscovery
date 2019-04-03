@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
 
             if (he != null)
             {
-                StatToDGV("Visits".Tx(this), hl.GetVisitsCount(he.System.Name) + " to system " + he.System.Name);
+                StatToDGV("Visits".Tx(this), hl.GetVisitsCount(he.System.Name) + " to system ".Tx(this) + he.System.Name);
                 StatToDGV("Jumps Before System".Tx(this), hl.GetFSDJumpsBeforeUTC(he.EventTimeUTC));
             }
 
@@ -801,7 +801,7 @@ namespace EDDiscovery.UserControls
             if (stats != null)
             {
                 treeViewStats.Nodes.Clear();
-                TreeNode bank = treeViewStats.Nodes.Add("Bank Account");
+                TreeNode bank = treeViewStats.Nodes.Add("Bank Account".Tx(this));
                 AddChildNode(bank, "Current Assets".Tx(this), stats.BankAccount?.CurrentWealth.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(bank, "Spent on Ships".Tx(this), stats.BankAccount?.SpentOnShips.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(bank, "Spent on Outfitting".Tx(this), stats.BankAccount?.SpentOnOutfitting.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
@@ -812,7 +812,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(bank, "Total Claim Costs".Tx(this), stats.BankAccount?.SpentOnInsurance.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand.Substring(0,1) == "Y") bank.Expand();
 
-                TreeNode combat = treeViewStats.Nodes.Add("Combat");
+                TreeNode combat = treeViewStats.Nodes.Add("Combat".Tx(this));
                 AddChildNode(combat, "Bounties Claimed".Tx(this), stats.Combat?.BountiesClaimed.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "");
                 AddChildNode(combat, "Profit from Bounty Hunting".Tx(this), stats.Combat?.BountyHuntingProfit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(combat, "Combat Bonds".Tx(this), stats.Combat?.CombatBonds.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -823,7 +823,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(combat, "Skimmers Killed".Tx(this), stats.Combat?.SkimmersKilled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(1,1) == "Y") combat.Expand();
 
-                TreeNode crime = treeViewStats.Nodes.Add("Crime");
+                TreeNode crime = treeViewStats.Nodes.Add("Crime".Tx(this));
                 AddChildNode(crime, "Notoriety".Tx(this), stats.Crime?.Notoriety.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(crime, "Number of Fines".Tx(this), stats.Crime?.Fines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(crime, "Lifetime Fines Value".Tx(this), stats.Crime?.TotalFines.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
@@ -832,7 +832,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(crime, "Highest Bounty Issued".Tx(this), stats.Crime?.HighestBounty.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand.Substring(2,1) == "Y") crime.Expand();
 
-                TreeNode smuggling = treeViewStats.Nodes.Add("Smuggling");
+                TreeNode smuggling = treeViewStats.Nodes.Add("Smuggling".Tx(this));
                 AddChildNode(smuggling, "Black Market Network".Tx(this), stats.Smuggling?.BlackMarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(smuggling, "Black Market Profits".Tx(this), stats.Smuggling?.BlackMarketsProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(smuggling, "Commodities Smuggled".Tx(this), stats.Smuggling?.ResourcesSmuggled.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -840,7 +840,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(smuggling, "Highest Single Transaction".Tx(this), stats.Smuggling?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand.Substring(3,1) == "Y") smuggling.Expand();
 
-                TreeNode trading = treeViewStats.Nodes.Add("Trading");
+                TreeNode trading = treeViewStats.Nodes.Add("Trading".Tx(this));
                 AddChildNode(trading, "Market Network".Tx(this), stats.Trading?.MarketsTradedWith.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(trading, "Market Profits".Tx(this), stats.Trading?.MarketProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(trading, "Commodities Traded".Tx(this), stats.Trading?.ResourcesTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -848,13 +848,13 @@ namespace EDDiscovery.UserControls
                 AddChildNode(trading, "Highest Single Transaction".Tx(this), stats.Trading?.HighestSingleTransaction.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand.Substring(4,1) == "Y") trading.Expand();
 
-                TreeNode mining = treeViewStats.Nodes.Add("Mining");
+                TreeNode mining = treeViewStats.Nodes.Add("Mining".Tx(this));
                 AddChildNode(mining, "Mining Profits".Tx(this), stats.Mining?.MiningProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(mining, "Materials Refined".Tx(this), stats.Mining?.QuantityMined.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(mining, "Materials Collected".Tx(this), stats.Mining?.MaterialsCollected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(5,1) == "Y") mining.Expand();
 
-                TreeNode exploration = treeViewStats.Nodes.Add("Exploration");
+                TreeNode exploration = treeViewStats.Nodes.Add("Exploration".Tx(this));
                 AddChildNode(exploration, "Systems Visited".Tx(this), stats.Exploration?.SystemsVisited.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(exploration, "Exploration Profits".Tx(this), stats.Exploration?.ExplorationProfits.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(exploration, "Level 2 Scans".Tx(this), stats.Exploration?.PlanetsScannedToLevel2.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -866,20 +866,20 @@ namespace EDDiscovery.UserControls
                 AddChildNode(exploration, "Time Played".Tx(this), stats.Exploration?.TimePlayed.SecondsToWeeksDaysHoursMinutesSeconds());
                 if (collapseExpand.Substring(6,1) == "Y") exploration.Expand();
 
-                TreeNode passengers = treeViewStats.Nodes.Add("Passengers");
+                TreeNode passengers = treeViewStats.Nodes.Add("Passengers".Tx(this));
                 AddChildNode(passengers, "Total Bulk Passengers Delivered".Tx(this), stats.PassengerMissions?.Bulk.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(passengers, "Total VIPs Delivered".Tx(this), stats.PassengerMissions?.VIP.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(passengers, "Delivered".Tx(this), stats.PassengerMissions?.Delivered.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(passengers, "Ejected".Tx(this), stats.PassengerMissions?.Ejected.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(7,1) == "Y") passengers.Expand();
 
-                TreeNode search = treeViewStats.Nodes.Add("Search and Rescue");
+                TreeNode search = treeViewStats.Nodes.Add("Search and Rescue".Tx(this));
                 AddChildNode(search, "Total Items Rescued".Tx(this), stats.SearchAndRescue?.Traded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(search, "Total Profit".Tx(this), stats.SearchAndRescue?.Profit.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(search, "Total Rescue Transactions".Tx(this), stats.SearchAndRescue?.Count.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(8,1) == "Y") search.Expand();
 
-                TreeNode craft = treeViewStats.Nodes.Add("Crafting");
+                TreeNode craft = treeViewStats.Nodes.Add("Crafting".Tx(this));
                 AddChildNode(craft, "Engineers Used".Tx(this), stats.Crafting?.CountOfUsedEngineers.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(craft, "Total Recipes Generated".Tx(this), stats.Crafting?.RecipesGenerated.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(craft, "Grade 1 Recipes Generated".Tx(this), stats.Crafting?.RecipesGeneratedRank1.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
@@ -889,14 +889,14 @@ namespace EDDiscovery.UserControls
                 AddChildNode(craft, "Grade 5 Recipes Generated".Tx(this), stats.Crafting?.RecipesGeneratedRank5.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(9,1) == "Y") craft.Expand();
 
-                TreeNode crew = treeViewStats.Nodes.Add("Crew"); 
+                TreeNode crew = treeViewStats.Nodes.Add("Crew".Tx(this)); 
                 AddChildNode(crew, "Total Wages".Tx(this), stats.Crew?.TotalWages.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 AddChildNode(crew, "Total Hired".Tx(this), stats.Crew?.Hired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(crew, "Total Fired".Tx(this), stats.Crew?.Fired.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(crew, "Died in Line of Duty".Tx(this), stats.Crew?.Died.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(10,1) == "Y") crew.Expand();
 
-                TreeNode multicrew = treeViewStats.Nodes.Add("Multi-crew");
+                TreeNode multicrew = treeViewStats.Nodes.Add("Multi-crew".Tx(this));
                 AddChildNode(multicrew, "Total Time".Tx(this), SecondsToDHMString(stats.Multicrew?.TimeTotal));
                 AddChildNode(multicrew, "Fighter Time".Tx(this), SecondsToDHMString(stats.Multicrew?.FighterTimeTotal));
                 AddChildNode(multicrew, "Gunner Time".Tx(this), SecondsToDHMString(stats.Multicrew?.GunnerTimeTotal));
@@ -904,7 +904,7 @@ namespace EDDiscovery.UserControls
                 AddChildNode(multicrew, "Fines Accrued".Tx(this), stats.Multicrew?.FinesTotal.ToString("N0", System.Globalization.CultureInfo.CurrentCulture), "Cr");
                 if (collapseExpand.Substring(11,1) == "Y") multicrew.Expand();
 
-                TreeNode mattrader = treeViewStats.Nodes.Add("Materials Trader");
+                TreeNode mattrader = treeViewStats.Nodes.Add("Materials Trader".Tx(this));
                 AddChildNode(mattrader, "Trades Completed".Tx(this), stats.MaterialTraderStats?.TradesCompleted.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 AddChildNode(mattrader, "Materials Traded".Tx(this), stats.MaterialTraderStats?.MaterialsTraded.ToString("N0", System.Globalization.CultureInfo.CurrentCulture));
                 if (collapseExpand.Substring(12,1) == "Y") mattrader.Expand();
@@ -949,7 +949,7 @@ namespace EDDiscovery.UserControls
             dataGridViewByShip.Columns.Clear();
 
             var Col1 = new DataGridViewTextBoxColumn();
-            Col1.HeaderText = "Type";
+            Col1.HeaderText = "Type".Tx(this);
             Col1.Tag = "AlphaSort";
 
             var Col2 = new DataGridViewTextBoxColumn();

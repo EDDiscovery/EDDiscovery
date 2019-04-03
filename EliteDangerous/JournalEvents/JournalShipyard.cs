@@ -303,7 +303,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("Of ".Tx(this), ShipType, "< from ".Txb(this), FromSystem, "Distance:; ly;0.0".Txb(this), Distance, "Price:; cr;N0", TransferPrice, "Transfer Time:".Txb(this), FriendlyTransferTime);
+            info = BaseUtils.FieldBuilder.Build("Of ".Tx(this), ShipType, "< from ".Txb(this), FromSystem, "Distance:; ly;0.0".Txb(this), 
+                            Distance, "Price:; cr;N0".Txb(this), TransferPrice, "Transfer Time:".Txb(this), FriendlyTransferTime);
             detailed = "";
         }
     }

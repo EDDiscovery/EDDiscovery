@@ -222,6 +222,7 @@ namespace EDDiscovery
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
 
             BaseUtils.Translator.Instance.Translate(contextMenuStripTabs, this);        // need to translate BEFORE we add in extra items
+            BaseUtils.Translator.Instance.Translate(notifyIconContextMenuStrip, this);        // need to translate BEFORE we add in extra items
 
             foreach (PanelInformation.PanelIDs pid in pids)
             {

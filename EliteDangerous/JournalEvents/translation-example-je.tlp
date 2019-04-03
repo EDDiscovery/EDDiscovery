@@ -462,7 +462,7 @@ SECTION JournalScan
 .Scanof: "Scan of {0}" @
 .MSM: "Mass:;SM;0.00" @
 .Age: "Age:;my;0.0" @
-.RS: "Radius:;SR;0.00" @
+.RS: "Radius:" @
 .MEM: "Mass:;EM;0.00" @
 .Landable: "<;, Landable" @
 .Terraformable: "<;, Terraformable" @
@@ -494,9 +494,11 @@ SECTION JournalScan
 .RotationPeriod: "Rotation Period: {0} days\n" @
 .Tidallylocked: "Tidally locked\n" @
 .Candidateforterraforming: "Candidate for terraforming\n" @
-.Belt: "Belt{0}" @
 .Moons: " Moons" @
-.Ring: "Ring{0}" @
+.Belt: "Belt" @
+.Belts: "Belts" @
+.Ring: "Ring" @
+.Rings: "Rings" @
 .EV: "\nEstimated value: {0:N0}" @
 .DB: "\n\nDiscovered by {0} on {1}" @
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" @
@@ -525,6 +527,8 @@ SECTION JournalScan
 .EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
 .EVFM: "\nFirst Mapped value: {0:N0}" @
 .SCNT: "\nScan Type: {0}" @
+.InferredCircumstellarzones: "Inferred Circumstellar zones:\n" @
+.MASS: "Mass:" @
 
 SECTION JournalSAAScanComplete
 

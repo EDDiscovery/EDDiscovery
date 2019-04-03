@@ -618,7 +618,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n");
                 if (IsStar)
                 {
-                    scanText.AppendFormat("Belt{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Belt".Tx(this) : "Belts".Tx(this));
                     for (int i = 0; i < Rings.Length; i++)
                     {
                         if (Rings[i].MassMT > (oneMoon_MT / 10000))
@@ -633,7 +633,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else
                 {
-                    scanText.AppendFormat("Ring{0}".Tx(this), Rings.Count() == 1 ? ":" : "s:");
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Ring".Tx(this) : "Rings".Tx(this));
 
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
@@ -695,7 +695,7 @@ namespace EliteDangerousCore.JournalEvents
             {
                 StringBuilder habZone = new StringBuilder();
 
-				habZone.Append("Inferred Circumstellar zones:\n");
+				habZone.Append("Inferred Circumstellar zones:\n".Tx(this));
 
 				habZone.AppendFormat(" - Habitable Zone, {0} ({1}-{2} AU),\n".Tx(this),
 									 GetHabZoneStringLs(),
@@ -1216,9 +1216,13 @@ namespace EliteDangerousCore.JournalEvents
 
                     if (Mapped)
                     {
-                        EstimatedValue = (int)PlanetValue33(kValue, mass, 3.3333333333 * (EfficientMapped ? 1.25 : 1));
-                        EstimatedValueFirstDiscoveredFirstMapped = (int)PlanetValue33(kValue, mass, 3.699622554 * (EfficientMapped ? 1.25 : 1));
-                        EstimatedValueFirstMapped = (int)PlanetValue33(kValue, mass, 8.0956 * (EfficientMapped ? 1.25 : 1));
+                        double effmapped = EfficientMapped ? 1.25 : 1;
+
+                        EstimatedValueFirstDiscoveredFirstMapped = (int)(PlanetValue33(kValue, mass, 3.699622554 * effmapped) * 2.6);
+
+                        EstimatedValueFirstMapped = (int)PlanetValue33(kValue, mass, 8.0956 * effmapped);
+
+                        EstimatedValue = (int)PlanetValue33(kValue, mass, 3.3333333333 * effmapped);
                     }
                     else
                     {

@@ -45,6 +45,8 @@ namespace EDDiscovery.UserControls
             groups = new List<Group>();
             InitializeComponent();
 
+            BaseUtils.Translator.Instance.Translate(this, new Control[] { });
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
         }
 
         public void Init(string t, Icon ic, Dictionary<string,Image> tags = null )
@@ -83,7 +85,7 @@ namespace EDDiscovery.UserControls
             g.name.Location = new Point(panelmargin, panelmargin+6);
             g.name.Text = var;
             g.panel.Controls.Add(g.name);
-            toolTip1.SetToolTip(g.name, "Tag name");
+            toolTip.SetToolTip(g.name, "Tag name".Tx(this,"TN"));
 
             int nextpos = g.name.Right;
 
@@ -93,7 +95,7 @@ namespace EDDiscovery.UserControls
             g.icon.Image = img;
             g.icon.Click += Icon_Click;
             g.icon.ImageLayout = ImageLayout.Stretch;
-            toolTip1.SetToolTip(g.icon, "Select image for this tag");
+            toolTip.SetToolTip(g.icon, "Select image for this tag".Tx(this,"SI"));
             g.panel.Controls.Add(g.icon);
 
             g.del = new ExtendedControls.ExtButton();
@@ -102,7 +104,7 @@ namespace EDDiscovery.UserControls
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
-            toolTip1.SetToolTip(g.del, "Delete entry");
+            toolTip.SetToolTip(g.del, "Delete entry".Tx(this,"DE"));
             g.panel.Controls.Add(g.del);
 
             groups.Add(g);

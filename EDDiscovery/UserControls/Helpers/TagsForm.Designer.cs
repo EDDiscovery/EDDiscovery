@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             this.panelVScroll1 = new ExtendedControls.ExtPanelScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.buttonMore = new ExtendedControls.ExtButton();
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop.SuspendLayout();
             this.panelOK.SuspendLayout();
             this.panelOuter.SuspendLayout();
@@ -228,13 +228,13 @@ namespace EDDiscovery.UserControls
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
             this.buttonMore.TabIndex = 5;
             this.buttonMore.Text = "+";
-            this.toolTip1.SetToolTip(this.buttonMore, "Add more tags");
+            this.toolTip.SetToolTip(this.buttonMore, "Add more tags");
             this.buttonMore.UseVisualStyleBackColor = true;
             this.buttonMore.Click += new System.EventHandler(this.buttonMore_Click);
             // 
-            // toolTip1
+            // toolTip
             // 
-            this.toolTip1.ShowAlways = true;
+            this.toolTip.ShowAlways = true;
             // 
             // TagsForm
             // 
@@ -274,6 +274,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelScroll panelVScroll1;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private ExtendedControls.ExtButton buttonMore;
-        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

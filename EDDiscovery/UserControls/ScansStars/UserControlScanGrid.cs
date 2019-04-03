@@ -83,6 +83,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+            BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             // retrieve context menu entries check state from DB
             circumstellarZoneToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showStellarZones", true);
@@ -678,9 +679,9 @@ namespace EDDiscovery.UserControls
 
         void dataGridViewScangrid_MouseClick(object sender, MouseEventArgs e)
         {
-            contextMenuStrip1.Visible |= e.Button == MouseButtons.Right;
-            contextMenuStrip1.Top = MousePosition.Y;
-            contextMenuStrip1.Left = MousePosition.X;
+            contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
+            contextMenuStrip.Top = MousePosition.Y;
+            contextMenuStrip.Left = MousePosition.X;
         }
 
         void circumstellarZoneToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)

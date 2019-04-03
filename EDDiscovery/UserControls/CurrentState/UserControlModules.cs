@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             BaseUtils.Translator.Instance.Translate(this);
+            BaseUtils.Translator.Instance.Translate(toolTip, this);
             storedmoduletext = "Stored Modules".Tx(this);
             travelhistorytext = "Travel History Entry".Tx(this);
             dataGridViewModules.MakeDoubleBuffered();

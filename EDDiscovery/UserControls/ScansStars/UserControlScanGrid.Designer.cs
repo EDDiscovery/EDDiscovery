@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             this.colBriefing = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.circumstellarZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.habitableZoneToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.metalRichToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             this.toolStripProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.statusStripSummary.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -209,15 +209,15 @@ namespace EDDiscovery.UserControls
             // 
             // contextMenuStrip1
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.circumstellarZoneToolStripMenuItem,
             this.structuresToolStripMenuItem,
             this.materialsToolStripMenuItem,
             this.valuesToolStripMenuItem,
             this.toolStripSeparator1,
             this.columnsToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(180, 120);
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(180, 120);
             // 
             // circumstellarZoneToolStripMenuItem
             // 
@@ -472,7 +472,7 @@ namespace EDDiscovery.UserControls
             this.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScangrid)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip.ResumeLayout(false);
             this.statusStripSummary.ResumeLayout(false);
             this.statusStripSummary.PerformLayout();
             this.ResumeLayout(false);
@@ -485,7 +485,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private System.Windows.Forms.DataGridView dataGridViewScangrid;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem circumstellarZoneToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem metalRichToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem waterWorldsToolStripMenuItem;
