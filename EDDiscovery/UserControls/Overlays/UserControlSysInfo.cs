@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
                                                                     si.ModuleMass() + si.HullMass(), si.FuelLevel, si.FuelCapacity / 2);
 
                         //System.Diagnostics.Debug.WriteLine("Jump range " + si.FuelLevel + " " + si.FuelCapacity + " " + ji.cursinglejump);
-                        textBoxJumpRange.Text = ji.cursinglejump.ToString("N1") + "ly";
+                        textBoxJumpRange.Text = ji.cursinglejump.ToString("N2") + "ly";
                     }
                 }
                 else

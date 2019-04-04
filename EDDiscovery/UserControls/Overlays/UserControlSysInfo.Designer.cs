@@ -761,7 +761,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxJumpRange.SelectionLength = 0;
             this.textBoxJumpRange.SelectionStart = 0;
-            this.textBoxJumpRange.Size = new System.Drawing.Size(48, 20);
+            this.textBoxJumpRange.Size = new System.Drawing.Size(54, 20);
             this.textBoxJumpRange.TabIndex = 47;
             this.textBoxJumpRange.TabStop = false;
             this.textBoxJumpRange.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;

@@ -206,14 +206,16 @@ namespace EliteDangerousCore.JournalEvents
         {
             SystemName = evt["SystemName"].Str();
             SystemAddress = evt["SystemAddress"].Long();
+            Count = evt["Count"].Int();
         }
 
         public long SystemAddress { get; set; }
         public string SystemName { get; set; }
+        public int Count { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = BaseUtils.FieldBuilder.Build("", SystemName);
+            info = BaseUtils.FieldBuilder.Build("", SystemName) + " ("  + Count.ToString() + ")";
             detailed = "";
         }
     }
