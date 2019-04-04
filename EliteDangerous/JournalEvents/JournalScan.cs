@@ -618,7 +618,7 @@ namespace EliteDangerousCore.JournalEvents
                 scanText.Append("\n");
                 if (IsStar)
                 {
-                    scanText.AppendFormat(Rings.Count() == 1 ? "Belt".Tx(this) : "Belts".Tx(this));
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Belt".Tx(this) : "Belts".Tx(this), ""); // OLD translator files had "Belt{0}" so supply an empty string just in case
                     for (int i = 0; i < Rings.Length; i++)
                     {
                         if (Rings[i].MassMT > (oneMoon_MT / 10000))
@@ -633,7 +633,7 @@ namespace EliteDangerousCore.JournalEvents
                 }
                 else
                 {
-                    scanText.AppendFormat(Rings.Count() == 1 ? "Ring".Tx(this) : "Rings".Tx(this));
+                    scanText.AppendFormat(Rings.Count() == 1 ? "Ring".Tx(this) : "Rings".Tx(this), ""); // OLD translator files had "Rings{0}" so supply an empty string just in case
 
                     for (int i = 0; i < Rings.Length; i++)
                         scanText.Append("\n" + RingInformation(i));
