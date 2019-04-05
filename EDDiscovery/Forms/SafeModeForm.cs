@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -31,6 +32,11 @@ namespace EDDiscovery.Forms
         public SafeModeForm()
         {
             InitializeComponent();
+
+            BaseUtils.Translator tx = new BaseUtils.Translator();
+            tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,
+                                        System.IO.Path.GetTempPath());
+            tx.Translate(this);
         }
 
         private void Run_Click(object sender, EventArgs e)

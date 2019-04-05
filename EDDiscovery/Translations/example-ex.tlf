@@ -20,6 +20,23 @@ Unknown: "Unknown" @
 Information: "Information" @
 NoPos: "No Pos" @
 
+SECTION StartUp
+.DUPLOAD:"EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
+
+SECTION SafeModeForm
+
+SafeModeForm: "EDDiscovery Safe Mode" @
+SafeModeForm.buttonCancel: "Cancel" @
+SafeModeForm.buttonNormal: "Run" @
+SafeModeForm.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
+SafeModeForm.buttonDbs: "Move Databases" @
+SafeModeForm.buttonLang: "Reset Language to English" @
+SafeModeForm.button1: "Remove all Action Packs" @
+SafeModeForm.buttonRemoveDLLs: "Remove all Extension DLLs" @
+SafeModeForm.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
+SafeModeForm.buttonPositions: "Reset Window Positions" @
+SafeModeForm.buttonResetTheme: "Reset Theme" @
+
 SECTION PopOutInfo
 
 .Log.Description: "Program log" @

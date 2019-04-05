@@ -16,6 +16,7 @@
 using EDDiscovery.Forms;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;                //Assembly
 using System.Runtime.InteropServices;   //GuidAttribute
@@ -49,7 +50,10 @@ namespace EDDiscovery
                 }
                 catch (TimeoutException)
                 {
-                    if (System.Windows.Forms.MessageBox.Show("EDDiscovery is already running. Launch anyway?", "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    BaseUtils.Translator tx = new BaseUtils.Translator();
+                    tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0, System.IO.Path.GetTempPath());
+
+                    if (System.Windows.Forms.MessageBox.Show(tx.Translate("EDDiscovery is already running. Launch anyway?","StartUp.DUPLOAD"), "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         Application.Run(new EDDApplicationContext());
                     }
