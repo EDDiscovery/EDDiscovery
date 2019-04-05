@@ -56,7 +56,7 @@ namespace EliteDangerousCore.DB
             int dbver;
             try
             {
-                conn.ExecuteQuery("CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
+                conn.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
 
                 SQLExtRegister reg = new SQLExtRegister(conn);
                 dbver = reg.GetSettingInt("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code

@@ -52,7 +52,7 @@ namespace EliteDangerousCore.DB
             int dbver;
             try
             {
-                conn.ExecuteQuery( "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
+                conn.ExecuteNonQuery( "CREATE TABLE IF NOT EXISTS Register (ID TEXT PRIMARY KEY NOT NULL, ValueInt INTEGER, ValueDouble DOUBLE, ValueString TEXT, ValueBlob BLOB)");
 
                 SQLExtRegister reg = new SQLExtRegister(conn);
                 dbver = reg.GetSettingInt("DBVer", 1);        // use the constring one, as don't want to go back into ConnectionString code
@@ -353,15 +353,15 @@ namespace EliteDangerousCore.DB
         {
             using (var conn = new SQLiteConnectionSystem())
             {
-                conn.ExecuteQuery( "DROP TABLE IF EXISTS EdsmSystems_temp");
-                conn.ExecuteQuery( "DROP TABLE IF EXISTS SystemNames_temp");
-                conn.ExecuteQuery(
+                conn.ExecuteNonQuery( "DROP TABLE IF EXISTS EdsmSystems_temp");
+                conn.ExecuteNonQuery( "DROP TABLE IF EXISTS SystemNames_temp");
+                conn.ExecuteNonQuery(
                     "CREATE TABLE SystemNames_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "Name TEXT NOT NULL COLLATE NOCASE, " +
                         "EdsmId INTEGER NOT NULL )");
 
-                conn.ExecuteQuery(
+                conn.ExecuteNonQuery(
                     "CREATE TABLE EdsmSystems_temp (" +
                         "Id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                         "EdsmId INTEGER NOT NULL, " +
@@ -386,14 +386,14 @@ namespace EliteDangerousCore.DB
                     DropSystemsTableIndexes();
                     using (var txn = conn.BeginTransaction())
                     {
-                        conn.ExecuteQuery( "DROP TABLE IF EXISTS Systems");
-                        conn.ExecuteQuery( "DROP TABLE IF EXISTS EdsmSystems");
-                        conn.ExecuteQuery( "DROP TABLE IF EXISTS SystemNames");
-                        conn.ExecuteQuery( "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
-                        conn.ExecuteQuery( "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
+                        conn.ExecuteNonQuery( "DROP TABLE IF EXISTS Systems");
+                        conn.ExecuteNonQuery( "DROP TABLE IF EXISTS EdsmSystems");
+                        conn.ExecuteNonQuery( "DROP TABLE IF EXISTS SystemNames");
+                        conn.ExecuteNonQuery( "ALTER TABLE EdsmSystems_temp RENAME TO EdsmSystems");
+                        conn.ExecuteNonQuery( "ALTER TABLE SystemNames_temp RENAME TO SystemNames");
                         txn.Commit();
                     }
-                    conn.ExecuteQuery( "VACUUM");
+                    conn.ExecuteNonQuery( "VACUUM");
                     CreateSystemsTableIndexesNoLock();
                 }
             }
