@@ -953,7 +953,7 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            this.BackColor = curcol;
+            BackColor = curcol;
             UpdateSkinny();
         }
 
@@ -963,13 +963,13 @@ namespace EDDiscovery.UserControls
             {
                 foreach (Control c in Controls)
                 {
-                    if (c is ExtendedControls.ExtTextBox)
+                    if (c is ExtendedControls.ExtTextBox b)
                     {
-                        ExtendedControls.ExtTextBox b = c as ExtendedControls.ExtTextBox;
                         b.ControlBackground = Color.Red;
                         b.BorderStyle = BorderStyle.None;
                         b.BorderColor = Color.Transparent;
                     }
+                    c.BackColor = ColorTransparency;
                 }
             }
             else
