@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright © 2015 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -113,34 +113,31 @@ namespace EliteDangerousCore
         Unknown = 0,
         EDSM = 1,
         EDDiscovery = 3,
-        EDDB = 4,
     }
 
     public interface ISystemBase : IEquatable<ISystemBase>
     {
-        long ID { get; set; }
         long EDSMID { get; set; }
 
         string Name { get; set; }
         double X { get; set; }
+        int Xi { get; set; }
         double Y { get; set; }
+        int Yi { get; set; }
         double Z { get; set; }
-        DateTime UpdateDate { get; set; }
+        int Zi { get; set; }
         bool HasCoordinate { get; }
         int GridID { get; set; }
-        int RandomID { get; set; }
         long? SystemAddress { get; set; }
 
         double Distance(ISystemBase other);
-        double Distance(double x,double y,double z);
+        double Distance(double x, double y, double z);
         bool Distance(ISystemBase other, double min, double max);
         bool Cuboid(ISystemBase other, double min, double max);
     }
 
-
     public interface ISystemEDDB
     {
-
         long EDDBID { get; set; }
         string Faction { get; set; }
         long Population { get; set; }
@@ -149,6 +146,8 @@ namespace EliteDangerousCore
         EDState State { get; set; }
         EDSecurity Security { get; set; }
         EDEconomy PrimaryEconomy { get; set; }
+        string Power { get; set; }
+        string PowerState { get; set; }
         int NeedsPermit { get; set; }
         int EDDBUpdatedAt { get; set; }
         bool HasEDDBInformation { get; }
@@ -157,11 +156,8 @@ namespace EliteDangerousCore
     // Definition of the core interface so we can swap out an "offline" version during testing
     public interface ISystem : ISystemBase, ISystemEDDB
     {
-        string CommanderCreate { get; set; }
-        DateTime CreateDate { get; set; }
-        string CommanderUpdate { get; set; }
         SystemStatusEnum status { get; set; }        // Who made this entry, where did the info come from?
-        string SystemNote { get; set; }
-
+        string ToString();
+        string ToStringVerbose();
     }
 }

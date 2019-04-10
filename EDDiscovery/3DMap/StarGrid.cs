@@ -20,11 +20,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Threading;
 using System.Windows.Forms;
-using EDDiscovery;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 
@@ -37,7 +35,7 @@ namespace EDDiscovery
         public float Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
         public float CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
-        public SystemClassDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
+        public SystemsDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Working = false;
@@ -77,12 +75,23 @@ namespace EDDiscovery
         public float DistanceFrom(float x, float z)
         { return (float)Math.Sqrt((x - X) * (x - X) + (z - Z) * (z - Z)); }
 
+        private Vector3 FromIntXYZScalar(int x, int y, int z)
+        {
+            return new Vector3((float)x/ SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar);
+        }
+
         public void FillFromDB()        // does not affect the display object
         {
             if (array1displayed)
-                array2vertices = SystemClassDB.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));       // MAY return array/carray is null
+            {
+                SystemsDB.GetSystemVector(Id, ref array2, ref carray2, Percentage, FromIntXYZScalar, dBAsk);       // MAY return array/carray is null
+                array2vertices = array2.Length;
+            }
             else
-                array1vertices = SystemClassDB.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));
+            {
+                SystemsDB.GetSystemVector(Id, ref array1, ref carray1, Percentage, FromIntXYZScalar, dBAsk);
+                array1vertices = array1.Length;
+            }
         }
 
         public void FillFromSystemList(List<HistoryEntry> cls) // does not affect the display object
@@ -400,7 +409,7 @@ namespace EDDiscovery
                     Debug.Assert(ok);
                     StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
-                        grd.dBAsk = SystemClassDB.SystemAskType.UnPopulatedStars;
+                        grd.dBAsk = SystemsDB.SystemAskType.UnpopulatedStars;
 
                     grids.Add(grd);
                 }
@@ -411,10 +420,10 @@ namespace EDDiscovery
 
             int solid = GridId.Id(0, 0);                                    
             populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
-            populatedgrid.dBAsk = SystemClassDB.SystemAskType.PopulatedStars;
+            populatedgrid.dBAsk = SystemsDB.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            long total = SystemClassDB.GetTotalSystemsFast();
+            long total = SystemsDB.GetTotalSystems();
 
             total = Math.Min(total, 10000000);                  // scaling limit at 10mil
             long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!

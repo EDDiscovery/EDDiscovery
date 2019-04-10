@@ -98,7 +98,7 @@ namespace EliteDangerousCore
 
                 if ((header.Beta && !EliteConfigInstance.InstanceOptions.DisableBetaCommanderCheck) || EliteConfigInstance.InstanceOptions.ForceBetaOnCommander) // if beta, and not disabled, or force beta
                 {
-                    TravelLogUnit.type |= 0x8000;
+                    TravelLogUnit.type |= TravelLogUnit.BetaMarker;
                 }
 
                 if (header.Part > 1)
@@ -116,7 +116,7 @@ namespace EliteDangerousCore
             {
                 string newname = (je as JournalEvents.JournalLoadGame).LoadGameCommander;
 
-                if ((TravelLogUnit.type & 0x8000) == 0x8000)
+                if ((TravelLogUnit.type & TravelLogUnit.BetaMarker) == TravelLogUnit.BetaMarker)
                 {
                     newname = "[BETA] " + newname;
                 }

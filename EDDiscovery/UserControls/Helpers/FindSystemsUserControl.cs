@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
 
             ValidateEnable();
 
-            textBoxSystemName.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete,true);
+            textBoxSystemName.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList,true);
 
             this.numberBoxMinRadius.TextChanged += new System.EventHandler(this.textBoxSystemName_RadiusChanged);
             this.numberBoxMaxRadius.TextChanged += new System.EventHandler(this.textBoxSystemName_RadiusChanged);
@@ -103,7 +103,7 @@ namespace EDDiscovery.UserControls
 
             Task taskEDSM = Task<List<ISystem>>.Factory.StartNew(() =>
             {
-                return SystemClassDB.GetSystemsByName(textBoxSystemName.Text, uselike: true);
+                return SystemCache.FindSystemWildcard(textBoxSystemName.Text);
 
             }).ContinueWith(task => this.Invoke(new Action(() =>
             {
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
                 Cursor = Cursors.WaitCursor;
 
-                EliteDangerousCore.DB.SystemClassDB.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
+                SystemCache.GetSystemListBySqDistancesFrom(distlist, sys.X, sys.Y, sys.Z, 50000,
                             numberBoxMinRadius.Value, numberBoxMaxRadius.Value, !checkBoxCustomCube.Checked);
 
                 Cursor = Cursors.Default;

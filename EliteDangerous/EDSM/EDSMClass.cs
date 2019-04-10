@@ -462,7 +462,8 @@ namespace EliteDangerousCore.EDSM
                             bool firstdiscover = jo["firstDiscover"].Value<bool>();
                             DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
 
-                            ISystem sc = SystemClassDB.GetSystem(id, cn, SystemClassDB.SystemIDType.EdsmId, name: name);
+                            ISystem sc = DB.SystemCache.FindSystem(id,cn);
+
                             if (sc == null)
                             {
                                 if (DateTime.UtcNow.Subtract(etutc).TotalHours < 6) // Avoid running into the rate limit

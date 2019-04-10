@@ -12,34 +12,12 @@ namespace EliteDangerousCore.EDSM
     {
         public GalacticMapObject GalMapObject { get; set; }
 
-        public GalacticMapSystem(ISystem sys, GalacticMapObject gmo)
+        public GalacticMapSystem(ISystem sys, GalacticMapObject gmo) : base(sys)
         {
-            this.Allegiance = sys.Allegiance;
-            this.CommanderCreate = sys.CommanderCreate;
-            this.CommanderUpdate = sys.CommanderUpdate;
-            this.CreateDate = sys.CreateDate;
-            this.EDDBUpdatedAt = sys.EDDBUpdatedAt;
-            this.Faction = sys.Faction;
-            this.Government = sys.Government;
-            this.GridID = sys.GridID;
-            this.EDDBID = sys.EDDBID;
-            this.EDSMID = sys.EDSMID;
-            this.Name = sys.Name;
-            this.NeedsPermit = sys.NeedsPermit;
-            this.Population = sys.Population;
-            this.PrimaryEconomy = sys.PrimaryEconomy;
-            this.RandomID = sys.RandomID;
-            this.Security = sys.Security;
-            this.State = sys.State;
-            this.status = sys.status;
-            this.UpdateDate = sys.UpdateDate;
-            this.X = sys.X;
-            this.Y = sys.Y;
-            this.Z = sys.Z;
             this.GalMapObject = gmo;
         }
 
-        public GalacticMapSystem(GalacticMapObject gmo)
+        public GalacticMapSystem(GalacticMapObject gmo) : base()
         {
             this.Name = gmo.galMapSearch;
             this.X = gmo.points[0].X;

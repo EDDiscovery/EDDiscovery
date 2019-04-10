@@ -69,15 +69,12 @@
     <Compile Include="Config\IEliteOptions.cs" />
     <Compile Include="DB\CaptainsLogClass.cs" />
     <Compile Include="DB\BookmarkClass.cs" />
-    <Compile Include="DB\SQLiteConnectionSystem.cs" />
     <Compile Include="DB\SQLiteConnectionUser.cs" />
     <Compile Include="DB\SavedRouteClass.cs" />
-    <Compile Include="DB\SystemClassDB.cs" />
     <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
-    <Compile Include="EDDB\SystemClassEDDB.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
     <Compile Include="EDSM\EDSMJournalSync.cs" />
@@ -87,7 +84,6 @@
     <Compile Include="EDSM\GalacticMapObject.cs" />
     <Compile Include="EDSM\GalacticMapSystem.cs" />
     <Compile Include="EDSM\GalacticMapping.cs" />
-    <Compile Include="EDSM\SystemClassEDSM.cs" />
     <Compile Include="EGO\EGOClass.cs" />
     <Compile Include="EGO\EGOSync.cs" />
     <Compile Include="Bindings\BindingsFile.cs" />
@@ -131,7 +127,6 @@
     <Compile Include="EliteDangerous\ShipYard.cs" />
     <Compile Include="EliteDangerous\StarDistanceComputer.cs" />
     <Compile Include="EliteDangerous\StarScan.cs" />
-    <Compile Include="DB\SystemCache.cs" />
     <Compile Include="EliteDangerous\SystemClass.cs" />
     <Compile Include="EliteDangerous\VisitingStarsCacheFolder.cs" />
     <Compile Include="HistoryList\HistoryTravel.cs" />
@@ -206,6 +201,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Status\UIEvents.cs" />
+    <Compile Include="SystemDB\EliteNameClassifier.cs" />
+    <Compile Include="SystemDB\SQLiteConnectionSystem.cs" />
+    <Compile Include="SystemDB\SystemCache.cs" />
+    <Compile Include="SystemDB\SystemGridID.cs" />
+    <Compile Include="SystemDB\SystemsDBEDDBStore.cs" />
+    <Compile Include="SystemDB\SystemsDBEDSMRemove.cs" />
+    <Compile Include="SystemDB\SystemsDBEDSMStore.cs" />
+    <Compile Include="SystemDB\SystemsDBEDSMSystemAliases.cs" />
+    <Compile Include="SystemDB\SystemsDBGet.cs" />
     <Compile Include="UIEvents\UICommand.cs" />
     <Compile Include="UIEvents\UIMusic.cs" />
     <Compile Include="UIEvents\UIOverallStatus.cs" />

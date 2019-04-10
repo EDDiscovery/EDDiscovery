@@ -155,7 +155,7 @@ namespace EDDiscovery
             Cursor.Current = Cursors.WaitCursor;
 
             if ( starpositions == null )
-                starpositions = SystemClassDB.GetStarPositions(25);     // limit to 25%
+                starpositions = SystemsDB.GetStarPositions(10,(x,y,z)=> { return new Point3D(x, y, z); });     // limit to 10%
 
             using (Pen pen = new Pen(Color.White, 2))
             using (Graphics gfx = Graphics.FromImage(imageViewer.Image))

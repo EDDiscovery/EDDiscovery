@@ -263,16 +263,15 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        public List<ISystem> KnownSystemList()          // list of known system only.  ID holds original index of entry from Systems
+        public List<Tuple<ISystem,int>> KnownSystemList()          // list of known system only.  ID holds original index of entry from Systems
         {
-            List<ISystem> list = new List<ISystem>();
+            List<Tuple<ISystem, int>> list = new List<Tuple<ISystem, int>>();
             for (int i = 0; i < Systems.Count; i++)
             {
                 ISystem s = SystemCache.FindSystem(Systems[i]);
                 if (s != null)
                 {
-                    s.ID = i;
-                    list.Add(s);
+                    list.Add(new Tuple<ISystem,int>(s,i));
                 }
             }
 
@@ -280,7 +279,7 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public double CumulativeDistance(ISystem start = null, List<ISystem> knownsystems = null)   // optional first system to measure from
+        public double CumulativeDistance(ISystem start = null, List<Tuple<ISystem, int>> knownsystems = null)   // optional first system to measure from
         {
             if ( knownsystems == null )
                 knownsystems = KnownSystemList();
@@ -290,13 +289,13 @@ namespace EliteDangerousCore.DB
 
             if ( start != null)
             {
-                i = knownsystems.FindIndex(x => x.Name.Equals(start.Name, StringComparison.InvariantCultureIgnoreCase));
+                i = knownsystems.FindIndex(x => x.Item1.Name.Equals(start.Name, StringComparison.InvariantCultureIgnoreCase));
                 if (i == -1)
                     return -1;
             }
 
             for (i++; i < knownsystems.Count; i++)                          // from 1, or 1 past found, to end, accumulate distance
-                distance += knownsystems[i].Distance(knownsystems[i-1]);
+                distance += knownsystems[i].Item1.Distance(knownsystems[i-1].Item1);
 
             return distance;
         }
@@ -304,7 +303,7 @@ namespace EliteDangerousCore.DB
 
         public ISystem PosAlongRoute(double percentage, int error = 0)             // go along route and give me a co-ord along it..
         {
-            List<ISystem> knownsystems = KnownSystemList();
+            List<Tuple<ISystem, int>> knownsystems = KnownSystemList();
 
             double totaldist = CumulativeDistance(null,knownsystems);
             double distleft = totaldist * percentage / 100.0;
@@ -319,8 +318,8 @@ namespace EliteDangerousCore.DB
             {
                 int i = (percentage < 0) ? 0 : knownsystems.Count - 2;      // take first two, or last two.
 
-                Point3D pos1 = P3D(knownsystems[i]);
-                Point3D pos2 = P3D(knownsystems[i + 1]);
+                Point3D pos1 = P3D(knownsystems[i].Item1);
+                Point3D pos2 = P3D(knownsystems[i + 1].Item1);
                 double p12dist = pos1.Distance(pos2);
                 double pospath = (percentage > 100) ? (1.0 + (percentage - 100) * totaldist / p12dist / 100.0) : (percentage * totaldist / p12dist / 100.0);
                 syspos = pos1.PointAlongPath(pos2, pospath );       // amplify percentage by totaldist/this path dist
@@ -330,14 +329,14 @@ namespace EliteDangerousCore.DB
             {
                 for (int i = 1; i < knownsystems.Count; i++)
                 {
-                    double d = knownsystems[i].Distance(knownsystems[i - 1]);
+                    double d = knownsystems[i].Item1.Distance(knownsystems[i - 1].Item1);
 
                     if (distleft<d || (i==knownsystems.Count-1))        // if left, OR last system (allows for some rounding errors on floats)
                     {
                         d = distleft / d;
                         //System.Diagnostics.Debug.WriteLine(percentage + " " + d + " last:" + last.X + " " + last.Y + " " + last.Z + " s:" + s.X + " " + s.Y + " " + s.Z);
-                        name = "WP" + knownsystems[i - 1].ID.ToString() + "-" + "WP" + knownsystems[i].ID.ToString() + "-" + d.ToString("#.00");
-                        syspos = new Point3D(knownsystems[i - 1].X + (knownsystems[i].X - knownsystems[i - 1].X) * d, knownsystems[i - 1].Y + (knownsystems[i].Y - knownsystems[i - 1].Y) * d, knownsystems[i - 1].Z + (knownsystems[i].Z - knownsystems[i - 1].Z) * d);
+                        name = "WP" + knownsystems[i - 1].Item2.ToString() + "-" + "WP" + knownsystems[i].Item2.ToString() + "-" + d.ToString("#.00");
+                        syspos = new Point3D(knownsystems[i - 1].Item1.X + (knownsystems[i].Item1.X - knownsystems[i - 1].Item1.X) * d, knownsystems[i - 1].Item1.Y + (knownsystems[i].Item1.Y - knownsystems[i - 1].Item1.Y) * d, knownsystems[i - 1].Item1.Z + (knownsystems[i].Item1.Z - knownsystems[i - 1].Item1.Z) * d);
                         break;
                     }
 
@@ -374,7 +373,7 @@ namespace EliteDangerousCore.DB
         {
             Point3D currentsystemp3d = P3D(currentsystem);
 
-            List<ISystem> knownsystems = KnownSystemList();
+            List<Tuple<ISystem,int>> knownsystems = KnownSystemList();
 
             if (knownsystems.Count < 1)     // need at least one
                 return null;
@@ -389,8 +388,8 @@ namespace EliteDangerousCore.DB
             {
                 if (i > 0)
                 {
-                    Point3D lastp3d = P3D(knownsystems[i - 1]);
-                    Point3D top3d = P3D(knownsystems[i]);
+                    Point3D lastp3d = P3D(knownsystems[i - 1].Item1);
+                    Point3D top3d = P3D(knownsystems[i].Item1);
 
                     double distbetween = lastp3d.Distance(top3d);
 
@@ -405,7 +404,7 @@ namespace EliteDangerousCore.DB
                     }
                 }
 
-                double disttofirstpoint = currentsystemp3d.Distance(P3D(knownsystems[i]));
+                double disttofirstpoint = currentsystemp3d.Distance(P3D(knownsystems[i].Item1));
 
                 if (disttofirstpoint < closesttodist)
                 {
@@ -427,10 +426,10 @@ namespace EliteDangerousCore.DB
                 //System.Diagnostics.Debug.WriteLine("Lies on line to WP" + interceptendpoint + " " + knownsystems[interceptendpoint].ToString());
             }
 
-            double distto = currentsystemp3d.Distance(P3D(knownsystems[topos]));
-            double cumldist = CumulativeDistance(knownsystems[topos], knownsystems);
+            double distto = currentsystemp3d.Distance(P3D(knownsystems[topos].Item1));
+            double cumldist = CumulativeDistance(knownsystems[topos].Item1, knownsystems);
 
-            return new ClosestInfo(knownsystems[topos], (int)knownsystems[topos].ID, mininterceptdist, cumldist, distto);
+            return new ClosestInfo(knownsystems[topos].Item1, (int)knownsystems[topos].Item2, mininterceptdist, cumldist, distto);
         }
 
         // Given a set of expedition files, update the DB.  Add any new ones, and make sure the EDSM marker is on.

@@ -1101,72 +1101,7 @@ namespace EDDiscovery.UserControls
 
         private void selectCorrectSystemToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<JournalEntry> jents = JournalEntry.GetAll(EDCommander.CurrentCmdrID).OrderBy(j => j.EventTimeUTC).ThenBy(j => j.Id).ToList();
-            int selindex = jents.FindIndex(j => j.Id == rightclicksystem.Journalid);
-            int firstrow = selindex;
-            int lastrow = selindex;
-
-            if (selindex < 0)
-            {
-                // Selected entry is not in history for commander - abort.
-                return;
-            }
-
-            EliteDangerousCore.JournalEvents.JournalLocOrJump journalent = null;
-
-            if (jents[selindex].EventTypeID != JournalTypeEnum.FSDJump)
-            {
-                for (int i = selindex - 1; i >= 0; i--)
-                {
-                    var jent = jents[i];
-                    if (jent.EdsmID != rightclicksystem.System.EDSMID || jent.EventTypeID == JournalTypeEnum.Died)
-                        break;
-                    firstrow = i;
-                    if (jent.EventTypeID == JournalTypeEnum.FSDJump)
-                        break;
-                }
-            }
-
-            for (int i = rightclickrow + 1; i < dataGridViewTravel.RowCount; i++)
-            {
-                var jent = jents[i];
-                if (jent.EdsmID != rightclicksystem.System.EDSMID || jent.EventTypeID == JournalTypeEnum.FSDJump)
-                    break;
-                lastrow = i;
-                if (jent.EventTypeID == JournalTypeEnum.Died)
-                    break;
-            }
-
-            var _jents = jents;
-            jents = new List<JournalEntry>();
-
-            for (int i = firstrow; i <= lastrow; i++)
-            {
-                jents.Add(_jents[i]);
-            }
-
-            journalent = jents.OfType<EliteDangerousCore.JournalEvents.JournalLocOrJump>().FirstOrDefault();
-
-            if (journalent == null)
-            {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Could not find Location or FSDJump entry associated with selected journal entry".Tx(this,"NOLOC"));
-                return;
-            }
-
-            using (Forms.AssignTravelLogSystemForm form = new Forms.AssignTravelLogSystemForm(journalent))
-            {
-                DialogResult result = form.ShowDialog(FindForm());
-                if (result == DialogResult.OK)
-                {
-                    foreach (var jent in jents)
-                    {
-                        jent.SetEDSMId(form.AssignedEdsmId);
-                        jent.Update();
-                    }
-
-                    discoveryform.RefreshHistoryAsync();
-                }
-            }
+            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Removed from EDD - please inform us if this is a problem");
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)

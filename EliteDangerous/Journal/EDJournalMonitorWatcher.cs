@@ -177,7 +177,7 @@ namespace EliteDangerousCore
             {
                 if (nfi.TravelLogUnit.id == 0)
                 {
-                    nfi.TravelLogUnit.type = 3;
+                    nfi.TravelLogUnit.type = TravelLogUnit.JournalType;
                     nfi.TravelLogUnit.Add();
                 }
 
@@ -233,7 +233,7 @@ namespace EliteDangerousCore
         {
 //            System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF", true), "Scanned " + WatcherFolder);
 
-            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & 0xFF) == 3).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, TravelLogUnit> m_travelogUnits = TravelLogUnit.GetAll().Where(t => (t.type & TravelLogUnit.TypeMask) == TravelLogUnit.JournalType).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
 
             // order by file write time so we end up on the last one written
             FileInfo[] allFiles = Directory.EnumerateFiles(WatcherFolder, journalfilematch, SearchOption.AllDirectories).Select(f => new FileInfo(f)).OrderBy(p => p.LastWriteTime).ToArray();
@@ -249,7 +249,7 @@ namespace EliteDangerousCore
                 if (!m_travelogUnits.ContainsKey(reader.TravelLogUnit.Name))
                 {
                     m_travelogUnits[reader.TravelLogUnit.Name] = reader.TravelLogUnit;
-                    reader.TravelLogUnit.type = 3;
+                    reader.TravelLogUnit.type = TravelLogUnit.JournalType;
                     reader.TravelLogUnit.Add();
                 }
 

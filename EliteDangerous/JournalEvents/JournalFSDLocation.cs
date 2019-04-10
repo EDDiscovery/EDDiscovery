@@ -172,7 +172,7 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 EDGovernment government;
-                if (Government != null && Government.StartsWith("$government_") && Enum.TryParse(Government.Substring(12), out government))
+                if (Government != null && Government.StartsWith("$government_") && Enum.TryParse(Government.Substring(12), true, out government))
                 {
                     return government;
                 }
@@ -186,7 +186,7 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 EDEconomy economy;
-                if (Economy != null && Economy.StartsWith("$economy_") && Enum.TryParse(Economy.Substring(9), out economy))
+                if (Economy != null && Economy.StartsWith("$economy_") && Enum.TryParse(Economy.Substring(9), true, out economy))
                 {
                     return economy;
                 }
@@ -216,7 +216,7 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 EDState state;
-                if (FactionState != null && Enum.TryParse(FactionState, out state))
+                if (FactionState != null && Enum.TryParse(FactionState, true, out state))
                 {
                     return state;
                 }
@@ -231,11 +231,22 @@ namespace EliteDangerousCore.JournalEvents
             get
             {
                 EDAllegiance allegiance;
-                if (Allegiance != null && Enum.TryParse(Allegiance, out allegiance))
+                if (Allegiance != null && Enum.TryParse(Allegiance, true, out allegiance))
                 {
                     return allegiance;
                 }
                 return EDAllegiance.Unknown;
+            }
+        }
+
+        public string PowerList
+        {
+            get
+            {
+                if (PowerplayPowers != null && PowerplayPowers.Length > 0)
+                    return string.Join(",", PowerplayPowers);
+                else
+                    return "";
             }
         }
     }

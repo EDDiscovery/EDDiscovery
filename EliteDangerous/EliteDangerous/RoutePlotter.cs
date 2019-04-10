@@ -72,7 +72,7 @@ namespace EliteDangerousCore
                                               curpos.Y + maxrange * travelvectorperly.Y,
                                               curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
 
-                ISystem bestsystem = DB.SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
+                ISystem bestsystem = DB.SystemCache.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
 
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;

@@ -48,8 +48,8 @@ namespace EDDiscovery.UserControls
             for (int i = 0; i < RoutePlotter.metric_options.Length; i++)
                 comboBoxRoutingMetric.Items.Add(RoutePlotter.metric_options[i]);
 
-            textBox_From.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete, true);
-            textBox_To.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete , true);
+            textBox_From.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete, true);
+            textBox_To.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete , true);
 
             textBox_From.Text = SQLiteDBClass.GetSettingString(DbSave("RouteFrom"), "");
             textBox_To.Text = SQLiteDBClass.GetSettingString(DbSave("RouteTo"), "");
@@ -65,7 +65,7 @@ namespace EDDiscovery.UserControls
             bool tostate = SQLiteDBClass.GetSettingBool(DbSave("RouteToState"), false);
 
             int metricvalue = SQLiteDBClass.GetSettingInt(DbSave("RouteMetric"), 0);
-            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemClassDB.metric_waypointdev2;
+            comboBoxRoutingMetric.SelectedIndex = (metricvalue >= 0 && metricvalue < comboBoxRoutingMetric.Items.Count) ? metricvalue : SystemsDB.metric_waypointdev2;
 
             SelectToMaster(tostate);
             UpdateTo(true);
@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {
@@ -504,7 +504,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    ISystem nearest = SystemClassDB.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
 
                     if (nearest != null)
                     {

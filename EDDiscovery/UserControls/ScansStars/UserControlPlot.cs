@@ -246,7 +246,7 @@ namespace EDDiscovery.UserControls
             // Fill with some information for the report                    
             //reportView.AppendText("\nText " + currentSystem.some_value_interesting_to_report);
             reportView.Text += string.Format((Environment.NewLine + "    Visits: {0}").Tx(this,"Vs") ,discoveryform.history.GetVisitsCount(currentSystem.Name, currentSystem.EDSMID));
-            reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).Tx(this,"Nt") ,currentSystem.SystemNote);
+            //removed - system does not have a note. reportView.Text += string.Format((Environment.NewLine + "    Notes: {0}" + Environment.NewLine).Tx(this,"Nt") ,currentSystem.SystemNote);
 
             // If the are any system inside the defined range...
             if (csl.Count() > 0)

@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
                 };
 
                 f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"), null, null);
-                f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete, true);
+                f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 
                 if (res == DialogResult.OK)
@@ -516,16 +516,12 @@ namespace EDDiscovery.UserControls
 
                                     foreach (string system in currentExplorationSet.Systems)
                                     {
-                                        List<long> edsmidlist = SystemClassDB.GetEdsmIdsFromName(system);
-
-                                        if (edsmidlist.Count > 0)
+                                        ISystem sys = SystemCache.FindSystem(system);
+                                        if (sys!=null)
                                         {
-                                            for (int ii = 0; ii < edsmidlist.Count; ii++)
-                                            {
-                                                List<JournalScan> sysscans = EDSMClass.GetBodiesList((int)edsmidlist[ii]);
-                                                if (sysscans != null)
-                                                    scans.AddRange(sysscans);
-                                            }
+                                            List<JournalScan> sysscans = EDSMClass.GetBodiesList(sys.EDSMID);
+                                            if (sysscans != null)
+                                                scans.AddRange(sysscans);
                                         }
                                     }
                                 }

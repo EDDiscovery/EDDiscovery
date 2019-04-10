@@ -296,7 +296,7 @@ namespace EliteDangerousCore
                 LastLogTime = lastlog;
                 TimeZone = tzinfo;
                 TimeZoneOffset = tzoffset;
-                TravelLogUnit.type = 1;
+                TravelLogUnit.type = TravelLogUnit.NetLogType;
                 Is23NetLog = is23netlog;
             }
             return ret;

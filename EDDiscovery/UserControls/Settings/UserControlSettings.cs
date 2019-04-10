@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
             ResetThemeList();
             SetEntryThemeComboBox();
 
-            textBoxHomeSystem.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete,true);
+            textBoxHomeSystem.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
             
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
@@ -470,7 +470,7 @@ namespace EDDiscovery.UserControls
         private void ValidateAndSaveHomeSystem()
         {
             string t = textBoxHomeSystem.Text.Trim();
-            ISystem s = SystemClassDB.GetSystem(t);
+            ISystem s = SystemCache.FindSystem(t);
 
             if (s != null)
             {
@@ -587,12 +587,10 @@ namespace EDDiscovery.UserControls
 
         public static void RemoveSectors(List<int> sectors, Action<string> inform)
         {
-            inform("Removing Names" + Environment.NewLine);
-            SystemClassDB.RemoveGridNames(sectors, inform);     // MUST do first as relies on system grid for info
-            inform("Removing System Information" + Environment.NewLine);
-            SystemClassDB.RemoveGridSystems(sectors, inform);
+            inform("Removing Grids" + Environment.NewLine);
+            SystemsDB.RemoveGridSystems(sectors.ToArray(), inform);     // MUST do first as relies on system grid for info
             inform("Vacuum Database for size" + Environment.NewLine);
-            SystemClassDB.Vacuum();
+            SystemsDB.Vacuum();
         }
 
         private Task taskremovesectors = null;

@@ -52,22 +52,6 @@ namespace EliteDangerousCore
             Xi = int.MinValue;
         }
 
-        public SystemClassBase(string name, double vx, double vy, double vz, long edsmid = 0)
-        {
-            EDSMID = edsmid;
-            Name = name;
-            X = vx; Y = vy; Z = vz;
-            GridID = EliteDangerousCore.DB.GridId.Id(Xi, Zi);
-        }
-
-        public SystemClassBase(string name, int xi, int yi, int zi, long edsmid = 0 , int gridid = -1)
-        {
-            EDSMID = edsmid;
-            Name = name;
-            Xi = xi; Yi = yi; Zi = zi;
-            GridID = gridid == -1 ? EliteDangerousCore.DB.GridId.Id(Xi,Zi) : gridid;
-        }
-
         public SystemClassBase(ISystem sys)
         {
             this.EDSMID = sys.EDSMID;
@@ -176,22 +160,33 @@ namespace EliteDangerousCore
             status = SystemStatusEnum.Unknown;
         }
 
-        public SystemClass(string name, double vx, double vy, double vz) : base( name, vx,vy,vz )
+        public SystemClass(string Name, double vx, double vy, double vz)
         {
+            base.Name = Name;
+            status = SystemStatusEnum.Unknown;
+            X = vx; Y = vy; Z = vz;
+        }
+
+        public SystemClass(string Name, int xi, int yi, int zi, long edsmid, int gridid = -1)
+        {
+            base.Name = Name;
+            Xi = xi; Yi = yi; Zi = zi;
+            EDSMID = edsmid;
+            GridID = gridid == -1 ? EliteDangerousCore.DB.GridId.Id(xi, zi) : gridid;
             status = SystemStatusEnum.Unknown;
         }
 
-        public SystemClass(string name, int xi, int yi, int zi, long edsmid, int gridid = -1) : base(name,xi,yi,zi,edsmid,gridid)
-        {
-            status = SystemStatusEnum.Unknown;
-        }
-
-        public SystemClass(string name, int xi, int yi, int zi, long edsmid,
+        public SystemClass(string Name, int xi, int yi, int zi, long edsmid,
                             long eddbid, int eddbupdateat, long population, string faction,
                             EDGovernment g, EDAllegiance a, EDState s, EDSecurity security,
                             EDEconomy eco, string power, string powerstate, int needspermit,
-                            int gridid = -1, SystemStatusEnum statusv = SystemStatusEnum.Unknown) : base(name, xi, yi, zi, edsmid, gridid)
+                            int gridid = -1, SystemStatusEnum statusv = SystemStatusEnum.Unknown)
         {
+            base.Name = Name;
+            Xi = xi; Yi = yi; Zi = zi;
+            EDSMID = edsmid;
+            GridID = gridid == -1 ? EliteDangerousCore.DB.GridId.Id(xi, zi) : gridid;
+
             EDDBID = eddbid;
             Population = population;
             Faction = faction;
