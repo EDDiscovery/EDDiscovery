@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
             if (plotter.possiblejumps > 100)
             {
                 DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
-                    string.Format(("This will result in a large number ({0})) of jumps" + Environment.NewLine + "Confirm please").Tx(this,"Confirm"), 
+                    string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").Tx(this,"Confirm"), 
                     plotter.possiblejumps), "Warning".Tx(), MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsFrom(out curpos))
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z,100);
 
                     if (nearest != null)
                     {
@@ -504,7 +504,7 @@ namespace EDDiscovery.UserControls
                 Point3D curpos;
                 if (GetCoordsTo(out curpos))
                 {
-                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z);
+                    ISystem nearest = SystemCache.FindNearestSystemTo(curpos.X, curpos.Y, curpos.Z,100);
 
                     if (nearest != null)
                     {

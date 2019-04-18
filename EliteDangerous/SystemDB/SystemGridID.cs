@@ -144,6 +144,51 @@ namespace EliteDangerousCore.DB
         }
 
 
+        public static bool Boundaries(int id, out float left, out float bottom, out float right, out float top)         // given id, return boundaries
+        {
+            left = bottom = right = top = 0;
+
+            if (id >= 0)
+            {
+                int xid = (id % ZMult);
+                int zid = (id / ZMult);
+
+                if (xid < GridXRange && zid < GridZRange)
+                {
+                    for (int i = 0; i < compresstablex.Length; i++)
+                    {
+                        if (compresstablex[i] == xid)
+                        {
+                            left = i * GridSize + xleft;
+
+                            while (i < compresstablex.Length && compresstablex[i] == xid)
+                                i++;
+
+                            right = i * GridSize + xleft;
+                            break;
+                        }
+                    }
+
+                    for (int i = 0; i < compresstablez.Length; i++)
+                    {
+                        if (compresstablez[i] == zid)
+                        {
+                            bottom = i * GridSize + zbot;
+
+                            while (i < compresstablez.Length && compresstablez[i] == zid)
+                                i++;
+
+                            top = i * GridSize + zbot;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public static int[] XLines(int endentry)            // fill in the LY values, plus an end stop one
         {
             int[] xlines = new int[GridXRange + 1];

@@ -131,7 +131,10 @@ namespace EliteDangerousCore.DB
             }
         }
 
-        // use the DB but cache the returns for future use
+        //
+        // Generally, cache is not used below, but systems are added to the cache to speed up above searches
+        //
+
         static public List<ISystem> FindSystemWildcard(string name, int limit = int.MaxValue, SQLiteConnectionSystem cn = null)
         {
             bool owncn = cn == null;
@@ -151,7 +154,6 @@ namespace EliteDangerousCore.DB
             return list;
         }
 
-        // use the DB but cache the returns for future use
         public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, double x, double y, double z,
                                                     int maxitems,
                                                     double mindist, double maxdist, bool spherical, SQLiteConnectionSystem cn = null)
@@ -173,30 +175,18 @@ namespace EliteDangerousCore.DB
                 cn.Dispose();
         }
 
-        // use the DB but cache the returns for future use
-        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance = 1000, SQLiteConnectionSystem cn = null)
-        {
-            bool owncn = cn == null;
-            if (owncn)
-                cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
-
-            ISystem s = DB.SystemsDB.FindNearestSystemTo(x, y, z, cn, maxdistance);
-            if (s != null)
-                AddToCache(s);
-
-            if (owncn)
-                cn.Dispose();
-            return s;
-        }
-
-        // use the DB but cache the returns for future use
         public static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn = null)
         {
+            return FindNearestSystemTo(x, y, z, 0.125, cn);
+        }
+
+        public static ISystem FindNearestSystemTo(double x, double y, double z, double maxdistance, SQLiteConnectionSystem cn = null)
+        {
             bool owncn = cn == null;
             if (owncn)
                 cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
 
-            ISystem s = DB.SystemsDB.GetSystemByPosition(x, y, z, cn);
+            ISystem s = DB.SystemsDB.GetSystemByPosition(x, y, z, cn, maxdistance);
             if (s != null)
                 AddToCache(s);
 
@@ -206,16 +196,18 @@ namespace EliteDangerousCore.DB
         }
 
         public static ISystem GetSystemNearestTo(Point3D currentpos,
-                                      Point3D wantedpos,
-                                      double maxfromcurpos,
-                                      double maxfromwanted,
-                                      int routemethod , SQLiteConnectionSystem cn = null)
+                                                 Point3D wantedpos,
+                                                 double maxfromcurpos,
+                                                 double maxfromwanted,
+                                                 int routemethod , 
+                                                 int limitto, 
+                                                 SQLiteConnectionSystem cn = null)
         {
             bool owncn = cn == null;
             if (owncn)
                 cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
 
-            ISystem sys = DB.SystemsDB.GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, cn, (s) => AddToCache(s));
+            ISystem sys = DB.SystemsDB.GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, cn, (s) => AddToCache(s), limitto);
 
             if (owncn)
                 cn.Dispose();
@@ -271,10 +263,17 @@ namespace EliteDangerousCore.DB
             if (input.HasChars())
             {
                 List<ISystem> systems = DB.SystemsDB.FindStarWildcard(input, MaximumStars);
-                foreach( var i in systems)
+                foreach (var i in systems)
                 {
                     AddToCache(i);
                     ret.Add(i.Name);
+                }
+
+                List<ISystem> aliases = DB.SystemsDB.FindAliasWildcard(input);
+                foreach (var i in aliases)
+                {
+                    AddToCache(i);
+                    ret.Add(i.Name);      
                 }
             }
 

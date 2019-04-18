@@ -17,8 +17,9 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Data.Common;
-using System.Data;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System;
 
 namespace EliteDangerousCore.DB
 {
@@ -133,6 +134,37 @@ namespace EliteDangerousCore.DB
             selectCmd.Parameters[0].Value = edsmid;
             selectCmd.Parameters[1].Value = name;
             return selectCmd.ExecuteScalar<long>(-1);
+        }
+
+        public static List<ISystem> FindAliasWildcard(string name)
+        {
+            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
+            {
+                return FindAliasWildcard(name, cn);
+            }
+        }
+
+        public static List<ISystem> FindAliasWildcard(string name, SQLiteConnectionSystem cn)
+        {
+            List<ISystem> ret = new List<ISystem>();
+
+            using (DbCommand selectSysCmd = cn.CreateSelect("Systems s", MakeSystemQueryEDDB,
+                                                "s.edsmid IN (Select edsmid_mergedto FROM Aliases WHERE name like @p1)",
+                                                new Object[] { name+"%" },
+                                                joinlist: MakeSystemQueryEDDBJoinList))
+            {
+                //System.Diagnostics.Debug.WriteLine( cn.ExplainQueryPlanString(selectSysCmd));
+
+                using (DbDataReader reader = selectSysCmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ret.Add(MakeSystem(reader));
+                    }
+                }
+            }
+
+            return ret;
         }
     }
 }

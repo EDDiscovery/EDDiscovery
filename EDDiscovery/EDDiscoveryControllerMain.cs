@@ -139,7 +139,7 @@ namespace EDDiscovery
                 FirstChanceExceptionCatcher.RegisterFirstChanceExceptionHandler();
             }
 
-            msg.Invoke("Scanning Memory Banks");
+            msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
             SQLiteConnectionUser.Initialize();
@@ -155,10 +155,10 @@ namespace EDDiscovery
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
-            msg.Invoke("Decoding Symbols");
+            msg.Invoke("Loading Icons");
             Icons.IconSet.ResetIcons();     // start with a clean slate loaded up from default icons
 
-            msg.Invoke("Locating Crew Members");
+            msg.Invoke("Loading Configuration");
             EDDConfig.Instance.Update(false);
             EDDProfiles.Instance.LoadProfiles();
 

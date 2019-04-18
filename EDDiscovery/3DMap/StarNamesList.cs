@@ -272,7 +272,7 @@ namespace EDDiscovery
                                    (_nameson && ((sys.nametexture == null && sys.newnametexture == null) ));
                             
                             painted++;
-                            System.Diagnostics.Debug.WriteLine("In view there " + sys.name + " draw " + draw);
+                            //System.Diagnostics.Debug.WriteLine("In view there " + sys.name + " draw " + draw);
                         }
                         else if (painted < maxstars)
                         {
@@ -286,7 +286,7 @@ namespace EDDiscovery
                                 draw = true;
                                 painted++;
 
-                                System.Diagnostics.Debug.WriteLine("Found " + inview.position);
+                                //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
                                 //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                                 //res += "N";
                             }

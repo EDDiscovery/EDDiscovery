@@ -132,7 +132,7 @@ namespace EDDiscovery
             try
             {
                 EDDMainForm = new EDDiscoveryForm();
-                SetLoadingMsg("Checking Ship Systems");
+                SetLoadingMsg("Starting EDD");
 
                 EDDiscoveryController.Initialize(SetLoadingMsg);   // this loads up the options
 
@@ -143,7 +143,7 @@ namespace EDDiscovery
 
                 EDDMainForm.Init(SetLoadingMsg);    // call the init function, which will initialize the eddiscovery form
 
-                SetLoadingMsg("Establishing Telepresence");
+                SetLoadingMsg("Starting Program");
                 SwitchContext(EDDMainForm);         // Ignition, and liftoff!
             }
             catch (Exception ex)

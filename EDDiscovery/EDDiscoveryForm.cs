@@ -155,7 +155,7 @@ namespace EDDiscovery
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");
 
-            msg.Invoke("Modulating Shields");
+            msg.Invoke("Loading Translations");
 
             if (EDDOptions.Instance.ResetLanguage)
                 EDDConfig.Instance.Language = "None";
@@ -184,7 +184,7 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
-            msg.Invoke("Repairing Canopy");
+            msg.Invoke("Loading Themes");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
@@ -256,13 +256,15 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Audio");
 
-            msg.Invoke("Activating Sensors");
+            msg.Invoke("Loading Action Packs");
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             actioncontroller.ReLoad();          // load system up here
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Theming");
+
+            msg.Invoke("Applying Themes");
 
             ApplyTheme();
 

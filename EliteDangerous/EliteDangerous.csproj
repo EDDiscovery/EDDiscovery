@@ -209,7 +209,10 @@
     <Compile Include="SystemDB\SystemsDBEDSMRemove.cs" />
     <Compile Include="SystemDB\SystemsDBEDSMStore.cs" />
     <Compile Include="SystemDB\SystemsDBEDSMSystemAliases.cs" />
-    <Compile Include="SystemDB\SystemsDBGet.cs" />
+    <Compile Include="SystemDB\SystemsDBGetByDistance.cs" />
+    <Compile Include="SystemDB\SystemsDBGetByGrid.cs" />
+    <Compile Include="SystemDB\SystemsDBGetLists.cs" />
+    <Compile Include="SystemDB\SystemsDBGetStars.cs" />
     <Compile Include="UIEvents\UICommand.cs" />
     <Compile Include="UIEvents\UIMusic.cs" />
     <Compile Include="UIEvents\UIOverallStatus.cs" />
