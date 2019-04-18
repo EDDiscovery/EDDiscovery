@@ -30,7 +30,7 @@ namespace EDDiscovery
         private class SystemsSyncState
         {
             public bool perform_edsm_fullsync = false;
-            public bool perform_eddb_sync = false;
+            public bool perform_eddb_edsmalias_sync = false;
 
             public long edsm_fullsync_count = 0;
             public long edsm_updatesync_count = 0;
@@ -48,13 +48,13 @@ namespace EDDiscovery
 
         private int resyncEDSMEDDBRequestedFlag = 0;            // flag gets set during EDSM refresh, cleared at end, interlocked exchange during request..
 
-        public bool AsyncPerformSync(bool eddbsync = false, bool edsmfullsync = false)      // UI thread.
+        public bool AsyncPerformSync(bool eddb_edsmalias_sync = false, bool edsmfullsync = false)      // UI thread.
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (Interlocked.CompareExchange(ref resyncEDSMEDDBRequestedFlag, 1, 0) == 0)
             {
-                syncstate.perform_eddb_sync |= eddbsync;
+                syncstate.perform_eddb_edsmalias_sync |= eddb_edsmalias_sync;
                 syncstate.perform_edsm_fullsync |= edsmfullsync;
                 resyncRequestedEvent.Set();
                 return true;
@@ -80,11 +80,11 @@ namespace EDDiscovery
                 DateTime eddbdatetime = SQLiteConnectionSystem.GetLastEDDBDownloadTime();
 
                 if (DateTime.UtcNow.Subtract(eddbdatetime).TotalDays > 6.5)     // Get EDDB data once every week.
-                    syncstate.perform_eddb_sync = true;
+                    syncstate.perform_eddb_edsmalias_sync = true;
 
-                if (syncstate.perform_eddb_sync || syncstate.perform_edsm_fullsync)
+                if (syncstate.perform_eddb_edsmalias_sync || syncstate.perform_edsm_fullsync)
                 {
-                    string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
+                    string databases = (syncstate.perform_edsm_fullsync && syncstate.perform_eddb_edsmalias_sync) ? "EDSM and EDDB" : ((syncstate.perform_edsm_fullsync) ? "EDSM" : "EDDB");
 
                     LogLine(string.Format("Full synchronisation to the {0} databases required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
@@ -116,7 +116,7 @@ namespace EDDiscovery
 
                 syncstate.ClearCounters();
 
-                if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_sync)
+                if (syncstate.perform_edsm_fullsync || syncstate.perform_eddb_edsmalias_sync)
                 {
                     if (syncstate.perform_edsm_fullsync && !PendingClose)
                     {
@@ -151,22 +151,30 @@ namespace EDDiscovery
                     {
                         try
                         {
-                            string eddbsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddbsystems.json");
+                            EDSMClass edsm = new EDSMClass();
+                            string jsonhidden = edsm.GetHiddenSystems();
 
-                            bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, eddbsystems, false, out bool newfile);
-
-                            syncstate.perform_eddb_sync = false;
-
-                            if (success)
+                            if (jsonhidden != null)
                             {
-                                syncstate.eddb_sync_count = SystemsDB.ParseEDDBJSONFile(eddbsystems, () => PendingClose);
+                                SystemsDB.ParseAliasString(jsonhidden);
 
-                                if (syncstate.eddb_sync_count < 0)      // on a cancel or error
-                                    return;
+                                string eddbsystems = Path.Combine(EliteConfigInstance.InstanceOptions.AppDataDirectory, "eddbsystems.json");
 
-                                SQLiteConnectionSystem.SetLastEDDBDownloadTime();
+                                bool success = BaseUtils.DownloadFile.HTTPDownloadFile(EliteConfigInstance.InstanceConfig.EDDBSystemsURL, eddbsystems, false, out bool newfile);
 
-                                BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
+                                syncstate.perform_eddb_edsmalias_sync = false;
+
+                                if (success)
+                                {
+                                    syncstate.eddb_sync_count = SystemsDB.ParseEDDBJSONFile(eddbsystems, () => PendingClose);
+
+                                    if (syncstate.eddb_sync_count < 0)      // on a cancel or error
+                                        return;
+
+                                    SQLiteConnectionSystem.SetLastEDDBDownloadTime();
+
+                                    BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
+                                }
                             }
                         }
                         catch (Exception ex)

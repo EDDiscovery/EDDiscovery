@@ -31,6 +31,12 @@ namespace EliteDangerousCore.DB
                 return ParseAlias(sr);
         }
 
+        public static long ParseAliasString(string json)
+        {
+            using (StringReader sr = new StringReader(json))
+                return ParseAlias(sr);
+        }
+
         public static long ParseAlias(TextReader sr)
         {
             using (JsonTextReader jr = new JsonTextReader(sr))
@@ -41,14 +47,16 @@ namespace EliteDangerousCore.DB
         {
             long updates = 0;
 
+            System.Diagnostics.Debug.WriteLine("Update aliases");
+
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer))  // open the db
             {
                 using (DbTransaction txn = cn.BeginTransaction())
                 {
                     DbCommand selectCmd = cn.CreateSelect("Aliases", "edsmid", "edsmid = @edsmid", inparas: new string[] { "edsmid:int64" }, limit: "1", tx: txn);   // 1 return matching ID
-
                     DbCommand deletesystemcmd = cn.CreateDelete("Systems", "edsmid=@edsmid", paras: new string[] { "edsmid:int64" }, tx: txn);
                     DbCommand insertCmd = cn.CreateReplace("Aliases", paras: new string[] { "edsmid:int64", "edsmid_mergedto:int64", "name:string" }, tx: txn);
+
                     try
                     {       // protect against json exceptions
                         while (true)
@@ -89,7 +97,7 @@ namespace EliteDangerousCore.DB
                                         insertCmd.Parameters[1].Value = mergedto;
                                         insertCmd.Parameters[2].Value = name;
                                         insertCmd.ExecuteNonQuery();
-                                        System.Diagnostics.Debug.WriteLine("Alias " + edsmid + " -> " + mergedto + " " + name);
+                                        //System.Diagnostics.Debug.WriteLine("Alias " + edsmid + " -> " + mergedto + " " + name);
                                         updates++;
                                     }
                                 }

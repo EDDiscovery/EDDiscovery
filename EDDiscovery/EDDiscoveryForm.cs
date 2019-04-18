@@ -873,7 +873,7 @@ namespace EDDiscovery
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
-            else if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
+            else if (!Controller.AsyncPerformSync(eddb_edsmalias_sync: true))      // we want it to have run, to completion, to allow another go..
                 ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
         }
 

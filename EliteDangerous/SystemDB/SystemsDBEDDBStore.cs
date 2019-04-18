@@ -47,10 +47,10 @@ namespace EliteDangerousCore.DB
 
             while (!eof)
             {
+                SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter);
+
                 SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>();
                 tl.OpenWriter();
-
-                SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter);
 
                 DbTransaction txn = cn.BeginTransaction();
 
@@ -134,6 +134,8 @@ namespace EliteDangerousCore.DB
                 }
 
                 txn.Commit();
+                txn.Dispose();
+                selectCmd.Dispose();
                 replaceCmd.Dispose();
                 tl.Dispose();
                 cn.Dispose();
