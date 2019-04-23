@@ -451,16 +451,14 @@ namespace EliteDangerousCore
 
                     cmd.CommandText += " Order By EventTime ASC";
 
-                    DataSet ds = cn.SQLQueryText(cmd);
-
-                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        return list;
-
-                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
-                        sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
-                        list.Add(sys);
+                        while (reader.Read())
+                        {
+                            JournalEntry sys = JournalEntry.CreateJournalEntry(reader);
+                            sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
+                            list.Add(sys);
+                        }
                     }
 
                     return list;
