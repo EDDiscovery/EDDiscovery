@@ -163,10 +163,31 @@ namespace EliteDangerousCore.EDDN
                     },
                 }
             },
+            ["Conflicts"] = new JArray
+            {
+                new JObject
+                {
+                    ["WarType"] = true,
+                    ["Status"] = true,
+                    ["Faction1"] = new JObject
+                    {
+                        ["Name"] = true,
+                        ["Stake"] = true,
+                        ["WonDays"] = true
+                    },
+                    ["Faction2"] = new JObject
+                    {
+                        ["Name"] = true,
+                        ["Stake"] = true,
+                        ["WonDays"] = true
+                    },
+                }
+            }
         };
 
         private static readonly JObject AllowedFieldsFSDJump = new JObject(AllowedFieldsLocJump)
         {
+            ["Body"] = true,
         };
 
         private static readonly JObject AllowedFieldsLocation = new JObject(AllowedFieldsLocJump)
@@ -178,6 +199,7 @@ namespace EliteDangerousCore.EDDN
             ["MarketID"] = true,
             ["StationName"] = true,
             ["StationType"] = true,
+            ["DistFromStarLS"] = true,
             ["StationFaction"] = new JObject
             {
                 ["Name"] = true,
@@ -260,6 +282,7 @@ namespace EliteDangerousCore.EDDN
             ["StellarMass"] = true,
             ["AbsoluteMagnitude"] = true,
             ["Luminosity"] = true,
+            ["Subclass"] = true,
             // Planet
             ["PlanetClass"] = true,
             ["TerraformState"] = true,
