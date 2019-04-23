@@ -752,6 +752,8 @@ namespace EliteDangerousCore.EDDN
 
 
             message = RemoveCommonKeys(message);
+            message.Remove("WasDiscovered");
+            message.Remove("WasMapped");
 
             message = FilterJournalEvent(message, AllowedFieldsScan);
 
