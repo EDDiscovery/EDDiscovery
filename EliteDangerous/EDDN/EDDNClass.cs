@@ -188,6 +188,8 @@ namespace EliteDangerousCore.EDDN
         private static readonly JObject AllowedFieldsFSDJump = new JObject(AllowedFieldsLocJump)
         {
             ["Body"] = true,
+            ["BodyID"] = true,
+            ["BodyType"] = true,
         };
 
         private static readonly JObject AllowedFieldsLocation = new JObject(AllowedFieldsLocJump)

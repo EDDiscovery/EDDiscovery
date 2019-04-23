@@ -412,6 +412,8 @@ namespace EliteDangerousCore.JournalEvents
             BoostUsed = evt["BoostUsed"].Bool();
             BoostValue = evt["BoostUsed"].Int();
             Body = evt["Body"].StrNull();
+            BodyID = evt["BodyID"].IntNull();
+            BodyType = evt["BodyType"].StrNull();
 
             JToken jm = evt["EDDMapColor"];
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
@@ -436,6 +438,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
         public bool EDSMFirstDiscover { get; set; }
         public string Body { get; set; }
+        public int? BodyID { get; set; }
+        public string BodyType { get; set; }
 
         public override string SummaryName(ISystem sys) { return string.Format("Jump to {0}".Tx(this), StarSystem); }
 
