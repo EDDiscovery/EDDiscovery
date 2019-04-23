@@ -40,7 +40,7 @@ namespace EliteDangerousCore.DB
             this.Systems = systems.ToList();
         }
 
-        public SavedRouteClass(DataRow dr, DataRow[] syslist)
+        public SavedRouteClass(DbDataReader dr, List<string> syslist)
         {
             this.Id = (long)dr["id"];
             this.Name = (string)dr["name"];
@@ -49,7 +49,7 @@ namespace EliteDangerousCore.DB
             if (dr["end"] != DBNull.Value)
                 this.EndDate = ((DateTime)dr["end"]);
                
-            this.Systems = syslist.Select(s => (string)s["systemname"]).ToList();
+            this.Systems = syslist;
             int statusbits = (int)dr["Status"];
             this.Deleted = (statusbits & 1) != 0;
             this.EDSM = (statusbits & 2) != 0;
@@ -219,28 +219,35 @@ namespace EliteDangerousCore.DB
             {
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
-                    using (DbCommand cmd1 = cn.CreateCommand("select * from routes_expeditions"))
+                    Dictionary<int, List<string>> routesystems = new Dictionary<int, List<string>>();
+
+                    using (DbCommand cmd = cn.CreateCommand("SELECT routeid, systemname FROM route_systems ORDER BY id ASC"))
                     {
-                        DataSet ds1 = cn.SQLQueryText( cmd1);
-
-                        if (ds1.Tables.Count > 0 && ds1.Tables[0].Rows.Count > 0)
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            using (DbCommand cmd2 = cn.CreateCommand("select * from route_systems"))
+                            while (rdr.Read())
                             {
-                                DataSet ds2 = cn.SQLQueryText( cmd2);
-
-                                foreach (DataRow dr in ds1.Tables[0].Rows)
+                                int routeid = (int)(long)rdr[0];
+                                string sysname = (string)rdr[1];
+                                if (!routesystems.ContainsKey(routeid))
                                 {
-                                    DataRow[] syslist = new DataRow[0];
-                                    if (ds2.Tables.Count != 0)
-                                    {
-                                        syslist = ds2.Tables[0].Select(String.Format("routeid = {0}", dr["id"]), "id ASC");
-                                    }
-
-                                    SavedRouteClass sys = new SavedRouteClass(dr, syslist);
-                                    retVal.Add(sys);
+                                    routesystems[routeid] = new List<string>();
                                 }
+                                routesystems[routeid].Add(sysname);
+                            }
+                        }
+                    }
 
+                    using (DbCommand cmd = cn.CreateCommand("SELECT id, name, start, end, Status FROM routes_expeditions"))
+                    {
+                        using (DbDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                int routeid = (int)(long)rdr[0];
+                                List<string> syslist = routesystems.ContainsKey(routeid) ? routesystems[routeid] : new List<string>();
+                                SavedRouteClass sys = new SavedRouteClass(rdr, syslist);
+                                retVal.Add(sys);
                             }
                         }
                     }

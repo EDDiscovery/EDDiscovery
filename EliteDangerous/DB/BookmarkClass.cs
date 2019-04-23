@@ -201,7 +201,7 @@ namespace EliteDangerousCore.DB
         {
         }
 
-        public BookmarkClass(DataRow dr)
+        public BookmarkClass(DbDataReader dr)
         {
             id = (long)dr["id"];
             if (System.DBNull.Value != dr["StarName"])
@@ -372,27 +372,30 @@ namespace EliteDangerousCore.DB
 
             try
             {
+                List<BookmarkClass> bookmarks = new List<BookmarkClass>();
+
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {
-                        DataSet ds = null;
-
-                        ds = cn.SQLQueryText( cmd);
-
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            return false;
+                            bookmarks.Add(new BookmarkClass(rdr));
                         }
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            BookmarkClass bc = new BookmarkClass(dr);
-                            gbl.globalbookmarks.Add(bc);
-                        }
-
-                        return true;
                     }
+                }
+
+                if (bookmarks.Count != 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    foreach (var bc in bookmarks)
+                    {
+                        gbl.globalbookmarks.Add(bc);
+                    }
+                    return true;
                 }
             }
             catch( Exception ex)

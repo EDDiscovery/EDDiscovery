@@ -41,7 +41,7 @@ namespace EliteDangerousCore.DB
         {
         }
 
-        public CaptainsLogClass(DataRow dr)
+        public CaptainsLogClass(DbDataReader dr)
         {
             ID = (long)dr["Id"];
             Commander = (int)(long)dr["Commander"];
@@ -179,22 +179,29 @@ namespace EliteDangerousCore.DB
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from CaptainsLog"))
                     {
-                        DataSet ds = null;
+                        List<CaptainsLogClass> logs = new List<CaptainsLogClass>();
 
-                        ds = cn.SQLQueryText(cmd);
+                        using (DbDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                logs.Add(new CaptainsLogClass(rdr));
+                            }
+                        }
 
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        if (logs.Count == 0)
                         {
                             return false;
                         }
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        else
                         {
-                            CaptainsLogClass bc = new CaptainsLogClass(dr);
-                            gbl.globallog.Add(bc);
-                        }
+                            foreach (var bc in logs)
+                            {
+                                gbl.globallog.Add(bc);
+                            }
 
-                        return true;
+                            return true;
+                        }
                     }
                 }
             }
