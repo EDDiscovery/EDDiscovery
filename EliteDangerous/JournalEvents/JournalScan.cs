@@ -43,8 +43,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public List<BodyParent> Parents { get; set; }
-        public bool? WasDiscovered { get; set; }                    // direct, 3.4
-        public bool? WasMapped { get; set; }                        // direct, 3.4
+        public bool? WasDiscovered { get; set; }                    // direct, 3.4, indicates whether the body has already been discovered
+        public bool? WasMapped { get; set; }                        // direct, 3.4, indicates whether the body has already been mapped
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc

@@ -268,6 +268,8 @@ namespace EliteDangerousCore.EDDN
                     ["Ring"] = true
                 }
             },
+            ["WasDiscovered"] = true,
+            ["WasMapped"] = true,
             // Star / Planet
             ["RotationPeriod"] = true,
             ["OrbitalPeriod"] = true,
@@ -752,8 +754,6 @@ namespace EliteDangerousCore.EDDN
 
 
             message = RemoveCommonKeys(message);
-            message.Remove("WasDiscovered");
-            message.Remove("WasMapped");
 
             message = FilterJournalEvent(message, AllowedFieldsScan);
 
