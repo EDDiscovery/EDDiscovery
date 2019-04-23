@@ -50,6 +50,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public FactionInformation[] Factions { get; set; }
 
+        public ConflictInfo[] Conflicts { get; set; }
+
         public bool HasCoordinate { get { return !float.IsNaN(StarPos.X); } }
 
         public bool IsTrainingEvent { get; private set; } // True if detected to be in training
@@ -83,6 +85,21 @@ namespace EliteDangerousCore.JournalEvents
         public class ActiveStatesInfo       // Howard info via discord .. just state
         {
             public string State { get; set; }
+        }
+
+        public class ConflictFactionInfo   // 3.4
+        {
+            public string Name { get; set; }
+            public string Stake { get; set; }
+            public int WonDays { get; set; }
+        }
+
+        public class ConflictInfo   // 3.4
+        {
+            public string WarType { get; set; }
+            public string Status { get; set; }
+            public ConflictFactionInfo Faction1 { get; set; }
+            public ConflictFactionInfo Faction2 { get; set; }
         }
 
         protected JournalLocOrJump(DateTime utc, ISystem sys, JournalTypeEnum jtype, bool edsmsynced ) : base(utc, jtype, edsmsynced)
@@ -159,6 +176,8 @@ namespace EliteDangerousCore.JournalEvents
 
             PowerplayState = evt["PowerplayState"].Str();            // NO evidence
             PowerplayPowers = evt["Powers"]?.ToObjectProtected<string[]>();
+
+            Conflicts = evt["Conflicts"]?.ToObjectProtected<ConflictInfo[]>();   // 3.4
 
             // Allegiance without Faction only occurs in Training
             if (!String.IsNullOrEmpty(Allegiance) && Faction == null && EventTimeUTC <= ED_No_Training_Timestamp && (EventTimeUTC <= ED_No_Faction_Timestamp || EventTypeID != JournalTypeEnum.FSDJump || StarSystem == "Eranin"))
@@ -255,6 +274,7 @@ namespace EliteDangerousCore.JournalEvents
             Body = evt["Body"].Str();
             BodyID = evt["BodyID"].IntNull();
             BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
+            DistFromStarLS = evt["DistFromStarLS"].DoubleNull();
 
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
@@ -287,6 +307,7 @@ namespace EliteDangerousCore.JournalEvents
         public int? BodyID { get; set; }
         public string BodyType { get; set; }
         public string BodyDesignation { get; set; }
+        public double? DistFromStarLS { get; set; }
 
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
@@ -390,6 +411,7 @@ namespace EliteDangerousCore.JournalEvents
             FuelLevel = evt["FuelLevel"].Double();
             BoostUsed = evt["BoostUsed"].Bool();
             BoostValue = evt["BoostUsed"].Int();
+            Body = evt["Body"].StrNull();
 
             JToken jm = evt["EDDMapColor"];
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);
@@ -413,6 +435,7 @@ namespace EliteDangerousCore.JournalEvents
         public int MapColor { get; set; }
         public bool RealJournalEvent { get; private set; } // True if real ED 2.2+ journal event and not pre 2.2 imported.
         public bool EDSMFirstDiscover { get; set; }
+        public string Body { get; set; }
 
         public override string SummaryName(ISystem sys) { return string.Format("Jump to {0}".Tx(this), StarSystem); }
 

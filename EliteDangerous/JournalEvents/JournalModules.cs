@@ -38,6 +38,17 @@ namespace EliteDangerousCore.JournalEvents
             ModulesValue = evt["ModulesValue"].LongNull();
             Rebuy = evt["Rebuy"].LongNull();
             Hot = evt["Hot"].BoolNull();    // 3.3
+            UnladenMass = evt["UnladenMass"].DoubleNull(); // 3.4
+            CargoCapacity = evt["CargoCapacity"].IntNull(); // 3.4
+            MaxJumpRange = evt["MaxJumpRange"].DoubleNull(); // 3.4
+
+            var fuelcap = evt["FuelCapacity"] as JObject; // 3.4
+
+            if (fuelcap != null)
+            {
+                MainFuelCapacity = fuelcap["Main"].DoubleNull();
+                ReserveFuelCapacity = fuelcap["Reserve"].DoubleNull();
+            }
 
             ShipModules = new List<ShipModule>();
 
@@ -86,6 +97,11 @@ namespace EliteDangerousCore.JournalEvents
         public long? ModulesValue { get; set; }   //3.0
         public long? Rebuy { get; set; }   //3.0
         public bool? Hot { get; set; }   //3.3
+        public double? UnladenMass { get; set; }   // 3.4
+        public double? MainFuelCapacity { get; set; }   // 3.4
+        public double? ReserveFuelCapacity { get; set; }   // 3.4
+        public int? CargoCapacity { get; set; }   // 3.4
+        public double? MaxJumpRange { get; set; }   // 3.4
 
         public List<ShipModule> ShipModules;
 

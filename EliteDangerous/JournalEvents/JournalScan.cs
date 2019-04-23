@@ -43,6 +43,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public List<BodyParent> Parents { get; set; }
+        public bool? WasDiscovered { get; set; }                    // direct, 3.4
+        public bool? WasMapped { get; set; }                        // direct, 3.4
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
@@ -75,6 +77,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? nOrbitalPeriodDays { get; set; }
         public double? nAxialTilt { get; set; }                     // direct, radians
         public double? nAxialTiltDeg { get; set; }      
+        public int? StarSubclass { get; set; }                      // star Subclass, direct, 3.4
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -298,6 +301,7 @@ namespace EliteDangerousCore.JournalEvents
             if (IsStar)
             {
                 StarTypeID = Bodies.StarStr2Enum(StarType);
+                StarSubclass = evt["Subclass"].IntNull();
 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
                 {

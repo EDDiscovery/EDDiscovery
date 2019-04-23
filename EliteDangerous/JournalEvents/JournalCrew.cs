@@ -95,9 +95,11 @@ namespace EliteDangerousCore.JournalEvents
         public JournalCrewLaunchFighter(JObject evt) : base(evt, JournalTypeEnum.CrewLaunchFighter)
         {
             Crew = evt["Crew"].Str();
+            ID = evt["ID"].IntNull();
 
         }
         public string Crew { get; set; }
+        public int? ID { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {

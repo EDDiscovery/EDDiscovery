@@ -21,8 +21,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.HeatDamage)]
     public class JournalHeatDamage : JournalEntry
     {
+        public int? ID { get; set; }
+
         public JournalHeatDamage(JObject evt ) : base(evt, JournalTypeEnum.HeatDamage)
         {
+            ID = evt["ID"].IntNull();
         }
 
         public override void FillInformation(out string info, out string detailed) 
