@@ -385,7 +385,7 @@ namespace EliteDangerousCore.DB
                     }
                 }
 
-                if (bookmarks.Count != 0)
+                if (bookmarks.Count == 0)
                 {
                     return false;
                 }
