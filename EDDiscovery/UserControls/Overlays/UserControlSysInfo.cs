@@ -533,7 +533,6 @@ namespace EDDiscovery.UserControls
         private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, BitSelSkinny);
-            UpdateSkinny();
         }
 
         void ToggleSelection(Object sender, int bit)
@@ -953,32 +952,42 @@ namespace EDDiscovery.UserControls
         public override Color ColorTransparency { get { return Color.Green; } }
         public override void SetTransparency(bool on, Color curcol)
         {
-            this.BackColor = curcol;
-            UpdateSkinny();
-        }
+            BackColor = curcol;
+            extPanelScroll.BackColor = curcol;
+            bool skinny = (Selection & (1 << BitSelSkinny)) != 0;
 
-        void UpdateSkinny()
-        { 
-            if (IsTransparent && (Selection & (1<<BitSelSkinny))!=0)
+            if ( !skinny )
+                EDDTheme.Instance.ApplyToControls(extPanelScroll);
+
+            foreach (Control c in extPanelScroll.Controls)
             {
-                foreach (Control c in Controls)
+                if (c is ExtendedControls.ExtTextBox)
                 {
-                    if (c is ExtendedControls.ExtTextBox)
+                    var tb = c as ExtendedControls.ExtTextBox;
+                    tb.BackColor = curcol;
+                    tb.ControlBackground = curcol;
+                    if (skinny)
                     {
-                        ExtendedControls.ExtTextBox b = c as ExtendedControls.ExtTextBox;
-                        b.ControlBackground = Color.Red;
-                        b.BorderStyle = BorderStyle.None;
-                        b.BorderColor = Color.Transparent;
+                        tb.BorderStyle = BorderStyle.None;
+                        tb.BorderColor = Color.Transparent;
                     }
                 }
+                else if (c is ExtendedControls.ExtRichTextBox)
+                {
+                    var tb = c as ExtendedControls.ExtRichTextBox;
+                    tb.TextBoxBackColor = curcol;
+                    if (skinny)
+                    {
+                        tb.BorderStyle = BorderStyle.None;
+                        tb.BorderColor = Color.Transparent;
+                    }
+                }
+                else
+                    c.BackColor = curcol;
             }
-            else
-                EDDTheme.Instance.ApplyToControls(this);
-
         }
 
         #endregion
-
-        
+       
     }
 }
