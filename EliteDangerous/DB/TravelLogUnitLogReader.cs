@@ -78,6 +78,15 @@ namespace EliteDangerousCore
                     // Only look for an end-of-line if not already at end of buffer
                     if (bufferpos < bufferlen)
                     {
+                        // Return false if the OS gave us nulls
+                        if (buffer[bufferpos] == 0)
+                        {
+                            System.Diagnostics.Trace.WriteLine($"Read null bytes from journal {this.FileName}");
+                            buffer = null;
+                            line = default(T);
+                            return false;
+                        }
+
                         // Find the next end-of-line
                         endlinepos = Array.IndexOf(buffer, (byte)'\n', bufferpos, bufferlen - bufferpos) - bufferpos;
 
@@ -127,9 +136,21 @@ namespace EliteDangerousCore
                         Array.Resize(ref buffer, buffer.Length * 2);
                     }
 
+                    int bytesread = 0;
+
                     // Read the data into the buffer
-                    stream.Seek(fileptr, SeekOrigin.Begin);
-                    int bytesread = stream.Read(buffer, bufferlen, buffer.Length - bufferlen);
+                    try
+                    {
+                        stream.Seek(fileptr, SeekOrigin.Begin);
+                        bytesread = stream.Read(buffer, bufferlen, buffer.Length - bufferlen);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Error reading journal {this.FileName}: {ex.Message}");
+                        buffer = null;
+                        line = default(T);
+                        return false;
+                    }
 
                     // Return false if end-of-file is encountered
                     if (bytesread == 0)
@@ -140,6 +161,15 @@ namespace EliteDangerousCore
                             buffer = null;
                         }
 
+                        line = default(T);
+                        return false;
+                    }
+
+                    // Return false if the OS gave us nulls
+                    if (buffer[bufferlen] == 0)
+                    {
+                        System.Diagnostics.Trace.WriteLine($"Read null bytes from journal {this.FileName}");
+                        buffer = null;
                         line = default(T);
                         return false;
                     }
