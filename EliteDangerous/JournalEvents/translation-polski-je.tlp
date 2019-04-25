@@ -525,6 +525,10 @@ SECTION JournalScan
 .EVFD: "\nFirst Discovered+Mapped value: {0:N0}" => "\nWartość Pierwszego Odkrycia+Mapowania: {0:N0}"
 .EVFM: "\nFirst Mapped value: {0:N0}" => "\nWartość Pierwszego Mapowania: {0:N0}"
 .SCNT: "\nScan Type: {0}" => "\nTyp Skanu: {0}"
+.Belts: "Belts" => "Pasy"
+.Rings: "Rings" => "Pierścienie"
+.InferredCircumstellarzones: "Inferred Circumstellar zones:\n" => "Obliczone Strefy Okołogwiazdowe:\n"
+.MASS: "Mass:" => "Masa:"
 
 SECTION JournalSAAScanComplete
 
