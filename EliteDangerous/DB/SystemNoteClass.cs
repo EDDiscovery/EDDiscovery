@@ -70,11 +70,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@edsmid", EdsmId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd.ExecuteScalar();
                 }
 
                 globalSystemNotes.Add(this);
@@ -104,7 +104,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@EdsmId", EdsmId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 Dirty = false;
             }
@@ -125,7 +125,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
@@ -171,7 +171,7 @@ namespace EliteDangerousCore.DB
             {
                 using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
                 {
-                    cn.SQLNonQueryText( cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

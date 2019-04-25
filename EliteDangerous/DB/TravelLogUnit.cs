@@ -100,11 +100,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd.ExecuteScalar();
                 }
 
                 return true;
@@ -130,7 +130,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@Path", Path);
                 cmd.AddParameterWithValue("@CommanderID", CommanderId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }

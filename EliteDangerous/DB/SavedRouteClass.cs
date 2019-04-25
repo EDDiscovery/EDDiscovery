@@ -118,11 +118,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@end", EndDate);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
                 {
-                    Id = (long)cn.SQLScalar( cmd2);
+                    Id = (long)cmd.ExecuteScalar();
                 }
 
                 using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
@@ -134,7 +134,7 @@ namespace EliteDangerousCore.DB
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        cn.SQLNonQueryText( cmd2);
+                        cmd2.ExecuteNonQuery();
                     }
                 }
 
@@ -160,12 +160,12 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@start", StartDate);
                 cmd.AddParameterWithValue("@end", EndDate);
                 cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
                 {
                     cmd2.AddParameterWithValue("@routeid", Id);
-                    cn.SQLNonQueryText( cmd2);
+                    cmd2.ExecuteNonQuery();
                 }
 
                 using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
@@ -177,7 +177,7 @@ namespace EliteDangerousCore.DB
                     {
                         cmd2.Parameters["@routeid"].Value = Id;
                         cmd2.Parameters["@name"].Value = sysname;
-                        cn.SQLNonQueryText( cmd2);
+                        cmd2.ExecuteNonQuery();
                     }
                 }
 

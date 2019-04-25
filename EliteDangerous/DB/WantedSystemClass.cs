@@ -53,11 +53,11 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
                 cmd.AddParameterWithValue("@systemname", system);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd.ExecuteScalar();
                 }
                 return true;
             }
@@ -77,7 +77,7 @@ namespace EliteDangerousCore.DB
             {
                 cmd.AddParameterWithValue("@id", id);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }

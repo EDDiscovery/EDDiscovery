@@ -86,11 +86,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@n", Note);
                 cmd.AddParameterWithValue("@g", Tags);
                 cmd.AddParameterWithValue("@p", Parameters);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from CaptainsLog"))
                 {
-                    ID = (long)cn.SQLScalar( cmd2);
+                    ID = (long)cmd.ExecuteScalar();
                 }
 
                 return true;
@@ -117,7 +117,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@n", Note);
                 cmd.AddParameterWithValue("@g", Tags);
                 cmd.AddParameterWithValue("@p", Parameters);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }
@@ -136,7 +136,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM CaptainsLog WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
                 return true;
             }
         }

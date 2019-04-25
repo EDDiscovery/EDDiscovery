@@ -241,11 +241,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd.ExecuteScalar();
                 }
 
                 return true;
@@ -274,7 +274,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }
@@ -293,7 +293,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
                 return true;
             }
         }
