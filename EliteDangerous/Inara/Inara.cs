@@ -195,7 +195,7 @@ namespace EliteDangerousCore.Inara
         {
             JObject eventData = new JObject();
             eventData["powerName"] = name;
-            eventData["rankValue"] = value;
+            eventData["rankValue"] = value+1;       // rank here is 1-5, not 0-4
             return Event("setCommanderRankPower", dt, eventData);
         }
 
