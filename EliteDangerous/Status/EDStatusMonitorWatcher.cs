@@ -68,6 +68,7 @@ namespace EliteDangerousCore
         int prev_firegroup = -1;
         double prev_curfuel = -1;
         double prev_curres = -1;
+        string prev_legalstatus = null;
         int prev_cargo = -1;
         UIEvents.UIPips.Pips prev_pips = new UIEvents.UIPips.Pips();
         UIEvents.UIPosition.Position prev_pos = new UIEvents.UIPosition.Position();     // default is MinValue
@@ -117,6 +118,11 @@ namespace EliteDangerousCore
             InFighter = 25,
             InSRV = 26,
             ShipMask = (1<< InMainShip) | (1<< InFighter) | (1<< InSRV),
+        }
+
+        private enum StatusFlagsReportedInOtherEvents       // reported via other mechs than flags 
+        {
+            AltitudeFromAverageRadius = 29, // 3.4, via position
         }
 
         private void ScanThreadProc()
@@ -265,11 +271,24 @@ namespace EliteDangerousCore
 
                         if (jlat != prev_pos.Latitude || jlon != prev_pos.Longitude || jalt != prev_pos.Altitude || jheading != prev_heading)
                         {
-                            UIEvents.UIPosition.Position newpos = new UIEvents.UIPosition.Position() { Latitude = jlat, Longitude = jlon, Altitude = jalt };
+                            UIEvents.UIPosition.Position newpos = new UIEvents.UIPosition.Position()
+                            {
+                                Latitude = jlat, Longitude = jlon,
+                                Altitude = jalt, AltitudeFromAverageRadius = (curflags & (1 << (int)StatusFlagsReportedInOtherEvents.AltitudeFromAverageRadius)) != 0
+                            };
+
                             events.Add(new UIEvents.UIPosition(newpos, jheading, EventTimeUTC, jlat == double.MinValue));
                             prev_pos = newpos;
                             prev_heading = jheading;
                             fireoverall = true;
+                        }
+
+                        string cur_legalstatus = jo["LegalState"].StrNull();
+
+                        if ( cur_legalstatus != prev_legalstatus )
+                        {
+                            events.Add(new UIEvents.UILegalStatus(cur_legalstatus,EventTimeUTC,prev_legalstatus == null));
+                            prev_legalstatus = cur_legalstatus;
                         }
 
                         if ( fireoverall )
@@ -279,7 +298,7 @@ namespace EliteDangerousCore
                             flagsset.AddRange(ReportFlagState(typeof(StatusFlagsAll), curflags));
 
                             events.Add(new UIEvents.UIOverallStatus(ShipType(curflags), flagsset, prev_guifocus, prev_pips, prev_firegroup, 
-                                                                    prev_curfuel,prev_curres, prev_cargo, prev_pos, prev_heading,
+                                                                    prev_curfuel,prev_curres, prev_cargo, prev_pos, prev_heading, prev_legalstatus,
                                                                     EventTimeUTC, fireoverallrefresh));        // overall list of flags set
                         }
 

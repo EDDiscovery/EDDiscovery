@@ -108,7 +108,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Name_Localised;
+            info = Name_Localised + " (" + BodyName + ")";
 
             if (Latitude != null && Longitude != null)
                 info += " " + JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude);

@@ -207,6 +207,7 @@
     </Compile>
     <Compile Include="Status\UIEvents.cs" />
     <Compile Include="UIEvents\UICommand.cs" />
+    <Compile Include="UIEvents\UILegalStatus.cs" />
     <Compile Include="UIEvents\UIMusic.cs" />
     <Compile Include="UIEvents\UIOverallStatus.cs" />
     <Compile Include="UIEvents\UIFuel.cs" />

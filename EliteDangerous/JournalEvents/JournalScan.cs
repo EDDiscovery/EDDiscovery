@@ -296,6 +296,9 @@ namespace EliteDangerousCore.JournalEvents
 
             nLandable = evt["Landable"].BoolNull();
 
+            WasMapped = evt["WasMapped"].BoolNull();            // new 3.4
+            WasDiscovered = evt["WasDiscovered"].BoolNull();        // new 3.4
+
             ReserveLevelStr = evt["ReserveLevel"].Str();
 
             if (IsStar)
@@ -670,6 +673,11 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
                     scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
                 }
+
+                if (WasDiscovered.HasValue && WasDiscovered.Value)
+                    scanText.AppendFormat("\nAlready Discovered".Tx(this, "EVAD"));
+                if (WasMapped.HasValue && WasMapped.Value)
+                    scanText.AppendFormat("\nAlready Mapped".Tx(this, "EVAM"));
             }
 
             if (EDSMDiscoveryCommander != null)

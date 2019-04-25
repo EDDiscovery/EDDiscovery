@@ -413,7 +413,7 @@ namespace EliteDangerousCore.JournalEvents
             BoostValue = evt["BoostUsed"].Int();
             Body = evt["Body"].StrNull();
             BodyID = evt["BodyID"].IntNull();
-            BodyType = evt["BodyType"].StrNull();
+            BodyType = JournalFieldNaming.NormaliseBodyType(evt["BodyType"].Str());
 
             JToken jm = evt["EDDMapColor"];
             MapColor = jm.Int(EliteDangerousCore.EliteConfigInstance.InstanceConfig.DefaultMapColour);

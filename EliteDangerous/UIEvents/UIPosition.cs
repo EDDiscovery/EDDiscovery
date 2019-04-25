@@ -43,6 +43,7 @@ namespace EliteDangerousCore.UIEvents
             public Position()
             {
                 Latitude = Longitude = Altitude = double.MinValue;
+                AltitudeFromAverageRadius = false;
             }
 
             // you MAY get position without Altitude.. seen in SRV it doing that.  Code defensively
@@ -53,6 +54,7 @@ namespace EliteDangerousCore.UIEvents
             public double Latitude;
             public double Longitude;
             public double Altitude;
+            public bool AltitudeFromAverageRadius;
         }
     }
 }
