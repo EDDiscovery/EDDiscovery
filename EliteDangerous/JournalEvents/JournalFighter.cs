@@ -21,8 +21,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockFighter)]
     public class JournalDockFighter : JournalEntry,  IShipInformation
     {
+        public int? ID { get; set; }
+
         public JournalDockFighter(JObject evt ) : base(evt, JournalTypeEnum.DockFighter)
         {
+            ID = evt["ID"].IntNull();
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
@@ -41,8 +44,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.FighterDestroyed)]
     public class JournalFighterDestroyed : JournalEntry, IShipInformation
     {
+        public int? ID { get; set; }
+
         public JournalFighterDestroyed(JObject evt) : base(evt, JournalTypeEnum.FighterDestroyed)
         {
+            ID = evt["ID"].IntNull();
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
@@ -63,9 +69,11 @@ namespace EliteDangerousCore.JournalEvents
         public JournalFighterRebuilt(JObject evt) : base(evt, JournalTypeEnum.FighterRebuilt)
         {
             Loadout = evt["Loadout"].Str();
+            ID = evt["ID"].IntNull();
         }
 
         public string Loadout { get; set; }
+        public int? ID { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
@@ -81,9 +89,12 @@ namespace EliteDangerousCore.JournalEvents
         {
             Loadout = evt["Loadout"].Str();
             PlayerControlled = evt["PlayerControlled"].Bool();
+            ID = evt["ID"].IntNull();
         }
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }
+        public int? ID { get; set; }
+
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
