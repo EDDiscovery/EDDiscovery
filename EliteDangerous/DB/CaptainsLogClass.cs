@@ -90,7 +90,7 @@ namespace EliteDangerousCore.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from CaptainsLog"))
                 {
-                    ID = (long)cmd.ExecuteScalar();
+                    ID = (long)cmd2.ExecuteScalar();
                 }
 
                 return true;

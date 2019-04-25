@@ -245,7 +245,7 @@ namespace EliteDangerousCore.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    id = (long)cmd.ExecuteScalar();
+                    id = (long)cmd2.ExecuteScalar();
                 }
 
                 return true;
@@ -380,7 +380,10 @@ namespace EliteDangerousCore.DB
                     {
                         using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            bookmarks.Add(new BookmarkClass(rdr));
+                            while (rdr.Read())
+                            {
+                                bookmarks.Add(new BookmarkClass(rdr));
+                            }
                         }
                     }
                 }

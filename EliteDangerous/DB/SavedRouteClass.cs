@@ -122,7 +122,7 @@ namespace EliteDangerousCore.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
                 {
-                    Id = (long)cmd.ExecuteScalar();
+                    Id = (long)cmd2.ExecuteScalar();
                 }
 
                 using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))

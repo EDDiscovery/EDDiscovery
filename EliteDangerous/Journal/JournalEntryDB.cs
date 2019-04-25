@@ -93,7 +93,7 @@ namespace EliteDangerousCore
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
                 {
-                    Id = (int)(long)cmd.ExecuteScalar();
+                    Id = (long)cmd2.ExecuteScalar();
                 }
                 return true;
             }

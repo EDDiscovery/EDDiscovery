@@ -57,7 +57,7 @@ namespace EliteDangerousCore.DB
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
-                    id = (long)cmd.ExecuteScalar();
+                    id = (long)cmd2.ExecuteScalar();
                 }
                 return true;
             }
