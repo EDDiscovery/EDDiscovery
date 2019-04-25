@@ -144,14 +144,13 @@ namespace EliteDangerousCore.DB
             {
                 using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
                 {
-                    DataSet ds = cn.SQLQueryText( cmd);
-                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        return list;
-
-                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    using (DbDataReader rdr = cmd.ExecuteReader())
                     {
-                        TravelLogUnit sys = new TravelLogUnit(dr);
-                        list.Add(sys);
+                        while (rdr.Read())
+                        {
+                            TravelLogUnit sys = new TravelLogUnit(rdr);
+                            list.Add(sys);
+                        }
                     }
 
                     return list;
