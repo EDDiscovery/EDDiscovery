@@ -517,7 +517,7 @@ namespace EliteDangerousCore.JournalEvents
             public string Trend;
         }
 
-        public class InfuluenceTrend
+        public class InfluenceTrend
         {
             public long SystemAddress;
             public string Trend;
@@ -527,7 +527,7 @@ namespace EliteDangerousCore.JournalEvents
         {
             public string Faction;
             public EffectTrend[] Effects;
-            public InfuluenceTrend[] Influence;
+            public InfluenceTrend[] Influence;
             public string Reputation;
         }
     }

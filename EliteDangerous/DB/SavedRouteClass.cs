@@ -125,16 +125,16 @@ namespace EliteDangerousCore.DB
                     Id = (long)cmd2.ExecuteScalar();
                 }
 
-                using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
+                using (DbCommand cmd3 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
                 {
-                    cmd2.AddParameter("@routeid", DbType.String);
-                    cmd2.AddParameter("@name", DbType.String);
+                    cmd3.AddParameter("@routeid", DbType.String);
+                    cmd3.AddParameter("@name", DbType.String);
 
                     foreach (var sysname in Systems)
                     {
-                        cmd2.Parameters["@routeid"].Value = Id;
-                        cmd2.Parameters["@name"].Value = sysname;
-                        cmd2.ExecuteNonQuery();
+                        cmd3.Parameters["@routeid"].Value = Id;
+                        cmd3.Parameters["@name"].Value = sysname;
+                        cmd3.ExecuteNonQuery();
                     }
                 }
 

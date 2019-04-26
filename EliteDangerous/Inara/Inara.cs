@@ -573,6 +573,21 @@ namespace EliteDangerousCore.Inara
                 eventData["rewardMaterials"] = ent;
             }
 
+            if (mission.FactionEffects != null && mission.FactionEffects.Length > 0)
+            {
+                JArray ent = new JArray();
+                foreach (var p in mission.FactionEffects)
+                {
+                    JObject o = new JObject();
+                    o["minorfactionName"] = p.Faction;
+                    o["influenceGain"] = p.Influence != null ? p.Influence[0].Trend : "";
+                    o["reputationGain"] = p.Reputation;
+                    ent.Add(o);
+                }
+
+                eventData["minorfactionEffects"] = ent;
+            }
+
             return Event("setCommanderMissionCompleted", mission.EventTimeUTC, eventData);
         }
 
