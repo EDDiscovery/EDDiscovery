@@ -52,9 +52,9 @@ namespace EDDiscovery.UserControls
         private int leftmargin;
         private int topmargin;
 
-        private Font stdfont = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F);
-        private Font largerfont = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 10F);
-        private Font stdfontUnderline = BaseUtils.FontLoader.GetFont("Microsoft Sans Serif", 8.25F, FontStyle.Underline);
+        private Font stdfont = EDDTheme.Instance.GetFontAtSize(8.25f);
+        private Font largerfont = EDDTheme.Instance.GetFontAtSize(10f);
+        private Font stdfontUnderline = EDDTheme.Instance.GetFontAtSize(8.25f, FontStyle.Underline);
 
         #region Init
         public ScanDisplayControl()
