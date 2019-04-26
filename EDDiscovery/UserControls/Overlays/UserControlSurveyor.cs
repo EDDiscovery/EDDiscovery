@@ -257,7 +257,7 @@ namespace EDDiscovery.UserControls
 
                         if (sn.ScanData.HasRings || sn.ScanData.Terraformable || sn.ScanData.Volcanism != null || sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body || sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world || sn.ScanData.PlanetTypeID == EDPlanet.Water_world)
                         {
-                            hasrings = sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world ? true : false;
+                            hasrings = sn.ScanData.HasRings;
                             terraformable = sn.ScanData.Terraformable ? true : false;
                             volcanism = sn.ScanData.Volcanism != null ? true : false;
                             ammonia = sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world ? true : false;

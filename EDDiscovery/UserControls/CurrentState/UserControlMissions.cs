@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
                 var totalReward = 0;
                 foreach (MissionState ms in mcurrent)
                 {
-                    object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
+                    object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.Expiry : ms.Mission.Expiry.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
                             else if (ms.State == MissionState.StateTypes.Failed)
                                 failed++;
 
-                            object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.Name) ,
+                            object[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.Mission.EventTimeUTC : ms.Mission.EventTimeLocal,
                                         EDDiscoveryForm.EDDConfig.DisplayUTC ? ms.MissionEndTime : ms.MissionEndTime.ToLocalTime(),
                                         ms.OriginatingSystem + ":" + ms.OriginatingStation,
