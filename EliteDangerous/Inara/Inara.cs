@@ -580,7 +580,7 @@ namespace EliteDangerousCore.Inara
                 {
                     JObject o = new JObject();
                     o["minorfactionName"] = p.Faction;
-                    o["influenceGain"] = p.Influence != null ? p.Influence[0].Trend : "";
+                    o["influenceGain"] = (p.Influence != null && p.Influence.Length>0) ? p.Influence[0].Influence : "";
                     o["reputationGain"] = p.Reputation;
                     ent.Add(o);
                 }
