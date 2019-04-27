@@ -447,13 +447,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Wynik (cr)"
 .pColInfo: "Info" => "Informacje"
 .labelTo: "to" => "do"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność"
+.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 .MPlural: " Missions" => "Misje"
 .MSingular: " Mission" => "Misja"
 .Name: "Name" => "Nazwa"
 .Value: "Value (cr):\n{0:N0}" => "Wartość (cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Wartość (cr)"
 .ValueC: "Value: " => "Wartość: "
+UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
 SECTION UserControlModules
 
@@ -623,6 +624,7 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" => "Współrzędna X"
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "To spowoduje wygenerowanie dużej liczby ({0}) skoków\r\nProszę potwierdzić"
 .NoRoute: "No route set up, retry" => "Brak ustawionej trasy, spróbuj ponownie"
+UserControlRoute.comboBoxRoutingMetric: "Nearest to Waypoint" => "Najbliżej do Punktu Naw."
 
 SECTION UserControlRouteTracker
 
@@ -724,7 +726,9 @@ SECTION UserControlScanGrid
 .columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" => "Odległość"
 .columnsToolStripMenuItem.informationToolStripMenuItem: "Information" => "Informacje"
 .toolStripStatusTotalValue: "Estimated scans value" => "Wartość"
-.toolStripStatusGreen: "GREEN SYSTEM" @
+.toolStripStatusGreen: "GREEN SYSTEM" => "ZIELONY UKŁAD"
+.GS: "This is a green system, as it has all existing jumponium materials available!" => "To jest zielony układ, ponieważ zawiera wszystkie istniejące materiały jumponium!"
+.JS: " jumponium materials found in system." => " materiały jumponium znalezione w układzie."
 
 SECTION UserControlSettings
 
@@ -1126,6 +1130,7 @@ UserControlStats.Crafting: "Crafting" => "Wytwarzanie"
 UserControlStats.Crew: "Crew" => "Załoga"
 UserControlStats.Multi: "Multi-crew" @
 UserControlStats.MaterialsTrader: "Materials Trader" => "Handel Materiałami"
+.tosystem: " to system " => " do układu "
 
 SECTION StatsTimeUserControl
 

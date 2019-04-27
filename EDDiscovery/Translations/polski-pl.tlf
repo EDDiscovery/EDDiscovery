@@ -21,6 +21,7 @@ Information: "Information" => "Informacja"
 NoPos: "No Pos" => "Brak Pozycji"
 
 SECTION StartUp
+
 .DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery jest już uruchomiony. Uruchomić mimo to?"
 
 SECTION SafeModeForm

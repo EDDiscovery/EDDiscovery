@@ -1,31 +1,31 @@
 ﻿
 SECTION Bodies
 
-.HMS: "Luminous Hot Main Sequence {0} star" @
-.BMS: "Luminous Blue Main Sequence {0} star" @
-.BWMS: "Bluish-White Main Sequence {0} star" @
-.WMS: "White Main Sequence {0} star" @
-.YMS: "Yellow Main Sequence {0} star" @
-.OMS: "Orange Main Sequence {0} star" @
-.RMS: "Red Main Sequence {0} star" @
-.DRNS: "Dark Red Non Main Sequence {0} star" @
-.MD: "Methane Dwarf star" @
-.BD: "Brown Dwarf star" @
-.WR: "Wolf-Rayet {0} star" @
-.C: "Carbon {0} star" @
+.HMS: "Luminous Hot Main Sequence {0} star" => "Jasna gorąca gwiazda {0} Ciągu Głównego"
+.BMS: "Luminous Blue Main Sequence {0} star" => "Jasna niebieska gwiazda {0} Ciągu Głównego"
+.BWMS: "Bluish-White Main Sequence {0} star" => "Niebieskawo-Biała gwiazda {0} Ciągu Głównego"
+.WMS: "White Main Sequence {0} star" => "Biała gwiazda {0} Ciągu Głównego"
+.YMS: "Yellow Main Sequence {0} star" => "Żółta gwiazda {0} Ciągu Głównego"
+.OMS: "Orange Main Sequence {0} star" => "Pomarańczowa gwiazda {0} Ciągu Głównego"
+.RMS: "Red Main Sequence {0} star" => "Czerwona gwiazda {0} Ciągu Głównego"
+.DRNS: "Dark Red Non Main Sequence {0} star" => "Ciemnoczerwona gwiazda {0} niebędąca w Ciągu Głównym"
+.MD: "Methane Dwarf star" => "Metanowy Karzeł"
+.BD: "Brown Dwarf star" => "Brązowy Karzeł"
+.WR: "Wolf-Rayet {0} star" => "Gwiazda Wolfa-Rayeta {0}"
+.C: "Carbon {0} star" => "Gwiazda węglowa {0}"
 .IZ: "Intermediate low Zirconium Monoxide Type star" @
 .CGZ: "Cool Giant Zirconium Monoxide rich Type star" @
-.WD: "White Dwarf {0} star" @
-.NS: "Neutron Star" @
-.BH: "Black Hole" @
+.WD: "White Dwarf {0} star" => "Biały Karzeł {0}"
+.NS: "Neutron Star" => "Gwiazda Neutronowa"
+.BH: "Black Hole" => "Czarna Dziura"
 .EX: "Exotic" @
-.SMBH: "Super Massive Black Hole" @
-.BSG: "Blue White Super Giant" @
-.WSG: "F White Super Giant" @
-.MSR: "M Red Super Giant" @
-.MOG: "M Red Giant" @
-.KOG: "K Orange Giant" @
-.RP: "Rogue Planet" @
+.SMBH: "Super Massive Black Hole" => "Supermasywna Czarna Dziura"
+.BSG: "Blue White Super Giant" => "Niebieskobiały Nadolbrzym"
+.WSG: "F White Super Giant" => "Biały Nadolbrzym F"
+.MSR: "M Red Super Giant" => "Czerwony Nadolbrzym M"
+.MOG: "M Red Giant" => "Czerwony Olbrzym M"
+.KOG: "K Orange Giant" => "Pomarańczowy Olbrzym K"
+.RP: "Rogue Planet" => "Samotna Planeta"
 
 SECTION MaterialCommodityData
 
