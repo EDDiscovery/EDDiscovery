@@ -92,6 +92,9 @@ namespace EliteDangerousCore.JournalEvents
             MarketID = evt["MarketID"].LongNull();
             Latitude = evt["Latitude"].DoubleNull();
             Longitude = evt["Longitude"].DoubleNull();
+            SystemAddress = evt["SystemAddress"].LongNull();
+            BodyID = evt["BodyID"].IntNull();
+            BodyName = evt["BodyName"].StrNull();
         }
 
         public string Name { get; set; }
@@ -99,10 +102,13 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public double? Latitude { get; set; }    // 3.3
         public double? Longitude { get; set; }
+        public long? SystemAddress { get; set; }
+        public int? BodyID { get; set; }
+        public string BodyName { get; set; }
 
         public override void FillInformation(out string info, out string detailed)
         {
-            info = Name_Localised;
+            info = Name_Localised + " (" + BodyName + ")";
 
             if (Latitude != null && Longitude != null)
                 info += " " + JournalFieldNaming.RLat(Latitude) + " " + JournalFieldNaming.RLong(Longitude);

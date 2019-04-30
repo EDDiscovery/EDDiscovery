@@ -107,7 +107,7 @@ namespace EliteDangerousCore.JournalEvents
             Faction = evt["Faction"].Str();
             FDName = evt["Name"].Str();
             Name = JournalFieldNaming.GetBetterMissionName(FDName);
-            LocalisedName = evt["LocalisedName"].Str(); 
+            LocalisedName = JournalFieldNaming.CheckLocalisation(evt["LocalisedName"].Str(),Name); 
 
             TargetType = evt["TargetType"].Str();
             TargetTypeFriendly = JournalFieldNaming.GetBetterTargetTypeName(TargetType);    // remove $, underscore it
@@ -209,7 +209,7 @@ namespace EliteDangerousCore.JournalEvents
             if (exp != null && !EliteConfigInstance.InstanceConfig.DisplayUTC)
                 exp = exp.ToLocalTime();
 
-            return BaseUtils.FieldBuilder.Build("", Name,
+            return BaseUtils.FieldBuilder.Build("", LocalisedName,
                                       "< from ".Tx(this), Faction,
                                       "System:".Txb(this), DestinationSystem,
                                       "Station:".Txb(this), DestinationStation,
@@ -233,7 +233,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public string MissionAuxInfo()          //  MissionList:info, used for MissionList:Info, used in mission panels.
         {
-            return BaseUtils.FieldBuilder.Build("", LocalisedName,
+            return BaseUtils.FieldBuilder.Build(
                                         "Influence:".Tx(this), Influence,
                                         "Reputation:".Tx(this), Reputation,
                                         "Deliver:".Tx(this), CommodityLocalised,
@@ -517,18 +517,20 @@ namespace EliteDangerousCore.JournalEvents
             public string Trend;
         }
 
-        public class InfuluenceTrend
+        public class InfluenceTrend
         {
             public long SystemAddress;
             public string Trend;
+            public string Influence; // not in very early ones
         }
 
         public class FactionEffectsEntry
         {
             public string Faction;
             public EffectTrend[] Effects;
-            public InfuluenceTrend[] Influence;
+            public InfluenceTrend[] Influence;
             public string Reputation;
+            public string ReputationTrend;
         }
     }
 

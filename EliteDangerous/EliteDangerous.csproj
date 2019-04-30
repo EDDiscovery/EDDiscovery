@@ -214,6 +214,7 @@
     <Compile Include="SystemDB\SystemsDBGetLists.cs" />
     <Compile Include="SystemDB\SystemsDBGetStars.cs" />
     <Compile Include="UIEvents\UICommand.cs" />
+    <Compile Include="UIEvents\UILegalStatus.cs" />
     <Compile Include="UIEvents\UIMusic.cs" />
     <Compile Include="UIEvents\UIOverallStatus.cs" />
     <Compile Include="UIEvents\UIFuel.cs" />

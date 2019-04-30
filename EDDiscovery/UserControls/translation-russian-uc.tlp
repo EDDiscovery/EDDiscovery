@@ -122,6 +122,7 @@ SECTION SearchScans
 .ColumnInformation: "Information" => "Информация"
 .ColumnCurrentDistance: "Current Distance" => "Текущее расстояние"
 .ColumnPosition: "Position" => "Положение"
+.conditionFilterUC.buttonMore: "+" @
 
 SECTION SearchStars
 
@@ -135,7 +136,7 @@ SECTION DataGridViewStarResults
 
 .3d: "Go to star on 3D Map" => "Показать систему на 3D-карте"
 .EDSM: "View on EDSM" => "Открыть в EDSM"
-//.Data: "View Data On Entry" => "Показать данные записи"
+
 .Data: "View Data On Entry" => "Показать данные сканирования"
 .Sys: "System" => "Система"
 .Station: "Station" => "станция"
@@ -260,9 +261,9 @@ SECTION UserControlJournalGrid
 .ColumnType: "Description" => "Описание"
 .ColumnText: "Information" => "Информация"
 .checkBoxMoveToTop: "Cursor to Top" => "Курсор наверх"
-//.buttonField: "Field Filter" => "Фильтр"
+
 .labelSearch: "Search" => "Поиск"
-//.buttonFilter: "Event Filter" => "События"
+
 .labelTime: "Time" => "Время"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Сбросить сортировку столбцов"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Перейти к другой записи..."
@@ -280,8 +281,7 @@ SECTION UserControlJournalGrid
 .TTFilt3: "Total filtered out {0}" => "Всего отфильтровано: {0}"
 .TTTotal: "Filter out entries matching the field selection, " => "Фильтровать записи в соответствии с указанными условиями"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
-//.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "При появлении новой записи курсор перемещается наверх"
-.checkBoxMoveToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
+
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
 .textBoxFilter.ToolTip: "Enter text to search in any fields for an item" => "Введите текст для поиска в любых полях"
@@ -412,6 +412,17 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
+.bodiesfound: " bodies found." => " тел найдено."
+.Noscanreported: "No scan reported." => "Нет результатов сканирования"
+.isanammoniaworld: " is an ammonia world." => ", аммиачная планета"
+.isanearthlikeworld: " is an earth like world." => ", землеподобная планета"
+.isawaterworld: " is a water world." => ", водная планета"
+.isaterraformablewaterworld: " is a terraformable water world." => ", терраформируемая водная планета"
+.isaterraformableplanet: " is a terraformable planet." => ", терраформируемая планета"
+.Hasring: " Has ring." => ", есть кольцо"
+.Has: " Has " => ", "
+
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Классы планет"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
@@ -422,7 +433,7 @@ SECTION UserControlSurveyor
 .bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "С кольцами"
 .hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Скрыть уже картографированные планеты"
 .textAlignToolStripMenuItem: "Alignment" => "Выравнивание"
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "По левому караю"
+.textAlignToolStripMenuItem.leftToolStripMenuItem: "Left" => "По левому краю"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Center" => "По центру"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Right" => "По правому краю"
 
@@ -461,8 +472,8 @@ SECTION UserControlModules
 .ItemCol: "Item" => "Модуль"
 .SlotCol: "Slot" => "Слот"
 .ItemInfo: "Info" => "Информация"
-//.Slot: "Slot" => "Слот"
-//.Info: "Info" => "Информация"
+
+
 .Mass: "Mass" => "Масса"
 .BluePrint: "BluePrint" => "Модификация"
 .PriorityEnable: "P/E" => "Приоритет"
@@ -470,7 +481,7 @@ SECTION UserControlModules
 .TravelHistoryEntry: "Travel History Entry" => "Запись истории полетов"
 .Value: "Value" => "Стоимость"
 .System: "System" => "Система"
-//.TxTime: "Tx Time" => "Время транзакции"
+
 .TxTime: "Tx Time" => "Время перемещения"
 .Cost: "Cost" => "Цена"
 .FSDAvgJump: "FSD Avg Jump" => "Средний прыжок"
@@ -661,14 +672,15 @@ SECTION UserControlScan
 .ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .checkBoxCustomHideFullMats.ToolTip: "Show/Hide materials which have reached their storage limit" => "Показать материалы, число которых достигло максимума"
 .chkShowOverlays.ToolTip: "Show/Hide body status icons" => "Показать значки статуса небесных тел"
+
 .checkBoxTiny.ToolTip: "Image size teeny tiny" => "Крошечный размер изображений"
 .checkBoxMaterials.ToolTip: "Show/Hide Materials" => "Показать материалы"
 .checkBoxMaterialsRare.ToolTip: "Show rare materials only" => "Показать только редкие материалы"
 .checkBoxEDSM.ToolTip: "Show/Hide Body data from EDSM" => "Использовать данные о телах с EDSM"
 .checkBoxMoons.ToolTip: "Show/Hide Moons" => "Показать луны"
-//.checkBoxLarge.ToolTip: "Image size large" => "Большой размер изображений"
-//.checkBoxSmall.ToolTip: "Image size small" => "Маленький размер изображений"
-//.checkBoxMedium.ToolTip: "Image size medium" => "Средний размер изображений"
+
+
+
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
 .lblSystemInfo.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .AV: "Approx value: {0:N0}" => "Примерная стоимость данных сканирования: {0:N0}"
@@ -678,15 +690,17 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" => "Отменить показ системы"
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Нажмите, чтобы показать/скрыть панель инструментов"
+.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" => "Показать название системы и примерную стоимость"
 
 SECTION UserControlScanGrid
 
 .Geologicalactivity: "Geological activity" => "Геологическая активность"
+
 .Surfacemapped: "Surface mapped" => "Картографирована"
 .colName: "Name" => "Название"
 .colClass: "Class" => "Класс"
-//.Distance: "Distance" => "Расстояние"
-//.distance: "Distance" => "Расстояние"
+
+
 .colDistance: "Distance" => "Расстояние"
 .colBriefing: "Briefing" => "Сводка"
 .Moon: "Moon" => "луна"
@@ -733,8 +747,11 @@ SECTION UserControlScanGrid
 
 SECTION UserControlSettings
 
+
+
 .SM: "Safe Mode" => "Вы действительно хотите перезапустить программу в безопасном режиме?"
 .CSM: "Confirm restart to safe mode" => "Безопасный режим"
+
 
 .groupBoxCustomHistoryLoad: "History Options" => "Настройки истории"
 .checkBoxShowUIEvents: "Show Elite UI Events in history" => "Показывать события Elite UI"
@@ -895,7 +912,6 @@ SECTION UserControlSpanel
 .expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Текст может заполнять пустые столбцы"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when.." => "Не показывать информацию..."
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: ".. when docked or landed" => "...если пристыкован или на поверхности"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => "...на панели"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: ".. when in Galaxy Panel" => "...на панели карты Галактики"
 .dontShowInformationWhenToolStripMenuItem.dontshowwhenInSystemMapPanelToolStripMenuItem: ".. when in System Map Panel" => "...на панели карты системы"
 .OrdertoolStripMenuItem: "Column Order.." => "Порядок столбцов..."
@@ -926,6 +942,7 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Ammonia Worlds" => "Аммиачные планеты"
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Ледяные планеты"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Полностью скрыть панель"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => "...на панели"
 .Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" => "зона Златовласки, {0} ({1}-{2} а. е.),\n"
 
 SECTION UserControlStarDistance
@@ -959,7 +976,7 @@ SECTION UserControlStarList
 .mapGotoStartoolStripMenuItem: "Go to star on 3D Map" => "Показать систему на 3D-карте"
 .viewOnEDSMToolStripMenuItem: "View on EDSM" => "Открыть в ESDM"
 .setNoteToolStripMenuItem: "Set Note" => "Добавить примечание"
-//.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "При появлении новой записи курсор перемещается наверх"
+
 .checkBoxMoveToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
@@ -1004,6 +1021,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageTravel: "Travel" => "Полеты"
 .tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn1: "Item" => "Наименование"
 .tabControlCustomStats.tabPageTravel.dataGridViewTextBoxColumn2: "Information" => "Информация"
+
 .tabControlCustomStats.tabPageTravel.userControlStatsTimeTravel.labelTime: "Time" => "Время"
 .tabControlCustomStats.tabPageScan: "Scan" => "Сканы"
 .tabControlCustomStats.tabPageScan.ScanNotUsed: "Column1" => "Колонка 1"
@@ -1011,7 +1029,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageGameStats: "In Game" => "По игре"
 .Visits: "Visits" => "Посещений"
 .Type: "Type" => "Тип"
-//.all: "all" => "Всего"
+
 .All: "All" => "Всего"
 .JumpsBeforeSystem: "Jumps Before System" => "Прыжков до этой системы"
 .TotalNoofjumps: "Total No of jumps: " => "Общее число прыжков"
@@ -1037,6 +1055,7 @@ SECTION UserControlStats
 .PremiumBoost: "Premium Boost" => "Премиум вбросов"
 .StandardBoost: "Standard Boost" => "Стандартных вбросов"
 .BasicBoost: "Basic Boost" => "Базовых вбросов"
+
 .JetConeBoost: "Jet Cone Boost" => "Перегрузок FSD (джет)"
 .Landed: "Landed" => "Посадок"
 .HeatWarning: "Heat Warning" => "Перегревов"
@@ -1123,12 +1142,27 @@ SECTION UserControlStats
 .BodiesScanned: "Bodies Scanned" => "Отсканировано тел"
 .GoodsBought: "Goods Bought" => "Куплено товаров"
 .GoodsSold: "Goods Sold" => "Продано товаров"
-//.Destroyed: "Destroyed" => "Разрушено раз" ?
+
 .Destroyed: "Destroyed" => "Разрушено"
 .Unknown: "Unknown" => "Неизвестно"
 .tabControlCustomStats.tabPageByShip: "By Ship" => "По кораблям"
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" => "Наименование"
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" => "Информация"
+
+
+UserControlStats.BankAccount: "Bank Account" => "Баланс"
+UserControlStats.Combat: "Combat" => "Бои"
+UserControlStats.Crime: "Crime" => "Преступления"
+UserControlStats.Smuggling: "Smuggling" => "Контрабанда"
+UserControlStats.Trading: "Trading" => "Торговля"
+UserControlStats.Mining: "Mining" => "Добыча ресурсов"
+UserControlStats.Exploration: "Exploration" => "Исследование"
+UserControlStats.Passengers: "Passengers" => "Пассажиры"
+UserControlStats.SearchandRescue: "Search and Rescue" => "Спасательные операции"
+UserControlStats.Crafting: "Crafting" => "Изготовление"
+UserControlStats.Crew: "Crew" => "Экипаж"
+UserControlStats.Multi: "Multi-crew" => "Multi-crew"
+UserControlStats.MaterialsTrader: "Materials Trader" => "Торговля материалами"
 
 SECTION StatsTimeUserControl
 
@@ -1137,6 +1171,7 @@ SECTION StatsTimeUserControl
 .Week: "Week" => "Неделя"
 .Month: "Month" => "Месяц"
 .Custom: "Custom" => "Выбрать"
+
 
 SECTION UserControlSynthesis
 
@@ -1248,8 +1283,8 @@ SECTION UserControlTravelGrid
 .ColumnDistance: "Information"  => "Информация"
 .ColumnNote: "Note" => "Примечание"
 .checkBoxMoveToTop: "Cursor to Top" => "Курсор наверх"
-//.buttonField: "Field Filter" => "Фильтр"
-//.buttonFilter: "Event Filter" => "События"
+
+
 .labelSearch: "Search" => "Поиск"
 .labelTime: "Time" => "Время"
 .removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" => "Сбросить сортировку столбцов"
@@ -1293,7 +1328,7 @@ SECTION UserControlTravelGrid
 .NOLOC: "Could not find Location or FSDJump entry associated with selected journal entry" => "Не удалось найти местоположение или запись о FSD-прыжке, связанную с этой записью журнала"
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Вы действительно хотите удалить эту запись?\r\nОна может появиться снова после повторного импорта журналов."
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Группировать"
-//.checkBoxMoveToTop.ToolTip: "Select if cursor moves to top entry when a new entry is received" => "При появлении новой записи курсор перемещается наверх"
+
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
 .buttonExtExcel.ToolTip: "Send data on grid to excel"  => "Передать данные в Excel"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Фильтровать записи в соответствии с указанными условиями"
@@ -1406,23 +1441,12 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Показать, если вы первооткрыватель согласно EDSM"
 .UKN: "System {0} unknown to EDSM" => "Система {0} неизвестна EDSM"
 
-SECTION UserControlSurveyor
 
-.Systemscancomplete: "System scan complete." => "Сканирование системы завершено"
-.bodiesfound: " bodies found." => " тел найдено."
-.Noscanreported: "No scan reported." => "Нет результатов сканирования"
-.isanammoniaworld: " is an ammonia world." => ", аммиачная планета"
-.isanearthlikeworld: " is an earth like world." => ", землеподобная планета"
-.isawaterworld: " is a water world." => ", водная планета"
-.isaterraformablewaterworld: " is a terraformable water world." => ", терраформируемая водная планета"
-.isaterraformableplanet: " is a terraformable planet." => ", терраформируемая планета"
-.Hasring: " Has ring." => ", есть кольцо"
-.Has: " Has " => ", "
 
-//SECTION ScanDisplay
+
 SECTION ScanDisplayControl
 
-//.AV: "Approx value: {0:N0}" => "Примерная стоимость: {0:N0}"
+
 .NSD: "No scan data available" => "Нет доступных данных сканирования"
 .BC: "Barycentre of {0}" => "Барицентр {0}"
 
@@ -1439,6 +1463,9 @@ SECTION TagsForm
 .buttonMore: "+" @
 .buttonMore.ToolTip: "Add more tags" => "Добавить тег"
 TagsForm: "Tags" => "Теги"
+TagsForm.TN: "Tag name" => "Название тега"
+TagsForm.SI: "Select image for this tag" => "Выбрать значок для тега"
+TagsForm.DE: "Delete entry" => "Удалить тег"
 
 SECTION FilterSelector
 

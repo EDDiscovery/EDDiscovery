@@ -201,6 +201,7 @@ namespace EDDiscovery.Actions
                 string mp = prefix + "Mission[" + i.ToStringInvariant() +"]_";
 
                 vars[mp + "Name"] = ms.Mission.Name;
+                vars[mp + "NameLocalised"] = ms.Mission.LocalisedName;
                 vars[mp + "ID"] = ms.Mission.MissionId.ToStringInvariant();
                 vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToStringUS();
                 vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToStringUS();
@@ -216,6 +217,7 @@ namespace EDDiscovery.Actions
                 vars[mp + "Reputation"] = ms.Mission.Reputation;
                 vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);
                 vars[mp + "Target"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetFriendly);
+                vars[mp + "TargetLocalised"] = ms.Mission.TargetLocalised.Alt(ms.Mission.TargetLocalised);
                 vars[mp + "TargetType"] = ms.Mission.TargetTypeLocalised.Alt(ms.Mission.TargetTypeFriendly);
                 vars[mp + "Passengers"] = ms.Mission.PassengerCount.ToStringInvariant();
                 vars[mp + "Completed"] = (ms.Completed != null).ToStringIntValue();

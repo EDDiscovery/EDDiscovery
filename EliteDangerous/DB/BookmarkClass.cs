@@ -201,7 +201,7 @@ namespace EliteDangerousCore.DB
         {
         }
 
-        public BookmarkClass(DataRow dr)
+        public BookmarkClass(DbDataReader dr)
         {
             id = (long)dr["id"];
             if (System.DBNull.Value != dr["StarName"])
@@ -241,11 +241,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd2.ExecuteScalar();
                 }
 
                 return true;
@@ -274,7 +274,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@note", Note);
                 cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }
@@ -293,7 +293,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
                 return true;
             }
         }
@@ -372,27 +372,33 @@ namespace EliteDangerousCore.DB
 
             try
             {
+                List<BookmarkClass> bookmarks = new List<BookmarkClass>();
+
                 using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
                     {
-                        DataSet ds = null;
-
-                        ds = cn.SQLQueryText( cmd);
-
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            return false;
+                            while (rdr.Read())
+                            {
+                                bookmarks.Add(new BookmarkClass(rdr));
+                            }
                         }
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
-                        {
-                            BookmarkClass bc = new BookmarkClass(dr);
-                            gbl.globalbookmarks.Add(bc);
-                        }
-
-                        return true;
                     }
+                }
+
+                if (bookmarks.Count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    foreach (var bc in bookmarks)
+                    {
+                        gbl.globalbookmarks.Add(bc);
+                    }
+                    return true;
                 }
             }
             catch( Exception ex)

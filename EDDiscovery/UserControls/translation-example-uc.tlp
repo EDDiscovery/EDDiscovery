@@ -455,6 +455,7 @@ SECTION UserControlMissions
 .Value: "Value (cr):\n{0:N0}" @
 .ValueN: "Value (cr)" @
 .ValueC: "Value: " @
+UserControlMissions.ToolTip: "Left click and drag on grid to reorder" @
 
 SECTION UserControlModules
 
@@ -624,6 +625,7 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" @
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" @
 .NoRoute: "No route set up, retry" @
+UserControlRoute.comboBoxRoutingMetric: "Nearest to Waypoint" @
 
 SECTION UserControlRouteTracker
 
@@ -726,6 +728,9 @@ SECTION UserControlScanGrid
 .columnsToolStripMenuItem.informationToolStripMenuItem: "Information" @
 .toolStripStatusTotalValue: "Estimated scans value" @
 .toolStripStatusGreen: "GREEN SYSTEM" @
+.GS: "This is a green system, as it has all existing jumponium materials available!" @
+.JS: " jumponium materials found in system." @
+
 
 SECTION UserControlSettings
 
@@ -985,6 +990,7 @@ SECTION UserControlStarList
 
 SECTION UserControlStats
 
+.tosystem: " to system " @
 .tabControlCustomStats.tabPageGeneral: "General" @
 .tabControlCustomStats.tabPageGeneral.mostVisited: "Most Visited" @
 .tabControlCustomStats.tabPageGeneral.ItemName: "Item" @

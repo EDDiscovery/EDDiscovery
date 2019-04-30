@@ -21,8 +21,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.DockSRV)]
     public class JournalDockSRV : JournalEntry, IShipInformation
     {
+        public int? ID { get; set; }
+
         public JournalDockSRV(JObject evt ) : base(evt, JournalTypeEnum.DockSRV)
         {
+            ID = evt["ID"].IntNull();
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
@@ -44,10 +47,11 @@ namespace EliteDangerousCore.JournalEvents
         {
             Loadout = evt["Loadout"].Str();
             PlayerControlled = evt["PlayerControlled"].Bool(true);
-
+            ID = evt["ID"].IntNull();
         }
         public string Loadout { get; set; }
         public bool PlayerControlled { get; set; }
+        public int? ID { get; set; }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
         {
@@ -65,8 +69,11 @@ namespace EliteDangerousCore.JournalEvents
     [JournalEntryType(JournalTypeEnum.SRVDestroyed)]
     public class JournalSRVDestroyed : JournalEntry, IShipInformation
     {
+        public int? ID { get; set; }
+
         public JournalSRVDestroyed(JObject evt) : base(evt, JournalTypeEnum.SRVDestroyed)
         {
+            ID = evt["ID"].IntNull();
         }
 
         public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)

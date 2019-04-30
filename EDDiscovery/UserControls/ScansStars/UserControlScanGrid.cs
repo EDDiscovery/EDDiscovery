@@ -527,12 +527,12 @@ namespace EDDiscovery.UserControls
 
                 if (isGreenSystem)
                 {
-                    toolStripProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!";
+                    toolStripProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".Tx(this,"GS");
                     toolStripStatusGreen.Visible = true;
                 }
                 else if (!isGreenSystem)
                 {
-                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.";
+                    toolStripProgressBar.ToolTipText = toolStripProgressBar.Value + " jumponium materials found in system.".Tx("JS");
                 }
 
                 // set a meaningful title for the controller            

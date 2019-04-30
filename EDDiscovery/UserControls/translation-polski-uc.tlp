@@ -120,6 +120,7 @@ SECTION SearchScans
 .ColumnInformation: "Information" => "Informacje"
 .ColumnCurrentDistance: "Current Distance" => "Obecna Odległość"
 .ColumnPosition: "Position" => "Pozycja"
+.conditionFilterUC.buttonMore: "+" => "+"
 
 SECTION SearchStars
 
@@ -401,6 +402,16 @@ SECTION UserControlMissionOverlay
 
 SECTION UserControlSurveyor
 
+.Systemscancomplete: "System scan complete." => "Ukończono skan układu."
+.bodiesfound: " bodies found." => " znalezionych ciał niebieskich."
+.Noscanreported: "No scan reported." => "Brak skanu."
+.isanammoniaworld: " is an ammonia world." => " to planeta amoniakowa."
+.isanearthlikeworld: " is an earth like world." => " to planeta ziemiopodobna."
+.isawaterworld: " is a water world." => " to planeta oceaniczna."
+.isaterraformablewaterworld: " is a terraformable water world." => " to terraformowalna planeta oceaniczna."
+.isaterraformableplanet: " is a terraformable planet." => " to terraformowalna planeta."
+.Hasring: " Has ring." => " Ma pierścień."
+.Has: " Has " => " Ma "
 .planetaryClassesToolStripMenuItem: "Planetary Classes" => "Klasy Planet"
 .planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Planeta Amoniakowa"
 .planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Planeta Ziemiopodobna"
@@ -436,13 +447,14 @@ SECTION UserControlMissions
 .pColResult: "Result (cr)" => "Wynik (cr)"
 .pColInfo: "Info" => "Informacje"
 .labelTo: "to" => "do"
-.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij na siatce, aby zmienić kolejność"
+.panelButtons.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 .MPlural: " Missions" => "Misje"
 .MSingular: " Mission" => "Misja"
 .Name: "Name" => "Nazwa"
 .Value: "Value (cr):\n{0:N0}" => "Wartość (cr):\n{0:N0}"
 .ValueN: "Value (cr)" => "Wartość (cr)"
 .ValueC: "Value: " => "Wartość: "
+UserControlMissions.ToolTip: "Left click and drag on grid to reorder" => "Kliknij lewym przyciskiem myszki i przeciągnij w tabeli aby zmienić kolejność"
 
 SECTION UserControlModules
 
@@ -612,6 +624,7 @@ SECTION UserControlRoute
 .textBox_FromX.ToolTip: "X Co-ord" => "Współrzędna X"
 .Confirm: "This will result in a large number ({0})) of jumps\r\nConfirm please" => "To spowoduje wygenerowanie dużej liczby ({0}) skoków\r\nProszę potwierdzić"
 .NoRoute: "No route set up, retry" => "Brak ustawionej trasy, spróbuj ponownie"
+UserControlRoute.comboBoxRoutingMetric: "Nearest to Waypoint" => "Najbliżej do Punktu Naw."
 
 SECTION UserControlRouteTracker
 
@@ -663,6 +676,7 @@ SECTION UserControlScan
 .cancelShowSystemToolStripMenuItem: "Cancel Show System" => "Anuluj Wyświetlenie Układu"
 .panelControls.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij panel prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
 .rollUpPanelTop.ToolTip: "Right click on panel to show/hide the toolbar" => "Kliknij panel prawym przyciskiem myszki aby pokazać/ukryć pasek narzędzi"
+.extCheckBoxDisplaySystemAlways.ToolTip: "Show system and value in main display" => "Pokaż układ i wartość w głównym widoku"
 
 SECTION UserControlScanGrid
 
@@ -712,7 +726,9 @@ SECTION UserControlScanGrid
 .columnsToolStripMenuItem.distanceToolStripMenuItem: "Distance" => "Odległość"
 .columnsToolStripMenuItem.informationToolStripMenuItem: "Information" => "Informacje"
 .toolStripStatusTotalValue: "Estimated scans value" => "Wartość"
-.toolStripStatusGreen: "GREEN SYSTEM" @
+.toolStripStatusGreen: "GREEN SYSTEM" => "ZIELONY UKŁAD"
+.GS: "This is a green system, as it has all existing jumponium materials available!" => "To jest zielony układ, ponieważ zawiera wszystkie istniejące materiały jumponium!"
+.JS: " jumponium materials found in system." => " materiały jumponium znalezione w układzie."
 
 SECTION UserControlSettings
 
@@ -902,6 +918,7 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Icy Planets" => "Planety Lodowe"
 .dontShowInformationWhenToolStripMenuItem.completelyHideThePanelToolStripMenuItem: "Completely hide the Panel" => "Całkowicie ukryj Panel"
 .Goldilocks: "Goldilocks, {0} ({1}-{2} AU),\n" => "Ekosfera, {0} ({1}-{2} AU),\n"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInPanelToolStripMenuItem: ".. when in a Panel" => ".. gdy w Panelu"
 
 SECTION UserControlStarDistance
 
@@ -1100,6 +1117,20 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn3: "Item" => "Element"
 .tabControlCustomStats.tabPageByShip.dataGridViewTextBoxColumn4: "Information" => "Informacje"
 .Mapped: "Mapped" => "Zmapowane"
+UserControlStats.BankAccount: "Bank Account" => "Konto Bankowe"
+UserControlStats.Combat: "Combat" => "Walka"
+UserControlStats.Crime: "Crime" => "Przestępstwa"
+UserControlStats.Smuggling: "Smuggling" => "Przemyt"
+UserControlStats.Trading: "Trading" => "Handel"
+UserControlStats.Mining: "Mining" => "Górnictwo"
+UserControlStats.Exploration: "Exploration" => "Eksploracja"
+UserControlStats.Passengers: "Passengers" => "Pasażerowie"
+UserControlStats.SearchandRescue: "Search and Rescue" => "Poszukiwania i Ratunek"
+UserControlStats.Crafting: "Crafting" => "Wytwarzanie"
+UserControlStats.Crew: "Crew" => "Załoga"
+UserControlStats.Multi: "Multi-crew" @
+UserControlStats.MaterialsTrader: "Materials Trader" => "Handel Materiałami"
+.tosystem: " to system " => " do układu "
 
 SECTION StatsTimeUserControl
 
@@ -1373,19 +1404,6 @@ SECTION UserControlTrippanel
 .FDEDSM: "Shows if EDSM indicates your it's first discoverer" => "Wyświetla, czy EDSM wskazuje że jesteś pierwszym odkrywcą układu"
 .UKN: "System {0} unknown to EDSM" => "Układ {0} nieznany w EDSM"
 
-SECTION UserControlSurveyor
-
-.Systemscancomplete: "System scan complete." => "Ukończono skan układu."
-.bodiesfound: " bodies found." => " znalezionych ciał niebieskich."
-.Noscanreported: "No scan reported." => "Brak skanu."
-.isanammoniaworld: " is an ammonia world." => " to planeta amoniakowa."
-.isanearthlikeworld: " is an earth like world." => " to planeta ziemiopodobna."
-.isawaterworld: " is a water world." => " to planeta oceaniczna."
-.isaterraformablewaterworld: " is a terraformable water world." => " to terraformowalna planeta oceaniczna."
-.isaterraformableplanet: " is a terraformable planet." => " to terraformowalna planeta."
-.Hasring: " Has ring." => " Ma pierścień."
-.Has: " Has " => " Ma "
-
 SECTION ScanDisplayControl
 
 .NSD: "No scan data available" => "Brak dostępnych danych skanu"
@@ -1404,6 +1422,9 @@ SECTION TagsForm
 .buttonMore: "+" => "+"
 .buttonMore.ToolTip: "Add more tags" => "Dodaj więcej tagów"
 TagsForm: "Tags" => "Tagi"
+TagsForm.TN: "Tag name" => "Nazwa tagu"
+TagsForm.SI: "Select image for this tag" => "Wybierz obraz dla tego tagu"
+TagsForm.DE: "Delete entry" => "Usuń wpis"
 
 SECTION FilterSelector
 

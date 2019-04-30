@@ -527,6 +527,8 @@ SECTION JournalScan
 .EVFD: "\nFirst Discovered+Mapped value: {0:N0}" @
 .EVFM: "\nFirst Mapped value: {0:N0}" @
 .SCNT: "\nScan Type: {0}" @
+.EVAD: "\nAlready Discovered" @
+.EVAM: "\nAlready Mapped" @
 .InferredCircumstellarzones: "Inferred Circumstellar zones:\n" @
 .MASS: "Mass:" @
 

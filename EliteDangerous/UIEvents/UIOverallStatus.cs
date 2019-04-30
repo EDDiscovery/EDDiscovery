@@ -21,7 +21,7 @@ namespace EliteDangerousCore.UIEvents
     public class UIOverallStatus : UIEvent
     {
         public UIOverallStatus(UIEvents.UIShipType.Shiptype st, List<UITypeEnum> list, int focus, UIEvents.UIPips.Pips pips, int fg, double fuel, double res, int cargo,
-            UIEvents.UIPosition.Position pos, double heading,
+            UIEvents.UIPosition.Position pos, double heading, string legalstate,
             DateTime time, bool refresh): base(UITypeEnum.OverallStatus, time, refresh)
         {
             ShipType = st;
@@ -34,6 +34,7 @@ namespace EliteDangerousCore.UIEvents
             Cargo = cargo;
             Pos = pos;
             Heading = heading;
+            LegalState = legalstate;
         }
 
         public UIEvents.UIShipType.Shiptype ShipType { get; private set; }
@@ -46,5 +47,6 @@ namespace EliteDangerousCore.UIEvents
         public int Cargo { get; private set; }
         public UIEvents.UIPosition.Position Pos { get; private set; }
         public double Heading { get; private set; }
+        public string LegalState { get; private set; }      // may be null
     }
 }

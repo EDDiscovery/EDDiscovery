@@ -28,7 +28,7 @@ namespace EliteDangerousCore.DB
         public WantedSystemClass()
         { }
 
-        public WantedSystemClass(DataRow dr)
+        public WantedSystemClass(DbDataReader dr)
         {
             id = (long)dr["id"];
             system = (string)dr["systemname"];
@@ -53,11 +53,11 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
             {
                 cmd.AddParameterWithValue("@systemname", system);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd2.ExecuteScalar();
                 }
                 return true;
             }
@@ -77,7 +77,7 @@ namespace EliteDangerousCore.DB
             {
                 cmd.AddParameterWithValue("@id", id);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }
@@ -91,18 +91,15 @@ namespace EliteDangerousCore.DB
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
                     {
-                        DataSet ds = cn.SQLQueryText( cmd);
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        {
-                            return null;
-                        }
-
                         List<WantedSystemClass> retVal = new List<WantedSystemClass>();
 
-                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        using (DbDataReader rdr = cmd.ExecuteReader())
                         {
-                            WantedSystemClass sys = new WantedSystemClass(dr);
-                            retVal.Add(sys);
+                            while (rdr.Read())
+                            {
+                                WantedSystemClass sys = new WantedSystemClass(rdr);
+                                retVal.Add(sys);
+                            }
                         }
 
                         return retVal;

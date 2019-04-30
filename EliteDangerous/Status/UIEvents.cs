@@ -61,6 +61,8 @@ namespace EliteDangerousCore
         Fuel,   // 3.3
         Cargo,  // 3.3
 
+        LegalStatus, // 3.4
+
         // EDD Ones
 
         ShipType,              

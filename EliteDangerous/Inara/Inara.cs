@@ -195,7 +195,7 @@ namespace EliteDangerousCore.Inara
         {
             JObject eventData = new JObject();
             eventData["powerName"] = name;
-            eventData["rankValue"] = value;
+            eventData["rankValue"] = value+1;       // rank here is 1-5, not 0-4
             return Event("setCommanderRankPower", dt, eventData);
         }
 
@@ -571,6 +571,21 @@ namespace EliteDangerousCore.Inara
                 }
 
                 eventData["rewardMaterials"] = ent;
+            }
+
+            if (mission.FactionEffects != null && mission.FactionEffects.Length > 0)
+            {
+                JArray ent = new JArray();
+                foreach (var p in mission.FactionEffects)
+                {
+                    JObject o = new JObject();
+                    o["minorfactionName"] = p.Faction;
+                    o["influenceGain"] = (p.Influence != null && p.Influence.Length>0) ? p.Influence[0].Influence : "";
+                    o["reputationGain"] = p.Reputation;
+                    ent.Add(o);
+                }
+
+                eventData["minorfactionEffects"] = ent;
             }
 
             return Event("setCommanderMissionCompleted", mission.EventTimeUTC, eventData);

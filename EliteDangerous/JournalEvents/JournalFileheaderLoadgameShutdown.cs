@@ -41,7 +41,10 @@ namespace EliteDangerousCore.JournalEvents
         {
             get
             {
-                if (GameVersion.Contains("Beta"))
+                if (GameVersion.Contains("Beta") )
+                    return true;
+
+                if (GameVersion.Contains("April Update EDH") && ( Build.Contains("r198057/r0") || Build.Contains("r197746/r0")))
                     return true;
 
                 if (GameVersion.Contains("Update EDH"))

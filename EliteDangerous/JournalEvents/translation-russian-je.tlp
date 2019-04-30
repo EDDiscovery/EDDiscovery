@@ -11,11 +11,14 @@ SECTION JournalTypeEnum
 
 .BuyExplorationData: "Buy Exploration Data" => "Покупка исследовательских данных"
 .BuyTradeData: "Buy Trade Data" => "Покупка данных о товарах"
+
 .CapShipBond: "Cap Ship Bond" => "Боевые облигации (крейсер)"
 .Cargo: "Cargo" => "Груз"
+
 .CargoDepot: "Cargo Depot" => "Доставка груза"
 .ChangeCrewRole: "Change Crew Role" => "Смена роли в экипаже"
 .ClearSavedGame: "Clear Saved Game" => "Сброс сохранения"
+
 .CockpitBreached: "Cockpit Breached" => "Пробоина в фонаре кабины"
 .CollectCargo: "Collect Cargo" => "Груз собран"
 .Commander: "Commander" => "Командир"
@@ -23,12 +26,14 @@ SECTION JournalTypeEnum
 .CommunityGoal: "Community Goal" => "Цели сообщества"
 .CommunityGoalJoin: "Community Goal Join" => "Присоединение к цели сообщества"
 .CommunityGoalReward: "Community Goal Reward" => "Награда цели сообщества"
+
 .Continued: "Continued" => "Продолжение лога"
 .CrewAssign: "Crew Assign" => "Назначен член экипажа"
 .CrewFire: "Crew Fire" => "Уволен член экипажа"
 .CrewHire: "Crew Hire" => "Нанят член экипажа"
 .DatalinkScan: "Datalink Scan" => "Сканирование канала данных"
 .Died: "Died" => "Корабль уничтожен"
+
 .DiscoveryScan: "Discovery Scan" => "Сканирование системы"
 .Docked: "Docked" => "Стыковка"
 .DockFighter: "Dock Fighter" => "Истребитель погружен"
@@ -36,18 +41,26 @@ SECTION JournalTypeEnum
 .DockingDenied: "Docking Denied" => "В стыковке отказано"
 .DockingGranted: "Docking Granted" => "Стыковка разрешена"
 .DockingRequested: "Docking Requested" => "Запрос стыковки"
+
 .DockingTimeout: "Docking Timeout" => "Стыковка продлилась слишком долго"
 .DockSRV: "Dock SRV" => "ТРП погружен"
+
 .EjectCargo: "Eject Cargo" => "Сброс груза"
+
 .EndCrewSession: "End Crew Session" => "Экипаж распущен"
+
 .EngineerApply: "Engineer Apply" => "Изготовление модификации (до 3.0)" 
 .EngineerContribution: "Engineer Contribution" => "Взнос для инженера"
 .EngineerCraft: "Engineer Craft" => "Изготовление модификации"
 .EngineerLegacyConvert: "Engineer Legacy Convert" => "Преобразование устаревшей модификации"
+
 .EngineerProgress: "Engineer Progress" => "Инженеры"
+
 .EscapeInterdiction: "Escape Interdiction" => "Уход от перехвата"
+
 .FactionKillBond: "Faction Kill Bond" => "Боевые облигации"
 .FSDJump: "FSD Jump" => "Прыжок"
+
 .FuelScoop: "Fuel Scoop" => "Сбор топлива"
 .Fileheader: "Fileheader" => "Заголовок файла"
 .FighterDestroyed: "Fighter Destroyed" => "Истребитель разрушен"
@@ -56,8 +69,12 @@ SECTION JournalTypeEnum
 .HeatDamage: "Heat Damage" => "Повреждения от перегрева"
 .HeatWarning: "Heat Warning" => "Предупреждение о перегреве"
 .HullDamage: "Hull Damage" => "Повреждения корпуса"
+
+
 .Interdicted: "Interdicted" => "Ваш корабль перехвачен"
+
 .Interdiction: "Interdiction" => "Инициирован перехват"
+
 .JetConeBoost: "Jet Cone Boost" => "Перегрузка FSD (джет)"
 .JetConeDamage: "Jet Cone Damage" => "Урон от перегрузки (джет)"
 .JoinACrew: "Join A Crew" => "Присоединение к экипажу"
@@ -88,11 +105,13 @@ SECTION JournalTypeEnum
 .MissionRedirected: "Mission Redirected" => "Миссия обновлена"
 .ModuleInfo: "Module Info" => "Информация о модулях"
 .ModuleBuy: "Module Buy" => "Покупка модуля"
+
 .ModuleRetrieve: "Module Retrieve" => "Перемещение из хранилища"
 .ModuleSell: "Module Sell" => "Продажа модуля"
 .ModuleStore: "Module Store" => "Помещение в хранилище"
 .ModuleSwap: "Module Swap" => "Обмен модуля"
 .Music: "Music" => "Музыка"
+
 .NavBeaconScan: "Nav Beacon Scan" => "Данные нав. маяка"
 .NewCommander: "New Commander" => "Новый командир"
 .NpcCrewPaidWage: "Npc Crew Paid Wage" => "Выплата экипажу (npc)"
@@ -127,10 +146,12 @@ SECTION JournalTypeEnum
 .RepairAll: "Repair All" => "Корабль полностью отремонтирован"
 .RepairDrone: "Repair Drone" => "Корабль отремонтирован дроном"
 .Reputation: "Reputation" => "Репутация"
+
 .RestockVehicle: "Restock Vehicle" => "Покупка транспорта"
 .Resurrect: "Resurrect" => "Воскрешение"
 .Scan: "Scan" => "Сканирование"
 .Scanned: "Scanned" => "Обнаружено сканирование корабля"
+
 .ScientificResearch: "Scientific Research" => "Научные исследования"
 .Screenshot: "Screenshot" => "Скриншот"
 .SearchAndRescue: "Search And Rescue" => "Спасательные операции"
@@ -496,7 +517,8 @@ SECTION JournalScan
 
 .Age: "Age:;my;0.0" => "возраст: ; млн лет;0.0"
 
-.RS: "Radius:;SR;0.00" => "солнечных радиусов: ; ;0.00"
+
+.RS: "Radius:" => "Радиус: "
 .MEM: "Mass:;EM;0.00" => "земных масс: ; ;0.00"
 .Landable: "<;, Landable" => "<;, пригодна для посадки"
 .Terraformable: "<;, Terraformable" => "<;, пригодна для терраформирования"
@@ -534,11 +556,15 @@ SECTION JournalScan
 .RotationPeriod: "Rotation Period: {0} days\n" => "Период вращения: {0} дн\n"
 .Tidallylocked: "Tidally locked\n" => "Приливный захват\n"
 .Candidateforterraforming: "Candidate for terraforming\n" => "Кандидат на терраформирование\n"
-.Belt: "Belt{0}" => "Пояс{0}"
 .Moons: " Moons" => " лунных масс"
-.Ring: "Ring{0}" => "Кольца{0}"
-.EV: "\nEstimated value: {0:N0}" => "\nПримерная стоимость данных сканирования: {0:N0} кр.,"
-.DB: "\n\nDiscovered by {0} on {1}" => "\n\nПервооткрыватель: {0} в {1}"
+
+.Belt: "Belt" => "Пояс"
+.Belts: "Belts" => "Пояса"
+.Ring: "Ring" => "Кольцо"
+.Rings: "Rings" => "Кольца"
+
+.EV: "\nEstimated value: {0:N0}" => "\n\nПримерная стоимость данных сканирования: {0:N0} кр.,"
+.DB: "\n\nDiscovered by {0} on {1}" => "\n\nПервооткрыватель: {0}, дата: {1}"
 .HabitableZoneApprox: "Habitable Zone Approx. {0} ({1}-{2} AU)\n" => "Обитаемая зона прибл. {0} ({1}-{2} а. е.)\n"
 .Othersstarsnotconsidered: " (Others stars not considered)\n" => " (без учета других звезд)\n\n"
 .Materials: "Materials:\n" => "Материалы:\n"
@@ -571,6 +597,9 @@ SECTION JournalScan
 
 .EVFM: "\nFirst Mapped value: {0:N0}" => "\nСтоимость данных + бонус первого картографировавшего: {0:N0} кр."
 .SCNT: "\nScan Type: {0}" => "\nТип сканирования: {0}"
+.InferredCircumstellarzones: "Inferred Circumstellar zones:\n" => "Предполагаемая околозвездная зона:\n"
+.MASS: "Mass:" => "Масса: "
+
 
 SECTION JournalSAAScanComplete
 

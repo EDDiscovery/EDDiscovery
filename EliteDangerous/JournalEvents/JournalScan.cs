@@ -43,6 +43,8 @@ namespace EliteDangerousCore.JournalEvents
         public bool HasRings { get { return Rings != null && Rings.Length > 0; } }
         public StarPlanetRing[] Rings { get; set; }
         public List<BodyParent> Parents { get; set; }
+        public bool? WasDiscovered { get; set; }                    // direct, 3.4, indicates whether the body has already been discovered
+        public bool? WasMapped { get; set; }                        // direct, 3.4, indicates whether the body has already been mapped
 
         // STAR
         public string StarType { get; set; }                        // null if no StarType, direct from journal, K, A, B etc
@@ -75,6 +77,7 @@ namespace EliteDangerousCore.JournalEvents
         public double? nOrbitalPeriodDays { get; set; }
         public double? nAxialTilt { get; set; }                     // direct, radians
         public double? nAxialTiltDeg { get; set; }      
+        public int? StarSubclass { get; set; }                      // star Subclass, direct, 3.4
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
@@ -293,11 +296,15 @@ namespace EliteDangerousCore.JournalEvents
 
             nLandable = evt["Landable"].BoolNull();
 
+            WasMapped = evt["WasMapped"].BoolNull();            // new 3.4
+            WasDiscovered = evt["WasDiscovered"].BoolNull();        // new 3.4
+
             ReserveLevelStr = evt["ReserveLevel"].Str();
 
             if (IsStar)
             {
                 StarTypeID = Bodies.StarStr2Enum(StarType);
+                StarSubclass = evt["Subclass"].IntNull();
 
                 if (nRadius.HasValue && nSurfaceTemperature.HasValue)
                 {
@@ -666,6 +673,11 @@ namespace EliteDangerousCore.JournalEvents
                     scanText.AppendFormat("\nFirst Discovered+Mapped value: {0:N0}".Tx(this, "EVFD"), EstimatedValueFirstDiscoveredFirstMapped);
                     scanText.AppendFormat("\nFirst Mapped value: {0:N0}".Tx(this, "EVFM"), EstimatedValueFirstMapped);
                 }
+
+                if (WasDiscovered.HasValue && WasDiscovered.Value)
+                    scanText.AppendFormat("\nAlready Discovered".Tx(this, "EVAD"));
+                if (WasMapped.HasValue && WasMapped.Value)
+                    scanText.AppendFormat("\nAlready Mapped".Tx(this, "EVAM"));
             }
 
             if (EDSMDiscoveryCommander != null)

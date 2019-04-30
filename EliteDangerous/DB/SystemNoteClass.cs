@@ -40,7 +40,7 @@ namespace EliteDangerousCore.DB
         {
         }
 
-        public SystemNoteClass(DataRow dr)
+        public SystemNoteClass(DbDataReader dr)
         {
             id = (long)dr["id"];
             Journalid = (long)dr["journalid"];
@@ -70,11 +70,11 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@edsmid", EdsmId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
                 {
-                    id = (long)cn.SQLScalar( cmd2);
+                    id = (long)cmd2.ExecuteScalar();
                 }
 
                 globalSystemNotes.Add(this);
@@ -104,7 +104,7 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@journalid", Journalid);
                 cmd.AddParameterWithValue("@EdsmId", EdsmId);
 
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 Dirty = false;
             }
@@ -125,7 +125,7 @@ namespace EliteDangerousCore.DB
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", id);
-                cn.SQLNonQueryText( cmd);
+                cmd.ExecuteNonQuery();
 
                 globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
                 return true;
@@ -171,7 +171,7 @@ namespace EliteDangerousCore.DB
             {
                 using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
                 {
-                    cn.SQLNonQueryText( cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
@@ -184,23 +184,29 @@ namespace EliteDangerousCore.DB
                 {
                     using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
                     {
-                        DataSet ds = cn.SQLQueryText( cmd);
-                        if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                        List<SystemNoteClass> notes = new List<SystemNoteClass>();
+
+                        using (DbDataReader rdr = cmd.ExecuteReader())
+                        {
+                            while (rdr.Read())
+                            {
+                                notes.Add(new SystemNoteClass(rdr));
+                            }
+                        }
+
+                        if (notes.Count == 0)
                         {
                             return false;
                         }
-
-                        globalSystemNotes.Clear();
-
-                        foreach (DataRow dr in ds.Tables[0].Rows)
+                        else
                         {
-                            SystemNoteClass sys = new SystemNoteClass(dr);
-                            globalSystemNotes.Add(sys);
-                            //System.Diagnostics.Debug.WriteLine("Global note " + sys.Journalid + " " + sys.SystemName + " " + sys.Note);
+                            foreach (var sys in notes)
+                            {
+                                globalSystemNotes.Add(sys);
+                            }
+
+                            return true;
                         }
-
-                        return true;
-
                     }
                 }
             }

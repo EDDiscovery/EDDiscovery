@@ -89,11 +89,11 @@ namespace EliteDangerousCore
                 cmd.AddParameterWithValue("@EdsmId", EdsmID);
                 cmd.AddParameterWithValue("@Synced", Synced);
 
-                cn.SQLNonQueryText(cmd);
+                cmd.ExecuteNonQuery();
 
                 using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
                 {
-                    Id = (int)(long)cn.SQLScalar(cmd2);
+                    Id = (long)cmd2.ExecuteScalar();
                 }
                 return true;
             }
@@ -119,7 +119,7 @@ namespace EliteDangerousCore
                 cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
                 cmd.AddParameterWithValue("@EdsmId", EdsmID);
                 cmd.AddParameterWithValue("@Synced", Synced);
-                cn.SQLNonQueryText(cmd);
+                cmd.ExecuteNonQuery();
 
                 return true;
             }
@@ -141,7 +141,7 @@ namespace EliteDangerousCore
                 {
                     cmd.AddParameterWithValue("@ID", Id);
                     cmd.AddParameterWithValue("@EventData", jo.ToString());
-                    cn.SQLNonQueryText(cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
             finally
@@ -166,7 +166,7 @@ namespace EliteDangerousCore
             using (DbCommand cmd = cn.CreateCommand("DELETE FROM JournalEntries WHERE id = @id"))
             {
                 cmd.AddParameterWithValue("@id", idvalue);
-                cn.SQLNonQueryText(cmd);
+                cmd.ExecuteNonQuery();
             }
         }
 
@@ -261,7 +261,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@sync", Synced);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update sync flag ID {0} with {1}", Id, Synced));
-                    cn.SQLNonQueryText(cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
             finally
@@ -282,7 +282,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@journalid", Id);
                     cmd.AddParameterWithValue("@cmdrid", cmdrid);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with map colour", Id));
-                    cn.SQLNonQueryText(cmd);
+                    cmd.ExecuteNonQuery();
                     CommanderId = cmdrid;
                 }
             }
@@ -300,7 +300,7 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@cmdridto", to);
                     cmd.AddParameterWithValue("@cmdridfrom", from);
                     System.Diagnostics.Trace.WriteLine(string.Format("Update cmdr id ID {0} with {1}", from, to));
-                    cn.SQLNonQueryText(cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
             return true;
@@ -451,16 +451,14 @@ namespace EliteDangerousCore
 
                     cmd.CommandText += " Order By EventTime ASC";
 
-                    DataSet ds = cn.SQLQueryText(cmd);
-
-                    if (ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
-                        return list;
-
-                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
-                        JournalEntry sys = JournalEntry.CreateJournalEntry(dr);
-                        sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
-                        list.Add(sys);
+                        while (reader.Read())
+                        {
+                            JournalEntry sys = JournalEntry.CreateJournalEntry(reader);
+                            sys.beta = tlus.ContainsKey(sys.TLUId) ? tlus[sys.TLUId].Beta : false;
+                            list.Add(sys);
+                        }
                     }
 
                     return list;
@@ -659,7 +657,7 @@ namespace EliteDangerousCore
                         cmd.AddParameterWithValue("@cmd", currentcmdrid);
                     }
 
-                    cn.SQLNonQueryText(cmd);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

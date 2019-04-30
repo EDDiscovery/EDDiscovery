@@ -658,20 +658,25 @@ namespace EliteDangerousCore
             engineering["Level"] = module.Engineering.Level;
             engineering["Quality"] = module.Engineering.Quality;
 
-            JArray modifiers = new JArray();
-            foreach (ShipModule.EngineeringModifiers modifier in module.Engineering.Modifiers)
+            if (module.Engineering.Modifiers != null) // may not have any
             {
-                JObject jmodifier = new JObject();
-                jmodifier["Label"] = modifier.Label;
-                jmodifier["Value"] = modifier.Value;
-                jmodifier["OriginalValue"] = modifier.OriginalValue;
-                jmodifier["LessIsGood"] = modifier.LessIsGood;
-                modifiers.Add(jmodifier);
+                JArray modifiers = new JArray();
+                foreach (ShipModule.EngineeringModifiers modifier in module.Engineering.Modifiers)
+                {
+                    JObject jmodifier = new JObject();
+                    jmodifier["Label"] = modifier.Label;
+                    jmodifier["Value"] = modifier.Value;
+                    jmodifier["OriginalValue"] = modifier.OriginalValue;
+                    jmodifier["LessIsGood"] = modifier.LessIsGood;
+                    modifiers.Add(jmodifier);
+                }
+
+                engineering["Modifiers"] = modifiers;
             }
 
+            if (module.Engineering.ExperimentalEffect.HasChars() )
+                engineering["ExperimentalEffect"] = module.Engineering.ExperimentalEffect;
 
-            engineering["Modifiers"] = modifiers;
-            engineering["ExperimentalEffect"] = module.Engineering.ExperimentalEffect;
             return engineering;
         }
 
