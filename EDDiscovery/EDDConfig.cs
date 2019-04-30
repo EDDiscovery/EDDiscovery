@@ -447,7 +447,7 @@ namespace EDDiscovery
             get
             {
                 if (homeSystem == null)
-                    homeSystem = SystemClassDB.GetSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
+                    homeSystem = SystemCache.FindSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
                 if ( homeSystem == null )
                     homeSystem = new EliteDangerousCore.SystemClass("Sol", 0, 0, 0);
                 return homeSystem;

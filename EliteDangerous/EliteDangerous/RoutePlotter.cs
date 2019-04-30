@@ -72,7 +72,7 @@ namespace EliteDangerousCore
                                               curpos.Y + maxrange * travelvectorperly.Y,
                                               curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
 
-                ISystem bestsystem = DB.SystemClassDB.GetSystemNearestTo(curpos, nextpos, maxrange, maxrange - 0.5, routemethod);
+                ISystem bestsystem = DB.SystemCache.GetSystemNearestTo(curpos, nextpos, maxrange, Math.Min(maxrange*1/2,250), routemethod, 1000);     // at least get 1/4 way there, otherwise waypoint.  Best 1000 from waypoint checked
 
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;

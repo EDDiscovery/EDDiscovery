@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            textBoxTarget.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textBoxTarget.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList);
 
             // same order as Sel bits are defined in, one bit per selection item.
             toolstriplist = new ToolStripMenuItem[] { toolStripSystem , toolStripEDSM , toolStripVisits, toolStripBody,

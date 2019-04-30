@@ -63,7 +63,7 @@ namespace EliteDangerousCore
 
             // TLUs
             List<TravelLogUnit> tlus = TravelLogUnit.GetAll();
-            Dictionary<string, TravelLogUnit> netlogtravelogUnits = tlus.Where(t => t.type == 1).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
+            Dictionary<string, TravelLogUnit> netlogtravelogUnits = tlus.Where(t => t.type == TravelLogUnit.NetLogType).GroupBy(t => t.Name).Select(g => g.First()).ToDictionary(t => t.Name);
             Dictionary<long, string> travellogunitid2name = netlogtravelogUnits.Values.ToDictionary(t => t.id, t => t.Name);
             Dictionary<string, List<JournalLocOrJump>> vsc_lookup = JournalEntry.GetAll().OfType<JournalLocOrJump>().GroupBy(v => v.TLUId).Where(g => travellogunitid2name.ContainsKey(g.Key)).ToDictionary(g => travellogunitid2name[g.Key], g => g.ToList());
 

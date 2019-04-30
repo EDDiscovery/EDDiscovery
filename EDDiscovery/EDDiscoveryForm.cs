@@ -155,7 +155,7 @@ namespace EDDiscovery
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");
 
-            msg.Invoke("Modulating Shields");
+            msg.Invoke("Loading Translations");
 
             if (EDDOptions.Instance.ResetLanguage)
                 EDDConfig.Instance.Language = "None";
@@ -184,7 +184,7 @@ namespace EDDiscovery
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");
             PopOuts = new PopOutControl(this);
 
-            msg.Invoke("Repairing Canopy");
+            msg.Invoke("Loading Themes");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
 
             screenshotconverter = new ScreenShots.ScreenShotConverter(this);
@@ -256,13 +256,15 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Audio");
 
-            msg.Invoke("Activating Sensors");
+            msg.Invoke("Loading Action Packs");
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
 
             actioncontroller.ReLoad();          // load system up here
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Theming");
+
+            msg.Invoke("Applying Themes");
 
             ApplyTheme();
 
@@ -620,8 +622,8 @@ namespace EDDiscovery
 
         public void ForceEDSMEDDBFullRefresh()
         {
-            SystemClassEDSM.ForceEDSMFullUpdate();
-            EliteDangerousCore.EDDB.SystemClassEDDB.ForceEDDBFullUpdate();
+            SQLiteConnectionSystem.ForceEDSMFullUpdate();
+            SQLiteConnectionSystem.ForceEDDBFullUpdate();
             Controller.AsyncPerformSync(true, true);
         }
 
@@ -871,7 +873,7 @@ namespace EDDiscovery
         {
             if (!EDDConfig.Instance.EDSMEDDBDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx(this, "SDDis"));
-            else if (!Controller.AsyncPerformSync(eddbsync: true))      // we want it to have run, to completion, to allow another go..
+            else if (!Controller.AsyncPerformSync(eddb_edsmalias_sync: true))      // we want it to have run, to completion, to allow another go..
                 ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx(this, "SDSyncErr"));
         }
 

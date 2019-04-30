@@ -20,11 +20,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using OpenTK.Graphics.OpenGL;
 using System.Threading;
 using System.Windows.Forms;
-using EDDiscovery;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 
@@ -37,7 +35,7 @@ namespace EDDiscovery
         public float Z { get; set; }
         public int Percentage { get; set; }          // foreground flags
         public float CalculatedDistance { get; set; }  // foreground.. what distance did we calc on..
-        public SystemClassDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
+        public SystemsDB.SystemAskType dBAsk { get; set; } // set for an explicit ask for unpopulated systems
         public int Count { get { return array1displayed ? array1vertices : array2vertices; } }
         public int CountJustMade { get { return array1displayed ? array2vertices : array1vertices; } }
         public bool Working = false;
@@ -77,12 +75,26 @@ namespace EDDiscovery
         public float DistanceFrom(float x, float z)
         { return (float)Math.Sqrt((x - X) * (x - X) + (z - Z) * (z - Z)); }
 
+        private Vector3 FromIntXYZScalar(int x, int y, int z)
+        {
+            return new Vector3((float)x/ SystemClass.XYZScalar, (float)y / SystemClass.XYZScalar, (float)z / SystemClass.XYZScalar);
+        }
+
         public void FillFromDB()        // does not affect the display object
         {
+            GridId.XZ(Id, out float x, out float z);
             if (array1displayed)
-                array2vertices = SystemClassDB.GetSystemVector(Id, ref array2, ref carray2, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));       // MAY return array/carray is null
+            {
+                SystemsDB.GetSystemVector(Id, ref array2, ref carray2, Percentage, FromIntXYZScalar, dBAsk);       // MAY return array/carray is null
+                array2vertices = array2.Length;
+//                System.Diagnostics.Debug.WriteLine("Grid " + Id + " " + x + "," + z + " into 2  at " + Percentage + " for " + array2vertices);
+            }
             else
-                array1vertices = SystemClassDB.GetSystemVector(Id, ref array1, ref carray1, dBAsk, Percentage, (x, y, z) => new Vector3(x, y, z));
+            {
+                SystemsDB.GetSystemVector(Id, ref array1, ref carray1, Percentage, FromIntXYZScalar, dBAsk);
+                array1vertices = array1.Length;
+//                System.Diagnostics.Debug.WriteLine("Grid " + Id + " " + x + "," + z + " into 1  at " + Percentage + " for " + array1vertices);
+            }
         }
 
         public void FillFromSystemList(List<HistoryEntry> cls) // does not affect the display object
@@ -376,11 +388,11 @@ namespace EDDiscovery
         private EventWaitHandle ewh = new EventWaitHandle(false, EventResetMode.AutoReset);
         private float curx = 0, curz = 0;
 
-        private int midpercentage = 80;
-        private float middistance = 20000;
-        private int farpercentage = 50;
-        private float fardistance = 40000;
-        private float MinRecalcDistance = 5000;            // only recalc a grid if we are more than this away from its prev calc pos
+        private float middistance = 5000;
+        private int midpercentage = 10;
+        private int farpercentage = 5;
+        private float fardistance = 20000;
+        private float MinRecalcDistance = 2500;            // only recalc a grid if we are more than this away from its prev calc pos
 
         private Color popcolour = Color.Blue;
 
@@ -400,7 +412,7 @@ namespace EDDiscovery
                     Debug.Assert(ok);
                     StarGrid grd = new StarGrid(id, xp, zp, Color.Transparent, 1.0F);           //A=0 means use default colour array
                     if (xp == 0 && zp == 0)                                     // sol grid, unpopulated stars please
-                        grd.dBAsk = SystemClassDB.SystemAskType.UnPopulatedStars;
+                        grd.dBAsk = SystemsDB.SystemAskType.UnpopulatedStars;
 
                     grids.Add(grd);
                 }
@@ -411,20 +423,10 @@ namespace EDDiscovery
 
             int solid = GridId.Id(0, 0);                                    
             populatedgrid = new StarGrid(solid, 0, 0, Color.Transparent, 1.0F);      // Duplicate grid id but asking for populated stars
-            populatedgrid.dBAsk = SystemClassDB.SystemAskType.PopulatedStars;
+            populatedgrid.dBAsk = SystemsDB.SystemAskType.PopulatedStars;
             grids.Add(populatedgrid);   // add last so shown last
 
-            long total = SystemClassDB.GetTotalSystemsFast();
-
-            total = Math.Min(total, 10000000);                  // scaling limit at 10mil
-            long offset = (total - 1000000) / 100000;           // scale down slowly.. experimental!
-            midpercentage -= (int)(offset / 2);
-            farpercentage -= (int)(offset / 3);
-
-            //midpercentage = 10;           // agressive debugging options
-            //farpercentage = 1;
-
-            Console.WriteLine("Grids " + grids.Count + " Database Stars " + total + " mid " + midpercentage + " far " + farpercentage);
+            Console.WriteLine("Grids " + grids.Count + " mid " + midpercentage + " far " + farpercentage);
         }
 
         public void Start()
@@ -541,10 +543,12 @@ namespace EDDiscovery
                     {
                         StarGrid gcheck = grids[i];
 
+                        //if (gcheck.Id == 2200)
+                            //System.Diagnostics.Debug.WriteLine("Cell 2200 ");
+
                         if (gcheck.Id >= 0 && !gcheck.Working )                                     // if not a special grid
                         {
                             float dist = gcheck.DistanceFrom(curx, curz);
-
                             if (Math.Abs(dist - gcheck.CalculatedDistance) > MinRecalcDistance) // if its too small a change, ignore.. histerisis
                             {
                                 int percentage = GetPercentage(dist);
@@ -576,6 +580,7 @@ namespace EDDiscovery
 
                     if (selmin != null)
                     {
+                        //System.Diagnostics.Debug.WriteLine("Repaint Grid -- " + selmin.Id + " dist from " + curx + "," + curz + " is " + selmin.DistanceFrom(curz,curz));
                         selmin.Working = true;                                          // stops another go by this thread, only cleared by UI when it has displayed
                         int prevpercent = selmin.Percentage;
                         float prevdist = selmin.CalculatedDistance;

@@ -37,7 +37,6 @@ namespace EDDiscovery
 
         public StarNames(ISystem other , Vector3 posf)          // we can't use the position in other, as its in doubles. and we must be able to accurately match
         {
-            id = other.ID;
             name = other.Name;
             pos = posf;
             population = other.Population;
@@ -245,7 +244,8 @@ namespace EDDiscovery
 
                 float textscalingw = Math.Min(_starnamemaxly, Math.Max(_starnamesizely / _lastcamera.LastZoom, _starnameminly)); // per char
                 float starsize = Math.Min(Math.Max(_lastcamera.LastZoom / 10F, 1.0F), 20F);     // Normal stars are at 1F.
-                //Console.WriteLine("Per char {0} h {1} sc {2} ", textscalingw, textscalingh, starsize);
+
+                System.Diagnostics.Debug.WriteLine("Named Stars begin search");
 
                 foreach (StarNames s in _starnamesbackground.Values)    // all items not processed
                     s.updatedinview = false;                                 // only items remaining will clear this
@@ -272,6 +272,7 @@ namespace EDDiscovery
                                    (_nameson && ((sys.nametexture == null && sys.newnametexture == null) ));
                             
                             painted++;
+                            //System.Diagnostics.Debug.WriteLine("In view there " + sys.name + " draw " + draw);
                         }
                         else if (painted < maxstars)
                         {
@@ -285,8 +286,13 @@ namespace EDDiscovery
                                 draw = true;
                                 painted++;
 
+                                //System.Diagnostics.Debug.WriteLine("Found " + inview.position);
                                 //Tools.LogToFile(String.Format("starnamesest: push {0}", sys.Pos));
                                 //res += "N";
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("Cant find " + inview.position);
                             }
                         }
                         else
@@ -321,6 +327,8 @@ namespace EDDiscovery
                     }
                 }
 
+                System.Diagnostics.Debug.WriteLine("Process " + _starnamesbackground.Count);
+
                 foreach (StarNames s in _starnamesbackground.Values)              // only items above will remain.
                 {
                     //if (s.inview != s.updatedinview) res += (s.updatedinview) ? "+" : "-";
@@ -341,6 +349,7 @@ namespace EDDiscovery
 
             _formmap.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate              // kick the UI thread to process.
             {
+                System.Diagnostics.Debug.WriteLine("Tell forground to change");
                 _formmap.ChangeNamedStars();
             });
         }

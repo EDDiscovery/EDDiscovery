@@ -372,7 +372,7 @@ namespace EDDiscovery
 
             SetCenterSystemTo(centerSystem);                   // move to this..
 
-            textboxFrom.SetAutoCompletor(SystemClassDB.ReturnSystemListForAutoComplete);
+            textboxFrom.SetAutoCompletor(SystemCache.ReturnSystemAdditionalListForAutoComplete);
         }
 
         protected override void OnShown(EventArgs e)
@@ -1841,28 +1841,25 @@ namespace EDDiscovery
             if (hoversystem != null)
             {
                 sysname = hoversystem.Name;
+
                 info = hoversystem.Name + Environment.NewLine + string.Format("x:{0} y:{1} z:{2}", hoversystem.X.ToString("0.00"), hoversystem.Y.ToString("0.00"), hoversystem.Z.ToString("0.00"));
+
                 pos = new Vector3d(hoversystem.X, hoversystem.Y, hoversystem.Z);
 
-                ISystem sysclass = (hoversystem.ID != 0) ? SystemClassDB.GetSystem(hoversystem.ID, name: hoversystem.Name) : SystemClassDB.GetSystem(hoversystem.Name);
+                if (hoversystem.Allegiance != EDAllegiance.Unknown)
+                    info += Environment.NewLine + "Allegiance: " + hoversystem.Allegiance;
 
-                if (sysclass != null)
-                {
-                    if (sysclass.Allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + sysclass.Allegiance;
+                if (hoversystem.PrimaryEconomy != EDEconomy.Unknown)
+                    info += Environment.NewLine + "Economy: " + hoversystem.PrimaryEconomy;
 
-                    if (sysclass.PrimaryEconomy != EDEconomy.Unknown)
-                        info += Environment.NewLine + "Economy: " + sysclass.PrimaryEconomy;
+                if (hoversystem.Government != EDGovernment.Unknown)
+                    info += Environment.NewLine + "Government: " + hoversystem.Allegiance;
 
-                    if (sysclass.Government != EDGovernment.Unknown)
-                        info += Environment.NewLine + "Government: " + sysclass.Allegiance;
+                if (hoversystem.State != EDState.Unknown)
+                    info += Environment.NewLine + "State: " + hoversystem.State;
 
-                    if (sysclass.State != EDState.Unknown)
-                        info += Environment.NewLine + "State: " + sysclass.State;
-
-                    if (sysclass.Allegiance != EDAllegiance.Unknown)
-                        info += Environment.NewLine + "Allegiance: " + sysclass.Allegiance;
-                }
+                if (hoversystem.Allegiance != EDAllegiance.Unknown)
+                    info += Environment.NewLine + "Allegiance: " + hoversystem.Allegiance;
 
                 if (hoversystem.Population != 0)
                     info += Environment.NewLine + "Population: " + hoversystem.Population;
@@ -1888,7 +1885,7 @@ namespace EDDiscovery
                     Vector3d cs = new Vector3d(centerSystem.X, centerSystem.Y, centerSystem.Z);
                     info += Environment.NewLine + "Distance from " + centerSystem.Name + ": " + (cs-pos).Length.ToString("0.0");
                 }
-                // if exists, history not hover, history not centre
+                // if ex, history not hover, history not centre
                 if (historySelection != null && !sysname.Equals(historySelection.Name) && !historySelection.Name.Equals(centerSystem.Name))
                 {
                     Vector3d hs = new Vector3d(historySelection.X, historySelection.Y, historySelection.Z);
@@ -2226,7 +2223,7 @@ namespace EDDiscovery
                     return sys.System;
             }
 
-            ISystem isys = SystemClassDB.GetSystem(name,cn);
+            ISystem isys = SystemCache.FindSystem(name,cn);
             return isys;
         }
 
@@ -2240,7 +2237,7 @@ namespace EDDiscovery
                     return vsc.System;
             }
 
-            return SystemClassDB.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
+            return SystemCache.GetSystemByPosition(pos.X, pos.Y, pos.Z, cn);
         }
 
         private ISystem SafeSystem(ISystem s)

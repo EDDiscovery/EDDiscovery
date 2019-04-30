@@ -73,7 +73,7 @@ namespace EDDiscovery.Actions
                 if (cmdname != null)
                 {
                     StarScan scan = (ap.actioncontroller as ActionController).HistoryList.starscan;
-                    ISystem sc = SystemClassDB.GetSystem(cmdname);
+                    ISystem sc = SystemCache.FindSystem(cmdname);
 
                     if (sc == null)
                     {

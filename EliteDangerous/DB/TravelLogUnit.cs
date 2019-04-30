@@ -23,6 +23,12 @@ namespace EliteDangerousCore.DB
 {
     public class TravelLogUnit
     {
+        public const int NetLogType = 1;
+        public const int EDSMType = 2;
+        public const int JournalType = 3;
+        public const int TypeMask = 0xff;
+        public const int BetaMarker = 0x8000;
+
         public long id;
         public string Name;
         public int type;            // bit 15 = BETA.  Type = 2 EDSM log, 3 = Journal, 1 = Old pre 2.1 logs.
@@ -72,13 +78,12 @@ namespace EliteDangerousCore.DB
         {
             get
             {
-                if ((Path != null && Path.Contains("PUBLIC_TEST_SERVER")) || (type & 0x8000) == 0x8000)
+                if ((Path != null && Path.Contains("PUBLIC_TEST_SERVER")) || (type & BetaMarker) == BetaMarker)
                     return true;
                 else
                     return false;
             }
         }
-
 
 
         public bool Add()

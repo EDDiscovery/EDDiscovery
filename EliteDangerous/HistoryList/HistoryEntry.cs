@@ -150,16 +150,17 @@ namespace EliteDangerousCore
                     newsys = new SystemClass(jl.StarSystem, jl.StarPos.X, jl.StarPos.Y, jl.StarPos.Z)
                     {
                         EDSMID = jl.EdsmID < 0 ? 0 : jl.EdsmID,       // pass across the EDSMID for the lazy load process.
+                        SystemAddress = jl.SystemAddress,
+                        Population = jl.Population ?? 0,
                         Faction = jl.Faction,
                         Government = jl.EDGovernment,
-                        PrimaryEconomy = jl.EDEconomy,
-                        Security = jl.EDSecurity,
-                        Population = jl.Population ?? 0,
-                        State = jl.EDState,
                         Allegiance = jl.EDAllegiance,
-                        UpdateDate = jl.EventTimeUTC,
+                        State = jl.EDState,
+                        Security = jl.EDSecurity,
+                        PrimaryEconomy = jl.EDEconomy,
+                        Power = jl.PowerList,
+                        PowerState = jl.PowerplayState,
                         status = SystemStatusEnum.EDDiscovery,
-                        SystemAddress = jl.SystemAddress,
                     };
 
                     // If it was a new system, pass the coords back to the StartJump

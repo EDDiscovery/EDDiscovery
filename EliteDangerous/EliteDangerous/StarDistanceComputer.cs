@@ -98,7 +98,7 @@ namespace EliteDangerousCore
 
                                 //System.Diagnostics.Debug.WriteLine("DB Computer Max distance " + req.MaxDistance);
 
-                                EliteDangerousCore.DB.SystemClassDB.GetSystemListBySqDistancesFrom(closestsystemlist, sys.X, sys.Y, sys.Z, req.MaxItems , 
+                                DB.SystemCache.GetSystemListBySqDistancesFrom(closestsystemlist, sys.X, sys.Y, sys.Z, req.MaxItems , 
                                               req.MinDistance, req.MaxDistance , req.Spherical);
 
                                 if (!PendingClose)

@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             var corner = dataGridViewExplore.TopLeftHeaderCell; // work around #1487
-            ColumnSystemName.AutoCompleteGenerator = SystemClassDB.ReturnOnlySystemsListForAutoComplete;
+            ColumnSystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
             currentexplorationset = new ExplorationSetClass();
         }
 
@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
                 var row = dataGridViewExplore.Rows[e.RowIndex];
                 var cell = dataGridViewExplore[e.ColumnIndex, e.RowIndex];
 
-                ISystem sys = SystemClassDB.GetSystem(sysname);
+                ISystem sys = SystemCache.FindSystem(sysname);
 
                 EDSMClass edsm = new EDSMClass();
 

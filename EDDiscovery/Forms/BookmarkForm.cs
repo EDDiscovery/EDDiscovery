@@ -62,7 +62,7 @@ namespace EDDiscovery.Forms
         public void NotedSystem(string name, string note, bool istarget)          // from target, a system with notes
         {
             this.Text = "System Information".Tx(this,"SI");
-            ISystem s = SystemClassDB.GetSystem(name);
+            ISystem s = SystemCache.FindSystem(name);
             textBoxName.Text = name;
             textBoxTravelNote.Text = (note != null) ? note : "";
             checkBoxTarget.Checked = istarget;
@@ -102,7 +102,7 @@ namespace EDDiscovery.Forms
 
             if (!bk.isRegion)
             {
-                ISystem s = SystemClassDB.GetSystem(bk.StarName);
+                ISystem s = SystemCache.FindSystem(bk.StarName);
                 if (s != null)    // paranoia
                 {
                     InitialisePos(s);
@@ -181,7 +181,7 @@ namespace EDDiscovery.Forms
             this.Text = "New System Bookmark".Tx(this,"NSB");
             textBoxName.Text = "Enter a system name...".Tx(this,"ESN");
             validatestarname = true;
-            textBoxName.SetAutoCompletor(SystemClassDB.ReturnOnlySystemsListForAutoComplete,true);
+            textBoxName.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList,true);
             textBoxName.ClearOnFirstChar = true;
             textBoxName.SelectAll();
             textBoxName.Focus();
