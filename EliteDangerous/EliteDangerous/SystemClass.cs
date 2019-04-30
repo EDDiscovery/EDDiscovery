@@ -38,9 +38,9 @@ namespace EliteDangerousCore
         public int Yi { get; set; }
         public int Zi { get; set; }
 
-        public double X { get { return Xi >= int.MinValue ? (double)Xi / XYZScalar : double.NaN; } set { Xi = double.IsNaN(value) ? int.MinValue : (int)(value / XYZScalar); } }
-        public double Y { get { return Xi >= int.MinValue ? (double)Yi / XYZScalar : double.NaN; } set { Yi = (int)(value / XYZScalar); } }
-        public double Z { get { return Xi >= int.MinValue ? (double)Zi / XYZScalar : double.NaN; } set { Zi = (int)(value / XYZScalar); } }
+        public double X { get { return Xi >= int.MinValue ? (double)Xi / XYZScalar : double.NaN; } set { Xi = double.IsNaN(value) ? int.MinValue : (int)(value * XYZScalar); } }
+        public double Y { get { return Xi >= int.MinValue ? (double)Yi / XYZScalar : double.NaN; } set { Yi = (int)(value * XYZScalar); } }
+        public double Z { get { return Xi >= int.MinValue ? (double)Zi / XYZScalar : double.NaN; } set { Zi = (int)(value * XYZScalar); } }
 
         public bool HasCoordinate { get { return Xi != int.MinValue; } }
 
