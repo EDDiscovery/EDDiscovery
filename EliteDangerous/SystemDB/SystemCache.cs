@@ -163,13 +163,6 @@ namespace EliteDangerousCore.DB
                 cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
 
             DB.SystemsDB.GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, cn, (s) => AddToCache(s));
-            if (distlist.Count > 0)
-            {
-                foreach (var s in distlist)
-                {
-                    AddToCache(s.Value);
-                }
-            }
 
             if (owncn)
                 cn.Dispose();

@@ -27,6 +27,7 @@ namespace EliteDangerousCore
         public const float XYZScalar = 128.0F;     // scaling between DB stored values and floats
 
         static public float IntToFloat(int pos) { return (float)pos / XYZScalar; }
+        static public double IntToDouble(int pos) { return (double)pos / XYZScalar; }
         static public int DoubleToInt(double pos) { return (int)(pos * XYZScalar); }
         static public double IntToDoubleSq(int pos) { double p = (float)pos / XYZScalar; return p * p; }
 

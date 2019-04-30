@@ -41,7 +41,7 @@ namespace EliteDangerousCore.DB
                                                             double x, double y, double z,
                                                             int maxitems,
                                                             double mindist,         // 0 = no min dist, always spherical
-                                                            double maxdist, 
+                                                            double maxdist,
                                                             bool spherical,     // enforces sphere on maxdist, else its a cube for maxdist
                                                             SQLiteConnectionSystem cn,
                                                             Action<ISystem> LookedUp = null
@@ -52,6 +52,8 @@ namespace EliteDangerousCore.DB
             // grid screener..  "s.sectorid IN (Select id FROM Sectors sx where sx.gridid IN (" + strinlist + ")) " +
             //var gridids = GridId.Ids(x - maxdist, x + maxdist, z - maxdist, z + maxdist);       // find applicable grid ids across this range..
             //var strinlist = string.Join(",", (from x1 in gridids select x1.ToStringInvariant()));     // here we convert using invariant for paranoia sake.
+
+           // System.Diagnostics.Debug.WriteLine("Time1 " + BaseUtils.AppTicks.TickCountLap("SDC"));
 
             int mindistint = mindist > 0 ? SystemClass.DoubleToInt(mindist) * SystemClass.DoubleToInt(mindist) : 0;
 
@@ -78,21 +80,37 @@ namespace EliteDangerousCore.DB
                 cmd.AddParameterWithValue("@max", maxitems + 1);     // 1 more, because if we are on a System, that will be returned
                 cmd.AddParameterWithValue("@maxdist", SystemClass.DoubleToInt(maxdist));
 
-//                System.Diagnostics.Debug.WriteLine(cn.ExplainQueryPlanString(cmd));
+               // System.Diagnostics.Debug.WriteLine(cn.ExplainQueryPlanString(cmd));
 
+                int xi = SystemClass.DoubleToInt(x);
+                int yi = SystemClass.DoubleToInt(y);
+                int zi = SystemClass.DoubleToInt(z);
+                long maxdistsqi = (long)SystemClass.DoubleToInt(maxdist) * (long)SystemClass.DoubleToInt(maxdist);
+
+                long count = 0;
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
+                  //  System.Diagnostics.Debug.WriteLine("Time1.5 " + BaseUtils.AppTicks.TickCountLap("SDC"));
+
                     while (reader.Read())// && distlist.Count < maxitems)           // already sorted, and already limited to max items
                     {
-                        SystemClass s = MakeSystem(reader);
-                        LookedUp?.Invoke(s);                            // callback to say looked up
+                        int sxi = reader.GetInt32(0);
+                        int syi = reader.GetInt32(1);
+                        int szi = reader.GetInt32(2);
 
-                        double distsq = s.DistanceSq(x, y, z);
-                        if ((!spherical || distsq <= maxdist * maxdist))
+                        long distsqi = (long)(xi - sxi) * (long)(xi - sxi) + (long)(yi - syi) * (long)(yi - syi) + (long)(zi - szi) * (long)(zi - szi);
+
+                        if (!spherical || distsqi <= maxdistsqi)
                         {
-                            distlist.Add(distsq, s);                  // which Rob has seen crashing the program! Bad EDSM!
+                            SystemClass s = MakeSystem(reader);
+                            LookedUp?.Invoke(s);                            // callback to say looked up
+                            distlist.Add(((double)distsqi) / SystemClass.XYZScalar / SystemClass.XYZScalar, s);                  // which Rob has seen crashing the program! Bad EDSM!
                         }
+
+                        count++;
                     }
+
+                  //  System.Diagnostics.Debug.WriteLine("Time2 " + BaseUtils.AppTicks.TickCountLap("SDC") + "  count " + count);
                 }
             }
         }
@@ -121,11 +139,11 @@ namespace EliteDangerousCore.DB
         public const int metric_maximum500ly = 4;
         public const int metric_waypointdev2 = 5;
 
-        public static ISystem GetSystemNearestTo( Point3D currentpos,            
-                                                  Point3D wantedpos,                
-                                                  double maxfromcurpos,             
-                                                  double maxfromwanted,             
-                                                  int routemethod,                  
+        public static ISystem GetSystemNearestTo(Point3D currentpos,
+                                                  Point3D wantedpos,
+                                                  double maxfromcurpos,
+                                                  double maxfromwanted,
+                                                  int routemethod,
                                                   Action<ISystem> LookedUp = null)
         {
             using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
@@ -135,18 +153,18 @@ namespace EliteDangerousCore.DB
         }
 
 
-        public static ISystem GetSystemNearestTo( Point3D currentpos,
+        public static ISystem GetSystemNearestTo(Point3D currentpos,
                                                   Point3D wantedpos,
                                                   double maxfromcurpos,
                                                   double maxfromwanted,
                                                   int routemethod,
                                                   SQLiteConnectionSystem cn,
                                                   Action<ISystem> LookedUp = null,
-                                                  int limitto = 1000 )
+                                                  int limitto = 1000)
         {
             using (DbCommand cmd = cn.CreateSelect("Systems s",
                         MakeSystemQueryEDDB,
-                        where: 
+                        where:
                                 "x >= @xc - @maxfromcurpos " +
                                 "AND x <= @xc + @maxfromcurpos " +
                                 "AND z >= @zc - @maxfromcurpos " +
@@ -229,7 +247,7 @@ namespace EliteDangerousCore.DB
                 return nearestsystem;
             }
         }
-                                   
+
 
     }
 }

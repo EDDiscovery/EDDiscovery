@@ -325,7 +325,7 @@ namespace EliteDangerousCore.DB
             string[] queries = new[]
             {
                 "CREATE INDEX IF NOT EXISTS SystemsSectorName ON Systems (sectorid,nameid)",        // worth it for lookups of stars
-                "CREATE INDEX IF NOT EXISTS SystemsXZ ON Systems (x,z)",        // speeds up searching. x+z is enough. X only saves a small percent
+                "CREATE INDEX IF NOT EXISTS SystemsXZY ON Systems (x,z,y)",        // speeds up searching. 
                
                 "CREATE INDEX IF NOT EXISTS NamesName ON Names (Name)",            // improved speed from 9038 (named)/1564 (std) to 516/446ms at minimal cost
 
