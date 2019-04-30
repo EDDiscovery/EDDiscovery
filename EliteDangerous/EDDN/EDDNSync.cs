@@ -111,6 +111,10 @@ namespace EliteDangerousCore.EDDN
                                 else
                                     logger?.Invoke($"Failed sending {he.EntryType.ToString()} event to EDDN ({he.EventSummary})");
                             }
+                            else
+                            {
+                                continue; // skip the 1 second delay if nothing was sent
+                            }
                         }
                     }
                     catch (Exception ex)
