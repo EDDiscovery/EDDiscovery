@@ -230,12 +230,15 @@ namespace EDDiscovery
 
         private static DateTime ED21date = new DateTime(2016, 5, 26);
         private static DateTime ED23date = new DateTime(2017, 4, 11);
+        private static DateTime ED30date = new DateTime(2018, 2, 27);
 
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
             DateTime lastrecordtime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
 
             long updates = 0;
+
+            double fetchmult = 1;
 
             while (lastrecordtime < DateTime.UtcNow.Subtract(new TimeSpan(0, 30, 0)))     // stop at X mins before now, so we don't get in a condition
             {                                                                           // where we do a set, the time moves to just before now, 
@@ -248,14 +251,16 @@ namespace EDDiscovery
 
                 EDSMClass edsm = new EDSMClass();
 
-                int hourstofetch = 6;
+                double hourstofetch = 3;
 
                 if (lastrecordtime < ED21date.AddHours(-48))
                     hourstofetch = 48;
                 else if (lastrecordtime < ED23date.AddHours(-12))
                     hourstofetch = 12;
+                else if (lastrecordtime < ED30date.AddHours(-6))
+                    hourstofetch = 6;
 
-                DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch);
+                DateTime enddate = lastrecordtime + TimeSpan.FromHours(hourstofetch * fetchmult);
                 if (enddate > DateTime.UtcNow)
                     enddate = DateTime.UtcNow;
 
@@ -266,7 +271,9 @@ namespace EDDiscovery
                 BaseUtils.ResponseData response;
                 try
                 {
+                    Stopwatch sw = new Stopwatch();
                     response = edsm.RequestSystemsData(lastrecordtime, enddate, timeout: 20000);
+                    fetchmult = Math.Max(0.1, Math.Min(Math.Min(fetchmult * 1.1, 1.0), 5000.0 / sw.ElapsedMilliseconds));
                 }
                 catch (WebException ex)
                 {
