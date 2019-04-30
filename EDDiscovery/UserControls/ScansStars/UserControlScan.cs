@@ -549,6 +549,8 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format("BodyName"));
                                 writer.Write(csv.Format("Estimated Value"));
                                 writer.Write(csv.Format("DistanceFromArrivalLS"));
+                                writer.Write(csv.Format("WasMapped"));
+                                writer.Write(csv.Format("WasDiscovered"));
                                 if (ShowStars)
                                 {
                                     writer.Write(csv.Format("StarType"));
@@ -645,6 +647,8 @@ namespace EDDiscovery.UserControls
                                 writer.Write(csv.Format(scan.BodyName));
                                 writer.Write(csv.Format(scan.EstimatedValue));
                                 writer.Write(csv.Format(scan.DistanceFromArrivalLS));
+                                writer.Write(csv.Format(scan.WasMapped));
+                                writer.Write(csv.Format(scan.WasDiscovered));
 
                                 if (ShowStars)
                                 {
