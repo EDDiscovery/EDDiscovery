@@ -67,6 +67,7 @@ namespace EliteDangerousCore.DB
 
             //System.Diagnostics.Debug.WriteLine("sysLap : " + BaseUtils.AppTicks.TickCountLap());
 
+            // tried xz comparision but slower than grid select
             using (DbCommand cmd = cn.CreateSelect("Systems s",
                                                     outparas: "s.edsmid,s.x,s.y,s.z" + (ask == SystemAskType.SplitPopulatedStars ? ",e.eddbid" : ""),
                                                     where: "s.sectorid IN (Select id FROM Sectors c WHERE c.gridid = @p1)" +

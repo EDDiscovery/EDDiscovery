@@ -98,6 +98,36 @@ namespace EliteDangerousCore.DB
             return x + ZMult * z;
         }
 
+        public static int X(int gridid)
+        {
+            return gridid % ZMult;
+        }
+
+        public static int Z(int gridid)
+        {
+            return gridid / ZMult;
+        }
+
+        public static bool IsLeft(int gridid)
+        {
+            return gridid % ZMult == 0;
+        }
+
+        public static bool IsRight(int gridid)
+        {
+            return gridid % ZMult == GridXRange - 1;
+        }
+
+        public static bool IsBottom(int gridid)
+        {
+            return gridid / ZMult == 0;
+        }
+
+        public static bool IsTop(int gridid)
+        {
+            return gridid / ZMult == GridZRange - 1;
+        }
+
         public static bool XZ(int id, out float x, out float z, bool mid = true)         // given id, return x/z pos of left bottom or mid
         {
             x = 0; z = 0;
@@ -142,7 +172,6 @@ namespace EliteDangerousCore.DB
 
             return false;
         }
-
 
         public static bool Boundaries(int id, out float left, out float bottom, out float right, out float top)         // given id, return boundaries
         {
