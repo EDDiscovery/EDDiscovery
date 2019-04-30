@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
         private ISystem rightclicksystem = null;
         private int rightclickrow = -1;
 
-        private const double defaultMaxRadius = 1000;
+        private const double defaultMaxRadius = 100;
         private const double defaultMinRadius = 0;
         private const int maxitems = 500;
 

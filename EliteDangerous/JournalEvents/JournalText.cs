@@ -29,7 +29,7 @@ namespace EliteDangerousCore.JournalEvents
             To = evt["To"].Str();
             To_Localised = JournalFieldNaming.CheckLocalisation(evt["To_Localised"].Str(),To);
             Message = evt["Message"].Str();
-            Command = Message.StartsWith("/") && To == "Local";
+            Command = Message.StartsWith("/") && To.Equals("Local", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public string To { get; set; }
