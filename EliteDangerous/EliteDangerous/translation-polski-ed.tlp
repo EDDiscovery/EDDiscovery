@@ -30,14 +30,14 @@ SECTION Bodies
 SECTION MaterialCommodityData
 
 .Raw: "Raw" @
-.VeryCommon: "Very Common" @
-.Common: "Common" @
-.Standard: "Standard" @
-.Rare: "Rare" @
+.VeryCommon: "Very Common" => "Bardzo Pospolite"
+.Common: "Common" => "Pospolite"
+.Standard: "Standard" => "Zwykłe"
+.Rare: "Rare" => "Rzadkie"
 .Encoded: "Encoded" @
-.VeryRare: "Very Rare" @
+.VeryRare: "Very Rare" => "Bardzo Rzadkie"
 .Manufactured: "Manufactured" @
-.Commodity: "Commodity" @
+.Commodity: "Commodity" => "Towar"
 .Salvage: "Salvage" @
 .Chemicals: "Chemicals" @
 .ConsumerItems: "Consumer Items" @
@@ -56,34 +56,34 @@ SECTION MaterialCommodityData
 .Weapons: "Weapons" @
 .PowerPlay: "PowerPlay" @
 .Drones: "Drones" @
-.carbon: "Carbon" @
-.iron: "Iron" @
-.nickel: "Nickel" @
-.phosphorus: "Phosphorus" @
-.sulphur: "Sulphur" @
-.lead: "Lead" @
-.rhenium: "Rhenium" @
-.chromium: "Chromium" @
-.germanium: "Germanium" @
-.manganese: "Manganese" @
-.vanadium: "Vanadium" @
-.zinc: "Zinc" @
-.zirconium: "Zirconium" @
-.arsenic: "Arsenic" @
-.niobium: "Niobium" @
-.tungsten: "Tungsten" @
-.molybdenum: "Molybdenum" @
-.mercury: "Mercury" @
-.boron: "Boron" @
-.cadmium: "Cadmium" @
-.tin: "Tin" @
-.selenium: "Selenium" @
-.yttrium: "Yttrium" @
-.technetium: "Technetium" @
-.tellurium: "Tellurium" @
-.ruthenium: "Ruthenium" @
-.polonium: "Polonium" @
-.antimony: "Antimony" @
+.carbon: "Carbon" => "Węgiel"
+.iron: "Iron" => "Żelazo"
+.nickel: "Nickel" => "Nikiel"
+.phosphorus: "Phosphorus" => "Fosfor"
+.sulphur: "Sulphur" => "Siarka"
+.lead: "Lead" => "Ołów"
+.rhenium: "Rhenium" => "Ren"
+.chromium: "Chromium" => "Chrom"
+.germanium: "Germanium" => "German"
+.manganese: "Manganese" => "Mangan"
+.vanadium: "Vanadium" => "Wanad"
+.zinc: "Zinc" => "Cynk"
+.zirconium: "Zirconium" => "Cyrkon"
+.arsenic: "Arsenic" => "Arsen"
+.niobium: "Niobium" => "Niob"
+.tungsten: "Tungsten" => "Wolfram"
+.molybdenum: "Molybdenum" => "Molibden"
+.mercury: "Mercury" => "Rtęć"
+.boron: "Boron" => "Boron"
+.cadmium: "Cadmium" => "Kadm"
+.tin: "Tin" => "Cyna"
+.selenium: "Selenium" => "Selen"
+.yttrium: "Yttrium" => "Itr"
+.technetium: "Technetium" => "Technet"
+.tellurium: "Tellurium" => "Tellur"
+.ruthenium: "Ruthenium" => "Ruten"
+.polonium: "Polonium" => "Polon"
+.antimony: "Antimony" => "Antymon"
 .bulkscandata: "Anomalous Bulk Scan Data" @
 .disruptedwakeechoes: "Atypical Disrupted Wake Echoes" @
 .shieldcyclerecordings: "Distorted Shield Cycle Recordings" @
@@ -266,28 +266,28 @@ SECTION MaterialCommodityData
 .performanceenhancers: "Performance Enhancers" @
 .progenitorcells: "Progenitor Cells" @
 .agriculturalmedicines: "Agri-Medicines" @
-.aluminium: "Aluminium" @
-.beryllium: "Beryllium" @
-.bismuth: "Bismuth" @
-.cobalt: "Cobalt" @
-.copper: "Copper" @
-.gallium: "Gallium" @
-.gold: "Gold" @
-.hafnium178: "Hafnium 178" @
-.indium: "Indium" @
-.lanthanum: "Lanthanum" @
-.lithium: "Lithium" @
-.osmium: "Osmium" @
-.palladium: "Palladium" @
-.platinum: "Platinum" @
-.praseodymium: "Praseodymium" @
-.samarium: "Samarium" @
-.silver: "Silver" @
-.tantalum: "Tantalum" @
-.thallium: "Thallium" @
-.thorium: "Thorium" @
-.titanium: "Titanium" @
-.uranium: "Uranium" @
+.aluminium: "Aluminium" => "Glin"
+.beryllium: "Beryllium" => "Beryl"
+.bismuth: "Bismuth" => "Bizmut"
+.cobalt: "Cobalt" => "Kobalt"
+.copper: "Copper" => "Miedź"
+.gallium: "Gallium" => "Gal"
+.gold: "Gold" => "Złoto"
+.hafnium178: "Hafnium 178" => "Hafn 178"
+.indium: "Indium" => "Ind"
+.lanthanum: "Lanthanum" => "Lantan"
+.lithium: "Lithium" => "Lit"
+.osmium: "Osmium" => "Osm"
+.palladium: "Palladium" => "Pallad"
+.platinum: "Platinum" => "Platyna"
+.praseodymium: "Praseodymium" => "Prazeodym"
+.samarium: "Samarium" => "Samar"
+.silver: "Silver" => "Srebro"
+.tantalum: "Tantalum" => "Tantal"
+.thallium: "Thallium" => "Tal"
+.thorium: "Thorium" => "Tor"
+.titanium: "Titanium" => "Tytan"
+.uranium: "Uranium" => "Uran"
 .platinumaloy: "Platinum Alloy" @
 .bauxite: "Bauxite" @
 .bertrandite: "Bertrandite" @
