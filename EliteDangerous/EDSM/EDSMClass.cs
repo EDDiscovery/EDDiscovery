@@ -160,7 +160,7 @@ namespace EliteDangerousCore.EDSM
 
         public bool IsKnownSystem(string sysName)
         {
-            string query = "system?sysname=" + HttpUtility.UrlEncode(sysName);
+            string query = "system?sysname=" + Uri.EscapeDataString(sysName);
             string json = null;
             var response = RequestGet("api-v1/" + query, handleException: true);
             if (response.Error)
@@ -182,7 +182,7 @@ namespace EliteDangerousCore.EDSM
             {
                 if (first) first = false;
                 else query = query + "&";
-                query = query + $"systemName[]={HttpUtility.UrlEncode(s)}";
+                query = query + $"systemName[]={Uri.EscapeDataString(s)}";
             }
 
             var response = RequestGet(query, handleException: true);
@@ -245,8 +245,8 @@ namespace EliteDangerousCore.EDSM
             }
 
             string query = "api-v1/systems" +
-                "?startdatetime=" + HttpUtility.UrlEncode(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
-                "&enddatetime=" + HttpUtility.UrlEncode(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
+                "?startdatetime=" + Uri.EscapeDataString(startdate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
+                "&enddatetime=" + Uri.EscapeDataString(enddate.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) +
                 "&coords=1&submitted=1&known=1&showId=1";
             return RequestGet(query, handleException: true, timeout: timeout);
         }
@@ -293,7 +293,7 @@ namespace EliteDangerousCore.EDSM
             if (!ValidCredentials)
                 return null;
 
-            string query = "get-comments?startdatetime=" + HttpUtility.UrlEncode(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&showId=1";
+            string query = "get-comments?startdatetime=" + Uri.EscapeDataString(starttime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)) + "&apiKey=" + apiKey + "&commanderName=" + Uri.EscapeDataString(commanderName) + "&showId=1";
             //string query = "get-comments?apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
             var response = RequestGet("api-logs-v1/" + query, handleException: true);
 
@@ -365,7 +365,7 @@ namespace EliteDangerousCore.EDSM
                 return null;
 
             string query;
-            query = "systemName=" + HttpUtility.UrlEncode(systemName) + "&commanderName=" + HttpUtility.UrlEncode(commanderName) + "&apiKey=" + apiKey + "&comment=" + HttpUtility.UrlEncode(note);
+            query = "systemName=" + Uri.EscapeDataString(systemName) + "&commanderName=" + Uri.EscapeDataString(commanderName) + "&apiKey=" + apiKey + "&comment=" + Uri.EscapeDataString(note);
 
             if (edsmid > 0)
             {
@@ -412,13 +412,13 @@ namespace EliteDangerousCore.EDSM
             if (!ValidCredentials)
                 return 0;
 
-            string query = "get-logs?showId=1&apiKey=" + apiKey + "&commanderName=" + HttpUtility.UrlEncode(commanderName);
+            string query = "get-logs?showId=1&apiKey=" + apiKey + "&commanderName=" + Uri.EscapeDataString(commanderName);
 
             if (starttimeutc != null)
-                query += "&startDateTime=" + HttpUtility.UrlEncode(starttimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+                query += "&startDateTime=" + Uri.EscapeDataString(starttimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
             if (endtimeutc != null)
-                query += "&endDateTime=" + HttpUtility.UrlEncode(endtimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+                query += "&endDateTime=" + Uri.EscapeDataString(endtimeutc.Value.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
             response = RequestGet("api-logs-v1/" + query, handleException: true);
 
@@ -624,7 +624,7 @@ namespace EliteDangerousCore.EDSM
         public string GetUrlToEDSMSystem(string sysName, long? id_edsm = null)
         {
             string sysID;
-            string encodedSys = HttpUtility.UrlEncode(sysName);
+            string encodedSys = Uri.EscapeDataString(sysName);
 
             if (id_edsm != null && id_edsm > 0)
             {
@@ -658,7 +658,7 @@ namespace EliteDangerousCore.EDSM
 
         private JObject GetBodies(string sysName)       // protect yourself from bad JSON
         {
-            string encodedSys = HttpUtility.UrlEncode(sysName);
+            string encodedSys = Uri.EscapeDataString(sysName);
 
             string query = "bodies?systemName=" + sysName;
             var response = RequestGet("api-system-v1/" + query, handleException: true);

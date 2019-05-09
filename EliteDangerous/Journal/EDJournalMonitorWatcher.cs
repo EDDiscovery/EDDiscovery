@@ -67,7 +67,6 @@ namespace EliteDangerousCore
                 }
                 catch (Exception ex)
                 {
-                    System.Windows.Forms.MessageBox.Show("Start Monitor exception : " + ex.Message, "EDDiscovery Error");
                     System.Diagnostics.Trace.WriteLine("Start Monitor exception : " + ex.Message);
                     System.Diagnostics.Trace.WriteLine(ex.StackTrace);
                 }

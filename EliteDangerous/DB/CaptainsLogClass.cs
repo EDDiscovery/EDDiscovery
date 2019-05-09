@@ -224,7 +224,6 @@ namespace EliteDangerousCore.DB
 
         public CaptainsLogClass AddOrUpdate(CaptainsLogClass bk, int commander, string systemname, string bodyname, DateTime timeutc, string notes, string tags = null, string parameters = null)
         {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
 
             if (addit)
@@ -253,7 +252,6 @@ namespace EliteDangerousCore.DB
 
         public void Delete(CaptainsLogClass bk)
         {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             long id = bk.ID;
             bk.Delete();
             globallog.RemoveAll(x => x.ID == id);

@@ -309,8 +309,6 @@ namespace EliteDangerousCore
         {
             ManualResetEvent stopRequested = StopRequested;
 
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-
             if (stopRequested != null)
             {
                 while (!events.IsEmpty)

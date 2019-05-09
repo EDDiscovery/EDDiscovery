@@ -88,9 +88,9 @@ namespace EliteDangerousCore
 
 
                 List<string> StatusFlags = new List<string>();
-                foreach (dynamic statusFlag in jo["statusFlags"])
+                foreach (string statusFlag in jo["statusFlags"])
                 {
-                    StatusFlags.Add((string)statusFlag);
+                    StatusFlags.Add(statusFlag);
                 }
                 this.StatusFlags = StatusFlags;
 

@@ -436,7 +436,6 @@ namespace EliteDangerousCore.DB
         // bk = null, new bookmark, else update.  isstar = true, region = false.
         public BookmarkClass AddOrUpdateBookmark(BookmarkClass bk, bool isstar, string name, double x, double y, double z, DateTime tme, string notes = null, PlanetMarks planetMarks = null)
         {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             bool addit = bk == null;
 
             if (addit)
@@ -476,7 +475,6 @@ namespace EliteDangerousCore.DB
 
         public void Delete(BookmarkClass bk)
         {
-            System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             long id = bk.id;
             bk.Delete();
             globalbookmarks.RemoveAll(x => x.id == id);
