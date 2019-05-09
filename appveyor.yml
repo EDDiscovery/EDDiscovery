@@ -1,4 +1,4 @@
-version: 8.4.1.{build}
+version: 10.6.0.{build}
 image: Visual Studio 2017
 configuration: Release
 install:
@@ -8,9 +8,9 @@ before_build:
 build:
   project: EDDiscovery.sln
 test_script:
-  - nunit3-console EDDiscoveryTests\bin\Release\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
+  - nunit3-console EDDiscoveryTests\bin\Release\net461\EDDiscoveryTests.dll --result=myresults.xml;format=AppVeyor
 after_build:
-  - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
+  - cmd: copy EDDiscovery\bin\Release\net461\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
 artifacts:
   - path: EDDiscovery.Portable.zip
 cache:

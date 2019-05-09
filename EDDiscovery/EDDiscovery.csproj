@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Version;Build;MakeZip">
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -108,7 +108,7 @@
       ]]></Code>
     </Task>
   </UsingTask>
-  <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="MakeZip" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' ">
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
@@ -133,11 +133,6 @@
   </Target>
   <Target Name="CleanZipFile" AfterTargets="Clean">
     <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
   </Target>
   <Target Name="Version">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
