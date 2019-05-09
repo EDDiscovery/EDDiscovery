@@ -172,6 +172,7 @@ namespace EDDiscovery.Icons
         public static Image Scan_DisplaySystemAlways { get { return IconSet.GetIcon("Controls.Scan.DisplaySystemAlways"); } }
         public static Image Scan_ExportToExcel { get { return IconSet.GetIcon("Controls.Scan.ExportToExcel"); } }
         public static Image Scan_FetchEDSMBodies { get { return IconSet.GetIcon("Controls.Scan.FetchEDSMBodies"); } }
+        public static Image Scan_ShowAnotherSystem { get { return IconSet.GetIcon("Controls.Scan.ShowAnotherSystem"); } }
         public static Image Scan_ShowAllMaterials { get { return IconSet.GetIcon("Controls.Scan.ShowAllMaterials"); } }
         public static Image Scan_HideFullMaterials { get { return IconSet.GetIcon("Controls.Scan.HideFullMaterials"); } }
         public static Image Scan_ShowMoons { get { return IconSet.GetIcon("Controls.Scan.ShowMoons"); } }

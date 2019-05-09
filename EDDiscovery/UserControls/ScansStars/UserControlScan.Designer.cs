@@ -170,7 +170,7 @@ namespace EDDiscovery.UserControls
             // 
             this.extCheckBoxStar.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxStar.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxStar.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("extCheckBoxStar.BackgroundImage")));
+            this.extCheckBoxStar.BackgroundImage = global::EDDiscovery.Icons.Controls.Scan_ShowAnotherSystem;
             this.extCheckBoxStar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.CheckBoxColor = System.Drawing.Color.White;
             this.extCheckBoxStar.CheckBoxInnerColor = System.Drawing.Color.White;
