@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using EliteDangerousCore.DB;
+using BaseUtils;
 
 namespace EDDiscovery.Forms
 {

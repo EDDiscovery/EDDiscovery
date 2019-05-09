@@ -32,6 +32,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EDDiscovery.Icons;
+using BaseUtils;
 
 namespace EDDiscovery
 {

@@ -17,6 +17,7 @@
 using EliteDangerousCore;
 using System;
 using System.Windows.Forms;
+using BaseUtils;
 
 namespace EDDiscovery.Forms
 {

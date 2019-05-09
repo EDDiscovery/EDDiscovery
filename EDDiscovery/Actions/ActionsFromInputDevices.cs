@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using DirectInputDevices;
-using EliteDangerousCore;
+using BaseUtils;
 
 namespace EDDiscovery.Actions
 {

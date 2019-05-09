@@ -115,6 +115,11 @@ namespace EDDiscovery
             journalqueuedelaytimer = new Timer(DelayPlay, null, Timeout.Infinite, Timeout.Infinite);
         }
 
+        private static void ShowException(Exception ex, string desc, string feedbackUrl, bool isFatal = false)
+        {
+            ExceptionForm.ShowException(ex, desc, feedbackUrl, isFatal);
+        }
+
         public static void Initialize(Action<string> msg)    // called from EDDApplicationContext to initialize config and dbs
         {
             msg.Invoke("Checking Config");
@@ -131,7 +136,7 @@ namespace EDDiscovery
 
             if (!Debugger.IsAttached || EDDOptions.Instance.LogExceptions)
             {
-                ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
+                ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback, ShowException, h => System.Windows.Forms.Application.ThreadException += h);
             }
 
             if (EDDOptions.Instance.LogExceptions)
