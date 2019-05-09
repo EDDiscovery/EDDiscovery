@@ -25,6 +25,13 @@ namespace EliteDangerousCore.DB
 {
     public class SQLiteConnectionUser : SQLExtConnectionWithLockRegister<SQLiteConnectionUser>
     {
+        public class UserDBUpgradeException : Exception
+        {
+            public UserDBUpgradeException(Exception ex) : base("UpgradeUserDB error: " + ex.Message, ex)
+            {
+            }
+        }
+
         protected static List<EDCommander> EarlyCommanders;
 
         public SQLiteConnectionUser() : base(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath, false, Initialize, AccessMode.ReaderWriter)
@@ -51,7 +58,7 @@ namespace EliteDangerousCore.DB
             });
         }
 
-        protected static bool UpgradeUserDB(SQLiteConnectionUser conn)
+        protected static void UpgradeUserDB(SQLiteConnectionUser conn)
         {
             int dbver;
             try
@@ -148,13 +155,10 @@ namespace EliteDangerousCore.DB
                     UpgradeUserDB120(conn);
 
                 CreateUserDBTableIndexes(conn);
-
-                return true;
             }
             catch (Exception ex)
             {
-                ExtendedControls.MessageBoxTheme.Show("UpgradeUserDB error: " + ex.Message + Environment.NewLine + ex.StackTrace);
-                return false;
+                throw new UserDBUpgradeException(ex);
             }
         }
 

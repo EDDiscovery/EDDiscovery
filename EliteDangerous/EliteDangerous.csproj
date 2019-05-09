@@ -288,10 +288,6 @@
       <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
       <Name>EDDIcons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj">
-      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
-      <Name>ExtendedControls</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

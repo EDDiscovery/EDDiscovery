@@ -142,7 +142,16 @@ namespace EDDiscovery
             msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
-            SQLiteConnectionUser.Initialize();
+            try
+            {
+                SQLiteConnectionUser.Initialize();
+            }
+            catch (SQLiteConnectionUser.UserDBUpgradeException ex)
+            {
+                ExtendedControls.MessageBoxTheme.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                Environment.Exit(1);
+            }
+
             SQLiteConnectionSystem.Initialize();
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");
 
