@@ -108,7 +108,7 @@
       ]]></Code>
     </Task>
   </UsingTask>
-  <Target Name="MakeZip" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' ">
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
