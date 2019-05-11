@@ -148,7 +148,7 @@ namespace EDDiscovery.Forms
             this.panel_transparent.Size = new System.Drawing.Size(24, 24);
             this.panel_transparent.TabIndex = 24;
             this.panel_transparent.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip1.SetToolTip(this.panel_transparent, resources.GetString("panel_transparent.ToolTip"));
+            this.toolTip1.SetToolTip(this.panel_transparent, global::EDDiscovery.Properties.Resources.Tooltip_FormTransparency);
             this.panel_transparent.UseMnemonic = true;
             this.panel_transparent.Click += new System.EventHandler(this.panel_transparency_Click);
             // 

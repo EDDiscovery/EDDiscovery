@@ -61,6 +61,25 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Program Concept by:
+        ///Cmdr Finwen  (Robert Wahlström)
+        ///
+        ///Developers for this release:
+        ///Robby (Releaser), Bravada Cadelanne, Iain Ross, Andrea Spada, Robosa
+        ///
+        ///Languages Translations:
+        ///Potatossuaro, Zafford, Andrea Spada, Goscickiw, Nats-ji, Jay
+        ///
+        ///Previous Contributors:
+        ///Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle...
+        /// </summary>
+        internal static string Developers {
+            get {
+                return ResourceManager.GetString("Developers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch31506\stshfhich31506\stshfbi31506\deflang2057\deflangfe2057\themelang2057\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}
         ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New [rest of string was truncated]&quot;;.
         /// </summary>
@@ -153,6 +172,46 @@ namespace EDDiscovery.Properties {
         internal static string mapuc {
             get {
                 return ResourceManager.GetString("mapuc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle window transparency thru four settings
+        ///Off - normal window
+        ///On (T) - transparent with controls active when mouse not inside window
+        ///On (Tc) - transparent with control active, to activate hold down the activate key
+        ///On (Tf) - fully transparent and inert, to activate hold down the activate key
+        ///
+        ///See the settings page for configuring which key is the activate key.  
+        ///Mouse must be within the boundaries of the window and the key held down for
+        ///500ms approx..
+        /// </summary>
+        internal static string Tooltip_FormTransparency {
+            get {
+                return ResourceManager.GetString("Tooltip_FormTransparency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the journal location folder.  Normally only needed if you are using EDD on another computer than your play computer.
+        ///Leave override journal location blank to use the standard Frontier location for journals..
+        /// </summary>
+        internal static string Tooltip_JournalLocation {
+            get {
+                return ResourceManager.GetString("Tooltip_JournalLocation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the key to hold down for at least 500 ms
+        ///to show the form of a transparent pop out, when
+        ///the pop out transparency mode if Tc (Click thru,
+        ///controls still active) or Tf (controls inactive)
+        ///Not all keys are guaranteed active on all keyboards.
+        /// </summary>
+        internal static string Tooltip_TransparencyHotkey {
+            get {
+                return ResourceManager.GetString("Tooltip_TransparencyHotkey", resourceCulture);
             }
         }
         

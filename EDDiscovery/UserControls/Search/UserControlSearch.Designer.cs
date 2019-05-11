@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
             this.tabStrip.DropDownWidth = 400;
             this.tabStrip.EmptyColor = System.Drawing.Color.Empty;
             this.tabStrip.EmptyColorScaling = 0.5F;
-            this.tabStrip.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStrip.EmptyPanelIcon")));
+            this.tabStrip.EmptyPanelIcon = global::EDDiscovery.Icons.Controls.TabStrip_EmptyPanel;
             this.tabStrip.Location = new System.Drawing.Point(0, 0);
             this.tabStrip.Name = "tabStrip";
             this.tabStrip.SelectedIndex = -1;

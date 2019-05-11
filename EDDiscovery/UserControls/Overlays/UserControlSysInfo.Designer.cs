@@ -543,7 +543,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.EndButtonEnable = false;
-            this.textBoxTarget.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTarget.EndButtonImage")));
+            this.textBoxTarget.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTarget.EndButtonVisible = true;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxTarget.InErrorCondition = false;
@@ -577,7 +577,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.ClearOnFirstChar = false;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTargetDist.EndButtonEnable = true;
-            this.textBoxTargetDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTargetDist.EndButtonImage")));
+            this.textBoxTargetDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTargetDist.EndButtonVisible = false;
             this.textBoxTargetDist.InErrorCondition = false;
             this.textBoxTargetDist.Location = new System.Drawing.Point(165, 341);
@@ -751,7 +751,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.ClearOnFirstChar = false;
             this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxJumpRange.EndButtonEnable = true;
-            this.textBoxJumpRange.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxJumpRange.EndButtonImage")));
+            this.textBoxJumpRange.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxJumpRange.EndButtonVisible = false;
             this.textBoxJumpRange.InErrorCondition = false;
             this.textBoxJumpRange.Location = new System.Drawing.Point(58, 677);
@@ -787,7 +787,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.ClearOnFirstChar = false;
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSystem.EndButtonEnable = true;
-            this.textBoxSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystem.EndButtonImage")));
+            this.textBoxSystem.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxSystem.EndButtonVisible = false;
             this.textBoxSystem.InErrorCondition = false;
             this.textBoxSystem.Location = new System.Drawing.Point(53, 14);
@@ -890,7 +890,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.ClearOnFirstChar = false;
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxVisits.EndButtonEnable = true;
-            this.textBoxVisits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxVisits.EndButtonImage")));
+            this.textBoxVisits.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxVisits.EndButtonVisible = false;
             this.textBoxVisits.InErrorCondition = false;
             this.textBoxVisits.Location = new System.Drawing.Point(53, 62);
@@ -921,7 +921,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.ClearOnFirstChar = false;
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBody.EndButtonEnable = true;
-            this.textBoxBody.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxBody.EndButtonImage")));
+            this.textBoxBody.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxBody.EndButtonVisible = false;
             this.textBoxBody.InErrorCondition = false;
             this.textBoxBody.Location = new System.Drawing.Point(53, 86);
@@ -952,7 +952,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.ClearOnFirstChar = false;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelJumps.EndButtonEnable = true;
-            this.textBoxTravelJumps.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelJumps.EndButtonImage")));
+            this.textBoxTravelJumps.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelJumps.EndButtonVisible = false;
             this.textBoxTravelJumps.InErrorCondition = false;
             this.textBoxTravelJumps.Location = new System.Drawing.Point(212, 555);
@@ -983,7 +983,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.ClearOnFirstChar = false;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelTime.EndButtonEnable = true;
-            this.textBoxTravelTime.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelTime.EndButtonImage")));
+            this.textBoxTravelTime.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelTime.EndButtonVisible = false;
             this.textBoxTravelTime.InErrorCondition = false;
             this.textBoxTravelTime.Location = new System.Drawing.Point(132, 555);
@@ -1014,7 +1014,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.ClearOnFirstChar = false;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFuel.EndButtonEnable = true;
-            this.textBoxFuel.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFuel.EndButtonImage")));
+            this.textBoxFuel.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxFuel.EndButtonVisible = false;
             this.textBoxFuel.InErrorCondition = false;
             this.textBoxFuel.Location = new System.Drawing.Point(54, 393);
@@ -1045,7 +1045,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.ClearOnFirstChar = false;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxData.EndButtonEnable = true;
-            this.textBoxData.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxData.EndButtonImage")));
+            this.textBoxData.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxData.EndButtonVisible = false;
             this.textBoxData.InErrorCondition = false;
             this.textBoxData.Location = new System.Drawing.Point(52, 472);
@@ -1076,7 +1076,7 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.ClearOnFirstChar = false;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxMaterials.EndButtonEnable = true;
-            this.textBoxMaterials.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxMaterials.EndButtonImage")));
+            this.textBoxMaterials.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxMaterials.EndButtonVisible = false;
             this.textBoxMaterials.InErrorCondition = false;
             this.textBoxMaterials.Location = new System.Drawing.Point(61, 498);
@@ -1107,7 +1107,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.ClearOnFirstChar = false;
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCredits.EndButtonEnable = true;
-            this.textBoxCredits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCredits.EndButtonImage")));
+            this.textBoxCredits.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxCredits.EndButtonVisible = false;
             this.textBoxCredits.InErrorCondition = false;
             this.textBoxCredits.Location = new System.Drawing.Point(61, 650);
@@ -1138,7 +1138,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.ClearOnFirstChar = false;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCargo.EndButtonEnable = true;
-            this.textBoxCargo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCargo.EndButtonImage")));
+            this.textBoxCargo.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxCargo.EndButtonVisible = false;
             this.textBoxCargo.InErrorCondition = false;
             this.textBoxCargo.Location = new System.Drawing.Point(55, 439);
@@ -1169,7 +1169,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.ClearOnFirstChar = false;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelDist.EndButtonEnable = true;
-            this.textBoxTravelDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelDist.EndButtonImage")));
+            this.textBoxTravelDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTravelDist.EndButtonVisible = false;
             this.textBoxTravelDist.InErrorCondition = false;
             this.textBoxTravelDist.Location = new System.Drawing.Point(55, 555);
@@ -1200,7 +1200,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.ClearOnFirstChar = false;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxShip.EndButtonEnable = true;
-            this.textBoxShip.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxShip.EndButtonImage")));
+            this.textBoxShip.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxShip.EndButtonVisible = false;
             this.textBoxShip.InErrorCondition = false;
             this.textBoxShip.Location = new System.Drawing.Point(55, 367);
@@ -1231,7 +1231,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.ClearOnFirstChar = false;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGameMode.EndButtonEnable = true;
-            this.textBoxGameMode.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGameMode.EndButtonImage")));
+            this.textBoxGameMode.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxGameMode.EndButtonVisible = false;
             this.textBoxGameMode.InErrorCondition = false;
             this.textBoxGameMode.Location = new System.Drawing.Point(55, 529);
@@ -1262,7 +1262,7 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.ClearOnFirstChar = false;
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxPosition.EndButtonEnable = true;
-            this.textBoxPosition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxPosition.EndButtonImage")));
+            this.textBoxPosition.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxPosition.EndButtonVisible = false;
             this.textBoxPosition.InErrorCondition = false;
             this.textBoxPosition.Location = new System.Drawing.Point(53, 110);
@@ -1293,7 +1293,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.ClearOnFirstChar = false;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxHomeDist.EndButtonEnable = true;
-            this.textBoxHomeDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxHomeDist.EndButtonImage")));
+            this.textBoxHomeDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxHomeDist.EndButtonVisible = false;
             this.textBoxHomeDist.InErrorCondition = false;
             this.textBoxHomeDist.Location = new System.Drawing.Point(61, 167);
@@ -1324,7 +1324,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.ClearOnFirstChar = false;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSolDist.EndButtonEnable = true;
-            this.textBoxSolDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSolDist.EndButtonImage")));
+            this.textBoxSolDist.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxSolDist.EndButtonVisible = false;
             this.textBoxSolDist.InErrorCondition = false;
             this.textBoxSolDist.Location = new System.Drawing.Point(246, 166);
@@ -1355,7 +1355,7 @@ namespace EDDiscovery.UserControls
             this.textBoxState.ClearOnFirstChar = false;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxState.EndButtonEnable = true;
-            this.textBoxState.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxState.EndButtonImage")));
+            this.textBoxState.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxState.EndButtonVisible = false;
             this.textBoxState.InErrorCondition = false;
             this.textBoxState.Location = new System.Drawing.Point(54, 237);
@@ -1386,7 +1386,7 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.ClearOnFirstChar = false;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxAllegiance.EndButtonEnable = true;
-            this.textBoxAllegiance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxAllegiance.EndButtonImage")));
+            this.textBoxAllegiance.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxAllegiance.EndButtonVisible = false;
             this.textBoxAllegiance.InErrorCondition = false;
             this.textBoxAllegiance.Location = new System.Drawing.Point(192, 237);
@@ -1417,7 +1417,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.ClearOnFirstChar = false;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGovernment.EndButtonEnable = true;
-            this.textBoxGovernment.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGovernment.EndButtonImage")));
+            this.textBoxGovernment.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxGovernment.EndButtonVisible = false;
             this.textBoxGovernment.InErrorCondition = false;
             this.textBoxGovernment.Location = new System.Drawing.Point(54, 255);
@@ -1448,7 +1448,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.ClearOnFirstChar = false;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxEconomy.EndButtonEnable = true;
-            this.textBoxEconomy.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEconomy.EndButtonImage")));
+            this.textBoxEconomy.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxEconomy.EndButtonVisible = false;
             this.textBoxEconomy.InErrorCondition = false;
             this.textBoxEconomy.Location = new System.Drawing.Point(192, 255);

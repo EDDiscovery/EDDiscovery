@@ -90,7 +90,7 @@ namespace EDDiscovery.Forms
             this.labelDevelopersEnum.Name = "labelDevelopersEnum";
             this.labelDevelopersEnum.Size = new System.Drawing.Size(267, 383);
             this.labelDevelopersEnum.TabIndex = 3;
-            this.labelDevelopersEnum.Text = resources.GetString("labelDevelopersEnum.Text");
+            this.labelDevelopersEnum.Text = global::EDDiscovery.Properties.Resources.Developers;
             // 
             // buttonOK
             // 

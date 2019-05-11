@@ -231,6 +231,7 @@ namespace EDDiscovery.Icons
         #endregion
         #region TabStrip
         public static Image TabStrip_Popout { get { return IconSet.GetIcon("Controls.TabStrip.Popout"); } }
+        public static Image TabStrip_EmptyPanel { get { return IconSet.GetIcon("Controls.TabStrip.EmptyPanel"); } }
         #endregion
         #region Selector
         public static Image Selector_Background { get { return IconSet.GetIcon("Controls.Selector.Selector"); } }
@@ -257,6 +258,7 @@ namespace EDDiscovery.Icons
         #region General
         public static Image All { get { return IconSet.GetIcon("Controls.General.All"); } }
         public static Image None { get { return IconSet.GetIcon("Controls.General.None"); } }
+        public static Image Dropdown { get { return IconSet.GetIcon("Controls.General.Dropdown"); } }
         #endregion
 
     }

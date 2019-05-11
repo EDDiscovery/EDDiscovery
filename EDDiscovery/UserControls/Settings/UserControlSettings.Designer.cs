@@ -341,7 +341,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.Size = new System.Drawing.Size(126, 21);
             this.comboBoxClickThruKey.TabIndex = 6;
             this.comboBoxClickThruKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxClickThruKey, resources.GetString("comboBoxClickThruKey.ToolTip"));
+            this.toolTip.SetToolTip(this.comboBoxClickThruKey, global::EDDiscovery.Properties.Resources.Tooltip_TransparencyHotkey);
             this.comboBoxClickThruKey.ValueMember = "";
             // 
             // checkBoxUseNotifyIcon
@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
             this.textBoxDefaultZoom.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxDefaultZoom.DelayBeforeNotification = 0;
             this.textBoxDefaultZoom.EndButtonEnable = true;
-            this.textBoxDefaultZoom.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxDefaultZoom.EndButtonImage")));
+            this.textBoxDefaultZoom.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxDefaultZoom.EndButtonVisible = false;
             this.textBoxDefaultZoom.Format = "0.#######";
             this.textBoxDefaultZoom.InErrorCondition = true;
@@ -519,7 +519,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxHomeSystem.DropDownWidth = 0;
             this.textBoxHomeSystem.EndButtonEnable = false;
-            this.textBoxHomeSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxHomeSystem.EndButtonImage")));
+            this.textBoxHomeSystem.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxHomeSystem.EndButtonVisible = false;
             this.textBoxHomeSystem.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxHomeSystem.InErrorCondition = false;
