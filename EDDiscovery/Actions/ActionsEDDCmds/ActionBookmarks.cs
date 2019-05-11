@@ -28,9 +28,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(System.Windows.Forms.Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Command string", UserData, "Configure Bookmark Command" , cp.Icon);
+            string promptValue = configFuncs.PromptSingleLine("Command string", UserData, "Configure Bookmark Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

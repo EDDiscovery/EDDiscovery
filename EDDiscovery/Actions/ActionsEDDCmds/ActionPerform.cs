@@ -37,9 +37,9 @@ namespace EDDiscovery.Actions
             return (FromString(userdata) != null) ? null : "Perform command line not in correct format";
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "Perform command", UserData, "Configure Perform Command" , cp.Icon);
+            string promptValue = configFuncs.PromptSingleLine("Perform command", UserData, "Configure Perform Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

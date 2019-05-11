@@ -37,10 +37,10 @@ namespace EDDiscovery.Actions
             return (FromString(userdata) != null) ? null : "DLLCall command line not in correct format";
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure DLLCall Dialog", cp.Icon,
+            List<string> r = configFuncs.PromptMultiLine("Configure DLLCall Dialog", cp.Icon,
                             new string[] { "DLL", "Acion", "P1", "P2" , "P3", "P4" , "P5", "P6" }, l?.ToArray(), true);
 
             if (r != null)

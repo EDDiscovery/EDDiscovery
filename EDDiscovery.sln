@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
 	ProjectSection(ProjectDependencies) = postProject
 		{59F99A05-CE16-4FB8-BE99-F1A24F019CB8} = {59F99A05-CE16-4FB8-BE99-F1A24F019CB8}
 		{2049403F-F4C7-45E6-B777-6390C78E4D2B} = {2049403F-F4C7-45E6-B777-6390C78E4D2B}
@@ -12,29 +12,31 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\
 		{C657C881-F3E1-45BA-ACA5-966348010414} = {C657C881-F3E1-45BA-ACA5-966348010414}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "EDDiscoveryTests\Tests.csproj", "{C4452886-6A1B-4AFD-9E76-AB0E5D8AABA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "EDDiscoveryTests\Tests.csproj", "{C4452886-6A1B-4AFD-9E76-AB0E5D8AABA5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EliteDangerous", "EliteDangerous\EliteDangerous.csproj", "{019917A4-7342-4F67-8AAF-9E20C016A935}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EDDIcons", "EDDIcons\EDDIcons.csproj", "{646F71BE-F102-444E-9254-818E5A320AB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionLanguage", "ActionLanguage\ActionLanguage\ActionLanguage.csproj", "{17F82244-9FA8-4B04-85F0-9B1D0654CD26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionLanguage", "ActionLanguage\ActionLanguage\ActionLanguage.csproj", "{17F82244-9FA8-4B04-85F0-9B1D0654CD26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Audio", "BaseUtilities\Audio\Audio.csproj", "{59F99A05-CE16-4FB8-BE99-F1A24F019CB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Audio", "BaseUtilities\Audio\Audio.csproj", "{59F99A05-CE16-4FB8-BE99-F1A24F019CB8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseUtils", "BaseUtilities\BaseUtilities\BaseUtils.csproj", "{C657C881-F3E1-45BA-ACA5-966348010414}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectInput", "BaseUtilities\DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DirectInput", "BaseUtilities\DirectInput\DirectInput.csproj", "{390B1547-A455-45E3-974F-E1F9B1613AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTKUtils", "BaseUtilities\OpenTKUtils\OpenTKUtils.csproj", "{4CFA37D5-4182-4CAE-AFC3-7563A13B44EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendedControls", "ExtendedControls\ExtendedControls\ExtendedControls.csproj", "{2049403F-F4C7-45E6-B777-6390C78E4D2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtendedForms", "ExtendedControls\ExtendedForms\ExtendedForms.csproj", "{298C11C9-B58F-415C-8458-1CAE3C6CAB62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtendedForms", "ExtendedControls\ExtendedForms\ExtendedForms.csproj", "{298C11C9-B58F-415C-8458-1CAE3C6CAB62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLLite", "BaseUtilities\SQLLite\SQLLite.csproj", "{3D79DE63-5EEC-4F30-A879-FB4C6BA4B2DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseUtils.WinForms", "BaseUtilities\BaseUtils.WinForms\BaseUtils.WinForms.csproj", "{61AFEA77-0276-4DCF-983F-589E6AF31258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionLanguage.WinForms", "ActionLanguage\ActionLanguage.WinForms\ActionLanguage.WinForms.csproj", "{76685C00-06B5-4C26-8ECA-CFCE03323EF7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +203,18 @@ Global
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x64.Build.0 = Release|Any CPU
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x86.ActiveCfg = Release|Any CPU
 		{61AFEA77-0276-4DCF-983F-589E6AF31258}.Release|x86.Build.0 = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|x64.Build.0 = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Debug|x86.Build.0 = Debug|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|x64.ActiveCfg = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|x64.Build.0 = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|x86.ActiveCfg = Release|Any CPU
+		{76685C00-06B5-4C26-8ECA-CFCE03323EF7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -38,10 +38,10 @@ namespace EDDiscovery.Actions
             return (FromString(userdata) != null) ? null : "Timer command line not in correct format";
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)
         {
             List<string> l = FromString(userdata);
-            List<string> r = ExtendedControls.PromptMultiLine.ShowDialog(parent, "Configure Timer Dialog", cp.Icon,
+            List<string> r = configFuncs.PromptMultiLine("Configure Timer Dialog", cp.Icon,
                             new string[] { "TimerName", "Milliseconds", "Opt JID" }, l?.ToArray());
             if (r != null)
             {

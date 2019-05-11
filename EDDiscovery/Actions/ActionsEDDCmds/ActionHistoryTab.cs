@@ -28,9 +28,9 @@ namespace EDDiscovery.Actions
     {
         public override bool AllowDirectEditingOfUserData { get { return true; } }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)
         {
-            string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(parent, "HistoryTab command", UserData, "Configure HistoryTab Command" , cp.Icon);
+            string promptValue = configFuncs.PromptSingleLine("HistoryTab command", UserData, "Configure HistoryTab Command" , cp.Icon);
             if (promptValue != null)
             {
                 userdata = promptValue;

@@ -29,7 +29,7 @@ namespace EDDiscovery.Actions
     {
         const string errmsgforbinding = "No keyboard binding for ";
 
-        class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
+        class AKP : IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
             public BindingsFile bindingsfile;
 
@@ -79,19 +79,19 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, BindingsFile bf)
+        static public string Configure(System.Drawing.Icon ic, string userdata, BindingsFile bf, ActionConfigFuncs configFuncs)
         {
             List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
             decorated.Sort();
-            return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
+            return Configure(ic, userdata, decorated, new AKP() { bindingsfile = bf }, configFuncs);
         
         }
 
-        public override bool ConfigurationMenu(Form parent, ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars)    // override again to expand any functionality
+        public override bool Configure(ActionCoreController cp, List<BaseUtils.TypeHelpers.PropertyNameInfo> eventvars, ActionConfigFuncs configFuncs)    // override again to expand any functionality
         {
             ActionController ac = cp as ActionController;
 
-            string ud = Menu(parent, cp.Icon, userdata , ac.FrontierBindings );      // base has no additional keys
+            string ud = Configure(cp.Icon, userdata, ac.FrontierBindings, configFuncs);      // base has no additional keys
             if (ud != null)
             {
                 userdata = ud;

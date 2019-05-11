@@ -70,7 +70,7 @@ namespace EDDiscovery.Actions
         Actions.ActionsFromInputDevices inputdevicesactions;
         BindingsFile frontierbindings;
 
-        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(frm, ic)
+        public ActionController(EDDiscoveryForm frm, EDDiscoveryController ctrl, System.Drawing.Icon ic) : base(new ActionConfigFuncsWinForms(frm), ic)
         {
             discoveryform = frm;
             discoverycontroller = ctrl;
@@ -257,12 +257,12 @@ namespace EDDiscovery.Actions
 
         private string onEditKeys(Form p, System.Drawing.Icon i, string keys)      // called when program wants to edit Key
         {
-            return ActionKeyED.Menu(p, i, keys, frontierbindings);
+            return ActionKeyED.Configure(i, keys, frontierbindings, new ActionConfigFuncsWinForms(p));
         }
 
         private string onEditSay(Form p, string say, ActionCoreController cp)      // called when program wants to edit Key
         {
-            return ActionSay.Menu(p, say, cp);
+            return ActionSay.Configure(say, cp, new ActionConfigFuncsWinForms(p));
         }
 
 
