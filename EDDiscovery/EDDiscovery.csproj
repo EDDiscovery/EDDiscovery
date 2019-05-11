@@ -61,6 +61,58 @@
       <LastGenOutput>Controls.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup Label="3DMap">
+    <Compile Update="3DMap\FormMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Label="Forms">
+    <Compile Update="Forms\*.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\*.Designer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Forms\SurfaceBookmarksUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\VersioningManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Label="UserControls">
+    <Compile Update="UserControls\*\*.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UserControls\*\*.Designer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\*.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\FindSystemsUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\StatsTimeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\ScanDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\TagsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Label="ScreenShots">
+    <Compile Update="ScreenShots\ScreenShotConfigureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup Label="Main">
+    <Compile Update="EDDiscoveryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionLanguage\ActionLanguage\ActionLanguage.csproj" />
     <ProjectReference Include="..\BaseUtilities\Audio\Audio.csproj" />
