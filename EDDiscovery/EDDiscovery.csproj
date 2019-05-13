@@ -116,6 +116,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ActionLanguage\ActionLanguage.WinForms\ActionLanguage.WinForms.csproj" />
     <ProjectReference Include="..\ActionLanguage\ActionLanguage\ActionLanguage.csproj" />
+    <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
     <ProjectReference Include="..\BaseUtilities\Audio\Audio.csproj" />
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
     <ProjectReference Include="..\BaseUtilities\BaseUtils.WinForms\BaseUtils.WinForms.csproj" />
