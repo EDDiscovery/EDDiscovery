@@ -261,4 +261,5 @@
     </ItemGroup>
     <WriteCodeFragment AssemblyAttributes="@(AssemblyAttribute)" Language="C#" OutputFile="Properties\ExtraVersion.cs" />
   </Target>
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.targets" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
 </Project>
