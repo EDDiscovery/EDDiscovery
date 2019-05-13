@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Version;Build;MakeZip">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" DefaultTargets="Version;Build;MakeZip">
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EDDiscovery</RootNamespace>
     <AssemblyName>EDDiscovery</AssemblyName>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFrameworks>net461<!-- ;netcoreapp30 --></TargetFrameworks>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWin32Manifest>true</NoWin32Manifest>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -19,24 +21,25 @@
     <DefineConstants>TRACE</DefineConstants>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp3.0'">
+    <DefineConstants>NO_SYSTEM_SPEECH</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
+    <ApplicationIcon>Resources\edlogo_3mo_icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OxyPlot.Core" Version="1.0.0" />
     <PackageReference Include="OxyPlot.WindowsForms" Version="1.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Threading.AccessControl" Version="4.5.0" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Speech" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
@@ -116,7 +119,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ActionLanguage\ActionLanguage.WinForms\ActionLanguage.WinForms.csproj" />
     <ProjectReference Include="..\ActionLanguage\ActionLanguage\ActionLanguage.csproj" />
-    <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
     <ProjectReference Include="..\BaseUtilities\Audio\Audio.csproj" />
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj" />
     <ProjectReference Include="..\BaseUtilities\BaseUtils.WinForms\BaseUtils.WinForms.csproj" />
@@ -127,6 +129,10 @@
     <ProjectReference Include="..\EliteDangerous\EliteDangerous.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj" />
     <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
+    <ProjectReference Include="..\BaseUtilities\Audio.CSCore\Audio.CSCore.csproj" />
+    <ProjectReference Include="..\BaseUtilities\Audio.WindowsSpeech\Audio.WindowsSpeech.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
