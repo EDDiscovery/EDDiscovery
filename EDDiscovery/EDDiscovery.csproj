@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" DefaultTargets="Version;Build;MakeZip">
+<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Version;Build;MakeZip">
+  <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EDDiscovery</RootNamespace>
     <AssemblyName>EDDiscovery</AssemblyName>
-    <TargetFrameworks>net461<!-- ;netcoreapp30 --></TargetFrameworks>
+    <TargetFrameworks>net461<!-- ;netcoreapp3.0 --></TargetFrameworks>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWin32Manifest>true</NoWin32Manifest>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
