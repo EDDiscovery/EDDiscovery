@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Version;Build;MakeZip">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Sdk="Microsoft.NET.Sdk.WindowsDesktop" Project="Sdk.props" Condition="'$(TargetFramework)' == 'netcoreapp3.0'"/>
   <PropertyGroup>
     <ProjectGuid>{6EE10D92-E3E4-44D9-8E6B-851801B0B510}</ProjectGuid>
@@ -193,7 +193,12 @@
       ]]></Code>
     </Task>
   </UsingTask>
-  <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' ">
+  <Target Name="MakeZip" Condition=" '$(OS)' != 'Unix' " AfterTargets="Build">
+    <PropertyGroup Condition="'$(OutDir)' == ''">
+      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
+      <TargetPath>$(OutDir)EDDiscovery.exe</TargetPath>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(OutDir)EDDiscovery.exe')" Text="$(OutDir)EDDiscovery.exe not found" />
     <ItemGroup>
       <ZipFiles Include="$(TargetPath)" />
       <ZipFiles Include="$(OutDir)*.dll" />
@@ -217,9 +222,12 @@
     <Error Condition="!Exists('$(OutDir)EDDiscovery.Portable.zip')" Text="Unknown error in BuildPortableZip." />
   </Target>
   <Target Name="CleanZipFile" AfterTargets="Clean">
+    <PropertyGroup Condition="'$(OutDir)' == ''">
+      <OutDir>$(MSBuildProjectDirectory)\bin\$(Configuration)\net461\</OutDir>
+    </PropertyGroup>
     <Delete Files="$(OutDir)EDDiscovery.Portable.zip" />
   </Target>
-  <Target Name="Version">
+  <Target Name="Version" BeforeTargets="Build">
     <PropertyGroup Condition=" '$(OS)' != 'Unix' ">
       <GitPath>$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows@InstallPath)</GitPath>
       <GitPath Condition=" '$(GitPath)' == '' Or !Exists('$(GitPath)\bin\git.exe') ">$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\GitForWindows', 'InstallPath', null, RegistryView.Registry64))</GitPath>
