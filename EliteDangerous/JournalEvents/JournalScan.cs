@@ -1216,7 +1216,8 @@ namespace EliteDangerousCore.JournalEvents
                             if (Terraformable) kValue += 116295;
                             break;
                         case EDPlanet.Earthlike_body:
-                            kValue = 116295;
+                            // Always terraformable so WW + bonus
+                            kValue = 64831 + 116295;
                             break;
                         default:
                             kValue = 300;
