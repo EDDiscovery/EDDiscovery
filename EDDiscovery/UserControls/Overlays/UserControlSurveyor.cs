@@ -70,6 +70,7 @@ namespace EDDiscovery.UserControls
             hasVolcanismToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showVolcanism", true);
             hasRingsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "hideMapped", true);
+            showStellarBodiesCountToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showStellarBodies", true);
             align = (Alignment)SQLiteDBClass.GetSettingInt(DbSave + nameof(align), 0);
 
             switch (align)
@@ -188,12 +189,13 @@ namespace EDDiscovery.UserControls
             public Image Img { get; set; }
             public string DistanceFromArrival { get; internal set; }
 
-            public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped;
+            public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped, Stellar;
 
             public string VolcanismString { get; set; }
+            
         }
 
-        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped)
+        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped, bool isStellar)
         {
             return new WantedBodies()
             {
@@ -207,7 +209,8 @@ namespace EDDiscovery.UserControls
                 Ammonia = isAmmoniaWorld,
                 Earthlike = isAnEarthLike,
                 WaterWorld = isWaterWorld,
-                Mapped = mapped
+                Mapped = mapped,
+                Stellar = isStellar
             };
         }
 
@@ -244,25 +247,26 @@ namespace EDDiscovery.UserControls
             last_he = he;
 
             var all_nodes = scannode.Bodies.ToList();
-
+            
             if (all_nodes != null)
             {
                 var wanted_nodes = new List<WantedBodies>();
-
+                
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
-                    if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
+                    if (sn.ScanData != null && sn.ScanData?.BodyName != null)
                     {
-                        bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped;
+                        bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped, stellar;
 
                         if (sn.ScanData.HasRings || sn.ScanData.Terraformable || sn.ScanData.Volcanism != null || sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body || sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world || sn.ScanData.PlanetTypeID == EDPlanet.Water_world)
                         {
                             hasrings = sn.ScanData.HasRings;
-                            terraformable = sn.ScanData.Terraformable ? true : false;
-                            volcanism = sn.ScanData.Volcanism != null ? true : false;
-                            ammonia = sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world ? true : false;
-                            earthlike = sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body ? true : false;
-                            waterworld = sn.ScanData.PlanetTypeID == EDPlanet.Water_world ? true : false;
+                            terraformable = sn.ScanData.Terraformable;
+                            volcanism = sn.ScanData.Volcanism != null;
+                            ammonia = sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world;
+                            earthlike = sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body;
+                            waterworld = sn.ScanData.PlanetTypeID == EDPlanet.Water_world;
+                            stellar = sn.ScanData.IsStar;
 
                             mapped = sn.ScanData.Mapped;
 
@@ -270,8 +274,9 @@ namespace EDDiscovery.UserControls
 
                             distanceString.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
 
-                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped));
+                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped, stellar));
                         }
+
                     }
                 }
 
@@ -285,50 +290,104 @@ namespace EDDiscovery.UserControls
         {
             if (wanted_nodes != null)
             {
+                var starCount = 0;
                 var bodiesCount = 0;
-
-                using (var body = wanted_nodes.GetEnumerator())
+                                
+                foreach (var wn in wanted_nodes)
                 {
-                    while (body.MoveNext())
+                    // count all stellar bodies
+                    if (showStellarBodiesCountToolStripMenuItem.Checked && wn.Stellar)
                     {
-                        if (body.Current.Ammonia && ammoniaWorldToolStripMenuItem.Checked)
+                        starCount++;
+                        PrintStarCount(starCount);
+                    }
+
+                    else if (!wn.Stellar)
+                    {
+                        if (wn.Ammonia && ammoniaWorldToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
 
-                        if (body.Current.Earthlike && earthlikeWorldToolStripMenuItem.Checked)
+                        if (wn.Earthlike && earthlikeWorldToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
 
-                        if (body.Current.WaterWorld && waterWorldToolStripMenuItem.Checked)
+                        if (wn.WaterWorld && waterWorldToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
 
-                        if (body.Current.Ringed && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && hasRingsToolStripMenuItem.Checked)
+                        if (wn.Ringed && !wn.Ammonia && !wn.Earthlike && !wn.WaterWorld && hasRingsToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
 
-                        if (body.Current.Volcanism && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && hasVolcanismToolStripMenuItem.Checked)
+                        if (wn.Volcanism && !wn.Ammonia && !wn.Earthlike && !wn.WaterWorld && hasVolcanismToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
 
-                        if (body.Current.Terraformable && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && terraformableToolStripMenuItem.Checked)
+                        if (wn.Terraformable && !wn.Ammonia && !wn.Earthlike && !wn.WaterWorld && terraformableToolStripMenuItem.Checked)
                         {
                             bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
+                            DrawToScreen(wn, bodiesCount);
                         }
                     }
                 }
             }
+        }
+
+        private void PrintStarCount(int starCount)
+        {
+            var containerSize = new Size(Math.Max(pictureBoxSurveyor.Width, 24), 24);        // note when minimized, we could have a tiny width, so need to protect            
+            var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+            var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
+            var stellarBodies = new StringBuilder();
+
+            stellarBodies.Clear();
+            string text;
+            if (starCount <= 1)
+            {
+                text = "body";
+            }
+            else { text = "bodies"; }
+            stellarBodies.Append(starCount).Append(" stellar ").Append(text).Append(" detected.");
+
+            var label = stellarBodies.ToString();
+
+            var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, displayfont, textcolour, backcolour, 1.0F);
+
+            if (align == Alignment.center)
+            {
+                labelOffset = (int)((containerSize.Width - bounds.Width) / 2);
+            }
+            else if (align == Alignment.right)
+            {
+                labelOffset = (int)(containerSize.Width - bounds.Width);
+            }
+            else
+            {
+                labelOffset = 0;
+            }
+
+            _ = pictureBoxSurveyor?.AddTextAutoSize(
+                    new Point(labelOffset, 0 + 4),
+                    new Size((int)bounds.Width, 24),
+                    label,
+                    displayfont,
+                    textcolour,
+                    backcolour,
+                    1.0F);
+
+            pictureBoxSurveyor.Refresh();
+
         }
 
         private void DrawToScreen(WantedBodies body, int bodiesCount)
@@ -343,20 +402,29 @@ namespace EDDiscovery.UserControls
             information.Append(body.Name);
 
             // Additional information
-            information.Append((body.Ammonia) ? @" is an ammonia world.".Tx(this) : null);
-            information.Append((body.Earthlike) ? @" is an earth like world.".Tx(this) : null);
-            information.Append((body.WaterWorld && !body.Terraformable) ? @" is a water world.".Tx(this) : null);
-            information.Append((body.WaterWorld && body.Terraformable) ? @" is a terraformable water world.".Tx(this) : null);
-            information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
-            information.Append((body.Ringed) ? @" Has ring.".Tx(this) : null);
-            information.Append((body.Volcanism) ? @" Has ".Tx(this) + body.VolcanismString : null);
-            information.Append(@" " + body.DistanceFromArrival);
+            information.Append((body.Ammonia) ? " is an ammonia world.".Tx(this) : null);
+            information.Append((body.Earthlike) ? " is an earth like world.".Tx(this) : null);
+            information.Append((body.WaterWorld && !body.Terraformable) ? " is a water world.".Tx(this) : null);
+            information.Append((body.WaterWorld && body.Terraformable) ? " is a terraformable water world.".Tx(this) : null);
+            information.Append((body.Terraformable && !body.WaterWorld) ? " is a terraformable planet.".Tx(this) : null);
+            information.Append((body.Ringed) ? " Has ring.".Tx(this) : null);
+            information.Append((body.Volcanism) ? " Has ".Tx(this) + body.VolcanismString : null);
+            information.Append(" " + body.DistanceFromArrival);
 
             //Debug.Print(information.ToString()); // for testing
 
             // Drawing Elements
             const int rowHeight = 24;
-            var vPos = (bodiesCount * rowHeight) - rowHeight;
+
+            int vPos;
+            if (showStellarBodiesCountToolStripMenuItem.Enabled)
+            {
+                vPos = bodiesCount * rowHeight;
+            }
+            else
+            {
+                vPos = (bodiesCount * rowHeight) - rowHeight;
+            }
 
             var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
@@ -389,7 +457,7 @@ namespace EDDiscovery.UserControls
                                 labelOffset = 0;
                             }
 
-                            pictureBoxSurveyor?.AddTextAutoSize(
+                            _ = pictureBoxSurveyor?.AddTextAutoSize(
                                     new Point(labelOffset, vPos + 4),
                                     new Size((int)bounds.Width, 24),
                                     information.ToString(),
@@ -449,6 +517,12 @@ namespace EDDiscovery.UserControls
             DrawSystem(last_he);
         }
 
+        private void ShowStellarBodiesCountToolStripMenuItem_CheckStateChanged(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "showStellarBodies", showStellarBodiesCountToolStripMenuItem.Checked);
+            DrawSystem(last_he);
+        }
+
         private void pictureBoxSurveyorAid_MouseClick(object sender, MouseEventArgs e)
         {
             contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
@@ -504,6 +578,6 @@ namespace EDDiscovery.UserControls
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
             DrawSystem(last_he);
-        }
+        }        
     }
 }
