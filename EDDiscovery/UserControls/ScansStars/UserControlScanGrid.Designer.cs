@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
             this.nameToolStripMenuItem.CheckOnClick = true;
             this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.ToolTipText = "Toggle body name column visibility";
             this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
@@ -389,7 +389,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem.CheckOnClick = true;
             this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.classToolStripMenuItem.Text = "Class";
             this.classToolStripMenuItem.ToolTipText = "Toggle body class column visibility";
             this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
@@ -400,7 +400,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem.CheckOnClick = true;
             this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.distanceToolStripMenuItem.Text = "Distance";
             this.distanceToolStripMenuItem.ToolTipText = "Toggle relative body distance column visibility";
             this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
@@ -411,7 +411,7 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.CheckOnClick = true;
             this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);

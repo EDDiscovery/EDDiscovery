@@ -189,13 +189,12 @@ namespace EDDiscovery.UserControls
             public Image Img { get; set; }
             public string DistanceFromArrival { get; internal set; }
 
-            public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped, Stellar;
+            public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped, Stellar, Moon;
 
-            public string VolcanismString { get; set; }
-            
+            public string VolcanismString { get; set; }            
         }
 
-        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped, bool isStellar)
+        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool isMoon, bool mapped, bool isStellar)
         {
             return new WantedBodies()
             {
@@ -209,6 +208,7 @@ namespace EDDiscovery.UserControls
                 Ammonia = isAmmoniaWorld,
                 Earthlike = isAnEarthLike,
                 WaterWorld = isWaterWorld,
+                Moon = isMoon,
                 Mapped = mapped,
                 Stellar = isStellar
             };
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (sn.ScanData != null && sn.ScanData?.BodyName != null)
                     {
-                        bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped, stellar;
+                        bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, moon, mapped, stellar;
 
                         if (sn.ScanData.HasRings || sn.ScanData.Terraformable || sn.ScanData.Volcanism != null || sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body || sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world || sn.ScanData.PlanetTypeID == EDPlanet.Water_world)
                         {
@@ -268,13 +268,19 @@ namespace EDDiscovery.UserControls
                             waterworld = sn.ScanData.PlanetTypeID == EDPlanet.Water_world;
                             stellar = sn.ScanData.IsStar;
 
+                            if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
+                            {
+                                moon = true;
+                            }
+                            else { moon = false; }
+
                             mapped = sn.ScanData.Mapped;
 
                             var distanceString = new StringBuilder();
 
                             distanceString.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
 
-                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped, stellar));
+                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, moon, mapped, stellar));
                         }
 
                     }
@@ -355,10 +361,10 @@ namespace EDDiscovery.UserControls
             string text;
             if (starCount <= 1)
             {
-                text = "body";
+                text = "body".Tx(this);
             }
-            else { text = "bodies"; }
-            stellarBodies.Append(starCount).Append(" stellar ").Append(text).Append(" detected.");
+            else { text = "bodies".Tx(this); }
+            stellarBodies.Append(starCount).Append(" stellar ".Tx(this)).Append(text).Append(" detected.".Tx(this));
 
             var label = stellarBodies.ToString();
 
@@ -401,15 +407,22 @@ namespace EDDiscovery.UserControls
             // Name
             information.Append(body.Name);
 
+            string type;
+            if (body.Moon)
+            {
+                type = "moon.".Tx(this);
+            }
+            else { type = "planet.".Tx(this); }
+
             // Additional information
-            information.Append((body.Ammonia) ? " is an ammonia world.".Tx(this) : null);
-            information.Append((body.Earthlike) ? " is an earth like world.".Tx(this) : null);
-            information.Append((body.WaterWorld && !body.Terraformable) ? " is a water world.".Tx(this) : null);
-            information.Append((body.WaterWorld && body.Terraformable) ? " is a terraformable water world.".Tx(this) : null);
-            information.Append((body.Terraformable && !body.WaterWorld) ? " is a terraformable planet.".Tx(this) : null);
+            information.Append((body.Ammonia) ? " is an ammonia".Tx(this).AppendPrePad(type) : null);
+            information.Append((body.Earthlike) ? " is an earth like".Tx(this).AppendPrePad(type) : null);
+            information.Append((body.WaterWorld && !body.Terraformable) ? " is a water".Tx(this).AppendPrePad(type) : null);
+            information.Append((body.WaterWorld && body.Terraformable) ? " is a terraformable water".Tx(this).AppendPrePad(type) : null);
+            information.Append((body.Terraformable && !body.WaterWorld) ? " is a terraformable".Tx(this).AppendPrePad(type) : null);
             information.Append((body.Ringed) ? " Has ring.".Tx(this) : null);
-            information.Append((body.Volcanism) ? " Has ".Tx(this) + body.VolcanismString : null);
-            information.Append(" " + body.DistanceFromArrival);
+            information.Append((body.Volcanism) ? " Has ".Tx(this) + body.VolcanismString.ToLowerInvariant() : null);
+            information.Append(' ').Append(body.DistanceFromArrival);
 
             //Debug.Print(information.ToString()); // for testing
 
