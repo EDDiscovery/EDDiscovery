@@ -212,6 +212,7 @@
     <Compile Include="SystemDB\SQLiteConnectionSystem.cs" />
     <Compile Include="SystemDB\SystemCache.cs" />
     <Compile Include="SystemDB\SystemGridID.cs" />
+    <Compile Include="SystemDB\SystemsDatabase.cs" />
     <Compile Include="SystemDB\SystemsDBEDDBStore.cs" />
     <Compile Include="SystemDB\SystemsDBEDSMRemove.cs" />
     <Compile Include="SystemDB\SystemsDBEDSMStore.cs" />
