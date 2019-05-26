@@ -140,7 +140,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Materials != null)
             {
                 foreach (MaterialItem m in Materials.Materials)
-                    mc.Set(m.Category, m.Name, m.Count, 0, conn);
+                    mc.Set(m.Category, m.Name, m.Count, 0);
             }
         }
 
@@ -149,7 +149,7 @@ namespace EliteDangerousCore.JournalEvents
             if (Commodities != null)
             {
                 foreach (CommodityItem m in Commodities.Commodities)
-                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice, conn);
+                    mc.Set(MaterialCommodityData.CommodityCategory, m.Name, m.Count, m.BuyPrice);
             }
         }
 

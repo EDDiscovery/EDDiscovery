@@ -125,7 +125,7 @@ namespace EliteDangerousCore
 
         // ifnorecatonsearch is used if you don't know if its a material or commodity.. for future use.
 
-        private MaterialCommodities GetNewCopyOf(string cat, string fdname, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        private MaterialCommodities GetNewCopyOf(string cat, string fdname, bool ignorecatonsearch = false)
         {
             int index = list.FindIndex(x => x.Details.FDName.Equals(fdname, StringComparison.InvariantCultureIgnoreCase) && (ignorecatonsearch || x.Details.Category.Equals(cat, StringComparison.InvariantCultureIgnoreCase)));
 
@@ -147,9 +147,9 @@ namespace EliteDangerousCore
         }
 
         // ignore cat is only used if you don't know what it is 
-        public void Change(string cat, string fdname, int num, long price, SQLiteConnectionUser conn, bool ignorecatonsearch = false)
+        public void Change(string cat, string fdname, int num, long price, bool ignorecatonsearch = false)
         {
-            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn, ignorecatonsearch);
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname, ignorecatonsearch);
        
             double costprev = mc.Count * mc.Price;
             double costnew = num * price;
@@ -180,9 +180,9 @@ namespace EliteDangerousCore
             list.RemoveAll(x => x.Details.IsCommodity);      // empty the list of all commodities
         }
 
-        public void Set(string cat, string fdname, int num, double price, SQLiteConnectionUser conn)
+        public void Set(string cat, string fdname, int num, double price)
         {
-            MaterialCommodities mc = GetNewCopyOf(cat, fdname, conn);
+            MaterialCommodities mc = GetNewCopyOf(cat, fdname);
 
             mc.Count = num;
             if (price > 0)

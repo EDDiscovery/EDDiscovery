@@ -59,7 +59,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", Count, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, "drones", Count, 0);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
@@ -92,7 +92,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -Count, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -Count, 0);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
@@ -121,7 +121,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0);
         }
 
         public override void FillInformation(out string info, out string detailed)

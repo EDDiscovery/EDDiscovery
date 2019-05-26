@@ -84,13 +84,13 @@ namespace EliteDangerousCore.JournalEvents
         public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Type.Equals("Materials"))
-                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, conn, true);
+                mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, true);
         }
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
             if (Type.Equals("Commodity"))
-                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0, conn);
+                mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)

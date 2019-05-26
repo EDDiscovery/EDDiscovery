@@ -91,7 +91,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
@@ -141,7 +141,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
         }
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)

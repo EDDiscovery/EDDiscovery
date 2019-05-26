@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
         {
-            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0, conn);
+            mc.Change(MaterialCommodityData.CommodityCategory, FDName, -Count, 0);
         }
 
         public override void FillInformation(out string info, out string detailed) 
