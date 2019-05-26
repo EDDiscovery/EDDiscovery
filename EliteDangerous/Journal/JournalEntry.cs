@@ -102,34 +102,34 @@ namespace EliteDangerousCore
 
         #region Setters - db is updated
 
-        public void SetStartFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetStartFlag(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, true, SyncFlags.StopMarker, false, updater);
         }
 
-        public void SetEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEndFlag(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, true, updater);
         }
 
-        public void ClearStartEndFlag(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void ClearStartEndFlag(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.StartMarker, false, SyncFlags.StopMarker, false, updater);
         }
 
-        public void SetEdsmSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEdsmSync(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.EDSM, true, SyncFlags.NoBit, false, updater);
         }
 
-        public void SetEddnSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEddnSync(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.EDDN, true, SyncFlags.NoBit, false, updater);
         }
 
-        public void SetEGOSync(SQLiteConnectionUser cn = null, DbTransaction txn = null)
+        public void SetEGOSync(RowUpdater updater = null)
         {
-            UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, cn, txn);
+            UpdateSyncFlagBit(SyncFlags.EGO, true, SyncFlags.NoBit, false, updater);
         }
 
         #endregion

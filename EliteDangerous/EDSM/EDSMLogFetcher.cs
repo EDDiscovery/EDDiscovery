@@ -72,8 +72,8 @@ namespace EliteDangerousCore.EDSM
             if (Commander != null)
             {
                 KeyName(out string latestdatekeyname, out string oldestdatekeyname);
-                SQLiteConnectionUser.DeleteKey(latestdatekeyname);
-                SQLiteConnectionUser.DeleteKey(oldestdatekeyname);
+                UserDatabase.Instance.DeleteKey(latestdatekeyname);
+                UserDatabase.Instance.DeleteKey(oldestdatekeyname);
             }
         }
 
@@ -107,8 +107,8 @@ namespace EliteDangerousCore.EDSM
                         lastCommentFetch = DateTime.UtcNow;
                     }
 
-                    DateTime latestentry = SQLiteConnectionUser.GetSettingDate(latestdatekeyname, GammaStart); // lastest entry
-                    DateTime oldestentry = SQLiteConnectionUser.GetSettingDate(oldestdatekeyname, DateTime.UtcNow); // oldest entry
+                    DateTime latestentry = UserDatabase.Instance.GetSettingDate(latestdatekeyname, GammaStart); // lastest entry
+                    DateTime oldestentry = UserDatabase.Instance.GetSettingDate(oldestdatekeyname, DateTime.UtcNow); // oldest entry
 
                     DateTime logstarttime = DateTime.MinValue;      // return what we got..
                     DateTime logendtime = DateTime.MinValue;
@@ -138,10 +138,10 @@ namespace EliteDangerousCore.EDSM
                             Process(edsmlogs, logstarttime, logendtime);
 
                         if (logendtime > latestentry)
-                            SQLiteConnectionUser.PutSettingDate(latestdatekeyname, logendtime);
+                            UserDatabase.Instance.PutSettingDate(latestdatekeyname, logendtime);
 
                         if (logstarttime < oldestentry)
-                            SQLiteConnectionUser.PutSettingDate(oldestdatekeyname, logstarttime);
+                            UserDatabase.Instance.PutSettingDate(oldestdatekeyname, logstarttime);
                     }
                     else if ( res != -1 )
                     {
@@ -242,13 +242,13 @@ namespace EliteDangerousCore.EDSM
                 tlu.CommanderId = EDCommander.CurrentCmdrID;
                 tlu.Add();  // Add to Database
 
-                UserDatabase.Instance.ExecuteWithDatabase(db =>
+                JournalEntry.ExecuteWithInserter(inserter =>
                 {
-                    foreach (JournalFSDJump jfsd in toadd)
+                    foreach (var jfsd in toadd)
                     {
                         System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
                         jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
-                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), db);     // add it to the db with the JSON created
+                        inserter.Add(jfsd, jfsd.CreateFSDJournalEntryJson());     // add it to the db with the JSON created
                     }
                 });
 

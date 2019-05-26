@@ -132,7 +132,7 @@ namespace EliteDangerousCore
         {
         }
 
-        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate, SystemsDatabaseConnection conn = null)
+        public static HistoryEntry FromJournalEntry(JournalEntry je, HistoryEntry prev, out bool journalupdate)
         {
             ISystem isys = prev == null ? new SystemClass("Unknown") : prev.System;
             int indexno = prev == null ? 1 : prev.Indexno + 1;
@@ -180,7 +180,7 @@ namespace EliteDangerousCore
                     newsys = new SystemClass(jl.StarSystem);
                     newsys.EDSMID = je.EdsmID;
 
-                    ISystem s = conn == null ? SystemCache.FindSystem(newsys) : SystemCache.FindSystem(newsys, conn);      // has no co-ord, did we find it?
+                    ISystem s = SystemCache.FindSystem(newsys);      // has no co-ord, did we find it?
 
                     if (s != null)                               // found a system..
                     {

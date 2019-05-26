@@ -384,7 +384,6 @@ namespace EliteDangerousCore.EDSM
         {
             EDSMClass edsm = new EDSMClass(cmdr);       // Ensure we use the commanders EDSM credentials.
             errmsg = null;
-            firstdiscovers = "";
 
             List<JObject> entries = new List<JObject>();
 
@@ -428,61 +427,62 @@ namespace EliteDangerousCore.EDSM
 
             if (results == null)
             {
+                firstdiscovers = "";
                 return false;
             }
             else
             {
-                using (var cn = new SQLiteConnectionUser(utc: true))
+                string firstdisc = "";
+
+                JournalEntry.ExecuteWithUpdater(updater =>
                 {
-                    using (var txn = cn.BeginTransaction())
+                    for (int i = 0; i < hl.Count && i < results.Count; i++)
                     {
-                        for (int i = 0; i < hl.Count && i < results.Count; i++)
+                        HistoryEntry he = hl[i];
+                        JObject result = results[i];
+                        int msgnr = result["msgnum"].Int();
+                        int systemId = result["systemId"].Int();
+
+                        if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
                         {
-                            HistoryEntry he = hl[i];
-                            JObject result = results[i];
-                            int msgnr = result["msgnum"].Int();
-                            int systemId = result["systemId"].Int();
-
-                            if ((msgnr >= 100 && msgnr < 200) || msgnr == 500)
+                            if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
                             {
-                                if (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location)
+                                if (systemId != 0)
                                 {
-                                    if (systemId != 0)
-                                    {
-                                        he.System.EDSMID = systemId;
-                                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, cn, txn);
-                                    }
-                                }
-
-                                if (he.EntryType == JournalTypeEnum.FSDJump )       // only on FSD, confirmed with Anthor.  25/4/2018
-                                {
-                                    bool systemCreated = result["systemCreated"].Bool();
-
-                                    if (systemCreated)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for " + he.System.Name);
-                                        (he.journalEntry as JournalFSDJump).UpdateFirstDiscover(true, cn, txn);
-                                        firstdiscovers = firstdiscovers.AppendPrePad(he.System.Name, ";");
-                                    }
-                                }
-
-                                he.journalEntry.SetEdsmSync(cn, txn);
-
-                                if (msgnr == 500)
-                                {
-                                    System.Diagnostics.Trace.WriteLine($"Warning submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                                    he.System.EDSMID = systemId;
+                                    JournalEntry.UpdateEDSMIDPosJump(he.Journalid, he.System, false, 0, updater);
                                 }
                             }
-                            else
+
+                            if (he.EntryType == JournalTypeEnum.FSDJump)       // only on FSD, confirmed with Anthor.  25/4/2018
                             {
-                                System.Diagnostics.Trace.WriteLine($"Error submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                                bool systemCreated = result["systemCreated"].Bool();
+
+                                if (systemCreated)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("** EDSM indicates first entry for " + he.System.Name);
+                                    (he.journalEntry as JournalFSDJump).UpdateFirstDiscover(true, updater);
+                                    firstdisc = firstdisc.AppendPrePad(he.System.Name, ";");
+                                }
                             }
 
+                            he.journalEntry.SetEdsmSync(updater);
+
+                            if (msgnr == 500)
+                            {
+                                System.Diagnostics.Trace.WriteLine($"Warning submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Trace.WriteLine($"Error submitting event {he.Journalid} \"{he.EventSummary}\": {msgnr} {result["msg"].Str()}");
                         }
 
-                        txn.Commit();
                     }
-                }
+
+                });
+
+                firstdiscovers = firstdisc;
 
                 return true;
             }

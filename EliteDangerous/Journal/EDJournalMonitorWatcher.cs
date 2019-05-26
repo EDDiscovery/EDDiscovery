@@ -191,17 +191,15 @@ namespace EliteDangerousCore
                 {
                     //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " ui " +uientries.Count + " size " + netlogpos);
 
+                    JournalEntry.ExecuteWithInserter(usetxn: true, action: inserter =>
+                    {
                         ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
 
-                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
-                    {
                         foreach (JournalReaderEntry jre in ents)
                         {
                             entries.Add(jre.JournalEntry);
-                            jre.JournalEntry.Add(jre.Json, db);
+                            inserter.Add(jre.JournalEntry, jre.Json);
                         }
-
-                        db.Commit();
                     });
 
                     // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
@@ -284,18 +282,16 @@ namespace EliteDangerousCore
 
                     //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 
-                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
+                    JournalEntry.ExecuteWithInserter(inserter =>
                     {
                         foreach (JournalReaderEntry jre in entries)
                         {
                             if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                jre.JournalEntry.Add(jre.Json, db);
+                                inserter.Add(jre.JournalEntry, jre.Json);
                                 //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                             }
                         }
-
-                        db.Commit();
                     });
                 }
 

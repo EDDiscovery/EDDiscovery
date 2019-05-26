@@ -106,51 +106,46 @@ namespace EliteDangerousCore
 
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                int ji = 0;
+
+                NetLogFileReader reader = readersToUpdate[i];
+                updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                JournalEntry.ExecuteWithInserter(inserter =>
                 {
-                    int ji = 0;
-
-                    NetLogFileReader reader = readersToUpdate[i];
-                    updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-
-                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
+                    foreach (JObject jo in reader.ReadSystems(cancelRequested, currentcmdrid))
                     {
-                        foreach (JObject jo in reader.ReadSystems(cancelRequested, currentcmdrid))
+                        jo["EDDMapColor"] = defaultMapColour;
+
+                        JournalLocOrJump je = new JournalFSDJump(jo);
+                        je.SetTLUCommander(reader.TravelLogUnit.id, currentcmdrid);
+
+                        while (ji < vsSystemsEnts.Count && vsSystemsEnts[ji].EventTimeUTC < je.EventTimeUTC)
                         {
-                            jo["EDDMapColor"] = defaultMapColour;
-
-                            JournalLocOrJump je = new JournalFSDJump(jo);
-                            je.SetTLUCommander(reader.TravelLogUnit.id, currentcmdrid);
-
-                            while (ji < vsSystemsEnts.Count && vsSystemsEnts[ji].EventTimeUTC < je.EventTimeUTC)
-                            {
-                                ji++;   // move to next entry which is bigger in time or equal to ours.
-                            }
-
-                            JournalLocOrJump prev = (ji > 0 && (ji - 1) < vsSystemsEnts.Count) ? vsSystemsEnts[ji - 1] : null;
-                            JournalLocOrJump next = ji < vsSystemsEnts.Count ? vsSystemsEnts[ji] : null;
-
-                            bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.01));
-                            bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.01));
-
-                            // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
-
-                            if (!(previssame || nextissame))
-                            {
-                                je.Add(jo, db);
-                                System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, jo.ToString());
-                            }
+                            ji++;   // move to next entry which is bigger in time or equal to ours.
                         }
 
-                        db.Commit();
+                        JournalLocOrJump prev = (ji > 0 && (ji - 1) < vsSystemsEnts.Count) ? vsSystemsEnts[ji - 1] : null;
+                        JournalLocOrJump next = ji < vsSystemsEnts.Count ? vsSystemsEnts[ji] : null;
 
-                        reader.TravelLogUnit.Update();
-                    });
+                        bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.01));
+                        bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.01));
 
-                    if (updateProgress != null)
-                    {
-                        updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+                        // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
+
+                        if (!(previssame || nextissame))
+                        {
+                            inserter.Add(je, jo);
+                            System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, jo.ToString());
+                        }
                     }
+                });
+
+                reader.TravelLogUnit.Update();
+
+                if (updateProgress != null)
+                {
+                    updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
                 }
             }
         }
