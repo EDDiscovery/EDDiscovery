@@ -540,14 +540,14 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateFirstDiscover(bool value, SQLiteConnectionUser cn = null, DbTransaction txnl = null)
+        public void UpdateFirstDiscover(bool value, RowUpdater updater = null)
         {
-            JObject jo = cn == null ? GetJson(Id) : GetJson(Id, cn, txnl);
+            JObject jo = updater == null ? GetJson(Id) : updater.GetJson(Id);
 
             if (jo != null)
             {
                 jo["EDD_EDSMFirstDiscover"] = value;
-                UpdateJsonEntry(jo, cn, txnl);
+                UpdateJsonEntry(jo, updater);
                 EDSMFirstDiscover = value;
             }
         }

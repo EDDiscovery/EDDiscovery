@@ -584,18 +584,15 @@ namespace EliteDangerousCore
 
             if (updatesystems.Count > 0)
             {
-                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))
+                JournalEntry.ExecuteWithUpdater(usetxn: true, action: updater =>
                 {
-                    using (DbTransaction txn = uconn.BeginTransaction())        // take a transaction over this
+                    foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
                     {
-                        foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
-                        {
-                            FillInSystemFromDBInt(he.Item1, he.Item2, uconn, txn);  // fill, we already have an EDSM system to use
-                        }
-
-                        txn.Commit();
+                        FillInSystemFromDBInt(he.Item1, he.Item2, updater);  // fill, we already have an EDSM system to use
                     }
-                }
+
+                    updater.Commit();
+                });
             }
         }
 
@@ -611,20 +608,18 @@ namespace EliteDangerousCore
 
             if (edsmsys != null)                                            // if we found it externally, fill in info
             {
-                using (SQLiteConnectionUser uconn = new SQLiteConnectionUser(utc: true))        // lets do this in a transaction for speed.
-                {
-                    using (DbTransaction txn = uconn.BeginTransaction())
-                    {
-                        FillInSystemFromDBInt(syspos, edsmsys, uconn, txn); // and fill in using this connection/tx
-                        txn.Commit();
-                    }
-                }
+                FillInSystemFromDBInt(syspos, edsmsys);
             }
             else
-                FillInSystemFromDBInt(syspos, null, null, null);        // else fill in using null system, which means just mark it checked
+                FillInSystemFromDBInt(syspos, null);        // else fill in using null system, which means just mark it checked
         }
 
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, SQLiteConnectionUser uconn, DbTransaction utn )       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys)
+        {
+            JournalEntry.ExecuteWithUpdater(updater => FillInSystemFromDBInt(syspos, edsmsys, updater));
+        }
+
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, JournalEntry.RowUpdater updater)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
@@ -671,7 +666,7 @@ namespace EliteDangerousCore
                     bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
 
                     if (updatepos || updateedsmid)
-                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, uconn , utn);  // update pos and edsmid, jdist not updated
+                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, updater);  // update pos and edsmid, jdist not updated
 
                     he.System = newsys;
                 }
@@ -1046,25 +1041,22 @@ namespace EliteDangerousCore
             {
                 reportProgress(-1, "Updating journal entries");
 
-                using (SQLiteConnectionUser conn = new SQLiteConnectionUser(utc: true))
+                JournalEntry.ExecuteWithUpdater(usetxn: true, action: updater =>
                 {
-                    using (DbTransaction txn = conn.BeginTransaction())
+                    foreach (Tuple<JournalEntry, HistoryEntry> jehe in jlistUpdated)
                     {
-                        foreach (Tuple<JournalEntry, HistoryEntry> jehe in jlistUpdated)
-                        {
-                            JournalEntry je = jehe.Item1;
-                            HistoryEntry he = jehe.Item2;
+                        JournalEntry je = jehe.Item1;
+                        HistoryEntry he = jehe.Item2;
 
-                            double dist = (je is JournalFSDJump) ? (je as JournalFSDJump).JumpDist : 0;
-                            bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
+                        double dist = (je is JournalFSDJump) ? (je as JournalFSDJump).JumpDist : 0;
+                        bool updatecoord = (je is JournalLocOrJump) ? (!(je as JournalLocOrJump).HasCoordinate && he.System.HasCoordinate) : false;
 
-                            Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.EDSMID, he.System.Name, je.Id, he.Indexno);
-                            JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, conn, txn);
-                        }
-
-                        txn.Commit();
+                        Debug.WriteLine("Push update {0} {1} to JE {2} HE {3}", he.System.EDSMID, he.System.Name, je.Id, he.Indexno);
+                        JournalEntry.UpdateEDSMIDPosJump(je.Id, he.System, updatecoord, dist, updater);
                     }
-                }
+
+                    updater.Commit();
+                });
             }
 
             // now database has been updated due to initial fill, now fill in stuff which needs the user database
