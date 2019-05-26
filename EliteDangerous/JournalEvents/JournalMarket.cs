@@ -89,12 +89,12 @@ namespace EliteDangerousCore.JournalEvents
         public long TotalCost { get; set; }
         public long? MarketID { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, Count, BuyPrice);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count, -TotalCost);
         }
@@ -139,12 +139,12 @@ namespace EliteDangerousCore.JournalEvents
         public bool BlackMarket { get; set; }
         public long? MarketID { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count + " Avg " + AvgPricePaid, TotalSale, (double)(SellPrice - AvgPricePaid));
         }

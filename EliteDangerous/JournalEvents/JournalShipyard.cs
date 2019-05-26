@@ -121,12 +121,12 @@ namespace EliteDangerousCore.JournalEvents
         public long? SellPrice { get; set; }
         public long? MarketID { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -ShipPrice + (SellPrice ?? 0));
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {                                   // new will come along and provide the new ship info
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Buy");
             if (StoreOldShipId != null && StoreOldShipFD != null)
@@ -162,7 +162,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ShipFD { get; set; }
         public int ShipId { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " NEW");
             shp.ShipyardNew(ShipType, ShipFD, ShipId);
@@ -195,12 +195,12 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }      // may be empty
         public long? MarketID { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, ShipPrice);
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             //Debug.WriteLine(EventTimeUTC + " SELL");
             shp.Sell(ShipTypeFD, SellShipId);
@@ -242,7 +242,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public long? MarketID { get; set; }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " SWAP");
             shp.ShipyardSwap(this, whereami, system.Name);
@@ -289,12 +289,12 @@ namespace EliteDangerousCore.JournalEvents
         public long? MarketID { get; set; }
         public long? ShipMarketID { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, -TransferPrice);
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             DateTime arrival = EventTimeUTC.AddSeconds(nTransferTime ?? 0);
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " Transfer");
@@ -387,7 +387,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             //System.Diagnostics.Debug.WriteLine(EventTimeUTC + " StoredShips");
             if (ShipsHere != null)
@@ -417,12 +417,12 @@ namespace EliteDangerousCore.JournalEvents
         public int SellShipId { get; set; }
         public long ShipPrice { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, ShipType, ShipPrice);
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.Sell(ShipType, SellShipId);
         }

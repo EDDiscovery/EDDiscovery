@@ -81,19 +81,19 @@ namespace EliteDangerousCore.JournalEvents
         public int Quantity { get; set; }
         public int TotalQuantity { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Type.Equals("Materials"))
                 mc.Change(MaterialCommodityData.MaterialRawCategory, Material, -Quantity, 0, true);
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Type.Equals("Commodity"))
                 mc.Change(MaterialCommodityData.CommodityCategory, Commodity, -Quantity, 0);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             if (Type.Equals("Credits"))
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Engineer Contribution Credits", -Quantity);
@@ -162,7 +162,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public Dictionary<string, int> Ingredients { get; set; }        // not for legacy convert
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Ingredients != null)
             {
@@ -171,7 +171,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             if ((IsPreview == null || IsPreview.Value == false) && Engineering != null)
             {

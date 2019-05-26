@@ -549,7 +549,7 @@ namespace EliteDangerousCore
 
         #region process
 
-        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, DB.SQLiteConnectionUser conn, string whereami, ISystem system)
+        public Tuple<ShipInformation, ModulesInStore> Process(JournalEntry je, DB.IUserDatabase conn, string whereami, ISystem system)
         {
             if (je is IShipInformation)
             {

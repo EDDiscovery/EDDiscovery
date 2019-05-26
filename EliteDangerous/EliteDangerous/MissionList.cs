@@ -353,7 +353,7 @@ namespace EliteDangerousCore
 
         #region process
 
-        public MissionList Process(JournalEntry je, ISystem sys, string body , DB.SQLiteConnectionUser conn)
+        public MissionList Process(JournalEntry je, ISystem sys, string body , DB.IUserDatabase conn)
         {
             if (je is IMissions)
             {

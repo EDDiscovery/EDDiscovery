@@ -207,7 +207,7 @@ namespace EliteDangerousCore
             //log.Write("", true);
         }
 
-        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, SQLiteConnectionUser conn )
+        static public MaterialCommoditiesList Process(JournalEntry je, MaterialCommoditiesList oldml, IUserDatabase conn )
         {
             MaterialCommoditiesList newmc = (oldml == null) ? new MaterialCommoditiesList() : oldml;
 

@@ -31,7 +31,7 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public long Cost { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, System, -Cost);
         }
@@ -65,7 +65,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Bonus { get; set; }
         public long TotalEarnings { get; set; }        // 3.0
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             int count = (Systems?.Length ?? 0) + (Discovered?.Length ?? 0);
 
@@ -115,7 +115,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Bonus { get; set; }
         public long TotalEarnings { get; set; }      
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             int count = (Systems?.Length ?? 0);
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, count + " systems", TotalEarnings);

@@ -110,7 +110,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Vessel.Equals("Ship"))      // only want ship cargo to change lists..
             {
@@ -152,12 +152,12 @@ namespace EliteDangerousCore.JournalEvents
         public string PowerplayOrigin { get; set; }
         public long? MissionID { get; set; }             // if applicable
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, -Count, 0);
         }
 
-        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType + " " + Count);
         }
@@ -217,13 +217,13 @@ namespace EliteDangerousCore.JournalEvents
 
         public long? MarketID { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (CargoType.Length > 0 && Count > 0)
                 mc.Change(MaterialCommodityData.CommodityCategory, CargoType, (UpdateEnum == UpdateTypeEnum.Collect) ? Count : -Count, 0);
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.CargoDepot(this);
         }
@@ -271,12 +271,12 @@ namespace EliteDangerousCore.JournalEvents
         public bool Stolen { get; set; }
         public long? MissionID { get; set; }             // if applicable
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
         }
 
-        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, FriendlyType);
         }

@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public int Count { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count.ToString(), -Cost);
         }
@@ -62,7 +62,7 @@ namespace EliteDangerousCore.JournalEvents
 
         protected override JournalTypeEnum IconEventType { get { return To.Contains("Mothership") ? JournalTypeEnum.VehicleSwitch_Mothership : JournalTypeEnum.VehicleSwitch_Fighter; } }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.VehicleSwitch(To);
         }

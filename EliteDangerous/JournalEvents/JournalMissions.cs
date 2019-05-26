@@ -63,7 +63,7 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Missions(this);       // check vs our mission list
         }
@@ -246,12 +246,12 @@ namespace EliteDangerousCore.JournalEvents
 
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Accepted(this, sys, body);
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, IUserDatabase conn)
         {
             if (Commodity != null && Count != null && DeliveryMissions.Contains(FDName) && EventTimeUTC < ED32Date)
             {
@@ -349,7 +349,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public FactionEffectsEntry[] FactionEffects;
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Commodity != null && Count != null)
             {
@@ -363,7 +363,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (MaterialsReward != null)
             {
@@ -375,7 +375,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             long rv = Reward.HasValue ? Reward.Value : 0;
             long dv = Donation.HasValue ? Donation.Value : 0;
@@ -383,7 +383,7 @@ namespace EliteDangerousCore.JournalEvents
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name, (rv - dv), 0);
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Completed(this);
         }
@@ -558,7 +558,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Failed(this);
         }
@@ -600,7 +600,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Redirected(this);
         }
@@ -631,7 +631,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.SQLiteConnectionUser conn)
+        public void UpdateMissions(MissionListAccumulator mlist, EliteDangerousCore.ISystem sys, string body, DB.IUserDatabase conn)
         {
             mlist.Abandoned(this);
         }

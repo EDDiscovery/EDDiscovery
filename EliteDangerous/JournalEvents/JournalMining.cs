@@ -33,12 +33,12 @@ namespace EliteDangerousCore.JournalEvents
         public string FriendlyType { get; set; }
         public string Type_Localised { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, Type, 1, 0);
         }
 
-        public void LedgerNC(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void LedgerNC(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEventNoCash(Id, EventTimeUTC, EventTypeID, Type_Localised);
         }

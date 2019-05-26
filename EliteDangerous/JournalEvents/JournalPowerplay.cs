@@ -124,7 +124,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public long Cost { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, -Cost);
         }
@@ -182,7 +182,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Power { get; set; }
         public long Amount { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Power, Amount);
         }

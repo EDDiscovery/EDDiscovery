@@ -77,7 +77,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public CombatRank CombatRank { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + Faction, -Cost);
         }

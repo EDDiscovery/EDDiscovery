@@ -98,7 +98,7 @@ namespace EliteDangerousCore.JournalEvents
             return sb.ToString();
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             //System.Diagnostics.Debug.WriteLine("Updated at " + this.EventTimeUTC.ToString());
             mc.Clear(false);
@@ -133,7 +133,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public int Count { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(Category, Name, Count, 0);
         }
@@ -161,7 +161,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }    // FDName
         public int Count { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(Category, Name, -Count, 0);
         }
@@ -244,7 +244,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Paid != null && Received != null)
             {
@@ -302,7 +302,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Name { get; set; }
         public Dictionary<string, int> Materials { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Materials != null)
             {

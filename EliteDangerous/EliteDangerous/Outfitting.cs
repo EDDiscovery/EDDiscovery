@@ -149,7 +149,7 @@ namespace EliteDangerousCore
             return list;
         }
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je, IUserDatabase conn)
         {
             if (je.EventTypeID == JournalTypeEnum.Outfitting)
             {

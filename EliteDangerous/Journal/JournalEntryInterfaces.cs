@@ -20,27 +20,27 @@ namespace EliteDangerousCore
 {
     public interface IMaterialJournalEntry
     {
-        void UpdateMaterials(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
+        void UpdateMaterials(MaterialCommoditiesList mc, IUserDatabase userdb);
     }
 
     public interface ICommodityJournalEntry
     {
-        void UpdateCommodities(MaterialCommoditiesList mc, SQLiteConnectionUser conn);
+        void UpdateCommodities(MaterialCommoditiesList mc, IUserDatabase userdb);
     }
 
     public interface ILedgerJournalEntry
     {
-        void Ledger(Ledger mcl, SQLiteConnectionUser conn);
+        void Ledger(Ledger mcl, IUserDatabase userdb);
     }
 
     public interface ILedgerNoCashJournalEntry
     {
-        void LedgerNC(Ledger mcl, SQLiteConnectionUser conn);
+        void LedgerNC(Ledger mcl, IUserDatabase userdb);
     }
 
     public interface IShipInformation
     {
-        void ShipInformation(ShipInformationList shp, string whereami, ISystem system, SQLiteConnectionUser conn);
+        void ShipInformation(ShipInformationList shp, string whereami, ISystem system, IUserDatabase userdb);
     }
 
     public interface IBodyNameAndID
@@ -55,7 +55,7 @@ namespace EliteDangerousCore
 
     public interface IMissions
     {
-        void UpdateMissions(MissionListAccumulator mlist, ISystem sys, string body, SQLiteConnectionUser conn);
+        void UpdateMissions(MissionListAccumulator mlist, ISystem sys, string body, IUserDatabase conn);
     }
 
     public interface ISystemStationEntry

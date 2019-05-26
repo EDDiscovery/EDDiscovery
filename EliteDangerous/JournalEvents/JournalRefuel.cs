@@ -30,7 +30,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public double Amount { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString("0.0") + "t", -Cost);
         }
@@ -41,7 +41,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.RefuelAll(this);
         }
@@ -59,7 +59,7 @@ namespace EliteDangerousCore.JournalEvents
         public long Cost { get; set; }
         public int Amount { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString("0.0") + "t", -Cost);
         }
@@ -70,7 +70,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.RefuelPartial(this);
         }
@@ -94,7 +94,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.FuelScoop(this);
         }
@@ -118,7 +118,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.FuelReservoirReplenished(this);
         }

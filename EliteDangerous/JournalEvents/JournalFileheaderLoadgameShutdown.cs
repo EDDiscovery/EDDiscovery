@@ -123,7 +123,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = BaseUtils.FieldBuilder.Build("Mode:".T(EDTx.JournalEntry_Mode), GameMode, "Group:".T(EDTx.JournalEntry_Group), Group, "Not Landed;Landed".T(EDTx.JournalEntry_NotLanded), StartLanded, "Fuel Level:;;0.0".T(EDTx.JournalEntry_FuelLevel), FuelLevel, "Capacity:;;0.0".T(EDTx.JournalEntry_Capacity), FuelCapacity);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             if (mcl.CashTotal != Credits)
             {
@@ -131,7 +131,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             if (ShipFD.HasChars())        // must have a ship name - there have been load games without it.
                 shp.LoadGame(ShipId, Ship, ShipFD, ShipName, ShipIdent, FuelLevel, FuelCapacity);

@@ -896,7 +896,7 @@ namespace EliteDangerousCore
                 }
             }
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            UserDatabase.Instance.ExecuteWithDatabase(conn =>
             {
                 he.ProcessWithUserDb(je, prev, this, conn);           // let some processes which need the user db to work
 
@@ -906,14 +906,12 @@ namespace EliteDangerousCore
                 shipyards.Process(je, conn);
                 outfitting.Process(je, conn);
 
-                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn,he.WhereAmI,he.System);
+                Tuple<ShipInformation, ModulesInStore> ret = shipinformationlist.Process(je, conn, he.WhereAmI, he.System);
                 he.ShipInformation = ret.Item1;
                 he.StoredModules = ret.Item2;
 
                 he.MissionList = missionlistaccumulator.Process(je, he.System, he.WhereAmI, conn);
-
-                
-            }
+            });
 
             historylist.Add(he);
 
@@ -1094,7 +1092,7 @@ namespace EliteDangerousCore
         {
             List<HistoryEntry> hl = historylist;
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())      // splitting the update into two, one using system, one using user helped
+            UserDatabase.Instance.ExecuteWithDatabase(conn =>      // splitting the update into two, one using system, one using user helped
             {
                 for (int i = 0; i < hl.Count; i++)
                 {
@@ -1143,7 +1141,7 @@ namespace EliteDangerousCore
                         this.starscan.AddBodyToBestSystem((IBodyNameAndID)je, i, hl);
                     }
                 }
-            }
+            });
         }
 
         public static int MergeTypeDelay(JournalEntry je)   // 0 = no delay, delay for attempts to merge items..

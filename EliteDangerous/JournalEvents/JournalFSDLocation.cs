@@ -523,23 +523,20 @@ namespace EliteDangerousCore.JournalEvents
             detailed = sb.ToString();
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, DB.IUserDatabase conn)
         {
             shp.FSDJump(this);
         }
 
         public void SetMapColour(int mapcolour)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                JObject jo = GetJson(Id, cn);
+            JObject jo = GetJson(Id);
 
-                if (jo != null)
-                {
-                    jo["EDDMapColor"] = mapcolour;
-                    UpdateJsonEntry(jo, cn);
-                    MapColor = mapcolour;
-                }
+            if (jo != null)
+            {
+                jo["EDDMapColor"] = mapcolour;
+                UpdateJsonEntry(jo);
+                MapColor = mapcolour;
             }
         }
 

@@ -135,7 +135,7 @@ namespace EliteDangerousCore.JournalEvents
         public MaterialListClass Materials { get; set; }             // FDNAMES
         public CommodityListClass Commodities { get; set; }
 
-        public void UpdateMaterials(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateMaterials(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             if (Materials != null)
             {
@@ -144,7 +144,7 @@ namespace EliteDangerousCore.JournalEvents
             }
         }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         { 
             if (Commodities != null)
             {

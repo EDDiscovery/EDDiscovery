@@ -38,7 +38,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "Wages for ".T(EDTx.JournalEntry_Wagesfor) + Name, -Amount);
         }

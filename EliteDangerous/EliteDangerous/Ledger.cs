@@ -80,7 +80,7 @@ namespace EliteDangerousCore
         }
 
 
-        public void Process(JournalEntry je, SQLiteConnectionUser conn)
+        public void Process(JournalEntry je, IUserDatabase conn)
         {
             if (je is ILedgerJournalEntry)
             {

@@ -37,7 +37,7 @@ namespace EliteDangerousCore.JournalEvents
             detailed = "";
         }
 
-        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, SQLiteConnectionUser conn)
+        public void ShipInformation(ShipInformationList shp, string whereami, ISystem system, IUserDatabase conn)
         {
             shp.SupercruiseEntry(this);
         }

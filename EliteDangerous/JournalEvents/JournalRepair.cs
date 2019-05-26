@@ -34,7 +34,7 @@ namespace EliteDangerousCore.JournalEvents
         public string ItemLocalised { get; set; }
         public long Cost { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Item, -Cost);
         }
@@ -57,7 +57,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public long Cost { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, "", -Cost);
         }

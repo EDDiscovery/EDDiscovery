@@ -191,7 +191,7 @@ namespace EliteDangerousCore.JournalEvents
         public string System { get; set; }
         public long Reward { get; set; }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Name + " " + System, Reward);
         }

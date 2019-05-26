@@ -57,12 +57,12 @@ namespace EliteDangerousCore.JournalEvents
         public long BuyPrice { get; set; }
         public long TotalCost { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", Count, 0);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Type + " " + Count + " drones", -TotalCost);
         }
@@ -90,12 +90,12 @@ namespace EliteDangerousCore.JournalEvents
         public long SellPrice { get; set; }
         public long TotalSale { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", -Count, 0);
         }
 
-        public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
+        public void Ledger(Ledger mcl, DB.IUserDatabase conn)
         {
             mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Count.ToString() + " " + "Drones".T(EDTx.JournalEntry_Drones), TotalSale);
         }
@@ -119,7 +119,7 @@ namespace EliteDangerousCore.JournalEvents
         public string Type { get; set; }
         public string FriendlyType { get; set; }
 
-        public void UpdateCommodities(MaterialCommoditiesList mc, DB.SQLiteConnectionUser conn)
+        public void UpdateCommodities(MaterialCommoditiesList mc, DB.IUserDatabase conn)
         {
             mc.Change(MaterialCommodityData.CommodityCategory, "drones", -1, 0);
         }
