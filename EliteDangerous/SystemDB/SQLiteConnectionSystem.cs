@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionSystem : SQLExtConnectionWithLockRegister<SQLiteConnectionSystem>
+    internal class SQLiteConnectionSystem : SQLExtConnectionWithLockRegister<SQLiteConnectionSystem>
     {
         const string tablepostfix = "temp"; // postfix for temp tables
         //const string debugoutfile = @"c:\code\edsm\Jsonprocess.lst";        // null off
@@ -180,7 +180,7 @@ namespace EliteDangerousCore.DB
 
                     long updates = SystemsDB.UpgradeDB102to200(cancelRequested, reportProgress, tablepostfix, tablesareempty: true, maxgridid: maxgridid);
 
-                    using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))      // use this special one so we don't get double init.
+                    using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))
                     {
                         if (updates >= 0) // a cancel will result in -1
                         {
@@ -227,7 +227,7 @@ namespace EliteDangerousCore.DB
                 }
                 else
                 {       // newer data is needed, so just remove
-                    using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))      // use this special one so we don't get double init.
+                    using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))
                     {
                         reportProgress?.Invoke("Removing old system tables");
 
@@ -288,7 +288,7 @@ namespace EliteDangerousCore.DB
 
         #region Helpers
 
-        private static void CreateStarTables(SQLExtConnection conn, string postfix = "")
+        private static void CreateStarTables(SQLiteConnectionSystem conn, string postfix = "")
         {
             conn.ExecuteNonQueries(new string[]
             {
@@ -300,7 +300,7 @@ namespace EliteDangerousCore.DB
             });
         }
 
-        private static void DropStarTables(SQLExtConnection conn, string postfix = "")
+        private static void DropStarTables(SQLiteConnectionSystem conn, string postfix = "")
         {
             conn.ExecuteNonQueries(new string[]
             {
@@ -310,7 +310,7 @@ namespace EliteDangerousCore.DB
             });
         }
 
-        private static void RenameStarTables(SQLExtConnection conn, string frompostfix, string topostfix)
+        private static void RenameStarTables(SQLiteConnectionSystem conn, string frompostfix, string topostfix)
         {
             conn.ExecuteNonQueries(new string[]
             {
