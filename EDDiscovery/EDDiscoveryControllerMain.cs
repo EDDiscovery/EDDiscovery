@@ -155,7 +155,7 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
             SQLiteConnectionUser.Initialize();
-            SQLiteConnectionSystem.Initialize();
+            SystemsDatabase.Instance.Initialize();
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Database initialization complete");
 
             HttpCom.LogPath = logpath;
@@ -251,13 +251,13 @@ namespace EDDiscovery
             {
                 // New Galmap load - it was not doing a refresh if EDSM sync kept on happening. Now has its own timer
 
-                DateTime galmaptime = SQLiteConnectionSystem.GetSettingDate("EDSMGalMapLast", DateTime.MinValue); // Latest time from RW file.
+                DateTime galmaptime = SystemsDatabase.Instance.GetEDSMGalMapLast(); // Latest time from RW file.
 
                 if (DateTime.Now.Subtract(galmaptime).TotalDays > 14 || !galacticMapping.GalMapFilePresent())  // Over 14 days do a sync from EDSM for galmap
                 {
                     LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
                     if (galacticMapping.DownloadFromEDSM())
-                        SQLiteConnectionSystem.PutSettingDate("EDSMGalMapLast", DateTime.UtcNow);
+                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
 
                 Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Check systems complete");
@@ -303,7 +303,7 @@ namespace EDDiscovery
                 if (!EDDOptions.Instance.NoSystemsLoad)
                 {
                     // check for 102, if so, upgrade it..
-                    SQLiteConnectionSystem.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
+                    SystemsDatabase.Instance.UpgradeSystemTableFrom102TypeDB(() => PendingClose, ReportSyncProgress, syncstate.perform_edsm_fullsync);
 
                     if (EDDConfig.Instance.EDSMEDDBDownload)      // if no system off, and EDSM download on
                     {

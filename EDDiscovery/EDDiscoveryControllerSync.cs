@@ -69,7 +69,7 @@ namespace EDDiscovery
         {
             if (!EDDOptions.Instance.NoSystemsLoad && EDDConfig.Instance.EDSMEDDBDownload)        // if enabled
             {
-                DateTime edsmdatetime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
+                DateTime edsmdatetime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
                 if (DateTime.UtcNow.Subtract(edsmdatetime).TotalDays >= 28)   // 600k ish per 12hours.  So 33MB.  Much less than a full download which is (23/1/2018) 2400MB, or 600MB compressed
                 {
@@ -77,7 +77,7 @@ namespace EDDiscovery
                     syncstate.perform_edsm_fullsync = true;       // do a full sync.
                 }
 
-                DateTime eddbdatetime = SQLiteConnectionSystem.GetLastEDDBDownloadTime();
+                DateTime eddbdatetime = SystemsDatabase.Instance.GetLastEDDBDownloadTime();
 
                 if (DateTime.UtcNow.Subtract(eddbdatetime).TotalDays > 6.5)     // Get EDDB data once every week.
                     syncstate.perform_eddb_edsmalias_sync = true;
@@ -130,7 +130,7 @@ namespace EDDiscovery
 
                             if (success)
                             {
-                                syncstate.edsm_fullsync_count = SQLiteConnectionSystem.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
+                                syncstate.edsm_fullsync_count = SystemsDatabase.Instance.UpgradeSystemTableFromFile(edsmsystems, grids, () => PendingClose, ReportSyncProgress);
 
                                 if (syncstate.edsm_fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
                                     return;
@@ -168,7 +168,7 @@ namespace EDDiscovery
                                     if (syncstate.eddb_sync_count < 0)      // on a cancel or error
                                         return;
 
-                                    SQLiteConnectionSystem.SetLastEDDBDownloadTime();
+                                    SystemsDatabase.Instance.SetLastEDDBDownloadTime();
 
                                     BaseUtils.FileHelpers.DeleteFileNoError(eddbsystems);       // remove file - don't hold in storage
                                 }
@@ -232,7 +232,7 @@ namespace EDDiscovery
 
         public long UpdateSync(bool[] grididallow, Func<bool> PendingClose, Action<string> ReportProgress)
         {
-            DateTime lastrecordtime = SQLiteConnectionSystem.GetLastEDSMRecordTimeUTC();
+            DateTime lastrecordtime = SystemsDatabase.Instance.GetLastEDSMRecordTimeUTC();
 
             if (lastrecordtime < MinEDSMDate)
                 lastrecordtime = MinEDSMDate;
@@ -358,7 +358,7 @@ namespace EDDiscovery
 
                 updates += updated;
 
-                SQLiteConnectionSystem.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
+                SystemsDatabase.Instance.SetLastEDSMRecordTimeUTC(lastrecordtime);       // keep on storing this in case next time we get an exception
 
                 int delay = 10;     // Anthor's normal delay 
                 int ratelimitlimit;

@@ -212,7 +212,7 @@ namespace EDDiscovery
             set
             {
                 edsmgridids = value;
-                SQLiteConnectionSystem.PutSettingString("EDSMGridIDs", value);
+                SystemsDatabase.Instance.SetEDSMGridIDs(value);
             }
         }
 
@@ -427,7 +427,7 @@ namespace EDDiscovery
                 defaultwavedevice = SQLiteConnectionUser.GetSettingString("WaveAudioDevice", "Default", conn);
                 clickthrukey = (System.Windows.Forms.Keys)SQLiteConnectionUser.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey, conn);
                 edsmeddbdownload = SQLiteConnectionUser.GetSettingBool("EDSMEDDBDownloadData", true, conn);    // this goes with the USER on purpose, so its kept over a system db delete
-                edsmgridids = SQLiteConnectionSystem.GetSettingString("EDSMGridIDs", "Not Set"); // from system database, not user, to keep setting with system data
+                edsmgridids = SystemsDatabase.Instance.GetEDSMGridIDs(); // from system database, not user, to keep setting with system data
                 fullhistoryloaddaylimit = SQLiteConnectionUser.GetSettingInt("FullHistoryLoadDayLimit", 0);
                 language = SQLiteConnectionUser.GetSettingString("DefaultLanguage", "Auto");
                 drawduringresize = SQLiteConnectionUser.GetSettingBool("DrawDuringResizeWindow", true);
