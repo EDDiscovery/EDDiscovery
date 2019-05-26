@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
 
         public void DGVLoadColumnLayout(DataGridView dgv, string root)
         {
-            if (SQLiteConnectionUser.keyExists(root + "1"))        // if stored values, set back to what they were..
+            if (UserDatabase.Instance.KeyExists(root + "1"))        // if stored values, set back to what they were..
             {
                 for (int i = 0; i < dgv.Columns.Count; i++)
                 {
@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
                     //System.Diagnostics.Debug.WriteLine("Load {0} {1} {2} {3}", Name, k, w, dgv.Columns[i].Width);
                 }
 
-                int hwidth = SQLiteConnectionUser.GetSettingInt(root + "HW", 0);
+                int hwidth = UserDatabase.Instance.GetSettingInt(root + "HW", 0);
                 if (hwidth > 0)
                     dgv.RowHeadersWidth = hwidth;
                 else
@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
                 //System.Diagnostics.Debug.WriteLine("Save {0} {1} {2}", Name, k, dgv.Columns[i].Width);
             }
 
-            SQLiteConnectionUser.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
+            UserDatabase.Instance.PutSettingInt(root + "HW", dgv.RowHeadersWidth);
         }
 
         #endregion

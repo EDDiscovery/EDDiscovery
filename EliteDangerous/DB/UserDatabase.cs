@@ -935,4 +935,54 @@ namespace EliteDangerousCore.DB
             return ExecuteWithDatabase(db => db.PutSettingDate(key, value));
         }
     }
+
+    // very old class used everywhere to get register stuff from user DB. its easier for now to keep this so we don't change 1000's of files.
+
+    public static class SQLiteDBClass
+    {
+        static public bool keyExists(string sKey)
+        {
+            return UserDatabase.Instance.KeyExists(sKey);
+        }
+
+        static public int GetSettingInt(string key, int defaultvalue)
+        {
+            return UserDatabase.Instance.GetSettingInt(key, defaultvalue);
+        }
+
+        static public bool PutSettingInt(string key, int intvalue)
+        {
+            return UserDatabase.Instance.PutSettingInt(key, intvalue);
+        }
+
+        static public double GetSettingDouble(string key, double defaultvalue)
+        {
+            return UserDatabase.Instance.GetSettingDouble(key, defaultvalue);
+        }
+
+        static public bool PutSettingDouble(string key, double doublevalue)
+        {
+            return UserDatabase.Instance.PutSettingDouble(key, doublevalue);
+        }
+
+        static public bool GetSettingBool(string key, bool defaultvalue)
+        {
+            return UserDatabase.Instance.GetSettingBool(key, defaultvalue);
+        }
+
+        static public bool PutSettingBool(string key, bool boolvalue)
+        {
+            return UserDatabase.Instance.PutSettingBool(key, boolvalue);
+        }
+
+        static public string GetSettingString(string key, string defaultvalue)
+        {
+            return UserDatabase.Instance.GetSettingString(key, defaultvalue);
+        }
+
+        static public bool PutSettingString(string key, string strvalue)
+        {
+            return UserDatabase.Instance.PutSettingString(key, strvalue);
+        }
+    }
 }

@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            string filter = SQLiteConnectionUser.GetSettingString(DbSave + "Campaign", "");
+            string filter = UserDatabase.Instance.GetSettingString(DbSave + "Campaign", "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);
 
             savedfilterentries = new List<FilterEntry>();
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
 
-            checkBoxCustomGridOn.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Gridshow", false);
+            checkBoxCustomGridOn.Checked = UserDatabase.Instance.GetSettingBool(DbSave + "Gridshow", false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
             transparentfont = EDDTheme.Instance.GetFont;
@@ -206,10 +206,10 @@ namespace EDDiscovery.UserControls
                                     f.StartTime.ToStringZulu() + "," + f.EndTime.ToStringZulu() + ",";
             }
 
-            SQLiteConnectionUser.PutSettingString(DbSave + "Campaign", s);
+            UserDatabase.Instance.PutSettingString(DbSave + "Campaign", s);
 
-            SQLiteConnectionUser.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
-            SQLiteConnectionUser.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
+            UserDatabase.Instance.PutSettingBool(DbSave + "Gridshow", checkBoxCustomGridOn.Checked);
+            UserDatabase.Instance.PutSettingString(DbSave + "Selected", current?.UniqueID ?? "");
         }
 
         public override void SetTransparency(bool on, Color curbackcol)
@@ -555,7 +555,7 @@ namespace EDDiscovery.UserControls
 
         private void SelectInitial()
         {
-            string sel = SQLiteConnectionUser.GetSettingString(DbSave + "Selected", "Since Last Dock");
+            string sel = UserDatabase.Instance.GetSettingString(DbSave + "Selected", "Since Last Dock");
 
             if (!sel.IsEmpty())
             {

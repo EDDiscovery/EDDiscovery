@@ -67,8 +67,8 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMin", 0);
-            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
+            textMinRadius.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "PlotMin", 0);
+            textMaxRadius.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "PlotMax", defaultmaximumradarradius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
             comboBoxView.Items.Add("Grid".T(EDTx.UserControlPlot_Grid));
             comboBoxView.Items.Add("Report".T(EDTx.UserControlPlot_Report));
 
-            var sel = SQLiteConnectionUser.GetSettingString(DbSave + "PlotOrientation", "!!");
+            var sel = UserDatabase.Instance.GetSettingString(DbSave + "PlotOrientation", "!!");
             if (comboBoxView.Items.Contains(sel))
                 comboBoxView.SelectedItem = sel;
             else
@@ -112,9 +112,9 @@ namespace EDDiscovery.UserControls
         {
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
-            SQLiteConnectionUser.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
+            UserDatabase.Instance.PutSettingDouble(DbSave + "PlotMin", textMinRadius.Value);
+            UserDatabase.Instance.PutSettingDouble(DbSave + "PlotMax", textMaxRadius.Value);
+            UserDatabase.Instance.PutSettingString(DbSave + "PlotOrientation", comboBoxView.SelectedItem.ToString());
         }
 
         public override void InitialDisplay()

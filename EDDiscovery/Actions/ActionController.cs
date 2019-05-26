@@ -116,9 +116,9 @@ namespace EDDiscovery.Actions
 
             Functions.GetCFH = DefaultGetCFH;
 
-            LoadPeristentVariables(new Variables(SQLiteConnectionUser.GetSettingString("UserGlobalActionVars", ""), Variables.FromMode.MultiEntryComma));
+            LoadPeristentVariables(new Variables(UserDatabase.Instance.GetSettingString("UserGlobalActionVars", ""), Variables.FromMode.MultiEntryComma));
 
-            lasteditedpack = SQLiteConnectionUser.GetSettingString("ActionPackLastFile", "");
+            lasteditedpack = UserDatabase.Instance.GetSettingString("ActionPackLastFile", "");
 
             ActionBase.AddCommand("Bookmarks", typeof(ActionBookmarks), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Captainslog", typeof(ActionCaptainsLog), ActionBase.ActionType.Cmd);
@@ -203,19 +203,19 @@ namespace EDDiscovery.Actions
 
             if (f != null)
             {
-                string collapsestate = SQLiteConnectionUser.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
+                string collapsestate = UserDatabase.Instance.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
                 frm.Init("Edit pack " + name, this.Icon, this, EDDOptions.Instance.ActionsAppDirectory(), f, ActionEventEDList.EventList(), collapsestate);
 
                 frm.ShowDialog(discoveryform); // don't care about the result, the form does all the saving
 
-                SQLiteConnectionUser.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
+                UserDatabase.Instance.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
 
                 ActionConfigureKeys();  // kick it to load in case its changed
                 VoiceLoadEvents();      
 
                 lasteditedpack = name;
-                SQLiteConnectionUser.PutSettingString("ActionPackLastFile", lasteditedpack);
+                UserDatabase.Instance.PutSettingString("ActionPackLastFile", lasteditedpack);
                 return true;
             }
             else
@@ -589,7 +589,7 @@ namespace EDDiscovery.Actions
 
         public void CloseDown()
         {
-            SQLiteConnectionUser.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
+            UserDatabase.Instance.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
 
             audioqueuespeech.StopAll();
             audioqueuewave.StopAll();

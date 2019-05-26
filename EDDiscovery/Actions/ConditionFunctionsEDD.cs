@@ -179,7 +179,7 @@ namespace EDDiscovery.Actions
         protected override bool VerifyFileAction(string action, string file)
         {
             string folder = Path.GetDirectoryName(file);
-            string actionfolderperms = SQLiteConnectionUser.GetSettingString("ActionFolderPerms", "");
+            string actionfolderperms = UserDatabase.Instance.GetSettingString("ActionFolderPerms", "");
 
             if (!actionfolderperms.Contains(folder + ";"))
             {
@@ -193,7 +193,7 @@ namespace EDDiscovery.Actions
 
                 if (ok)
                 {
-                    SQLiteConnectionUser.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                    UserDatabase.Instance.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
                     return true;
                 }
                 else
@@ -205,7 +205,7 @@ namespace EDDiscovery.Actions
 
         protected override bool VerifyProcessAllowed(string proc, string cmdline)
         {
-            string actionprocessperms = SQLiteConnectionUser.GetSettingString("ActionProcessPerms", "");
+            string actionprocessperms = UserDatabase.Instance.GetSettingString("ActionProcessPerms", "");
 
             if (!actionprocessperms.Contains("!" + proc + ";"))
             {
@@ -218,7 +218,7 @@ namespace EDDiscovery.Actions
 
                 if (ok)
                 {
-                    SQLiteConnectionUser.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
+                    UserDatabase.Instance.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
                     return true;
                 }
                 else

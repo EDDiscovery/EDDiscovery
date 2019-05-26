@@ -145,8 +145,8 @@ namespace EDDiscovery.UserControls
                 uc.CloseDown();
             }
 
-            SQLiteConnectionUser.PutSettingString(DBWindowNames, s);
-            SQLiteConnectionUser.PutSettingString(DbPositionSize, p);
+            UserDatabase.Instance.PutSettingString(DBWindowNames, s);
+            UserDatabase.Instance.PutSettingString(DbPositionSize, p);
 
             string z = "";
 
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            SQLiteConnectionUser.PutSettingString(DbZOrder, z);
+            UserDatabase.Instance.PutSettingString(DbZOrder, z);
             //System.Diagnostics.Debug.WriteLine("---- END Grid Saving to " + DbWindows);
         }
 
@@ -408,11 +408,11 @@ namespace EDDiscovery.UserControls
 
         List<Tuple<string, Point, Size, int>> GetSavedSettings()
         {
-            string[] names = SQLiteConnectionUser.GetSettingString(DBWindowNames, "").Split(',');
+            string[] names = UserDatabase.Instance.GetSettingString(DBWindowNames, "").Split(',');
             int[] positions;
             int[] zorder;
-            string pos = SQLiteConnectionUser.GetSettingString(DbPositionSize, "");
-            string zo = SQLiteConnectionUser.GetSettingString(DbZOrder, "");
+            string pos = UserDatabase.Instance.GetSettingString(DbPositionSize, "");
+            string zo = UserDatabase.Instance.GetSettingString(DbZOrder, "");
 
             if (pos.RestoreArrayFromString(out positions) && zo.RestoreArrayFromString(out zorder, 0, names.Length - 1) &&
                         names.Length == zorder.Length && positions.Length == 4 * names.Length)

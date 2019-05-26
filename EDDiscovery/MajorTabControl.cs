@@ -47,8 +47,8 @@ namespace EDDiscovery
             int[] displaynumbers;
             int restoretab = 0;
 
-            string majortabs = SQLiteConnectionUser.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", "");
-            string[] majortabnames = SQLiteConnectionUser.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
+            string majortabs = UserDatabase.Instance.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", "");
+            string[] majortabnames = UserDatabase.Instance.GetSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", "").Replace("!error!", "+").Split(';');       // if its okay, load the name list
 
             while (true)
             {
@@ -140,8 +140,8 @@ namespace EDDiscovery
                 tabnames += p.Text + ";";
             }
 
-            SQLiteConnectionUser.PutSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", string.Join(",", idlist));
-            SQLiteConnectionUser.PutSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", tabnames);
+            UserDatabase.Instance.PutSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", string.Join(",", idlist));
+            UserDatabase.Instance.PutSettingString(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", tabnames);
         }
 
         public void AddTab(PanelInformation.PanelIDs id , int tabindex = 0)     // -n is from the end, else before 0,1,2

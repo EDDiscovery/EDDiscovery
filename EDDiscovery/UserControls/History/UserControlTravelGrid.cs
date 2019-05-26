@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             cfs.AddJournalEntries();
             cfs.SaveSettings += EventFilterChanged;
 
-            checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
+            checkBoxCursorToTop.Checked = UserDatabase.Instance.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
 
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             discoveryform.OnNewEntry += AddNewEntry;
             discoveryform.OnNoteChanged += OnNoteChanged;
 
-            contextMenuStripOutlines.SetToolStripState(SQLiteConnectionUser.GetSettingString(DbOutlines, ""));
+            contextMenuStripOutlines.SetToolStripState(UserDatabase.Instance.GetSettingString(DbOutlines, ""));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfterFirstToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
             this.rollUpAfter5ToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel, DbColumnSave);
             discoveryform.OnHistoryChange -= HistoryChanged;
             discoveryform.OnNewEntry -= AddNewEntry;
-            SQLiteConnectionUser.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
+            UserDatabase.Instance.PutSettingBool(DbAutoTop, checkBoxCursorToTop.Checked);
             searchtimer.Dispose();
         }
 
@@ -835,7 +835,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripOutliningToggle(object sender, EventArgs e)
         {
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
             if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
                 HistoryChanged(current_historylist, true);
@@ -847,7 +847,7 @@ namespace EDDiscovery.UserControls
             rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
             rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
             rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
-            SQLiteConnectionUser.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
+            UserDatabase.Instance.PutSettingString(DbOutlines, contextMenuStripOutlines.GetToolStripState());
             if (outliningOnOffToolStripMenuItem.Checked )
                 HistoryChanged(current_historylist, true);
         }

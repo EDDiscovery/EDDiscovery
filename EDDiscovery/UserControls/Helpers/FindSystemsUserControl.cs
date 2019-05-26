@@ -54,14 +54,14 @@ namespace EDDiscovery.UserControls
             ucdbname = ucn;
             displaynumber = dn;
             discoveryform = disc;
-            numberBoxMinRadius.Value = SQLiteConnectionUser.GetSettingDouble(DbRadiusMin, 0);
-            numberBoxMaxRadius.Value = SQLiteConnectionUser.GetSettingDouble(DbRadiusMax, 20);
-            textBoxSystemName.Text = SQLiteConnectionUser.GetSettingString(DbStar, "");
-            numberBoxDoubleX.Value = SQLiteConnectionUser.GetSettingDouble(DbX, 0);
-            numberBoxDoubleY.Value = SQLiteConnectionUser.GetSettingDouble(DbY, 0);
-            numberBoxDoubleZ.Value = SQLiteConnectionUser.GetSettingDouble(DbZ, 0);
-            checkBoxCustomCube.Checked = SQLiteConnectionUser.GetSettingBool(DbCube, false);
-            extCheckBoxExcludeVisitedSystems.Checked = SQLiteConnectionUser.GetSettingBool(DbEVS, false);
+            numberBoxMinRadius.Value = UserDatabase.Instance.GetSettingDouble(DbRadiusMin, 0);
+            numberBoxMaxRadius.Value = UserDatabase.Instance.GetSettingDouble(DbRadiusMax, 20);
+            textBoxSystemName.Text = UserDatabase.Instance.GetSettingString(DbStar, "");
+            numberBoxDoubleX.Value = UserDatabase.Instance.GetSettingDouble(DbX, 0);
+            numberBoxDoubleY.Value = UserDatabase.Instance.GetSettingDouble(DbY, 0);
+            numberBoxDoubleZ.Value = UserDatabase.Instance.GetSettingDouble(DbZ, 0);
+            checkBoxCustomCube.Checked = UserDatabase.Instance.GetSettingBool(DbCube, false);
+            extCheckBoxExcludeVisitedSystems.Checked = UserDatabase.Instance.GetSettingBool(DbEVS, false);
 
             if (textBoxSystemName.Text.Length > 0)
                 SetXYZ();
@@ -90,14 +90,14 @@ namespace EDDiscovery.UserControls
 
         public void Closing()
         {
-            SQLiteConnectionUser.PutSettingDouble(DbRadiusMin, numberBoxMinRadius.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbRadiusMax, numberBoxMaxRadius.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbX, numberBoxDoubleX.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbY, numberBoxDoubleY.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbZ, numberBoxDoubleZ.Value);
-            SQLiteConnectionUser.PutSettingString(DbStar, textBoxSystemName.Text);
-            SQLiteConnectionUser.PutSettingBool(DbCube, checkBoxCustomCube.Checked);
-            SQLiteConnectionUser.PutSettingBool(DbEVS, extCheckBoxExcludeVisitedSystems.Checked);
+            UserDatabase.Instance.PutSettingDouble(DbRadiusMin, numberBoxMinRadius.Value);
+            UserDatabase.Instance.PutSettingDouble(DbRadiusMax, numberBoxMaxRadius.Value);
+            UserDatabase.Instance.PutSettingDouble(DbX, numberBoxDoubleX.Value);
+            UserDatabase.Instance.PutSettingDouble(DbY, numberBoxDoubleY.Value);
+            UserDatabase.Instance.PutSettingDouble(DbZ, numberBoxDoubleZ.Value);
+            UserDatabase.Instance.PutSettingString(DbStar, textBoxSystemName.Text);
+            UserDatabase.Instance.PutSettingBool(DbCube, checkBoxCustomCube.Checked);
+            UserDatabase.Instance.PutSettingBool(DbEVS, extCheckBoxExcludeVisitedSystems.Checked);
         }
 
         private void buttonExtNamesClick(object sender, EventArgs e)

@@ -46,9 +46,9 @@ namespace EDDiscovery.Forms
             else
                 radioButtonSemiColon.Checked = true;
 
-            checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportFormIncludeHeader", true);
-            checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportFormOpenExcel", true);
-            checkBoxRawJournal.Checked = EliteDangerousCore.DB.SQLiteConnectionUser.GetSettingBool("ExportAsJournals", true);
+            checkBoxIncludeHeader.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormIncludeHeader", true);
+            checkBoxCustomAutoOpen.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true);
+            checkBoxRawJournal.Checked = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportAsJournals", true);
 
             comboBoxCustomExportType.SelectedIndex = 0;
 
@@ -84,9 +84,9 @@ namespace EDDiscovery.Forms
 
         private void buttonExport_Click(object sender, EventArgs e)
         {
-            EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
-            EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
-            if (checkBoxRawJournal.Visible) EliteDangerousCore.DB.SQLiteConnectionUser.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormIncludeHeader", checkBoxIncludeHeader.Checked);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormOpenExcel", checkBoxCustomAutoOpen.Checked);
+            if (checkBoxRawJournal.Visible) EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportAsJournals", checkBoxRawJournal.Checked);
 
             SelectedIndex = comboBoxCustomExportType.SelectedIndex;
 

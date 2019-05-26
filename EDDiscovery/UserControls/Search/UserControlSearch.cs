@@ -62,14 +62,14 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            int seltab = SQLiteConnectionUser.GetSettingInt(DbSelectedSave, 0);
+            int seltab = UserDatabase.Instance.GetSettingInt(DbSelectedSave, 0);
             seltab = seltab.Range(0, tabStrip.ImageList.Length - 1);
             tabStrip.SelectedIndex = seltab;
         }
 
         public override void Closing()
         {
-            SQLiteConnectionUser.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
+            UserDatabase.Instance.PutSettingInt(DbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();
         }
 
