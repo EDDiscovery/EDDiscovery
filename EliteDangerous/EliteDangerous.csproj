@@ -74,6 +74,7 @@
     <Compile Include="DB\SystemNoteClass.cs" />
     <Compile Include="DB\TargetClass.cs" />
     <Compile Include="DB\TravelLogUnit.cs" />
+    <Compile Include="DB\UserDatabase.cs" />
     <Compile Include="DB\WantedSystemClass.cs" />
     <Compile Include="EDDN\EDDNClass.cs" />
     <Compile Include="EDDN\EDDNSync.cs" />
