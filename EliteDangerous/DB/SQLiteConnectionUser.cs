@@ -23,7 +23,7 @@ using SQLLiteExtensions;
 
 namespace EliteDangerousCore.DB
 {
-    public class SQLiteConnectionUser : SQLExtConnectionWithLockRegister<SQLiteConnectionUser>
+    internal class SQLiteConnectionUser : SQLExtConnectionWithLockRegister<SQLiteConnectionUser>
     {
         protected static List<EDCommander> EarlyCommanders;
 
