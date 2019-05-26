@@ -452,8 +452,11 @@ namespace EliteDangerousCore.EDSM
                     if (enddatestr == null || !DateTime.TryParseExact(enddatestr, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out logendtime))
                         logendtime = DateTime.MinValue;
 
-                    using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+
+                    log = SystemsDatabase.Instance.ExecuteWithDatabase(db =>
                     {
+                        var xlog = new List<JournalFSDJump>();
+
                         foreach (JObject jo in logs)
                         {
                             string name = jo["system"].Value<string>();
@@ -462,7 +465,7 @@ namespace EliteDangerousCore.EDSM
                             bool firstdiscover = jo["firstDiscover"].Value<bool>();
                             DateTime etutc = DateTime.ParseExact(ts, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal); // UTC time
 
-                            ISystem sc = DB.SystemCache.FindSystem(name,id,cn);
+                            ISystem sc = DB.SystemCache.FindSystem(name,id,db);
 
                             if (sc == null)
                             {
@@ -479,9 +482,11 @@ namespace EliteDangerousCore.EDSM
                             }
 
                             JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EDCommander.Current.MapColour, firstdiscover, true);
-                            log.Add(fsd);
+                            xlog.Add(fsd);
                         }
-                    }
+
+                        return xlog;
+                    });
                 }
 
                 return msgnr;

@@ -566,7 +566,7 @@ namespace EliteDangerousCore
         {
             List<Tuple<HistoryEntry, ISystem>> updatesystems = new List<Tuple<HistoryEntry, ISystem>>();
 
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem())
+            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
                 foreach (HistoryEntry he in historylist)
                 {
@@ -574,13 +574,13 @@ namespace EliteDangerousCore
                     {           // done in two IFs for debugging, in case your wondering why!
                         if (he.System.status != SystemStatusEnum.EDSM && he.System.EDSMID == 0)   // and its not from EDSM and we have not already tried
                         {
-                            ISystem found = SystemCache.FindSystem(he.System, cn);
+                            ISystem found = SystemCache.FindSystem(he.System, db);
                             if (found != null)
                                 updatesystems.Add(new Tuple<HistoryEntry, ISystem>(he, found));
                         }
                     }
                 }
-            }
+            });
 
             if (updatesystems.Count > 0)
             {
@@ -1007,7 +1007,7 @@ namespace EliteDangerousCore
 
             List<Tuple<JournalEntry, HistoryEntry>> jlistUpdated = new List<Tuple<JournalEntry, HistoryEntry>>();
 
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem())
+            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
                 HistoryEntry prev = null;
                 JournalEntry jprev = null;
@@ -1035,7 +1035,7 @@ namespace EliteDangerousCore
                         continue;
                     }
 
-                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate, conn);
+                    HistoryEntry he = HistoryEntry.FromJournalEntry(je, prev, out bool journalupdate, db);
 
                     prev = he;
                     jprev = je;
@@ -1048,7 +1048,7 @@ namespace EliteDangerousCore
                         Debug.WriteLine("Queued update requested {0} {1}", he.System.EDSMID, he.System.Name);
                     }
                 }
-            }
+            });
 
             if (jlistUpdated.Count > 0)
             {
