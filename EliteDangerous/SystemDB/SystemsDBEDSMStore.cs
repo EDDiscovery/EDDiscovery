@@ -62,109 +62,132 @@ namespace EliteDangerousCore.DB
             sectoridcache = new Dictionary<long, Sector>();     
             sectornamecache = new Dictionary<string, Sector>();
 
+            long updates = 0;
+
             int nextsectorid = GetNextSectorID();
-
-            SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Writer);
-
+            bool jr_eof = false;
             StreamWriter sw = null;
 
-#if DEBUG
             try
             {
-                if (debugoutputfile != null) sw = new StreamWriter(debugoutputfile);
-            }
-            catch
-            {
-            }
+#if DEBUG
+                try
+                {
+                    if (debugoutputfile != null) sw = new StreamWriter(debugoutputfile);
+                }
+                catch
+                {
+                }
 #endif
 
-            long updates = 0;
-            const int BlockSize = 100000;
-            int Limit = int.MaxValue;
-            bool jr_eof = false;
-
-            DbCommand selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null, 
-                                                    new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
-
-            while (jr_eof == false)
-            {
-                if ( cancelRequested() )
+                while (jr_eof == false)
                 {
-                    updates = -1;
-                    break;
-                }
-
-                int recordstostore = 0;
-
-                while (true)
-                {
-                    try
+                    if (cancelRequested())
                     {
-                        if (jr.Read())                                                      // collect a decent amount
-                        {
-                            if (jr.TokenType == JsonToken.StartObject)
-                            {
-                                EDSMFileEntry d = new EDSMFileEntry();
+                        updates = -1;
+                        break;
+                    }
 
-                                if (d.Deserialize(jr) && d.id >= 0 && d.name.HasChars() && d.z != int.MinValue)     // if we have a valid record
+                    DbCommand selectSectorCmd = null;
+
+                    int recordstostore = 0;
+                    DateTime cpmaxdate = maxdate;
+
+                    SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Reader, action: db =>
+                    {
+                        try
+                        {
+                            var cn = db.Connection;
+
+                            const int BlockSize = 100000;
+                            int Limit = int.MaxValue;
+
+                            selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null,
+                                                                    new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
+
+                            while (true)
+                            {
+                                try
                                 {
-                                    int gridid = GridId.Id(d.x, d.z);
-                                    if (grididallowed == null || ( grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
+                                    if (jr.Read())                                                      // collect a decent amount
                                     {
-                                        CreateNewUpdate(selectSectorCmd, d, gridid, tablesareempty, ref maxdate, ref nextsectorid);
-                                        recordstostore++;
+                                        if (jr.TokenType == JsonToken.StartObject)
+                                        {
+                                            EDSMFileEntry d = new EDSMFileEntry();
+
+                                            if (d.Deserialize(jr) && d.id >= 0 && d.name.HasChars() && d.z != int.MinValue)     // if we have a valid record
+                                            {
+                                                int gridid = GridId.Id(d.x, d.z);
+                                                if (grididallowed == null || (grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
+                                                {
+                                                    CreateNewUpdate(selectSectorCmd, d, gridid, tablesareempty, ref cpmaxdate, ref nextsectorid);
+                                                    recordstostore++;
+                                                }
+                                            }
+
+                                            if (--Limit == 0)
+                                            {
+                                                jr_eof = true;
+                                                break;
+                                            }
+
+                                            if (recordstostore >= BlockSize)
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        jr_eof = true;
+                                        break;
                                     }
                                 }
-
-                                if (--Limit == 0)
+                                catch (Exception ex)
                                 {
-                                    jr_eof = true;
-                                    break;
+                                    System.Diagnostics.Debug.WriteLine("EDSM JSON file exception " + ex.ToString());
+                                    jr_eof = true;                                                                              // stop read, but let it continue to finish this section
                                 }
-
-                                if (recordstostore >= BlockSize)
-                                    break;
                             }
                         }
-                        else
+                        finally
                         {
-                            jr_eof = true;
-                            break;
+                            if (selectSectorCmd != null)
+                            {
+                                selectSectorCmd.Dispose();
+                            }
                         }
-                    }
-                    catch (Exception ex)
+                    });
+
+                    maxdate = cpmaxdate;
+
+                    System.Diagnostics.Debug.WriteLine("Process " + BaseUtils.AppTicks.TickCountLap("L1") + "   " + updates);
+
+                    if (recordstostore > 0)
                     {
-                        System.Diagnostics.Debug.WriteLine("EDSM JSON file exception " + ex.ToString());
-                        jr_eof = true;                                                                              // stop read, but let it continue to finish this section
+                        updates += StoreNewEntries(tablepostfix, sw);
+
+                        reportProgress?.Invoke("EDSM Star database updated " + updates);
+                    }
+
+                    if (jr_eof)
+                        break;
+
+                    if (SQLiteConnectionSystem.IsReadWaiting)
+                    {
+                        System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
                     }
                 }
-
-                System.Diagnostics.Debug.WriteLine("Process " + BaseUtils.AppTicks.TickCountLap("L1") + "   " + updates);
-
-                if (recordstostore > 0)
+            }
+            finally
+            {
+                if (sw != null)
                 {
-                    updates += StoreNewEntries(cn, tablepostfix, sw);
-
-                    reportProgress?.Invoke("EDSM Star database updated " + updates);
-                }
-
-                if (jr_eof)
-                    break;
-
-                if (SQLiteConnectionSystem.IsReadWaiting)
-                {
-                    System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
+                    sw.Close();
                 }
             }
 
             System.Diagnostics.Debug.WriteLine("Process " + BaseUtils.AppTicks.TickCountLap("L1") + "   " + updates);
-            reportProgress?.Invoke( "EDSM Star database updated " + updates);
+            reportProgress?.Invoke("EDSM Star database updated " + updates);
 
-            if (sw != null)
-                sw.Close();
-
-            selectSectorCmd.Dispose();
-            cn.Dispose();
 
             PutNextSectorID(nextsectorid);    // and store back
 
@@ -185,19 +208,13 @@ namespace EliteDangerousCore.DB
             sectoridcache = new Dictionary<long, Sector>();
             sectornamecache = new Dictionary<string, Sector>();
 
-            SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter);
-
             int nextsectorid = GetNextSectorID();
-
             long updates = 0;
-            long Limit =  long.MaxValue;
+
+            long Limit = long.MaxValue;
 
             DateTime maxdate = DateTime.MinValue;       // we don't pass this back due to using the same date
-            reportProgress?.Invoke("Being System DB upgrade");
-
-            DbCommand selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null, 
-                                                    new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
-
+            reportProgress?.Invoke("Begin System DB upgrade");
             List<int> gridids = DB.GridId.AllId();
             BaseUtils.AppTicks.TickCountLap("UTotal");
 
@@ -213,48 +230,65 @@ namespace EliteDangerousCore.DB
 
                 if (gridid == maxgridid)        // for debugging
                     break;
-                    
-                DbCommand selectPrev = cn.CreateSelect("EdsmSystems s", "s.EdsmId,s.x,s.y,s.z,n.Name,s.UpdateTimeStamp", "s.GridId = " + gridid.ToStringInvariant(),
-                                                        joinlist: new string[] { "LEFT OUTER JOIN SystemNames n ON n.EdsmId=s.EdsmId" });
 
                 int recordstostore = 0;
+                DbCommand selectSectorCmd = null;
+                DbCommand selectPrev = null;
 
-                using (DbDataReader reader = selectPrev.ExecuteReader())       // find name:gid
+                SystemsDatabase.Instance.ExecuteWithDatabase(db =>
                 {
-                    BaseUtils.AppTicks.TickCountLap("U1");
-
-                    while (reader.Read())
+                    try
                     {
-                        try
-                        {
-                            EDSMFileEntry d = new EDSMFileEntry();
-                            d.id = (long)reader[0];
-                            d.x = (int)(long)reader[1];
-                            d.y = (int)(long)reader[2];
-                            d.z = (int)(long)reader[3];
-                            d.name = (string)reader[4];
-                            d.date = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
-                            int grididentry = GridId.Id(d.x, d.z);  // because i don't trust the previous gridid - it should be the same as the outer loop, but lets recalc
+                        var cn = db.Connection;
 
-                            //if (!tablesareempty)  d.z = debug_z++;  // for debug checking
+                        selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null,
+                                                                new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
+                        selectPrev = cn.CreateSelect("EdsmSystems s", "s.EdsmId,s.x,s.y,s.z,n.Name,s.UpdateTimeStamp", "s.GridId = @gid", null,
+                                                                new string[] { "gid" }, new DbType[] { DbType.Int32 },
+                                                                joinlist: new string[] { "LEFT OUTER JOIN SystemNames n ON n.EdsmId=s.EdsmId" });
 
-                            CreateNewUpdate(selectSectorCmd, d, grididentry, tablesareempty, ref maxdate, ref nextsectorid);      // not using gridid on purpose to double check it.
-                            recordstostore++;
-                        }
-                        catch (Exception ex)
+                        selectPrev.Parameters["gid"].Value = gridid;
+
+                        using (DbDataReader reader = selectPrev.ExecuteReader())       // find name:gid
                         {
-                            System.Diagnostics.Debug.WriteLine("Reading prev table" + ex);
+                            BaseUtils.AppTicks.TickCountLap("U1");
+
+                            while (reader.Read())
+                            {
+                                try
+                                {
+                                    EDSMFileEntry d = new EDSMFileEntry();
+                                    d.id = (long)reader[0];
+                                    d.x = (int)(long)reader[1];
+                                    d.y = (int)(long)reader[2];
+                                    d.z = (int)(long)reader[3];
+                                    d.name = (string)reader[4];
+                                    d.date = new DateTime(2015, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromSeconds((long)reader["UpdateTimestamp"]);
+                                    int grididentry = GridId.Id(d.x, d.z);  // because i don't trust the previous gridid - it should be the same as the outer loop, but lets recalc
+
+                                    //if (!tablesareempty)  d.z = debug_z++;  // for debug checking
+
+                                    CreateNewUpdate(selectSectorCmd, d, grididentry, tablesareempty, ref maxdate, ref nextsectorid);      // not using gridid on purpose to double check it.
+                                    recordstostore++;
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("Reading prev table" + ex);
+                                }
+                            }
                         }
                     }
-                }
-
-                selectPrev.Dispose();
+                    finally
+                    {
+                        selectSectorCmd?.Dispose();
+                    }
+                });
 
                 //System.Diagnostics.Debug.WriteLine("Reader took " + BaseUtils.AppTicks.TickCountLap("U1") + " in " + gridid + "  " + recordpos + " total " + recordstostore);
 
                 if (recordstostore >= 0)
                 {
-                    updates += StoreNewEntries(cn, tablepostfix, null);
+                    updates += StoreNewEntries(tablepostfix, null);
                     reportProgress?.Invoke("System DB upgrade processed " + updates);
 
                     Limit -= recordstostore;
@@ -267,15 +301,13 @@ namespace EliteDangerousCore.DB
                         System.Threading.Thread.Sleep(20);      // just sleepy for a bit to let others use the db
                     }
                 }
+
                 var tres1 = BaseUtils.AppTicks.TickCountLapDelta("U1");
                 var tres2 = BaseUtils.AppTicks.TickCountFrom("UTotal");
                 System.Diagnostics.Debug.WriteLine("Sector " + gridid + " took " + tres1.Item1 + " store " + recordstostore + " total " + updates + " " + ((float)tres1.Item2 / (float)recordstostore) + " cumulative " + tres2);
             }
 
             reportProgress?.Invoke("System DB complete, processed " + updates);
-
-            selectSectorCmd.Dispose();
-            cn.Dispose();
 
             PutNextSectorID(nextsectorid);    // and store back
 
@@ -357,93 +389,101 @@ namespace EliteDangerousCore.DB
             t.edsmdatalist.Add(data);                       // add to list of systems to process for this sector
         }
 
-        private static long StoreNewEntries(SQLiteConnectionSystem cn,
-                                           string tablepostfix = "",        // set to add on text to table names to redirect to another table
+        private static long StoreNewEntries(string tablepostfix = "",        // set to add on text to table names to redirect to another table
                                            StreamWriter sw = null
                                         )
         {
-            long updates = 0;
-
             ////////////////////////////////////////////////////////////// push all new data to the db without any selects
 
-            SQLExtTransactionLock<SQLiteConnectionSystem> tl = new SQLExtTransactionLock<SQLiteConnectionSystem>();     // not using on purpose.
-            tl.OpenWriter();
-            DbTransaction txn = cn.BeginTransaction();
-
-            DbCommand replaceSectorCmd = cn.CreateReplace("Sectors" + tablepostfix, new string[] { "name", "gridid" , "id" }, new DbType[] { DbType.String, DbType.Int32, DbType.Int64 }, txn);
-
-            DbCommand replaceSysCmd = cn.CreateReplace("Systems" + tablepostfix, new string[] { "sectorid", "nameid", "x", "y", "z", "edsmid" }, 
-                                new DbType[] { DbType.Int64, DbType.Int64, DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int64 }, txn );
-
-            DbCommand replaceNameCmd = cn.CreateReplace("Names" + tablepostfix, new string[] { "name", "id" }, new DbType[] { DbType.String, DbType.Int64 }, txn);
-
-            foreach (var kvp in sectoridcache)                  // all sectors cached, id is unique so its got all sectors                           
+            return SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Writer, usetxnlock: true, func: db =>
             {
-                Sector t = kvp.Value;
+                long updates = 0;
 
-                if (t.insertsec)         // if we have been told to insert the sector, do it
+                DbTransaction txn = null;
+                DbCommand replaceSectorCmd = null;
+                DbCommand replaceSysCmd = null;
+                DbCommand replaceNameCmd = null;
+                try
                 {
-                    replaceSectorCmd.Parameters[0].Value = t.Name;     // make a new one so we can get the ID
-                    replaceSectorCmd.Parameters[1].Value = t.GId;
-                    replaceSectorCmd.Parameters[2].Value = t.Id;        // and we insert with ID, managed by us, and replace in case there are any repeat problems (which there should not be)
-                    replaceSectorCmd.ExecuteNonQuery();
-                    //System.Diagnostics.Debug.WriteLine("Written sector " + t.GId + " " +t.Name);
-                    t.insertsec = false;
-                }
+                    var cn = db.Connection;
+                    txn = cn.BeginTransaction();
 
-                if (t.edsmdatalist != null)       // if updated..
-                {
+                    replaceSectorCmd = cn.CreateReplace("Sectors" + tablepostfix, new string[] { "name", "gridid", "id" }, new DbType[] { DbType.String, DbType.Int32, DbType.Int64 }, txn);
+
+                    replaceSysCmd = cn.CreateReplace("Systems" + tablepostfix, new string[] { "sectorid", "nameid", "x", "y", "z", "edsmid" },
+                                        new DbType[] { DbType.Int64, DbType.Int64, DbType.Int32, DbType.Int32, DbType.Int32, DbType.Int64 }, txn);
+
+                    replaceNameCmd = cn.CreateReplace("Names" + tablepostfix, new string[] { "name", "id" }, new DbType[] { DbType.String, DbType.Int64 }, txn);
+
+                    foreach (var kvp in sectoridcache)                  // all sectors cached, id is unique so its got all sectors                           
+                    {
+                        Sector t = kvp.Value;
+
+                        if (t.insertsec)         // if we have been told to insert the sector, do it
+                        {
+                            replaceSectorCmd.Parameters[0].Value = t.Name;     // make a new one so we can get the ID
+                            replaceSectorCmd.Parameters[1].Value = t.GId;
+                            replaceSectorCmd.Parameters[2].Value = t.Id;        // and we insert with ID, managed by us, and replace in case there are any repeat problems (which there should not be)
+                            replaceSectorCmd.ExecuteNonQuery();
+                            //System.Diagnostics.Debug.WriteLine("Written sector " + t.GId + " " +t.Name);
+                            t.insertsec = false;
+                        }
+
+                        if (t.edsmdatalist != null)       // if updated..
+                        {
 #if DEBUG
-                    t.edsmdatalist.Sort(delegate (TableWriteData left, TableWriteData right) { return left.edsm.id.CompareTo(right.edsm.id); });
+                            t.edsmdatalist.Sort(delegate (TableWriteData left, TableWriteData right) { return left.edsm.id.CompareTo(right.edsm.id); });
 #endif
 
-                    foreach (var data in t.edsmdatalist)            // now write the star list in this sector
-                    {
-                        try
-                        {
-                            if (data.classifier.IsNamed)    // if its a named entry, we need a name
+                            foreach (var data in t.edsmdatalist)            // now write the star list in this sector
                             {
-                                data.classifier.NameIdNumeric = data.edsm.id;           // name is the edsm id
-                                replaceNameCmd.Parameters[0].Value = data.classifier.StarName;       // insert a new name
-                                replaceNameCmd.Parameters[1].Value = data.edsm.id;      // we use edsmid as the nameid, and use replace to ensure that if a prev one is there, its replaced
-                                replaceNameCmd.ExecuteNonQuery();
-                               // System.Diagnostics.Debug.WriteLine("Make name " + data.classifier.NameIdNumeric);
+                                try
+                                {
+                                    if (data.classifier.IsNamed)    // if its a named entry, we need a name
+                                    {
+                                        data.classifier.NameIdNumeric = data.edsm.id;           // name is the edsm id
+                                        replaceNameCmd.Parameters[0].Value = data.classifier.StarName;       // insert a new name
+                                        replaceNameCmd.Parameters[1].Value = data.edsm.id;      // we use edsmid as the nameid, and use replace to ensure that if a prev one is there, its replaced
+                                        replaceNameCmd.ExecuteNonQuery();
+                                        // System.Diagnostics.Debug.WriteLine("Make name " + data.classifier.NameIdNumeric);
+                                    }
+
+                                    replaceSysCmd.Parameters[0].Value = t.Id;
+                                    replaceSysCmd.Parameters[1].Value = data.classifier.ID;
+                                    replaceSysCmd.Parameters[2].Value = data.edsm.x;
+                                    replaceSysCmd.Parameters[3].Value = data.edsm.y;
+                                    replaceSysCmd.Parameters[4].Value = data.edsm.z;
+                                    replaceSysCmd.Parameters[5].Value = data.edsm.id;       // in the event a new entry has the same edsmid, the system table edsmid is replace with new data
+                                    replaceSysCmd.ExecuteNonQuery();
+
+                                    if (sw != null)
+                                        sw.WriteLine(data.edsm.name + " " + data.edsm.x + "," + data.edsm.y + "," + data.edsm.z + ", EDSM:" + data.edsm.id + " Grid:" + data.gridid);
+
+                                    updates++;
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("general exception during insert - ignoring " + ex.ToString());
+                                }
+
                             }
-
-                            replaceSysCmd.Parameters[0].Value = t.Id;
-                            replaceSysCmd.Parameters[1].Value = data.classifier.ID;
-                            replaceSysCmd.Parameters[2].Value = data.edsm.x;
-                            replaceSysCmd.Parameters[3].Value = data.edsm.y;
-                            replaceSysCmd.Parameters[4].Value = data.edsm.z;
-                            replaceSysCmd.Parameters[5].Value = data.edsm.id;       // in the event a new entry has the same edsmid, the system table edsmid is replace with new data
-                            replaceSysCmd.ExecuteNonQuery();
-
-                            if (sw != null)
-                                sw.WriteLine(data.edsm.name + " " + data.edsm.x + "," + data.edsm.y + "," + data.edsm.z + ", EDSM:" + data.edsm.id + " Grid:" + data.gridid);
-
-                            updates++;
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine("general exception during insert - ignoring " + ex.ToString());
                         }
 
+                        t.edsmdatalist = null;     // and delete back
                     }
+
+                    txn.Commit();
+
+                    return updates;
                 }
-
-                t.edsmdatalist = null;     // and delete back
-            }
-
-            txn.Commit();
-
-            replaceSectorCmd.Dispose();
-            replaceSysCmd.Dispose();
-            replaceNameCmd.Dispose();
-            txn.Dispose();
-            tl.Dispose();
-
-            return updates;
-
+                finally
+                {
+                    replaceSectorCmd?.Dispose();
+                    replaceSysCmd?.Dispose();
+                    replaceNameCmd?.Dispose();
+                    txn?.Dispose();
+                }
+            });
         }
 
         #endregion

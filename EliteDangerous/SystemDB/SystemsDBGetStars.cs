@@ -26,13 +26,10 @@ namespace EliteDangerousCore.DB
 
         public static ISystem FindStar(string name)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                return FindStar(name, cn);
-            }
+            return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStar(name, cn.Connection));
         }
 
-        public static ISystem FindStar(string name, SQLiteConnectionSystem cn)
+        internal static ISystem FindStar(string name, SQLiteConnectionSystem cn)
         {
             EliteNameClassifier ec = new EliteNameClassifier(name);
 
@@ -87,13 +84,10 @@ namespace EliteDangerousCore.DB
 
         public static ISystem FindStar(long edsmid)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                return FindStar(edsmid, cn);
-            }
+            return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStar(edsmid, cn.Connection));
         }
 
-        public static ISystem FindStar(long edsmid, SQLiteConnectionSystem cn)
+        internal static ISystem FindStar(long edsmid, SQLiteConnectionSystem cn)
         {
             // No indexes needed- edsmid is primary key
 
@@ -119,13 +113,10 @@ namespace EliteDangerousCore.DB
 
         public static List<ISystem> FindStarWildcard(string name, int limit = int.MaxValue)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                return FindStarWildcard(name, cn, limit);
-            }
+            return SystemsDatabase.Instance.ExecuteWithDatabase(cn => FindStarWildcard(name, cn.Connection, limit));
         }
 
-        public static List<ISystem> FindStarWildcard(string name, SQLiteConnectionSystem cn, int limit = int.MaxValue)
+        internal static List<ISystem> FindStarWildcard(string name, SQLiteConnectionSystem cn, int limit = int.MaxValue)
         {
             EliteNameClassifier ec = new EliteNameClassifier(name);
 

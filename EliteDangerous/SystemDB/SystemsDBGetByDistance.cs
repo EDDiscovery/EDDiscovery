@@ -31,13 +31,13 @@ namespace EliteDangerousCore.DB
                                                     Action<ISystem> LookedUp = null
                                                     )
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, cn, LookedUp);
-            }
+                GetSystemListBySqDistancesFrom(distlist, x, y, z, maxitems, mindist, maxdist, spherical, db.Connection, LookedUp);
+            });
         }
 
-        public static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, // MUST use duplicate double list to protect against EDSM having two at the same point
+        internal static void GetSystemListBySqDistancesFrom(BaseUtils.SortedListDoubleDuplicate<ISystem> distlist, // MUST use duplicate double list to protect against EDSM having two at the same point
                                                             double x, double y, double z,
                                                             int maxitems,
                                                             double mindist,         // 0 = no min dist, always spherical
@@ -117,13 +117,13 @@ namespace EliteDangerousCore.DB
 
         public static ISystem GetSystemByPosition(double x, double y, double z, double maxdist = 0.125)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                return GetSystemByPosition(x, y, z, cn, maxdist);
-            }
+                return GetSystemByPosition(x, y, z, db.Connection, maxdist);
+            });
         }
 
-        public static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn, double maxdist = 0.125)
+        internal static ISystem GetSystemByPosition(double x, double y, double z, SQLiteConnectionSystem cn, double maxdist = 0.125)
         {
             BaseUtils.SortedListDoubleDuplicate<ISystem> distlist = new BaseUtils.SortedListDoubleDuplicate<ISystem>();
             GetSystemListBySqDistancesFrom(distlist, x, y, z, 1, 0, maxdist, true, cn); // return 1 item, min dist 0, maxdist
@@ -146,14 +146,14 @@ namespace EliteDangerousCore.DB
                                                   int routemethod,
                                                   Action<ISystem> LookedUp = null)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            return SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                return GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, cn, LookedUp);
-            }
+                return GetSystemNearestTo(currentpos, wantedpos, maxfromcurpos, maxfromwanted, routemethod, db.Connection, LookedUp);
+            });
         }
 
 
-        public static ISystem GetSystemNearestTo(Point3D currentpos,
+        internal static ISystem GetSystemNearestTo(Point3D currentpos,
                                                   Point3D wantedpos,
                                                   double maxfromcurpos,
                                                   double maxfromwanted,

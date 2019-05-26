@@ -41,13 +41,23 @@ namespace EliteDangerousCore.DB
                                                           int percentage, Func<int, int, int, V> tovect,
                                                           SystemAskType ask = SystemAskType.SplitPopulatedStars)
         {
-            using (SQLiteConnectionSystem cn = new SQLiteConnectionSystem(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            V[] cpvertices1 = vertices1;
+            uint[] cpcolours1 = colours1;
+            V[] cpvertices2 = vertices2;
+            uint[] cpcolours2 = colours2;
+
+            SystemsDatabase.Instance.ExecuteWithDatabase(db =>
             {
-                GetSystemVector<V>(gridid, ref vertices1, ref colours1, ref vertices2, ref colours2, percentage, tovect, cn, ask);
-            }
+                GetSystemVector<V>(gridid, ref cpvertices1, ref cpcolours1, ref cpvertices2, ref cpcolours2, percentage, tovect, db.Connection, ask);
+            });
+
+            vertices1 = cpvertices1;
+            colours1 = cpcolours1;
+            vertices2 = cpvertices2;
+            colours2 = cpcolours2;
         }
 
-        public static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
+        internal static void GetSystemVector<V>(int gridid, ref V[] vertices1, ref uint[] colours1,
                                                           ref V[] vertices2, ref uint[] colours2,
                                                           int percentage, Func<int, int, int, V> tovect,
                                                           SQLiteConnectionSystem cn,
