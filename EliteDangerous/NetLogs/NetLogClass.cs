@@ -113,7 +113,7 @@ namespace EliteDangerousCore
                     NetLogFileReader reader = readersToUpdate[i];
                     updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
 
-                    using (DbTransaction tn = cn.BeginTransaction())
+                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
                     {
                         foreach (JObject jo in reader.ReadSystems(cancelRequested, currentcmdrid))
                         {
@@ -133,19 +133,19 @@ namespace EliteDangerousCore
                             bool previssame = (prev != null && prev.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!prev.HasCoordinate || !je.HasCoordinate || (prev.StarPos - je.StarPos).LengthSquared < 0.01));
                             bool nextissame = (next != null && next.StarSystem.Equals(je.StarSystem, StringComparison.CurrentCultureIgnoreCase) && (!next.HasCoordinate || !je.HasCoordinate || (next.StarPos - je.StarPos).LengthSquared < 0.01));
 
-                           // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
+                            // System.Diagnostics.Debug.WriteLine("{0} {1} {2}", ji, vsSystemsEnts[ji].EventTimeUTC, je.EventTimeUTC);
 
                             if (!(previssame || nextissame))
                             {
-                                je.Add(jo, cn, tn);
+                                je.Add(jo, db);
                                 System.Diagnostics.Debug.WriteLine("Add {0} {1}", je.EventTimeUTC, jo.ToString());
                             }
                         }
 
-                        tn.Commit();
+                        db.Commit();
 
                         reader.TravelLogUnit.Update();
-                    }
+                    });
 
                     if (updateProgress != null)
                     {

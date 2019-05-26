@@ -53,83 +53,43 @@ namespace EliteDangerousCore.DB
 
         private bool AddToDbAndGlobal()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            id = UserDatabase.Instance.Add<long>("SystemNote", "id", new Dictionary<string, object>
             {
-                bool ret = AddToDbAndGlobal(cn);
-                return ret;
-            }
-        }
+                ["Name"] = SystemName,
+                ["Time"] = Time,
+                ["Note"] = Note,
+                ["Journalid"] = Journalid,
+                ["EdsmId"] = EdsmId
+            });
 
-        private bool AddToDbAndGlobal(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into SystemNote (Name, Time, Note, journalid, edsmid) values (@name, @time, @note, @journalid, @edsmid)"))
-            {
-                cmd.AddParameterWithValue("@name", SystemName);
-                cmd.AddParameterWithValue("@time", Time);
-                cmd.AddParameterWithValue("@note", Note);
-                cmd.AddParameterWithValue("@journalid", Journalid);
-                cmd.AddParameterWithValue("@edsmid", EdsmId);
+            globalSystemNotes.Add(this);
 
-                cmd.ExecuteNonQuery();
+            Dirty = false;
 
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from SystemNote"))
-                {
-                    id = (long)cmd2.ExecuteScalar();
-                }
-
-                globalSystemNotes.Add(this);
-
-                Dirty = false;
-
-                return true;
-            }
+            return true;
         }
 
         private bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            UserDatabase.Instance.Update("SystemNote", "id", id, new Dictionary<string, object>
             {
-                return Update(cn);
-            }
-        }
+                ["Name"] = SystemName,
+                ["Time"] = Time,
+                ["Note"] = Note,
+                ["Journalid"] = Journalid,
+                ["EdsmId"] = EdsmId
+            });
 
-        private bool Update(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Update SystemNote set Name=@Name, Time=@Time, Note=@Note, Journalid=@journalid, EdsmId=@EdsmId  where ID=@id"))
-            {
-                cmd.AddParameterWithValue("@ID", id);
-                cmd.AddParameterWithValue("@Name", SystemName);
-                cmd.AddParameterWithValue("@Note", Note);
-                cmd.AddParameterWithValue("@Time", Time);
-                cmd.AddParameterWithValue("@journalid", Journalid);
-                cmd.AddParameterWithValue("@EdsmId", EdsmId);
-
-                cmd.ExecuteNonQuery();
-
-                Dirty = false;
-            }
+            Dirty = false;
 
             return true;
         }
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
-        }
-
-        private bool Delete(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM SystemNote WHERE id = @id"))
-            {
-                cmd.AddParameterWithValue("@id", id);
-                cmd.ExecuteNonQuery();
-
-                globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
-                return true;
-            }
+            UserDatabase.Instance.Delete("SystemNote", "id", id);
+            globalSystemNotes.RemoveAll(x => x.id == id);     // remove from list any containing id.
+            return true;
         }
 
         // we update our note, time, edsmid and set dirty true.  If on a commit, we write.
@@ -167,47 +127,27 @@ namespace EliteDangerousCore.DB
 
         public static void ClearEDSMID()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                using (DbCommand cmd = cn.CreateCommand("UPDATE SystemNote SET EdsmId=0"))
-                {
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            UserDatabase.Instance.Update("SystemNote", new Dictionary<string, object> { ["EdsmId"] = 0 });
         }
 
         public static bool GetAllSystemNotes()
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                var notes = UserDatabase.Instance.Retrieve("SystemNote", rdr => new SystemNoteClass(rdr));
+
+                if (notes.Count == 0)
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from SystemNote"))
+                    return false;
+                }
+                else
+                {
+                    foreach (var sys in notes)
                     {
-                        List<SystemNoteClass> notes = new List<SystemNoteClass>();
-
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                notes.Add(new SystemNoteClass(rdr));
-                            }
-                        }
-
-                        if (notes.Count == 0)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            foreach (var sys in notes)
-                            {
-                                globalSystemNotes.Add(sys);
-                            }
-
-                            return true;
-                        }
+                        globalSystemNotes.Add(sys);
                     }
+
+                    return true;
                 }
             }
             catch (Exception ex)

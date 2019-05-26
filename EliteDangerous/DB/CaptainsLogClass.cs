@@ -69,76 +69,40 @@ namespace EliteDangerousCore.DB
 
         internal bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
+            ID = UserDatabase.Instance.Add<long>("CaptainsLog", "id", new Dictionary<string, object>
             {
-                return Add(cn);
-            }
-        }
+                ["Commander"] = Commander,
+                ["TimeUTC"] = TimeUTC,
+                ["SystemName"] = SystemName,
+                ["BodyName"] = BodyName,
+                ["Note"] = Note,
+                ["Tags"] = Tags,
+                ["Parameters"] = Parameters
+            });
 
-        private bool Add(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into CaptainsLog (Commander, Time, SystemName, BodyName, Note, Tags, Parameters) values (@c,@t,@s,@b,@n,@g,@p)"))
-            {
-                cmd.AddParameterWithValue("@c", Commander);
-                cmd.AddParameterWithValue("@t", TimeUTC);
-                cmd.AddParameterWithValue("@s", SystemName);
-                cmd.AddParameterWithValue("@b", BodyName);
-                cmd.AddParameterWithValue("@n", Note);
-                cmd.AddParameterWithValue("@g", Tags);
-                cmd.AddParameterWithValue("@p", Parameters);
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from CaptainsLog"))
-                {
-                    ID = (long)cmd2.ExecuteScalar();
-                }
-
-                return true;
-            }
+            return true;
         }
 
         internal bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            UserDatabase.Instance.Update("CaptainsLog", "id", ID, new Dictionary<string, object>
             {
-                return Update(cn);
-            }
-        }
+                ["Commander"] = Commander,
+                ["TimeUTC"] = TimeUTC,
+                ["SystemName"] = SystemName,
+                ["BodyName"] = BodyName,
+                ["Note"] = Note,
+                ["Tags"] = Tags,
+                ["Parameters"] = Parameters
+            });
 
-        private bool Update(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Update CaptainsLog set Commander=@c, Time=@t, SystemName=@s, BodyName=@b, Note=@n, Tags=@g, Parameters=@p where ID=@id"))
-            {
-                cmd.AddParameterWithValue("@id", ID);
-                cmd.AddParameterWithValue("@c", Commander);
-                cmd.AddParameterWithValue("@t", TimeUTC);
-                cmd.AddParameterWithValue("@s", SystemName);
-                cmd.AddParameterWithValue("@b", BodyName);
-                cmd.AddParameterWithValue("@n", Note);
-                cmd.AddParameterWithValue("@g", Tags);
-                cmd.AddParameterWithValue("@p", Parameters);
-                cmd.ExecuteNonQuery();
-
-                return true;
-            }
+            return true;
         }
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn,ID);
-            }
-        }
-
-        static private bool Delete(SQLiteConnectionUser cn, long id)
-        {
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM CaptainsLog WHERE id = @id"))
-            {
-                cmd.AddParameterWithValue("@id", id);
-                cmd.ExecuteNonQuery();
-                return true;
-            }
+            UserDatabase.Instance.Delete("CaptainsLog", "id", ID);
+            return true;
         }
 
         // Update notes
@@ -175,34 +139,20 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                List<CaptainsLogClass> logs = UserDatabase.Instance.Retrieve("CaptainsLog", rdr => new CaptainsLogClass(rdr));
+
+                if (logs.Count == 0)
                 {
-                    using (DbCommand cmd = cn.CreateCommand("select * from CaptainsLog"))
+                    return false;
+                }
+                else
+                {
+                    foreach (var bc in logs)
                     {
-                        List<CaptainsLogClass> logs = new List<CaptainsLogClass>();
-
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                logs.Add(new CaptainsLogClass(rdr));
-                            }
-                        }
-
-                        if (logs.Count == 0)
-                        {
-                            return false;
-                        }
-                        else
-                        {
-                            foreach (var bc in logs)
-                            {
-                                gbl.globallog.Add(bc);
-                            }
-
-                            return true;
-                        }
+                        gbl.globallog.Add(bc);
                     }
+
+                    return true;
                 }
             }
             catch (Exception ex)

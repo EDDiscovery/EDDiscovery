@@ -102,114 +102,54 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+            Id = UserDatabase.Instance.Add<long>("routes_expeditions", "id", new Dictionary<string, object>
             {
-                bool ret = Add(cn);     // pass it an open connection since it does multiple SQLs
-                return ret;
-            }
-        }
+                ["name"] = Name,
+                ["start"] = StartDate,
+                ["end"] = EndDate,
+                ["Status"] = (Deleted ? 1 : 0) + (EDSM ? 2 : 0)
+            });
 
-        private bool Add(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into routes_expeditions (name, start, end, Status) values (@name, @start, @end, @stat)"))
+            var sysrows = Systems.Select(s => new Dictionary<string, object>
             {
-                cmd.AddParameterWithValue("@name", Name);
-                cmd.AddParameterWithValue("@start", StartDate);
-                cmd.AddParameterWithValue("@end", EndDate);
-                cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
+                ["routeid"] = Id,
+                ["systemname"] = s
+            }).ToList();
 
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from routes_expeditions"))
-                {
-                    Id = (long)cmd2.ExecuteScalar();
-                }
-
-                using (DbCommand cmd3 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
-                {
-                    cmd3.AddParameter("@routeid", DbType.String);
-                    cmd3.AddParameter("@name", DbType.String);
-
-                    foreach (var sysname in Systems)
-                    {
-                        cmd3.Parameters["@routeid"].Value = Id;
-                        cmd3.Parameters["@name"].Value = sysname;
-                        cmd3.ExecuteNonQuery();
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        public bool Update()
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                bool ret = Update(cn);
-                return ret;
-            }
-        }
-
-        private bool Update(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("UPDATE routes_expeditions SET name=@name, start=@start, end=@end, Status=@stat WHERE id=@id"))
-            {
-                cmd.AddParameterWithValue("@id", Id);
-                cmd.AddParameterWithValue("@name", Name);
-                cmd.AddParameterWithValue("@start", StartDate);
-                cmd.AddParameterWithValue("@end", EndDate);
-                cmd.AddParameterWithValue("@stat", (Deleted ? 1 : 0) + (EDSM ? 2 : 0));
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
-                {
-                    cmd2.AddParameterWithValue("@routeid", Id);
-                    cmd2.ExecuteNonQuery();
-                }
-
-                using (DbCommand cmd2 = cn.CreateCommand("INSERT INTO route_systems (routeid, systemname) VALUES (@routeid, @name)"))
-                {
-                    cmd2.AddParameter("@routeid", DbType.String);
-                    cmd2.AddParameter("@name", DbType.String);
-
-                    foreach (var sysname in Systems)
-                    {
-                        cmd2.Parameters["@routeid"].Value = Id;
-                        cmd2.Parameters["@name"].Value = sysname;
-                        cmd2.ExecuteNonQuery();
-                    }
-                }
-
-                return true;
-            }
-        }
-
-        public bool Delete()
-        {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
-        }
-
-        public bool Delete(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM routes_expeditions WHERE id=@id"))
-            {
-                cmd.AddParameterWithValue("@id", Id);
-                cmd.ExecuteNonQuery();
-            }
-
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM route_systems WHERE routeid=@routeid"))
-            {
-                cmd.AddParameterWithValue("@routeid", Id);
-                cmd.ExecuteNonQuery();
-            }
+            UserDatabase.Instance.Add("route_systems", sysrows);
 
             return true;
         }
 
+        public bool Update()
+        {
+            UserDatabase.Instance.Update("routes_expeditions", "id", Id, new Dictionary<string, object>
+            {
+                ["name"] = Name,
+                ["start"] = StartDate,
+                ["end"] = EndDate,
+                ["Status"] = (Deleted ? 1 : 0) + (EDSM ? 2 : 0)
+            });
+
+            UserDatabase.Instance.Delete("route_systems", "routeid", Id);
+
+            var sysrows = Systems.Select(s => new Dictionary<string, object>
+            {
+                ["routeid"] = Id,
+                ["systemname"] = s
+            }).ToList();
+
+            UserDatabase.Instance.Add("route_systems", sysrows);
+
+            return true;
+        }
+
+        public bool Delete()
+        {
+            UserDatabase.Instance.Delete("route_systems", "routeid", Id);
+            UserDatabase.Instance.Delete("routes_expeditions", "id", Id);
+            return true;
+        }
 
         public static List<SavedRouteClass> GetAllSavedRoutes()
         {
@@ -217,41 +157,26 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc:true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+                Dictionary<int, List<string>> routesystems = new Dictionary<int, List<string>>();
+
+                foreach (var row in UserDatabase.Instance.Retrieve("route_systems", "routeid", "systemname"))
                 {
-                    Dictionary<int, List<string>> routesystems = new Dictionary<int, List<string>>();
-
-                    using (DbCommand cmd = cn.CreateCommand("SELECT routeid, systemname FROM route_systems ORDER BY id ASC"))
+                    int routeid = (int)(long)row[0];
+                    string sysname = (string)row[1];
+                    if (!routesystems.ContainsKey(routeid))
                     {
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                int routeid = (int)(long)rdr[0];
-                                string sysname = (string)rdr[1];
-                                if (!routesystems.ContainsKey(routeid))
-                                {
-                                    routesystems[routeid] = new List<string>();
-                                }
-                                routesystems[routeid].Add(sysname);
-                            }
-                        }
+                        routesystems[routeid] = new List<string>();
                     }
-
-                    using (DbCommand cmd = cn.CreateCommand("SELECT id, name, start, end, Status FROM routes_expeditions"))
-                    {
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                int routeid = (int)(long)rdr[0];
-                                List<string> syslist = routesystems.ContainsKey(routeid) ? routesystems[routeid] : new List<string>();
-                                SavedRouteClass sys = new SavedRouteClass(rdr, syslist);
-                                retVal.Add(sys);
-                            }
-                        }
-                    }
+                    routesystems[routeid].Add(sysname);
                 }
+
+                retVal = UserDatabase.Instance.Retrieve("routes_expeditions", rdr =>
+                {
+                    int routeid = (int)(long)rdr[0];
+                    List<string> syslist = routesystems.ContainsKey(routeid) ? routesystems[routeid] : new List<string>();
+                    SavedRouteClass sys = new SavedRouteClass(rdr, syslist);
+                    return sys;
+                });
             }
             catch (Exception ex)
             {

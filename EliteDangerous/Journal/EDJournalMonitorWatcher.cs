@@ -191,25 +191,22 @@ namespace EliteDangerousCore
                 {
                     //System.Diagnostics.Debug.WriteLine("ScanReader " + Path.GetFileName(nfi.FileName) + " read " + ents.Count + " ui " +uientries.Count + " size " + netlogpos);
 
-                    using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                        ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
+
+                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
                     {
-                        using (DbTransaction txn = cn.BeginTransaction())
+                        foreach (JournalReaderEntry jre in ents)
                         {
-                            ents = ents.Where(jre => JournalEntry.FindEntry(jre.JournalEntry, jre.Json).Count == 0).ToList();
-
-                            foreach (JournalReaderEntry jre in ents)
-                            {
-                                entries.Add(jre.JournalEntry);
-                                jre.JournalEntry.Add(jre.Json, cn, txn);
-                            }
-
-                           // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
-
-                            nfi.TravelLogUnit.Update(cn);
-
-                            txn.Commit();
+                            entries.Add(jre.JournalEntry);
+                            jre.JournalEntry.Add(jre.Json, db);
                         }
-                    }
+
+                        db.Commit();
+                    });
+
+                    // System.Diagnostics.Debug.WriteLine("Wrote " + ents.Count() + " to db and updated TLU");
+
+                    nfi.TravelLogUnit.Update();
                 }
             }
             catch ( Exception ex )
@@ -274,42 +271,39 @@ namespace EliteDangerousCore
 
             for (int i = 0; i < readersToUpdate.Count; i++)
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                EDJournalReader reader = readersToUpdate[i];
+                updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
+
+                reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
+
+                if (entries.Count > 0)
                 {
-                    EDJournalReader reader = readersToUpdate[i];
-                    updateProgress(i * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+                    ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
 
-                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " read ");
+                    //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 
-                    reader.ReadJournal(out List<JournalReaderEntry> entries, out List<UIEvent> uievents, historyrefreshparsing: true, resetOnError:true);      // this may create new commanders, and may write to the TLU db
-
-                    if (entries.Count > 0)
+                    UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, mode: SQLLiteExtensions.SQLExtConnection.AccessMode.ReaderWriter, action: db =>
                     {
-                        ILookup<DateTime, JournalEntry> existing = JournalEntry.GetAllByTLU(reader.TravelLogUnit.id).ToLookup(e => e.EventTimeUTC);
-
-                        //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
-
-                        using (DbTransaction tn = cn.BeginTransaction())
+                        foreach (JournalReaderEntry jre in entries)
                         {
-                            foreach (JournalReaderEntry jre in entries)
+                            if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
                             {
-                                if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
-                                {
-                                    jre.JournalEntry.Add(jre.Json, cn, tn);
-                                    //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
-                                }
+                                jre.JournalEntry.Add(jre.Json, db);
+                                //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                             }
-
-                            tn.Commit();
                         }
-                    }
 
-                    reader.TravelLogUnit.Update(cn);
-
-                    updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
-
-                    lastnfi = reader;
+                        db.Commit();
+                    });
                 }
+
+                reader.TravelLogUnit.Update();
+
+                updateProgress((i + 1) * 100 / readersToUpdate.Count, reader.TravelLogUnit.Name);
+
+                lastnfi = reader;
             }
 
             updateProgress(-1, "");

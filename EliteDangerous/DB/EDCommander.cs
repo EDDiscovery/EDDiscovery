@@ -38,7 +38,7 @@ namespace EliteDangerousCore
             {
                 if (commanderID == Int32.MinValue)
                 {
-                    commanderID = SQLiteConnectionUser.GetSettingInt("ActiveCommander", 0);
+                    commanderID = UserDatabase.Instance.GetSettingInt("ActiveCommander", 0);
                 }
 
                 if (commanderID >= 0 && !commanders.ContainsKey(commanderID) && commanders.Count != 0)
@@ -58,7 +58,7 @@ namespace EliteDangerousCore
                     }
 
                     commanderID = value;
-                    SQLiteConnectionUser.PutSettingInt("ActiveCommander", value);
+                    UserDatabase.Instance.PutSettingInt("ActiveCommander", value);
                 }
             }
         }
@@ -119,14 +119,7 @@ namespace EliteDangerousCore
         {
             commanders.Remove(cmdrid);
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
-            {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Deleted = 1 WHERE Id = @Id"))
-                {
-                    cmd.AddParameterWithValue("@Id", cmdrid);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+            UserDatabase.Instance.Update("Commanders", "Id", cmdrid, new Dictionary<string, object> { ["Deleted"] = true });
         }
 
         public static void Delete(EDCommander cmdr)
@@ -147,59 +140,50 @@ namespace EliteDangerousCore
         {
             EDCommander cmdr;
 
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            cmdr = new EDCommander
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour,MapCentreOnSelection,MapZoom) " +
-                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour,@MapCentreOnSelection,@MapZoom)"))
-                {
+                Name = name ?? "",
+                EdsmName = edsmName ?? name ?? "",
+                EDSMAPIKey = edsmApiKey ?? "",
+                JournalDir = journalpath ?? "",
+                SyncToEdsm = toedsm,
+                SyncFromEdsm = fromedsm,
+                SyncToEddn = toeddn,
+                SyncToEGO = toego,
+                EGOName = egoname ?? "",
+                EGOAPIKey = egoapi ?? "",
+                SyncToInara = toinara,
+                InaraName = inaraname ?? "",
+                InaraAPIKey = inaraapikey ?? "",
+                homesystem = homesystem ?? "",
+                MapColour = mapcolour == -1 ? System.Drawing.Color.Red.ToArgb() : mapcolour,
+                MapCentreOnSelection = mapcentreonselection,
+                MapZoom = mapzoom,
+                Deleted = false
+            };
 
-                    cmd.AddParameterWithValue("@Name", name ?? "");
-                    cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
-                    cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
-                    cmd.AddParameterWithValue("@JournalDir", journalpath ?? "");
-                    cmd.AddParameterWithValue("@Deleted", false);
-                    cmd.AddParameterWithValue("@SyncToEdsm", toedsm);
-                    cmd.AddParameterWithValue("@SyncFromEdsm", fromedsm);
-                    cmd.AddParameterWithValue("@SyncToEddn", toeddn);
-                    cmd.AddParameterWithValue("@NetLogDir", "");        // Unused field, null out
-                    cmd.AddParameterWithValue("@SyncToEGO", toego);
-                    cmd.AddParameterWithValue("@EGOName", egoname ?? "");
-                    cmd.AddParameterWithValue("@EGOApiKey", egoapi ?? "");
-                    cmd.AddParameterWithValue("@SyncToInara", toinara);
-                    cmd.AddParameterWithValue("@InaraName", inaraname ?? "");
-                    cmd.AddParameterWithValue("@InaraApiKey", inaraapikey ?? "");
-                    cmd.AddParameterWithValue("@HomeSystem", homesystem ?? "");
-                    cmd.AddParameterWithValue("@MapColour", mapcolour == -1 ? System.Drawing.Color.Red.ToArgb() : mapcolour );
-                    cmd.AddParameterWithValue("@MapCentreOnSelection", mapcentreonselection );
-                    cmd.AddParameterWithValue("@MapZoom", mapzoom );
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (DbCommand cmd = conn.CreateCommand("SELECT Id FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    int nr = Convert.ToInt32(cmd.ExecuteScalar());
-                }
-
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders WHERE rowid = last_insert_rowid()"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        reader.Read();
-                        {
-                            cmdr = new EDCommander(reader);
-                        }
-                    }
-                }
-
-                if (name == null)
-                {
-                    using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name = @Name WHERE rowid = last_insert_rowid()"))
-                    {
-                        cmd.AddParameterWithValue("@Name", cmdr.Name);
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
+            cmdr.Nr = (int)UserDatabase.Instance.Add<long>("Commanders", "Id", new Dictionary<string, object>
+            {
+                ["Name"] = cmdr.Name,
+                ["EdsmName"] = cmdr.EdsmName,
+                ["EDSMAPIKey"] = cmdr.EDSMAPIKey,
+                ["JournalDir"] = cmdr.JournalDir,
+                ["NetLogDir"] = "",        // Unused field, null out
+                ["SyncToEdsm"] = cmdr.SyncToEdsm,
+                ["SyncFromEdsm"] = cmdr.SyncFromEdsm,
+                ["SyncToEddn"] = cmdr.SyncToEddn,
+                ["SyncToEGO"] = cmdr.SyncToEGO,
+                ["EGOName"] = cmdr.EGOName,
+                ["EGOAPIKey"] = cmdr.EGOAPIKey,
+                ["SyncToInara"] = cmdr.SyncToInara,
+                ["InaraName"] = cmdr.InaraName,
+                ["InaraAPIKey"] = cmdr.InaraAPIKey,
+                ["HomeSystem"] = cmdr.homesystem,
+                ["MapColour"] = cmdr.MapColour,
+                ["MapCentreOnSelection"] = cmdr.MapCentreOnSelection,
+                ["MapZoom"] = cmdr.MapZoom,
+                ["Deleted"] = cmdr.Deleted
+            });
 
             commanders[cmdr.Nr] = cmdr;
 
@@ -208,64 +192,43 @@ namespace EliteDangerousCore
 
         public static void Update(List<EDCommander> cmdrlist, bool reload)
         {
-            using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
+            UserDatabase.Instance.ExecuteWithDatabase(usetxn: true, action: db =>
             {
-                using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
-                                                          "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
-                                                          "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey, HomeSystem=@HomeSystem, " +
-                                                          "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom " + 
-                                                          "WHERE Id=@Id"))
+                using (var updater = db.CreateUpdater<long>("Commanders", "Id"))
                 {
-                    cmd.AddParameter("@Id", DbType.Int32);
-                    cmd.AddParameter("@Name", DbType.String);
-                    cmd.AddParameter("@EdsmName", DbType.String);
-                    cmd.AddParameter("@EdsmApiKey", DbType.String);
-                    cmd.AddParameter("@NetLogDir", DbType.String);
-                    cmd.AddParameter("@JournalDir", DbType.String);
-                    cmd.AddParameter("@SyncToEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncFromEdsm", DbType.Boolean);
-                    cmd.AddParameter("@SyncToEddn", DbType.Boolean);
-                    cmd.AddParameter("@SyncToEGO", DbType.Boolean);
-                    cmd.AddParameter("@EGOName", DbType.String);
-                    cmd.AddParameter("@EGOApiKey", DbType.String);
-                    cmd.AddParameter("@SyncToInara", DbType.Boolean);
-                    cmd.AddParameter("@InaraName", DbType.String);
-                    cmd.AddParameter("@InaraApiKey", DbType.String);
-                    cmd.AddParameter("@HomeSystem", DbType.String);
-                    cmd.AddParameter("@MapColour", DbType.Int32);
-                    cmd.AddParameter("@MapCentreOnSelection", DbType.Boolean);
-                    cmd.AddParameter("@MapZoom", DbType.Double);
-
-                    foreach (EDCommander edcmdr in cmdrlist) // potential NRE
+                    foreach (var cmdr in cmdrlist)
                     {
-                        cmd.Parameters["@Id"].Value = edcmdr.Nr;
-                        cmd.Parameters["@Name"].Value = edcmdr.Name;
-                        cmd.Parameters["@EdsmName"].Value = edcmdr.EdsmName;
-                        cmd.Parameters["@EdsmApiKey"].Value = edcmdr.EDSMAPIKey != null ? edcmdr.EDSMAPIKey : "";
-                        cmd.Parameters["@NetLogDir"].Value = ""; // unused field
-                        cmd.Parameters["@JournalDir"].Value = edcmdr.JournalDir != null ? edcmdr.JournalDir : "";
-                        cmd.Parameters["@SyncToEdsm"].Value = edcmdr.SyncToEdsm;
-                        cmd.Parameters["@SyncFromEdsm"].Value = edcmdr.SyncFromEdsm;
-                        cmd.Parameters["@SyncToEddn"].Value = edcmdr.SyncToEddn;
-                        cmd.Parameters["@SyncToEGO"].Value = edcmdr.SyncToEGO;
-                        cmd.Parameters["@EGOName"].Value = edcmdr.EGOName != null ? edcmdr.EGOName : "";
-                        cmd.Parameters["@EGOApiKey"].Value = edcmdr.EGOAPIKey != null ? edcmdr.EGOAPIKey : "";
-                        cmd.Parameters["@SyncToInara"].Value = edcmdr.SyncToInara;
-                        cmd.Parameters["@InaraName"].Value = edcmdr.InaraName != null ? edcmdr.InaraName : "";
-                        cmd.Parameters["@InaraAPIKey"].Value = edcmdr.InaraAPIKey != null ? edcmdr.InaraAPIKey : "";
-                        cmd.Parameters["@HomeSystem"].Value = edcmdr.homesystem != null ? edcmdr.homesystem : "";
-                        cmd.Parameters["@MapColour"].Value = edcmdr.MapColour;
-                        cmd.Parameters["@MapCentreOnSelection"].Value = edcmdr.MapCentreOnSelection;
-                        cmd.Parameters["@MapZoom"].Value = edcmdr.MapZoom;
-                        cmd.ExecuteNonQuery();
+                        updater.Update(cmdr.Nr, new Dictionary<string, object>
+                        {
+                            ["Name"] = cmdr.Name,
+                            ["EdsmName"] = cmdr.EdsmName,
+                            ["EdsmApiKey"] = cmdr.EDSMAPIKey,
+                            ["NetLogDir"] = "", // unused field
+                            ["JournalDir"] = cmdr.JournalDir,
+                            ["SyncToEdsm"] = cmdr.SyncToEdsm,
+                            ["SyncFromEdsm"] = cmdr.SyncFromEdsm,
+                            ["SyncToEddn"] = cmdr.SyncToEddn,
+                            ["SyncToEGO"] = cmdr.SyncToEGO,
+                            ["EGOName"] = cmdr.EGOName,
+                            ["EGOAPIKey"] = cmdr.EGOAPIKey,
+                            ["SyncToInara"] = cmdr.SyncToInara,
+                            ["InaraName"] = cmdr.InaraName,
+                            ["InaraAPIKey"] = cmdr.InaraAPIKey,
+                            ["HomeSystem"] = cmdr.homesystem,
+                            ["MapColour"] = cmdr.MapColour,
+                            ["MapCentreOnSelection"] = cmdr.MapCentreOnSelection,
+                            ["MapZoom"] = cmdr.MapZoom
+                        });
 
-                        commanders[edcmdr.Nr] = edcmdr;
+                        commanders[cmdr.Nr] = cmdr;
                     }
-
-                    if (reload)
-                        Load(true, conn);       // refresh in-memory copy
                 }
-            }
+
+                db.Commit();
+            });
+
+            if (reload)
+                Load(true);       // refresh in-memory copy
 
             // For  some people sharing their user DB between different computers and having different paths to their journals on those computers.
             JObject jo = new JObject();
@@ -295,7 +258,7 @@ namespace EliteDangerousCore
         }
 
 
-        public static void Load(bool write = true, SQLiteConnectionUser conn = null)
+        public static void Load(bool write = true)
         {
             if (commandersDict == null)
                 commandersDict = new Dictionary<int, EDCommander>();
@@ -304,7 +267,7 @@ namespace EliteDangerousCore
             {
                 commandersDict.Clear();
 
-                var cmdrs = GetCommanders(conn);
+                var cmdrs = GetCommanders();
                 int maxnr = cmdrs.Count == 0 ? 0 : cmdrs.Max(c => c.Nr);
 
                 foreach (EDCommander cmdr in cmdrs)
@@ -361,38 +324,15 @@ namespace EliteDangerousCore
         }
 
 
-        public static List<EDCommander> GetCommanders(SQLiteConnectionUser conn = null)
+        public static List<EDCommander> GetCommanders()
         {
             List<EDCommander> commanders = new List<EDCommander>();
 
-            bool closeconn = false;
-            if (conn == null)
+            if (UserDatabase.Instance.GetSettingInt("DBVer", 1) >= 102)
             {
-                closeconn = true;
-                conn = new SQLiteConnectionUser(true, SQLLiteExtensions.SQLExtConnection.AccessMode.Reader);
+                commanders = UserDatabase.Instance.Retrieve("Commanders", rdr => new EDCommander(rdr));
             }
 
-            if (SQLiteConnectionUser.GetSettingInt("DBVer", 1,conn) >= 102)
-            {
-                using (DbCommand cmd = conn.CreateCommand("SELECT * FROM Commanders"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            EDCommander edcmdr = new EDCommander(reader);
-
-                            string name = Convert.ToString(reader["Name"]);
-                            string edsmapikey = Convert.ToString(reader["EdsmApiKey"]);
-
-                            commanders.Add(edcmdr);
-                        }
-                    }
-                }
-            }
-
-            if (closeconn && conn != null)
-                conn.Dispose();
             return commanders;
         }
 
