@@ -47,12 +47,12 @@ namespace EDDiscovery.UserControls
         {
             computer = new StarDistanceComputer();
 
-            textMinRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Min", defaultMinRadius);
-            textMaxRadius.ValueNoChange = SQLiteConnectionUser.GetSettingDouble(DbSave + "Max", defaultMaxRadius);
+            textMinRadius.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "Min", defaultMinRadius);
+            textMaxRadius.ValueNoChange = UserDatabase.Instance.GetSettingDouble(DbSave + "Max", defaultMaxRadius);
             textMinRadius.SetComparitor(textMaxRadius, -2);     // need to do this after values are set
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
-            checkBoxCube.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Behaviour", false);
+            checkBoxCube.Checked = UserDatabase.Instance.GetSettingBool(DbSave + "Behaviour", false);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -77,9 +77,9 @@ namespace EDDiscovery.UserControls
             discoveryform.OnHistoryChange -= Discoveryform_OnHistoryChange;
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             computer.ShutDown();
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
-            SQLiteConnectionUser.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
-            SQLiteConnectionUser.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
+            UserDatabase.Instance.PutSettingDouble(DbSave + "Min", textMinRadius.Value);
+            UserDatabase.Instance.PutSettingDouble(DbSave + "Max", textMaxRadius.Value);
+            UserDatabase.Instance.PutSettingBool(DbSave + "Behaviour", checkBoxCube.Checked);
         }
 
         public override void InitialDisplay()

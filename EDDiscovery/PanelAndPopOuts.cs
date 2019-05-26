@@ -350,7 +350,7 @@ namespace EDDiscovery
                 {
                     int numopened = usercontrolsforms.CountOf(pi.PopoutType);
                     if ( numopened>0) System.Diagnostics.Debug.WriteLine($"Save Popout {p} {numopened}");
-                    SQLiteConnectionUser.PutSettingInt(PopOutSaveID(p), numopened);
+                    UserDatabase.Instance.PutSettingInt(PopOutSaveID(p), numopened);
                 }
             }
         }
@@ -359,7 +359,7 @@ namespace EDDiscovery
         {
             foreach (PanelInformation.PanelIDs p in Enum.GetValues(typeof(PanelInformation.PanelIDs)))        // in terms of PanelInformation.PopOuts Enum
             {
-                int numtoopen = SQLiteConnectionUser.GetSettingInt(PopOutSaveID(p), 0);
+                int numtoopen = UserDatabase.Instance.GetSettingInt(PopOutSaveID(p), 0);
 
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(p);
 

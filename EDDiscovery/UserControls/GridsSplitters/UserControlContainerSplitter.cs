@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
 
             string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels
 
-            string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, defaultview);
+            string splitctrl = UserDatabase.Instance.GetSettingString(DbWindows, defaultview);
 
             //System.Diagnostics.Debug.WriteLine("Init " + displaynumber + " " + splitctrl);
 
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
         {
             ucursor_history = uctg;                 // record base one
             ucursor_inuse = FindTHC() ?? ucursor_history; // if we have a THC, use it, else use the history one
-            string splitctrl = SQLiteConnectionUser.GetSettingString(DbWindows, "");
+            string splitctrl = UserDatabase.Instance.GetSettingString(DbWindows, "");
 
             //System.Diagnostics.Debug.WriteLine("Layout loading " + displaynumber + " " + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
                 });
 
             //System.Diagnostics.Debug.WriteLine("Split save " + state);
-            SQLiteConnectionUser.PutSettingString(DbWindows, state);
+            UserDatabase.Instance.PutSettingString(DbWindows, state);
 
             (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
@@ -519,7 +519,7 @@ namespace EDDiscovery.UserControls
         {
             string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
 
-            string splitctrl = SQLiteConnectionUser.GetSettingString(primarycontrolname, "");
+            string splitctrl = UserDatabase.Instance.GetSettingString(primarycontrolname, "");
 
             if (splitctrl == "" || !splitctrl.Contains("'0,1006'"))   // never set, or wiped, or does not have TG in it, reset.. if previous system had the IDs, use them, else use defaults
             {
@@ -532,7 +532,7 @@ namespace EDDiscovery.UserControls
                                 "H(0.5, U'2," + enum_topright.ToStringInvariant() + "', " +
                                 "H(0.25,U'3," + enum_middleright.ToStringInvariant() + "',U'4," + enum_bottomright + "')) )";
 
-                SQLiteConnectionUser.PutSettingString(primarycontrolname, ctrl);
+                UserDatabase.Instance.PutSettingString(primarycontrolname, ctrl);
             }
         }
 

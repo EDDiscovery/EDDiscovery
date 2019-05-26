@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
             panelStars.ValueLimit = SQLiteDBClass.GetSettingInt(DbSave + "ValueLimit", 50000);
             progchange = false;
 
-            rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
+            rollUpPanelTop.PinState = UserDatabase.Instance.GetSettingBool(DbSave + "PinState", true);
 
             rollUpPanelTop.SetToolTip(toolTip);
 
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
+            UserDatabase.Instance.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState);
 
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;

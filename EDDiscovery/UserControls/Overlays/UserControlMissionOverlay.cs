@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
         {
             BaseUtils.Translator.Instance.Translate(this);
 
-            SelectionBits sel = (SelectionBits)SQLiteConnectionUser.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+            SelectionBits sel = (SelectionBits)UserDatabase.Instance.GetSettingInt(DBSelections, (int)SelectionBits.Default);
 
             missionDescriptionToolStripMenuItem.Checked = (sel & SelectionBits.MissionName) != SelectionBits.None;
             startDateToolStripMenuItem.Checked = (sel & SelectionBits.StartDate) != SelectionBits.None;
@@ -214,11 +214,11 @@ namespace EDDiscovery.UserControls
             ToolStripMenuItem tsmi = sender as ToolStripMenuItem;
             SelectionBits sel = (SelectionBits)(tsmi.Tag);     // tag contains bit number
 
-            SelectionBits cur = (SelectionBits)SQLiteConnectionUser.GetSettingInt(DBSelections, (int)SelectionBits.Default);
+            SelectionBits cur = (SelectionBits)UserDatabase.Instance.GetSettingInt(DBSelections, (int)SelectionBits.Default);
             cur = (cur & ~sel);
             if ( tsmi.Checked )
                 cur |= sel;
-            SQLiteConnectionUser.PutSettingInt(DBSelections, (int)cur);
+            UserDatabase.Instance.PutSettingInt(DBSelections, (int)cur);
 
             System.Diagnostics.Debug.WriteLine("Mission overal sel code " + cur);
             Display(currentHE);

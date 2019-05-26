@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             private Queries()
             {
                 StandardSearches = Searches.Count();
-                string[] userqueries = SQLiteConnectionUser.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker });
+                string[] userqueries = UserDatabase.Instance.GetSettingString(DbUserQueries, "").Split(new char[] { splitmarker });
 
                 for (int i = 0; i+1 < userqueries.Length; i += 2)
                     Searches.Add(new Tuple<string, string>(userqueries[i], userqueries[i + 1]));
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                     userqueries += Searches[i].Item1 + splitmarker + Searches[i].Item2 + splitmarker;
                 }
 
-                SQLiteConnectionUser.PutSettingString(DbUserQueries, userqueries);
+                UserDatabase.Instance.PutSettingString(DbUserQueries, userqueries);
             }
 
             public void Update(string name, string expr)
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("EventTimeLocal", "Date Time in Local time", BaseUtils.ConditionEntry.MatchType.DateAfter));     // add on a few from the base class..
             classnames.Add(new BaseUtils.TypeHelpers.PropertyNameInfo("SyncedEDSM", "Synced to EDSM, 1 = yes, 0 = not", BaseUtils.ConditionEntry.MatchType.IsTrue));     // add on a few from the base class..
 
-            string query = SQLiteConnectionUser.GetSettingString(DbQuerySave, "");
+            string query = UserDatabase.Instance.GetSettingString(DbQuerySave, "");
 
             conditionFilterUC.VariableNames = classnames;
             conditionFilterUC.InitConditionList(new BaseUtils.ConditionLists(query));   // will ignore if query is bad and return empty query
@@ -180,16 +180,16 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView, DbColumnSave);
-            splitContainer.SplitterDistance(SQLiteConnectionUser.GetSettingDouble(DbSplitterSave, 0.2));
+            splitContainer.SplitterDistance(UserDatabase.Instance.GetSettingDouble(DbSplitterSave, 0.2));
         }
 
         public override void Closing()
         {
             DGVSaveColumnLayout(dataGridView, DbColumnSave);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result
-            SQLiteConnectionUser.PutSettingString(DbQuerySave, conditionFilterUC.Result.ToString());
+            UserDatabase.Instance.PutSettingString(DbQuerySave, conditionFilterUC.Result.ToString());
             Queries.Instance.Save();
-            SQLiteConnectionUser.PutSettingDouble(DbSplitterSave, splitContainer.GetSplitterDistance());
+            UserDatabase.Instance.PutSettingDouble(DbSplitterSave, splitContainer.GetSplitterDistance());
         }
 
         #endregion

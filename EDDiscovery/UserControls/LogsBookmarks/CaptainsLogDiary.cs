@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             DateTime firstofmonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-            curmonth = SQLiteConnectionUser.GetSettingDate(DbDateSave, firstofmonth);
+            curmonth = UserDatabase.Instance.GetSettingDate(DbDateSave, firstofmonth);
 
             string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".T(EDTx.CaptainsLogDiary_Daysofweek);
             string[] daynamesplit = daynames.Split(';');
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            SQLiteConnectionUser.PutSettingDate(DbDateSave, curmonth);
+            UserDatabase.Instance.PutSettingDate(DbDateSave, curmonth);
         }
 
         private void CaptainsLogDiary_Resize(object sender, EventArgs e)

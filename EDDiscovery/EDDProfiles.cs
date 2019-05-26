@@ -99,12 +99,12 @@ namespace EDDiscovery
 
         public void LoadProfiles(string selectprofile)
         {
-            string profiles = SQLiteConnectionUser.GetSettingString("ProfileIDs", "0");
+            string profiles = UserDatabase.Instance.GetSettingString("ProfileIDs", "0");
             List<int> profileints = profiles.RestoreIntListFromString(1,0); // default is length 1, value 0
 
             foreach (int profileid in profileints)
             {
-                StringParser sp = new StringParser(SQLiteConnectionUser.GetSettingString(ProfilePrefix(profileid) + "Settings", ""));
+                StringParser sp = new StringParser(UserDatabase.Instance.GetSettingString(ProfilePrefix(profileid) + "Settings", ""));
 
                 string name = sp.NextQuotedWordComma();
                 string tripcondition = sp.NextQuotedWordComma();
@@ -123,7 +123,7 @@ namespace EDDiscovery
                 ProfileList.Add(new Profile(DefaultId, "Default", "Condition AlwaysFalse", "Condition AlwaysFalse"));
             }
 
-            int curid = SQLiteConnectionUser.GetSettingInt("ProfilePowerOnID", DefaultId);
+            int curid = UserDatabase.Instance.GetSettingInt("ProfilePowerOnID", DefaultId);
 
             if ( selectprofile != null )
             {
@@ -142,14 +142,14 @@ namespace EDDiscovery
             foreach (Profile p in ProfileList)
             {
                 string idstr = p.Id.ToStringInvariant();
-                SQLiteConnectionUser.PutSettingString(ProfilePrefix(p.Id) + "Settings",
+                UserDatabase.Instance.PutSettingString(ProfilePrefix(p.Id) + "Settings",
                             p.Name.QuoteString(comma: true) + "," +
                             p.TripCondition.ToString().QuoteString(comma: true) + "," + p.BackCondition.ToString().QuoteString(comma: true)
                             );
                 ids = ids.AppendPrePad(idstr, ",");
             }
 
-            SQLiteConnectionUser.PutSettingString("ProfileIDs", ids);
+            UserDatabase.Instance.PutSettingString("ProfileIDs", ids);
         }
 
         public bool UpdateProfiles(List<Profile> newset, int poweronindex )        // true reload - Current is invalid if true, must reload to new profile
@@ -181,7 +181,7 @@ namespace EDDiscovery
                     removedcurrent = true;
 
                 System.Diagnostics.Debug.WriteLine("Delete ID " + p.Id);
-                SQLiteConnectionUser.DeleteKey(ProfilePrefix(p.Id) + "%");       // all profiles string
+                UserDatabase.Instance.DeleteKey(ProfilePrefix(p.Id) + "%");       // all profiles string
                 ProfileList.Remove(p);
             }
 
@@ -202,7 +202,7 @@ namespace EDDiscovery
             }
 
             poweronindex = poweronindex >= 0 ? poweronindex : 0;
-            SQLiteConnectionUser.PutSettingInt("ProfilePowerOnID", ProfileList[poweronindex].Id);
+            UserDatabase.Instance.PutSettingInt("ProfilePowerOnID", ProfileList[poweronindex].Id);
             PowerOn = ProfileList[poweronindex];
 
             SaveProfiles();

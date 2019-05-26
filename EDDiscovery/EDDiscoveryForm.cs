@@ -180,7 +180,7 @@ namespace EDDiscovery
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.SecondHiddenMarkerWidth = 60;
-            panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
+            panelToolBar.PinState = UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
 
             labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
@@ -208,10 +208,10 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.TabsReset)
             {
-                SQLiteConnectionUser.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
-                SQLiteConnectionUser.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
-                SQLiteConnectionUser.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
-                SQLiteConnectionUser.DeleteKey("ProfilePowerOnID");                 // back to base profile
+                UserDatabase.Instance.DeleteKey("GridControlWindows%");              // these hold the grid/splitter control values for all windows
+                UserDatabase.Instance.DeleteKey("SplitterControlWindows%");          // wack them so they start empty.
+                UserDatabase.Instance.DeleteKey("SavedPanelInformation.%");          // and delete the pop out history
+                UserDatabase.Instance.DeleteKey("ProfilePowerOnID");                 // back to base profile
             }
 
             //Make sure the primary splitter is set up.. and rational
@@ -358,7 +358,7 @@ namespace EDDiscovery
 
             // DLL loads
 
-            string alloweddlls = SQLiteConnectionUser.GetSettingString("DLLAllowed", "");
+            string alloweddlls = UserDatabase.Instance.GetSettingString("DLLAllowed", "");
 
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
@@ -377,7 +377,7 @@ namespace EDDiscovery
                                 "Warning".T(EDTx.Warning),
                                 MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
-                    SQLiteConnectionUser.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
+                    UserDatabase.Instance.PutSettingString("DLLAllowed", alloweddlls.AppendPrePad(res.Item3, ","));
                     DLLManager.UnLoad();
                     res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
                 }
@@ -403,7 +403,7 @@ namespace EDDiscovery
             {
                 this.BeginInvoke(new Action(() =>
                 {
-                    string acklist = SQLiteConnectionUser.GetSettingString("NotificationLastAckTime", "");
+                    string acklist = UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
                     Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetVersionString());
 
                     foreach (Notifications.Notification n in notelist)
@@ -464,7 +464,7 @@ namespace EDDiscovery
                 {
                     DateTime ackdate = (DateTime)o;
                     System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                    SQLiteConnectionUser.PutSettingString("NotificationLastAckTime", SQLiteConnectionUser.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
+                    UserDatabase.Instance.PutSettingString("NotificationLastAckTime", UserDatabase.Instance.GetSettingString("NotificationLastAckTime","") + ackdate.ToStringZulu());
                 });
 
                 ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
@@ -1146,7 +1146,7 @@ namespace EDDiscovery
 
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string rwsystime = SQLiteConnectionUser.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
+            string rwsystime = UserDatabase.Instance.GetSettingString("InaraLastHistoricUpload", "2000-01-01 00:00:00"); // Latest time
             DateTime upload;
             if (!DateTime.TryParse(rwsystime, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out upload))
                 upload = new DateTime(2000, 1, 1);
@@ -1154,7 +1154,7 @@ namespace EDDiscovery
             if (DateTime.UtcNow.Subtract(upload).TotalHours >= 1)  // every hours, allowed to do this..
             {
                 EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine,history, EDCommander.Current);
-                SQLiteConnectionUser.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
+                UserDatabase.Instance.PutSettingString("InaraLastHistoricUpload", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture));
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
