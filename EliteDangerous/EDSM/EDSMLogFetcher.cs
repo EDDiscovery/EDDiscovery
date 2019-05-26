@@ -242,15 +242,15 @@ namespace EliteDangerousCore.EDSM
                 tlu.CommanderId = EDCommander.CurrentCmdrID;
                 tlu.Add();  // Add to Database
 
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
+                UserDatabase.Instance.ExecuteWithDatabase(db =>
                 {
                     foreach (JournalFSDJump jfsd in toadd)
                     {
                         System.Diagnostics.Trace.WriteLine(string.Format("Add {0} {1}", jfsd.EventTimeUTC, jfsd.StarSystem));
                         jfsd.SetTLUCommander(tlu.id, tlu.CommanderId.Value);        // update its TLU id to the TLU made above
-                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), cn);     // add it to the db with the JSON created
+                        jfsd.Add(jfsd.CreateFSDJournalEntryJson(), db);     // add it to the db with the JSON created
                     }
-                }
+                });
 
                 LogLine($"Retrieved {toadd.Count} log entries from EDSM, from {logstarttime.ToLocalTime().ToString()} to {logendtime.ToLocalTime().ToString()}");
 

@@ -41,70 +41,25 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            id = UserDatabase.Instance.Add<long>("wanted_systems", "id", new Dictionary<string, object>
             {
-                bool ret = Add(cn);
-                return ret;
-            }
-        }
+                ["systemname"] = system
+            });
 
-        private bool Add(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into wanted_systems (systemname) values (@systemname)"))
-            {
-                cmd.AddParameterWithValue("@systemname", system);
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from wanted_systems"))
-                {
-                    id = (long)cmd2.ExecuteScalar();
-                }
-                return true;
-            }
+            return true;
         }
 
         public bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
-        }
-
-        private bool Delete(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM wanted_systems WHERE id = @id"))
-            {
-                cmd.AddParameterWithValue("@id", id);
-
-                cmd.ExecuteNonQuery();
-
-                return true;
-            }
+            UserDatabase.Instance.Delete("wanted_systems", "id", id);
+            return true;
         }
 
         public static List<WantedSystemClass> GetAllWantedSystems()     // CAN return null
         {
             try
             {
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("select * from wanted_systems"))
-                    {
-                        List<WantedSystemClass> retVal = new List<WantedSystemClass>();
-
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                WantedSystemClass sys = new WantedSystemClass(rdr);
-                                retVal.Add(sys);
-                            }
-                        }
-
-                        return retVal;
-                    }
-                }
+                return UserDatabase.Instance.Retrieve("wanted_systems", rdr => new WantedSystemClass(rdr));
             }
             catch (System.Exception ex)
             {

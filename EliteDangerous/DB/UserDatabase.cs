@@ -38,6 +38,7 @@ namespace EliteDangerousCore.DB
         List<T> Retrieve<T>(string table, Func<DbDataReader, T> processor, string[] fields = null, string where = null, Dictionary<string, object> whereparams = null, string orderby = null, bool includenull = false, int? limit = null, Func<T, bool> filter = null);
         List<object[]> Retrieve(string table, params string[] fields);
         TOut Retrieve<T, TOut>(string table, string idcol, T id, Func<DbDataReader, TOut> processor);
+        void Commit();
         bool KeyExists(string sKey);
         bool DeleteKey(string key);
         int GetSettingInt(string key, int defaultvalue);

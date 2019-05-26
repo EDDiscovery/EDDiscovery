@@ -530,16 +530,13 @@ namespace EliteDangerousCore.JournalEvents
 
         public void SetMapColour(int mapcolour)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                JObject jo = GetJson(Id, cn);
+            JObject jo = GetJson(Id);
 
-                if (jo != null)
-                {
-                    jo["EDDMapColor"] = mapcolour;
-                    UpdateJsonEntry(jo, cn);
-                    MapColor = mapcolour;
-                }
+            if (jo != null)
+            {
+                jo["EDDMapColor"] = mapcolour;
+                UpdateJsonEntry(jo);
+                MapColor = mapcolour;
             }
         }
 

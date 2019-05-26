@@ -88,118 +88,67 @@ namespace EliteDangerousCore.DB
 
         public bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            id = UserDatabase.Instance.Add<long>("TravelLogUnit", "id", new Dictionary<string, object>
             {
-                bool ret = Add(cn);
-                return ret;
-            }
-        }
+                ["Name"] = Name,
+                ["Type"] = type,
+                ["Size"] = Size,
+                ["Path"] = Path,
+                ["CommanderID"] = CommanderId
+            });
 
-        private bool Add(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into TravelLogUnit (Name, type, size, Path, CommanderID) values (@name, @type, @size, @Path, @CommanderID)"))
-            {
-                cmd.AddParameterWithValue("@name", Name);
-                cmd.AddParameterWithValue("@type", type);
-                cmd.AddParameterWithValue("@size", Size);
-                cmd.AddParameterWithValue("@Path", Path);
-                cmd.AddParameterWithValue("@CommanderID", CommanderId);
-
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from TravelLogUnit"))
-                {
-                    id = (long)cmd2.ExecuteScalar();
-                }
-
-                return true;
-            }
+            return true;
         }
 
         public bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            UserDatabase.Instance.Update("TravelLogUnit", "id", id, new Dictionary<string, object>
             {
-                return Update(cn);
-            }
-        }
+                ["Name"] = Name,
+                ["Type"] = type,
+                ["Size"] = Size,
+                ["Path"] = Path,
+                ["CommanderID"] = CommanderId
+            });
 
-        public bool Update(SQLiteConnectionUser cn, DbTransaction tn = null)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Update TravelLogUnit set Name=@Name, Type=@type, size=@size, Path=@Path, CommanderID=@CommanderID  where ID=@id", tn))
-            {
-                cmd.AddParameterWithValue("@ID", id);
-                cmd.AddParameterWithValue("@Name", Name);
-                cmd.AddParameterWithValue("@Type", type);
-                cmd.AddParameterWithValue("@size", Size);
-                cmd.AddParameterWithValue("@Path", Path);
-                cmd.AddParameterWithValue("@CommanderID", CommanderId);
-
-                cmd.ExecuteNonQuery();
-
-                return true;
-            }
+            return true;
         }
         
         static public List<TravelLogUnit> GetAll()
         {
-            List<TravelLogUnit> list = new List<TravelLogUnit>();
-
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                using (DbCommand cmd = cn.CreateCommand("select * from TravelLogUnit"))
-                {
-                    using (DbDataReader rdr = cmd.ExecuteReader())
-                    {
-                        while (rdr.Read())
-                        {
-                            TravelLogUnit sys = new TravelLogUnit(rdr);
-                            list.Add(sys);
-                        }
-                    }
-
-                    return list;
-                }
-            }
+            return UserDatabase.Instance.Retrieve("TravelLogUnit", rdr => new TravelLogUnit(rdr));
         }
 
         public static List<string> GetAllNames()
         {
-            List<string> names = new List<string>();
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
+            var names = new List<string>();
+
+            foreach (var row in UserDatabase.Instance.Retrieve("TravelLogUnit", new[] { "Name" }))
             {
-                using (DbCommand cmd = cn.CreateCommand("SELECT DISTINCT Name FROM TravelLogUnit"))
-                {
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            names.Add((string)reader["Name"]);
-                        }
-                    }
-                }
+                names.Add((string)row[0]);
             }
+
             return names;
         }
 
         public static TravelLogUnit Get(string name)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Name = @name ORDER BY Id DESC"))
-                {
-                    cmd.AddParameterWithValue("@name", name);
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new TravelLogUnit(reader);
-                        }
-                    }
-                }
-            }
+            var logs = UserDatabase.Instance.Retrieve(
+                "TravelLogUnit", 
+                rdr => new TravelLogUnit(rdr), 
+                where: "Name = @Name", 
+                whereparams: new Dictionary<string, object> { ["Name"] = name }, 
+                orderby: "Id DESC"
+            );
 
-            return null;
+            if (logs.Count != 0)
+            {
+                return logs[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool TryGet(string name, out TravelLogUnit tlu)
@@ -210,22 +159,21 @@ namespace EliteDangerousCore.DB
 
         public static TravelLogUnit Get(long id)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-            {
-                using (DbCommand cmd = cn.CreateCommand("SELECT * FROM TravelLogUnit WHERE Id = @id ORDER BY Id DESC"))
-                {
-                    cmd.AddParameterWithValue("@id", id);
-                    using (DbDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            return new TravelLogUnit(reader);
-                        }
-                    }
-                }
-            }
+            var logs = UserDatabase.Instance.Retrieve(
+                "TravelLogUnit",
+                rdr => new TravelLogUnit(rdr),
+                where: "Id = @Id",
+                whereparams: new Dictionary<string, object> { ["Id"] = id }
+            );
 
-            return null;
+            if (logs.Count != 0)
+            {
+                return logs[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static bool TryGet(long id, out TravelLogUnit tlu)

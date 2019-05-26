@@ -69,34 +69,24 @@ namespace EliteDangerousCore
 
         public bool Add(JObject jo)
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser(utc: true))
-            {
-                bool ret = Add(jo, cn);
-                return ret;
-            }
+            return UserDatabase.Instance.ExecuteWithDatabase(db => Add(jo, db));
         }
 
-        public bool Add(JObject jo, SQLiteConnectionUser cn, DbTransaction tn = null)
+        public bool Add(JObject jo, IUserDatabase db)
         {
-            using (DbCommand cmd = cn.CreateCommand("Insert into JournalEntries (EventTime, TravelLogID, CommanderId, EventTypeId , EventType, EventData, EdsmId, Synced) values (@EventTime, @TravelLogID, @CommanderID, @EventTypeId , @EventStrName, @EventData, @EdsmId, @Synced)", tn))
+            Id = db.Add<long>("JournalEntries", "Id", new Dictionary<string, object>
             {
-                cmd.AddParameterWithValue("@EventTime", EventTimeUTC);           // MUST use UTC connection
-                cmd.AddParameterWithValue("@TravelLogID", TLUId);
-                cmd.AddParameterWithValue("@CommanderID", CommanderId);
-                cmd.AddParameterWithValue("@EventTypeId", EventTypeID);
-                cmd.AddParameterWithValue("@EventStrName", EventTypeStr);
-                cmd.AddParameterWithValue("@EventData", jo.ToString());
-                cmd.AddParameterWithValue("@EdsmId", EdsmID);
-                cmd.AddParameterWithValue("@Synced", Synced);
+                ["EventTime"] = EventTimeUTC,
+                ["TravelLogID"] = TLUId,
+                ["CommanderId"] = CommanderId,
+                ["EventTypeId"] = (int)EventTypeID,
+                ["EventType"] = EventTypeStr,
+                ["EventData"] = jo.ToString(),
+                ["EdsmId"] = EdsmID,
+                ["Synced"] = Synced
+            });
 
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from JournalEntries"))
-                {
-                    Id = (long)cmd2.ExecuteScalar();
-                }
-                return true;
-            }
+            return true;
         }
 
         public bool Update()

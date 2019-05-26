@@ -222,80 +222,41 @@ namespace EliteDangerousCore.DB
 
         internal bool Add()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())      // open connection..
+            id = UserDatabase.Instance.Add<long>("Bookmarks", "id", new Dictionary<string, object>
             {
-                return Add(cn);
-            }
-        }
+                ["StarName"] = StarName,
+                ["x"] = x,
+                ["y"] = y,
+                ["z"] = z,
+                ["Time"] = Time,
+                ["Heading"] = Heading,
+                ["Note"] = Note,
+                ["PlanetMarks"] = PlanetaryMarks?.ToJsonString()
+            });
 
-        private bool Add(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Insert into Bookmarks (StarName, x, y, z, Time, Heading, Note, PlanetMarks) values (@sname, @xp, @yp, @zp, @time, @head, @note, @pmarks)"))
-            {
-                cmd.AddParameterWithValue("@sname", StarName);
-                cmd.AddParameterWithValue("@xp", x);
-                cmd.AddParameterWithValue("@yp", y);
-                cmd.AddParameterWithValue("@zp", z);
-                cmd.AddParameterWithValue("@time", Time);
-                cmd.AddParameterWithValue("@head", Heading);
-                cmd.AddParameterWithValue("@note", Note);
-                cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
-
-                cmd.ExecuteNonQuery();
-
-                using (DbCommand cmd2 = cn.CreateCommand("Select Max(id) as id from Bookmarks"))
-                {
-                    id = (long)cmd2.ExecuteScalar();
-                }
-
-                return true;
-            }
+            return true;
         }
 
         internal bool Update()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
+            UserDatabase.Instance.Update("Bookmarks", "id", id, new Dictionary<string, object>
             {
-                return Update(cn);
-            }
-        }
-
-        private bool Update(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("Update Bookmarks set StarName=@sname, x = @xp, y = @yp, z = @zp, Time=@time, Heading = @head, Note=@note, PlanetMarks=@pmarks  where ID=@id"))
-            {
-                cmd.AddParameterWithValue("@ID", id);
-                cmd.AddParameterWithValue("@sname", StarName);
-                cmd.AddParameterWithValue("@xp", x);
-                cmd.AddParameterWithValue("@yp", y);
-                cmd.AddParameterWithValue("@zp", z);
-                cmd.AddParameterWithValue("@time", Time);
-                cmd.AddParameterWithValue("@head", Heading);
-                cmd.AddParameterWithValue("@note", Note);
-                cmd.AddParameterWithValue("@pmarks", PlanetaryMarks?.ToJsonString());
-
-                cmd.ExecuteNonQuery();
-
-                return true;
-            }
+                ["StarName"] = StarName,
+                ["x"] = x,
+                ["y"] = y,
+                ["z"] = z,
+                ["Time"] = Time,
+                ["Heading"] = Heading,
+                ["Note"] = Note,
+                ["PlanetMarks"] = PlanetaryMarks?.ToJsonString()
+            });
+            return true;
         }
 
         internal bool Delete()
         {
-            using (SQLiteConnectionUser cn = new SQLiteConnectionUser())
-            {
-                return Delete(cn);
-            }
-        }
-
-        private bool Delete(SQLiteConnectionUser cn)
-        {
-            using (DbCommand cmd = cn.CreateCommand("DELETE FROM Bookmarks WHERE id = @id"))
-            {
-                cmd.AddParameterWithValue("@id", id);
-                cmd.ExecuteNonQuery();
-                return true;
-            }
+            UserDatabase.Instance.Delete("Bookmarks", "id", id);
+            return true;
         }
 
         // with a found bookmark.. add locations in the system
@@ -372,21 +333,7 @@ namespace EliteDangerousCore.DB
 
             try
             {
-                List<BookmarkClass> bookmarks = new List<BookmarkClass>();
-
-                using (SQLiteConnectionUser cn = new SQLiteConnectionUser(mode: SQLLiteExtensions.SQLExtConnection.AccessMode.Reader))
-                {
-                    using (DbCommand cmd = cn.CreateCommand("select * from Bookmarks"))
-                    {
-                        using (DbDataReader rdr = cmd.ExecuteReader())
-                        {
-                            while (rdr.Read())
-                            {
-                                bookmarks.Add(new BookmarkClass(rdr));
-                            }
-                        }
-                    }
-                }
+                List<BookmarkClass> bookmarks = UserDatabase.Instance.Retrieve("Bookmarks", rdr => new BookmarkClass(rdr));
 
                 if (bookmarks.Count == 0)
                 {
