@@ -45,11 +45,13 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.splitContainerVertical = new ExtendedControls.ExtSplitContainer();
+            this.splitContainerVertical = new System.Windows.Forms.SplitContainer();
             this.pictureBoxList = new ExtendedControls.ExtPictureBox();
-            this.splitContainerRightHorz = new ExtendedControls.ExtSplitContainer();
-            this.buttonTechBroker = new ExtendedControls.ExtButton();
+            this.splitContainerRightHorz = new System.Windows.Forms.SplitContainer();
             this.userControlSynthesis = new EDDiscovery.UserControls.UserControlSynthesis();
+            this.panelSpecialButs = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonTechBroker = new ExtendedControls.ExtButton();
+            this.buttonSpecialEffects = new ExtendedControls.ExtButton();
             this.userControlEngineering = new EDDiscovery.UserControls.UserControlEngineering();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.showMaxFSDInjectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,7 +61,6 @@ namespace EDDiscovery.UserControls
             this.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useEDSMDataInSystemAvailabilityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.useHistoricMaterialCountsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonSpecialEffects = new ExtendedControls.ExtButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerVertical)).BeginInit();
             this.splitContainerVertical.Panel1.SuspendLayout();
             this.splitContainerVertical.Panel2.SuspendLayout();
@@ -69,6 +70,7 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.Panel1.SuspendLayout();
             this.splitContainerRightHorz.Panel2.SuspendLayout();
             this.splitContainerRightHorz.SuspendLayout();
+            this.panelSpecialButs.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -111,9 +113,8 @@ namespace EDDiscovery.UserControls
             // 
             // splitContainerRightHorz.Panel1
             // 
-            this.splitContainerRightHorz.Panel1.Controls.Add(this.buttonSpecialEffects);
-            this.splitContainerRightHorz.Panel1.Controls.Add(this.buttonTechBroker);
             this.splitContainerRightHorz.Panel1.Controls.Add(this.userControlSynthesis);
+            this.splitContainerRightHorz.Panel1.Controls.Add(this.panelSpecialButs);
             // 
             // splitContainerRightHorz.Panel2
             // 
@@ -122,9 +123,29 @@ namespace EDDiscovery.UserControls
             this.splitContainerRightHorz.SplitterDistance = 234;
             this.splitContainerRightHorz.TabIndex = 0;
             // 
+            // userControlSynthesis
+            // 
+            this.userControlSynthesis.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlSynthesis.Location = new System.Drawing.Point(0, 29);
+            this.userControlSynthesis.Name = "userControlSynthesis";
+            this.userControlSynthesis.Size = new System.Drawing.Size(997, 205);
+            this.userControlSynthesis.TabIndex = 0;
+            // 
+            // panelSpecialButs
+            // 
+            this.panelSpecialButs.AutoSize = true;
+            this.panelSpecialButs.Controls.Add(this.buttonTechBroker);
+            this.panelSpecialButs.Controls.Add(this.buttonSpecialEffects);
+            this.panelSpecialButs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSpecialButs.Location = new System.Drawing.Point(0, 0);
+            this.panelSpecialButs.Name = "panelSpecialButs";
+            this.panelSpecialButs.Size = new System.Drawing.Size(997, 29);
+            this.panelSpecialButs.TabIndex = 2;
+            // 
             // buttonTechBroker
             // 
-            this.buttonTechBroker.Location = new System.Drawing.Point(3, 3);
+            this.buttonTechBroker.Location = new System.Drawing.Point(0, 3);
+            this.buttonTechBroker.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.buttonTechBroker.Name = "buttonTechBroker";
             this.buttonTechBroker.Size = new System.Drawing.Size(150, 23);
             this.buttonTechBroker.TabIndex = 1;
@@ -132,15 +153,15 @@ namespace EDDiscovery.UserControls
             this.buttonTechBroker.UseVisualStyleBackColor = true;
             this.buttonTechBroker.Click += new System.EventHandler(this.buttonTechBroker_Click);
             // 
-            // userControlSynthesis
+            // buttonSpecialEffects
             // 
-            this.userControlSynthesis.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.userControlSynthesis.Location = new System.Drawing.Point(0, 32);
-            this.userControlSynthesis.Name = "userControlSynthesis";
-            this.userControlSynthesis.Size = new System.Drawing.Size(994, 199);
-            this.userControlSynthesis.TabIndex = 0;
+            this.buttonSpecialEffects.Location = new System.Drawing.Point(156, 3);
+            this.buttonSpecialEffects.Name = "buttonSpecialEffects";
+            this.buttonSpecialEffects.Size = new System.Drawing.Size(121, 23);
+            this.buttonSpecialEffects.TabIndex = 1;
+            this.buttonSpecialEffects.Text = "Special Effects";
+            this.buttonSpecialEffects.UseVisualStyleBackColor = true;
+            this.buttonSpecialEffects.Click += new System.EventHandler(this.buttonSpecialEffects_Click);
             // 
             // userControlEngineering
             // 
@@ -224,16 +245,6 @@ namespace EDDiscovery.UserControls
             this.useHistoricMaterialCountsToolStripMenuItem.Text = "Use Historic Material Counts";
             this.useHistoricMaterialCountsToolStripMenuItem.Click += new System.EventHandler(this.useHistoricMaterialCountsToolStripMenuItem_Click);
             // 
-            // buttonSpecialEffects
-            // 
-            this.buttonSpecialEffects.Location = new System.Drawing.Point(190, 3);
-            this.buttonSpecialEffects.Name = "buttonSpecialEffects";
-            this.buttonSpecialEffects.Size = new System.Drawing.Size(121, 23);
-            this.buttonSpecialEffects.TabIndex = 1;
-            this.buttonSpecialEffects.Text = "Special Effects";
-            this.buttonSpecialEffects.UseVisualStyleBackColor = true;
-            this.buttonSpecialEffects.Click += new System.EventHandler(this.buttonSpecialEffects_Click);
-            // 
             // UserControlShoppingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,9 +258,11 @@ namespace EDDiscovery.UserControls
             this.splitContainerVertical.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxList)).EndInit();
             this.splitContainerRightHorz.Panel1.ResumeLayout(false);
+            this.splitContainerRightHorz.Panel1.PerformLayout();
             this.splitContainerRightHorz.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerRightHorz)).EndInit();
             this.splitContainerRightHorz.ResumeLayout(false);
+            this.panelSpecialButs.ResumeLayout(false);
             this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -257,9 +270,9 @@ namespace EDDiscovery.UserControls
 
         #endregion
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtSplitContainer splitContainerVertical;
+        private System.Windows.Forms.SplitContainer splitContainerVertical;
         private ExtendedControls.ExtPictureBox pictureBoxList;
-        private ExtendedControls.ExtSplitContainer splitContainerRightHorz;
+        private System.Windows.Forms.SplitContainer splitContainerRightHorz;
         private UserControlSynthesis userControlSynthesis;
         private UserControlEngineering userControlEngineering;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
@@ -272,5 +285,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonTechBroker;
         private System.Windows.Forms.ToolStripMenuItem onlyCapacityToolStripMenuItem;
         private ExtendedControls.ExtButton buttonSpecialEffects;
+        private System.Windows.Forms.FlowLayoutPanel panelSpecialButs;
     }
 }

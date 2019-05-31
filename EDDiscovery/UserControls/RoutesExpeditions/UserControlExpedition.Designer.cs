@@ -44,6 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlExpedition));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImportFile = new System.Windows.Forms.ToolStripButton();
@@ -53,7 +54,6 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonShowOn3DMap = new System.Windows.Forms.ToolStripButton();
             this.toolStripComboBoxRouteSelection = new ExtendedControls.ToolStripComboBoxCustom();
-            this.panelRouteInfo = new System.Windows.Forms.Panel();
             this.labelCml = new System.Windows.Forms.Label();
             this.labelP2P = new System.Windows.Forms.Label();
             this.txtP2PDIstance = new ExtendedControls.ExtTextBox();
@@ -80,11 +80,16 @@ namespace EDDiscovery.UserControls
             this.editBookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ctxMenuCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ctxMenuItemUndelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.topPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.extPanelDataGridViewScroll = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.extScrollBarDGV = new ExtendedControls.ExtScrollBar();
             this.toolStrip.SuspendLayout();
-            this.panelRouteInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).BeginInit();
             this.contextMenuCopyPaste.SuspendLayout();
             this.ctxMenuCombo.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.extPanelDataGridViewScroll.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -178,22 +183,17 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripComboBoxRouteSelection
             // 
-            this.toolStripComboBoxRouteSelection.ArrowWidth = 1;
             this.toolStripComboBoxRouteSelection.BorderColor = System.Drawing.Color.White;
             this.toolStripComboBoxRouteSelection.ButtonColorScaling = 0.5F;
             this.toolStripComboBoxRouteSelection.DataSource = null;
             this.toolStripComboBoxRouteSelection.DisplayMember = "";
             this.toolStripComboBoxRouteSelection.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.toolStripComboBoxRouteSelection.DropDownHeight = 200;
-            this.toolStripComboBoxRouteSelection.DropDownWidth = 200;
             this.toolStripComboBoxRouteSelection.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxRouteSelection.ItemHeight = 13;
             this.toolStripComboBoxRouteSelection.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxRouteSelection.Name = "toolStripComboBoxRouteSelection";
             this.toolStripComboBoxRouteSelection.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.toolStripComboBoxRouteSelection.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.toolStripComboBoxRouteSelection.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.toolStripComboBoxRouteSelection.ScrollBarWidth = 16;
             this.toolStripComboBoxRouteSelection.SelectedIndex = -1;
             this.toolStripComboBoxRouteSelection.SelectedItem = null;
             this.toolStripComboBoxRouteSelection.Size = new System.Drawing.Size(200, 29);
@@ -201,31 +201,11 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxRouteSelection.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxRouteSelection_SelectedIndexChanged);
             this.toolStripComboBoxRouteSelection.MouseUp += new System.Windows.Forms.MouseEventHandler(this.toolStripComboBoxRouteSelection_MouseUp);
             // 
-            // panelRouteInfo
-            // 
-            this.panelRouteInfo.Controls.Add(this.labelCml);
-            this.panelRouteInfo.Controls.Add(this.labelP2P);
-            this.panelRouteInfo.Controls.Add(this.txtP2PDIstance);
-            this.panelRouteInfo.Controls.Add(this.txtCmlDistance);
-            this.panelRouteInfo.Controls.Add(this.buttonReverseRoute);
-            this.panelRouteInfo.Controls.Add(this.dateTimePickerEndTime);
-            this.panelRouteInfo.Controls.Add(this.dateTimePickerEndDate);
-            this.panelRouteInfo.Controls.Add(this.labelEndDate);
-            this.panelRouteInfo.Controls.Add(this.dateTimePickerStartTime);
-            this.panelRouteInfo.Controls.Add(this.dateTimePickerStartDate);
-            this.panelRouteInfo.Controls.Add(this.labelDateStart);
-            this.panelRouteInfo.Controls.Add(this.textBoxRouteName);
-            this.panelRouteInfo.Controls.Add(this.labelRouteName);
-            this.panelRouteInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRouteInfo.Location = new System.Drawing.Point(0, 32);
-            this.panelRouteInfo.Name = "panelRouteInfo";
-            this.panelRouteInfo.Size = new System.Drawing.Size(1134, 89);
-            this.panelRouteInfo.TabIndex = 1;
-            // 
             // labelCml
             // 
             this.labelCml.AutoSize = true;
-            this.labelCml.Location = new System.Drawing.Point(439, 64);
+            this.labelCml.Location = new System.Drawing.Point(444, 58);
+            this.labelCml.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.labelCml.Name = "labelCml";
             this.labelCml.Size = new System.Drawing.Size(72, 13);
             this.labelCml.TabIndex = 12;
@@ -234,7 +214,8 @@ namespace EDDiscovery.UserControls
             // labelP2P
             // 
             this.labelP2P.AutoSize = true;
-            this.labelP2P.Location = new System.Drawing.Point(439, 37);
+            this.labelP2P.Location = new System.Drawing.Point(444, 34);
+            this.labelP2P.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.labelP2P.Name = "labelP2P";
             this.labelP2P.Size = new System.Drawing.Size(75, 13);
             this.labelP2P.TabIndex = 11;
@@ -250,8 +231,12 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtP2PDIstance.ClearOnFirstChar = false;
             this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.txtP2PDIstance.EndButtonEnable = true;
+            this.txtP2PDIstance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtP2PDIstance.EndButtonImage")));
+            this.txtP2PDIstance.EndButtonVisible = false;
             this.txtP2PDIstance.InErrorCondition = false;
-            this.txtP2PDIstance.Location = new System.Drawing.Point(517, 32);
+            this.txtP2PDIstance.Location = new System.Drawing.Point(529, 34);
+            this.txtP2PDIstance.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.txtP2PDIstance.Multiline = false;
             this.txtP2PDIstance.Name = "txtP2PDIstance";
             this.txtP2PDIstance.ReadOnly = true;
@@ -273,8 +258,12 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCmlDistance.ClearOnFirstChar = false;
             this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.txtCmlDistance.EndButtonEnable = true;
+            this.txtCmlDistance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("txtCmlDistance.EndButtonImage")));
+            this.txtCmlDistance.EndButtonVisible = false;
             this.txtCmlDistance.InErrorCondition = false;
-            this.txtCmlDistance.Location = new System.Drawing.Point(517, 58);
+            this.txtCmlDistance.Location = new System.Drawing.Point(529, 58);
+            this.txtCmlDistance.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.txtCmlDistance.Multiline = false;
             this.txtCmlDistance.Name = "txtCmlDistance";
             this.txtCmlDistance.ReadOnly = true;
@@ -288,9 +277,10 @@ namespace EDDiscovery.UserControls
             // 
             // buttonReverseRoute
             // 
-            this.buttonReverseRoute.Location = new System.Drawing.Point(517, 4);
+            this.buttonReverseRoute.Location = new System.Drawing.Point(299, 5);
+            this.buttonReverseRoute.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.buttonReverseRoute.Name = "buttonReverseRoute";
-            this.buttonReverseRoute.Size = new System.Drawing.Size(59, 23);
+            this.buttonReverseRoute.Size = new System.Drawing.Size(100, 25);
             this.buttonReverseRoute.TabIndex = 8;
             this.buttonReverseRoute.Text = "Reverse";
             this.buttonReverseRoute.UseVisualStyleBackColor = true;
@@ -303,7 +293,8 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndTime.Checked = false;
             this.dateTimePickerEndTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerEndTime.Location = new System.Drawing.Point(298, 58);
+            this.dateTimePickerEndTime.Location = new System.Drawing.Point(299, 58);
+            this.dateTimePickerEndTime.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerEndTime.Name = "dateTimePickerEndTime";
             this.dateTimePickerEndTime.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndTime.ShowCheckBox = true;
@@ -320,7 +311,8 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(81, 58);
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(78, 58);
+            this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndDate.ShowCheckBox = true;
@@ -333,7 +325,7 @@ namespace EDDiscovery.UserControls
             // labelEndDate
             // 
             this.labelEndDate.AutoSize = true;
-            this.labelEndDate.Location = new System.Drawing.Point(5, 64);
+            this.labelEndDate.Location = new System.Drawing.Point(3, 56);
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(55, 13);
             this.labelEndDate.TabIndex = 5;
@@ -346,7 +338,8 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartTime.Checked = false;
             this.dateTimePickerStartTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePickerStartTime.Location = new System.Drawing.Point(298, 31);
+            this.dateTimePickerStartTime.Location = new System.Drawing.Point(299, 34);
+            this.dateTimePickerStartTime.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerStartTime.Name = "dateTimePickerStartTime";
             this.dateTimePickerStartTime.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartTime.ShowCheckBox = true;
@@ -363,7 +356,8 @@ namespace EDDiscovery.UserControls
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerStartDate.Location = new System.Drawing.Point(81, 31);
+            this.dateTimePickerStartDate.Location = new System.Drawing.Point(78, 34);
+            this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
             this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartDate.ShowCheckBox = true;
@@ -376,7 +370,7 @@ namespace EDDiscovery.UserControls
             // labelDateStart
             // 
             this.labelDateStart.AutoSize = true;
-            this.labelDateStart.Location = new System.Drawing.Point(5, 37);
+            this.labelDateStart.Location = new System.Drawing.Point(3, 32);
             this.labelDateStart.Name = "labelDateStart";
             this.labelDateStart.Size = new System.Drawing.Size(58, 13);
             this.labelDateStart.TabIndex = 2;
@@ -392,15 +386,19 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxRouteName.EndButtonEnable = true;
+            this.textBoxRouteName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxRouteName.EndButtonImage")));
+            this.textBoxRouteName.EndButtonVisible = false;
             this.textBoxRouteName.InErrorCondition = false;
-            this.textBoxRouteName.Location = new System.Drawing.Point(81, 4);
+            this.textBoxRouteName.Location = new System.Drawing.Point(78, 5);
+            this.textBoxRouteName.Margin = new System.Windows.Forms.Padding(2, 2, 8, 2);
             this.textBoxRouteName.Multiline = false;
             this.textBoxRouteName.Name = "textBoxRouteName";
             this.textBoxRouteName.ReadOnly = false;
             this.textBoxRouteName.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.textBoxRouteName.SelectionLength = 0;
             this.textBoxRouteName.SelectionStart = 0;
-            this.textBoxRouteName.Size = new System.Drawing.Size(352, 20);
+            this.textBoxRouteName.Size = new System.Drawing.Size(211, 20);
             this.textBoxRouteName.TabIndex = 1;
             this.textBoxRouteName.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxRouteName.WordWrap = true;
@@ -408,7 +406,7 @@ namespace EDDiscovery.UserControls
             // labelRouteName
             // 
             this.labelRouteName.AutoSize = true;
-            this.labelRouteName.Location = new System.Drawing.Point(5, 7);
+            this.labelRouteName.Location = new System.Drawing.Point(3, 3);
             this.labelRouteName.Name = "labelRouteName";
             this.labelRouteName.Size = new System.Drawing.Size(70, 13);
             this.labelRouteName.TabIndex = 0;
@@ -417,6 +415,7 @@ namespace EDDiscovery.UserControls
             // dataGridViewRouteSystems
             // 
             this.dataGridViewRouteSystems.AllowDrop = true;
+            this.dataGridViewRouteSystems.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewRouteSystems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRouteSystems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemName,
@@ -424,9 +423,10 @@ namespace EDDiscovery.UserControls
             this.Note});
             this.dataGridViewRouteSystems.ContextMenuStrip = this.contextMenuCopyPaste;
             this.dataGridViewRouteSystems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 121);
+            this.dataGridViewRouteSystems.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRouteSystems.Name = "dataGridViewRouteSystems";
-            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1134, 552);
+            this.dataGridViewRouteSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewRouteSystems.Size = new System.Drawing.Size(1121, 558);
             this.dataGridViewRouteSystems.TabIndex = 2;
             this.dataGridViewRouteSystems.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRouteSystems_CellValidated);
             this.dataGridViewRouteSystems.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridViewRouteSystems_CellValidating);
@@ -524,23 +524,109 @@ namespace EDDiscovery.UserControls
             this.ctxMenuItemUndelete.Size = new System.Drawing.Size(121, 22);
             this.ctxMenuItemUndelete.Text = "&Undelete";
             // 
+            // topPanel2
+            // 
+            this.topPanel2.AutoSize = true;
+            this.topPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel2.Location = new System.Drawing.Point(445, 6);
+            this.topPanel2.Name = "topPanel2";
+            this.topPanel2.Size = new System.Drawing.Size(79, 0);
+            this.topPanel2.TabIndex = 14;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 5;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.labelRouteName, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.labelDateStart, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dateTimePickerStartTime, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dateTimePickerStartDate, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.labelEndDate, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.txtCmlDistance, 4, 2);
+            this.tableLayoutPanel1.Controls.Add(this.dateTimePickerEndDate, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.dateTimePickerEndTime, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.labelCml, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.labelP2P, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.txtP2PDIstance, 4, 1);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxRouteName, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.topPanel2, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.buttonReverseRoute, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 32);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1134, 83);
+            this.tableLayoutPanel1.TabIndex = 12;
+            // 
+            // extPanelDataGridViewScroll
+            // 
+            this.extPanelDataGridViewScroll.Controls.Add(this.extScrollBarDGV);
+            this.extPanelDataGridViewScroll.Controls.Add(this.dataGridViewRouteSystems);
+            this.extPanelDataGridViewScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelDataGridViewScroll.InternalMargin = new System.Windows.Forms.Padding(0);
+            this.extPanelDataGridViewScroll.Location = new System.Drawing.Point(0, 115);
+            this.extPanelDataGridViewScroll.Name = "extPanelDataGridViewScroll";
+            this.extPanelDataGridViewScroll.Size = new System.Drawing.Size(1134, 558);
+            this.extPanelDataGridViewScroll.TabIndex = 13;
+            this.extPanelDataGridViewScroll.VerticalScrollBarDockRight = true;
+            // 
+            // extScrollBarDGV
+            // 
+            this.extScrollBarDGV.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarDGV.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarDGV.ArrowColorScaling = 0.5F;
+            this.extScrollBarDGV.ArrowDownDrawAngle = 270F;
+            this.extScrollBarDGV.ArrowUpDrawAngle = 90F;
+            this.extScrollBarDGV.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarDGV.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarDGV.HideScrollBar = false;
+            this.extScrollBarDGV.LargeChange = 1;
+            this.extScrollBarDGV.Location = new System.Drawing.Point(1121, 0);
+            this.extScrollBarDGV.Maximum = 0;
+            this.extScrollBarDGV.Minimum = 0;
+            this.extScrollBarDGV.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarDGV.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarDGV.Name = "extScrollBarDGV";
+            this.extScrollBarDGV.Size = new System.Drawing.Size(13, 558);
+            this.extScrollBarDGV.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarDGV.SmallChange = 1;
+            this.extScrollBarDGV.TabIndex = 14;
+            this.extScrollBarDGV.Text = "extScrollBar1";
+            this.extScrollBarDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarDGV.ThumbColorScaling = 0.5F;
+            this.extScrollBarDGV.ThumbDrawAngle = 0F;
+            this.extScrollBarDGV.Value = 0;
+            this.extScrollBarDGV.ValueLimited = 0;
+            // 
             // UserControlExpedition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dataGridViewRouteSystems);
-            this.Controls.Add(this.panelRouteInfo);
+            this.Controls.Add(this.extPanelDataGridViewScroll);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStrip);
             this.Name = "UserControlExpedition";
             this.Size = new System.Drawing.Size(1134, 673);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.panelRouteInfo.ResumeLayout(false);
-            this.panelRouteInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRouteSystems)).EndInit();
             this.contextMenuCopyPaste.ResumeLayout(false);
             this.ctxMenuCombo.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.extPanelDataGridViewScroll.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -549,7 +635,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
-        private System.Windows.Forms.Panel panelRouteInfo;
         private ExtendedControls.ExtDateTimePicker dateTimePickerEndTime;
         private ExtendedControls.ExtDateTimePicker dateTimePickerEndDate;
         private System.Windows.Forms.Label labelEndDate;
@@ -582,5 +667,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem editBookmarkToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip ctxMenuCombo;
         private System.Windows.Forms.ToolStripMenuItem ctxMenuItemUndelete;
+        private System.Windows.Forms.FlowLayoutPanel topPanel2;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScroll;
+        private ExtendedControls.ExtScrollBar extScrollBarDGV;
     }
 }

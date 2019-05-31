@@ -29,13 +29,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlPanelSelector : UserControlCommonBase
     {
-        const int hstart = 10;
-        const int vstart = 10;
-        const int hspacing = 160;
-        const int vspacing = 170;
-        Size panelsize = new Size(hspacing - 20, vspacing - 20);
-
-        private int HorzNumber { get { return Math.Max(1,ClientRectangle.Width / hspacing); } }
         private int curhorz = 0;
 
         public UserControlPanelSelector()
@@ -64,9 +57,13 @@ namespace EDDiscovery.UserControls
 
             panelVScroll.RemoveAllControls();
 
+            // design for std 8.25 font sizes
+
             Bitmap backimage = new Bitmap(EDDiscovery.Icons.Controls.Selector_Background);
             Color centre = backimage.GetPixel(48, 48);
-
+            Size iconsize = new Size(24,24);
+            int width = 96;
+            int padbot = 6, padbetween = 5;
 
             {
                 Versions.VersioningManager mgr = new Versions.VersioningManager();
@@ -74,25 +71,26 @@ namespace EDDiscovery.UserControls
 
                 int i = mgr.DownloadItems.Count;
 
-                CompositeButton cb = new CompositeButton();
-                cb.Size = panelsize;
-                cb.Tag = 999;
-                cb.Padding = new Padding(10);
-                cb.QuickInit(EDDiscovery.Icons.Controls.Selector_Background,
-                            (i==0) ? "NO ADD ONS!".Tx(this) : i.ToString() + " Add Ons".Tx(this),
-                            EDDTheme.Instance.GetFontAtSize(11),
-                            (i==0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
-                            centre,
-                            EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns,
-                            new Size(48, 48),
-                            new Image[] { EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns },
-                            new Size(48, 48),
+                CompositeButton cb = CompositeButton.QuickInit(
+                            EDDiscovery.Icons.Controls.Selector_Background,
+                            (i == 0) ? "NO ADD ONS!".Tx(this) : i.ToString() + " Add Ons".Tx(this),
+                            EDDTheme.Instance.GetFont,
+                            (i == 0) ? Color.Red : (EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor),
+                            Color.Transparent,
+                            EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns, iconsize,
+                            new Image[] { EDDiscovery.Icons.Controls.Main_Addons_ManageAddOns }, iconsize,
+                            padbetween,
                             ButtonPress);
 
-                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".Tx(this,"TTA"));
-                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".Tx(this,"TTB"));
-                panelVScroll.Controls.Add(cb);    
-                EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);       // need to theme up the button
+                panelVScroll.Controls.Add(cb);
+                cb.Name = "Add on";
+                cb.Tag = null;
+                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".Tx(this, "TTA"));
+                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".Tx(this, "TTB"));
+
+                EDDTheme.Instance.ApplyStd(cb);       // need to theme up the button
+                cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
+                cb.Label.BackColor = cb.Label.TextBackColor = cb.Decals[0].BackColor = Color.Transparent;
                 cb.Buttons[0].BackColor = centre;   // but then fix the back colour again
             }
 
@@ -102,65 +100,95 @@ namespace EDDiscovery.UserControls
             {
                 PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
 
-                CompositeButton cb = new CompositeButton();
-                cb.Size = panelsize;
-                cb.Tag = pi.PopoutID;
-                cb.Padding = new Padding(10);
-                cb.QuickInit(EDDiscovery.Icons.Controls.Selector_Background,
+                CompositeButton cb = CompositeButton.QuickInit(
+                            EDDiscovery.Icons.Controls.Selector_Background,
                             pi.WindowTitle,
-                            EDDTheme.Instance.GetFontAtSize(11),
+                            EDDTheme.Instance.GetFont,
                             EDDTheme.Instance.TextBlockColor.GetBrightness() < 0.1 ? Color.AntiqueWhite : EDDTheme.Instance.TextBlockColor,
-                            centre,
-                            pi.TabIcon,
-                            new Size(48, 48),
-                            new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab },
-                            new Size(48, 48),
+                            Color.Transparent,
+                            pi.TabIcon, iconsize,
+                            new Image[] { EDDiscovery.Icons.Controls.TabStrip_Popout, EDDiscovery.Icons.Controls.Selector_AddTab }, iconsize,
+                            padbetween,
                             ButtonPress);
-                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".Tx(this,"PP1"));
+                cb.SuspendLayout();
+                panelVScroll.Controls.Add(cb);
+                cb.Tag = pi.PopoutID;
+                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".Tx(this, "PP1"));
                 toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".Tx(this, "MT1"));
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
-                EDDTheme.Instance.ApplyToControls(cb.Buttons[0], null, true);
-                cb.Buttons[0].BackColor = centre; // need to reset the colour back!
-                EDDTheme.Instance.ApplyToControls(cb.Buttons[1], null, true);
-                cb.Buttons[1].BackColor = centre;
 
-                panelVScroll.Controls.Add(cb);       // we don't theme it.. its already fully themed to a fixed theme.
+                EDDTheme.Instance.ApplyStd(cb);
+                cb.ResumeLayout();
+
+                cb.Size = new Size(width, cb.FindMaxSubControlArea(0, padbot).Height);
+                cb.Label.BackColor = cb.Label.TextBackColor = cb.Decals[0].BackColor = Color.Transparent;
+                cb.Buttons[0].BackColor = centre; // need to reset the colour back!
+                cb.Buttons[1].BackColor = centre; // need to reset the colour back!
             }
 
+            panelVScroll.Scale(this.FindForm().CurrentAutoScaleFactor());
             Reposition();
 
             panelVScroll.ResumeLayout();
         }
 
 
+        private int MarginAround()
+        {
+            return Font.ScalePixels(10);
+        }
+
+        private Tuple<int,int> Spacing()
+        {
+            CompositeButton cb = panelVScroll.Controls.OfType<CompositeButton>().First();
+            return new Tuple<int,int> (cb.Width + MarginAround(), cb.Height + MarginAround());
+        }
+
+
+        private int NumberAcross()
+        {
+            return (panelVScroll.Width - panelVScroll.ScrollBarWidth) / Spacing().Item1;
+        }
+
         private void Reposition()
         {
             panelVScroll.SuspendLayout();
 
-            int i = 0;
-            curhorz = HorzNumber;
+            curhorz = NumberAcross();
+            int margin = MarginAround();
+            var spacing = Spacing();
 
+            int i = 0;
             foreach ( Control c in panelVScroll.Controls)
             {
                 if (c is CompositeButton)
                 {
-                    c.Location = new Point(hstart + hspacing * (i % curhorz), vstart + vspacing * (i / curhorz));
+                    c.Location = new Point(margin + spacing.Item1 * (i % curhorz), margin + spacing.Item2 * (i / curhorz));
                     i++;
                 }
 
             }
+
             panelVScroll.ResumeLayout();
+        }
+
+        private void panelVScroll_Resize(object sender, EventArgs e)
+        {
+            if (panelVScroll.Controls.Count > 1 && NumberAcross() != curhorz)
+            {
+                Reposition();
+            }
         }
 
         private void ButtonPress(Object o, int i)
         {
-            int button = (int)o;
+            Object cbtag = ((CompositeButton)o).Tag;
 
-            if (button == 999)
+            if ( cbtag is null )        // tag being null means
                 discoveryform.manageAddOnsToolStripMenuItem_Click(null, null);
             else
             {
-                PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)o;
+                PanelInformation.PanelIDs pid = (PanelInformation.PanelIDs)cbtag;
                 System.Diagnostics.Debug.WriteLine("Selected " + pid + " " + i);
 
                 if (i == 0)
@@ -176,12 +204,5 @@ namespace EDDiscovery.UserControls
             Redraw();
         }
 
-        private void panelVScroll_Resize(object sender, EventArgs e)
-        {
-            if (HorzNumber != curhorz)
-            {
-                Reposition();
-            }
-        }
     }
 }

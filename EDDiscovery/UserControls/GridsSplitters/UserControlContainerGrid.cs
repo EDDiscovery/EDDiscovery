@@ -66,6 +66,8 @@ namespace EDDiscovery.UserControls
 
             ResumeLayout();
             UpdateButtons();
+
+            // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
 
         public override Color ColorTransparency { get { return Color.Green; } }
@@ -203,7 +205,6 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Trace.WriteLine("GD:Create " + uccb.GetType().Name + " " + dnum);
             uccb.Init(discoveryform, dnum);
-            discoveryform.theme.ApplyToControls(uccr, discoveryform.theme.GetFont);
 
             return uccr;
         }
@@ -320,21 +321,17 @@ namespace EDDiscovery.UserControls
         {
             popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
 
-            popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
             popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
             popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.Activated += (s, ea) =>
-            {
-                Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
-                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
-                this.Invalidate(true);
-            };
+            popoutdropdown.PositionBelow(buttonExtPopOut);
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
                 UserControlContainerResizable uccr = CreateInitPanel(PanelInformation.Create(pids[popoutdropdown.SelectedIndex]));
+                // uccb init done above, contract states we now theme.
+                discoveryform.theme.ApplyStd(uccr);
 
                 LoadLayoutPanel(uccr, uccr.control as UserControlCommonBase,
                                             new Point((uccrlist.Count % 5) * 50, (uccrlist.Count % 5) * 50),
@@ -348,8 +345,7 @@ namespace EDDiscovery.UserControls
                 AssignTHC();
             };
 
-            popoutdropdown.Size = new Size(500, 26 * 20);
-            discoveryform.theme.ApplyToControls(popoutdropdown);
+            discoveryform.theme.ApplyStd(popoutdropdown);
             popoutdropdown.SelectionBackColor = discoveryform.theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }

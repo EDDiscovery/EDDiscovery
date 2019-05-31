@@ -88,7 +88,7 @@ namespace EDDiscovery.Forms
                     initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
                     EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-                    bool winborder = theme.ApplyToFormStandardFontSize(this);
+                    bool winborder = theme.ApplyDialog(this);
                     statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
                     BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
@@ -249,7 +249,7 @@ namespace EDDiscovery.Forms
                 }
             };
             
-            DialogResult res = f.ShowDialog(parent, parent.Icon, new Size(width, 200), new Point(-999, -999), "Select EDSM Galaxy Data".Tx(t, "GALSELTitle"));
+            DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select EDSM Galaxy Data".Tx(t, "GALSELTitle"));
 
             string sel = f.Get("Entry");
             int index = DefaultGalaxyOptions.FindIndex((x) => { return x.Item1 == sel; });

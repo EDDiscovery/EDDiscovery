@@ -61,12 +61,10 @@ namespace EDDiscovery.UserControls
             this.tabStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabStrip.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.tabStrip.DropDownBorderColor = System.Drawing.Color.Green;
-            this.tabStrip.DropDownHeight = 500;
             this.tabStrip.DropDownItemSeperatorColor = System.Drawing.Color.Purple;
             this.tabStrip.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.tabStrip.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.tabStrip.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.tabStrip.DropDownWidth = 400;
             this.tabStrip.EmptyColor = System.Drawing.Color.Empty;
             this.tabStrip.EmptyColorScaling = 0.5F;
             this.tabStrip.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStrip.EmptyPanelIcon")));
@@ -76,7 +74,6 @@ namespace EDDiscovery.UserControls
             this.tabStrip.ShowPopOut = false;
             this.tabStrip.Size = new System.Drawing.Size(804, 716);
             this.tabStrip.StripMode = ExtendedControls.TabStrip.StripModeType.StripTopOpen;
-            this.tabStrip.TabFieldSpacing = 8;
             this.tabStrip.TabIndex = 0;
             // 
             // UserControlSearch

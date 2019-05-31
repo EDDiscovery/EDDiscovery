@@ -27,8 +27,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlTrippanel : UserControlCommonBase
     {
-        //static String TITLE = "Trip panel";
-
         private string DbSave { get { return DBName("TripPanel" ); } }
 
         private HistoryEntry lastHE;
@@ -150,17 +148,17 @@ namespace EDDiscovery.UserControls
                 Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
                 Color backcolour = IsTransparent ? Color.Black : this.BackColor;
 
-                int coltext = 5;
+                int leftstart = 5;
+                int topstart = 5;
+                int coltext = leftstart;
+
+                ExtendedControls.ExtPictureBox.ImageElement iedsm = null;
 
                 if (showEDSMStartButtonsToolStripMenuItem.Checked)
                 {
-                    ExtendedControls.ExtPictureBox.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(5, 5), new Size(80, 20), "EDSM", displayfont, backcolour, textcolour, 0.5F, true, he, "View system on EDSM");
-                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
-
-                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(5, 35), new Size(80, 20), "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
-                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", edsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
-
-                    coltext = 100;
+                    iedsm = pictureBox.AddTextAutoSize(new Point(leftstart, topstart), new Size(1000, 1000), "EDSM", displayfont, backcolour, textcolour, 0.5F, he, "View system on EDSM");
+                    iedsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", iedsm.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F), iedsm.pos, true);
+                    coltext = iedsm.pos.Right + displayfont.ScalePixels(8);
                 }
 
                 backcolour = IsTransparent ? Color.Transparent : this.BackColor;
@@ -195,11 +193,12 @@ namespace EDDiscovery.UserControls
                 int line1hpos = coltext;
                 if ( firstdiscovery )
                 {
-                    pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".Tx(this, "FDEDSM"), false);
-                    line1hpos += 24;
+                    var i1 = pictureBox.AddImage(new Rectangle(line1hpos, 5, 24, 24), Icons.Controls.firstdiscover, null, "Shows if EDSM indicates your it's first discoverer".Tx(this, "FDEDSM"), false);
+                    line1hpos = i1.pos.Right + Font.ScalePixels(8);
                 }
 
-                pictureBox.AddTextAutoSize(new Point(line1hpos, 5), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                var eline1 = pictureBox.AddTextAutoSize(new Point(line1hpos, topstart), new Size(1000, 1000), line, displayfont, textcolour, backcolour, 1.0F);
+                int line2vpos = eline1.pos.Bottom + displayfont.ScalePixels(8);
 
                 line = "";
 
@@ -258,8 +257,14 @@ namespace EDDiscovery.UserControls
                         line = line.AppendPrePad(addtext, " | ");
                 }
 
+                if (showEDSMStartButtonsToolStripMenuItem.Checked)
+                {
+                    ExtendedControls.ExtPictureBox.ImageElement start = pictureBox.AddTextFixedSizeC(new Point(leftstart, line2vpos), iedsm.img.Size, "Start", displayfont, backcolour, textcolour, 0.5F, true, "Start", "Set a journey start point");
+                    start.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("Start", start.img.Size, displayfont, backcolour, textcolour.Multiply(1.2F), 0.5F, true), start.pos, true);
+                }
+
                 if (line.HasChars())
-                    pictureBox.AddTextAutoSize(new Point(coltext, 35), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
+                    pictureBox.AddTextAutoSize(new Point(coltext, line2vpos), new Size(1000, 40), line, displayfont, textcolour, backcolour, 1.0F);
 
                 pictureBox.Render();
             }

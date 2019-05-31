@@ -48,12 +48,12 @@ namespace EDDiscovery.Forms
             this.label_index = new ExtendedControls.ExtLabel();
             this.labelControlText = new ExtendedControls.ExtLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
-            this.panel_ontop = new ExtendedControls.ExtPanelDrawn();
-            this.panel_transparent = new ExtendedControls.ExtPanelDrawn();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_taskbaricon = new ExtendedControls.ExtPanelDrawn();
-            this.panel_showtitle = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
+            this.panel_ontop = new ExtendedControls.ExtButtonDrawn();
+            this.panel_transparent = new ExtendedControls.ExtButtonDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_taskbaricon = new ExtendedControls.ExtButtonDrawn();
+            this.panel_showtitle = new ExtendedControls.ExtButtonDrawn();
             this.panelTop = new System.Windows.Forms.Panel();
             this.statusStripBottom = new ExtendedControls.ExtStatusStrip();
             this.panelTop.SuspendLayout();
@@ -91,7 +91,7 @@ namespace EDDiscovery.Forms
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(582, -2);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -114,7 +114,7 @@ namespace EDDiscovery.Forms
             this.panel_ontop.AutoEllipsis = false;
             this.panel_ontop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_ontop.Image = null;
-            this.panel_ontop.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Floating;
+            this.panel_ontop.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Floating;
             this.panel_ontop.Location = new System.Drawing.Point(558, -2);
             this.panel_ontop.MouseOverColor = System.Drawing.Color.White;
             this.panel_ontop.MouseSelectedColor = System.Drawing.Color.Green;
@@ -136,7 +136,7 @@ namespace EDDiscovery.Forms
             this.panel_transparent.AutoEllipsis = false;
             this.panel_transparent.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_transparent.Image = null;
-            this.panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Transparent;
+            this.panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             this.panel_transparent.Location = new System.Drawing.Point(486, -2);
             this.panel_transparent.MouseOverColor = System.Drawing.Color.White;
             this.panel_transparent.MouseSelectedColor = System.Drawing.Color.Green;
@@ -158,7 +158,7 @@ namespace EDDiscovery.Forms
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
-            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(606, -2);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -181,7 +181,7 @@ namespace EDDiscovery.Forms
             this.panel_taskbaricon.AutoEllipsis = false;
             this.panel_taskbaricon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_taskbaricon.Image = null;
-            this.panel_taskbaricon.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.WindowInTaskBar;
+            this.panel_taskbaricon.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar;
             this.panel_taskbaricon.Location = new System.Drawing.Point(534, -2);
             this.panel_taskbaricon.MouseOverColor = System.Drawing.Color.White;
             this.panel_taskbaricon.MouseSelectedColor = System.Drawing.Color.Green;
@@ -203,7 +203,7 @@ namespace EDDiscovery.Forms
             this.panel_showtitle.AutoEllipsis = false;
             this.panel_showtitle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_showtitle.Image = null;
-            this.panel_showtitle.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Captioned;
+            this.panel_showtitle.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Captioned;
             this.panel_showtitle.Location = new System.Drawing.Point(510, -2);
             this.panel_showtitle.MouseOverColor = System.Drawing.Color.White;
             this.panel_showtitle.MouseSelectedColor = System.Drawing.Color.Green;
@@ -266,15 +266,15 @@ namespace EDDiscovery.Forms
         #endregion
 
         private ExtendedControls.ExtLabel label_index;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
-        private ExtendedControls.ExtPanelDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
         private ExtendedControls.ExtStatusStrip statusStripBottom;
         private ExtendedControls.ExtLabel labelControlText;
-        private ExtendedControls.ExtPanelDrawn panel_ontop;
+        private ExtendedControls.ExtButtonDrawn panel_ontop;
         private System.Windows.Forms.ToolTip toolTip1;
-        private ExtendedControls.ExtPanelDrawn panel_transparent;
+        private ExtendedControls.ExtButtonDrawn panel_transparent;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtPanelDrawn panel_taskbaricon;
-        private ExtendedControls.ExtPanelDrawn panel_showtitle;
+        private ExtendedControls.ExtButtonDrawn panel_taskbaricon;
+        private ExtendedControls.ExtButtonDrawn panel_showtitle;
     }
 }

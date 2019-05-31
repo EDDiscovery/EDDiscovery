@@ -63,9 +63,11 @@ namespace EDDiscovery.UserControls
             discoveryform = ed;
             displaynumber = dn;
             Init();
-        }    
+        }
+
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
-        // themeing happens at this point
+        // themeing and scaling happens at this point.  Init has a chance to make new controls if required to be autothemed/scaled.
+        // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab
         public virtual void SetTransparency(bool ison, Color curcol) { }  // set on/off transparency of components - occurs before SetCursor/LoadLayout/InitialDisplay in a pop out form
         public virtual void SetCursor(IHistoryCursor cur) { uctg = cur; }       // cursor is set..  Most UCs don't need to implement this.
         public virtual void LoadLayout() { }        // then a chance to load a layout. cursor available

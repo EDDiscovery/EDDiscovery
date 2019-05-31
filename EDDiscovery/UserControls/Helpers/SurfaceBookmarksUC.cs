@@ -235,7 +235,7 @@ namespace EDDiscovery.Forms
                 }
             };
 
-            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 110), new Point(-999, -999), "Manually Add Planet".Tx(this, "MAP"));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".Tx(this, "MAP"));
 
             string pname = f.Get("Planet");
             if (res == DialogResult.OK && pname.HasChars())

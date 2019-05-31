@@ -456,8 +456,8 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(750, 280), new Point(-999, -999), "Add Systems".Tx(this,"AddSys"), 
-                                callback: () => { usc.Font = EDDTheme.Instance.GetFontStandardFontSize(); usc.Init(0, "ExplorationFindSys", false, discoveryform); });
+            f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".Tx(this,"AddSys"), 
+                                callback: () => { usc.Font = EDDTheme.Instance.GetScaledFont(0.8f); usc.Init(0, "ExplorationFindSys", false, discoveryform); });
             usc.Closing();
         }
 

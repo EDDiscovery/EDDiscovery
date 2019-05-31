@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
             checkBoxCustomGridOn.Checked = SQLiteConnectionUser.GetSettingBool(DbSave + "Gridshow", false);
             checkBoxCustomGridOn.Visible = IsFloatingWindow;
 
-            transparentfont = EDDTheme.Instance.GetFontAtSize(12);
+            transparentfont = EDDTheme.Instance.GetFont;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -662,7 +662,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 220), new Point(-999, -999), "Campaign".Tx());
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".Tx());
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),
@@ -717,19 +717,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private const int DefaultRowHeight = 26;
-
         private void dataGridViewCombat_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            int defaultRowHeight = Font.ScalePixels(26);
+
             if (leftclickrow >= 0)                                                   // Click expands it..
             {
                 int ch = dataGridViewCombat.Rows[leftclickrow].Height;
-                bool toexpand = (ch <= DefaultRowHeight);
+                bool toexpand = (ch <= defaultRowHeight);
 
                 leftclicksystem.journalEntry.FillInformation(out string EventDescription, out string EventDetailedInfo);
                 string infotext = EventDescription + ((toexpand && EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
 
-                int h = DefaultRowHeight;
+                int h = defaultRowHeight;
 
                 if (toexpand)
                 {
@@ -744,7 +744,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                toexpand = (h > DefaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
+                toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
 
                 dataGridViewCombat.Rows[leftclickrow].Height = h;
                 dataGridViewCombat.Rows[leftclickrow].Cells[2].Value = infotext;

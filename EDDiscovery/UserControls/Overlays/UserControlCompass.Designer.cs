@@ -75,7 +75,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxHideTransparent.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxHideTransparent.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxHideTransparent.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxHideTransparent.FontNerfReduction = 0.5F;
             this.checkBoxHideTransparent.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxHideTransparent.Location = new System.Drawing.Point(231, 9);
             this.checkBoxHideTransparent.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -83,7 +82,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxHideTransparent.Size = new System.Drawing.Size(120, 17);
             this.checkBoxHideTransparent.TabIndex = 8;
             this.checkBoxHideTransparent.Text = "Hide In Transparent";
-            this.checkBoxHideTransparent.TickBoxReductionSize = 10;
+            this.checkBoxHideTransparent.TickBoxReductionRatio = 0.75f;
             this.checkBoxHideTransparent.UseVisualStyleBackColor = true;
             this.checkBoxHideTransparent.CheckedChanged += new System.EventHandler(this.checkBoxHideTransparent_CheckedChanged);
             // 
@@ -147,23 +146,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxBookmarks
             // 
-            this.comboBoxBookmarks.ArrowWidth = 1;
             this.comboBoxBookmarks.BorderColor = System.Drawing.Color.White;
             this.comboBoxBookmarks.ButtonColorScaling = 0.5F;
             this.comboBoxBookmarks.DataSource = null;
             this.comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxBookmarks.DisplayMember = "";
             this.comboBoxBookmarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxBookmarks.DropDownHeight = 400;
-            this.comboBoxBookmarks.DropDownWidth = 400;
             this.comboBoxBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxBookmarks.ItemHeight = 13;
             this.comboBoxBookmarks.Location = new System.Drawing.Point(116, 34);
             this.comboBoxBookmarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxBookmarks.Name = "comboBoxBookmarks";
             this.comboBoxBookmarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxBookmarks.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxBookmarks.ScrollBarWidth = 16;
             this.comboBoxBookmarks.SelectedIndex = -1;
             this.comboBoxBookmarks.SelectedItem = null;
             this.comboBoxBookmarks.SelectedValue = null;

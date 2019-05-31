@@ -57,7 +57,7 @@ namespace EDDiscovery.Forms
             this.btnClose = new ExtendedControls.ExtButton();
             this.panelMain = new System.Windows.Forms.Panel();
             this.pnlCaption = new System.Windows.Forms.Panel();
-            this.pnlClose = new ExtendedControls.ExtPanelDrawn();
+            this.pnlClose = new ExtendedControls.ExtButtonDrawn();
             this.lblCaption = new System.Windows.Forms.Label();
             this.pnlBack = new System.Windows.Forms.Panel();
             this.panelMain.SuspendLayout();
@@ -166,7 +166,6 @@ namespace EDDiscovery.Forms
             this.richTextBoxReleaseInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxReleaseInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxReleaseInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxReleaseInfo.ScrollBarWidth = 20;
             this.richTextBoxReleaseInfo.ShowLineCount = false;
             this.richTextBoxReleaseInfo.Size = new System.Drawing.Size(701, 300);
             this.richTextBoxReleaseInfo.TabIndex = 5;
@@ -348,7 +347,7 @@ namespace EDDiscovery.Forms
         private System.Windows.Forms.Panel panelMain;
         private System.Windows.Forms.Panel pnlCaption;
         private System.Windows.Forms.Label lblCaption;
-        private ExtendedControls.ExtPanelDrawn pnlClose;
+        private ExtendedControls.ExtButtonDrawn pnlClose;
         private System.Windows.Forms.Panel pnlBack;
     }
 }

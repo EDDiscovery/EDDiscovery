@@ -548,5 +548,10 @@ namespace EDDiscovery.UserControls
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to read " + path, "Import Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
+        private void buttonField_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

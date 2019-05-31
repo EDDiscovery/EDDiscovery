@@ -55,8 +55,8 @@ namespace EDDiscovery
             this.toolStripButtonStars = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
             this.imageViewer = new ExtendedControls.ImageViewer();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.panelOuter = new System.Windows.Forms.Panel();
@@ -89,22 +89,17 @@ namespace EDDiscovery
             // 
             // toolStripComboExpo
             // 
-            this.toolStripComboExpo.ArrowWidth = 1;
             this.toolStripComboExpo.BorderColor = System.Drawing.Color.White;
             this.toolStripComboExpo.ButtonColorScaling = 0.5F;
             this.toolStripComboExpo.DataSource = null;
             this.toolStripComboExpo.DisplayMember = "";
             this.toolStripComboExpo.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.toolStripComboExpo.DropDownHeight = 106;
-            this.toolStripComboExpo.DropDownWidth = 150;
             this.toolStripComboExpo.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboExpo.ItemHeight = 13;
             this.toolStripComboExpo.Margin = new System.Windows.Forms.Padding(3, 0, 2, 0);
             this.toolStripComboExpo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboExpo.Name = "toolStripComboExpo";
             this.toolStripComboExpo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.toolStripComboExpo.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.toolStripComboExpo.ScrollBarWidth = 16;
             this.toolStripComboExpo.SelectedIndex = -1;
             this.toolStripComboExpo.SelectedItem = null;
             this.toolStripComboExpo.Size = new System.Drawing.Size(150, 29);
@@ -118,22 +113,17 @@ namespace EDDiscovery
             // 
             // toolStripComboBoxTime
             // 
-            this.toolStripComboBoxTime.ArrowWidth = 1;
             this.toolStripComboBoxTime.BorderColor = System.Drawing.Color.White;
             this.toolStripComboBoxTime.ButtonColorScaling = 0.5F;
             this.toolStripComboBoxTime.DataSource = null;
             this.toolStripComboBoxTime.DisplayMember = "";
             this.toolStripComboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.toolStripComboBoxTime.DropDownHeight = 106;
-            this.toolStripComboBoxTime.DropDownWidth = 140;
             this.toolStripComboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxTime.ItemHeight = 13;
             this.toolStripComboBoxTime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolStripComboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
             this.toolStripComboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.toolStripComboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.toolStripComboBoxTime.ScrollBarWidth = 16;
             this.toolStripComboBoxTime.SelectedIndex = -1;
             this.toolStripComboBoxTime.SelectedItem = null;
             this.toolStripComboBoxTime.Size = new System.Drawing.Size(200, 29);
@@ -222,7 +212,7 @@ namespace EDDiscovery
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(925, 5);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -244,7 +234,7 @@ namespace EDDiscovery
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
-            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(955, 5);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -328,8 +318,8 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripButton toolStripButtonZoomtoFit;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripButton toolStripButtonStars;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
         private System.Windows.Forms.Panel panelOuter;
         private ExtendedControls.ExtStatusStrip statusStripCustom;

@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewMC.MakeDoubleBuffered();
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMC.RowTemplate.Height = 26;
+            dataGridViewMC.RowTemplate.Height = Font.ScalePixels(26);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);

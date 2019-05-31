@@ -40,8 +40,8 @@
             this.customDateTimePickerFrom = new ExtendedControls.ExtDateTimePicker();
             this.customDateTimePickerTo = new ExtendedControls.ExtDateTimePicker();
             this.comboBoxCustomExportType = new ExtendedControls.ExtComboBox();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -71,7 +71,6 @@
             this.checkBoxRawJournal.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxRawJournal.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxRawJournal.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxRawJournal.FontNerfReduction = 0.5F;
             this.checkBoxRawJournal.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxRawJournal.Location = new System.Drawing.Point(184, 14);
             this.checkBoxRawJournal.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -79,7 +78,7 @@
             this.checkBoxRawJournal.Size = new System.Drawing.Size(98, 17);
             this.checkBoxRawJournal.TabIndex = 6;
             this.checkBoxRawJournal.Text = "Export Journals";
-            this.checkBoxRawJournal.TickBoxReductionSize = 10;
+            this.checkBoxRawJournal.TickBoxReductionRatio = 0.75f;
             this.checkBoxRawJournal.UseVisualStyleBackColor = true;
             this.checkBoxRawJournal.CheckedChanged += new System.EventHandler(this.checkBoxRawJournal_CheckedChanged);
             // 
@@ -106,7 +105,6 @@
             // radioButtonSemiColon
             // 
             this.radioButtonSemiColon.AutoSize = true;
-            this.radioButtonSemiColon.FontNerfReduction = 0.5F;
             this.radioButtonSemiColon.Location = new System.Drawing.Point(184, 86);
             this.radioButtonSemiColon.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonSemiColon.Name = "radioButtonSemiColon";
@@ -134,7 +132,6 @@
             // radioButtonComma
             // 
             this.radioButtonComma.AutoSize = true;
-            this.radioButtonComma.FontNerfReduction = 0.5F;
             this.radioButtonComma.Location = new System.Drawing.Point(184, 63);
             this.radioButtonComma.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.radioButtonComma.Name = "radioButtonComma";
@@ -154,7 +151,6 @@
             this.checkBoxIncludeHeader.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxIncludeHeader.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxIncludeHeader.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxIncludeHeader.FontNerfReduction = 0.5F;
             this.checkBoxIncludeHeader.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxIncludeHeader.Location = new System.Drawing.Point(12, 14);
             this.checkBoxIncludeHeader.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -162,7 +158,7 @@
             this.checkBoxIncludeHeader.Size = new System.Drawing.Size(99, 17);
             this.checkBoxIncludeHeader.TabIndex = 1;
             this.checkBoxIncludeHeader.Text = "Include Header";
-            this.checkBoxIncludeHeader.TickBoxReductionSize = 10;
+            this.checkBoxIncludeHeader.TickBoxReductionRatio = 0.75f;
             this.checkBoxIncludeHeader.UseVisualStyleBackColor = true;
             // 
             // checkBoxCustomAutoOpen
@@ -171,7 +167,6 @@
             this.checkBoxCustomAutoOpen.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomAutoOpen.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomAutoOpen.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomAutoOpen.FontNerfReduction = 0.5F;
             this.checkBoxCustomAutoOpen.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomAutoOpen.Location = new System.Drawing.Point(12, 37);
             this.checkBoxCustomAutoOpen.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -179,7 +174,7 @@
             this.checkBoxCustomAutoOpen.Size = new System.Drawing.Size(91, 17);
             this.checkBoxCustomAutoOpen.TabIndex = 1;
             this.checkBoxCustomAutoOpen.Text = "Open in excel";
-            this.checkBoxCustomAutoOpen.TickBoxReductionSize = 10;
+            this.checkBoxCustomAutoOpen.TickBoxReductionRatio = 0.75f;
             this.checkBoxCustomAutoOpen.UseVisualStyleBackColor = true;
             // 
             // customDateTimePickerFrom
@@ -218,23 +213,18 @@
             // 
             // comboBoxCustomExportType
             // 
-            this.comboBoxCustomExportType.ArrowWidth = 1;
             this.comboBoxCustomExportType.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomExportType.ButtonColorScaling = 0.5F;
             this.comboBoxCustomExportType.DataSource = null;
             this.comboBoxCustomExportType.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomExportType.DisplayMember = "";
             this.comboBoxCustomExportType.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomExportType.DropDownHeight = 106;
-            this.comboBoxCustomExportType.DropDownWidth = 1;
             this.comboBoxCustomExportType.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomExportType.ItemHeight = 13;
             this.comboBoxCustomExportType.Location = new System.Drawing.Point(18, 8);
             this.comboBoxCustomExportType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomExportType.Name = "comboBoxCustomExportType";
             this.comboBoxCustomExportType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomExportType.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomExportType.ScrollBarWidth = 16;
             this.comboBoxCustomExportType.SelectedIndex = -1;
             this.comboBoxCustomExportType.SelectedItem = null;
             this.comboBoxCustomExportType.SelectedValue = null;
@@ -258,7 +248,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(327, 2);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -335,8 +325,8 @@
         private ExtendedControls.ExtDateTimePicker customDateTimePickerTo;
         private ExtendedControls.ExtComboBox comboBoxCustomExportType;
         private ExtendedControls.ExtButton buttonCancel;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private ExtendedControls.ExtCheckBox checkBoxCustomAutoOpen;
         private ExtendedControls.ExtButton buttonExport;

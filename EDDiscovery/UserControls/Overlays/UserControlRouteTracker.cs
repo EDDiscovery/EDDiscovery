@@ -221,8 +221,8 @@ namespace EDDiscovery.UserControls
             pictureBox.ClearImageList();
             Color textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             Color backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-            pictureBox.AddTextAutoSize(new Point(10, 5), new Size(1000, 35), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
-            pictureBox.AddTextAutoSize(new Point(10, 35), new Size(1000, 35), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
+            var ie = pictureBox.AddTextAutoSize(new Point(10, 5), new Size(10000, 100), topline == null ? "" : topline, displayfont, textcolour, backcolour, 1.0F);
+            pictureBox.AddTextAutoSize(new Point(10, ie.pos.Bottom + displayfont.ScalePixels(4)), new Size(10000, 100), bottomLine == null ? "" : bottomLine, displayfont, textcolour, backcolour, 1.0F);
             pictureBox.Render();
         }
 
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
 
             var routes = SavedRouteClass.GetAllSavedRoutes();
             var routenames = (from x in routes select x.Name).ToList();
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".Tx(this), routenames, new Size(400, 400)));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Route", "", new Point(10, 40), new Size(400, 24), "Select route".Tx(this), routenames));
             f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(410-100, 80), new Size(100, 24), "Press to Cancel".Tx(this)));
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -266,7 +266,7 @@ namespace EDDiscovery.UserControls
                     f.DialogResult = DialogResult.OK;
                 f.Close();
             };
-            if ( f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(430, 120), new Point(-999, -999), "Enter route".Tx(this)) == DialogResult.OK )
+            if ( f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Enter route".Tx(this)) == DialogResult.OK )
             {
                 string routename = f.Get("Route");
                 currentRoute = routes.Find(x => x.Name.Equals(routename));       // not going to be null, but consider the upset.

@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
 
             displayfont = discoveryform.theme.GetFont;
-            EDDTheme.Instance.ApplyToControls(this);
 
             // set context menu checkboxes
             ammoniaWorldToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAmmonia", true);
@@ -451,9 +450,8 @@ namespace EDDiscovery.UserControls
 
         private void pictureBoxSurveyorAid_MouseClick(object sender, MouseEventArgs e)
         {
-            contextMenuStrip.Visible |= e.Button == MouseButtons.Right;
-            contextMenuStrip.Top = MousePosition.Y;
-            contextMenuStrip.Left = MousePosition.X;
+            contextMenuStrip.Font = this.Font;
+            contextMenuStrip.Show(new Point(MousePosition.X,MousePosition.Y));
         }
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)

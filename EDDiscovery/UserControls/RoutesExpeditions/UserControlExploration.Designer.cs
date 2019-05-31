@@ -44,6 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlExploration));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLoad = new System.Windows.Forms.ToolStripButton();
@@ -53,7 +54,6 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClear = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.panelRouteInfo = new System.Windows.Forms.Panel();
             this.textBoxFileName = new ExtendedControls.ExtTextBox();
             this.labelFilename = new System.Windows.Forms.Label();
             this.textBoxRouteName = new ExtendedControls.ExtTextBox();
@@ -78,11 +78,12 @@ namespace EDDiscovery.UserControls
             this.ColumnNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataViewScrollerPanel1 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.toolStrip.SuspendLayout();
-            this.panelRouteInfo.SuspendLayout();
             this.contextMenuCopyPaste.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewExplore)).BeginInit();
             this.dataViewScrollerPanel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -179,18 +180,6 @@ namespace EDDiscovery.UserControls
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
-            // panelRouteInfo
-            // 
-            this.panelRouteInfo.Controls.Add(this.textBoxFileName);
-            this.panelRouteInfo.Controls.Add(this.labelFilename);
-            this.panelRouteInfo.Controls.Add(this.textBoxRouteName);
-            this.panelRouteInfo.Controls.Add(this.labelName);
-            this.panelRouteInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelRouteInfo.Location = new System.Drawing.Point(0, 32);
-            this.panelRouteInfo.Name = "panelRouteInfo";
-            this.panelRouteInfo.Size = new System.Drawing.Size(817, 54);
-            this.panelRouteInfo.TabIndex = 1;
-            // 
             // textBoxFileName
             // 
             this.textBoxFileName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
@@ -201,8 +190,11 @@ namespace EDDiscovery.UserControls
             this.textBoxFileName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFileName.ClearOnFirstChar = false;
             this.textBoxFileName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFileName.EndButtonEnable = true;
+            this.textBoxFileName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFileName.EndButtonImage")));
+            this.textBoxFileName.EndButtonVisible = false;
             this.textBoxFileName.InErrorCondition = false;
-            this.textBoxFileName.Location = new System.Drawing.Point(90, 3);
+            this.textBoxFileName.Location = new System.Drawing.Point(88, 6);
             this.textBoxFileName.Multiline = false;
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.ReadOnly = true;
@@ -217,11 +209,11 @@ namespace EDDiscovery.UserControls
             // labelFilename
             // 
             this.labelFilename.AutoSize = true;
-            this.labelFilename.Location = new System.Drawing.Point(5, 6);
+            this.labelFilename.Location = new System.Drawing.Point(3, 3);
             this.labelFilename.Name = "labelFilename";
-            this.labelFilename.Size = new System.Drawing.Size(49, 13);
+            this.labelFilename.Size = new System.Drawing.Size(52, 13);
             this.labelFilename.TabIndex = 2;
-            this.labelFilename.Text = "Filename";
+            this.labelFilename.Text = "Filename:";
             // 
             // textBoxRouteName
             // 
@@ -233,8 +225,11 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxRouteName.EndButtonEnable = true;
+            this.textBoxRouteName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxRouteName.EndButtonImage")));
+            this.textBoxRouteName.EndButtonVisible = false;
             this.textBoxRouteName.InErrorCondition = false;
-            this.textBoxRouteName.Location = new System.Drawing.Point(90, 28);
+            this.textBoxRouteName.Location = new System.Drawing.Point(88, 32);
             this.textBoxRouteName.Multiline = false;
             this.textBoxRouteName.Name = "textBoxRouteName";
             this.textBoxRouteName.ReadOnly = false;
@@ -249,7 +244,7 @@ namespace EDDiscovery.UserControls
             // labelName
             // 
             this.labelName.AutoSize = true;
-            this.labelName.Location = new System.Drawing.Point(5, 31);
+            this.labelName.Location = new System.Drawing.Point(3, 29);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(79, 13);
             this.labelName.TabIndex = 0;
@@ -313,6 +308,7 @@ namespace EDDiscovery.UserControls
             // dataGridViewExplore
             // 
             this.dataGridViewExplore.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewExplore.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewExplore.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewExplore.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnSystemName,
@@ -329,7 +325,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewExplore.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewExplore.Name = "dataGridViewExplore";
             this.dataGridViewExplore.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewExplore.Size = new System.Drawing.Size(797, 487);
+            this.dataGridViewExplore.Size = new System.Drawing.Size(804, 483);
             this.dataGridViewExplore.TabIndex = 2;
             this.dataGridViewExplore.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewExplore_CellValidated);
             this.dataGridViewExplore.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewExplore_SortCompare);
@@ -417,10 +413,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewExplore);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 86);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 90);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(817, 487);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(817, 483);
             this.dataViewScrollerPanel1.TabIndex = 3;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -435,13 +430,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(797, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(804, 0);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 487);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 483);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 3;
@@ -452,23 +447,44 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.labelName, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.labelFilename, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxFileName, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxRouteName, 1, 1);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 32);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(0, 3, 0, 3);
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(817, 58);
+            this.tableLayoutPanel1.TabIndex = 4;
+            // 
             // UserControlExploration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel1);
-            this.Controls.Add(this.panelRouteInfo);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolStrip);
             this.Name = "UserControlExploration";
             this.Size = new System.Drawing.Size(817, 573);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.panelRouteInfo.ResumeLayout(false);
-            this.panelRouteInfo.PerformLayout();
             this.contextMenuCopyPaste.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewExplore)).EndInit();
             this.dataViewScrollerPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -477,7 +493,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonNew;
         private System.Windows.Forms.ToolStripButton toolStripButtonSave;
-        private System.Windows.Forms.Panel panelRouteInfo;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private ExtendedControls.ExtTextBox textBoxRouteName;
@@ -508,5 +523,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnPrimaryStar;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnNote;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }

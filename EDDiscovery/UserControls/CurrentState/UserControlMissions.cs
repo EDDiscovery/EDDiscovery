@@ -50,12 +50,12 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewCurrent.MakeDoubleBuffered();
-            dataGridViewCurrent.RowTemplate.Height = 26;
+            dataGridViewCurrent.RowTemplate.Height = Font.ScalePixels(26);
             dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewCurrent.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             dataGridViewPrevious.MakeDoubleBuffered();
-            dataGridViewPrevious.RowTemplate.Height = 26;
+            dataGridViewPrevious.RowTemplate.Height = Font.ScalePixels(26);
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 labelValue.Visible = (value != 0);
-                labelValue.Text = "Value: ".Tx(this,"ValueC") + value.ToStringInvariant() + " C:" + completed.ToStringInvariant() + " A:" + abandonded.ToStringInvariant() + " F:" + failed.ToStringInvariant();
+                labelValue.Text = "Value: ".Tx(this,"ValueC") + value.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
 
                 //System.Diagnostics.Debug.WriteLine("Prev " + sortorderprev + " " + sortcolprev.Index);
                 dataGridViewPrevious.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);

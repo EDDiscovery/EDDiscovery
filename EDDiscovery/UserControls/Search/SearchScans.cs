@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
             dataGridView.CheckEDSM = false; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridView.RowTemplate.Height = 26;
+            dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { });

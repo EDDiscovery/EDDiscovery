@@ -556,8 +556,7 @@ namespace EDDiscovery.UserControls
                     c.Visible = false;
             }
 
-            int textboxh = EDDTheme.Instance.FontSize > 10 ? 24 : 20;
-            int vspacing = textboxh+4;
+            int vspacing = (int)textBoxAllegiance.Height + textBoxAllegiance.Font.ScalePixels(4);
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
@@ -957,7 +956,7 @@ namespace EDDiscovery.UserControls
             bool skinny = (Selection & (1 << BitSelSkinny)) != 0;
 
             if ( !skinny )
-                EDDTheme.Instance.ApplyToControls(extPanelScroll);
+                EDDTheme.Instance.ApplyStd(extPanelScroll);
 
             foreach (Control c in extPanelScroll.Controls)
             {

@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
         public void Init(string t, Icon ic, Dictionary<string,Image> tags = null )
         {
             this.Icon = ic;
-            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance?.ApplyToForm(this, SystemFonts.DefaultFont) ?? true;
+            bool winborder = ExtendedControls.ThemeableFormsInstance.Instance?.ApplyDialog(this) ?? true;
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             this.Text = label_index.Text = t;
 
@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             groups.Add(g);
 
             panelVScroll1.Controls.Add(g.panel);
-            ExtendedControls.ThemeableFormsInstance.Instance?.ApplyToControls(g.panel, SystemFonts.DefaultFont);
+            ExtendedControls.ThemeableFormsInstance.Instance?.ApplyDialog(g.panel);
 
             FixUpGroups();
 
@@ -161,26 +161,18 @@ namespace EDDiscovery.UserControls
             Dickeys.Sort();
             List<Image> images = (from x in Dickeys select EDDiscovery.Icons.IconSet.Icons[x]).ToList();
 
-            dropdown.ItemHeight = 26;
             dropdown.FitImagesToItemHeight = true;
             dropdown.Items = Dickeys;
             dropdown.ImageItems = images;
             dropdown.FlatStyle = FlatStyle.Popup;
-            dropdown.Activated += (s, ea) =>
-            {
-                Point location = (sender as Control).PointToScreen(new Point(0, 0));
-                dropdown.Location = dropdown.PositionWithinScreen(location.X, location.Y);
-                this.Invalidate(true);
-            };
+            dropdown.PositionBelow(sender as Control);
             dropdown.SelectedIndexChanged += (s, ea) =>
             {
                 Image img = images[dropdown.SelectedIndex];
                 but.Image = img;
             };
 
-            dropdown.Size = new Size(400, 800);
-
-            EDDTheme.Instance.ApplyToControls(dropdown);
+            EDDTheme.Instance.ApplyDialog(dropdown);
             dropdown.Show(this.FindForm());
         }
 

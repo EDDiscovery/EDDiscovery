@@ -53,7 +53,7 @@ namespace EDDiscovery.Forms
             comboBoxCustomExportType.SelectedIndex = 0;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             label_index.Visible = panel_minimize.Visible = panel_close.Visible = !winborder;
 
             if (disablestartendtime)

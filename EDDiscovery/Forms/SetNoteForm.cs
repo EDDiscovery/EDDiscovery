@@ -43,7 +43,7 @@ namespace EDDiscovery.Forms
             this.labelDetails.Text = EventDescription;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelTimestamp, labelSystem, labelSummary, labelDetails });
