@@ -56,7 +56,6 @@ namespace EDDiscovery.UserControls
             public const int OtherInformation = 3;
         }
 
-        private const int DefaultRowHeight = 26;
         private string DbColumnSave { get { return DBName("StarListControl" ,  "DGVCol"); } }
         private string DbHistorySave { get { return DBName("StarListControlEDUIHistory" ); } }
         private string DbAutoTop { get { return DBName("StarListControlAutoTop" ); } }
@@ -88,9 +87,8 @@ namespace EDDiscovery.UserControls
 
          
             dataGridViewStarList.MakeDoubleBuffered();
-            dataGridViewStarList.RowTemplate.Height = DefaultRowHeight;
             dataGridViewStarList.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewStarList.RowTemplate.Height = 26;
+            dataGridViewStarList.RowTemplate.Height = Math.Max(26, Font.ScalePixels(26));
             dataGridViewStarList.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             dataGridViewStarList.Columns[2].ValueType = typeof(Int32);            

@@ -80,18 +80,19 @@ namespace EDDiscovery
                 {
                     if (panelids[i] == -1)
                     {
-                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                        TabPage p = CreateTab(PanelInformation.PanelIDs.SplitterControl, name ?? "History", displaynumbers[i], TabPages.Count);
                         p.Tag = true;       // this marks it as the primary tab..
                     }
                     else
                     {
                         PanelInformation.PanelIDs p = (PanelInformation.PanelIDs)panelids[i];
-                        CreateTab(p, name, displaynumbers[i], TabPages.Count, false);      // no need the theme, will be themed as part of overall load
+                        CreateTab(p, name, displaynumbers[i], TabPages.Count);      // no need the theme, will be themed as part of overall load
                     }
                 }
                 catch (Exception ex)   // paranoia in case something crashes it, unlikely, but we want maximum chance the history tab will show
                 {
-                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}" );
+                    System.Diagnostics.Trace.WriteLine($"Exception caught creating tab {i} ({name}): {ex.ToString()}");
+                    MessageBox.Show($"Report to EDD team - Exception caught creating tab {i} ({name}): {ex.ToString()}");
                 }
             }
 
@@ -115,7 +116,7 @@ namespace EDDiscovery
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
             }
-                
+
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
         }
 
@@ -148,7 +149,7 @@ namespace EDDiscovery
             if (tabindex < 0)
                 tabindex = Math.Max(0,TabCount + tabindex);
 
-            TabPage page = CreateTab(id, null, -1, tabindex, true);
+            TabPage page = CreateTab(id, null, -1, tabindex);
 
             if (page != null)
             {
@@ -191,7 +192,7 @@ namespace EDDiscovery
             TabPage page = GetMajorTab(ptype);
             if (page == null)
             {
-                page = CreateTab(ptype, null, -1, TabCount, true);
+                page = CreateTab(ptype, null, -1, TabCount);
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.SetCursor(PrimaryTab.GetTravelGrid);
                 uccb.LoadLayout();
@@ -208,19 +209,35 @@ namespace EDDiscovery
 
         // MAY return null!
 
-        private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex, bool dotheme)
+        private TabPage CreateTab(PanelInformation.PanelIDs ptype, string name, int dn, int posindex)
         {
+            // debug - create an example tab page
+            // keep for now 
+            //TabPage page = new TabPage();
+            //page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
+            //page.Padding = new System.Windows.Forms.Padding(3);
+            //UserControl uc = new UserControl();
+            //uc.Dock = DockStyle.Fill;
+            //uc.AutoScaleMode = AutoScaleMode.Inherit;
+            //page.Controls.Add(uc);
+            //ExtendedControls.TabStrip ts = new ExtendedControls.TabStrip();
+            //ts.Dock = DockStyle.Fill;
+            //uc.Controls.Add(ts);
+            //TabPages.Insert(posindex, page);
+
+
             UserControls.UserControlCommonBase uccb = PanelInformation.Create(ptype);   // must create, since its a ptype.
             if (uccb == null)       // if ptype is crap, it returns null.. catch
                 return null;
 
+            uccb.AutoScaleMode = AutoScaleMode.Inherit;     // inherit will mean Font autoscale won't happen at attach
             uccb.Dock = System.Windows.Forms.DockStyle.Fill;    // uccb has to be fill, even though the VS designer does not indicate you need to set it.. copied from designer code
             uccb.Location = new System.Drawing.Point(3, 3);
 
             if (dn == -1) // if work out display number
             {
                 List<int> idlist = (from TabPage p in TabPages where p.Controls[0].GetType() == uccb.GetType() select (p.Controls[0] as UserControls.UserControlCommonBase).displaynumber).ToList();
-                
+
                 if (!idlist.Contains(UserControls.UserControlCommonBase.DisplayNumberPrimaryTab))
                     dn = UserControls.UserControlCommonBase.DisplayNumberPrimaryTab;
                 else
@@ -249,17 +266,17 @@ namespace EDDiscovery
 
             TabPage page = new TabPage(title);
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
-            page.Padding = new System.Windows.Forms.Padding(3);
+            page.Padding = new System.Windows.Forms.Padding(3); // this is to allow a pad around the sides
 
             page.Controls.Add(uccb);
 
-            TabPages.Insert(posindex, page);
+            TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
 
             //Init control after it is added to the form
             uccb.Init(eddiscovery, dn);    // start the uccb up
 
-            if (dotheme)                // only user created ones need themeing
-                EDDTheme.Instance.ApplyToControls(page, applytothis: true);
+            uccb.Scale(this.FindForm().CurrentAutoScaleFactor());       // scale and  
+            EDDTheme.Instance.ApplyStd(page);  // theme it.  Order as per the contract in UCCB
 
             return page;
         }

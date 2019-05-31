@@ -55,7 +55,6 @@
             this.rollUpPanelMenu.ShowHiddenMarker = true;
             this.rollUpPanelMenu.Size = new System.Drawing.Size(912, 32);
             this.rollUpPanelMenu.TabIndex = 1;
-            this.rollUpPanelMenu.UnrolledHeight = 32;
             this.rollUpPanelMenu.UnrollHoverDelay = 1000;
             // 
             // buttonExtTile

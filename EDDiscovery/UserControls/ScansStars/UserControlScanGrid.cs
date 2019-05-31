@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,22 +13,16 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Drawing.Drawing2D;
+
 using EliteDangerousCore;
-using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -58,6 +52,9 @@ namespace EDDiscovery.UserControls
         private bool hasVanadium;
         private bool hasYttrium;
 
+        int iconsize;   // computed icon and body sizes
+        int bodysize;
+
         private string DbColumnSave { get { return DBName("ScanGridPanel", "DGVCol"); } }
         private string DbSave { get { return DBName("ScanGridPanel"); } }
 
@@ -65,13 +62,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             var corner = dataGridViewScangrid.TopLeftHeaderCell; // work around #1487
-
-            // dataGridView setup - the rule is, use the designer for most properties.. only do these here since they are so buried or not available.
-
             // this allows the row to grow to accomodate the text.. with a min height of 48px.
             dataGridViewScangrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewScangrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
-            dataGridViewScangrid.RowTemplate.MinimumHeight = 48;
             this.dataGridViewScangrid.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
         }
 
@@ -110,10 +103,6 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewScangrid, DbColumnSave);
         }
 
-        /// <summary>
-        /// Called when the cursor move to another system
-        /// </summary>
-        /// <param name="thc"></param>
         public override void ChangeCursorType(IHistoryCursor thc)
         {
             uctg.OnTravelSelectionChanged -= Display;
@@ -133,21 +122,11 @@ namespace EDDiscovery.UserControls
             DrawSystem(uctg.GetCurrentHistoryEntry, false);
         }
 
-        /// <summary>
-        /// called when a new entry is made.. check to see if its a scan update
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="hl">HistoryList</param>
         private void NewEntry(HistoryEntry he, HistoryList hl)
         {
             DrawSystem(he, he.EntryType == JournalTypeEnum.Scan);
         }
 
-        /// <summary>
-        /// Called at first start or hooked to change cursor
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="hl">HistoryList</param>
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             ResetDefaults();
@@ -158,7 +137,6 @@ namespace EDDiscovery.UserControls
         {
             // reset isGreenSystem tag
             isGreenSystem = false;
-
 
             // reset indicator for jumponium materials
             hasArsenic = false;
@@ -180,19 +158,11 @@ namespace EDDiscovery.UserControls
 
         #region PopulateGrid
 
-        /// <summary>
-        /// Constructor to pass properties to postdrawing function
-        /// </summary>
         private class Overlays
         {
             public bool landable, materials, volcanism, mapped;     // all false on creation
         }
-                
-        /// <summary>
-        /// Draw the system bodies
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="force">Boolean</param>
+
         private void DrawSystem(HistoryEntry he, bool force)
         {
             StarScan.SystemNode scannode = null;
@@ -229,15 +199,20 @@ namespace EDDiscovery.UserControls
             // only record first row if same system 
             var firstdisplayedrow = (dataGridViewScangrid.RowCount > 0 && samesys) ? dataGridViewScangrid.FirstDisplayedScrollingRowIndex : -1;
 
+            dataGridViewScangrid.RowTemplate.MinimumHeight = Font.ScalePixels(64);        // based on icon size
+            bodysize = dataGridViewScangrid.RowTemplate.MinimumHeight;
+            iconsize = bodysize / 4;
+          
+
             dataGridViewScangrid.Rows.Clear();
 
             var all_nodes = scannode.Bodies.ToList(); // flatten tree of scan nodes to prepare for listing
 
-            var _stars = 0;
-            var _planets = 0;
-            var _terrestrial = 0;
-            var _gasgiants = 0;
-            var _moons = 0;
+            var stars = 0;
+            var planets = 0;
+            var terrestrial = 0;
+            var gasgiants = 0;
+            var moons = 0;
 
             foreach (StarScan.ScanNode sn in all_nodes)
             {
@@ -297,7 +272,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.IsStar)
                         {
                             // is a star, so populate its information field with relevant data
-                            _stars++;
+                            stars++;
 
                             // star class
                             if (sn.ScanData.StarTypeText != null)
@@ -370,7 +345,7 @@ namespace EDDiscovery.UserControls
                             if (sn.ScanData.PlanetClass != null)
                                 bdClass.Append(sn.ScanData.PlanetClass);
 
-                            _planets++;
+                            planets++;
 
                             // tell us the distance from the arrivals in both AU and LS
                             if (sn.level <= 1 && sn.type == StarScan.ScanNodeType.body)
@@ -380,7 +355,7 @@ namespace EDDiscovery.UserControls
                             if (sn.level >= 2 && sn.type == StarScan.ScanNodeType.body)
                             {
                                 if (sn.ScanData.PlanetClass != null)
-                                    _moons++;
+                                    moons++;
 
                                 bdClass.Append(" ").Append("Moon".Tx(this));
 
@@ -390,9 +365,9 @@ namespace EDDiscovery.UserControls
                             }
 
                             if (sn.ScanData.PlanetClass != null && sn.ScanData.PlanetClass.Contains("Giant"))
-                                _gasgiants++;
+                                gasgiants++;
                             else
-                                _terrestrial++;
+                                terrestrial++;
 
                             // Details
 
@@ -536,7 +511,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 // set a meaningful title for the controller            
-                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".Tx(this), scannode.system.Name, _stars, _planets, _terrestrial, _gasgiants, _moons));
+                SetControlText(string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".Tx(this), scannode.system.Name, stars, planets, terrestrial, gasgiants, moons));
                 if (firstdisplayedrow >= 0 && firstdisplayedrow < dataGridViewScangrid.RowCount)
                     dataGridViewScangrid.FirstDisplayedScrollingRowIndex = firstdisplayedrow;
 
@@ -612,55 +587,44 @@ namespace EDDiscovery.UserControls
                 // we programatically draw the image because we have control over its pos/ size this way, which you can't do
                 // with a image column - there you can only draw a fixed image or stretch it to cell contents.. which we don't want to do
 
-                int top = e.RowBounds.Top + 4;
-                int bot = e.RowBounds.Bottom - 4;
-                int left = e.RowBounds.Left + 4;
-                int right = e.RowBounds.Left + cur.Cells[0].Size.Width - 4;
+                int vmid = (e.RowBounds.Top + e.RowBounds.Bottom) / 2;
+                int hmid = e.RowBounds.Left + cur.Cells[0].Size.Width / 2;
 
                 int icons = 0;
 
                 if (overlays != null)
                     icons = (overlays.mapped ? 1 : 0) + (overlays.volcanism ? 1 : 0) + (overlays.materials ? 1 : 0) + (overlays.landable ? 1 : 0);
 
-                int iconsize = 12;
-
-                if (icons != 0)
-                {
-                    iconsize = Math.Min(iconsize, (bot - top) / icons - 2);             // size so they all fit, less 2 for interspacing
-                                        
-                    //System.Diagnostics.Debug.WriteLine("Icon size" + iconsize);
-                    right -= iconsize;
-                }
-
-                int size = Math.Min(bot - top, right - left);                           
+                int iconspacing = Font.ScalePixels(2);
 
                 Image img = cur.Tag as Image;
-                e.Graphics.DrawImage(img, new Rectangle((right+left)/2-size/2, (bot+top)/2-size/2, size, size));        // main icon
+                Rectangle body = new Rectangle(hmid - (iconsize + bodysize + iconspacing) / 2, vmid - bodysize / 2, bodysize, bodysize);
+                e.Graphics.DrawImage(img, body);        // main icon
 
-                int vposoverlay = (top+bot)/2 - iconsize*icons/2;                       // position it centrally vertically
+                int right = body.Left + bodysize + iconspacing;
+                int vposoverlay = vmid - iconsize * icons / 2;                       // position it centrally vertically
 
                 if (overlays?.landable ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));                    
-                    vposoverlay += iconsize + 2;
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Landable, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.materials ?? false)
                 {
-                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay , iconsize, iconsize));
-                    vposoverlay += iconsize + 2;
+                    e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_ShowAllMaterials, new Rectangle(right, vposoverlay, iconsize, iconsize));
+                    vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.volcanism ?? false)
                 {
                     e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism, new Rectangle(right, vposoverlay, iconsize, iconsize));
-                    vposoverlay += iconsize + 2;
+                    vposoverlay += iconsize + iconspacing;
                 }
 
                 if (overlays?.mapped ?? false)
                 {
                     e.Graphics.DrawImage((Image)EDDiscovery.Icons.Controls.Scan_Bodies_Mapped, new Rectangle(right, vposoverlay, iconsize, iconsize));
-
                 }
             }
         }

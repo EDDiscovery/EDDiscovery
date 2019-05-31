@@ -145,23 +145,19 @@ namespace EDDiscovery
 
             Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
             Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
-
-            //if (File.Exists(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF")))     // removed for now, since the font dialogs don't allow us to pick this local font.. yet
-            //{
-            //    BaseUtils.FontLoader.AddFontFile(Path.Combine(EDDOptions.ExeDirectory(), "EUROCAPS.TTF"));
-            //}
         }
 
         public void Init(Action<string> msg)    // called from EDDApplicationContext .. continues on with the construction of the form
         {
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " ED init");        // STAGE 1
 
             msg.Invoke("Loading Translations");
 
             if (EDDOptions.Instance.ResetLanguage)
                 EDDConfig.Instance.Language = "None";
 
-            BaseUtils.Translator.Instance.LoadTranslation(EDDConfig.Instance.Language, CultureInfo.CurrentUICulture, 
+            BaseUtils.Translator.Instance.LoadTranslation(EDDOptions.Instance.SelectLanguage ?? EDDConfig.Instance.Language, 
+                    CultureInfo.CurrentUICulture, 
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory);
 
@@ -176,25 +172,39 @@ namespace EDDiscovery
             // obsolete remove IconSet.SetPanelImageListGetter(PanelInformation.GetPanelImages);
             InitializeComponent();
 
+            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
+            PopOuts = new PopOutControl(this);
+            Map = new EDDiscovery._3DMap.MapManager(this);
+
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");        // STAGE 2 themeing the main interface (not the tab pages)
+            msg.Invoke("Applying Themes");
+
+            comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.SecondHiddenMarkerWidth = 60;
             panelToolBar.PinState = SQLiteConnectionUser.GetSettingBool("ToolBarPanelPinState", true);
 
+            labelInfoBoxTop.Text = "";
             label_version.Text = EDDOptions.Instance.VersionDisplayString;
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Load popouts, themes, init controls");
-            PopOuts = new PopOutControl(this);
-
-            msg.Invoke("Loading Themes");
             theme.LoadThemes();                                         // default themes and ones on disk loaded
-
-            screenshotconverter = new ScreenShots.ScreenShotConverter(this);
 
             if (!EDDOptions.Instance.NoTheme)
                 themeok = theme.RestoreSettings();                                    // theme, remember your saved settings
 
+            if (EDDOptions.Instance.FontSize > 0)
+                theme.FontSize = EDDOptions.Instance.FontSize;
+
+            if (EDDOptions.Instance.Font.HasChars())
+                theme.FontName = EDDOptions.Instance.Font;
+
+            ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
+
+            this.TopMost = EDDConfig.KeepOnTop;
+            notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+
             // open all the major tabs except the built in ones
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");
+            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Creating major tabs Now");        // STAGE 3 Tabs
 
             if (EDDOptions.Instance.TabsReset)
             {
@@ -208,16 +218,18 @@ namespace EDDiscovery
 
             UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(EDDOptions.Instance.TabsReset ? "?????" : "TravelControl"); // Double check, use TravelControlBottom etc as the old lookup name if its nonsence
 
-            tabControlMain.MinimumTabWidth = 32;
-            tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
-
-            if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null )  // double check we have a primary tab and tg..
+            if (!EDDOptions.Instance.NoTabs)
             {
-                MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
-                                "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
-                                "To try and clear it, hold down shift and then launch the program." + Environment.NewLine + 
-                                "Click on Reset tabs, then Run program, which may clear the problem.").Tx(this,"TSF") );
-                Application.Exit();
+                tabControlMain.MinimumTabWidth = 32;
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                if (tabControlMain.PrimaryTab == null || tabControlMain.PrimaryTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
+                {
+                    MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
+                                    "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
+                                    "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
+                                    "Click on Reset tabs, then Run program, which may clear the problem.").Tx(this, "TSF"));
+                    Application.Exit();
+                }
             }
 
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
@@ -250,26 +262,13 @@ namespace EDDiscovery
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Map manager");
-            Map = new EDDiscovery._3DMap.MapManager(this);
 
-            this.TopMost = EDDConfig.KeepOnTop;
-
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Audio");
-
-            msg.Invoke("Loading Action Packs");
+            msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
             actioncontroller = new Actions.ActionController(this, Controller, this.Icon);
-
             actioncontroller.ReLoad();          // load system up here
 
-            Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Theming");
-
-            msg.Invoke("Applying Themes");
-
-            ApplyTheme();
-
-            notifyIcon1.Visible = EDDConfig.UseNotifyIcon;
+            // Stage 5 Misc
 
             EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
@@ -303,8 +302,6 @@ namespace EDDiscovery
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Finish ED Init");
 
-            labelInfoBoxTop.Text = "";
-
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
@@ -313,7 +310,7 @@ namespace EDDiscovery
 
             Controller.InitComplete();
 
-            BaseUtils.Translator.Instance.Translate(menuStrip, this);
+            BaseUtils.Translator.Instance.Translate(mainMenu, this);
             BaseUtils.Translator.Instance.Translate(toolTip,this);
         }
 
@@ -325,7 +322,8 @@ namespace EDDiscovery
 
             Controller.PostInit_Loaded();
 
-            tabControlMain.LoadTabs();
+            if (!EDDOptions.Instance.NoTabs)
+                tabControlMain.LoadTabs();
 
             if (EDDOptions.Instance.ActionButton)
             {
@@ -452,6 +450,8 @@ namespace EDDiscovery
                 }));
 
             });
+
+            // this.DebugSizePosition(toolTip); // Debug - theme all the tooltips to show info on control - useful
         }
 
         List<Notifications.Notification> popupnotificationlist = new List<Notifications.Notification>();
@@ -597,7 +597,7 @@ namespace EDDiscovery
 
         #region Themeing
 
-        public void ApplyTheme()
+        public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
         {
             panel_close.Visible = !theme.WindowsFrame;
             panel_minimize.Visible = !theme.WindowsFrame;
@@ -605,11 +605,14 @@ namespace EDDiscovery
 
             this.Text = "EDDiscovery " + label_version.Text;            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
 
-            theme.ApplyToForm(this);
-
+            //this.DumpTree(0);
+            theme.ApplyStd(this);
+            
+            statusStrip.Font = contextMenuStripTabs.Font = this.Font;
             labelInfoBoxTop.Location = new Point(label_version.Right + 16, labelInfoBoxTop.Top);
 
-            //?????Controller.RefreshDisplays(); // why? removed in june 18..
+            if ( panelrefreshaswell)
+                Controller.RefreshDisplays(); // needed to cause them to cope with theme change
         }
 
 #endregion
@@ -1338,7 +1341,7 @@ namespace EDDiscovery
 
         public bool IsMenuItemInstalled(string menuname)
         {
-            foreach( ToolStripMenuItem tsi in menuStrip.Items )
+            foreach( ToolStripMenuItem tsi in mainMenu.Items )
             {
                 List<ToolStripItem> presentlist = (from ToolStripItem s in tsi.DropDownItems where s.Name.Equals(menuname) select s).ToList();
                 if (presentlist.Count() > 0)
@@ -1570,28 +1573,20 @@ namespace EDDiscovery
 
         private void buttonExtPopOut_Click(object sender, EventArgs e)
         {
-            Point location = buttonExtPopOut.PointToScreen(new Point(0, 0));
             popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
             popoutdropdown.StartPosition = FormStartPosition.Manual;
-            popoutdropdown.Location = location;
-            popoutdropdown.ItemHeight = 26;
             popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
             popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
             popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
             PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
-            popoutdropdown.Shown += (s, ea) =>
-            {
-                popoutdropdown.Location = popoutdropdown.PositionWithinScreen(location.X + buttonExtPopOut.Width, location.Y);
-                this.Invalidate(true);
-            };
+            popoutdropdown.PositionBelow(buttonExtPopOut);
             popoutdropdown.SelectedIndexChanged += (s, ea) =>
             {
                 PopOuts.PopOut(pids[popoutdropdown.SelectedIndex]);
             };
 
-            popoutdropdown.Size = new Size(500,600);
-            theme.ApplyToControls(popoutdropdown);
+            theme.ApplyStd(popoutdropdown);
             popoutdropdown.SelectionBackColor = theme.ButtonBackColor;
             popoutdropdown.Show(this);
         }

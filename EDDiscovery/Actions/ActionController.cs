@@ -335,7 +335,7 @@ namespace EDDiscovery.Actions
         private void Dmf_OnEditGlobals()                    // edit the globals
         {
             ExtendedConditionsForms.VariablesForm avf = new ExtendedConditionsForms.VariablesForm();
-            avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showone: true);
+            avf.Init("Global User variables to pass to program on run", this.Icon, PersistentVariables, showatleastoneentry: true);
 
             if (avf.ShowDialog(discoveryform) == DialogResult.OK)
             {

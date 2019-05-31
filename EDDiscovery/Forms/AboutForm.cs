@@ -38,12 +38,12 @@ namespace EDDiscovery.Forms
             SetTipAndTag(linkLabelLicense, Resources.URLProjectLicense);
 
             var x = Properties.Resources.EDD_License;
-            textBoxLicense.Rtf = x;
-            textBoxLicense.ScrollBarLineTweak = -15;     // RTF ends up formatting it with non regular spacing.. add on 15 lines so you can see the bottom. fudge
+            textBoxLicense.Rtf = x;     // we use the RTB to convert from RTF to text, and double space the result. this makes the scroll bar work.
+            textBoxLicense.Text = textBoxLicense.Text.LineTextInsersion("","\n","\n");
 
             System.Diagnostics.Debug.WriteLine("Theme AF");
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             panel_close.Visible = !winborder;
 
             panelLogo.Tag = Resources.URLProjectGithub;

@@ -98,9 +98,9 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
             this.panelFD = new ExtendedControls.PanelNoTheme();
             this.textBoxSystem = new ExtendedControls.ExtTextBox();
-            this.buttonEDSM = new ExtendedControls.ExtPanelDrawn();
-            this.buttonEDDB = new ExtendedControls.ExtPanelDrawn();
-            this.buttonRoss = new ExtendedControls.ExtPanelDrawn();
+            this.buttonEDSM = new ExtendedControls.ExtButtonDrawn();
+            this.buttonEDDB = new ExtendedControls.ExtButtonDrawn();
+            this.buttonRoss = new ExtendedControls.ExtButtonDrawn();
             this.textBoxVisits = new ExtendedControls.ExtTextBox();
             this.textBoxBody = new ExtendedControls.ExtTextBox();
             this.textBoxTravelJumps = new ExtendedControls.ExtTextBox();
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy = new ExtendedControls.ExtTextBox();
             this.richTextBoxScrollMissions = new ExtendedControls.ExtRichTextBox();
             this.richTextBoxNote = new ExtendedControls.ExtRichTextBox();
-            this.buttonEDSMTarget = new ExtendedControls.ExtPanelDrawn();
+            this.buttonEDSMTarget = new ExtendedControls.ExtButtonDrawn();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
             this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.contextMenuStrip.SuspendLayout();
@@ -536,12 +536,9 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTarget.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxTarget.DropDownHeight = 200;
-            this.textBoxTarget.DropDownItemHeight = 13;
             this.textBoxTarget.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBoxTarget.DropDownWidth = 0;
             this.textBoxTarget.EndButtonEnable = false;
             this.textBoxTarget.EndButtonImage = global::EDDiscovery.Icons.Controls.Dropdown;
             this.textBoxTarget.EndButtonVisible = true;
@@ -766,6 +763,9 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.TabStop = false;
             this.textBoxJumpRange.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxJumpRange.WordWrap = true;
+            this.textBoxJumpRange.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.textBoxJumpRange.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.textBoxJumpRange.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
             // panelFD
             // 
@@ -812,7 +812,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSM.AutoEllipsis = false;
             this.buttonEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDSM.Image = null;
-            this.buttonEDSM.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.InverseText;
+            this.buttonEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.buttonEDSM.Location = new System.Drawing.Point(54, 36);
             this.buttonEDSM.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSM.MouseSelectedColor = System.Drawing.Color.Green;
@@ -837,7 +837,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDDB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDDB.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonEDDB.Image = null;
-            this.buttonEDDB.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.EDDB;
+            this.buttonEDDB.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.EDDB;
             this.buttonEDDB.Location = new System.Drawing.Point(98, 36);
             this.buttonEDDB.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDDB.MouseSelectedColor = System.Drawing.Color.Green;
@@ -861,7 +861,7 @@ namespace EDDiscovery.UserControls
             this.buttonRoss.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonRoss.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonRoss.Image = null;
-            this.buttonRoss.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Ross;
+            this.buttonRoss.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Ross;
             this.buttonRoss.Location = new System.Drawing.Point(121, 36);
             this.buttonRoss.MouseOverColor = System.Drawing.Color.White;
             this.buttonRoss.MouseSelectedColor = System.Drawing.Color.Green;
@@ -1484,13 +1484,11 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxScrollMissions.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxScrollMissions.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxScrollMissions.ScrollBarLineTweak = 0;
             this.richTextBoxScrollMissions.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxScrollMissions.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxScrollMissions.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxScrollMissions.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxScrollMissions.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxScrollMissions.ScrollBarWidth = 20;
             this.richTextBoxScrollMissions.ShowLineCount = false;
             this.richTextBoxScrollMissions.Size = new System.Drawing.Size(200, 50);
             this.richTextBoxScrollMissions.TabIndex = 0;
@@ -1516,13 +1514,11 @@ namespace EDDiscovery.UserControls
             this.richTextBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxNote.ScrollBarLineTweak = 0;
             this.richTextBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxNote.ScrollBarWidth = 20;
             this.richTextBoxNote.ShowLineCount = false;
             this.richTextBoxNote.Size = new System.Drawing.Size(200, 50);
             this.richTextBoxNote.TabIndex = 0;
@@ -1539,7 +1535,7 @@ namespace EDDiscovery.UserControls
             this.buttonEDSMTarget.AutoEllipsis = false;
             this.buttonEDSMTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.buttonEDSMTarget.Image = null;
-            this.buttonEDSMTarget.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.InverseText;
+            this.buttonEDSMTarget.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.buttonEDSMTarget.Location = new System.Drawing.Point(217, 341);
             this.buttonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
             this.buttonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
@@ -1615,9 +1611,9 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.labelHomeDist);
             this.extPanelScroll.Controls.Add(this.textBoxHomeDist);
             this.extPanelScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelScroll.InternalScrollbar = true;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
-            this.extPanelScroll.ScrollBarWidth = 20;
             this.extPanelScroll.Size = new System.Drawing.Size(371, 760);
             this.extPanelScroll.TabIndex = 49;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
@@ -1633,13 +1629,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = true;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(351, 0);
+            this.extScrollBar1.Location = new System.Drawing.Point(358, 0);
             this.extScrollBar1.Maximum = -53;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(20, 760);
+            this.extScrollBar1.Size = new System.Drawing.Size(13, 760);
             this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar1.SmallChange = 1;
             this.extScrollBar1.TabIndex = 49;
@@ -1683,17 +1679,17 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelState;
         private ExtendedControls.ExtTextBox textBoxEconomy;
         private ExtendedControls.ExtTextBox textBoxState;
-        private ExtendedControls.ExtPanelDrawn buttonEDDB;
-        private ExtendedControls.ExtPanelDrawn buttonRoss;
+        private ExtendedControls.ExtButtonDrawn buttonEDDB;
+        private ExtendedControls.ExtButtonDrawn buttonRoss;
         private ExtendedControls.ExtTextBox textBoxHomeDist;
         private System.Windows.Forms.Label labelHomeDist;
-        private ExtendedControls.ExtPanelDrawn buttonEDSM;
+        private ExtendedControls.ExtButtonDrawn buttonEDSM;
         private ExtendedControls.ExtTextBox textBoxSolDist;
         private System.Windows.Forms.Label labelSolDist;
         private ExtendedControls.ExtRichTextBox richTextBoxNote;
         private System.Windows.Forms.Label labelNote;
         private System.Windows.Forms.Label labelTarget;
-        private ExtendedControls.ExtPanelDrawn buttonEDSMTarget;
+        private ExtendedControls.ExtButtonDrawn buttonEDSMTarget;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxTarget;
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtTextBox textBoxTargetDist;

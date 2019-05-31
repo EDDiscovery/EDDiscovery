@@ -134,9 +134,9 @@ namespace EDDiscovery.UserControls
             this.panelData.Controls.Add(this.mostVisited);
             this.panelData.Controls.Add(this.dataGridViewStats);
             this.panelData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelData.InternalScrollbar = true;
             this.panelData.Location = new System.Drawing.Point(3, 3);
             this.panelData.Name = "panelData";
-            this.panelData.ScrollBarWidth = 20;
             this.panelData.Size = new System.Drawing.Size(784, 720);
             this.panelData.TabIndex = 4;
             this.panelData.VerticalScrollBarDockRight = true;
@@ -153,13 +153,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 10;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(764, 0);
-            this.vScrollBarCustom.Maximum = -202;
+            this.vScrollBarCustom.Location = new System.Drawing.Point(771, 0);
+            this.vScrollBarCustom.Maximum = -206;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 720);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 720);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 8;
@@ -167,8 +167,8 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom.Value = -202;
-            this.vScrollBarCustom.ValueLimited = -202;
+            this.vScrollBarCustom.Value = -206;
+            this.vScrollBarCustom.ValueLimited = -206;
             // 
             // tabControlCustomStats
             // 
@@ -231,11 +231,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2});
             this.dataGridViewTravel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 28);
+            this.dataGridViewTravel.Location = new System.Drawing.Point(0, 23);
             this.dataGridViewTravel.Name = "dataGridViewTravel";
             this.dataGridViewTravel.RowHeadersVisible = false;
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(790, 698);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(790, 703);
             this.dataGridViewTravel.TabIndex = 3;
             this.dataGridViewTravel.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewTravel_SortCompare);
             // 
@@ -256,10 +256,11 @@ namespace EDDiscovery.UserControls
             // 
             // userControlStatsTimeTravel
             // 
+            this.userControlStatsTimeTravel.AutoSize = true;
             this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
-            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 28);
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(790, 23);
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeTravel.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeTravel_TimeModeChanged);
@@ -284,11 +285,11 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ScanNotUsed});
             this.dataGridViewScan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewScan.Location = new System.Drawing.Point(0, 28);
+            this.dataGridViewScan.Location = new System.Drawing.Point(0, 23);
             this.dataGridViewScan.Name = "dataGridViewScan";
             this.dataGridViewScan.RowHeadersVisible = false;
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridViewScan.Size = new System.Drawing.Size(790, 698);
+            this.dataGridViewScan.Size = new System.Drawing.Size(790, 703);
             this.dataGridViewScan.TabIndex = 4;
             this.dataGridViewScan.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewScan_SortCompare);
             // 
@@ -299,10 +300,11 @@ namespace EDDiscovery.UserControls
             // 
             // userControlStatsTimeScan
             // 
+            this.userControlStatsTimeScan.AutoSize = true;
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
-            this.userControlStatsTimeScan.Size = new System.Drawing.Size(790, 28);
+            this.userControlStatsTimeScan.Size = new System.Drawing.Size(790, 23);
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EDDiscovery.UserControls.StatsTimeUserControl.TimeModeType.Summary;
             this.userControlStatsTimeScan.TimeModeChanged += new System.EventHandler(this.userControlStatsTimeScan_TimeModeChanged);
@@ -336,7 +338,6 @@ namespace EDDiscovery.UserControls
             this.treeViewStats.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.treeViewStats.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.treeViewStats.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.treeViewStats.ScrollBarWidth = 20;
             this.treeViewStats.ShowLineCount = false;
             this.treeViewStats.ShowLines = true;
             this.treeViewStats.ShowPlusMinus = true;
@@ -403,8 +404,10 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.ResumeLayout(false);
             this.tabPageGeneral.ResumeLayout(false);
             this.tabPageTravel.ResumeLayout(false);
+            this.tabPageTravel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTravel)).EndInit();
             this.tabPageScan.ResumeLayout(false);
+            this.tabPageScan.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewScan)).EndInit();
             this.tabPageGameStats.ResumeLayout(false);
             this.tabPageByShip.ResumeLayout(false);

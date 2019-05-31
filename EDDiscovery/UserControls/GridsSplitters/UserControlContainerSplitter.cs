@@ -92,15 +92,13 @@ namespace EDDiscovery.UserControls
 
             SuspendLayout();
 
-            // try and make the configured splitter tree
+            //try and make the configured splitter tree
             SplitContainer sp = ControlHelpersStaticFunc.SplitterTreeMakeFromCtrlString(new BaseUtils.StringParser(splitctrl), MakeSplitContainer, MakeNode, 0);
 
             if (sp == null)       // string is screwed, nothing was returned.  Lets set the default up
                 sp = ControlHelpersStaticFunc.SplitterTreeMakeFromCtrlString(new BaseUtils.StringParser(defaultview), MakeSplitContainer, MakeNode, 0);
 
             panelPlayfield.Controls.Add(sp);
-
-            //panelPlayfield.Controls[0].DumpTree(0);
 
             ResumeLayout();
 
@@ -113,8 +111,9 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Trace.WriteLine("SP:Make UCCB " + uccb.GetType().Name + " tag " + tagid + " dno " + displaynumber);
 
                 uccb.Init(discoveryform, displaynumber);
-                discoveryform.theme.ApplyToControls(uccb);  // mimic themeing applied via pop out - its done before ucf::shown
             });
+
+            // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
 
         public override void LoadLayout()           // cursor now set up, initial setup complete..
@@ -126,7 +125,7 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("--------------------" + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
 
-            RunActionOnSplitterTree((p, c, uccb) =>
+            RunActionOnSplitterTree((p, c, uccb) =>     // now, at load layout, do the rest of the UCCB contract.
             {
                 uccb.SetCursor(ucursor_inuse);
                 uccb.LoadLayout();
@@ -201,8 +200,8 @@ namespace EDDiscovery.UserControls
                     pi = PanelInformation.GetPanelInfoByPanelID(PanelInformation.PanelIDs.Log);      // make sure we have a valid one - can't return nothing
 
                 UserControlCommonBase uccb = PanelInformation.Create(pi.PopoutID);      // must return as we made sure pi is valid
+                uccb.AutoScaleMode = AutoScaleMode.Inherit;     // very very important and took 2 days to work out!
                 uccb.Dock = DockStyle.Fill;
-
                 uccb.Tag = tagid;
                 uccb.Name = "UC-" + tagid.ToStringInvariant();
 
@@ -217,8 +216,6 @@ namespace EDDiscovery.UserControls
                 tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha);
 
                 tabstrip.Dock = DockStyle.Fill;
-                tabstrip.DropDownWidth = 500;
-                tabstrip.DropDownHeight = 500;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
 
                 tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
@@ -233,12 +230,13 @@ namespace EDDiscovery.UserControls
                     AssignTHC();        // in case we removed anything
                 };
 
-                tabstrip.OnCreateTab += (tab, si) =>
+                tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 
                 {
                     PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID((PanelInformation.PanelIDs)tab.TagList[si]);  // must be valid, as it came from the taglist
                     Control c = PanelInformation.Create(pi.PopoutID);
+                    (c as UserControlCommonBase).AutoScaleMode = AutoScaleMode.Inherit; 
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
-
+                    System.Diagnostics.Trace.WriteLine("SP:Create Tab " + c.Name );
                     return c;
                 };
 
@@ -251,20 +249,20 @@ namespace EDDiscovery.UserControls
                     if (uc != null)
                     {
                         System.Diagnostics.Trace.WriteLine("SP:Make Tab " + tabstripid + " with dno " + displaynumber + " Use THC " + ucursor_inuse.GetHashCode());
-                        uc.Init(discoveryform, displaynumber);
+                        uc.Init(discoveryform, displaynumber);      // init..
+
+                        uc.Scale(this.FindForm().CurrentAutoScaleFactor());       // keeping to the contract, scale and  
+                        discoveryform.theme.ApplyStd(uc);       // theme the uc. between init and set cursor
+
                         uc.SetCursor(ucursor_inuse);
                         uc.LoadLayout();
                         uc.InitialDisplay();
                     }
 
-                    //System.Diagnostics.Debug.WriteLine("And theme {0}", i);
-                    discoveryform.theme.ApplyToControls(tab);
                     AssignTHC();        // in case we added one
                 };
 
                 tabstrip.OnPopOut += (tab, i) => { discoveryform.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
-
-                discoveryform.theme.ApplyToControls(tabstrip, applytothis: true);
 
                 PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha); // sort order v.important.. we need the right index, dep
 
@@ -272,7 +270,7 @@ namespace EDDiscovery.UserControls
 
                 if (indexofentry >= 0)       // if we have a panel, open it
                 {
-                    tabstrip.Create(indexofentry);       // create but not post create yet...
+                    tabstrip.Create(indexofentry);       // create but not post create during the init phase. Post create is only used during dynamics
                 }
 
                 return tabstrip;
@@ -288,7 +286,7 @@ namespace EDDiscovery.UserControls
             sc.Name = "SC-" + lv;
             sc.Controls[0].Name = lv + "-P1";       // names used for debugging this complicated beast!
             sc.Controls[1].Name = lv + "-P2";
-            toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels");
+            toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels".Tx(this,"RC"));
             return sc;
         }
         
@@ -390,6 +388,7 @@ namespace EDDiscovery.UserControls
                 toolStripSplitPanel2.Enabled = !(currentsplitter.Panel2.Controls[0] is SplitContainer);
                 toolStripMergePanel1.Enabled = currentsplitter.Panel1.Controls[0] is SplitContainer;
                 toolStripMergePanel2.Enabled = currentsplitter.Panel2.Controls[0] is SplitContainer;
+                contextMenuStripSplitter.Font = this.Font;
                 contextMenuStripSplitter.Show(currentsplitter.PointToScreen(e.Location));
             }
         }

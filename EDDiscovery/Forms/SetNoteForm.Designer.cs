@@ -41,8 +41,8 @@
             this.buttonSave = new ExtendedControls.ExtButton();
             this.textBoxNote = new ExtendedControls.ExtRichTextBox();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelBack.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -177,13 +177,11 @@
             this.textBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
             this.textBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBoxNote.ScrollBarLineTweak = 0;
             this.textBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.textBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.textBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.textBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.textBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.textBoxNote.ScrollBarWidth = 20;
             this.textBoxNote.ShowLineCount = false;
             this.textBoxNote.Size = new System.Drawing.Size(510, 110);
             this.textBoxNote.TabIndex = 12;
@@ -217,7 +215,7 @@
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(476, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -270,8 +268,8 @@
         private ExtendedControls.ExtRichTextBox textBoxNote;
         private System.Windows.Forms.Panel panelBack;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
     }
 }

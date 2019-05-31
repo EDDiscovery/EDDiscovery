@@ -83,6 +83,7 @@
             // 
             // panel1
             // 
+            this.panel1.AutoSize = true;
             this.panel1.Controls.Add(this.buttonExtExcel);
             this.panel1.Controls.Add(this.textBox_ToName);
             this.panel1.Controls.Add(this.textBox_FromName);
@@ -115,14 +116,14 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(706, 193);
+            this.panel1.Size = new System.Drawing.Size(706, 169);
             this.panel1.TabIndex = 0;
             // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Route_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(312, 148);
+            this.buttonExtExcel.Location = new System.Drawing.Point(312, 140);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
             this.buttonExtExcel.TabIndex = 59;
@@ -141,8 +142,11 @@
             this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToName.ClearOnFirstChar = false;
             this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToName.EndButtonEnable = true;
+            this.textBox_ToName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToName.EndButtonImage")));
+            this.textBox_ToName.EndButtonVisible = false;
             this.textBox_ToName.InErrorCondition = false;
-            this.textBox_ToName.Location = new System.Drawing.Point(342, 39);
+            this.textBox_ToName.Location = new System.Drawing.Point(342, 31);
             this.textBox_ToName.Multiline = false;
             this.textBox_ToName.Name = "textBox_ToName";
             this.textBox_ToName.ReadOnly = true;
@@ -165,8 +169,11 @@
             this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromName.ClearOnFirstChar = false;
             this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromName.EndButtonEnable = true;
+            this.textBox_FromName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromName.EndButtonImage")));
+            this.textBox_FromName.EndButtonVisible = false;
             this.textBox_FromName.InErrorCondition = false;
-            this.textBox_FromName.Location = new System.Drawing.Point(57, 39);
+            this.textBox_FromName.Location = new System.Drawing.Point(57, 31);
             this.textBox_FromName.Multiline = false;
             this.textBox_FromName.Name = "textBox_FromName";
             this.textBox_FromName.ReadOnly = true;
@@ -181,24 +188,19 @@
             // 
             // comboBoxRoutingMetric
             // 
-            this.comboBoxRoutingMetric.ArrowWidth = 1;
             this.comboBoxRoutingMetric.BorderColor = System.Drawing.Color.Red;
             this.comboBoxRoutingMetric.ButtonColorScaling = 0.5F;
             this.comboBoxRoutingMetric.DataSource = null;
             this.comboBoxRoutingMetric.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxRoutingMetric.DisplayMember = "";
             this.comboBoxRoutingMetric.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxRoutingMetric.DropDownHeight = 200;
-            this.comboBoxRoutingMetric.DropDownWidth = 234;
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxRoutingMetric.ItemHeight = 13;
-            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 120);
+            this.comboBoxRoutingMetric.Location = new System.Drawing.Point(57, 112);
             this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxRoutingMetric.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxRoutingMetric.ScrollBarWidth = 16;
             this.comboBoxRoutingMetric.SelectedIndex = -1;
             this.comboBoxRoutingMetric.SelectedItem = null;
             this.comboBoxRoutingMetric.SelectedValue = null;
@@ -210,7 +212,7 @@
             // 
             // buttonExtTravelTo
             // 
-            this.buttonExtTravelTo.Location = new System.Drawing.Point(342, 91);
+            this.buttonExtTravelTo.Location = new System.Drawing.Point(342, 83);
             this.buttonExtTravelTo.Name = "buttonExtTravelTo";
             this.buttonExtTravelTo.Size = new System.Drawing.Size(72, 23);
             this.buttonExtTravelTo.TabIndex = 56;
@@ -221,7 +223,7 @@
             // 
             // buttonExtTravelFrom
             // 
-            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 91);
+            this.buttonExtTravelFrom.Location = new System.Drawing.Point(57, 83);
             this.buttonExtTravelFrom.Name = "buttonExtTravelFrom";
             this.buttonExtTravelFrom.Size = new System.Drawing.Size(72, 23);
             this.buttonExtTravelFrom.TabIndex = 55;
@@ -232,7 +234,7 @@
             // 
             // buttonExtTargetTo
             // 
-            this.buttonExtTargetTo.Location = new System.Drawing.Point(420, 91);
+            this.buttonExtTargetTo.Location = new System.Drawing.Point(420, 83);
             this.buttonExtTargetTo.Name = "buttonExtTargetTo";
             this.buttonExtTargetTo.Size = new System.Drawing.Size(72, 23);
             this.buttonExtTargetTo.TabIndex = 54;
@@ -243,7 +245,7 @@
             // 
             // buttonToEDSM
             // 
-            this.buttonToEDSM.Location = new System.Drawing.Point(498, 91);
+            this.buttonToEDSM.Location = new System.Drawing.Point(498, 83);
             this.buttonToEDSM.Name = "buttonToEDSM";
             this.buttonToEDSM.Size = new System.Drawing.Size(72, 23);
             this.buttonToEDSM.TabIndex = 53;
@@ -254,7 +256,7 @@
             // 
             // buttonFromEDSM
             // 
-            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 91);
+            this.buttonFromEDSM.Location = new System.Drawing.Point(213, 83);
             this.buttonFromEDSM.Name = "buttonFromEDSM";
             this.buttonFromEDSM.Size = new System.Drawing.Size(72, 23);
             this.buttonFromEDSM.TabIndex = 52;
@@ -265,7 +267,7 @@
             // 
             // buttonTargetFrom
             // 
-            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 91);
+            this.buttonTargetFrom.Location = new System.Drawing.Point(135, 83);
             this.buttonTargetFrom.Name = "buttonTargetFrom";
             this.buttonTargetFrom.Size = new System.Drawing.Size(72, 23);
             this.buttonTargetFrom.TabIndex = 51;
@@ -276,7 +278,7 @@
             // 
             // cmd3DMap
             // 
-            this.cmd3DMap.Location = new System.Drawing.Point(174, 148);
+            this.cmd3DMap.Location = new System.Drawing.Point(174, 140);
             this.cmd3DMap.Name = "cmd3DMap";
             this.cmd3DMap.Size = new System.Drawing.Size(111, 26);
             this.cmd3DMap.TabIndex = 50;
@@ -287,6 +289,7 @@
             // 
             // textBox_From
             // 
+            this.textBox_From.AutoCompleteCommentMarker = null;
             this.textBox_From.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_From.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_From.BackErrorColor = System.Drawing.Color.Red;
@@ -297,15 +300,15 @@
             this.textBox_From.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_From.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBox_From.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBox_From.DropDownHeight = 200;
-            this.textBox_From.DropDownItemHeight = 13;
             this.textBox_From.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBox_From.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_From.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBox_From.DropDownWidth = 0;
+            this.textBox_From.EndButtonEnable = false;
+            this.textBox_From.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_From.EndButtonImage")));
+            this.textBox_From.EndButtonVisible = false;
             this.textBox_From.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_From.InErrorCondition = false;
-            this.textBox_From.Location = new System.Drawing.Point(57, 13);
+            this.textBox_From.Location = new System.Drawing.Point(57, 5);
             this.textBox_From.Multiline = false;
             this.textBox_From.Name = "textBox_From";
             this.textBox_From.ReadOnly = true;
@@ -331,9 +334,12 @@
             this.textBox_Range.ClearOnFirstChar = false;
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_Range.DelayBeforeNotification = 0;
+            this.textBox_Range.EndButtonEnable = true;
+            this.textBox_Range.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Range.EndButtonImage")));
+            this.textBox_Range.EndButtonVisible = false;
             this.textBox_Range.Format = "D";
             this.textBox_Range.InErrorCondition = false;
-            this.textBox_Range.Location = new System.Drawing.Point(498, 121);
+            this.textBox_Range.Location = new System.Drawing.Point(498, 113);
             this.textBox_Range.Maximum = ((long)(999));
             this.textBox_Range.Minimum = ((long)(1));
             this.textBox_Range.Multiline = false;
@@ -351,6 +357,7 @@
             // 
             // textBox_To
             // 
+            this.textBox_To.AutoCompleteCommentMarker = null;
             this.textBox_To.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.textBox_To.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_To.BackErrorColor = System.Drawing.Color.Red;
@@ -361,15 +368,15 @@
             this.textBox_To.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBox_To.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBox_To.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBox_To.DropDownHeight = 200;
-            this.textBox_To.DropDownItemHeight = 13;
             this.textBox_To.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBox_To.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBox_To.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBox_To.DropDownWidth = 0;
+            this.textBox_To.EndButtonEnable = false;
+            this.textBox_To.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_To.EndButtonImage")));
+            this.textBox_To.EndButtonVisible = false;
             this.textBox_To.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBox_To.InErrorCondition = false;
-            this.textBox_To.Location = new System.Drawing.Point(342, 13);
+            this.textBox_To.Location = new System.Drawing.Point(342, 5);
             this.textBox_To.Multiline = false;
             this.textBox_To.Name = "textBox_To";
             this.textBox_To.ReadOnly = true;
@@ -387,7 +394,7 @@
             // labelLy2
             // 
             this.labelLy2.AutoSize = true;
-            this.labelLy2.Location = new System.Drawing.Point(563, 150);
+            this.labelLy2.Location = new System.Drawing.Point(563, 142);
             this.labelLy2.Name = "labelLy2";
             this.labelLy2.Size = new System.Drawing.Size(14, 13);
             this.labelLy2.TabIndex = 43;
@@ -396,7 +403,7 @@
             // labelLy1
             // 
             this.labelLy1.AutoSize = true;
-            this.labelLy1.Location = new System.Drawing.Point(563, 123);
+            this.labelLy1.Location = new System.Drawing.Point(563, 115);
             this.labelLy1.Name = "labelLy1";
             this.labelLy1.Size = new System.Drawing.Size(14, 13);
             this.labelLy1.TabIndex = 44;
@@ -412,8 +419,11 @@
             this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Distance.ClearOnFirstChar = false;
             this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_Distance.EndButtonEnable = true;
+            this.textBox_Distance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_Distance.EndButtonImage")));
+            this.textBox_Distance.EndButtonVisible = false;
             this.textBox_Distance.InErrorCondition = false;
-            this.textBox_Distance.Location = new System.Drawing.Point(498, 154);
+            this.textBox_Distance.Location = new System.Drawing.Point(498, 146);
             this.textBox_Distance.Multiline = false;
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.ReadOnly = true;
@@ -431,7 +441,7 @@
             // labelTo
             // 
             this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(301, 14);
+            this.labelTo.Location = new System.Drawing.Point(301, 6);
             this.labelTo.Name = "labelTo";
             this.labelTo.Size = new System.Drawing.Size(20, 13);
             this.labelTo.TabIndex = 49;
@@ -447,8 +457,11 @@
             this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToZ.ClearOnFirstChar = false;
             this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToZ.EndButtonEnable = true;
+            this.textBox_ToZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToZ.EndButtonImage")));
+            this.textBox_ToZ.EndButtonVisible = false;
             this.textBox_ToZ.InErrorCondition = false;
-            this.textBox_ToZ.Location = new System.Drawing.Point(498, 65);
+            this.textBox_ToZ.Location = new System.Drawing.Point(498, 57);
             this.textBox_ToZ.Multiline = false;
             this.textBox_ToZ.Name = "textBox_ToZ";
             this.textBox_ToZ.ReadOnly = true;
@@ -467,7 +480,7 @@
             // labelMaxJump
             // 
             this.labelMaxJump.AutoSize = true;
-            this.labelMaxJump.Location = new System.Drawing.Point(419, 122);
+            this.labelMaxJump.Location = new System.Drawing.Point(419, 114);
             this.labelMaxJump.Name = "labelMaxJump";
             this.labelMaxJump.Size = new System.Drawing.Size(52, 13);
             this.labelMaxJump.TabIndex = 45;
@@ -483,8 +496,11 @@
             this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToY.ClearOnFirstChar = false;
             this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToY.EndButtonEnable = true;
+            this.textBox_ToY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToY.EndButtonImage")));
+            this.textBox_ToY.EndButtonVisible = false;
             this.textBox_ToY.InErrorCondition = false;
-            this.textBox_ToY.Location = new System.Drawing.Point(420, 65);
+            this.textBox_ToY.Location = new System.Drawing.Point(420, 57);
             this.textBox_ToY.Multiline = false;
             this.textBox_ToY.Name = "textBox_ToY";
             this.textBox_ToY.ReadOnly = true;
@@ -503,7 +519,7 @@
             // labelDistance
             // 
             this.labelDistance.AutoSize = true;
-            this.labelDistance.Location = new System.Drawing.Point(422, 155);
+            this.labelDistance.Location = new System.Drawing.Point(422, 147);
             this.labelDistance.Name = "labelDistance";
             this.labelDistance.Size = new System.Drawing.Size(49, 13);
             this.labelDistance.TabIndex = 46;
@@ -519,8 +535,11 @@
             this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToX.ClearOnFirstChar = false;
             this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_ToX.EndButtonEnable = true;
+            this.textBox_ToX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_ToX.EndButtonImage")));
+            this.textBox_ToX.EndButtonVisible = false;
             this.textBox_ToX.InErrorCondition = false;
-            this.textBox_ToX.Location = new System.Drawing.Point(342, 65);
+            this.textBox_ToX.Location = new System.Drawing.Point(342, 57);
             this.textBox_ToX.Multiline = false;
             this.textBox_ToX.Name = "textBox_ToX";
             this.textBox_ToX.ReadOnly = true;
@@ -539,7 +558,7 @@
             // labelMetric
             // 
             this.labelMetric.AutoSize = true;
-            this.labelMetric.Location = new System.Drawing.Point(3, 122);
+            this.labelMetric.Location = new System.Drawing.Point(3, 114);
             this.labelMetric.Name = "labelMetric";
             this.labelMetric.Size = new System.Drawing.Size(36, 13);
             this.labelMetric.TabIndex = 47;
@@ -555,8 +574,11 @@
             this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromZ.ClearOnFirstChar = false;
             this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromZ.EndButtonEnable = true;
+            this.textBox_FromZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromZ.EndButtonImage")));
+            this.textBox_FromZ.EndButtonVisible = false;
             this.textBox_FromZ.InErrorCondition = false;
-            this.textBox_FromZ.Location = new System.Drawing.Point(213, 65);
+            this.textBox_FromZ.Location = new System.Drawing.Point(213, 57);
             this.textBox_FromZ.Multiline = false;
             this.textBox_FromZ.Name = "textBox_FromZ";
             this.textBox_FromZ.ReadOnly = true;
@@ -575,7 +597,7 @@
             // button_Route
             // 
             this.button_Route.Enabled = false;
-            this.button_Route.Location = new System.Drawing.Point(57, 147);
+            this.button_Route.Location = new System.Drawing.Point(57, 139);
             this.button_Route.Name = "button_Route";
             this.button_Route.Size = new System.Drawing.Size(111, 27);
             this.button_Route.TabIndex = 42;
@@ -594,8 +616,11 @@
             this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromY.ClearOnFirstChar = false;
             this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromY.EndButtonEnable = true;
+            this.textBox_FromY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromY.EndButtonImage")));
+            this.textBox_FromY.EndButtonVisible = false;
             this.textBox_FromY.InErrorCondition = false;
-            this.textBox_FromY.Location = new System.Drawing.Point(135, 65);
+            this.textBox_FromY.Location = new System.Drawing.Point(135, 57);
             this.textBox_FromY.Multiline = false;
             this.textBox_FromY.Name = "textBox_FromY";
             this.textBox_FromY.ReadOnly = true;
@@ -614,7 +639,7 @@
             // labelFrom
             // 
             this.labelFrom.AutoSize = true;
-            this.labelFrom.Location = new System.Drawing.Point(3, 14);
+            this.labelFrom.Location = new System.Drawing.Point(3, 6);
             this.labelFrom.Name = "labelFrom";
             this.labelFrom.Size = new System.Drawing.Size(30, 13);
             this.labelFrom.TabIndex = 48;
@@ -630,8 +655,11 @@
             this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromX.ClearOnFirstChar = false;
             this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBox_FromX.EndButtonEnable = true;
+            this.textBox_FromX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBox_FromX.EndButtonImage")));
+            this.textBox_FromX.EndButtonVisible = false;
             this.textBox_FromX.InErrorCondition = false;
-            this.textBox_FromX.Location = new System.Drawing.Point(57, 65);
+            this.textBox_FromX.Location = new System.Drawing.Point(57, 57);
             this.textBox_FromX.Multiline = false;
             this.textBox_FromX.Name = "textBox_FromX";
             this.textBox_FromX.ReadOnly = true;
@@ -675,10 +703,9 @@
             this.dataViewScrollerPanel1.Controls.Add(this.dataGridViewRoute);
             this.dataViewScrollerPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel1.InternalMargin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 193);
+            this.dataViewScrollerPanel1.Location = new System.Drawing.Point(0, 169);
             this.dataViewScrollerPanel1.Name = "dataViewScrollerPanel1";
-            this.dataViewScrollerPanel1.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 221);
+            this.dataViewScrollerPanel1.Size = new System.Drawing.Size(706, 245);
             this.dataViewScrollerPanel1.TabIndex = 29;
             this.dataViewScrollerPanel1.VerticalScrollBarDockRight = true;
             // 
@@ -693,13 +720,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = true;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(683, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(690, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 221);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 245);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 4;
@@ -716,6 +743,7 @@
             this.dataGridViewRoute.AllowUserToDeleteRows = false;
             this.dataGridViewRoute.AllowUserToResizeRows = false;
             this.dataGridViewRoute.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRoute.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewRoute.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRoute.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.SystemCol,
@@ -739,7 +767,7 @@
             this.dataGridViewRoute.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewRoute.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dataGridViewRoute.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRoute.Size = new System.Drawing.Size(683, 221);
+            this.dataGridViewRoute.Size = new System.Drawing.Size(690, 245);
             this.dataGridViewRoute.TabIndex = 1;
             this.dataGridViewRoute.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRoute_CellClick);
             this.dataGridViewRoute.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewRoute_MouseDown);
@@ -802,6 +830,7 @@
             this.dataViewScrollerPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRoute)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

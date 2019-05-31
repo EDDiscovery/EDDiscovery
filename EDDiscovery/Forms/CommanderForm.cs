@@ -27,7 +27,7 @@ namespace EDDiscovery.Forms
         {
             InitializeComponent();
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -122,6 +122,12 @@ namespace EDDiscovery.Forms
         private void panel_close_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            Refresh();
         }
 
         #endregion

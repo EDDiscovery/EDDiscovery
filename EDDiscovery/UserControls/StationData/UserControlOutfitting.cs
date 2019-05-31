@@ -46,10 +46,12 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewOutfitting.MakeDoubleBuffered();
             dataGridViewOutfitting.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewOutfitting.RowTemplate.Height = 26;
+            dataGridViewOutfitting.RowTemplate.Height = Font.ScalePixels(26);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
+
+            Col1.HeaderText = Col2.HeaderText = Col3.HeaderText = Col4.HeaderText = ColPrice.HeaderText = ""; // zero because no values until a display selected
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);

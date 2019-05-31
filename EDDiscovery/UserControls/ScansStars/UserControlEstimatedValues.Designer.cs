@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 572);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
@@ -77,13 +76,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(559, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 572);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(13, 572);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -109,7 +108,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.Name = "dataGridViewEstimatedValues";
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(552, 572);
+            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(559, 572);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             // 
             // BodyName

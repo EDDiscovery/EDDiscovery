@@ -58,7 +58,6 @@ namespace EDDiscovery.UserControls
             this.labelFaction = new ExtendedControls.ExtLabel();
             this.labelTotalReward = new ExtendedControls.ExtLabel();
             this.labelFactionReward = new ExtendedControls.ExtLabel();
-            this.panelTop = new System.Windows.Forms.Panel();
             this.checkBoxCustomGridOn = new ExtendedControls.ExtCheckBox();
             this.comboBoxCustomCampaign = new ExtendedControls.ExtComboBox();
             this.buttonExtEditCampaign = new ExtendedControls.ExtButton();
@@ -70,10 +69,11 @@ namespace EDDiscovery.UserControls
             this.Event = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Reward = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.panelStatus.SuspendLayout();
-            this.panelTop.SuspendLayout();
             this.dataViewScrollerPanelCombat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).BeginInit();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip
@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             this.panelStatus.Controls.Add(this.labelTotalReward);
             this.panelStatus.Controls.Add(this.labelFactionReward);
             this.panelStatus.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelStatus.Location = new System.Drawing.Point(0, 32);
+            this.panelStatus.Location = new System.Drawing.Point(0, 26);
             this.panelStatus.Name = "panelStatus";
             this.panelStatus.Size = new System.Drawing.Size(713, 80);
             this.panelStatus.TabIndex = 5;
@@ -187,54 +187,40 @@ namespace EDDiscovery.UserControls
             this.labelFactionReward.TextBackColor = System.Drawing.SystemColors.Control;
             this.toolTip.SetToolTip(this.labelFactionReward, "Reward associated with destroying the faction ships");
             // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.checkBoxCustomGridOn);
-            this.panelTop.Controls.Add(this.comboBoxCustomCampaign);
-            this.panelTop.Controls.Add(this.buttonExtEditCampaign);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(713, 32);
-            this.panelTop.TabIndex = 5;
-            // 
             // checkBoxCustomGridOn
             // 
             this.checkBoxCustomGridOn.AutoSize = true;
             this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomGridOn.FontNerfReduction = 0.5F;
             this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(284, 7);
+            this.checkBoxCustomGridOn.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCustomGridOn.Location = new System.Drawing.Point(288, 1);
+            this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
             this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
             this.checkBoxCustomGridOn.TabIndex = 3;
             this.checkBoxCustomGridOn.Text = "Grid";
-            this.checkBoxCustomGridOn.TickBoxReductionSize = 10;
+            this.checkBoxCustomGridOn.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxCustomGridOn, "Show grid when in transparent mode");
             this.checkBoxCustomGridOn.UseVisualStyleBackColor = true;
             // 
             // comboBoxCustomCampaign
             // 
-            this.comboBoxCustomCampaign.ArrowWidth = 1;
             this.comboBoxCustomCampaign.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomCampaign.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCampaign.DataSource = null;
             this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCampaign.DisplayMember = "";
             this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomCampaign.DropDownHeight = 400;
-            this.comboBoxCustomCampaign.DropDownWidth = 600;
             this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCampaign.ItemHeight = 13;
-            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 3);
+            this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 1);
+            this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
             this.comboBoxCustomCampaign.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomCampaign.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCampaign.ScrollBarWidth = 16;
             this.comboBoxCustomCampaign.SelectedIndex = -1;
             this.comboBoxCustomCampaign.SelectedItem = null;
             this.comboBoxCustomCampaign.SelectedValue = null;
@@ -247,7 +233,8 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtEditCampaign
             // 
-            this.buttonExtEditCampaign.Location = new System.Drawing.Point(228, 3);
+            this.buttonExtEditCampaign.Location = new System.Drawing.Point(230, 1);
+            this.buttonExtEditCampaign.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtEditCampaign.Name = "buttonExtEditCampaign";
             this.buttonExtEditCampaign.Size = new System.Drawing.Size(50, 24);
             this.buttonExtEditCampaign.TabIndex = 2;
@@ -262,10 +249,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCombat.Controls.Add(this.dataGridViewCombat);
             this.dataViewScrollerPanelCombat.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelCombat.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelCombat.Location = new System.Drawing.Point(0, 112);
+            this.dataViewScrollerPanelCombat.Location = new System.Drawing.Point(0, 106);
             this.dataViewScrollerPanelCombat.Name = "dataViewScrollerPanelCombat";
-            this.dataViewScrollerPanelCombat.ScrollBarWidth = 20;
-            this.dataViewScrollerPanelCombat.Size = new System.Drawing.Size(713, 249);
+            this.dataViewScrollerPanelCombat.Size = new System.Drawing.Size(713, 255);
             this.dataViewScrollerPanelCombat.TabIndex = 3;
             this.dataViewScrollerPanelCombat.VerticalScrollBarDockRight = true;
             // 
@@ -280,13 +266,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(693, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(700, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 249);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 255);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -335,7 +321,7 @@ namespace EDDiscovery.UserControls
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridViewCombat.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewCombat.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewCombat.Size = new System.Drawing.Size(693, 249);
+            this.dataGridViewCombat.Size = new System.Drawing.Size(700, 255);
             this.dataGridViewCombat.TabIndex = 0;
             this.dataGridViewCombat.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewCombat_CellDoubleClick);
             this.dataGridViewCombat.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCombat_SortCompare);
@@ -366,6 +352,18 @@ namespace EDDiscovery.UserControls
             this.Reward.Name = "Reward";
             this.Reward.ReadOnly = true;
             // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.comboBoxCustomCampaign);
+            this.panelTop.Controls.Add(this.buttonExtEditCampaign);
+            this.panelTop.Controls.Add(this.checkBoxCustomGridOn);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(713, 26);
+            this.panelTop.TabIndex = 4;
+            // 
             // UserControlCombatPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -376,11 +374,12 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlCombatPanel";
             this.Size = new System.Drawing.Size(713, 361);
             this.panelStatus.ResumeLayout(false);
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.dataViewScrollerPanelCombat.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCombat)).EndInit();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -404,9 +403,9 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtLabel labelBalance;
         private System.Windows.Forms.Panel panelStatus;
         private ExtendedControls.ExtLabel labelCredits;
-        private System.Windows.Forms.Panel panelTop;
         private ExtendedControls.ExtCheckBox checkBoxCustomGridOn;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtLabel labelTarget;
+        private System.Windows.Forms.FlowLayoutPanel panelTop;
     }
 }

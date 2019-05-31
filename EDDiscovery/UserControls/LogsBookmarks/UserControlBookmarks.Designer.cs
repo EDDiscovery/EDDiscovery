@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelButtons = new System.Windows.Forms.Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlBookmarks));
             this.buttonExtImport = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.buttonDelete = new ExtendedControls.ExtButton();
@@ -52,7 +52,7 @@
             this.openInEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.userControlSurfaceBookmarks = new EDDiscovery.Forms.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.panelButtons.SuspendLayout();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -60,30 +60,17 @@
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).BeginInit();
             this.contextMenuStripBookmarks.SuspendLayout();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.buttonExtImport);
-            this.panelButtons.Controls.Add(this.buttonExtExcel);
-            this.panelButtons.Controls.Add(this.buttonDelete);
-            this.panelButtons.Controls.Add(this.buttonNew);
-            this.panelButtons.Controls.Add(this.buttonEdit);
-            this.panelButtons.Controls.Add(this.textBoxFilter);
-            this.panelButtons.Controls.Add(this.labelSearch);
-            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtons.Location = new System.Drawing.Point(0, 0);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(676, 32);
-            this.panelButtons.TabIndex = 0;
             // 
             // buttonExtImport
             // 
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(338, 3);
+            this.buttonExtImport.Location = new System.Drawing.Point(349, 1);
+            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtImport.Name = "buttonExtImport";
-            this.buttonExtImport.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
             this.buttonExtImport.TabIndex = 38;
             this.toolTip.SetToolTip(this.buttonExtImport, "Import bookmarks to EDD from CSV file");
             this.buttonExtImport.UseVisualStyleBackColor = true;
@@ -93,9 +80,10 @@
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.TravelGrid_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(308, 3);
+            this.buttonExtExcel.Location = new System.Drawing.Point(313, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 38;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Export bookmarks to CSV file");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
@@ -104,9 +92,10 @@
             // buttonDelete
             // 
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(270, 0);
+            this.buttonDelete.Location = new System.Drawing.Point(277, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(32, 32);
+            this.buttonDelete.Size = new System.Drawing.Size(28, 28);
             this.buttonDelete.TabIndex = 27;
             this.toolTip.SetToolTip(this.buttonDelete, "Delete selected bookmark");
             this.buttonDelete.UseVisualStyleBackColor = true;
@@ -115,9 +104,10 @@
             // buttonNew
             // 
             this.buttonNew.Image = global::EDDiscovery.Icons.Controls.Bookmarks_New;
-            this.buttonNew.Location = new System.Drawing.Point(204, 0);
+            this.buttonNew.Location = new System.Drawing.Point(205, 1);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonNew.Name = "buttonNew";
-            this.buttonNew.Size = new System.Drawing.Size(32, 32);
+            this.buttonNew.Size = new System.Drawing.Size(28, 28);
             this.buttonNew.TabIndex = 2;
             this.toolTip.SetToolTip(this.buttonNew, "New Bookmark");
             this.buttonNew.UseVisualStyleBackColor = true;
@@ -126,9 +116,10 @@
             // buttonEdit
             // 
             this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Bookmarks_Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(236, 0);
+            this.buttonEdit.Location = new System.Drawing.Point(241, 1);
+            this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(32, 32);
+            this.buttonEdit.Size = new System.Drawing.Size(28, 28);
             this.buttonEdit.TabIndex = 3;
             this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
             this.buttonEdit.UseVisualStyleBackColor = true;
@@ -144,8 +135,12 @@
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textBoxFilter.EndButtonEnable = true;
+            this.textBoxFilter.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFilter.EndButtonImage")));
+            this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(50, 6);
+            this.textBoxFilter.Location = new System.Drawing.Point(49, 1);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -162,7 +157,8 @@
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(3, 6);
+            this.labelSearch.Location = new System.Drawing.Point(0, 1);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 26;
@@ -171,7 +167,7 @@
             // splitContainer
             // 
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 32);
+            this.splitContainer.Location = new System.Drawing.Point(0, 30);
             this.splitContainer.Name = "splitContainer";
             this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -182,7 +178,7 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.userControlSurfaceBookmarks);
-            this.splitContainer.Size = new System.Drawing.Size(676, 411);
+            this.splitContainer.Size = new System.Drawing.Size(676, 413);
             this.splitContainer.SplitterDistance = 204;
             this.splitContainer.TabIndex = 1;
             // 
@@ -194,7 +190,6 @@
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.ScrollBarWidth = 20;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 204);
             this.dataViewScrollerPanel.TabIndex = 5;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -210,13 +205,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(656, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(663, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 204);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 204);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -231,6 +226,7 @@
             // 
             this.dataGridViewBookMarks.AllowUserToAddRows = false;
             this.dataGridViewBookMarks.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewBookMarks.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridViewBookMarks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewBookMarks.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColType,
@@ -244,7 +240,7 @@
             this.dataGridViewBookMarks.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewBookMarks.Name = "dataGridViewBookMarks";
             this.dataGridViewBookMarks.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewBookMarks.Size = new System.Drawing.Size(656, 204);
+            this.dataGridViewBookMarks.Size = new System.Drawing.Size(663, 204);
             this.dataGridViewBookMarks.TabIndex = 4;
             this.dataGridViewBookMarks.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
             this.dataGridViewBookMarks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellEndEdit);
@@ -316,19 +312,33 @@
             this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
             this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
-            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 203);
+            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
             this.userControlSurfaceBookmarks.TabIndex = 5;
+            // 
+            // topPanel
+            // 
+            this.topPanel.AutoSize = true;
+            this.topPanel.Controls.Add(this.labelSearch);
+            this.topPanel.Controls.Add(this.textBoxFilter);
+            this.topPanel.Controls.Add(this.buttonNew);
+            this.topPanel.Controls.Add(this.buttonEdit);
+            this.topPanel.Controls.Add(this.buttonDelete);
+            this.topPanel.Controls.Add(this.buttonExtExcel);
+            this.topPanel.Controls.Add(this.buttonExtImport);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(676, 30);
+            this.topPanel.TabIndex = 39;
             // 
             // UserControlBookmarks
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer);
-            this.Controls.Add(this.panelButtons);
+            this.Controls.Add(this.topPanel);
             this.Name = "UserControlBookmarks";
             this.Size = new System.Drawing.Size(676, 443);
-            this.panelButtons.ResumeLayout(false);
-            this.panelButtons.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -336,13 +346,14 @@
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBookMarks)).EndInit();
             this.contextMenuStripBookmarks.ResumeLayout(false);
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel panelButtons;
         private ExtendedControls.ExtTextBox textBoxFilter;
         private System.Windows.Forms.Label labelSearch;
         private System.Windows.Forms.SplitContainer splitContainer;
@@ -365,5 +376,6 @@
         private System.Windows.Forms.ToolStripMenuItem openInEDSMToolStripMenuItem;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtButton buttonExtImport;
+        private System.Windows.Forms.FlowLayoutPanel topPanel;
     }
 }

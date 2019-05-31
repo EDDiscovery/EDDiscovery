@@ -77,9 +77,6 @@
     <Compile Update="Forms\*.Designer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Forms\SurfaceBookmarksUC.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Update="Forms\VersioningManager.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,11 +97,14 @@
     <Compile Update="UserControls\Helpers\StatsTimeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Update="UserControls\Helpers\ScanDisplay.cs">
+    <Compile Update="UserControls\Helpers\ScanDisplayUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="UserControls\Helpers\TagsForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="UserControls\Helpers\SurfaceBookmarksUC.cs">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup Label="ScreenShots">

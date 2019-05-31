@@ -38,7 +38,7 @@ namespace EDDiscovery.Forms
         public BookmarkForm()
         {
             InitializeComponent();
-            EDDTheme.Instance.ApplyToFormStandardFontSize(this);
+            EDDTheme.Instance.ApplyDialog(this);
 
             BaseUtils.Translator.Instance.Translate(this, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks });
         }
@@ -64,6 +64,7 @@ namespace EDDiscovery.Forms
             this.Text = "System Information".Tx(this,"SI");
             ISystem s = SystemCache.FindSystem(name);
             textBoxName.Text = name;
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxTravelNote.Text = (note != null) ? note : "";
             checkBoxTarget.Checked = istarget;
 
@@ -82,6 +83,7 @@ namespace EDDiscovery.Forms
             textBoxName.Text = "Enter a region name...".Tx(this,"RN");
             textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = tme.ToString();
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxX.ReadOnly = false;
             textBoxY.ReadOnly = false;
             textBoxZ.ReadOnly = false;
@@ -126,6 +128,7 @@ namespace EDDiscovery.Forms
             buttonOK.Text = "Update".Tx(this);
             textBoxName.Text = name;
             textBoxName.ReadOnly = !bk.isRegion;
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxBookmarkNotes.Text = bk.Note;
             textBoxBookmarkNotes.CursorToEnd();
             textBoxBookmarkNotes.ScrollToCaret();
@@ -159,6 +162,7 @@ namespace EDDiscovery.Forms
         {
             this.Text = "New System Bookmark".Tx(this,"SB");
             textBoxName.Text = system.Name;
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxTravelNote.Text = note;
             textBoxTime.Text = tme.ToString();
             InitialisePos(system);
@@ -180,6 +184,7 @@ namespace EDDiscovery.Forms
         {
             this.Text = "New System Bookmark".Tx(this,"NSB");
             textBoxName.Text = "Enter a system name...".Tx(this,"ESN");
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             validatestarname = true;
             textBoxName.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList,true);
             textBoxName.ClearOnFirstChar = true;
@@ -197,6 +202,7 @@ namespace EDDiscovery.Forms
         {
             this.Text = "Galactic Mapping Object".Tx(this,"GMO");
             textBoxName.Text = name;
+            textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxBookmarkNotes.Text = descr.WordWrap(40);
             textBoxBookmarkNotes.CursorToEnd();
             textBoxBookmarkNotes.ScrollToCaret();
@@ -214,7 +220,7 @@ namespace EDDiscovery.Forms
 
         private void HideTime() { labelTimeMade.Hide(); textBoxTime.Hide(); ShiftControls(textBoxBookmarkNotes, textBoxTime); }
         private void HideBookmarkNotes() { labelBookmarkNotes.Hide(); textBoxBookmarkNotes.Hide(); ShiftControls(textBoxTravelNote, textBoxBookmarkNotes); }
-        private void HideTravelNote() { labelTravelNote.Hide(); labelTravelNoteEdit.Hide(); textBoxTravelNote.Hide(); ShiftControls(SurfaceBookmarks, textBoxTravelNote); }
+        private void HideTravelNote() { labelTravelNote.Hide();  textBoxTravelNote.Hide(); ShiftControls(SurfaceBookmarks, textBoxTravelNote); }
         private void HideSurfaceBookmarks() { SurfaceBookmarks.Hide(); ShiftControls(buttonOK, SurfaceBookmarks); }
         private void HideEDSM() { buttonEDSM.Hide(); checkBoxTarget.Left = buttonEDSM.Left; }
 

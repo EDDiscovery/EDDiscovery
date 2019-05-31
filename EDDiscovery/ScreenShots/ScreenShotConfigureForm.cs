@@ -29,7 +29,7 @@ namespace EDDiscovery.ScreenShots
         {
             InitializeComponent();
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyStd(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
         }
 

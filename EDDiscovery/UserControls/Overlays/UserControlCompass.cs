@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             compassControl.CentreTickColor = fore.Multiply(1.2F);
             compassControl.BugColor = fore.Multiply(0.8F);
             compassControl.BackColor = on ? Color.Transparent : BackColor;
-            compassControl.Font = discoveryform.theme.GetFontAtSize(10);
+            compassControl.Font = discoveryform.theme.GetScaledFont(0.8f);
 
             if (autoHideTargetCoords)
             {

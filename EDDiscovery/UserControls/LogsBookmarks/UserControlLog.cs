@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         {
             discoveryform.OnNewLogEntry += AppendText;
             AppendText(discoveryform.LogText, discoveryform.theme.TextBlockColor);
+            richTextBox_History.ScrollToCaret();
             BaseUtils.Translator.Instance.Translate(contextMenuStrip,this);
         }
 

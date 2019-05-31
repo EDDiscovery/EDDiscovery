@@ -113,8 +113,12 @@ namespace EDDiscovery.UserControls
             int butleft = hspacing / 2;
             int leftrighthoffset = hspacing/2-4;
 
-            calfont = discoveryform.theme.GetFontAtSize(Math.Max(1,butwidth / 4));      // tried disposing of old font but that crashes since the button is still assigned to it..
-            labfont = discoveryform.theme.GetFontAtSize(Math.Min(Math.Max(butwidth / 5,1),24));
+            float pixelh = discoveryform.theme.GetFont.GetHeight();     // get some idea of the size of the font
+
+            // tried disposing of old font but that crashes since the button is still assigned to it..
+            //System.Diagnostics.Debug.WriteLine("Button width " + butwidth + " vs" + pixelh);
+            calfont = discoveryform.theme.GetScaledFont((float)Math.Min(butwidth,butheight) / pixelh * 0.5f);
+            labfont = discoveryform.theme.GetScaledFont((float)Math.Min(butwidth, butheight) / pixelh * 0.4f);
 
             for (int i = 0; i < 7; i++)
             {

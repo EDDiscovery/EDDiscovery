@@ -33,9 +33,9 @@ namespace EDDiscovery.UserControls
     {
         private List<SavedRouteClass> savedroute;
         private SavedRouteClass currentroute;
-        private Rectangle _dragBox;
-        private int _dragRowIndex;
-        private bool _suppressCombo = false;
+        private Rectangle dragBox;
+        private int dragRowIndex;
+        private bool suppressCombo = false;
 
         private List<ISystem> latestplottedroute;
 
@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnNewCalculatedRoute += _discoveryForm_OnNewCalculatedRoute;
+            discoveryform.OnNewCalculatedRoute += discoveryForm_OnNewCalculatedRoute;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolStrip, this);
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
         {
             DGVSaveColumnLayout(dataGridViewRouteSystems, DbColumnSave);
 
-            discoveryform.OnNewCalculatedRoute -= _discoveryForm_OnNewCalculatedRoute;
+            discoveryform.OnNewCalculatedRoute -= discoveryForm_OnNewCalculatedRoute;
             discoveryform.OnExpeditionsDownloaded -= Discoveryform_OnExpeditionsDownloaded;
 
             if (uctg is IHistoryCursorNewStarList)
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
 
         #region Interaction with other parts of the system
 
-        private void _discoveryForm_OnNewCalculatedRoute(List<ISystem> obj) // called when a new route is calculated
+        private void discoveryForm_OnNewCalculatedRoute(List<ISystem> obj) // called when a new route is calculated
         {
             latestplottedroute = obj;
         }
@@ -149,7 +149,7 @@ namespace EDDiscovery.UserControls
 
         private void UpdateComboBox()
         {
-            _suppressCombo = true;
+            suppressCombo = true;
             toolStripComboBoxRouteSelection.Items.Clear();
 
             foreach (var route in savedroute)
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
             }
 
             toolStripComboBoxRouteSelection.Text = currentroute.Name;
-            _suppressCombo = false;
+            suppressCombo = false;
         }
 
         private void UpdateUndeleteMenu()
@@ -205,14 +205,14 @@ namespace EDDiscovery.UserControls
 
         private void toolStripComboBoxRouteSelection_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_suppressCombo)
+            if (suppressCombo)
                 return;
 
             if (!PromptAndSaveIfNeeded())
             {
-                _suppressCombo = true;
+                suppressCombo = true;
                 toolStripComboBoxRouteSelection.Text = currentroute.Name;
-                _suppressCombo = false;
+                suppressCombo = false;
                 return;
             }
 
@@ -496,13 +496,13 @@ namespace EDDiscovery.UserControls
                 var hit = dataGridViewRouteSystems.HitTest(e.X, e.Y);
                 if (hit.Type == DataGridViewHitTestType.RowHeader && hit.RowIndex != -1)
                 {
-                    _dragRowIndex = hit.RowIndex;
+                    dragRowIndex = hit.RowIndex;
                     Size dragsize = SystemInformation.DragSize;
-                    _dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
+                    dragBox = new Rectangle(e.X - dragsize.Width / 2, e.Y - dragsize.Height / 2, dragsize.Width, dragsize.Height);
                 }
                 else
                 {
-                    _dragBox = Rectangle.Empty;
+                    dragBox = Rectangle.Empty;
                 }
             }
         }
@@ -511,9 +511,9 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button.HasFlag(MouseButtons.Left))
             {
-                if (_dragBox != Rectangle.Empty && !_dragBox.Contains(e.Location))
+                if (dragBox != Rectangle.Empty && !dragBox.Contains(e.Location))
                 {
-                    dataGridViewRouteSystems.DoDragDrop(dataGridViewRouteSystems.Rows[_dragRowIndex], DragDropEffects.Move);
+                    dataGridViewRouteSystems.DoDragDrop(dataGridViewRouteSystems.Rows[dragRowIndex], DragDropEffects.Move);
                 }
             }
         }

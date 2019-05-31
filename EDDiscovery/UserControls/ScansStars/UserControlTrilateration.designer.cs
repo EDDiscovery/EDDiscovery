@@ -57,7 +57,6 @@ namespace EDDiscovery.UserControls
             this.deleteAllWithKnownPositionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addAllLocalSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addAllEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panel_controls = new System.Windows.Forms.Panel();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonSubmitDistances = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonNew = new System.Windows.Forms.ToolStripButton();
@@ -72,8 +71,8 @@ namespace EDDiscovery.UserControls
             this.toolStripLabelNoCoords = new System.Windows.Forms.ToolStripLabel();
             this.toolStripAddFromHistory = new System.Windows.Forms.ToolStripButton();
             this.toolStripAddRecentHistory = new System.Windows.Forms.ToolStripButton();
-            this.splitContainerCustom1 = new ExtendedControls.ExtSplitContainer();
-            this.splitContainerCustom2 = new ExtendedControls.ExtSplitContainer();
+            this.splitContainerCustom1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainerCustom2 = new System.Windows.Forms.SplitContainer();
             this.dataViewScroller_Distances = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewDistances = new System.Windows.Forms.DataGridView();
@@ -90,7 +89,6 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.trilatContextMenu.SuspendLayout();
             this.wantedContextMenu.SuspendLayout();
-            this.panel_controls.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerCustom1)).BeginInit();
             this.splitContainerCustom1.Panel1.SuspendLayout();
@@ -182,19 +180,9 @@ namespace EDDiscovery.UserControls
             this.addAllEDSMSystemsToolStripMenuItem.Text = "Add all EDSM systems";
             this.addAllEDSMSystemsToolStripMenuItem.Click += new System.EventHandler(this.addAllEDSMSystemsToolStripMenuItem_Click);
             // 
-            // panel_controls
-            // 
-            this.panel_controls.Controls.Add(this.toolStrip);
-            this.panel_controls.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_controls.Location = new System.Drawing.Point(0, 0);
-            this.panel_controls.Name = "panel_controls";
-            this.panel_controls.Size = new System.Drawing.Size(1088, 32);
-            this.panel_controls.TabIndex = 24;
-            // 
             // toolStrip
             // 
             this.toolStrip.AutoSize = false;
-            this.toolStrip.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSubmitDistances,
             this.toolStripButtonNew,
@@ -369,7 +357,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
-            this.dataViewScroller_Distances.ScrollBarWidth = 20;
             this.dataViewScroller_Distances.Size = new System.Drawing.Size(588, 675);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
@@ -385,13 +372,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(568, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(575, 0);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 675);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 675);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
@@ -415,7 +402,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDistances.Name = "dataGridViewDistances";
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(568, 675);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(575, 675);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
             this.dataGridViewDistances.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellEndEdit);
@@ -474,13 +461,11 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBox_History.ScrollBarLineTweak = 0;
             this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
             this.richTextBox_History.Size = new System.Drawing.Size(588, 141);
             this.richTextBox_History.TabIndex = 0;
@@ -495,7 +480,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Wanted.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
-            this.dataViewScroller_Wanted.ScrollBarWidth = 20;
             this.dataViewScroller_Wanted.Size = new System.Drawing.Size(496, 820);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
@@ -511,13 +495,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(476, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(483, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 820);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(13, 820);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
@@ -554,7 +538,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewClosestSystems.ReadOnly = true;
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(476, 820);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(483, 820);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);
             // 
@@ -577,12 +561,11 @@ namespace EDDiscovery.UserControls
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerCustom1);
-            this.Controls.Add(this.panel_controls);
+            this.Controls.Add(this.toolStrip);
             this.Name = "UserControlTrilateration";
             this.Size = new System.Drawing.Size(1088, 852);
             this.trilatContextMenu.ResumeLayout(false);
             this.wantedContextMenu.ResumeLayout(false);
-            this.panel_controls.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.splitContainerCustom1.Panel1.ResumeLayout(false);
@@ -603,7 +586,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
         protected System.Windows.Forms.DataGridView dataGridViewDistances;
-        private System.Windows.Forms.Panel panel_controls;
         private ExtendedControls.ExtDataGridViewColumnAutoComplete ColumnSystem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnDistance;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnCalculated;
@@ -617,8 +599,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridView dataGridViewClosestSystems;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnClosestSystemsSystem;
-        private ExtendedControls.ExtSplitContainer splitContainerCustom1;
-        private ExtendedControls.ExtSplitContainer splitContainerCustom2;
+        private System.Windows.Forms.SplitContainer splitContainerCustom1;
+        private System.Windows.Forms.SplitContainer splitContainerCustom2;
         private ExtendedControls.ExtRichTextBox richTextBox_History;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScroller_Distances;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScroller_Wanted;

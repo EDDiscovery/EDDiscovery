@@ -138,10 +138,12 @@ namespace EliteDangerousCore.DB
             else if (!name.HasChars())
                 query = "edsmid = @edsmid";
 
-            DbCommand selectCmd = cn.CreateSelect("Aliases", "edsmid_mergedto", query, inparas: new string[] { "edsmid:int64", "name:string" });
-            selectCmd.Parameters[0].Value = edsmid;
-            selectCmd.Parameters[1].Value = name;
-            return selectCmd.ExecuteScalar<long>(-1);
+            using (DbCommand selectCmd = cn.CreateSelect("Aliases", "edsmid_mergedto", query, inparas: new string[] { "edsmid:int64", "name:string" }))
+            {
+                selectCmd.Parameters[0].Value = edsmid;
+                selectCmd.Parameters[1].Value = name;
+                return selectCmd.ExecuteScalar<long>(-1);
+            }
         }
 
         public static List<ISystem> FindAliasWildcard(string name)

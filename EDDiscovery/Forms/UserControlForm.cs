@@ -230,19 +230,19 @@ namespace EDDiscovery.Forms
             panel_showtitle.Visible = IsTransparencySupported && !transparent;
 
             if (transparentmode == TransparencyMode.On)
-                panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Transparent;
+                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             else if (transparentmode == TransparencyMode.OnClickThru)
-                panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.TransparentClickThru;
+                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
             else if (transparentmode == TransparencyMode.OnFullyTransparent)
-                panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.FullyTransparent;
+                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
             else
-                panel_transparent.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.NotTransparent;
+                panel_transparent.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
             label_index.Visible = labelControlText.Visible = (displayTitle || !transparent);   //  titles are on, or transparent is off
 
-            panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtPanelDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtPanelDrawn.ImageType.WindowNotInTaskBar;
-            panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.ExtPanelDrawn.ImageType.Captioned : ExtendedControls.ExtPanelDrawn.ImageType.NotCaptioned;
-            panel_ontop.ImageSelected = TopMost ? ExtendedControls.ExtPanelDrawn.ImageType.OnTop : ExtendedControls.ExtPanelDrawn.ImageType.Floating;
+            panel_taskbaricon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
+            panel_showtitle.ImageSelected = displayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
+            panel_ontop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
         }
 
         const int UCPaddingWidth = 3;

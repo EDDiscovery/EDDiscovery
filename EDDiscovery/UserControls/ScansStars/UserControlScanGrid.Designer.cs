@@ -91,7 +91,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(572, 550);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
@@ -126,7 +125,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScangrid.RowTemplate.Height = 36;
             this.dataGridViewScangrid.RowTemplate.ReadOnly = true;
             this.dataGridViewScangrid.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewScangrid.Size = new System.Drawing.Size(552, 550);
+            this.dataGridViewScangrid.Size = new System.Drawing.Size(559, 550);
             this.dataGridViewScangrid.TabIndex = 23;
             this.dataGridViewScangrid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridViewScangrid.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewScangrid_RowPostPaint);
@@ -189,13 +188,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(552, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(559, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 550);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(13, 550);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -378,7 +377,7 @@ namespace EDDiscovery.UserControls
             this.nameToolStripMenuItem.CheckOnClick = true;
             this.nameToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.nameToolStripMenuItem.Text = "Name";
             this.nameToolStripMenuItem.ToolTipText = "Toggle body name column visibility";
             this.nameToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.nameToolStripMenuItem_CheckStateChanged);
@@ -389,7 +388,7 @@ namespace EDDiscovery.UserControls
             this.classToolStripMenuItem.CheckOnClick = true;
             this.classToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.classToolStripMenuItem.Name = "classToolStripMenuItem";
-            this.classToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.classToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.classToolStripMenuItem.Text = "Class";
             this.classToolStripMenuItem.ToolTipText = "Toggle body class column visibility";
             this.classToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.classToolStripMenuItem_CheckStateChanged);
@@ -400,7 +399,7 @@ namespace EDDiscovery.UserControls
             this.distanceToolStripMenuItem.CheckOnClick = true;
             this.distanceToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.distanceToolStripMenuItem.Name = "distanceToolStripMenuItem";
-            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.distanceToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.distanceToolStripMenuItem.Text = "Distance";
             this.distanceToolStripMenuItem.ToolTipText = "Toggle relative body distance column visibility";
             this.distanceToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.distanceToolStripMenuItem_CheckStateChanged);
@@ -411,7 +410,7 @@ namespace EDDiscovery.UserControls
             this.informationToolStripMenuItem.CheckOnClick = true;
             this.informationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.informationToolStripMenuItem.Name = "informationToolStripMenuItem";
-            this.informationToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.informationToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.informationToolStripMenuItem.Text = "Information";
             this.informationToolStripMenuItem.ToolTipText = "Toggle body information column visibility";
             this.informationToolStripMenuItem.CheckStateChanged += new System.EventHandler(this.informationToolStripMenuItem_CheckStateChanged);

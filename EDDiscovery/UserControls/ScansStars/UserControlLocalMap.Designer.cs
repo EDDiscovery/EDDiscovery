@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlLocalMap));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -153,7 +154,6 @@ namespace EDDiscovery.UserControls
             this.textMinRadius = new ExtendedControls.NumberBoxDouble();
             this.labelExtMax = new System.Windows.Forms.Label();
             this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
-            this.panelTop = new System.Windows.Forms.Panel();
             this.slideMaxItems = new System.Windows.Forms.TrackBar();
             this.chartMap = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -176,18 +176,18 @@ namespace EDDiscovery.UserControls
             this.toolStripMenuReset = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.background = new System.Windows.Forms.PictureBox();
-            this.panelTop.SuspendLayout();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.background)).BeginInit();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelExtMin
             // 
             this.labelExtMin.AutoSize = true;
-            this.labelExtMin.Location = new System.Drawing.Point(3, 6);
+            this.labelExtMin.Location = new System.Drawing.Point(0, 1);
+            this.labelExtMin.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelExtMin.Name = "labelExtMin";
             this.labelExtMin.Size = new System.Drawing.Size(24, 13);
             this.labelExtMin.TabIndex = 3;
@@ -204,9 +204,13 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.ClearOnFirstChar = false;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.EndButtonEnable = true;
+            this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonVisible = false;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
-            this.textMinRadius.Location = new System.Drawing.Point(28, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(32, 1);
+            this.textMinRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textMinRadius.Maximum = 100000D;
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
@@ -225,7 +229,8 @@ namespace EDDiscovery.UserControls
             // labelExtMax
             // 
             this.labelExtMax.AutoSize = true;
-            this.labelExtMax.Location = new System.Drawing.Point(75, 6);
+            this.labelExtMax.Location = new System.Drawing.Point(80, 1);
+            this.labelExtMax.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelExtMax.Name = "labelExtMax";
             this.labelExtMax.Size = new System.Drawing.Size(27, 13);
             this.labelExtMax.TabIndex = 3;
@@ -242,9 +247,13 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.ClearOnFirstChar = false;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.EndButtonEnable = true;
+            this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonVisible = false;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(103, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(115, 1);
+            this.textMaxRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -260,29 +269,16 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.WordWrap = true;
             this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
             // 
-            // panelTop
-            // 
-            this.panelTop.BackColor = System.Drawing.SystemColors.Control;
-            this.panelTop.Controls.Add(this.slideMaxItems);
-            this.panelTop.Controls.Add(this.labelExtMin);
-            this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.labelExtMax);
-            this.panelTop.Controls.Add(this.textMaxRadius);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(380, 26);
-            this.panelTop.TabIndex = 25;
-            this.toolTip.SetToolTip(this.panelTop, "Rotate with 1st mouse button; Zoom with ScrollWheel; Pan with middle button");
-            // 
             // slideMaxItems
             // 
+            this.slideMaxItems.AutoSize = false;
             this.slideMaxItems.LargeChange = 50;
-            this.slideMaxItems.Location = new System.Drawing.Point(152, 1);
+            this.slideMaxItems.Location = new System.Drawing.Point(163, 1);
+            this.slideMaxItems.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.slideMaxItems.Maximum = 500;
             this.slideMaxItems.Minimum = 50;
             this.slideMaxItems.Name = "slideMaxItems";
-            this.slideMaxItems.Size = new System.Drawing.Size(90, 45);
+            this.slideMaxItems.Size = new System.Drawing.Size(90, 24);
             this.slideMaxItems.SmallChange = 10;
             this.slideMaxItems.TabIndex = 4;
             this.slideMaxItems.TickFrequency = 50;
@@ -339,7 +335,8 @@ namespace EDDiscovery.UserControls
             chartArea1.BackSecondaryColor = System.Drawing.Color.Black;
             chartArea1.Name = "ChartArea";
             this.chartMap.ChartAreas.Add(chartArea1);
-            this.chartMap.Location = new System.Drawing.Point(16, 40);
+            this.chartMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartMap.Location = new System.Drawing.Point(0, 0);
             this.chartMap.Margin = new System.Windows.Forms.Padding(0);
             this.chartMap.MinimumSize = new System.Drawing.Size(50, 50);
             this.chartMap.Name = "chartMap";
@@ -1050,7 +1047,7 @@ namespace EDDiscovery.UserControls
             this.chartMap.Series.Add(series99);
             this.chartMap.Series.Add(series100);
             this.chartMap.Series.Add(series101);
-            this.chartMap.Size = new System.Drawing.Size(350, 350);
+            this.chartMap.Size = new System.Drawing.Size(380, 406);
             this.chartMap.SuppressExceptions = true;
             this.chartMap.TabIndex = 29;
             this.chartMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartMap_MouseDown);
@@ -1207,37 +1204,40 @@ namespace EDDiscovery.UserControls
             this.aboutToolStripAbout.Text = "About";
             this.aboutToolStripAbout.Click += new System.EventHandler(this.aboutToolStripAbout_Click);
             // 
-            // background
+            // flowLayoutPanel1
             // 
-            this.background.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.background.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.background.Location = new System.Drawing.Point(0, 0);
-            this.background.Name = "background";
-            this.background.Size = new System.Drawing.Size(380, 406);
-            this.background.TabIndex = 30;
-            this.background.TabStop = false;
-            this.background.MouseDown += new System.Windows.Forms.MouseEventHandler(this.background_MouseDown);
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
+            this.flowLayoutPanel1.Controls.Add(this.labelExtMin);
+            this.flowLayoutPanel1.Controls.Add(this.textMinRadius);
+            this.flowLayoutPanel1.Controls.Add(this.labelExtMax);
+            this.flowLayoutPanel1.Controls.Add(this.textMaxRadius);
+            this.flowLayoutPanel1.Controls.Add(this.slideMaxItems);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(380, 26);
+            this.flowLayoutPanel1.TabIndex = 5;
             // 
             // UserControlLocalMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.chartMap);
-            this.Controls.Add(this.background);
             this.Name = "UserControlLocalMap";
             this.Size = new System.Drawing.Size(380, 406);
             this.Load += new System.EventHandler(this.UserControlMap_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.UserControlMap_MouseClick);
             this.Resize += new System.EventHandler(this.UserControlMap_Resize);
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slideMaxItems)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartMap)).EndInit();
             this.contextMenuStrip.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.background)).EndInit();
+            this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1246,7 +1246,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExtMax;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
-        private Panel panelTop;
         private System.Windows.Forms.DataVisualization.Charting.Chart chartMap;
         private TrackBar slideMaxItems;
         private ToolTip toolTip;
@@ -1269,6 +1268,6 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem toolStripMenuReset;
         private ToolStripSeparator toolStripSeparator;
         private ToolStripMenuItem aboutToolStripAbout;
-        private PictureBox background;
+        private FlowLayoutPanel flowLayoutPanel1;
     }
 }

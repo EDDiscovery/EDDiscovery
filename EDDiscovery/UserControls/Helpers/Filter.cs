@@ -91,15 +91,9 @@ namespace EDDiscovery.UserControls
 
         // do not use base Filter options - use these.
 
-        public void Filter(Control ctr, Form parent, int width = 300)
+        public void Filter(Control ctr, Form parent)
         {
-            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent, width);
+            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), ctr, parent);
         }
-
-        public void Filter(Point p, Size s, Form parent)
-        {
-            Show(SQLiteDBClass.GetSettingString(dbstring, "All"), p, s, parent);
-        }
-
     }
 }

@@ -20,7 +20,6 @@ namespace EDDiscovery.UserControls
         public bool Selected { get { return selected; } set { SetSelected(value); } }
 
         private const int margin = 3;
-        private const int ycontroltext = 18;    // space for title/control text. Control text replaces title on UCs where its called.
         private bool selected = false;
 
         private Label lcontroltext;
@@ -54,6 +53,7 @@ namespace EDDiscovery.UserControls
         {
             base.OnLayout(e);
             lcontroltext.Width = ClientRectangle.Width - lcontroltext.Left - margin*2;
+            int ycontroltext = (int)Font.GetHeight()+4;    // space for title/control text. Control text replaces title on UCs where its called.
             control.Location = new Point(margin, margin+ycontroltext);
             control.Size = new Size(ClientRectangle.Width - margin * 2, ClientRectangle.Height - margin * 2 - ycontroltext);
         }
