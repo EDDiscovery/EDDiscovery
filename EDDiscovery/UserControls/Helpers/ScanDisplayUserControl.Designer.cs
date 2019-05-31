@@ -16,7 +16,7 @@
 
 namespace EDDiscovery.UserControls
 {
-    partial class ScanDisplayControl
+    partial class ScanDisplayUserControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -60,13 +60,12 @@ namespace EDDiscovery.UserControls
             this.panelStars.Controls.Add(this.imagebox);
             this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelStars.InternalScrollbar = true;
             this.panelStars.Location = new System.Drawing.Point(0, 0);
             this.panelStars.Name = "panelStars";
-            this.panelStars.ScrollBarWidth = 20;
             this.panelStars.Size = new System.Drawing.Size(748, 682);
             this.panelStars.TabIndex = 1;
             this.panelStars.VerticalScrollBarDockRight = true;
-            this.panelStars.Click += new System.EventHandler(this.panelStars_Click);
             // 
             // rtbNodeInfo
             // 
@@ -84,13 +83,11 @@ namespace EDDiscovery.UserControls
             this.rtbNodeInfo.ScrollBarBorderColor = System.Drawing.Color.White;
             this.rtbNodeInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.rtbNodeInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.rtbNodeInfo.ScrollBarLineTweak = 0;
             this.rtbNodeInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.rtbNodeInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.rtbNodeInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.rtbNodeInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.rtbNodeInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.rtbNodeInfo.ScrollBarWidth = 20;
             this.rtbNodeInfo.ShowLineCount = false;
             this.rtbNodeInfo.Size = new System.Drawing.Size(200, 100);
             this.rtbNodeInfo.TabIndex = 3;
@@ -116,13 +113,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(728, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(735, 0);
             this.vScrollBarCustom.Maximum = -108;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 682);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 682);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 2;
@@ -139,12 +136,12 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
-            // ScanDisplayControl
+            // ScanDisplayUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelStars);
-            this.Name = "ScanDisplayControl";
+            this.Name = "ScanDisplayUserControl";
             this.Size = new System.Drawing.Size(748, 682);
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
             this.panelStars.ResumeLayout(false);

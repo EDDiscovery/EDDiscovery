@@ -41,7 +41,7 @@ namespace EDDiscovery.Forms
             BaseUtils.Translator.Instance.Translate(this);
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            theme.ApplyToFormStandardFontSize(this);
+            theme.ApplyDialog(this);
 
             return true;
         }

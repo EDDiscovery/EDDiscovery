@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewEngineering.MakeDoubleBuffered();
             dataGridViewEngineering.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewEngineering.RowTemplate.Height = 26;
+            dataGridViewEngineering.RowTemplate.Height = Font.ScalePixels(26);
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
             if (Order.Max() >= Recipes.EngineeringRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void FilterChanged(object sender, EventArgs e)
+        private void FilterChanged()
         {
             Display();
         }

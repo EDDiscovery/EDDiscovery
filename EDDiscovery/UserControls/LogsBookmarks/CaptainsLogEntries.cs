@@ -276,7 +276,7 @@ namespace EDDiscovery.UserControls
             string notes = rw.Cells[3].Value != null ? (string)rw.Cells[3].Value : "";
 
             string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(this), notes,
-                            "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, width: 800, vspacing: 400, cursoratend: true);
+                            "Enter Note".Tx(this), this.FindForm().Icon, multiline: true, cursoratend: true);
 
             if (s != null)
             {
@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
 
             Point loc = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(4, rw.Index, false).Location);
 
-            cfs.Show(taglist, loc, new Size(250, 600), this.FindForm(), tag:rw);
+            cfs.Show(taglist, loc, this.FindForm(), tag:rw);
         }
 
         private void TagsChanged(string newtags, Object tag)

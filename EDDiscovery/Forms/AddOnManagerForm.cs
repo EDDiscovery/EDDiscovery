@@ -72,9 +72,14 @@ namespace EDDiscovery.Forms
         {
             this.Icon = ic;
             managedownloadmode = ad;
-            
+
+            SizeF prev = this.AutoScaleDimensions;
+
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyStd(this);      // changing FONT changes the autoscale since form is in AutoScaleMode=font
+
+            //System.Diagnostics.Debug.WriteLine("Scale factor " + prev + "->" + this.AutoScaleDimensions);
+
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
             richTextBoxScrollDescription.ReadOnly = true;
 
@@ -176,21 +181,29 @@ namespace EDDiscovery.Forms
 
             int[] tabs;
             if ( managedownloadmode )
-                tabs = new int[] { 0, 100, 300, 400, 600, 780, 930, 1030 };
+                //               type, n,  ver  des  stat act, del, ena
+                tabs = new int[] { 0,  80, 280, 360, 560, 660, 760, 820 , 880};
             else
-                tabs = new int[] { 0, 100, 300, 400, 600, 600, 780, 930 };
+                tabs = new int[] { 0,  80, 280, 360, 560, 560, 660, 720 , 780};
 
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, 24), Text = "Type".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, 24), Text = "Name".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, 24), Text = "Version".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, 24), Text = "Description".Tx(this) });
+            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
+
+            int fonth = (int)theme.GetFont.GetHeight() + 1;
+            int headervsize =  fonth + panelheightmargin + 2;
+
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[0] + panelleftmargin, panelheightmargin), Size = new Size(tabs[1] - tabs[0] - 2, headervsize), Text = "Type".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[1] + panelleftmargin, panelheightmargin), Size = new Size(tabs[2] - tabs[1] - 2, headervsize), Text = "Name".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[2] + panelleftmargin, panelheightmargin), Size = new Size(tabs[3] - tabs[2] - 2, headervsize), Text = "Version".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[3] + panelleftmargin, panelheightmargin), Size = new Size(tabs[4] - tabs[3] - 2, headervsize), Text = "Description".Tx(this) });
             if ( managedownloadmode)
-                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, 24), Text = "Status".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5]-2, 24), Text = "Action".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6]-2, 24), Text = "Delete".Tx(this) });
-            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(120, 24), Text = "Enabled".Tx(this) });
+                panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[4] + panelleftmargin, panelheightmargin), Size = new Size(tabs[5] - tabs[4] - 2, headervsize), Text = "Status".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[5] + panelleftmargin, panelheightmargin), Size = new Size(tabs[6] - tabs[5]-2, headervsize), Text = "Action".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[6] + panelleftmargin, panelheightmargin), Size = new Size(tabs[7] - tabs[6]-2, headervsize), Text = "Delete".Tx(this) });
+            panelVScroll.Controls.Add(new Label() { Location = new Point(tabs[7] + panelleftmargin, panelheightmargin), Size = new Size(tabs[8] - tabs[7]-2, headervsize), Text = "Enabled".Tx(this) });
 
-            int vpos = panelheightmargin + 30;
+            int vpos = headervsize + 8;
+
+            // draw everything in 8.25 point position then scale
 
             foreach ( VersioningManager.DownloadItem di in mgr.DownloadItems )
             {
@@ -208,7 +221,7 @@ namespace EDDiscovery.Forms
                 g.panel.Controls.Add(g.type);
 
                 g.info = new ExtendedControls.ExtButton();
-                g.info.Location = new Point(tabs[1], labelheightmargin + 2);      // 8 spacing, allow 8*4 to indent
+                g.info.Location = new Point(tabs[1], labelheightmargin-4 );      // 8 spacing, allow 8*4 to indent
                 g.info.Size = new Size(16,16);
                 g.info.Text = "i";
                 g.info.Click += Info_Click;
@@ -216,8 +229,8 @@ namespace EDDiscovery.Forms
                 g.panel.Controls.Add(g.info);
 
                 g.name = new Label();
-                g.name.Location = new Point(tabs[1]+18, labelheightmargin);      // 8 spacing, allow 8*4 to indent
-                g.name.Size = new Size(tabs[2] - tabs[1] - 18, 24);
+                g.name.Location = new Point(tabs[1]+32, labelheightmargin);      // 8 spacing, allow 8*4 to indent
+                g.name.Size = new Size(tabs[2] - tabs[1] - 32, 24);
                 g.name.Text = di.itemname;
                 g.panel.Controls.Add(g.name);
 
@@ -283,7 +296,7 @@ namespace EDDiscovery.Forms
                     {
                         g.actionbutton = new ExtendedControls.ExtButton();
                         g.actionbutton.Location = new Point(tabs[5], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
-                        g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20, 24);
+                        g.actionbutton.Size = new Size(tabs[6] - tabs[5] - 20,24);
                         g.actionbutton.Text = "Edit".Tx(this);
                         g.actionbutton.Click += ActionbuttonEdit_Click;
                         g.actionbutton.Tag = g;
@@ -294,8 +307,8 @@ namespace EDDiscovery.Forms
                 if ( di.HasLocalCopy)
                 {
                     g.deletebutton = new ExtendedControls.ExtButton();
-                    g.deletebutton.Location = new Point(tabs[6]+20, labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
-                    g.deletebutton.Size = new Size(24, 24);
+                    g.deletebutton.Location = new Point(tabs[6], labelheightmargin - 4);      // 8 spacing, allow 8*4 to indent
+                    g.deletebutton.Size = new Size(24,24);
                     g.deletebutton.Text = "X";
                     g.deletebutton.Click += Deletebutton_Click;
                     g.deletebutton.Tag = g;
@@ -306,30 +319,27 @@ namespace EDDiscovery.Forms
                 {
                     g.enabled = new ExtendedControls.ExtCheckBox();
                     g.enabled.Location = new Point(tabs[7], labelheightmargin);
-                    g.enabled.Size = new Size(100, 20);
-                    g.enabled.Text = "Enabled".Tx(this);
+                    g.enabled.Size = new Size(tabs[8]-tabs[7], 24);
+                    g.enabled.Text = "";// "Enabled".Tx(this);
                     g.enabled.Checked = di.localenable.Value;
                     g.enabled.Click += Enabled_Click;
                     g.enabled.Tag = g;
                     g.panel.Controls.Add(g.enabled);
                 }
 
-                int panelwidth = Math.Max(panelVScroll.Width - panelVScroll.ScrollBarWidth, 10) - panelleftmargin*2;
-
                 g.panel.Location= new Point(panelleftmargin, vpos);
-                g.panel.Size = new Size(panelwidth, 32);
-
-                vpos += g.panel.Height + 4;
+                g.panel.Size = g.panel.FindMaxSubControlArea(4, 4);
 
                 panelVScroll.Controls.Add(g.panel);
+                vpos += g.panel.Height + 4;
             }
 
             buttonMore.Location = new Point(panelleftmargin, vpos);
 
-            EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            if ( theme != null )
-                theme.ApplyToControls(panelVScroll, label_index.Font);
+            panelVScroll.Scale(this.CurrentAutoScaleFactor());       // scale newly added children to form
 
+            theme.ApplyStd(panelVScroll);
+            
             panelVScroll.ResumeLayout();
         }
 

@@ -73,7 +73,7 @@ namespace EDDiscovery.UserControls
             public const int HistoryTag = Description;      // where the tags are used
         }
 
-        private const int DefaultRowHeight = 26;
+        private int defaultRowHeight;
 
         private string DbFilterSave { get { return DBName("TravelHistoryControlEventFilter2" ); } }
         private string DbColumnSave { get { return DBName("TravelControl" ,  "DGVCol"); } }
@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
-            dataGridViewTravel.RowTemplate.Height = DefaultRowHeight;
+            defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28,Font.ScalePixels(28));       // due to 24 bit icons
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
@@ -151,8 +151,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(toolTip, this);
 
             TravelHistoryFilter.InitaliseComboBox(comboBoxHistoryWindow, DbHistorySave);
-
-
         }
 
         private void ToolStripOutliningOn_CheckStateChanged(object sender, EventArgs e)
@@ -771,11 +769,11 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     int ch = dataGridViewTravel.Rows[leftclickrow].Height;
-                    bool toexpand = (ch <= DefaultRowHeight);
+                    bool toexpand = (ch <= defaultRowHeight);
 
                     string infotext = (toexpand) ? infodetailed : EventDescription;
 
-                    int h = DefaultRowHeight;
+                    int h = defaultRowHeight;
 
                     if (toexpand)
                     {
@@ -792,7 +790,7 @@ namespace EDDiscovery.UserControls
                         }
                     }
 
-                    toexpand = (h > DefaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
+                    toexpand = (h > defaultRowHeight);      // now we have our h, is it bigger? If so, we need to go into wrap mode
 
                     dataGridViewTravel.Rows[leftclickrow].Height = h;
                     dataGridViewTravel.Rows[leftclickrow].Cells[TravelHistoryColumns.Information].Value = infotext;
@@ -825,6 +823,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 var p = extCheckBoxOutlines.PointToScreen(new Point(0, extCheckBoxOutlines.Height));
+                contextMenuStripOutlines.Font = this.Font;
                 contextMenuStripOutlines.Show(p);
             }
         }

@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             dataGridView.CheckEDSM = true;
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridView.RowTemplate.Height = 26;
+            dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             findSystemsUserControl.Init(displaynumber, "SearchFindSys", true, discoveryform);

@@ -95,7 +95,7 @@ namespace EDDiscovery.Forms
                         {
                             
                             File.Copy(opt.UserDatabasePath, userfilename, true);
-                            mbt.MsgText = "Copying System DB";
+                            mbt.MessageText = "Copying System DB";
                             File.Copy(opt.SystemDatabasePath, systemfilename, true);
 
                             // this file tells us where they are now, placed in the appdatadirectory                

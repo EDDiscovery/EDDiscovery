@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
                 discoveryform.theme.SetCustom();                                   // go to custom theme..
 
             SetEntryThemeComboBox();
-            discoveryform.ApplyTheme();
+            discoveryform.ApplyTheme(true);
         }
 
         private void buttonSaveTheme_Click(object sender, EventArgs e)
@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
 
         public void UpdateThemeChanges()
         {
-            discoveryform.ApplyTheme();
+            discoveryform.ApplyTheme(true);
         }
 
         public void button_edittheme_Click(object sender, EventArgs e)

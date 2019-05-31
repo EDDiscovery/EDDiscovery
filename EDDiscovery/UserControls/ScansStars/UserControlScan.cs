@@ -75,6 +75,7 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
+
         }
 
         public override void ChangeCursorType(IHistoryCursor thc)
@@ -204,9 +205,9 @@ namespace EDDiscovery.UserControls
             if ( extCheckBoxStar.Checked == true )
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-                int width = 700;
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(160, 24), null));
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(180, 40), new Size(width - 180 - 20, 24), null));
+                int width = 500;
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "System:".Tx(this), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 80), new Size(80, 24), ""));
                 f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 80), new Size(80, 24), ""));
@@ -218,9 +219,19 @@ namespace EDDiscovery.UserControls
                         f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
                         f.Close();
                     }
+                    else if ( controlname == "Sys:Return")
+                    {
+                        if (f.Get("Sys").HasChars())
+                        {
+                            f.DialogResult = DialogResult.OK;
+                            f.Close();
+                        }
+
+                        f.SwallowReturn = true;
+                    }
                 };
 
-                f.Init(this.FindForm().Icon, new Size(width, 120), new Point(-999, -999), "Show System".Tx(this, "EnterSys"), null, null);
+                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".Tx(this, "EnterSys"), null, null);
                 f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 
@@ -357,7 +368,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            if (cf.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, height), new Point(-999, -999), "Set Valuable Minimum".Tx(this, "VLMT")) == DialogResult.OK)
+            if (cf.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Set Valuable Minimum".Tx(this, "VLMT")) == DialogResult.OK)
             {
                 long? value = cf.GetLong("UC");
                 panelStars.ValueLimit = (int)value.Value;
@@ -383,16 +394,10 @@ namespace EDDiscovery.UserControls
 
             string[] textlist = new string[] { "128", "96", "64", "48", "32", "16" };
 
-            dropdown.ItemHeight = imagelist[0].Size.Height + 2;
             dropdown.Items = textlist.ToList();
             dropdown.ImageItems = imagelist.ToList();
             dropdown.FlatStyle = FlatStyle.Popup;
-            dropdown.Activated += (s, ea) =>
-            {
-                Point location = buttonSize.PointToScreen(new Point(0, 0));
-                dropdown.Location = dropdown.PositionWithinScreen(location.X, location.Y);
-                this.Invalidate(true);
-            };
+            dropdown.PositionBelow(buttonSize);
             dropdown.SelectedIndexChanged += (s, ea) =>
             {
                 int size = textlist[dropdown.SelectedIndex].InvariantParseInt(64);
@@ -400,9 +405,7 @@ namespace EDDiscovery.UserControls
                 DrawSystem();
             };
 
-            dropdown.Size = new Size(64, dropdown.ItemHeight * textlist.Length + 8);
-
-            EDDTheme.Instance.ApplyToControls(dropdown);
+            EDDTheme.Instance.ApplyStd(dropdown);
 
             dropdown.Show(this.FindForm());
         }

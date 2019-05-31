@@ -26,7 +26,7 @@ using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class ScanDisplayControl : UserControl
+    public partial class ScanDisplayUserControl : UserControl
     {
         public bool CheckEDSM { get; set; }
         public bool ShowMoons { get; set; }
@@ -48,16 +48,15 @@ namespace EDDiscovery.UserControls
         private int moonspacerx;        // distance to move moon across
         private int moonspacery;        // distance to slide down moon vs planet
         private int materiallinespacerxy;   // extra distance to add around material output
-        private int beltspacerx;
         private int leftmargin;
         private int topmargin;
 
-        private Font stdfont = EDDTheme.Instance.GetFontAtSize(8.25f);
-        private Font largerfont = EDDTheme.Instance.GetFontAtSize(10f);
-        private Font stdfontUnderline = EDDTheme.Instance.GetFontAtSize(8.25f, FontStyle.Underline);
+        private Font stdfont = EDDTheme.Instance.GetDialogFont;
+        private Font largerfont = EDDTheme.Instance.GetFont;
+        private Font stdfontUnderline = EDDTheme.Instance.GetDialogScaledFont(1f,FontStyle.Underline);
 
         #region Init
-        public ScanDisplayControl()
+        public ScanDisplayUserControl()
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
@@ -80,13 +79,15 @@ namespace EDDiscovery.UserControls
             return showing_system != null ? hl.starscan.FindSystem(showing_system, CheckEDSM, byname: true) : null;
         }
 
-        public void DrawSystem(StarScan.SystemNode last_sn, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null )   // draw showing_system (may be null), showing_matcomds (may be null)
+        // draw scannode (may be null), 
+        // curmats may be null
+        public void DrawSystem(StarScan.SystemNode scannode, MaterialCommoditiesList curmats, HistoryList hl, string opttext = null ) 
         {
             HideInfo();
 
             imagebox.ClearImageList();  // does not clear the image, render will do that
             
-            if (last_sn != null)
+            if (scannode != null)
             {
                 Point curpos = new Point(leftmargin, topmargin);
 
@@ -103,7 +104,7 @@ namespace EDDiscovery.UserControls
 
                 //for( int i = 0; i < 1000; i +=100)  CreateStarPlanet(starcontrols, EDDiscovery.Properties.Resources.ImageStarDiscWhite, new Point(i, 0), new Size(24, 24), i.ToString(), "");
 
-                foreach (StarScan.ScanNode starnode in last_sn.starnodes.Values)        // always has scan nodes
+                foreach (StarScan.ScanNode starnode in scannode.starnodes.Values)        // always has scan nodes
                 {
                     // Draw star
 
@@ -135,26 +136,28 @@ namespace EDDiscovery.UserControls
 
                         foreach (StarScan.ScanNode planetnode in starnode.children.Values.Where(s => s.type == StarScan.ScanNodeType.body || s.type == StarScan.ScanNodeType.star))
                         {
-                           // System.Diagnostics.Debug.WriteLine("Draw " + planetnode.type);
+                            //System.Diagnostics.Debug.WriteLine("Draw " + planetnode.ownname + ":" + planetnode.type);
 
                             while (lastbelt != null && planetnode.ScanData != null && (lastbelt.BeltData == null || lastbelt.BeltData.OuterRad < planetnode.ScanData.nSemiMajorAxis))
                             {
+                                //System.Diagnostics.Debug.WriteLine("Draw a belt " + lastbelt.ownname);
+
                                 // if too far across, go back to star
                                 if (curpos.X + planetsize.Width > panelStars.Width - panelStars.ScrollBarWidth)
                                 {
                                     curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height + planetspacery);
                                 }
 
-                                DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
-                                         new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
+                                Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
+                                                        new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
-                                curpos = new Point(curpos.X + planetsize.Width + beltspacerx, curpos.Y);
+                                curpos = new Point(used.X, curpos.Y);
                                 lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
                             }
 
                             bool nonedsmscans = planetnode.DoesNodeHaveNonEDSMScansBelow();     // is there any scans here, either at this node or below?
 
-                            //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
+                           //System.Diagnostics.Debug.WriteLine("Planet Node " + planetnode.ownname + " has scans " + nonedsmscans);
 
                             if (nonedsmscans || CheckEDSM)
                             {
@@ -190,10 +193,10 @@ namespace EDDiscovery.UserControls
                                 curpos = new Point(firstcolumn.X, maxitemspos.Y + planetsize.Height);
                             }
 
-                            DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
+                            Point used = DrawNode(starcontrols, lastbelt, curmats, hl, Icons.Controls.Scan_Bodies_Belt,
                                      new Point(curpos.X + (planetsize.Width - beltsize.Width) / 2, curpos.Y), beltsize, ref offset, false);
 
-                            curpos = new Point(curpos.X + planetsize.Width + beltspacerx, curpos.Y);
+                            curpos = new Point(used.X, curpos.Y);
                             lastbelt = belts.Count != 0 ? belts.Dequeue() : null;
                         }
                     }
@@ -280,6 +283,7 @@ namespace EDDiscovery.UserControls
         // labelvoff : any additional compensation for label pos
 
         // return right bottom of area used from curpos
+        // curmats may be null
         Point DrawNode(List<ExtPictureBox.ImageElement> pc, StarScan.ScanNode sn, MaterialCommoditiesList curmats, HistoryList hl, 
                                     Image notscanned, Point curpos,
                                     Size size, ref int offset, bool aligndown = false, int labelvoff = 0,
@@ -446,7 +450,7 @@ namespace EDDiscovery.UserControls
                 valuable;
         }
 
-
+        // curmats may be null
         Point CreateMaterialNodes(List<ExtPictureBox.ImageElement> pc, JournalScan sn, MaterialCommoditiesList curmats, HistoryList hl, Point matpos, Size matsize)
         {
             Point startpos = matpos;
@@ -474,7 +478,7 @@ namespace EDDiscovery.UserControls
                     if (HideFullMaterials)                 // check full
                     {
                         int? limit = mc.MaterialLimit();
-                        MaterialCommodities matnow = curmats.Find(mc);
+                        MaterialCommodities matnow = curmats?.Find(mc);  // allow curmats = null
 
                         // debug if (matnow != null && mc.shortname == "Fe")  matnow.count = 10000;
                             
@@ -575,7 +579,6 @@ namespace EDDiscovery.UserControls
             int matsize = stars >= 64 ? 24 : 16;
             materialsize = new Size(matsize, matsize);
 
-            beltspacerx = Math.Min(stars / 2, 16);
             starfirstplanetspacerx = Math.Min(stars / 2, 16);      // 16/2=8 to 16
             starplanetgroupspacery = Math.Min(stars / 2, 24);      // 16/2=8 to 24
             planetspacerx = Math.Min(stars / 4, 16);       
@@ -627,11 +630,6 @@ namespace EDDiscovery.UserControls
                 rtbNodeInfo.Size = new Size(panelStars.Width * 7 / 16, h);
                 rtbNodeInfo.PerformLayout();    // not sure why i need this..
             }
-        }
-
-        private void panelStars_Click(object sender, EventArgs e)
-        {
-            HideInfo();
         }
 
         public void SetBackground(Color c)

@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStarDistance));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -55,23 +56,23 @@ namespace EDDiscovery.UserControls
             this.addToExplorationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToExpeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelExtMin = new System.Windows.Forms.Label();
+            this.labelExtMax = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
+            this.textMinRadius = new ExtendedControls.NumberBoxDouble();
+            this.checkBoxCube = new ExtendedControls.ExtCheckBox();
+            this.flowLayoutStarDistances = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom2 = new ExtendedControls.ExtScrollBar();
             this.dataGridViewNearest = new System.Windows.Forms.DataGridView();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.labelExtMin = new System.Windows.Forms.Label();
-            this.textMinRadius = new ExtendedControls.NumberBoxDouble();
-            this.labelExtMax = new System.Windows.Forms.Label();
-            this.textMaxRadius = new ExtendedControls.NumberBoxDouble();
-            this.panelTop = new System.Windows.Forms.Panel();
-            this.checkBoxCube = new ExtendedControls.ExtCheckBox();
-            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.contextMenuStrip.SuspendLayout();
+            this.flowLayoutStarDistances.SuspendLayout();
             this.dataViewScrollerPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).BeginInit();
-            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip
@@ -112,16 +113,138 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem1.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem1.Click += new System.EventHandler(this.viewOnEDSMToolStripMenuItem1_Click);
             // 
+            // labelExtMin
+            // 
+            this.labelExtMin.AutoSize = true;
+            this.labelExtMin.Location = new System.Drawing.Point(0, 1);
+            this.labelExtMin.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelExtMin.Name = "labelExtMin";
+            this.labelExtMin.Size = new System.Drawing.Size(24, 13);
+            this.labelExtMin.TabIndex = 3;
+            this.labelExtMin.Text = "Min";
+            // 
+            // labelExtMax
+            // 
+            this.labelExtMax.AutoSize = true;
+            this.labelExtMax.Location = new System.Drawing.Point(92, 1);
+            this.labelExtMax.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelExtMax.Name = "labelExtMax";
+            this.labelExtMax.Size = new System.Drawing.Size(27, 13);
+            this.labelExtMax.TabIndex = 3;
+            this.labelExtMax.Text = "Max";
+            // 
+            // textMaxRadius
+            // 
+            this.textMaxRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textMaxRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
+            this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
+            this.textMaxRadius.BorderColorScaling = 0.5F;
+            this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMaxRadius.ClearOnFirstChar = false;
+            this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.EndButtonEnable = true;
+            this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonVisible = false;
+            this.textMaxRadius.Format = "0.#######";
+            this.textMaxRadius.InErrorCondition = false;
+            this.textMaxRadius.Location = new System.Drawing.Point(127, 1);
+            this.textMaxRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textMaxRadius.Maximum = 100000D;
+            this.textMaxRadius.Minimum = 0D;
+            this.textMaxRadius.Multiline = false;
+            this.textMaxRadius.Name = "textMaxRadius";
+            this.textMaxRadius.ReadOnly = false;
+            this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textMaxRadius.SelectionLength = 0;
+            this.textMaxRadius.SelectionStart = 0;
+            this.textMaxRadius.Size = new System.Drawing.Size(52, 20);
+            this.textMaxRadius.TabIndex = 1;
+            this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
+            this.textMaxRadius.Value = 0D;
+            this.textMaxRadius.WordWrap = true;
+            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
+            // 
+            // textMinRadius
+            // 
+            this.textMinRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
+            this.textMinRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
+            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
+            this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
+            this.textMinRadius.BorderColorScaling = 0.5F;
+            this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textMinRadius.ClearOnFirstChar = false;
+            this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
+            this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.EndButtonEnable = true;
+            this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonVisible = false;
+            this.textMinRadius.Format = "0.#######";
+            this.textMinRadius.InErrorCondition = false;
+            this.textMinRadius.Location = new System.Drawing.Point(32, 1);
+            this.textMinRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textMinRadius.Maximum = 100000D;
+            this.textMinRadius.Minimum = 0D;
+            this.textMinRadius.Multiline = false;
+            this.textMinRadius.Name = "textMinRadius";
+            this.textMinRadius.ReadOnly = false;
+            this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textMinRadius.SelectionLength = 0;
+            this.textMinRadius.SelectionStart = 0;
+            this.textMinRadius.Size = new System.Drawing.Size(52, 20);
+            this.textMinRadius.TabIndex = 1;
+            this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.toolTip.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
+            this.textMinRadius.Value = 0D;
+            this.textMinRadius.WordWrap = true;
+            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
+            // 
+            // checkBoxCube
+            // 
+            this.checkBoxCube.AutoSize = true;
+            this.checkBoxCube.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxCube.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCube.Location = new System.Drawing.Point(187, 1);
+            this.checkBoxCube.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.checkBoxCube.Name = "checkBoxCube";
+            this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
+            this.checkBoxCube.TabIndex = 4;
+            this.checkBoxCube.Text = "Cube";
+            this.checkBoxCube.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
+            this.checkBoxCube.UseVisualStyleBackColor = true;
+            this.checkBoxCube.CheckedChanged += new System.EventHandler(this.checkBoxCube_CheckedChanged);
+            // 
+            // flowLayoutStarDistances
+            // 
+            this.flowLayoutStarDistances.AutoSize = true;
+            this.flowLayoutStarDistances.Controls.Add(this.labelExtMin);
+            this.flowLayoutStarDistances.Controls.Add(this.textMinRadius);
+            this.flowLayoutStarDistances.Controls.Add(this.labelExtMax);
+            this.flowLayoutStarDistances.Controls.Add(this.textMaxRadius);
+            this.flowLayoutStarDistances.Controls.Add(this.checkBoxCube);
+            this.flowLayoutStarDistances.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutStarDistances.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutStarDistances.Name = "flowLayoutStarDistances";
+            this.flowLayoutStarDistances.Size = new System.Drawing.Size(352, 22);
+            this.flowLayoutStarDistances.TabIndex = 5;
+            this.flowLayoutStarDistances.WrapContents = false;
+            // 
             // dataViewScrollerPanel2
             // 
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridViewNearest);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 31);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 22);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 541);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(352, 550);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -137,13 +260,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = true;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(332, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(339, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(20, 541);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(13, 550);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -160,6 +283,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.AllowUserToDeleteRows = false;
             this.dataGridViewNearest.AllowUserToResizeRows = false;
             this.dataGridViewNearest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewNearest.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -195,7 +319,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewNearest.RowHeadersVisible = false;
             this.dataGridViewNearest.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewNearest.Size = new System.Drawing.Size(332, 541);
+            this.dataGridViewNearest.Size = new System.Drawing.Size(339, 550);
             this.dataGridViewNearest.TabIndex = 23;
             this.dataGridViewNearest.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewNearest_SortCompare);
             this.dataGridViewNearest.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewNearest_MouseDown);
@@ -222,130 +346,21 @@ namespace EDDiscovery.UserControls
             this.colVisited.Name = "colVisited";
             this.colVisited.ReadOnly = true;
             // 
-            // labelExtMin
-            // 
-            this.labelExtMin.AutoSize = true;
-            this.labelExtMin.Location = new System.Drawing.Point(3, 6);
-            this.labelExtMin.Name = "labelExtMin";
-            this.labelExtMin.Size = new System.Drawing.Size(24, 13);
-            this.labelExtMin.TabIndex = 3;
-            this.labelExtMin.Text = "Min";
-            // 
-            // textMinRadius
-            // 
-            this.textMinRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textMinRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
-            this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.textMinRadius.BorderColorScaling = 0.5F;
-            this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textMinRadius.ClearOnFirstChar = false;
-            this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMinRadius.DelayBeforeNotification = 500;
-            this.textMinRadius.Format = "0.#######";
-            this.textMinRadius.InErrorCondition = false;
-            this.textMinRadius.Location = new System.Drawing.Point(43, 3);
-            this.textMinRadius.Maximum = 100000D;
-            this.textMinRadius.Minimum = 0D;
-            this.textMinRadius.Multiline = false;
-            this.textMinRadius.Name = "textMinRadius";
-            this.textMinRadius.ReadOnly = false;
-            this.textMinRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textMinRadius.SelectionLength = 0;
-            this.textMinRadius.SelectionStart = 0;
-            this.textMinRadius.Size = new System.Drawing.Size(52, 20);
-            this.textMinRadius.TabIndex = 1;
-            this.textMinRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textMinRadius, "Minimum star distance in ly");
-            this.textMinRadius.Value = 0D;
-            this.textMinRadius.WordWrap = true;
-            this.textMinRadius.ValueChanged += new System.EventHandler(this.textMinRadius_ValueChanged);
-            // 
-            // labelExtMax
-            // 
-            this.labelExtMax.AutoSize = true;
-            this.labelExtMax.Location = new System.Drawing.Point(96, 6);
-            this.labelExtMax.Name = "labelExtMax";
-            this.labelExtMax.Size = new System.Drawing.Size(27, 13);
-            this.labelExtMax.TabIndex = 3;
-            this.labelExtMax.Text = "Max";
-            // 
-            // textMaxRadius
-            // 
-            this.textMaxRadius.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textMaxRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
-            this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
-            this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.textMaxRadius.BorderColorScaling = 0.5F;
-            this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textMaxRadius.ClearOnFirstChar = false;
-            this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textMaxRadius.DelayBeforeNotification = 500;
-            this.textMaxRadius.Format = "0.#######";
-            this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(136, 3);
-            this.textMaxRadius.Maximum = 100000D;
-            this.textMaxRadius.Minimum = 0D;
-            this.textMaxRadius.Multiline = false;
-            this.textMaxRadius.Name = "textMaxRadius";
-            this.textMaxRadius.ReadOnly = false;
-            this.textMaxRadius.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.textMaxRadius.SelectionLength = 0;
-            this.textMaxRadius.SelectionStart = 0;
-            this.textMaxRadius.Size = new System.Drawing.Size(52, 20);
-            this.textMaxRadius.TabIndex = 1;
-            this.textMaxRadius.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.toolTip.SetToolTip(this.textMaxRadius, "Maximum star distance in ly");
-            this.textMaxRadius.Value = 0D;
-            this.textMaxRadius.WordWrap = true;
-            this.textMaxRadius.ValueChanged += new System.EventHandler(this.textMaxRadius_ValueChanged);
-            // 
-            // panelTop
-            // 
-            this.panelTop.Controls.Add(this.checkBoxCube);
-            this.panelTop.Controls.Add(this.labelExtMin);
-            this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.labelExtMax);
-            this.panelTop.Controls.Add(this.textMaxRadius);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(352, 31);
-            this.panelTop.TabIndex = 25;
-            // 
-            // checkBoxCube
-            // 
-            this.checkBoxCube.AutoSize = true;
-            this.checkBoxCube.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCube.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCube.FontNerfReduction = 0.5F;
-            this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
-            this.checkBoxCube.Location = new System.Drawing.Point(195, 5);
-            this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
-            this.checkBoxCube.Name = "checkBoxCube";
-            this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
-            this.checkBoxCube.TabIndex = 4;
-            this.checkBoxCube.Text = "Cube";
-            this.checkBoxCube.TickBoxReductionSize = 10;
-            this.toolTip.SetToolTip(this.checkBoxCube, "Check to indicate use a cube instead of a sphere for distances");
-            this.checkBoxCube.UseVisualStyleBackColor = true;
-            this.checkBoxCube.CheckedChanged += new System.EventHandler(this.checkBoxCube_CheckedChanged);
-            // 
             // UserControlStarDistance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel2);
-            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.flowLayoutStarDistances);
             this.Name = "UserControlStarDistance";
             this.Size = new System.Drawing.Size(352, 572);
             this.contextMenuStrip.ResumeLayout(false);
+            this.flowLayoutStarDistances.ResumeLayout(false);
+            this.flowLayoutStarDistances.PerformLayout();
             this.dataViewScrollerPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNearest)).EndInit();
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }               
 
@@ -363,10 +378,10 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExtMax;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
-        private Panel panelTop;
         private ToolTip toolTip;
         private ExtendedControls.ExtCheckBox checkBoxCube;
         private ToolStripMenuItem addToExplorationToolStripMenuItem;
         private ToolStripMenuItem addToExpeditionToolStripMenuItem;
+        private FlowLayoutPanel flowLayoutStarDistances;
     }
 }

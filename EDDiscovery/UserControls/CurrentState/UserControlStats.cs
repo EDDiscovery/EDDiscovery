@@ -13,19 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using EliteDangerousCore.JournalEvents;
-using EliteDangerousCore;
-using EliteDangerousCore.DB;
 
 namespace EDDiscovery.UserControls
 {
@@ -39,6 +37,9 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
+            userControlStatsTimeScan.AutoScaleMode = AutoScaleMode.Inherit;
+            userControlStatsTimeTravel.AutoScaleMode = AutoScaleMode.Inherit;
+
             var corner = dataGridViewStats.TopLeftHeaderCell; // work around #1487
         }
 

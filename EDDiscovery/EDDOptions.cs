@@ -62,6 +62,18 @@ namespace EDDiscovery
             {
                 TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-fontsize")
+            {
+                FontSize = (toeol ? ca.Rest() : ca.NextEmpty()).InvariantParseFloat(0);
+            }
+            else if (optname == "-font")
+            {
+                Font = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-language")
+            {
+                SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname.StartsWith("-"))
             {
                 string opt = optname.Substring(1);
@@ -95,6 +107,7 @@ namespace EDDiscovery
                         ForceBetaOnCommander = true;
                         break;
                     case "notheme": NoTheme = true; break;
+                    case "notabs": NoTabs = true; break;
                     case "tabsreset": TabsReset = true; break;
                     case "nosound": NoSound = true; break;
                     case "no3dmap": No3DMap = true; break;
@@ -139,6 +152,7 @@ namespace EDDiscovery
         public bool ActionButton { get; private set; }
         public bool NoLoad { get; private set; }
         public bool NoTheme { get; set; }
+        public bool NoTabs { get; set; }
         public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
@@ -153,9 +167,12 @@ namespace EDDiscovery
         public bool CheckRelease { get; private set; }
         public bool CheckGithubFiles { get; private set; }
         public bool ResetLanguage { get; set; }
+        public string SelectLanguage { get; set; }
         public bool SafeMode { get; set; }
         public bool DisableMerge { get; set; }
         public string NotificationFolderOverride { get; set; }      // normally null..
+        public float FontSize { get; set; }                           // override font size
+        public string Font { get; set; }                           // override font 
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {

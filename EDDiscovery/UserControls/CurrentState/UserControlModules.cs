@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             travelhistorytext = "Travel History Entry".Tx(this);
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewModules.RowTemplate.Height = 26;
+            dataGridViewModules.RowTemplate.Height = Font.ScalePixels(26);
 
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
@@ -468,7 +468,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialog(this.FindForm(), this.FindForm().Icon, new Size(width, 110), new Point(-999, -999), "Ship Configure".Tx(this,"SC"));
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Ship Configure".Tx(this,"SC"));
 
             if (res == DialogResult.OK)
             {

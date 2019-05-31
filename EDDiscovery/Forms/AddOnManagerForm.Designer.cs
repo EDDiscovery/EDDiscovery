@@ -44,8 +44,8 @@ namespace EDDiscovery.Forms
         private void InitializeComponent()
         {
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -69,13 +69,14 @@ namespace EDDiscovery.Forms
             // 
             // panelTop
             // 
+            this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.panel_close);
             this.panelTop.Controls.Add(this.panel_minimize);
             this.panelTop.Controls.Add(this.label_index);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1228, 26);
+            this.panelTop.Size = new System.Drawing.Size(928, 27);
             this.panelTop.TabIndex = 30;
             this.panelTop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseDown);
             this.panelTop.MouseUp += new System.Windows.Forms.MouseEventHandler(this.label_index_MouseUp);
@@ -86,8 +87,8 @@ namespace EDDiscovery.Forms
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
-            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
-            this.panel_close.Location = new System.Drawing.Point(1205, 0);
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
+            this.panel_close.Location = new System.Drawing.Point(905, 0);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
@@ -108,8 +109,8 @@ namespace EDDiscovery.Forms
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
-            this.panel_minimize.Location = new System.Drawing.Point(1175, 0);
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
+            this.panel_minimize.Location = new System.Drawing.Point(875, 0);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
@@ -140,10 +141,10 @@ namespace EDDiscovery.Forms
             this.panelOuter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelOuter.Controls.Add(this.splitContainer1);
             this.panelOuter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelOuter.Location = new System.Drawing.Point(0, 26);
+            this.panelOuter.Location = new System.Drawing.Point(0, 27);
             this.panelOuter.Name = "panelOuter";
             this.panelOuter.Padding = new System.Windows.Forms.Padding(3);
-            this.panelOuter.Size = new System.Drawing.Size(1228, 581);
+            this.panelOuter.Size = new System.Drawing.Size(928, 580);
             this.panelOuter.TabIndex = 32;
             // 
             // splitContainer1
@@ -160,8 +161,8 @@ namespace EDDiscovery.Forms
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.richTextBoxScrollDescription);
-            this.splitContainer1.Size = new System.Drawing.Size(1220, 573);
-            this.splitContainer1.SplitterDistance = 358;
+            this.splitContainer1.Size = new System.Drawing.Size(920, 572);
+            this.splitContainer1.SplitterDistance = 357;
             this.splitContainer1.TabIndex = 1;
             // 
             // panelVScroll
@@ -169,10 +170,10 @@ namespace EDDiscovery.Forms
             this.panelVScroll.Controls.Add(this.vScrollBarCustom1);
             this.panelVScroll.Controls.Add(this.buttonMore);
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelVScroll.InternalScrollbar = true;
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
-            this.panelVScroll.ScrollBarWidth = 20;
-            this.panelVScroll.Size = new System.Drawing.Size(1220, 358);
+            this.panelVScroll.Size = new System.Drawing.Size(920, 357);
             this.panelVScroll.TabIndex = 2;
             this.panelVScroll.VerticalScrollBarDockRight = true;
             // 
@@ -187,13 +188,13 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 10;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(1200, 0);
-            this.vScrollBarCustom1.Maximum = -309;
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(907, 0);
+            this.vScrollBarCustom1.Maximum = -308;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(20, 358);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(13, 357);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 0;
@@ -201,8 +202,8 @@ namespace EDDiscovery.Forms
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
-            this.vScrollBarCustom1.Value = -309;
-            this.vScrollBarCustom1.ValueLimited = -309;
+            this.vScrollBarCustom1.Value = -308;
+            this.vScrollBarCustom1.ValueLimited = -308;
             // 
             // buttonMore
             // 
@@ -231,33 +232,31 @@ namespace EDDiscovery.Forms
             this.richTextBoxScrollDescription.ScrollBarBorderColor = System.Drawing.Color.White;
             this.richTextBoxScrollDescription.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
             this.richTextBoxScrollDescription.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxScrollDescription.ScrollBarLineTweak = 0;
             this.richTextBoxScrollDescription.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
             this.richTextBoxScrollDescription.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
             this.richTextBoxScrollDescription.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBoxScrollDescription.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBoxScrollDescription.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBoxScrollDescription.ScrollBarWidth = 20;
             this.richTextBoxScrollDescription.ShowLineCount = false;
-            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(1220, 211);
+            this.richTextBoxScrollDescription.Size = new System.Drawing.Size(920, 211);
             this.richTextBoxScrollDescription.TabIndex = 1;
             this.richTextBoxScrollDescription.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.richTextBoxScrollDescription.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
             // 
             // panelOK
             // 
+            this.panelOK.AutoSize = true;
             this.panelOK.Controls.Add(this.buttonExtGlobals);
             this.panelOK.Controls.Add(this.buttonOK);
             this.panelOK.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelOK.Location = new System.Drawing.Point(0, 607);
             this.panelOK.Name = "panelOK";
-            this.panelOK.Size = new System.Drawing.Size(1228, 30);
+            this.panelOK.Size = new System.Drawing.Size(928, 30);
             this.panelOK.TabIndex = 10;
             // 
             // buttonExtGlobals
             // 
-            this.buttonExtGlobals.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonExtGlobals.Location = new System.Drawing.Point(3, 3);
+            this.buttonExtGlobals.Location = new System.Drawing.Point(7, 4);
             this.buttonExtGlobals.Name = "buttonExtGlobals";
             this.buttonExtGlobals.Size = new System.Drawing.Size(100, 23);
             this.buttonExtGlobals.TabIndex = 7;
@@ -268,7 +267,7 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(1116, 3);
+            this.buttonOK.Location = new System.Drawing.Point(808, 3);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 23);
             this.buttonOK.TabIndex = 7;
@@ -280,14 +279,14 @@ namespace EDDiscovery.Forms
             // 
             this.statusStripCustom.Location = new System.Drawing.Point(0, 637);
             this.statusStripCustom.Name = "statusStripCustom";
-            this.statusStripCustom.Size = new System.Drawing.Size(1228, 22);
+            this.statusStripCustom.Size = new System.Drawing.Size(928, 22);
             this.statusStripCustom.TabIndex = 31;
             // 
             // AddOnManagerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1228, 659);
+            this.ClientSize = new System.Drawing.Size(928, 659);
             this.Controls.Add(this.panelOuter);
             this.Controls.Add(this.panelTop);
             this.Controls.Add(this.panelOK);
@@ -314,8 +313,8 @@ namespace EDDiscovery.Forms
         #endregion
 
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelOuter;

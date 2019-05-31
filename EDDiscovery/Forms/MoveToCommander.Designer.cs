@@ -95,23 +95,18 @@ namespace EDDiscovery.Forms
             // 
             // comboBoxCommanders
             // 
-            this.comboBoxCommanders.ArrowWidth = 1;
             this.comboBoxCommanders.BorderColor = System.Drawing.Color.White;
             this.comboBoxCommanders.ButtonColorScaling = 0.5F;
             this.comboBoxCommanders.DataSource = null;
             this.comboBoxCommanders.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommanders.DisplayMember = "";
             this.comboBoxCommanders.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCommanders.DropDownHeight = 106;
-            this.comboBoxCommanders.DropDownWidth = 165;
             this.comboBoxCommanders.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCommanders.ItemHeight = 13;
             this.comboBoxCommanders.Location = new System.Drawing.Point(19, 58);
             this.comboBoxCommanders.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommanders.Name = "comboBoxCommanders";
             this.comboBoxCommanders.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCommanders.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommanders.ScrollBarWidth = 16;
             this.comboBoxCommanders.SelectedIndex = -1;
             this.comboBoxCommanders.SelectedItem = null;
             this.comboBoxCommanders.SelectedValue = null;

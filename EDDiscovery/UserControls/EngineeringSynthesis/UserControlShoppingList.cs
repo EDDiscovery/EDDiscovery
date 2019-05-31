@@ -57,6 +57,10 @@ namespace EDDiscovery.UserControls
         public UserControlShoppingList()
         {
             InitializeComponent();
+            // for some reason, designer won't let me set these, so make sure they are in inherit otherwise you get double scaling
+            // on a tab page because when you attach this control inside a tab, the scaling occurs.  See MajorTabControl
+            this.userControlSynthesis.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+            this.userControlEngineering.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
         }
 
         public override void Init()
@@ -383,7 +387,7 @@ namespace EDDiscovery.UserControls
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
-        private void TechBrokerSelectionChanged(object sender, EventArgs e)
+        private void TechBrokerSelectionChanged()
         {
             Display();
         }
@@ -395,7 +399,7 @@ namespace EDDiscovery.UserControls
                              discoveryform.theme.TextBackColor, discoveryform.theme.TextBlockColor, this.FindForm());
         }
 
-        private void SpecialEffectsSelectionChanged(object sender, EventArgs e)
+        private void SpecialEffectsSelectionChanged()
         {
             Display();
         }

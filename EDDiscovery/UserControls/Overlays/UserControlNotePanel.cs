@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
 
                 pictureBox.AddTextAutoSize(
                     new Point(0, 5),
-                    new Size(1000, 1000),
+                    new Size(10000, 10000),
                     botline,
                     displayfont,
                     textcolour,

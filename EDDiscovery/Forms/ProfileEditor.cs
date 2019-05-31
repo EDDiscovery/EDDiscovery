@@ -68,7 +68,7 @@ namespace EDDiscovery.Forms
             Icon = ic;
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             statusStripCustom.Visible = panelTop.Visible = panelTop.Enabled = !winborder;
 
             BaseUtils.Translator.Instance.Translate(this);
@@ -90,6 +90,8 @@ namespace EDDiscovery.Forms
         private void AddProfile(int id, string name, ConditionLists tripcondition , ConditionLists backcondition , bool poweron)
         {
             Group g = new Group();
+
+            // We draw as it was 8.25 point then scale.
 
             g.Id = id;
 
@@ -149,7 +151,8 @@ namespace EDDiscovery.Forms
             g.triggercondition = new ConditionLists(tripcondition);        // copy so we can edit
             g.backcondition = new ConditionLists(backcondition);
 
-            EDDiscovery.EDDTheme.Instance.ApplyToControls(g.panel, label_index.Font);
+            EDDiscovery.EDDTheme.Instance.ApplyDialog(g.panel);
+            g.panel.Scale(this.CurrentAutoScaleFactor());
 
             panelVScrollMain.Controls.Add(g.panel);
             groups.Add(g);
@@ -163,9 +166,9 @@ namespace EDDiscovery.Forms
             foreach (Group g in groups)
             {
                 g.panel.Location = new Point(panelleftmargin, vpos);
-                g.panel.Size = new Size(panelwidth, 32);
+                g.panel.Size = g.panel.FindMaxSubControlArea(2, textheightmargin);
                 g.deletebutton.Visible = g.Id != EDDProfiles.DefaultId;
-                vpos += g.panel.Height + 4;
+                vpos += g.panel.Height + Font.ScalePixels(4);
             }
 
             buttonMore.Location = new Point(panelleftmargin, vpos);

@@ -149,7 +149,7 @@ SECTION UserControlEngineering
 .EngineersCol: "Engineers" => "Ingenhere"
 .chkHistoric: "Use Cursor Positon" => "Usa la posizione del cursore"
 .buttonClear: "Clear Wanted" => "Pulischi Ricercati"
-.buttonFilterMaterial: "Filter By Material" => "Filtra per Materiali"
+.buttonFilterMaterial: "Filter By Material" => "Filtra per Materiali Filtra per Materiali"
 .buttonFilterUpgrade: "Filter By Upgrade" => "Filtra per Miglioramenti"
 .buttonFilterLevel: "Filter By Level" => "Filtra per Livello"
 .buttonFilterEngineer: "Filter By Engineer" => "Filtra per Ingegnere"

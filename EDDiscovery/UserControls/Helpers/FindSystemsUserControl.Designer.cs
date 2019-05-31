@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FindSystemsUserControl));
             this.labelRadMin = new System.Windows.Forms.Label();
             this.labelFilter = new System.Windows.Forms.Label();
             this.labelRadMax = new System.Windows.Forms.Label();
@@ -117,6 +118,9 @@
             this.numberBoxMaxRadius.ClearOnFirstChar = false;
             this.numberBoxMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxMaxRadius.DelayBeforeNotification = 0;
+            this.numberBoxMaxRadius.EndButtonEnable = true;
+            this.numberBoxMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMaxRadius.EndButtonImage")));
+            this.numberBoxMaxRadius.EndButtonVisible = false;
             this.numberBoxMaxRadius.Format = "0.##";
             this.numberBoxMaxRadius.InErrorCondition = false;
             this.numberBoxMaxRadius.Location = new System.Drawing.Point(95, 88);
@@ -145,6 +149,9 @@
             this.numberBoxMinRadius.ClearOnFirstChar = false;
             this.numberBoxMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxMinRadius.DelayBeforeNotification = 0;
+            this.numberBoxMinRadius.EndButtonEnable = true;
+            this.numberBoxMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxMinRadius.EndButtonImage")));
+            this.numberBoxMinRadius.EndButtonVisible = false;
             this.numberBoxMinRadius.Format = "0.##";
             this.numberBoxMinRadius.InErrorCondition = false;
             this.numberBoxMinRadius.Location = new System.Drawing.Point(95, 62);
@@ -164,6 +171,7 @@
             // 
             // textBoxSystemName
             // 
+            this.textBoxSystemName.AutoCompleteCommentMarker = null;
             this.textBoxSystemName.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
             this.textBoxSystemName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSystemName.BackErrorColor = System.Drawing.Color.Red;
@@ -174,12 +182,12 @@
             this.textBoxSystemName.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxSystemName.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxSystemName.DropDownHeight = 200;
-            this.textBoxSystemName.DropDownItemHeight = 13;
             this.textBoxSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
             this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
-            this.textBoxSystemName.DropDownWidth = 0;
+            this.textBoxSystemName.EndButtonEnable = false;
+            this.textBoxSystemName.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystemName.EndButtonImage")));
+            this.textBoxSystemName.EndButtonVisible = false;
             this.textBoxSystemName.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxSystemName.InErrorCondition = false;
             this.textBoxSystemName.Location = new System.Drawing.Point(95, 6);
@@ -215,6 +223,9 @@
             this.numberBoxDoubleX.ClearOnFirstChar = false;
             this.numberBoxDoubleX.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleX.DelayBeforeNotification = 0;
+            this.numberBoxDoubleX.EndButtonEnable = true;
+            this.numberBoxDoubleX.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleX.EndButtonImage")));
+            this.numberBoxDoubleX.EndButtonVisible = false;
             this.numberBoxDoubleX.Format = "0.##";
             this.numberBoxDoubleX.InErrorCondition = false;
             this.numberBoxDoubleX.Location = new System.Drawing.Point(95, 32);
@@ -244,6 +255,9 @@
             this.numberBoxDoubleY.ClearOnFirstChar = false;
             this.numberBoxDoubleY.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleY.DelayBeforeNotification = 0;
+            this.numberBoxDoubleY.EndButtonEnable = true;
+            this.numberBoxDoubleY.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleY.EndButtonImage")));
+            this.numberBoxDoubleY.EndButtonVisible = false;
             this.numberBoxDoubleY.Format = "0.##";
             this.numberBoxDoubleY.InErrorCondition = false;
             this.numberBoxDoubleY.Location = new System.Drawing.Point(218, 32);
@@ -273,6 +287,9 @@
             this.numberBoxDoubleZ.ClearOnFirstChar = false;
             this.numberBoxDoubleZ.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxDoubleZ.DelayBeforeNotification = 0;
+            this.numberBoxDoubleZ.EndButtonEnable = true;
+            this.numberBoxDoubleZ.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxDoubleZ.EndButtonImage")));
+            this.numberBoxDoubleZ.EndButtonVisible = false;
             this.numberBoxDoubleZ.Format = "0.##";
             this.numberBoxDoubleZ.InErrorCondition = false;
             this.numberBoxDoubleZ.Location = new System.Drawing.Point(350, 32);
@@ -334,15 +351,15 @@
             this.checkBoxCustomCube.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxCustomCube.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomCube.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomCube.FontNerfReduction = 0.5F;
             this.checkBoxCustomCube.ImageButtonDisabledScaling = 0.5F;
+            this.checkBoxCustomCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomCube.Location = new System.Drawing.Point(456, 33);
             this.checkBoxCustomCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCube.Name = "checkBoxCustomCube";
             this.checkBoxCustomCube.Size = new System.Drawing.Size(51, 17);
             this.checkBoxCustomCube.TabIndex = 39;
             this.checkBoxCustomCube.Text = "Cube";
-            this.checkBoxCustomCube.TickBoxReductionSize = 10;
+            this.checkBoxCustomCube.TickBoxReductionRatio = 0.75F;
             this.checkBoxCustomCube.UseVisualStyleBackColor = true;
             // 
             // FindSystemsUserControl

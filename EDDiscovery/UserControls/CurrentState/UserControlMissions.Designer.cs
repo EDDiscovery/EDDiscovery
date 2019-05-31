@@ -69,11 +69,11 @@ namespace EDDiscovery.UserControls
             this.pColResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomPrev = new ExtendedControls.ExtScrollBar();
-            this.panelButtons = new System.Windows.Forms.Panel();
-            this.labelValue = new System.Windows.Forms.Label();
-            this.labelTo = new System.Windows.Forms.Label();
+            this.panelButtons = new System.Windows.Forms.FlowLayoutPanel();
             this.customDateTimePickerEnd = new ExtendedControls.ExtDateTimePicker();
+            this.labelTo = new System.Windows.Forms.Label();
             this.customDateTimePickerStart = new ExtendedControls.ExtDateTimePicker();
+            this.labelValue = new System.Windows.Forms.Label();
             this.panelCurrent = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainerMissions = new System.Windows.Forms.SplitContainer();
@@ -98,7 +98,6 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCurrent.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanelCurrent.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanelCurrent.Name = "dataViewScrollerPanelCurrent";
-            this.dataViewScrollerPanelCurrent.ScrollBarWidth = 20;
             this.dataViewScrollerPanelCurrent.Size = new System.Drawing.Size(800, 266);
             this.dataViewScrollerPanelCurrent.TabIndex = 0;
             this.dataViewScrollerPanelCurrent.VerticalScrollBarDockRight = true;
@@ -126,7 +125,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCurrent.RowHeadersVisible = false;
             this.dataGridViewCurrent.RowHeadersWidth = 25;
             this.dataGridViewCurrent.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewCurrent.Size = new System.Drawing.Size(780, 266);
+            this.dataGridViewCurrent.Size = new System.Drawing.Size(787, 266);
             this.dataGridViewCurrent.TabIndex = 1;
             this.dataGridViewCurrent.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewCurrent_SortCompare);
             // 
@@ -208,13 +207,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomCur.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomCur.HideScrollBar = false;
             this.vScrollBarCustomCur.LargeChange = 0;
-            this.vScrollBarCustomCur.Location = new System.Drawing.Point(780, 0);
+            this.vScrollBarCustomCur.Location = new System.Drawing.Point(787, 0);
             this.vScrollBarCustomCur.Maximum = -1;
             this.vScrollBarCustomCur.Minimum = 0;
             this.vScrollBarCustomCur.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomCur.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomCur.Name = "vScrollBarCustomCur";
-            this.vScrollBarCustomCur.Size = new System.Drawing.Size(20, 266);
+            this.vScrollBarCustomCur.Size = new System.Drawing.Size(13, 266);
             this.vScrollBarCustomCur.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomCur.SmallChange = 1;
             this.vScrollBarCustomCur.TabIndex = 0;
@@ -241,10 +240,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelPrev.Controls.Add(this.vScrollBarCustomPrev);
             this.dataViewScrollerPanelPrev.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanelPrev.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanelPrev.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanelPrev.Location = new System.Drawing.Point(0, 22);
             this.dataViewScrollerPanelPrev.Name = "dataViewScrollerPanelPrev";
-            this.dataViewScrollerPanelPrev.ScrollBarWidth = 20;
-            this.dataViewScrollerPanelPrev.Size = new System.Drawing.Size(800, 270);
+            this.dataViewScrollerPanelPrev.Size = new System.Drawing.Size(800, 280);
             this.dataViewScrollerPanelPrev.TabIndex = 4;
             this.dataViewScrollerPanelPrev.VerticalScrollBarDockRight = true;
             // 
@@ -271,7 +269,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewPrevious.RowHeadersVisible = false;
             this.dataGridViewPrevious.RowHeadersWidth = 25;
             this.dataGridViewPrevious.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewPrevious.Size = new System.Drawing.Size(780, 270);
+            this.dataGridViewPrevious.Size = new System.Drawing.Size(787, 280);
             this.dataGridViewPrevious.TabIndex = 2;
             this.dataGridViewPrevious.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewPrevious_SortCompare);
             // 
@@ -357,13 +355,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomPrev.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomPrev.HideScrollBar = false;
             this.vScrollBarCustomPrev.LargeChange = 0;
-            this.vScrollBarCustomPrev.Location = new System.Drawing.Point(780, 0);
+            this.vScrollBarCustomPrev.Location = new System.Drawing.Point(787, 0);
             this.vScrollBarCustomPrev.Maximum = -1;
             this.vScrollBarCustomPrev.Minimum = 0;
             this.vScrollBarCustomPrev.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomPrev.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomPrev.Name = "vScrollBarCustomPrev";
-            this.vScrollBarCustomPrev.Size = new System.Drawing.Size(20, 270);
+            this.vScrollBarCustomPrev.Size = new System.Drawing.Size(13, 280);
             this.vScrollBarCustomPrev.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomPrev.SmallChange = 1;
             this.vScrollBarCustomPrev.TabIndex = 0;
@@ -376,33 +374,16 @@ namespace EDDiscovery.UserControls
             // 
             // panelButtons
             // 
-            this.panelButtons.Controls.Add(this.labelValue);
-            this.panelButtons.Controls.Add(this.labelTo);
+            this.panelButtons.AutoSize = true;
             this.panelButtons.Controls.Add(this.customDateTimePickerEnd);
+            this.panelButtons.Controls.Add(this.labelTo);
             this.panelButtons.Controls.Add(this.customDateTimePickerStart);
+            this.panelButtons.Controls.Add(this.labelValue);
             this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelButtons.Location = new System.Drawing.Point(0, 0);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(800, 32);
+            this.panelButtons.Size = new System.Drawing.Size(800, 22);
             this.panelButtons.TabIndex = 2;
-            this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
-            // 
-            // labelValue
-            // 
-            this.labelValue.AutoSize = true;
-            this.labelValue.Location = new System.Drawing.Point(487, 7);
-            this.labelValue.Name = "labelValue";
-            this.labelValue.Size = new System.Drawing.Size(0, 13);
-            this.labelValue.TabIndex = 1;
-            // 
-            // labelTo
-            // 
-            this.labelTo.AutoSize = true;
-            this.labelTo.Location = new System.Drawing.Point(228, 7);
-            this.labelTo.Name = "labelTo";
-            this.labelTo.Size = new System.Drawing.Size(16, 13);
-            this.labelTo.TabIndex = 1;
-            this.labelTo.Text = "to";
             // 
             // customDateTimePickerEnd
             // 
@@ -411,7 +392,8 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerEnd.Checked = false;
             this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerEnd.Location = new System.Drawing.Point(251, 3);
+            this.customDateTimePickerEnd.Location = new System.Drawing.Point(0, 1);
+            this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
             this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerEnd.ShowCheckBox = true;
@@ -422,6 +404,16 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerEnd.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             this.customDateTimePickerEnd.ValueChanged += new System.EventHandler(this.customDateTimePickerEnd_ValueChanged);
             // 
+            // labelTo
+            // 
+            this.labelTo.AutoSize = true;
+            this.labelTo.Location = new System.Drawing.Point(226, 1);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelTo.Name = "labelTo";
+            this.labelTo.Size = new System.Drawing.Size(16, 13);
+            this.labelTo.TabIndex = 1;
+            this.labelTo.Text = "to";
+            // 
             // customDateTimePickerStart
             // 
             this.customDateTimePickerStart.BorderColor = System.Drawing.Color.Transparent;
@@ -429,7 +421,8 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerStart.Checked = false;
             this.customDateTimePickerStart.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.customDateTimePickerStart.Location = new System.Drawing.Point(4, 3);
+            this.customDateTimePickerStart.Location = new System.Drawing.Point(250, 1);
+            this.customDateTimePickerStart.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.customDateTimePickerStart.Name = "customDateTimePickerStart";
             this.customDateTimePickerStart.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerStart.ShowCheckBox = true;
@@ -439,6 +432,16 @@ namespace EDDiscovery.UserControls
             this.customDateTimePickerStart.TextBackColor = System.Drawing.SystemColors.ControlLight;
             this.customDateTimePickerStart.Value = new System.DateTime(2017, 4, 7, 9, 2, 29, 549);
             this.customDateTimePickerStart.ValueChanged += new System.EventHandler(this.customDateTimePickerStart_ValueChanged);
+            // 
+            // labelValue
+            // 
+            this.labelValue.AutoSize = true;
+            this.labelValue.Location = new System.Drawing.Point(478, 1);
+            this.labelValue.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelValue.Name = "labelValue";
+            this.labelValue.Size = new System.Drawing.Size(43, 13);
+            this.labelValue.TabIndex = 1;
+            this.labelValue.Text = "<code>";
             // 
             // panelCurrent
             // 
@@ -481,6 +484,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanelCurrent.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCurrent)).EndInit();
             this.panelPrev.ResumeLayout(false);
+            this.panelPrev.PerformLayout();
             this.dataViewScrollerPanelPrev.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPrevious)).EndInit();
             this.panelButtons.ResumeLayout(false);
@@ -501,7 +505,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustomCur;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Panel panelPrev;
-        private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.DataGridView dataGridViewPrevious;
         private System.Windows.Forms.Panel panelCurrent;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelPrev;
@@ -529,5 +532,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn pColTargetFaction;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColResult;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColInfo;
+        private System.Windows.Forms.FlowLayoutPanel panelButtons;
     }
 }

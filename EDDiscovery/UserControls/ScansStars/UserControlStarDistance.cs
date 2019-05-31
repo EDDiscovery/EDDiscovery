@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -17,16 +17,9 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls

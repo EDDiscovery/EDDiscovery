@@ -402,16 +402,10 @@ namespace EDDiscovery
                 //System.Diagnostics.Debug.WriteLine("UCCB init of " + ctrl.GetType().Name);
                 ctrl.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
 
+                discoveryform.theme.ApplyStd(tcf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
+
                 //System.Diagnostics.Debug.WriteLine("Show");
                 tcf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
-
-                if (tcf.UserControl != null)
-                    tcf.UserControl.Font = discoveryform.theme.GetFont;        // Important. Apply font autoscaling to the user control
-                                                                                // ApplyToForm does not apply the font to the actual UC, only
-                                                                                // specific children controls.  The TabControl in the discoveryform ends up autoscaling most stuff
-                                                                                // the children directly attached to the discoveryform are not autoscaled
-
-                discoveryform.theme.ApplyToForm(tcf);
 
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp, null, new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
             }

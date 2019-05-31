@@ -54,16 +54,16 @@ namespace EDDiscovery.UserControls
             this.Notes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Recipe = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
-            this.panelButtons = new System.Windows.Forms.Panel();
             this.chkHistoric = new ExtendedControls.ExtCheckBox();
             this.buttonMaterialFilter = new ExtendedControls.ExtButton();
             this.buttonFilterLevel = new ExtendedControls.ExtButton();
             this.buttonRecipeFilter = new ExtendedControls.ExtButton();
             this.buttonClear = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).BeginInit();
-            this.panelButtons.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataViewScrollerPanel
@@ -72,10 +72,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 32);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 25);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 540);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 547);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -99,7 +98,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.RowHeadersVisible = false;
             this.dataGridViewSynthesis.RowHeadersWidth = 25;
             this.dataGridViewSynthesis.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewSynthesis.Size = new System.Drawing.Size(780, 540);
+            this.dataGridViewSynthesis.Size = new System.Drawing.Size(787, 547);
             this.dataGridViewSynthesis.TabIndex = 1;
             this.dataGridViewSynthesis.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
             this.dataGridViewSynthesis.DragDrop += new System.Windows.Forms.DragEventHandler(this.dataGridViewSynthesis_DragDrop);
@@ -178,13 +177,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(780, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(787, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(20, 540);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(13, 547);
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
@@ -195,35 +194,22 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
-            // panelButtons
-            // 
-            this.panelButtons.Controls.Add(this.chkHistoric);
-            this.panelButtons.Controls.Add(this.buttonMaterialFilter);
-            this.panelButtons.Controls.Add(this.buttonFilterLevel);
-            this.panelButtons.Controls.Add(this.buttonRecipeFilter);
-            this.panelButtons.Controls.Add(this.buttonClear);
-            this.panelButtons.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelButtons.Location = new System.Drawing.Point(0, 0);
-            this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(800, 32);
-            this.panelButtons.TabIndex = 2;
-            this.toolTip.SetToolTip(this.panelButtons, "Left click and drag on grid to reorder");
-            // 
             // chkHistoric
             // 
             this.chkHistoric.AutoSize = true;
             this.chkHistoric.CheckBoxColor = System.Drawing.Color.Gray;
             this.chkHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
             this.chkHistoric.CheckColor = System.Drawing.Color.DarkBlue;
-            this.chkHistoric.FontNerfReduction = 0.5F;
             this.chkHistoric.ImageButtonDisabledScaling = 0.5F;
-            this.chkHistoric.Location = new System.Drawing.Point(322, 8);
+            this.chkHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.chkHistoric.Location = new System.Drawing.Point(264, 1);
+            this.chkHistoric.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.chkHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.chkHistoric.Name = "chkHistoric";
             this.chkHistoric.Size = new System.Drawing.Size(118, 17);
             this.chkHistoric.TabIndex = 7;
             this.chkHistoric.Text = "Use Cursor Position";
-            this.chkHistoric.TickBoxReductionSize = 10;
+            this.chkHistoric.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.chkHistoric, "When clicked on, use the materials at the cursor to estimate, when off always use" +
         " the latest materials.");
             this.chkHistoric.UseVisualStyleBackColor = true;
@@ -231,33 +217,36 @@ namespace EDDiscovery.UserControls
             // 
             // buttonMaterialFilter
             // 
-            this.buttonMaterialFilter.Location = new System.Drawing.Point(216, 4);
+            this.buttonMaterialFilter.Location = new System.Drawing.Point(176, 1);
+            this.buttonMaterialFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonMaterialFilter.Name = "buttonMaterialFilter";
-            this.buttonMaterialFilter.Size = new System.Drawing.Size(100, 23);
+            this.buttonMaterialFilter.Size = new System.Drawing.Size(80, 23);
             this.buttonMaterialFilter.TabIndex = 4;
-            this.buttonMaterialFilter.Text = "Filter By Material";
+            this.buttonMaterialFilter.Text = "Material";
             this.toolTip.SetToolTip(this.buttonMaterialFilter, "Filter the table by the material type");
             this.buttonMaterialFilter.UseVisualStyleBackColor = true;
             this.buttonMaterialFilter.Click += new System.EventHandler(this.buttonMaterialFilter_Click);
             // 
             // buttonFilterLevel
             // 
-            this.buttonFilterLevel.Location = new System.Drawing.Point(110, 4);
+            this.buttonFilterLevel.Location = new System.Drawing.Point(88, 1);
+            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonFilterLevel.Name = "buttonFilterLevel";
-            this.buttonFilterLevel.Size = new System.Drawing.Size(100, 23);
+            this.buttonFilterLevel.Size = new System.Drawing.Size(80, 23);
             this.buttonFilterLevel.TabIndex = 3;
-            this.buttonFilterLevel.Text = "Filter By Level";
+            this.buttonFilterLevel.Text = "Level";
             this.toolTip.SetToolTip(this.buttonFilterLevel, "Filter the table by the synthesis level");
             this.buttonFilterLevel.UseVisualStyleBackColor = true;
             this.buttonFilterLevel.Click += new System.EventHandler(this.buttonFilterLevel_Click);
             // 
             // buttonRecipeFilter
             // 
-            this.buttonRecipeFilter.Location = new System.Drawing.Point(4, 4);
+            this.buttonRecipeFilter.Location = new System.Drawing.Point(0, 1);
+            this.buttonRecipeFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonRecipeFilter.Name = "buttonRecipeFilter";
-            this.buttonRecipeFilter.Size = new System.Drawing.Size(100, 23);
+            this.buttonRecipeFilter.Size = new System.Drawing.Size(80, 23);
             this.buttonRecipeFilter.TabIndex = 2;
-            this.buttonRecipeFilter.Text = "Filter By Synthesis";
+            this.buttonRecipeFilter.Text = "Synthesis";
             this.toolTip.SetToolTip(this.buttonRecipeFilter, "Filter the table by the synthesis type");
             this.buttonRecipeFilter.UseVisualStyleBackColor = true;
             this.buttonRecipeFilter.Click += new System.EventHandler(this.buttonRecipeFilter_Click);
@@ -265,11 +254,12 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(697, 4);
+            this.buttonClear.Location = new System.Drawing.Point(390, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonClear.Name = "buttonClear";
-            this.buttonClear.Size = new System.Drawing.Size(100, 23);
+            this.buttonClear.Size = new System.Drawing.Size(80, 23);
             this.buttonClear.TabIndex = 1;
-            this.buttonClear.Text = "Clear Wanted";
+            this.buttonClear.Text = "Clear";
             this.toolTip.SetToolTip(this.buttonClear, "Set all wanted values to zero");
             this.buttonClear.UseVisualStyleBackColor = true;
             this.buttonClear.Click += new System.EventHandler(this.buttonClear_Click);
@@ -278,19 +268,35 @@ namespace EDDiscovery.UserControls
             // 
             this.toolTip.ShowAlways = true;
             // 
+            // panelTop
+            // 
+            this.panelTop.AutoSize = true;
+            this.panelTop.Controls.Add(this.buttonRecipeFilter);
+            this.panelTop.Controls.Add(this.buttonFilterLevel);
+            this.panelTop.Controls.Add(this.buttonMaterialFilter);
+            this.panelTop.Controls.Add(this.chkHistoric);
+            this.panelTop.Controls.Add(this.buttonClear);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Margin = new System.Windows.Forms.Padding(0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(800, 25);
+            this.panelTop.TabIndex = 2;
+            // 
             // UserControlSynthesis
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
-            this.Controls.Add(this.panelButtons);
+            this.Controls.Add(this.panelTop);
             this.Name = "UserControlSynthesis";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSynthesis)).EndInit();
-            this.panelButtons.ResumeLayout(false);
-            this.panelButtons.PerformLayout();
+            this.panelTop.ResumeLayout(false);
+            this.panelTop.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -299,7 +305,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel;
         private System.Windows.Forms.DataGridView dataGridViewSynthesis;
         private ExtendedControls.ExtScrollBar vScrollBarCustomMC;
-        private System.Windows.Forms.Panel panelButtons;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonClear;
         private ExtendedControls.ExtButton buttonRecipeFilter;
@@ -313,5 +318,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Available;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
         private System.Windows.Forms.DataGridViewTextBoxColumn Recipe;
+        private System.Windows.Forms.FlowLayoutPanel panelTop;
     }
 }

@@ -64,7 +64,7 @@ namespace EDDiscovery.Forms
             ValidateData();
 
             EDDiscovery.EDDTheme theme = EDDiscovery.EDDTheme.Instance;
-            bool winborder = theme.ApplyToFormStandardFontSize(this);
+            bool winborder = theme.ApplyDialog(this);
             panelTop.Visible = panelTop.Enabled = !winborder;
 
             BaseUtils.Translator.Instance.Translate(this);

@@ -258,8 +258,10 @@ namespace EDDiscovery.UserControls
                 if (!drawnnootherstuff)                                         // and it may indicate its overwriting all stuff, which is fine
                 {
                     int rowpos = scanpostextoffset.Y;
-                    int rowheight = Config(Configuration.showIcon) ? 26 : 20;
-					int habrowheight = Config(Configuration.showIcon) ? 26 : 20;
+                    //int rowheight = Config(Configuration.showIcon) ? 26 : 20;
+                    //int habrowheight = Config(Configuration.showIcon) ? 26 : 20;
+
+                    int rowmargin = displayfont.ScalePixels(4);
 
 					// Check if need to hide the UI
                     if (Config(Configuration.showNothingWhenDocked) && 
@@ -267,7 +269,7 @@ namespace EDDiscovery.UserControls
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, rowheight, (hl.IsCurrentlyDocked) ? "Docked" : "Landed",
+							AddColText(0, 0, rowpos, (hl.IsCurrentlyDocked) ? "Docked" : "Landed",
 									   textcolour, backcolour, null);
 						}
 					}
@@ -275,7 +277,7 @@ namespace EDDiscovery.UserControls
                     {
 						if (!Config(Configuration.showNoTitleWhenHidden))
 						{
-							AddColText(0, 0, rowpos, rowheight, uistate.ToString().SplitCapsWord(),
+							AddColText(0, 0, rowpos, uistate.ToString().SplitCapsWord(),
 									   textcolour, backcolour, null);
 						}
 					}
@@ -288,6 +290,8 @@ namespace EDDiscovery.UserControls
                         ISystem currentsystem = hl.CurrentSystem; // may be null
 
                         HistoryEntry last = hl.GetLast;
+
+                      // last = hl.FindByName("Myeia Thaa QY-H c23-0");
 
                         if (Config(Configuration.showSystemInformation) && last != null)
                         {
@@ -307,9 +311,7 @@ namespace EDDiscovery.UserControls
                             HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
                             bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
 
-                            AddColText(0, 0, rowpos, rowheight, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer");
-
-                            rowpos += rowheight;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, null , firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").pos.Bottom;
                         }
 
                         if (Config(Configuration.showHabInformation) && last != null)
@@ -320,74 +322,59 @@ namespace EDDiscovery.UserControls
 
                             StringBuilder res = new StringBuilder();
 
-							void expandRowHeight()
-							{
-								habrowheight += 20;
-							}
-
-                            if ( sn != null && sn.starnodes.Count>0 && sn.starnodes.Values[0].ScanData != null )
+                            if (sn != null && sn.starnodes.Count > 0 && sn.starnodes.Values[0].ScanData != null)
                             {
                                 JournalScan js = sn.starnodes.Values[0].ScanData;
 
-                                //res.AppendFormat(js.CircumstellarZonesString().Replace("\r\n", " "));
+                                if (showCircumstellarZonesToolStripMenuItem.Checked)
+                                {
+                                    res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
+                                                     js.GetHabZoneStringLs(),
+                                                     (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
+                                                     (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
+                                }
 
-								if (showCircumstellarZonesToolStripMenuItem.Checked)
-								{
-									res.AppendFormat("Goldilocks, {0} ({1}-{2} AU),\n".Tx(this),
-													 js.GetHabZoneStringLs(),
-													 (js.HabitableZoneInner.Value / JournalScan.oneAU_LS).ToString("N2"),
-													 (js.HabitableZoneOuter.Value / JournalScan.oneAU_LS).ToString("N2"));
-								}
+                                if (showMetalRichPlanetsToolStripMenuItem.Checked)
+                                {
+                                    res.Append(js.MetalRichZoneString());
+                                }
 
-								if (showMetalRichPlanetsToolStripMenuItem.Checked)
-								{
-									res.AppendFormat(js.MetalRichZoneString());
-									expandRowHeight();
-								}
+                                if (showWaterWorldsToolStripMenuItem.Checked)
+                                {
+                                    res.Append(js.WaterWorldZoneString());
+                                }
 
-								if (showWaterWorldsToolStripMenuItem.Checked)
-								{
-									res.AppendFormat((js.WaterWorldZoneString()));
-									expandRowHeight();
-								}
+                                if (showEarthLikeToolStripMenuItem.Checked)
+                                {
+                                    res.Append(js.EarthLikeZoneString());
+                                }
 
-								if (showEarthLikeToolStripMenuItem.Checked)
-								{
-									res.AppendFormat(js.EarthLikeZoneString());
-									expandRowHeight();
-								}
+                                if (showAmmoniaWorldsToolStripMenuItem.Checked)
+                                {
+                                    res.Append(js.AmmoniaWorldZoneString());
+                                }
 
-								if (showAmmoniaWorldsToolStripMenuItem.Checked)
-								{
-									res.AppendFormat(js.AmmoniaWorldZoneString());
-									expandRowHeight();
-								}
-
-								if (showIcyPlanetsToolStripMenuItem.Checked)
-								{
-									res.AppendFormat(js.IcyPlanetsZoneString());
-									expandRowHeight();
-								}
+                                if (showIcyPlanetsToolStripMenuItem.Checked)
+                                {
+                                    res.Append(js.IcyPlanetsZoneString());
+                                }
                             }
 
-                            if (res != null)
+                            if (res.ToString().HasChars())
                             {
-                                AddColText(0, 0, rowpos, habrowheight, res.ToString(), textcolour, backcolour, null);
-                                rowpos += habrowheight;
+                                rowpos = rowmargin + AddColText(0, 0, rowpos, res.ToString(), textcolour, backcolour, null).pos.Bottom;
                             }
                         }
 
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
                             string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(tpos.X, tpos.Y, tpos.Z).ToString("0.00") : "Unknown".Tx();
-                            AddColText(0, 0, rowpos, rowheight, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null);
-                            rowpos += rowheight;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".Tx(this) + ": " + name + " @ " + dist +" ly", textcolour, backcolour, null).pos.Bottom;
                         }
 
                         foreach (HistoryEntry rhe in result)
                         {
-                            DrawHistoryEntry(rhe, rowpos, rowheight, tpos, textcolour, backcolour);
-                            rowpos += rowheight;
+                            rowpos = rowmargin + DrawHistoryEntry(rhe, rowpos, tpos, textcolour, backcolour);
 
                             if (rowpos > ClientRectangle.Height)                // stop when off of screen
                                 break;
@@ -401,10 +388,13 @@ namespace EDDiscovery.UserControls
             pictureBox.Render();
         }
 
-        void DrawHistoryEntry(HistoryEntry he, int rowpos, int rowheight, Point3D tpos , Color textcolour , Color backcolour )
+        int DrawHistoryEntry(HistoryEntry he, int rowpos, Point3D tpos , Color textcolour , Color backcolour )
         {
             List<string> coldata = new List<string>();                      // First we accumulate the strings
             List<int> tooltipattach = new List<int>();
+
+            int initialrowpos = rowpos;
+            int maxrowpos = rowpos;
 
             if (Config(Configuration.showTime))
                 coldata.Add((EDDiscoveryForm.EDDConfig.DisplayUTC ? he.EventTimeUTC : he.EventTimeLocal).ToString("HH:mm.ss"));
@@ -453,16 +443,20 @@ namespace EDDiscovery.UserControls
 
             int colnum = 0;
 
+            ExtendedControls.ExtPictureBox.ImageElement edsm = null;
+
             if (Config(Configuration.showEDSMButton))
             {
                 Color backtext = (backcolour.IsFullyTransparent()) ? Color.Black : backcolour;
-                ExtendedControls.ExtPictureBox.ImageElement edsm = pictureBox.AddTextFixedSizeC(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(45, 14), 
-                                            "EDSM", displayfont, backtext, textcolour, 0.5F, true, he, "View system on EDSM".Tx(this,"TVE"));
-                edsm.Translate(0, (rowheight - edsm.img.Height) / 2);          // align to centre of rowh..
-                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoFixedSizeBitmapC("EDSM", edsm.img.Size, displayfont, backtext, textcolour.Multiply(1.2F), 0.5F, true), edsm.pos, true);
+
+                edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum++], rowpos), new Size(200, 200),
+                                            "EDSM", displayfont, backtext, textcolour, 0.5F, he, "View system on EDSM".Tx(this,"TVE"));
+                edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200,200), displayfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.pos, true);
             }
 
             string tooltip = he.EventSummary + Environment.NewLine + EventDescription + Environment.NewLine + EventDetailedInfo;
+
+            List<ExtendedControls.ExtPictureBox.ImageElement> items = new List<ExtPictureBox.ImageElement>();
 
             for (int i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
             {
@@ -470,20 +464,36 @@ namespace EDDiscovery.UserControls
                 for (; nextfull < coldata.Count && Config(Configuration.showExpandOverColumns) && coldata[nextfull].Length == 0; nextfull++)
                 { }
 
-                if ( coldata[i].Equals("`!!ICON!!") )            // marker for ICON..
+                if (coldata[i].Equals("`!!ICON!!"))            // marker for ICON..
                 {
                     Image img = he.journalEntry.Icon;
-                    ExtendedControls.ExtPictureBox.ImageElement e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum+i], rowpos, img.Width, img.Height), img, null, null, false);
-                    e.Translate(0, (rowheight - e.img.Height) / 2);          // align to centre of rowh..
+                    var e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum + i], rowpos, img.Width, img.Height), img, null, null, false); 
+                    maxrowpos = Math.Max(maxrowpos, e.pos.Bottom);
+                    items.Add(e);
                 }
                 else
-                    AddColText(colnum + i, colnum + nextfull, rowpos, rowheight, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
+                {
+                    var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, tooltipattach.Contains(i) ? tooltip : null);
+                    if (e != null)
+                    {
+                        maxrowpos = Math.Max(maxrowpos, e.pos.Bottom);
+                        items.Add(e);
+                    }
+                }
             }
+
+            if ( edsm != null )
+                edsm.Translate(0, (maxrowpos-initialrowpos - edsm.img.Height) / 2);    // align to centre of rowh..
+
+            foreach( var e in items )
+                e.Translate(0, (maxrowpos-initialrowpos - e.img.Height) / 2);          // align to centre of rowh..
+
+            return maxrowpos;
         }
 
         public bool DrawScanText(bool attop, Color textcolour , Color backcolour)
         {
-            Size maxscansize = new Size(1920, 1080);            // set arbitary large.. not important for this.
+            Size maxscansize = new Size(10000, 10000);            // set arbitary large.. not important for this.
 
             if (scantext != null)
             {
@@ -539,7 +549,7 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        void AddColText(int coli, int nextcol , int rowpos, int rowh, string text, Color textcolour, Color backcolour, string tooltip, Image opt = null , string imagetooltip = null)
+        ExtendedControls.ExtPictureBox.ImageElement AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, string tooltip, Image opt = null , string imagetooltip = null)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
             {
@@ -547,7 +557,7 @@ namespace EDDiscovery.UserControls
 
                 int colpos = scanpostextoffset.X + columnpos[coli];
 
-                if ( opt != null )
+                if (opt != null)
                 {
                     pictureBox.AddImage(new Rectangle(colpos, rowpos, 24, 24), Icons.Controls.firstdiscover, null, imagetooltip, false);
                     colpos += 24;
@@ -555,11 +565,13 @@ namespace EDDiscovery.UserControls
 
                 ExtendedControls.ExtPictureBox.ImageElement e =
                                 pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
-                                new Size(endpos, rowh),
+                                new Size(endpos, 200),
                                 text, displayfont, textcolour, backcolour, 1.0F, null, tooltip);
 
-                e.Translate(0, (rowh - e.img.Height) / 2);          // align to centre of rowh..
+                return e;
             }
+            else
+                return null;
         }
 
         private void OnNewUIEvent(UIEvent uievent)       // UI event in, see if we want to hide.  UI events come before any onNew
@@ -1015,7 +1027,7 @@ namespace EDDiscovery.UserControls
         private void configureEventFilterToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Point p = MousePosition;
-            cfs.Filter(contextMenuStrip.PointToScreen(new Point(0, 0)), new Size(300,800), this.FindForm());
+            cfs.Filter(contextMenuStrip, this.FindForm());
         }
 
         private void EventFilterChanged(object sender, bool same, Object e)

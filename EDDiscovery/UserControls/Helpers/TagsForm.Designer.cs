@@ -48,8 +48,8 @@ namespace EDDiscovery.UserControls
             this.buttonOK = new ExtendedControls.ExtButton();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelOK = new System.Windows.Forms.Panel();
             this.panelOuter = new System.Windows.Forms.Panel();
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_close.Image = null;
-            this.panel_close.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Close;
+            this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(386, 0);
             this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
@@ -134,7 +134,7 @@ namespace EDDiscovery.UserControls
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.panel_minimize.Image = null;
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(356, 0);
             this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
@@ -188,7 +188,6 @@ namespace EDDiscovery.UserControls
             this.panelVScroll1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelVScroll1.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll1.Name = "panelVScroll1";
-            this.panelVScroll1.ScrollBarWidth = 20;
             this.panelVScroll1.Size = new System.Drawing.Size(407, 165);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
@@ -266,8 +265,8 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonOK;
         private ExtendedControls.ExtStatusStrip statusStripCustom;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelOK;
         private System.Windows.Forms.Panel panelOuter;

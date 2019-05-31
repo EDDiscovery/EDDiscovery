@@ -55,8 +55,8 @@ namespace EDDiscovery.UserControls
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.Init(discoveryform, displaynumber);
+                discoveryform.theme.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
                 uccb.LoadLayout();
-                discoveryform.theme.ApplyToControls(tab);       // theme BEFORE initial display on purpose
                 uccb.InitialDisplay();
 
                 if (uccb is CaptainsLogDiary)

@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.panelTop = new System.Windows.Forms.Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlPlot));
             this.labelExtMin = new System.Windows.Forms.Label();
             this.labelExtMax = new System.Windows.Forms.Label();
             this.comboBoxView = new ExtendedControls.ExtComboBox();
@@ -80,31 +80,18 @@ namespace EDDiscovery.UserControls
             this.plotViewSide = new OxyPlot.WindowsForms.PlotView();
             this.plotViewFront = new OxyPlot.WindowsForms.PlotView();
             this.reportView = new ExtendedControls.ExtTextBox();
-            this.panelTop.SuspendLayout();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).BeginInit();
+            this.topPanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panelTop
-            // 
-            this.panelTop.BackColor = System.Drawing.SystemColors.Control;
-            this.panelTop.Controls.Add(this.labelExtMin);
-            this.panelTop.Controls.Add(this.labelExtMax);
-            this.panelTop.Controls.Add(this.comboBoxView);
-            this.panelTop.Controls.Add(this.textMinRadius);
-            this.panelTop.Controls.Add(this.textMaxRadius);
-            this.panelTop.Controls.Add(this.menuStrip);
-            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTop.Location = new System.Drawing.Point(0, 0);
-            this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1026, 26);
-            this.panelTop.TabIndex = 25;
             // 
             // labelExtMin
             // 
             this.labelExtMin.AutoSize = true;
             this.labelExtMin.BackColor = System.Drawing.Color.Transparent;
-            this.labelExtMin.Location = new System.Drawing.Point(2, 7);
+            this.labelExtMin.Location = new System.Drawing.Point(0, 1);
+            this.labelExtMin.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelExtMin.Name = "labelExtMin";
             this.labelExtMin.Size = new System.Drawing.Size(24, 13);
             this.labelExtMin.TabIndex = 31;
@@ -113,7 +100,8 @@ namespace EDDiscovery.UserControls
             // labelExtMax
             // 
             this.labelExtMax.AutoSize = true;
-            this.labelExtMax.Location = new System.Drawing.Point(86, 7);
+            this.labelExtMax.Location = new System.Drawing.Point(76, 1);
+            this.labelExtMax.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelExtMax.Name = "labelExtMax";
             this.labelExtMax.Size = new System.Drawing.Size(27, 13);
             this.labelExtMax.TabIndex = 32;
@@ -121,23 +109,19 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxView
             // 
-            this.comboBoxView.ArrowWidth = 1;
             this.comboBoxView.BorderColor = System.Drawing.Color.White;
             this.comboBoxView.ButtonColorScaling = 0.5F;
             this.comboBoxView.DataSource = null;
             this.comboBoxView.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxView.DisplayMember = "";
             this.comboBoxView.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxView.DropDownHeight = 106;
-            this.comboBoxView.DropDownWidth = 75;
             this.comboBoxView.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxView.ItemHeight = 13;
-            this.comboBoxView.Location = new System.Drawing.Point(175, 2);
+            this.comboBoxView.Location = new System.Drawing.Point(155, 1);
+            this.comboBoxView.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxView.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxView.Name = "comboBoxView";
             this.comboBoxView.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxView.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxView.ScrollBarWidth = 16;
             this.comboBoxView.SelectedIndex = -1;
             this.comboBoxView.SelectedItem = null;
             this.comboBoxView.SelectedValue = null;
@@ -159,9 +143,13 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.ClearOnFirstChar = false;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMinRadius.DelayBeforeNotification = 500;
+            this.textMinRadius.EndButtonEnable = true;
+            this.textMinRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMinRadius.EndButtonImage")));
+            this.textMinRadius.EndButtonVisible = false;
             this.textMinRadius.Format = "0.#######";
             this.textMinRadius.InErrorCondition = false;
-            this.textMinRadius.Location = new System.Drawing.Point(45, 3);
+            this.textMinRadius.Location = new System.Drawing.Point(32, 1);
+            this.textMinRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textMinRadius.Maximum = 100000D;
             this.textMinRadius.Minimum = 0D;
             this.textMinRadius.Multiline = false;
@@ -189,9 +177,13 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.ClearOnFirstChar = false;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
             this.textMaxRadius.DelayBeforeNotification = 500;
+            this.textMaxRadius.EndButtonEnable = true;
+            this.textMaxRadius.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textMaxRadius.EndButtonImage")));
+            this.textMaxRadius.EndButtonVisible = false;
             this.textMaxRadius.Format = "0.#######";
             this.textMaxRadius.InErrorCondition = false;
-            this.textMaxRadius.Location = new System.Drawing.Point(130, 3);
+            this.textMaxRadius.Location = new System.Drawing.Point(111, 1);
+            this.textMaxRadius.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textMaxRadius.Maximum = 100000D;
             this.textMaxRadius.Minimum = 0D;
             this.textMaxRadius.Multiline = false;
@@ -213,9 +205,11 @@ namespace EDDiscovery.UserControls
             this.menuStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(284, 0);
+            this.menuStrip.Location = new System.Drawing.Point(261, 1);
+            this.menuStrip.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(40, 29);
+            this.menuStrip.Padding = new System.Windows.Forms.Padding(0);
+            this.menuStrip.Size = new System.Drawing.Size(34, 25);
             this.menuStrip.TabIndex = 33;
             // 
             // optionsToolStripMenuItem
@@ -330,11 +324,11 @@ namespace EDDiscovery.UserControls
             this.sysZ,
             this.sysVisits});
             this.dataGridList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridList.Location = new System.Drawing.Point(0, 26);
+            this.dataGridList.Location = new System.Drawing.Point(0, 27);
             this.dataGridList.Name = "dataGridList";
             this.dataGridList.ReadOnly = true;
             this.dataGridList.RowHeadersVisible = false;
-            this.dataGridList.Size = new System.Drawing.Size(1026, 669);
+            this.dataGridList.Size = new System.Drawing.Size(1026, 473);
             this.dataGridList.TabIndex = 30;
             this.dataGridList.Visible = false;
             this.dataGridList.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridList_SortCompare);
@@ -379,10 +373,10 @@ namespace EDDiscovery.UserControls
             this.plotViewTop.Cursor = System.Windows.Forms.Cursors.Cross;
             this.plotViewTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotViewTop.ForeColor = System.Drawing.Color.Black;
-            this.plotViewTop.Location = new System.Drawing.Point(0, 26);
+            this.plotViewTop.Location = new System.Drawing.Point(0, 27);
             this.plotViewTop.Name = "plotViewTop";
             this.plotViewTop.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewTop.Size = new System.Drawing.Size(1026, 669);
+            this.plotViewTop.Size = new System.Drawing.Size(1026, 473);
             this.plotViewTop.TabIndex = 31;
             this.plotViewTop.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewTop.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -393,10 +387,10 @@ namespace EDDiscovery.UserControls
             this.plotViewSide.Cursor = System.Windows.Forms.Cursors.Cross;
             this.plotViewSide.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotViewSide.ForeColor = System.Drawing.Color.Black;
-            this.plotViewSide.Location = new System.Drawing.Point(0, 26);
+            this.plotViewSide.Location = new System.Drawing.Point(0, 27);
             this.plotViewSide.Name = "plotViewSide";
             this.plotViewSide.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewSide.Size = new System.Drawing.Size(1026, 669);
+            this.plotViewSide.Size = new System.Drawing.Size(1026, 473);
             this.plotViewSide.TabIndex = 33;
             this.plotViewSide.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewSide.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -407,10 +401,10 @@ namespace EDDiscovery.UserControls
             this.plotViewFront.Cursor = System.Windows.Forms.Cursors.Cross;
             this.plotViewFront.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plotViewFront.ForeColor = System.Drawing.Color.Black;
-            this.plotViewFront.Location = new System.Drawing.Point(0, 26);
+            this.plotViewFront.Location = new System.Drawing.Point(0, 27);
             this.plotViewFront.Name = "plotViewFront";
             this.plotViewFront.PanCursor = System.Windows.Forms.Cursors.NoMove2D;
-            this.plotViewFront.Size = new System.Drawing.Size(1026, 669);
+            this.plotViewFront.Size = new System.Drawing.Size(1026, 473);
             this.plotViewFront.TabIndex = 34;
             this.plotViewFront.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
             this.plotViewFront.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
@@ -428,18 +422,37 @@ namespace EDDiscovery.UserControls
             this.reportView.ControlBackground = System.Drawing.SystemColors.Control;
             this.reportView.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.reportView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.reportView.EndButtonEnable = true;
+            this.reportView.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("reportView.EndButtonImage")));
+            this.reportView.EndButtonVisible = false;
             this.reportView.InErrorCondition = false;
-            this.reportView.Location = new System.Drawing.Point(0, 26);
+            this.reportView.Location = new System.Drawing.Point(0, 27);
             this.reportView.Multiline = true;
             this.reportView.Name = "reportView";
             this.reportView.ReadOnly = false;
             this.reportView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.reportView.SelectionLength = 0;
             this.reportView.SelectionStart = 0;
-            this.reportView.Size = new System.Drawing.Size(1026, 669);
+            this.reportView.Size = new System.Drawing.Size(1026, 473);
             this.reportView.TabIndex = 2;
             this.reportView.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.reportView.WordWrap = true;
+            // 
+            // topPanel
+            // 
+            this.topPanel.AutoSize = true;
+            this.topPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.topPanel.Controls.Add(this.labelExtMin);
+            this.topPanel.Controls.Add(this.textMinRadius);
+            this.topPanel.Controls.Add(this.labelExtMax);
+            this.topPanel.Controls.Add(this.textMaxRadius);
+            this.topPanel.Controls.Add(this.comboBoxView);
+            this.topPanel.Controls.Add(this.menuStrip);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(1026, 27);
+            this.topPanel.TabIndex = 34;
             // 
             // UserControlPlot
             // 
@@ -452,22 +465,22 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.plotViewFront);
             this.Controls.Add(this.plotViewSide);
             this.Controls.Add(this.reportView);
-            this.Controls.Add(this.panelTop);
+            this.Controls.Add(this.topPanel);
             this.Name = "UserControlPlot";
-            this.Size = new System.Drawing.Size(1026, 695);
-            this.panelTop.ResumeLayout(false);
-            this.panelTop.PerformLayout();
+            this.Size = new System.Drawing.Size(1026, 500);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridList)).EndInit();
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
         private ExtendedControls.NumberBoxDouble textMinRadius;
         private ExtendedControls.NumberBoxDouble textMaxRadius;
-        private Panel panelTop;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripMenuItem toolStripMenuItem125;
         private ToolStripMenuItem toolStripMenuItem15;
@@ -498,6 +511,7 @@ namespace EDDiscovery.UserControls
         private ToolStripMenuItem pDFToolStripMenuItem;
         private ToolStripMenuItem sVGToolStripMenuItem;
         private ToolStripMenuItem tXTToolStripMenuItem;
+        private FlowLayoutPanel topPanel;
     }
 }
 

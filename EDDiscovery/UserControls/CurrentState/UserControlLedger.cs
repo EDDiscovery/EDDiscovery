@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewLedger.MakeDoubleBuffered();
             dataGridViewLedger.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewLedger.RowTemplate.Height = 26;
+            dataGridViewLedger.RowTemplate.Height = Font.ScalePixels(26);
 
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });
             string cashtype = string.Join(";", jes.Select(x=>x.Item1) ) + ";";
@@ -112,8 +112,6 @@ namespace EDDiscovery.UserControls
 
             current_mc = mc;
             
-            labelNoItems.Visible = true;
-
             if (mc != null && mc.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxHistoryWindow.SelectedItem ?? TravelHistoryFilter.NoFilter;
@@ -142,8 +140,6 @@ namespace EDDiscovery.UserControls
                     }
 
                     dataGridViewLedger.FilterGridView(textBoxFilter.Text);
-
-                    labelNoItems.Visible = false;
                 }
             }
 

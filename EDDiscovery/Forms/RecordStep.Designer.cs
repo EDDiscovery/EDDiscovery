@@ -71,8 +71,8 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitComplete = new ExtendedControls.ExtCheckBox();
             this.checkBoxDisplayMessageWhenComplete = new ExtendedControls.ExtCheckBox();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.panel_close = new ExtendedControls.ExtPanelDrawn();
-            this.panel_minimize = new ExtendedControls.ExtPanelDrawn();
+            this.panel_close = new ExtendedControls.ExtButtonDrawn();
+            this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.label_index = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.panelTop.SuspendLayout();
@@ -401,7 +401,6 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitForSlew.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxWaitForSlew.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxWaitForSlew.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxWaitForSlew.FontNerfReduction = 0.5F;
             this.checkBoxWaitForSlew.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxWaitForSlew.Location = new System.Drawing.Point(376, 20);
             this.checkBoxWaitForSlew.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -409,7 +408,7 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitForSlew.Size = new System.Drawing.Size(87, 17);
             this.checkBoxWaitForSlew.TabIndex = 7;
             this.checkBoxWaitForSlew.Text = "Wait for slew";
-            this.checkBoxWaitForSlew.TickBoxReductionSize = 10;
+            this.checkBoxWaitForSlew.TickBoxReductionRatio = 0.75f;
             this.checkBoxWaitForSlew.UseVisualStyleBackColor = true;
             this.checkBoxWaitForSlew.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
             // 
@@ -419,7 +418,6 @@ namespace EDDiscovery.Forms
             this.checkBoxPos.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxPos.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxPos.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxPos.FontNerfReduction = 0.5F;
             this.checkBoxPos.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxPos.Location = new System.Drawing.Point(379, 83);
             this.checkBoxPos.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -427,7 +425,7 @@ namespace EDDiscovery.Forms
             this.checkBoxPos.Size = new System.Drawing.Size(56, 17);
             this.checkBoxPos.TabIndex = 7;
             this.checkBoxPos.Text = "Go To";
-            this.checkBoxPos.TickBoxReductionSize = 10;
+            this.checkBoxPos.TickBoxReductionRatio = 0.75f;
             this.checkBoxPos.UseVisualStyleBackColor = true;
             this.checkBoxPos.CheckedChanged += new System.EventHandler(this.checkBoxGoTo_CheckedChanged);
             // 
@@ -437,7 +435,6 @@ namespace EDDiscovery.Forms
             this.checkBoxPan.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxPan.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxPan.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxPan.FontNerfReduction = 0.5F;
             this.checkBoxPan.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxPan.Location = new System.Drawing.Point(379, 148);
             this.checkBoxPan.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -445,7 +442,7 @@ namespace EDDiscovery.Forms
             this.checkBoxPan.Size = new System.Drawing.Size(79, 17);
             this.checkBoxPan.TabIndex = 7;
             this.checkBoxPan.Text = "Change Dir";
-            this.checkBoxPan.TickBoxReductionSize = 10;
+            this.checkBoxPan.TickBoxReductionRatio = 0.75f;
             this.checkBoxPan.UseVisualStyleBackColor = true;
             this.checkBoxPan.CheckedChanged += new System.EventHandler(this.checkBoxChangeDir_CheckedChanged);
             // 
@@ -455,7 +452,6 @@ namespace EDDiscovery.Forms
             this.checkBoxChangeZoom.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxChangeZoom.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxChangeZoom.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxChangeZoom.FontNerfReduction = 0.5F;
             this.checkBoxChangeZoom.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxChangeZoom.Location = new System.Drawing.Point(379, 214);
             this.checkBoxChangeZoom.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -463,7 +459,7 @@ namespace EDDiscovery.Forms
             this.checkBoxChangeZoom.Size = new System.Drawing.Size(93, 17);
             this.checkBoxChangeZoom.TabIndex = 7;
             this.checkBoxChangeZoom.Text = "Change Zoom";
-            this.checkBoxChangeZoom.TickBoxReductionSize = 10;
+            this.checkBoxChangeZoom.TickBoxReductionRatio = 0.75f;
             this.checkBoxChangeZoom.UseVisualStyleBackColor = true;
             this.checkBoxChangeZoom.CheckedChanged += new System.EventHandler(this.checkBoxChangeZoom_CheckedChanged);
             // 
@@ -482,7 +478,6 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitComplete.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxWaitComplete.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxWaitComplete.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxWaitComplete.FontNerfReduction = 0.5F;
             this.checkBoxWaitComplete.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxWaitComplete.Location = new System.Drawing.Point(272, 316);
             this.checkBoxWaitComplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -490,7 +485,7 @@ namespace EDDiscovery.Forms
             this.checkBoxWaitComplete.Size = new System.Drawing.Size(158, 17);
             this.checkBoxWaitComplete.TabIndex = 7;
             this.checkBoxWaitComplete.Text = "Wait for actions to complete";
-            this.checkBoxWaitComplete.TickBoxReductionSize = 10;
+            this.checkBoxWaitComplete.TickBoxReductionRatio = 0.75f;
             this.checkBoxWaitComplete.UseVisualStyleBackColor = true;
             this.checkBoxWaitComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
             // 
@@ -500,7 +495,6 @@ namespace EDDiscovery.Forms
             this.checkBoxDisplayMessageWhenComplete.CheckBoxColor = System.Drawing.Color.Gray;
             this.checkBoxDisplayMessageWhenComplete.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxDisplayMessageWhenComplete.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxDisplayMessageWhenComplete.FontNerfReduction = 0.5F;
             this.checkBoxDisplayMessageWhenComplete.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxDisplayMessageWhenComplete.Location = new System.Drawing.Point(272, 339);
             this.checkBoxDisplayMessageWhenComplete.MouseOverColor = System.Drawing.Color.CornflowerBlue;
@@ -508,7 +502,7 @@ namespace EDDiscovery.Forms
             this.checkBoxDisplayMessageWhenComplete.Size = new System.Drawing.Size(174, 17);
             this.checkBoxDisplayMessageWhenComplete.TabIndex = 7;
             this.checkBoxDisplayMessageWhenComplete.Text = "Display Message with complete";
-            this.checkBoxDisplayMessageWhenComplete.TickBoxReductionSize = 10;
+            this.checkBoxDisplayMessageWhenComplete.TickBoxReductionRatio = 0.75f;
             this.checkBoxDisplayMessageWhenComplete.UseVisualStyleBackColor = true;
             this.checkBoxDisplayMessageWhenComplete.CheckedChanged += new System.EventHandler(this.checkBoxWaitForSlew_CheckedChanged);
             // 
@@ -539,7 +533,7 @@ namespace EDDiscovery.Forms
             // panel_minimize
             // 
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel_minimize.ImageSelected = ExtendedControls.ExtPanelDrawn.ImageType.Minimize;
+            this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(518, 0);
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(6);
@@ -644,8 +638,8 @@ namespace EDDiscovery.Forms
         private ExtendedControls.ExtCheckBox checkBoxWaitComplete;
         private ExtendedControls.ExtCheckBox checkBoxDisplayMessageWhenComplete;
         private System.Windows.Forms.Panel panelTop;
-        private ExtendedControls.ExtPanelDrawn panel_close;
-        private ExtendedControls.ExtPanelDrawn panel_minimize;
+        private ExtendedControls.ExtButtonDrawn panel_close;
+        private ExtendedControls.ExtButtonDrawn panel_minimize;
         private System.Windows.Forms.Label label_index;
         private System.Windows.Forms.Panel panelMain;
     }

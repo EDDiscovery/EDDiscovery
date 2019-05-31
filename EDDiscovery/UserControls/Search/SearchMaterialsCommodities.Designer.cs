@@ -72,10 +72,9 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 81);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 67);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.ScrollBarWidth = 20;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 635);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 649);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -90,13 +89,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(791, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(20, 635);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(13, 649);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -125,7 +124,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView.Size = new System.Drawing.Size(784, 635);
+            this.dataGridView.Size = new System.Drawing.Size(791, 649);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
@@ -174,6 +173,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelTop
             // 
+            this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.buttonExtFind);
             this.panelTop.Controls.Add(this.comboBoxCustomCMANDOR);
@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(804, 81);
+            this.panelTop.Size = new System.Drawing.Size(804, 67);
             this.panelTop.TabIndex = 8;
             // 
             // buttonExtExcel
@@ -210,23 +210,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCMANDOR
             // 
-            this.comboBoxCustomCMANDOR.ArrowWidth = 1;
             this.comboBoxCustomCMANDOR.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomCMANDOR.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCMANDOR.DataSource = null;
             this.comboBoxCustomCMANDOR.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCMANDOR.DisplayMember = "";
             this.comboBoxCustomCMANDOR.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomCMANDOR.DropDownHeight = 400;
-            this.comboBoxCustomCMANDOR.DropDownWidth = 600;
             this.comboBoxCustomCMANDOR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCMANDOR.ItemHeight = 13;
             this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(386, 43);
             this.comboBoxCustomCMANDOR.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCMANDOR.Name = "comboBoxCustomCMANDOR";
             this.comboBoxCustomCMANDOR.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomCMANDOR.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCMANDOR.ScrollBarWidth = 16;
             this.comboBoxCustomCMANDOR.SelectedIndex = -1;
             this.comboBoxCustomCMANDOR.SelectedItem = null;
             this.comboBoxCustomCMANDOR.SelectedValue = null;
@@ -237,23 +232,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCM2
             // 
-            this.comboBoxCustomCM2.ArrowWidth = 1;
             this.comboBoxCustomCM2.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomCM2.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCM2.DataSource = null;
             this.comboBoxCustomCM2.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCM2.DisplayMember = "";
             this.comboBoxCustomCM2.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomCM2.DropDownHeight = 400;
-            this.comboBoxCustomCM2.DropDownWidth = 600;
             this.comboBoxCustomCM2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCM2.ItemHeight = 13;
             this.comboBoxCustomCM2.Location = new System.Drawing.Point(91, 42);
             this.comboBoxCustomCM2.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCM2.Name = "comboBoxCustomCM2";
             this.comboBoxCustomCM2.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomCM2.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCM2.ScrollBarWidth = 16;
             this.comboBoxCustomCM2.SelectedIndex = -1;
             this.comboBoxCustomCM2.SelectedItem = null;
             this.comboBoxCustomCM2.SelectedValue = null;
@@ -264,23 +254,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCM1
             // 
-            this.comboBoxCustomCM1.ArrowWidth = 1;
             this.comboBoxCustomCM1.BorderColor = System.Drawing.Color.White;
             this.comboBoxCustomCM1.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCM1.DataSource = null;
             this.comboBoxCustomCM1.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCM1.DisplayMember = "";
             this.comboBoxCustomCM1.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.comboBoxCustomCM1.DropDownHeight = 400;
-            this.comboBoxCustomCM1.DropDownWidth = 600;
             this.comboBoxCustomCM1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCM1.ItemHeight = 13;
             this.comboBoxCustomCM1.Location = new System.Drawing.Point(91, 14);
             this.comboBoxCustomCM1.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCM1.Name = "comboBoxCustomCM1";
             this.comboBoxCustomCM1.ScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomCM1.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCM1.ScrollBarWidth = 16;
             this.comboBoxCustomCM1.SelectedIndex = -1;
             this.comboBoxCustomCM1.SelectedItem = null;
             this.comboBoxCustomCM1.SelectedValue = null;
@@ -320,6 +305,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

@@ -71,7 +71,6 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
             this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.richTextBox_History.ScrollBarWidth = 20;
             this.richTextBox_History.ShowLineCount = false;
             this.richTextBox_History.Size = new System.Drawing.Size(496, 224);
             this.richTextBox_History.TabIndex = 1;

@@ -624,11 +624,11 @@
     <Compile Include="UserControls\ScansStars\UserControlScan.Designer.cs">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Helpers\ScanDisplay.cs">
+    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Helpers\ScanDisplay.Designer.cs">
-      <DependentUpon>ScanDisplay.cs</DependentUpon>
+    <Compile Include="UserControls\Helpers\ScanDisplayUserControl.Designer.cs">
+      <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlScanGrid.cs">
       <SubType>UserControl</SubType>
@@ -681,10 +681,10 @@
     <Compile Include="UserControls\UserControlCommonBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\SurfaceBookmarksUC.cs">
+    <Compile Include="UserControls\Helpers\SurfaceBookmarksUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forms\SurfaceBookmarksUC.Designer.cs">
+    <Compile Include="UserControls\Helpers\SurfaceBookmarksUC.Designer.cs">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\StatsTimeUserControl.cs">
@@ -846,8 +846,8 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScan.resx">
       <DependentUpon>UserControlScan.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Helpers\ScanDisplay.resx">
-      <DependentUpon>ScanDisplay.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Helpers\ScanDisplayUserControl.resx">
+      <DependentUpon>ScanDisplayUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ScansStars\UserControlScanGrid.resx">
       <DependentUpon>UserControlScanGrid.cs</DependentUpon>
@@ -873,7 +873,7 @@
     <EmbeddedResource Include="UserControls\StationData\UserControlShipYards.resx">
       <DependentUpon>UserControlShipYards.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\SurfaceBookmarksUC.resx">
+    <EmbeddedResource Include="UserControls\Helpers\SurfaceBookmarksUC.resx">
       <DependentUpon>SurfaceBookmarksUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Helpers\StatsTimeUserControl.resx">

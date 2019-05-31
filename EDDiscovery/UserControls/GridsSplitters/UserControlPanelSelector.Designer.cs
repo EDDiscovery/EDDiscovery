@@ -60,7 +60,6 @@ namespace EDDiscovery.UserControls
             this.panelVScroll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelVScroll.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll.Name = "panelVScroll";
-            this.panelVScroll.ScrollBarWidth = 20;
             this.panelVScroll.Size = new System.Drawing.Size(684, 526);
             this.panelVScroll.TabIndex = 0;
             this.panelVScroll.VerticalScrollBarDockRight = true;

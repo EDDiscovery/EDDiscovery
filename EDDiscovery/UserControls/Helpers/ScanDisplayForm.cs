@@ -32,30 +32,34 @@ namespace EDDiscovery.UserControls
                 return;
 
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-            int width = Math.Max(250, parent.Width * 4 / 5);
-            int height = 800;
+
+            Size infosize = parent.SizeWithinScreen(new Size(parent.Width * 2 / 4,parent.Height * 2 / 4), 128, 128+100);        // go for this, but allow this around window
+            int topmargin = 40;
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
-            ScanDisplayControl sd = null;
+            ScanDisplayUserControl sd = null;
             string title = "System".Tx(ty, "Sys") + ": " + sys.Name;
+
+            AutoScaleMode asm = AutoScaleMode.Font;
 
             if (he != null && (he.EntryType == JournalTypeEnum.Market || he.EntryType == JournalTypeEnum.EDDCommodityPrices))  // station data..
             {
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
                 jm.FillInformation(out string info, out string detailed,1);
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, 40), new Size(width - 20, height - 85), null));
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("RTB", typeof(ExtendedControls.ExtRichTextBox), detailed, new Point(0, topmargin), infosize, null));
 
                 title += ", " +"Station".Tx(ty) + ": " + jm.Station;
             }
             else
             {      
-                sd = new ScanDisplayControl();
+                sd = new ScanDisplayUserControl();
                 sd.CheckEDSM =checkedsm;
                 sd.ShowMoons = sd.ShowMaterials = sd.ShowOverlays = true;
-                sd.SetSize(48);
-                sd.Size = new Size(width - 20, 1024);
+                int selsize = (int)(EDDTheme.Instance.GetFont.Height / 16.0f * 48.0f);
+                sd.SetSize( selsize );
+                sd.Size = infosize;
 
                 StarScan.SystemNode data = sd.FindSystem(sys, hl);
                 if ( data != null )
@@ -67,12 +71,14 @@ namespace EDDiscovery.UserControls
                 sd.BackColor = EDDTheme.Instance.Form;
                 sd.DrawSystem( data, null , hl);
 
-                height = Math.Min(800, Math.Max(400, sd.DisplayAreaUsed.Y)) + 100;
+                infosize = new Size(Math.Max(400, sd.DisplayAreaUsed.X) , Math.Max(200, sd.DisplayAreaUsed.Y));
 
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, 40), new Size(width - 20, height - 85), null) { control = sd });
+                asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.
+
+                f.Add(new ExtendedControls.ConfigurableForm.Entry("Sys", null, null, new Point(0, topmargin), infosize, null) { control = sd });
             }
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(infosize.Width - 120, topmargin + infosize.Height + 10), new Size(100, 24), ""));
 
             f.Trigger += (dialogname, controlname, ttag) =>
             {
@@ -80,7 +86,7 @@ namespace EDDiscovery.UserControls
                     f.Close();
             };
 
-            f.Init(parent.Icon, new Size(width, height), new Point(-999, -999), title, null, null);
+            f.InitCentred( parent, parent.Icon, title, null, null, asm);
 
             f.Show(parent);
         }
