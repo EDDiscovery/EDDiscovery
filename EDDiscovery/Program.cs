@@ -40,7 +40,6 @@ namespace EDDiscovery
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                BaseUtils.Translator.SetTranslatorInstance(new BaseUtils.WinFormTranslator());
 
                 try
                 {
