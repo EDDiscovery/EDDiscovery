@@ -34,6 +34,7 @@ namespace EliteDangerousCore.JournalEvents
         public string BodyName { get; set; }                        // direct (meaning no translation)
         public int? BodyID { get; set; }                            // direct
         public double DistanceFromArrivalLS { get; set; }           // direct
+        public string DistanceFromArrivalText { get { return string.Format("{0:0.00}AU ({1:0.0}ls)", DistanceFromArrivalLS / JournalScan.oneAU_LS, DistanceFromArrivalLS); } }
         public double? nRotationPeriod { get; set; }                // direct
         public double? nRotationPeriodDays { get; set; }      
         public double? nSurfaceTemperature { get; set; }            // direct
@@ -81,7 +82,12 @@ namespace EliteDangerousCore.JournalEvents
 
         // Planets
         public string PlanetClass { get; set; }                     // planet class, direct
+
         public EDPlanet PlanetTypeID { get; }                       // planet class -> ID
+        public bool AmmoniaWorld { get { return PlanetTypeID == EDPlanet.Ammonia_world; } }
+        public bool Earthlike { get { return PlanetTypeID == EDPlanet.Earthlike_body; } }
+        public bool WaterWorld { get { return PlanetTypeID == EDPlanet.Water_world; } }
+
         public bool? nTidalLock { get; set; }                       // direct
         public string TerraformState { get; set; }                  // direct, can be empty or a string
         public bool Terraformable { get { return TerraformState != null && TerraformState.ToLowerInvariant().Equals("terraformable"); } }
@@ -92,6 +98,7 @@ namespace EliteDangerousCore.JournalEvents
         public Dictionary<string, double> AtmosphereComposition { get; set; }
         public Dictionary<string, double> PlanetComposition { get; set; }
         public bool HasPlanetaryComposition { get { return PlanetComposition != null && PlanetComposition.Any(); } }
+
         public string Volcanism { get; set; }                       // direct from journal
         public EDVolcanism VolcanismID { get; }                     // Volcanism -> ID (Water_Magma, Nitrogen_Magma etc)
         public bool HasMeaningfulVolcanism { get { return VolcanismID != EDVolcanism.None && VolcanismID != EDVolcanism.Unknown; } }

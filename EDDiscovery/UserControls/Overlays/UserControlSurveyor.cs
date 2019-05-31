@@ -32,8 +32,6 @@ namespace EDDiscovery.UserControls
 
         private string DbSave => DBName("Surveyor");
 
-        private Font displayfont;
-
         private enum Alignment
         {
             left = 0,
@@ -58,8 +56,6 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
-
-            displayfont = discoveryform.theme.GetFont;
 
             // set context menu checkboxes
             ammoniaWorldToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showAmmonia", true);
@@ -115,7 +111,7 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            DrawSystem(uctg.GetCurrentHistoryEntry);
+            DrawSystem(uctg?.GetCurrentHistoryEntry);
         }
 
         #endregion
@@ -166,12 +162,6 @@ namespace EDDiscovery.UserControls
             this.BackColor = curcol;
         }
 
-        /// <summary>
-        /// Called at first start or hooked to change cursor
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="hl">HistoryList</param>
-        /// <param name="selectedEntry">todo: describe selectedEntry parameter on Display</param>
         private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             DrawSystem(he);
@@ -181,39 +171,6 @@ namespace EDDiscovery.UserControls
 
         #region Main
 
-        public class WantedBodies
-        {
-            public string Name { get; set; }
-            public Image Img { get; set; }
-            public string DistanceFromArrival { get; internal set; }
-
-            public bool Ammonia, Earthlike, WaterWorld, Terraformable, Volcanism, Ringed, Mapped;
-
-            public string VolcanismString { get; set; }
-        }
-
-        public static WantedBodies WantedBodiesList(string bdName, Image bdImg, string distance, bool bodyHasRings, bool bodyIsTerraformable, bool bodyHasVolcanism, string bodyVolcanismString, bool isAmmoniaWorld, bool isAnEarthLike, bool isWaterWorld, bool mapped)
-        {
-            return new WantedBodies()
-            {
-                Name = bdName,
-                Img = bdImg,
-                DistanceFromArrival = distance,
-                Ringed = bodyHasRings,
-                Terraformable = bodyIsTerraformable,
-                Volcanism = bodyHasVolcanism,
-                VolcanismString = bodyVolcanismString,
-                Ammonia = isAmmoniaWorld,
-                Earthlike = isAnEarthLike,
-                WaterWorld = isWaterWorld,
-                Mapped = mapped
-            };
-        }
-
-        /// <summary>
-        /// Retrieve the list of bodies which match the user needs
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>        
         private void DrawSystem(HistoryEntry he)
         {
             pictureBoxSurveyor.ClearImageList();
@@ -246,116 +203,61 @@ namespace EDDiscovery.UserControls
 
             if (all_nodes != null)
             {
-                var wanted_nodes = new List<WantedBodies>();
+                int vpos = 0;
 
                 foreach (StarScan.ScanNode sn in all_nodes)
                 {
                     if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
                     {
-                        bool hasrings, terraformable, volcanism, ammonia, earthlike, waterworld, mapped;
+                        var sd = sn.ScanData;
 
-                        if (sn.ScanData.HasRings || sn.ScanData.Terraformable || sn.ScanData.Volcanism != null || sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body || sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world || sn.ScanData.PlanetTypeID == EDPlanet.Water_world)
+                        if ((sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
+                                                (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
+                                                (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
+                                                (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
+                                                (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
+                                                (sd.Terraformable && terraformableToolStripMenuItem.Checked)
+                                                )
                         {
-                            hasrings = sn.ScanData.HasRings;
-                            terraformable = sn.ScanData.Terraformable ? true : false;
-                            volcanism = sn.ScanData.Volcanism != null ? true : false;
-                            ammonia = sn.ScanData.PlanetTypeID == EDPlanet.Ammonia_world ? true : false;
-                            earthlike = sn.ScanData.PlanetTypeID == EDPlanet.Earthlike_body ? true : false;
-                            waterworld = sn.ScanData.PlanetTypeID == EDPlanet.Water_world ? true : false;
-
-                            mapped = sn.ScanData.Mapped;
-
-                            var distanceString = new StringBuilder();
-
-                            distanceString.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / JournalScan.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
-
-                            wanted_nodes.Add(WantedBodiesList(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped));
+                            if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
+                            {
+                                DrawToScreen(sd, vpos);
+                                vpos += (int)Font.Height;
+                            }
                         }
+//                        wanted_nodes.Add(new BodyInfo(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped));
                     }
                 }
-
-                SelectBodiesToDisplay(wanted_nodes);
             }
 
             pictureBoxSurveyor.Render();
         }
 
-        private void SelectBodiesToDisplay(List<WantedBodies> wanted_nodes)
-        {
-            if (wanted_nodes != null)
-            {
-                var bodiesCount = 0;
-
-                using (var body = wanted_nodes.GetEnumerator())
-                {
-                    while (body.MoveNext())
-                    {
-                        if (body.Current.Ammonia && ammoniaWorldToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-
-                        if (body.Current.Earthlike && earthlikeWorldToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-
-                        if (body.Current.WaterWorld && waterWorldToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-
-                        if (body.Current.Ringed && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && hasRingsToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-
-                        if (body.Current.Volcanism && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && hasVolcanismToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-
-                        if (body.Current.Terraformable && !body.Current.Ammonia && !body.Current.Earthlike && !body.Current.WaterWorld && terraformableToolStripMenuItem.Checked)
-                        {
-                            bodiesCount++;
-                            DrawToScreen(body.Current, bodiesCount);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawToScreen(WantedBodies body, int bodiesCount)
+        private void DrawToScreen(JournalScan sd, int vpos)
         {
             var information = new StringBuilder();
 
-            // Is already surface mapped or not?
-            if (body.Mapped)
-                information.Append("o "); // let the cmdr see that this body is already mapped
+            if (sd.Mapped)
+                information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
             // Name
-            information.Append(body.Name);
+            information.Append(sd.BodyName);
 
             // Additional information
-            information.Append((body.Ammonia) ? @" is an ammonia world.".Tx(this) : null);
-            information.Append((body.Earthlike) ? @" is an earth like world.".Tx(this) : null);
-            information.Append((body.WaterWorld && !body.Terraformable) ? @" is a water world.".Tx(this) : null);
-            information.Append((body.WaterWorld && body.Terraformable) ? @" is a terraformable water world.".Tx(this) : null);
-            information.Append((body.Terraformable && !body.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
-            information.Append((body.Ringed) ? @" Has ring.".Tx(this) : null);
-            information.Append((body.Volcanism) ? @" Has ".Tx(this) + body.VolcanismString : null);
-            information.Append(@" " + body.DistanceFromArrival);
-
-            //Debug.Print(information.ToString()); // for testing
-
-            // Drawing Elements
-            const int rowHeight = 24;
-            var vPos = (bodiesCount * rowHeight) - rowHeight;
+            information.Append((sd.AmmoniaWorld) ? @" is an ammonia world.".Tx(this) : null);
+            information.Append((sd.Earthlike) ? @" is an earth like world.".Tx(this) : null);
+            information.Append((sd.WaterWorld && !sd.Terraformable) ? @" is a water world.".Tx(this) : null);
+            information.Append((sd.WaterWorld && sd.Terraformable) ? @" is a terraformable water world.".Tx(this) : null);
+            information.Append((sd.Terraformable && !sd.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
+            information.Append((sd.HasRings) ? @" Has ring.".Tx(this) : null);
+            information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".Tx(this) + sd.Volcanism : null);
+            information.Append(@" " + sd.DistanceFromArrivalText);
+            if ( sd.WasMapped == true && sd.WasDiscovered == true )
+                information.Append(" (Mapped & Discovered)".Tx(this));
+            else if (sd.WasMapped == true)
+                information.Append(" (Mapped)".Tx(this));
+            else if (sd.WasDiscovered == true)
+                information.Append(" (Discovered)".Tx(this));
 
             var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
             var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
@@ -364,43 +266,32 @@ namespace EDDiscovery.UserControls
             {
                 var grfx = Graphics.FromImage(bitmap);
 
-                using (var font = new Font(displayfont, FontStyle.Regular))
+                var containerSize = new Size(Math.Max(pictureBoxSurveyor.Width,24), 24);        // note when minimized, we could have a tiny width, so need to protect
+                var label = information.ToString();
+
+                var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, Font, textcolour, backcolour, 1.0F);
+
+                if (align == Alignment.center)
                 {
-                    if (body != null)
-                    {
-                        if (!body.Mapped || (body.Mapped && !hideAlreadyMappedBodiesToolStripMenuItem.Checked))
-                        {
-                            var containerSize = new Size(Math.Max(pictureBoxSurveyor.Width,24), 24);        // note when minimized, we could have a tiny width, so need to protect
-                            var label = information.ToString();
-
-                            var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, displayfont, textcolour, backcolour, 1.0F);
-
-                            if (align == Alignment.center)
-                            {
-                                labelOffset = (int)((containerSize.Width - bounds.Width) / 2);
-                            }
-                            else if (align == Alignment.right)
-                            {
-                                labelOffset = (int)(containerSize.Width - bounds.Width);
-                            }
-                            else
-                            {
-                                labelOffset = 0;
-                            }
-
-                            pictureBoxSurveyor?.AddTextAutoSize(
-                                    new Point(labelOffset, vPos + 4),
-                                    new Size((int)bounds.Width, 24),
-                                    information.ToString(),
-                                    displayfont,
-                                    textcolour,
-                                    backcolour,
-                                    1.0F);
-                        }
-
-                        pictureBoxSurveyor.Refresh();
-                    }
+                    labelOffset = (int)((containerSize.Width - bounds.Width) / 2);
                 }
+                else if (align == Alignment.right)
+                {
+                    labelOffset = (int)(containerSize.Width - bounds.Width);
+                }
+                else
+                {
+                    labelOffset = 0;
+                }
+
+                pictureBoxSurveyor?.AddTextAutoSize(
+                        new Point(labelOffset, vpos),
+                        new Size((int)bounds.Width, 24),
+                        information.ToString(),
+                        Font,
+                        textcolour,
+                        backcolour,
+                        1.0F);
             }
         }
 
@@ -446,12 +337,6 @@ namespace EDDiscovery.UserControls
         {
             SQLiteDBClass.PutSettingBool(DbSave + "hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
             DrawSystem(last_he);
-        }
-
-        private void pictureBoxSurveyorAid_MouseClick(object sender, MouseEventArgs e)
-        {
-            contextMenuStrip.Font = this.Font;
-            contextMenuStrip.Show(new Point(MousePosition.X,MousePosition.Y));
         }
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
