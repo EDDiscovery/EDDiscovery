@@ -87,76 +87,7 @@ namespace EliteDangerousCore.DB
                         break;
                     }
 
-                    DbCommand selectSectorCmd = null;
-
-                    int recordstostore = 0;
-                    DateTime cpmaxdate = maxdate;
-
-                    SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Reader, action: db =>
-                    {
-                        try
-                        {
-                            var cn = db.Connection;
-
-                            const int BlockSize = 100000;
-                            int Limit = int.MaxValue;
-
-                            selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null,
-                                                                    new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
-
-                            while (true)
-                            {
-                                try
-                                {
-                                    if (jr.Read())                                                      // collect a decent amount
-                                    {
-                                        if (jr.TokenType == JsonToken.StartObject)
-                                        {
-                                            EDSMFileEntry d = new EDSMFileEntry();
-
-                                            if (d.Deserialize(jr) && d.id >= 0 && d.name.HasChars() && d.z != int.MinValue)     // if we have a valid record
-                                            {
-                                                int gridid = GridId.Id(d.x, d.z);
-                                                if (grididallowed == null || (grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
-                                                {
-                                                    CreateNewUpdate(cache, selectSectorCmd, d, gridid, tablesareempty, ref cpmaxdate, ref nextsectorid);
-                                                    recordstostore++;
-                                                }
-                                            }
-
-                                            if (--Limit == 0)
-                                            {
-                                                jr_eof = true;
-                                                break;
-                                            }
-
-                                            if (recordstostore >= BlockSize)
-                                                break;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        jr_eof = true;
-                                        break;
-                                    }
-                                }
-                                catch (Exception ex)
-                                {
-                                    System.Diagnostics.Debug.WriteLine("EDSM JSON file exception " + ex.ToString());
-                                    jr_eof = true;                                                                              // stop read, but let it continue to finish this section
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            if (selectSectorCmd != null)
-                            {
-                                selectSectorCmd.Dispose();
-                            }
-                        }
-                    });
-
-                    maxdate = cpmaxdate;
+                    int recordstostore = ProcessBlock(cache, jr, grididallowed, tablesareempty, tablepostfix, ref maxdate, ref nextsectorid, ref jr_eof);
 
                     System.Diagnostics.Debug.WriteLine("Process " + BaseUtils.AppTicks.TickCountLap("L1") + "   " + updates);
 
@@ -314,18 +245,125 @@ namespace EliteDangerousCore.DB
 
         #region Table Update Helpers
 
+        private static int ProcessBlock(SectorCache cache,
+                                         JsonTextReader jr,
+                                         bool[] grididallowed,       // null = all, else grid bool value
+                                         bool tablesareempty,
+                                         string tablepostfix,
+                                         ref DateTime maxdate,       // updated with latest date
+                                         ref int nextsectorid,
+                                         ref bool jr_eof)
+        {
+            int recordstostore = 0;
+            DbCommand selectSectorCmd = null;
+            DateTime cpmaxdate = maxdate;
+            int cpnextsectorid = nextsectorid;
+            const int BlockSize = 10000;
+            int Limit = int.MaxValue;
+            var entries = new List<TableWriteData>();
+
+            while (jr_eof == false)
+            {
+                try
+                {
+                    if (jr.Read())
+                    {
+                        if (jr.TokenType == JsonToken.StartObject)
+                        {
+                            EDSMFileEntry d = new EDSMFileEntry();
+
+                            if (d.Deserialize(jr) && d.id >= 0 && d.name.HasChars() && d.z != int.MinValue)     // if we have a valid record
+                            {
+                                int gridid = GridId.Id(d.x, d.z);
+                                if (grididallowed == null || (grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
+                                {
+                                    TableWriteData data = new TableWriteData() { edsm = d, classifier = new EliteNameClassifier(d.name), gridid = gridid };
+
+                                    if (!TryCreateNewUpdate(cache, data, tablesareempty, ref cpmaxdate, ref cpnextsectorid, out Sector sector))
+                                    {
+                                        entries.Add(data);
+                                    }
+
+                                    recordstostore++;
+                                }
+                            }
+
+                            if (--Limit == 0)
+                            {
+                                jr_eof = true;
+                                break;
+                            }
+
+                            if (recordstostore >= BlockSize)
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        jr_eof = true;
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("EDSM JSON file exception " + ex.ToString());
+                    jr_eof = true;                                                                              // stop read, but let it continue to finish this section
+                }
+            }
+
+            SystemsDatabase.Instance.ExecuteWithDatabase(mode: SQLExtConnection.AccessMode.Reader, action: db =>
+            {
+                try
+                {
+                    var cn = db.Connection;
+
+                    selectSectorCmd = cn.CreateSelect("Sectors" + tablepostfix, "id", "name = @sname AND gridid = @gid", null,
+                                                            new string[] { "sname", "gid" }, new DbType[] { DbType.String, DbType.Int32 });
+
+                    foreach (var entry in entries)
+                    {
+                        CreateNewUpdate(cache, selectSectorCmd, entry, tablesareempty, ref cpmaxdate, ref cpnextsectorid);
+                    }
+                }
+                finally
+                {
+                    if (selectSectorCmd != null)
+                    {
+                        selectSectorCmd.Dispose();
+                    }
+                }
+            });
+
+            maxdate = cpmaxdate;
+            nextsectorid = cpnextsectorid;
+
+            return recordstostore;
+        }
+
+
         // create a new entry for insert in the sector tables 
-        private static void CreateNewUpdate(SectorCache cache, DbCommand selectSectorCmd , EDSMFileEntry d, int gid, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid)
+        private static void CreateNewUpdate(SectorCache cache, DbCommand selectSectorCmd, EDSMFileEntry d, int gid, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid)
         {
             TableWriteData data = new TableWriteData() { edsm = d, classifier = new EliteNameClassifier(d.name), gridid = gid };
+            CreateNewUpdate(cache, selectSectorCmd, data, tablesareempty, ref maxdate, ref nextsectorid);
+        }
 
-            if (d.date > maxdate)                                   // for all, record last recorded date processed
-                maxdate = d.date;
+        private static bool TryCreateNewUpdate(SectorCache cache, TableWriteData data, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid, out Sector t, bool makenew = false)
+        {
+            if (data.edsm.date > maxdate)                                   // for all, record last recorded date processed
+                maxdate = data.edsm.date;
 
-            Sector t = null, prev = null;
+            Sector prev = null;
+
+            t = null;
 
             if (!cache.SectorNameCache.ContainsKey(data.classifier.SectorName))   // if unknown to cache
             {
+                if (!tablesareempty && !makenew)
+                {
+                    return false;
+                }
+
                 cache.SectorNameCache[data.classifier.SectorName] = t = new Sector(data.classifier.SectorName, gridid: data.gridid);   // make a sector of sectorname and with gridID n , id == -1
             }
             else
@@ -339,6 +377,11 @@ namespace EliteDangerousCore.DB
 
                 if (t == null)      // still not got it, its a new one.
                 {
+                    if (!tablesareempty && !makenew)
+                    {
+                        return false;
+                    }
+
                     prev.NextSector = t = new Sector(data.classifier.SectorName, gridid: data.gridid);   // make a sector of sectorname and with gridID n , id == -1
                 }
             }
@@ -352,33 +395,41 @@ namespace EliteDangerousCore.DB
                     cache.SectorIDCache[t.Id] = t;    // and cache
                     //System.Diagnostics.Debug.WriteLine("Made sector " + t.Name + ":" + t.GId);
                 }
-                else
-                {
-                    selectSectorCmd.Parameters[0].Value = t.Name;   
-                    selectSectorCmd.Parameters[1].Value = t.GId;
-
-                    using (DbDataReader reader = selectSectorCmd.ExecuteReader())       // find name:gid
-                    {
-                        if (reader.Read())      // if found name:gid
-                        {
-                            t.Id = (long)reader[0];
-                        }
-                        else
-                        {
-                            t.Id = nextsectorid++;      // insert the sector with the guessed ID
-                            t.insertsec = true;
-                        }
-
-                        cache.SectorIDCache[t.Id] = t;                // and cache
-                      //  System.Diagnostics.Debug.WriteLine("Made sector " + t.Name + ":" + t.GId);
-                    }
-                }
             }
 
             if (t.edsmdatalist == null)
                 t.edsmdatalist = new List<TableWriteData>(5000);
 
             t.edsmdatalist.Add(data);                       // add to list of systems to process for this sector
+
+            return true;
+        }
+
+        private static void CreateNewUpdate(SectorCache cache, DbCommand selectSectorCmd, TableWriteData data, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid)
+        {
+            TryCreateNewUpdate(cache, data, tablesareempty, ref maxdate, ref nextsectorid, out Sector t, true);
+
+            if (t.Id == -1)   // if unknown sector ID..
+            {
+                selectSectorCmd.Parameters[0].Value = t.Name;   
+                selectSectorCmd.Parameters[1].Value = t.GId;
+
+                using (DbDataReader reader = selectSectorCmd.ExecuteReader())       // find name:gid
+                {
+                    if (reader.Read())      // if found name:gid
+                    {
+                        t.Id = (long)reader[0];
+                    }
+                    else
+                    {
+                        t.Id = nextsectorid++;      // insert the sector with the guessed ID
+                        t.insertsec = true;
+                    }
+
+                    cache.SectorIDCache[t.Id] = t;                // and cache
+                    //  System.Diagnostics.Debug.WriteLine("Made sector " + t.Name + ":" + t.GId);
+                }
+            }
         }
 
         private static long StoreNewEntries(SectorCache cache, string tablepostfix = "",        // set to add on text to table names to redirect to another table
@@ -491,8 +542,8 @@ namespace EliteDangerousCore.DB
 
         private class SectorCache
         {
-            public Dictionary<long, Sector> SectorIDCache { get; set; }          // only used during store operation
-            public Dictionary<string, Sector> SectorNameCache { get; set; }
+            public Dictionary<long, Sector> SectorIDCache { get; set; } = new Dictionary<long, Sector>();          // only used during store operation
+            public Dictionary<string, Sector> SectorNameCache { get; set; } = new Dictionary<string, Sector>();
         }
 
         private class Sector
