@@ -584,15 +584,10 @@ namespace EliteDangerousCore
 
             if (updatesystems.Count > 0)
             {
-                JournalEntry.ExecuteWithUpdater(usetxn: true, action: updater =>
+                foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
                 {
-                    foreach (Tuple<HistoryEntry, ISystem> he in updatesystems)
-                    {
-                        FillInSystemFromDBInt(he.Item1, he.Item2, updater);  // fill, we already have an EDSM system to use
-                    }
-
-                    updater.Commit();
-                });
+                    FillInSystemFromDBInt(he.Item1, he.Item2);  // fill, we already have an EDSM system to use
+                }
             }
         }
 
@@ -614,15 +609,11 @@ namespace EliteDangerousCore
                 FillInSystemFromDBInt(syspos, null);        // else fill in using null system, which means just mark it checked
         }
 
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys)
-        {
-            JournalEntry.ExecuteWithUpdater(updater => FillInSystemFromDBInt(syspos, edsmsys, updater));
-        }
-
-        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys, JournalEntry.RowUpdater updater)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
+        private void FillInSystemFromDBInt(HistoryEntry syspos, ISystem edsmsys)       // call to fill in ESDM data for entry, and also fills in all others pointing to the system object
         {
             List<HistoryEntry> alsomatching = new List<HistoryEntry>();
 
+            // TODO: create dictionary of history entries by system
             foreach (HistoryEntry he in historylist)       // list of systems in historylist using the same system object
             {
                 if (Object.ReferenceEquals(he.System, syspos.System))  
@@ -661,15 +652,18 @@ namespace EliteDangerousCore
                     status = SystemStatusEnum.EDSM
                 };
 
-                foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                JournalEntry.ExecuteWithUpdater(updater =>
                 {
-                    bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
+                    foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                    {
+                        bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
 
-                    if (updatepos || updateedsmid)
-                        JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, updater);  // update pos and edsmid, jdist not updated
+                        if (updatepos || updateedsmid)
+                            JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, updater);  // update pos and edsmid, jdist not updated
 
-                    he.System = newsys;
-                }
+                        he.System = newsys;
+                    }
+                });
             }
             else
             {
