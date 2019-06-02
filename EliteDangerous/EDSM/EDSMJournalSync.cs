@@ -479,7 +479,6 @@ namespace EliteDangerousCore.EDSM
                         }
 
                     }
-
                 });
 
                 firstdiscovers = firstdisc;
