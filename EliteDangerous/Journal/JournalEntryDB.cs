@@ -436,19 +436,19 @@ namespace EliteDangerousCore
 
             if (commander != -999)
             {
-                where.AppendPrePad("Commander = @Commander", " AND ");
-                whereparams["Commander"] = commander;
+                where = where.AppendPrePad("CommanderId = @CommanderId", " AND ");
+                whereparams["CommanderId"] = commander;
             }
 
             if (after != null)
             {
-                where.AppendPrePad("EventTime >= @After", " AND ");
+                where = where.AppendPrePad("EventTime >= @After", " AND ");
                 whereparams["After"] = after.Value;
             }
 
             if (before != null)
             {
-                where.AppendPrePad("EventTime <= @Before", " AND ");
+                where = where.AppendPrePad("EventTime <= @Before", " AND ");
                 whereparams["Before"] = before.Value;
             }
 
@@ -457,12 +457,12 @@ namespace EliteDangerousCore
                 int[] array = Array.ConvertAll(ids, x => (int)x);
                 if (allidsafter != null)
                 {
-                    where.AppendPrePad("(EventTypeId in (" + string.Join(",", array) + ") Or EventTime>=@idafter)", " and ");
+                    where = where.AppendPrePad("(EventTypeId in (" + string.Join(",", array) + ") Or EventTime>=@idafter)", " and ");
                     whereparams.Add("idafter", allidsafter.Value);
                 }
                 else
                 {
-                    where.AppendPrePad("EventTypeId in (" + string.Join(",", array) + ")", " and ");
+                    where = where.AppendPrePad("EventTypeId in (" + string.Join(",", array) + ")", " and ");
                 }
             }
 
