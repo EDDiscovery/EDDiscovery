@@ -151,7 +151,7 @@ namespace EliteDangerousCore.DB
 
                 if (idcol != null)
                 {
-                    if (conntype.Name == "System.Data.SqlClient.SqlConnection")
+                    if (conntype.FullName == "System.Data.SqlClient.SqlConnection")
                     {
                         query += $" OUTPUT INSERTED.{querybuilder.QuoteIdentifier(idcol)}";
                     }
@@ -159,15 +159,15 @@ namespace EliteDangerousCore.DB
 
                 query += $" VALUES ({paramsb.ToString()})";
 
-                if (conntype.Name == "MySql.Data.MySqlClient.MySqlConnection")
+                if (conntype.FullName == "MySql.Data.MySqlClient.MySqlConnection")
                 {
                     query += "; SELECT LAST_INSERT_ID()";
                 }
-                else if (conntype.Name == "System.Data.SQLite.SQLiteConnection" || conntype.Name == "Mono.Data.Sqlite.SqliteConnection")
+                else if (conntype.FullName == "System.Data.SQLite.SQLiteConnection" || conntype.FullName == "Mono.Data.Sqlite.SqliteConnection")
                 {
                     query += "; SELECT LAST_INSERT_ROWID()";
                 }
-                else if (conntype.Name == "Npgsql.NpgsqlConnection")
+                else if (conntype.FullName == "Npgsql.NpgsqlConnection")
                 {
                     query += $" RETURNING {querybuilder.QuoteIdentifier(idcol)}";
                 }
@@ -187,7 +187,9 @@ namespace EliteDangerousCore.DB
                     Parameters[kvp.Key].Value = kvp.Value ?? DBNull.Value;
                 }
 
-                return (T)Command.ExecuteScalar();
+                var ret = Command.ExecuteScalar();
+
+                return (T)ret;
             }
 
             public void Commit()
@@ -515,7 +517,7 @@ namespace EliteDangerousCore.DB
 
             public void Update<T>(string table, string idcol, T id, Dictionary<string, object> fields)
             {
-                using (var updater = new RowUpdater<T>(table, idcol))
+                using (var updater = CreateUpdater<T>(table, idcol))
                 {
                     updater.Update(id, fields);
                 }
@@ -523,7 +525,7 @@ namespace EliteDangerousCore.DB
 
             public void Update(string table, Dictionary<string, object> fields, string where = null, Dictionary<string, object> whereparams = null)
             {
-                using (var updater = new RowUpdater<object>(table, null))
+                using (var updater = CreateUpdater<object>(table, null))
                 {
                     updater.Update(fields, where, whereparams);
                 }
@@ -559,7 +561,7 @@ namespace EliteDangerousCore.DB
 
                 var query = $"SELECT ";
 
-                if (filter == null && limit != null && conntype.Name == "System.Data.SqlClient.SqlConnection")
+                if (filter == null && limit != null && conntype.FullName == "System.Data.SqlClient.SqlConnection")
                 {
                     query += $"TOP {limit} ";
                 }
@@ -584,9 +586,9 @@ namespace EliteDangerousCore.DB
                     "Npgsql.NpgsqlConnection"
                 };
 
-                if (filter == null && limit != null && uselimit.Contains(conntype.Name))
+                if (filter == null && limit != null && uselimit.Contains(conntype.FullName))
                 {
-                    query += $"LIMIT {limit}";
+                    query += $" LIMIT {limit}";
                 }
 
                 using (var cmd = Connection.CreateCommand(query))
@@ -739,6 +741,8 @@ namespace EliteDangerousCore.DB
 
         public static UserDatabase Instance { get; } = new UserDatabase();
 
+        private const bool DebugLongHeldConnections = false;
+
         private UserDatabase()
         {
         }
@@ -747,17 +751,21 @@ namespace EliteDangerousCore.DB
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             action();
-            if (sw.ElapsedMilliseconds > 100)
+            if (sw.ElapsedMilliseconds > 200)
             {
                 var trace = new System.Diagnostics.StackTrace(skipframes, true);
                 System.Diagnostics.Trace.WriteLine($"UserDatabase connection held for {sw.ElapsedMilliseconds}ms\n{trace.ToString()}");
+                if (DebugLongHeldConnections && System.Diagnostics.Debugger.IsAttached)
+                {
+                    System.Diagnostics.Debugger.Break();
+                }
             }
         }
 
         protected T Execute<T>(Func<T> func, int skipframes = 1)
         {
             T ret = default(T);
-            Execute(() => ret = func(), skipframes + 1);
+            Execute(() => { ret = func(); }, skipframes + 1);
             return ret;
         }
 

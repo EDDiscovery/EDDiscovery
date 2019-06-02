@@ -33,21 +33,21 @@ namespace EliteDangerousCore.DB
 
         public static SystemsDatabase Instance { get; } = new SystemsDatabase();
 
-        protected void Execute(Action action, int skipframes = 1)
+        protected void Execute(Action action, int skipframes = 1, int warnthreshold = 500)
         {
             var sw = System.Diagnostics.Stopwatch.StartNew();
             action();
-            if (sw.ElapsedMilliseconds > 100)
+            if (sw.ElapsedMilliseconds > warnthreshold)
             {
                 var trace = new System.Diagnostics.StackTrace(skipframes, true);
                 System.Diagnostics.Trace.WriteLine($"SystemsDatabase connection held for {sw.ElapsedMilliseconds}ms\n{trace.ToString()}");
             }
         }
 
-        protected T Execute<T>(Func<T> func, int skipframes = 1)
+        protected T Execute<T>(Func<T> func, int skipframes = 1, int warnthreshold = 500)
         {
             T ret = default(T);
-            Execute(() => ret = func(), skipframes + 1);
+            Execute(() => { ret = func(); }, skipframes + 1, warnthreshold);
             return ret;
         }
 
