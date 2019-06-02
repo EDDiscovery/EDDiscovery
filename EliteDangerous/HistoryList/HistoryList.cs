@@ -652,18 +652,21 @@ namespace EliteDangerousCore
                     status = SystemStatusEnum.EDSM
                 };
 
-                JournalEntry.ExecuteWithUpdater(updater =>
+                if (updatesyspos || updateedsmid)
                 {
-                    foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                    JournalEntry.ExecuteWithUpdater(updater =>
                     {
-                        bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
+                        foreach (HistoryEntry he in alsomatching)       // list of systems in historylist using the same system object
+                        {
+                            bool updatepos = (he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.Location) && updatesyspos;
 
-                        if (updatepos || updateedsmid)
-                            JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, updater);  // update pos and edsmid, jdist not updated
+                            if (updatepos || updateedsmid)
+                                JournalEntry.UpdateEDSMIDPosJump(he.Journalid, edsmsys, updatepos, -1, updater);  // update pos and edsmid, jdist not updated
 
-                        he.System = newsys;
-                    }
-                });
+                            he.System = newsys;
+                        }
+                    });
+                }
             }
             else
             {
