@@ -123,9 +123,9 @@ namespace EliteDangerousCore.DB
             DateTime maxdate = DateTime.MinValue;
             long updates = SystemsDB.ParseEDSMJSONFile(filename, gridids, ref maxdate, cancelRequested, reportProgress, tablepostfix, presumeempty: true, debugoutputfile: debugoutfile);
 
-            using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))   
+            if (updates > 0)
             {
-                if (updates > 0)
+                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))
                 {
                     reportProgress?.Invoke("Remove old data");
                     DropStarTables(conn);     // drop the main ones - this also kills the indexes
@@ -137,16 +137,20 @@ namespace EliteDangerousCore.DB
 
                     reportProgress?.Invoke("Creating indexes");
                     CreateSystemDBTableIndexes(conn);
-
-                    SetLastEDSMRecordTimeUTC(maxdate);          // record last data stored in database
-
-                    return updates;
                 }
-                else
+
+                SetLastEDSMRecordTimeUTC(maxdate);          // record last data stored in database
+
+                return updates;
+            }
+            else
+            {
+                using (SQLiteConnectionSystem conn = new SQLiteConnectionSystem(AccessMode.ReaderWriter))
                 {
                     DropStarTables(conn, tablepostfix);     // clean out half prepared tables
-                    return -1;
                 }
+
+                return -1;
             }
         }
 
