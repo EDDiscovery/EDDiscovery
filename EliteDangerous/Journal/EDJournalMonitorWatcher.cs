@@ -282,17 +282,37 @@ namespace EliteDangerousCore
 
                     //System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCountLap("PJF"), i + " into db");
 
-                    JournalEntry.ExecuteWithInserter(inserter =>
+                    var entryenum = entries.GetEnumerator();
+
+                    while (true)
                     {
-                        foreach (JournalReaderEntry jre in entries)
+                        var entrypage = new List<JournalReaderEntry>();
+
+                        while (entrypage.Count < 1000 && entryenum.MoveNext())
                         {
+                            var jre = entryenum.Current;
                             if (!existing[jre.JournalEntry.EventTimeUTC].Any(e => JournalEntry.AreSameEntry(jre.JournalEntry, e, ent1jo: jre.Json)))
+                            {
+                                entrypage.Add(jre);
+                            }
+                        }
+
+                        if (entrypage.Count == 0)
+                        {
+                            break;
+                        }
+
+                        JournalEntry.ExecuteWithInserter(usetxn: true, action: inserter =>
+                        {
+                            foreach (JournalReaderEntry jre in entrypage)
                             {
                                 inserter.Add(jre.JournalEntry, jre.Json);
                                 //System.Diagnostics.Trace.WriteLine(string.Format("Write Journal to db {0} {1}", jre.JournalEntry.EventTimeUTC, jre.JournalEntry.EventTypeStr));
                             }
-                        }
-                    });
+
+                            inserter.Commit();
+                        });
+                    }
                 }
 
                 reader.TravelLogUnit.Update();
