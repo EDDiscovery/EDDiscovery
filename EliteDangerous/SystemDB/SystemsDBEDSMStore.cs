@@ -59,8 +59,7 @@ namespace EliteDangerousCore.DB
                                         string debugoutputfile = null
                                         )
         {
-            sectoridcache = new Dictionary<long, Sector>();     
-            sectornamecache = new Dictionary<string, Sector>();
+            var cache = new SectorCache();
 
             long updates = 0;
 
@@ -120,7 +119,7 @@ namespace EliteDangerousCore.DB
                                                 int gridid = GridId.Id(d.x, d.z);
                                                 if (grididallowed == null || (grididallowed.Length > gridid && grididallowed[gridid]))    // allows a null or small grid
                                                 {
-                                                    CreateNewUpdate(selectSectorCmd, d, gridid, tablesareempty, ref cpmaxdate, ref nextsectorid);
+                                                    CreateNewUpdate(cache, selectSectorCmd, d, gridid, tablesareempty, ref cpmaxdate, ref nextsectorid);
                                                     recordstostore++;
                                                 }
                                             }
@@ -163,7 +162,7 @@ namespace EliteDangerousCore.DB
 
                     if (recordstostore > 0)
                     {
-                        updates += StoreNewEntries(tablepostfix, sw);
+                        updates += StoreNewEntries(cache, tablepostfix, sw);
 
                         reportProgress?.Invoke("EDSM Star database updated " + updates);
                     }
@@ -191,9 +190,6 @@ namespace EliteDangerousCore.DB
 
             PutNextSectorID(nextsectorid);    // and store back
 
-            sectoridcache = null;
-            sectornamecache = null;
-
             return updates;
         }
 
@@ -205,8 +201,7 @@ namespace EliteDangerousCore.DB
 
         public static long UpgradeDB102to200(Func<bool> cancelRequested, Action<string> reportProgress, string tablepostfix, bool tablesareempty = false, int maxgridid = int.MaxValue)
         {
-            sectoridcache = new Dictionary<long, Sector>();
-            sectornamecache = new Dictionary<string, Sector>();
+            var cache = new SectorCache();
 
             int nextsectorid = GetNextSectorID();
             long updates = 0;
@@ -268,7 +263,7 @@ namespace EliteDangerousCore.DB
 
                                     //if (!tablesareempty)  d.z = debug_z++;  // for debug checking
 
-                                    CreateNewUpdate(selectSectorCmd, d, grididentry, tablesareempty, ref maxdate, ref nextsectorid);      // not using gridid on purpose to double check it.
+                                    CreateNewUpdate(cache, selectSectorCmd, d, grididentry, tablesareempty, ref maxdate, ref nextsectorid);      // not using gridid on purpose to double check it.
                                     recordstostore++;
                                 }
                                 catch (Exception ex)
@@ -288,7 +283,7 @@ namespace EliteDangerousCore.DB
 
                 if (recordstostore >= 0)
                 {
-                    updates += StoreNewEntries(tablepostfix, null);
+                    updates += StoreNewEntries(cache, tablepostfix, null);
                     reportProgress?.Invoke("System DB upgrade processed " + updates);
 
                     Limit -= recordstostore;
@@ -311,9 +306,6 @@ namespace EliteDangerousCore.DB
 
             PutNextSectorID(nextsectorid);    // and store back
 
-            sectoridcache = null;
-            sectornamecache = null;
-
             return updates;
         }
 
@@ -323,7 +315,7 @@ namespace EliteDangerousCore.DB
         #region Table Update Helpers
 
         // create a new entry for insert in the sector tables 
-        private static void CreateNewUpdate(DbCommand selectSectorCmd , EDSMFileEntry d, int gid, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid)
+        private static void CreateNewUpdate(SectorCache cache, DbCommand selectSectorCmd , EDSMFileEntry d, int gid, bool tablesareempty, ref DateTime maxdate, ref int nextsectorid)
         {
             TableWriteData data = new TableWriteData() { edsm = d, classifier = new EliteNameClassifier(d.name), gridid = gid };
 
@@ -332,13 +324,13 @@ namespace EliteDangerousCore.DB
 
             Sector t = null, prev = null;
 
-            if (!sectornamecache.ContainsKey(data.classifier.SectorName))   // if unknown to cache
+            if (!cache.SectorNameCache.ContainsKey(data.classifier.SectorName))   // if unknown to cache
             {
-                sectornamecache[data.classifier.SectorName] = t = new Sector(data.classifier.SectorName, gridid: data.gridid);   // make a sector of sectorname and with gridID n , id == -1
+                cache.SectorNameCache[data.classifier.SectorName] = t = new Sector(data.classifier.SectorName, gridid: data.gridid);   // make a sector of sectorname and with gridID n , id == -1
             }
             else
             {
-                t = sectornamecache[data.classifier.SectorName];        // find the first sector of name
+                t = cache.SectorNameCache[data.classifier.SectorName];        // find the first sector of name
                 while (t != null && t.GId != data.gridid)        // if GID of sector disagrees
                 {
                     prev = t;                          // go thru list
@@ -357,7 +349,7 @@ namespace EliteDangerousCore.DB
                 {
                     t.Id = nextsectorid++;      // insert the sector with the guessed ID
                     t.insertsec = true;
-                    sectoridcache[t.Id] = t;    // and cache
+                    cache.SectorIDCache[t.Id] = t;    // and cache
                     //System.Diagnostics.Debug.WriteLine("Made sector " + t.Name + ":" + t.GId);
                 }
                 else
@@ -377,7 +369,7 @@ namespace EliteDangerousCore.DB
                             t.insertsec = true;
                         }
 
-                        sectoridcache[t.Id] = t;                // and cache
+                        cache.SectorIDCache[t.Id] = t;                // and cache
                       //  System.Diagnostics.Debug.WriteLine("Made sector " + t.Name + ":" + t.GId);
                     }
                 }
@@ -389,7 +381,7 @@ namespace EliteDangerousCore.DB
             t.edsmdatalist.Add(data);                       // add to list of systems to process for this sector
         }
 
-        private static long StoreNewEntries(string tablepostfix = "",        // set to add on text to table names to redirect to another table
+        private static long StoreNewEntries(SectorCache cache, string tablepostfix = "",        // set to add on text to table names to redirect to another table
                                            StreamWriter sw = null
                                         )
         {
@@ -415,7 +407,7 @@ namespace EliteDangerousCore.DB
 
                     replaceNameCmd = cn.CreateReplace("Names" + tablepostfix, new string[] { "name", "id" }, new DbType[] { DbType.String, DbType.Int64 }, txn);
 
-                    foreach (var kvp in sectoridcache)                  // all sectors cached, id is unique so its got all sectors                           
+                    foreach (var kvp in cache.SectorIDCache)                  // all sectors cached, id is unique so its got all sectors                           
                     {
                         Sector t = kvp.Value;
 
@@ -494,11 +486,14 @@ namespace EliteDangerousCore.DB
 
         #region Internal Vars and Classes
 
-        private static int GetNextSectorID() { return SQLiteConnectionSystem.GetSettingInt("EDSMSectorIDNext", 1); }
-        private static void PutNextSectorID(int v) { SQLiteConnectionSystem.PutSettingInt("EDSMSectorIDNext", v); }  
+        private static int GetNextSectorID() { return SystemsDatabase.Instance.GetEDSMSectorIDNext(); }
+        private static void PutNextSectorID(int v) { SystemsDatabase.Instance.SetEDSMSectorIDNext(v); }  
 
-        static Dictionary<long, Sector> sectoridcache;          // only used during store operation
-        static Dictionary<string, Sector> sectornamecache;
+        private class SectorCache
+        {
+            public Dictionary<long, Sector> SectorIDCache { get; set; }          // only used during store operation
+            public Dictionary<string, Sector> SectorNameCache { get; set; }
+        }
 
         private class Sector
         {

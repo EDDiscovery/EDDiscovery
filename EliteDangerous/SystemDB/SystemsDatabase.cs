@@ -178,6 +178,16 @@ namespace EliteDangerousCore.DB
             Execute(() => SQLiteConnectionSystem.PutSettingDate("EDDBLastDownloadTime", DateTime.MinValue));
         }
 
+        public int GetEDSMSectorIDNext()
+        {
+            return Execute(() => SQLiteConnectionSystem.GetSettingInt("EDSMSectorIDNext", 1));
+        }
+
+        public void SetEDSMSectorIDNext(int val)
+        {
+            Execute(() => SQLiteConnectionSystem.PutSettingInt("EDSMSectorIDNext", val));
+        }
+
         #endregion
     }
 }
