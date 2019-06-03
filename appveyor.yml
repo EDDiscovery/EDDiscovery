@@ -10,7 +10,7 @@ before_build:
 build:
   project: EDDiscovery.sln
 test_script:
-  - dotnet test EDDiscoveryTests\EDDiscoveryTests.csproj
+  - dotnet test EDDiscoveryTests\Tests.csproj
 for:
 -
   matrix:
