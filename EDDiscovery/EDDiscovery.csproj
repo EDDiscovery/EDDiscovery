@@ -242,10 +242,10 @@
       <ZipFiles Include="$(ProjectDir)App.Portable.config">
         <Name>EDDiscovery.exe.config</Name>
       </ZipFiles>
-      <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll" Condition="'$(TargetFramework)' == 'net462'">
+      <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
       </Zipfiles>
-      <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll" Condition="'$(TargetFramework)' == 'net462'">
+      <Zipfiles Include="$(OutDir)x86\SQLite.Interop.dll">
         <Name>x86\SQLite.Interop.dll</Name>
       </Zipfiles>
       <Zipfiles Include="$(OutDir)runtimes\**\*.dll" />
