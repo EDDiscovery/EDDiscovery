@@ -632,6 +632,16 @@ namespace EDDiscovery.UserControls
                             {
                                 JournalScan scan = je as JournalScan;
 
+                                if (ShowPlanets == true && !string.IsNullOrEmpty(scan.PlanetClass))
+                                {
+                                    var mapping = mappings?.FirstOrDefault(m => m.BodyID == scan.BodyID);
+
+                                    if (mapping != null)
+                                    {
+                                        scan.SetMapped(true, mapping.ProbesUsed <= mapping.EfficiencyTarget);
+                                    }
+                                }
+
                                 if (ShowPlanets == false)  // Then only show stars.
                                     if (String.IsNullOrEmpty(scan.StarType))
                                         continue;
