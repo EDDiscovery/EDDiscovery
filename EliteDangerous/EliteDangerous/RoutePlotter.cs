@@ -1,23 +1,35 @@
-﻿using EMK.LightGeometry;
+﻿/*
+ * Copyright © 2019 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
+using EMK.LightGeometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EliteDangerousCore
 {
     public class RoutePlotter
     {
-        public float maxrange;
-        public bool usingcoordsfrom;
-        public Point3D coordsfrom;
-        public bool usingcoordsto;
-        public Point3D coordsto;
-        public string fromsys;
-        public string tosys;
-        public int routemethod;
-        public int possiblejumps;
+        public bool StopPlotter { get; set; } = false;
+        public float MaxRange;
+        public Point3D Coordsfrom;
+        public Point3D Coordsto;
+        public string FromSystem;
+        public string ToSystem;
+        public int RouteMethod;
 
         // METRICs defined by systemclass GetSystemNearestTo function
         public static string[] metric_options = {
@@ -46,33 +58,36 @@ namespace EliteDangerousCore
 
         public List<ISystem> RouteIterative(Action<ReturnInfo> info)
         {
-            double traveldistance = Point3D.DistanceBetween(coordsfrom, coordsto);      // its based on a percentage of the traveldistance
+            double traveldistance = Point3D.DistanceBetween(Coordsfrom, Coordsto);      // its based on a percentage of the traveldistance
             List<ISystem> routeSystems = new List<ISystem>();
-            System.Diagnostics.Debug.WriteLine("From " + fromsys + " to  " + tosys);
+            System.Diagnostics.Debug.WriteLine("From " + FromSystem + " to  " + ToSystem);
 
-            routeSystems.Add(new SystemClass(fromsys, coordsfrom.X, coordsfrom.Y, coordsfrom.Z));
+            routeSystems.Add(new SystemClass(FromSystem, Coordsfrom.X, Coordsfrom.Y, Coordsfrom.Z));
 
-            info(new ReturnInfo(fromsys, double.NaN, coordsfrom,double.NaN,double.NaN,routeSystems[0]));
+            info(new ReturnInfo(FromSystem, double.NaN, Coordsfrom,double.NaN,double.NaN,routeSystems[0]));
 
-            Point3D curpos = coordsfrom;
+            Point3D curpos = Coordsfrom;
             int jump = 1;
             double actualdistance = 0;
 
+            float maxfromwanted = (MaxRange<100) ? (MaxRange-1) : (100+MaxRange * 1 / 5);       // if <100, then just make sure we jump off by 1 yr, else its a 100+1/5
+
             do
             {
-                double distancetogo = Point3D.DistanceBetween(coordsto, curpos);      // to go
+                double distancetogo = Point3D.DistanceBetween(Coordsto, curpos);      // to go
 
-                if (distancetogo <= maxrange)                                         // within distance, we can go directly
+                if (distancetogo <= MaxRange)                                         // within distance, we can go directly
                     break;
 
-                Point3D travelvector = new Point3D(coordsto.X - curpos.X, coordsto.Y - curpos.Y, coordsto.Z - curpos.Z); // vector to destination
+                Point3D travelvector = new Point3D(Coordsto.X - curpos.X, Coordsto.Y - curpos.Y, Coordsto.Z - curpos.Z); // vector to destination
                 Point3D travelvectorperly = new Point3D(travelvector.X / distancetogo, travelvector.Y / distancetogo, travelvector.Z / distancetogo); // per ly travel vector
 
-                Point3D nextpos = new Point3D(curpos.X + maxrange * travelvectorperly.X,
-                                              curpos.Y + maxrange * travelvectorperly.Y,
-                                              curpos.Z + maxrange * travelvectorperly.Z);   // where we would like to be..
+                Point3D nextpos = new Point3D(curpos.X + MaxRange * travelvectorperly.X,
+                                              curpos.Y + MaxRange * travelvectorperly.Y,
+                                              curpos.Z + MaxRange * travelvectorperly.Z);   // where we would like to be..
+                
 
-                ISystem bestsystem = DB.SystemCache.GetSystemNearestTo(curpos, nextpos, maxrange, Math.Min(maxrange*1/2,250), routemethod, 1000);     // at least get 1/4 way there, otherwise waypoint.  Best 1000 from waypoint checked
+                ISystem bestsystem = DB.SystemCache.GetSystemNearestTo(curpos, nextpos, MaxRange, maxfromwanted, RouteMethod, 1000);     // at least get 1/4 way there, otherwise waypoint.  Best 1000 from waypoint checked
 
                 string sysname = "WAYPOINT";
                 double deltafromwaypoint = 0;
@@ -94,13 +109,13 @@ namespace EliteDangerousCore
                 curpos = nextpos;
                 jump++;
 
-            } while (true);
+            } while ( !StopPlotter);
 
-            routeSystems.Add(new SystemClass(tosys, coordsto.X, coordsto.Y, coordsto.Z));
+            routeSystems.Add(new SystemClass(ToSystem, Coordsto.X, Coordsto.Y, Coordsto.Z));
 
-            actualdistance += Point3D.DistanceBetween(curpos, coordsto);
+            actualdistance += Point3D.DistanceBetween(curpos, Coordsto);
 
-            info(new ReturnInfo(tosys, Point3D.DistanceBetween(curpos, coordsto), coordsto, double.NaN, double.NaN, routeSystems.Last()));
+            info(new ReturnInfo(ToSystem, Point3D.DistanceBetween(curpos, Coordsto), Coordsto, double.NaN, double.NaN, routeSystems.Last()));
 
             info(new ReturnInfo("Straight Line Distance", traveldistance));
             info(new ReturnInfo("Travelled Distance", actualdistance));
