@@ -32,7 +32,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString() + "t", -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString("0.0") + "t", -Cost);
         }
 
         public override void FillInformation(out string info, out string detailed) 
@@ -61,7 +61,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString() + "t", -Cost);
+            mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Amount.ToString("0.0") + "t", -Cost);
         }
 
         public override void FillInformation(out string info, out string detailed)

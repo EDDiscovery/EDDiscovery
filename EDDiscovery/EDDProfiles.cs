@@ -97,7 +97,7 @@ namespace EDDiscovery
 
         static public string ProfilePrefix(int id) { return "Profile_" + id + "_"; }
 
-        public void LoadProfiles()
+        public void LoadProfiles(string selectprofile)
         {
             string profiles = SQLiteConnectionUser.GetSettingString("ProfileIDs", "0");
             List<int> profileints = profiles.RestoreIntListFromString(1,0); // default is length 1, value 0
@@ -124,6 +124,13 @@ namespace EDDiscovery
             }
 
             int curid = SQLiteConnectionUser.GetSettingInt("ProfilePowerOnID", DefaultId);
+
+            if ( selectprofile != null )
+            {
+                int found = ProfileList.FindIndex(x => x.Name.Equals(selectprofile, StringComparison.InvariantCultureIgnoreCase));
+                if (found >= 0)
+                    curid = ProfileList[found].Id;
+            }
 
             PowerOn = Current = ProfileList.Find(x => x.Id == curid) ?? ProfileList[0];
             History.Push(Current.Id);

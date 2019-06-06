@@ -53,7 +53,6 @@ namespace EDDiscovery.UserControls
             travelhistorytext = "Travel History Entry".Tx(this);
             dataGridViewModules.MakeDoubleBuffered();
             dataGridViewModules.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewModules.RowTemplate.Height = Font.ScalePixels(26);
 
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
 
@@ -71,6 +70,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewModules.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewModules, DbColumnSave);
         }

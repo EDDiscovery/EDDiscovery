@@ -73,8 +73,9 @@ namespace EDDiscovery
             OutfittingPanel,        // 38 Just for Iain i'm keeping this numbering going ;-)
             SplitterControl,        // 39
             MissionOverlay,         // 40
-            CaptainsLog,            // 41 Actually its important for debugging purposes so you can recongnised the ID
+            CaptainsLog,            // 41 Actually its important for debugging purposes so you can recognised the ID as its stored by ID in the DB
             Surveyor,               // 42
+            EDSM,                   // 43
             // ****** ADD More here DO NOT REORDER *****
         };
 
@@ -109,6 +110,7 @@ namespace EDDiscovery
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system", transparent: false) },
+            { new PanelInfo( PanelIDs.EDSM, typeof(UserControlEDSM), "EDSM", "EDSM", "Automatic web view of EDSM page on system") },
             { new PanelInfo( PanelIDs.ScanGrid, typeof(UserControlScanGrid), "Scan Grid", "ScanGrid", "Scan data on system in a grid", transparent: false) },
             { new PanelInfo( PanelIDs.StarDistance, typeof(UserControlStarDistance), "Nearest Stars", "StarDistance","Nearest stars from current position") },
             { new PanelInfo( PanelIDs.EstimatedValues, typeof(UserControlEstimatedValues),"Estimated Values", "EstimatedValues", "Estimated Scan values of bodies in system", transparent: false) },

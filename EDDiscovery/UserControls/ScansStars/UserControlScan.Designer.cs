@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlScan));
             this.checkBoxCustomHideFullMats = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxDisplaySystemAlways = new ExtendedControls.ExtCheckBox();
             this.chkShowOverlays = new ExtendedControls.ExtCheckBox();
@@ -67,7 +66,7 @@ namespace EDDiscovery.UserControls
             // checkBoxCustomHideFullMats
             // 
             this.checkBoxCustomHideFullMats.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCustomHideFullMats.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxCustomHideFullMats.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxCustomHideFullMats.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCustomHideFullMats.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxCustomHideFullMats.CheckBoxDisabledScaling = 0.5F;
@@ -84,11 +83,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCustomHideFullMats.ImageIndeterminate = null;
             this.checkBoxCustomHideFullMats.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomHideFullMats.ImageUnchecked = null;
-            this.checkBoxCustomHideFullMats.Location = new System.Drawing.Point(92, 1);
+            this.checkBoxCustomHideFullMats.Location = new System.Drawing.Point(104, 1);
             this.checkBoxCustomHideFullMats.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.checkBoxCustomHideFullMats.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomHideFullMats.Name = "checkBoxCustomHideFullMats";
-            this.checkBoxCustomHideFullMats.Size = new System.Drawing.Size(24, 24);
+            this.checkBoxCustomHideFullMats.Size = new System.Drawing.Size(28, 28);
             this.checkBoxCustomHideFullMats.TabIndex = 31;
             this.checkBoxCustomHideFullMats.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxCustomHideFullMats, "Show/Hide materials which have reached their storage limit");
@@ -98,7 +97,7 @@ namespace EDDiscovery.UserControls
             // extCheckBoxDisplaySystemAlways
             // 
             this.extCheckBoxDisplaySystemAlways.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxDisplaySystemAlways.BackColor = System.Drawing.Color.Transparent;
+            this.extCheckBoxDisplaySystemAlways.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxDisplaySystemAlways.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxDisplaySystemAlways.CheckBoxColor = System.Drawing.Color.White;
             this.extCheckBoxDisplaySystemAlways.CheckBoxDisabledScaling = 0.5F;
@@ -115,11 +114,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDisplaySystemAlways.ImageIndeterminate = null;
             this.extCheckBoxDisplaySystemAlways.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxDisplaySystemAlways.ImageUnchecked = null;
-            this.extCheckBoxDisplaySystemAlways.Location = new System.Drawing.Point(256, 1);
+            this.extCheckBoxDisplaySystemAlways.Location = new System.Drawing.Point(288, 1);
             this.extCheckBoxDisplaySystemAlways.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.extCheckBoxDisplaySystemAlways.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxDisplaySystemAlways.Name = "extCheckBoxDisplaySystemAlways";
-            this.extCheckBoxDisplaySystemAlways.Size = new System.Drawing.Size(24, 24);
+            this.extCheckBoxDisplaySystemAlways.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxDisplaySystemAlways.TabIndex = 31;
             this.extCheckBoxDisplaySystemAlways.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxDisplaySystemAlways, "Show system and value in main display");
@@ -129,8 +128,8 @@ namespace EDDiscovery.UserControls
             // chkShowOverlays
             // 
             this.chkShowOverlays.Appearance = System.Windows.Forms.Appearance.Button;
-            this.chkShowOverlays.BackColor = System.Drawing.Color.Transparent;
-            this.chkShowOverlays.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.chkShowOverlays.BackColor = System.Drawing.SystemColors.Control;
+            this.chkShowOverlays.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkShowOverlays.CheckBoxColor = System.Drawing.Color.White;
             this.chkShowOverlays.CheckBoxDisabledScaling = 0.5F;
             this.chkShowOverlays.CheckBoxInnerColor = System.Drawing.Color.White;
@@ -146,11 +145,11 @@ namespace EDDiscovery.UserControls
             this.chkShowOverlays.ImageIndeterminate = null;
             this.chkShowOverlays.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkShowOverlays.ImageUnchecked = null;
-            this.chkShowOverlays.Location = new System.Drawing.Point(228, 1);
+            this.chkShowOverlays.Location = new System.Drawing.Point(256, 1);
             this.chkShowOverlays.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.chkShowOverlays.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.chkShowOverlays.Name = "chkShowOverlays";
-            this.chkShowOverlays.Size = new System.Drawing.Size(24, 24);
+            this.chkShowOverlays.Size = new System.Drawing.Size(28, 28);
             this.chkShowOverlays.TabIndex = 31;
             this.chkShowOverlays.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.chkShowOverlays, "Show/Hide body status icons");
@@ -160,8 +159,7 @@ namespace EDDiscovery.UserControls
             // extCheckBoxStar
             // 
             this.extCheckBoxStar.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxStar.BackColor = System.Drawing.Color.Transparent;
-            this.extCheckBoxStar.Image = ((System.Drawing.Image)(resources.GetObject("extCheckBoxStar.BackgroundImage")));
+            this.extCheckBoxStar.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxStar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.CheckBoxColor = System.Drawing.Color.White;
             this.extCheckBoxStar.CheckBoxDisabledScaling = 0.5F;
@@ -173,6 +171,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.extCheckBoxStar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxStar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.extCheckBoxStar.Image = global::EDDiscovery.Icons.Controls.Scan_Star;
             this.extCheckBoxStar.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxStar.ImageIndeterminate = null;
             this.extCheckBoxStar.ImageLayout = System.Windows.Forms.ImageLayout.Center;
@@ -181,7 +180,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.extCheckBoxStar.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxStar.Name = "extCheckBoxStar";
-            this.extCheckBoxStar.Size = new System.Drawing.Size(24, 24);
+            this.extCheckBoxStar.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxStar.TabIndex = 2;
             this.extCheckBoxStar.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxStar, "Select another system to view");
@@ -191,8 +190,7 @@ namespace EDDiscovery.UserControls
             // checkBoxMaterials
             // 
             this.checkBoxMaterials.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMaterials.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMaterials.Image = global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials;
+            this.checkBoxMaterials.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxMaterials.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterials.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterials.CheckBoxDisabledScaling = 0.5F;
@@ -204,15 +202,16 @@ namespace EDDiscovery.UserControls
             this.checkBoxMaterials.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxMaterials.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxMaterials.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxMaterials.Image = global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials;
             this.checkBoxMaterials.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMaterials.ImageIndeterminate = null;
             this.checkBoxMaterials.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterials.ImageUnchecked = null;
-            this.checkBoxMaterials.Location = new System.Drawing.Point(36, 1);
+            this.checkBoxMaterials.Location = new System.Drawing.Point(40, 1);
             this.checkBoxMaterials.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.checkBoxMaterials.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMaterials.Name = "checkBoxMaterials";
-            this.checkBoxMaterials.Size = new System.Drawing.Size(24, 24);
+            this.checkBoxMaterials.Size = new System.Drawing.Size(28, 28);
             this.checkBoxMaterials.TabIndex = 2;
             this.checkBoxMaterials.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxMaterials, "Show/Hide Materials");
@@ -222,8 +221,7 @@ namespace EDDiscovery.UserControls
             // checkBoxMaterialsRare
             // 
             this.checkBoxMaterialsRare.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMaterialsRare.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMaterialsRare.Image = global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials;
+            this.checkBoxMaterialsRare.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxMaterialsRare.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterialsRare.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMaterialsRare.CheckBoxDisabledScaling = 0.5F;
@@ -235,15 +233,16 @@ namespace EDDiscovery.UserControls
             this.checkBoxMaterialsRare.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxMaterialsRare.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxMaterialsRare.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxMaterialsRare.Image = global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials;
             this.checkBoxMaterialsRare.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMaterialsRare.ImageIndeterminate = null;
             this.checkBoxMaterialsRare.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMaterialsRare.ImageUnchecked = null;
-            this.checkBoxMaterialsRare.Location = new System.Drawing.Point(64, 1);
+            this.checkBoxMaterialsRare.Location = new System.Drawing.Point(72, 1);
             this.checkBoxMaterialsRare.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.checkBoxMaterialsRare.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMaterialsRare.Name = "checkBoxMaterialsRare";
-            this.checkBoxMaterialsRare.Size = new System.Drawing.Size(24, 24);
+            this.checkBoxMaterialsRare.Size = new System.Drawing.Size(28, 28);
             this.checkBoxMaterialsRare.TabIndex = 2;
             this.checkBoxMaterialsRare.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxMaterialsRare, "Show rare materials only");
@@ -253,8 +252,8 @@ namespace EDDiscovery.UserControls
             // checkBoxEDSM
             // 
             this.checkBoxEDSM.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxEDSM.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxEDSM.BackColor = System.Drawing.SystemColors.Control;
+            this.checkBoxEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxEDSM.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxEDSM.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxEDSM.CheckBoxInnerColor = System.Drawing.Color.White;
@@ -270,11 +269,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxEDSM.ImageIndeterminate = null;
             this.checkBoxEDSM.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxEDSM.ImageUnchecked = null;
-            this.checkBoxEDSM.Location = new System.Drawing.Point(200, 1);
+            this.checkBoxEDSM.Location = new System.Drawing.Point(224, 1);
             this.checkBoxEDSM.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.checkBoxEDSM.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxEDSM.Name = "checkBoxEDSM";
-            this.checkBoxEDSM.Size = new System.Drawing.Size(24, 24);
+            this.checkBoxEDSM.Size = new System.Drawing.Size(28, 28);
             this.checkBoxEDSM.TabIndex = 3;
             this.checkBoxEDSM.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxEDSM, "Show/Hide Body data from EDSM");
@@ -284,8 +283,7 @@ namespace EDDiscovery.UserControls
             // checkBoxMoons
             // 
             this.checkBoxMoons.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxMoons.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxMoons.Image = global::EDDiscovery.Icons.Controls.Scan_ShowMoons;
+            this.checkBoxMoons.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxMoons.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMoons.CheckBoxColor = System.Drawing.Color.White;
             this.checkBoxMoons.CheckBoxDisabledScaling = 0.5F;
@@ -297,15 +295,16 @@ namespace EDDiscovery.UserControls
             this.checkBoxMoons.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.checkBoxMoons.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxMoons.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxMoons.Image = global::EDDiscovery.Icons.Controls.Scan_ShowMoons;
             this.checkBoxMoons.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxMoons.ImageIndeterminate = null;
             this.checkBoxMoons.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxMoons.ImageUnchecked = null;
-            this.checkBoxMoons.Location = new System.Drawing.Point(128, 1);
+            this.checkBoxMoons.Location = new System.Drawing.Point(144, 1);
             this.checkBoxMoons.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.checkBoxMoons.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxMoons.Name = "checkBoxMoons";
-            this.checkBoxMoons.Size = new System.Drawing.Size(24, 24);
+            this.checkBoxMoons.Size = new System.Drawing.Size(28, 28);
             this.checkBoxMoons.TabIndex = 2;
             this.checkBoxMoons.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxMoons, "Show/Hide Moons");
@@ -314,41 +313,44 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSize
             // 
+            this.buttonSize.BackColor = System.Drawing.SystemColors.Control;
             this.buttonSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
-            this.buttonSize.Location = new System.Drawing.Point(164, 1);
+            this.buttonSize.Location = new System.Drawing.Point(184, 1);
             this.buttonSize.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.buttonSize.Name = "buttonSize";
-            this.buttonSize.Size = new System.Drawing.Size(24, 24);
+            this.buttonSize.Size = new System.Drawing.Size(28, 28);
             this.buttonSize.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonSize, "Select image size");
-            this.buttonSize.UseVisualStyleBackColor = true;
+            this.buttonSize.UseVisualStyleBackColor = false;
             this.buttonSize.Click += new System.EventHandler(this.buttonSize_Click);
             // 
             // extButtonHighValue
             // 
+            this.extButtonHighValue.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
-            this.extButtonHighValue.Location = new System.Drawing.Point(284, 1);
+            this.extButtonHighValue.Location = new System.Drawing.Point(320, 1);
             this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.extButtonHighValue.Name = "extButtonHighValue";
-            this.extButtonHighValue.Size = new System.Drawing.Size(24, 24);
+            this.extButtonHighValue.Size = new System.Drawing.Size(28, 28);
             this.extButtonHighValue.TabIndex = 29;
             this.toolTip.SetToolTip(this.extButtonHighValue, "Set High Value Limit");
-            this.extButtonHighValue.UseVisualStyleBackColor = true;
+            this.extButtonHighValue.UseVisualStyleBackColor = false;
             this.extButtonHighValue.Click += new System.EventHandler(this.extButtonHighValue_Click);
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor = System.Drawing.SystemColors.Control;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(312, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(352, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
-            this.buttonExtExcel.Size = new System.Drawing.Size(24, 24);
+            this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
-            this.buttonExtExcel.UseVisualStyleBackColor = true;
+            this.buttonExtExcel.UseVisualStyleBackColor = false;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
             // toolTip
@@ -371,7 +373,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.RollUpDelay = 1000;
             this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 26);
+            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 30);
             this.rollUpPanelTop.TabIndex = 4;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
@@ -393,7 +395,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 26);
+            this.panelControls.Size = new System.Drawing.Size(748, 30);
             this.panelControls.TabIndex = 32;
             // 
             // panelStars
@@ -401,13 +403,13 @@ namespace EDDiscovery.UserControls
             this.panelStars.CheckEDSM = false;
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStars.HideFullMaterials = false;
-            this.panelStars.Location = new System.Drawing.Point(0, 26);
+            this.panelStars.Location = new System.Drawing.Point(0, 30);
             this.panelStars.Name = "panelStars";
             this.panelStars.ShowMaterials = false;
             this.panelStars.ShowMaterialsRare = false;
             this.panelStars.ShowMoons = false;
             this.panelStars.ShowOverlays = false;
-            this.panelStars.Size = new System.Drawing.Size(748, 656);
+            this.panelStars.Size = new System.Drawing.Size(748, 652);
             this.panelStars.TabIndex = 5;
             this.panelStars.ValueLimit = 50000;
             // 

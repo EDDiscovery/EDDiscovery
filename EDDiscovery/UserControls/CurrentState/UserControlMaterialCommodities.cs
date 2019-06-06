@@ -48,7 +48,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewMC.MakeDoubleBuffered();
             dataGridViewMC.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMC.RowTemplate.Height = Font.ScalePixels(26);
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -116,6 +115,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewMC, DbColumnSave);
         }

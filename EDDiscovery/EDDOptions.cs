@@ -46,6 +46,14 @@ namespace EDDiscovery
             {
                 UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
             }
+            else if (optname == "-cmdr" || optname == "-commander")
+            {
+                Commander = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-profile")
+            {
+                Profile = toeol ? ca.Rest() : ca.NextEmpty();
+            }
             else if (optname == "-systemsdbpath")
             {
                 SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
@@ -171,8 +179,10 @@ namespace EDDiscovery
         public bool SafeMode { get; set; }
         public bool DisableMerge { get; set; }
         public string NotificationFolderOverride { get; set; }      // normally null..
-        public float FontSize { get; set; }                           // override font size
-        public string Font { get; set; }                           // override font 
+        public float FontSize { get; set; }                           // override font size, 0 if not
+        public string Font { get; set; }                           // override font, null if not
+        public string Commander { get; set; }                   // set commander, null if not
+        public string Profile { get; set; }                   // set profile, null if not
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {

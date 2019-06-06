@@ -160,7 +160,7 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Configuration");
             EDDConfig.Instance.Update(false);
-            EDDProfiles.Instance.LoadProfiles();
+            EDDProfiles.Instance.LoadProfiles(EDDOptions.Instance.Profile);
 
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
 
@@ -366,6 +366,14 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
                 LogLine("Reading travel history".Tx(this, "RTH"));
+
+                if ( EDDOptions.Instance.Commander != null )
+                {
+                    EDCommander switchto = EDCommander.GetCommander(EDDOptions.Instance.Commander);
+                    if (switchto != null)
+                        EDCommander.CurrentCmdrID = switchto.Nr;
+                }
+
                 DoRefreshHistory(new RefreshWorkerArgs { CurrentCommander = EDCommander.CurrentCmdrID });       // kick the background refresh worker thread into action
             }
 

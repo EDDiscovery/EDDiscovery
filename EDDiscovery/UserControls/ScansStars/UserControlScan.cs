@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,21 +13,17 @@
  * 
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+using EliteDangerousCore;
+using EliteDangerousCore.DB;
+using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ExtendedControls;
-using System.Drawing.Drawing2D;
-using EliteDangerousCore.EDSM;
-using EliteDangerousCore.DB;
-using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
 
 namespace EDDiscovery.UserControls
 {
@@ -78,30 +74,35 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void ChangeCursorType(IHistoryCursor thc)
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void ChangeCursorType(IHistoryCursor thc)
+        {
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+            uctg = thc;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
+        }
+
+        public override void InitialDisplay()
+        {
+            last_he = uctg.GetCurrentHistoryEntry;
+            DrawSystem(last_he);    // may be null
         }
 
         public override void Closing()
         {
             SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             discoveryform.OnNewEntry -= NewEntry;
             closing = true;
         }
-		
-		#endregion
-		
-		
-		#region Transparency
+
+        #endregion
+
+        #region Transparency
         Color transparencycolor = Color.Green;
         public override Color ColorTransparency { get { return transparencycolor; } }
         public override void SetTransparency(bool on, Color curcol)
@@ -135,28 +136,25 @@ namespace EDDiscovery.UserControls
 
         public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
         {
-            // if he valid, and last is null, or not he, or we have a new scan
-            if (he != null && (last_he == null || he != last_he || he.EntryType == JournalTypeEnum.Scan))
+            if (he != null)
             {
-                last_he = he;
-                DrawSystem(last_he);
+                if (he.EntryType == JournalTypeEnum.Scan || last_he == null || last_he.System != he.System) // if new entry is scan, may be new data.. or not presenting or diff sys
+                {
+                    last_he = he;
+                    DrawSystem(last_he);
+                }
             }
         }
 
-        public override void InitialDisplay()
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
-            Display(uctg.GetCurrentHistoryEntry, discoveryform.history);
-        }
-
-        private void Display(HistoryEntry he, HistoryList hl) =>
-            Display(he, hl, true);
-
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)            // when user clicks around..
-        {
-            if (he != null && (last_he == null || he.System != last_he.System))
+            if (he != null)
             {
-                last_he = he;
-                DrawSystem(last_he);
+                if (last_he == null || last_he.System != he.System) // if we changed system, we need to represent
+                {
+                    last_he = he;
+                    DrawSystem(last_he);
+                }
             }
         }
 

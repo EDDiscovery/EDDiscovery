@@ -46,7 +46,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewShips.MakeDoubleBuffered();
             dataGridViewShips.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewShips.RowTemplate.Height = Font.ScalePixels(26);
 
             discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             discoveryform.OnNewEntry += Discoveryform_OnNewEntry;
@@ -64,6 +63,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewShips.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewShips, DbColumnSave);
         }

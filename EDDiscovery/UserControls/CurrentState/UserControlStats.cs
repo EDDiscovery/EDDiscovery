@@ -81,12 +81,6 @@ namespace EDDiscovery.UserControls
             TravelGridChanged(uctg.GetCurrentHistoryEntry,discoveryform.history);
         }
 
-        protected override void OnLayout(LayoutEventArgs e)
-        {
-            base.OnLayout(e);
-            SizeControls();         // need to size controls here as well.. goes tabstrip.. create user control.. calls updatestats with incorrect size.. added to UC panel.. relayout
-        }
-
         private void TravelGridChanged(HistoryEntry he, HistoryList hl) =>
             TravelGridChanged(he, hl, true);
 
@@ -239,7 +233,7 @@ namespace EDDiscovery.UserControls
             else
                 mostVisited.Visible = false;
 
-            SizeControls();
+            PerformLayout();
         }
 
         bool IsTravelling(HistoryList hl, out DateTime startTime)
@@ -254,29 +248,6 @@ namespace EDDiscovery.UserControls
                 if (inTrip) startTime = lastStartMark.EventTimeLocal;
             }
             return inTrip;
-        }
-
-        void SizeControls()
-        {
-            try
-            {
-                int height = 0;
-                foreach (DataGridViewRow row in dataGridViewStats.Rows)
-                {
-                    height += row.Height + 1;
-                }
-                height += dataGridViewStats.ColumnHeadersHeight + 2;
-                dataGridViewStats.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), height);             // all controls should be placed each time.
-                                                                                                                                                  //System.Diagnostics.Debug.WriteLine("DGV {0} {1}", dataGridViewStats.Size, dataGridViewStats.Location);
-                mostVisited.Location = new Point(0, height);
-                mostVisited.Size = new Size(Math.Max(10, panelData.DisplayRectangle.Width - panelData.ScrollBarWidth), mostVisited.Height);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Trace.WriteLine($"UserControlStats::SizeControls Exception: {ex.Message}");
-                return;
-            }
-
         }
 
         void StatToDGV(string title, string data)
@@ -1019,7 +990,6 @@ namespace EDDiscovery.UserControls
             Col2.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             Col2.SortMode = DataGridViewColumnSortMode.Automatic;
         }
-
        
         void StatToDGV(DataGridView datagrid,  string title, string[] data, bool showEmptyLines = true)
         {
@@ -1038,6 +1008,27 @@ namespace EDDiscovery.UserControls
                 datagrid.Rows.Add(rowobj);
         }
 
+        protected override void OnLayout(LayoutEventArgs e)
+        {
+            dataGridViewTravel.RowTemplate.MinimumHeight =
+            dataGridViewScan.RowTemplate.MinimumHeight =
+            dataGridViewByShip.RowTemplate.MinimumHeight =
+            dataGridViewStats.RowTemplate.MinimumHeight = Font.ScalePixels(24);
+
+            int height = 0;
+            foreach (DataGridViewRow row in dataGridViewStats.Rows)
+            {
+                height += row.Height + 1;
+            }
+            height += dataGridViewStats.ColumnHeadersHeight + 2;
+
+            dataGridViewStats.Height = height;
+            mostVisited.Width = dataGridViewStats.Width = panelGeneral.Width - panelGeneral.ScrollBarWidth - dataGridViewStats.Left;
+            mostVisited.Top = dataGridViewStats.Bottom + 8;
+            base.OnLayout(e);
+        }
+
         #endregion
+
     }
 }

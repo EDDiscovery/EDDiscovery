@@ -576,6 +576,12 @@
     <Compile Include="UserControls\Helpers\DataGridViewStarResults.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEDSM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ScansStars\UserControlEDSM.Designer.cs">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Search\SearchMaterialsCommodities.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -821,6 +827,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
       <DependentUpon>UserControlBookmarks.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ScansStars\UserControlEDSM.resx">
+      <DependentUpon>UserControlEDSM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Search\SearchMaterialsCommodities.resx">
       <DependentUpon>SearchMaterialsCommodities.cs</DependentUpon>
