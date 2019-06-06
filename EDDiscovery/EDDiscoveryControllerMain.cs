@@ -154,8 +154,7 @@ namespace EDDiscovery
             msg.Invoke("Checking Databases");
 
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Initializing database");
-
-            //TBD
+            UserDatabase.Instance.Start();
             UserDatabase.Instance.Initialize();
             SystemsDatabase.Instance.Start();
             SystemsDatabase.Instance.Initialize();

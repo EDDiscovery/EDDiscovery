@@ -806,7 +806,7 @@ namespace EDDiscovery
             DLLManager.UnLoad();
 
             Close();
-            //TBD
+            UserDatabase.Instance.Stop();
             SystemsDatabase.Instance.Stop();
             Application.Exit();
         }
