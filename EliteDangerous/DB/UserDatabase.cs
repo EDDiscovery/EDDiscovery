@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Data.Common;
 using System.Text;
 using System.Linq;
 using System.Data;
 using SQLLiteExtensions;
+using System.Threading;
 
 namespace EliteDangerousCore.DB
 {
@@ -739,18 +741,83 @@ namespace EliteDangerousCore.DB
             }
         }
 
+        private class Job : IDisposable
+        {
+            private ManualResetEventSlim WaitHandle;
+            private Action Action;
+
+            public Job(Action action)
+            {
+                this.Action = action;
+                this.WaitHandle = new ManualResetEventSlim(false);
+            }
+
+            public void Exec()
+            {
+                Action.Invoke();
+                WaitHandle.Set();
+            }
+
+            public void Wait()
+            {
+                WaitHandle.Wait();
+            }
+
+            public void Dispose()
+            {
+                this.WaitHandle?.Dispose();
+            }
+        }
+
         public static UserDatabase Instance { get; } = new UserDatabase();
 
         private const bool DebugLongHeldConnections = false;
+
+        private ConcurrentQueue<Job> JobQueue = new ConcurrentQueue<Job>();
+        private Thread SqlThread;
+        private ManualResetEvent StopRequestedEvent = new ManualResetEvent(false);
+        private bool StopRequested = false;
+        private AutoResetEvent JobQueuedEvent = new AutoResetEvent(false);
+        private ManualResetEvent StopCompleted = new ManualResetEvent(true);
 
         private UserDatabase()
         {
         }
 
+        private void SqlThreadProc()
+        {
+            while (!StopRequested)
+            {
+                switch (WaitHandle.WaitAny(new WaitHandle[] { StopRequestedEvent, JobQueuedEvent }))
+                {
+                    case 1:
+                        while (JobQueue.TryDequeue(out Job job))
+                        {
+                            job.Exec();
+                        }
+                        break;
+                }
+            }
+
+            StopCompleted.Set();
+        }
+
         protected void Execute(Action action, int skipframes = 1)
         {
+            if (StopCompleted.WaitOne(0))
+            {
+                throw new ObjectDisposedException(nameof(UserDatabase));
+            }
+
             var sw = System.Diagnostics.Stopwatch.StartNew();
-            action();
+
+            using (var job = new Job(action))
+            {
+                JobQueue.Enqueue(job);
+                JobQueuedEvent.Set();
+                job.Wait();
+            }
+
             if (sw.ElapsedMilliseconds > 200)
             {
                 var trace = new System.Diagnostics.StackTrace(skipframes, true);
@@ -767,6 +834,29 @@ namespace EliteDangerousCore.DB
             T ret = default(T);
             Execute(() => { ret = func(); }, skipframes + 1);
             return ret;
+        }
+
+        public void Start()
+        {
+            StopRequested = false;
+            StopRequestedEvent.Reset();
+            StopCompleted.Reset();
+
+            if (SqlThread == null)
+            {
+                SqlThread = new Thread(SqlThreadProc);
+                SqlThread.Name = "UserDatabaseThread";
+                SqlThread.IsBackground = true;
+                SqlThread.Start();
+            }
+        }
+
+        public void Stop()
+        {
+            StopRequested = true;
+            StopRequestedEvent.Set();
+            StopCompleted.WaitOne();
+            SqlThread = null;
         }
 
         public void ExecuteWithDatabase(Action<IUserDatabase> action, bool usetxn = false, bool utc = true, SQLLiteExtensions.SQLExtConnection.AccessMode mode = SQLLiteExtensions.SQLExtConnection.AccessMode.Reader)
