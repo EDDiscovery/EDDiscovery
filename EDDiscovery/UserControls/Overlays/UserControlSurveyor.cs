@@ -28,18 +28,16 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlSurveyor : UserControlCommonBase
     {
-        HistoryEntry last_he = null;
+        ISystem last_sys = null;
 
         private string DbSave => DBName("Surveyor");
 
-        private enum Alignment
-        {
-            left = 0,
-            center = 1,
-            right = 2,
-        }
+        System.Drawing.StringAlignment alignment = System.Drawing.StringAlignment.Near;
+        string titletext = "";
 
-        private Alignment align;
+        const int lowRadiusLimit = 600 * 1000;
+
+        EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
 
         public UserControlSurveyor()
         {
@@ -50,9 +48,6 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            discoveryform.OnHistoryChange += Display;
-            discoveryform.OnNewEntry += NewEntry;
-
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
             BaseUtils.Translator.Instance.Translate(contextMenuStrip, this);
@@ -65,167 +60,205 @@ namespace EDDiscovery.UserControls
             hasVolcanismToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showVolcanism", true);
             hasRingsToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showRinged", true);
             hideAlreadyMappedBodiesToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "hideMapped", true);
-            align = (Alignment)SQLiteDBClass.GetSettingInt(DbSave + nameof(align), 0);
+            autoHideToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "autohide", false);
+            lowRadiusToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "lowradius", false);
+            checkEDSMForInformationToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "edsm", false);
+            showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "showsysinfo", true);
+            dontHideInFSSModeToolStripMenuItem.Checked = SQLiteDBClass.GetSettingBool(DbSave + "donthidefssmode", true);
+            SetAlign((StringAlignment)SQLiteDBClass.GetSettingInt(DbSave + "align", 0));
 
-            switch (align)
-            {
-                case Alignment.right:
-                    rightToolStripMenuItem.Checked = true;
-                    break;
-                case Alignment.center:
-                    centerToolStripMenuItem.Checked = true;
-                    break;
-                default:
-                    leftToolStripMenuItem.Checked = true;
-                    break;
-            }
-        }
+            // install the handlers AFTER setup otherwise you get lots of events
+            this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
+            this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
+            this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
+            this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
+            this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
+            this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
+            this.lowRadiusToolStripMenuItem.Click += new System.EventHandler(this.lowRadiusToolStripMenuItem_Click);
+            this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
+            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
+            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
+            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
+            this.autoHideToolStripMenuItem.Click += new System.EventHandler(this.autoHideToolStripMenuItem_Click);
+            this.checkEDSMForInformationToolStripMenuItem.Click += new System.EventHandler(this.checkEDSMForInformationToolStripMenuItem_Click);
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Click += new System.EventHandler(this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click);
+            this.dontHideInFSSModeToolStripMenuItem.Click += new System.EventHandler(this.dontHideInFSSModeToolStripMenutItem_Click);
 
-        private void Display(HistoryList hl)
-        {
-            DrawSystem(uctg.GetCurrentHistoryEntry);
+            discoveryform.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+            discoveryform.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
         public override void LoadLayout()
         {
-            uctg.OnTravelSelectionChanged += Display;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
-        /// <summary>
-        /// Called when the cursor move to another system
-        /// </summary>
-        /// <param name="thc"></param>
         public override void ChangeCursorType(IHistoryCursor thc)
         {
-            uctg.OnTravelSelectionChanged -= Display;
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
             uctg = thc;
-            uctg.OnTravelSelectionChanged += Display;
-        }
-
-        public override void Closing()
-        {
-            uctg.OnTravelSelectionChanged -= Display;
-            discoveryform.OnNewEntry -= NewEntry;
-            discoveryform.OnHistoryChange -= Display;
+            uctg.OnTravelSelectionChanged += Uctg_OnTravelSelectionChanged;
         }
 
         public override void InitialDisplay()
         {
-            DrawSystem(uctg?.GetCurrentHistoryEntry);
+            last_sys = uctg.GetCurrentHistoryEntry?.System;
+            DrawSystem(last_sys, last_sys?.Name);    // may be null
         }
 
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// called when a new entry is made.. check to see if its a scan update
-        /// </summary>
-        /// <param name="he">HistoryEntry</param>
-        /// <param name="hl">HistoryList</param>
-        private void NewEntry(HistoryEntry he, HistoryList hl)
+        private void Discoveryform_OnHistoryChange(HistoryList hl)
         {
-            if (he.EntryType == JournalTypeEnum.Scan)
-            {
-                DrawSystem(he);
-            }
+            last_sys = hl.GetLast?.System;      // may be null
+            DrawSystem(last_sys, last_sys?.Name);    // may be null
+        }
 
-            if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
-            {
-                SetControlText("System scan complete.".Tx(this));
-            }
+        public override void Closing()
+        {
+            uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
+        }
 
-            if (he.EntryType == JournalTypeEnum.FSDJump)
-            {
-                SetControlText(string.Empty);
-                pictureBoxSurveyor.ClearImageList();
-                Refresh();
-            }
+        public override Color ColorTransparency => Color.Green;
+        public override void SetTransparency(bool on, Color curcol)
+        {
+            System.Diagnostics.Debug.WriteLine("Set colour to " + curcol);
+            pictureBoxSurveyor.BackColor = this.BackColor = curcol;
+            DrawSystem(last_sys);   // need to redraw as we use backcolour
+        }
 
-            if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        {
+            if (he != null)
             {
-                var je = he.journalEntry as JournalFSSDiscoveryScan;
-                if (je != null)
+                if (last_sys == null || last_sys.Name != he.System.Name) // if new entry is scan, may be new data.. or not presenting or diff sys
                 {
+                    last_sys = he.System;
+                    DrawSystem(last_sys, last_sys.Name);
+                }
+                else if (he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
+                {
+                    JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                    last_sys = new SystemClass(jsj.StarSystem);
+                    DrawSystem(last_sys, last_sys.Name);
+                }
+                else if (he.EntryType == JournalTypeEnum.FSSAllBodiesFound)
+                {
+                    DrawSystem(last_sys, last_sys.Name + " " + "System scan complete.".Tx(this));
+                }
+                else if (he.EntryType == JournalTypeEnum.FSSDiscoveryScan)
+                {
+                    var je = he.journalEntry as JournalFSSDiscoveryScan;
                     var bodies_found = je.BodyCount;
-                    SetControlText(bodies_found + " bodies found.".Tx(this));
+                    DrawSystem( last_sys, last_sys.Name + " " + bodies_found + " bodies found.".Tx(this));
+                }
+                else if (he.EntryType == JournalTypeEnum.Scan)
+                {
+                    DrawSystem(last_sys);
                 }
             }
         }
 
-        public override Color ColorTransparency => Color.Green;
-
-        public int labelOffset { get; private set; }
-
-        public override void SetTransparency(bool on, Color curcol)
+        private void Discoveryform_OnNewUIEvent(UIEvent uievent)
         {
-            this.BackColor = curcol;
+            EliteDangerousCore.UIEvents.UIGUIFocus gui = uievent as EliteDangerousCore.UIEvents.UIGUIFocus;
+
+            if (gui != null)
+            {
+                bool refresh = gui.GUIFocus != uistate;
+                uistate = gui.GUIFocus;
+
+                System.Diagnostics.Debug.WriteLine("Surveyor UI event " + uistate);
+                if (refresh)
+                    DrawSystem(last_sys);
+            }
         }
 
-        private void Display(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        public override void onControlTextVisibilityChanged(bool newvalue)       // user changed vis, update
         {
-            DrawSystem(he);
+            DrawSystem(last_sys);
         }
+
 
         #endregion
 
         #region Main
 
-        private void DrawSystem(HistoryEntry he)
+        private void DrawSystem(ISystem sys, string tt = null)
         {
+            if ( tt != null )
+            {
+                titletext = tt;
+                SetControlText(tt);
+            }
+
             pictureBoxSurveyor.ClearImageList();
 
-            StarScan.SystemNode scannode = null;
-
-            var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;
-
-            if (he == null)     //  no he, no display
-            {
-                last_he = he;
-                SetControlText("No scan reported.".Tx(this));
-                return;
-            }
-            else
-            {
-                scannode = discoveryform.history.starscan.FindSystem(he.System, true);        // get data with EDSM
-
-                if (scannode == null)     // no data, clear display, clear any last_he so samesys is false next time
-                {
-                    last_he = null;
-                    SetControlText("No scan reported.".Tx(this));
-                    return;
-                }
-            }
-
-            last_he = he;
-
-            var all_nodes = scannode.Bodies.ToList();
-
-            if (all_nodes != null)
+            // if system, and we are in no focus or don't care
+            if (sys != null && ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus || !autoHideToolStripMenuItem.Checked )
+                 || ( uistate == EliteDangerousCore.UIEvents.UIGUIFocus.Focus.FSSMode && dontHideInFSSModeToolStripMenuItem.Checked) )
             {
                 int vpos = 0;
+                StringFormat frmt = new StringFormat(StringFormatFlags.NoWrap);
+                frmt.Alignment = alignment;
+                var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
+                var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
 
-                foreach (StarScan.ScanNode sn in all_nodes)
+                if (!IsControlTextVisible() && showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked)
                 {
-                    if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
-                    {
-                        var sd = sn.ScanData;
+                    pictureBoxSurveyor.AddTextFixedSizeC(
+                            new Point(3, vpos),
+                            new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
+                            titletext,
+                            Font,
+                            textcolour,
+                            backcolour,
+                            1.0F,
+                            false,
+                            frmt: frmt);
 
-                        if ((sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
-                                                (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
-                                                (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
-                                                (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
-                                                (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
-                                                (sd.Terraformable && terraformableToolStripMenuItem.Checked)
-                                                )
+                    vpos += (int)Font.Height;
+                }
+
+                StarScan.SystemNode scannode = discoveryform.history.starscan.FindSystem(sys, checkEDSMForInformationToolStripMenuItem.Checked);        // get data with EDSM
+
+                if (scannode != null)     // no data, clear display, clear any last_he so samesys is false next time
+                {
+                    var all_nodes = scannode.Bodies.ToList();
+
+                    if (all_nodes != null)
+                    {
+                        foreach (StarScan.ScanNode sn in all_nodes)
                         {
-                            if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
+                            if (sn.ScanData != null && sn.ScanData?.BodyName != null && !sn.ScanData.IsStar)
                             {
-                                DrawToScreen(sd, vpos);
-                                vpos += (int)Font.Height;
+                                var sd = sn.ScanData;
+
+                                if ((sd.AmmoniaWorld && ammoniaWorldToolStripMenuItem.Checked) ||
+                                                        (sd.Earthlike && earthlikeWorldToolStripMenuItem.Checked) ||
+                                                        (sd.WaterWorld && waterWorldToolStripMenuItem.Checked) ||
+                                                        (sd.HasRings && !sd.AmmoniaWorld && !sd.Earthlike && !sd.WaterWorld && hasRingsToolStripMenuItem.Checked) ||
+                                                        (sd.HasMeaningfulVolcanism && hasVolcanismToolStripMenuItem.Checked) ||
+                                                        (sd.Terraformable && terraformableToolStripMenuItem.Checked) ||
+                                                        (lowRadiusToolStripMenuItem.Checked && sd.nRadius < lowRadiusLimit)
+                                                        )
+                                {
+                                    if (!sd.Mapped || hideAlreadyMappedBodiesToolStripMenuItem.Checked == false)      // if not mapped, or show mapped
+                                    {
+                                        pictureBoxSurveyor.AddTextFixedSizeC(
+                                                new Point(3, vpos),
+                                                new Size(Math.Max(pictureBoxSurveyor.Width - 6, 24), Font.Height),
+                                                InfoLine(last_sys,sd),
+                                                Font,
+                                                textcolour,
+                                                backcolour,
+                                                1.0F,
+                                                false,
+                                                frmt: frmt);
+
+                                        vpos += (int)Font.Height;
+                                    }
+                                }
                             }
                         }
-//                        wanted_nodes.Add(new BodyInfo(sn.ScanData.BodyName, sn.ScanData.GetPlanetClassImage(), distanceString.ToString(), hasrings, terraformable, volcanism, sn.ScanData.Volcanism, ammonia, earthlike, waterworld, mapped));
                     }
                 }
             }
@@ -233,15 +266,21 @@ namespace EDDiscovery.UserControls
             pictureBoxSurveyor.Render();
         }
 
-        private void DrawToScreen(JournalScan sd, int vpos)
+        private string InfoLine(ISystem sys, JournalScan sd)
         {
             var information = new StringBuilder();
 
             if (sd.Mapped)
                 information.Append("\u2713"); // let the cmdr see that this body is already mapped - this is a check
 
+            string bodyname = sd.BodyName;
+
+            // if [0] starts with [1], and there is more in [0] then [1], remove
+            if (bodyname.StartsWith(sys.Name, StringComparison.InvariantCultureIgnoreCase) && bodyname.Length > sys.Name.Length)
+                bodyname = bodyname.Substring(sys.Name.Length).Trim();
+
             // Name
-            information.Append(sd.BodyName);
+            information.Append(bodyname);
 
             // Additional information
             information.Append((sd.AmmoniaWorld) ? @" is an ammonia world.".Tx(this) : null);
@@ -251,142 +290,125 @@ namespace EDDiscovery.UserControls
             information.Append((sd.Terraformable && !sd.WaterWorld) ? @" is a terraformable planet.".Tx(this) : null);
             information.Append((sd.HasRings) ? @" Has ring.".Tx(this) : null);
             information.Append((sd.HasMeaningfulVolcanism) ? @" Has ".Tx(this) + sd.Volcanism : null);
+            information.Append((sd.nRadius < lowRadiusLimit) ? @" Low Radius.".Tx(this) : null);
             information.Append(@" " + sd.DistanceFromArrivalText);
-            if ( sd.WasMapped == true && sd.WasDiscovered == true )
+            if (sd.WasMapped == true && sd.WasDiscovered == true)
                 information.Append(" (Mapped & Discovered)".Tx(this));
             else if (sd.WasMapped == true)
                 information.Append(" (Mapped)".Tx(this));
             else if (sd.WasDiscovered == true)
                 information.Append(" (Discovered)".Tx(this));
 
-            var textcolour = IsTransparent ? discoveryform.theme.SPanelColor : discoveryform.theme.LabelColor;
-            var backcolour = IsTransparent ? Color.Transparent : this.BackColor;
-
-            using (var bitmap = new Bitmap(1, 1))
-            {
-                var grfx = Graphics.FromImage(bitmap);
-
-                var containerSize = new Size(Math.Max(pictureBoxSurveyor.Width,24), 24);        // note when minimized, we could have a tiny width, so need to protect
-                var label = information.ToString();
-
-                var bounds = BitMapHelpers.DrawTextIntoAutoSizedBitmap(label, containerSize, Font, textcolour, backcolour, 1.0F);
-
-                if (align == Alignment.center)
-                {
-                    labelOffset = (int)((containerSize.Width - bounds.Width) / 2);
-                }
-                else if (align == Alignment.right)
-                {
-                    labelOffset = (int)(containerSize.Width - bounds.Width);
-                }
-                else
-                {
-                    labelOffset = 0;
-                }
-
-                pictureBoxSurveyor?.AddTextAutoSize(
-                        new Point(labelOffset, vpos),
-                        new Size((int)bounds.Width, 24),
-                        information.ToString(),
-                        Font,
-                        textcolour,
-                        backcolour,
-                        1.0F);
-            }
+            return information.ToString();
         }
 
+        
         #endregion
 
         private void ammoniaWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showAmmonia", ammoniaWorldToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void earthlikeWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showEarthlike", earthlikeWorldToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void waterWorldToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showWaterWorld", waterWorldToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void terraformableToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showTerraformable", terraformableToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void hasVolcanismToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showVolcanism", hasVolcanismToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void hasRingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "showRinged", hasRingsToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
 
         private void hideAlreadyMappedBodiesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SQLiteDBClass.PutSettingBool(DbSave + "hideMapped", hideAlreadyMappedBodiesToolStripMenuItem.Checked);
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
+
+        private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "autohide", autoHideToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void lowRadiusToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "lowradius", lowRadiusToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void checkEDSMForInformationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "edsm", checkEDSMForInformationToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "showsysinfo", showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
+        private void dontHideInFSSModeToolStripMenutItem_Click(object sender, EventArgs e)
+        {
+            SQLiteDBClass.PutSettingBool(DbSave + "donthidefssmode", dontHideInFSSModeToolStripMenuItem.Checked);
+            DrawSystem(last_sys);
+        }
+
 
         private void leftToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.left);
+            SetAlign(StringAlignment.Near);
+            DrawSystem(last_sys);
+        }
 
-            align = Alignment.left;
-
-            if (leftToolStripMenuItem.Checked)
-            {
-                centerToolStripMenuItem.Checked = false;
-                rightToolStripMenuItem.Checked = false;
-            }
-
-            DrawSystem(last_he);
+        private void SetAlign(StringAlignment al)
+        {
+            alignment = al;
+            SQLiteDBClass.PutSettingInt(DbSave + "align", (int)alignment);
+            leftToolStripMenuItem.Checked = alignment == StringAlignment.Near;
+            centerToolStripMenuItem.Checked = alignment == StringAlignment.Center;
+            rightToolStripMenuItem.Checked = alignment == StringAlignment.Far;
         }
 
         private void centerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.center);
-
-            align = Alignment.center;
-
-            if (centerToolStripMenuItem.Checked)
-            {
-                leftToolStripMenuItem.Checked = false;
-                rightToolStripMenuItem.Checked = false;
-            }
-
-            DrawSystem(last_he);
+            SetAlign(StringAlignment.Center);
+            DrawSystem(last_sys);
         }
 
         private void rightToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SQLiteDBClass.PutSettingInt(DbSave + nameof(align), (int)Alignment.right);
-
-            align = Alignment.right;
-
-            if (rightToolStripMenuItem.Checked)
-            {
-                centerToolStripMenuItem.Checked = false;
-                leftToolStripMenuItem.Checked = false;
-            }
-
-            DrawSystem(last_he);
+            SetAlign(StringAlignment.Far);
+            DrawSystem(last_sys);
         }
 
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
         {
-            DrawSystem(last_he);
+            DrawSystem(last_sys);
         }
+
     }
 }

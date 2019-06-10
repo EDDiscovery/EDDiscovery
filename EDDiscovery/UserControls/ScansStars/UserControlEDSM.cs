@@ -28,13 +28,14 @@ using EliteDangerousCore.EDSM;
 using EliteDangerousCore.DB;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using System.Threading;
 
 namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlCommonBase
     {
         private string DbSave { get { return DBName("EDSMAutoView" ); } }
-        HistoryEntry last_he = null;
+        ISystem last_sys = null;
 
         #region Init
         public UserControlEDSM()
@@ -48,8 +49,6 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             rollUpPanelTop.PinState = SQLiteConnectionUser.GetSettingBool(DbSave + "PinState", true);
-
-            discoveryform.OnNewEntry += NewEntry;
 
             BaseUtils.Translator.Instance.Translate(this);
             BaseUtils.Translator.Instance.Translate(toolTip, this);
@@ -69,15 +68,17 @@ namespace EDDiscovery.UserControls
 
         public override void InitialDisplay()
         {
-            last_he = uctg.GetCurrentHistoryEntry;
-            PresentSystem(last_he?.System);    // may be null
+            last_sys = uctg.GetCurrentHistoryEntry?.System;
+            PresentSystem(last_sys);    // may be null
         }
+
+        bool isClosing = false;     // in case we are in a middle of a lookup
 
         public override void Closing()
         {
+            isClosing = true;
             SQLiteConnectionUser.PutSettingBool(DbSave + "PinState", rollUpPanelTop.PinState );
             uctg.OnTravelSelectionChanged -= Uctg_OnTravelSelectionChanged;
-            discoveryform.OnNewEntry -= NewEntry;
         }
 
         #endregion
@@ -86,25 +87,50 @@ namespace EDDiscovery.UserControls
 
         SystemClass override_system = null;
 
-        public void NewEntry(HistoryEntry he, HistoryList hl)               // called when a new entry is made.. check to see if its a scan update
+        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
         {
             if (he != null)
             {
-                // not sure its worth it on a journal scan entry, update time thru EDSM will be long
-
-                if (last_he == null || last_he.System != he.System) // if new entry is scan, may be new data.. or not presenting or diff sys
+                if (last_sys == null || last_sys.Name != he.System.Name) // if new entry is scan, may be new data.. or not presenting or diff sys
                 {
-                    last_he = he;
+                    last_sys = he.System;       // even if overridden, we want to track system
 
-                    if ( override_system == null )
-                        PresentSystem(last_he.System);
+                    if (override_system == null)
+                        PresentSystem(last_sys);
+                }
+                else if (override_system == null && he.EntryType == JournalTypeEnum.StartJump)  // we ignore start jump if overriden      
+                {
+                    JournalStartJump jsj = he.journalEntry as JournalStartJump;
+                    last_sys = new SystemClass(jsj.StarSystem);
+                    PresentSystem(last_sys);
                 }
             }
         }
 
-        private void Uctg_OnTravelSelectionChanged(HistoryEntry he, HistoryList hl, bool selectedEntry)
+        private void LookUpThread(object s)
         {
-            NewEntry(he, hl);   // same rules as new entry
+            ISystem sys = s as ISystem;
+
+            EDSMClass edsm = new EDSMClass();
+            string url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
+            System.Diagnostics.Debug.WriteLine("Url is " + last_sys.Name + "=" + url);
+
+            this.BeginInvoke( (MethodInvoker)delegate 
+            {
+                if (!isClosing)
+                {
+                    if (url.HasChars())
+                    {
+                        SetControlText("Data on " + sys.Name);
+                        webBrowser.Navigate(url);
+                    }
+                    else
+                    {
+                        SetControlText("No Data on " + sys.Name);
+                        webBrowser.Navigate(EDSMClass.ServerAddress);
+                    }
+                }
+            });
         }
 
         void PresentSystem(ISystem sys)
@@ -112,20 +138,7 @@ namespace EDDiscovery.UserControls
             SetControlText("No Entry");
             if ( sys != null )
             {
-                EDSMClass edsm = new EDSMClass();
-
-                string url = edsm.GetUrlToEDSMSystem(sys.Name, sys.EDSMID);
-
-                if (url.HasChars())
-                {
-                    SetControlText("Data on " + sys.Name);
-                    webBrowser.Navigate(url);
-                }
-                else
-                {
-                    SetControlText("No Data on " + sys.Name);
-                    webBrowser.Navigate(EDSMClass.ServerAddress);
-                }
+                new System.Threading.Thread(new System.Threading.ParameterizedThreadStart( LookUpThread )).Start(sys);
             }
         }
 
@@ -186,7 +199,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 override_system = null;
-                PresentSystem(last_he?.System);
+                PresentSystem(last_sys);
                 extCheckBoxStar.Checked = false;
             }
         }

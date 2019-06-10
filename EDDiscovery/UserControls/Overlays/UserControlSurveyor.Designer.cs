@@ -55,8 +55,13 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasVolcanismToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hasRingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lowRadiusToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.hideAlreadyMappedBodiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkEDSMForInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoHideToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dontHideInFSSModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.textAlignToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.leftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.centerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,9 +87,13 @@ namespace EDDiscovery.UserControls
             this.bodyFeaturesToolStripMenuItem,
             this.toolStripSeparator1,
             this.hideAlreadyMappedBodiesToolStripMenuItem,
+            this.checkEDSMForInformationToolStripMenuItem,
+            this.autoHideToolStripMenuItem,
+            this.dontHideInFSSModeToolStripMenuItem,
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem,
             this.textAlignToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(226, 98);
+            this.contextMenuStrip.Size = new System.Drawing.Size(226, 186);
             // 
             // planetaryClassesToolStripMenuItem
             // 
@@ -104,7 +113,6 @@ namespace EDDiscovery.UserControls
             this.ammoniaWorldToolStripMenuItem.Name = "ammoniaWorldToolStripMenuItem";
             this.ammoniaWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.ammoniaWorldToolStripMenuItem.Text = "Ammonia World";
-            this.ammoniaWorldToolStripMenuItem.Click += new System.EventHandler(this.ammoniaWorldToolStripMenuItem_Click);
             // 
             // earthlikeWorldToolStripMenuItem
             // 
@@ -114,7 +122,6 @@ namespace EDDiscovery.UserControls
             this.earthlikeWorldToolStripMenuItem.Name = "earthlikeWorldToolStripMenuItem";
             this.earthlikeWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.earthlikeWorldToolStripMenuItem.Text = "Earthlike World";
-            this.earthlikeWorldToolStripMenuItem.Click += new System.EventHandler(this.earthlikeWorldToolStripMenuItem_Click);
             // 
             // waterWorldToolStripMenuItem
             // 
@@ -124,14 +131,14 @@ namespace EDDiscovery.UserControls
             this.waterWorldToolStripMenuItem.Name = "waterWorldToolStripMenuItem";
             this.waterWorldToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.waterWorldToolStripMenuItem.Text = "Water World";
-            this.waterWorldToolStripMenuItem.Click += new System.EventHandler(this.waterWorldToolStripMenuItem_Click);
             // 
             // bodyFeaturesToolStripMenuItem
             // 
             this.bodyFeaturesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.terraformableToolStripMenuItem,
             this.hasVolcanismToolStripMenuItem,
-            this.hasRingsToolStripMenuItem});
+            this.hasRingsToolStripMenuItem,
+            this.lowRadiusToolStripMenuItem});
             this.bodyFeaturesToolStripMenuItem.Name = "bodyFeaturesToolStripMenuItem";
             this.bodyFeaturesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.bodyFeaturesToolStripMenuItem.Text = "Body Features";
@@ -142,9 +149,8 @@ namespace EDDiscovery.UserControls
             this.terraformableToolStripMenuItem.CheckOnClick = true;
             this.terraformableToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.terraformableToolStripMenuItem.Name = "terraformableToolStripMenuItem";
-            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.terraformableToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.terraformableToolStripMenuItem.Text = "Terraformable";
-            this.terraformableToolStripMenuItem.Click += new System.EventHandler(this.terraformableToolStripMenuItem_Click);
             // 
             // hasVolcanismToolStripMenuItem
             // 
@@ -152,9 +158,8 @@ namespace EDDiscovery.UserControls
             this.hasVolcanismToolStripMenuItem.CheckOnClick = true;
             this.hasVolcanismToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasVolcanismToolStripMenuItem.Name = "hasVolcanismToolStripMenuItem";
-            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasVolcanismToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.hasVolcanismToolStripMenuItem.Text = "Has Volcanism";
-            this.hasVolcanismToolStripMenuItem.Click += new System.EventHandler(this.hasVolcanismToolStripMenuItem_Click);
             // 
             // hasRingsToolStripMenuItem
             // 
@@ -162,9 +167,17 @@ namespace EDDiscovery.UserControls
             this.hasRingsToolStripMenuItem.CheckOnClick = true;
             this.hasRingsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.hasRingsToolStripMenuItem.Name = "hasRingsToolStripMenuItem";
-            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.hasRingsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.hasRingsToolStripMenuItem.Text = "Has Rings";
-            this.hasRingsToolStripMenuItem.Click += new System.EventHandler(this.hasRingsToolStripMenuItem_Click);
+            // 
+            // lowRadiusToolStripMenuItem
+            // 
+            this.lowRadiusToolStripMenuItem.Checked = true;
+            this.lowRadiusToolStripMenuItem.CheckOnClick = true;
+            this.lowRadiusToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.lowRadiusToolStripMenuItem.Name = "lowRadiusToolStripMenuItem";
+            this.lowRadiusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.lowRadiusToolStripMenuItem.Text = "Low Radius";
             // 
             // toolStripSeparator1
             // 
@@ -179,7 +192,42 @@ namespace EDDiscovery.UserControls
             this.hideAlreadyMappedBodiesToolStripMenuItem.Name = "hideAlreadyMappedBodiesToolStripMenuItem";
             this.hideAlreadyMappedBodiesToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.hideAlreadyMappedBodiesToolStripMenuItem.Text = "Hide already mapped bodies";
-            this.hideAlreadyMappedBodiesToolStripMenuItem.Click += new System.EventHandler(this.hideAlreadyMappedBodiesToolStripMenuItem_Click);
+            // 
+            // checkEDSMForInformationToolStripMenuItem
+            // 
+            this.checkEDSMForInformationToolStripMenuItem.Checked = true;
+            this.checkEDSMForInformationToolStripMenuItem.CheckOnClick = true;
+            this.checkEDSMForInformationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkEDSMForInformationToolStripMenuItem.Name = "checkEDSMForInformationToolStripMenuItem";
+            this.checkEDSMForInformationToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.checkEDSMForInformationToolStripMenuItem.Text = "Check EDSM for information";
+            // 
+            // autoHideToolStripMenuItem
+            // 
+            this.autoHideToolStripMenuItem.Checked = true;
+            this.autoHideToolStripMenuItem.CheckOnClick = true;
+            this.autoHideToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.autoHideToolStripMenuItem.Name = "autoHideToolStripMenuItem";
+            this.autoHideToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.autoHideToolStripMenuItem.Text = "Auto Hide";
+            // 
+            // dontHideInFSSModeToolStripMenuItem
+            // 
+            this.dontHideInFSSModeToolStripMenuItem.Checked = true;
+            this.dontHideInFSSModeToolStripMenuItem.CheckOnClick = true;
+            this.dontHideInFSSModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.dontHideInFSSModeToolStripMenuItem.Name = "dontHideInFSSModeToolStripMenuItem";
+            this.dontHideInFSSModeToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.dontHideInFSSModeToolStripMenuItem.Text = "Don\'t Hide in FSS Mode";
+            // 
+            // showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem
+            // 
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Checked = true;
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckOnClick = true;
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Name = "showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem";
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem.Text = "Show System Info Always";
             // 
             // textAlignToolStripMenuItem
             // 
@@ -193,27 +241,21 @@ namespace EDDiscovery.UserControls
             // 
             // leftToolStripMenuItem
             // 
-            this.leftToolStripMenuItem.CheckOnClick = true;
             this.leftToolStripMenuItem.Name = "leftToolStripMenuItem";
             this.leftToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.leftToolStripMenuItem.Text = "Left";
-            this.leftToolStripMenuItem.Click += new System.EventHandler(this.leftToolStripMenuItem_Click);
             // 
             // centerToolStripMenuItem
             // 
-            this.centerToolStripMenuItem.CheckOnClick = true;
             this.centerToolStripMenuItem.Name = "centerToolStripMenuItem";
             this.centerToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.centerToolStripMenuItem.Text = "Center";
-            this.centerToolStripMenuItem.Click += new System.EventHandler(this.centerToolStripMenuItem_Click);
             // 
             // rightToolStripMenuItem
             // 
-            this.rightToolStripMenuItem.CheckOnClick = true;
             this.rightToolStripMenuItem.Name = "rightToolStripMenuItem";
             this.rightToolStripMenuItem.Size = new System.Drawing.Size(109, 22);
             this.rightToolStripMenuItem.Text = "Right";
-            this.rightToolStripMenuItem.Click += new System.EventHandler(this.rightToolStripMenuItem_Click);
             // 
             // UserControlSurveyor
             // 
@@ -248,5 +290,10 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem leftToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem centerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rightToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lowRadiusToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem autoHideToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem checkEDSMForInformationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dontHideInFSSModeToolStripMenuItem;
     }
 }
