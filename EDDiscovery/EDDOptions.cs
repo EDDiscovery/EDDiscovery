@@ -255,6 +255,13 @@ namespace EDDiscovery
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
                 Directory.CreateDirectory(AppDataDirectory);
+
+            var tempdir = Path.Combine(AppDataDirectory, "Temp");
+            if (!Directory.Exists(tempdir))
+                Directory.CreateDirectory(tempdir);
+
+            Environment.SetEnvironmentVariable("TMP", tempdir);
+            Environment.SetEnvironmentVariable("TEMP", tempdir);
         }
 
         private void SetVersionDisplayString()
