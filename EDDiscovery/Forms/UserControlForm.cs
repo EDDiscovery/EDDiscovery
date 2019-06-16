@@ -133,6 +133,12 @@ namespace EDDiscovery.Forms
             displayTitle = t;
             UpdateControls();
             SQLiteDBClass.PutSettingBool(dbrefname + "ShowTitle", displayTitle);
+            UserControl.onControlTextVisibilityChanged(displayTitle);            
+        }
+
+        public bool IsControlTextVisible()
+        {
+            return displayTitle;
         }
 
         public void SetTopMost(bool t)

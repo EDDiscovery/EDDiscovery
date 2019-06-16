@@ -318,7 +318,14 @@ namespace EDDiscovery.UserControls
                 pictureBoxList.Render();
                 font.Dispose();
 
-                splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
+                try
+                {
+                    splitContainerVertical.Panel1MinSize = displayList.img.Width + 8;       // panel left has minimum width to accomodate the text
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("Swallowed exception " + e);         // swallow the exception - seen an instance of it but wan't reproduce. #2512.
+                }
 
                 if (IsTransparent)
                 {

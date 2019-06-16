@@ -115,7 +115,6 @@ namespace EDDiscovery.UserControls
             checkBoxCursorToTop.Checked = SQLiteConnectionUser.GetSettingBool(DbAutoTop, true);
 
             dataGridViewTravel.MakeDoubleBuffered();
-            defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28,Font.ScalePixels(28));       // due to 24 bit icons
 
             string filter = SQLiteDBClass.GetSettingString(DbFieldFilter, "");
             if (filter.Length > 0)
@@ -160,6 +159,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            defaultRowHeight = dataGridViewTravel.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));       // due to 24 bit icons
             DGVLoadColumnLayout(dataGridViewTravel, DbColumnSave);
         }
 

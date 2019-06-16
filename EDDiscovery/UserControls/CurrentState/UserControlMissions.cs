@@ -50,12 +50,10 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             dataGridViewCurrent.MakeDoubleBuffered();
-            dataGridViewCurrent.RowTemplate.Height = Font.ScalePixels(26);
             dataGridViewCurrent.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewCurrent.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             dataGridViewPrevious.MakeDoubleBuffered();
-            dataGridViewPrevious.RowTemplate.Height = Font.ScalePixels(26);
             dataGridViewPrevious.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridViewPrevious.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
@@ -88,6 +86,8 @@ namespace EDDiscovery.UserControls
         public override void LoadLayout()
         {
             uctg.OnTravelSelectionChanged += Display;
+
+            dataGridViewPrevious.RowTemplate.MinimumHeight = dataGridViewCurrent.RowTemplate.MinimumHeight = Font.ScalePixels(26);
 
             DGVLoadColumnLayout(dataGridViewCurrent, DbColumnSaveCurrent);
             DGVLoadColumnLayout(dataGridViewPrevious, DbColumnSavePrevious);

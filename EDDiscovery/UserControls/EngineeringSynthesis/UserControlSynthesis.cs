@@ -66,7 +66,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewSynthesis.MakeDoubleBuffered();
             dataGridViewSynthesis.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewSynthesis.RowTemplate.Height = Font.ScalePixels(26);
 
             Order = SQLiteDBClass.GetSettingString(DbOSave, "").RestoreArrayFromString(0, Recipes.SynthesisRecipes.Count);
             if (Order.Max() >= Recipes.SynthesisRecipes.Count || Order.Min() < 0 || Order.Distinct().Count() != Recipes.SynthesisRecipes.Count)       // if not distinct..
@@ -131,6 +130,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewSynthesis.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             uctg.OnTravelSelectionChanged += Display;
             DGVLoadColumnLayout(dataGridViewSynthesis, DbColumnSave);
             chkHistoric.Checked = isHistoric;

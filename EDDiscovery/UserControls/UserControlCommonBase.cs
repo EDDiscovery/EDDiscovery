@@ -111,9 +111,21 @@ namespace EDDiscovery.UserControls
                 ((UserControlContainerResizable)(this.Parent)).SetControlText(s);
         }
 
+        public bool IsControlTextVisible()
+        {
+            if (this.Parent is Forms.UserControlForm)
+                return ((Forms.UserControlForm)(this.Parent)).IsControlTextVisible();
+            else
+                return true;    // else presume true
+        }
+
         public bool HasControlTextArea()
         {
             return (this.Parent is ExtendedControls.TabStrip) || (this.Parent is Forms.UserControlForm) || (this.Parent is UserControlContainerResizable);
+        }
+
+        public virtual void onControlTextVisibilityChanged(bool newvalue)       // override to know
+        {
         }
 
         public void SetClipboardText(string s)

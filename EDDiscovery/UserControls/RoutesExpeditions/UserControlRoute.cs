@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿/*
+ * Copyright © 2019 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * 
+ * EDDiscovery is not affiliated with Frontier Developments plc.
+ */
+
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
-using System.Threading;
-using EMK.LightGeometry;
 using EliteDangerousCore.EDSM;
+using EMK.LightGeometry;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -85,6 +96,12 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            if ( routingthread != null && routingthread.IsAlive && plotter != null )
+            {
+                plotter.StopPlotter = true;
+                routingthread.Join();
+            }
+                
             SQLiteDBClass.PutSettingString(DbSave("RouteFrom"), textBox_From.Text);
             SQLiteDBClass.PutSettingString(DbSave("RouteTo"), textBox_To.Text);
             SQLiteDBClass.PutSettingInt(DbSave("RouteRange"), (int)textBox_Range.Value);
@@ -119,64 +136,6 @@ namespace EDDiscovery.UserControls
             ((ExtendedControls.ExtTextBox)sender).SelectAll(); // clicking highlights everything
         }
 
-        #region router
-        private Thread ThreadRoute;
-
-        private RoutePlotter CreateRoutePlotter()
-        {
-            RoutePlotter p = new RoutePlotter();
-            p.maxrange = textBox_Range.Value;
-            p.usingcoordsfrom = textBox_From.ReadOnly == true;
-            p.usingcoordsto = textBox_To.ReadOnly == true;
-            GetCoordsFrom(out p.coordsfrom);                      // will be valid for a system or a co-ords box
-            GetCoordsTo(out p.coordsto);
-            p.fromsys = textBox_From.Text;
-            p.tosys = textBox_To.Text;
-            p.routemethod = comboBoxRoutingMetric.SelectedIndex;
-
-            if (p.usingcoordsfrom)
-                p.fromsys = "START POINT";
-            if (p.usingcoordsto)
-                p.tosys = "END POINT";
-
-            p.possiblejumps = (int)(Point3D.DistanceBetween(p.coordsfrom, p.coordsto) / p.maxrange);
-
-            return p;
-        }
-
-        private void RouteMain(object _plotter)
-        {
-            RoutePlotter p = (RoutePlotter)_plotter;
-
-            routeSystems = null;    // so its null until route interative finishes
-
-            routeSystems = p.RouteIterative(AppendData);
-
-            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true); }));
-        }
-
-        private void AppendData(RoutePlotter.ReturnInfo info)
-        {
-            BeginInvoke((MethodInvoker)delegate
-            {
-                DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells(dataGridViewRoute, 
-                        info.name, 
-                        double.IsNaN(info.dist) ? "" : info.dist.ToString("N2"),
-                        info.pos == null ? "" : info.pos.X.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Y.ToString("0.00"),
-                        info.pos == null ? "" : info.pos.Z.ToString("0.00"),
-                        double.IsNaN(info.waypointdist) ? "" : info.waypointdist.ToString("0.0"),
-                        double.IsNaN(info.deviation) ? "" : info.deviation.ToString("0.0")
-                        );
-
-                rw.Tag = info.system;       // may be null if waypoint or not a system
-                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
-                dataGridViewRoute.Rows.Add(rw);
-            });
-        }
-
-        #endregion
 
         #region Helpers
 
@@ -229,16 +188,32 @@ namespace EDDiscovery.UserControls
 
         #region UI
 
+        RoutePlotter plotter = null;
+
         private void button_Route_Click(object sender, EventArgs e)
         {
             ToggleButtons(false);           // beware the tab order, this moves the focus onto the next control, which in this dialog can be not what we want.
-            RoutePlotter plotter = CreateRoutePlotter();
 
-            if (plotter.possiblejumps > 100)
+            plotter = new RoutePlotter();
+            plotter.MaxRange = textBox_Range.Value;
+            GetCoordsFrom(out plotter.Coordsfrom);                      // will be valid for a system or a co-ords box
+            GetCoordsTo(out plotter.Coordsto);
+            plotter.FromSystem = textBox_From.Text;
+            plotter.ToSystem = textBox_To.Text;
+            plotter.RouteMethod = comboBoxRoutingMetric.SelectedIndex;
+
+            if (textBox_From.ReadOnly == true)
+                plotter.FromSystem = "START POINT";
+            if (textBox_To.ReadOnly == true)
+                plotter.ToSystem = "END POINT";
+
+            int PossibleJumps = (int)(Point3D.DistanceBetween(plotter.Coordsfrom, plotter.Coordsto) / plotter.MaxRange);
+
+            if (PossibleJumps > 100)
             {
                 DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
                     string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").Tx(this,"Confirm"), 
-                    plotter.possiblejumps), "Warning".Tx(), MessageBoxButtons.YesNo);
+                    PossibleJumps), "Warning".Tx(), MessageBoxButtons.YesNo);
                 if (res != System.Windows.Forms.DialogResult.Yes)
                 {
                     ToggleButtons(true);
@@ -247,9 +222,43 @@ namespace EDDiscovery.UserControls
             }
 
             dataGridViewRoute.Rows.Clear();
-            ThreadRoute = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RouteMain));
-            ThreadRoute.Name = "Thread Route";
-            ThreadRoute.Start(plotter);
+            routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(RoutingThread));
+            routingthread.Name = "Thread Route";
+            routingthread.Start(plotter);
+        }
+
+        private Thread routingthread;
+
+        private void RoutingThread(object _plotter)
+        {
+            RoutePlotter p = (RoutePlotter)_plotter;
+
+            routeSystems = null;    // so its null until route interative finishes
+
+            routeSystems = p.RouteIterative(AppendData);
+
+            this.BeginInvoke(new Action(() => { discoveryform.NewCalculatedRoute(routeSystems); ToggleButtons(true); }));
+        }
+
+        private void AppendData(RoutePlotter.ReturnInfo info)
+        {
+            BeginInvoke((MethodInvoker)delegate
+            {
+                DataGridViewRow rw = dataGridViewRoute.RowTemplate.Clone() as DataGridViewRow;
+                rw.CreateCells(dataGridViewRoute,
+                        info.name,
+                        double.IsNaN(info.dist) ? "" : info.dist.ToString("N2"),
+                        info.pos == null ? "" : info.pos.X.ToString("0.00"),
+                        info.pos == null ? "" : info.pos.Y.ToString("0.00"),
+                        info.pos == null ? "" : info.pos.Z.ToString("0.00"),
+                        double.IsNaN(info.waypointdist) ? "" : info.waypointdist.ToString("0.0"),
+                        double.IsNaN(info.deviation) ? "" : info.deviation.ToString("0.0")
+                        );
+
+                rw.Tag = info.system;       // may be null if waypoint or not a system
+                rw.HeaderCell.Value = info.pos != null ? (dataGridViewRoute.Rows.Count + 1).ToStringInvariant() : "-";
+                dataGridViewRoute.Rows.Add(rw);
+            });
         }
 
         private void cmd3DMap_Click(object sender, EventArgs e)

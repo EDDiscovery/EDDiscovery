@@ -614,6 +614,8 @@
     <EmbeddedResource Include="Controls\SysInfo\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Scan\backbutton.png" />
+    <EmbeddedResource Include="Panels\EDSM.png" />
     <EmbeddedResource Include="Controls\TravelGrid\CursorStill.png" />
     <EmbeddedResource Include="Controls\Scan\DisplaySystemAlways.png" />
     <EmbeddedResource Include="Controls\Scan\Star.png" />

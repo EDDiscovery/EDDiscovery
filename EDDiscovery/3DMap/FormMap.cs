@@ -107,18 +107,14 @@ namespace EDDiscovery
 
         public List<BaseUtils.Map2d> fgeimages = new List<BaseUtils.Map2d>();
 
-        public DateTime startTime { get; set; }
-        public DateTime endTime { get; set; }
-        private DateTimePicker startPicker;
-        private DateTimePicker endPicker;
-        private ToolStripControlHost startPickerHost;
-        private ToolStripControlHost endPickerHost;
+        public DateTime filterStartTime { get; set; }
+        public DateTime filterEndTime { get; set; }
 
         private bool isActivated = false;
         private float _znear;
 
-        private ToolStripMenuItem _toolstripToggleNamingButton;     // for picking up this option quickly
-        private ToolStripMenuItem _toolstripToggleRegionColouringButton;     // for picking up this option quickly
+        private ToolStripMenuItem toolstripToggleNamingButton;     // for picking up this option quickly
+        private ToolStripMenuItem toolstripToggleRegionColouringButton;     // for picking up this option quickly
         
         MapRecorder maprecorder = null;                     // the recorder 
         TimedMessage mapmsg = null;                         // and msg
@@ -192,16 +188,16 @@ namespace EDDiscovery
                         toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton(tp.Description, tp, tp.Enabled));
                         if (tp.Group == GalMapType.GalMapGroup.Regions)
                         {
-                            _toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, SQLiteDBClass.GetSettingBool("Map3DGMORegionColouring", true));
-                            toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleRegionColouringButton);
+                            toolstripToggleRegionColouringButton = AddGalMapButton("Toggle Region Colouring", 2, SQLiteDBClass.GetSettingBool("Map3DGMORegionColouring", true));
+                            toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleRegionColouringButton);
                         }
                     }
                 }
 
                 toolStripDropDownButtonGalObjects.DropDownItems.Add(AddGalMapButton("Toggle All", 0, null));
 
-                _toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
-                toolStripDropDownButtonGalObjects.DropDownItems.Add(_toolstripToggleNamingButton);
+                toolstripToggleNamingButton = AddGalMapButton("Toggle Star Naming", 1, SQLiteDBClass.GetSettingBool("Map3DGMONaming", true));
+                toolStripDropDownButtonGalObjects.DropDownItems.Add(toolstripToggleNamingButton);
             }
 
             maprecorder.UpdateStoredVideosToolButton(toolStripDropDownRecord, LoadVideo, Icons.Controls.Map3D_Recorder_Save);
@@ -462,8 +458,8 @@ namespace EDDiscovery
             SQLiteDBClass.PutSettingBool("Map3DShowNoteMarks", showNoteMarksToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool("Map3DShowBookmarks", showBookmarksToolStripMenuItem.Checked);
             SQLiteDBClass.PutSettingBool("Map3DPerspective", toolStripButtonPerspective.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DGMONaming", _toolstripToggleNamingButton.Checked);
-            SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", _toolstripToggleRegionColouringButton.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DGMONaming", toolstripToggleNamingButton.Checked);
+            SQLiteDBClass.PutSettingBool("Map3DGMORegionColouring", toolstripToggleRegionColouringButton.Checked);
             discoveryForm.galacticMapping.SaveSettings();
 
             stargrids.Stop();
@@ -974,7 +970,7 @@ namespace EDDiscovery
 
             DatasetBuilder builder = new DatasetBuilder();
 
-            List<HistoryEntry> filtered = systemlist.Where(s => s.EventTimeLocal >= startTime && s.EventTimeLocal <= endTime && s.MultiPlayer == false).OrderBy(s => s.EventTimeUTC).ToList();
+            List<HistoryEntry> filtered = systemlist.Where(s => s.EventTimeLocal >= filterStartTime && s.EventTimeLocal <= filterEndTime && s.MultiPlayer == false).OrderBy(s => s.EventTimeUTC).ToList();
 
             datasets_systems = builder.BuildSystems(drawLinesBetweenStarsWithPositionToolStripMenuItem.Checked,
                             drawADiscOnStarsWithPositionToolStripMenuItem.Checked,
@@ -1022,12 +1018,12 @@ namespace EDDiscovery
 
             DatasetBuilder builder3 = new DatasetBuilder();
             List<IData3DCollection> oldgalmaps = datasets_galmapobjects;
-            datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation, _toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
+            datasets_galmapobjects = builder3.AddGalMapObjectsToDataset(discoveryForm.galacticMapping, maptarget, GetBitmapOnScreenSizeX(), GetBitmapOnScreenSizeY(), lastcameranorm.Rotation, toolstripToggleNamingButton.Checked, enableColoursToolStripMenuItem.Checked ? Color.White : Color.Orange );
             DeleteDataset(ref oldgalmaps);
 
             DatasetBuilder builder4 = new DatasetBuilder();
             List<IData3DCollection> oldgalreg = datasets_galmapregions;
-            datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, _toolstripToggleRegionColouringButton.Checked);
+            datasets_galmapregions = builder4.AddGalMapRegionsToDataset(discoveryForm.galacticMapping, toolstripToggleRegionColouringButton.Checked);
             DeleteDataset(ref oldgalreg);
 
             if (clickedGMO != null)              // if GMO marked.
@@ -1094,62 +1090,6 @@ namespace EDDiscovery
 
 
         #region User Controls
-
-        private void EndPicker_ValueChanged(object sender, EventArgs e)
-        {
-            endTime = endPicker.Value;
-            GenerateDataSetsSystemList();
-            RequestPaint();
-        }
-
-        private void StartPicker_ValueChanged(object sender, EventArgs e)
-        {
-            startTime = startPicker.Value;
-            GenerateDataSetsSystemList();
-            RequestPaint();
-        }
-
-        private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
-        {
-            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
-            {
-                if (item != sel)
-                {
-                    item.Checked = false;
-                }
-            }
-
-            if (startTime < startPicker.MinDate)
-            {
-                startTime = startPicker.MinDate;
-            }
-
-            SQLiteDBClass.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
-            startPickerHost.Visible = true;
-            endPickerHost.Visible = true;
-            startPicker.Value = startTime;
-            endPicker.Value = endTime;
-            GenerateDataSetsSystemList();
-            RequestPaint();
-        }
-
-        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
-        {
-            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
-            {
-                if (item != sel)
-                {
-                    item.Checked = false;
-                }
-            }
-            SQLiteDBClass.PutSettingString("Map3DFilter", sel.Text);
-            startTime = startfunc();
-            endTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
-            startPickerHost.Visible = false;
-            endPickerHost.Visible = false;
-            GenerateDataSetsSystemList();
-            RequestPaint();
-        }
 
         private void buttonLookAt_Click(object sender, EventArgs e)
         {
@@ -2284,7 +2224,7 @@ namespace EDDiscovery
         #endregion
 
 
-        #region Map Images
+        #region Map Images and Expeditions
 
         private void LoadMapImages()
         {
@@ -2308,15 +2248,15 @@ namespace EDDiscovery
 
         public void AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
         {
-            _AddExpedition(name, starttime, endtime);
+            AddExpeditionInt(name, starttime, endtime);
         }
 
         public void AddExpedition(string name, DateTime starttime, DateTime? endtime)
         {
-            _AddExpedition(name, () => starttime, endtime == null ? null : new Func<DateTime>(() => (DateTime)endtime));
+            AddExpeditionInt(name, () => starttime, endtime == null ? null : new Func<DateTime>(() => (DateTime)endtime));
         }
 
-        private ToolStripButton _AddExpedition(string name, Func<DateTime> starttime, Func<DateTime> endtime)
+        private ToolStripButton AddExpeditionInt(string name, Func<DateTime> starttime, Func<DateTime> endtime)
         {
             var item = new ToolStripButton
             {
@@ -2333,7 +2273,7 @@ namespace EDDiscovery
         {
             Dictionary<string, Func<DateTime>> starttimes = new Dictionary<string, Func<DateTime>>()
             {
-                { "All", () => new DateTime(2010, 1, 1, 0, 0, 0) },
+                { "All", () => new DateTime(2014, 12, 16, 0, 0, 0) },
                 { "Last Week", () => DateTime.Now.AddDays(-7) },
                 { "Last Month", () => DateTime.Now.AddMonths(-1) },
                 { "Last Year", () => DateTime.Now.AddYears(-1) }
@@ -2362,8 +2302,8 @@ namespace EDDiscovery
                 }
             }
 
-            startTime = starttimes["All"]();
-            endTime = DateTime.MaxValue;
+            filterStartTime = starttimes["All"]();
+            filterEndTime = DateTime.UtcNow.AddYears(1);
 
             string lastsel = SQLiteDBClass.GetSettingString("Map3DFilter", "");
             foreach (var kvp in starttimes)
@@ -2371,13 +2311,13 @@ namespace EDDiscovery
                 var name = kvp.Key;
                 var startfunc = kvp.Value;
                 var endfunc = endtimes.ContainsKey(name) ? endtimes[name] : () => DateTime.Now.AddDays(1);
-                var item = _AddExpedition(name, startfunc, endfunc);
+                var item = AddExpeditionInt(name, startfunc, endfunc);
 
                 if (item.Text.Equals(lastsel))              // if a standard one, restore.  WE are not saving custom.
                 {                                           // if custom is selected, we don't restore a tick.
                     item.Checked = true;
-                    startTime = startfunc();
-                    endTime = endfunc();
+                    filterStartTime = startfunc();
+                    filterEndTime = endfunc();
                 }
             }
 
@@ -2390,17 +2330,63 @@ namespace EDDiscovery
             citem.Click += (s, e) => dropdownFilterHistory_Custom_Click(s, e, citem);
 
             dropdownFilterDate.DropDownItems.Add(citem);
+        }
 
-            startPicker = new DateTimePicker();
-            endPicker = new DateTimePicker();
-            startPicker.ValueChanged += StartPicker_ValueChanged;
-            endPicker.ValueChanged += EndPicker_ValueChanged;
-            startPickerHost = new ToolStripControlHost(startPicker) { Visible = false };
-            endPickerHost = new ToolStripControlHost(endPicker) { Visible = false };
-            startPickerHost.Size = new Size(150, 20);
-            endPickerHost.Size = new Size(150, 20);
-            toolStripControls.Items.Add(startPickerHost);
-            toolStripControls.Items.Add(endPickerHost);
+        private void dropdownFilterHistory_Custom_Click(object sender, EventArgs e, ToolStripButton sel)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+
+            SQLiteDBClass.PutSettingString("Map3DFilter", "Custom");                   // Custom is not saved, but clear last entry.
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            int width = 300;
+
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("From", typeof(ExtendedControls.ExtDateTimePicker), filterStartTime.ToStringUS(), new Point(10, 40), new Size(width - 20, 24), null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("To", typeof(ExtendedControls.ExtDateTimePicker), filterEndTime.ToStringUS(), new Point(10, 80), new Size(width - 20, 24), null));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(), new Point(width - 20 - 80, 120), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton), "Cancel".Tx(), new Point(width - 200, 120), new Size(80, 24), ""));
+
+            f.Trigger += (dialogname, controlname, tag) =>
+            {
+                if (controlname == "OK" || controlname == "Cancel")
+                {
+                    f.DialogResult = controlname == "OK" ? DialogResult.OK : DialogResult.Cancel;
+                    f.Close();
+                }
+            };
+
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Time".Tx(this, "TimeSel"));
+
+            if (res == DialogResult.OK)
+            {
+                filterStartTime = f.GetDateTime("From").Value;
+                filterEndTime = f.GetDateTime("To").Value;
+                GenerateDataSetsSystemList();
+                RequestPaint();
+            }
+        }
+
+        private void dropdownFilterHistory_Item_Click(object sender, EventArgs e, ToolStripButton sel, Func<DateTime> startfunc, Func<DateTime> endfunc)
+        {
+            foreach (var item in dropdownFilterDate.DropDownItems.OfType<ToolStripButton>())
+            {
+                if (item != sel)
+                {
+                    item.Checked = false;
+                }
+            }
+
+            SQLiteDBClass.PutSettingString("Map3DFilter", sel.Text);
+            filterStartTime = startfunc();
+            filterEndTime = endfunc == null ? DateTime.Now.AddDays(1) : endfunc();
+            GenerateDataSetsSystemList();
+            RequestPaint();
         }
 
 

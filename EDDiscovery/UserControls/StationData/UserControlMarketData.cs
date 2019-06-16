@@ -48,7 +48,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewMarketData.MakeDoubleBuffered();
             dataGridViewMarketData.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
-            dataGridViewMarketData.RowTemplate.Height = Font.ScalePixels(26);
 
             checkBoxBuyOnly.Checked = SQLiteDBClass.GetSettingBool(DbBuyOnly, false);
             this.checkBoxBuyOnly.CheckedChanged += new System.EventHandler(this.checkBoxBuyOnly_CheckedChanged);
@@ -69,6 +68,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewMarketData.RowTemplate.MinimumHeight= Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewMarketData, DbColumnSave);
             uctg.OnTravelSelectionChanged += OnChanged;
         }

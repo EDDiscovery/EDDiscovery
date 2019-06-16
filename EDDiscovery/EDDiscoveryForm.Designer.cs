@@ -44,7 +44,7 @@ namespace EDDiscovery
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ExtendedControls.TabStyleSquare tabStyleSquare2 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.edsmRefreshTimer = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -193,7 +193,7 @@ namespace EDDiscovery
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.tabControlMain.TabStyle = tabStyleSquare2;
+            this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
@@ -447,7 +447,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(335, 24);
+            this.mainMenu.Size = new System.Drawing.Size(215, 24);
             this.mainMenu.TabIndex = 16;
             this.mainMenu.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.mainMenu.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -468,7 +468,7 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -476,7 +476,7 @@ namespace EDDiscovery
             // 
             this.show2DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open2DMap;
             this.show2DMapsToolStripMenuItem.Name = "show2DMapsToolStripMenuItem";
-            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.show2DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.show2DMapsToolStripMenuItem.Text = "Show &2D maps";
             this.show2DMapsToolStripMenuItem.Click += new System.EventHandler(this.show2DMapsToolStripMenuItem_Click);
             // 
@@ -484,7 +484,7 @@ namespace EDDiscovery
             // 
             this.show3DMapsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Open3DMap;
             this.show3DMapsToolStripMenuItem.Name = "show3DMapsToolStripMenuItem";
-            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.show3DMapsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.show3DMapsToolStripMenuItem.Text = "Show &3D maps";
             this.show3DMapsToolStripMenuItem.Click += new System.EventHandler(this.show3DMapsToolStripMenuItem_Click);
             // 
@@ -495,7 +495,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Popouts_Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -518,7 +518,7 @@ namespace EDDiscovery
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Main_Tools_Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -800,7 +800,7 @@ namespace EDDiscovery
             // label_version
             // 
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(343, 1);
+            this.label_version.Location = new System.Drawing.Point(223, 1);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -812,7 +812,7 @@ namespace EDDiscovery
             // labelInfoBoxTop
             // 
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(397, 1);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(277, 1);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);

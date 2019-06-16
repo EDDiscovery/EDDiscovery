@@ -185,6 +185,7 @@ namespace EDDiscovery.Icons
         public static Image Scan_SizeTinyTiny { get { return IconSet.GetIcon("Controls.Scan.SizeTinyTiny"); } }
         public static Image Scan_SizeMinuscule { get { return IconSet.GetIcon("Controls.Scan.SizeMinuscule"); } }
         public static Image Scan_Star { get { return IconSet.GetIcon("Controls.Scan.Star"); } }
+        public static Image backbutton { get { return IconSet.GetIcon("Controls.Scan.backbutton"); } }
         #endregion
         #region EDDiscovery.UserControls.UserControlScanGrid
         public static Image ScanGrid_Belt { get { return IconSet.GetIcon("Controls.ScanGrid.Belt"); } }

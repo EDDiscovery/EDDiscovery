@@ -80,7 +80,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewJournal.MakeDoubleBuffered();
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
-            dataGridViewJournal.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));
             dataGridViewJournal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
             cfs = new FilterSelector(DbFilterSave);
@@ -113,6 +112,7 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            dataGridViewJournal.RowTemplate.MinimumHeight = Math.Max(28, Font.ScalePixels(28));
             DGVLoadColumnLayout(dataGridViewJournal, DbColumnSave);
         }
 
