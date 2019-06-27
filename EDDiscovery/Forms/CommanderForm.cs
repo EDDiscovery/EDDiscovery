@@ -16,6 +16,7 @@
 
 using EliteDangerousCore;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace EDDiscovery.Forms
@@ -58,10 +59,28 @@ namespace EDDiscovery.Forms
             textBoxBorderInaraAPIKey.Text = cmdr.InaraAPIKey;
             textBoxBorderInaraName.Text = cmdr.InaraName;
             checkBoxCustomInara.Checked = cmdr.SyncToInara;
+
+            extTextBoxAutoCompleteHomeSystem.Text = cmdr.HomeSystemTextOrSol;
+            extTextBoxAutoCompleteHomeSystem.SetAutoCompletor(EliteDangerousCore.DB.SystemCache.ReturnSystemAutoCompleteList, true);
+
+            textBoxDefaultZoom.ValueNoChange = cmdr.MapZoom;
+
+            bool selectionCentre = cmdr.MapCentreOnSelection;
+            radioButtonHistorySelection.Checked = selectionCentre;
+            radioButtonCentreHome.Checked = !selectionCentre;
+
+            panel_defaultmapcolor.BackColor = System.Drawing.Color.FromArgb(cmdr.MapColour);
+            panel_defaultmapcolor.Click += Panel_defaultmapcolor_Click;
         }
 
-        public void Update(EDCommander cmdr)
+        public bool Update(EDCommander cmdr)
         {
+            bool update = cmdr.JournalDir != textBoxBorderJournal.Text ||                   // changing these means need to resync system and start up stuff
+                          cmdr.EdsmName != textBoxBorderEDSMName.Text ||
+                          cmdr.EDSMAPIKey != textBoxBorderEDSMAPI.Text ||
+                          cmdr.SyncFromEdsm != checkBoxCustomEDSMFrom.Checked ||
+                          cmdr.SyncToEdsm != checkBoxCustomEDSMTo.Checked;
+
             cmdr.Name = textBoxBorderCmdr.Text;
             cmdr.JournalDir = textBoxBorderJournal.Text;
             cmdr.EdsmName = textBoxBorderEDSMName.Text;
@@ -75,12 +94,31 @@ namespace EDDiscovery.Forms
             cmdr.InaraAPIKey = textBoxBorderInaraAPIKey.Text;
             cmdr.InaraName = textBoxBorderInaraName.Text;
             cmdr.SyncToInara = checkBoxCustomInara.Checked;
+            cmdr.HomeSystemTextOrSol = extTextBoxAutoCompleteHomeSystem.Text;
+            cmdr.MapZoom = float.TryParse(textBoxDefaultZoom.Text, out float res) ? res : 1.0f;
+            cmdr.MapCentreOnSelection = radioButtonHistorySelection.Checked;
+            cmdr.MapColour = panel_defaultmapcolor.BackColor.ToArgb();
+
+            return update;
         }
+
 
         public bool Valid { get { return textBoxBorderCmdr.Text != ""; } }
         public string CommanderName { get { return textBoxBorderCmdr.Text; } }
 
         #region UI
+
+        private void Panel_defaultmapcolor_Click(object sender, EventArgs e)
+        {
+            ColorDialog mapColorDialog = new ColorDialog();
+            mapColorDialog.AllowFullOpen = true;
+            mapColorDialog.FullOpen = true;
+            mapColorDialog.Color = panel_defaultmapcolor.BackColor;
+            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
+            {
+                panel_defaultmapcolor.BackColor = mapColorDialog.Color;
+            }
+        }
 
         private void buttonExtBrowse_Click(object sender, EventArgs e)
         {
@@ -129,8 +167,9 @@ namespace EDDiscovery.Forms
             Refresh();
         }
 
+
         #endregion
 
-
+       
     }
 }

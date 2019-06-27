@@ -32,6 +32,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EDDiscovery.Icons;
+using EDDiscovery.WebServer;
 
 namespace EDDiscovery
 {
@@ -44,6 +45,8 @@ namespace EDDiscovery
 
         public EDDiscovery.DLL.EDDDLLManager DLLManager;
         public EDDiscovery.DLL.EDDDLLIF.EDDCallBacks DLLCallBacks;
+
+        public WebServer.WebServer WebServer;
 
         public Actions.ActionController DEBUGGETAC { get { return actioncontroller; } }
 
@@ -304,6 +307,8 @@ namespace EDDiscovery
             DLLManager = new DLL.EDDDLLManager();
             DLLCallBacks = new EDDiscovery.DLL.EDDDLLIF.EDDCallBacks();
 
+            WebServer = new WebServer.WebServer(this);
+
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
@@ -378,6 +383,12 @@ namespace EDDiscovery
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
 
+            if (EDDConfig.Instance.WebServerPort > 0 )
+            {
+                WebServer.Port = EDDConfig.Instance.WebServerPort;
+                WebServer.Start();
+            }
+
             Tuple<string, string, string> res = DLLManager.Load(EDDOptions.Instance.DLLAppDirectory(), EDDApplicationContext.AppVersion, EDDOptions.Instance.DLLAppDirectory(), DLLCallBacks, alloweddlls);
 
             if (res.Item3.HasChars())
@@ -404,6 +415,8 @@ namespace EDDiscovery
                 LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(this, "DLLF"), res.Item2));
 
             LogLine(string.Format("Profile {0} Loaded".Tx(this, "PROFL"), EDDProfiles.Instance.Current.Name));
+
+
 
 
             Notifications.CheckForNewNotifications((notelist) =>
@@ -1108,9 +1121,9 @@ namespace EDDiscovery
 
             history.FillInPositionsFSDJumps();
 
-            Map.Prepare(he?.System, EDDConfig.Instance.HomeSystem,
-                        EDDConfig.Instance.MapCentreOnSelection ? he?.System : EDDConfig.Instance.HomeSystem,
-                        EDDConfig.Instance.MapZoom, Controller.history.FilterByTravel);
+            Map.Prepare(he?.System, EDCommander.Current.HomeSystemTextOrSol,
+                        EDCommander.Current.MapCentreOnSelection ? he?.System : EDCommander.Current.HomeSystemIOrSol,
+                        EDCommander.Current.MapZoom, Controller.history.FilterByTravel);
             Map.Show();
             this.Cursor = Cursors.Default;
         }
@@ -1122,8 +1135,8 @@ namespace EDDiscovery
             if (centerSystem == null || !centerSystem.HasCoordinate)
                 centerSystem = history.GetLastWithPosition.System;
 
-            Map.Prepare(centerSystem, EDDConfig.Instance.HomeSystem, centerSystem,
-                             EDDConfig.Instance.MapZoom, history.FilterByTravel);
+            Map.Prepare(centerSystem, EDCommander.Current.HomeSystemTextOrSol, centerSystem,
+                             EDCommander.Current.MapZoom, history.FilterByTravel);
 
             Map.Show();
             this.Cursor = Cursors.Default;

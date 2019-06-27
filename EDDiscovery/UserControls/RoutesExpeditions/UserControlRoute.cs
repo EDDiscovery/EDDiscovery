@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
                     dist = 30;
 
                 discoveryform.history.FillInPositionsFSDJumps();
-                map.Prepare(routeSystems.First(), EDDConfig.Instance.HomeSystem, routeSystems.First(), 400 / dist, discoveryform.history.FilterByTravel);
+                map.Prepare(routeSystems.First(), EDCommander.Current.HomeSystemTextOrSol, routeSystems.First(), 400 / dist, discoveryform.history.FilterByTravel);
                 map.SetPlanned(routeSystems);
                 map.Show();
             }

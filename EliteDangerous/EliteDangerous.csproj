@@ -91,7 +91,7 @@
     <Compile Include="EliteDangerous\BodyDesignations.cs" />
     <Compile Include="EliteDangerous\CommodityPrices.cs" />
     <Compile Include="EliteDangerous\EDCalculations.cs" />
-    <Compile Include="EliteDangerous\EDCommander.cs" />
+    <Compile Include="DB\EDCommander.cs" />
     <Compile Include="Journal\EDJournalClass.cs" />
     <Compile Include="Journal\EDJournalReader.cs" />
     <Compile Include="Journal\EDJournalMonitorWatcher.cs" />
