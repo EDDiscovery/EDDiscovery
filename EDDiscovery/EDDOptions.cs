@@ -121,6 +121,8 @@ namespace EDDiscovery
                     case "no3dmap": No3DMap = true; break;
                     case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
                     case "resetlanguage": ResetLanguage = true; break;
+                    case "tempdirindatadir": TempDirInDataDir = true; break;
+                    case "notempdirindatadir": TempDirInDataDir = false; break;
                     default:
                         System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
                         break;
@@ -183,6 +185,7 @@ namespace EDDiscovery
         public string Font { get; set; }                           // override font, null if not
         public string Commander { get; set; }                   // set commander, null if not
         public string Profile { get; set; }                   // set profile, null if not
+        public bool TempDirInDataDir { get; set; }
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -255,6 +258,16 @@ namespace EDDiscovery
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there..
                 Directory.CreateDirectory(AppDataDirectory);
+
+            if (TempDirInDataDir == true)
+            {
+                var tempdir = Path.Combine(AppDataDirectory, "Temp");
+                if (!Directory.Exists(tempdir))
+                    Directory.CreateDirectory(tempdir);
+
+                Environment.SetEnvironmentVariable("TMP", tempdir);
+                Environment.SetEnvironmentVariable("TEMP", tempdir);
+            }
         }
 
         private void SetVersionDisplayString()
