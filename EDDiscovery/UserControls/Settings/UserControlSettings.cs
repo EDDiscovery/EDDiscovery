@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
+ * Copyright © 2016 - 2019 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -44,8 +44,6 @@ namespace EDDiscovery.UserControls
             ResetThemeList();
             SetEntryThemeComboBox();
 
-            textBoxHomeSystem.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
-            
             btnDeleteCommander.Enabled = EDCommander.NumberOfCommanders > 1;
 
             comboBoxClickThruKey.Items = KeyObjectExtensions.KeyListString(inclshifts:true);
@@ -82,22 +80,8 @@ namespace EDDiscovery.UserControls
 
             checkBoxMinimizeToNotifyIcon.Enabled = EDDiscoveryForm.EDDConfig.UseNotifyIcon;
 
-            textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
-
-            textBoxDefaultZoom.ValueNoChange = EDDConfig.Instance.MapZoom;
-
-            textBoxDefaultZoom.ValueChanged += textBoxDefaultZoom_ValueChanged;
-
-            bool selectionCentre = EDDConfig.Instance.MapCentreOnSelection;
-            radioButtonHistorySelection.Checked = selectionCentre;
-            radioButtonCentreHome.Checked = !selectionCentre;
-
-            radioButtonCentreHome.CheckedChanged += radioButtonCentreHome_CheckedChanged;
-
             dataGridViewCommanders.AutoGenerateColumns = false;             // BEFORE assigned to list..
             dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
-
-            panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
 
             this.comboBoxTheme.SelectedIndexChanged += this.comboBoxTheme_SelectedIndexChanged;    // now turn on the handler..
 
@@ -134,9 +118,6 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            if (textBoxHomeSystem.Text != EDDiscoveryForm.EDDConfig.HomeSystem.Name)
-                ValidateAndSaveHomeSystem();     // make sure any change is persisted
-
             discoveryform.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 
             themeeditor?.Dispose();
@@ -162,8 +143,12 @@ namespace EDDiscovery.UserControls
 
         public void UpdateCommandersListBox()
         {
+            int selrow = dataGridViewCommanders.SelectedRows.Count > 0 ? dataGridViewCommanders.SelectedRows[0].Index : -1;
             dataGridViewCommanders.DataSource = null;
-            dataGridViewCommanders.DataSource = EDCommander.GetListCommanders();
+            List<EDCommander> cmdrs = EDCommander.GetListCommanders();
+            dataGridViewCommanders.DataSource = cmdrs;
+            if (selrow >= 0 && selrow < dataGridViewCommanders.RowCount)
+                dataGridViewCommanders.Rows[selrow].Selected = true;
             dataGridViewCommanders.Update();
         }
 
@@ -191,9 +176,9 @@ namespace EDDiscovery.UserControls
 
         private void buttonEditCommander_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCommanders.CurrentCell != null)
+            if (dataGridViewCommanders.SelectedRows.Count > 0)
             {
-                int row = dataGridViewCommanders.CurrentCell.RowIndex;
+                int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
                 CommanderForm cf = new CommanderForm();
@@ -201,22 +186,22 @@ namespace EDDiscovery.UserControls
 
                 if (cf.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    cf.Update(cmdr);
+                    bool forceupdate = cf.Update(cmdr);
                     List<EDCommander> edcommanders = (List<EDCommander>)dataGridViewCommanders.DataSource;
                     discoveryform.LoadCommandersListBox();
                     EDCommander.Update(edcommanders, false);
-                }
 
-                // CAPI Descoped discoveryform.Capi.Logout();       // logout.. CAPI may have changed
-                discoveryform.RefreshHistoryAsync();           // do a resync, CAPI may have changed, anything else, make it work again
+                    if ( forceupdate )                  // journal loc change forcing update
+                        discoveryform.RefreshHistoryAsync();        // do a resync
+                }
             }
         }
 
         private void btnDeleteCommander_Click(object sender, EventArgs e)
         {
-            if (dataGridViewCommanders.CurrentCell != null)
+            if (dataGridViewCommanders.SelectedRows.Count > 0)
             {
-                int row = dataGridViewCommanders.CurrentCell.RowIndex;
+                int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander " + cmdr.Name + "?", "Delete commander", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -431,54 +416,6 @@ namespace EDDiscovery.UserControls
             ExtendedControls.ExtComboBox c = sender as ExtendedControls.ExtComboBox;
             EDDConfig.Instance.Language = c.Items[c.SelectedIndex];
             ExtendedControls.MessageBoxTheme.Show(this, "Applies at next restart of ED Discovery".Tx(this, "Language"), "Information".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        #endregion
-
-
-        #region 3dmap
-
-        private void textBoxDefaultZoom_ValueChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.MapZoom = (float)textBoxDefaultZoom.Value;
-        }
-
-        private void radioButtonCentreHome_CheckedChanged(object sender, EventArgs e)
-        {
-            EDDConfig.Instance.MapCentreOnSelection = radioButtonHistorySelection.Checked;
-        }
-
-        public void panel_defaultmapcolor_Click(object sender, EventArgs e)
-        {
-            ColorDialog mapColorDialog = new ColorDialog();
-            mapColorDialog.AllowFullOpen = true;
-            mapColorDialog.FullOpen = true;
-            mapColorDialog.Color = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
-            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                EDDConfig.Instance.DefaultMapColour = mapColorDialog.Color.ToArgb();
-                EDDConfig.Instance.DefaultMapColour = EDDConfig.Instance.DefaultMapColour;
-                panel_defaultmapcolor.BackColor = Color.FromArgb(EDDConfig.Instance.DefaultMapColour);
-            }
-        }
-
-        private void textBoxHomeSystem_Leave(object sender, EventArgs e)
-        {
-            ValidateAndSaveHomeSystem();
-        }
-
-        private void ValidateAndSaveHomeSystem()
-        {
-            string t = textBoxHomeSystem.Text.Trim();
-            ISystem s = SystemCache.FindSystem(t);
-
-            if (s != null)
-            {
-                textBoxHomeSystem.Text = s.Name;
-                EDDConfig.Instance.HomeSystem = s;
-            }
-            else
-                textBoxHomeSystem.Text = EDDConfig.Instance.HomeSystem.Name;
         }
 
         #endregion

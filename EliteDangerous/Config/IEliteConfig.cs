@@ -18,7 +18,6 @@ namespace EliteDangerousCore
 {
     public interface IEliteConfig
     {
-        int DefaultMapColour { get; }
         bool DisplayUTC { get; }
         string EDSMFullSystemsURL { get; }
         string EDDBSystemsURL { get; }

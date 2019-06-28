@@ -478,7 +478,7 @@ namespace EliteDangerousCore.EDSM
                                 }
                             }
 
-                            JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EliteConfigInstance.InstanceConfig.DefaultMapColour, firstdiscover, true);
+                            JournalFSDJump fsd = new JournalFSDJump(etutc, sc, EDCommander.Current.MapColour, firstdiscover, true);
                             log.Add(fsd);
                         }
                     }

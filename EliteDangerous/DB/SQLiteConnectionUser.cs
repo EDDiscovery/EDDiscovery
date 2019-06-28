@@ -154,6 +154,12 @@ namespace EliteDangerousCore.DB
                 if (dbver < 120)
                     UpgradeUserDB120(conn);
 
+                if (dbver < 121)
+                    UpgradeUserDB121(conn);
+
+                if (dbver < 122)
+                    UpgradeUserDB122(conn);
+
                 CreateUserDBTableIndexes(conn);
             }
             catch (Exception ex)
@@ -448,6 +454,19 @@ namespace EliteDangerousCore.DB
             conn.PerformUpgrade(120, true, false, new[] { query1 });
         }
 
+        private static void UpgradeUserDB121(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN HomeSystem TEXT";
+            conn.PerformUpgrade(121, true, false, new[] { query1 });
+        }
+
+        private static void UpgradeUserDB122(SQLiteConnectionUser conn)
+        {
+            string query1 = "ALTER TABLE Commanders ADD COLUMN MapColour INT";
+            string query2 = "ALTER TABLE Commanders ADD COLUMN MapCentreOnSelection INT";
+            string query3 = "ALTER TABLE Commanders ADD COLUMN MapZoom REAL";
+            conn.PerformUpgrade(122, true, false, new[] { query1, query2, query3 });
+        }
 
         private static void DropOldUserTables(SQLiteConnectionUser conn)
         {

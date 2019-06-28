@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
 
                     textBoxPosition.Text = he.System.X.ToString(SingleCoordinateFormat) + separ + he.System.Y.ToString(SingleCoordinateFormat) + separ + he.System.Z.ToString(SingleCoordinateFormat);
 
-                    ISystem homesys = EDDConfig.Instance.HomeSystem;
+                    ISystem homesys = EDCommander.Current.HomeSystemIOrSol;
 
                     textBoxHomeDist.Text = he.System.Distance(homesys).ToString(SingleCoordinateFormat);
                     textBoxSolDist.Text = he.System.Distance(0, 0, 0).ToString(SingleCoordinateFormat);

@@ -142,15 +142,17 @@ namespace EliteDangerousCore
 
         public static EDCommander Create(string name = null, string edsmName = null, string edsmApiKey = null, string journalpath = null, 
                                         bool toedsm = true, bool fromedsm = false, bool toeddn = true, bool toego = false, string egoname = null, string egoapi = null,
-                                        bool toinara = false, string inaraname = null, string inaraapikey = null)
+                                        bool toinara = false, string inaraname = null, string inaraapikey = null, string homesystem = null,
+                                        float mapzoom = 1.0f, bool mapcentreonselection = true, int mapcolour = -1)
         {
             EDCommander cmdr;
 
             using (SQLiteConnectionUser conn = new SQLiteConnectionUser())
             {
-                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey) " +
-                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey)"))
+                using (DbCommand cmd = conn.CreateCommand("INSERT INTO Commanders (Name,EdsmName,EdsmApiKey,JournalDir,Deleted, SyncToEdsm, SyncFromEdsm, SyncToEddn, NetLogDir, SyncToEGO, EGOName, EGOAPIKey, SyncToInara, InaraName, InaraAPIKey, HomeSystem, MapColour,MapCentreOnSelection,MapZoom) " +
+                                                          "VALUES (@Name,@EdsmName,@EdsmApiKey,@JournalDir,@Deleted, @SyncToEdsm, @SyncFromEdsm, @SyncToEddn, @NetLogDir, @SyncToEGO, @EGOName, @EGOApiKey, @SyncToInara, @InaraName, @InaraAPIKey, @HomeSystem, @MapColour,@MapCentreOnSelection,@MapZoom)"))
                 {
+
                     cmd.AddParameterWithValue("@Name", name ?? "");
                     cmd.AddParameterWithValue("@EdsmName", edsmName ?? name ?? "");
                     cmd.AddParameterWithValue("@EdsmApiKey", edsmApiKey ?? "");
@@ -166,6 +168,10 @@ namespace EliteDangerousCore
                     cmd.AddParameterWithValue("@SyncToInara", toinara);
                     cmd.AddParameterWithValue("@InaraName", inaraname ?? "");
                     cmd.AddParameterWithValue("@InaraApiKey", inaraapikey ?? "");
+                    cmd.AddParameterWithValue("@HomeSystem", homesystem ?? "");
+                    cmd.AddParameterWithValue("@MapColour", mapcolour == -1 ? System.Drawing.Color.Red.ToArgb() : mapcolour );
+                    cmd.AddParameterWithValue("@MapCentreOnSelection", mapcentreonselection );
+                    cmd.AddParameterWithValue("@MapZoom", mapzoom );
                     cmd.ExecuteNonQuery();
                 }
 
@@ -206,7 +212,8 @@ namespace EliteDangerousCore
             {
                 using (DbCommand cmd = conn.CreateCommand("UPDATE Commanders SET Name=@Name, EdsmName=@EdsmName, EdsmApiKey=@EdsmApiKey, NetLogDir=@NetLogDir, JournalDir=@JournalDir, " +
                                                           "SyncToEdsm=@SyncToEdsm, SyncFromEdsm=@SyncFromEdsm, SyncToEddn=@SyncToEddn, SyncToEGO=@SyncToEGO, EGOName=@EGOName, " +
-                                                          "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey " + 
+                                                          "EGOAPIKey=@EGOApiKey, SyncToInara=@SyncToInara, InaraName=@InaraName, InaraAPIKey=@InaraAPIKey, HomeSystem=@HomeSystem, " +
+                                                          "MapColour=@MapColour, MapCentreOnSelection=@MapCentreOnSelection, MapZoom=@MapZoom " + 
                                                           "WHERE Id=@Id"))
                 {
                     cmd.AddParameter("@Id", DbType.Int32);
@@ -224,6 +231,10 @@ namespace EliteDangerousCore
                     cmd.AddParameter("@SyncToInara", DbType.Boolean);
                     cmd.AddParameter("@InaraName", DbType.String);
                     cmd.AddParameter("@InaraApiKey", DbType.String);
+                    cmd.AddParameter("@HomeSystem", DbType.String);
+                    cmd.AddParameter("@MapColour", DbType.Int32);
+                    cmd.AddParameter("@MapCentreOnSelection", DbType.Boolean);
+                    cmd.AddParameter("@MapZoom", DbType.Double);
 
                     foreach (EDCommander edcmdr in cmdrlist) // potential NRE
                     {
@@ -242,6 +253,10 @@ namespace EliteDangerousCore
                         cmd.Parameters["@SyncToInara"].Value = edcmdr.SyncToInara;
                         cmd.Parameters["@InaraName"].Value = edcmdr.InaraName != null ? edcmdr.InaraName : "";
                         cmd.Parameters["@InaraAPIKey"].Value = edcmdr.InaraAPIKey != null ? edcmdr.InaraAPIKey : "";
+                        cmd.Parameters["@HomeSystem"].Value = edcmdr.homesystem != null ? edcmdr.homesystem : "";
+                        cmd.Parameters["@MapColour"].Value = edcmdr.MapColour;
+                        cmd.Parameters["@MapCentreOnSelection"].Value = edcmdr.MapCentreOnSelection;
+                        cmd.Parameters["@MapZoom"].Value = edcmdr.MapZoom;
                         cmd.ExecuteNonQuery();
 
                         commanders[edcmdr.Nr] = edcmdr;
@@ -422,6 +437,10 @@ namespace EliteDangerousCore
         private bool syncToEddn;
         private bool syncToEGO;
         private bool syncToInara;
+        private string homesystem;
+        private float mapzoom;
+        private bool mapcentreonselection;
+        private int mapcolour;
 
         public EDCommander()
         {
@@ -448,6 +467,13 @@ namespace EliteDangerousCore
             inaraapikey = Convert.ToString(reader["InaraAPIKey"]);
 
             syncToEddn = Convert.ToBoolean(reader["SyncToEddn"]);
+
+            homesystem = Convert.ToString(reader["HomeSystem"]);        // may be null
+
+            mapzoom = reader["MapZoom"] is System.DBNull ? 1.0f : (float)Convert.ToDouble(reader["MapZoom"]);
+            mapcolour = reader["MapColour"] is System.DBNull ? System.Drawing.Color.Red.ToArgb() : Convert.ToInt32(reader["MapColour"]);
+            mapcentreonselection = reader["MapCentreOnSelection"] is System.DBNull ? true : Convert.ToBoolean(reader["MapCentreOnSelection"]);
+            
         }
 
         public EDCommander(int id, string Name )
@@ -467,6 +493,10 @@ namespace EliteDangerousCore
             this.SyncToInara = false;
             this.inaraname = "";
             this.inaraapikey = "";
+            this.homesystem = "";
+            this.mapcentreonselection = true;
+            this.mapzoom = 1.0f;
+            this.MapColour = System.Drawing.Color.Red.ToArgb();
 
             this.syncToEddn = false;
         }
@@ -480,6 +510,16 @@ namespace EliteDangerousCore
         public string EGOAPIKey { get { return egoapikey; } set { egoapikey = value; } }
         public string InaraName { get { return inaraname; } set { inaraname = value; } }
         public string InaraAPIKey { get { return inaraapikey; } set { inaraapikey = value; } }
+        public string HomeSystemTextOrSol { get { return homesystem.HasChars() ? homesystem : "Sol"; } set { homesystem = value; } }
+        public ISystem HomeSystemIOrSol { get
+            {
+                return SystemCache.FindSystem(HomeSystemTextOrSol) ?? new SystemClass("Sol", 0, 0, 0);
+            } }
+
+        public float MapZoom { get { return mapzoom; } set { mapzoom = value; } }
+        public int MapColour { get { return mapcolour; } set { mapcolour = value; } }
+        public bool MapCentreOnSelection { get { return mapcentreonselection; } set { mapcentreonselection = value; } }
+
         public string JournalDir { get { return journalDir; } set { journalDir = value; } }
         public bool SyncToEdsm { get { return syncToEdsm; } set { syncToEdsm = value; } }
         public bool SyncFromEdsm { get { return syncFromEdsm; } set { syncFromEdsm = value; } }

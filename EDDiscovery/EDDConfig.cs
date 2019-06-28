@@ -74,6 +74,7 @@ namespace EDDiscovery
         private string eddshipyardURL = "";
         private string eddbsystemsurl = "";
         private string edsmfullsystemsurl = "";
+        private int webserverport = 0;
         Dictionary<string, Image> captainslogtaglist;
 
         /// <summary>
@@ -382,6 +383,19 @@ namespace EDDiscovery
             }
         }
 
+        public int WebServerPort
+        {
+            get
+            {
+                return webserverport;
+            }
+            set
+            {
+                webserverport = value;
+                SQLiteConnectionUser.PutSettingInt("WebServerPort", webserverport);
+            }
+        }
+
         #endregion
 
         #region Update at start
@@ -410,6 +424,7 @@ namespace EDDiscovery
                 edsmfullsystemsurl = SQLiteConnectionUser.GetSettingString("EDSMFullSystemsURL", "Default");
                 eddbsystemsurl = SQLiteConnectionUser.GetSettingString("EDDBSystemsURL", "Default");
                 CaptainsLogTags = SQLiteConnectionUser.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
+                webserverport = SQLiteConnectionUser.GetSettingInt("WebServerPort", 0);
 
                 EliteDangerousCore.EDCommander.Load(write, conn);
             }
@@ -423,82 +438,5 @@ namespace EDDiscovery
 
         #endregion
 
-        int? defmapcolour;
-
-        public int DefaultMapColour
-        {
-            get
-            {
-                if (defmapcolour == null)
-                    defmapcolour = SQLiteConnectionUser.GetSettingInt("DefaultMap", System.Drawing.Color.Red.ToArgb());
-                return defmapcolour.Value;
-            }
-            set
-            {
-                SQLiteConnectionUser.PutSettingInt("DefaultMap", value);
-                defmapcolour = value;
-            }
-        }
-
-        private EliteDangerousCore.ISystem homeSystem = null;
-
-        public EliteDangerousCore.ISystem HomeSystem
-        {
-            get
-            {
-                if (homeSystem == null)
-                    homeSystem = SystemCache.FindSystem(SQLiteDBClass.GetSettingString("DefaultMapCenter", "Sol"));
-                if ( homeSystem == null )
-                    homeSystem = new EliteDangerousCore.SystemClass("Sol", 0, 0, 0);
-                return homeSystem;
-            }
-            set
-            {
-                if (value != null && value.HasCoordinate)
-                {
-                    SQLiteDBClass.PutSettingString("DefaultMapCenter", value.Name);
-                    homeSystem = value;
-                }
-            }
-        }
-
-        private float? mapzoom;
-
-        public float MapZoom
-        {
-            get
-            {
-                if (mapzoom == null)
-                    mapzoom = (float)SQLiteDBClass.GetSettingDouble("DefaultMapZoom", 1.0);
-                return mapzoom.Value;
-            }
-
-            set
-            {
-                //SQLiteDBClass.PutSettingDouble("DefaultMapZoom", Double.TryParse(textBoxDefaultZoom.Text, out zoom) ? zoom : 1.0);
-
-                SQLiteDBClass.PutSettingDouble("DefaultMapZoom", value);
-                mapzoom = value;
-            }
-
-        }
-
-        private bool? mapcentreonselection;
-
-        public bool MapCentreOnSelection
-        {
-            get
-            {
-                if (mapcentreonselection == null)
-                    mapcentreonselection = SQLiteDBClass.GetSettingBool("CentreMapOnSelection", true);
-                return mapcentreonselection.Value;
-            }
-
-            set
-            {
-                SQLiteDBClass.PutSettingBool("CentreMapOnSelection", value);
-                mapcentreonselection = value;
-            }
-        }
     }
 }

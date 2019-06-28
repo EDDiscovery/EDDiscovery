@@ -16,10 +16,6 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="EliteDangerous\Synthesis.cs" />
-    <Compile Remove="SystemDB\SystemClass.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.Management" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
