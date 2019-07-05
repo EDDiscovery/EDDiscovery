@@ -67,7 +67,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null)
+            if (Systems != null && Systems.Length != 0)
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
         }
 
@@ -76,13 +76,13 @@ namespace EliteDangerousCore.JournalEvents
             info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus,
                                 "Total:; cr;N0".Tx(this), TotalEarnings);
             detailed = "";
-            if (Systems != null)
+            if (Systems != null && Systems.Length != 0)
             {
                 detailed += "Scanned:".Txb(this);
                 foreach (string s in Systems)
                     detailed += s + " ";
             }
-            if (Discovered != null)
+            if (Discovered != null && Discovered.Length != 0)
             {
                 detailed += System.Environment.NewLine + "Discovered:".Txb(this);
                 foreach (string s in Discovered)
