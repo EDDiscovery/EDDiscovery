@@ -620,6 +620,11 @@ namespace EliteDangerousCore.EDDN
                 ["modules"] = new JArray(journal.ItemList.Items.Select(m => JournalFieldNaming.NormaliseFDItemName(m.FDName)))
             };
 
+            if (journal.Horizons != null)
+            {
+                message["horizons"] = journal.Horizons;
+            }
+
             //if (systemAddress != null)
             //    message["systemAddress"] = systemAddress;
 
@@ -673,6 +678,11 @@ namespace EliteDangerousCore.EDDN
                 ["marketId"] = journal.MarketID,
                 ["ships"] = new JArray(journal.Yard.Ships.Select(m => m.FDShipType))
             };
+
+            if (journal.Horizons != null)
+            {
+                message["horizons"] = journal.Horizons;
+            }
 
             //if (systemAddress != null)
             //    message["SystemAddress"] = systemAddress;
