@@ -50,8 +50,8 @@ namespace EliteDangerousCore.JournalEvents
 
         public JournalSellExplorationData(JObject evt) : base(evt, JournalTypeEnum.SellExplorationData)
         {
-            Systems = evt["Systems"]?.ToObjectProtected<string[]>();
-            Discovered = evt["Discovered"]?.ToObjectProtected<string[]>();
+            Systems = evt["Systems"]?.ToObjectProtected<string[]>() ?? new string[0];
+            Discovered = evt["Discovered"]?.ToObjectProtected<string[]>() ?? new string[0];
             BaseValue = evt["BaseValue"].Long();
             Bonus = evt["Bonus"].Long();
             TotalEarnings = evt["TotalEarnings"].Long(0);        // may not be present - get 0. also 3.02 has a bug with incorrect value - actually fed from the FD web server so may not be version tied
@@ -67,7 +67,7 @@ namespace EliteDangerousCore.JournalEvents
 
         public void Ledger(Ledger mcl, DB.SQLiteConnectionUser conn)
         {
-            if (Systems != null)
+            if (Systems != null && Systems.Length != 0)
                 mcl.AddEvent(Id, EventTimeUTC, EventTypeID, Systems.Length + " systems", TotalEarnings);
         }
 
@@ -76,13 +76,13 @@ namespace EliteDangerousCore.JournalEvents
             info = BaseUtils.FieldBuilder.Build("Amount:; cr;N0".Txb(this), BaseValue, "Bonus:; cr;N0".Txb(this), Bonus,
                                 "Total:; cr;N0".Tx(this), TotalEarnings);
             detailed = "";
-            if (Systems != null)
+            if (Systems != null && Systems.Length != 0)
             {
                 detailed += "Scanned:".Txb(this);
                 foreach (string s in Systems)
                     detailed += s + " ";
             }
-            if (Discovered != null)
+            if (Discovered != null && Discovered.Length != 0)
             {
                 detailed += System.Environment.NewLine + "Discovered:".Txb(this);
                 foreach (string s in Discovered)
