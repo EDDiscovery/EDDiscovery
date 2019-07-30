@@ -120,7 +120,6 @@ namespace EliteDangerousCore
                 lock (StopRequested) // Wait for ScanTickDone
                 {
                     StopRequested.Set();
-                    StopRequested = null;
                 }
             }
 
